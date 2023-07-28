@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <title>React App</title>
+    <!-- <link rel="shortcut icon" type="image/png" href="images/favicon.png" /> -->
+    <link
+      href="%PUBLIC_URL%/assets/vendor/jquery-nice-select/css/nice-select.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="%PUBLIC_URL%/assets/vendor/dotted-map/css/contrib/jquery.smallipop-0.3.0.min.css"
+      type="text/css"
+      media="all"
+    />
+    <link
+      href="%PUBLIC_URL%/assets/vendor/owl-carousel/owl.carousel.css"
+      rel="stylesheet"
+    />
+    <link
+      href="%PUBLIC_URL%/assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css"
+      rel="stylesheet"
+    />
+    <!-- Style css -->
+    <link
+      href="%PUBLIC_URL%/assets/vendor/datepicker/css/bootstrap-datepicker.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="%PUBLIC_URL%/assets/vendor/swiper/css/swiper-bundle.min.css"
+      rel="stylesheet"
+    />
+    <link href="%PUBLIC_URL%/assets/css/style.css" rel="stylesheet" />
+
+    <link href="%PUBLIC_URL%/assets/css/alltheme.css" rel="stylesheet" />
+
+
+
+
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+
+    <script src="%PUBLIC_URL%/assets/vendor/global/global.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/vendor/chart.js/Chart.bundle.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/vendor/jquery-nice-select/js/jquery.nice-select.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/vendor/datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/vendor/owl-carousel/owl.carousel.js"></script>
+
+    <!-- Swiper-js -->
+    <script src="%PUBLIC_URL%/assets/vendor/swiper/js/swiper-bundle.min.js"></script>
+
+    <!-- Apex Chart -->
+    <!-- <script src="%PUBLIC_URL%/assets/vendor/apexchart/apexchart.js"></script> -->
+
+    <!-- Chart piety plugin files -->
+    <script src="%PUBLIC_URL%/assets/vendor/peity/jquery.peity.min.js"></script>
+
+    <!-- Dashboard 1 -->
+    <script src="%PUBLIC_URL%/assets/js/dashboard/dashboard-1.js"></script>
+
+    <script src="%PUBLIC_URL%/assets/js/custom.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/js/deznav-init.js"></script>
+    <script src="%PUBLIC_URL%/assets/js/demo.js"></script>
+    <script src="%PUBLIC_URL%/assets/js/styleSwitcher.js"></script>
+
+
+
+
+
+
+
+    <script>
+      $(function () {
+          $("#datepicker").datepicker({
+            autoclose: true,
+            todayHighlight: true
+          }).datepicker('update', new Date());
+
+      });
+
+    </script>
+
+
+    <script>
+    $(document).ready(function() {
+      // Check if the theme is stored in a cookie
+      var storedTheme = getCookie('selectedTheme');
+      if (storedTheme) {
+        $('body').addClass(storedTheme);
+      }
+
+      $('.theme-link').on('click', function() {
+        var themeClass = $(this).data('theme');
+
+        // Remove existing theme classes from body
+        $('body').removeClass('theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8  theme-9 theme-10');
+
+        // Add the clicked theme class to body
+        $('body').addClass('theme-' + themeClass);
+
+        // Store the selected theme in a cookie
+        setCookie('selectedTheme', 'theme-' + themeClass, 30);
+      });
+
+      // Function to get the value of a cookie
+      function getCookie(name) {
+        var value = '; ' + document.cookie;
+        var parts = value.split('; ' + name + '=');
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      }
+
+      // Function to set the value of a cookie
+      function setCookie(name, value, days) {
+        var expires = '';
+        if (days) {
+          var date = new Date();
+          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+          expires = '; expires=' + date.toUTCString();
+        }
+        document.cookie = name + '=' + (value || '') + expires + '; path=/';
+      }
+    });
+
+
+    </script>
+    <script>
+      $(function () {
+        $("#datepicker")
+          .datepicker({
+            autoclose: true,
+            todayHighlight: true,
+          })
+          .datepicker("update", new Date());
+      });
+    </script>
+    <script>
+      var swiper = new Swiper(".front-view-slider", {
+        slidesPerView: 5,
+        spaceBetween: 30,
+        centeredSlides: true,
+        loop: true,
+        pagination: {
+          el: ".room-swiper-pagination",
+          clickable: true,
+        },
+        breakpoints: {
+          360: {
+            slidesPerView: 1,
+            spaceBetween: 20,
+          },
+          575: {
+            slidesPerView: 3,
+            spaceBetween: 20,
+          },
+          768: {
+            slidesPerView: 3,
+            spaceBetween: 20,
+          },
+          1024: {
+            slidesPerView: 3,
+          },
+          1400: {
+            slidesPerView: 5,
+            spaceBetween: 20,
+          },
+          1600: {
+            slidesPerView: 5,
+            spaceBetween: 30,
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
