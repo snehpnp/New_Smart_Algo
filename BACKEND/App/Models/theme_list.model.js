@@ -1,28 +1,22 @@
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-// const roleSchema = new mongoose.Schema({
-//     role: {
-//         type: String,
-//         required: true,
-//         unique: true
-//     },
-//      name: {
-//         type: String,
-//         required: true,
-//         unique: true
-//     },
-//     description: {
-//         type: String,
-//         required: true
-//     },
-//     createdAt: {
-//         type: Date,
-//         default: Date.now
-//     }
-// },{
-//     // This enables Mongoose to handle the _id field automatically
-//     _id: true,
-//   });
+const themeSchema = new mongoose.Schema({
+    themeId: {
+        type: Number,
+        // required: true,
+        unique: true
+    },
+    theme_name: {
 
-// const Role = mongoose.model('Roles', roleSchema);
-// module.exports = Role;
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+}, {
+    // This enables Mongoose to handle the _id field automatically
+    _id: true,
+});
+
+const Theme_List = mongoose.model('theme_list', themeSchema);
+module.exports = Theme_List;

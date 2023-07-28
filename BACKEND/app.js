@@ -4,18 +4,12 @@ const mongoConnection = require('./App/Connection/mongo_connection')
 const express = require("express");
 const app = express();
 
-// Hello Shakir Sir
-
+// HELLO SNEH
 const http = require("http");
 const https = require('https');
 const socketIo = require("socket.io");
 const cors = require('cors');
 const bodyparser = require('body-parser')
-// const Role = require('./App/Models/role.model');
-
-
-
-
 
 
 const corsOpts = {
@@ -45,8 +39,7 @@ app.get('/get', async (req, res) => {
 
 // Routes all
 app.use(require("./App/Routes/Admin/user.route"))
-
-
+app.use(require("./App/Routes/SuperAdmin/theme_list.router"))
 
 
 
