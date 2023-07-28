@@ -11,35 +11,41 @@ const userModel = Schema({
     FullName: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        default: null
     },
     UserName: {
         type: String,
         required: true,
         trim: true,
-        unique: true
+        unique: true,
+        default: null
     },
     Email: {
         type: String,
         required: true,
         trim: true,
-        unique: true
+        unique: true,
+        default: null
     },
     PhoneNo: {
         type: String,
         required: true,
         trim: true,
-        unique: true
+        unique: true,
+        default: null
     },
     Password: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        default: null
     },
     Otp: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        default: null
     },
     CreateDate: {
         type: Date,
@@ -47,11 +53,13 @@ const userModel = Schema({
     },
     StartDate: {
         type: Date,
-        required: true
+        required: true,
+        default: null
     },
     EndDate: {
         type: Date,
-        required: true
+        required: true,
+        default: null
     },
     LoginStatus: {
         type: String,
