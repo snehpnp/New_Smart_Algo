@@ -1,5 +1,6 @@
 "use strict";
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const { User_model } = require('../../Models/user.model')
 const formattedDateTime = require('../../Helper/time.helper')
@@ -49,27 +50,25 @@ class Login {
             }
 
 
-
             // USER EXPIRY CHECK
             if (new Date(EmailCheck.EndDate) <= new Date()) {
                 return res.status(409).json({ status: false, msg: 'your service is terminated please contact to admin', data: [] });
-              } 
+            } 
+       
 
             // JWT TOKEN CREATE 
-            var token = jwt.sign({ id: result[0].id }, 'testsnehissetalogintocheck', {
+            var token = jwt.sign({ id: EmailCheck._id }, 'testsnehissetalogintocheck', {
                 expiresIn: 86400 // 24 hours
             });
-            // console.log("token",token);
-
             var msg = { 'user_id': EmailCheck._id, 'token': token, 'mobile': EmailCheck.PhoneNo };
-
+            
             res.send({ status: true, msg: "Login Succesfully", data: msg })
-
 
 
         }
         catch (error) {
-            res.send({ msg: "Login Error", error })
+            console.log(error);
+            res.send({status: false, msg: "Server Side error", data: error  })
         }
 
     }
