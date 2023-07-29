@@ -14,7 +14,6 @@ const Sidebar = ({ ShowSidebar }) => {
 
     const location = useLocation()
 
-    console.log("location", location.pathname);
 
     const roles = JSON.parse(localStorage.getItem('user_role'))
 

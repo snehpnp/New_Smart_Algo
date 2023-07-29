@@ -273,10 +273,6 @@ const CreateTheme = ({ SelectTheme1 }) => {
 
 
 
-
-
-
-
         axios.post("https://api.smartalgo.in:3001/smartalgo/theme_add", req).then((res) => {
             setIsModalOpen(false)
         }).catch((err) => {
@@ -285,18 +281,7 @@ const CreateTheme = ({ SelectTheme1 }) => {
     }
 
 
-    // let a = 'software.kashialgo.com'
-    let a = 'https://backend.fealtyinc.in/'
 
-    const firstDotIndex = a.indexOf(".");
-    const firstPart = a.slice(0, firstDotIndex);
-    const remainingPart = a.slice(firstDotIndex + 1);
-
-
-    let panel_name = a.split(".")[2]
-
-    console.log("First part:", firstPart);
-    console.log("Remaining part:", remainingPart);
 
 
 
