@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from 'react'
 import html2canvas from 'html2canvas';
 import Content from "../../../Components/Dashboard/Content/Content"
@@ -9,7 +10,7 @@ const Dashboard = () => {
 
 
     return <>
-    <div><div className="content-body"  data-Dashboard="theme-1-dashboard">
+ <div><div className="content-body" >
       {/* row */}
       <div className="container-fluid">
 
@@ -697,6 +698,8 @@ const Dashboard = () => {
           </div>
         </div>
         {/* --------theme-5-dashboard end--------- */}
+
+        {/* --------theme-6-dashboard start--------- */}
         <div className='theme-6-dashboard'>
           <div className='row'>
             <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
@@ -830,6 +833,9 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+        {/* --------theme-6-dashboard end--------- */}
+
+        {/* --------theme-7-dashboard start--------- */}
         <div className='theme-7-dashboard'>
           <div className='row'>
             <div className="col-xl-4 col-lg-4 col-sm-6">
@@ -962,6 +968,9 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+        {/* --------theme-7-dashboard end--------- */}
+
+        {/* --------theme-8-dashboard start--------- */}
         <div className='theme-8-dashboard'>
           <div className='row'>
             <div className="col-xl-3 col-xxl-4 col-lg-4 col-sm-6">
@@ -1059,6 +1068,292 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+    {/* --------theme-8-dashboard end--------- */}
+    {/* --------theme-8-dashboard start--------- */}
+    
+    <div className="theme-9-dashboard">
+            <div className="row">
+              <div className="col-xl-3 col-lg-3 col-xxl-3 col-sm-6">
+                <div className="card border-0 rounded">
+                  <div className="card-body">
+                    <div className="row justify-content-center align-items-center">
+                      <div className="col-auto text-center">
+                        <h6>Lifetime earnings</h6>
+                        <h2 className="text-uppercase">74,206</h2>
+                      </div>
+                      <div className="col-auto text-center px-0">
+                        <img
+                          src="../assets/images/dash_icon/dash-9-icon.png"
+                          className="w-50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-3 col-lg-3 col-xxl-3 col-sm-6">
+                <div className="card border-0 rounded">
+                  <div className="card-body">
+                    <div className="row justify-content-center align-items-center">
+                      <div className="col-auto text-center">
+                        <h6>Lifetime earnings</h6>
+                        <h2 className="text-uppercase">74,206</h2>
+                      </div>
+                      <div className="col-auto text-center px-0">
+                        <img
+                          src="../assets/images/dash_icon/dash-9-icon.png"
+                          className="w-50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-3 col-lg-3 col-xxl-3 col-sm-6">
+                <div className="card border-0 rounded">
+                  <div className="card-body">
+                    <div className="row justify-content-center align-items-center">
+                      <div className="col-auto text-center">
+                        <h6>Lifetime earnings</h6>
+                        <h2 className="text-uppercase">74,206</h2>
+                      </div>
+                      <div className="col-auto text-center px-0">
+                        <img
+                          src="../assets/images/dash_icon/dash-9-icon.png"
+                          className="w-50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-3 col-lg-3 col-xxl-3 col-sm-6">
+                <div className="card border-0 rounded">
+                  <div className="card-body">
+                    <div className="row justify-content-center align-items-center">
+                      <div className="col-auto text-center">
+                        <h6>Lifetime earnings</h6>
+                        <h2 className="text-uppercase">74,206</h2>
+                      </div>
+                      <div className="col-auto text-center px-0">
+                        <img
+                          src="../assets/images/dash_icon/dash-9-icon.png"
+                          className="w-50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-3 col-lg-3 col-xxl-3 col-sm-6">
+                <div className="card border-0 rounded">
+                  <div className="card-body">
+                    <div className="row justify-content-center align-items-center">
+                      <div className="col-auto text-center">
+                        <h6>Lifetime earnings</h6>
+                        <h2 className="text-uppercase">74,206</h2>
+                      </div>
+                      <div className="col-auto text-center px-0">
+                        <img
+                          src="../assets/images/dash_icon/dash-9-icon.png"
+                          className="w-50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-3 col-lg-3 col-xxl-3 col-sm-6">
+                <div className="card border-0 rounded">
+                  <div className="card-body">
+                    <div className="row justify-content-center align-items-center">
+                      <div className="col-auto text-center">
+                        <h6>Lifetime earnings</h6>
+                        <h2 className="text-uppercase">74,206</h2>
+                      </div>
+                      <div className="col-auto text-center px-0">
+                        <img
+                          src="../assets/images/dash_icon/dash-9-icon.png"
+                          className="w-50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-3 col-lg-3 col-xxl-3 col-sm-6">
+                <div className="card border-0 rounded">
+                  <div className="card-body">
+                    <div className="row justify-content-center align-items-center">
+                      <div className="col-auto text-center">
+                        <h6>Lifetime earnings</h6>
+                        <h2 className="text-uppercase">74,206</h2>
+                      </div>
+                      <div className="col-auto text-center px-0">
+                        <img
+                          src="../assets/images/dash_icon/dash-9-icon.png"
+                          className="w-50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-3 col-lg-3 col-xxl-3 col-sm-6">
+                <div className="card border-0 rounded">
+                  <div className="card-body">
+                    <div className="row justify-content-center align-items-center">
+                      <div className="col-auto text-center">
+                        <h6>Lifetime earnings</h6>
+                        <h2 className="text-uppercase">74,206</h2>
+                      </div>
+                      <div className="col-auto text-center px-0">
+                        <img
+                          src="../assets/images/dash_icon/dash-9-icon.png"
+                          className="w-50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    {/* --------theme-9-dashboard end--------- */}
+
+    {/* --------theme-10-dashboard start--------- */}
+    
+    <div className="theme-10-dashboard">
+            <div className="row">
+              <div className="col-xl-4 col-lg-4 col-xxl-4 col-md-4">
+                <div className="card widget-stat border-0 sixth-dashboard-card">
+                  <div className="card-header border-0 pb-0">
+                    <div className="media w-100">
+                      <span className="me-3 bg-primary">
+                        <i className="la la-users  text-white" />
+                      </span>
+                      <div className="media-body text-end">
+                        <p className="mb-1">Total Students</p>
+                        <h3 className="">3280</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div className=" text-center">
+                    <img
+                      src="../assets/images/dash_icon/dash-6-icon.png"
+                      className=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-4 col-lg-4 col-xxl-4 col-md-4">
+                <div className="card widget-stat border-0 sixth-dashboard-card">
+                  <div className="card-header border-0 pb-0">
+                    <div className="media w-100">
+                      <span className="me-3 bg-primary">
+                        <i className="la la-users  text-white" />
+                      </span>
+                      <div className="media-body text-end">
+                        <p className="mb-1">Total Students</p>
+                        <h3 className="">3280</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div className=" text-center">
+                    <img
+                      src="../assets/images/dash_icon/dash-6-icon.png"
+                      className=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-4 col-lg-4 col-xxl-4 col-md-4">
+                <div className="card widget-stat border-0 sixth-dashboard-card">
+                  <div className="card-header border-0 pb-0">
+                    <div className="media w-100">
+                      <span className="me-3 bg-primary">
+                        <i className="la la-users  text-white" />
+                      </span>
+                      <div className="media-body text-end">
+                        <p className="mb-1">Total Students</p>
+                        <h3 className="">3280</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div className=" text-center">
+                    <img
+                      src="../assets/images/dash_icon/dash-6-icon.png"
+                      className=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-4 col-lg-4 col-xxl-4 col-md-4">
+                <div className="card widget-stat border-0 sixth-dashboard-card">
+                  <div className="card-header border-0 pb-0">
+                    <div className="media w-100">
+                      <span className="me-3 bg-primary">
+                        <i className="la la-users  text-white" />
+                      </span>
+                      <div className="media-body text-end">
+                        <p className="mb-1">Total Students</p>
+                        <h3 className="">3280</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div className=" text-center">
+                    <img
+                      src="../assets/images/dash_icon/dash-6-icon.png"
+                      className=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-4 col-lg-4 col-xxl-4 col-md-4">
+                <div className="card widget-stat border-0 sixth-dashboard-card">
+                  <div className="card-header border-0 pb-0">
+                    <div className="media w-100">
+                      <span className="me-3 bg-primary">
+                        <i className="la la-users  text-white" />
+                      </span>
+                      <div className="media-body text-end">
+                        <p className="mb-1">Total Students</p>
+                        <h3 className="">3280</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div className=" text-center">
+                    <img
+                      src="../assets/images/dash_icon/dash-6-icon.png"
+                      className=""
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-4 col-lg-4 col-xxl-4 col-md-4">
+                <div className="card widget-stat border-0 sixth-dashboard-card">
+                  <div className="card-header border-0 pb-0">
+                    <div className="media w-100">
+                      <span className="me-3 bg-primary">
+                        <i className="la la-users  text-white" />
+                      </span>
+                      <div className="media-body text-end">
+                        <p className="mb-1">Total Students</p>
+                        <h3 className="">3280</h3>
+                      </div>
+                    </div>
+                  </div>
+                  <div className=" text-center">
+                    <img
+                      src="../assets/images/dash_icon/dash-6-icon.png"
+                      className=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    {/* --------theme-10-dashboard end--------- */}
         {/* <div className="row">
         <div className="col-xl-12">
           <div className="col-xl-12 card h-auto">
