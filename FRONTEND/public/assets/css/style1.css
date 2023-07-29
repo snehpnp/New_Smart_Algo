@@ -185,7 +185,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
  */
 :root {
   --bs-blue: #5e72e4;
-  --bs-indigo: #9763e4;
+  --bs-indigo: #6610f2;
   --bs-purple: #6f42c1;
   --bs-pink: #e83e8c;
   --bs-red: #EE3232;
@@ -3816,12 +3816,10 @@ textarea.form-control-lg {
 .breadcrumb-item.active {
   color: #6c757d; }
 
-  .pagination {
-    display: flex;
-    padding-left: 0;
-    list-style: none;
-    justify-content: end;
-}
+.pagination {
+  display: flex;
+  padding-left: 0;
+  list-style: none; }
 
 .page-link {
   position: relative;
@@ -8332,7 +8330,7 @@ h1, .h1, .h1, h2, .h2, .h2, h3, .h3, .h3, h4, .h4, .h4, h5, .h5, .h5, h6, .h6, .
   color: #5e72e4; }
 
 .text-indigo {
-  color: #9763e4; }
+  color: #6610f2; }
 
 .text-purple {
   color: #6f42c1; }
@@ -8966,7 +8964,7 @@ label {
   @media only screen and (max-width: 87.5rem) {
     .nav-control {
       right: 0.444rem; } }
-  @media only screen and (max-width: 48.9375rem) {
+  @media only screen and (max-width: 47.9375rem) {
     .nav-control {
       right: -3rem; } }
   @media only screen and (max-width: 35.9375rem) {
@@ -9317,7 +9315,7 @@ svg.pulse-svg {
       background: #F1F1F1; }
   .header-left .headaer-title h1, .header-left .headaer-title .h1 {
     font-size: 2rem; }
-    @media only screen and (max-width: 48.9375rem) {
+    @media only screen and (max-width: 47.9375rem) {
       .header-left .headaer-title h1, .header-left .headaer-title .h1 {
         display: none; } }
 
@@ -12396,7 +12394,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     [data-sibebarbg="color_3"][data-layout="horizontal"] .deznav .metismenu > li.mega-menu:hover > ul::after {
       background-color: #f5584d; }
     [data-sibebarbg="color_4"][data-layout="horizontal"] .deznav .metismenu > li.mega-menu:hover > ul::after {
-      background-color: #29298f; }
+      background-color: #360474; }
     [data-sibebarbg="color_5"][data-layout="horizontal"] .deznav .metismenu > li.mega-menu:hover > ul::after {
       background-color: #bd2130; }
     [data-sibebarbg="color_6"][data-layout="horizontal"] .deznav .metismenu > li.mega-menu:hover > ul::after {
@@ -12835,12 +12833,12 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     padding-top: 6.5rem; } }
   @media only screen and (min-width: 48rem) and (max-width: 63.9375rem) {
     [data-sidebar-style="mini"][data-header-position="fixed"] .content-body {
-      padding-top: 1rem; } }
+      padding-top: 5.5rem; } }
 
 @media only screen and (min-width: 48rem) {
-  /* [data-sidebar-style="mini"][data-layout="vertical"] .deznav {
+  [data-sidebar-style="mini"][data-layout="vertical"] .deznav {
     position: absolute !important;
-  } */
+  }
     [data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu li:hover > ul {
       display: block; }
     [data-sidebar-style="mini"][data-layout="vertical"] .deznav .metismenu > li:nth-last-child(-n + 1) > ul {
@@ -13970,7 +13968,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   .sidebar-right #header_color_2 + label,
   .sidebar-right #sidebar_color_2 + label,
   .sidebar-right #primary_color_2 + label {
-    background-color: #9763e4; }
+    background-color: #6610f2; }
   .sidebar-right #nav_header_color_3 + label,
   .sidebar-right #header_color_3 + label,
   .sidebar-right #sidebar_color_3 + label,
@@ -13980,7 +13978,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   .sidebar-right #header_color_4 + label,
   .sidebar-right #sidebar_color_4 + label,
   .sidebar-right #primary_color_4 + label {
-    background-color: #3B3B98; }
+    background-color: #4d06a5; }
   .sidebar-right #nav_header_color_5 + label,
   .sidebar-right #header_color_5 + label,
   .sidebar-right #sidebar_color_5 + label,
@@ -14025,7 +14023,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   .sidebar-right #header_color_13 + label,
   .sidebar-right #sidebar_color_13 + label,
   .sidebar-right #primary_color_13 + label {
-    background-color: #000000; }
+    background-color: #2a2a2a; }
   .sidebar-right #nav_header_color_14 + label,
   .sidebar-right #header_color_14 + label,
   .sidebar-right #sidebar_color_14 + label,
@@ -14522,7 +14520,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-nav-headerbg="color_2"][data-theme-version="dark"],
 [data-nav-headerbg="color_2"] {
-  --nav-headbg: #9763e4; }
+  --nav-headbg: #6610f2; }
   [data-nav-headerbg="color_2"][data-theme-version="dark"] .nav-header,
   [data-nav-headerbg="color_2"] .nav-header {
     border-right: 1px solid #EEEEEE57; }
@@ -14574,7 +14572,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-nav-headerbg="color_4"][data-theme-version="dark"],
 [data-nav-headerbg="color_4"] {
-  --nav-headbg: #3B3B98; }
+  --nav-headbg: #4d06a5; }
   [data-nav-headerbg="color_4"][data-theme-version="dark"] .nav-header,
   [data-nav-headerbg="color_4"] .nav-header {
     border-right: 1px solid #EEEEEE57; }
@@ -14808,7 +14806,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-nav-headerbg="color_13"][data-theme-version="dark"],
 [data-nav-headerbg="color_13"] {
-  --nav-headbg: #000000; }
+  --nav-headbg: #2a2a2a; }
   [data-nav-headerbg="color_13"][data-theme-version="dark"] .nav-header,
   [data-nav-headerbg="color_13"] .nav-header {
     border-right: 1px solid #EEEEEE57; }
@@ -14886,13 +14884,13 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-sibebarbg="color_2"][data-theme-version="dark"],
 [data-sibebarbg="color_2"] {
-  --sidebar-bg: #9763e4;
+  --sidebar-bg: #6610f2;
   /* .hamburger .line{
 				background:$white;
 			} */ }
   [data-sibebarbg="color_2"][data-theme-version="dark"] .menu-toggle .deznav .metismenu li > ul,
   [data-sibebarbg="color_2"] .menu-toggle .deznav .metismenu li > ul {
-    background: #9763e4 !important; }
+    background: #6610f2 !important; }
   [data-sibebarbg="color_2"][data-theme-version="dark"] .deznav .metismenu ul a:before,
   [data-sibebarbg="color_2"] .deznav .metismenu ul a:before {
     background: rgba(255, 255, 255, 0.5); }
@@ -15198,13 +15196,13 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-sibebarbg="color_4"][data-theme-version="dark"],
 [data-sibebarbg="color_4"] {
-  --sidebar-bg: #3B3B98;
+  --sidebar-bg: #4d06a5;
   /* .hamburger .line{
 				background:$white;
 			} */ }
   [data-sibebarbg="color_4"][data-theme-version="dark"] .menu-toggle .deznav .metismenu li > ul,
   [data-sibebarbg="color_4"] .menu-toggle .deznav .metismenu li > ul {
-    background: #3B3B98 !important; }
+    background: #4d06a5 !important; }
   [data-sibebarbg="color_4"][data-theme-version="dark"] .deznav .metismenu ul a:before,
   [data-sibebarbg="color_4"] .deznav .metismenu ul a:before {
     background: rgba(255, 255, 255, 0.5); }
@@ -16602,13 +16600,13 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-sibebarbg="color_13"][data-theme-version="dark"],
 [data-sibebarbg="color_13"] {
-  --sidebar-bg: #000000;
+  --sidebar-bg: #2a2a2a;
   /* .hamburger .line{
 				background:$white;
 			} */ }
   [data-sibebarbg="color_13"][data-theme-version="dark"] .menu-toggle .deznav .metismenu li > ul,
   [data-sibebarbg="color_13"] .menu-toggle .deznav .metismenu li > ul {
-    background: #000000 !important; }
+    background: #2a2a2a !important; }
   [data-sibebarbg="color_13"][data-theme-version="dark"] .deznav .metismenu ul a:before,
   [data-sibebarbg="color_13"] .deznav .metismenu ul a:before {
     background: rgba(255, 255, 255, 0.5); }
@@ -17070,7 +17068,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-headerbg="color_2"][data-theme-version="dark"],
 [data-headerbg="color_2"] {
-  --headerbg: #9763e4; }
+  --headerbg: #6610f2; }
   [data-headerbg="color_2"][data-theme-version="dark"] .search-area2 .input-group-text,
   [data-headerbg="color_2"][data-theme-version="dark"] .search-area2 .form-control, [data-headerbg="color_2"][data-theme-version="dark"] .search-area2 .form-control::placeholder,
   [data-headerbg="color_2"] .search-area2 .input-group-text,
@@ -17198,7 +17196,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-headerbg="color_4"][data-theme-version="dark"],
 [data-headerbg="color_4"] {
-  --headerbg: #3B3B98; }
+  --headerbg: #4d06a5; }
   [data-headerbg="color_4"][data-theme-version="dark"] .search-area2 .input-group-text,
   [data-headerbg="color_4"][data-theme-version="dark"] .search-area2 .form-control, [data-headerbg="color_4"][data-theme-version="dark"] .search-area2 .form-control::placeholder,
   [data-headerbg="color_4"] .search-area2 .input-group-text,
@@ -17774,7 +17772,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-headerbg="color_13"][data-theme-version="dark"],
 [data-headerbg="color_13"] {
-  --headerbg: #000000; }
+  --headerbg: #2a2a2a; }
   [data-headerbg="color_13"][data-theme-version="dark"] .search-area2 .input-group-text,
   [data-headerbg="color_13"][data-theme-version="dark"] .search-area2 .form-control, [data-headerbg="color_13"][data-theme-version="dark"] .search-area2 .form-control::placeholder,
   [data-headerbg="color_13"] .search-area2 .input-group-text,
@@ -18072,7 +18070,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   max-width: 92.5rem; }
 
 [data-primary="color_2"] {
-  --primary: #9763e4;
+  --primary: #6610f2;
   --secondary: #ffd482;
   --primary-hover: #510bc4;
   --primary-dark: #290564;
@@ -18102,9 +18100,9 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   --rgba-primary-9: rgba(248, 133, 125, 0.9); }
 
 [data-primary="color_4"] {
-  --primary: #3B3B98;
+  --primary: #4d06a5;
   --secondary: #ffd482;
-  --primary-hover: #29298f;
+  --primary-hover: #360474;
   --primary-dark: #080111;
   --rgba-primary-1: rgba(77, 6, 165, 0.1);
   --rgba-primary-2: rgba(77, 6, 165, 0.2);
@@ -18209,7 +18207,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 [data-primary="color_11"] {
   --primary: #cd2c66;
   --secondary: #ffd482;
-  --primary-hover: #b51f55;
+  --primary-hover: #754d70;
   --primary-dark: #382435;
   --rgba-primary-1: rgba(148, 97, 142, 0.1);
   --rgba-primary-2: rgba(148, 97, 142, 0.2);
@@ -18237,7 +18235,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   --rgba-primary-9: rgba(52, 58, 64, 0.9); }
 
 [data-primary="color_13"] {
-  --primary: #000000;
+  --primary: #2a2a2a;
   --secondary: #ffd482;
   --primary-hover: #111111;
   --primary-dark: black;
@@ -25755,12 +25753,9 @@ code {
   color: #2D3134; }
   .table strong {
     color: #6e6e6e; }
-    .table th {
-      border-color: #d3d3d3;
-      padding: 1.313rem 1.125rem; }
-      .table td {
-        border-color: #d3d3d3;
-        padding: 0.5rem 1.125rem; }
+  .table th, .table td {
+    border-color: #d3d3d3;
+    padding: 1.313rem 1.125rem; }
     [data-theme-version="dark"] .table th, [data-theme-version="dark"] .table td {
       border-color: #3D3D3D !important;
       color: #fff; }
@@ -25834,7 +25829,7 @@ code {
   .table thead th {
     border-bottom: 0.0625rem solid #EEEEEE;
     text-transform: capitalize;
-    color: #fff;
+    color: #000;
     font-size: 0.875rem;
     white-space: nowrap;
     font-weight: 600;
@@ -26579,17 +26574,16 @@ table.dataTable.display tbody td {
     .gap {
       height: unset; } }
 
-      .default-select {
-        padding: 0.5em 2.8125rem 0.875rem 1.125rem;
-        line-height: 1;
-        align-items: center;
-        display: flex;
-        border-radius: 0.5rem;
-        margin-left: 1.5rem;
-        font-weight: 500;
-        color: #000;
-        border: 1px solid #C2C2C2 !important;
-    }
+.default-select {
+  padding: 0.875rem 2.8125rem 0.875rem 1.125rem;
+  line-height: 1;
+  align-items: center;
+  display: flex;
+  border-radius: 0.5rem;
+  margin-left: 1.5rem;
+  font-weight: 500;
+  color: #000;
+  border: 1px solid #C2C2C2 !important; }
   @media only screen and (max-width: 61.9375rem) {
     .default-select {
       margin-left: 0; } }
