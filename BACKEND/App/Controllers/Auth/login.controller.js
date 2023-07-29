@@ -1,7 +1,7 @@
 "use strict";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const {logger} = require('../../Helper/logger.helper')
 const { User_model } = require('../../Models/user.model')
 const formattedDateTime = require('../../Helper/time.helper')
 
@@ -60,7 +60,9 @@ class Login {
             });
             var msg = { 'user_id': EmailCheck._id, 'token': token, 'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role };
 
-
+            // logger.info('Logiin Success!')
+            console.log("--",logger);
+            logger.info('info', { role: "ADMIN", user_id: "1" });
             res.send({ status: true, msg: "Login Succesfully", data: msg })
 
 
