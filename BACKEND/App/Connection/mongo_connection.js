@@ -26,6 +26,7 @@ const connectToDatabase = async () => {
           .then((role) => {
             if (role.length == 0) {
             console.log("Run");
+            CompanyCreate()
             }
             return role;
 
@@ -41,6 +42,10 @@ const connectToDatabase = async () => {
   }
 }
 connectToDatabase()
+
+
+// ========================================================================================================
+
 
 // Role Create
 const RoleCreate = ()=>{
@@ -77,3 +82,17 @@ const RoleCreate = ()=>{
 }
 
 // Create Company information Table 
+const CompanyCreate = ()=>{
+  const companyData = new company({
+    panel_name:"Demo Comapnyname",
+    panel_key:"panel_key",
+    prefix:"prefix",
+    domain_url:"domain_url",
+    domain_url_https:"domain_url_https",
+    broker_url:"broker_url",
+    theme_name:"theme_name"
+    
+  })
+  // console.log("newRole", newRole);
+  return companyData.save();
+}

@@ -1,5 +1,5 @@
 "use strict";
-
+const bcrypt = require("bcrypt");
 const { User_model } = require('../../Models/user.model')
 const Role_model = require('../../Models/role.model')
 
@@ -39,17 +39,21 @@ class Employee {
 
 
 
+            const salt = await bcrypt.genSalt(10);
+            var ByCryptrand_password = await bcrypt.hash(rand_password.toString(), salt);
 
-            return
+
+
+            // return
             // Company Information
             const User = new User_model({
                 FullName: FullName,
                 UserName: UserName,
                 Email: Email,
                 PhoneNo: PhoneNo,
-                Password: UserName + "@" + PhoneNo.slice(-4),
-                // Password: RandomeNum,
-                Otp: "123",
+                // Password: UserName + "@" + PhoneNo.slice(-4),
+                Password: ByCryptrand_password,
+                Otp: rand_password,
                 StartDate: StartDate,
                 EndDate: EndDate,
                 Role: Role.toUpperCase()
