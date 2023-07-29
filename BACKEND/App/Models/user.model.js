@@ -32,6 +32,8 @@ const userModel = Schema({
         type: String,
         required: true,
         trim: true,
+        min:10,
+        max:10,
         unique: true,
         default: null
     },
@@ -61,16 +63,32 @@ const userModel = Schema({
         required: true,
         default: null
     },
-    LoginStatus: {
+    ActiveStatus: {
         type: String,
-        enum: ['0', '1'],
-        default: '0'
+        enum: ['1', '0'],
+        default: '1'
     },
-
     Role: {
         type: String,
         required: true
-    }
+    },
+    AppLoginStatus: {
+        type: String,
+        required: true,
+        enum: ['0', '1'],
+        default: '0'
+    },
+    WebLoginStatus: {
+        type: String,
+        required: true,
+        enum: ['0', '1'],
+        default: '0'
+    },
+    TradingStatus: {
+        type: String,
+        enum: ['off', 'on'],
+        default: 'off'
+    },
 
 },
     {

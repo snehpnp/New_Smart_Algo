@@ -40,6 +40,8 @@ app.get('/get', async (req, res) => {
 // Routes all
 app.use(require("./App/Routes/Admin/user.route"))
 app.use(require("./App/Routes/SuperAdmin/theme_list.router"))
+app.use(require("./App/Routes/Auth/login.route"))
+
 
 
 

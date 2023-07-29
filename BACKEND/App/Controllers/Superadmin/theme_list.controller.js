@@ -1,12 +1,11 @@
 "use strict";
 const Theme_list = require('../../Models/theme_list.model')
-
+const { formattedDateTime } = require('../../Helper/time.helper')
 class Theme {
     async AddTheme(req, res) {
         try {
-
             const { theme_name, theme_version, primary_col, nav_head_col, header_col, sidebar_col
-                , sidebar, header_position, sidebar_position, container, body_font, dashboard, image } = req.body
+                , sidebar, header_position, sidebar_position, layout, container, body_font, dashboard, image } = req.body
 
             var lastElement;
             // FIND TABLE THEME DATA LAST INDEX
@@ -22,19 +21,19 @@ class Theme {
             const AddTheme = new Theme_list({
                 themeId: lastElement,
                 theme_name: theme_name,
-                theme_version: theme_name,
-                primary_col: theme_name,
-                nav_head_col: theme_name,
-                header_col: theme_name,
-                sidebar_col: theme_name,
-                layout: theme_name,
-                sidebar: theme_name,
-                header_position: theme_name,
-                sidebar_position: theme_name,
-                container: theme_name,
-                body_font: theme_name,
-                dashboard: theme_name,
-                image: theme_name
+                theme_version: theme_version,
+                primary_col: primary_col,
+                nav_head_col: nav_head_col,
+                header_col: header_col,
+                sidebar_col: sidebar_col,
+                layout: layout,
+                sidebar: sidebar,
+                header_position: header_position,
+                sidebar_position: sidebar_position,
+                container: container,
+                body_font: body_font,
+                dashboard: dashboard,
+                image: image
             });
             AddTheme.save()
                 .then(async (data) => {
