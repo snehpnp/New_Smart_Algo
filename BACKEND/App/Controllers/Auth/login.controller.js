@@ -5,9 +5,10 @@ const jwt = require("jsonwebtoken");
 const { User_model } = require('../../Models/user.model')
 const formattedDateTime = require('../../Helper/time.helper')
 
-// OK
-// Product CLASS
+// Login CLASS
 class Login {
+
+    // Login User
     async login(req, res) {
         try {
             const { Email, Password, device } = req.body;
@@ -26,9 +27,6 @@ class Login {
                 if (EmailCheck.WebLoginStatus == 1) {
                     return res.status(409).json({ status: false, msg: 'You are already logged in on the Web.', data: [] });
                 }
-            } else {
-                return res.status(409).json({ status: false, msg: 'Server Side issue', data: [] });
-
             }
 
 
@@ -53,27 +51,81 @@ class Login {
             // USER EXPIRY CHECK
             if (new Date(EmailCheck.EndDate) <= new Date()) {
                 return res.status(409).json({ status: false, msg: 'your service is terminated please contact to admin', data: [] });
-            } 
-       
+            }
+
 
             // JWT TOKEN CREATE 
             var token = jwt.sign({ id: EmailCheck._id }, 'testsnehissetalogintocheck', {
                 expiresIn: 86400 // 24 hours
             });
-            var msg = { 'user_id': EmailCheck._id, 'token': token, 'mobile': EmailCheck.PhoneNo };
-            
+            var msg = { 'user_id': EmailCheck._id, 'token': token, 'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role };
+
+
             res.send({ status: true, msg: "Login Succesfully", data: msg })
 
 
         }
         catch (error) {
             console.log(error);
-            res.send({status: false, msg: "Server Side error", data: error  })
+            res.send({ status: false, msg: "Server Side error", data: error })
         }
 
     }
 
+    // Verify user
+    async verifyUser(req, res) {
+        try {
+            const { Email, Device } = req.body;
+            var addData = {}
 
+            // IF Login Time Email CHECK
+            const EmailCheck = await User_model.findOne({ Email: Email });
+            if (!EmailCheck) {
+                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+            }
+
+            try {
+                // WHERE LOGIN CHECK
+                if (Device == "APP") {                  //App Login Check
+                    if (EmailCheck.AppLoginStatus == 1) {
+
+                        return res.status(409).json({ status: false, msg: 'You are already logged in on the phone.', data: [] });
+                    } else {
+                        addData["AppLoginStatus"] = 7
+                    }
+                } else if (Device == "WEB") {          //Web login check
+                    if (EmailCheck.WebLoginStatus == 1) {
+
+                        return res.status(409).json({ status: false, msg: 'You are already logged in on the Web.', data: [] });
+                    } else {
+                        addData["WebLoginStatus"] = 1
+                    }
+                }
+
+            } catch (error) {
+                console.log("Verfiy error", error);
+            }
+
+
+            // Update Successfully
+            const result = await User_model.updateOne(
+                { Email: Email },
+                { $set: addData }
+            );
+
+            // If Not Update User
+            if (!result) {
+                return res.status(409).json({ status: false, msg: 'Server Side issue.', data: [] });
+            }
+
+
+            res.send({ status: true, msg: "Login Succesfully", data: [] })
+
+
+        } catch (error) {
+
+        }
+    }
 
 
 }
