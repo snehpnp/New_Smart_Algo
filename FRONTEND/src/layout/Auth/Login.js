@@ -1,25 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState , useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { SignIn } from "../../ReduxStore/Slice/Auth/AuthSlice";
 import Modal from "../../Components/ExtraComponents/Modal"
 import OtpInput from 'react-otp-input';
+import { check_Device } from "../../Utils/find_device";
 
 const Login = () => {
   const navigate = useNavigate();
+  const data = useRef()
   const dispatch = useDispatch();
 
 
   const [showModal, setshowModal] = useState(false)
   const [otp, setOtp] = useState('');
+  // let aaaa
+  // useEffect(() => {
+  //   aaaa += check_Device()
+  // }, [aaaa])
 
+
+  // console.log("abc", aaaa);
 
   const loginUser = async (e) => {
     e.preventDefault();
 
     let req = {
-      Email: "snehj121@gmail.com",
-      Password: "977490",
+      Email: "superadmin@gmail.com",
+      Password: "269043",
       device: "APP",
     };
 
@@ -30,44 +38,24 @@ const Login = () => {
         if (res.payload.status) {
           if (res.payload.data.Role === "SUPERADMIN") {
             // __________ Super Admin __________
-            localStorage.setItem(
-              "user_details",
-              JSON.stringify(res.payload.data)
-            );
-            localStorage.setItem(
-              "user_role",
-              JSON.stringify(res.data.data.role)
-            );
+            localStorage.setItem("user_details",JSON.stringify(res.payload.data));
+            localStorage.setItem("user_role",JSON.stringify(res.data.data.role));
             navigate("/super/dashboard");
           } else if (res.payload.data.Role === "ADMIN") {
             // __________ Admin __________
-            localStorage.setItem(
-              "user_details",
-              JSON.stringify(res.payload.data)
-            );
-            localStorage.setItem(
-              "user_role",
-              JSON.stringify(res.data.data.role)
-            );
+            localStorage.setItem("user_details",JSON.stringify(res.payload.data));
+            localStorage.setItem("user_role", JSON.stringify(res.data.data.role));
+        
             navigate("/admin/dashboard");
           } else if (res.payload.data.Role === "CLIENT") {
             // __________ client __________
-            localStorage.setItem(
-              "user_details",
-              JSON.stringify(res.payload.data)
-            );
-            localStorage.setItem(
-              "user_role",
-              JSON.stringify(res.data.data.role)
-            );
+            localStorage.setItem("user_details", JSON.stringify(res.payload.data));
+            localStorage.setItem("user_role", JSON.stringify(res.data.data.role));
             navigate("/client/dashboard");
           } else if (res.payload.data.Role === "SUBADMIN") {
             // __________ subadmin __________
             localStorage.setItem("user_details", JSON.stringify(res.data.data));
-            localStorage.setItem(
-              "user_role",
-              JSON.stringify(res.data.data.role)
-            );
+            localStorage.setItem("user_role",JSON.stringify(res.data.data.role));
             navigate("/subadmin/dashboard");
           }
         }
@@ -83,16 +71,10 @@ const Login = () => {
 
 
 
-const verifyOTP = ()=>{
-  
-  const userAgent = navigator.userAgent;
-const isMobileApp = /Mobile|Android|iPhone/i.test(userAgent);
-if (isMobileApp) {
-console.log('User is using the mobile app.');
-} else {
-console.log('User is using the web app.');
-}
-}
+  const verifyOTP = () => {
+
+
+  }
 
 
   return (
@@ -120,46 +102,46 @@ console.log('User is using the web app.');
 
                       <button onClick={() => setshowModal(!showModal)}  > click</button>
                       {showModal ?
-                      <>
-                        <Modal isOpen={showModal} handleClose={!showModal} backdrop="static" size="sm"  title="Verify OTP" btn_name="Verify"  Submit_Function={verifyOTP()}>
-                        <OtpInput
-                        containerStyle ="otp-div"
-      value={otp}
-      onChange={setOtp}
-      numInputs={4}
-      renderSeparator={<span></span>}
-      renderInput={(props) => <input {...props} />}
-    />
+                        <>
+                          <Modal isOpen={showModal} handleClose={!showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify" Submit_Function={verifyOTP()}>
+                            <OtpInput
+                              containerStyle="otp-div"
+                              value={otp}
+                              onChange={setOtp}
+                              numInputs={4}
+                              renderSeparator={<span></span>}
+                              renderInput={(props) => <input {...props} />}
+                            />
                           </Modal >
-                      </>
-                          :""
+                        </>
+                        : ""
                       }
 
 
-                      
 
-                          <form action="index.html">
-                            <div className="mb-3">
-                              <label className="mb-1">
-                                <strong> Email </strong>
-                              </label>
-                              <input
-                                type="email"
-                                className="form-control"
-                                placeholder="Example@gmail.com"
-                              />
-                            </div>
-                            <div className="mb-3">
-                              <label className="mb-1">
-                                <strong> Password </strong>
-                              </label>
-                              <input
-                                type="password"
-                                className="form-control"
-                                placeholder="Password"
-                              />
-                            </div>
-                            {/* <div className="form-row d-flex justify-content-between mt-4 mb-2">
+
+                      <form action="index.html">
+                        <div className="mb-3">
+                          <label className="mb-1">
+                            <strong> Email </strong>
+                          </label>
+                          <input
+                            type="email"
+                            className="form-control"
+                            placeholder="Example@gmail.com"
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label className="mb-1">
+                            <strong> Password </strong>
+                          </label>
+                          <input
+                            type="password"
+                            className="form-control"
+                            placeholder="Password"
+                          />
+                        </div>
+                        {/* <div className="form-row d-flex justify-content-between mt-4 mb-2">
                                                             <div className="mb-3">
                                                                 <div className="form-check custom-checkbox ms-0">
                                                                     <input
@@ -179,19 +161,19 @@ console.log('User is using the web app.');
                                                                 <a href="page-forgot-password.html">Forgot Password?</a>
                                                             </div>
                                                         </div> */}
-                            <div className="text-center">
-                              <button
-                                type="submit"
-                                className="btn btn-primary btn-block"
-                                onClick={(e) => {
-                                  loginUser(e);
-                                }}
-                              >
-                                Sign Me In
-                              </button>
-                            </div>
-                          </form>
-                          {/* <div className="new-account mt-3">
+                        <div className="text-center">
+                          <button
+                            type="submit"
+                            className="btn btn-primary btn-block"
+                            onClick={(e) => {
+                              loginUser(e);
+                            }}
+                          >
+                            Sign Me In
+                          </button>
+                        </div>
+                      </form>
+                      {/* <div className="new-account mt-3">
                                                         <p className="mb-0 mb-sm-3">
                                                             Don't have an account?
                                                             <a className="text-primary" href="./page-register.html">
@@ -199,8 +181,7 @@ console.log('User is using the web app.');
                                                             </a>
                                                         </p>
                                                     </div> */}
-                        </div>
-                  </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -208,7 +189,8 @@ console.log('User is using the web app.');
           </div>
         </div>
       </div>
-      );
+    </div>
+  );
 };
 
-      export default Login;
+export default Login;

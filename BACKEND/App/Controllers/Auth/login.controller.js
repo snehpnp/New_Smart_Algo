@@ -1,7 +1,7 @@
 "use strict";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const { logger } = require('../../Helper/logger.helper')
 const { User_model } = require('../../Models/user.model')
 const formattedDateTime = require('../../Helper/time.helper')
 
@@ -61,6 +61,7 @@ class Login {
             var msg = { 'user_id': EmailCheck._id, 'token': token, 'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role };
 
 
+            logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
             res.send({ status: true, msg: "Login Succesfully", data: msg })
 
 
@@ -88,17 +89,17 @@ class Login {
                 // WHERE LOGIN CHECK
                 if (Device == "APP") {                  //App Login Check
                     if (EmailCheck.AppLoginStatus == 1) {
-
+                        logger.info('You are already logged in on the phone.', { role: EmailCheck.Role, user_id: EmailCheck._id });
                         return res.status(409).json({ status: false, msg: 'You are already logged in on the phone.', data: [] });
                     } else {
-                        addData["AppLoginStatus"] = 7
+                        addData["AppLoginStatus"] = 1;
                     }
                 } else if (Device == "WEB") {          //Web login check
                     if (EmailCheck.WebLoginStatus == 1) {
-
+                        logger.info('You are already logged in on the Web.', { role: EmailCheck.Role, user_id: EmailCheck._id });
                         return res.status(409).json({ status: false, msg: 'You are already logged in on the Web.', data: [] });
                     } else {
-                        addData["WebLoginStatus"] = 1
+                        addData["WebLoginStatus"] = 1;
                     }
                 }
 
@@ -119,7 +120,8 @@ class Login {
             }
 
 
-            res.send({ status: true, msg: "Login Succesfully", data: [] })
+            logger.info('Verify Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+            res.send({ status: true, msg: "Verify Succesfully", data: [] })
 
 
         } catch (error) {
@@ -127,6 +129,62 @@ class Login {
         }
     }
 
+    // Logout User
+    async logoutUser(req, res) {
+        try {
+            const { userId, Device } = req.body;
+            var addData = {}
+
+            // IF Login Time Email CHECK
+            const EmailCheck = await User_model.findById(userId);
+            if (!EmailCheck) {
+                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+            }
+
+
+            try {
+                // WHERE LOGIN CHECK
+                if (Device == "APP") {                  //App Login Check
+                    if (EmailCheck.AppLoginStatus == 0) {
+                        logger.info('You are already log Out on the phone.', { role: EmailCheck.Role, user_id: EmailCheck._id });
+                        return res.status(409).json({ status: false, msg: 'You are already log Out on the phone.', data: [] });
+                    } else {
+                        addData["AppLoginStatus"] = 0;
+                    }
+                } else if (Device == "WEB") {          //Web login check
+                    if (EmailCheck.WebLoginStatus == 0) {
+                        logger.info('You are already log Out on the Web.', { role: EmailCheck.Role, user_id: EmailCheck._id });
+                        return res.status(409).json({ status: false, msg: 'You are already log Out on the Web.', data: [] });
+                    } else {
+                        addData["WebLoginStatus"] = 0;
+                    }
+                }
+
+            } catch (error) {
+                console.log("Verfiy error", error);
+            }
+
+
+            // Update Successfully
+            const result = await User_model.updateOne(
+                { Email: EmailCheck.Email },
+                { $set: addData }
+            );
+
+            // If Not Update User
+            if (!result) {
+                return res.status(409).json({ status: false, msg: 'Server Side issue.', data: [] });
+            }
+
+
+            logger.info('Logout Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+            res.send({ status: true, msg: "Logout Succesfully", data: [] })
+
+
+        } catch (error) {
+
+        }
+    }
 
 }
 
