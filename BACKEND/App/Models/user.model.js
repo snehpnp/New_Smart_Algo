@@ -89,6 +89,12 @@ const userModel = Schema({
         enum: ['off', 'on'],
         default: 'off'
     },
+    client_key : {
+        type: String,
+        required: true,
+        trim: true,
+        default: null
+    },
 
 },
     {
@@ -96,7 +102,7 @@ const userModel = Schema({
     },
 
 )
-const User_model = model('USER_MODEL', userModel);
+const User_model = model('USER', userModel);
 
 
 
