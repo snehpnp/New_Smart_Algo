@@ -5,6 +5,7 @@ class Company {
     async EditCompany(req, res) {
         try {
 
+
             var _id = req.body.id;
 
             company.findById(_id)
@@ -20,6 +21,11 @@ class Company {
 
 
                 })
+
+
+            company.findById(_id)
+            .then((role) => {})
+
 
         } catch (error) {
             console.log("Theme error-", error);
