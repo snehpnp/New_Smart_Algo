@@ -76,7 +76,7 @@ class Login {
     // Verify user
     async verifyUser(req, res) {
         try {
-            const { Email, Device } = req.body;
+            const { Email, Otp, Device } = req.body;
             var addData = {}
 
             // IF Login Time Email CHECK
@@ -84,6 +84,13 @@ class Login {
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
+
+            // CHECK OTP AND VERFIY OUR CLIENTS
+            if (EmailCheck.PhoneNo.slice(-4) != Otp) {
+                return res.status(409).json({ status: false, msg: 'Otp Not Match', data: [] });
+            }
+
+
 
             try {
                 // WHERE LOGIN CHECK
@@ -105,6 +112,8 @@ class Login {
 
             } catch (error) {
                 console.log("Verfiy error", error);
+                return res.status(409).json({ status: false, msg: 'Server Issue', data: error });
+
             }
 
 

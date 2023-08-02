@@ -46,6 +46,14 @@ class Theme {
             console.log("Theme error-", error);
         }
     }
+
+    async GetAllTheme(req,res){
+        try {
+            
+        } catch (error) {
+            console.log();
+        }
+    }
 }
 
 

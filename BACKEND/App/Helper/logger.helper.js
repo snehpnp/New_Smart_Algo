@@ -1,7 +1,7 @@
 const { createLogger, format, transports } = require('winston');
 const fs = require('fs');
 const {formattedDateTime} = require('../Helper/time.helper')
-const logFilePath = 'BACKEND/Logs/activity.log'; // Replace 'activity.log' with the desired log file path
+const logFilePath = 'activity.log'; // Replace 'activity.log' with the desired log file path
 
 // Create a logger instance
 const logger = createLogger({
@@ -9,7 +9,7 @@ const logger = createLogger({
     format: format.combine(
         format.timestamp(),
         format.printf(({ timestamp, level, message, ...data }) => {
-            return `{time:"${formattedDateTime}" ,type:${level.toUpperCase()},Role:"${data.role}",user_id:"${data.user_id}", msg:"${message}"}`;
+            return `{Ip:"${ipAddress}", time:"${formattedDateTime}" ,type:${level.toUpperCase()},Role:"${data.role}",user_id:"${data.user_id}", msg:"${message}"}`;
         })
     ),
     transports: [
@@ -17,6 +17,28 @@ const logger = createLogger({
         new transports.File({ filename: logFilePath }), // Log to the specified file
     ],
 });
+
+
+const os = require('os');
+
+const getIPAddress = () => {
+  const interfaces = os.networkInterfaces();
+  let ipAddress = '';
+
+  for (const networkInterface of Object.values(interfaces)) {
+    for (const networkInfo of networkInterface) {
+      if (networkInfo.family === 'IPv4' && !networkInfo.internal) {
+        ipAddress = networkInfo.address;
+        break;
+      }
+    }
+  }
+
+  return ipAddress;
+};
+
+const ipAddress = getIPAddress();
+
 
 
 module.exports = {logger}
