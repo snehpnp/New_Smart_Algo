@@ -1,7 +1,7 @@
 const { createLogger, format, transports } = require('winston');
 const fs = require('fs');
 const {formattedDateTime} = require('../Helper/time.helper')
-const logFilePath = 'activity.log'; // Replace 'activity.log' with the desired log file path
+const logFilePath = 'BACKEND/Logs/activity.log'; // Replace 'activity.log' with the desired log file path
 
 // Create a logger instance
 const logger = createLogger({

@@ -32,6 +32,15 @@ app.use(bodyparser.json());
 const server = http.createServer(app);
 
 
+
+
+// REQUIRE File
+require('./App/Cron/cron')
+
+
+
+
+// TEST API 
 app.get('/get', async (req, res) => {
   res.send({ msg: "Done!!!" })
 })
@@ -41,7 +50,6 @@ app.get('/get', async (req, res) => {
 app.use(require("./App/Routes/Admin/user.route"))
 app.use(require("./App/Routes/SuperAdmin/theme_list.router"))
 app.use(require("./App/Routes/Auth/login.route"))
-
 
 
 
