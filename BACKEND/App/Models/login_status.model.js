@@ -21,5 +21,5 @@ const userActivitySchema = new mongoose.Schema({
     _id: true,
   });
 
-const Role = mongoose.model('Roles', userActivitySchema);
+const Role = mongoose.model('login_status', userActivitySchema);
 module.exports = Role;
