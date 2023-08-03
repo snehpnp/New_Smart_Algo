@@ -8,6 +8,8 @@ const db  = require('../../Models');
 const User = db.user;
 
 const formattedDateTime = require('../../Helper/time.helper')
+const  user_logs  = require('../../Models/user_logs.model')
+
 
 // Login CLASS
 class Login {
@@ -23,7 +25,7 @@ class Login {
             }
             // console.log("ipAddress",ipAddress);
 
-            // WHERE LOGIN CHECK
+            // WHERE LOGIN CHECKgetIPAddress
             if (device == "APP") {                  //App Login Check
                 if (EmailCheck.AppLoginStatus == 1) {
                     return res.status(409).json({ status: false, msg: 'You are already logged in on the phone.', data: [] });
@@ -59,15 +61,31 @@ class Login {
             }
 
 
-            // JWT TOKEN CREATE 
+            // JWT TOKEN CREATE
             var token = jwt.sign({ id: EmailCheck._id }, 'testsnehissetalogintocheck', {
                 expiresIn: 86400 // 24 hours
             });
             var msg = { 'user_id': EmailCheck._id, 'token': token, 'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role };
 
+            try {
+                // ADD USER LOGS COLLECTION DATA
+                const user_login = new user_logs({
+                    user_Id: EmailCheck._id,
+                    login_status:"Panel On",
+                    role:EmailCheck.Role,
+                    system_ip:getIPAddress
+                })
 
-            logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Login Succesfully", data: msg })
+                await user_login.save()
+
+                logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+
+                res.send({ status: true, msg: "Login Succesfully", data: msg })
+
+
+            } catch (error) {
+                console.log("Some Error in a login", error);
+            }
 
 
         }
@@ -79,7 +97,7 @@ class Login {
     }
 
     // Verify user
-    async verifyUser(req, res) {
+   async verifyUser(req, res) {
         try {
             const { Email, Otp, Device } = req.body;
             var addData = {}
@@ -134,14 +152,15 @@ class Login {
             }
 
 
-            logger.info('Verify Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Verify Succesfully", data: [] })
+            logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+            res.send({ status: true, msg: "Login Successfully", data: [] })
 
 
         } catch (error) {
 
         }
     }
+
 
     // Logout User
     async logoutUser(req, res) {
