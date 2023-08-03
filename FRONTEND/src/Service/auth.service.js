@@ -57,3 +57,26 @@ export async function LOG_OUT_USER(data, token) {
     }
 
 }
+
+
+
+
+
+// GET COMPANY AND THEME DETAILS
+export async function SET_THEME_DETAILS(data, token) {
+    try {
+        const res = await axios.get(`${Config.base_url}get/company`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        console.log("res", res);
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+

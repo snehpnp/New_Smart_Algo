@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { SIGN_IN_USER, VARIFY_USER_DEVICE, LOG_OUT_USER } from "../../../Service/auth.service";
+import { SIGN_IN_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_DETAILS } from "../../../Service/auth.service";
 
 export const SignIn = createAsyncThunk("DispatchLogin", async (data) => {
   try {
@@ -34,6 +34,15 @@ export const Log_Out_User = createAsyncThunk("DispatchUserLogout", async (data) 
 });
 
 
+export const get_theme_details = createAsyncThunk("/get/theme", async (data) => {
+  try {
+    const res = await SET_THEME_DETAILS(data)
+    return res;
+  }
+  catch (err) {
+    return err;
+  }
+});
 
 const AuthSlice = createSlice({
   name: "AuthSlice",
@@ -42,7 +51,8 @@ const AuthSlice = createSlice({
     isError: false,
     logdatails: [],
     device_user: [],
-    userlogout: []
+    userlogout: [],
+    getheme: []
   },
 
   recuders: {},
@@ -67,8 +77,14 @@ const AuthSlice = createSlice({
     [Log_Out_User.fulfilled]: (state, { payload }) => {
       return { ...state, device_user: payload, isLoading: false };
     },
-     [Log_Out_User.rejected]: (state, action) => {
+    [Log_Out_User.rejected]: (state, action) => {
       return { ...state, device_user: action, isLoading: false };
+    },
+    [get_theme_details.fulfilled]: (state, { payload }) => {
+      return { ...state, getheme: payload, isLoading: false };
+    },
+    [get_theme_details.rejected]: (state, action) => {
+      return { ...state, getheme: action, isLoading: false };
     },
   },
 });
