@@ -1,7 +1,9 @@
 const { createLogger, format, transports } = require('winston');
 const fs = require('fs');
 const {formattedDateTime} = require('../Helper/time.helper')
-const logFilePath = 'activity.log'; // Replace 'activity.log' with the desired log file path
+const logFilePath = 'Logs/activity.log'; // Replace 'activity.log' with the desired log file path
+const os = require('os');
+
 
 // Create a logger instance
 const logger = createLogger({
@@ -19,7 +21,6 @@ const logger = createLogger({
 });
 
 
-const os = require('os');
 
 const getIPAddress = () => {
   const interfaces = os.networkInterfaces();
@@ -41,4 +42,4 @@ const ipAddress = getIPAddress();
 
 
 
-module.exports = {logger}
+module.exports = {logger,getIPAddress}
