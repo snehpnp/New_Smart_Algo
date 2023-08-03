@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 
-const { logger ,ipAddress} = require('../../Helper/logger.helper')
 const { User_model } = require('../../Models/user.model')
 const formattedDateTime = require('../../Helper/time.helper')
 
