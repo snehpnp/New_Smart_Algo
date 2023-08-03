@@ -3,9 +3,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
-
 const { User_model } = require('../../Models/user.model')
 const formattedDateTime = require('../../Helper/time.helper')
+const  user_logs  = require('../../Models/user_logs.model')
+
 
 // Login CLASS
 class Login {
@@ -63,9 +64,25 @@ class Login {
             });
             var msg = { 'user_id': EmailCheck._id, 'token': token, 'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role };
 
+            try {
+                // ADD USER LOGS COLLECTION DATA
+                const user_login = new user_logs({
+                    user_Id: EmailCheck._id,
+                    login_status:"Panel On",
+                    role:EmailCheck.Role,
+                    system_ip:getIPAddress
+                })
 
-            logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Login Succesfully", data: msg })
+                await user_login.save()
+
+                logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+
+                res.send({ status: true, msg: "Login Succesfully", data: msg })
+
+
+            } catch (error) {
+                console.log("Some Error in a login", error);
+            }
 
 
         }
