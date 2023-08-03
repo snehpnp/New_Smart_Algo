@@ -17,7 +17,7 @@ const Wraper = () => {
 
 
   const [toggleChatBox, setToggleChatBox] = useState(false)
-  const [toggleSidebar, setToggleSidebar] = useState(false)
+  const [toggleSidebar, setToggleSidebar] = useState(true)
 
 
   const roles = JSON.parse(localStorage.getItem('user_role'))
@@ -31,9 +31,7 @@ const Wraper = () => {
 
   const ShowSidebar = () => {
     setToggleSidebar(!toggleSidebar)
-    let tst = $('body')
-    console.log("tesss", tst);
-
+    // let tst = $('body')
 
   }
 
