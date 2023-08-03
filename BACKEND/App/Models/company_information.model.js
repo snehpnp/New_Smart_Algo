@@ -27,6 +27,10 @@ const CompanySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    theme_id: {
+        type: String,
+        required: true
+    },
     theme_name: {
         type: String,
         required: true

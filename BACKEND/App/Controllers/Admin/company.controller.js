@@ -9,17 +9,24 @@ class Company {
             var companydata = req.body.data
             var _id = req.body.id;
 
-            company.findById(_id)
+            company_information.findById(_id)
                 .then(async (value) => {
-                if (!value) {
+                    if (!value) {
                         return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
                     }
                     console.log("value", value);
 
-                    const filter = { _id: ObjectId(_id) };
+                    const filter = { _id: _id };
                     const updateOperation = { $set: companydata };
 
-                    const result = await collection.updateOne(filter, updateOperation);
+                    const result = await company_information.updateOne(filter, updateOperation);
+
+                    if (!result) {
+                        return res.status(409).json({ status: false, msg: 'Company not update', data: [] });
+                    }
+
+                    return res.status(200).json({ status: true, msg: 'Update Successfully.', data: [] });
+
                 })
 
 
@@ -32,7 +39,7 @@ class Company {
     async GetCompanyInfo(req, res) {
         try {
 
-            var compantInfo = await company.find()
+            var compantInfo = await company_information.find()
             if (!compantInfo) {
                 return res.status(409).json({ status: false, msg: 'Server issue Not find Company information.', data: [] });
             }

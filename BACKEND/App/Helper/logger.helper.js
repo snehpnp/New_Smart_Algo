@@ -11,7 +11,7 @@ const logger = createLogger({
     format: format.combine(
         format.timestamp(),
         format.printf(({ timestamp, level, message, ...data }) => {
-            return `{Ip:"${ipAddress}", time:"${formattedDateTime}" ,type:${level.toUpperCase()},Role:"${data.role}",user_id:"${data.user_id}", msg:"${message}"}`;
+            return `{Ip:"${getIPAddress()}", time:"${formattedDateTime}" ,type:${level.toUpperCase()},Role:"${data.role}",user_id:"${data.user_id}", msg:"${message}"}`;
         })
     ),
     transports: [
@@ -38,9 +38,10 @@ const getIPAddress = () => {
   return ipAddress;
 };
 
-const ipAddress = getIPAddress();
+
 
 
 module.exports = {logger,getIPAddress}
 
-module.exports = {logger,ipAddress}
+
+
