@@ -1,7 +1,10 @@
 "use strict";
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
+
+const { logger ,ipAddress} = require('../../Helper/logger.helper')
 const { User_model } = require('../../Models/user.model')
 const formattedDateTime = require('../../Helper/time.helper')
 
@@ -17,6 +20,7 @@ class Login {
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
+            // console.log("ipAddress",ipAddress);
 
             // WHERE LOGIN CHECK
             if (device == "APP") {                  //App Login Check

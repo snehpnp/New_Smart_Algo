@@ -41,5 +41,6 @@ const getIPAddress = () => {
 const ipAddress = getIPAddress();
 
 
-
 module.exports = {logger,getIPAddress}
+
+module.exports = {logger,ipAddress}

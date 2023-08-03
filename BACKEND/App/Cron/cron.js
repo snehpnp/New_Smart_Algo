@@ -37,7 +37,7 @@ const service_token_update = () => {
             // console.log("response", response.data);
 
             var Cash_stocks = []
-            response.data.map(async (item) => {
+            response.data.map(async(item) => {
                 if (item.exch_seg == "NSE") {
                     await Cash_stocks.push(item)
                 }
