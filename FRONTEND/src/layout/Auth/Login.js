@@ -46,13 +46,13 @@ const Login = () => {
     let req = {
       // Email: "superadmin@gmail.com",
       // Password: "123456",
-      Email: "admin@gmail.com",
-      Password: "123456",
+      // Email: "admin@gmail.com",
+      // Password: "123456",
       // Email: "user@gmail.com",
       // Password: "123456",
 
-      // Email: Email,
-      // Password: password,
+      Email: Email,
+      Password: password,
       device: CheckUser,
     };
 
