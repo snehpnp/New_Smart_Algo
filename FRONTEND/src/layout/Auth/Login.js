@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { SignIn, Verify_User_Device, device_user } from "../../ReduxStore/Slice/Auth/AuthSlice";
+import { SignIn, Verify_User_Device, get_theme_details } from "../../ReduxStore/Slice/Auth/AuthSlice";
 import Modal from "../../Components/ExtraComponents/Modal"
 import OtpInput from 'react-otp-input';
 import { check_Device } from "../../Utils/find_device";
@@ -34,25 +34,23 @@ const Login = () => {
 
 
 
-  // useEffect(() => {
-  // let abc =   check_Device()
-  // }, [])
+  useEffect(() => {
+  }, [])
 
 
 
   const loginUser = async (e) => {
     e.preventDefault();
-
     let req = {
       // Email: "superadmin@gmail.com",
       // Password: "123456",
-      Email: "admin@gmail.com",
-      Password: "123456",
+      // Email: "admin@gmail.com",
+      // Password: "123456",
       // Email: "user@gmail.com",
       // Password: "123456",
 
-      // Email: Email,
-      // Password: password,
+      Email: Email,
+      Password: password,
       device: CheckUser,
     };
 
@@ -114,7 +112,6 @@ const Login = () => {
               localStorage.setItem("user_role", JSON.stringify(UserData.Role));
               toast.success(res.payload.msg)
               setshowModal(false)
-
               setTimeout(() => {
                 navigate("/admin/dashboard");
               }, 1000);

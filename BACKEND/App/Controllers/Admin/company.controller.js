@@ -46,7 +46,7 @@ class Company {
 
             console.log("compantInfo", compantInfo);
 
-            return res.status(409).json({ status: true, msg: 'Done', data: compantInfo });
+            return res.status(200).json({ status: true, msg: 'Done', data: compantInfo });
 
 
         } catch (error) {
