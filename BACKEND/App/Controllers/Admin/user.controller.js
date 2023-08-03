@@ -1,8 +1,9 @@
 "use strict";
 const bcrypt = require("bcrypt");
-const { User_model } = require('../../Models/user.model')
-const Role_model = require('../../Models/role.model')
-const Company_info = require('../../Models/company_information.model')
+const db  = require('../../Models');
+const  User_model  = db.user;
+const Role_model = db.role;
+const Company_info = db.company_information;
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
 

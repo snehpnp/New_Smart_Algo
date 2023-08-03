@@ -106,4 +106,5 @@ const User_model = model('USER', userModel);
 
 
 
-module.exports = { User_model: User_model };
+module.exports = User_model;
+//module.exports = { User_model: User_model };

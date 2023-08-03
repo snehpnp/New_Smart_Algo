@@ -1,5 +1,6 @@
 "use strict";
-const Theme_list = require('../../Models/theme_list.model')
+const db  = require('../../Models');
+const Theme_list = db.theme_list;
 const { formattedDateTime } = require('../../Helper/time.helper')
 class Theme {
     async AddTheme(req, res) {

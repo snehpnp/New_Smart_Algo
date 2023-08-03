@@ -4,7 +4,9 @@ const jwt = require("jsonwebtoken");
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 
-const { User_model } = require('../../Models/user.model')
+const db  = require('../../Models');
+const User = db.user;
+
 const formattedDateTime = require('../../Helper/time.helper')
 
 // Login CLASS
@@ -15,7 +17,7 @@ class Login {
         try {
             const { Email, Password, device } = req.body;
             // IF Login Time Email CHECK
-            const EmailCheck = await User_model.findOne({ Email: Email });
+            const EmailCheck = await User.findOne({ Email: Email });
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
@@ -83,7 +85,7 @@ class Login {
             var addData = {}
 
             // IF Login Time Email CHECK
-            const EmailCheck = await User_model.findOne({ Email: Email });
+            const EmailCheck = await User.findOne({ Email: Email });
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
@@ -121,7 +123,7 @@ class Login {
 
 
             // Update Successfully
-            const result = await User_model.updateOne(
+            const result = await User.updateOne(
                 { Email: Email },
                 { $set: addData }
             );
@@ -148,7 +150,7 @@ class Login {
             var addData = {}
 
             // IF Login Time Email CHECK
-            const EmailCheck = await User_model.findById(userId);
+            const EmailCheck = await User.findById(userId);
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
@@ -178,7 +180,7 @@ class Login {
 
 
             // Update Successfully
-            const result = await User_model.updateOne(
+            const result = await User.updateOne(
                 { Email: EmailCheck.Email },
                 { $set: addData }
             );

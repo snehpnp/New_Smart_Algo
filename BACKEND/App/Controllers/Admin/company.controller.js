@@ -1,5 +1,6 @@
 "use strict";
-const company = require('../../Models/company_information.model')
+const db = require('../../Models');
+const company_information = db.company_information
 const { formattedDateTime } = require('../../Helper/time.helper')
 class Company {
     async EditCompany(req, res) {
@@ -8,7 +9,7 @@ class Company {
 
             var _id = req.body.id;
 
-            company.findById(_id)
+            company_information.findById(_id)
                 .then((value) => {
                   
                     if (!value) {
@@ -23,7 +24,7 @@ class Company {
                 })
 
 
-            company.findById(_id)
+            company_information.findById(_id)
             .then((role) => {})
 
 
