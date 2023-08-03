@@ -54,7 +54,7 @@ class Login {
             }
 
 
-            // JWT TOKEN CREATE 
+            // JWT TOKEN CREATE
             var token = jwt.sign({ id: EmailCheck._id }, 'testsnehissetalogintocheck', {
                 expiresIn: 86400 // 24 hours
             });
@@ -74,9 +74,9 @@ class Login {
     }
 
     // Verify user
-    async verifyUser(req, res) {
+   async verifyUser(req, res) {
         try {
-            const { Email, Device } = req.body;
+            const { Email, Otp, Device } = req.body;
             var addData = {}
 
             // IF Login Time Email CHECK
@@ -84,6 +84,13 @@ class Login {
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
+
+            // CHECK OTP AND VERFIY OUR CLIENTS
+            if (EmailCheck.PhoneNo.slice(-4) != Otp) {
+                return res.status(409).json({ status: false, msg: 'Otp Not Match', data: [] });
+            }
+
+
 
             try {
                 // WHERE LOGIN CHECK
@@ -105,6 +112,8 @@ class Login {
 
             } catch (error) {
                 console.log("Verfiy error", error);
+                return res.status(409).json({ status: false, msg: 'Server Issue', data: error });
+
             }
 
 
@@ -120,14 +129,15 @@ class Login {
             }
 
 
-            logger.info('Verify Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Verify Succesfully", data: [] })
+            logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+            res.send({ status: true, msg: "Login Successfully", data: [] })
 
 
         } catch (error) {
 
         }
     }
+
 
     // Logout User
     async logoutUser(req, res) {

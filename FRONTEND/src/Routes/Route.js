@@ -45,7 +45,7 @@ const Routing = () => {
     if (roles != null) {
       if (roles === "ADMIN" && location.pathname === "/") {
         navigate("/admin/dashboard");
-      } else if (roles === "CLIENT" && location.pathname === "/") {
+      } else if (roles === "USER" && location.pathname === "/") {
         navigate("/client/dashboard");
       }
       else if (roles === "SUBADMIN" && location.pathname === "/") {
@@ -72,7 +72,7 @@ const Routing = () => {
       <Route path="/super/*" element={(roles === "SUPERADMIN") ? <SuperAdmin /> : <Login />} />
       <Route path="/admin/*" element={(roles === "ADMIN") ? <Admin /> : <Login />} />
       <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
-      <Route path="/client/*" element={(roles === "CLIENT") ? <Client /> : <Login />} />
+      <Route path="/client/*" element={(roles === "USER") ? <Client /> : <Login />} />
       <Route path="/login" element={<Login />} />
 
 

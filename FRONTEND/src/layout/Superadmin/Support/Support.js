@@ -1,5 +1,7 @@
 import React from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
+import Loader from '../../../Utils/Loader'
+
 
 
 const Support = () => {
@@ -8,9 +10,8 @@ const Support = () => {
 
 
     return <>
-        <Content Page_title="Support">
-            <p>Support</p>
-        </Content>
+        {/* <Content Page_title="Support">
+        </Content> */}
         )
     </>
 }
