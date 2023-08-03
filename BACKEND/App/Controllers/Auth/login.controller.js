@@ -22,7 +22,7 @@ class Login {
             }
             // console.log("ipAddress",ipAddress);
 
-            // WHERE LOGIN CHECK
+            // WHERE LOGIN CHECKgetIPAddress
             if (device == "APP") {                  //App Login Check
                 if (EmailCheck.AppLoginStatus == 1) {
                     return res.status(409).json({ status: false, msg: 'You are already logged in on the phone.', data: [] });
