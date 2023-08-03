@@ -57,7 +57,7 @@ class Login {
             }
 
 
-            // JWT TOKEN CREATE 
+            // JWT TOKEN CREATE
             var token = jwt.sign({ id: EmailCheck._id }, 'testsnehissetalogintocheck', {
                 expiresIn: 86400 // 24 hours
             });
@@ -77,7 +77,7 @@ class Login {
     }
 
     // Verify user
-    async verifyUser(req, res) {
+   async verifyUser(req, res) {
         try {
             const { Email, Otp, Device } = req.body;
             var addData = {}
@@ -132,14 +132,15 @@ class Login {
             }
 
 
-            logger.info('Verify Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Verify Succesfully", data: [] })
+            logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+            res.send({ status: true, msg: "Login Successfully", data: [] })
 
 
         } catch (error) {
 
         }
     }
+
 
     // Logout User
     async logoutUser(req, res) {

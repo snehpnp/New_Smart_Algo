@@ -200,7 +200,7 @@ const Sidebar = ({ ShowSidebar }) => {
 
                                     </>
                                 }) :
-                                    roles === 'CLIENT' ? Client && Client.map((item) => {
+                                    roles ==="USER"? Client && Client.map((item) => {
                                         return <>
                                             <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
                                                 {item.Data.length > 0 ? <>

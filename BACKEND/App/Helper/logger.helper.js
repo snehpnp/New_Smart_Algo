@@ -22,6 +22,8 @@ const logger = createLogger({
 
 
 
+const os = require('os');
+
 const getIPAddress = () => {
   const interfaces = os.networkInterfaces();
   let ipAddress = '';
@@ -38,9 +40,10 @@ const getIPAddress = () => {
   return ipAddress;
 };
 
-const ipAddress = getIPAddress();
+
 
 
 module.exports = {logger,getIPAddress}
 
-module.exports = {logger,ipAddress}
+
+
