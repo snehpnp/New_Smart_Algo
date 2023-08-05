@@ -14,8 +14,7 @@ class Company {
                     if (!value) {
                         return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
                     }
-                    console.log("value", value);
-
+  
                     const filter = { _id: _id };
                     const updateOperation = { $set: companydata };
 

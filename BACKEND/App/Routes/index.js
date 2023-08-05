@@ -4,7 +4,9 @@ module.exports = function (app) {
 app.use(require("./Auth/login.route"));
 
 // SuperAdmin Route
-app.use(require("./SuperAdmin/theme_list.router"));
+app.use(require("./SuperAdmin/theme_list.route"));
+app.use(require("./SuperAdmin/panel.route"));
+
 
 // Admin Route
 app.use(require("./Admin/user.route"));

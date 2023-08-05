@@ -4,11 +4,11 @@ const jwt = require("jsonwebtoken");
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 
-const db  = require('../../Models');
+const db = require('../../Models');
 const User = db.user;
 
 const formattedDateTime = require('../../Helper/time.helper')
-const  user_logs  = require('../../Models/user_logs.model')
+const user_logs = require('../../Models/user_logs.model')
 
 
 // Login CLASS
@@ -23,7 +23,6 @@ class Login {
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
-            // console.log("ipAddress",ipAddress);
 
             // WHERE LOGIN CHECKgetIPAddress
             if (device == "APP") {                  //App Login Check
@@ -60,28 +59,16 @@ class Login {
                 return res.status(409).json({ status: false, msg: 'your service is terminated please contact to admin', data: [] });
             }
 
-
             // JWT TOKEN CREATE
-            var token = jwt.sign({ id: EmailCheck._id }, 'testsnehissetalogintocheck', {
+            var token = jwt.sign({ id: EmailCheck._id }, process.env.SECRET, {
                 expiresIn: 86400 // 24 hours
             });
             var msg = { 'user_id': EmailCheck._id, 'token': token, 'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role };
 
             try {
-                // ADD USER LOGS COLLECTION DATA
-                const user_login = new user_logs({
-                    user_Id: EmailCheck._id,
-                    login_status:"Panel On",
-                    role:EmailCheck.Role,
-                    system_ip:getIPAddress
-                })
-
-                await user_login.save()
 
                 logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-
                 res.send({ status: true, msg: "Login Succesfully", data: msg })
-
 
             } catch (error) {
                 console.log("Some Error in a login", error);
@@ -97,7 +84,7 @@ class Login {
     }
 
     // Verify user
-   async verifyUser(req, res) {
+    async verifyUser(req, res) {
         try {
             const { Email, Otp, Device } = req.body;
             var addData = {}
@@ -112,8 +99,6 @@ class Login {
             if (EmailCheck.PhoneNo.slice(-4) != Otp) {
                 return res.status(409).json({ status: false, msg: 'Otp Not Match', data: [] });
             }
-
-
 
             try {
                 // WHERE LOGIN CHECK
@@ -151,8 +136,16 @@ class Login {
                 return res.status(409).json({ status: false, msg: 'Server Side issue.', data: [] });
             }
 
+            // ADD USER LOGS COLLECTION DATA
+            const user_login = new user_logs({
+                user_Id: EmailCheck._id,
+                login_status: "Panel On",
+                role: EmailCheck.Role,
+                system_ip: getIPAddress()
+            })
+            await user_login.save();
 
-            logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+            logger.info('Very Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
             res.send({ status: true, msg: "Login Successfully", data: [] })
 
 
