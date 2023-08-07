@@ -36,8 +36,6 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions }) => {
             noDataIndication={() => <NoDataIndication />}
             headerClasses="bg-primary text-primary text-center header-class"
             rowClasses='text-center'
-
-
         />
 
     </>

@@ -64,11 +64,11 @@ const Login = () => {
             setUserData(res.payload.data)
           } else if (res.payload.data.Role === "SUPERADMIN") {
             toast.success(res.payload.msg)
-            // setTimeout(() => {
-            //   // navigate("/super/dashboard");
-            // }, 2000);
             localStorage.setItem("user_details", JSON.stringify(res.payload.data));
             localStorage.setItem("user_role", JSON.stringify(res.payload.data.Role));
+            setTimeout(() => {
+              navigate("/super/dashboard");
+            }, 1000);
 
           }
         }
@@ -102,7 +102,6 @@ const Login = () => {
 
     await dispatch(Verify_User_Device(req))
       .then((res) => {
-        console.log(" Otp Verify", res.payload)
 
         if (res.payload.status) {
           if (UserData && UserData.Role === "ADMIN") {
@@ -111,8 +110,8 @@ const Login = () => {
               localStorage.setItem("user_details", JSON.stringify(UserData));
               localStorage.setItem("user_role", JSON.stringify(UserData.Role));
               toast.success(res.payload.msg)
-              setshowModal(false)
               setTimeout(() => {
+                setshowModal(false)
                 navigate("/admin/dashboard");
               }, 1000);
             } else {
@@ -125,10 +124,11 @@ const Login = () => {
             if (mobile_No === true) {
               localStorage.setItem("user_details", JSON.stringify(UserData));
               localStorage.setItem("user_role", JSON.stringify(UserData.Role));
-              setshowModal(false)
+              // setshowModal(false)
               toast.success(res.payload.msg)
 
               setTimeout(() => {
+                setshowModal(false)
                 navigate("/client/dashboard");
               }, 1000);
             } else {
@@ -143,9 +143,9 @@ const Login = () => {
               localStorage.setItem("user_details", JSON.stringify(UserData));
               localStorage.setItem("user_role", JSON.stringify(UserData.Role));
               toast.success(res.payload.msg)
-              setshowModal(false)
 
               setTimeout(() => {
+                setshowModal(false)
                 navigate("/subadmin/dashboard");
               }, 1000);
             } else {
@@ -346,3 +346,5 @@ const Login = () => {
 };
 
 export default Login;
+
+

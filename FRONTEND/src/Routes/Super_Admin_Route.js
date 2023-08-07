@@ -7,6 +7,7 @@ import Dashboard from '../layout/Superadmin/Dashboard/Dashboard';
 import Admins from '../layout/Superadmin/AdminList/Admins';
 import  History from  '../layout/Superadmin/History/History';
 import  Support from  '../layout/Superadmin/Support/Support';
+import  CompanyTheme from  '../layout/Superadmin/ThemeSelect/CompanyTheme';
 
 const Admin = () => {
 
@@ -24,6 +25,7 @@ const Admin = () => {
                 <Route exact path="/alladmins" element={<Admins />} />
                 <Route exact path="/history" element={<History />} />
                 <Route exact path="/support" element={<Support />} />
+                <Route exact path="/selecttheme" element={<CompanyTheme />} />
                 {/* </> */}
             </Routes>
 

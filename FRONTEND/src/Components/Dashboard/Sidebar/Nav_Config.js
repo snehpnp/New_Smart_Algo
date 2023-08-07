@@ -1,5 +1,5 @@
 
-import { Signal  } from 'lucide-react';
+import { Signal } from 'lucide-react';
 
 export const admin_sidebar = [
     {
@@ -22,14 +22,19 @@ export const admin_sidebar = [
         "Icon": "Users",
 
         "Data": [
-            
             {
                 'id': 1,
+                "name": 'Add Client',
+                "route": "/admin/client/add",
+            },
+
+            {
+                'id': 2,
                 "name": 'Clients',
                 "route": "/admin/allclients",
             },
             {
-                'id': 2,
+                'id': 3,
                 "name": 'SignUp - Clients',
                 "route": "/admin/signupclients",
             },
@@ -198,6 +203,13 @@ export const supper_admin_sidebar = [
         "name": 'History',
         "Icon": "FolderClock",
         "route": "/super/history",
+        "Data": []
+    },
+    {
+        'id': 3,
+        "name": 'Select Theme',
+        "Icon": "Paintbrush",
+        "route": "/super/selecttheme",
         "Data": []
     },
     {

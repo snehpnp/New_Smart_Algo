@@ -13,7 +13,7 @@ import Login from "../layout/Auth/Login"
 // import Login from '../Layout/Auth/Login'
 // import ResetPassword from '../Layout/Auth/ResetPassword';
 // import UpdatePassword from '../Layout/Auth/UpdatePassword';
-// import Testing from "../Testing"
+import Testing from "../test"
 // import NotFound from "../Layout/NotFound"
 
 
@@ -74,6 +74,7 @@ const Routing = () => {
       <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
       <Route path="/client/*" element={(roles === "USER") ? <Client /> : <Login />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/Testing" element={<Testing />} />
 
 
 

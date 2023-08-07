@@ -207,6 +207,18 @@ const ThemeSelection = () => {
             console.log("error", err);
         })
 
+
+
+    $(window).on("resize", function () {
+        var windowWidth = $(this).width();
+        if (windowWidth > 1024) {
+          $("body").attr("data-sidebar-style", "full");
+        } else if (windowWidth > 769 && windowWidth <= 1024) {
+          $("body").attr("data-sidebar-style", "mini");
+        } else if (windowWidth <= 767) {
+          $("body").attr("data-sidebar-style", "overlay");
+        }
+      });
     }
 
     // const Apply_Theme = () => {

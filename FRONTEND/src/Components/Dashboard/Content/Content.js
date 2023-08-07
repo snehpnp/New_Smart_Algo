@@ -19,7 +19,10 @@ const Content = ({ Page_title, ...rest }) => {
                   <div className="card">
                     <div className="card-header border-0 pb-0 flex-wrap">
                       <div className="card-body">
-                        {rest.children}
+                        <div className="form-validation">
+
+                          {rest.children}
+                        </div>
                       </div>
                     </div>
                   </div>

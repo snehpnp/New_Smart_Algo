@@ -1,5 +1,5 @@
 import React from "react";
-import Content from "../../../Components/Dashboard/Content/Content";
+import Content from "../../../../Components/Dashboard/Content/Content";
 
 const Sign_Up_Clients = () => {
     return (
@@ -8,9 +8,7 @@ const Sign_Up_Clients = () => {
                 <div className="content-body">
                     {/* row */}
                     <div className="container-fluid">
-                        {/* <Content Page_title="Sign_Up_Clients">
-            <p>Sign_Up_Clients</p>
-        </Content> */}
+
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="card form-card">
@@ -203,8 +201,7 @@ const Sign_Up_Clients = () => {
                                                             <div className="col-lg-7">
                                                                 <select
                                                                     className="default-select wide form-control"
-                                                                    id="validationCustom05"
-                                                                >
+                                                                    id="validationCustom05">
                                                                     <option data-display="Select">
                                                                         Please select
                                                                     </option>
@@ -223,64 +220,64 @@ const Sign_Up_Clients = () => {
                                                     <div className="col-lg-12">
                                                         <div className="row">
                                                             <div className="col-lg-2">
-                                                            <div class="form-check custom-checkbox mb-3">
-											<input type="checkbox" className="form-check-input" id="customCheckBox1" required/>
-											<label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-										</div>
+                                                                <div class="form-check custom-checkbox mb-3">
+                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
+                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
+                                                                </div>
                                                             </div>
                                                             <div className="col-lg-2">
-                                                            <div class="form-check custom-checkbox mb-3">
-											<input type="checkbox" className="form-check-input" id="customCheckBox1" required/>
-											<label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-										</div>
+                                                                <div class="form-check custom-checkbox mb-3">
+                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
+                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
+                                                                </div>
                                                             </div>
                                                             <div className="col-lg-2">
-                                                            <div class="form-check custom-checkbox mb-3">
-											<input type="checkbox" className="form-check-input" id="customCheckBox1" required/>
-											<label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-										</div>
+                                                                <div class="form-check custom-checkbox mb-3">
+                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
+                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
+                                                                </div>
                                                             </div>
                                                             <div className="col-lg-2">
-                                                            <div class="form-check custom-checkbox mb-3">
-											<input type="checkbox" className="form-check-input" id="customCheckBox1" required/>
-											<label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-										</div>
+                                                                <div class="form-check custom-checkbox mb-3">
+                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
+                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
+                                                                </div>
                                                             </div>
                                                             <div className="col-lg-2">
-                                                            <div class="form-check custom-checkbox mb-3">
-											<input type="checkbox" className="form-check-input" id="customCheckBox1" required/>
-											<label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-										</div>
+                                                                <div class="form-check custom-checkbox mb-3">
+                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
+                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
+                                                                </div>
                                                             </div>
                                                             <div className="col-lg-2">
-                                                            <div class="form-check custom-checkbox mb-3">
-											<input type="checkbox" className="form-check-input" id="customCheckBox1" required/>
-											<label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-										</div>
+                                                                <div class="form-check custom-checkbox mb-3">
+                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
+                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
+                                                                </div>
                                                             </div>
                                                             <div className="col-lg-2">
-                                                            <div class="form-check custom-checkbox mb-3">
-											<input type="checkbox" className="form-check-input" id="customCheckBox1" required/>
-											<label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-										</div>
+                                                                <div class="form-check custom-checkbox mb-3">
+                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
+                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
+                                                                </div>
                                                             </div>
                                                             <div className="col-lg-2">
-                                                            <div class="form-check custom-checkbox mb-3">
-											<input type="checkbox" className="form-check-input" id="customCheckBox1" required/>
-											<label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-										</div>
+                                                                <div class="form-check custom-checkbox mb-3">
+                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
+                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
+                                                                </div>
                                                             </div>
                                                             <div className="col-lg-2">
-                                                            <div class="form-check custom-checkbox mb-3">
-											<input type="checkbox" className="form-check-input" id="customCheckBox1" required/>
-											<label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-										</div>
+                                                                <div class="form-check custom-checkbox mb-3">
+                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
+                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
+                                                                </div>
                                                             </div>
                                                             <div className="col-lg-2">
-                                                            <div class="form-check custom-checkbox mb-3">
-											<input type="checkbox" className="form-check-input" id="customCheckBox1" required/>
-											<label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-										</div>
+                                                                <div class="form-check custom-checkbox mb-3">
+                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
+                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
+                                                                </div>
                                                             </div>
 
                                                         </div>
@@ -291,7 +288,7 @@ const Sign_Up_Clients = () => {
                                                                 className="col-lg-4 col-form-label"
                                                                 htmlFor="validationCustom05"
                                                             >
-                                                               Service Month Given
+                                                                Service Month Given
                                                                 <span className="text-danger">*</span>
                                                             </label>
                                                             <div className="col-lg-7">
@@ -346,12 +343,12 @@ const Sign_Up_Clients = () => {
                                                     <div className="col-xl-12">
                                                         <div className="mb-3">
 
-                                                                <button
-                                                                    type="submit"
-                                                                    className="btn btn-primary"
-                                                                >
-                                                                    Submit
-                                                                </button>
+                                                            <button
+                                                                type="submit"
+                                                                className="btn btn-primary"
+                                                            >
+                                                                Submit
+                                                            </button>
 
                                                         </div>
                                                     </div>
