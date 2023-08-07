@@ -1,7 +1,7 @@
 "use strict";
 const bcrypt = require("bcrypt");
-const db  = require('../../Models');
-const  User_model  = db.user;
+const db = require('../../Models');
+const User_model = db.user;
 const Role_model = db.role;
 const Company_info = db.company_information;
 var dateTime = require('node-datetime');
@@ -56,7 +56,7 @@ class Employee {
 
 
             var ccd = dt.format('ymd');
-            var client_key = Panel_key[0].prefix + cli_key +ccd
+            var client_key = Panel_key[0].prefix + cli_key + ccd
             console.log("Panel_key", client_key);
 
 
@@ -72,14 +72,22 @@ class Employee {
                 StartDate: StartDate,
                 EndDate: EndDate,
                 Role: Role.toUpperCase(),
-                client_key:client_key
+                client_key: client_key
 
             });
 
             const userinfo = User.save()
                 .then(async (data) => {
-                    // console.log("data", data);
                     res.send({ status: true, msg: "successfully Add!", data: data })
+
+                })
+                .catch((err) => {
+                    console.log(" Add Time Error-", err);
+                    if (err.keyValue) {
+                        return res.status(409).json({ status: false, msg: 'Key duplicate', data: err.keyValue });
+
+                    }
+
                 })
 
 

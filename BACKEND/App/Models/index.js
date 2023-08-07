@@ -6,8 +6,9 @@ module.exports = {
     services: require("./services.model"),
     theme_list: require("./theme_list.model"),
     user_logs: require("./user_logs.model"),
-    user : require("./user.model")
-    
-    
+    user : require("./user.model"),
+    strategy :require('./strategy.model'),
+    panel_model :require('./all_panels.model')
+
 };
  

@@ -13,7 +13,7 @@ cron.schedule('42 12 * * *', () => {
 
 
 
-
+// SERVICES TOKEN WORK
 const service_token_update = () => {
 
     let config = {
