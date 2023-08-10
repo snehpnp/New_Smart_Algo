@@ -28,8 +28,9 @@ const CompanySchema = new mongoose.Schema({
         required: true
     },
     theme_id: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'theme_list',
+        default: null
     },
     theme_name: {
         type: String,
