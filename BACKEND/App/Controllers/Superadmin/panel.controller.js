@@ -45,6 +45,33 @@ class Panel {
         }
     }
 
+     // ADD PANEL IN A COLLECTION
+     async EditPanel(req, res) {
+        try {
+            const { _id,panle_data } = req.body
+
+            panel_model.findById(_id)
+            .then(async (value) => {
+                if (!value) {
+                    return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
+                }
+                const filter = { _id: _id };
+                const updateOperation = { $set: panle_data };
+                const result = await panel_model.updateOne(filter, updateOperation);
+                if (!result) {
+                    return res.status(409).json({ status: false, msg: 'Company not update', data: [] });
+                }
+
+                return res.status(200).json({ status: true, msg: 'Update Successfully.', data:result });
+
+            })
+
+        } catch (error) {
+            console.log("Theme error-", error);
+        }
+    }
+
+
     // USER PROFILE TO GET USER 
     async UserProfile(req, res) {
         try {
