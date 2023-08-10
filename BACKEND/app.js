@@ -45,6 +45,10 @@ app.get('/get', async (req, res) => {
   res.send({ msg: "Done!!!" })
 })
 
+//Testing Api #Shakir
+require("./shakirTeting")(app)
+
+
 
 // Routes all
 require("./App/Routes")(app)

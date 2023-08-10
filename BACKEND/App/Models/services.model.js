@@ -1,23 +1,46 @@
 const mongoose = require('mongoose');
 
 const servicesSchema = new mongoose.Schema({
-    user_Id: {
+    name: {
         type: String,
         required: true,
-        unique: true    
+           
     },
-     login_status: {
+    instrument_token: {
         type: String,
-        required: true,
+       
+    },
+    zebu_token: {
+        type: String,
+       
+    }, kotak_token: {
+        type: String,
+       
+    },
+    instrumenttype: {
+        type: String,      
+    },
+    exch_seg: {
+        type: String,      
+    },
+    lotsize: {
+        type: String,      
+    },
+    unique_column: {
+        type: String,
         unique: true
+
     },
-   
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    categorie_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "category"
+
+      }
+
 },{
     // This enables Mongoose to handle the _id field automatically
+    strictPopulate: false,
+    timestamps: true,
     _id: true,
   });
 

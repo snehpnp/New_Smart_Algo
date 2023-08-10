@@ -27,6 +27,7 @@ const categorySchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
+    
 }, {
     // This enables Mongoose to handle the _id field automatically
     _id: true,
