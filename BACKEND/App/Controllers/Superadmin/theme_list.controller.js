@@ -4,7 +4,7 @@ const Theme_list = db.theme_list;
 const { formattedDateTime } = require('../../Helper/time.helper')
 class Theme {
 
-    // ADD THEME 
+    // ADD THEME
     async AddTheme(req, res) {
         try {
             const { theme_name, theme_version, primary_col, nav_head_col, header_col, sidebar_col
@@ -42,14 +42,16 @@ class Theme {
                 container: container,
                 body_font: body_font,
                 dashboard: dashboard,
-                image: image
+                image: image,
             });
+
+
             AddTheme.save()
                 .then(async (data) => {
                     res.send({ status: true, msg: "successfully Add!", data: data });
                 })
                 .catch((err) => {
-                    console.log("err", err.keyValue);
+                    console.log("err", err);
                     if (err.keyValue) {
                         res.send({ status: false, msg: "Duplicate data", data: err.keyValue });
                     }
@@ -63,22 +65,22 @@ class Theme {
         }
     }
 
-    // GET THEME 
+    // GET THEME
     async GetAllTheme(req, res) {
         try {
 
-            const { page, limit } = req.body;
-            const skip = (page - 1) * limit;
+            // const { page, limit } = req.body;
+            // const skip = (page - 1) * limit;
 
             const totalCount = await Theme_list.countDocuments();
 
 
-            // THEME LIST DATA 
+            // THEME LIST DATA
             // var getAllTheme = await Theme_list.find()
             const getAllTheme = await Theme_list
                 .find({})
-                .skip(skip)
-                .limit(Number(limit))
+                // .skip(skip)
+                // .limit(Number(limit))
 
 
             // IF DATA NOT EXIST
@@ -91,10 +93,10 @@ class Theme {
                 status: true,
                 msg: "Get All Theme name",
                 data: getAllTheme,
-                page: Number(page),
-                limit: Number(limit),
-                totalCount: totalCount,
-                totalPages: Math.ceil(totalCount / Number(limit)),
+                // page: Number(page),
+                // limit: Number(limit),
+                // totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
             })
 
 

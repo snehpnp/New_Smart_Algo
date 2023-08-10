@@ -63,18 +63,18 @@ class Login {
             var token = jwt.sign({ id: EmailCheck._id }, process.env.SECRET, {
                 expiresIn: 86400 // 24 hours
             });
-            var msg = { 'user_id': EmailCheck._id, 'token': token, 'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role };
+            var msg = {
+                'user_id': EmailCheck._id,
+                'token': token,
+                'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role
+            };
 
             try {
-
                 logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
                 res.send({ status: true, msg: "Login Succesfully", data: msg })
-
             } catch (error) {
                 console.log("Some Error in a login", error);
             }
-
-
         }
         catch (error) {
             console.log(error);
@@ -212,6 +212,122 @@ class Login {
         }
     }
 
+
+    //  Forget Password
+    async ForgetPassword(req, res) {
+        try {
+
+            const { Email, Device } = req.body;
+
+            // // IF Login Time Email CHECK
+            var EmailCheck = await User.findOne({ Email: Email })
+
+            if (!EmailCheck) {
+                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+            }
+
+
+            var userid = Buffer.from(JSON.stringify(EmailCheck._id)).toString('base64');
+            var redirectUrl = 'http://localhost:3000/#/update/' + userid
+            // res.status(200).json({ status: false, msg: redirectUrl, data: [] });
+
+
+        } catch (error) {
+
+        }
+
+        logger.info('Mail send successfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+        res.send({ status: true, msg: "Mail send successfully", data: redirectUrl })
+    }
+
+
+    // Update Password
+    async UpdatePassword(req, res) {
+        try {
+            const { userid, newpassword, confirmpassword } = req.body;
+            // // IF Login Time Email CHECK
+            const EmailCheck = await User.findById(userid);
+
+            if (!EmailCheck) {
+                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+            }
+
+            if (newpassword !== confirmpassword) {
+                return res.status(409).json({ status: false, msg: 'New Password and Confirm Password Not Match', data: [] });
+            }
+
+            const hashedPassword = await bcrypt.hash(newpassword, 8);
+            let result = await User.findByIdAndUpdate(
+                EmailCheck._id,
+                {
+                    Password: hashedPassword,
+                    Otp: newpassword
+                },
+                { new: true }
+            )
+
+            // If Not Update User
+            if (!result) {
+                return res.status(409).json({ status: false, msg: 'Server Side issue.', data: [] });
+            }
+
+
+            logger.info('Password Update Successfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+            res.send({ status: true, msg: "Password Update Successfully" });
+        } catch (error) {
+
+        }
+    }
+
+    // Reset Password
+
+    async ResetPassword(req, res) {
+        try {
+            const { userid, newpassword, oldpassword } = req.body;
+            // // IF Login Time Email CHECK
+            const EmailCheck = await User.findById(userid);
+
+            console.log("EmailCheck", EmailCheck)
+
+
+            // return
+
+            if (!EmailCheck) {
+                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+            }
+
+            const validPassword = await bcrypt.compare(oldpassword.toString(), EmailCheck.Password.toString());
+
+            // return
+            if (!validPassword) {
+                res.status(409).send({ success: 'false', message: 'old Password Not Match' });
+                return
+            } else {
+                const hashedPassword = await bcrypt.hash(newpassword, 8);
+                await User.findByIdAndUpdate(
+                    EmailCheck._id,
+                    {
+                        Password: hashedPassword,
+                        Otp: newpassword
+                    },
+                    { new: true }
+                );
+
+
+                res.send({ status: true, message: "Password Update Successfully" });
+
+            }
+            // If Not Update User
+            if (!result) {
+                return res.status(409).json({ status: false, msg: 'Server Side issue.', data: [] });
+            }
+
+            logger.info('Password Update Successfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+            // res.send({ status: true, message: "Password Update Successfully" });
+        } catch (error) {
+
+        }
+    }
 }
 
 

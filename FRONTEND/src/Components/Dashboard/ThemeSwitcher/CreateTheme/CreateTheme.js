@@ -233,48 +233,68 @@ const CreateTheme = ({ SelectTheme1 }) => {
             // Convert canvas to an image and download it
             const screenshot = canvas.toDataURL('image/png');
             screenshotUrl = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = screenshot;
-            link.download = 'screenshot.png';
-            link.click();
+            // const link = document.createElement('a');
+            // link.href = screenshot;
+            // link.download = 'screenshot.png';
+            // link.click();
         })
 
 
 
         // return
         const req = {
-            typography: BodyFont,
-            version: ThemeVersion,
-            layout: Layout,
-            primary: PrimaryColor,
-            headerBg: HeaderColor,
-            navheaderBg: NavHeaderColor,
-            sidebarBg: SidebarColor,
-            sidebarStyle: Sidebar,
-            sidebarPosition: SidebarPosition,
-            headerPosition: HeaderPosition,
-            containerLayout: Container,
-            panel_name: "smartalgo",
-            image: screenshotUrl,
-            theme_name: themeName,
-            dashboard: ThemeDashboard
-
-
-
-            // typography: "poppins",
-            // version: "light",
-            // layout: "vertical",
-            // primary: "color_1",
-            // headerBg: "color_1",
-            // navheaderBg: "color_1",
-            // sidebarBg: "color_1",
-            // sidebarStyle: "full",
-            // sidebarPosition: "fixed",
-            // headerPosition: "fixed",
-            // containerLayout: "full",
-            // image: "smartalgo",
+            // body_font: BodyFont,
+            // theme_version: ThemeVersion,
+            // layout: Layout,
+            // primary_col: PrimaryColor,
+            // header_col: HeaderColor,
+            // nav_head_col: NavHeaderColor,
+            // sidebar_col: SidebarColor,
+            // sidebar: Sidebar,
+            // sidebar_position: SidebarPosition,
+            // header_position: HeaderPosition,
+            // container: Container,
+            // panel_name: "smartalgo",
+            // image: screenshotUrl,
             // theme_name: themeName,
             // dashboard: ThemeDashboard
+
+
+            // body_font: BodyFont,
+            // theme_version: ThemeVersion,
+            // layout: Layout,
+            // primary_col: PrimaryColor,
+            // header_col: HeaderColor,
+            // nav_head_col: NavHeaderColor,
+            // sidebar_col: SidebarColor,
+            // sidebar: Sidebar,
+            // sidebar_position: SidebarPosition,
+            // header_position: HeaderPosition,
+            // container: Container,
+            // panel_name: "smartalgo",
+            // image: screenshotUrl,
+            // theme_name: themeName,
+            // dashboard: ThemeDashboard
+
+
+
+            body_font: "poppins",
+            theme_version: "light",
+            layout: "horizontal",
+            primary_col: "color_9",
+            header_col: "color_1",
+            nav_head_col: 'color_9',
+            sidebar_col: "color_9",
+            sidebar: "full",
+            sidebar_position: "fixed",
+            header_position: "fixed",
+            container: "full",
+            panel_name: "smartalgo",
+            image: "smartalgo",
+            theme_name: "Theme-8",
+            dashboard: "Theme-8"
+
+
         }
 
 

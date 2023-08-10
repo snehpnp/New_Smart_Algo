@@ -1,7 +1,6 @@
 import React from 'react'
 
 const Content = ({ Page_title, ...rest }) => {
-  console.log("res", rest);
   return (
     <div>
       <div className="content-body">

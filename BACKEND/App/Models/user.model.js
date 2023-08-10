@@ -32,8 +32,8 @@ const userModel = Schema({
         type: String,
         required: true,
         trim: true,
-        min:10,
-        max:10,
+        min: 10,
+        max: 10,
         unique: true,
         default: null
     },
@@ -89,12 +89,25 @@ const userModel = Schema({
         enum: ['off', 'on'],
         default: 'off'
     },
-    client_key : {
+    client_key: {
         type: String,
         required: true,
         trim: true,
         default: null
     },
+    client_key: {
+        type: String,
+        required: true,
+        trim: true,
+        default: null
+    },
+    reset_password_status: {
+        type: String,
+        required: true,
+        trim: true,
+        default: '0'
+    },
+
 
 },
     {

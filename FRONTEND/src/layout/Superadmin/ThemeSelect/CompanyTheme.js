@@ -1,50 +1,54 @@
-import React from 'react'
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Loader from '../../../Utils/Loader'
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
+import { Get_All_Theme, getthemedata } from '../../../ReduxStore/Slice/ThemeSlice'
+import { useDispatch, useSelector } from "react-redux";
+
 const CompanyTheme = () => {
 
-    
+    const dispatch = useDispatch()
+    const theme_list = useSelector(getthemedata && getthemedata)
 
-    const products = [];
-
-    // Create 50 items
-    for (let i = 1; i <= 50; i++) {
-        products.push({
-            id: i,
-            name: i % 2 === 0 ? "mango" : "banana", // Alternating between mango and banana names
-            price: Math.floor(Math.random() * 100) + 1, // Random price between 1 and 100
-        });
-    }
+    const [themeData, setThemeData] = useState({
+        loading: true,
+        data: []
+    });
 
 
-    // const imageFormatter = (cell, row) => (
-    //     <>
-    //     <img src='../../../../assets/images/norecordfound.png' alt="sss"
-    //         className='mx-auto d-flex'
-    //     />
-    // </>
-    // );
+    useEffect(() => {
+        dispatch(Get_All_Theme())
+    }, [dispatch])
+
+
+
+    useEffect(() => {
+        if (theme_list !== undefined) {
+            if (theme_list && theme_list.gettheme) {
+                setThemeData({
+                    loading: false,
+                    data: theme_list.gettheme
+                });
+            }
+            if (theme_list !== undefined && theme_list.gettheme.message === "Network Error") {
+                alert(theme_list.gettheme.message);
+            }
+        }
+    }, [theme_list]);
+
+
 
 
     const columns = [
         {
-            dataField: 'id',
-            text: 'Product ID',
-            Cell: row => (
-                <div>
-                    <span title={row.value}>{row.value}</span>
-                </div>
-            )
+            dataField: "index",
+            text: "SR. No.",
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: "image",
-            text: "Image",
-            // formatter: imageFormatter,
-        },
-        {
-            dataField: 'price',
-            text: 'Product Name'
+            dataField: 'theme_name',
+            text: 'Theme Name'
         },
         {
             dataField: 'price',
@@ -65,14 +69,18 @@ const CompanyTheme = () => {
     ];
 
 
-    return <>
+    return (
         <Content Page_title="Company Theme">
-            <FullDataTable TableColumns={columns} tableData={products} />
+            {themeData.loading ? (
+                <Loader />
+            ) : themeData.data && themeData.data.length === 0 ? (
+                'No data found'
+            ) : (
+                <FullDataTable TableColumns={columns} tableData={themeData.data.data} />
+            )}
         </Content>
-        )
-    </>
+    );
 }
 
 
 export default CompanyTheme
-

@@ -6,7 +6,7 @@ import Content from '../../Dashboard/Content/Content';
 
 
 
-const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, formik, btn_name }) => {
+const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, formik, btn_name, forlogin, title }) => {
 
   const location = useLocation()
 
@@ -26,7 +26,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
               <div className="col-lg-6">
                 <div className="mb-3 row">
                   <label
-                    className="col-lg-4 col-form-label"
+                    className={`col-lg-${title === "forlogin" ? 3 : 4}  col-form-label`}
                     htmlFor={field.name}
                   >
                     {field.label}
@@ -104,16 +104,16 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
 
                 </> :
                   field.type === "password" ? <>
-                    <div className="col-lg-6">
+                    <div className={`col-lg-${title === "forlogin" ? 12 : title === "forUpdatePassword" ? 12 :6} `}>
                       <div className="mb-3 row">
                         <label
-                          className="col-lg-4 col-form-label"
-                          htmlFor="validationCustom01"
+                          className={`col-lg-${title === "forlogin" ? 3 :title === "forUpdatePassword" ? 7 : 4} col-form-label `}
+                          htmlFor={field.name}
                         >
-                          Fullname
+                          {field.label}
                           <span className="text-danger">*</span>
                         </label>
-                        <div className="col-lg-7" style={{ position: 'relative' }}>
+                        <div className={`col-lg-${title === "forlogin" ? 8 : title === "forUpdatePassword" ? 12 :7} `} style={{ position: 'relative' }}>
 
                           <input
                             id={field.name}
@@ -136,7 +136,10 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
 
                             }
                           ></i>
+                          {formik.errors[field.name] &&
+                            <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
                         </div>
+
                       </div>
                     </div>
 
@@ -158,16 +161,16 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
 
 
 
-                      <div className="col-lg-6">
+                      <div className={`col-lg-${title === "forlogin" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
                         <div className="mb-3 row">
                           <label
-                            className="col-lg-4 col-form-label"
+                            className={`col-lg-${title === "forlogin" ? 3 : 4} col-form-label `}
                             htmlFor={field.name}
                           >
                             {field.label}
                             <span className="text-danger">*</span>
                           </label>
-                          <div className="col-lg-7">
+                          <div className={`col-lg-${title === "forlogin" ? 8 : title === "forResetPassword"  || "forUpdatePassword"? 12 : 7} `}>
                             <input
                               type="text"
                               className="form-control"

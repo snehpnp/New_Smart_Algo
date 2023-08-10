@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { SIGN_IN_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_DETAILS } from "../../../Service/auth.service";
+import { SIGN_IN_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_DETAILS, RESET_PASSWORD, UPDATE_PASSWORD, FORGET_PASSWORD } from "../../../Service/auth.service";
+
+
 
 export const SignIn = createAsyncThunk("DispatchLogin", async (data) => {
   try {
@@ -44,6 +46,40 @@ export const get_theme_details = createAsyncThunk("/get/theme", async (data) => 
   }
 });
 
+//  Forget Password
+export const Forget_Password = createAsyncThunk("/forget/password", async (data) => {
+  try {
+    const res = await FORGET_PASSWORD(data)
+    return res;
+  }
+  catch (err) {
+    throw err;
+  }
+});
+
+//  Forget Password
+export const Update_Password = createAsyncThunk("/update/password", async (data) => {
+  try {
+    const res = await UPDATE_PASSWORD(data)
+    return res;
+  }
+  catch (err) {
+    return err;
+  }
+});
+
+
+//  Forget Password
+export const Reset_Password = createAsyncThunk("/reset/password", async (data) => {
+  try {
+    const res = await RESET_PASSWORD(data)
+    return res;
+  }
+  catch (err) {
+    return err;
+  }
+});
+
 const AuthSlice = createSlice({
   name: "AuthSlice",
   initialState: {
@@ -52,7 +88,10 @@ const AuthSlice = createSlice({
     logdatails: [],
     device_user: [],
     userlogout: [],
-    getheme: []
+    getheme: [],
+    forgetpassword: [],
+    updatepassword: [],
+    resetpassword: []
   },
 
   recuders: {},
@@ -86,7 +125,38 @@ const AuthSlice = createSlice({
     [get_theme_details.rejected]: (state, action) => {
       return { ...state, getheme: action, isLoading: false };
     },
+    [Forget_Password.fulfilled]: (state, { payload }) => {
+      return { ...state, forgetpassword: payload, isLoading: false };
+    },
+    [Update_Password.fulfilled]: (state, { payload }) => {
+      return { ...state, updatepassword: payload, isLoading: false };
+    },
+    // [Update_Password.rejected]: (state, action) => {
+    //   return { ...state, updatepassword: action, isLoading: false };
+    // },
+    [Reset_Password.fulfilled]: (state, { payload }) => {
+      return { ...state, resetpassword: payload, isLoading: false };
+    },
+    [Reset_Password.rejected]: (state, action) => {
+      return { ...state, resetpassword: action, isLoading: false };
+    },
   },
+
+  // extraReducers:  (builder) => {
+  //   builder.addCase(Forget_Password.pending, (state) => {
+  //     // Handle pending state
+  //   })
+  //     .addCase(Forget_Password.fulfilled, (state, action) => {
+  //       // Handle fulfilled state
+  //       console.log("action" ,action);
+  //     })
+  //     .addCase(Forget_Password.rejected, (state, action) => {
+  //       state.isError = true;
+  //       console.log("action" ,action);
+
+  //       state.errorMsg = action.error.message; // Store error message in state
+  //     });
+  // }
 });
 
 // export const {ganpat} = HomeScreenSlice.actions

@@ -1,6 +1,8 @@
 "use strict";
 const db = require('../../Models');
 const panel_model = db.panel_model;
+const User = db.user;
+
 const { formattedDateTime } = require('../../Helper/time.helper')
 class Panel {
 
@@ -9,7 +11,7 @@ class Panel {
         try {
             const { panel_name, domain, port, key, ip_address, theme_id } = req.body
 
-            // FIND PANEL NAME DUPLICATE 
+            // FIND PANEL NAME DUPLICATE
             const panel_data = await panel_model.findOne({ panel_name: panel_name });
             if (panel_data) {
                 return res.status(409).json({ status: false, msg: 'Panel Name already exists', data: [] });
@@ -43,7 +45,7 @@ class Panel {
         }
     }
 
-    // // GET THEME 
+    // // GET THEME
     // async GetAllTheme(req, res) {
     //     try {
 
@@ -53,7 +55,7 @@ class Panel {
     //         const totalCount = await Theme_list.countDocuments();
 
 
-    //         // THEME LIST DATA 
+    //         // THEME LIST DATA
     //         // var getAllTheme = await Theme_list.find()
     //         const getAllTheme = await Theme_list
     //             .find({})
@@ -82,6 +84,25 @@ class Panel {
     //         console.log("Get all theme error-", error);
     //     }
     // }
+
+
+
+    async UserProfile(req, res) {
+        try {
+            const { userId } = req.body
+
+            // FIND PANEL NAME DUPLICATE
+            const EmailCheck = await User.findOne({ _id: userId })
+
+            if (!EmailCheck) {
+                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+            }
+            res.send({ status: true, msg: "Get User", data: EmailCheck })
+
+        } catch (error) {
+            console.log("Theme error-", error);
+        }
+    }
 
 
 }

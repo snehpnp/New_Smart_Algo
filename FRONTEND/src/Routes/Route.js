@@ -7,12 +7,9 @@ import Client from "./User_Route"
 
 import Login from "../layout/Auth/Login"
 
-// import SuperAdmin from './Superadmin'
-// import Client from './Child_Client'
-// import Master_Client from './Master_Clients'
-// import Login from '../Layout/Auth/Login'
-// import ResetPassword from '../Layout/Auth/ResetPassword';
-// import UpdatePassword from '../Layout/Auth/UpdatePassword';
+
+import ForgetPassword from '../layout/Auth/ForgetPassword';
+import UpdatePassword from '../layout/Auth/UpdatePassword.js';
 import Testing from "../test"
 // import NotFound from "../Layout/NotFound"
 
@@ -58,9 +55,9 @@ const Routing = () => {
       //   navigate("/login");
       // }
     }
-    else {
-      navigate("/login");
-    }
+    // else {
+    //   navigate("/login");
+    // }
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -74,6 +71,8 @@ const Routing = () => {
       <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
       <Route path="/client/*" element={(roles === "USER") ? <Client /> : <Login />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forget" element={<ForgetPassword />} />
+      <Route path="/update/:id" element={<UpdatePassword />} />
       <Route path="/Testing" element={<Testing />} />
 
 

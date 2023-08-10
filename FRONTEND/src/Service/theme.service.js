@@ -7,7 +7,7 @@ import * as Config from "../Utils/Config";
 
 
 
-// Admin Dashboard
+// ADD THEME
 export async function ADD_THEME(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}add/theme`, data, {
@@ -19,6 +19,25 @@ export async function ADD_THEME(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
+    }
+
+}
+
+
+
+// GET ALL THEME
+export async function GET_ALL_THEME(data, token) {
+    try {
+        const res = await axios.get(`${Config.base_url}getall/theme`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        return err
     }
 
 }

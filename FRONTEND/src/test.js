@@ -1,261 +1,353 @@
-import React, { useEffect, useState } from 'react'
-import Formikform from "./Components/ExtraComponents/Form/Formik_form"
-import { Formik, Form, Field, useFormik } from 'formik';
-// import * as  valid_err from "../../../Utils/Common_Messages"
-// import { toast } from "react-toastify";
-import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Email_regex, Mobile_regex } from "./Utils/Common_regex"
-import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router, Link } from "react-router-dom";
-// import "../../../component/admin/admin-assets/css/style.css"
-
-// import { AddClients } from "../../../ReduxStore/Slice/AdminMasters"
-
-const AddClient = () => {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  // const AdminToken = JSON.parse(localStorage.getItem('user_details')).accessToken;
-  // const userid = JSON.parse(localStorage.getItem('user_details')).id;
-  // const roleId = JSON.parse(localStorage.getItem('user_details')).roleId;
-  // const admin_id = JSON.parse(localStorage.getItem('user_details')).admin_id;
-  // const RoleId = JSON.parse(localStorage.getItem('user_details')).roles;
+// import React, { useEffect, useState, useRef } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { useDispatch, useSelector } from "react-redux";
+// import { SignIn, Verify_User_Device, get_theme_details } from "../../ReduxStore/Slice/Auth/AuthSlice";
+// import Modal from "../../Components/ExtraComponents/Modal"
+// import OtpInput from 'react-otp-input';
+// import { check_Device } from "../../Utils/find_device";
+// import { getLastFourDigits } from "../../Utils/common_Functions"
+// import axios from "axios"
+// import toast, { Toaster } from 'react-hot-toast';
+// import $ from "jquery";
+// import ToastButton from "../../Components/ExtraComponents/Alert_Toast";
 
 
 
 
-  const [showLoader, setshowLoader] = useState(false)
 
 
-  const isValidEmail = (email) => {
-    return Email_regex(email)
-  }
-  const isValidContact = (mobile) => {
-    return Mobile_regex(mobile)
-  }
-
-
-  const setRoleId = (role) => {
-    if (role === "ADMIN") {
-      return "2"
-    }
-    else if (role === "USER") {
-      return "4"
-    }
-    else if (role === "SUPERADMIN") {
-      return "1"
-    }
-    else if (role === "MASTER") {
-      return "2"
-    }
-  }
+// const Login = () => {
+//   const navigate = useNavigate();
+//   const data = useRef()
+//   const dispatch = useDispatch();
+//   const selector = useSelector((state) => state)
 
 
 
-
-  const formik = useFormik({
-    initialValues: {
-      username: '',
-      fullName: '',
-      email: '',
-      mobile: '',
-      broker: '',
-      licencetype: '',
-      tomonth: "0",
-
-      app_id: 'null',
-      api_type: 'null',
-      client_code: 'null',
-      api_key: 'null',
-      api_secret: 'null',
-      app_key: 'null',
-      demat_userid: 'null'
-
-    },
-    validate: (values) => {
-      const errors = {};
-      // if (!values.username) {
-      //   errors.username = valid_err.USERNAME_ERROR;
-      // }
-      // if (!values.fullName) {
-      //   errors.fullName = valid_err.FULLNAME_ERROR;
-      // }
-      // if (!values.mobile) {
-      //   errors.mobile = valid_err.CONTACT_ERROR;
-      // } else if (!isValidContact(values.mobile)) {
-      //   errors.mobile = valid_err.INVALID_CONTACT_ERROR;
-      // }
-      // if (!values.licencetype) {
-      //   errors.licence = valid_err.LICENCE_TYPE_ERROR;
-      // }
-      // if (!values.tomonth) {
-      //   errors.tomonth = valid_err.LICENCE_ERROR;
-      // }
-      // if (!values.broker) {
-      //   errors.broker = valid_err.BROKER_ERROR;
-      // }
-      // if (!values.apisecret) {
-      //   errors.apisecret = valid_err.APISECRET_ERROR;
-      // }
-      // if (!values.apikey) {
-      //   errors.apikey = valid_err.APIKEY_ERROR;
-      // }
-      // if (!values.apiid) {
-      //   errors.apiid = valid_err.APIID_ERROR;
-      // }
-
-      // if (!values.email) {
-      //   errors.email = valid_err.EMPTY_EMAIL_ERROR;
-      // } else if (!isValidEmail(values.email)) {
-      //   errors.email = valid_err.INVALID_EMAIL_ERROR;
-      // }
-
-      return errors;
-    },
-    onSubmit: async (values) => {
-
-      // const req = {
-      //   "fullname": values.fullName,
-      //   "username": values.username,
-      //   "email": values.email,
-      //   "phone_number": values.mobile,
-      //   "license_type": "1",
-      //   "licence": "0",
-      //   "roleId": "3",
-      //   "roles": RoleId,
-      //   "master_id": "0",
-      //   "parent_admin_id": userid,
-      //   "parent_role_id": setRoleId(RoleId),
-      //   // "parent_role_id": roleId,
-      //   "broker": values.broker,
-      //   "api_secret": values.api_secret,
-      //   "app_id": values.app_id,
-      //   "client_code": values.client_code,
-      //   "api_key": values.api_key,
-      //   "app_key": values.app_key,
-      //   "api_type": values.api_type,
-
-      //   "demat_userid": values.demat_userid
-      // }
-
-      // console.log("res", req);
-      // return
-
-      // await dispatch(AddClients({ req: req, AdminToken: AdminToken })).then((res) => {
-
-
-      //   if (res.meta.requestStatus === "fulfilled") {
-      //     if (res.payload === "Failed! Username is already in use!") {
-      //       toast.error(res.payload)
-      //     } else {
-      //       toast.success(res.payload.data)
-      //       // setshowLoader(false)
-      //       // setshowLoader(false)
-      //       setTimeout(() => {
-      //         navigate("/admin/masters")
-      //       }, 2000);
-      //     }
-      //   }
-
-      // })
-    }
-  });
-
-  const fields = [
-    { name: 'username', label: 'Username', type: 'text' },
-    { name: 'username', label: 'Username', type: 'text' },
-    { name: 'password', label: 'password', type: 'password' },
-    {
-      name: 'broker',
-      label: 'Broker',
-      type: 'select',
-      options: [
-        { label: 'Market Hub', value: '1' },
-        { label: 'B2C', value: '11' },
-
-      ],
-    },
-    { name: 'mobile', label: 'FullName', type: 'radio', index: '1' },
-    { name: 'mobile', label: 'Mobile', type: 'radio', index: '2' },
-    { name: 'mobile', label: 'Mobile', type: 'radio', index: '2' },
-    { name: 'mobile', label: 'Mobile', type: 'radio', index: '2' },
-    { name: 'mobile', label: 'Mobile', type: 'radio', index: '2' },
-    { name: 'mobile', label: 'Mobile', type: 'radio', index: '2' },
-    { name: 'mobile', label: 'Mobile', type: 'radio', index: '2' },
-
-    {
-      name: 'api_key',
-      label: formik.values.broker === 4 ? 'App Key' : formik.values.broker === 7 ? "Consumer Key" : formik.values.broker === 9 ? "Vendor Key" : formik.values.broker === 8 ? 'App Key' : formik.values.broker === 10 ? 'App Key' : "'Api Key", type: 'text',
-      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6'
-    },
-
-    {
-      name: 'client_code',
-      label: formik.values.broker === 1 ? 'User' : formik.values.broker === 4 ? "Client Code" : formik.values.broker === 7 ? "User Name" : formik.values.broker === 9 ? "Vander Id" : formik.values.broker === 11 ? "Client Code" : formik.values.broker === 11 ? "client_code" : 'User Id', type: 'text',
-      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6'
-    },
-    {
-      name: 'demat_userid',
-      label: formik.values.broker === 9 ? 'User Id' : '', type: 'text',
-      showWhen: values => values.broker === '9'
-    },
-
-
-    {
-      name: 'app_id',
-      label: formik.values.broker === 1 ? 'Verification Code' : formik.values.broker === 5 ? 'Password' : formik.values.broker === 7 ? 'Demat Password' : formik.values.broker === 11 ? 'Password' : formik.values.broker === 13 ? 'App Id' : formik.values.broker === 9 ? 'Password' : formik.values.broker === 14 ? 'User Id ' : 'App Id', type: 'text',
-      showWhen: values => values.broker === '2' || values.broker === '1' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14'
-    },
+//   const [showModal, setshowModal] = useState(false)
+//   const [typeOtp, setTypeOtp] = useState('');
+//   const [Email, setEmail] = useState('');
+//   const [password, setPassword] = useState('');
+//   const [UserData, setUserData] = useState('');
+//   const [CheckUser, setCheckUser] = useState(check_Device());
 
 
 
-    {
-      name: 'app_key',
-      label: formik.values.broker === 5 || 6 ? 'App Key' : "", type: 'text',
-      showWhen: values => values.broker === '5'
-    },
-
-    {
-      name: 'api_secret',
-      label: formik.values.broker === 1 ? 'Password Code' : formik.values.broker === 5 ? 'DOB' : formik.values.broker === 7 ? 'Consumer Secret' : formik.values.broker === 9 ? 'Encryption Secret Key' : formik.values.broker === 10 ? 'Api Secret Key' : formik.values.broker === 11 ? '2FA' : formik.values.broker === 14 ? 'Encryption Key' : 'Api Secret', type: 'text',
-      showWhen: values => values.broker === '1'
-        || values.broker === '2' || values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15'
-    },
-    {
-      name: 'api_type',
-      label: formik.values.broker === 5 ? 'DOB' : formik.values.broker === 7 ? 'Trade Api Password' : formik.values.broker === 9 ? 'Encryption IV' : 'Api Secret', type: 'text',
-      showWhen: values =>
-        values.broker === '7' || values.broker === '9'
-    },
-
-  ];
+//   useEffect(() => {
+//   }, [])
 
 
 
+//   const loginUser = async (e) => {
+//     e.preventDefault();
+//     let req = {
+//       // Email: "superadmin@gmail.com",
+//       // Password: "123456",
+//       // Email: "admin@gmail.com",
+//       // Password: "123456",
+//       // Email: "user@gmail.com",
+//       // Password: "123456",
 
-  return (
-    <>
-      <div className="main-panel">
-        <div className="content ">
-          <div className="panel-header bg-primary-gradient">
-            <div className="py-5 page-inner">
-              <div className="d-flex align-items-left align-items-md-center flex-column flex-md-row">
-                <h4 className="flex-grow-1 text-white fw-bold">Add Master</h4>
-                <Link to='/admin/masters' className='btn btn-light'>Back</Link>
-              </div>
-            </div>
-          </div>
-          <div className="page-inner mt--5">
-            <div className="row row-card-no-pd  shadow-lg mt--2">
-              <div className='data-table-div'>
-                <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Master" />
+//       Email: Email,
+//       Password: password,
+//       device: CheckUser,
+//     };
 
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  )
-}
+//     await dispatch(SignIn(req))
+//       .then((res) => {
+//         console.log("signin", res);
 
-export default AddClient
+//         if (res.payload.status) {
+//           if (res.payload.data.Role !== "SUPERADMIN") {
+//             setshowModal(true)
+//             setUserData(res.payload.data)
+//           } else if (res.payload.data.Role === "SUPERADMIN") {
+//             toast.success(res.payload.msg)
+//             localStorage.setItem("user_details", JSON.stringify(res.payload.data));
+//             localStorage.setItem("user_role", JSON.stringify(res.payload.data.Role));
+//             setTimeout(() => {
+//               navigate("/super/dashboard");
+//             }, 1000);
+
+//           }
+//         }
+//         else  if (res.payload.status !== true)  {
+//           toast.error(res.payload.msg)
+
+//         }
+//       })
+//       .catch((err) => {
+//         console.log("error", err);
+//       });
+//   };
+
+
+
+//   const verifyOTP = async () => {
+
+//     if (typeOtp === "") {
+//       alert("enter otp")
+//       return
+//     }
+//     if (typeOtp.length < 4) {
+//       alert("please enter valid otp")
+//       return
+//     }
+
+
+
+//     let req = {
+//       Email: "user@gmail.com",
+//       Device: CheckUser,
+//       Otp: typeOtp
+//     };
+
+
+//     await dispatch(Verify_User_Device(req))
+//       .then((res) => {
+//         if (res.payload.status) {
+//           if (UserData && UserData.Role === "ADMIN") {
+//             let mobile_No = getLastFourDigits(UserData && UserData.mobile, typeOtp)
+//             if (mobile_No === true) {
+//               localStorage.setItem("user_details", JSON.stringify(UserData));
+//               localStorage.setItem("user_role", JSON.stringify(UserData.Role));
+//               toast.success(res.payload.msg)
+//               setTimeout(() => {
+//                 setshowModal(false)
+//                 navigate("/admin/dashboard");
+//               }, 1000);
+//             } else {
+//               toast.error(mobile_No)
+//               // alert(mobile_No)
+//             }
+//           }
+//           else if (UserData && UserData.Role === "USER") {
+//             let mobile_No = getLastFourDigits(UserData && UserData.mobile, typeOtp)
+//             if (mobile_No === true) {
+//               localStorage.setItem("user_details", JSON.stringify(UserData));
+//               localStorage.setItem("user_role", JSON.stringify(UserData.Role));
+//               // setshowModal(false)
+//               toast.success(res.payload.msg)
+
+//               setTimeout(() => {
+//                 setshowModal(false)
+//                 navigate("/client/dashboard");
+//               }, 1000);
+//             } else {
+//               toast.error(mobile_No)
+//               // alert(mobile_No)
+//             }
+
+//           }
+//           else if (UserData && UserData.Role === "SUBADMIN") {
+//             let mobile_No = getLastFourDigits(UserData && UserData.mobile, typeOtp)
+//             if (mobile_No === true) {
+//               localStorage.setItem("user_details", JSON.stringify(UserData));
+//               localStorage.setItem("user_role", JSON.stringify(UserData.Role));
+//               toast.success(res.payload.msg)
+
+//               setTimeout(() => {
+//                 setshowModal(false)
+//                 navigate("/subadmin/dashboard");
+//               }, 1000);
+//             } else {
+//               toast.error(mobile_No)
+//               // alert(mobile_No)
+//             }
+//           }
+//         }
+//         else {
+//           toast.error(res.payload.msg)
+//         }
+
+//       }).catch((error) =>
+//         console.log("error on Otp Verify", error))
+//   }
+
+
+
+//   const GetAllThemes = () => {
+
+//     axios.get("https://api.smartalgo.in:3001/smartalgo/get/theme").then((res) => {
+//       // console.log("accept res`122`12`", res.data.data);
+
+//       // $('body').attr('data-theme-version', themedata.theme_version);
+
+//       // setThemeData(res.data.data)
+//     }).catch((err) => {
+//       console.log("error", err);
+//     })
+//   }
+
+
+//   useEffect(() => {
+//     GetAllThemes()
+//   }, [])
+
+//   // let theme_id = localStorage.getItem("theme_id")
+//   // let theme_id = 62
+
+
+//   // console.log("theme_id", theme_id);
+
+//   // if (theme_id != null) {
+//   //   axios.post("https://api.smartalgo.in:3001/smartalgo/getthemeById", { id: parseInt(62) }).then((res) => {
+//   //     let themedata = res.data.data[0]
+
+//   //     $('body').removeClass('theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9  theme-10');
+//   //     $('body').addClass(themedata.dashboard)
+
+//   //     $('body').attr('data-dashboard', `${themedata.dashboard}-dashboard`);
+
+
+//   //     $('body').attr('data-theme-version', themedata.theme_version);
+
+//   //     $('body').attr('data-primary', themedata.primary_col);
+//   //     $('body').attr('data-nav-headerbg', themedata.nav_head_col);
+//   //     $('body').attr('data-headerbg', themedata.header_col);
+//   //     $('body').attr('data-sibebarbg', themedata.sidebar_col);
+
+//   //     if ($('body').attr('data-sidebar-style') === 'overlay') {
+//   //       $('body').attr('data-sidebar-style', 'full');
+//   //       $('body').attr('data-layout', themedata.layout);
+//   //       return;
+//   //     }
+//   //     $('body').attr('data-layout', themedata.layout);
+//   //     if ($('body').attr('data-layout') === "horizontal") {
+//   //       if (themedata.sidebar === "overlay") {
+//   //         alert("Sorry! Overlay is not possible in Horizontal layout.");
+//   //         return;
+//   //       }
+//   //     }
+//   //     if ($('body').attr('data-layout') === "vertical") {
+//   //       if ($('body').attr('data-container') === "boxed" && themedata.sidebar === "full") {
+//   //         alert("Sorry! Full menu is not available in Vertical Boxed layout.");
+//   //         return;
+//   //       }
+//   //       if (themedata.sidebar === "modern" && $('body').attr('data-sidebar-position') === "fixed") {
+//   //         alert("Sorry! Modern sidebar layout is not available in the fixed position. Please change the sidebar position into Static.");
+//   //         return;
+//   //       }
+//   //     }
+//   //     $('body').attr('data-sidebar-style', themedata.sidebar);
+//   //     if ($('body').attr('data-sidebar-style') === 'icon-hover') {
+//   //       $('.deznav').on('hover', function () {
+//   //         $('#main-wrapper').addClass('iconhover-toggle');
+//   //       }, function () {
+//   //         $('#main-wrapper').removeClass('iconhover-toggle');
+//   //       });
+//   //     }
+
+//   //     $('body').attr('data-header-position', themedata.header_position);
+//   //     $('body').attr('data-sidebar-position', themedata.sidebar_position);
+//   //     $('body').attr('data-typography', themedata.body_font);
+//   //     if (themedata.container === "boxed") {
+//   //       if ($('body').attr('data-layout') === "vertical" && $('body').attr('data-sidebar-style') === "full") {
+//   //         $('body').attr('data-sidebar-style', 'overlay');
+//   //         $('body').attr('data-container', themedata.container);
+//   //         setTimeout(function () {
+//   //           $(window).trigger('resize');
+//   //         }, 200);
+//   //         return;
+//   //       }
+//   //     }
+//   //     $('body').attr('data-container', themedata.container);
+
+//   //   }).catch((err) => {
+//   //     console.log("error", err);
+//   //   })
+
+//   // }
+
+//   return (
+//     <div class="vh-100">
+//       <div className="authincation h-100">
+//         <div className="container h-100">
+//           <div className="row justify-content-center h-100 align-items-center">
+//             <div className="col-md-6">
+//               <div className="authincation-content">
+//                 <div className="row no-gutters">
+//                   <div className="col-xl-12">
+//                     <div className="auth-form">
+//                       <div className="text-center mb-3">
+//                         <a href="#a"> logo </a>
+//                       </div>
+//                       <h4 className="text-center mb-4">
+//                         Sign in your account
+//                       </h4>
+
+//                       <form >
+//                         <div className="mb-3">
+//                           <label className="mb-1">
+//                             <strong> Email </strong>
+//                           </label>
+//                           <input
+//                             type="email"
+//                             className="form-control"
+//                             placeholder="Example@gmail.com"
+//                             onChange={(e) => setEmail(e.target.value)}
+//                           />
+//                         </div>
+//                         <div className="mb-3">
+//                           <label className="mb-1">
+//                             <strong> Password </strong>
+//                           </label>
+//                           <input
+//                             type="password"
+//                             className="form-control"
+//                             placeholder="Password"
+//                             onChange={(e) => setPassword(e.target.value)}
+
+//                           />
+//                         </div>
+
+//                         <div className="text-center">
+//                           <button
+//                             type="submit"
+//                             className="btn btn-primary btn-block"
+//                             onClick={(e) => {
+//                               loginUser(e);
+//                             }}
+//                           >
+//                             Sign Me In
+//                           </button>
+//                         </div>
+//                         <ToastButton />
+//                       </form>
+//                     </div>
+//                   </div>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+
+
+//       {/* For Varify OTP Modal */}
+//       {showModal ?
+//         <>
+//           <Modal isOpen={showModal} handleClose={!showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify" Submit_Function={verifyOTP}>
+//             <form onSubmit={verifyOTP}>
+//               <OtpInput
+//                 containerStyle="otp-div"
+//                 value={typeOtp}
+//                 onChange={setTypeOtp}
+//                 numInputs={4}
+//                 renderSeparator={<span></span>}
+//                 renderInput={(props) => <input {...props} />}
+
+//               />
+//             </form>
+//           </Modal >
+//         </>
+//         : ""
+//       }
+//     </div>
+//   );
+// };
+
+// export default Login;
+
+
