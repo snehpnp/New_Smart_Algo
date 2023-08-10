@@ -105,7 +105,7 @@ const CompanyCreate = () => {
     domain_url: "domain_url",
     domain_url_https: "domain_url_https",
     broker_url: "broker_url",
-    theme_id: "12",
+    theme_id: "64d0c04a0e38c94d0e20ee28",
     theme_name: "theme_name"
 
   })

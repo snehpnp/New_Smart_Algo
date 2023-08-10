@@ -45,48 +45,7 @@ class Panel {
         }
     }
 
-    // // GET THEME
-    // async GetAllTheme(req, res) {
-    //     try {
-
-    //         const { page, limit } = req.body;
-    //         const skip = (page - 1) * limit;
-
-    //         const totalCount = await Theme_list.countDocuments();
-
-
-    //         // THEME LIST DATA
-    //         // var getAllTheme = await Theme_list.find()
-    //         const getAllTheme = await Theme_list
-    //             .find({})
-    //             .skip(skip)
-    //             .limit(Number(limit))
-
-
-    //         // IF DATA NOT EXIST
-    //         if (getAllTheme.length == 0) {
-    //             res.send({ status: false, msg: "Empty data", data: getAllTheme })
-    //         }
-
-    //         // DATA GET SUCCESSFULLY
-    //         res.send({
-    //             status: true,
-    //             msg: "Get All Theme name",
-    //             data: getAllTheme,
-    //             page: Number(page),
-    //             limit: Number(limit),
-    //             totalCount: totalCount,
-    //             totalPages: Math.ceil(totalCount / Number(limit)),
-    //         })
-
-
-    //     } catch (error) {
-    //         console.log("Get all theme error-", error);
-    //     }
-    // }
-
-
-
+    // USER PROFILE TO GET USER 
     async UserProfile(req, res) {
         try {
             const { userId } = req.body
@@ -103,6 +62,88 @@ class Panel {
             console.log("Theme error-", error);
         }
     }
+
+     // GET ONE PANEL AND HIS THEME INFORMATION
+     async GetPanleinformation(req, res) {
+        try {
+            const { id } = req.body
+
+            // FIND PANEL NAME DUPLICATE
+            // const Panle_information = await panel_model.findOne({ _id: id })
+            const Panle_information = await panel_model.aggregate(
+
+                [
+                    {
+                      '$lookup': {
+                        'from': 'theme_lists', 
+                        'localField': 'theme_id', 
+                        'foreignField': '_id', 
+                        'as': 'theme_data'
+                      }
+                    }
+                    // ,
+                    // {
+                    //     '$lookup': {
+                    //       'from': 'companies', 
+                    //       'localField': 'theme_id', 
+                    //       'foreignField': 'theme_id', 
+                    //       'as': 'compnay_data'
+                    //     }
+                    //   },
+                  ]
+            )
+
+
+            if (!Panle_information) {
+                return res.status(409).json({ status: false, msg: 'Panle Not exist Not exists', data: [] });
+            }
+            res.send({ status: true, msg: "Get User", data: Panle_information })
+
+        } catch (error) {
+            console.log("Theme error-", error);
+        }
+    }
+
+    // GET All Panel  
+    async GetAllPanel(req, res) {
+        try {
+
+            const { page, limit } = req.body;
+            const skip = (page - 1) * limit;
+
+            const totalCount = await panel_model.countDocuments();
+
+
+            // THEME LIST DATA
+            // var getAllTheme = await Theme_list.find()
+            const getAllpanel = await panel_model
+                .find({})
+                .skip(skip)
+                .limit(Number(limit))
+
+
+            // IF DATA NOT EXIST
+            if (getAllpanel.length == 0) {
+                res.send({ status: false, msg: "Empty data", data: getAllpanel })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All Panels name",
+                data: getAllpanel,
+                page: Number(page),
+                limit: Number(limit),
+                totalCount: totalCount,
+                totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+
+
+        } catch (error) {
+            console.log("Get all Panels error-", error);
+        }
+    }
+
 
 
 }
