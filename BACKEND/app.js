@@ -50,6 +50,11 @@ app.get('/get', async (req, res) => {
 require("./App/Routes")(app)
 
 
+// EMERGANCY
+require("./App/Emergency Apis/service")(app)
+
+
+
 
 // Server start
 server.listen(process.env.PORT, () =>
