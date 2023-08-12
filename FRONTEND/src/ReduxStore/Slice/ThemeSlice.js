@@ -28,17 +28,19 @@ const ThemeSlice = createSlice({
         isError: false,
         add_theme: [],
         gettheme: [],
-        status : false
+        status: false
     },
 
     recuders: {},
     extraReducers: {
-        [Add_Theme.pending]: (state, action) => {
-            console.log("Pending");
+
+        [Add_Theme.pending]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, add_theme: [], isLoading: true };
         },
         [Add_Theme.fulfilled]: (state, { payload }) => {
-            state.isLoading = false;
-            return { ...state, add_theme: payload };
+            // state.isLoading = false;
+            return { ...state, add_theme: payload, isLoading: false };
         },
         [Add_Theme.rejected]: (state, action) => {
             return { ...state, add_theme: action, isLoading: false };
@@ -47,7 +49,7 @@ const ThemeSlice = createSlice({
             return { ...state, gettheme: [], isLoading: true };
         },
         [Get_All_Theme.fulfilled]: (state, { payload }) => {
-            console.log("payload" ,payload);
+            console.log("payload", payload);
             return { ...state, gettheme: payload, status: false };
         },
         [Get_All_Theme.rejected]: (state, action) => {

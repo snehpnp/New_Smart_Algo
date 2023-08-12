@@ -2,40 +2,37 @@
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Loader from '../../../Utils/Loader'
+import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { Get_All_Theme, getthemedata } from '../../../ReduxStore/Slice/ThemeSlice'
+import { All_Panel_List, panellist } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 
 const AdminsList = () => {
 
     const dispatch = useDispatch()
-    const theme_list = useSelector(getthemedata && getthemedata)
+    const theme_list = useSelector(panellist && panellist)
 
+    console.log("theme_list", theme_list);
     const [themeData, setThemeData] = useState({
         loading: true,
         data: []
     });
 
 
-    useEffect(() => {
-        dispatch(Get_All_Theme())
-    }, [dispatch])
-
-
-
-    useEffect(() => {
-        if (theme_list !== undefined) {
-            if (theme_list && theme_list.gettheme) {
+    useEffect(async () => {
+        await dispatch(All_Panel_List()).unwrap()
+            .then((response) => {
+                console.log("rest", response.data);
                 setThemeData({
                     loading: false,
-                    data: theme_list.gettheme
+                    data: response.data
                 });
-            }
-            if (theme_list !== undefined && theme_list.gettheme.message === "Network Error") {
-                alert(theme_list.gettheme.message);
-            }
-        }
-    }, [theme_list]);
+            })
+    }, [])
+
+
+
+
 
 
 
@@ -47,38 +44,94 @@ const AdminsList = () => {
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: 'theme_name',
-            text: 'Theme Name'
+            dataField: 'domain',
+            text: 'Domain Name'
         },
         {
-            dataField: 'price',
-            text: 'Product Name'
+            dataField: 'panel_name',
+            text: 'Panel Name'
         },
         {
-            dataField: 'price',
-            text: 'Product Name'
+            dataField: 'port',
+            text: 'Port No'
         },
         {
-            dataField: 'price',
-            text: 'Product Name'
+            dataField: 'key',
+            text: 'Key'
         },
         {
-            dataField: 'price',
-            text: 'Product Name'
+            dataField: 'is_active',
+            text: 'Active'
+        },
+        {
+            dataField: 'is_expired',
+            text: 'Expired'
+        },
+        {
+            dataField: 'ip_address',
+            text: 'IP Address'
+        },
+        {
+            dataField: 'actions',
+            text: 'Actions',
+            formatter: (cell, row) => (
+                <div>
+                    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                        Tooltip on top
+                    </button>
+
+                    <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                </div>
+            ),
         },
     ];
 
 
     return (
-        <Content Page_title="Company Theme">
+        <>
+            {
+                themeData.loading ? <Loader /> :
+                    <>
+                        <Content Page_title="Company Theme">
+                            {
+                                themeData.data && themeData.data.length === 0 ? (
+                                    'No data found') :
+                                    <FullDataTable TableColumns={columns} tableData={themeData.data} />
+
+
+                            }
+                        </Content>
+                    </>
+            }
+
+
+
+            {/*
+            <Content Page_title="Company Theme">
+                {themeData.loading ? (
+                    <Loader />
+                ) : themeData.data && themeData.data.length === 0 ? (
+                    'No data found'
+                ) : (
+                    <FullDataTable TableColumns={columns} tableData={themeData.data} />
+                )}
+            </Content>
+ */}
+
+            {/*
+<Content Page_title="Company Theme">
             {themeData.loading ? (
                 <Loader />
             ) : themeData.data && themeData.data.length === 0 ? (
                 'No data found'
             ) : (
-                <FullDataTable TableColumns={columns} tableData={themeData.data.data} />
+                <FullDataTable TableColumns={columns} tableData={themeData.data} />
             )}
         </Content>
+ */}
+
+        </ >
     );
 }
 

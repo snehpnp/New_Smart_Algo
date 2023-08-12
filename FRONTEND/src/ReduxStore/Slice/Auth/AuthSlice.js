@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { SIGN_IN_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_DETAILS, RESET_PASSWORD, UPDATE_PASSWORD, FORGET_PASSWORD } from "../../../Service/auth.service";
+import { SIGN_IN_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_DETAILS, RESET_PASSWORD, UPDATE_PASSWORD, FORGET_PASSWORD  , GET_PANEL_INFORMATION} from "../../../Service/auth.service";
 
 
 
@@ -80,6 +80,24 @@ export const Reset_Password = createAsyncThunk("/reset/password", async (data) =
   }
 });
 
+
+//  Forget Password
+export const Get_Panel_Informtion = createAsyncThunk("/get/panelinfo", async (data) => {
+  try {
+    const res = await GET_PANEL_INFORMATION(data)
+    return res;
+  }
+  catch (err) {
+    return err;
+  }
+});
+
+
+
+
+
+
+
 const AuthSlice = createSlice({
   name: "AuthSlice",
   initialState: {
@@ -91,7 +109,8 @@ const AuthSlice = createSlice({
     getheme: [],
     forgetpassword: [],
     updatepassword: [],
-    resetpassword: []
+    resetpassword: [] ,
+    panel_details : []
   },
 
   recuders: {},
@@ -140,6 +159,10 @@ const AuthSlice = createSlice({
     [Reset_Password.rejected]: (state, action) => {
       return { ...state, resetpassword: action, isLoading: false };
     },
+  },
+
+  [Get_Panel_Informtion.fulfilled]: (state, { payload }) => {
+    return { ...state, panel_details: payload, isLoading: false };
   },
 
   // extraReducers:  (builder) => {
