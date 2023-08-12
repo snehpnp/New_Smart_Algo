@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const db  = require('../../Models');
 
 const serviceGroupName = db.serviceGroupName;
+const services = db.services;
 const serviceGroup_services_id = db.serviceGroup_services_id;
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
@@ -11,7 +12,16 @@ var dt = dateTime.create();
 class GroupService {
     async Addgroupservice(req, res) {
         try{
-      //  console.log("req body -",req.body)
+
+
+     //   const data = await services.findById({_id:'64d77617c9af6c1843e460f3'},{'name':1}).populate('categorie_id','name segment');
+
+      
+
+      
+         // res.send({status:true,data:data})
+       //   return
+          //console.log("req body -",req.body)
        
       
         const groupdetails = req.body.groupdetails;
@@ -68,6 +78,7 @@ class GroupService {
 
 
 }
+
 
 
 module.exports = new GroupService();
