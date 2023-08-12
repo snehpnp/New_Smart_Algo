@@ -55,12 +55,12 @@ const userModel = Schema({
     },
     StartDate: {
         type: Date,
-        required: true,
+        // required: true,
         default: null
     },
     EndDate: {
         type: Date,
-        required: true,
+        // required: true,
         default: null
     },
     ActiveStatus: {

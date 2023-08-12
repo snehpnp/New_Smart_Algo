@@ -11,6 +11,10 @@ app.use(require("./SuperAdmin/panel.route"));
 // Admin Route
 app.use(require("./Admin/user.route"));
 
+// SUBADMIN ROUTES
+app.use(require("./Subadmin/subadmin.route"));
+
+
 
 
 };

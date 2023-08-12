@@ -1,3 +1,4 @@
+const Subadmin_Permission = require("./subadmin_permision.model");
 
 module.exports = {
     categorie : require("./categorie.model"),
@@ -8,7 +9,9 @@ module.exports = {
     user_logs: require("./user_logs.model"),
     user : require("./user.model"),
     strategy :require('./strategy.model'),
-    panel_model :require('./all_panels.model')
+    panel_model :require('./all_panels.model'),
+    Subadmin_Permission :require('./subadmin_permision.model')
+
 
 };
  
