@@ -140,3 +140,29 @@ export async function SET_THEME_DETAILS(data, token) {
 
 
 
+// GET_PANEL_INFORMATION
+
+export async function GET_PANEL_INFORMATION(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/panelinformation`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        console.log("res", res);
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        return err
+
+        // custom error
+    }
+
+}
+
+
+
+
+
+
+

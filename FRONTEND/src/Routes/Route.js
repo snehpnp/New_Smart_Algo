@@ -72,6 +72,7 @@ const Routing = () => {
       <Route path="/client/*" element={(roles === "USER") ? <Client /> : <Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forget" element={<ForgetPassword />} />
+      <Route path="/profile" element={<ForgetPassword />} />
       <Route path="/update/:id" element={<UpdatePassword />} />
       <Route path="/Testing" element={<Testing />} />
 

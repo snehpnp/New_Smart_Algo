@@ -78,7 +78,8 @@ class Panel {
         }
     }
 
-    // USER PROFILE TO GET USER 
+
+    // USER PROFILE TO GET USER
     async UserProfile(req, res) {
         try {
             const { userId } = req.body
@@ -100,16 +101,14 @@ class Panel {
     async GetPanleinformation(req, res) {
         try {
             const { id } = req.body
-           
-            // FIND PANEL NAME DUPLICATE             
-            const Panle_information = await panel_model.aggregate([
-                {
-                    '$match': {
-                        '_id': new mongoose.Types.ObjectId(id)
-                    }
-                },
-                {
-                    '$lookup': {
+
+            // FIND PANEL NAME DUPLICATE
+            // const Panle_information = await panel_model.findOne({ _id: id })
+            const Panle_information = await panel_model.aggregate(
+
+                [
+                    {
+                      '$lookup': {
                         'from': 'theme_lists',
                         'localField': 'theme_id',
                         'foreignField': '_id',
@@ -130,14 +129,13 @@ class Panel {
         }
     }
 
-    // GET All Panel  
+    // GET All Panel
     async GetAllPanel(req, res) {
         try {
 
             const { page, limit } = req.body;     //LIMIT & PAGE
             const skip = (page - 1) * limit;
 
-            // COUNT OF PANELS 
             const totalCount = await panel_model.countDocuments();
 
             // THEME LIST DATA

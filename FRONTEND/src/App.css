@@ -69,10 +69,11 @@ body {
   height: 100vh;
   position: absolute;
   z-index: 1111111;
-  background: aqua;
+  background:rgba(0, 0, 0, 0.7);
   width: 100%;
   align-items: center;
   justify-content: center;
+  top: 0;
 }
 .loader__coin {
   animation: flip 0.5s ease-in-out infinite alternate-reverse both;

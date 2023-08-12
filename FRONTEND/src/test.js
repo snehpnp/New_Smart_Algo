@@ -351,3 +351,18 @@
 // export default Login;
 
 
+
+
+
+
+import React from 'react'
+import Loader from './Utils/Loader'
+
+
+const test = () => {
+  return (
+    <div><Loader/></div>
+  )
+}
+
+export default test

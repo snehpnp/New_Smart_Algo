@@ -29,6 +29,7 @@
     "react-router-dom": "^6.14.1",
     "react-scripts": "5.0.1",
     "react-select": "^5.7.4",
+    "react-use-pagination": "^2.0.1",
     "web-vitals": "^2.1.4",
     "yup": "^1.2.0"
   },

@@ -134,12 +134,20 @@ export const admin_sidebar = [
                 "route": "/admin/msgbroadcast",
 
             },
+            {
+                'id': 3,
+                "name": 'Api-Create-Info',
+                "route": "/admin/apicreateinfo",
+                "Icon": "WalletCards",
+
+                "Data": []
+            },
         ]
 
     },
     {
         'id': 8,
-        "name": 'Services',
+        "name": 'Script Mgmt',
         "Icon": "Wrench",
         "Data": [
             {
@@ -152,11 +160,10 @@ export const admin_sidebar = [
                 'id': 2,
                 "name": 'Group Service',
                 "route": "/admin/groupservices",
-
             },
         ]
     },
-    {
+      {
         'id': 9,
         "name": 'Report',
         "Icon": "Repeat2",
@@ -169,17 +176,9 @@ export const admin_sidebar = [
         "name": 'Release Updates',
         "Icon": "Rocket",
         "route": "/admin/updates",
-
         "Data": []
     },
-    {
-        'id': 11,
-        "name": 'Api-Create-Info',
-        "route": "/admin/apicreateinfo",
-        "Icon": "WalletCards",
 
-        "Data": []
-    },
 ]
 
 
