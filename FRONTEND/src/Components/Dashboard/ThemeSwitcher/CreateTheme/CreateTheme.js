@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
 import { primaryColor, Nav_Heaer_Color, Header_Color, Sidebar_Color } from "./Data"
@@ -5,16 +6,21 @@ import $ from "jquery";
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { Tabs, Tab, Button } from 'react-bootstrap';
-import CustomModal from '../../../ExtraComponents/Modal';
+import Modal_Component from '../../../ExtraComponents/Modal';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
+import { useDispatch, useSelector } from "react-redux";
 import html2canvas from 'html2canvas';
-
-
+import * as Config from "../../../../Utils/Config";
+import { Add_Theme } from '../../../../ReduxStore/Slice/ThemeSlice';
 
 
 
 const CreateTheme = ({ SelectTheme1 }) => {
+
+    const dispatch = useDispatch()
+
+
     const [toggleSelection, setToggleSelection] = useState(false)
 
     // for theme selection
@@ -206,7 +212,7 @@ const CreateTheme = ({ SelectTheme1 }) => {
         setIsModalOpen(!isModalOpen)
     }
     const AddTheme = async (e) => {
-        e.preventDefault();
+        // e.preventDefault();
 
         const element = document.getElementById('root');
 
@@ -223,31 +229,48 @@ const CreateTheme = ({ SelectTheme1 }) => {
         var screenshotUrl
 
         // Capture the screenshot
-        html2canvas(document.documentElement, options).then(canvas => {
+        await html2canvas(document.documentElement, options).then(canvas => {
             // Convert canvas to an image and download it
             const screenshot = canvas.toDataURL('image/png');
             screenshotUrl = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = screenshot;
-            link.download = 'screenshot.png';
-            link.click();
+            // const link = document.createElement('a');
+            // link.href = screenshot;
+            // link.download = 'screenshot.png';
+            // link.click();
         })
 
 
 
         // return
         const req = {
-            // typography: BodyFont,
-            // version: ThemeVersion,
+            // body_font: BodyFont,
+            // theme_version: ThemeVersion,
             // layout: Layout,
-            // primary: PrimaryColor,
-            // headerBg: HeaderColor,
-            // navheaderBg: NavHeaderColor,
-            // sidebarBg: SidebarColor,
-            // sidebarStyle: Sidebar,
-            // sidebarPosition: SidebarPosition,
-            // headerPosition: HeaderPosition,
-            // containerLayout: Container,
+            // primary_col: PrimaryColor,
+            // header_col: HeaderColor,
+            // nav_head_col: NavHeaderColor,
+            // sidebar_col: SidebarColor,
+            // sidebar: Sidebar,
+            // sidebar_position: SidebarPosition,
+            // header_position: HeaderPosition,
+            // container: Container,
+            // panel_name: "smartalgo",
+            // image: screenshotUrl,
+            // theme_name: themeName,
+            // dashboard: ThemeDashboard
+
+
+            // body_font: BodyFont,
+            // theme_version: ThemeVersion,
+            // layout: Layout,
+            // primary_col: PrimaryColor,
+            // header_col: HeaderColor,
+            // nav_head_col: NavHeaderColor,
+            // sidebar_col: SidebarColor,
+            // sidebar: Sidebar,
+            // sidebar_position: SidebarPosition,
+            // header_position: HeaderPosition,
+            // container: Container,
             // panel_name: "smartalgo",
             // image: screenshotUrl,
             // theme_name: themeName,
@@ -255,30 +278,36 @@ const CreateTheme = ({ SelectTheme1 }) => {
 
 
 
-            typography: "poppins",
-            version: "light",
-            layout: "vertical",
-            primary: "color_1",
-            headerBg: "color_1",
-            navheaderBg: "color_1",
-            sidebarBg: "color_1",
-            sidebarStyle: "full",
-            sidebarPosition: "fixed",
-            headerPosition: "fixed",
-            containerLayout: "full",
+            body_font: "poppins",
+            theme_version: "light",
+            layout: "horizontal",
+            primary_col: "color_9",
+            header_col: "color_1",
+            nav_head_col: 'color_9',
+            sidebar_col: "color_9",
+            sidebar: "full",
+            sidebar_position: "fixed",
+            header_position: "fixed",
+            container: "full",
+            panel_name: "smartalgo",
             image: "smartalgo",
-            theme_name: themeName,
-            dashboard: ThemeDashboard
+            theme_name: "Theme-8",
+            dashboard: "Theme-8"
+
+
         }
 
 
 
-        axios.post("https://api.smartalgo.in:3001/smartalgo/theme_add", req).then((res) => {
+        // axios.post(`${Config}/add/theme`, req).then((res) => {
+        dispatch(Add_Theme(req)).then((res) => {
             setIsModalOpen(false)
         }).catch((err) => {
             console.log("error", err);
         })
     }
+
+
 
 
 
@@ -612,27 +641,28 @@ const CreateTheme = ({ SelectTheme1 }) => {
             </div>
 
 
-            <CustomModal
+            <Modal_Component
                 isOpen={isModalOpen}
                 handleClose={() => setIsModalOpen(!isModalOpen)}
                 title="Theme Name"
                 btn_name="Add Theme"
-                content={
-                    <>
-                        <FloatingLabel
-                            controlId="floatingInput"
-                            label="Theme Name"
-                        // className="mb-3"
-                        >
-                            <Form.Control type="email" placeholder="Theme Name" onChange={(e) => setThemeName(e.target.value)} />
-                        </FloatingLabel>
-                    </>
-                }
+
+
+
                 size="sm"
                 Submit_Function={(e) => AddTheme(e)}
                 backdrop='static'
-            />
-
+            >
+                <>
+                    <FloatingLabel
+                        controlId="floatingInput"
+                        label="Theme Name"
+                    // className="mb-3"
+                    >
+                        <Form.Control type="text" placeholder="Theme Name" onChange={(e) => setThemeName(e.target.value)} />
+                    </FloatingLabel>
+                </>
+            </Modal_Component>
         </div>
     )
 }

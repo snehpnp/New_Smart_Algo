@@ -14,13 +14,9 @@ class Company {
                     if (!value) {
                         return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
                     }
-                    console.log("value", value);
-
                     const filter = { _id: _id };
                     const updateOperation = { $set: companydata };
-
                     const result = await company_information.updateOne(filter, updateOperation);
-
                     if (!result) {
                         return res.status(409).json({ status: false, msg: 'Company not update', data: [] });
                     }
@@ -43,8 +39,6 @@ class Company {
             if (!compantInfo) {
                 return res.status(409).json({ status: false, msg: 'Server issue Not find Company information.', data: [] });
             }
-
-            console.log("compantInfo", compantInfo);
 
             return res.status(200).json({ status: true, msg: 'Done', data: compantInfo });
 

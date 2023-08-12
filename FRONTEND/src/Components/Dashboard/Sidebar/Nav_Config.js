@@ -1,5 +1,5 @@
 
-import { Signal  } from 'lucide-react';
+import { Signal } from 'lucide-react';
 
 export const admin_sidebar = [
     {
@@ -22,14 +22,19 @@ export const admin_sidebar = [
         "Icon": "Users",
 
         "Data": [
-            
             {
                 'id': 1,
+                "name": 'Add Client',
+                "route": "/admin/client/add",
+            },
+
+            {
+                'id': 2,
                 "name": 'Clients',
                 "route": "/admin/allclients",
             },
             {
-                'id': 2,
+                'id': 3,
                 "name": 'SignUp - Clients',
                 "route": "/admin/signupclients",
             },
@@ -129,12 +134,20 @@ export const admin_sidebar = [
                 "route": "/admin/msgbroadcast",
 
             },
+            {
+                'id': 3,
+                "name": 'Api-Create-Info',
+                "route": "/admin/apicreateinfo",
+                "Icon": "WalletCards",
+
+                "Data": []
+            },
         ]
 
     },
     {
         'id': 8,
-        "name": 'Services',
+        "name": 'Script Mgmt',
         "Icon": "Wrench",
         "Data": [
             {
@@ -147,11 +160,10 @@ export const admin_sidebar = [
                 'id': 2,
                 "name": 'Group Service',
                 "route": "/admin/groupservices",
-
             },
         ]
     },
-    {
+      {
         'id': 9,
         "name": 'Report',
         "Icon": "Repeat2",
@@ -164,17 +176,9 @@ export const admin_sidebar = [
         "name": 'Release Updates',
         "Icon": "Rocket",
         "route": "/admin/updates",
-
         "Data": []
     },
-    {
-        'id': 11,
-        "name": 'Api-Create-Info',
-        "route": "/admin/apicreateinfo",
-        "Icon": "WalletCards",
 
-        "Data": []
-    },
 ]
 
 
@@ -198,6 +202,13 @@ export const supper_admin_sidebar = [
         "name": 'History',
         "Icon": "FolderClock",
         "route": "/super/history",
+        "Data": []
+    },
+    {
+        'id': 3,
+        "name": 'Select Theme',
+        "Icon": "Paintbrush",
+        "route": "/super/selecttheme",
         "Data": []
     },
     {

@@ -8,8 +8,8 @@ verifyToken = (req, res, next) => {
         });
     }
     jwt.verify(token, process.env.SECRET, (err, decoded) => {
+
         if (err) {
-            console.log("err", err)
             return res.status(401).send({
                 message: "Unauthorized!"
             });
@@ -19,4 +19,4 @@ verifyToken = (req, res, next) => {
     });
 };
 
-module.exports = {verifyToken}
+module.exports = { verifyToken }

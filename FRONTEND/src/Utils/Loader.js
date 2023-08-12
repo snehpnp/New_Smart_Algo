@@ -17,9 +17,10 @@
 
 import { applyMiddleware } from '@reduxjs/toolkit'
 import React from 'react'
-import "../App.css"
+// import "../App.css"
 function Loader() {
     return (
+
             <div class="loader">
             <div class="loader__image">
                 <div class="loader__coin">

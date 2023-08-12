@@ -53,13 +53,69 @@ export async function LOG_OUT_USER(data, token) {
     }
     catch (err) {
         console.log("error", err);
+        return err
+
         // custom error
     }
 
 }
 
 
+// FORGET PASSWORD
+export async function FORGET_PASSWORD(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}forgetpassword`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        console.log("res", res);
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+    }
 
+}
+
+
+// UPDATE  PASSWORD
+export async function UPDATE_PASSWORD(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        console.log("res", res);
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+// RESET PASSWORD
+export async function RESET_PASSWORD(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}resetpassword`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        console.log("res", res);
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        return err
+
+        // custom error
+    }
+
+}
 
 
 // GET COMPANY AND THEME DETAILS
@@ -74,9 +130,39 @@ export async function SET_THEME_DETAILS(data, token) {
     }
     catch (err) {
         console.log("error", err);
+        return err
+
         // custom error
     }
 
 }
+
+
+
+
+// GET_PANEL_INFORMATION
+
+export async function GET_PANEL_INFORMATION(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/panelinformation`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        console.log("res", res);
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        return err
+
+        // custom error
+    }
+
+}
+
+
+
+
+
 
 

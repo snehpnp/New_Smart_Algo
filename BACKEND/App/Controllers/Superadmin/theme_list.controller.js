@@ -1,12 +1,20 @@
 "use strict";
-const db  = require('../../Models');
+const db = require('../../Models');
 const Theme_list = db.theme_list;
 const { formattedDateTime } = require('../../Helper/time.helper')
 class Theme {
+
+    // ADD THEME
     async AddTheme(req, res) {
         try {
             const { theme_name, theme_version, primary_col, nav_head_col, header_col, sidebar_col
                 , sidebar, header_position, sidebar_position, layout, container, body_font, dashboard, image } = req.body
+
+            const exist_strategy = await Theme_list.findOne({ theme_name: theme_name });
+            if (exist_strategy) {
+                return res.status(409).json({ status: false, msg: 'Theme Name already exists', data: [] });
+            }
+
 
             var lastElement;
             // FIND TABLE THEME DATA LAST INDEX
@@ -34,11 +42,20 @@ class Theme {
                 container: container,
                 body_font: body_font,
                 dashboard: dashboard,
-                image: image
+                image: image,
             });
+
+
             AddTheme.save()
                 .then(async (data) => {
                     res.send({ status: true, msg: "successfully Add!", data: data });
+                })
+                .catch((err) => {
+                    console.log("err", err);
+                    if (err.keyValue) {
+                        res.send({ status: false, msg: "Duplicate data", data: err.keyValue });
+                    }
+
                 })
 
 
@@ -48,13 +65,48 @@ class Theme {
         }
     }
 
-    async GetAllTheme(req,res){
+    // GET THEME
+    async GetAllTheme(req, res) {
         try {
-            
+
+            // const { page, limit } = req.body;
+            // const skip = (page - 1) * limit;
+
+            const totalCount = await Theme_list.countDocuments();
+
+
+            // THEME LIST DATA
+            // var getAllTheme = await Theme_list.find()
+            const getAllTheme = await Theme_list
+                .find({})
+                // .skip(skip)
+                // .limit(Number(limit))
+
+
+            // IF DATA NOT EXIST
+            if (getAllTheme.length == 0) {
+                res.send({ status: false, msg: "Empty data", data: getAllTheme })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All Theme name",
+                data: getAllTheme,
+                // page: Number(page),
+                // limit: Number(limit),
+                // totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+
+
         } catch (error) {
-            console.log();
+            console.log("Get all theme error-", error);
         }
     }
+
+    
+
 }
 
 

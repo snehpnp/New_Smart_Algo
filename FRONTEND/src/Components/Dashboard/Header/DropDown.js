@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react'
-import { useNavigate } from "react-router-dom";
+import { useNavigate ,Link } from "react-router-dom";
 import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { useDispatch } from "react-redux";
 import { check_Device } from "../../../Utils/find_device";
@@ -55,9 +55,9 @@ const DropDown = () => {
                 <i className="fa fa-angle-down ms-3" />
             </button>
             <div className="dropdown-menu dropdown-menu-end" style={{ margin: 0 }}>
-                <button className=" my-2 text-center  text-white btn  btn-primary dropdown-item" href="#">
+                <Link to="profile" className=" my-2 text-center  text-white btn  btn-primary dropdown-item" href="#">
                     Profile
-                </button>
+                </Link>
                 <button className="btn text-center text-white btn-primary dropdown-item" onClick={(e) => LogoutUser(e)}>
                     Logout
                 </button>
