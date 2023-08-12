@@ -8,6 +8,7 @@ app.use(require("./SuperAdmin/theme_list.router"));
 
 // Admin Route
 app.use(require("./Admin/user.route"));
+app.use(require("./Admin/servicegroup.route"));
 
 
 

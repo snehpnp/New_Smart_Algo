@@ -6,7 +6,9 @@ module.exports = {
     services: require("./services.model"),
     theme_list: require("./theme_list.model"),
     user_logs: require("./user_logs.model"),
-    user : require("./user.model")
+    user : require("./user.model"),
+    serviceGroupName : require("./serviceGroupName.model"),
+    serviceGroup_services_id : require("./serviceGroup_services_id.model")
     
     
 };
