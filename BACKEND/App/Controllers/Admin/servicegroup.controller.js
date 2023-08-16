@@ -3,15 +3,27 @@ const bcrypt = require("bcrypt");
 const db  = require('../../Models');
 
 const serviceGroupName = db.serviceGroupName;
+const services = db.services;
 const serviceGroup_services_id = db.serviceGroup_services_id;
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
 
 
 class GroupService {
+
+
     async Addgroupservice(req, res) {
         try{
-      //  console.log("req body -",req.body)
+
+
+      //  const data = await services.findById({_id:'64d77617c9af6c1843e460f1'},{'name':1}).populate('categorie_id','name segment');
+
+      
+
+      
+      // res.send({status:true,data:data})
+      //    return
+          //console.log("req body -",req.body)
        
       
         const groupdetails = req.body.groupdetails;
@@ -64,10 +76,58 @@ class GroupService {
 
     }
 
+// SErvices Work
+
+async GetAllServices(req, res) {
+  
+  const pipeline = [
+
+    {
+      $lookup: {
+        from: 'categories',
+        localField: 'categorie_id',
+        foreignField: '_id',
+        as: 'categoryResult'
+      }
+    },
+    
+    {
+      $unwind: '$categoryResult', // Unwind the 'categoryResult' array
+    },
+    {
+      $project: {
+        // Include fields from the original collection
+        'categoryResult.segment': 1,
+        'categoryResult.name': 1,
+         name : 1
+        // // Exclude the rest of the 'categoryResult' fields if needed
+        // 'categoryResult._id': 0,
+        // 'categoryResult.fieldName3': 0,
+        
+        // Include other fields as needed
+      },
+
+
+    },
+  ];
+
+  const result = await services.aggregate(pipeline);
+  
+  if(result.length > 0){
+    res.send({status:true,data:result});
+    
+  }else{
+    res.send({status:false,data:[]});
+
+  }
 
 
 
 }
+
+
+}
+
 
 
 module.exports = new GroupService();
