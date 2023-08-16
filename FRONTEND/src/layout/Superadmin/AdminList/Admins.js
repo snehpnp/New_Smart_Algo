@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
@@ -76,12 +77,13 @@ const AdminsList = () => {
             text: 'Actions',
             formatter: (cell, row) => (
                 <div>
-                    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Tooltip on top">
+                    <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                        Tooltip on top
-                    </button>
+                    </span>
+                    <span data-toggle="tooltip" data-placement="top" title="Delete">
+                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                    </span>
 
-                    <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
                 </div>
             ),
         },
