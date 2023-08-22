@@ -109,30 +109,6 @@ const Login = () => {
 
 
 
-
-      //   console.log("res" ,res);
-      //   if (res.payload.status) {
-      //     if (res.payload.data.Role !== "SUPERADMIN") {
-      //       setshowModal(true)
-
-      //       setUserData(res.payload.data)
-      //     } else if (res.payload.data.Role === "SUPERADMIN") {
-      //       toast.success(res.payload.msg)
-      //       localStorage.setItem("user_details", JSON.stringify(res.payload.data));
-      //       localStorage.setItem("user_role", JSON.stringify(res.payload.data.Role));
-      //       setTimeout(() => {
-      //         navigate("/super/dashboard");
-      //       }, 1000);
-
-      //     }
-      //   }
-      //   else if (res.payload.status !== true) {
-      //     toast.error(res.payload.msg)
-      //   }
-      // })
-      // .catch((err) => {
-      //   console.log("error", err);
-      // });
     }
   })
 
@@ -160,7 +136,7 @@ const Login = () => {
 
 
     let req = {
-      Email: "user@gmail.com",
+      Email: UserData.Email,
       Device: CheckUser,
       Otp: typeOtp
     };

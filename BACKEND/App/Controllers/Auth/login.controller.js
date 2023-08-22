@@ -23,6 +23,7 @@ class Login {
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
+            console.log(EmailCheck);
 
             // WHERE LOGIN CHECKgetIPAddress
             if (device == "APP") {                  //App Login Check
@@ -64,13 +65,14 @@ class Login {
                 expiresIn: 86400 // 24 hours
             });
             var msg = {
+                'Email': EmailCheck.Email,
                 'user_id': EmailCheck._id,
                 'token': token,
                 'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role
             };
 
             try {
-                logger.info('Login Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
+                logger.info('Login Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
                 res.send({ status: true, msg: "Login Succesfully", data: msg })
             } catch (error) {
                 console.log("Some Error in a login", error);
@@ -102,14 +104,14 @@ class Login {
 
             try {
                 // WHERE LOGIN CHECK
-                if (Device == "APP") {                  //App Login Check
+                if (Device.toUpperCase() == "APP") {                  //App Login Check
                     if (EmailCheck.AppLoginStatus == 1) {
                         logger.info('You are already logged in on the phone.', { role: EmailCheck.Role, user_id: EmailCheck._id });
                         return res.status(409).json({ status: false, msg: 'You are already logged in on the phone.', data: [] });
                     } else {
                         addData["AppLoginStatus"] = 1;
                     }
-                } else if (Device == "WEB") {          //Web login check
+                } else if (Device.toUpperCase() == "WEB") {          //Web login check
                     if (EmailCheck.WebLoginStatus == 1) {
                         logger.info('You are already logged in on the Web.', { role: EmailCheck.Role, user_id: EmailCheck._id });
                         return res.status(409).json({ status: false, msg: 'You are already logged in on the Web.', data: [] });
@@ -124,12 +126,13 @@ class Login {
 
             }
 
-
+            console.log("addData", addData);
             // Update Successfully
             const result = await User.updateOne(
                 { Email: Email },
                 { $set: addData }
             );
+            console.log("addData", result);
 
             // If Not Update User
             if (!result) {

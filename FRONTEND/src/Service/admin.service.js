@@ -7,18 +7,62 @@ import * as Config from "../Utils/Config";
 
 
 
-// Admin Dashboard
-// export async function admin_dashboard(data , token) {
-//     try {
-//         const res = await axios.post(`${Config.base_url}admin/dashboard`, data ,{
-//             headers: header(token),
-//             data: {},
-//         })
-//         return await res?.data;
-//     }
-//     catch (err) {
-//         console.log("error", err);
-//         // custom error
-//     }
 
-// }
+
+// ALL SERVICES
+
+export async function ALL_SERVICES(data , token) {
+    try {
+        const res = await axios.get(`${Config.base_url}getAllService`, data ,{
+            //  headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+
+
+
+// ALL CATAGORY
+
+export async function ALL_CATAGORY(data , token) {
+    try {
+        const res = await axios.get(`${Config.base_url}allCatagory`, data ,{
+            //  headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+
+
+// ALL SERVICE_BY_CATAGORY
+
+export async function SERVICE_BY_CATAGORY(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}ServiceByCatagory`, data ,{
+            //  headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
