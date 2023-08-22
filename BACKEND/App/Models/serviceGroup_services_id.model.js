@@ -1,11 +1,10 @@
 const { Schema, model } = require('mongoose');
+const mongoose = require('mongoose');
 
 const serviceGroup_services_id = Schema({
     Servicegroup_id: {
-        type: String,
-        required: true,
-        trim: true,
-        default: null
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'serviceGroupName',
     },
     Service_id: {
         type: String,
@@ -20,7 +19,8 @@ const serviceGroup_services_id = Schema({
     unique_column: {
         type: String,
         unique: true,
-    }
+    },
+   
         
     
 },

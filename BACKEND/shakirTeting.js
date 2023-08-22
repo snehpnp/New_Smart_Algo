@@ -128,8 +128,8 @@ services.find()
   //const matchingElements = categoryResult.filter(item => item.segment === "FO");
 
   // console.log('Matching elements:', matchingElements[0]._id);
-
- 
+  res.send("done");
+    return
      var axios = require('axios');
     var config = {
         method: 'get',
