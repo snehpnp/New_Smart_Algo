@@ -10,6 +10,8 @@ var dt = dateTime.create();
 // OK
 // Product CLASS
 class Employee {
+
+    // USER ADD 
     async AddEmployee(req, res) {
         try {
             const { FullName, UserName, Email, PhoneNo, StartDate, EndDate, Role } = req.body;
@@ -57,7 +59,7 @@ class Employee {
 
             var ccd = dt.format('ymd');
             var client_key = Panel_key[0].prefix + cli_key + ccd
-            console.log("Panel_key", client_key);
+            // console.log("Panel_key", client_key);
 
 
             // Company Information
@@ -98,9 +100,67 @@ class Employee {
 
     }
 
+// GET ALL LOGIN CLIENTS
+    async loginClients(req, res) {
+        try {
 
+            // GET LOGIN CLIENTS
+            const getAllLoginClients = await User_model.find({
+                $or: [
+                    { AppLoginStatus: 1 },
+                    { WebLoginStatus: 1 }
+                ]
+            });
+            const totalCount = getAllLoginClients.length;
+            // IF DATA NOT EXIST
+            if (getAllLoginClients.length == 0) {
+              return  res.send({ status: false, msg: "Empty data", data: [] , totalCount: totalCount,})
+            }
 
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All Login Clients",
+                totalCount: totalCount,
+                data: getAllLoginClients,
+                // page: Number(page),
+                // limit: Number(limit),
+                // totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+        } catch (error) {
+            console.log("loginClients Error-", error);
+        }
+    }
 
+    // GET ALL TRADING ON  CLIENTS
+    async tradingOnClients(req, res) {
+        try {
+
+            // GET LOGIN CLIENTS
+            const getAllTradingClients = await User_model.find({
+                TradingStatus: "on"
+            });
+            const totalCount = getAllTradingClients.length;
+            // console.log("totalCount", totalCount);
+            // IF DATA NOT EXIST
+            if (getAllTradingClients.length == 0) {
+              return  res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All trading Clients",
+                data: getAllTradingClients,
+                // page: Number(page),
+                // limit: Number(limit),
+                totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+        } catch (error) {
+            console.log("trading Clients Error-", error);
+        }
+    }
 }
 
 

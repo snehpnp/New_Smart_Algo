@@ -4,7 +4,7 @@
 const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
-const { AddEmployee } = require('../../Controllers/Admin/user.controller')
+const { AddEmployee,loginClients ,tradingOnClients} = require('../../Controllers/Admin/user.controller')
 const { EditCompany, GetCompanyInfo } = require('../../Controllers/Admin/company.controller')
 const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy } = require('../../Controllers/Admin/strategy.controller')
 
@@ -13,6 +13,10 @@ const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy } = require('.
 
 // USER ADD EDIT
 router.post('/add/employee', verifyToken, AddEmployee);
+router.post('/getall/loginclients',  loginClients);
+router.post('/getall/trdingon',  tradingOnClients);
+
+
 
 
 // COMPANY RELETE ROUTES

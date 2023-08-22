@@ -173,17 +173,17 @@ class Login {
 
             try {
                 // WHERE LOGIN CHECK
-                if (Device == "APP") {                  //App Login Check
+                if (Device.toUpperCase() == "APP") {                  //App Login Check
                     if (EmailCheck.AppLoginStatus == 0) {
                         logger.info('You are already log Out on the phone.', { role: EmailCheck.Role, user_id: EmailCheck._id });
-                        return res.status(409).json({ status: false, msg: 'You are already log Out on the phone.', data: [] });
+                        // return res.status(409).json({ status: false, msg: 'You are already log Out on the phone.', data: [] });
                     } else {
                         addData["AppLoginStatus"] = 0;
                     }
-                } else if (Device == "WEB") {          //Web login check
+                } else if (Device.toUpperCase() == "WEB") {          //Web login check
                     if (EmailCheck.WebLoginStatus == 0) {
                         logger.info('You are already log Out on the Web.', { role: EmailCheck.Role, user_id: EmailCheck._id });
-                        return res.status(409).json({ status: false, msg: 'You are already log Out on the Web.', data: [] });
+                        // return res.status(409).json({ status: false, msg: 'You are already log Out on the Web.', data: [] });
                     } else {
                         addData["WebLoginStatus"] = 0;
                     }

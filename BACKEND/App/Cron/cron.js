@@ -11,9 +11,15 @@ const user_logs = db.user_logs;
 
 
 // 1. LOGOUT AND TRADING OFF ALL USER 
-cron.schedule('5 0 * * *', () => {
-    console.log('running a task every minute');
-    LogoutAndTradingOff()
+cron.schedule('5 2 * * *', () => {
+    console.log('Run First Time');
+    LogoutAllUsers()
+});
+
+// 1.1 LOGOUT AND TRADING OFF ALL USER 
+cron.schedule('5 5 * * *', () => {
+    console.log('Run Second Time');
+    LogoutAllUsers()
 });
 
 // 2. SERVICES TOKEN CREATE
@@ -24,12 +30,12 @@ cron.schedule('42 12 * * *', () => {
 
 
 // cron.schedule('* * * * *', () => {
-//     console.log('running a task every minute');
-//     LogoutAndTradingOff()
+//     console.log('Run Second Time');
+//     LogoutAllUsers()
 // });
 
 // 1. LOGOUT AND TRADING OFF ALL USER 
-const LogoutAndTradingOff = async () => {
+const LogoutAllUsers = async () => {
 
     // APP LOGOUT USERS  
     const AppLoginUser = await User.find({ AppLoginStatus: 1 });

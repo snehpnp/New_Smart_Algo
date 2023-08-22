@@ -70,42 +70,29 @@ class Subadmin {
 
             });
 
-
-console.log("Subadmin_permision_data",Subadmin_permision_data); 
-console.log("strategy",Subadmin_permision_data.strategy);
-
-            return
             const userinfo = User.save()
                 .then(async (data) => {
-                    console.log("data", Subadmin_permision_data);
-                  const SubadminPermision = new Subadmin_Permission({
+
+                    const SubadminPermision = new Subadmin_Permission({
                         client_add: Subadmin_permision_data.client_add,
                         go_To_Dashboard: Subadmin_permision_data.go_To_Dashboard,
                         trade_history_old: Subadmin_permision_data.trade_history_old,
                         client_activation: Subadmin_permision_data.client_activation,
-                        strategy: ["64cb8d33292feb109fa5cdd6","64cce75c1c9ed65b980c58be"],
-                        group_services:  ["64cb8d33292feb109fa5cdd6","64cce75c1c9ed65b980c58be"],
+                        strategy: Subadmin_permision_data.strategy,
+                        group_services: Subadmin_permision_data.group_services,
                         user_id: data._id
                     })
-                    console.log("Subadmin_permision_data", Subadmin_permision_data);
                     const SuperadminInfo = SubadminPermision.save()
                         .then(async (data) => {
-                            // res.send({ status: true, msg: "successfully Add!", data: data })
-                            console.log("data", data);
-                            res.send({ status: true, msg: "successfully Add!", data: data })
+                            return res.send({ status: true, msg: "successfully Add!", data: data })
                         })
                         .catch((err) => {
-                            console.log(" Add Time Error-", err);
+
                             if (err.keyValue) {
                                 return res.status(409).json({ status: false, msg: 'Key duplicate', data: err.keyValue });
 
                             }
-
                         })
-
-
-
-
                 })
                 .catch((err) => {
                     console.log(" Add Time Error-", err);
@@ -124,9 +111,60 @@ console.log("strategy",Subadmin_permision_data.strategy);
 
     }
 
+    async getallSubadmin(req, res) {
+        try {
 
+            // GET LOGIN CLIENTS
+            const getAllSubAdmins = await User_model.find({
+                Role: "SUBADMIN"
+            });
+            const totalCount = getAllSubAdmins.length;
 
+            // IF DATA NOT EXIST
+            if (getAllSubAdmins.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
 
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All Subadmins",
+                data: getAllSubAdmins,
+                // page: Number(page),
+                // limit: Number(limit),
+                totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+        } catch (error) {
+            console.log("getallSubadmin error -", error);
+        }
+    }
+
+    async getOneSubadmin(req, res) {
+        try {
+
+            // GET LOGIN CLIENTS
+            const getAllSubAdmins = await User_model.find({
+                Role: "SUBADMIN"
+            });
+            const totalCount = getAllSubAdmins.length;
+
+            // IF DATA NOT EXIST
+            if (getAllSubAdmins.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [] })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get  Subadmins",
+                data: getAllSubAdmins,
+
+            })
+        } catch (error) {
+            console.log("get Subadmin error -", error);
+        }
+    }
 }
 
 
