@@ -32,6 +32,9 @@ import MsgBroadCast from "../layout/Admin/Support/MsgBroadCast/MsgBroadCast"
 // Service
 import Service from "../layout/Admin/Service/AllService/AllService"
 import GroupService from "../layout/Admin/Service/GroupService/GroupService"
+import AddGroup from '../layout/Admin/Service/GroupService/Add_Group';
+import EditGroup from '../layout/Admin/Service/GroupService/Edit_Group';
+
 
 // Report
 import Report from '../layout/Admin/Report/Report';
@@ -79,6 +82,8 @@ const Admin = () => {
                 <Route exact path="/msgbroadcast" element={<MsgBroadCast />} />
                 <Route exact path="/allservices" element={<Service />} />
                 <Route exact path="/groupservices" element={<GroupService />} />
+                <Route exact path="/groupservices/add" element={<AddGroup />} />
+                <Route exact path="/groupservices/edit" element={<EditGroup />} />
                 <Route exact path="/reports" element={<Report />} />
                 <Route exact path="/apicreateinfo" element={<ApiCreateInfo />} />
                 <Route exact path="/updates" element={<ReleaseUpdate />} />

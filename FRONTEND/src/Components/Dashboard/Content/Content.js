@@ -5,18 +5,27 @@ const Content = ({ Page_title, ...rest }) => {
     <div>
       <div className="content-body">
         <div className="container-fluid">
+        <div className="row page-titles">
+    <ol className="breadcrumb">
+
+      <li className="breadcrumb-item">
+      <h4 className="font-w500 mb-0">{Page_title}</h4>
+      </li>
+    </ol>
+  </div>
+
           <div className="row">
             <div className="col-xl-12">
-              <div className="mt-5 mb-4">
+              {/* <div className="mt-5 mb-4">
                 <div className="d-flex align-items-center justify-content-between mb-sm-0 mb-2">
                   <h2 className="font-w500">{Page_title}</h2>
                 </div>
-              </div>
+              </div> */}
 
               <div className="row">
                 <div className="col-xl-12">
-                  <div className="card">
-                    <div className="card-header border-0 pb-0 flex-wrap">
+                  <div className="card form-card">
+
                       <div className="card-body">
                         <div className="form-validation">
 
@@ -30,7 +39,8 @@ const Content = ({ Page_title, ...rest }) => {
             </div>
           </div>
         </div>
-      </div></div>
+
+      </div>
   )
 }
 

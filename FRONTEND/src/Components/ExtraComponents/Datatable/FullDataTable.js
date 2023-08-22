@@ -21,7 +21,7 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions }) => {
 
 
     const options = {
-        sizePerPage: 5,
+        sizePerPage: 10,
         hidePageListOnlyOnePage: false,
         ...tableoptions
     };
@@ -29,7 +29,6 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions }) => {
 
     return <>
     <div className='table-responsive'>
-
         <BootstrapTable
             keyField="id"
             data={tableData}

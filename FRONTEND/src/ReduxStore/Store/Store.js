@@ -8,6 +8,8 @@ import CommonSlice from "../Slice/Common/commoSlice"
 // SUPERADMIN SLICE
 
 import SuperAdminSlice from "../Slice/Superadmin/SuperAdminSlice"
+import AdminSlice from "../Slice/Admin/AdminSlice";
+
 
 
 
@@ -20,6 +22,7 @@ const store = configureStore({
     ThemeSlice: ThemeSlice.reducer,
     CommonSlice: CommonSlice.reducer,
     SuperAdminSlice: SuperAdminSlice.reducer,
+    AdminSlice: AdminSlice.reducer,
   },
 });
 
