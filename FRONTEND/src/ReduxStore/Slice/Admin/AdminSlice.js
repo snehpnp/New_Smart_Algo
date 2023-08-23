@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY } from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY,ALL_GROUP_SERVICES } from "../../../Service/admin.service";
 
 
 
@@ -33,6 +33,22 @@ export const Service_By_Catagory = createAsyncThunk("admin/catogory", async (dat
     }
 });
 
+
+
+// ADMIN GET ALL GROUP SERVICES
+export const GET_ALL_GROUP_SERVICES = createAsyncThunk("getall/groupservices", async (data) => {
+    try {
+        const res = await ALL_GROUP_SERVICES(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+
+
 const AdminSlice = createSlice({
     name: "AdminSlice",
     initialState: {
@@ -41,7 +57,8 @@ const AdminSlice = createSlice({
         status: false,
         allService: [],
         allCatagory: [],
-        servicebycatagory: []
+        servicebycatagory: [],
+        allGroupServices:[]
     },
 
     recuders: {},
@@ -70,7 +87,10 @@ const AdminSlice = createSlice({
             // state.isLoading = false;
             return { ...state, servicebycatagory: payload, isLoading: false };
         },
-
+        [GET_ALL_GROUP_SERVICES.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, allGroupServices: payload, isLoading: false };
+        },
     },
 });
 

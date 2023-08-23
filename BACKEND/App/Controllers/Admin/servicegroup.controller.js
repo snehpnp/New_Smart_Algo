@@ -13,26 +13,12 @@ var dt = dateTime.create();
 
 class GroupService {
 
-
+  // ADD GROUP SERVICES
   async Addgroupservice(req, res) {
     try {
 
-
-      //  const data = await services.findById({_id:'64d77617c9af6c1843e460f1'},{'name':1}).populate('categorie_id','name segment');
-
-
-
-
-      // res.send({status:true,data:data})
-      //    return
-      //console.log("req body -",req.body)
-
-
       const groupdetails = req.body.groupdetails;
       const services_id = req.body.services_id;
-
-      //console.log("groupdetails -",groupdetails)
-      //  console.log("services_id -",services_id)
 
       serviceGroupName.create({
         name: groupdetails.name,
@@ -79,7 +65,6 @@ class GroupService {
   }
 
   // SErvices Work
-
   async GetAllServices(req, res) {
 
     const pipeline = [
@@ -128,7 +113,6 @@ class GroupService {
   }
 
   //  GetAllCatagory
-
   async GetAllCatagory(req, res) {
     const pipeline = [
       {
@@ -214,47 +198,6 @@ class GroupService {
     }
 
 
-    // const pipeline = [
-    //   {
-    //     $lookup: {
-    //       from: 'categories', // Replace with the actual name of your categories collection
-    //       localField: 'categorie_id',
-    //       foreignField: '_id',
-    //       as: 'categoryResult',
-    //     },
-    //   },
-    //   {
-    //     $match: {
-    //       $or: [
-    //         { 'categoryResult.segment': req.body.segment },
-    //         { 'categoryResult.segment': 'all' }, // Include all data if segment is "all"
-    //       ],
-    //     },
-    //   },
-
-    //   {
-    //     $unwind: '$categoryResult', // Unwind the 'categoryResult' array
-    //   },
-    //   {
-    //     $project: {
-    //       'categoryResult.segment': 1,
-    //       'categoryResult.name': 1, // Exclude the category field from the result
-    //       name:1,
-    //       instrument_token: 1,
-    //       zebu_token: 1,
-    //       kotak_token: 1,
-    //       instrumenttype: 1,
-    //       exch_seg: 1,
-    //       lotsize: 1,
-    //       unique_column: 1,
-    //       categorie_id: 1,
-    //       createdAt: 1,
-    //       updatedAt: 1,
-
-    //     },
-    //         },
-    // ];
-
     const result = await services.aggregate(pipeline);
 
     if (result.length > 0) {
@@ -268,6 +211,40 @@ class GroupService {
 
 
   }
+
+  // GET ALL GROUP BY SERVICES
+  async getAllgroupServices(req, res) {
+    try {
+      const pipeline = [
+        {
+          '$lookup': {
+            'from': 'servicegroup_services_ids', 
+            'localField': '_id', 
+            'foreignField': 'Servicegroup_id', 
+            'as': 'result'
+          }
+        },
+        {
+          '$addFields': {
+            'resultCount': { '$size': '$result' } // Add a field to store the count of 'result' array
+          }
+        }
+      ];
+  
+      const result = await serviceGroupName.aggregate(pipeline);
+  
+      if (result.length > 0) {
+        res.send({ status: true, data: result, msg: 'Get All successfully' });
+      } else {
+        res.send({ status: false, data: [],  msg: 'false' });
+      }
+  
+    } catch (error) {
+      console.log("Get All Group Services Error - ", error);
+      res.status(500).send({ status: false, data: [],  msg: 'An error occurred' });
+    }
+  }
+  
 
 }
 

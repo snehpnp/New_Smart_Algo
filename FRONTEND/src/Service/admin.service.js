@@ -66,3 +66,22 @@ export async function SERVICE_BY_CATAGORY(data , token) {
     }
 
 }
+
+
+
+// ALL ALL_GROUP_SERVICES
+
+export async function ALL_GROUP_SERVICES(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/groupservices`, data ,{
+            //  headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

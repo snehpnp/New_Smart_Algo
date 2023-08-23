@@ -48,21 +48,24 @@ class Login {
                 return res.status(409).json({ status: false, msg: 'Password Not Match', data: [] });
             }
 
+            if (EmailCheck.Role == "USER") {
 
-            // User active Status
-            if (EmailCheck.ActiveStatus == 0) {
-                return res.status(409).json({ status: false, msg: 'please contact admin you are inactive.', data: [] });
+                // User active Status
+                if (EmailCheck.ActiveStatus == 0) {
+                    return res.status(409).json({ status: false, msg: 'please contact admin you are inactive.', data: [] });
+                }
+
+                // USER EXPIRY CHECK
+                if (new Date(EmailCheck.EndDate) <= new Date()) {
+                    return res.status(409).json({ status: false, msg: 'your service is terminated please contact to admin', data: [] });
+                }
             }
 
 
-            // USER EXPIRY CHECK
-            if (new Date(EmailCheck.EndDate) <= new Date()) {
-                return res.status(409).json({ status: false, msg: 'your service is terminated please contact to admin', data: [] });
-            }
 
             // JWT TOKEN CREATE
             var token = jwt.sign({ id: EmailCheck._id }, process.env.SECRET, {
-                expiresIn: 86400 // 24 hours
+                expiresIn: 36000 // 10 hours
             });
             var msg = {
                 'Email': EmailCheck.Email,

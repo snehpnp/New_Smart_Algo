@@ -6,18 +6,21 @@ import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Conten
 import Loader from '../../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
-// import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { Get_All_Service, Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { Get_All_Service, Get_All_Catagory, Service_By_Catagory, GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
+import Modal from '../../../../Components/ExtraComponents/Modal';
+
 
 const ServicesList = () => {
 
     const dispatch = useDispatch()
 
     const [first, setfirst] = useState('all')
+    const [showModal, setshowModal] = useState(false)
 
-    const [AllServices, setAllServices] = useState({
+    const [AllGroupServices, setAllGroupServices] = useState({
         loading: true,
         data: []
     });
@@ -34,10 +37,10 @@ const ServicesList = () => {
 
 
     useEffect(async () => {
-        await dispatch(Get_All_Catagory()).unwrap()
+        await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
             .then((response) => {
                 if (response.status) {
-                    setAllServices({
+                    setAllGroupServices({
                         loading: false,
                         data: response.data
                     });
@@ -56,19 +59,58 @@ const ServicesList = () => {
         },
         {
             dataField: 'name',
-            text: 'Catagory'
+            text: 'Group Services Name'
         },
         {
-            dataField: 'categoryResult.name',
-            text: 'Service Name'
+            dataField: 'resultCount',
+            text: 'Service Count'
         },
         {
             dataField: 'categoryResult.segment',
-            text: 'Segment'
+            text: 'Services',
+            formatter: (cell, row) => (
+                <div>
+                    <button
+                        className="btn  btn-color"
+                    onClick={(e) => setshowModal(true)}
+                    >
+                                                 <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+
+                    </button>
+                </div>
+            ),
         },
+        {
+            dataField: 'actions',
+            text: 'Client Using',
+            formatter: (cell, row) => (
+                <div>
+                    <span data-toggle="tooltip" data-placement="top" title="Edit">
+                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    </span>
+                    <span data-toggle="tooltip" data-placement="top" title="Delete">
+                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                    </span>
 
+                </div>
+            ),
+        },
+        {
+            dataField: 'actions',
+            text: 'Actions',
+            formatter: (cell, row) => (
+                <div>
+                    <span data-toggle="tooltip" data-placement="top" title="Edit">
+                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    </span>
+                    <span data-toggle="tooltip" data-placement="top" title="Delete">
+                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                    </span>
+
+                </div>
+            ),
+        },
     ];
-
 
 
 
@@ -77,49 +119,37 @@ const ServicesList = () => {
     return (
         <>
             {
-                AllServices.loading ? <Loader /> :
+                AllGroupServices.loading ? <Loader /> :
                     <>
                         <Theme_Content Page_title="Group Service" button_title="Add Grouop" route="/admin/groupservices/add">
 
                             {
-                                AllServices.data && AllServices.data.length === 0 ? (
+                                AllGroupServices.data && AllGroupServices.data.length === 0 ? (
                                     'No data found') :
                                     <>
 
-                                        <FullDataTable TableColumns={columns} tableData={AllServices.data} />
+                                        <FullDataTable TableColumns={columns} tableData={AllGroupServices.data} />
                                     </>
 
 
                             }
+
+                            {
+                                showModal ?
+                                    <>
+                                        < Modal isOpen={showModal}  backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
+                                        //  handleClose={setshowModal(false)}
+                                          >
+                                        </Modal >
+                                    </>
+                                    : ""
+                            }
+
                         </Theme_Content>
                     </>
             }
 
 
-
-            {/*
-            <Content Page_title="Company Theme">
-                {AllServices.loading ? (
-                    <Loader />
-                ) : AllServices.data && AllServices.data.length === 0 ? (
-                    'No data found'
-                ) : (
-                    <FullDataTable TableColumns={columns} tableData={AllServices.data} />
-                )}
-            </Content>
- */}
-
-            {/*
-<Content Page_title="Company Theme">
-            {AllServices.loading ? (
-                <Loader />
-            ) : AllServices.data && AllServices.data.length === 0 ? (
-                'No data found'
-            ) : (
-                <FullDataTable TableColumns={columns} tableData={AllServices.data} />
-            )}
-        </Content>
- */}
 
         </ >
     );

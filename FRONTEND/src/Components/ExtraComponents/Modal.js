@@ -6,7 +6,7 @@ const Modal_Component = ({ isOpen, handleClose, Submit_Function, title, btn_name
     return (
         <div>
             <Modal show={isOpen} handleClose={!handleClose} centered size={size} backdrop={backdrop}>
-                <Modal.Header closeButton className={`${title === "Verify OTP" ? 'border-0' : ""}`} >
+                <Modal.Header closeButton={handleClose} className={`${title === "Verify OTP" ? 'border-0' : ""}`} >
                     <Modal.Title  >{title}</Modal.Title >
                 </Modal.Header>
                 <Modal.Body>{rest.children}</Modal.Body>
