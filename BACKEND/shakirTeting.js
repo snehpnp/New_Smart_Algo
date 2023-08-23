@@ -1,10 +1,19 @@
 module.exports = function (app) {
-   
+    
+  const WebSocket = require('ws');
+  var CryptoJS = require("crypto-js");
 
     const db = require('./App/Models');
   
     const services = db.services;
     const categorie = db.categorie;
+
+    const { MongoClient } = require('mongodb');
+
+    const uri = "mongodb://localhost:27017";
+    const client = new MongoClient(uri, { useUnifiedTopology: true });
+    client.connect();
+    console.log("Connected to MongoDB successfully!");
      
    
 
@@ -63,54 +72,217 @@ module.exports = function (app) {
 //   });
 
 
-//   async function fetchData() {
-//     try {
-//       // Your Mongoose query without the callback
-//       const result = await services.find().exec();
-  
-//       console.log('Data fetched:', result);
-//     } catch (err) {
-//       console.error('Error fetching data:', err);
-//     }
-//   }
-  
-//   fetchData();
+      });
 
-services.find()
-.populate('category', 'segment')
-.then(product=>console.log(product))
-.catch(error=>console.log(error));
+
+
+
+
+      async function connectToDB(collectionName,response) {
+        try {
+          
+          const db = client.db('TradeTools'); // Replace 'mydb' with your desired database name
+         // console.log("db",db);
+        //  const collectionName = 'shakir'; // Replace with your desired collection name
+
+         // List all collections in the database
+    const collections = await db.listCollections().toArray();
+    
+    // Check if the desired collection exists
+    const collectionExists = collections.some(coll => coll.name === collectionName);
+
+    if (collectionExists) {
+      //console.log(`Collection '${collectionName}' exists.`);
+
+      const collection = db.collection(collectionName);
       
+      if(response.lp != undefined){
+        let bp1 = response.lp;
+        let sp1 = response.lp;
+        let v = '';
+        
+        if(response.bp1 != undefined){
+           bp1 = response.bp1
+        }
+
+        if(response.sp1 != undefined){
+           sp1 = response.sp1
+        }
+
+        if(response.v != undefined){
+          v = response.v
+        }
+
+
+      let singleDocument = {
+           t: response.tk,
+           lp: response.lp,
+           bp1: bp1,
+           sp1: sp1,
+           v: v
+       }
+
+       
+      const insertResult = await collection.insertOne(singleDocument);
+     // console.log('Inserted document:', insertResult.insertedId);
+
+
+       } 
+
+
+    // Update a single document
+    // const filter = { name: 'Jane' };
+    // const update = { $set: { age: 30 } }; // Update the 'age' field to 30
+    // const updateResult = await collection.updateOne(filter, update);
+    // console.log('Matched documents:', updateResult.matchedCount);
+    // console.log('Modified documents:', updateResult.modifiedCount);
+
+
+
+
+    } else {
+       // console.log(`Collection '${collectionName}' does not exist.`);
+        await db.createCollection(collectionName);
+       // console.log(`Collection '${collectionName}' created successfully`);
       
-      
-      
-      
-      
+        const collection = db.collection(collectionName);
+       // const singleDocument = { name: 'John', age: 30 };
+
+        if(response.lp != undefined){
+          let bp1 = response.lp;
+          let sp1 = response.lp;
+          let v = '';
+          
+          if(response.bp1 != undefined){
+             bp1 = response.bp1
+          }
+
+          if(response.sp1 != undefined){
+             sp1 = response.sp1
+          }
+
+          if(response.v != undefined){
+            v = response.v
+          }
+
+
+        let singleDocument = {
+             t: response.tk,
+             lp: response.lp,
+             bp1: bp1,
+             sp1: sp1,
+             v: v
+         }
+
+         
+        const insertResult = await collection.insertOne(singleDocument);
+        //console.log('Inserted document:', insertResult.insertedId);
+
+
+         }  
 
 
 
         
-        // services.create({
-        //     name: 'IDEA#',
-        //     instrument_token:"14366",
-        //     zebu_token:"IDEA-EQ",
-        //     kotak_token:"125",
-        //     categorie_id : '64c9dbdc14a9fefd971c9797'
-        //   })
-        //   .then((createdServices) => {
-        //     console.log('User created and saved:', createdServices._id)
-        //   })
-        //   .catch((err) => {
-        //     console.error('Error creating and saving user:', err);
-        //   });
+
+
+
+  
+
+    }
+ 
+
+
+
+          // await db.createCollection(collectionName);
+          // console.log(`Collection '${collectionName}' created successfully`);
+
+
+
+          // Now you can create a collection, insert documents, or perform other operations
+      
+        } catch (err) {
+          console.error('Error connecting to MongoDB:', err);
+        } 
+      }     
+
+
+
+app.get('/socket-api', async (req, res) => {
+const collection = "shakir2";
+//connectToDB(collection);
+
+  var BASEURL = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/";
+  let AuthorizationToken;
+  let type = "API";
+  const url = "wss://ws1.aliceblueonline.com/NorenWS/";
+  let socket;
+  let channel = 'NSE|3045#NSE|14366#NFO|61546#NFO|61547#NFO|61548#NFO|61549';
+  let userId = '438760';
+  let userSession = 'g1FI0oO5fuYK3uKxcBqyIlX3HOdIjtY6T2kNjo11PEDy3UTYgATLbVBSztdb7FOdO3796WB8qqQJ35bbTmQB6zPMg5A9jgSZBvNerrGgG8aBrhZpmrWcWMNKBaOAfvWcZlofnkY5n7VGa7VvHSMdv70vhTshmqz3mQWyXWFMiH7Mdq7jQNhNJJOXpsSHoiNkxZp6IEuYh6Onn4DCYmjHH1czbMZKH8nKLS1lnab1BTEfh7a0hNyN0MNnQkAdUu0D';
+
+
+   connect(userId,userSession,channel)
+
+   function connect(userId, userSession, token = "") {
+
+        socket = new WebSocket(url);
+        socket.onopen = function () {
+            connectionRequest(userId, userSession);
+            
+        };
+        socket.onmessage = async function (msg) {
+            var response = JSON.parse(msg.data);
+        //    console.log("okk socket open  1 ",response)
+            
+            if(response.tk){ 
+             //console.log("response",response)
+              connectToDB(response.tk,response);  
+           }
+          
+           
+
+            if (response.s == "OK") {
+
+                var channel = token;
+                let json = {
+                    k: channel,
+                    t: 't'
+                };
+                socket.send(JSON.stringify(json))
+
+            }
+
+        };
+    }
+
+    function connectionRequest(userId, userSession) {
+        var encrcptToken = CryptoJS.SHA256(
+            CryptoJS.SHA256(userSession).toString()
+        ).toString();
+        // alert(encrcptToken);
+        var initCon = {
+            susertoken: encrcptToken,
+            t: "c",
+            actid: userId + "_" + type,
+            uid: userId + "_" + type,
+            source: type,
+        };
+        // console.log('initCon', JSON.stringify(initCon));
+        try {
+            socket.send(JSON.stringify(initCon));
+        } catch (error) {
+            console.log("Shocket",error);
+        }
+       
+    }
+ res.send("socket run")
+});
 
 
 
 
-
-        res.send({ msg: "shakir Done!!!" })
-      });
-
+//Add stoch Api.....
  app.get('/addstock',async function(req,res){
           
   
