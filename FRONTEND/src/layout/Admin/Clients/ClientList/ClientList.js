@@ -175,13 +175,13 @@ const AddClient = () => {
 
             ],
         },
-        { name: 'fullName', label: 'FullName', type: 'checkbox', index: '1' },
-        { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
-        { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
-        { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
-        { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
-        { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
-        { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
+        // { name: 'fullName', label: 'FullName', type: 'checkbox', index: '1' },
+        // { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
+        // { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
+        // { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
+        // { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
+        // { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
+        // { name: 'mobile', label: 'Mobile', type: 'checkbox', index: '2' },
 
         {
             name: 'api_key',
@@ -245,10 +245,10 @@ const AddClient = () => {
                                     <h4 className="card-title">Add Client</h4>
                                 </div>
                                 <div className="card-body">
-                                    <div className="form-validation">
+                                    {/* <div className="form-validation">
                                         <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Master" />
 
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>

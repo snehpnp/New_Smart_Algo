@@ -17,7 +17,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
     // <Content Page_title="HelpCenter">
     <form onSubmit={formik.handleSubmit}>
       <div className='row' style={{ height: `${title === "addgroup" ? '65vh' : ""}`, overflowY: `${title === "addgroup" ? 'scroll' : ""}` }}>
-        {/* <div className={`row`}> */}
+        <div className={`row`}>
         {fieldtype.map((field) => (
           <>
             {field.type === 'select' ? <>
@@ -200,6 +200,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
         <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
           {btn_name}
         </button>
+      </div>
       </div>
 
     </form >

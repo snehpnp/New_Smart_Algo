@@ -64,20 +64,16 @@ const AdminSlice = createSlice({
     recuders: {},
     extraReducers: {
 
-        [Get_All_Service.pending]: (state, { payload }) => {
-            // state.isLoading = false;
+        [Get_All_Service.pending]: (state, action) => {
             console.log("pending Get_All_Service ");
-            // return { ...state, allService: [], isLoading: true };
         },
         [Get_All_Service.fulfilled]: (state, { payload }) => {
-            // state.isLoading = false;
-
             return { ...state, allService: payload, isLoading: false };
         },
-        [Get_All_Service.rejected]: (state, action) => {
-            console.log("pending reject ");
-            // return { ...state, allService: action, isLoading: false };
-        },
+        // [Get_All_Service.rejected]: (state, action) => {
+        //     console.log("pending reject ");
+        //     // return { ...state, allService: action, isLoading: false };
+        // },
         [Get_All_Catagory.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, allCatagory: payload, isLoading: false };

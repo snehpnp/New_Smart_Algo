@@ -451,9 +451,9 @@ const AddClient = () => {
 
   return (
     <>
-      <Theme_Content Page_title="HelpCenter">
+      <Content Page_title="Add Client" button_title='Back'  route="/admin/allclients">
         <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Master" />
-      </Theme_Content >
+      </Content >
 
     </>
   )

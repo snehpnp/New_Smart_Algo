@@ -20,7 +20,7 @@ const ServicesList = () => {
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
 
-    const [AllGroupServices, setAllGroupServices] = useState({
+    const [AllServices, setAllServices] = useState({
         loading: true,
         data: []
     });
@@ -32,25 +32,22 @@ const ServicesList = () => {
     });
 
 
-// SNEH
-    const data = async () => {
-        await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
+
+
+
+
+    useEffect(async () => {
+        await dispatch(Get_All_Catagory()).unwrap()
             .then((response) => {
                 if (response.status) {
-                    setAllGroupServices({
+                    setAllServices({
                         loading: false,
                         data: response.data
                     });
                 }
             })
-    }
-
-
-    useEffect(() => {
-
-        data()
-
     }, [])
+
 
 
 

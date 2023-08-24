@@ -92,9 +92,9 @@ const Header = ({ ChatBox }) => {
                     <nav className="navbar navbar-expand">
                         <div className="collapse navbar-collapse justify-content-between">
                             <div className="header-left">
-                                <div className="headaer-title">
+                                {/* <div className="headaer-title">
                                     <h1 className="font-w600 mb-0">Dashboard</h1>
-                                </div>
+                                </div> */}
                             </div>
                             <ul className="navbar-nav header-right">
                                 {/*  For Show Notification Box */}

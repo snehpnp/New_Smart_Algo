@@ -1,18 +1,33 @@
 import React from 'react'
-
-const Content = ({ Page_title, ...rest }) => {
+import { Link } from 'react-router-dom'
+const Content = ({ Page_title, button_title, route, ...rest }) => {
   return (
     <div>
       <div className="content-body">
         <div className="container-fluid">
-        <div className="row page-titles">
-    <ol className="breadcrumb">
+          <div className="row page-titles">
+            <div className='row mb-3'>
 
-      <li className="breadcrumb-item">
-      <h4 className="font-w500 mb-0">{Page_title}</h4>
-      </li>
-    </ol>
-  </div>
+              <div className="col-lg-6"></div>
+
+            </div>
+
+            <ol className="breadcrumb">
+            <div className="col-lg-6">
+
+
+              <li className="breadcrumb-item">
+                <h4 className="font-w500 mb-0">{Page_title}</h4>
+              </li>
+            </div>
+
+                 <div className="col-lg-6">
+                <Link to={route} className='btn btn-primary float-lg-end '>
+                  <i className={`fa-solid  ${button_title === "Back" ? 'fa-arrow-left' : 'fa-plus'} `}></i> {button_title}</Link>
+              </div>
+            </ol>
+
+          </div>
 
           <div className="row">
             <div className="col-xl-12">
@@ -26,11 +41,10 @@ const Content = ({ Page_title, ...rest }) => {
                 <div className="col-xl-12">
                   <div className="card form-card">
 
-                      <div className="card-body">
-                        <div className="form-validation">
+                    <div className="card-body">
+                      <div className="form-validation">
 
-                          {rest.children}
-                        </div>
+                        {rest.children}
                       </div>
                     </div>
                   </div>
@@ -39,8 +53,9 @@ const Content = ({ Page_title, ...rest }) => {
             </div>
           </div>
         </div>
-
       </div>
+
+    </div>
   )
 }
 
