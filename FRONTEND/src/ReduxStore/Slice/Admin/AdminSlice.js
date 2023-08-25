@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY,ALL_GROUP_SERVICES ,ALL_CLIENTS} from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY,ALL_GROUP_SERVICES ,ALL_CLIENTS,GET_COMPANY_INFO} from "../../../Service/admin.service";
 
 
 
@@ -33,8 +33,6 @@ export const Service_By_Catagory = createAsyncThunk("admin/catogory", async (dat
     }
 });
 
-
-
 // ADMIN GET ALL CLIENTS
 export const GET_ALL_CLIENTS = createAsyncThunk("getall/clients", async (data) => {
     try {
@@ -58,6 +56,16 @@ export const GET_ALL_GROUP_SERVICES = createAsyncThunk("getall/groupservices", a
     }
 });
 
+// GET COMPANY INFORMATION
+export const GET_COMPANY_INFOS = createAsyncThunk("get/company", async (data) => {
+    try {
+        const res = await GET_COMPANY_INFO(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
 
 
 
@@ -71,7 +79,9 @@ const AdminSlice = createSlice({
         allCatagory: [],
         servicebycatagory: [],
         allGroupServices:[],
-        allClients:[]
+        allClients:[],
+        companyInfo:[]
+
 
     },
 
@@ -104,6 +114,10 @@ const AdminSlice = createSlice({
         [GET_ALL_CLIENTS.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, allClients: payload, isLoading: false };
+        },
+        [GET_COMPANY_INFOS.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, companyInfo: payload, isLoading: false };
         },
     },
 });

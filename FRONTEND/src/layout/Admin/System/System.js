@@ -1,50 +1,57 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import FullDataTable from '../../../Components/ExtraComponents/Datatable/FullDataTable'
 import BasicDataTable from '../../../Components/ExtraComponents/Datatable/BasicDataTable'
-
+import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import { Pencil, Trash2 } from 'lucide-react';
 
-
+import { useDispatch, useSelector } from "react-redux";
 
 const System = () => {
 
-    const products = [];
 
-    // Create 50 items
-    for (let i = 1; i <= 1; i++) {
-        products.push({
-            id: i,
-            name: i % 2 === 0 ? "mango" : "banana", // Alternating between mango and banana names
-            price: Math.floor(Math.random() * 100) + 1, // Random price between 1 and 100
-        });
+    const dispatch = useDispatch()
+    const [getCompanyName, setCompanyName] = useState({
+        loading: true,
+        data: []
+    });
+
+
+    const CompanyName = async () => {
+        await dispatch(GET_COMPANY_INFOS()).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setCompanyName({
+                        loading: false,
+                        data: response.data
+                    });
+                }
+            })
     }
-
-
+    useEffect(() => {
+        CompanyName()
+    }, [])
     const Company_columns = [
         {
-            dataField: 'id',
+            dataField: 'index',
             text: 'Company ID',
-            Cell: row => (
-                <div>
-                    <span title={row.value}>{row.value}</span>
-                </div>
-            )
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
+
         },
         {
-            dataField: 'name',
+            dataField: 'panel_name',
             text: 'Company Name'
         },
         {
-            dataField: 'price',
+            dataField: 'prefix',
             text: 'Company Short Name'
         },
         {
-            dataField: 'price',
+            dataField: 'prefix',
             text: 'Broker Name'
         },
         {
-            dataField: 'price',
+            dataField: 'prefix',
             text: 'Version'
         },
         {
@@ -55,7 +62,7 @@ const System = () => {
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </span>
-                 
+
                 </div>
             ),
         },
@@ -65,34 +72,30 @@ const System = () => {
         {
             dataField: 'id',
             text: 'Email ID',
-            Cell: row => (
-                <div>
-                    <span title={row.value}>{row.value}</span>
-                </div>
-            )
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: 'Email',
+            dataField: 'email',
             text: 'Email'
         },
         {
-            dataField: 'CC',
+            dataField: 'cc_mail',
             text: 'CC'
         },
         {
-            dataField: 'BCC',
+            dataField: 'bcc_mail',
             text: 'BCC'
         },
         {
-            dataField: 'Password',
+            dataField: 'smtp_password',
             text: 'Password'
         },
         {
-            dataField: 'SMTP Host',
+            dataField: 'smtphost',
             text: 'SMTP Host'
         },
         {
-            dataField: 'SMTP Port',
+            dataField: 'smtpport',
             text: 'SMTP Port'
         },
         {
@@ -103,7 +106,7 @@ const System = () => {
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </span>
-                 
+
                 </div>
             ),
         },
@@ -113,11 +116,11 @@ const System = () => {
 
 
             <h2>Company Information</h2>
-            <BasicDataTable tableData={products} TableColumns={Company_columns} dropdown={false} />
+            <BasicDataTable tableData={getCompanyName.data} TableColumns={Company_columns} dropdown={false} />
             <br />
 
             <h2>Email Information</h2>
-            <BasicDataTable tableData={products} TableColumns={Email_columns} dropdown={false} />
+            <BasicDataTable tableData={getCompanyName.data} TableColumns={Email_columns} dropdown={false} />
             <br />
 
         </Content>

@@ -107,4 +107,19 @@ export async function ALL_GROUP_SERVICES(data , token) {
 }
 
 
+// GET COMPNAY INFORMATION
 
+export async function GET_COMPANY_INFO(data , token) {
+    try {
+        const res = await axios.get(`${Config.base_url}get/company`, data ,{
+            //  headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
