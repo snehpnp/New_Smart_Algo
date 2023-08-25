@@ -129,13 +129,11 @@ class Login {
 
             }
 
-            console.log("addData", addData);
             // Update Successfully
             const result = await User.updateOne(
                 { Email: Email },
                 { $set: addData }
             );
-            console.log("addData", result);
 
             // If Not Update User
             if (!result) {

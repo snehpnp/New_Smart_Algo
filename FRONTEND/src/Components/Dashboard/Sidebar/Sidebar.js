@@ -19,9 +19,9 @@ const Sidebar = ({ ShowSidebar }) => {
 
     const roles = JSON.parse(localStorage.getItem('user_role'))
 
-useEffect(() => {
-    $(".metismenu li").addClass("mm-active");
-}, [])
+// useEffect(() => {
+//     $(".metismenu li").addClass("mm-active");
+// }, [])
 
 
     return (

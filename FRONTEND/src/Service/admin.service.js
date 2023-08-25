@@ -6,7 +6,27 @@ import * as Config from "../Utils/Config";
 // import { header } from "../Utils/api_header";
 
 
+// ALL CLIENTS
 
+export async function ALL_CLIENTS(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/clients`, data ,{
+            //  headers: header(token),
+            data: {
+                
+                    "page": "5",
+                    "limit": "1"
+                  
+            },
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
 
 
 // ALL SERVICES
@@ -85,3 +105,6 @@ export async function ALL_GROUP_SERVICES(data , token) {
     }
 
 }
+
+
+

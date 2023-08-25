@@ -41,6 +41,7 @@ const AddGroup = () => {
     const formik = useFormik({
         initialValues: {
             group_name: '',
+            group_description:'',
             selectSegment: null,
             selectedServices: [],
         },
@@ -159,6 +160,7 @@ const AddGroup = () => {
         <>
             <Content Page_title="Add Group" button_title="Back" route="/admin/groupservices">
                 <form onSubmit={handleSubmit}>
+                    {/* TOP INPUT */}
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="mb-3 row">
@@ -182,6 +184,33 @@ const AddGroup = () => {
                                 </div>
                             </div>
                         </div>
+                        <div className="col-lg-6">
+                            <div className="mb-3 row">
+                                <label className="col-lg-4 col-form-label" htmlFor="group_description">
+                                    Group Description
+                                    <span className="text-danger">*</span>
+                                </label>
+                                <div className="col-lg-7">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="group_description"
+                                        placeholder="Enter group Description"
+                                        {...formik.getFieldProps('group_description')}
+                                        required=""
+                                    />
+                                    <div className="invalid-feedback">Please enter Group Description</div>
+                                    {formik.errors.group_description && (
+                                        <div style={{ color: 'red' }}>{formik.errors.group_description}</div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* SEGMENT SELECTION */}
+                    <div className="row">
+
                         <div className="col-lg-6">
                             <div className="mb-3 row">
                                 <label className="col-lg-4 col-form-label" htmlFor="selectSegment">
