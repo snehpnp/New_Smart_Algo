@@ -7,7 +7,7 @@ class strategy {
     // ADD STRATEGY IN A COLLECTION
     async AddStragegy(req, res) {
         try {
-            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester } = req.body;
+            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester , strategy_amount } = req.body;
 
 
             const exist_strategy = await strategy_model.findOne({ strategy_name: strategy_name });
@@ -21,7 +21,8 @@ class strategy {
                 strategy_category: strategy_category,
                 strategy_segment: strategy_segment,
                 strategy_indicator: strategy_indicator,
-                strategy_tester: strategy_tester
+                strategy_tester: strategy_tester,
+                strategy_amount :strategy_amount
             })
 
 
@@ -125,7 +126,7 @@ class strategy {
             const totalCount = await strategy_model.countDocuments();
 
 
-            // THEME LIST DATA 
+            // THEME LIST DATA
             // var getAllTheme = await strategy_model.find()
             const getAllstrategy = await strategy_model
                 .find({})
@@ -155,6 +156,22 @@ class strategy {
         }
     }
 
+
+    //  DELETE STRATEGY
+    async DeleteStrategy(req, res) {
+        try {
+            const { _id } = req.body;
+
+            const exist_strategy = await strategy_model.findOneAndDelete({ _id: _id });
+            if (!exist_strategy) {
+                return res.status(409).json({ status: false, msg: 'Strategy Not exists', data: [] });
+            }
+            return res.status(200).json({ status: true, msg: 'Strategy Delete  Successfully!', data: [] });
+
+        } catch (error) {
+            console.log("Strategy Get One error -", error.keyValue);
+        }
+    }
 
 
 }

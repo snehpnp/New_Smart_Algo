@@ -35,7 +35,7 @@ import MsgBroadCast from "../layout/Admin/Support/MsgBroadCast/MsgBroadCast"
 import Service from "../layout/Admin/Service/AllService/AllService"
 import GroupService from "../layout/Admin/Service/GroupService/GroupService"
 import AddGroup from '../layout/Admin/Service/GroupService/Add_Group';
-// import EditGroup from '../layout/Admin/Service/GroupService/Edit_Group';
+import EditGroup from '../layout/Admin/Service/GroupService/Edit_Group';
 
 
 // Report
@@ -49,8 +49,13 @@ import ReleaseUpdate from '../layout/Admin/ReleaseUpdate/ReleaseUpdate';
 
 
 // System
-
 import System from '../layout/Admin/System/System';
+
+// Strategy
+
+import AllStrategy from '../layout/Admin/Service/AllStrategy/AllStrategy';
+import AddStrategy from '../layout/Admin/Service/AllStrategy/AddStrategy';
+import EditStrategy from '../layout/Admin/Service/AllStrategy/EditStrategy';
 
 
 
@@ -76,7 +81,9 @@ const Admin = () => {
                 <Route exact path="/allsubadmins" element={<AllSubadmin />} />
                 <Route exact path="/subadminclients" element={<SubadminClient />} />
                 <Route exact path="/allsubadmins/add" element={<AddSubadmin />} />
-
+                <Route exact path="/strategies" element={<AllStrategy />} />
+                <Route exact path="/strategies/add" element={<AddStrategy />} />
+                <Route exact path="/strategies/edit/:id" element={<EditStrategy />} />
                 <Route exact path="/sevendaysentry" element={<SevenDaysEntry />} />
                 <Route exact path="/tradeexecution" element={<TradeExecutionReport />} />
                 <Route exact path="/tradingstatus" element={<TradingStatus />} />
@@ -89,7 +96,7 @@ const Admin = () => {
                 <Route exact path="/allservices" element={<Service />} />
                 <Route exact path="/groupservices" element={<GroupService />} />
                 <Route exact path="/groupservices/add" element={<AddGroup />} />
-                {/* <Route exact path="/groupservices/edit" element={<EditGroup />} /> */}
+                <Route exact path="/groupservices/edit" element={<EditGroup />} />
                 <Route exact path="/reports" element={<Report />} />
                 <Route exact path="/apicreateinfo" element={<ApiCreateInfo />} />
                 <Route exact path="/updates" element={<ReleaseUpdate />} />

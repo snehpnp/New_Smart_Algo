@@ -7,13 +7,11 @@ export const Email_regex = (email) => {
 
 export const Mobile_regex = (mobile) => {
     const MobileRegex = /^[0-9]{10}$/
-return  MobileRegex.test(mobile);
-     
+    return MobileRegex.test(mobile);
+
 }
 
 export const No_Negetive_Input_regex = (mobile) => {
-    
-    const value = /^[0-9]+$/
-return  value.test(mobile);
-     
+    const value =/^(?!0*(\.0*)?$)\d+(\.\d+)?$/
+    return value.test(mobile);
 }

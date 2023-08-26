@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
@@ -6,21 +7,20 @@ import { Email_regex, Mobile_regex } from '../../../../Utils/Common_regex';
 import { useDispatch } from 'react-redux';
 import Content from '../../../../Components/Dashboard/Content/Content';
 import { Service_By_Catagory, Get_All_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
+import { Add_Group } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
+import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const AddGroup = () => {
+    const navigate = useNavigate();
+
     const dispatch = useDispatch();
     const [selectedServices, setSelectedServices] = useState([]);
     const [GroupQty, setGroupQty] = useState([]);
-
-
-
-
     const [enabledInputs, setEnabledInputs] = useState({});
-
-
-    console.log("selectedServices", selectedServices);
-    console.log("GroupQty", GroupQty);
-
 
     const [allServices, setAllServices] = useState({
         loading: true,
@@ -31,57 +31,11 @@ const AddGroup = () => {
         data: [],
     });
 
-    const isValidEmail = (email) => {
-        return Email_regex(email);
-    };
-    const isValidContact = (mobile) => {
-        return Mobile_regex(mobile);
-    };
-
-    const formik = useFormik({
-        initialValues: {
-            group_name: '',
-            selectSegment: null,
-            selectedServices: [],
-        },
-        validate: (values) => {
-            const errors = {};
-            if (!values.group_name) {
-                errors.group_name = valid_err.USERNAME_ERROR;
-            }
-            if (!values.selectSegment) {
-                errors.selectSegment = valid_err.USERNAME_ERROR;
-            }
-            return errors;
-        },
-        handleSubmit: async (values) => {
-            // ... Your submission logic
-
-            console.log("helo")
 
 
-        },
-    });
 
-    const data = async () => {
-        if (formik.values.selectSegment) {
-            await dispatch(Service_By_Catagory({ segment: formik.values.selectSegment })).unwrap()
-                .then((response) => {
-                    if (response.status) {
-                        setAllServices({
-                            loading: false,
-                            data: response.data,
-                        });
-                    }
-                });
-        }
-    };
 
-    useEffect(() => {
-        data();
-    }, [formik.values.selectSegment]);
-
-    const handleServiceChange = (event) => {
+    function handleServiceChange(event) {
         const serviceId = event.target.value;
         const isChecked = event.target.checked;
 
@@ -94,7 +48,10 @@ const AddGroup = () => {
 
             return updatedSelected;
         });
-    };
+    }
+
+        //  -------------------For Show Segment List-----------------
+
 
     const getservice = async () => {
         await dispatch(Get_All_Catagory())
@@ -114,9 +71,10 @@ const AddGroup = () => {
     }, []);
 
 
+    //   For Mange Qty Acco
+
 
     const InputGroupQty = (event, id) => {
-
         setGroupQty((prevQtys) => ([
             ...prevQtys,
             {
@@ -124,15 +82,32 @@ const AddGroup = () => {
                 group_qty: event.target.value === "" ? "0" : event.target.value,
                 service_id: id
             }
-
-
-
         ]));
-
     }
 
 
-    const handleSubmit = (e) => {
+    //  Form For Submit
+    const formik = useFormik({
+        initialValues: {
+            group_name: '',
+            selectSegment: null,
+            selectedServices: [],
+        },
+        validate: (values) => {
+            const errors = {};
+            if (!values.group_name) {
+                errors.group_name = valid_err.EMPTY_GROUP_NAME_ERR;
+            }
+            console.log("values.selectSegment", values.selectSegment);
+            if (!values.selectSegment) {
+                errors.selectSegment = valid_err.SEGEMENTSELECT_ERROR;
+            }
+            return errors;
+        },
+    });
+
+
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
         const uniqueArr = Object.values(
@@ -141,14 +116,42 @@ const AddGroup = () => {
                 return acc;
             }, {})
         );
-        console.log("uniqueArr", uniqueArr);
 
+        await dispatch(Add_Group({
+            groupdetails: { name: formik.values.group_name },
+            services_id: uniqueArr
 
+        })).then((response) => {
+            console.log("response", response);
 
-
+            if (response.payload.status) {
+                toast.success(response.payload.msg);
+                setTimeout(() => {
+                    navigate("/admin/groupservices")
+                }, 1000);
+            }
+        })
     }
 
 
+    //  -------------------For Show Service According to Segment -----------------
+
+        const data = async () => {
+            if (formik.values.selectSegment) {
+                await dispatch(Service_By_Catagory({ segment: formik.values.selectSegment })).unwrap()
+                    .then((response) => {
+                        if (response.status) {
+                            setAllServices({
+                                loading: false,
+                                data: response.data,
+                            });
+                        }
+                    });
+            }
+        };
+        useEffect(() => {
+            data();
+        }, [formik.values.selectSegment]);
 
 
 
@@ -158,7 +161,7 @@ const AddGroup = () => {
     return (
         <>
             <Content Page_title="Add Group" button_title="Back" route="/admin/groupservices">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} >
                     <div className="row">
                         <div className="col-lg-6">
                             <div className="mb-3 row">
@@ -200,6 +203,9 @@ const AddGroup = () => {
                                             </option>
                                         ))}
                                     </select>
+                                    {formik.errors.selectSegment && (
+                                        <div style={{ color: 'red' }}>{formik.errors.selectSegment}</div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -250,6 +256,8 @@ const AddGroup = () => {
                         Add Group
                     </button>
                 </form>
+                <ToastButton />
+
             </Content>
         </>
     );

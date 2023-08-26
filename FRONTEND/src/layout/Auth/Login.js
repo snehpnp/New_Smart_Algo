@@ -144,58 +144,6 @@ const Login = () => {
 
     await dispatch(Verify_User_Device(req))
       .then((res) => {
-        // if (res.payload.status) {
-        //   if (UserData && UserData.Role === "ADMIN") {
-        //     let mobile_No = getLastFourDigits(UserData && UserData.mobile, typeOtp)
-        //     if (mobile_No === true) {
-        //       localStorage.setItem("user_details", JSON.stringify(UserData));
-        //       localStorage.setItem("user_role", JSON.stringify(UserData.Role));
-        //       toast.success(res.payload.msg)
-        //       setTimeout(() => {
-        //         setshowModal(false)
-        //         navigate("/admin/dashboard");
-        //       }, 1000);
-        //     } else {
-        //       toast.error(mobile_No)
-        //       // alert(mobile_No)
-        //     }
-        //   }
-        //   else if (UserData && UserData.Role === "USER") {
-        //     let mobile_No = getLastFourDigits(UserData && UserData.mobile, typeOtp)
-        //     if (mobile_No === true) {
-        //       localStorage.setItem("user_details", JSON.stringify(UserData));
-        //       localStorage.setItem("user_role", JSON.stringify(UserData.Role));
-        //       // setshowModal(false)
-        //       toast.success(res.payload.msg)
-
-        //       setTimeout(() => {
-        //         setshowModal(false)
-        //         navigate("/client/dashboard");
-        //       }, 1000);
-        //     } else {
-        //       toast.error(mobile_No)
-        //       // alert(mobile_No)
-        //     }
-
-        //   }
-        //   else if (UserData && UserData.Role === "SUBADMIN") {
-        //     let mobile_No = getLastFourDigits(UserData && UserData.mobile, typeOtp)
-        //     if (mobile_No === true) {
-        //       localStorage.setItem("user_details", JSON.stringify(UserData));
-        //       localStorage.setItem("user_role", JSON.stringify(UserData.Role));
-        //       toast.success(res.payload.msg)
-
-        //       setTimeout(() => {
-        //         setshowModal(false)
-        //         navigate("/subadmin/dashboard");
-        //       }, 1000);
-        //     } else {
-        //       toast.error(mobile_No)
-        //       // alert(mobile_No)
-        //     }
-        //   }
-        // }
-
         if (res.payload.status) {
           const roles = ["ADMIN", "USER", "SUBADMIN"];
           const userData = UserData;
@@ -210,6 +158,7 @@ const Login = () => {
             setTimeout(() => {
               setshowModal(false);
               navigate(redirectPath);
+              window.location.reload()
             }, 1000);
           } else {
             toast.error(mobileNo);
