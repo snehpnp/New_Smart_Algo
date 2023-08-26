@@ -1,13 +1,13 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/role-supports-aria-props */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useRef , useEffect } from 'react'
+import React, {  useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config'
 import { Signal, Users, Wrench, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Rocket, Paintbrush } from 'lucide-react';
-import Test from "../../../test"
-import html2canvas from 'html2canvas';
-import $ from "jquery";
+// import Test from "../../../test"
+// import html2canvas from 'html2canvas';
+// import $ from "jquery";
 
 
 
@@ -22,6 +22,11 @@ const Sidebar = ({ ShowSidebar }) => {
 // useEffect(() => {
 //     $(".metismenu li").addClass("mm-active");
 // }, [])
+
+useEffect(() => {
+    // $(".metismenu li").addClass("mm-active");
+}, [])
+
 
 
     return (
@@ -85,16 +90,6 @@ const Sidebar = ({ ShowSidebar }) => {
                         </a>
                     </div>
                     <ul className="metismenu" id="menu">
-
-                    {/* <li class="mm-active">
-                        <a class="has-arrow" aria-expanded="true">
-                        <span class="nav-text">Clients</span></a>
-                        <ul aria-expanded="false" class="mm-collapse mm-show" style="">
-                            <li class="mm-active"><a href="#/admin/client/add" class="mm-active">Add Client</a></li>
-                            <li class=""><a href="#/admin/allclients">Clients</a></li>
-                            <li class=""><a href="#/admin/signupclients">SignUp - Clients</a></li>
-                            </ul>
-                            </li> */}
                         {
                             roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
                                 return <>

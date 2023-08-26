@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
@@ -6,21 +7,20 @@ import { Email_regex, Mobile_regex } from '../../../../Utils/Common_regex';
 import { useDispatch } from 'react-redux';
 import Content from '../../../../Components/Dashboard/Content/Content';
 import { Service_By_Catagory, Get_All_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
+import { Add_Group } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
+import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const AddGroup = () => {
+    const navigate = useNavigate();
+
     const dispatch = useDispatch();
     const [selectedServices, setSelectedServices] = useState([]);
     const [GroupQty, setGroupQty] = useState([]);
-
-
-
-
     const [enabledInputs, setEnabledInputs] = useState({});
-
-
-    console.log("selectedServices", selectedServices);
-    console.log("GroupQty", GroupQty);
-
 
     const [allServices, setAllServices] = useState({
         loading: true,
@@ -41,7 +41,7 @@ const AddGroup = () => {
     const formik = useFormik({
         initialValues: {
             group_name: '',
-            group_description:'',
+            group_description: '',
             selectSegment: null,
             selectedServices: [],
         },
@@ -61,227 +61,265 @@ const AddGroup = () => {
             console.log("helo")
 
 
-        },
-    });
+            function handleServiceChange(event) {
+                const serviceId = event.target.value;
+                const isChecked = event.target.checked;
 
-    const data = async () => {
-        if (formik.values.selectSegment) {
-            await dispatch(Service_By_Catagory({ segment: formik.values.selectSegment })).unwrap()
-                .then((response) => {
-                    if (response.status) {
-                        setAllServices({
-                            loading: false,
-                            data: response.data,
-                        });
-                    }
+                setSelectedServices((prevSelected) => {
+                    const updatedSelected = isChecked
+                        ? [...prevSelected, serviceId]
+                        : prevSelected.filter((id) => id !== serviceId);
+
+                    setEnabledInputs((prevInputs) => ({ ...prevInputs, [serviceId]: isChecked, }));
+
+                    return updatedSelected;
                 });
-        }
-    };
+            }
 
-    useEffect(() => {
-        data();
-    }, [formik.values.selectSegment]);
+            //  -------------------For Show Segment List-----------------
 
-    const handleServiceChange = (event) => {
-        const serviceId = event.target.value;
-        const isChecked = event.target.checked;
 
-        setSelectedServices((prevSelected) => {
-            const updatedSelected = isChecked
-                ? [...prevSelected, serviceId]
-                : prevSelected.filter((id) => id !== serviceId);
+            const getservice = async () => {
+                await dispatch(Get_All_Catagory())
+                    .unwrap()
+                    .then((response) => {
 
-            setEnabledInputs((prevInputs) => ({ ...prevInputs, [serviceId]: isChecked, }));
-
-            return updatedSelected;
-        });
-    };
-
-    const getservice = async () => {
-        await dispatch(Get_All_Catagory())
-            .unwrap()
-            .then((response) => {
-
-                if (response.status) {
-                    setGetAllSgments({
-                        loading: false,
-                        data: response.data,
+                        if (response.status) {
+                            setGetAllSgments({
+                                loading: false,
+                                data: response.data,
+                            });
+                        }
                     });
-                }
-            });
-    };
-    useEffect(() => {
-        getservice();
-    }, []);
+            };
+            useEffect(() => {
+                getservice();
+            }, []);
 
 
+            //   For Mange Qty Acco
 
-    const InputGroupQty = (event, id) => {
 
-        setGroupQty((prevQtys) => ([
-            ...prevQtys,
-            {
-                // [id]: id,
-                group_qty: event.target.value === "" ? "0" : event.target.value,
-                service_id: id
+            const InputGroupQty = (event, id) => {
+                setGroupQty((prevQtys) => ([
+                    ...prevQtys,
+                    {
+                        // [id]: id,
+                        group_qty: event.target.value === "" ? "0" : event.target.value,
+                        service_id: id
+                    }
+                ]));
             }
 
 
-
-        ]));
-
-    }
-
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
-
-        const uniqueArr = Object.values(
-            GroupQty.reduce((acc, cur) => {
-                acc[cur.service_id] = cur;
-                return acc;
-            }, {})
-        );
-        console.log("uniqueArr", uniqueArr);
-
-
-
-
-    }
+            //  Form For Submit
+            const formik = useFormik({
+                initialValues: {
+                    group_name: '',
+                    selectSegment: null,
+                    selectedServices: [],
+                },
+                validate: (values) => {
+                    const errors = {};
+                    if (!values.group_name) {
+                        errors.group_name = valid_err.EMPTY_GROUP_NAME_ERR;
+                    }
+                    console.log("values.selectSegment", values.selectSegment);
+                    if (!values.selectSegment) {
+                        errors.selectSegment = valid_err.SEGEMENTSELECT_ERROR;
+                    }
+                    return errors;
+                },
+            });
 
 
+            const handleSubmit = async (e) => {
+                e.preventDefault()
+
+                const uniqueArr = Object.values(
+                    GroupQty.reduce((acc, cur) => {
+                        acc[cur.service_id] = cur;
+                        return acc;
+                    }, {})
+                );
+
+                await dispatch(Add_Group({
+                    groupdetails: { name: formik.values.group_name },
+                    services_id: uniqueArr
+
+                })).then((response) => {
+                    console.log("response", response);
+
+                    if (response.payload.status) {
+                        toast.success(response.payload.msg);
+                        setTimeout(() => {
+                            navigate("/admin/groupservices")
+                        }, 1000);
+                    }
+                })
+            }
+
+
+            //  -------------------For Show Service According to Segment -----------------
+
+            const data = async () => {
+                if (formik.values.selectSegment) {
+                    await dispatch(Service_By_Catagory({ segment: formik.values.selectSegment })).unwrap()
+                        .then((response) => {
+                            if (response.status) {
+                                setAllServices({
+                                    loading: false,
+                                    data: response.data,
+                                });
+                            }
+                        });
+                }
+            };
+            useEffect(() => {
+                data();
+            }, [formik.values.selectSegment]);
 
 
 
 
 
 
-    return (
-        <>
-            <Content Page_title="Add Group" button_title="Back" route="/admin/groupservices">
-                <form onSubmit={handleSubmit}>
-                    {/* TOP INPUT */}
-                    <div className="row">
-                        <div className="col-lg-6">
-                            <div className="mb-3 row">
-                                <label className="col-lg-4 col-form-label" htmlFor="group_name">
-                                    Group Name
-                                    <span className="text-danger">*</span>
-                                </label>
-                                <div className="col-lg-7">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="group_name"
-                                        placeholder="Enter group name"
-                                        {...formik.getFieldProps('group_name')}
-                                        required=""
-                                    />
-                                    <div className="invalid-feedback">Please enter a group name</div>
-                                    {formik.errors.group_name && (
-                                        <div style={{ color: 'red' }}>{formik.errors.group_name}</div>
-                                    )}
+            return (<>
+                <Content Page_title="Add Group" button_title="Back" route="/admin/groupservices">
+
+                    <form onSubmit={handleSubmit}>
+                        {/* TOP INPUT */}
+
+                        <form onSubmit={handleSubmit} >
+                            <div className="row">
+                                <div className="col-lg-6">
+                                    <div className="mb-3 row">
+                                        <label className="col-lg-4 col-form-label" htmlFor="group_name">
+                                            Group Name
+                                            <span className="text-danger">*</span>
+                                        </label>
+                                        <div className="col-lg-7">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="group_name"
+                                                placeholder="Enter group name"
+                                                {...formik.getFieldProps('group_name')}
+                                                required=""
+                                            />
+                                            <div className="invalid-feedback">Please enter a group name</div>
+                                            {formik.errors.group_name && (
+                                                <div style={{ color: 'red' }}>{formik.errors.group_name}</div>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div className="col-lg-6">
-                            <div className="mb-3 row">
-                                <label className="col-lg-4 col-form-label" htmlFor="group_description">
-                                    Group Description
-                                    <span className="text-danger">*</span>
-                                </label>
-                                <div className="col-lg-7">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        id="group_description"
-                                        placeholder="Enter group Description"
-                                        {...formik.getFieldProps('group_description')}
-                                        required=""
-                                    />
-                                    <div className="invalid-feedback">Please enter Group Description</div>
-                                    {formik.errors.group_description && (
-                                        <div style={{ color: 'red' }}>{formik.errors.group_description}</div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* SEGMENT SELECTION */}
-                    <div className="row">
-
-                        <div className="col-lg-6">
-                            <div className="mb-3 row">
-                                <label className="col-lg-4 col-form-label" htmlFor="selectSegment">
-                                    Select Segment
-                                </label>
-                                <div className="col-lg-7">
-                                    <select
-                                        className="form-control"
-                                        id="selectSegment"
-                                        {...formik.getFieldProps('selectSegment')}
-                                    >
-                                        <option value="">Select a segment</option>
-                                        {GetAllSgments.data.map((segment) => (
-                                            <option key={segment.segment} value={segment.segment}>
-                                                {segment.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div className="col-lg-12" style={{ overflowY: 'scroll', height: '40vh' }}>
-                        {allServices.data.length > 0 && (
-                            <div className="mb-3 row">
-                                <div className="col-lg-12">
-                                    <div className="row">
-                                        {allServices.data.length === 0 ?
-                                            <p>Segment Is Empty </p> :
-                                            allServices.data.map((service) => (
-                                                <div key={service._id} className="col-md-3 mb-2">
-                                                    <div className="form-check">
-                                                        <input
-                                                            type="checkbox"
-                                                            className="form-check-input"
-                                                            id={`service-${service._id}`}
-                                                            value={service._id}
-                                                            checked={selectedServices.includes(service._id)}
-                                                            onChange={handleServiceChange}
-                                                        />
-                                                        <label className="form-check-label" htmlFor={`service-${service._id}`}>
-                                                            {service.name}
-                                                        </label>
-                                                    </div>
-
-
-                                                    <input
-                                                        type="number"
-                                                        className="form-input my-2"
-                                                        placeholder="Enter Group Qty"
-                                                        onChange={(e) => InputGroupQty(e, service._id)}
-                                                        min={0}
-                                                        defaultValue="0"
-                                                        disabled={!enabledInputs[service._id]}
-                                                    />
-                                                </div>
-                                            ))}
+                                <div className="col-lg-6">
+                                    <div className="mb-3 row">
+                                        <label className="col-lg-4 col-form-label" htmlFor="group_description">
+                                            Group Description
+                                            <span className="text-danger">*</span>
+                                        </label>
+                                        <div className="col-lg-7">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                id="group_description"
+                                                placeholder="Enter group Description"
+                                                {...formik.getFieldProps('group_description')}
+                                                required=""
+                                            />
+                                            <div className="invalid-feedback">Please enter Group Description</div>
+                                            {formik.errors.group_description && (
+                                                <div style={{ color: 'red' }}>{formik.errors.group_description}</div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        )}
-                    </div>
-                    <button type="submit" className="btn btn-primary" >
-                        Add Group
-                    </button>
-                </form>
-            </Content>
-        </>
-    );
-};
 
-export default AddGroup;
+                            {/* SEGMENT SELECTION */}
+                            <div className="row">
+
+                                <div className="col-lg-6">
+                                    <div className="mb-3 row">
+                                        <label className="col-lg-4 col-form-label" htmlFor="selectSegment">
+                                            Select Segment
+                                        </label>
+                                        <div className="col-lg-7">
+                                            <select
+                                                className="form-control"
+                                                id="selectSegment"
+                                                {...formik.getFieldProps('selectSegment')}
+                                            >
+                                                <option value="">Select a segment</option>
+                                                {GetAllSgments.data.map((segment) => (
+                                                    <option key={segment.segment} value={segment.segment}>
+                                                        {segment.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            {formik.errors.selectSegment && (
+                                                <div style={{ color: 'red' }}>{formik.errors.selectSegment}</div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div className="col-lg-12" style={{ overflowY: 'scroll', height: '40vh' }}>
+                                {allServices.data.length > 0 && (
+                                    <div className="mb-3 row">
+                                        <div className="col-lg-12">
+                                            <div className="row">
+                                                {allServices.data.length === 0 ?
+                                                    <p>Segment Is Empty </p> :
+                                                    allServices.data.map((service) => (
+                                                        <div key={service._id} className="col-md-3 mb-2">
+                                                            <div className="form-check">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="form-check-input"
+                                                                    id={`service-${service._id}`}
+                                                                    value={service._id}
+                                                                    checked={selectedServices.includes(service._id)}
+                                                                    onChange={handleServiceChange}
+                                                                />
+                                                                <label className="form-check-label" htmlFor={`service-${service._id}`}>
+                                                                    {service.name}
+                                                                </label>
+                                                            </div>
+
+
+                                                            <input
+                                                                type="number"
+                                                                className="form-input my-2"
+                                                                placeholder="Enter Group Qty"
+                                                                onChange={(e) => InputGroupQty(e, service._id)}
+                                                                min={0}
+                                                                defaultValue="0"
+                                                                disabled={!enabledInputs[service._id]}
+                                                            />
+                                                        </div>
+                                                    ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <button type="submit" className="btn btn-primary" >
+                                Add Group
+                            </button>
+                        </form>
+                    </form>
+
+                    <ToastButton />
+
+                </Content>
+            </>)
+
+
+
+
+            export default AddGroup;

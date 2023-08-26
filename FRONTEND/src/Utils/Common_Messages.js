@@ -17,13 +17,37 @@ export const PER_TRADE_ERROR = 'Please Enter Per Trade Fund Value ';
 export const PER_TRADE_INVALID_ERROR = 'Please Enter integer  Value ';
 export const QTY_ERROR = 'Please Enter Per  QTY ';
 export const QTY_INVALID_ERROR = 'Please Enter Invalid QTY ';
-export const SEGEMENTSELECT_ERROR = 'Please Select Segment Selection';
-export const SEGEMENTSELECT_LEASTONE_ERROR = 'Please Select At Least One ';
+// export const SEGEMENTSELECT_ERROR = 'Please Select Segment Selection';
+// export const SEGEMENTSELECT_LEASTONE_ERROR = 'Please Select At Least One ';
 export const NEW_PASSWORD_ERROR = 'Please Enter New Password ';
 export const OLD_PASSWORD_ERROR = 'Please Enter Old Password ';
 export const CONFIRM_PASSWORD_ERROR = 'Please Enter Confirm Password';
 export const CONFIRM_AND_NEW_PASSWORD_ERROR = 'New Password And Confirm Password Are Not Matched';
 export const OLD_AND_NEW_PASSWORD_ERROR = 'Old Password And New Password Are Not Matched';
+
+
+
+//For Group Details
+
+export const EMPTY_GROUP_NAME_ERR = 'Please Enter Group Name';
+export const SEGEMENTSELECT_ERROR = 'Please Select Segment Selection';
+export const SEGEMENTSELECT_LEASTONE_ERROR = 'Please Select At Least One ';
+
+
+//  Strategy Error
+
+export const EMPTY_STRATEGY_NAME_ERR = 'Please Enter Strategy Name';
+export const EMPTY_STRATEGY_LOT_ERR = 'Please Enter Strategy Lot Amount ';
+export const VALID_STRATEGY_LOT_ERR = 'Accept Number Only and Grater Than Zero';
+export const EMPTY_STRATEGY_CATAGORY_ERR = 'Please Enter Strategy Category ';
+export const EMPTY_STRATEGY_SEGMENT_ERR = 'Please Select Strategy Segment ';
+export const EMPTY_STRATEGY_DESCRIPTION_ERR = 'Please Enter Strategy Description ';
+
+
+
+
+
+
 
 // ForCompany Details
 

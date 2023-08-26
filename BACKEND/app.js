@@ -28,6 +28,8 @@ app.use(cors(corsOpts));
 
 
 app.use(bodyparser.urlencoded({ extended: true }));
+app.use(bodyparser.json({limit: '10mb', extended: true}));
+
 app.use(bodyparser.json());
 const server = http.createServer(app);
 
@@ -40,7 +42,7 @@ require('./App/Cron/cron')
 
 
 
-// TEST API 
+// TEST API
 app.get('/get', async (req, res) => {
   res.send({ msg: "Done!!!" })
 })
