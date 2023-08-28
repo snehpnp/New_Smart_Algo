@@ -47,34 +47,6 @@ class Company {
             console.log("Comany Get Error -", error);
         }
     }
-
-     // EDIT COMPANY Email INFORMATION
-     async EditEmailInfo(req, res) {
-        try {
-            var companydata = req.body.data
-            var _id = req.body.id;
-
-            company_information.findById(_id)
-                .then(async (value) => {
-                    if (!value) {
-                        return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
-                    }
-                    const filter = { _id: _id };
-                    const updateOperation = { $set: companydata };
-                    const result = await company_information.updateOne(filter, updateOperation);
-                    if (!result) {
-                        return res.status(409).json({ status: false, msg: 'Company not update', data: [] });
-                    }
-
-                    return res.status(200).json({ status: true, msg: 'Update Successfully.', data: [] });
-
-                })
-
-
-        } catch (error) {
-            console.log("Theme error-", error);
-        }
-    }
 }
 
 

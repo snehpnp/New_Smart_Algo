@@ -100,45 +100,7 @@ class Employee {
 
     }
 
-
-    // GET ALL GetAllClients
-    async GetAllClients(req, res) {
-        try {
-
-            const { page, limit } = req.body;     //LIMIT & PAGE
-            const skip = (page - 1) * limit;
-
-            // GET ALL CLIENTS
-            const getAllClients = await User_model.find({
-                $or: [
-                    { Role: "USER" }
-                ]
-            }).skip(skip)
-                .limit(Number(limit));
-
-            const totalCount = getAllClients.length;
-            // IF DATA NOT EXIST
-            if (getAllClients.length == 0) {
-                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
-            }
-
-            // DATA GET SUCCESSFULLY
-            res.send({
-                status: true,
-                msg: "Get All  Clients",
-                totalCount: totalCount,
-                data: getAllClients,
-                page: Number(page),
-                limit: Number(limit),
-                totalPages: Math.ceil(totalCount / Number(limit)),
-            })
-        } catch (error) {
-            console.log("loginClients Error-", error);
-        }
-    }
-
-
-    // GET ALL LOGIN CLIENTS
+// GET ALL LOGIN CLIENTS
     async loginClients(req, res) {
         try {
 
@@ -152,7 +114,7 @@ class Employee {
             const totalCount = getAllLoginClients.length;
             // IF DATA NOT EXIST
             if (getAllLoginClients.length == 0) {
-                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+              return  res.send({ status: false, msg: "Empty data", data: [] , totalCount: totalCount,})
             }
 
             // DATA GET SUCCESSFULLY
@@ -182,7 +144,7 @@ class Employee {
             // console.log("totalCount", totalCount);
             // IF DATA NOT EXIST
             if (getAllTradingClients.length == 0) {
-                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+              return  res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
             }
 
             // DATA GET SUCCESSFULLY

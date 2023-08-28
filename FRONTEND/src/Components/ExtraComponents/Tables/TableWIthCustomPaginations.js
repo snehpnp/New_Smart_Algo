@@ -10,6 +10,7 @@ const TableWIthCustomPaginations = ({ tableData, tableColumn }) => {
 
     const data = tableData
 
+    console.log("data" ,data);
     return (
         <div>
 
@@ -29,7 +30,7 @@ const TableWIthCustomPaginations = ({ tableData, tableColumn }) => {
                         {/* {currentData.map((item) => ( */}
                         {data.map((item) => (
                             <tr key={item.id}>
-                                <td>{item.id}</td>
+                                <td>{item._id}</td>
                                 <td>{item.name}</td>
                                 <td>{item.age}</td>
                             </tr>

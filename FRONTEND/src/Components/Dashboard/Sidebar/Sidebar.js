@@ -19,9 +19,9 @@ const Sidebar = ({ ShowSidebar }) => {
 
     const roles = JSON.parse(localStorage.getItem('user_role'))
 
-// useEffect(() => {
-//     $(".metismenu li").addClass("mm-active");
-// }, [])
+useEffect(() => {
+    // $(".metismenu li").addClass("mm-active");
+}, [])
 
 
     return (
@@ -85,16 +85,6 @@ const Sidebar = ({ ShowSidebar }) => {
                         </a>
                     </div>
                     <ul className="metismenu" id="menu">
-
-                    {/* <li class="mm-active">
-                        <a class="has-arrow" aria-expanded="true">
-                        <span class="nav-text">Clients</span></a>
-                        <ul aria-expanded="false" class="mm-collapse mm-show" style="">
-                            <li class="mm-active"><a href="#/admin/client/add" class="mm-active">Add Client</a></li>
-                            <li class=""><a href="#/admin/allclients">Clients</a></li>
-                            <li class=""><a href="#/admin/signupclients">SignUp - Clients</a></li>
-                            </ul>
-                            </li> */}
                         {
                             roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
                                 return <>

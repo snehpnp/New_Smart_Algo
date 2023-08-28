@@ -5,18 +5,13 @@ const logFilePath = 'Logs/activity.log'; // Replace 'activity.log' with the desi
 const os = require('os');
 
 
-
-var timestamp = Date.now();
-var currentDate = new Date(timestamp);
-const CurrentDatetime = currentDate.toLocaleDateString() +" "+ currentDate.toLocaleTimeString()
-
 // Create a logger instance
 const logger = createLogger({
     level: 'info', // Set the minimum log level (e.g., 'info', 'debug', 'error')
     format: format.combine(
         format.timestamp(),
         format.printf(({ timestamp, level, message, ...data }) => {
-            return `{Ip:"${getIPAddress()}", time:"${CurrentDatetime}" ,type:${level.toUpperCase()},Role:"${data.role}",user_id:"${data.user_id}", msg:"${message}"}`;
+            return `{Ip:"${getIPAddress()}", time:"${formattedDateTime}" ,type:${level.toUpperCase()},Role:"${data.role}",user_id:"${data.user_id}", msg:"${message}"}`;
         })
     ),
     transports: [

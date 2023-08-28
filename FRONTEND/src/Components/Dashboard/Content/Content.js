@@ -7,7 +7,6 @@ const Content = ({ Page_title, button_title, route, ...rest }) => {
         <div className="container-fluid">
           <div className="row page-titles">
             <div className='row mb-3'>
-
               <div className="col-lg-6"></div>
 
             </div>
