@@ -120,53 +120,31 @@ const ServicesList = () => {
 
     return (
         <>
+            {
+                AllGroupServices.loading ? <Loader /> :
+                    <>
+                        <Theme_Content Page_title="Group Service" button_title="Add Grouop" route="/admin/groupservices/add">
 
-
-            <Theme_Content Page_title="Group Service" button_title="Add Grouop" route="/admin/groupservices/add">
-
-                {
-                    AllGroupServices.data && AllGroupServices.data.length === 0 ? (
-                        'No data found') :
-                        <>
-                            <FullDataTable TableColumns={columns} tableData={AllGroupServices.data} />
-                        </>
-                }
-
-                {/*  For Show Service  */}
-                {
-                    showModalForService ?
-                        <>
-                            < Modal isOpen={showModalForService} backdrop="static" size="md" title="Services" btn_name="Verify"
-                                handleClose={() => setshowModalForService(false)}
-                                closeButton
-                            >
-
-
-                            </Modal >
-                        </>
-                        : ""
-                }
-
-                {/*  For Show Users Which Is Use Thier Services */}
-
-                {
-                    showModalForCients ?
-                        <>
-                            < Modal isOpen={showModalForCients} backdrop="static" size="sm" title="Client List " btn_name="Verify"
-                                handleClose={() => setshowModalForCients(false)}
-                                closeButton
-                            >
-
-
-
-
-
-                            </Modal >
-                        </>
-                        : ""
-                }
-            </Theme_Content>
-
+                            {
+                                AllGroupServices.data && AllGroupServices.data.length === 0 ? (
+                                    'No data found') :
+                                    <>
+                                        <FullDataTable TableColumns={columns} tableData={AllGroupServices.data} />
+                                    </>
+                            }
+                            {
+                                showModal ?
+                                    <>
+                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
+                                        //  handleClose={setshowModal(false)}
+                                        >
+                                        </Modal >
+                                    </>
+                                    : ""
+                            }
+                        </Theme_Content>
+                    </>
+            }
 
 
 
