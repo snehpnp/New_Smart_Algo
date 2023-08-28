@@ -141,12 +141,6 @@ const AllSubadmin = () => {
 
         </ >
     )
-    {/* <>
-        <Content Page_title="AllSubadmin">
-            <p>AllSubadmin 123</p>
-        </Content>
-        )
-    </> */}
 }
 
 
