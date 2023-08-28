@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
 
-const AllSubadmin = () => {
+const EditSubadmin = () => {
 
     const dispatch = useDispatch()
 
@@ -43,6 +43,7 @@ const AllSubadmin = () => {
     // useEffect(() => {
     //     data()
     // }, [])
+
     const fields = [
         { name: 'username', label: 'Username', type: 'text' },
         { name: 'email', label: 'Email', type: 'text' },
@@ -131,8 +132,9 @@ const AllSubadmin = () => {
             {
                 Addsubadmin.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="Add Sub-Admin" button_title="Back" route="/admin/allsubadmins">
-                            <Formikform fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Add Sub-Admin" />
+                        <Theme_Content Page_title="Edit Sub-Admin" button_title="Back" route="/admin/allsubadmins">
+
+                            <Formikform fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Edit Sub-Admin" />
                         </Theme_Content>
                     </>
             }
@@ -150,4 +152,4 @@ const AllSubadmin = () => {
 }
 
 
-export default AllSubadmin
+export default EditSubadmin;

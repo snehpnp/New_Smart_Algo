@@ -13,6 +13,7 @@ import SignUpClients from '../layout/Admin/Clients/Sign_Up_Clients/Sign_Up_Clien
 
 //  Sub Admin
 import AllSubadmin from '../layout/Admin/SubAdmin/Subadmins/AllSubadmin';
+import EditSubadmin from '../layout/Admin/SubAdmin/Subadmins/EditSubadmin';
 import SubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/Subadmin_Client"
 import AddSubadmin from "../layout/Admin/SubAdmin/Subadmins/AddSubadmin"
 
@@ -81,6 +82,7 @@ const Admin = () => {
                 <Route exact path="/client/edit" element={<EditClient />} />
                 <Route exact path="/signupclients" element={<SignUpClients />} />
                 <Route exact path="/allsubadmins" element={<AllSubadmin />} />
+                <Route exact path="/editsubadmin" element={<EditSubadmin />} />
                 <Route exact path="/subadminclients" element={<SubadminClient />} />
                 <Route exact path="/allsubadmins/add" element={<AddSubadmin />} />
                 <Route exact path="/strategies" element={<AllStrategy />} />
