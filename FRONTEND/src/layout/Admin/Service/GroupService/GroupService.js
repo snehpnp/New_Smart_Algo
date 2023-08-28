@@ -123,7 +123,7 @@ const ServicesList = () => {
             {
                 AllGroupServices.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="Group Service" button_title="Add Grouop" route="/admin/groupservices/add">
+                        <Theme_Content Page_title="Group Service" button_title="Add Group" route="/admin/groupservices/add">
 
                             {
                                 AllGroupServices.data && AllGroupServices.data.length === 0 ? (

@@ -8,9 +8,10 @@ import Dashboard from '../layout/Admin/Dashboard/Dashbaord';
 //  Clients
 import ClientList from '../layout/Admin/Clients/ClientList/ClientList'
 import AddClient from '../layout/Admin/Clients/ClientList/Add_Client'
+import EditClient from '../layout/Admin/Clients/ClientList/Edit_Client'
 import SignUpClients from '../layout/Admin/Clients/Sign_Up_Clients/Sign_Up_Clients';
 
-//  Clients
+//  Sub Admin
 import AllSubadmin from '../layout/Admin/SubAdmin/Subadmins/AllSubadmin';
 import SubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/Subadmin_Client"
 import AddSubadmin from "../layout/Admin/SubAdmin/Subadmins/AddSubadmin"
@@ -71,6 +72,7 @@ const Admin = () => {
                 <Route exact path="/system" element={<System />} />
                 <Route exact path="/allclients" element={<ClientList />} />
                 <Route exact path="/client/add" element={<AddClient />} />
+                <Route exact path="/client/edit" element={<EditClient />} />
                 <Route exact path="/signupclients" element={<SignUpClients />} />
                 <Route exact path="/allsubadmins" element={<AllSubadmin />} />
                 <Route exact path="/subadminclients" element={<SubadminClient />} />
