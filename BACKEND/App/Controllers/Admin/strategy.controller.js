@@ -1,13 +1,14 @@
 "use strict";
 const db = require('../../Models');
 const strategy_model = db.strategy
+const strategy_client_model = db.strategy_client
 const { formattedDateTime } = require('../../Helper/time.helper')
 class strategy {
 
     // ADD STRATEGY IN A COLLECTION
     async AddStragegy(req, res) {
         try {
-            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester , strategy_amount } = req.body;
+            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester } = req.body;
 
 
             const exist_strategy = await strategy_model.findOne({ strategy_name: strategy_name });
@@ -21,8 +22,7 @@ class strategy {
                 strategy_category: strategy_category,
                 strategy_segment: strategy_segment,
                 strategy_indicator: strategy_indicator,
-                strategy_tester: strategy_tester,
-                strategy_amount :strategy_amount
+                strategy_tester: strategy_tester
             })
 
 
@@ -126,7 +126,7 @@ class strategy {
             const totalCount = await strategy_model.countDocuments();
 
 
-            // THEME LIST DATA
+            // THEME LIST DATA 
             // var getAllTheme = await strategy_model.find()
             const getAllstrategy = await strategy_model
                 .find({})
@@ -156,23 +156,38 @@ class strategy {
         }
     }
 
-
-    //  DELETE STRATEGY
-    async DeleteStrategy(req, res) {
+    // DELETE STRATEGY IN A COLLECTION
+    async DeleteStragegy(req, res) {
         try {
             const { _id } = req.body;
-
-            const exist_strategy = await strategy_model.findOneAndDelete({ _id: _id });
-            if (!exist_strategy) {
-                return res.status(409).json({ status: false, msg: 'Strategy Not exists', data: [] });
+    
+            // CHECK IF STRATEGY EXISTS
+            const strategy_check = await strategy_model.findOne({ _id: _id });
+            if (!strategy_check) {
+                return res.status(409).json({ status: false, msg: 'Strategy does not exist', data: [] });
             }
-            return res.status(200).json({ status: true, msg: 'Strategy Delete  Successfully!', data: [] });
-
+    
+            // CHECK IF STRATEGY EXISTS IN STRATEGY CLIENT
+            const strategy_client_check = await strategy_client_model.findOne({ strategy_id: _id });
+            if (strategy_client_check) {
+                return res.status(409).json({ status: false, msg: 'Strategy is assigned to a client', data: [] });
+            }
+    
+            // Delete the strategy
+            const deleteResult = await strategy_model.deleteOne({ _id: _id });
+            if (deleteResult.deletedCount === 1) {
+                return res.status(200).json({ status: true, msg: 'Strategy deleted successfully!', data: [] });
+            } else {
+                return res.status(500).json({ status: false, msg: 'Error deleting strategy', data: [] });
+            }
+    
         } catch (error) {
-            console.log("Strategy Get One error -", error.keyValue);
+            console.log("Delete Strategy Error:", error);
+            return res.status(500).json({ status: false, msg: 'An error occurred', data: [] });
         }
     }
-
+    
+    
 
 }
 
