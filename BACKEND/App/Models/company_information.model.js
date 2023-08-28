@@ -27,6 +27,31 @@ const CompanySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    email: {
+        type: String,
+        default: ""
+    }, smtp_password: {
+        type: String,
+        default: ""
+    }, cc_mail: {
+        type: String,
+        default: ""
+    },
+    bcc_mail: {
+        type: String,
+        default: ""
+    }, smtphost: {
+        type: String,
+        default: ""
+    },
+    smtpport: {
+        type: String,
+        default: ""
+    },
+    logo: {
+        type: String,
+        default: ""
+    },
     theme_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'theme_list',
@@ -40,10 +65,10 @@ const CompanySchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-},{
+}, {
     // This enables Mongoose to handle the _id field automatically
     _id: true,
-  });
+});
 
 const company = mongoose.model('company', CompanySchema);
 module.exports = company;
