@@ -1,370 +1,136 @@
-import React from "react";
-import Content from "../../../../Components/Dashboard/Content/Content";
+// import React from 'react'
+/* eslint-disable react/jsx-pascal-case */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from 'react'
+import Content from "../../../../Components/Dashboard/Content/Content"
+import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
+import Loader from '../../../../Utils/Loader'
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+
+import { Pencil, Trash2 } from 'lucide-react';
+import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
+import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { useDispatch, useSelector } from "react-redux";
+import Modal from '../../../../Components/ExtraComponents/Modal';
+
 
 const Sign_Up_Clients = () => {
+
+    const dispatch = useDispatch()
+
+    const [first, setfirst] = useState('all')
+    const [showModal, setshowModal] = useState(false)
+
+    const [getAllClients, setAllClients] = useState({
+        loading: true,
+        data: []
+    });
+
+
+    const data = async () => {
+        await dispatch(GET_ALL_CLIENTS()).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setAllClients({
+                        loading: false,
+                        data: response.data
+                    });
+                }
+            })
+    }
+    useEffect(() => {
+        data()
+    }, [])
+
+    const columns = [
+        {
+            dataField: "index",
+            text: "SR. No.",
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
+        },
+        {
+            dataField: 'UserName',
+            text: 'User Name'
+        },
+        {
+            dataField: 'Email',
+            text: 'Email'
+        },
+        {
+            dataField: 'PhoneNo',
+            text: 'Phone Number'
+        },
+        {
+            dataField: 'Otp',
+            text: 'Password'
+        },
+        {
+            dataField: 'ActiveStatus',
+            text: 'Status',
+            formatter: (cell, row) => (
+                <>
+                    <label class="switch" >
+                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false}/>
+                            <span class="slider round"></span>
+                    </label>
+
+                </>
+
+                
+            ),
+        },
+        {
+            dataField: 'actions',
+            text: 'Actions',
+            formatter: (cell, row) => (
+                <div>
+                    <span data-toggle="tooltip" data-placement="top" title="Edit">
+                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    </span>
+                    <span data-toggle="tooltip" data-placement="top" title="Delete">
+                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                    </span>
+
+                </div>
+            ),
+        },
+    ];
     return (
         <>
-            <div>
-                <div className="content-body">
-                    {/* row */}
-                    <div className="container-fluid">
+            {
+                getAllClients.loading ? <Loader /> :
+                    <>
+                        <Theme_Content Page_title="All Signup Clients" button_title="Add Client" route="/client/add">
 
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <div className="card form-card">
-                                    <div className="card-header main-card-header">
-                                        <h4 className="card-title">Add Client</h4>
-                                    </div>
-                                    <div className="card-body">
-                                        <div className="form-validation">
-                                            <form
-                                                className="needs-validation"
-                                                noValidate=""
-                                                data-bitwarden-watching={1}
-                                            >
-                                                <div className="row">
-                                                    <div className="col-xl-6">
-                                                        <div className="mb-3 row">
-                                                            <label
-                                                                className="col-lg-4 col-form-label"
-                                                                htmlFor="validationCustom01"
-                                                            >
-                                                                Username
-                                                                <span className="text-danger">*</span>
-                                                            </label>
-                                                            <div className="col-lg-7">
-                                                                <input
-                                                                    type="text"
-                                                                    className="form-control"
-                                                                    id="validationCustom01"
-                                                                    placeholder="Enter a username.."
-                                                                    required=""
-                                                                />
-                                                                <div className="invalid-feedback">
-                                                                    Please enter a username.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="mb-3 row">
-                                                            <label
-                                                                className="col-lg-4 col-form-label"
-                                                                htmlFor="validationCustom01"
-                                                            >
-                                                                Fullname
-                                                                <span className="text-danger">*</span>
-                                                            </label>
-                                                            <div className="col-lg-7">
-                                                                <input
-                                                                    type="text"
-                                                                    className="form-control"
-                                                                    id="validationCustom01"
-                                                                    placeholder="Enter a username.."
-                                                                    required=""
-                                                                />
-                                                                <div className="invalid-feedback">
-                                                                    Please enter a fullname.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="mb-3 row">
-                                                            <label
-                                                                className="col-lg-4 col-form-label"
-                                                                htmlFor="validationCustom02"
-                                                            >
-                                                                Email <span className="text-danger">*</span>
-                                                            </label>
-                                                            <div className="col-lg-7">
-                                                                <input
-                                                                    type="text"
-                                                                    className="form-control"
-                                                                    id="validationCustom02"
-                                                                    placeholder="Your valid email.."
-                                                                    required=""
-                                                                />
-                                                                <div className="invalid-feedback">
-                                                                    Please enter a Email.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="mb-3 row">
-                                                            <label
-                                                                className="col-lg-4 col-form-label"
-                                                                htmlFor="validationCustom03"
-                                                            >
-                                                                Password
-                                                                <span className="text-danger">*</span>
-                                                            </label>
-                                                            <div className="col-lg-7">
-                                                                <input
-                                                                    type="password"
-                                                                    className="form-control"
-                                                                    id="validationCustom03"
-                                                                    placeholder="Choose a safe one.."
-                                                                    required=""
-                                                                />
-                                                                <div className="invalid-feedback">
-                                                                    Please enter a password.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="mb-3 row">
-                                                            <label
-                                                                className="col-lg-4 col-form-label"
-                                                                htmlFor="validationCustom05"
-                                                            >
-                                                                To Month (Form Date)
-                                                                <span className="text-danger">*</span>
-                                                            </label>
-                                                            <div className="col-lg-7 ">
-                                                                <input
-                                                                    type="date"
-                                                                    className="datepicker-default form-control"
-                                                                    id="datepicker"
-                                                                    placeholder="2017-06-04"
-                                                                />
+                            {
+                                getAllClients.data && getAllClients.data.length === 0 ? (
+                                    'No data found') :
+                                    <>
+                                        <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
+                                    </>
+                            }
+                            {
+                                showModal ?
+                                    <>
+                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
+                                        //  handleClose={setshowModal(false)}
+                                        >
+                                        </Modal >
+                                    </>
+                                    : ""
+                            }
+                        </Theme_Content>
+                    </>
+            }
 
-                                                                <div className="invalid-feedback">
-                                                                    Please select a one.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="mb-3 row">
-                                                            <label
-                                                                className="col-lg-4 col-form-label"
-                                                                htmlFor="validationCustom05"
-                                                            >
-                                                                License
-                                                                <span className="text-danger">*</span>
-                                                            </label>
-                                                            <div className="col-lg-7">
-                                                                <select
-                                                                    className="default-select wide form-control"
-                                                                    id="validationCustom05"
-                                                                >
-                                                                    <option data-display="Select">
-                                                                        Please select
-                                                                    </option>
-                                                                    <option value="html">HTML</option>
-                                                                    <option value="css">CSS</option>
-                                                                    <option value="javascript">JavaScript</option>
-                                                                    <option value="angular">Angular</option>
-                                                                    <option value="angular">React</option>
-                                                                </select>
-                                                                <div className="invalid-feedback">
-                                                                    Please select a one.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="mb-3 row">
-                                                            <label
-                                                                className="col-lg-4 col-form-label"
-                                                                htmlFor="validationCustom05"
-                                                            >
-                                                                To Month (To Date)
-                                                                <span className="text-danger">*</span>
-                                                            </label>
-                                                            <div className="col-lg-7 ">
-                                                                <input
-                                                                    type="date"
-                                                                    className="datepicker-default form-control"
-                                                                    id="datepicker"
-                                                                    placeholder="2017-06-04"
-                                                                />
 
-                                                                <div className="invalid-feedback">
-                                                                    Please select a one.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="mb-3 row">
-                                                            <label
-                                                                className="col-lg-4 col-form-label"
-                                                                htmlFor="validationCustom05"
-                                                            >
-                                                                Group
-                                                                <span className="text-danger">*</span>
-                                                            </label>
-                                                            <div className="col-lg-7">
-                                                                <select
-                                                                    className="default-select wide form-control"
-                                                                    id="validationCustom05">
-                                                                    <option data-display="Select">
-                                                                        Please select
-                                                                    </option>
-                                                                    <option value="html">HTML</option>
-                                                                    <option value="css">CSS</option>
-                                                                    <option value="javascript">JavaScript</option>
-                                                                    <option value="angular">Angular</option>
-                                                                    <option value="angular">React</option>
-                                                                </select>
-                                                                <div className="invalid-feedback">
-                                                                    Please select a one.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-12">
-                                                        <div className="row">
-                                                            <div className="col-lg-2">
-                                                                <div class="form-check custom-checkbox mb-3">
-                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
-                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-2">
-                                                                <div class="form-check custom-checkbox mb-3">
-                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
-                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-2">
-                                                                <div class="form-check custom-checkbox mb-3">
-                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
-                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-2">
-                                                                <div class="form-check custom-checkbox mb-3">
-                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
-                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-2">
-                                                                <div class="form-check custom-checkbox mb-3">
-                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
-                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-2">
-                                                                <div class="form-check custom-checkbox mb-3">
-                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
-                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-2">
-                                                                <div class="form-check custom-checkbox mb-3">
-                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
-                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-2">
-                                                                <div class="form-check custom-checkbox mb-3">
-                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
-                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-2">
-                                                                <div class="form-check custom-checkbox mb-3">
-                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
-                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-                                                                </div>
-                                                            </div>
-                                                            <div className="col-lg-2">
-                                                                <div class="form-check custom-checkbox mb-3">
-                                                                    <input type="checkbox" className="form-check-input" id="customCheckBox1" required />
-                                                                    <label className="form-check-label" for="customCheckBox1">Checkbox 1</label>
-                                                                </div>
-                                                            </div>
 
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="mb-3 row">
-                                                            <label
-                                                                className="col-lg-4 col-form-label"
-                                                                htmlFor="validationCustom05"
-                                                            >
-                                                                Service Month Given
-                                                                <span className="text-danger">*</span>
-                                                            </label>
-                                                            <div className="col-lg-7">
-                                                                <select
-                                                                    className="default-select wide form-control"
-                                                                    id="validationCustom05"
-                                                                >
-                                                                    <option data-display="Select">
-                                                                        Please select
-                                                                    </option>
-                                                                    <option value="html">HTML</option>
-                                                                    <option value="css">CSS</option>
-                                                                    <option value="javascript">JavaScript</option>
-                                                                    <option value="angular">Angular</option>
-                                                                    <option value="angular">React</option>
-                                                                </select>
-                                                                <div className="invalid-feedback">
-                                                                    Please select a one.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-lg-6">
-                                                        <div className="mb-3 row">
-                                                            <label
-                                                                className="col-lg-4 col-form-label"
-                                                                htmlFor="validationCustom05"
-                                                            >
-                                                                Sub-Admin
-                                                                <span className="text-danger">*</span>
-                                                            </label>
-                                                            <div className="col-lg-7">
-                                                                <select
-                                                                    className="default-select wide form-control"
-                                                                    id="validationCustom05"
-                                                                >
-                                                                    <option data-display="Select">
-                                                                        Please select
-                                                                    </option>
-                                                                    <option value="html">HTML</option>
-                                                                    <option value="css">CSS</option>
-                                                                    <option value="javascript">JavaScript</option>
-                                                                    <option value="angular">Angular</option>
-                                                                    <option value="angular">React</option>
-                                                                </select>
-                                                                <div className="invalid-feedback">
-                                                                    Please select a one.
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="col-xl-12">
-                                                        <div className="mb-3">
+        </ >
+    )
 
-                                                            <button
-                                                                type="submit"
-                                                                className="btn btn-primary"
-                                                            >
-                                                                Submit
-                                                            </button>
+}
 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            )
-        </>
-    );
-};
 
-export default Sign_Up_Clients;
+export default Sign_Up_Clients
+
