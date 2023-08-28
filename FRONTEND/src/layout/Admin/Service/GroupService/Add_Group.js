@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as valid_err from '../../../../Utils/Common_Messages';
-import { Email_regex, Mobile_regex } from '../../../../Utils/Common_regex';
+// import { Email_regex, Mobile_regex } from '../../../../Utils/Common_regex';
 import { useDispatch } from 'react-redux';
 import Content from '../../../../Components/Dashboard/Content/Content';
 import { Service_By_Catagory, Get_All_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
 import { Add_Group } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 
