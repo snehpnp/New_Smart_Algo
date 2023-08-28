@@ -14,7 +14,7 @@ class Employee {
     // USER ADD 
     async AddEmployee(req, res) {
         try {
-            const { FullName, UserName, Email, PhoneNo, StartDate, EndDate, Role } = req.body;
+            const { FullName, UserName, Email, PhoneNo, StartDate, EndDate, Role,parent_id,parent_role } = req.body;
 
             // IF ROLE NOT EXIST TO CHECK
             const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
@@ -74,7 +74,9 @@ class Employee {
                 StartDate: StartDate,
                 EndDate: EndDate,
                 Role: Role.toUpperCase(),
-                client_key: client_key
+                client_key: client_key,
+                parent_id:parent_id,
+                parent_role:parent_role
 
             });
 

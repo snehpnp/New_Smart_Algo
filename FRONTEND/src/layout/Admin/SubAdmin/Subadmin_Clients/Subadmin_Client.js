@@ -11,6 +11,8 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { Get_All_SUBADMIN_CLIENT } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
+import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
@@ -26,13 +28,39 @@ const SubadminClient = () => {
         loading: true,
         data: []
     });
-
+    const [getAllsubadmins, setAllsubadmins] = useState({
+        loading: true,
+        data: []
+    });
 
     const data = async () => {
-        await dispatch(GET_ALL_CLIENTS()).unwrap()
+        await dispatch(Get_All_SUBADMIN_CLIENT()).unwrap()
             .then((response) => {
                 if (response.status) {
-                    setAllClients({
+                    if (first == "all") {
+                        setAllClients({
+                            loading: false,
+                            data: response.data
+                        });
+                    } else {
+                        var filter_data = response.data.filter((data) => {
+                            return data.parent_id == first
+                        })
+
+                        setAllClients({
+                            loading: false,
+                            data: filter_data
+                        });
+                    }
+
+                }
+            })
+    }
+    const data1 = async () => {
+        await dispatch(Get_All_SUBADMIN()).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setAllsubadmins({
                         loading: false,
                         data: response.data
                     });
@@ -41,7 +69,8 @@ const SubadminClient = () => {
     }
     useEffect(() => {
         data()
-    }, [])
+        data1()
+    }, [first])
 
     const columns = [
         {
@@ -71,13 +100,13 @@ const SubadminClient = () => {
             formatter: (cell, row) => (
                 <>
                     <label class="switch" >
-                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false}/>
-                            <span class="slider round"></span>
+                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false} />
+                        <span class="slider round"></span>
                     </label>
 
                 </>
 
-                
+
             ),
         },
         {
@@ -101,26 +130,41 @@ const SubadminClient = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All subadmin Clients" button_title="Add Client" route="/client/add">
+                        <Content Page_title="All Subadmin Clients">
+                            <div className="col-lg-6">
+                                <div className="mb-3 row">
+                                    <div className="col-lg-7">
+                                        <select
+                                            className="default-select wide form-control"
+                                            id="validationCustom05"
+                                            onChange={(e) => setfirst(e.target.value)}
+                                        >
+                                            <option disabled>
+                                                Please Select Catagory
+                                            </option>
+                                            <option selected value="all">
+                                                All
+                                            </option>
+                                            {getAllsubadmins.data && getAllsubadmins.data.map((item) => {
+                                                return <>
+                                                    <option value={item._id}>{item.FullName}</option>
+                                                </>
+                                            })}
 
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (
                                     'No data found') :
                                     <>
+
                                         <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
                                     </>
                             }
-                            {
-                                showModal ?
-                                    <>
-                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
-                                        //  handleClose={setshowModal(false)}
-                                        >
-                                        </Modal >
-                                    </>
-                                    : ""
-                            }
-                        </Theme_Content>
+                        </Content>
                     </>
             }
 

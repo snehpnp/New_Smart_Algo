@@ -22,3 +22,18 @@ export async function GETALL_SUB_ADMINS(data , token) {
     }
 
 }
+// Admin Dashboard
+export async function GETALL_SUB_ADMINS_CLIENTS(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/subadmin/clients`, data ,{
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

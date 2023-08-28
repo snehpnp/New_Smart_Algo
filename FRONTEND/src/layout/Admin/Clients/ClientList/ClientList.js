@@ -62,6 +62,24 @@ const AllClients = () => {
             text: 'Phone Number'
         },
         {
+            dataField: 'CreateDate',
+            text: 'CreateDate',
+            formatter: (cell, row) => cell.split('T')[0] 
+           
+        },
+        {
+            dataField: 'CreateDate',
+            text: 'CreateDate',
+            formatter: (cell, row) => cell.split('T')[0] 
+           
+        }, 
+                 {
+            dataField: 'CreateDate',
+            text: 'CreateDate',
+            formatter: (cell, row) => cell.split('T')[0] 
+           
+        },
+        {
             dataField: 'Otp',
             text: 'Password'
         },

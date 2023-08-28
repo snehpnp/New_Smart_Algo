@@ -148,30 +148,6 @@ const ServicesList = () => {
 
 
 
-            {/*
-            <Content Page_title="Company Theme">
-                {AllServices.loading ? (
-                    <Loader />
-                ) : AllServices.data && AllServices.data.length === 0 ? (
-                    'No data found'
-                ) : (
-                    <FullDataTable TableColumns={columns} tableData={AllServices.data} />
-                )}
-            </Content>
- */}
-
-            {/*
-<Content Page_title="Company Theme">
-            {AllServices.loading ? (
-                <Loader />
-            ) : AllServices.data && AllServices.data.length === 0 ? (
-                'No data found'
-            ) : (
-                <FullDataTable TableColumns={columns} tableData={AllServices.data} />
-            )}
-        </Content>
- */}
-
         </ >
     );
 }
