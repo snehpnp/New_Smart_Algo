@@ -31,7 +31,7 @@ const HelpCenter = () => {
     ];
 
     return (
-        <Content Page_title="Signals">
+        <Content Page_title="Help Center">
             <BasicDataTable tableData={columns} TableColumns={columns} dropdown={false} />
         </Content>
         )
