@@ -15,11 +15,7 @@ const MsgBroadCast = () => {
     })
     return <>
         <Content Page_title="Message Broadcast">
-        <Formikform 
-        fieldtype={fields.filter(field => !field.showWhen)} 
-        formik={formik} 
-        btn_name="Send" 
-        style={{ width:100}}/>
+        <Formikform fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Send" />
         </Content>
     </>
 }
