@@ -64,20 +64,20 @@ const AllClients = () => {
         {
             dataField: 'CreateDate',
             text: 'CreateDate',
-            formatter: (cell, row) => cell.split('T')[0] 
-           
+            formatter: (cell, row) => cell.split('T')[0]
+
         },
         {
             dataField: 'CreateDate',
             text: 'CreateDate',
-            formatter: (cell, row) => cell.split('T')[0] 
-           
-        }, 
-                 {
+            formatter: (cell, row) => cell.split('T')[0]
+
+        },
+        {
             dataField: 'CreateDate',
             text: 'CreateDate',
-            formatter: (cell, row) => cell.split('T')[0] 
-           
+            formatter: (cell, row) => cell.split('T')[0]
+
         },
         {
             dataField: 'Otp',
@@ -89,20 +89,60 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <>
                     <label class="switch" >
-                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false}/>
-                            <span class="slider round"></span>
+                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false} />
+                        <span class="slider round"></span>
                     </label>
 
                 </>
 
-                
+
+            ),
+        },
+        {
+            dataField: 'ActiveStatus',
+            text: 'Go To Dashboard',
+            formatter: (cell, row) => (
+                <>
+                    Broker
+                </>
+
+
+            ),
+        },
+        {
+            dataField: 'ActiveStatus',
+            text: 'Dashboard',
+            formatter: (cell, row) => (
+                <>
+                    <button
+                        className="btn btn-new-block"
+                        style={row.AppLoginStatus == '0' && row.WebLoginStatus == '0' ? { backgroundColor: "#FF0000",color:"black" } : { backgroundColor: "#008000",color:"black" }}
+                    // onClick={() => goToDashboard(row.id, row.client_id)}
+                    >
+                        Dashboard
+                    </button>
+
+                </>
+
+
+            ),
+        },
+        {
+            dataField: 'TradingStatus',
+            text: 'TradingStatus',
+            formatter: (cell, row) => (
+                <>
+                <span style={(cell == "off" ||cell === null) ? { color: "#FF0000", fontSize: "40px" } : { color: "#008000", fontSize: "40px" }}>&#9679;</span>
+              </>
+
+
             ),
         },
         {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
-                <div>
+                <div style={{width:"120px"}}>
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </span>
