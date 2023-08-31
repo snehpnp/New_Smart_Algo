@@ -2,6 +2,8 @@
 const bcrypt = require("bcrypt");
 const db = require('../../Models');
 const User_model = db.user;
+const user_logs = db.user_logs;
+
 const Role_model = db.role;
 const Company_info = db.company_information;
 var dateTime = require('node-datetime');
@@ -102,7 +104,6 @@ class Employee {
 
     }
 
-
     // GET ALL GetAllClients
     async GetAllClients(req, res) {
         try {
@@ -138,7 +139,6 @@ class Employee {
             console.log("loginClients Error-", error);
         }
     }
-
 
     // GET ALL LOGIN CLIENTS
     async loginClients(req, res) {
@@ -199,6 +199,36 @@ class Employee {
             })
         } catch (error) {
             console.log("trading Clients Error-", error);
+        }
+    }
+
+     // GET ALL TRADING ON  CLIENTS
+     async GetTradingStatus(req, res) {
+        try {
+
+            // GET LOGIN CLIENTS
+            const GetAlluser_logs = await user_logs.find({
+                
+            });
+            const totalCount = GetAlluser_logs.length;
+            // console.log("totalCount", totalCount);
+            // IF DATA NOT EXIST
+            if (GetAlluser_logs.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All user_logs",
+                data: GetAlluser_logs,
+                // page: Number(page),
+                // limit: Number(limit),
+                totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+        } catch (error) {
+            console.log("trading status Error-", error);
         }
     }
 }

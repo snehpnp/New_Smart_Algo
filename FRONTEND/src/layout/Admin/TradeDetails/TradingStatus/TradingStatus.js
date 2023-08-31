@@ -11,6 +11,8 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { GET_ALL_TRADING_STATUS } from '../../../../ReduxStore/Slice/Admin/tradedetails'
+
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
@@ -101,7 +103,7 @@ const TradingStatus = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All Clients" button_title="Add Client" route="/client/add">
+                        <Theme_Content Page_title="Trading Status" button_title="" route="/client/add" button_status={false}>
 
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (

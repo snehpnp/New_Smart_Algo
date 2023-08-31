@@ -194,3 +194,20 @@ export async function ADD_STRATEGY(data , token) {
     }
 
 }
+
+
+// GET ALL TRADING STATUS
+export async function GET_ALL_TRADINGSTATUS(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/tadingstatus`, data ,{
+             headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
