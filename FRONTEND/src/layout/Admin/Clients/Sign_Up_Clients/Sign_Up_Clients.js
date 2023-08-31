@@ -101,7 +101,7 @@ const Sign_Up_Clients = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All Signup Clients" button_title="Add Client" route="/client/add">
+                        <Theme_Content Page_title="All Signup Clients"  button_status={false}>
 
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (

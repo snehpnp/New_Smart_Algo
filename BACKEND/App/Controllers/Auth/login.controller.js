@@ -203,6 +203,14 @@ class Login {
                 { $set: addData }
             );
 
+            const user_login = new user_logs({
+                user_Id: EmailCheck._id,
+                login_status: "Panel off",
+                role: EmailCheck.Role,
+                system_ip: getIPAddress()
+            })
+            await user_login.save();
+
             // If Not Update User
             if (!result) {
                 return res.status(409).json({ status: false, msg: 'Server Side issue.', data: [] });

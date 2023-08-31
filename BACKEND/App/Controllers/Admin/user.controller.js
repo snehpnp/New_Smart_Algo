@@ -16,7 +16,7 @@ class Employee {
     // USER ADD 
     async AddEmployee(req, res) {
         try {
-            const { FullName, UserName, Email, PhoneNo, StartDate, EndDate, Role,parent_id,parent_role } = req.body;
+            const { FullName, UserName, Email, PhoneNo, StartDate, EndDate, Role, parent_id, parent_role } = req.body;
 
             // IF ROLE NOT EXIST TO CHECK
             const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
@@ -77,8 +77,8 @@ class Employee {
                 EndDate: EndDate,
                 Role: Role.toUpperCase(),
                 client_key: client_key,
-                parent_id:parent_id,
-                parent_role:parent_role
+                parent_id: parent_id,
+                parent_role: parent_role
 
             });
 
@@ -202,14 +202,40 @@ class Employee {
         }
     }
 
-     // GET ALL TRADING ON  CLIENTS
-     async GetTradingStatus(req, res) {
+    // GET ALL TRADING ON  CLIENTS
+    async GetTradingStatus(req, res) {
         try {
 
             // GET LOGIN CLIENTS
-            const GetAlluser_logs = await user_logs.find({
-                
-            });
+
+            const GetAlluser_logs = await user_logs.aggregate([
+                {
+                  $lookup: {
+                    from: "users",
+                    localField: "user_Id",
+                    foreignField: "_id",
+                    as: "userinfo",
+                  },
+                },
+                {
+                    $unwind: '$userinfo', // Unwind the 'categoryResult' array
+                  },
+                  {
+                    $project: {
+                      'userinfo.FullName': 1,
+                      login_status:1,
+                      trading_status:1,
+                      message:1,
+                      role:1,
+                      system_ip:1,
+                      createdAt:1       
+                    },
+                  },
+              ]);
+
+            // const GetAlluser_logs = await user_logs.find({
+
+            // });
             const totalCount = GetAlluser_logs.length;
             // console.log("totalCount", totalCount);
             // IF DATA NOT EXIST

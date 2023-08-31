@@ -130,7 +130,8 @@ const SubadminClient = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Content Page_title="All Subadmin Clients">
+                        <Theme_Content Page_title="All Subadmin Clients" button_status={false}>
+                            
                             <div className="col-lg-6">
                                 <div className="mb-3 row">
                                     <div className="col-lg-7">
@@ -164,7 +165,7 @@ const SubadminClient = () => {
                                         <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
                                     </>
                             }
-                        </Content>
+                        </Theme_Content>
                     </>
             }
 
