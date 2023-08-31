@@ -1,6 +1,7 @@
 "use strict";
 const db = require('../../Models');
 const strategy_model = db.strategy
+const strategy_client_model = db.strategy_client
 const { formattedDateTime } = require('../../Helper/time.helper')
 class strategy {
 
@@ -155,7 +156,38 @@ class strategy {
         }
     }
 
-
+    // DELETE STRATEGY IN A COLLECTION
+    async DeleteStragegy(req, res) {
+        try {
+            const { _id } = req.body;
+    
+            // CHECK IF STRATEGY EXISTS
+            const strategy_check = await strategy_model.findOne({ _id: _id });
+            if (!strategy_check) {
+                return res.status(409).json({ status: false, msg: 'Strategy does not exist', data: [] });
+            }
+    
+            // CHECK IF STRATEGY EXISTS IN STRATEGY CLIENT
+            const strategy_client_check = await strategy_client_model.findOne({ strategy_id: _id });
+            if (strategy_client_check) {
+                return res.status(409).json({ status: false, msg: 'Strategy is assigned to a client', data: [] });
+            }
+    
+            // Delete the strategy
+            const deleteResult = await strategy_model.deleteOne({ _id: _id });
+            if (deleteResult.deletedCount === 1) {
+                return res.status(200).json({ status: true, msg: 'Strategy deleted successfully!', data: [] });
+            } else {
+                return res.status(500).json({ status: false, msg: 'Error deleting strategy', data: [] });
+            }
+    
+        } catch (error) {
+            console.log("Delete Strategy Error:", error);
+            return res.status(500).json({ status: false, msg: 'An error occurred', data: [] });
+        }
+    }
+    
+    
 
 }
 

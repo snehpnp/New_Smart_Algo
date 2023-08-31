@@ -34,9 +34,7 @@ const ServicesList = () => {
 
 
 
-
-
-    useEffect(async () => {
+    const data = async () => {
         await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -46,6 +44,10 @@ const ServicesList = () => {
                     });
                 }
             })
+    }
+
+    useEffect(() => {
+        data()
     }, [])
 
 
@@ -72,9 +74,9 @@ const ServicesList = () => {
                 <div>
                     <button
                         className="btn  btn-color"
-                    onClick={(e) => setshowModal(true)}
+                        onClick={(e) => setshowModal(true)}
                     >
-                                                 <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
 
                     </button>
                 </div>
@@ -127,24 +129,19 @@ const ServicesList = () => {
                                 AllGroupServices.data && AllGroupServices.data.length === 0 ? (
                                     'No data found') :
                                     <>
-
                                         <FullDataTable TableColumns={columns} tableData={AllGroupServices.data} />
                                     </>
-
-
                             }
-
                             {
                                 showModal ?
                                     <>
-                                        < Modal isOpen={showModal}  backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
+                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
                                         //  handleClose={setshowModal(false)}
-                                          >
+                                        >
                                         </Modal >
                                     </>
                                     : ""
                             }
-
                         </Theme_Content>
                     </>
             }

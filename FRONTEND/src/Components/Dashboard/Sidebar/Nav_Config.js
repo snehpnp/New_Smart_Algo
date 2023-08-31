@@ -1,5 +1,4 @@
 
-import { Signal } from 'lucide-react';
 
 export const admin_sidebar = [
     {
@@ -20,14 +19,12 @@ export const admin_sidebar = [
         'id': 3,
         "name": 'Clients',
         "Icon": "Users",
-
         "Data": [
             {
                 'id': 1,
                 "name": 'Add Client',
                 "route": "/admin/client/add",
             },
-
             {
                 'id': 2,
                 "name": 'Clients',
@@ -38,7 +35,6 @@ export const admin_sidebar = [
                 "name": 'SignUp - Clients',
                 "route": "/admin/signupclients",
             },
-
         ]
     },
     {
@@ -50,13 +46,11 @@ export const admin_sidebar = [
                 'id': 1,
                 "name": 'All Subadmins',
                 "route": "/admin/allsubadmins",
-
             },
             {
                 'id': 2,
                 "name": 'Subadmin Clients',
                 "route": "/admin/subadminclients",
-
             },
         ]
     },
@@ -69,31 +63,26 @@ export const admin_sidebar = [
                 'id': 1,
                 "name": 'Signals',
                 "route": "/admin/signals",
-
             },
             {
                 'id': 2,
                 "name": 'Trade-History',
                 "route": "/admin/tradehistory",
-
             },
             {
                 'id': 3,
                 "name": 'Trading-Status',
                 "route": "/admin/tradingstatus",
-
             },
             {
                 'id': 4,
                 "name": 'Trade-Execution-Report',
                 "route": "/admin/tradeexecution",
-
             },
             {
                 'id': 5,
                 "name": '7Days-Entry-Only',
                 "route": "/admin/sevendaysentry",
-
             },
         ]
     },
@@ -106,19 +95,40 @@ export const admin_sidebar = [
                 'id': 1,
                 "name": 'Transaction Licence',
                 "route": "/admin/allLicence",
-
             },
             {
                 'id': 2,
                 "name": 'Expired Licence',
                 "route": "/admin/expiredlicence",
-
             },
         ]
     },
 
     {
         'id': 7,
+        "name": 'Script Mgmt',
+        "Icon": "Wrench",
+        "Data": [
+            {
+                'id': 1,
+                "name": 'All Services',
+                "route": "/admin/allservices",
+
+            },
+            {
+                'id': 2,
+                "name": 'Group Services',
+                "route": "/admin/groupservices",
+            },
+            {
+                'id': 3,
+                "name": "Strategies",
+                "route": "/admin/strategies",
+            },
+        ]
+    },
+    {
+        'id': 8,
         "name": 'Support',
         "Icon": "HelpingHand",
         "Data": [
@@ -139,36 +149,17 @@ export const admin_sidebar = [
                 "name": 'Api-Create-Info',
                 "route": "/admin/apicreateinfo",
                 "Icon": "WalletCards",
-
                 "Data": []
             },
         ]
 
     },
-    {
-        'id': 8,
-        "name": 'Script Mgmt',
-        "Icon": "Wrench",
-        "Data": [
-            {
-                'id': 1,
-                "name": 'All Service',
-                "route": "/admin/allservices",
 
-            },
-            {
-                'id': 2,
-                "name": 'Group Service',
-                "route": "/admin/groupservices",
-            },
-        ]
-    },
       {
         'id': 9,
         "name": 'Report',
         "Icon": "Repeat2",
         "route": "/admin/reports",
-
         "Data": []
     },
     {
@@ -227,7 +218,6 @@ export const sub_admin_sidebar = [
         "name": 'Signals',
         "Icon": "Signal",
         "route": "/subradmin/signals",
-
         "Data": []
     },
     {
@@ -235,7 +225,6 @@ export const sub_admin_sidebar = [
         "name": 'All Clients',
         "Icon": "Users",
         "route": "/subradmin/clients",
-
         "Data": []
     },
     {
@@ -243,7 +232,6 @@ export const sub_admin_sidebar = [
         "name": 'All Services',
         "Icon": "Wrench",
         "route": "/subradmin/services",
-
         "Data": []
     },
     {
@@ -251,7 +239,6 @@ export const sub_admin_sidebar = [
         "name": 'Group Services',
         "Icon": "Frame",
         "route": "/subradmin/groupservices",
-
         "Data": []
     },
     {
@@ -259,7 +246,6 @@ export const sub_admin_sidebar = [
         "name": 'Trade History',
         "Icon": "CandlestickChart",
         "route": "/subradmin/tradehistory",
-
         "Data": []
 
     },
@@ -268,7 +254,6 @@ export const sub_admin_sidebar = [
         "name": 'Trading Status',
         "Icon": "Activity",
         "route": "/subradmin/tradingstatus",
-
         "Data": []
     },
     {
@@ -276,7 +261,6 @@ export const sub_admin_sidebar = [
         "name": 'Api Create Info',
         "Icon": "WalletCards",
         "route": "/subradmin/apicreateinfo",
-
         "Data": []
     },
     {
@@ -284,7 +268,6 @@ export const sub_admin_sidebar = [
         "name": 'Help Center',
         "Icon": "HelpingHand",
         "route": "/subradmin/helpcenter",
-
         "Data": []
     },
 ]
@@ -297,7 +280,6 @@ export const Client = [
         "name": 'Dashboard',
         "Icon": "LayoutDashboard",
         "route": "/client/dashobard",
-
         "Data": []
     },
     {
@@ -305,7 +287,6 @@ export const Client = [
         "name": 'Signals',
         "Icon": "Signal",
         "route": "/client/signals",
-
         "Data": []
     },
     {
@@ -313,7 +294,6 @@ export const Client = [
         "name": 'Trade History',
         "Icon": "FolderClock",
         "route": "/client/tradehistory",
-
         "Data": []
     },
     {
@@ -322,7 +302,6 @@ export const Client = [
         "name": 'Trading Status',
         "Icon": "Activity",
         "route": "/client/tradingstatus",
-
         "Data": []
     },
     {
@@ -330,7 +309,6 @@ export const Client = [
         "name": 'Broker Response',
         "Icon": "ArrowRightLeft",
         "route": "/client/brokerresponse",
-
         "Data": []
     },
     {
@@ -338,7 +316,6 @@ export const Client = [
         "name": 'Api Create Info',
         "Icon": "WalletCards",
         "route": "/client/apicreateinfo",
-
         "Data": []
     },
     {
@@ -346,7 +323,6 @@ export const Client = [
         "name": 'Help Center',
         "Icon": "HelpingHand",
         "route": "/client/helpcenter",
-
         "Data": []
     },
     {
@@ -354,7 +330,6 @@ export const Client = [
         "name": 'Strategy Desc.',
         "Icon": "ScatterChart",
         "route": "/client/strategydesc",
-
         "Data": []
     },
 ]

@@ -74,13 +74,11 @@ const userModel = Schema({
     },
     AppLoginStatus: {
         type: String,
-        required: true,
         enum: ['0', '1'],
         default: '0'
     },
     WebLoginStatus: {
         type: String,
-        required: true,
         enum: ['0', '1'],
         default: '0'
     },
@@ -95,11 +93,15 @@ const userModel = Schema({
         trim: true,
         default: null
     },
-    client_key: {
+    parent_id: {
         type: String,
         required: true,
-        trim: true,
-        default: null
+
+    },
+    parent_role: {
+        type: String,
+        required: true,
+       
     },
     reset_password_status: {
         type: String,

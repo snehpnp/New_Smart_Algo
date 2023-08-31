@@ -1,12 +1,14 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/role-supports-aria-props */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useRef } from 'react'
+import React, { useRef , useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config'
-import { Signal, Users, Wrench, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Rocket  , Paintbrush } from 'lucide-react';
+import { Signal, Users, Wrench, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Rocket, Paintbrush } from 'lucide-react';
 import Test from "../../../test"
 import html2canvas from 'html2canvas';
+import $ from "jquery";
+
 
 
 
@@ -16,6 +18,10 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
     const roles = JSON.parse(localStorage.getItem('user_role'))
+
+useEffect(() => {
+    // $(".metismenu li").addClass("mm-active");
+}, [])
 
 
     return (
@@ -81,27 +87,24 @@ const Sidebar = ({ ShowSidebar }) => {
                     <ul className="metismenu" id="menu">
                         {
                             roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
-
-
                                 return <>
-                                    <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
+                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                         {item.Data.length > 0 ? <>
                                             <a
-                                                // className="has-arrow "
-                                                href="javascript:void()"
-                                                aria-expanded="false"
-                                                className={`has-arrow `}
+                                                className="has-arrow"
+                                                aria-expanded={location.pathname === item.route && item.route ? true :false}
+                                                // className={`has-arrow `}
                                             >
                                                 <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
                                                 <span className="nav-text">{item.name}</span>
                                             </a>
                                         </> : ""}
-                                        <ul aria-expanded="false">
+                                        <ul aria-expanded='false'>
                                             {item.Data.length > 0 ?
                                                 item.Data.map((nested_item) => {
                                                     return <>
-                                                        <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
-                                                            <Link href="javascript:void()" to={nested_item.route}>{nested_item.name}</Link>
+                                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                            <Link  to={nested_item.route}>{nested_item.name}</Link>
                                                         </li>
                                                     </>
                                                 })
@@ -110,7 +113,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                     </li>
                                     {item.Data.length === 0 ? <>
 
-                                        <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
+                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                             <Link to={item.route} className="" aria-expanded="false">
                                                 <IconComponent key={item.id} icon={item.Icon} />
                                                 <span className="nav-text">{item.name}</span>
@@ -122,7 +125,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                 </>
                             }) : roles === 'SUPERADMIN' ? supper_admin_sidebar && supper_admin_sidebar.map((item) => {
                                 return <>
-                                    <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
+                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                         {item.Data.length > 0 ? <>
 
                                             <Link
@@ -139,8 +142,8 @@ const Sidebar = ({ ShowSidebar }) => {
                                             {item.Data.length > 0 ?
                                                 item.Data.map((nested_item) => {
                                                     return <>
-                                                        <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
-                                                            <Link  to={nested_item.route}>{nested_item.name}</Link>
+                                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                            <Link to={nested_item.route}>{nested_item.name}</Link>
                                                         </li>
                                                     </>
                                                 })
@@ -148,7 +151,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                         </ul>
                                     </li>
                                     {item.Data.length === 0 ? <>
-                                        <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
+                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                             <Link to={item.route} className="" aria-expanded="false">
                                                 <IconComponent key={item.id} icon={item.Icon} />
 
@@ -162,7 +165,7 @@ const Sidebar = ({ ShowSidebar }) => {
                             }) :
                                 roles === 'SUBADMIN' ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
                                     return <>
-                                        <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
+                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                             {item.Data.length > 0 ? <>
 
                                                 <Link
@@ -179,7 +182,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                                 {item.Data.length > 0 ?
                                                     item.Data.map((nested_item) => {
                                                         return <>
-                                                            <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
+                                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                                 <Link to={nested_item.route}>{nested_item.name}</Link>
                                                             </li>
                                                         </>
@@ -188,7 +191,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                             </ul>
                                         </li>
                                         {item.Data.length === 0 ? <>
-                                            <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
+                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                 <Link to={item.route} className="" aria-expanded="false">
                                                     <IconComponent key={item.id} icon={item.Icon} />
                                                     {/* <i className="flaticon-013-checkmark" /> */}
@@ -200,9 +203,9 @@ const Sidebar = ({ ShowSidebar }) => {
 
                                     </>
                                 }) :
-                                    roles ==="USER"? Client && Client.map((item) => {
+                                    roles === "USER" ? Client && Client.map((item) => {
                                         return <>
-                                            <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
+                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                 {item.Data.length > 0 ? <>
 
                                                     <Link
@@ -219,7 +222,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                                     {item.Data.length > 0 ?
                                                         item.Data.map((nested_item) => {
                                                             return <>
-                                                                <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
+                                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                                     <Link to={nested_item.route}>{nested_item.name}</Link>
                                                                 </li>
                                                             </>
@@ -228,7 +231,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                                 </ul>
                                             </li>
                                             {item.Data.length === 0 ? <>
-                                                <li className={`${location.pathname ===item.route &&  item.route ? 'mm-active' : ""}`}>
+                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                     <Link to={item.route} className="" aria-expanded="false">
                                                         <IconComponent key={item.id} icon={item.Icon} />
 
@@ -299,7 +302,7 @@ const IconComponent = ({ icon }) => {
             case 'ScatterChart':
                 return <ScatterChart className='me-3' />;
             case 'Paintbrush':
-                return <Paintbrush  className='me-3' />;
+                return <Paintbrush className='me-3' />;
 
 
             default:

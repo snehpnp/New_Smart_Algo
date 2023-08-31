@@ -62,7 +62,7 @@ const LogoutAllUsers = async () => {
     if (WebLoginUser.length > 0) {
         WebLoginUser.map(async (user) => {
             const updateValues = { WebLoginStatus: 0 };
-            const updatedDocument = await User.findByIdAndUpdate(user._id, updateValues, {
+            const updatedDocument = await User.findByIdAndUpdate(user._id, `updateValues`, {
                 new: true, // To return the updated document
             });
 
@@ -92,25 +92,13 @@ const service_token_update = () => {
 
     axios.request(config)
         .then((response) => {
-
-            fs.writeFile(filePath, JSON.stringify(response.data), 'utf8', (err) => {
-                if (err) {
-                    console.error('Error writing to the file:', err);
-                } else {
-                    console.log('Content written to the file successfully!');
-                }
-            });
-
-            // console.log("response", response.data);
-
             var Cash_stocks = []
             response.data.map(async (item) => {
-                if (item.exch_seg == "NSE") {
-                    await Cash_stocks.push(item)
+                if (await item.exch_seg == "NSE") {
+                    Cash_stocks.push(item)
                 }
-
             });
-            // console.log(Cash_stocks);
+
             return Cash_stocks;
 
         })
@@ -120,4 +108,4 @@ const service_token_update = () => {
 
 }
 
-module.exports= {service_token_update}
+module.exports = { service_token_update }

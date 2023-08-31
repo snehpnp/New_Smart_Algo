@@ -13,6 +13,8 @@ import SignUpClients from '../layout/Admin/Clients/Sign_Up_Clients/Sign_Up_Clien
 //  Clients
 import AllSubadmin from '../layout/Admin/SubAdmin/Subadmins/AllSubadmin';
 import SubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/Subadmin_Client"
+import AddSubadmin from "../layout/Admin/SubAdmin/Subadmins/AddSubadmin"
+
 
 // Trade Details
 import Signals from "../layout/Admin/TradeDetails/Signals/Signals"
@@ -47,8 +49,15 @@ import ReleaseUpdate from '../layout/Admin/ReleaseUpdate/ReleaseUpdate';
 
 
 // System
-
 import System from '../layout/Admin/System/System';
+
+// Strategy
+
+import AllStrategy from '../layout/Admin/Service/AllStrategy/AllStrategy';
+import AddStrategy from '../layout/Admin/Service/AllStrategy/AddStrategy';
+import EditStrategy from '../layout/Admin/Service/AllStrategy/EditStrategy';
+
+
 
 
 
@@ -71,6 +80,10 @@ const Admin = () => {
                 <Route exact path="/signupclients" element={<SignUpClients />} />
                 <Route exact path="/allsubadmins" element={<AllSubadmin />} />
                 <Route exact path="/subadminclients" element={<SubadminClient />} />
+                <Route exact path="/allsubadmins/add" element={<AddSubadmin />} />
+                <Route exact path="/strategies" element={<AllStrategy />} />
+                <Route exact path="/strategies/add" element={<AddStrategy />} />
+                <Route exact path="/strategies/edit/:id" element={<EditStrategy />} />
                 <Route exact path="/sevendaysentry" element={<SevenDaysEntry />} />
                 <Route exact path="/tradeexecution" element={<TradeExecutionReport />} />
                 <Route exact path="/tradingstatus" element={<TradingStatus />} />
