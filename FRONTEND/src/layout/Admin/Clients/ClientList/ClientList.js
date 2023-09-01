@@ -10,12 +10,12 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
-
 const AllClients = () => {
+    const navigate = useNavigate()
 
     const dispatch = useDispatch()
 
@@ -42,6 +42,35 @@ const AllClients = () => {
     useEffect(() => {
         data()
     }, [])
+
+
+
+
+    // GO TO DASHBOARD 
+    const goToDashboard = async (asyncid, email) => {
+
+        let req = {
+            Email: email,
+          
+        };
+        await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    console.log(response);
+
+                    window.open('/')
+                    navigate("/client/dashboard")
+                    localStorage.setItem("gotodashboard","true");
+                    localStorage.setItem("user_details", JSON.stringify(response.data));
+                    localStorage.setItem("user_role", JSON.stringify(response.data.Role));
+                
+                }
+            })
+
+    }
+
+
+
 
     const columns = [
         {
@@ -116,8 +145,13 @@ const AllClients = () => {
                 <>
                     <button
                         className="btn btn-new-block"
-                        style={row.AppLoginStatus == '0' && row.WebLoginStatus == '0' ? { backgroundColor: "#FF0000",color:"black" } : { backgroundColor: "#008000",color:"black" }}
-                    // onClick={() => goToDashboard(row.id, row.client_id)}
+                        style={
+                            row.AppLoginStatus === '0' && row.WebLoginStatus === '0'
+                                ? { color: "#FF0000" }
+                                : { color: "#008000" }
+                        }
+                        onClick={() => goToDashboard(row._id, row.Email)}
+                        disabled={row.AppLoginStatus === '0' && row.WebLoginStatus === '0'}
                     >
                         Dashboard
                     </button>
@@ -132,8 +166,8 @@ const AllClients = () => {
             text: 'TradingStatus',
             formatter: (cell, row) => (
                 <>
-                <span style={(cell == "off" ||cell === null) ? { color: "#FF0000", fontSize: "40px" } : { color: "#008000", fontSize: "40px" }}>&#9679;</span>
-              </>
+                    <span style={(cell == "off" || cell === null) ? { color: "#FF0000", fontSize: "40px" } : { color: "#008000", fontSize: "40px" }}>&#9679;</span>
+                </>
 
 
             ),
@@ -142,7 +176,7 @@ const AllClients = () => {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
-                <div style={{width:"120px"}}>
+                <div style={{ width: "120px" }}>
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </span>

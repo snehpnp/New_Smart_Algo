@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY,ALL_GROUP_SERVICES ,ALL_CLIENTS,GET_COMPANY_INFO,GET_ALL_TRADINGSTATUS} from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY,ALL_GROUP_SERVICES ,ALL_CLIENTS,GET_COMPANY_INFO,GET_ALL_TRADINGSTATUS,GO_TO_DASHBOARD} from "../../../Service/admin.service";
 
 
 
@@ -68,10 +68,22 @@ export const GET_COMPANY_INFOS = createAsyncThunk("get/company", async (data) =>
 });
 
 // GET ALL TRADING STATUS
-
 export const GET_ALL_TRADING_STATUS = createAsyncThunk("getall/tadingstatus", async (data) => {
     try {
         const res = await GET_ALL_TRADINGSTATUS(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+
+// GET ALL TRADING STATUS
+export const GO_TO_DASHBOARDS = createAsyncThunk("goToDashboard", async (data) => {
+    try {
+        const res = await GO_TO_DASHBOARD(data);
         // console.log("res" ,res);
         return await res;
     } catch (err) {
@@ -93,6 +105,8 @@ const AdminSlice = createSlice({
         allClients:[],
         companyInfo:[],
         getalltradingstatus:[],
+        goTodashboard:[],
+
 
 
 
@@ -135,6 +149,10 @@ const AdminSlice = createSlice({
         [GET_ALL_TRADING_STATUS.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, getalltradingstatus: payload, isLoading: false };
+        },
+        [GO_TO_DASHBOARDS.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, goTodashboard: payload, isLoading: false };
         },
     },
 });
