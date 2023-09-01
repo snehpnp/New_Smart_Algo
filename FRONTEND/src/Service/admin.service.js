@@ -211,3 +211,19 @@ export async function GET_ALL_TRADINGSTATUS(data , token) {
     }
 
 }
+
+// GET ALL TRADING STATUS
+export async function GO_TO_DASHBOARD(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}goToDashboard`, data ,{
+             headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

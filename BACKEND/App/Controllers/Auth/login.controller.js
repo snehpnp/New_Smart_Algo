@@ -203,6 +203,14 @@ class Login {
                 { $set: addData }
             );
 
+            const user_login = new user_logs({
+                user_Id: EmailCheck._id,
+                login_status: "Panel off",
+                role: EmailCheck.Role,
+                system_ip: getIPAddress()
+            })
+            await user_login.save();
+
             // If Not Update User
             if (!result) {
                 return res.status(409).json({ status: false, msg: 'Server Side issue.', data: [] });
@@ -334,6 +342,46 @@ class Login {
 
         }
     }
+
+
+    // GO TO DASHBOARD
+    async goToDashboard(req, res) {
+        try {
+            console.log("============================");
+            const { Email } = req.body;
+            // IF Login Time Email CHECK
+            const EmailCheck = await User.findOne({ Email: Email });
+            if (!EmailCheck) {
+                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+            }
+            // JWT TOKEN CREATE
+            var token = jwt.sign({ id: EmailCheck._id }, process.env.SECRET, {
+                expiresIn: 3600 // 10 hours
+            });
+            var msg = {
+                'gotodashboard': true,
+                'Email': EmailCheck.Email,
+                'user_id': EmailCheck._id,
+                'token': token,
+                'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
+
+            };
+
+            try {
+                logger.info('Go To Dashboard Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
+                res.send({ status: true, msg: "Go To Dashboard Succesfully", data: msg })
+            } catch (error) {
+                console.log("Some Error in a login", error);
+            }
+        }
+        catch (error) {
+            console.log(error);
+            res.send({ status: false, msg: "Server Side error", data: error })
+        }
+
+    }
+
+
 }
 
 

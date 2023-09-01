@@ -10,9 +10,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
-import { GET_ALL_TRADING_STATUS } from '../../../../ReduxStore/Slice/Admin/tradedetails'
-
+import { GET_ALL_CLIENTS,GET_ALL_TRADING_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
@@ -31,7 +29,7 @@ const TradingStatus = () => {
 
 
     const data = async () => {
-        await dispatch(GET_ALL_CLIENTS()).unwrap()
+        await dispatch(GET_ALL_TRADING_STATUS()).unwrap()
             .then((response) => {
                 if (response.status) {
                     setAllClients({
@@ -39,6 +37,9 @@ const TradingStatus = () => {
                         data: response.data
                     });
                 }
+            })
+            .catch((err)=>{
+                console.log("err",err);
             })
     }
     useEffect(() => {
@@ -52,58 +53,81 @@ const TradingStatus = () => {
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: 'UserName',
+            dataField: 'userinfo.FullName',
             text: 'User Name'
         },
         {
-            dataField: 'Email',
-            text: 'Email'
+            dataField: 'login_status',
+            text: 'Login Status',
+            formatter: (cell, row) => cell == null || "" ? "-":cell
+            
         },
         {
-            dataField: 'PhoneNo',
-            text: 'Phone Number'
-        },
-        {
-            dataField: 'Otp',
-            text: 'Password'
-        },
-        {
-            dataField: 'ActiveStatus',
-            text: 'Status',
-            formatter: (cell, row) => (
-                <>
-                    <label class="switch" >
-                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false}/>
-                            <span class="slider round"></span>
-                    </label>
+            dataField: 'trading_status',
+            text: 'Trading Status',
+            formatter: (cell, row) => cell == null || "" ? "-":cell
 
-                </>
+            
+        },
+        {
+            dataField: 'message',
+            text: 'message',
+            formatter: (cell, row) => cell == null || "" ? "-":cell
+
+        },
+        
+        {
+            dataField: 'role',
+            text: 'role'
+        },
+        {
+            dataField: 'system_ip',
+            text: 'system_ip'
+        },
+       
+        {
+            dataField: 'createdAt',
+            text: 'Create Date',
+            formatter: (cell, row) => cell.split('T')[0] +"   "+cell.split('T')[1] 
+           
+        },
+        // {
+        //     dataField: 'ActiveStatus',
+        //     text: 'Status',
+        //     formatter: (cell, row) => (
+        //         <>
+        //             <label class="switch" >
+        //                 <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false}/>
+        //                     <span class="slider round"></span>
+        //             </label>
+
+        //         </>
 
                 
-            ),
-        },
-        {
-            dataField: 'actions',
-            text: 'Actions',
-            formatter: (cell, row) => (
-                <div>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-                    </span>
+        //     ),
+        // },
+        // {
+        //     dataField: 'actions',
+        //     text: 'Actions',
+        //     formatter: (cell, row) => (
+        //         <div>
+        //             <span data-toggle="tooltip" data-placement="top" title="Edit">
+        //                 <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+        //             </span>
+        //             <span data-toggle="tooltip" data-placement="top" title="Delete">
+        //                 <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+        //             </span>
 
-                </div>
-            ),
-        },
+        //         </div>
+        //     ),
+        // },
     ];
     return (
         <>
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="Trading Status" button_title="" route="/client/add" button_status={false}>
+                        <Theme_Content Page_title="Trading Status" button_status={false}  >
 
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (
