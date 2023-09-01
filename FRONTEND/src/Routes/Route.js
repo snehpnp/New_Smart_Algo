@@ -22,17 +22,8 @@ const Routing = () => {
   // const accessToken = localStorage.getItem("user_details").accessToken
 
   const roles = JSON.parse(localStorage.getItem('user_role'))
+  const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
 
-
-  // let roles = {
-  //   roles: ["SUPERADMIN"]
-  // }
-  // let roles = {
-  //   roles: ["ADMIN"]
-  // }
-  // let roles = {
-  //   roles: ["SUBADMIN"]
-  // }
 
 
   useEffect(() => {
@@ -55,9 +46,6 @@ const Routing = () => {
       //   navigate("/login");
       // }
     }
-    // else {
-    //   navigate("/login");
-    // }
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -58,11 +58,10 @@ const AllClients = () => {
                 if (response.status) {
                     console.log(response);
 
-                    window.open('/')
-                    navigate("/client/dashboard")
+                    navigate("/client/dashboard")     
                     localStorage.setItem("gotodashboard","true");
-                    localStorage.setItem("user_details", JSON.stringify(response.data));
-                    localStorage.setItem("user_role", JSON.stringify(response.data.Role));
+                    localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
+                    localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
                 
                 }
             })
