@@ -51,18 +51,18 @@ const AllClients = () => {
 
         let req = {
             Email: email,
-          
+
         };
         await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
             .then((response) => {
                 if (response.status) {
                     console.log(response);
 
-                    localStorage.setItem("gotodashboard","true");
+                    localStorage.setItem("gotodashboard", "true");
                     localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
                     localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
-                    navigate("/client/dashboard")     
-                
+                    navigate("/client/dashboard")
+
                 }
             })
 

@@ -1,0 +1,87 @@
+body {
+    background: #1D1F20;
+}
+
+$length: 672.1px;
+$length-half: $length / 2;
+$length-third: $length / 3;
+$length-two-thirds: $length-third * 2;
+
+.Button {
+    background: none;
+    padding: 0;
+    margin: 50px auto;
+    border: none;
+    display: block;
+    backface-visibility: hidden;
+    width: 300px;
+    height: 80px;
+    position: relative;
+    color: #98A5A6;
+    font-size: 18px;
+    transition: transform 300ms, color 300ms;
+    cursor: pointer;
+}
+
+
+.Button-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes outer-dashoffset {
+    0% {
+        stroke-dashoffset: 0;
+        stroke-dasharray: $length-half $length-half;
+    }
+
+    50% {
+        stroke-dasharray: $length-third $length-two-thirds;
+    }
+
+    100% {
+        stroke-dashoffset: $length;
+        stroke-dasharray: $length-half $length-half;
+    }
+}
+
+.Button-line--outer {
+    stroke-dasharray: $length-half $length-half;
+    stroke-dashoffset: 0;
+    animation: outer-dashoffset infinite linear 6s;
+}
+
+@keyframes inner-dashoffset {
+    0% {
+        stroke-dashoffset: 0;
+        stroke-dasharray: $length-half $length-half;
+    }
+
+    50% {
+        stroke-dasharray: $length-third $length-two-thirds;
+    }
+
+    100% {
+        stroke-dashoffset: -$length;
+        stroke-dasharray: $length-half $length-half;
+    }
+}
+
+.Button-line--inner {
+    stroke-dashoffset: 0;
+    stroke-dasharray: $length-half $length-half;
+    animation: inner-dashoffset infinite 5s;
+}
+
+.Button-content {
+    width: 100%;
+    height: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}

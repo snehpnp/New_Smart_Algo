@@ -128,6 +128,45 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
                                 </>
+                            }): user_role_goTo === "SUBADMIN" ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
+                                return <>
+                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                        {item.Data.length > 0 ? <>
+
+                                            <Link
+                                                className="has-arrow "
+                                                // href="javascript:void()"
+                                                aria-expanded="false"
+                                            >
+                                                <IconComponent key={item.id} icon={item.Icon} />
+
+                                                <span className="nav-text mx-2">{item.name}</span>
+                                            </Link>
+                                        </> : ""}
+                                        <ul aria-expanded="false">
+                                            {item.Data.length > 0 ?
+                                                item.Data.map((nested_item) => {
+                                                    return <>
+                                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                            <Link to={nested_item.route}>{nested_item.name}</Link>
+                                                        </li>
+                                                    </>
+                                                })
+                                                : ""}
+                                        </ul>
+                                    </li>
+                                    {item.Data.length === 0 ? <>
+                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                            <Link to={item.route} className="" aria-expanded="false">
+                                                <IconComponent key={item.id} icon={item.Icon} />
+
+                                                <span className="nav-text mx-2">{item.name}</span>
+                                            </Link>
+                                        </li>
+                                    </> : ""}
+
+
+                                </>
                             }): "" :
                                 roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
                                     return <>

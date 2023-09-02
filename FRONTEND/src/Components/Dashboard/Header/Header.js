@@ -12,6 +12,8 @@ const Header = ({ ChatBox }) => {
   const navigate = useNavigate()
 
   let gotodashboard = localStorage.getItem("gotodashboard")
+  let user_role = localStorage.getItem("user_role")
+
 
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id)
@@ -87,11 +89,16 @@ const Header = ({ ChatBox }) => {
 
 
   const redirectToAdmin = () => {
+
+
     localStorage.removeItem("gotodashboard");
     localStorage.removeItem("user_details_goTo");
     localStorage.removeItem("user_role_goTo");
+    user_role == "ADMIN" ?
+      navigate("/admin/allclients")
+      :
+      navigate("/admin/allsubadmins")
 
-    navigate("/admin/allclients")
   };
 
   return (
@@ -117,7 +124,7 @@ const Header = ({ ChatBox }) => {
                       type="button"
                       className="btn btn-color"
                     >
-                      Go to SubAdmin
+                      Go to Admin
                     </button>
                   </li> : ""
                 }
