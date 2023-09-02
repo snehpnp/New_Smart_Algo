@@ -4,13 +4,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
+import BasicDataTable from '../../../../Components/ExtraComponents/Datatable/BasicDataTable'
+import { Pencil, Trash2 } from 'lucide-react';
 import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
 import Loader from '../../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
-import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_ALL_CLIENTS,GET_ALL_TRADING_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { GET_ALL_CLIENTS, GET_ALL_TRADING_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
@@ -38,8 +39,8 @@ const TradingStatus = () => {
                     });
                 }
             })
-            .catch((err)=>{
-                console.log("err",err);
+            .catch((err) => {
+                console.log("err", err);
             })
     }
     useEffect(() => {
@@ -48,8 +49,8 @@ const TradingStatus = () => {
 
     const columns = [
         {
-            dataField: "index",
-            text: "SR. No.",
+            dataField: 'index',
+            text: 'S.No.',
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
@@ -59,23 +60,23 @@ const TradingStatus = () => {
         {
             dataField: 'login_status',
             text: 'Login Status',
-            formatter: (cell, row) => cell == null || "" ? "-":cell
-            
+            formatter: (cell, row) => cell == null || "" ? "-" : cell
+
         },
         {
             dataField: 'trading_status',
             text: 'Trading Status',
-            formatter: (cell, row) => cell == null || "" ? "-":cell
+            formatter: (cell, row) => cell == null || "" ? "-" : cell
 
-            
+
         },
         {
             dataField: 'message',
             text: 'message',
-            formatter: (cell, row) => cell == null || "" ? "-":cell
+            formatter: (cell, row) => cell == null || "" ? "-" : cell
 
         },
-        
+
         {
             dataField: 'role',
             text: 'role'
@@ -84,12 +85,12 @@ const TradingStatus = () => {
             dataField: 'system_ip',
             text: 'system_ip'
         },
-       
+
         {
             dataField: 'createdAt',
             text: 'Create Date',
-            formatter: (cell, row) => cell.split('T')[0] +"   "+cell.split('T')[1] 
-           
+            formatter: (cell, row) => cell.split('T')[0] + "   " + cell.split('T')[1]
+
         },
         // {
         //     dataField: 'ActiveStatus',
@@ -103,7 +104,7 @@ const TradingStatus = () => {
 
         //         </>
 
-                
+
         //     ),
         // },
         // {
@@ -121,9 +122,28 @@ const TradingStatus = () => {
         //         </div>
         //     ),
         // },
-    ];
+
+
+        {
+            dataField: 'panel_name',
+            text: 'Name'
+        },
+        {
+            dataField: 'panel_name',
+            text: 'Username'
+        },
+        {
+            dataField: 'prefix',
+            text: 'Mobile Number'
+        },
+        {
+            dataField: 'prefix',
+            text: 'Trading On/Off'
+        },
+  ];
+
     return (
-        <>
+   <>
             {
                 getAllClients.loading ? <Loader /> :
                     <>
@@ -155,8 +175,13 @@ const TradingStatus = () => {
         </ >
     )
 
+        // <Content Page_title="Signals">
+        //     <BasicDataTable tableData={columns} TableColumns={columns} dropdown={false} />
+        // </Content>
+        // )
 }
 
 
-export default TradingStatus
+export default TradingStatus;
+
 

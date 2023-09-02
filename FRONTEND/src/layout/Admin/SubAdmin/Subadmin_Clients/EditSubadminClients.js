@@ -1,8 +1,4 @@
-// import React from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
 import Loader from '../../../../Utils/Loader'
@@ -16,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
 
-const AllSubadmin = () => {
+const EditSubadminClient = () => {
 
     const dispatch = useDispatch()
 
@@ -43,6 +39,7 @@ const AllSubadmin = () => {
     // useEffect(() => {
     //     data()
     // }, [])
+
     const fields = [
         { name: 'username', label: 'Username', type: 'text' },
         { name: 'email', label: 'Email', type: 'text' },
@@ -131,8 +128,9 @@ const AllSubadmin = () => {
             {
                 Addsubadmin.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="Add Sub-Admin" button_title="Back" route="/admin/allsubadmins">
-                            <Formikform fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Add Sub-Admin" />
+                        <Theme_Content Page_title="Edit Sub-Admin Clients" button_title="Back" route="/admin/subadminclients"> 
+
+                            <Formikform fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Edit Sub-Admin Client" />
                         </Theme_Content>
                     </>
             }
@@ -141,7 +139,13 @@ const AllSubadmin = () => {
 
         </ >
     )
+    {/* <>
+        <Content Page_title="AllSubadmin">
+            <p>AllSubadmin 123</p>
+        </Content>
+        )
+    </> */}
 }
 
 
-export default AllSubadmin
+export default EditSubadminClient;

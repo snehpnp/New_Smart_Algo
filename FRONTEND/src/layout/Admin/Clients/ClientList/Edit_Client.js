@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable react-hooks/exhaustive-deps */
-//okkkkkk
 import React, { useEffect, useState } from 'react'
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form"
 import { useFormik } from 'formik';
@@ -18,7 +17,7 @@ import Theme_Content from '../../../../Components/Dashboard/Content/Theme_Conten
 
 
 
-const AddClient = () => {
+const EditClient = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   // const AdminToken = JSON.parse(localStorage.getItem('user_details')).accessToken;
@@ -452,8 +451,8 @@ const AddClient = () => {
 
   return (
     <>
-      <Content Page_title="Add Client" button_title='Back'  route="/admin/allclients">
-        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Master" />
+      <Content Page_title="Edit Client" button_title='Back'  route="/admin/allclients">
+        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Edit Master" />
       </Content >
 
     </>
@@ -461,5 +460,4 @@ const AddClient = () => {
 }
 
 
-export default AddClient
-
+export default EditClient;

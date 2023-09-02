@@ -8,11 +8,14 @@ import Dashboard from '../layout/Admin/Dashboard/Dashbaord';
 //  Clients
 import ClientList from '../layout/Admin/Clients/ClientList/ClientList'
 import AddClient from '../layout/Admin/Clients/ClientList/Add_Client'
+import EditClient from '../layout/Admin/Clients/ClientList/Edit_Client'
 import SignUpClients from '../layout/Admin/Clients/Sign_Up_Clients/Sign_Up_Clients';
 
-//  Clients
+//  Sub Admin
 import AllSubadmin from '../layout/Admin/SubAdmin/Subadmins/AllSubadmin';
+import EditSubadmin from '../layout/Admin/SubAdmin/Subadmins/EditSubadmin';
 import SubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/Subadmin_Client"
+import EditSubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/EditSubadminClients"
 import AddSubadmin from "../layout/Admin/SubAdmin/Subadmins/AddSubadmin"
 
 
@@ -77,10 +80,13 @@ const Admin = () => {
                 <Route exact path="/system" element={<System />} />
                 <Route exact path="/allclients" element={<ClientList />} />
                 <Route exact path="/client/add" element={<AddClient />} />
+                <Route exact path="/client/edit" element={<EditClient />} />
                 <Route exact path="/signupclients" element={<SignUpClients />} />
                 <Route exact path="/allsubadmins" element={<AllSubadmin />} />
+                <Route exact path="/editsubadmin" element={<EditSubadmin />} />
                 <Route exact path="/subadminclients" element={<SubadminClient />} />
                 <Route exact path="/allsubadmins/add" element={<AddSubadmin />} />
+                <Route exact path="/allsubadmins/edit" element={<EditSubadminClient />} />
                 <Route exact path="/strategies" element={<AllStrategy />} />
                 <Route exact path="/strategies/add" element={<AddStrategy />} />
                 <Route exact path="/strategies/edit/:id" element={<EditStrategy />} />

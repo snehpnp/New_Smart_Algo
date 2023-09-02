@@ -44,8 +44,6 @@ const AllClients = () => {
     }, [])
 
 
-
-
     // GO TO DASHBOARD 
     const goToDashboard = async (asyncid, email) => {
 
@@ -67,9 +65,6 @@ const AllClients = () => {
             })
 
     }
-
-
-
 
     const columns = [
         {
@@ -176,17 +171,23 @@ const AllClients = () => {
             text: 'Actions',
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-                    </span>
-
+                    <div>
+                        <Link to="/admin/client/edit">
+                            <span data-toggle="tooltip" data-placement="top" title="Edit">
+                                <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                            </span>
+                        </Link>
+                        <Link>
+                            <span data-toggle="tooltip" data-placement="top" title="Delete">
+                                <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                            </span>
+                        </Link>
+                    </div>
                 </div>
             ),
         },
     ];
+
     return (
         <>
             {
@@ -216,10 +217,8 @@ const AllClients = () => {
             }
 
 
-
         </ >
-    )
-
+        )
 }
 
 

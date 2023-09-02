@@ -46,7 +46,7 @@ const AllLicence = () => {
     const columns = [
         {
             dataField: "index",
-            text: "SR. No.",
+            text: "S.No.",
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
