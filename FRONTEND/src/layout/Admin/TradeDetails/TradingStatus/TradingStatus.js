@@ -58,6 +58,10 @@ const TradingStatus = () => {
             text: 'User Name'
         },
         {
+            dataField: 'prefix',
+            text: 'Mobile Number'
+        },
+        {
             dataField: 'login_status',
             text: 'Login Status',
             formatter: (cell, row) => cell == null || "" ? "-" : cell
@@ -67,8 +71,8 @@ const TradingStatus = () => {
             dataField: 'trading_status',
             text: 'Trading Status',
             formatter: (cell, row) => cell == null || "" ? "-" : cell
-
-
+            
+            
         },
         {
             dataField: 'message',
@@ -83,7 +87,7 @@ const TradingStatus = () => {
         },
         {
             dataField: 'system_ip',
-            text: 'system_ip'
+            text: 'system IP'
         },
 
         {
@@ -122,24 +126,10 @@ const TradingStatus = () => {
         //         </div>
         //     ),
         // },
-
-
-        {
-            dataField: 'panel_name',
-            text: 'Name'
-        },
-        {
-            dataField: 'panel_name',
-            text: 'Username'
-        },
-        {
-            dataField: 'prefix',
-            text: 'Mobile Number'
-        },
-        {
-            dataField: 'prefix',
-            text: 'Trading On/Off'
-        },
+        // {
+        //     dataField: 'prefix',
+        //     text: 'Trading On/Off'
+        // },
   ];
 
     return (

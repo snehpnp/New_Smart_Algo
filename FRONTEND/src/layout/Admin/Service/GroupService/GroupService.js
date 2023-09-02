@@ -31,6 +31,9 @@ const ServicesList = () => {
         data: []
     });
 
+    const handleClose = () => {
+        setshowModal(false);
+    }
 
 
 
@@ -75,6 +78,7 @@ const ServicesList = () => {
                     <button
                         className="btn  btn-color"
                         onClick={(e) => setshowModal(true)}
+                        onChange={(e)=> setshowModal(false)}
                     >
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
 
@@ -135,7 +139,7 @@ const ServicesList = () => {
                             {
                                 showModal ?
                                     <>
-                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
+                                        < Modal isOpen={showModal} backdrop="static" size="md" title="Verify OTP" btn_name="Verify"
                                         //  handleClose={setshowModal(false)}
                                         >
                                         </Modal >

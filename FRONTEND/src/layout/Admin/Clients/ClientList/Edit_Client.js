@@ -452,7 +452,7 @@ const EditClient = () => {
   return (
     <>
       <Content Page_title="Edit Client" button_title='Back'  route="/admin/allclients">
-        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Edit Master" />
+        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Edit Client" />
       </Content >
 
     </>

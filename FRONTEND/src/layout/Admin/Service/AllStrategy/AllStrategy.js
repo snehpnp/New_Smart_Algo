@@ -46,7 +46,7 @@ const ServicesList = () => {
             }, token: user_token
         })).unwrap().then((response) => {
             console.log("response", response);
-            if (response.status) {
+            if (response) {
                 setAllStrategy({
                     loading: true,
                     data: response.data
@@ -57,7 +57,7 @@ const ServicesList = () => {
 
     useEffect(() => {
         data()
-    }, [refresh])
+    }, [])
 
 
 

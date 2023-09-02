@@ -10,6 +10,7 @@ import ClientList from '../layout/Admin/Clients/ClientList/ClientList'
 import AddClient from '../layout/Admin/Clients/ClientList/Add_Client'
 import EditClient from '../layout/Admin/Clients/ClientList/Edit_Client'
 import SignUpClients from '../layout/Admin/Clients/Sign_Up_Clients/Sign_Up_Clients';
+import EditSignupClient from '../layout/Admin/Clients/Sign_Up_Clients/EditSignupClients';
 
 //  Sub Admin
 import AllSubadmin from '../layout/Admin/SubAdmin/Subadmins/AllSubadmin';
@@ -22,6 +23,7 @@ import AddSubadmin from "../layout/Admin/SubAdmin/Subadmins/AddSubadmin"
 // Trade Details
 import Signals from "../layout/Admin/TradeDetails/Signals/Signals"
 import SevenDaysEntry from "../layout/Admin/TradeDetails/7DaysEntryOnly/SevenDaysEntryOnly"
+import Edit7days from "../layout/Admin/TradeDetails/7DaysEntryOnly/Edit7days"
 import TradeExecutionReport from "../layout/Admin/TradeDetails/TradeExecutionReport/TradeExecutionReport"
 import TradingStatus from "../layout/Admin/TradeDetails/TradingStatus/TradingStatus"
 import TradeHistory from "../layout/Admin/TradeDetails/TradeHistory/TradeHistory"
@@ -82,6 +84,7 @@ const Admin = () => {
                 <Route exact path="/client/add" element={<AddClient />} />
                 <Route exact path="/client/edit" element={<EditClient />} />
                 <Route exact path="/signupclients" element={<SignUpClients />} />
+                <Route exact path="/editsignupclients" element={<EditSignupClient />} />
                 <Route exact path="/allsubadmins" element={<AllSubadmin />} />
                 <Route exact path="/editsubadmin" element={<EditSubadmin />} />
                 <Route exact path="/subadminclients" element={<SubadminClient />} />
@@ -91,6 +94,7 @@ const Admin = () => {
                 <Route exact path="/strategies/add" element={<AddStrategy />} />
                 <Route exact path="/strategies/edit/:id" element={<EditStrategy />} />
                 <Route exact path="/sevendaysentry" element={<SevenDaysEntry />} />
+                <Route exact path="/Edit7days" element={<Edit7days />} />
                 <Route exact path="/tradeexecution" element={<TradeExecutionReport />} />
                 <Route exact path="/tradingstatus" element={<TradingStatus />} />
                 <Route exact path="/tradehistory" element={<TradeHistory />} />
