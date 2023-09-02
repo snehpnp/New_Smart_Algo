@@ -1,7 +1,4 @@
-// import React from 'react'
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import React, { useEffect, useState } from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
 
@@ -16,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
 import BasicDataTable from '../../../../Components/ExtraComponents/Datatable/BasicDataTable'
-import { Pencil, Trash2 } from 'lucide-react';
+
 
 
 const HelpCenter = () => {
