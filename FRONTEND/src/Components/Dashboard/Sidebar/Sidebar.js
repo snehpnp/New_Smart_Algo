@@ -1,7 +1,7 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/role-supports-aria-props */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useRef , useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config'
 import { Signal, Users, Wrench, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Rocket, Paintbrush } from 'lucide-react';
@@ -18,10 +18,13 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
     const roles = JSON.parse(localStorage.getItem('user_role'))
+    const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+    const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
 
-useEffect(() => {
-    // $(".metismenu li").addClass("mm-active");
-}, [])
+
+    useEffect(() => {
+        // $(".metismenu li").addClass("mm-active");
+    }, [])
 
 
     return (
@@ -86,59 +89,22 @@ useEffect(() => {
                     </div>
                     <ul className="metismenu" id="menu">
                         {
-                            roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
-                                return <>
-                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                        {item.Data.length > 0 ? <>
-                                            <a
-                                                className="has-arrow"
-                                                aria-expanded={location.pathname === item.route && item.route ? true :false}
-                                                // className={`has-arrow `}
-                                            >
-                                                <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
-                                                <span className="nav-text">{item.name}</span>
-                                            </a>
-                                        </> : ""}
-                                        <ul aria-expanded='false'>
-                                            {item.Data.length > 0 ?
-                                                item.Data.map((nested_item) => {
-                                                    return <>
-                                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                            <Link  to={nested_item.route}>{nested_item.name}</Link>
-                                                        </li>
-                                                    </>
-                                                })
-                                                : ""}
-                                        </ul>
-                                    </li>
-                                    {item.Data.length === 0 ? <>
-
-                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                            <Link to={item.route} className="" aria-expanded="false">
-                                                <IconComponent key={item.id} icon={item.Icon} />
-                                                <span className="nav-text">{item.name}</span>
-                                            </Link>
-                                        </li>
-                                    </> : ""}
-
-
-                                </>
-                            }) : roles === 'SUPERADMIN' ? supper_admin_sidebar && supper_admin_sidebar.map((item) => {
+                            gotodashboard != null ? user_role_goTo === "USER" ? Client && Client.map((item) => {
                                 return <>
                                     <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                         {item.Data.length > 0 ? <>
 
                                             <Link
                                                 className="has-arrow "
-                                                href="javascript:void()"
+                                                // href="javascript:void()"
                                                 aria-expanded="false"
-                                                to={item.route}
                                             >
-                                                <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
-                                                <span className="nav-text mx-2 mm-active">{item.name}</span>
+                                                <IconComponent key={item.id} icon={item.Icon} />
+
+                                                <span className="nav-text mx-2">{item.name}</span>
                                             </Link>
                                         </> : ""}
-                                        <ul aria-expanded="false" >
+                                        <ul aria-expanded="false">
                                             {item.Data.length > 0 ?
                                                 item.Data.map((nested_item) => {
                                                     return <>
@@ -162,23 +128,60 @@ useEffect(() => {
 
 
                                 </>
-                            }) :
-                                roles === 'SUBADMIN' ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
+                            }): "" :
+                                roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
+                                    return <>
+                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                            {item.Data.length > 0 ? <>
+                                                <a
+                                                    className="has-arrow"
+                                                    aria-expanded={location.pathname === item.route && item.route ? true : false}
+                                                // className={`has-arrow `}
+                                                >
+                                                    <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
+                                                    <span className="nav-text">{item.name}</span>
+                                                </a>
+                                            </> : ""}
+                                            <ul aria-expanded='false'>
+                                                {item.Data.length > 0 ?
+                                                    item.Data.map((nested_item) => {
+                                                        return <>
+                                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                                <Link to={nested_item.route}>{nested_item.name}</Link>
+                                                            </li>
+                                                        </>
+                                                    })
+                                                    : ""}
+                                            </ul>
+                                        </li>
+                                        {item.Data.length === 0 ? <>
+
+                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                <Link to={item.route} className="" aria-expanded="false">
+                                                    <IconComponent key={item.id} icon={item.Icon} />
+                                                    <span className="nav-text">{item.name}</span>
+                                                </Link>
+                                            </li>
+                                        </> : ""}
+
+
+                                    </>
+                                }) : roles === 'SUPERADMIN' ? supper_admin_sidebar && supper_admin_sidebar.map((item) => {
                                     return <>
                                         <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                             {item.Data.length > 0 ? <>
 
                                                 <Link
                                                     className="has-arrow "
-                                                    // href="javascript:void()"
+                                                    href="javascript:void()"
                                                     aria-expanded="false"
+                                                    to={item.route}
                                                 >
-                                                    <IconComponent key={item.id} icon={item.Icon} />
-
-                                                    <span className="nav-text  mx-2">{item.name}</span>
+                                                    <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
+                                                    <span className="nav-text mx-2 mm-active">{item.name}</span>
                                                 </Link>
                                             </> : ""}
-                                            <ul aria-expanded="false">
+                                            <ul aria-expanded="false" >
                                                 {item.Data.length > 0 ?
                                                     item.Data.map((nested_item) => {
                                                         return <>
@@ -194,7 +197,7 @@ useEffect(() => {
                                             <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                 <Link to={item.route} className="" aria-expanded="false">
                                                     <IconComponent key={item.id} icon={item.Icon} />
-                                                    {/* <i className="flaticon-013-checkmark" /> */}
+
                                                     <span className="nav-text mx-2">{item.name}</span>
                                                 </Link>
                                             </li>
@@ -203,7 +206,7 @@ useEffect(() => {
 
                                     </>
                                 }) :
-                                    roles === "USER" ? Client && Client.map((item) => {
+                                    roles === 'SUBADMIN' ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
                                         return <>
                                             <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                 {item.Data.length > 0 ? <>
@@ -215,7 +218,7 @@ useEffect(() => {
                                                     >
                                                         <IconComponent key={item.id} icon={item.Icon} />
 
-                                                        <span className="nav-text mx-2">{item.name}</span>
+                                                        <span className="nav-text  mx-2">{item.name}</span>
                                                     </Link>
                                                 </> : ""}
                                                 <ul aria-expanded="false">
@@ -234,7 +237,7 @@ useEffect(() => {
                                                 <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                     <Link to={item.route} className="" aria-expanded="false">
                                                         <IconComponent key={item.id} icon={item.Icon} />
-
+                                                        {/* <i className="flaticon-013-checkmark" /> */}
                                                         <span className="nav-text mx-2">{item.name}</span>
                                                     </Link>
                                                 </li>
@@ -242,8 +245,48 @@ useEffect(() => {
 
 
                                         </>
-                                    })
-                                        : ""
+                                    }) :
+                                        roles === "USER" ? Client && Client.map((item) => {
+                                            return <>
+                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                    {item.Data.length > 0 ? <>
+
+                                                        <Link
+                                                            className="has-arrow "
+                                                            // href="javascript:void()"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <IconComponent key={item.id} icon={item.Icon} />
+
+                                                            <span className="nav-text mx-2">{item.name}</span>
+                                                        </Link>
+                                                    </> : ""}
+                                                    <ul aria-expanded="false">
+                                                        {item.Data.length > 0 ?
+                                                            item.Data.map((nested_item) => {
+                                                                return <>
+                                                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                                        <Link to={nested_item.route}>{nested_item.name}</Link>
+                                                                    </li>
+                                                                </>
+                                                            })
+                                                            : ""}
+                                                    </ul>
+                                                </li>
+                                                {item.Data.length === 0 ? <>
+                                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                        <Link to={item.route} className="" aria-expanded="false">
+                                                            <IconComponent key={item.id} icon={item.Icon} />
+
+                                                            <span className="nav-text mx-2">{item.name}</span>
+                                                        </Link>
+                                                    </li>
+                                                </> : ""}
+
+
+                                            </>
+                                        })
+                                            : ""
                         }
 
 

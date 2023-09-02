@@ -23,6 +23,8 @@ const Routing = () => {
 
   const roles = JSON.parse(localStorage.getItem('user_role'))
   const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+  const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
+
 
 
 
@@ -45,6 +47,10 @@ const Routing = () => {
       // else {
       //   navigate("/login");
       // }
+    }   else  if (gotodashboard != null) { 
+      if (user_role_goTo === "USER" && location.pathname === "/") {
+        navigate("/client/dashboard");
+      }
     }
 
 
@@ -57,7 +63,7 @@ const Routing = () => {
       <Route path="/super/*" element={(roles === "SUPERADMIN") ? <SuperAdmin /> : <Login />} />
       <Route path="/admin/*" element={(roles === "ADMIN") ? <Admin /> : <Login />} />
       <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
-      <Route path="/client/*" element={(roles === "USER") ? <Client /> : <Login />} />
+      <Route path="/client/*" element={gotodashboard != null ? <Client /> :   (roles === "USER") ? <Client /> : <Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forget" element={<ForgetPassword />} />
       <Route path="/profile" element={<ForgetPassword />} />

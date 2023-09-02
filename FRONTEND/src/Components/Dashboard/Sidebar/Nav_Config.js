@@ -279,7 +279,7 @@ export const Client = [
         'id': 1,
         "name": 'Dashboard',
         "Icon": "LayoutDashboard",
-        "route": "/client/dashobard",
+        "route": "/client/dashboard",
         "Data": []
     },
     {
