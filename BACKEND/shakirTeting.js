@@ -187,7 +187,7 @@ services.find()
 
             if (item.symbol.slice(-3) == '-EQ') {
               count++
-              console.log('item - C '+count+' ',item)
+              
               const matchingElements = categoryResult.filter(item => item.segment === "C");
               const category_id = matchingElements[0]._id
              

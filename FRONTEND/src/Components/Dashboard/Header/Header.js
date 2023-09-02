@@ -12,7 +12,7 @@ const Header = ({ ChatBox }) => {
   const navigate = useNavigate()
 
   let gotodashboard = localStorage.getItem("gotodashboard")
-  let user_role = localStorage.getItem("user_role")
+  let user_role_goTo = localStorage.getItem("user_role_goTo")
 
 
   if (theme_id != null) {
@@ -87,17 +87,22 @@ const Header = ({ ChatBox }) => {
     });
   }
 
-
   const redirectToAdmin = () => {
 
 
-    localStorage.removeItem("gotodashboard");
-    localStorage.removeItem("user_details_goTo");
-    localStorage.removeItem("user_role_goTo");
-    user_role == "ADMIN" ?
+    user_role_goTo == "USER" ?
       navigate("/admin/allclients")
       :
       navigate("/admin/allsubadmins")
+
+    localStorage.removeItem("gotodashboard");
+
+    setTimeout(() => {
+
+      localStorage.removeItem("user_details_goTo");
+      localStorage.removeItem("user_role_goTo");
+    }, 1000);
+
 
   };
 
@@ -165,7 +170,8 @@ const Header = ({ ChatBox }) => {
             </div>
           </nav>
         </div>
-      </div></div>
+      </div>
+    </div>
   )
 }
 

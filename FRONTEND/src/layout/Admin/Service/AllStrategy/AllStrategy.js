@@ -34,7 +34,6 @@ const ServicesList = () => {
         data: []
     });
 
-    console.log("AllStrategy", AllStrategy);
 
 
 
@@ -45,7 +44,6 @@ const ServicesList = () => {
                 "limit": "100"
             }, token: user_token
         })).unwrap().then((response) => {
-            console.log("response", response);
             if (response.status) {
                 setAllStrategy({
                     loading: true,
@@ -71,7 +69,6 @@ const ServicesList = () => {
             _id: strat_id,
             token: user_token
         })).unwrap().then((response) => {
-            console.log("response", response);
             if (response.status === 409) {
                 toast.error(response.data.msg);
             }

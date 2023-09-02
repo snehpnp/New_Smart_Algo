@@ -26,7 +26,6 @@ const DropDown = () => {
         await dispatch(Log_Out_User(request))
             .then((res) => {
                 if (res.payload.status) {
-                    console.log("Log_Out_User", res.payload.msg);
                     toast.success(res.payload.msg)
                     localStorage.removeItem("user_role",);
                     localStorage.removeItem("user_details");
