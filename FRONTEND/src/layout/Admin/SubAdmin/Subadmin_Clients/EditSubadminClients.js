@@ -132,7 +132,7 @@ const EditSubadminClient = () => {
             {
                 Addsubadmin.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="Edit Sub-Admin Clients" button_title="Back" route="/admin/subadminclients">
+                        <Theme_Content Page_title="Edit Sub-Admin Clients" button_title="Back" route="/admin/subadminclients"> 
 
                             <Formikform fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Edit Sub-Admin Client" />
                         </Theme_Content>
