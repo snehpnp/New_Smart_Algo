@@ -14,10 +14,10 @@ const Header = ({ ChatBox }) => {
   const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
 
   const user_role = JSON.parse(localStorage.getItem('user_role'))
-  const user_role_goTo = JSON.parse(localStorage.getItem('user_role'))
+  const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
 
 
-
+console.log("user_role_goTo=>",user_role_goTo);
 
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id)
