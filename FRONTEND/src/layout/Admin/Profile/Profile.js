@@ -7,9 +7,9 @@ import Formikform from "../../../../src/Components/ExtraComponents/Form/Formik_f
 
 const Profile = () =>{
     const fields = [
-        { name: 'oldPassword', label: 'Old Password', type: 'text' },
-        { name: 'newPassword', label: 'New Password', type: 'text' },
-        { name: 'confirmPassword', label: 'Confirm Password', type: 'text' },
+        { name: 'oldPassword', label: 'Old Password', type: 'password' },
+        { name: 'newPassword', label: 'New Password', type: 'password' },
+        { name: 'confirmPassword', label: 'Confirm Password', type: 'password' },
     ]
     const formik = useFormik({
         initialValues: {
