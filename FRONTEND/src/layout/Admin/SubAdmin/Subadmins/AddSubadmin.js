@@ -29,25 +29,37 @@ const AllSubadmin = () => {
     });
 
 
-    // const data = async () => {
-    //     await dispatch(Get_All_SUBADMIN()).unwrap()
-    //         .then((response) => {
-    //             if (response.status) {
-    //                 setAddsubadmin({
-    //                     loading: false,
-    //                     data: response.data
-    //                 });
-    //             }
-    //         })
-    // }
-    // useEffect(() => {
-    //     data()
-    // }, [])
     const fields = [
+        { name: 'fullname', label: 'FullName', type: 'text' },
         { name: 'username', label: 'Username', type: 'text' },
         { name: 'email', label: 'Email', type: 'text' },
         { name: 'mobile', label: 'Mobile', type: 'text' },
         { name: 'password', label: 'Password', type: 'password' },
+
+        {
+            name: 'Permissions',
+            label: 'Permissions',
+            type: 'checkbox',
+            options: [
+                { id: 1, name: 'Permissions', label: 'Licence Permission ', type: 'radio' },
+                { id: 2, name: 'Permissions', label: 'Go To Dashboard', type: 'radio' },
+                { id: 3, name: 'Permissions', label: 'Group Permission', type: 'radio' },
+                {
+                    id: 4, name: 'Permissions',
+                    label: 'Strategy Permission',
+                    type: 'checkbox',
+                    options: [
+                        { id: 1, name: 'Permissions', label: 'Licence Permission ', type: 'radio' },
+                        { id: 2, name: 'Permissions', label: 'Go To Dashboard', type: 'radio' },
+                        { id: 3, name: 'Permissions', label: 'Group Permission', type: 'radio' },
+                        { id: 4, name: 'Permissions', label: 'Strategy Permission', type: 'radio' }
+
+                    ]
+                }
+
+            ]
+        }
+
     ]
 
     const formik = useFormik({
@@ -124,7 +136,7 @@ const AllSubadmin = () => {
             }
         }
     });
-
+    console.log("formik", formik);
 
     return (
         <>
@@ -133,6 +145,7 @@ const AllSubadmin = () => {
                     <>
                         <Theme_Content Page_title="Add Sub-Admin" button_title="Back" route="/admin/allsubadmins">
                             <Formikform fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Add Sub-Admin" />
+
                         </Theme_Content>
                     </>
             }

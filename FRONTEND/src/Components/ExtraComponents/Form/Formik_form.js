@@ -74,11 +74,11 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
                   </div>
                 </div>
               </> :
-
                 field.type === "checkbox" ? <>
-                  {/* {field.index === '1' ? <>
-                </>
-                  : ""} */}
+                  {field.name == "Permissions" ?
+                    <label className="form-check-label" for={field.name} >{field.name}</label>
+                    : ""}
+
                   {field.options.map((option, index) => (
                     <>
 
@@ -97,8 +97,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
                     </>
                   ))}
                 </> :
-
-
                   field.type === "radio" ? <>
                     {field.index === '1' ? <>
                       {/* <label
@@ -251,8 +249,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
                               </div>
                             </div> */}
                           </> :
-
-
 
                             <div className={`col-lg-${title === "forlogin" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
                               <div className="mb-3 row">
