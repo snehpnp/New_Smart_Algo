@@ -41,7 +41,7 @@ const Profile = () =>{
     
     return(
         <>
-        <Profile_theme Page_title="Admin Profile">
+        <Profile_theme >
         <Formikform fieldtype={fields.filter(field => !field.showWhen )} formik={formik} btn_name="Submit" />
         </Profile_theme>
         </>

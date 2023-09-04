@@ -1,10 +1,11 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Profile_theme = ({ Page_title, Page_title2, route, ...rest }) => {
+const Profile_theme = ({ Page_title, route, ...rest }) => {
     return (
         <div>
             <div className="content-body">
+                <div className="container-fluid card-body">ADMIN</div>
                 <div className="container-fluid d-flex col-md-12">
                     <div className="row page-titles me-2 col-md-6">
                         <div className='text-center mt-5'>
@@ -21,12 +22,11 @@ const Profile_theme = ({ Page_title, Page_title2, route, ...rest }) => {
                     <div className="row page-titles col-md-6">
 
                         <div>
-                            <h3 className='text-center card-title'>Change Password</h3>
+                            <h3 className='text-center'>Change Password</h3>
                         </div>
 
                         <div className="card-body">
-                            <div className="form-validation d-block">
-
+                            <div className="form-validation">
                                 {rest.children}
                             </div>
                         </div>
