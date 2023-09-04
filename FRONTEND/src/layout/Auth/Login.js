@@ -166,6 +166,11 @@ const Login = () => {
         }
         else {
           toast.error(res.payload.msg)
+
+          setTimeout(() => {
+            
+            setshowModal(false);
+          }, 1000);
         }
 
       }).catch((error) =>
@@ -314,7 +319,7 @@ const Login = () => {
       {
         showModal ?
           <>
-            < Modal isOpen={showModal} handleClose={!showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify" Submit_Function={verifyOTP} >
+            < Modal isOpen={showModal} handleClose={!showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify" btn_name1="Verify1" Submit_Function={verifyOTP} >
               <form onSubmit={verifyOTP}>
                 <OtpInput
                   containerStyle="otp-div"

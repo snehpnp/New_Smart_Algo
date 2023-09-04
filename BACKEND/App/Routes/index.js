@@ -16,6 +16,9 @@ app.use(require("./Admin/servicegroup.route"));
 app.use(require("./Subadmin/subadmin.route"));
 
 
+// USER ROUTES
+app.use(require("./User/user.route"));
+
 
 
 };
