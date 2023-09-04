@@ -54,9 +54,7 @@ const AllClients = () => {
         await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
             .then((response) => {
                 if (response.status) {
-;
-                    localStorage.setItem("gotodashboard", JSON.stringify(true));
-                    
+                    localStorage.setItem("gotodashboard", JSON.stringify(true));        
                     localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
                     localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
                     navigate("/client/dashboard")

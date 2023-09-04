@@ -79,11 +79,11 @@ const TradingStatus = () => {
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: 'UserName',
+            dataField: 'Time',
             text: 'User Name'
         },
         {
-            dataField: 'Email',
+            dataField: 'Time',
             text: 'Email'
         },
         {
