@@ -11,8 +11,12 @@ const Header = ({ ChatBox }) => {
   let theme_id = localStorage.getItem("theme")
   const navigate = useNavigate()
 
-  let gotodashboard = localStorage.getItem("gotodashboard")
-  let user_role_goTo = localStorage.getItem("user_role_goTo")
+  const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+
+  const user_role = JSON.parse(localStorage.getItem('user_role'))
+  const user_role_goTo = JSON.parse(localStorage.getItem('user_role'))
+
+
 
 
   if (theme_id != null) {
@@ -114,17 +118,24 @@ const Header = ({ ChatBox }) => {
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">
               <div className="header-left">
-                <div className="headaer-title">
-                  <h3 className="font-w400 mb-0">Api Login </h3>               
-                </div>
-                <div className="Api Login m-2"><label class="switch" >
-                    <input type="checkbox" className="bg-primary"
-                    //  checked={row.ActiveStatus == "1" ? true : false}
-                    />
-                    <span class="slider round"></span>
-                  </label>
-                  </div>
-                
+                {user_role == "USER" ?
+                  <>
+                    <div className="headaer-title">
+                      <h3 className="font-w400 mb-0">Api Login </h3>
+                    </div>
+
+                    <div className="Api Login m-2"><label class="switch" >
+                      <input type="checkbox" className="bg-primary"
+                      //  checked={row.ActiveStatus == "1" ? true : false}
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                    </div>
+                  </>
+                  : ""}
+
+
+
               </div>
               <ul className="navbar-nav header-right">
 

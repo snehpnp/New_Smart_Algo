@@ -5,6 +5,8 @@ import Wraper from '../Components/Dashboard/Wraper/Wraper';
 
 import Dashboard from '../layout/User/Dashboard/Dashboard';
 import Signals from '../layout/Admin/TradeDetails/Signals/Signals';
+import TradingStatus from '../layout/User/Trading status/Tradingstatus';
+
 
 
 
@@ -23,6 +25,8 @@ const Admin = () => {
                 {/* <> */}
                 <Route exact path="/dashboard" element={<Dashboard />} />
                 <Route exact path="/signals" element={<Signals />} />
+                <Route exact path="/tradingstatus" element={<TradingStatus />} />
+
 
                 {/* <Route exact path="/admins" element={<Admins />} />
                 <Route exact path="/admin/add" element={<AddAdmins />} />
