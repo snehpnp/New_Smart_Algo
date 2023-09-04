@@ -7,7 +7,7 @@ const Profile_theme = ({ Page_title, route, ...rest }) => {
             <div className="content-body">
                 <div className="container-fluid col-md-12">
                     <div className="row page-titles me-2 col-md-12">
-                        <div className='text-center mt-5'>
+                        <div className='text-center'>
                             <i class="fa-solid fa-user display-1"></i>
                             <h3 className='text-center'>Administrator</h3>
                         <div className='text-center'>
