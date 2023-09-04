@@ -1,0 +1,41 @@
+import React from 'react'
+import { Link } from 'react-router-dom'
+
+const Profile_theme = ({ Page_title, Page_title2, route, ...rest }) => {
+    return (
+        <div>
+            <div className="content-body">
+                <div className="container-fluid d-flex col-md-12">
+                    <div className="row page-titles me-2 col-md-6">
+                        <div className='text-center mt-5'>
+                            <i class="fa-solid fa-user display-1"></i>
+                            <h3 className='text-center'>Administrator</h3>
+                        <div className='text-center'>
+                            <label><b>Email ID :</b></label>
+                            <div className='text-center'>
+                                <label><b>Mobile :</b></label>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div className="row page-titles col-md-6">
+
+                        <div>
+                            <h3 className='text-center card-title'>Change Password</h3>
+                        </div>
+
+                        <div className="card-body">
+                            <div className="form-validation d-block">
+
+                                {rest.children}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    )
+}
+
+export default Profile_theme;

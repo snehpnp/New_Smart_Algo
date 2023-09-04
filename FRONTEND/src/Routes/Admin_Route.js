@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from 
 
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
 import Dashboard from '../layout/Admin/Dashboard/Dashbaord';
+import Profile from '../layout/Admin/Profile/Profile'
 
 //  Clients
 import ClientList from '../layout/Admin/Clients/ClientList/ClientList'
@@ -61,6 +62,7 @@ import System from '../layout/Admin/System/System';
 import AllStrategy from '../layout/Admin/Service/AllStrategy/AllStrategy';
 import AddStrategy from '../layout/Admin/Service/AllStrategy/AddStrategy';
 import EditStrategy from '../layout/Admin/Service/AllStrategy/EditStrategy';
+import { Import } from 'lucide-react';
 
 
 
@@ -79,6 +81,7 @@ const Admin = () => {
             {location.pathname !== "/admin" && location.pathname !== "/admin/*" ? <Wraper /> : null}
             <Routes>
                 <Route exact path="/dashboard" element={<Dashboard />} />
+                <Route exact path="/profile" element={<Profile />} />
                 <Route exact path="/system" element={<System />} />
                 <Route exact path="/allclients" element={<ClientList />} />
                 <Route exact path="/client/add" element={<AddClient />} />
