@@ -26,8 +26,7 @@ const connectToDatabase = async () => {
         // Company Information table check
         company.find()
           .then((role) => {
-            if (role.length == 0) {
-              console.log("Run");
+            if (role.length == 0) {         
               CompanyCreate()
             }
             return role;
@@ -38,7 +37,6 @@ const connectToDatabase = async () => {
         categorysdata.find()
           .then(async (role) => {
             if (role.length != 8) {
-              console.log("role.length", role.length);
               await categorysdata.deleteMany({});
               console.log('All data deleted successfully.');
               categorys()
@@ -91,7 +89,6 @@ const RoleCreate = () => {
   ]
   arr.forEach((role) => {
     const newRole = new Role(role)
-    // console.log("newRole", newRole);
     return newRole.save();
   })
 }
@@ -109,7 +106,6 @@ const CompanyCreate = () => {
     theme_name: "theme_name"
 
   })
-  // console.log("newRole", newRole);
   return companyData.save();
 }
 // Create categorys 
@@ -176,7 +172,6 @@ const categorys = async () => {
 
   category.forEach(async (data) => {
     const newCategory = new categorysdata(data)
-    // console.log("newCategory", newCategory);
     await newCategory.save();
   })
 

@@ -12,7 +12,7 @@ export async function USER_PROFILE(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {

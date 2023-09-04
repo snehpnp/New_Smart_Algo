@@ -13,7 +13,7 @@ const AdminsList = () => {
     const dispatch = useDispatch()
     const theme_list = useSelector(panellist && panellist)
 
-    console.log("theme_list", theme_list);
+    // console.log("theme_list", theme_list);
     const [themeData, setThemeData] = useState({
         loading: true,
         data: []
@@ -23,7 +23,7 @@ const AdminsList = () => {
     useEffect(async () => {
         await dispatch(All_Panel_List()).unwrap()
             .then((response) => {
-                console.log("rest", response.data);
+         
                 setThemeData({
                     loading: false,
                     data: response.data

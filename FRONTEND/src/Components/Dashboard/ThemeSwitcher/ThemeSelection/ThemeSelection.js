@@ -16,7 +16,7 @@ const ThemeSelection = () => {
         axios.post("https://api.smartalgo.in:3001/smartalgo/getthemeById", { id: parseInt(id) }).then((res) => {
             let themedata = res.data.data[0]
 
-            console.log("themedata", themedata);
+            // console.log("themedata", themedata);
             // let abc = $('body').attr('class')
             // $('body').attr('data-dashboard', `${abc}-dashboard`);
 

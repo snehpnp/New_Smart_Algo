@@ -25,7 +25,6 @@ class GroupService {
         description: groupdetails.description
       })
         .then((createdServicesGroupName) => {
-          //  console.log('User created and saved:', createdServicesGroupName._id)
           const groupName_id = createdServicesGroupName._id;
 
           services_id.forEach(item => {
@@ -38,7 +37,7 @@ class GroupService {
 
             })
               .then((createdGroupServiceId) => {
-                console.log('User created createdGroupServiceId and saved:', createdGroupServiceId._id)
+                // console.log('User created createdGroupServiceId and saved:', createdGroupServiceId._id)
 
               })
               .catch((err) => {

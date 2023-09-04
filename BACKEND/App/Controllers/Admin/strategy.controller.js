@@ -53,8 +53,6 @@ class strategy {
         try {
             const { _id, edit_strategy } = req.body;
 
-            // console.log(_id, edit_strategy);
-
             const strategy_check = await strategy_model.findOne({ _id: _id });
             if (!strategy_check) {
                 return res.status(409).json({ status: false, msg: 'Strategy Not exist', data: [] });

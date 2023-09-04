@@ -12,7 +12,7 @@ const EditGroup = () => {
 
     const location = useLocation()
 
-    console.log("location", location.state);
+    // console.log("location", location.state);
     const dispatch = useDispatch();
     const [selectedServices, setSelectedServices] = useState([]);
     const [GroupQty, setGroupQty] = useState([]);
@@ -23,8 +23,8 @@ const EditGroup = () => {
     const [enabledInputs, setEnabledInputs] = useState({});
 
 
-    console.log("selectedServices", selectedServices);
-    console.log("GroupQty", GroupQty);
+    // console.log("selectedServices", selectedServices);
+    // console.log("GroupQty", GroupQty);
 
 
     const [allServices, setAllServices] = useState({
@@ -33,7 +33,7 @@ const EditGroup = () => {
     });
 
 
-    console.log("allServices" ,allServices);
+    // console.log("allServices" ,allServices);
     const [GetAllSgments, setGetAllSgments] = useState({
         loading: true,
         data: [],
@@ -57,7 +57,7 @@ const EditGroup = () => {
         },
     });
 
-    console.log("selectSegment" ,formik.values);
+    // console.log("selectSegment" ,formik.values);
 
     const data = async () => {
         if (formik.values.selectSegment) {
@@ -132,7 +132,7 @@ const EditGroup = () => {
                 return acc;
             }, {})
         );
-        console.log("uniqueArr", uniqueArr);
+        // console.log("uniqueArr", uniqueArr);
 
     }
 

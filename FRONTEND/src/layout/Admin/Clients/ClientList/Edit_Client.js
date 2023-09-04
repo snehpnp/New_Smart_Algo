@@ -141,7 +141,6 @@ const EditClient = () => {
         // "demat_userid": values.demat_userid
       }
 
-      // console.log("res", req);
       // return
 
       //   await dispatch(AddClients({ req: req, AdminToken: AdminToken })).then((res) => {

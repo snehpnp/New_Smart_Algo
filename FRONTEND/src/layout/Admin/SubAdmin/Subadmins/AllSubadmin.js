@@ -133,7 +133,7 @@ const AllSubadmin = () => {
         await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
             .then((response) => {
                 if (response.status) {
-                    console.log(response);
+                    // console.log(response);
 
                     localStorage.setItem("gotodashboard","true");
                     localStorage.setItem("user_details_goTo", JSON.stringify(response.data));

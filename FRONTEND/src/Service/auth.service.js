@@ -48,7 +48,7 @@ export async function LOG_OUT_USER(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
@@ -68,7 +68,7 @@ export async function FORGET_PASSWORD(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
@@ -85,13 +85,13 @@ export async function UPDATE_PASSWORD(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
         return err
 
-        console.log("error", err);
+        // console.log("error", err);/
         // custom error
     }
 
@@ -105,7 +105,7 @@ export async function RESET_PASSWORD(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
@@ -125,7 +125,7 @@ export async function SET_THEME_DETAILS(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
@@ -148,7 +148,7 @@ export async function GET_PANEL_INFORMATION(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {

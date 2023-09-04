@@ -29,7 +29,6 @@ module.exports = function (app) {
                 // Save the CSV content to a file
                 const filename = 'data10.csv';
 
-                console.log(bseData.length);
                 const csvContent1 = bseData.map(row => Object.values(row).join(',')).join('\n');
 
 

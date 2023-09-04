@@ -60,9 +60,7 @@ class Employee {
 
 
             var ccd = dt.format('ymd');
-            var client_key = Panel_key[0].prefix + cli_key + ccd
-            // console.log("Panel_key", client_key);
-
+            var client_key = Panel_key[0].prefix + cli_key + ccd 
 
             // Company Information
             const User = new User_model({
@@ -237,7 +235,6 @@ class Employee {
 
             // });
             const totalCount = GetAlluser_logs.length;
-            // console.log("totalCount", totalCount);
             // IF DATA NOT EXIST
             if (GetAlluser_logs.length == 0) {
                 return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })

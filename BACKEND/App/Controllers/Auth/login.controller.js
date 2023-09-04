@@ -23,7 +23,6 @@ class Login {
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
-            console.log(EmailCheck);
 
             // WHERE LOGIN CHECKgetIPAddress
             if (device == "APP") {                  //App Login Check
@@ -82,7 +81,7 @@ class Login {
             }
         }
         catch (error) {
-            console.log(error);
+    
             res.send({ status: false, msg: "Server Side error", data: error })
         }
 
@@ -129,13 +128,11 @@ class Login {
 
             }
 
-            console.log("addData", addData);
             // Update Successfully
             const result = await User.updateOne(
                 { Email: Email },
                 { $set: addData }
             );
-            console.log("addData", result);
 
             // If Not Update User
             if (!result) {
@@ -301,11 +298,7 @@ class Login {
             // // IF Login Time Email CHECK
             const EmailCheck = await User.findById(userid);
 
-            console.log("EmailCheck", EmailCheck)
-
-
             // return
-
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
@@ -347,7 +340,6 @@ class Login {
     // GO TO DASHBOARD
     async goToDashboard(req, res) {
         try {
-            console.log("============================");
             const { Email } = req.body;
             // IF Login Time Email CHECK
             const EmailCheck = await User.findOne({ Email: Email });

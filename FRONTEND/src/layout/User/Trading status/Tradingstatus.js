@@ -40,7 +40,6 @@ const TradingStatus = () => {
     const data1 = async () => {
         await dispatch(Get_All_TRADINGSTATUS_USER(req)).unwrap()
             .then((response) => {
-                console.log("response", response);
                 if (response.status) {
                     setAllUserTrading_status({
                         loading: false,
