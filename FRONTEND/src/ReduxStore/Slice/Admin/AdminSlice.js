@@ -101,30 +101,23 @@ const AdminSlice = createSlice({
         allService: [],
         allCatagory: [],
         servicebycatagory: [],
-        allGroupServices:[],
-        allClients:[],
-        companyInfo:[],
-        getalltradingstatus:[],
-        goTodashboard:[],
-
-
-
-
+        allGroupServices: [],
+        allClients: [],
+        companyInfo: [],
+        getalltradingstatus: [],
+        goTodashboard: [],
     },
 
     recuders: {},
     extraReducers: {
 
-        [Get_All_Service.pending]: (state, action) => {
-            console.log("pending Get_All_Service ");
-        },
+        // [Get_All_Service.pending]: (state, action) => {
+        //     console.log("pending Get_All_Service ");
+        // },
         [Get_All_Service.fulfilled]: (state, { payload }) => {
             return { ...state, allService: payload, isLoading: false };
         },
-        // [Get_All_Service.rejected]: (state, action) => {
-        //     console.log("pending reject ");
-        //     // return { ...state, allService: action, isLoading: false };
-        // },
+
         [Get_All_Catagory.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, allCatagory: payload, isLoading: false };

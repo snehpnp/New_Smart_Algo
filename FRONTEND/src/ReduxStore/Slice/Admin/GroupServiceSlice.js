@@ -51,30 +51,33 @@ const GroupServiceSlice = createSlice({
         isError: false,
         status: false,
         addgroup: [],
-        recuders: {},
         AllservicesName: [],
         deletegroupService: [],
         AllservicesuserName: [],
-
-
-        extraReducers: {
-
-            [Add_Group.pending]: (state, action) => {
-                console.log("pending Get_All_Service ");
-            },
-            [Add_Group.fulfilled]: (state, { payload }) => {
-                return { ...state, addgroup: payload, isLoading: false };
-            },
-            [GET_ALL_SERVICES_NAMES.fulfilled]: (state, { payload }) => {
-                return { ...state, AllservicesName: payload, isLoading: false };
-            },
-            [GET_ALL_SERVICES_USER_NAMES.fulfilled]: (state, { payload }) => {
-                return { ...state, AllservicesuserName: payload, isLoading: false };
-            },
-            [DELETE_GROUP_SERVICE.fulfilled]: (state, { payload }) => {
-                return { ...state, deletegroupService: payload, isLoading: false };
-            },
-        },
+    },
+    reducers: {}, // Reducers should be defined here, if you have any
+    extraReducers: (builder) => { // Define extra reducers using builder
+        builder
+            .addCase(Add_Group.pending, (state, action) => {
+                console.log("pending Add_Group");
+                state.isLoading = true;
+            })
+            .addCase(Add_Group.fulfilled, (state, action) => {
+                state.addgroup = action.payload;
+                state.isLoading = false;
+            })
+            .addCase(GET_ALL_SERVICES_NAMES.fulfilled, (state, action) => {
+                state.AllservicesName = action.payload;
+                state.isLoading = false;
+            })
+            .addCase(GET_ALL_SERVICES_USER_NAMES.fulfilled, (state, action) => {
+                state.AllservicesuserName = action.payload;
+                state.isLoading = false;
+            })
+            .addCase(DELETE_GROUP_SERVICE.fulfilled, (state, action) => {
+                state.deletegroupService = action.payload;
+                state.isLoading = false;
+            });
     },
 });
 

@@ -11,7 +11,7 @@ import FullDataTable from "../../../../Components/ExtraComponents/Datatable/Full
 import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable"
 
 import { Get_All_Service, Get_All_Catagory, Service_By_Catagory, GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
-import { GET_ALL_SERVICES_NAMES, DELETE_GROUP_SERVICE ,GET_ALL_SERVICES_USER_NAMES} from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
+import { GET_ALL_SERVICES_NAMES, DELETE_GROUP_SERVICE, GET_ALL_SERVICES_USER_NAMES } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 import toast, { Toaster } from 'react-hot-toast';
@@ -27,36 +27,14 @@ const ServicesList = () => {
     const [getrefresh, setrefresh] = useState(false)
     const [getServicesName, setServicesName] = useState([])
     const [getServicesuserName, setServicesuserName] = useState([])
-
-
-
     const [AllGroupServices, setAllGroupServices] = useState({
         loading: true,
         data: []
     });
 
-
-
+    
     const handleClose = () => setshowModal(false);
     const handleClose1 = () => setshowModaluser(false);
-
-
-    // GET ALL GROUP SERVICES NAME
-    const data = async () => {
-        await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    setAllGroupServices({
-                        loading: false,
-                        data: response.data
-                    });
-                }
-            })
-    }
-
-    useEffect(() => {
-        data()
-    }, [])
 
 
 
@@ -123,6 +101,25 @@ const ServicesList = () => {
         },
     ];
 
+
+
+
+
+
+
+    // GET ALL GROUP SERVICES NAME
+    const data = async () => {
+        await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setAllGroupServices({
+                        loading: false,
+                        data: response.data
+                    });
+                }
+            })
+    }
+
     // GET ALL GROUP SERVICES NAME
     const GetAllServicesName = async (row) => {
 
@@ -142,20 +139,20 @@ const ServicesList = () => {
 
     // GET ALL GROUP SERVICES USER NAME
     const GetAllServicesUserName = async (row) => {
+        setshowModal(true);
+        //     await dispatch(GET_ALL_SERVICES_USER_NAMES({
+        //         data: row
+        //     })).unwrap()
+        //         .then((response) => {
+        //             console.log("123", response);
+        //             if (response.status) {
+        //                 console.log("responseresponseresponse", response.data);
 
-        await dispatch(GET_ALL_SERVICES_USER_NAMES({
-            data: row
-        })).unwrap()
-            .then((response) => {
-                if (response.status) {
-                  
-                    setServicesuserName({
-                            loading: false,
-                            data: response.data
-                        });
-                        setshowModal(true);
-                }
-            })
+        //                 // setServicesuserName(response.data);
+
+
+        //             }
+        //         })
     }
 
     // DELETE GROUP
@@ -171,12 +168,16 @@ const ServicesList = () => {
                     toast.success("Done")
                     // window.location.reload()
                 } else {
-          
+
                     toast.error(response.msg)
                 }
             })
     }
 
+
+    useEffect(() => {
+        data()
+    }, [])
 
     return (
         <>
@@ -225,7 +226,7 @@ const ServicesList = () => {
                                     <>
                                         < Modal isOpen={showModaluser} backdrop="static" size="ms-5" title="Services" hideBtn={true} onHide={handleClose1}
                                         >
-                                            <BasicDataTable TableColumns={[
+                                            {/* <BasicDataTable TableColumns={[
                                                 {
                                                     dataField: "index",
                                                     text: "SR. No.",
@@ -240,7 +241,7 @@ const ServicesList = () => {
                                                     text: 'lotsize'
                                                 },
 
-                                            ]} tableData={getServicesuserName && getServicesuserName.data} />
+                                            ]} tableData={ getServicesuserName.data} /> */}
 
                                             <button onClick={handleClose1}>off</button>
                                         </Modal >
