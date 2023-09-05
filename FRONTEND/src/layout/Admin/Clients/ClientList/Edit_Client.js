@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
+import { useParams } from "react-router-dom";
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form"
 import { useFormik } from 'formik';
 import * as  valid_err from "../../../../Utils/Common_Messages"
@@ -9,10 +10,10 @@ import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from 
 import { Email_regex, Mobile_regex } from "../../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
 import Content from '../../../../Components/Dashboard/Content/Content';
+import { User_Profile } from '../../../../ReduxStore/Slice/Common/commoSlice';
+
 import Theme_Content from '../../../../Components/Dashboard/Content/Theme_Content';
 // import "../../../component/admin/admin-assets/css/style.css"
-
-
 // import { AddClients } from "../../../ReduxStore/Slice/AdminMasters"
 
 
@@ -20,16 +21,13 @@ import Theme_Content from '../../../../Components/Dashboard/Content/Theme_Conten
 const EditClient = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  // const AdminToken = JSON.parse(localStorage.getItem('user_details')).accessToken;
-  // const userid = JSON.parse(localStorage.getItem('user_details')).id;
-  // const roleId = JSON.parse(localStorage.getItem('user_details')).roleId;
-  // const admin_id = JSON.parse(localStorage.getItem('user_details')).admin_id;
-  // const RoleId = JSON.parse(localStorage.getItem('user_details')).roles;
 
+  const { id } = useParams();
 
 
 
   const [showLoader, setshowLoader] = useState(false)
+  const [getUser, setUser] = useState([])
 
 
   const isValidEmail = (email) => {
@@ -444,13 +442,30 @@ const EditClient = () => {
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
+
+    get_user(id)
   }, [formik.values.broker]);
 
 
 
+  // ACTIVE USER TO API
+  const get_user = async (id) => {
+    let req = {
+      id: id,
+
+    };
+    await dispatch(User_Profile(req)).unwrap()
+      .then((response) => {
+        console.log("response=>", response);
+        if (response.status) {
+          setUser(response.data)
+        }
+      })
+  }
+
   return (
     <>
-      <Content Page_title="Edit Client" button_title='Back'  route="/admin/allclients">
+      <Content Page_title="Edit Client" button_title='Back' route="/admin/allclients">
         <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Edit Client" />
       </Content >
 

@@ -10,9 +10,10 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
+import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 
 const AllClients = () => {
     const navigate = useNavigate()
@@ -54,7 +55,7 @@ const AllClients = () => {
         await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
             .then((response) => {
                 if (response.status) {
-                    localStorage.setItem("gotodashboard", JSON.stringify(true));        
+                    localStorage.setItem("gotodashboard", JSON.stringify(true));
                     localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
                     localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
                     navigate("/client/dashboard")
@@ -62,6 +63,21 @@ const AllClients = () => {
                 }
             })
 
+    }
+
+    // ACTIVE USER TO API
+    const activeUser = async (e, data) => {
+        let req = {
+            id: data._id,
+            user_active_status: e.target.checked == true ? "1" : "0"
+
+        };
+        await dispatch(UPDATE_USER_ACTIVE_STATUS(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
+
+                }
+            })
     }
 
     const columns = [
@@ -110,8 +126,15 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <>
                     <label class="switch" >
-                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false} />
+                        <input type="checkbox" className="bg-primary" defaultChecked={row.ActiveStatus == "1" ? true : false} onChange={(e) => activeUser(e, row)} />
                         <span class="slider round"></span>
+                        {/* <BootstrapSwitchButton
+                            checked={row.ActiveStatus === '1' ? true : false}
+                            size="xs"
+                            onstyle="outline-success"
+                            offstyle="outline-danger"
+                            onChange={(e) => activeUser(e, row)}
+                        /> */}
                     </label>
 
                 </>
@@ -170,7 +193,7 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
                     <div>
-                        <Link to="/admin/client/edit">
+                    <Link to={`/admin/client/edit/${row._id}`}>
                             <span data-toggle="tooltip" data-placement="top" title="Edit">
                                 <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                             </span>
@@ -216,7 +239,7 @@ const AllClients = () => {
 
 
         </ >
-        )
+    )
 }
 
 

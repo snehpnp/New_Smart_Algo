@@ -260,8 +260,6 @@ export async function GET_ALL_SERVICES_USER_NAME(data , token) {
 
 }
 
-
-
 // DELETE GROUP SERVICES
 export async function DELETE_GROUP_SERVICES(data , token) {
     try {
@@ -273,6 +271,23 @@ export async function DELETE_GROUP_SERVICES(data , token) {
     }
     catch (err) {
         console.log("error", err);
+        // custom error
+    }
+
+}
+
+// UPDATE ACTIVE STATUS
+export async function UPDATE_USERACTIVE_STATUS(data , token) {
+    console.log(data);
+    try {
+        const res = await axios.post(`${Config.base_url}update/useractive/status`, data ,{
+            //  headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error =", err);
         // custom error
     }
 

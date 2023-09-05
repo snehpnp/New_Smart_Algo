@@ -85,7 +85,7 @@ const Admin = () => {
                 <Route exact path="/system" element={<System />} />
                 <Route exact path="/allclients" element={<ClientList />} />
                 <Route exact path="/client/add" element={<AddClient />} />
-                <Route exact path="/client/edit" element={<EditClient />} />
+                <Route exact path="/client/edit/:id" element={<EditClient />} />
                 <Route exact path="/signupclients" element={<SignUpClients />} />
                 <Route exact path="/editsignupclients" element={<EditSignupClient />} />
                 <Route exact path="/allsubadmins" element={<AllSubadmin />} />

@@ -60,7 +60,7 @@ class Employee {
 
 
             var ccd = dt.format('ymd');
-            var client_key = Panel_key[0].prefix + cli_key + ccd 
+            var client_key = Panel_key[0].prefix + cli_key + ccd
 
             // Company Information
             const User = new User_model({
@@ -110,11 +110,7 @@ class Employee {
             const skip = (page - 1) * limit;
 
             // GET ALL CLIENTS
-            const getAllClients = await User_model.find({
-                $or: [
-                    { Role: "USER" }
-                ]
-            }).skip(skip)
+            const getAllClients = await User_model.find({ Role: "USER" }).skip(skip)
                 .limit(Number(limit));
 
             const totalCount = getAllClients.length;
@@ -208,28 +204,28 @@ class Employee {
 
             const GetAlluser_logs = await user_logs.aggregate([
                 {
-                  $lookup: {
-                    from: "users",
-                    localField: "user_Id",
-                    foreignField: "_id",
-                    as: "userinfo",
-                  },
+                    $lookup: {
+                        from: "users",
+                        localField: "user_Id",
+                        foreignField: "_id",
+                        as: "userinfo",
+                    },
                 },
                 {
                     $unwind: '$userinfo', // Unwind the 'categoryResult' array
-                  },
-                  {
+                },
+                {
                     $project: {
-                      'userinfo.FullName': 1,
-                      login_status:1,
-                      trading_status:1,
-                      message:1,
-                      role:1,
-                      system_ip:1,
-                      createdAt:1       
+                        'userinfo.FullName': 1,
+                        login_status: 1,
+                        trading_status: 1,
+                        message: 1,
+                        role: 1,
+                        system_ip: 1,
+                        createdAt: 1
                     },
-                  },
-              ]);
+                },
+            ]);
 
             // const GetAlluser_logs = await user_logs.find({
 
@@ -254,6 +250,48 @@ class Employee {
             console.log("trading status Error-", error);
         }
     }
+
+
+    // CLIENTS ACTIVE INACTIVE STATUS UPDATE
+    async UpdateActiveStatus(req, res) {
+        try {
+            const { id, user_active_status } = req.body
+            // UPDATE ACTTIVE STATUS CLIENT
+
+
+            const get_user = await User_model.find({ _id: id });
+            if (get_user.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
+
+            const filter = { _id: id };
+            const updateOperation = { $set: { ActiveStatus: user_active_status } };
+            console.log("updateOperation",updateOperation);
+            const result = await User_model.updateOne(filter, updateOperation);
+
+            console.log("result", result);
+
+            return
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All user_logs",
+                data: GetAlluser_logs,
+                // page: Number(page),
+                // limit: Number(limit),
+                totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+        } catch (error) {
+            console.log("trading status Error-", error);
+        }
+    }
+
+
+
+
+
 }
 
 
