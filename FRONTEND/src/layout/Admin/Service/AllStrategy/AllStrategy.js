@@ -44,6 +44,7 @@ const ServicesList = () => {
                 "limit": "100"
             }, token: user_token
         })).unwrap().then((response) => {
+            console.log("response", response);
             if (response.status) {
                 setAllStrategy({
                     loading: false,
@@ -55,7 +56,7 @@ const ServicesList = () => {
 
     useEffect(() => {
         data()
-    }, [refresh])
+    }, [])
 
 
 

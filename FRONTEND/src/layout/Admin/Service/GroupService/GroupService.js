@@ -32,6 +32,9 @@ const ServicesList = () => {
         data: []
     });
 
+    const handleClose = () => {
+        setshowModal(false);
+    }
 
 
 
@@ -75,7 +78,7 @@ const ServicesList = () => {
                 <div>
                     <button
                         className="btn  btn-color"
-                        onClick={(e) => GetAllServicesName(row)}
+                        onClick={(e) => setshowModal(true)}
                     >
                         <GanttChartSquare size={20} color="#198754" strokeWidth={2} className="mx-1" />
 
@@ -173,7 +176,7 @@ const ServicesList = () => {
                             {
                                 showModal ?
                                     <>
-                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Services" btn_name="Verify"
+                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
                                         //  handleClose={setshowModal(false)}
                                         >
 

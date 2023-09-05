@@ -56,7 +56,11 @@ const DropDown = () => {
             </button>
             <div className="dropdown-menu dropdown-menu-end" style={{ margin: 0 }}>
 
-                <Link to="profile" className=" my-2 text-center  text-white btn  btn-primary dropdown-item" href="#">
+
+                {/* <Link to="profile" className=" my-2 text-center  text-white btn  btn-primary dropdown-item" href="#"> */}
+
+                <Link to="/admin/profile" className=" my-2 text-center  text-white btn  btn-primary dropdown-item">
+
                     Profile
                 </Link>
                 {gotodashboard == null ?
