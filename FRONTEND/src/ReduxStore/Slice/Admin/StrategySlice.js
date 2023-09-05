@@ -60,45 +60,45 @@ export const Add_Strategy = createAsyncThunk("admin/strategy/add", async (apireq
 const StrategyServiceSlice = createSlice({
     name: "StrategyServiceSlice",
     initialState: {
-      isLoading: false,
-      isError: false,
-      status: false,
-      allstrategy: [],
-      getonestrategy: [],
-      removestrategy: [],
-      addstrategy: [],
+        isLoading: false,
+        isError: false,
+        status: false,
+        allstrategy: [],
+        getonestrategy: [],
+        removestrategy: [],
+        addstrategy: [],
     },
     reducers: {}, // Define any reducers here if needed
     extraReducers: (builder) => {
-      builder
-        .addCase(Get_All_Strategy.pending, (state, action) => {
-          state.isLoading = true;
-          state.isError = false;
-        })
-        .addCase(Add_Strategy.fulfilled, (state, action) => {
-          state.addstrategy = action.payload;
-          state.isLoading = false;
-          state.isError = false;
-        })
-        .addCase(Get_All_Strategy.fulfilled, (state, action) => {
-          state.allstrategy = action.payload;
-          state.isLoading = false;
-          state.isError = false;
-        })
-        .addCase(Get_Strategy_BY_Id.fulfilled, (state, action) => {
-          state.getonestrategy = action.payload;
-          state.isLoading = false;
-          state.isError = false;
-        })
-        .addCase(Remove_Strategy_BY_Id.fulfilled, (state, action) => {
-          state.removestrategy = action.payload;
-          state.isLoading = false;
-          state.isError = false;
-        });
+        builder
+            .addCase(Get_All_Strategy.pending, (state, action) => {
+                state.isLoading = true;
+                state.isError = false;
+            })
+            .addCase(Add_Strategy.fulfilled, (state, action) => {
+                state.addstrategy = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(Get_All_Strategy.fulfilled, (state, action) => {
+                state.allstrategy = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(Get_Strategy_BY_Id.fulfilled, (state, action) => {
+                state.getonestrategy = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            })
+            .addCase(Remove_Strategy_BY_Id.fulfilled, (state, action) => {
+                state.removestrategy = action.payload;
+                state.isLoading = false;
+                state.isError = false;
+            });
     },
-  });
-  
-  export default StrategyServiceSlice;
-  
+});
+
+export default StrategyServiceSlice;
+
 
 
