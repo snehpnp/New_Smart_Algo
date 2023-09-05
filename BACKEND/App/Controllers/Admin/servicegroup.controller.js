@@ -217,9 +217,9 @@ class GroupService {
       const pipeline = [
         {
           '$lookup': {
-            'from': 'servicegroup_services_ids', 
-            'localField': '_id', 
-            'foreignField': 'Servicegroup_id', 
+            'from': 'servicegroup_services_ids',
+            'localField': '_id',
+            'foreignField': 'Servicegroup_id',
             'as': 'result'
           }
         },
@@ -229,21 +229,110 @@ class GroupService {
           }
         }
       ];
-  
+
       const result = await serviceGroupName.aggregate(pipeline);
-  
+
       if (result.length > 0) {
         res.send({ status: true, data: result, msg: 'Get All successfully' });
       } else {
-        res.send({ status: false, data: [],  msg: 'false' });
+        res.send({ status: false, data: [], msg: 'false' });
       }
-  
+
     } catch (error) {
       console.log("Get All Group Services Error - ", error);
-      res.status(500).send({ status: false, data: [],  msg: 'An error occurred' });
+      res.status(500).send({ status: false, data: [], msg: 'An error occurred' });
     }
   }
+
+
+ // DELETE GROUP SERVICES 
+ async DELETEGROUPSERVICES(req, res) {
+
+try {
+
+  const {} = req.body
+  console.log("req.body",req.body);
+   // if (result.length > 0) {
+  //   res.send({ status: true, data: result });
+
+  // } else {
+  //   res.send({ status: false, data: [] });
+
+  // }
+
+} catch (error) {
   
+}
+}
+
+  // GET SERVICES NAME
+  async GetAllServicesName(req, res) {
+
+
+    try {
+      const { data } = req.body
+
+      data.result.forEach(async (info) => {
+   
+        const Service_name_get = await services.findOne({ _id: info.Service_id });
+
+        console.log("Service_name_get",Service_name_get);
+      })
+
+
+
+    } catch (error) {
+      console.log("GET SERVICES NAME -", error);
+    }
+
+    // const pipeline = [
+
+    //   {
+    //     $lookup: {
+    //       from: 'categories',
+    //       localField: 'categorie_id',
+    //       foreignField: '_id',
+    //       as: 'categoryResult'
+    //     }
+    //   },
+
+    //   {
+    //     $unwind: '$categoryResult', // Unwind the 'categoryResult' array
+    //   },
+    //   {
+    //     $project: {
+    //       // Include fields from the original collection
+    //       'categoryResult.segment': 1,
+    //       'categoryResult.name': 1,
+    //       name: 1
+    //       // // Exclude the rest of the 'categoryResult' fields if needed
+    //       // 'categoryResult._id': 0,
+    //       // 'categoryResult.fieldName3': 0,
+
+    //       // Include other fields as needed
+    //     },
+
+
+    //   },
+    // ];
+
+
+
+
+
+    // const result = await services.aggregate(pipeline);
+
+    // if (result.length > 0) {
+    //   res.send({ status: true, data: result });
+
+    // } else {
+    //   res.send({ status: false, data: [] });
+
+    // }
+
+
+
+  }
 
 }
 

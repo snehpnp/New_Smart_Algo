@@ -191,7 +191,7 @@ const AllClients = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All Clients" button_title="Add Client" route="/client/add">
+                        <Theme_Content Page_title="All Clients" button_title="Add Client" route="/admin/client/add">
 
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (

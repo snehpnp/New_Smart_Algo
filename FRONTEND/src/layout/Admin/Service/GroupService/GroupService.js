@@ -6,9 +6,10 @@ import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Conten
 import Loader from '../../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, GanttChartSquare } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { Get_All_Service, Get_All_Catagory, Service_By_Catagory, GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { Get_All_Service, Get_All_Catagory, Service_By_Catagory, GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
+import { GET_ALL_SERVICES_NAMES, DELETE_GROUP_SERVICE } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
@@ -74,9 +75,9 @@ const ServicesList = () => {
                 <div>
                     <button
                         className="btn  btn-color"
-                        onClick={(e) => setshowModal(true)}
+                        onClick={(e) => GetAllServicesName(row)}
                     >
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                        <GanttChartSquare size={20} color="#198754" strokeWidth={2} className="mx-1" />
 
                     </button>
                 </div>
@@ -87,13 +88,13 @@ const ServicesList = () => {
             text: 'Client Using',
             formatter: (cell, row) => (
                 <div>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-                    </span>
+                    <button
+                        className="btn  btn-color"
+                        onClick={(e) => setshowModal(true)}
+                    >
+                        <GanttChartSquare size={20} color="#198754" strokeWidth={2} className="mx-1" />
 
+                    </button>
                 </div>
             ),
         },
@@ -105,8 +106,9 @@ const ServicesList = () => {
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </span>
+
                     <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                        <Trash2 onClick={(e) => DeleteGroup(row)} size={20} color="#d83131" strokeWidth={2} className="mx-1" />
                     </span>
 
                 </div>
@@ -114,8 +116,44 @@ const ServicesList = () => {
         },
     ];
 
+    // GET ALL GROUP SERVICES NAME
+    const GetAllServicesName = async (row) => {
 
+        // setshowModal(true);
 
+        var req = {
+            data: row
+        }
+
+        await dispatch(GET_ALL_SERVICES_NAMES(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    console.log("response", response.data);
+                    // setAllGroupServices({
+                    //     loading: false,
+                    //     data: response.data
+                    // });
+                }
+            })
+    }
+
+    // DELETE GROUP
+    const DeleteGroup = async (row) => {
+        console.log("DeleteGroup", row._id);
+        var req = {
+            id: row._id
+        }
+        await dispatch(DELETE_GROUP_SERVICE(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    console.log("response", response.data);
+                    // setAllGroupServices({
+                    //     loading: false,
+                    //     data: response.data
+                    // });
+                }
+            })
+    }
 
 
     return (
@@ -135,9 +173,10 @@ const ServicesList = () => {
                             {
                                 showModal ?
                                     <>
-                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
+                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Services" btn_name="Verify"
                                         //  handleClose={setshowModal(false)}
                                         >
+
                                         </Modal >
                                     </>
                                     : ""

@@ -46,7 +46,7 @@ const ServicesList = () => {
         })).unwrap().then((response) => {
             if (response.status) {
                 setAllStrategy({
-                    loading: true,
+                    loading: false,
                     data: response.data
                 });
             }
