@@ -54,7 +54,7 @@ const DropDown = () => {
                 <img src="../assets/images/avatar/1.png" />
                 <i className="fa fa-angle-down ms-3" />
             </button>
-            <div className="dropdown-menu dropdown-menu-end" style={{ margin: 0 }}>
+            <div className="dropdown-menu dropdown-menu-end" style={{ margin: 0, padding: "11px" }}>
 
 
                 {/* <Link to="profile" className=" my-2 text-center  text-white btn  btn-primary dropdown-item" href="#"> */}
