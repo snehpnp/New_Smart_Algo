@@ -34,7 +34,6 @@ const ServicesList = () => {
         data: []
     });
 
-    console.log("AllStrategy", AllStrategy);
 
 
 
@@ -57,7 +56,7 @@ const ServicesList = () => {
 
     useEffect(() => {
         data()
-    }, [refresh])
+    }, [])
 
 
 
@@ -71,7 +70,6 @@ const ServicesList = () => {
             _id: strat_id,
             token: user_token
         })).unwrap().then((response) => {
-            console.log("response", response);
             if (response.status === 409) {
                 toast.error(response.data.msg);
             }

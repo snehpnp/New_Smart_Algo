@@ -7,18 +7,18 @@ import * as Config from "../Utils/Config";
 
 
 
-// Admin Dashboard
-// export async function admin_dashboard(data , token) {
-//     try {
-//         const res = await axios.post(`${Config.base_url}admin/dashboard`, data ,{
-//             headers: header(token),
-//             data: {},
-//         })
-//         return await res?.data;
-//     }
-//     catch (err) {
-//         console.log("error", err);
-//         // custom error
-//     }
+// USER TRADING STATUS GET ALL
+export async function user_getall_tradingstatus(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/user/trading_status`, data ,{
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
 
-// }
+}

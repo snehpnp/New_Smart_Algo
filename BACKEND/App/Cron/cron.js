@@ -29,10 +29,6 @@ cron.schedule('42 12 * * *', () => {
 });
 
 
-// cron.schedule('* * * * *', () => {
-//     console.log('Run Second Time');
-//     LogoutAllUsers()
-// });
 
 // 1. LOGOUT AND TRADING OFF ALL USER 
 const LogoutAllUsers = async () => {

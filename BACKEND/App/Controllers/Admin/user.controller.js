@@ -2,6 +2,8 @@
 const bcrypt = require("bcrypt");
 const db = require('../../Models');
 const User_model = db.user;
+const user_logs = db.user_logs;
+
 const Role_model = db.role;
 const Company_info = db.company_information;
 var dateTime = require('node-datetime');
@@ -14,7 +16,7 @@ class Employee {
     // USER ADD 
     async AddEmployee(req, res) {
         try {
-            const { FullName, UserName, Email, PhoneNo, StartDate, EndDate, Role } = req.body;
+            const { FullName, UserName, Email, PhoneNo, StartDate, EndDate, Role, parent_id, parent_role } = req.body;
 
             // IF ROLE NOT EXIST TO CHECK
             const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
@@ -59,8 +61,6 @@ class Employee {
 
             var ccd = dt.format('ymd');
             var client_key = Panel_key[0].prefix + cli_key + ccd
-            // console.log("Panel_key", client_key);
-
 
             // Company Information
             const User = new User_model({
@@ -74,7 +74,9 @@ class Employee {
                 StartDate: StartDate,
                 EndDate: EndDate,
                 Role: Role.toUpperCase(),
-                client_key: client_key
+                client_key: client_key,
+                parent_id: parent_id,
+                parent_role: parent_role
 
             });
 
@@ -100,7 +102,39 @@ class Employee {
 
     }
 
-// GET ALL LOGIN CLIENTS
+    // GET ALL GetAllClients
+    async GetAllClients(req, res) {
+        try {
+
+            const { page, limit } = req.body;     //LIMIT & PAGE
+            const skip = (page - 1) * limit;
+
+            // GET ALL CLIENTS
+            const getAllClients = await User_model.find({ Role: "USER" }).skip(skip)
+                .limit(Number(limit));
+
+            const totalCount = getAllClients.length;
+            // IF DATA NOT EXIST
+            if (getAllClients.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All  Clients",
+                totalCount: totalCount,
+                data: getAllClients,
+                page: Number(page),
+                limit: Number(limit),
+                totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+        } catch (error) {
+            console.log("loginClients Error-", error);
+        }
+    }
+
+    // GET ALL LOGIN CLIENTS
     async loginClients(req, res) {
         try {
 
@@ -114,7 +148,7 @@ class Employee {
             const totalCount = getAllLoginClients.length;
             // IF DATA NOT EXIST
             if (getAllLoginClients.length == 0) {
-              return  res.send({ status: false, msg: "Empty data", data: [] , totalCount: totalCount,})
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
             }
 
             // DATA GET SUCCESSFULLY
@@ -144,7 +178,7 @@ class Employee {
             // console.log("totalCount", totalCount);
             // IF DATA NOT EXIST
             if (getAllTradingClients.length == 0) {
-              return  res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
             }
 
             // DATA GET SUCCESSFULLY
@@ -161,6 +195,103 @@ class Employee {
             console.log("trading Clients Error-", error);
         }
     }
+
+    // GET ALL TRADING ON  CLIENTS
+    async GetTradingStatus(req, res) {
+        try {
+
+            // GET LOGIN CLIENTS
+
+            const GetAlluser_logs = await user_logs.aggregate([
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "user_Id",
+                        foreignField: "_id",
+                        as: "userinfo",
+                    },
+                },
+                {
+                    $unwind: '$userinfo', // Unwind the 'categoryResult' array
+                },
+                {
+                    $project: {
+                        'userinfo.FullName': 1,
+                        login_status: 1,
+                        trading_status: 1,
+                        message: 1,
+                        role: 1,
+                        system_ip: 1,
+                        createdAt: 1
+                    },
+                },
+            ]);
+
+            // const GetAlluser_logs = await user_logs.find({
+
+            // });
+            const totalCount = GetAlluser_logs.length;
+            // IF DATA NOT EXIST
+            if (GetAlluser_logs.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All user_logs",
+                data: GetAlluser_logs,
+                // page: Number(page),
+                // limit: Number(limit),
+                totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+        } catch (error) {
+            console.log("trading status Error-", error);
+        }
+    }
+
+
+    // CLIENTS ACTIVE INACTIVE STATUS UPDATE
+    async UpdateActiveStatus(req, res) {
+        try {
+            const { id, user_active_status } = req.body
+            // UPDATE ACTTIVE STATUS CLIENT
+
+
+            const get_user = await User_model.find({ _id: id });
+            if (get_user.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
+
+            const filter = { _id: id };
+            const updateOperation = { $set: { ActiveStatus: user_active_status } };
+            console.log("updateOperation",updateOperation);
+            const result = await User_model.updateOne(filter, updateOperation);
+
+            console.log("result", result);
+
+            return
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All user_logs",
+                data: GetAlluser_logs,
+                // page: Number(page),
+                // limit: Number(limit),
+                totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+        } catch (error) {
+            console.log("trading status Error-", error);
+        }
+    }
+
+
+
+
+
 }
 
 

@@ -13,7 +13,7 @@ var dt = dateTime.create();
 class Subadmin {
     async AddSubadmin(req, res) {
         try {
-            const { FullName, UserName, Email, PhoneNo, Role, password, Subadmin_permision_data } = req.body;
+            const { FullName, UserName, Email, PhoneNo, Role, password, Subadmin_permision_data ,parent_id,parent_role} = req.body;
 
 
             // IF ROLE NOT EXIST TO CHECK
@@ -66,7 +66,10 @@ class Subadmin {
                 // StartDate: "00-00-00",
                 // EndDate: "00-00-00",
                 Role: Role.toUpperCase(),
-                client_key: client_key
+                client_key: client_key,
+                parent_role:parent_role,
+                parent_id:parent_id
+                
 
             });
 
@@ -163,6 +166,36 @@ class Subadmin {
             })
         } catch (error) {
             console.log("get Subadmin error -", error);
+        }
+    }
+
+
+    async getallSubadminClients(req, res) {
+        try {
+
+            // GET LOGIN CLIENTS
+            const getAllSubAdmins = await User_model.find({
+                parent_role: "SUBADMIN"
+            });
+            const totalCount = getAllSubAdmins.length;
+
+            // IF DATA NOT EXIST
+            if (getAllSubAdmins.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All Subadmins",
+                data: getAllSubAdmins,
+                // page: Number(page),
+                // limit: Number(limit),
+                totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+        } catch (error) {
+            console.log("getallSubadmin error -", error);
         }
     }
 }

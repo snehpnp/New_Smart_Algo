@@ -82,10 +82,10 @@ class Panel {
     // USER PROFILE TO GET USER
     async UserProfile(req, res) {
         try {
-            const { userId } = req.body
+            const { id } = req.body
 
             // FIND PANEL NAME DUPLICATE
-            const EmailCheck = await User.findOne({ _id: userId })
+            const EmailCheck = await User.findOne({ _id: id })
 
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
@@ -108,14 +108,14 @@ class Panel {
 
                 [
                     {
-                      '$lookup': {
-                        'from': 'theme_lists',
-                        'localField': 'theme_id',
-                        'foreignField': '_id',
-                        'as': 'theme_data'
+                        '$lookup': {
+                            'from': 'theme_lists',
+                            'localField': 'theme_id',
+                            'foreignField': '_id',
+                            'as': 'theme_data'
+                        }
                     }
-                }
-            ]);
+                ]);
 
 
             // CHECK IF PANEL EXIST OR NOT

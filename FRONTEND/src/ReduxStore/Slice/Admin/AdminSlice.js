@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY,ALL_GROUP_SERVICES , } from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_CLIENTS, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS } from "../../../Service/admin.service";
 
 
 
@@ -33,19 +33,77 @@ export const Service_By_Catagory = createAsyncThunk("admin/catogory", async (dat
     }
 });
 
+// ADMIN GET ALL CLIENTS
+export const GET_ALL_CLIENTS = createAsyncThunk("getall/clients", async (data) => {
+    try {
+        const res = await ALL_CLIENTS(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
 
 
 // ADMIN GET ALL GROUP SERVICES
 export const GET_ALL_GROUP_SERVICES = createAsyncThunk("getall/groupservices", async (data) => {
     try {
         const res = await ALL_GROUP_SERVICES(data);
+        // console.log("res" ,res);
         return await res;
     } catch (err) {
-        return err
+        return err;
+    }
+});
+
+// GET COMPANY INFORMATION
+export const GET_COMPANY_INFOS = createAsyncThunk("get/company", async (data) => {
+    try {
+        const res = await GET_COMPANY_INFO(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+// GET ALL TRADING STATUS
+export const GET_ALL_TRADING_STATUS = createAsyncThunk("getall/tadingstatus", async (data) => {
+    try {
+        const res = await GET_ALL_TRADINGSTATUS(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
     }
 });
 
 
+
+// GET ALL TRADING STATUS
+export const GO_TO_DASHBOARDS = createAsyncThunk("goToDashboard", async (data) => {
+    try {
+        const res = await GO_TO_DASHBOARD(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+
+// UPDATE USER ACTIVE STATUS FOR API
+export const UPDATE_USER_ACTIVE_STATUS = createAsyncThunk("update/useractive/status", async (data) => {
+    try {
+        const res = await UPDATE_USERACTIVE_STATUS(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        console.log("err",err);
+        return err;
+    }
+});
 
 
 const AdminSlice = createSlice({
@@ -57,15 +115,20 @@ const AdminSlice = createSlice({
         allService: [],
         allCatagory: [],
         servicebycatagory: [],
-        allGroupServices:[]
+        allGroupServices: [],
+        allClients: [],
+        companyInfo: [],
+        getalltradingstatus: [],
+        goTodashboard: [],
+        activeStatus: []
     },
 
     recuders: {},
     extraReducers: {
 
-        [Get_All_Service.pending]: (state, action) => {
-            console.log("pending Get_All_Service ");
-        },
+        // [Get_All_Service.pending]: (state, action) => {
+        //     console.log("pending Get_All_Service ");
+        // },
         [Get_All_Service.fulfilled]: (state, { payload }) => {
             return { ...state, allService: payload, isLoading: false };
         },
@@ -82,6 +145,26 @@ const AdminSlice = createSlice({
         [GET_ALL_GROUP_SERVICES.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, allGroupServices: payload, isLoading: false };
+        },
+        [GET_ALL_CLIENTS.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, allClients: payload, isLoading: false };
+        },
+        [GET_COMPANY_INFOS.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, companyInfo: payload, isLoading: false };
+        },
+        [GET_ALL_TRADING_STATUS.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, getalltradingstatus: payload, isLoading: false };
+        },
+        [GO_TO_DASHBOARDS.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, goTodashboard: payload, isLoading: false };
+        },
+        [UPDATE_USER_ACTIVE_STATUS.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, activeStatus: payload, isLoading: false };
         },
     },
 });

@@ -16,7 +16,7 @@ const ThemeSelection = () => {
         axios.post("https://api.smartalgo.in:3001/smartalgo/getthemeById", { id: parseInt(id) }).then((res) => {
             let themedata = res.data.data[0]
 
-            console.log("themedata", themedata);
+            // console.log("themedata", themedata);
             // let abc = $('body').attr('class')
             // $('body').attr('data-dashboard', `${abc}-dashboard`);
 
@@ -279,7 +279,7 @@ const ThemeSelection = () => {
                         {/* {theme_arr && theme_arr.map((item) => { */}
                         {ThemeData && ThemeData.map((item) => {
                             return <>
-                                <div className="overlay-bx dz-demo-bx">
+                                <div key={item._id} className="overlay-bx dz-demo-bx">
                                     <div className="overlay-wrapper">
                                         <img
                                             src={item.image}
@@ -434,7 +434,7 @@ const ThemeSelection = () => {
                         <h5 className="text-black mb-2">Demo 7</h5> */}
                     </div>
                 </div>
-                {/* <div className="fs-12 pt-3">
+                <div className="fs-12 pt-3">
                     <span className="text-danger">*Note :</span> This theme switcher is not
                     part of product. It is only for demo. you will get all guideline in
                     documentation. please checkonClick
@@ -443,7 +443,7 @@ const ThemeSelection = () => {
                         className="text-primary">
                         documentation.
                     </button>
-                </div> */}
+                </div>
             </div>
         </div>
         </div>

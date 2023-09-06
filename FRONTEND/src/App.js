@@ -2837,7 +2837,6 @@ const App = () => {
 
   const captureScreenshot = () => {
 
-    // console.log("pageRef.current", pageRef.current);
     // const options = {
     //   width: document.documentElement.scrollWidth, // Set custom width
     //   height: document.documentElement.scrollHeight, // Set custom height

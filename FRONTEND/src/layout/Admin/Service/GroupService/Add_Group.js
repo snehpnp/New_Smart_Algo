@@ -98,7 +98,6 @@ const AddGroup = () => {
             if (!values.group_name) {
                 errors.group_name = valid_err.EMPTY_GROUP_NAME_ERR;
             }
-            console.log("values.selectSegment", values.selectSegment);
             if (!values.selectSegment) {
                 errors.selectSegment = valid_err.SEGEMENTSELECT_ERROR;
             }
@@ -122,8 +121,7 @@ const AddGroup = () => {
             services_id: uniqueArr
 
         })).then((response) => {
-            console.log("response", response);
-
+          
             if (response.payload.status) {
                 toast.success(response.payload.msg);
                 setTimeout(() => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Theme_Content = ({ Page_title, button_title, route, ...rest }) => {
+const Theme_Content = ({ Page_title, button_title,button_status, route, ...rest }) => {
     return (
         <div>
             <div className="content-body">
@@ -9,10 +9,11 @@ const Theme_Content = ({ Page_title, button_title, route, ...rest }) => {
 
                     <div className='row mb-3'>
                         <div className="col-lg-6"></div>
-                        <div className="col-lg-6">
+                        {button_status == false ? "":<div className="col-lg-6">
                             <Link to={route} className='btn btn-primary float-lg-end '>
                                 <i className={`fa-solid  ${button_title === "Back" ?  'fa-arrow-left' : 'fa-plus' } `}></i> {button_title}</Link>
-                    </div>
+                    </div>}
+                        
                 </div>
                 <div className="row">
                     <div className="col-lg-12">

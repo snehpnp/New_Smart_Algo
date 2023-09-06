@@ -11,12 +11,14 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
+import { GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
 
 const AllSubadmin = () => {
-
+    const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const [first, setfirst] = useState('all')
@@ -80,13 +82,38 @@ const AllSubadmin = () => {
             ),
         },
         {
+            dataField: 'ActiveStatus',
+            text: 'Dashboard',
+            formatter: (cell, row) => (
+                <>
+                    <button
+                        className="btn btn-new-block"
+                        style={
+                            row.AppLoginStatus === '0' && row.WebLoginStatus === '0'
+                                ? { color: "#FF0000" }
+                                : { color: "#008000" }
+                        }
+                        onClick={() => goToDashboard(row._id, row.Email)}
+                        disabled={row.AppLoginStatus === '0' && row.WebLoginStatus === '0'}
+                    >
+                        Dashboard
+                    </button>
+
+                </>
+
+
+            ),
+        },
+        {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
                 <div>
+                    <Link to="/admin/editsubadmin">
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </span>
+                    </Link>
                     <span data-toggle="tooltip" data-placement="top" title="Delete">
                         <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
                     </span>
@@ -95,6 +122,29 @@ const AllSubadmin = () => {
             ),
         },
     ];
+
+
+    const goToDashboard = async (asyncid, email) => {
+
+        let req = {
+            Email: email,
+          
+        };
+        await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    // console.log(response);
+
+                    localStorage.setItem("gotodashboard","true");
+                    localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
+                    localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
+                    navigate("/client/dashboard")     
+                
+                }
+            })
+
+    }
+
     return (
         <>
             {

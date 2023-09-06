@@ -10,7 +10,6 @@ const TableWIthCustomPaginations = ({ tableData, tableColumn }) => {
 
     const data = tableData
 
-    console.log("data" ,data);
     return (
         <div>
 

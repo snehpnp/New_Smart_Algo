@@ -1,13 +1,16 @@
 "use strict";
 const bcrypt = require("bcrypt");
 const db = require('../../Models');
-
+const mongoose = require('mongoose');
+var dateTime = require('node-datetime');
+const ObjectId = mongoose.Types.ObjectId;
 const serviceGroupName = db.serviceGroupName;
 const services = db.services;
 const serviceGroup_services_id = db.serviceGroup_services_id;
 const categorie = db.categorie;
+const groupServices_client1 = db.groupService_User;
 
-var dateTime = require('node-datetime');
+
 var dt = dateTime.create();
 
 
@@ -25,7 +28,6 @@ class GroupService {
         description: groupdetails.description
       })
         .then((createdServicesGroupName) => {
-          //  console.log('User created and saved:', createdServicesGroupName._id)
           const groupName_id = createdServicesGroupName._id;
 
           services_id.forEach(item => {
@@ -38,7 +40,7 @@ class GroupService {
 
             })
               .then((createdGroupServiceId) => {
-                console.log('User created createdGroupServiceId and saved:', createdGroupServiceId._id)
+                // console.log('User created createdGroupServiceId and saved:', createdGroupServiceId._id)
 
               })
               .catch((err) => {
@@ -101,11 +103,12 @@ class GroupService {
     const result = await services.aggregate(pipeline);
 
     if (result.length > 0) {
-      res.send({ status: true, data: result });
+
+      return res.json({ status: true, msg: 'Get all', data: result });
 
     } else {
-      res.send({ status: false, data: [] });
 
+      return res.json({ status: false, msg: 'An error occurred', data: [] });
     }
 
 
@@ -218,9 +221,9 @@ class GroupService {
       const pipeline = [
         {
           '$lookup': {
-            'from': 'servicegroup_services_ids', 
-            'localField': '_id', 
-            'foreignField': 'Servicegroup_id', 
+            'from': 'servicegroup_services_ids',
+            'localField': '_id',
+            'foreignField': 'Servicegroup_id',
             'as': 'result'
           }
         },
@@ -230,21 +233,149 @@ class GroupService {
           }
         }
       ];
-  
+
       const result = await serviceGroupName.aggregate(pipeline);
-  
+
       if (result.length > 0) {
         res.send({ status: true, data: result, msg: 'Get All successfully' });
       } else {
-        res.send({ status: false, data: [],  msg: 'false' });
+        res.send({ status: false, data: [], msg: 'false' });
       }
-  
+
     } catch (error) {
       console.log("Get All Group Services Error - ", error);
-      res.status(500).send({ status: false, data: [],  msg: 'An error occurred' });
+      res.status(500).send({ status: false, data: [], msg: 'An error occurred' });
     }
   }
-  
+
+
+  // DELETE GROUP SERVICES 
+
+
+  async DELETEGROUPSERVICES(req, res) {
+    try {
+      const { id } = req.body; // Assuming your ID is passed as 'id' in the request body
+
+      console.log("Received ID:", id);
+
+      // Convert the string ID to an ObjectId
+      const objectId = new ObjectId(id);
+
+      const groupServices_user = await groupServices_client1.find({ groupService_id: objectId })
+
+
+      if (groupServices_user.length != 0) {
+        return res.json({ status: false, msg: 'This group already assign', data: groupServices_user });
+      }
+
+      const result = await serviceGroupName.deleteOne({ _id: objectId });
+      const result1 = await serviceGroup_services_id.deleteMany({ Servicegroup_id: objectId });
+
+      console.log("result", result.acknowledged);
+
+
+      // Handle the results here, e.g., send them in the response
+      if (result.acknowledged == true) {
+        return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
+
+      }
+    } catch (error) {
+      console.error("Error:", error);
+
+      return res.json({ status: false, msg: 'server error delete group service-', data: error });
+    }
+  }
+
+
+  // GET SERVICES NAME
+  async GetAllServicesName(req, res) {
+
+    try {
+      const { data } = req.body
+      var ServicesArr = []
+
+      data.result.forEach(async (info) => {
+
+        const Service_name_get = await services.findOne({ _id: info.Service_id });
+        if (Service_name_get) {
+          ServicesArr.push(Service_name_get)
+
+          if (data.result.length == ServicesArr.length) {
+            return res.send({ status: true, msg: 'Get All successfully ', data: ServicesArr });
+          }
+        }
+
+      })
+
+
+
+    } catch (error) {
+      console.log("GET SERVICES NAME -", error);
+    }
+
+  }
+
+
+
+  // GET SERVICES NAME
+  async GetAllServicesUserNAme(req, res) {
+
+    try {
+      const { data } = req.body
+      var ServicesArr = []
+      const objectId = new ObjectId(data._id);
+
+
+
+    // Define the aggregation pipeline
+    const pipeline = [
+      {
+        $match: {
+          groupService_id: objectId, // Replace 'objectId' with your actual ObjectId
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user_id',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $project: {     
+          username: '$user.FullName', // Replace 'username' with the actual field name in 'users' collection
+        },
+      },
+    ];
+
+    // Execute the aggregation pipeline
+    const result = await groupServices_client1.aggregate(pipeline)
+console.log("result",result);
+
+
+
+
+
+
+      const groupServices_user = await groupServices_client1.find({ groupService_id: objectId })
+
+      if (groupServices_user.length == 0) {
+        return res.send({ status: false, msg: 'NO DATA', data: groupServices_user });
+      }
+
+      return res.send({ status: true, data: groupServices_user, msg: 'Get All successfully' });
+
+
+
+    } catch (error) {
+      console.log("GET SERVICES NAME -", error);
+    }
+
+  }
 
 }
 
