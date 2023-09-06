@@ -2,7 +2,7 @@ import React from 'react'
 import { Modal, Button } from 'react-bootstrap';
 
 
-const Modal_Component = ({ isOpen, handleClose, Submit_Function, title, btn_name, backdrop, size, hideBtn, ...rest }) => {
+const Modal_Component = ({ isOpen, handleClose, Submit_Function,Submit_Function_2, title, btn_name, btn_2,btn_name_2, backdrop, size, hideBtn, ...rest }) => {
     return (
         <div>
             <Modal show={isOpen} centered size={size} backdrop={backdrop} onHide={handleClose}>
@@ -16,6 +16,13 @@ const Modal_Component = ({ isOpen, handleClose, Submit_Function, title, btn_name
                         <Button type="submit" className="btn btn-primary " onClick={() => Submit_Function()}>
                             {btn_name}
                         </Button>}
+
+                    {btn_2 == true ? 
+                        <Button type="submit" className="btn btn-primary " onClick={() => Submit_Function_2()}>
+                            {btn_name_2}
+                        </Button> : ""
+                         }
+
                 </Modal.Footer>
             </Modal>
         </div>

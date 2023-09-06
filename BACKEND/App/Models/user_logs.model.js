@@ -21,6 +21,10 @@ const userActivitySchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    device: {
+        type: String,
+        default: null
+    },
     system_ip: {
         type: String,
         default: null

@@ -81,7 +81,7 @@ class Login {
             }
         }
         catch (error) {
-    
+
             res.send({ status: false, msg: "Server Side error", data: error })
         }
 
@@ -144,9 +144,11 @@ class Login {
                 user_Id: EmailCheck._id,
                 login_status: "Panel On",
                 role: EmailCheck.Role,
+                device: Device,
                 system_ip: getIPAddress()
             })
             await user_login.save();
+            console.log("user_login",user_login);
 
             logger.info('Very Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
             res.send({ status: true, msg: "Login Successfully", data: [] })
