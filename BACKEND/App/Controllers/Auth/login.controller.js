@@ -81,7 +81,7 @@ class Login {
             }
         }
         catch (error) {
-    
+
             res.send({ status: false, msg: "Server Side error", data: error })
         }
 

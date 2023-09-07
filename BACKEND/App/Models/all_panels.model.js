@@ -37,7 +37,7 @@ const panelSchema = new mongoose.Schema({
     theme_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'theme_list',
-        default: null
+
     }
 }, {
     timestamps: true
