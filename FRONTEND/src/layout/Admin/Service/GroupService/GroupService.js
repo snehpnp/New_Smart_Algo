@@ -32,7 +32,7 @@ const ServicesList = () => {
         data: []
     });
 
-    
+
     const handleClose = () => setshowModal(false);
     const handleClose1 = () => setshowModaluser(false);
 
@@ -175,16 +175,16 @@ const ServicesList = () => {
     }
 
 
-    useEffect(() => {
-        data()
-    }, [])
+        useEffect(() => {
+            data()
+        }, [])
 
     return (
         <>
             {
                 AllGroupServices.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="Group Service" button_title="Add Grouop" route="/admin/groupservices/add">
+                        <Theme_Content Page_title="Group Service" button_title="Add Group" route="/admin/groupservices/add">
 
                             {
                                 AllGroupServices.data && AllGroupServices.data.length === 0 ? (
@@ -198,6 +198,7 @@ const ServicesList = () => {
                                 showModal ?
                                     <>
                                         < Modal isOpen={showModal} backdrop="static" size="ms-5" title="Services" hideBtn={true} onHide={handleClose}
+                                         handleClose={()=>setshowModal(false)}
                                         >
                                             <BasicDataTable TableColumns={[
                                                 {
@@ -225,6 +226,7 @@ const ServicesList = () => {
                                 showModaluser ?
                                     <>
                                         < Modal isOpen={showModaluser} backdrop="static" size="ms-5" title="Services" hideBtn={true} onHide={handleClose1}
+                                        handleClose={setshowModaluser(false)}
                                         >
                                             {/* <BasicDataTable TableColumns={[
                                                 {
@@ -243,7 +245,7 @@ const ServicesList = () => {
 
                                             ]} tableData={ getServicesuserName.data} /> */}
 
-                                            <button onClick={handleClose1}>off</button>
+                                            {/* <button onClick={handleClose1}>off</button> */}
                                         </Modal >
                                     </>
                                     : ""

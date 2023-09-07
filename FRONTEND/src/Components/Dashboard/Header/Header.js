@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react'
 import Logo from "./Logo"
@@ -5,8 +6,15 @@ import DropDown from "./DropDown"
 import Notification from '../../ExtraComponents/Notification'
 import $ from "jquery";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import Modal from '../../../Components/ExtraComponents/Modal';
+import UpdateBrokerKey from './Update_Broker_Key';
+
+
 
 const Header = ({ ChatBox }) => {
+  const [showModal, setshowModal] = useState(false)
+
+
   //  For Set Theme
   let theme_id = localStorage.getItem("theme")
   const navigate = useNavigate()
@@ -91,8 +99,6 @@ const Header = ({ ChatBox }) => {
   }
 
   const redirectToAdmin = () => {
-
-
     user_role_goTo == "USER" ?
       navigate("/admin/allclients")
       :
@@ -108,6 +114,9 @@ const Header = ({ ChatBox }) => {
 
 
   };
+
+
+
 
   return (
     <div>
@@ -138,26 +147,43 @@ const Header = ({ ChatBox }) => {
               </div>
               <ul className="navbar-nav header-right">
 
+
                 {/* GO TO DASHBOARD */}
                 {gotodashboard != null ?
+                  <>
+                    <li className="nav-item dropdown gotodashboard" >
+                      <button
+                        onClick={redirectToAdmin}
+                        type="button"
+                        className="btn btn-color"
+                      >
+                        Go to Admin
+                      </button>
+                    </li>
 
-                  <li className="nav-item dropdown gotodashboard" >
-                    <button
-                      onClick={redirectToAdmin}
-                      type="button"
-                      className="btn btn-color"
-                    >
-                      Go to Admin
-                    </button>
-                  </li> : ""
+
+                  </>
+
+                  : ""
                 }
+                <li className="nav-item dropdown header-profile">
+                  <button
+                    className="btn btn-color btn-primary"
+                    onClick={() => setshowModal(true)}
+
+                  >
+                    Set ApiKey
+                  </button>
+                </li>
+
+
 
 
 
                 {/*  For Show Notification Box */}
-                <Notification />
+                {/* <Notification /> */}
                 {/*  For Show Chat Box */}
-                <li className="nav-item dropdown notification_dropdown" onClick={() => ChatBox()}>
+                {/* <li className="nav-item dropdown notification_dropdown" onClick={() => ChatBox()}>
                   <a className="nav-link bell-link nav-action" >
                     <svg
                       width={28}
@@ -177,17 +203,20 @@ const Header = ({ ChatBox }) => {
                     </svg>
                     <span className="badge light text-white bg-primary rounded-circle" />
                   </a>
-                </li>
+                </li> */}
                 <li className="nav-item dropdown header-profile">
-
-                  {/* </li>
-                                <li> */}
                   <DropDown />
                 </li>
               </ul>
             </div>
           </nav>
         </div>
+
+        <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Update Broker Key" hideBtn={true}
+          handleClose={() => setshowModal(false)}
+        >
+          <UpdateBrokerKey />
+        </Modal >
       </div>
     </div>
   )

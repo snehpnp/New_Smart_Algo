@@ -8,6 +8,8 @@ import ThemeSelection from '../ThemeSwitcher/ThemeSelection/ThemeSelection'
 import CreateTheme from '../ThemeSwitcher/CreateTheme/CreateTheme'
 import Cookies from 'js-cookie'
 import html2canvas from 'html2canvas';
+import * as Config from "../../../Utils/Config";
+
 import axios from 'axios';
 import $ from "jquery";
 
@@ -61,20 +63,36 @@ const Wraper = () => {
 
 
 
-
-
-  const getColors = () => {
-
-    axios.get("https://api.smartalgo.in:3001/smartalgo/get/theme").then((res) => {
+  const GetAllThemes = () => {
+    axios.get(`${Config.base_url}getall/theme`).then((res) => {
       setSetTheme(res.data.data[0])
     }).catch((err) => {
-      console.log("error", err);
+        console.log("error", err);
     })
+}
 
-  }
-  useEffect(() => {
-    getColors()
-  }, []);
+useEffect(() => {
+    GetAllThemes()
+}, [])
+
+
+
+
+//   const getColors = () => {
+
+//     axios.get("https://api.smartalgo.in:3001/smartalgo/get/theme").then((res) => {
+// console.log("dddddddddd" ,res.data.data[0]);
+
+
+//       setSetTheme(res.data.data[0])
+//     }).catch((err) => {
+//       console.log("error", err);
+//     })
+
+//   }
+//   useEffect(() => {
+//     getColors()
+//   }, []);
 
 
 

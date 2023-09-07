@@ -529,14 +529,14 @@ body.theme-10 .deznav  {
         width: 60px;
         height: 34px;
       }
-      
+
       /* Hide default HTML checkbox */
       .switch input {
         opacity: 0;
         width: 0;
         height: 0;
       }
-      
+
       .slider {
         position: absolute;
         cursor: pointer;
@@ -548,7 +548,7 @@ body.theme-10 .deznav  {
         -webkit-transition: .4s;
         transition: .4s;
       }
-      
+
       .slider:before {
         position: absolute;
         content: "";
@@ -560,26 +560,147 @@ body.theme-10 .deznav  {
         -webkit-transition: .4s;
         transition: .4s;
       }
-      
+
       input:checked + .slider {
         background-color: #2196F3;
       }
-      
+
       input:focus + .slider {
         box-shadow: 0 0 1px #2196F3;
       }
-      
+
       input:checked + .slider:before {
         -webkit-transform: translateX(26px);
         -ms-transform: translateX(26px);
         transform: translateX(26px);
       }
-      
+
       /* Rounded sliders */
       .slider.round {
         border-radius: 34px;
       }
-      
+
       .slider.round:before {
         border-radius: 50%;
       }
+
+
+#app-cover {
+    display: table;
+
+    counter-reset: button-counter;
+  }
+
+  #app-cover  .row {
+    display: table-row;
+  }
+
+  #app-cover .toggle-button-cover {
+    display: table-cell;
+
+
+    box-sizing: border-box;
+  }
+
+  #app-cover .button-cover {
+
+    margin: 20px;
+
+  }
+
+  #app-cover .button-cover:before {
+    counter-increment: button-counter;
+    content: counter(button-counter);
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    color: #d7e3e3;
+    font-size: 12px;
+    line-height: 1;
+    padding: 5px;
+  }
+
+  /* #app-cover .button-cover,
+  .knobs,
+  .layer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  } */
+
+  #app-cover .button {
+    position: relative;
+    top: 50%;
+    width: 74px;
+    height: 36px;
+    margin: -20px auto 0 auto;
+    overflow: hidden;
+  }
+
+  #app-cover  .button.r,
+  .button.r .layer {
+    border-radius: 100px;
+  }
+
+  #app-cover .button.b2 {
+    border-radius: 2px;
+  }
+
+  #app-cover .checkbox {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 3;
+  }
+
+  #app-cover  .knobs {
+    z-index: 2;
+  }
+
+  #app-cover  .layer {
+    width: 100%;
+    background-color: #ebf7fc;
+    transition: 0.3s ease all;
+    z-index: 1;
+  }
+
+  /* Button 1 */
+  #app-cover  #button-1 .knobs:before {
+    content: "";
+    position: absolute;
+    top: 9px;
+    left: 4px;
+    width: 20px;
+    height: 10px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1;
+    padding: 9px 4px;
+    background-color: #03a9f4;
+    border-radius: 50%;
+    transition: 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15) all;
+  }
+
+  #app-cover #button-1 .checkbox:checked + .knobs:before {
+    content: "";
+    left: 42px;
+    background-color: #f44336;
+  }
+
+  #app-cover  #button-1 .checkbox:checked ~ .layer {
+    background-color: #fcebeb;
+  }
+
+  #app-cover  #button-1 .knobs,
+  #button-1 .knobs:before,
+  #button-1 .layer {
+    transition: 0.3s ease all;
+  }

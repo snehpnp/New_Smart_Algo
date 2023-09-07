@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
-import Content from '../../Dashboard/Content/Content';
+import { useLocation } from "react-router-dom";
 
 
 
-const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, formik, btn_name, forlogin, title }) => {
+const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fieldtype, formik, btn_name, forlogin, title, additional_field }) => {
+
+
+  console.log("fromDate", fromDate);
 
   const location = useLocation()
 
@@ -37,6 +37,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
 
   return (
 
+
     // <Content Page_title="HelpCenter">
     <form onSubmit={formik.handleSubmit}>
       <div className='row' style={{ height: `${title === "addgroup" ? '65vh' : ""}`, overflowY: `${title === "addgroup" ? 'scroll' : ""}` }}>
@@ -44,10 +45,10 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
           {fieldtype.map((field, index) => (
             <>
               {field.type === 'select' ? <>
-                <div className="col-lg-6">
+                <div className={`col-lg-${title === "update_theme" ? 12 :  6}`}>
                   <div className="mb-3 row">
                     <label
-                      className={`col-lg-${title === "forlogin" ? 3 : 7}  col-form-label`}
+                      className={`col-lg-${title === "forlogin" ? 3 : title === "update_theme" ? 12 :7}  col-form-label`}
                       htmlFor={field.name}
                     >
                       {field.label}
@@ -75,28 +76,64 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
                 </div>
               </> :
                 field.type === "checkbox" ? <>
-                  {field.name == "Permissions" ?
+                  {field.name === "Permissions" ?
                     <label className="form-check-label" for={field.name} >{field.name}</label>
                     : ""}
 
-                  {field.options.map((option, index) => (
-                    <>
+                  {field.options && field.options.length > 0 ? <>
+                    {field.options && field.options.map((option, index) => (
+                      <>
+                        <div className={`col-lg-${title === "addgroup" ? 2 : 3}`} key={option.id}>
+                          <div className="row d-flex">
+                            <div className="col-lg-12 ">
+                              <div class="form-check custom-checkbox mb-3">
+                                <input type={field.type} className="form-check-input" id={option.label}   {...formik.getFieldProps(option.label)}
+                                />
+                                <label className="form-check-label" for={option.label} >{option.label}</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ))}
+                  </> :
 
-                      <div className={`col-lg-${title === "addgroup" ? 2 : 3}`} key={option.id}>
-                        <div className="row d-flex">
-                          <div className="col-lg-12 ">
-                            <div class="form-check custom-checkbox mb-3">
-                              <input type={field.type} className="form-check-input" id={option.label}   {...formik.getFieldProps(option.label)}
-                              />
-                              <label className="form-check-label" for={option.label} >{option.label}</label>
+                    field.s === "toggle" ? <>
+                      <div id="app-cover">
+                        {/* <div class="row"> */}
+                        <div class="toggle-button-cover">
+                          <div class="button-cover">
+                            <div class="button r" id="button-1">
+                              <input type="checkbox" class="checkbox" />
+                              <div class="knobs"></div>
+                              <div class="layer"></div>
+                              <label className="form-check-label" for={field.label} >{field.label}</label>
                             </div>
                           </div>
                         </div>
                       </div>
+                      {/* </div> */}
+                    </> :
 
-                    </>
-                  ))}
+                      <>
+
+                        <div className={`col-lg-${title === "addgroup" ? 2 : 3}`} key={field.id}>
+                          <div className="row d-flex">
+                            <div className="col-lg-12 ">
+                              <div class="form-check custom-checkbox mb-3">
+                                <input type={field.type} className="form-check-input" id={field.label}   {...formik.getFieldProps(field.label)}
+                                />
+                                <label className="form-check-label" for={field.label} >{field.label}</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                  }
+
+
                 </> :
+
                   field.type === "radio" ? <>
                     {field.index === '1' ? <>
                       {/* <label
@@ -172,6 +209,8 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
                                 <label className="col-lg-4 " for={field.name}>{field.name}</label>
                                 <input type={field.type} name={field.name} className="form-control" id={field.name}
                                   {...formik.getFieldProps(field.name)}
+
+                                  min={field.name === "todate" ? fromDate : field.name}
                                 />
                               </div>
                             </div>
@@ -250,10 +289,10 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
                             </div> */}
                           </> :
 
-                            <div className={`col-lg-${title === "forlogin" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
+                            <div className={`col-lg-${title === "forlogin" || title === "brokerkey" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
                               <div className="mb-3 row">
                                 <label
-                                  className={`col-lg-${title === "forlogin" ? 3 : 4} col-form-label `}
+                                  className={`col-lg-${title === "forlogin" ? 3 : title === "brokerkey" ? 6 : 4} col-form-label `}
                                   htmlFor={field.name}
                                 >
                                   {field.label}
@@ -286,6 +325,8 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
 
 
         </div >
+
+        {additional_field}
         <div className="form-group mb-0">
           <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
             {btn_name}

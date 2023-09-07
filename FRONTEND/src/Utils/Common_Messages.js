@@ -5,7 +5,6 @@ export const USERNAME_ERROR = 'Please Enter Username ';
 export const FULLNAME_ERROR = 'Please Enter FullName ';
 export const CONTACT_ERROR = 'Please Enter Contact Number ';
 export const INVALID_CONTACT_ERROR = 'Please Enter Valid Contact Number ';
-export const MASTER_ERROR = 'Please Enter Select Master ';
 export const APIKEY_ERROR = 'Please Enter APIKey ';
 export const APIID_ERROR = 'Please Enter APIID ';
 export const APISECRET_ERROR = 'Please Enter API Secret ';
@@ -13,8 +12,10 @@ export const BROKER_ERROR = 'Please Select Broker ';
 export const LICENCE_TYPE_ERROR = 'Please Enter Licence Type ';
 export const LICENCE_ERROR = 'Please Enter Licence Month';
 export const QUANTITYSELECT_ERROR = 'Please Select Quantity Selection';
-export const PER_TRADE_ERROR = 'Please Enter Per Trade Fund Value ';
-export const PER_TRADE_INVALID_ERROR = 'Please Enter integer  Value ';
+export const GROUPSELECT_ERROR = 'Please Select Group Service';
+
+// export const PER_TRADE_ERROR = 'Please Enter Per Trade Fund Value ';
+// export const PER_TRADE_INVALID_ERROR = 'Please Enter integer  Value ';
 export const QTY_ERROR = 'Please Enter Per  QTY ';
 export const QTY_INVALID_ERROR = 'Please Enter Invalid QTY ';
 // export const SEGEMENTSELECT_ERROR = 'Please Select Segment Selection';
@@ -43,6 +44,9 @@ export const EMPTY_STRATEGY_CATAGORY_ERR = 'Please Enter Strategy Category ';
 export const EMPTY_STRATEGY_SEGMENT_ERR = 'Please Select Strategy Segment ';
 export const EMPTY_STRATEGY_DESCRIPTION_ERR = 'Please Enter Strategy Description ';
 
+
+//  Update Theme
+export const THEMESELECT_ERROR = 'Please Select Theme For Update';
 
 
 
