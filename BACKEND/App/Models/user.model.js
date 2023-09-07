@@ -72,6 +72,11 @@ const userModel = Schema({
         type: String,
         required: true
     },
+    User_type: {
+        type: String,
+        enum: ['0', '1', '2'],  // 0 = 2 days 1= Demo 2 =Live
+        default: '0'
+    },
     AppLoginStatus: {
         type: String,
         enum: ['0', '1'],
@@ -101,7 +106,7 @@ const userModel = Schema({
     parent_role: {
         type: String,
         required: true,
-       
+
     },
     reset_password_status: {
         type: String,
@@ -109,7 +114,15 @@ const userModel = Schema({
         trim: true,
         default: '0'
     },
-
+    Service_Month_Given: {
+        type: String,
+        default: null
+    },
+    broker: {
+        type: String,
+        enum: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+        default: '0'
+    },
 
 },
     {
