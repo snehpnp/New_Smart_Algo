@@ -32,6 +32,12 @@ const Login = () => {
   const [CheckUser, setCheckUser] = useState(check_Device());
 
   const [showModal, setshowModal] = useState(false)
+  const [showModal1, setshowModal1] = useState(false)
+  const [getOtpStatus, setgetOtpStatus] = useState(false)
+
+  const [getOtp, setgetOtp] = useState("")
+
+
   const [typeOtp, setTypeOtp] = useState('');
   const [Email, setEmail] = useState('');
   const [EmailErr, setEmailErr] = useState('');
@@ -165,12 +171,21 @@ const Login = () => {
           }
         }
         else {
-          toast.error(res.payload.msg)
 
-          setTimeout(() => {
-            
+          if (res.payload.msg == "You are already logged in on the Web.") {
+            toast.error(res.payload.msg)
             setshowModal(false);
-          }, 1000);
+            setshowModal1(true);
+
+          } else {
+
+            toast.error(res.payload.msg)
+
+            setTimeout(() => {
+              setshowModal(false);
+            }, 1000);
+          }
+
         }
 
       }).catch((error) =>
@@ -178,7 +193,23 @@ const Login = () => {
   }
 
 
+  // CLOSE THE MODAL
+  const verifyOTP_2 = () => {
+    setshowModal1(false)
+    setgetOtpStatus(false)
+  }
 
+
+  // USE HERE THE TH OTP GET
+  const USEHERE = () => {
+
+
+    console.log("UserData.Email", UserData.Email);
+
+    setgetOtpStatus(true)
+
+
+  }
 
 
 
@@ -331,6 +362,36 @@ const Login = () => {
 
                 />
               </form>
+            </Modal >
+          </>
+          : ""
+      }
+      {
+        showModal1 ?
+          <>
+            < Modal isOpen={showModal1} handleClose={!showModal1} backdrop="static" size="sm" title="Login or Close the Page" btn_2={true} btn_name="CLOSE" btn_name_2="USE HERE" Submit_Function={verifyOTP_2} Submit_Function_2={USEHERE}>
+
+              {getOtpStatus == false ? <p><b>If you want to login only then do so, otherwise close it.</b></p> : ""}
+
+
+              {getOtpStatus == true ?
+                <form onSubmit={verifyOTP}>
+                  <h4><b>Please Enter a otp to send you regersterd Email </b></h4>
+                  <h6><b>Email :-</b> {UserData.Email}</h6>
+
+
+                  <OtpInput
+                    containerStyle="otp-div"
+                    value={""}
+                    onChange={setTypeOtp}
+                    numInputs={4}
+                    renderSeparator={<span></span>}
+                    renderInput={(props) => <input {...props} />}
+
+                  />
+                </form>
+                : ""}
+
             </Modal >
           </>
           : ""
