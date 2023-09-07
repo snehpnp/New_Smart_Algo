@@ -260,39 +260,39 @@ const CreateTheme = ({ SelectTheme1 }) => {
             // dashboard: ThemeDashboard
 
 
-            // body_font: BodyFont,
-            // theme_version: ThemeVersion,
-            // layout: Layout,
-            // primary_col: PrimaryColor,
-            // header_col: HeaderColor,
-            // nav_head_col: NavHeaderColor,
-            // sidebar_col: SidebarColor,
-            // sidebar: Sidebar,
-            // sidebar_position: SidebarPosition,
-            // header_position: HeaderPosition,
-            // container: Container,
-            // panel_name: "smartalgo",
-            // image: screenshotUrl,
-            // theme_name: themeName,
-            // dashboard: ThemeDashboard
-
-
-
-            body_font: "poppins",
-            theme_version: "light",
-            layout: "horizontal",
-            primary_col: "color_9",
-            header_col: "color_1",
-            nav_head_col: 'color_9',
-            sidebar_col: "color_9",
-            sidebar: "full",
-            sidebar_position: "fixed",
-            header_position: "fixed",
-            container: "full",
+            body_font: BodyFont,
+            theme_version: ThemeVersion,
+            layout: Layout,
+            primary_col: PrimaryColor,
+            header_col: HeaderColor,
+            nav_head_col: NavHeaderColor,
+            sidebar_col: SidebarColor,
+            sidebar: Sidebar,
+            sidebar_position: SidebarPosition,
+            header_position: HeaderPosition,
+            container: Container,
             panel_name: "smartalgo",
-            image: "smartalgo",
-            theme_name: "Theme-8",
-            dashboard: "Theme-8"
+            image: screenshotUrl,
+            theme_name: themeName,
+            dashboard: ThemeDashboard
+
+
+
+            // body_font: "poppins",
+            // theme_version: "light",
+            // layout: "horizontal",
+            // primary_col: "color_9",
+            // header_col: "color_1",
+            // nav_head_col: 'color_9',
+            // sidebar_col: "color_9",
+            // sidebar: "full",
+            // sidebar_position: "fixed",
+            // header_position: "fixed",
+            // container: "full",
+            // panel_name: "smartalgo",
+            // image: "smartalgo",
+            // theme_name: "Theme-8",
+            // dashboard: "Theme-8"
 
 
         }

@@ -6,7 +6,7 @@ import Content from "../../../Components/Dashboard/Content/Content"
 const Profile = () => {
   return (
     <div>
-        <Admin_Profile route=""/>
+        <Admin_Profile/>
         </div>
   )
 }

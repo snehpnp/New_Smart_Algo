@@ -14468,7 +14468,11 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
       background: rgba(0, 0, 0, 0.15); }
   .dz-demo-panel .dz-demo-inner {
     padding: 1.875rem 1.875rem;
-    background: #fff; }
+    background: #fff;
+    overflow-y: scroll;
+    height: 100vh;
+
+  }
   .dz-demo-panel .dz-demo-content {
     height: calc(100vh - 140px); }
   .dz-demo-panel .dz-demo-header {

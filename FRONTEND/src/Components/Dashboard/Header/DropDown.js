@@ -13,6 +13,7 @@ const DropDown = () => {
     const navigate = useNavigate();
 
     const user_id = JSON.parse(localStorage.getItem('user_details')).user_id
+    const Role = JSON.parse(localStorage.getItem('user_details')).Role
 
     const [CheckUser, setCheckUser] = useState(check_Device());
 
@@ -40,7 +41,24 @@ const DropDown = () => {
             })
     }
 
+    const profile_Route = () => {
 
+        if (Role === "USER") {
+            return "/client/profile"
+        }
+        else if (Role === "ADMIN") {
+            return "/admin/profile"
+        }
+        else if (Role === "SUBADMIN") {
+            return "/subadmin/profile"
+        }
+        else if (Role === "SUPERADMIN") {
+            return "/super/profile"
+        } else {
+            return "/client/profile"
+        }
+
+    }
 
 
     return (
@@ -59,7 +77,7 @@ const DropDown = () => {
 
                 {/* <Link to="profile" className=" my-2 text-center  text-white btn  btn-primary dropdown-item" href="#"> */}
 
-                <Link to="/admin/profile" className=" my-2 text-center  text-white btn  btn-primary dropdown-item">
+                <Link to={profile_Route()} className=" my-2 text-center  text-white btn  btn-primary dropdown-item">
 
                     Profile
                 </Link>

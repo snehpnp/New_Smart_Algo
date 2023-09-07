@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { theme_arr } from "../CreateTheme/Data"
 import axios from "axios"
 import $ from "jquery";
+import * as Config from "../../../../Utils/Config";
+
 
 
 
@@ -10,10 +12,15 @@ const ThemeSelection = () => {
     const [toggleSelection, setToggleSelection] = useState(false)
     const [ThemeData, setThemeData] = useState([])
 
+    console.log("ThemeData", ThemeData);
+
     const AddClassName = (id) => {
         localStorage.setItem("theme_id", id)
 
-        axios.post("https://api.smartalgo.in:3001/smartalgo/getthemeById", { id: parseInt(id) }).then((res) => {
+
+        axios.post(`${Config.base_url}find_one/theme`, { _id: id }).then((res) => {
+            console.log("resresresresresresres", res);
+
             let themedata = res.data.data[0]
 
             // console.log("themedata", themedata);
@@ -108,17 +115,12 @@ const ThemeSelection = () => {
 
 
     const GetAllThemes = () => {
-        axios.get("https://api.smartalgo.in:3001/smartalgo/get/theme").then((res) => {
-            // console.log("accept res`122`12`", res.data.data);
-
-            // $('body').attr('data-theme-version', themedata.theme_version);
-
+        axios.get(`${Config.base_url}getall/theme`).then((res) => {
             setThemeData(res.data.data)
         }).catch((err) => {
             console.log("error", err);
         })
     }
-
 
     useEffect(() => {
         GetAllThemes()
@@ -292,7 +294,7 @@ const ThemeSelection = () => {
                                             // href="javascript:void(0);"
                                             data-theme={item.key}
                                             className="btn dz_theme_demo btn-secondary btn-sm mr-2"
-                                            onClick={() => AddClassName(item.id)}
+                                            onClick={() => AddClassName(item._id)}
                                         >
                                             {item.theme_name}
                                         </button>

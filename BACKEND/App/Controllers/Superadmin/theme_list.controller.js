@@ -1,6 +1,12 @@
 "use strict";
 const db = require('../../Models');
 const Theme_list = db.theme_list;
+const panel_model = db.panel_model;
+
+const mongoose = require('mongoose');
+
+const ObjectId = mongoose.Types.ObjectId;
+
 const { formattedDateTime } = require('../../Helper/time.helper')
 class Theme {
 
@@ -79,8 +85,8 @@ class Theme {
             // var getAllTheme = await Theme_list.find()
             const getAllTheme = await Theme_list
                 .find({})
-                // .skip(skip)
-                // .limit(Number(limit))
+            // .skip(skip)
+            // .limit(Number(limit))
 
 
             // IF DATA NOT EXIST
@@ -105,7 +111,80 @@ class Theme {
         }
     }
 
-    
+    // GET ALL TRADING ON  CLIENTS
+    async GetThemeByIdThemeId(req, res) {
+        try {
+
+            console.log("req.body._Id", req.body._id)
+
+            // GET LOGIN CLIENTS
+            const getAllTradingClients = await Theme_list.find({
+                _id: req.body._id
+            });
+            const totalCount = getAllTradingClients.length;
+
+            // IF DATA NOT EXIST
+            if (getAllTradingClients.length == 0) {
+                return res.send({ status: false, msg: "Theme Not Found", data: [], totalCount: totalCount, })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get Your Theme",
+                data: getAllTradingClients,
+
+            })
+        } catch (error) {
+            console.log("trading Clients Error-", error);
+        }
+    }
+
+
+    // UPDATE COMPANY THEME
+
+    async UpdatePanelTheme(req, res) {
+        try {
+
+
+            // GET LOGIN CLIENTS
+            const getAllTradingClients = await panel_model.find({
+                _id: req.body.userid
+            });
+
+
+            const totalCount = getAllTradingClients.length;
+
+            // IF DATA NOT EXIST
+            if (getAllTradingClients.length == 0) {
+                return res.send({ status: false, msg: "Theme Not Found", data: [], totalCount: totalCount, })
+            }
+
+
+            var objectId = new ObjectId(req.body.theme_id);
+
+
+            var updateValues = { theme_id: objectId, };
+
+            const updatedDocument = await panel_model.findByIdAndUpdate(getAllTradingClients[0]._id, updateValues, {
+                new: true, // To return the updated document
+            });
+
+
+            // DATA GET SUCCESSFULLY
+
+
+
+            res.send({
+                status: true,
+                msg: "Theme Update Successfully",
+                data: updatedDocument,
+
+            })
+        } catch (error) {
+            console.log("trading Clients Error-", error);
+        }
+    }
 
 }
 
