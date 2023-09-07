@@ -72,11 +72,16 @@ const userModel = Schema({
         type: String,
         required: true
     },
-    User_type: {
+    license_type: {
         type: String,
         enum: ['0', '1', '2'],  // 0 = 2 days 1= Demo 2 =Live
         default: '0'
     },
+    licence: {
+        type: String,
+        default: null
+    },
+
     AppLoginStatus: {
         type: String,
         enum: ['0', '1'],
@@ -114,7 +119,7 @@ const userModel = Schema({
         trim: true,
         default: '0'
     },
-    Service_Month_Given: {
+    service_given_month: {
         type: String,
         default: null
     },
@@ -122,6 +127,34 @@ const userModel = Schema({
         type: String,
         enum: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
         default: '0'
+    },
+    api_secret: {
+        type: String,
+        default: null
+    },
+    app_id: {
+        type: String,
+        default: null
+    },
+    client_code: {
+        type: String,
+        default: null
+    },
+    api_key: {
+        type: String,
+        default: null
+    },
+    app_key: {
+        type: String,
+        default: null
+    },
+    api_type: {
+        type: String,
+        default: null
+    },
+    demat_userid: {
+        type: String,
+        default: null
     },
 
 },
