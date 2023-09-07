@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 
 const db = require('../../Models');
-const User = db.user;
+const User = db.company_information;
 
 const formattedDateTime = require('../../Helper/time.helper')
 const user_logs = require('../../Models/user_logs.model')
@@ -374,6 +374,46 @@ class Login {
         }
 
     }
+
+    
+    // session clear
+    async sessionClear(req, res) {
+        try {
+            const { id } = req.body;
+            // IF Login Time Email CHECK
+            const EmailCheck = await User.findOne({ Email: Email });
+            if (!EmailCheck) {
+                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+            }
+            // JWT TOKEN CREATE
+            var token = jwt.sign({ id: EmailCheck._id }, process.env.SECRET, {
+                expiresIn: 3600 // 10 hours
+            });
+            var msg = {
+                'gotodashboard': true,
+                'Email': EmailCheck.Email,
+                'user_id': EmailCheck._id,
+                'token': token,
+                'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
+
+            };
+
+            try {
+                logger.info('Go To Dashboard Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
+                res.send({ status: true, msg: "Go To Dashboard Succesfully", data: msg })
+            } catch (error) {
+                console.log("Some Error in a login", error);
+            }
+        }
+        catch (error) {
+            console.log(error);
+            res.send({ status: false, msg: "Server Side error", data: error })
+        }
+
+    }
+
+
+
 
 
 }

@@ -105,14 +105,15 @@ const AllClients = () => {
 
         },
         {
-            dataField: 'CreateDate',
-            text: 'CreateDate',
-            formatter: (cell, row) => cell.split('T')[0]
+            dataField: 'StartDate',
+            text: 'Start Date',
+            formatter: (cell, row) => cell.split('T')[0],
+           
 
         },
         {
-            dataField: 'CreateDate',
-            text: 'CreateDate',
+            dataField: 'EndDate',
+            text: 'End Date',
             formatter: (cell, row) => cell.split('T')[0]
 
         },
