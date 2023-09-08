@@ -16,6 +16,8 @@ import Theme_Content from '../../../../Components/Dashboard/Content/Theme_Conten
 import { GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
+import { Add_User } from '../../../../ReduxStore/Slice/Admin/userSlice';
+
 
 
 
@@ -30,7 +32,11 @@ const AddClient = () => {
   const Role = JSON.parse(localStorage.getItem("user_details")).Role
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
 
-  // console.log("RoleRoleRoleRole" ,Role);
+
+  const [selectedStrategies, setSelectedStrategies] = useState([]);
+
+  const [first, setfirst] = useState([])
+
 
 
   const [AllGroupServices, setAllGroupServices] = useState({
@@ -51,10 +57,6 @@ const AddClient = () => {
 
 
 
-
-  const [showLoader, setshowLoader] = useState(false)
-
-
   const isValidEmail = (email) => {
     return Email_regex(email)
   }
@@ -65,13 +67,19 @@ const AddClient = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: '',
-      fullName: '',
-      email: '',
-      mobile: '',
-      broker: '',
-      licencetype: '',
-      tomonth: "0",
+      username: null,
+      fullName: null,
+      email: null,
+      mobile: null,
+      broker: null,
+      licence: null,
+      groupservice: null,
+      service_given_month: '0',
+      parent_id: null,
+      strategies: [],
+      tomonth: null,
+      todate: null,
+      fromDate: null,
       app_id: 'null',
       api_type: 'null',
       client_code: 'null',
@@ -79,10 +87,8 @@ const AddClient = () => {
       api_secret: 'null',
       app_key: 'null',
       demat_userid: 'null',
-      strategies: [],
-      service_given_month: '0',
-      parent_id: null,
       parent_role: null,
+      Strategy: false
     },
     validate: (values) => {
       const errors = {};
@@ -97,30 +103,26 @@ const AddClient = () => {
       } else if (!isValidContact(values.mobile)) {
         errors.mobile = valid_err.INVALID_CONTACT_ERROR;
       }
-      if (!values.licence) {
-        errors.licence = valid_err.LICENCE_TYPE_ERROR;
-      }
+      // if (!values.licence) {
+      //   errors.licence = valid_err.LICENCE_TYPE_ERROR;
+      // }
 
-      if ((values.licence === "1" || values.licence === 1) && values.licence)
+      // if ((values.licence === "1" || values.licence === 1) && values.licence)
 
-        if (!values.tomonth) {
-          errors.tomonth = valid_err.LICENCE_ERROR;
-        }
+      // if (!values.tomonth) {
+      //   errors.tomonth = valid_err.LICENCE_ERROR;
+      // }
+
       if (!values.broker) {
         errors.broker = valid_err.BROKER_ERROR;
       }
       if (!values.groupservice) {
         errors.groupservice = valid_err.GROUPSELECT_ERROR;
       }
-      // if (!values.apisecret) {
-      //   errors.apisecret = valid_err.APISECRET_ERROR;
-      // }
-      // if (!values.apikey) {
-      //   errors.apikey = valid_err.APIKEY_ERROR;
-      // }
-      // if (!values.apiid) {
-      //   errors.apiid = valid_err.APIID_ERROR;
-      // }
+      if (!values.Strategy) {
+        errors.Strategy = "select test";
+      }
+
 
       if (!values.email) {
         errors.email = valid_err.EMPTY_EMAIL_ERROR;
@@ -136,22 +138,26 @@ const AddClient = () => {
         "UserName": values.username,
         "Email": values.email,
         "PhoneNo": values.mobile,
-        "license_type": "1",
-        "licence": "0",
+        "licence": values.tomonth,
+        "license_type": values.licence,
+
         "Strategies": selectedStrategies,
-        "fromdate": values.fromdate,
+        "fromdate": values.fromDate,
         "todate": values.todate,
+
         "service_given_month": values.service_given_month,
+
         "broker": values.broker,
-        "parent_id": values.parent_id != null ? values.parent_id : user_id ,
-        "parent_role": values.parent_role != null ? values.parent_role : Role,
+        "parent_id": values.parent_id != null ? values.parent_id : user_id,
+        "parent_role": values.parent_id != null ? "SUBADMIN" : "ADMIN",
         "api_secret": values.api_secret,
         "app_id": values.app_id,
         "client_code": values.client_code,
         "api_key": values.api_key,
         "app_key": values.app_key,
         "api_type": values.api_type,
-        "demat_userid": values.demat_userid
+        "demat_userid": values.demat_userid,
+        "group_service": values.groupservice
       }
 
 
@@ -159,31 +165,29 @@ const AddClient = () => {
 
       // return
 
-      //   await dispatch(AddClients({ req: req, AdminToken: AdminToken })).then((res) => {
+      await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((res) => {
+        console.log("response", res);
 
+        // if (res.meta.requestStatus === "fulfilled") {
+        //   if (res.payload === "Failed! Username is already in use!") {
+        //     toast.error(res.payload)
+        //   } else {
+        //     toast.success(res.payload.data)
+        //     // setshowLoader(false)
+        //     // setshowLoader(false)
+        //     setTimeout(() => {
+        //       navigate("/admin/masters")
+        //     }, 2000);
+        //   }
+        // }
 
-      //     if (res.meta.requestStatus === "fulfilled") {
-      //       if (res.payload === "Failed! Username is already in use!") {
-      //         toast.error(res.payload)
-      //       } else {
-      //         toast.success(res.payload.data)
-      //         // setshowLoader(false)
-      //         // setshowLoader(false)
-      //         setTimeout(() => {
-      //           navigate("/admin/masters")
-      //         }, 2000);
-      //       }
-      //     }
-
-      //   })
+      })
     }
   });
 
-  console.log("formik", formik.values);
 
 
 
-  const [selectedStrategies, setSelectedStrategies] = useState([]);
 
 
   const handleStrategyChange = (event) => {
@@ -202,17 +206,15 @@ const AddClient = () => {
   };
 
 
-  const [first, setfirst] = useState([])
 
   useEffect(() => {
     let Service_Month_Arr = []
-    for (let index = 1; index < 2; index++) {
+    for (let index = 1; index < 3; index++) {
       Service_Month_Arr.push({ month: index, endDate: `${index} Month Licence Expired On ${new Date(new Date().getFullYear(), new Date().getMonth() + index, new Date().getDate()).toString().split('00:00:00')[0]}` })
     }
     console.log('Service_Month_Arr', Service_Month_Arr);
     setfirst(Service_Month_Arr)
   }, [])
-  console.log("datassssssssssssss" , first);
 
 
 
@@ -238,7 +240,7 @@ const AddClient = () => {
       name: 'tomonth',
       label: 'To Month',
       type: 'select',
-      options: first && first.map((item) => ({ label: item.endDate, value: item.index })),
+      options: first && first.map((item) => ({ label: item.endDate, value: item.month })),
       showWhen: values => values.licence === '2'
     },
 
@@ -330,6 +332,7 @@ const AddClient = () => {
       label: 'Service Given To Month',
       type: 'select',
       options: [
+        { label: '0', value: '0' },
         { label: '1', value: '1' },
         { label: '2', value: '2' },
         { label: '3', value: '3' },
@@ -359,6 +362,7 @@ const AddClient = () => {
 
   ];
 
+// console.log("fields" ,fields);
 
   useEffect(() => {
     if (formik.values.broker === '1' || formik.values.broker === 1) {
@@ -538,8 +542,7 @@ const AddClient = () => {
     <>
       <Content Page_title="Add Client" button_title='Back' route="/admin/allclients">
         <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Master"
-
-          fromDate={formik.values.fromdate}
+          fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
           additional_field={
             <>

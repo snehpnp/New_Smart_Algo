@@ -1,28 +1,40 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Logo from "./Logo"
 import DropDown from "./DropDown"
 import Notification from '../../ExtraComponents/Notification'
+import { useDispatch, useSelector } from "react-redux";
+
 import $ from "jquery";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Modal from '../../../Components/ExtraComponents/Modal';
 import UpdateBrokerKey from './Update_Broker_Key';
+import { loginWithApi } from './log_with_api';
+import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
+
 
 
 
 const Header = ({ ChatBox }) => {
-  const [showModal, setshowModal] = useState(false)
 
-
-  //  For Set Theme
-  let theme_id = localStorage.getItem("theme")
+  // HOOKS
+  const dispatch = useDispatch();
   const navigate = useNavigate()
 
-  const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+  const [showModal, setshowModal] = useState(false)
+  const [UserDetails, setUserDetails] = useState([]);
 
+  //  lOCAL STORAGE VALUE
+  let theme_id = localStorage.getItem("theme")
+  const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
   const user_role = JSON.parse(localStorage.getItem('user_role'))
   const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
+  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+
+
+
 
 
 
@@ -99,7 +111,7 @@ const Header = ({ ChatBox }) => {
   }
 
   const redirectToAdmin = () => {
-    user_role_goTo == "USER" ?
+    user_role_goTo === "USER" ?
       navigate("/admin/allclients")
       :
       navigate("/admin/allsubadmins")
@@ -116,6 +128,33 @@ const Header = ({ ChatBox }) => {
   };
 
 
+  //  BROKER LOGIN
+  const LogIn_WIth_Api = (check, brokerid, tradingstatus, app_id) => {
+    if (check) {
+      loginWithApi(brokerid, app_id)
+    } else {
+      alert("trading is off")
+    }
+  }
+
+
+  //  GET_USER_DETAILS
+
+  const data = async () => {
+    await dispatch(User_Profile({ id: user_id }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setUserDetails(response.data);
+        }
+      });
+  };
+  useEffect(() => {
+    data();
+  }, []);
+
+
+
 
 
   return (
@@ -126,7 +165,7 @@ const Header = ({ ChatBox }) => {
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">
               <div className="header-left">
-                {user_role == "USER" ?
+                {user_role === "USER" ?
                   <>
                     <div className="headaer-title">
                       <h3 className="font-w400 mb-0">Api Login </h3>
@@ -134,19 +173,16 @@ const Header = ({ ChatBox }) => {
 
                     <div className="Api Login m-2"><label class="switch" >
                       <input type="checkbox" className="bg-primary"
-                      //  checked={row.ActiveStatus == "1" ? true : false}
+                        checked={UserDetails.TradingStatus === "on" ? true : false}
+                        onClick={(e) => LogIn_WIth_Api(e.target.checked, UserDetails.broker, UserDetails.TradingStatus)}
                       />
                       <span class="slider round"></span>
                     </label>
                     </div>
                   </>
                   : ""}
-
-
-
               </div>
               <ul className="navbar-nav header-right">
-
 
                 {/* GO TO DASHBOARD */}
                 {gotodashboard != null ?
@@ -160,21 +196,20 @@ const Header = ({ ChatBox }) => {
                         Go to Admin
                       </button>
                     </li>
-
-
                   </>
-
                   : ""
                 }
-                <li className="nav-item dropdown header-profile">
-                  <button
-                    className="btn btn-color btn-primary"
-                    onClick={() => setshowModal(true)}
 
-                  >
-                    Set ApiKey
-                  </button>
-                </li>
+                {user_role === "USER" ? <>
+                  <li className="nav-item dropdown header-profile">
+                    <button
+                      className=" btn btn-secondary"
+                      onClick={() => setshowModal(true)}
+                    >
+                      Set ApiKey
+                    </button>
+                  </li>
+                </> : ""}
 
 
 

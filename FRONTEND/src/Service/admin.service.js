@@ -12,10 +12,10 @@ export async function ALL_CLIENTS(data , token) {
         const res = await axios.post(`${Config.base_url}getall/clients`, data ,{
              headers: header(token),
             data: {
-                
+
                     "page": "5",
                     "limit": "1"
-                  
+
             },
         })
         return await res?.data;
@@ -288,6 +288,26 @@ export async function UPDATE_USERACTIVE_STATUS(data , token) {
     }
     catch (err) {
         console.log("error =", err);
+        // custom error
+    }
+
+}
+
+
+
+// ADD USER
+export async function ADD_CLIENT(data , token) {
+    console.log(data);
+    try {
+        const res = await axios.post(`${Config.base_url}add/employee`, data ,{
+             headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error =", err);
+        return err
         // custom error
     }
 

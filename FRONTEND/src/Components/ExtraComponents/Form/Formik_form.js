@@ -6,7 +6,6 @@ import { useLocation } from "react-router-dom";
 const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fieldtype, formik, btn_name, forlogin, title, additional_field }) => {
 
 
-  console.log("fromDate", fromDate);
 
   const location = useLocation()
 
@@ -91,6 +90,8 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
                                 />
                                 <label className="form-check-label" for={option.label} >{option.label}</label>
                               </div>
+                            {formik.errors[field.name] &&
+                              <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
                             </div>
                           </div>
                         </div>
