@@ -166,7 +166,7 @@ const Header = ({ ChatBox }) => {
 
                     <div className="Api Login m-2"><label class="switch" >
                       <input type="checkbox" className="bg-primary" onChange={(e) => GetProfile(e)} 
-                       checked={row.ActiveStatus == "1" ? true : false}
+                      //  checked={row.ActiveStatus == "1" ? true : false}
                       />
                       <span class="slider round"></span>
                     </label>
