@@ -116,6 +116,17 @@ const Header = ({ ChatBox }) => {
   };
 
 
+  // GET PROFILE
+  const GetProfile = (e) => {
+    console.log("e", e.target.value);
+
+
+
+
+
+    
+  }
+
 
 
   return (
@@ -133,7 +144,7 @@ const Header = ({ ChatBox }) => {
                     </div>
 
                     <div className="Api Login m-2"><label class="switch" >
-                      <input type="checkbox" className="bg-primary"
+                      <input type="checkbox" className="bg-primary" onChange={(e) => GetProfile(e)}
                       //  checked={row.ActiveStatus == "1" ? true : false}
                       />
                       <span class="slider round"></span>
