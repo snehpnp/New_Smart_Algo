@@ -14,6 +14,9 @@ import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '..
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
+import { fDate, fDateTimeSuffix } from '../../../../Utils/Date_formet';
+
+
 
 const AllClients = () => {
     const navigate = useNavigate()
@@ -34,8 +37,8 @@ const AllClients = () => {
 
     const data = async () => {
         var req1 = {
-            Find_Role:Role,
-            user_ID:user_ID
+            Find_Role: Role,
+            user_ID: user_ID
         }
         await dispatch(GET_ALL_CLIENTS(req1)).unwrap()
             .then((response) => {
@@ -105,25 +108,24 @@ const AllClients = () => {
             dataField: 'PhoneNo',
             text: 'Phone Number'
         },
-        // {
-        //     dataField: 'CreateDate',
-        //     text: 'CreateDate',
-        //     formatter: (cell, row) => cell.split('T')[0]
+        {
+            dataField: 'CreateDate',
+            text: 'CreateDate',
+            formatter: (cell, row) => fDateTimeSuffix(row.CreateDate)
 
-        // },
-        // {
-        //     dataField: 'StartDate',
-        //     text: 'Start Date',
-        //     formatter: (cell, row) => cell.split('T')[0],
-           
+        },
+        {
+            dataField: 'StartDate',
+            text: 'Start Date',
+            formatter: (cell, row) => fDateTimeSuffix(row.StartDate)
 
-        // },
+
+
+        },
         {
             dataField: 'EndDate',
             text: 'End Date',
-            formatter: (cell, row) => cell.toString().split('T')[0]
-            // formatter: (cell, row) => toString(cell).split('T')[0]
-
+            formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
         },
         {
             dataField: 'Otp',
@@ -202,7 +204,7 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
                     <div>
-                    <Link to={`/admin/client/edit/${row._id}`}>
+                        <Link to={`/admin/client/edit/${row._id}`}>
                             <span data-toggle="tooltip" data-placement="top" title="Edit">
                                 <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                             </span>
