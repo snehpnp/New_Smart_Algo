@@ -5,20 +5,27 @@ import Logo from "./Logo"
 import DropDown from "./DropDown"
 import Notification from '../../ExtraComponents/Notification'
 import $ from "jquery";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Modal from '../../../Components/ExtraComponents/Modal';
 import UpdateBrokerKey from './Update_Broker_Key';
-
+import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 
 
 const Header = ({ ChatBox }) => {
   const [showModal, setshowModal] = useState(false)
 
+  const [UserDetails, setUserDetails] = useState({
+    loading: true,
+    data: [],
+  });
+
 
   //  For Set Theme
   let theme_id = localStorage.getItem("theme")
   const navigate = useNavigate()
-
+  const dispatch = useDispatch();
+  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
 
   const user_role = JSON.parse(localStorage.getItem('user_role'))
@@ -117,17 +124,31 @@ const Header = ({ ChatBox }) => {
 
 
   // GET PROFILE
-  const GetProfile = (e) => {
+  const GetProfile = async(e) => {
     console.log("e", e.target.value);
 
+    await dispatch(User_Profile({ id: user_id }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setUserDetails({
+            loading: false,
+            data: response.data,
+          });
+
+          console.log("UserDetails",UserDetails);
+        }
+      });
 
 
 
 
-    
   }
 
+  // GET PROFILE 
+  // const data = async () => {
 
+  // };
 
   return (
     <div>
@@ -144,8 +165,8 @@ const Header = ({ ChatBox }) => {
                     </div>
 
                     <div className="Api Login m-2"><label class="switch" >
-                      <input type="checkbox" className="bg-primary" onChange={(e) => GetProfile(e)}
-                      //  checked={row.ActiveStatus == "1" ? true : false}
+                      <input type="checkbox" className="bg-primary" onChange={(e) => GetProfile(e)} 
+                       checked={row.ActiveStatus == "1" ? true : false}
                       />
                       <span class="slider round"></span>
                     </label>
