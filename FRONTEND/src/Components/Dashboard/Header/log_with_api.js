@@ -4,14 +4,14 @@
 // 13 =Fyers , 14 = 5-Paisa , 15 Zerodha ,
 
 
-export const loginWithApi = (broker_id, app_id) => {
+export const loginWithApi = (broker_id, UserDetails) => {
     if (broker_id === "1" || broker_id === 1) {
         alert("broker-1")
     }
     if (broker_id === "2" || broker_id === 2) {
-        window.location.href = `https://ant.aliceblueonline.com/?appcode=${app_id}`;
+        window.location.href = `https://ant.aliceblueonline.com/?appcode=${UserDetails.app_id}`;
         console.log("Alice Blue");
-
+        console.log("UserDetails", UserDetails);
     }
     if (broker_id === "3" || broker_id === 3) {
         alert("broker-3")

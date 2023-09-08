@@ -13,6 +13,8 @@ import Modal from '../../../Components/ExtraComponents/Modal';
 import UpdateBrokerKey from './Update_Broker_Key';
 import { loginWithApi } from './log_with_api';
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
+import { check_Device } from "../../../Utils/find_device";
+
 
 const Header = ({ ChatBox }) => {
 
@@ -22,6 +24,9 @@ const Header = ({ ChatBox }) => {
 
   const [showModal, setshowModal] = useState(false)
   const [UserDetails, setUserDetails] = useState([]);
+
+  const [CheckUser, setCheckUser] = useState(check_Device());
+console.log("CheckUser",CheckUser);
 
   //  lOCAL STORAGE VALUE
   let theme_id = localStorage.getItem("theme")
@@ -126,9 +131,9 @@ const Header = ({ ChatBox }) => {
 
 
   //  BROKER LOGIN
-  const LogIn_WIth_Api = (check, brokerid, tradingstatus, app_id) => {
+  const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
     if (check) {
-      loginWithApi(brokerid, app_id)
+      loginWithApi(brokerid, UserDetails)
     } else {
       alert("trading is off")
     }
@@ -166,7 +171,7 @@ return (
                   <div className="Api Login m-2"><label class="switch" >
                     <input type="checkbox" className="bg-primary"
                       checked={UserDetails.TradingStatus === "on" ? true : false}
-                      onClick={(e) => LogIn_WIth_Api(e.target.checked, UserDetails.broker, UserDetails.TradingStatus)}
+                      onClick={(e) => LogIn_WIth_Api(e.target.checked, UserDetails.broker, UserDetails.TradingStatus,UserDetails)}
                     />
                     <span class="slider round"></span>
                   </label>
