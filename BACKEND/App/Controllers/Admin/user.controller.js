@@ -244,12 +244,22 @@ class Employee {
     async GetAllClients(req, res) {
         try {
 
-            const { page, limit } = req.body;     //LIMIT & PAGE
+            const { page, limit, Find_Role, user_ID } = req.body;     //LIMIT & PAGE
             const skip = (page - 1) * limit;
 
             // GET ALL CLIENTS
-            const getAllClients = await User_model.find({ Role: "USER" }).skip(skip)
+            var AdminMatch
+
+            if (Find_Role == "ADMIN") {
+                AdminMatch = { Role: "USER" }
+            } else if (Find_Role == "SUBADMIN") {
+                AdminMatch = { Role: "USER", parent_id: user_ID }
+            }
+
+            const getAllClients = await User_model.find(AdminMatch).skip(skip)
                 .limit(Number(limit));
+
+
 
             const totalCount = getAllClients.length;
             // IF DATA NOT EXIST
@@ -260,7 +270,7 @@ class Employee {
             // DATA GET SUCCESSFULLY
             res.send({
                 status: true,
-                msg: "Get All  Clients",
+                msg: "Get All Clients",
                 totalCount: totalCount,
                 data: getAllClients,
                 page: Number(page),
@@ -338,8 +348,8 @@ class Employee {
     async GetTradingStatus(req, res) {
         try {
 
-            // GET LOGIN CLIENTS
-
+            const { Role } = req.body
+            // var Role = "ADMIN"
             const GetAlluser_logs = await user_logs.aggregate([
                 {
                     $lookup: {
@@ -350,7 +360,12 @@ class Employee {
                     },
                 },
                 {
-                    $unwind: '$userinfo', // Unwind the 'categoryResult' array
+                    $unwind: '$userinfo',
+                },
+                {
+                    $match: {
+                        'userinfo.Role': Role, // Replace 'desired_role_here' with the role you want to filter by
+                    },
                 },
                 {
                     $project: {
@@ -360,10 +375,11 @@ class Employee {
                         message: 1,
                         role: 1,
                         system_ip: 1,
-                        createdAt: 1
+                        createdAt: 1,
                     },
                 },
             ]);
+
 
             // const GetAlluser_logs = await user_logs.find({
 

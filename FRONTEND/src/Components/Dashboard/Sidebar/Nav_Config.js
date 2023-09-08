@@ -217,35 +217,35 @@ export const sub_admin_sidebar = [
         'id': 1,
         "name": 'Signals',
         "Icon": "Signal",
-        "route": "/subradmin/signals",
+        "route": "/subadmin/signals",
         "Data": []
     },
     {
         'id': 2,
         "name": 'All Clients',
         "Icon": "Users",
-        "route": "/subradmin/clients",
+        "route": "/subadmin/clients",
         "Data": []
     },
     {
         'id': 3,
         "name": 'All Services',
         "Icon": "Wrench",
-        "route": "/subradmin/services",
+        "route": "/subadmin/services",
         "Data": []
     },
     {
         'id': 4,
         "name": 'Group Services',
         "Icon": "Frame",
-        "route": "/subradmin/groupservices",
+        "route": "/subadmin/groupservices",
         "Data": []
     },
     {
         'id': 5,
         "name": 'Trade History',
         "Icon": "CandlestickChart",
-        "route": "/subradmin/tradehistory",
+        "route": "/subadmin/tradehistory",
         "Data": []
 
     },
@@ -253,21 +253,21 @@ export const sub_admin_sidebar = [
         'id': 6,
         "name": 'Trading Status',
         "Icon": "Activity",
-        "route": "/subradmin/tradingstatus",
+        "route": "/subadmin/tradingstatus",
         "Data": []
     },
     {
         'id': 7,
         "name": 'Api Create Info',
         "Icon": "WalletCards",
-        "route": "/subradmin/apicreateinfo",
+        "route": "/subadmin/apicreateinfo",
         "Data": []
     },
     {
         'id': 7,
         "name": 'Help Center',
         "Icon": "HelpingHand",
-        "route": "/subradmin/helpcenter",
+        "route": "/subadmin/helpcenter",
         "Data": []
     },
 ]

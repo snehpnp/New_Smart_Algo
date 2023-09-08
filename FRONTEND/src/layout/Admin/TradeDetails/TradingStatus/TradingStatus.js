@@ -20,7 +20,7 @@ const TradingStatus = () => {
 
     const dispatch = useDispatch()
 
-    const [first, setfirst] = useState('all')
+    const [first, setfirst] = useState('USER')
     const [showModal, setshowModal] = useState(false)
 
     const [getAllClients, setAllClients] = useState({
@@ -30,7 +30,7 @@ const TradingStatus = () => {
 
 
     const data = async () => {
-        await dispatch(GET_ALL_TRADING_STATUS()).unwrap()
+        await dispatch(GET_ALL_TRADING_STATUS({Role:first})).unwrap()
             .then((response) => {
                 if (response.status) {
                     setAllClients({
@@ -45,7 +45,7 @@ const TradingStatus = () => {
     }
     useEffect(() => {
         data()
-    }, [])
+    }, [first])
 
     const columns = [
         {
@@ -57,22 +57,12 @@ const TradingStatus = () => {
             dataField: 'userinfo.FullName',
             text: 'User Name'
         },
-        {
-            dataField: 'prefix',
-            text: 'Mobile Number'
-        },
+
         {
             dataField: 'login_status',
-            text: 'Login Status',
-            formatter: (cell, row) => cell == null || "" ? "-" : cell
-
-        },
-        {
-            dataField: 'trading_status',
-            text: 'Trading Status',
-            formatter: (cell, row) => cell == null || "" ? "-" : cell
-            
-            
+            text: 'Login And Trading  Status',
+            // formatter: (cell, row) => cell == null || "" ? "-" : cell
+            formatter: (cell, row) => row.login_status == null ? row.trading_status : row.login_status
         },
         {
             dataField: 'message',
@@ -96,48 +86,45 @@ const TradingStatus = () => {
             formatter: (cell, row) => cell.split('T')[0] + "   " + cell.split('T')[1]
 
         },
-        // {
-        //     dataField: 'ActiveStatus',
-        //     text: 'Status',
-        //     formatter: (cell, row) => (
-        //         <>
-        //             <label class="switch" >
-        //                 <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false}/>
-        //                     <span class="slider round"></span>
-        //             </label>
-
-        //         </>
 
 
-        //     ),
-        // },
-        // {
-        //     dataField: 'actions',
-        //     text: 'Actions',
-        //     formatter: (cell, row) => (
-        //         <div>
-        //             <span data-toggle="tooltip" data-placement="top" title="Edit">
-        //                 <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-        //             </span>
-        //             <span data-toggle="tooltip" data-placement="top" title="Delete">
-        //                 <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-        //             </span>
+    ];
 
-        //         </div>
-        //     ),
-        // },
-        // {
-        //     dataField: 'prefix',
-        //     text: 'Trading On/Off'
-        // },
-  ];
+    var RoleArr = ["ADMIN", "USER", "SUBADMIN"]
 
     return (
-   <>
+        <>
             {
                 getAllClients.loading ? <Loader /> :
                     <>
                         <Theme_Content Page_title="Trading Status" button_status={false}  >
+                            <div className="col-lg-6">
+                                <div className="mb-3 row">
+                                    <div className="col-lg-7">
+                                        <select
+                                            className="default-select wide form-control"
+                                            id="validationCustom05"
+                                            onChange={(e) => setfirst(e.target.value)}
+                                        >
+                                            <option disabled>
+                                                Please Select Catagory
+                                            </option>
+                                            {/* <option selecte d value="all">
+                                                All
+                                            </option> */}
+                                            {RoleArr && RoleArr.map((item) => {
+                                                return <>
+                                                    <option value={item}>{item}</option>
+                                                </>
+                                            })}
+
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
 
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (
@@ -165,10 +152,10 @@ const TradingStatus = () => {
         </ >
     )
 
-        // <Content Page_title="Signals">
-        //     <BasicDataTable tableData={columns} TableColumns={columns} dropdown={false} />
-        // </Content>
-        // )
+    // <Content Page_title="Signals">
+    //     <BasicDataTable tableData={columns} TableColumns={columns} dropdown={false} />
+    // </Content>
+    // )
 }
 
 

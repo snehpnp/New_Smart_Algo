@@ -3,16 +3,16 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import Content from "../../../../Components/Dashboard/Content/Content"
-import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
-import Loader from '../../../../Utils/Loader'
+// import Content from "../../../../Components/Dashboard/Content/Content"
+import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
+import Loader from '../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Pencil, Trash2 } from 'lucide-react';
-import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
+import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
-import Modal from '../../../../Components/ExtraComponents/Modal';
+import Modal from '../../../Components/ExtraComponents/Modal';
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 
 const AllClients = () => {
@@ -22,7 +22,6 @@ const AllClients = () => {
     const Role = JSON.parse(localStorage.getItem("user_details")).Role
     const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
 
-
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
 
@@ -30,7 +29,6 @@ const AllClients = () => {
         loading: true,
         data: []
     });
-
 
     const data = async () => {
         var req1 = {
@@ -118,17 +116,16 @@ const AllClients = () => {
            
 
         // },
-        {
-            dataField: 'EndDate',
-            text: 'End Date',
-            formatter: (cell, row) => cell.toString().split('T')[0]
-            // formatter: (cell, row) => toString(cell).split('T')[0]
+        // {
+        //     dataField: 'EndDate',
+        //     text: 'End Date',
+        //     formatter: (cell, row) => cell.split('T')[0]
 
-        },
-        {
-            dataField: 'Otp',
-            text: 'Password'
-        },
+        // },
+        // {
+        //     dataField: 'Otp',
+        //     text: 'Password'
+        // },
         {
             dataField: 'ActiveStatus',
             text: 'Status',
