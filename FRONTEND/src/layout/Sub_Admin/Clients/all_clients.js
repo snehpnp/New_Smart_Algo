@@ -3,20 +3,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import Content from "../../../../Components/Dashboard/Content/Content"
-import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
-import Loader from '../../../../Utils/Loader'
+// import Content from "../../../../Components/Dashboard/Content/Content"
+import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
+import Loader from '../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Pencil, Trash2 } from 'lucide-react';
-import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
+import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
-import Modal from '../../../../Components/ExtraComponents/Modal';
+import Modal from '../../../Components/ExtraComponents/Modal';
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
-import { fDate, fDateTimeSuffix } from '../../../../Utils/Date_formet';
-
-
 
 const AllClients = () => {
     const navigate = useNavigate()
@@ -24,7 +21,6 @@ const AllClients = () => {
     const dispatch = useDispatch()
     const Role = JSON.parse(localStorage.getItem("user_details")).Role
     const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
-
 
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
@@ -34,11 +30,10 @@ const AllClients = () => {
         data: []
     });
 
-
     const data = async () => {
         var req1 = {
-            Find_Role: Role,
-            user_ID: user_ID
+            Find_Role:Role,
+            user_ID:user_ID
         }
         await dispatch(GET_ALL_CLIENTS(req1)).unwrap()
             .then((response) => {
@@ -108,29 +103,29 @@ const AllClients = () => {
             dataField: 'PhoneNo',
             text: 'Phone Number'
         },
-        {
-            dataField: 'CreateDate',
-            text: 'CreateDate',
-            formatter: (cell, row) => fDateTimeSuffix(row.CreateDate)
+        // {
+        //     dataField: 'CreateDate',
+        //     text: 'CreateDate',
+        //     formatter: (cell, row) => cell.split('T')[0]
 
-        },
-        {
-            dataField: 'StartDate',
-            text: 'Start Date',
-            formatter: (cell, row) => fDateTimeSuffix(row.StartDate)
+        // },
+        // {
+        //     dataField: 'StartDate',
+        //     text: 'Start Date',
+        //     formatter: (cell, row) => cell.split('T')[0],
+           
 
+        // },
+        // {
+        //     dataField: 'EndDate',
+        //     text: 'End Date',
+        //     formatter: (cell, row) => cell.split('T')[0]
 
-
-        },
-        {
-            dataField: 'EndDate',
-            text: 'End Date',
-            formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
-        },
-        {
-            dataField: 'Otp',
-            text: 'Password'
-        },
+        // },
+        // {
+        //     dataField: 'Otp',
+        //     text: 'Password'
+        // },
         {
             dataField: 'ActiveStatus',
             text: 'Status',
@@ -204,7 +199,7 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
                     <div>
-                        <Link to={`/admin/client/edit/${row._id}`}>
+                    <Link to={`/admin/client/edit/${row._id}`}>
                             <span data-toggle="tooltip" data-placement="top" title="Edit">
                                 <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                             </span>

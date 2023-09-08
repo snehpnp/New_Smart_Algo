@@ -14,9 +14,6 @@ import UpdateBrokerKey from './Update_Broker_Key';
 import { loginWithApi } from './log_with_api';
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 
-
-
-
 const Header = ({ ChatBox }) => {
 
   // HOOKS
@@ -152,109 +149,104 @@ const Header = ({ ChatBox }) => {
   useEffect(() => {
     data();
   }, []);
+return (
+  <div>
+    <Logo />
+    <div className="header">
+      <div className="header-content">
+        <nav className="navbar navbar-expand">
+          <div className="collapse navbar-collapse justify-content-between">
+            <div className="header-left">
+              {user_role === "USER" ?
+                <>
+                  <div className="headaer-title">
+                    <h3 className="font-w400 mb-0">Api Login </h3>
+                  </div>
 
+                  <div className="Api Login m-2"><label class="switch" >
+                    <input type="checkbox" className="bg-primary"
+                      checked={UserDetails.TradingStatus === "on" ? true : false}
+                      onClick={(e) => LogIn_WIth_Api(e.target.checked, UserDetails.broker, UserDetails.TradingStatus)}
+                    />
+                    <span class="slider round"></span>
+                  </label>
+                  </div>
+                </>
+                : ""}
+            </div>
+            <ul className="navbar-nav header-right">
 
-
-
-
-  return (
-    <div>
-      <Logo />
-      <div className="header">
-        <div className="header-content">
-          <nav className="navbar navbar-expand">
-            <div className="collapse navbar-collapse justify-content-between">
-              <div className="header-left">
-                {user_role === "USER" ?
-                  <>
-                    <div className="headaer-title">
-                      <h3 className="font-w400 mb-0">Api Login </h3>
-                    </div>
-
-                    <div className="Api Login m-2"><label class="switch" >
-                      <input type="checkbox" className="bg-primary"
-                        checked={UserDetails.TradingStatus === "on" ? true : false}
-                        onClick={(e) => LogIn_WIth_Api(e.target.checked, UserDetails.broker, UserDetails.TradingStatus)}
-                      />
-                      <span class="slider round"></span>
-                    </label>
-                    </div>
-                  </>
-                  : ""}
-              </div>
-              <ul className="navbar-nav header-right">
-
-                {/* GO TO DASHBOARD */}
-                {gotodashboard != null ?
-                  <>
-                    <li className="nav-item dropdown gotodashboard" >
-                      <button
-                        onClick={redirectToAdmin}
-                        type="button"
-                        className="btn btn-color"
-                      >
-                        Go to Admin
-                      </button>
-                    </li>
-                  </>
-                  : ""
-                }
-
-                {user_role === "USER" ? <>
-                  <li className="nav-item dropdown header-profile">
+              {/* GO TO DASHBOARD */}
+              {gotodashboard != null ?
+                <>
+                  <li className="nav-item dropdown gotodashboard" >
                     <button
-                      className=" btn btn-secondary"
-                      onClick={() => setshowModal(true)}
+                      onClick={redirectToAdmin}
+                      type="button"
+                      className="btn btn-color"
                     >
-                      Set ApiKey
+                      Go to Admin
                     </button>
                   </li>
-                </> : ""}
+                </>
+                : ""
+              }
 
-
-
-
-
-                {/*  For Show Notification Box */}
-                {/* <Notification /> */}
-                {/*  For Show Chat Box */}
-                {/* <li className="nav-item dropdown notification_dropdown" onClick={() => ChatBox()}>
-                  <a className="nav-link bell-link nav-action" >
-                    <svg
-                      width={28}
-                      height={28}
-                      viewBox="0 0 28 28"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M14.8257 17.5282C14.563 17.6783 14.2627 17.7534 14 17.7534C13.7373 17.7534 13.437 17.6783 13.1743 17.5282L0 9.49598V20.193C0 22.4826 1.83914 24.3217 4.12869 24.3217H23.8713C26.1609 24.3217 28 22.4826 28 20.193V9.49598L14.8257 17.5282Z"
-                        fill="#737B8B"
-                      />
-                      <path
-                        d="M23.8713 3.67829H4.12863C2.17689 3.67829 0.525417 5.06703 0.112549 6.90617L13.9999 15.3887L27.8873 6.90617C27.4745 5.06703 25.823 3.67829 23.8713 3.67829Z"
-                        fill="#737B8B"
-                      />
-                    </svg>
-                    <span className="badge light text-white bg-primary rounded-circle" />
-                  </a>
-                </li> */}
+              {user_role === "USER" ? <>
                 <li className="nav-item dropdown header-profile">
-                  <DropDown />
+                  <button
+                    className=" btn btn-secondary"
+                    onClick={() => setshowModal(true)}
+                  >
+                    Set ApiKey
+                  </button>
                 </li>
-              </ul>
-            </div>
-          </nav>
-        </div>
+              </> : ""}
 
-        <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Update Broker Key" hideBtn={true}
-          handleClose={() => setshowModal(false)}
-        >
-          <UpdateBrokerKey />
-        </Modal >
+
+
+
+
+              {/*  For Show Notification Box */}
+              {/* <Notification /> */}
+              {/*  For Show Chat Box */}
+              {/* <li className="nav-item dropdown notification_dropdown" onClick={() => ChatBox()}>
+                <a className="nav-link bell-link nav-action" >
+                  <svg
+                    width={28}
+                    height={28}
+                    viewBox="0 0 28 28"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M14.8257 17.5282C14.563 17.6783 14.2627 17.7534 14 17.7534C13.7373 17.7534 13.437 17.6783 13.1743 17.5282L0 9.49598V20.193C0 22.4826 1.83914 24.3217 4.12869 24.3217H23.8713C26.1609 24.3217 28 22.4826 28 20.193V9.49598L14.8257 17.5282Z"
+                      fill="#737B8B"
+                    />
+                    <path
+                      d="M23.8713 3.67829H4.12863C2.17689 3.67829 0.525417 5.06703 0.112549 6.90617L13.9999 15.3887L27.8873 6.90617C27.4745 5.06703 25.823 3.67829 23.8713 3.67829Z"
+                      fill="#737B8B"
+                    />
+                  </svg>
+                  <span className="badge light text-white bg-primary rounded-circle" />
+                </a>
+              </li> */}
+              <li className="nav-item dropdown header-profile">
+                <DropDown />
+              </li>
+            </ul>
+          </div>
+        </nav>
       </div>
+
+      <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Update Broker Key" hideBtn={true}
+        handleClose={() => setshowModal(false)}
+      >
+        <UpdateBrokerKey />
+      </Modal >
     </div>
-  )
+  </div>
+)
 }
 
 export default Header

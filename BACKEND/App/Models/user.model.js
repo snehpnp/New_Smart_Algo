@@ -125,7 +125,7 @@ const userModel = Schema({
     },
     broker: {
         type: String,
-        enum: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+        enum: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], //1 = Market Hub,2=Alice Blue,3=Master Trust , 4 = Motilal Oswal
         default: '0'
     },
     api_secret: {
