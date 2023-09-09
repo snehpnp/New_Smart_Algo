@@ -13,9 +13,11 @@ const DropDown = () => {
     const navigate = useNavigate();
 
     const user_id = JSON.parse(localStorage.getItem('user_details')).user_id
+    const Role = JSON.parse(localStorage.getItem('user_details')).Role
 
     const [CheckUser, setCheckUser] = useState(check_Device());
 
+    const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
 
     const LogoutUser = async () => {
         const request = {
@@ -26,7 +28,6 @@ const DropDown = () => {
         await dispatch(Log_Out_User(request))
             .then((res) => {
                 if (res.payload.status) {
-                    console.log("Log_Out_User", res.payload.msg);
                     toast.success(res.payload.msg)
                     localStorage.removeItem("user_role",);
                     localStorage.removeItem("user_details");
@@ -40,7 +41,24 @@ const DropDown = () => {
             })
     }
 
+    const profile_Route = () => {
 
+        if (Role === "USER") {
+            return "/client/profile"
+        }
+        else if (Role === "ADMIN") {
+            return "/admin/profile"
+        }
+        else if (Role === "SUBADMIN") {
+            return "/subadmin/profile"
+        }
+        else if (Role === "SUPERADMIN") {
+            return "/super/profile"
+        } else {
+            return "/client/profile"
+        }
+
+    }
 
 
     return (
@@ -54,15 +72,24 @@ const DropDown = () => {
                 <img src="../assets/images/avatar/1.png" />
                 <i className="fa fa-angle-down ms-3" />
             </button>
-            <div className="dropdown-menu dropdown-menu-end" style={{ margin: 0 }}>
-                <Link to="profile" className=" my-2 text-center  text-white btn  btn-primary dropdown-item" href="#">
+            <div className="dropdown-menu dropdown-menu-end" style={{ margin: 0, padding: "11px" }}>
+
+
+                {/* <Link to="profile" className=" my-2 text-center  text-white btn  btn-primary dropdown-item" href="#"> */}
+
+                <Link to={profile_Route()} className=" my-2 text-center  text-white btn  btn-primary dropdown-item">
+
                     Profile
                 </Link>
-                <button className="btn text-center text-white btn-primary dropdown-item" onClick={(e) => LogoutUser(e)}>
-                    Logout
-                </button>
+                {gotodashboard == null ?
+                    <button className="btn text-center text-white btn-primary dropdown-item" onClick={(e) => LogoutUser(e)}>
+                        Logout
+                    </button>
+                    : ""}
 
-            </div></div>
+
+            </div>
+        </div>
     )
 }
 

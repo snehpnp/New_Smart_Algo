@@ -12,10 +12,10 @@ export async function ALL_CLIENTS(data , token) {
         const res = await axios.post(`${Config.base_url}getall/clients`, data ,{
              headers: header(token),
             data: {
-                
+
                     "page": "5",
                     "limit": "1"
-                  
+
             },
         })
         return await res?.data;
@@ -223,6 +223,91 @@ export async function GO_TO_DASHBOARD(data , token) {
     }
     catch (err) {
         console.log("error", err);
+        // custom error
+    }
+
+}
+
+// GET ALL SERVICES NAMES
+export async function GET_ALL_SERVICES_NAME(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/servicesName`, data ,{
+            //  headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+// GET ALL SERVICES NAMES
+export async function GET_ALL_SERVICES_USER_NAME(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/services/username`, data ,{
+            //  headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+// DELETE GROUP SERVICES
+export async function DELETE_GROUP_SERVICES(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}delete/groupServices`, data ,{
+            //  headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+// UPDATE ACTIVE STATUS
+export async function UPDATE_USERACTIVE_STATUS(data , token) {
+    console.log(data);
+    try {
+        const res = await axios.post(`${Config.base_url}update/useractive/status`, data ,{
+            //  headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error =", err);
+        // custom error
+    }
+
+}
+
+
+
+// ADD USER
+export async function ADD_CLIENT(data , token) {
+    console.log(data);
+    try {
+        const res = await axios.post(`${Config.base_url}add/employee`, data ,{
+             headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error =", err);
+        return err
         // custom error
     }
 

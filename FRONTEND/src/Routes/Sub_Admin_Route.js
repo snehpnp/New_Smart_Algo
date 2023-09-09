@@ -4,6 +4,9 @@ import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from 
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
 
 import Dashboard from '../layout/Sub_Admin/Dashboard/Dashboard';
+import Profile from '../layout/Sub_Admin/Profile/Profile';
+import AllClients from '../layout/Sub_Admin/Clients/all_clients';
+
 
 
 const Admin = () => {
@@ -20,8 +23,9 @@ const Admin = () => {
             <Routes>
                 {/* <> */}
                 <Route exact path="/dashboard" element={<Dashboard />} />
-                {/* <Route exact path="/admins" element={<Admins />} />
-                <Route exact path="/admin/add" element={<AddAdmins />} />
+                <Route exact path="/profile" element={<Profile />} />
+                <Route exact path="/clients" element={<AllClients />} />
+                {/*  <Route exact path="/admin/add" element={<AddAdmins />} />
                 <Route exact path="/admin/edit/:id" element={<EditEdmins />} />
                 <Route exact path="/system" element={<System />} />
                 <Route exact path="system/editsystem/:id" element={<Editsystem />} /> */}

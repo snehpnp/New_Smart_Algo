@@ -16,6 +16,13 @@ app.use(require("./Admin/servicegroup.route"));
 app.use(require("./Subadmin/subadmin.route"));
 
 
+// USER ROUTES
+app.use(require("./User/user.route"));
+
+
+// BROKER ACCESS TOKEN
+app.use(require("./Brokerassecc_token/broker_access_toke.route"));
+
 
 
 };

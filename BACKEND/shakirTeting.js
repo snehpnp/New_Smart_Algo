@@ -37,39 +37,13 @@ module.exports = function (app) {
     {
       $unwind: '$categoryResult', // Unwind the 'categoryResult' array
     },
-    // {
-    //   $project: {
-    //     // Include fields from the original collection
-    //    //  'categoryResult.segment': 1,
-        
-    //     // Include fields from the 'categoryResult' array
-    //     // 'categoryResult.fieldName1': 1,
-    //     // 'categoryResult.fieldName2': 1,
-        
-    //     // // Exclude the rest of the 'categoryResult' fields if needed
-    //     // 'categoryResult._id': 0,
-    //     // 'categoryResult.fieldName3': 0,
-        
-    //     // Include other fields as needed
-    //   },
-
-
-    // },
+ 
   ];
 
   const result = await services.aggregate(pipeline);
   res.send({status:true,data:result});
   return
   
-//  services.find({})
-//   .populate('category', 'name') // Populate the 'user' field with 'name' and 'email' fields from the User collection
-//   .exec((err, servicesdata) => {
-//     if (err) {
-//       console.error('Error fetching posts:', err);
-//     } else {
-//       console.log('Posts with user data:', servicesdata);
-//     }
-//   });
 
 
       });
@@ -359,7 +333,7 @@ const collection = "shakir2";
 
             if (item.symbol.slice(-3) == '-EQ') {
               count++
-              console.log('item - C '+count+' ',item)
+              
               const matchingElements = categoryResult.filter(item => item.segment === "C");
               const category_id = matchingElements[0]._id
              

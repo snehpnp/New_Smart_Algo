@@ -13,6 +13,8 @@ module.exports = {
     strategy:require('./strategy.model'),
     strategy_client:require('./strategy_client.model'),
     panel_model :require('./all_panels.model'),
-    Subadmin_Permission :require('./subadmin_permision.model')
+    Subadmin_Permission :require('./subadmin_permision.model'),
+    groupService_User :require('./group_services_client.model')
+
 };
  

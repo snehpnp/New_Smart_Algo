@@ -1,9 +1,14 @@
 import React from 'react'
-import {  Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
 
 import Dashboard from '../layout/User/Dashboard/Dashboard';
+import Signals from '../layout/Admin/TradeDetails/Signals/Signals';
+import TradingStatus from '../layout/User/Trading status/Tradingstatus';
+import Profile from '../layout/User/Profile/Profile';
+
+
 
 
 const Admin = () => {
@@ -20,6 +25,11 @@ const Admin = () => {
             <Routes>
                 {/* <> */}
                 <Route exact path="/dashboard" element={<Dashboard />} />
+                <Route exact path="/signals" element={<Signals />} />
+                <Route exact path="/tradingstatus" element={<TradingStatus />} />
+                <Route exact path="/profile" element={<Profile />} />
+
+
                 {/* <Route exact path="/admins" element={<Admins />} />
                 <Route exact path="/admin/add" element={<AddAdmins />} />
                 <Route exact path="/admin/edit/:id" element={<EditEdmins />} />

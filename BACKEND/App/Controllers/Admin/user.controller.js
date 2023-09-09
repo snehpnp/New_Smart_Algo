@@ -3,9 +3,14 @@ const bcrypt = require("bcrypt");
 const db = require('../../Models');
 const User_model = db.user;
 const user_logs = db.user_logs;
-
 const Role_model = db.role;
 const Company_info = db.company_information;
+const strategy_client = db.strategy_client;
+const groupService_User = db.groupService_User;
+
+
+
+
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
 
@@ -16,27 +21,106 @@ class Employee {
     // USER ADD 
     async AddEmployee(req, res) {
         try {
-            const { FullName, UserName, Email, PhoneNo, StartDate, EndDate, Role, parent_id, parent_role } = req.body;
+            const { FullName, UserName, Email, PhoneNo, license_type, licence, fromdate, Strategies, todate, service_given_month, broker, parent_id, parent_role, api_secret, app_id, client_code, api_key, app_key, api_type, demat_userid, group_service } = req.body;
+
+            var Role = "USER";
+            var StartDate1 = "";
+            var EndDate1 = "";
+
+
 
             // IF ROLE NOT EXIST TO CHECK
             const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
             if (!roleCheck) {
-                return res.status(409).json({ status: false, msg: 'Role Not exists', data: [] });
+                return res.send({ status: false, msg: 'Role Not exists', data: [] });
             }
 
             // IF USER ALEARDY EXIST       
             const existingUsername = await User_model.findOne({ UserName: UserName });
             if (existingUsername) {
-                return res.status(409).json({ status: false, msg: 'Username already exists', data: [] });
+                return res.send({ status: false, msg: 'Username already exists', data: [] });
             }
             const existingemail = await User_model.findOne({ Email: Email });
             if (existingemail) {
-                return res.status(409).json({ status: false, msg: 'Email already exists', data: [] });
+                return res.send({ status: false, msg: 'Email already exists', data: [] });
             }
             const existingePhone = await User_model.findOne({ PhoneNo: PhoneNo });
             if (existingePhone) {
-                return res.status(409).json({ status: false, msg: 'Phone Number already exists', data: [] });
+                return res.send({ status: false, msg: 'Phone Number already exists', data: [] });
             }
+
+            // IF CHECK STRATEGY NULL
+            if (Strategies.length == 0) {
+                return res.send({ status: false, msg: 'Please Select a one Strategy', data: [] });
+            }
+
+            // IF CHECK GROUP SERVICES NULL
+            if (group_service == "") {
+                return res.send({ status: false, msg: 'Please Select a one Group', data: [] });
+            }
+
+            // USER 2 DAYS LICENSE USE
+            if (license_type == '0') {
+
+                var currentDate = new Date();
+                var start_date_2days = dateTime.create(currentDate);
+                start_date_2days = start_date_2days.format('Y-m-d H:M:S');
+                var start_date = start_date_2days;
+
+                // console.log("start_date", start_date);
+                StartDate1 = start_date
+
+
+                var UpdateDate = ""
+                var StartDate = new Date(start_date)
+                var GetDay = StartDate.getDay()
+                if (GetDay == 4) {
+                    UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+                } else if (GetDay == 5) {
+                    UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+                } else if (GetDay == 6) {
+                    UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+                } else if (GetDay == 0) {
+                    UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+                } else if (GetDay > 0 && GetDay < 4) {
+                    UpdateDate = StartDate.setDate(StartDate.getDate() + 2);
+                }
+
+
+                var end_date_2days = dateTime.create(UpdateDate);
+                var end_date_2days = end_date_2days.format('Y-m-d H:M:S');
+
+                // console.log("END DATE", end_date_2days);
+                EndDate1 = end_date_2days
+
+            } else if (license_type == '1') {
+                StartDate1 = fromdate
+                EndDate1 = todate
+            } else if (license_type == '2') {
+
+                var currentDate = new Date();
+                var start_date_2days = dateTime.create(currentDate);
+                start_date_2days = start_date_2days.format('Y-m-d H:M:S');
+                var start_date = start_date_2days;
+
+                // console.log("start_date", start_date);
+                StartDate1 = start_date
+
+
+                var UpdateDate = ""
+                var StartDate = new Date(start_date)
+
+                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseFloat(licence));
+
+                var end_date_2days = dateTime.create(UpdateDate);
+                var end_date_2days = end_date_2days.format('Y-m-d H:M:S');
+
+                // console.log("END DATE", end_date_2days);
+                EndDate1 = end_date_2days
+
+            }
+
+
 
 
             const min = 1;
@@ -50,7 +134,7 @@ class Employee {
             // Panel Prifix key Find 
             var Panel_key = await Company_info.find()
             if (Panel_key.length == 0) {
-                return res.status(409).json({ status: false, msg: 'client prifix not exist.', data: [] });
+                return res.send({ status: false, msg: 'client prifix not exist.', data: [] });
             }
 
             const mins = 1;
@@ -61,11 +145,8 @@ class Employee {
 
             var ccd = dt.format('ymd');
             var client_key = Panel_key[0].prefix + cli_key + ccd
-            // console.log("Panel_key", client_key);
 
-
-            // Company Information
-            const User = new User_model({
+            var user_data = {
                 FullName: FullName,
                 UserName: UserName,
                 Email: Email,
@@ -73,24 +154,79 @@ class Employee {
                 // Password: UserName + "@" + PhoneNo.slice(-4),
                 Password: ByCryptrand_password,
                 Otp: rand_password,
-                StartDate: StartDate,
-                EndDate: EndDate,
+                StartDate: StartDate1,
+                EndDate: EndDate1,
                 Role: Role.toUpperCase(),
+                license_type: license_type,
+                licence: licence,
                 client_key: client_key,
                 parent_id: parent_id,
-                parent_role: parent_role
+                parent_role: parent_role,
+                api_secret: api_secret,
+                app_id: app_id,
+                client_code: client_code,
+                api_key: api_key,
+                app_key: app_key,
+                api_type: api_type,
+                demat_userid: demat_userid,
+                service_given_month: service_given_month
+            }
 
-            });
+                ;
+            // return
 
+            // const User = new User_model({
+            //     FullName: FullName,
+            //     UserName: UserName,
+            //     Email: Email,
+            //     PhoneNo: PhoneNo,
+            //     // Password: UserName + "@" + PhoneNo.slice(-4),
+            //     Password: ByCryptrand_password,
+            //     Otp: rand_password,
+            //     StartDate: fromdate,
+            //     EndDate: todate,
+            //     Role: Role.toUpperCase(),
+            //     client_key: client_key,
+            //     parent_id: parent_id,
+            //     parent_role: parent_role
+
+            // });
+            const User = new User_model(user_data)
             const userinfo = User.save()
                 .then(async (data) => {
+                    var User_id = data._id
+
+                    // GROUP SERVICE ADD 
+                    const User_group_service = new groupService_User(
+                        {
+                            groupService_id: group_service,
+                            user_id: User_id
+                        })
+                    User_group_service.save()
+
+
+                    // STRATEGY ADD 
+                    Strategies.forEach((data) => {
+
+                        const User_strategy_client = new strategy_client(
+                            {
+                                strategy_id: data,
+                                user_id: User_id
+                            })
+                        User_strategy_client.save()
+                    })
+
+
+
+
+
                     res.send({ status: true, msg: "successfully Add!", data: data })
 
                 })
                 .catch((err) => {
                     console.log(" Add Time Error-", err);
                     if (err.keyValue) {
-                        return res.status(409).json({ status: false, msg: 'Key duplicate', data: err.keyValue });
+                        return res.send({ status: false, msg: 'Key duplicate', data: err.keyValue });
 
                     }
 
@@ -108,16 +244,22 @@ class Employee {
     async GetAllClients(req, res) {
         try {
 
-            const { page, limit } = req.body;     //LIMIT & PAGE
+            const { page, limit, Find_Role, user_ID } = req.body;     //LIMIT & PAGE
             const skip = (page - 1) * limit;
 
             // GET ALL CLIENTS
-            const getAllClients = await User_model.find({
-                $or: [
-                    { Role: "USER" }
-                ]
-            }).skip(skip)
+            var AdminMatch
+
+            if (Find_Role == "ADMIN") {
+                AdminMatch = { Role: "USER" }
+            } else if (Find_Role == "SUBADMIN") {
+                AdminMatch = { Role: "USER", parent_id: user_ID }
+            }
+
+            const getAllClients = await User_model.find(AdminMatch).skip(skip)
                 .limit(Number(limit));
+
+
 
             const totalCount = getAllClients.length;
             // IF DATA NOT EXIST
@@ -128,7 +270,7 @@ class Employee {
             // DATA GET SUCCESSFULLY
             res.send({
                 status: true,
-                msg: "Get All  Clients",
+                msg: "Get All Clients",
                 totalCount: totalCount,
                 data: getAllClients,
                 page: Number(page),
@@ -206,38 +348,43 @@ class Employee {
     async GetTradingStatus(req, res) {
         try {
 
-            // GET LOGIN CLIENTS
-
+            const { Role } = req.body
+            // var Role = "ADMIN"
             const GetAlluser_logs = await user_logs.aggregate([
                 {
-                  $lookup: {
-                    from: "users",
-                    localField: "user_Id",
-                    foreignField: "_id",
-                    as: "userinfo",
-                  },
+                    $lookup: {
+                        from: "users",
+                        localField: "user_Id",
+                        foreignField: "_id",
+                        as: "userinfo",
+                    },
                 },
                 {
-                    $unwind: '$userinfo', // Unwind the 'categoryResult' array
-                  },
-                  {
-                    $project: {
-                      'userinfo.FullName': 1,
-                      login_status:1,
-                      trading_status:1,
-                      message:1,
-                      role:1,
-                      system_ip:1,
-                      createdAt:1       
+                    $unwind: '$userinfo',
+                },
+                {
+                    $match: {
+                        'userinfo.Role': Role, // Replace 'desired_role_here' with the role you want to filter by
                     },
-                  },
-              ]);
+                },
+                {
+                    $project: {
+                        'userinfo.FullName': 1,
+                        login_status: 1,
+                        trading_status: 1,
+                        message: 1,
+                        role: 1,
+                        system_ip: 1,
+                        createdAt: 1,
+                    },
+                },
+            ]);
+
 
             // const GetAlluser_logs = await user_logs.find({
 
             // });
             const totalCount = GetAlluser_logs.length;
-            // console.log("totalCount", totalCount);
             // IF DATA NOT EXIST
             if (GetAlluser_logs.length == 0) {
                 return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
@@ -257,6 +404,48 @@ class Employee {
             console.log("trading status Error-", error);
         }
     }
+
+
+    // CLIENTS ACTIVE INACTIVE STATUS UPDATE
+    async UpdateActiveStatus(req, res) {
+        try {
+            const { id, user_active_status } = req.body
+            // UPDATE ACTTIVE STATUS CLIENT
+
+
+            const get_user = await User_model.find({ _id: id });
+            if (get_user.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
+
+            const filter = { _id: id };
+            const updateOperation = { $set: { ActiveStatus: user_active_status } };
+            console.log("updateOperation", updateOperation);
+            const result = await User_model.updateOne(filter, updateOperation);
+
+            console.log("result", result);
+
+            return
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All user_logs",
+                data: GetAlluser_logs,
+                // page: Number(page),
+                // limit: Number(limit),
+                totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+        } catch (error) {
+            console.log("trading status Error-", error);
+        }
+    }
+
+
+
+
+
 }
 
 

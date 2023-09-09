@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY,ALL_GROUP_SERVICES ,ALL_CLIENTS,GET_COMPANY_INFO,GET_ALL_TRADINGSTATUS,GO_TO_DASHBOARD} from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_CLIENTS, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS } from "../../../Service/admin.service";
 
 
 
@@ -92,6 +92,20 @@ export const GO_TO_DASHBOARDS = createAsyncThunk("goToDashboard", async (data) =
 });
 
 
+
+// UPDATE USER ACTIVE STATUS FOR API
+export const UPDATE_USER_ACTIVE_STATUS = createAsyncThunk("update/useractive/status", async (data) => {
+    try {
+        const res = await UPDATE_USERACTIVE_STATUS(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        console.log("err",err);
+        return err;
+    }
+});
+
+
 const AdminSlice = createSlice({
     name: "AdminSlice",
     initialState: {
@@ -101,30 +115,24 @@ const AdminSlice = createSlice({
         allService: [],
         allCatagory: [],
         servicebycatagory: [],
-        allGroupServices:[],
-        allClients:[],
-        companyInfo:[],
-        getalltradingstatus:[],
-        goTodashboard:[],
-
-
-
-
+        allGroupServices: [],
+        allClients: [],
+        companyInfo: [],
+        getalltradingstatus: [],
+        goTodashboard: [],
+        activeStatus: []
     },
 
     recuders: {},
     extraReducers: {
 
-        [Get_All_Service.pending]: (state, action) => {
-            console.log("pending Get_All_Service ");
-        },
+        // [Get_All_Service.pending]: (state, action) => {
+        //     console.log("pending Get_All_Service ");
+        // },
         [Get_All_Service.fulfilled]: (state, { payload }) => {
             return { ...state, allService: payload, isLoading: false };
         },
-        // [Get_All_Service.rejected]: (state, action) => {
-        //     console.log("pending reject ");
-        //     // return { ...state, allService: action, isLoading: false };
-        // },
+
         [Get_All_Catagory.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, allCatagory: payload, isLoading: false };
@@ -153,6 +161,10 @@ const AdminSlice = createSlice({
         [GO_TO_DASHBOARDS.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, goTodashboard: payload, isLoading: false };
+        },
+        [UPDATE_USER_ACTIVE_STATUS.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, activeStatus: payload, isLoading: false };
         },
     },
 });

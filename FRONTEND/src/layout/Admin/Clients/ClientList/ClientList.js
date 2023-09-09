@@ -10,14 +10,21 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
+import BootstrapSwitchButton from 'bootstrap-switch-button-react'
+import { fDate, fDateTimeSuffix } from '../../../../Utils/Date_formet';
+
+
 
 const AllClients = () => {
     const navigate = useNavigate()
 
     const dispatch = useDispatch()
+    const Role = JSON.parse(localStorage.getItem("user_details")).Role
+    const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
+
 
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
@@ -29,7 +36,11 @@ const AllClients = () => {
 
 
     const data = async () => {
-        await dispatch(GET_ALL_CLIENTS()).unwrap()
+        var req1 = {
+            Find_Role: Role,
+            user_ID: user_ID
+        }
+        await dispatch(GET_ALL_CLIENTS(req1)).unwrap()
             .then((response) => {
                 if (response.status) {
                     setAllClients({
@@ -44,33 +55,40 @@ const AllClients = () => {
     }, [])
 
 
-
-
     // GO TO DASHBOARD 
     const goToDashboard = async (asyncid, email) => {
 
         let req = {
             Email: email,
-          
+
         };
         await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
             .then((response) => {
                 if (response.status) {
-                    console.log(response);
-
-                    window.open('/')
+                    localStorage.setItem("gotodashboard", JSON.stringify(true));
+                    localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
+                    localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
                     navigate("/client/dashboard")
-                    localStorage.setItem("gotodashboard","true");
-                    localStorage.setItem("user_details", JSON.stringify(response.data));
-                    localStorage.setItem("user_role", JSON.stringify(response.data.Role));
-                
+
                 }
             })
 
     }
 
+    // ACTIVE USER TO API
+    const activeUser = async (e, data) => {
+        let req = {
+            id: data._id,
+            user_active_status: e.target.checked == true ? "1" : "0"
 
+        };
+        await dispatch(UPDATE_USER_ACTIVE_STATUS(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
 
+                }
+            })
+    }
 
     const columns = [
         {
@@ -93,20 +111,21 @@ const AllClients = () => {
         {
             dataField: 'CreateDate',
             text: 'CreateDate',
-            formatter: (cell, row) => cell.split('T')[0]
+            formatter: (cell, row) => fDateTimeSuffix(row.CreateDate)
 
         },
         {
-            dataField: 'CreateDate',
-            text: 'CreateDate',
-            formatter: (cell, row) => cell.split('T')[0]
+            dataField: 'StartDate',
+            text: 'Start Date',
+            formatter: (cell, row) => fDateTimeSuffix(row.StartDate)
+
+
 
         },
         {
-            dataField: 'CreateDate',
-            text: 'CreateDate',
-            formatter: (cell, row) => cell.split('T')[0]
-
+            dataField: 'EndDate',
+            text: 'End Date',
+            formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
         },
         {
             dataField: 'Otp',
@@ -118,8 +137,15 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <>
                     <label class="switch" >
-                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false} />
+                        <input type="checkbox" className="bg-primary" defaultChecked={row.ActiveStatus == "1" ? true : false} onChange={(e) => activeUser(e, row)} />
                         <span class="slider round"></span>
+                        {/* <BootstrapSwitchButton
+                            checked={row.ActiveStatus === '1' ? true : false}
+                            size="xs"
+                            onstyle="outline-success"
+                            offstyle="outline-danger"
+                            onChange={(e) => activeUser(e, row)}
+                        /> */}
                     </label>
 
                 </>
@@ -177,23 +203,29 @@ const AllClients = () => {
             text: 'Actions',
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-                    </span>
-
+                    <div>
+                        <Link to={`/admin/client/edit/${row._id}`}>
+                            <span data-toggle="tooltip" data-placement="top" title="Edit">
+                                <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                            </span>
+                        </Link>
+                        <Link>
+                            <span data-toggle="tooltip" data-placement="top" title="Delete">
+                                <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                            </span>
+                        </Link>
+                    </div>
                 </div>
             ),
         },
     ];
+
     return (
         <>
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All Clients" button_title="Add Client" route="/client/add">
+                        <Theme_Content Page_title="All Clients" button_title="Add Client" route="/admin/client/add">
 
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (
@@ -217,10 +249,8 @@ const AllClients = () => {
             }
 
 
-
         </ >
     )
-
 }
 
 

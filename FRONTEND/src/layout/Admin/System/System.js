@@ -3,6 +3,7 @@ import Content from "../../../Components/Dashboard/Content/Content"
 import FullDataTable from '../../../Components/ExtraComponents/Datatable/FullDataTable'
 import BasicDataTable from '../../../Components/ExtraComponents/Datatable/BasicDataTable'
 import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
+import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
 import { Pencil, Trash2 } from 'lucide-react';
 
 import { useDispatch, useSelector } from "react-redux";
@@ -111,8 +112,36 @@ const System = () => {
             ),
         },
     ];
+
+    const background_images = [
+        {
+            dataField: 'id',
+            text: 'ID',
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
+        },
+        // {
+        //     dataField: 'smtpport',
+        //     text: 'Login Background'
+        // },
+        {
+            dataField: 'smtpport',
+            text: 'Trade History Water'
+        },
+        {
+            dataField: 'Action',
+            text: 'Action',
+            formatter: (cell, row) => (
+                <div>
+                    <span data-toggle="tooltip" data-placement="top" title="Edit">
+                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    </span>
+
+                </div>
+            ),
+        },
+    ];
     return <>
-        <Content Page_title="System">
+        <Theme_Content Page_title="System" button_status={false}>
 
 
             <h2>Company Information</h2>
@@ -123,7 +152,11 @@ const System = () => {
             <BasicDataTable tableData={getCompanyName.data} TableColumns={Email_columns} dropdown={false} />
             <br />
 
-        </Content>
+            <h2>Background Images</h2>
+            <BasicDataTable tableData={getCompanyName.data} TableColumns={background_images} dropdown={false} />
+            <br />
+
+        </Theme_Content>
     </>
 }
 

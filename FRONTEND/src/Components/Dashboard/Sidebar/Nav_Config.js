@@ -39,24 +39,24 @@ export const admin_sidebar = [
     },
     {
         'id': 4,
-        "name": 'Sub-admin',
+        "name": 'Sub Admin',
         "Icon": "Users",
         "Data": [
             {
                 'id': 1,
-                "name": 'All Subadmins',
+                "name": 'All Sub Admins',
                 "route": "/admin/allsubadmins",
             },
             {
                 'id': 2,
-                "name": 'Subadmin Clients',
+                "name": 'Sub Admin Clients',
                 "route": "/admin/subadminclients",
             },
         ]
     },
     {
         'id': 5,
-        "name": 'Trade-Details',
+        "name": 'Trade Details',
         "Icon": "FolderClock",
         "Data": [
             {
@@ -66,39 +66,39 @@ export const admin_sidebar = [
             },
             {
                 'id': 2,
-                "name": 'Trade-History',
+                "name": 'Trade History',
                 "route": "/admin/tradehistory",
             },
             {
                 'id': 3,
-                "name": 'Trading-Status',
+                "name": 'Trading Status',
                 "route": "/admin/tradingstatus",
             },
             {
                 'id': 4,
-                "name": 'Trade-Execution-Report',
+                "name": 'Trade Execution Report',
                 "route": "/admin/tradeexecution",
             },
             {
                 'id': 5,
-                "name": '7Days-Entry-Only',
+                "name": '7 Days Entry',
                 "route": "/admin/sevendaysentry",
             },
         ]
     },
     {
         'id': 6,
-        "name": 'Licence',
+        "name": 'License',
         "Icon": "Copyright",
         "Data": [
             {
                 'id': 1,
-                "name": 'Transaction Licence',
+                "name": 'Transaction License',
                 "route": "/admin/allLicence",
             },
             {
                 'id': 2,
-                "name": 'Expired Licence',
+                "name": 'Expired License',
                 "route": "/admin/expiredlicence",
             },
         ]
@@ -140,13 +140,13 @@ export const admin_sidebar = [
             },
             {
                 'id': 2,
-                "name": 'Msg BroadCast',
+                "name": 'Message Broadcast',
                 "route": "/admin/msgbroadcast",
 
             },
             {
                 'id': 3,
-                "name": 'Api-Create-Info',
+                "name": 'Api Create Info',
                 "route": "/admin/apicreateinfo",
                 "Icon": "WalletCards",
                 "Data": []
@@ -157,7 +157,7 @@ export const admin_sidebar = [
 
       {
         'id': 9,
-        "name": 'Report',
+        "name": 'Reports',
         "Icon": "Repeat2",
         "route": "/admin/reports",
         "Data": []
@@ -217,35 +217,35 @@ export const sub_admin_sidebar = [
         'id': 1,
         "name": 'Signals',
         "Icon": "Signal",
-        "route": "/subradmin/signals",
+        "route": "/subadmin/signals",
         "Data": []
     },
     {
         'id': 2,
         "name": 'All Clients',
         "Icon": "Users",
-        "route": "/subradmin/clients",
+        "route": "/subadmin/clients",
         "Data": []
     },
     {
         'id': 3,
         "name": 'All Services',
         "Icon": "Wrench",
-        "route": "/subradmin/services",
+        "route": "/subadmin/services",
         "Data": []
     },
     {
         'id': 4,
         "name": 'Group Services',
         "Icon": "Frame",
-        "route": "/subradmin/groupservices",
+        "route": "/subadmin/groupservices",
         "Data": []
     },
     {
         'id': 5,
         "name": 'Trade History',
         "Icon": "CandlestickChart",
-        "route": "/subradmin/tradehistory",
+        "route": "/subadmin/tradehistory",
         "Data": []
 
     },
@@ -253,21 +253,21 @@ export const sub_admin_sidebar = [
         'id': 6,
         "name": 'Trading Status',
         "Icon": "Activity",
-        "route": "/subradmin/tradingstatus",
+        "route": "/subadmin/tradingstatus",
         "Data": []
     },
     {
         'id': 7,
         "name": 'Api Create Info',
         "Icon": "WalletCards",
-        "route": "/subradmin/apicreateinfo",
+        "route": "/subadmin/apicreateinfo",
         "Data": []
     },
     {
         'id': 7,
         "name": 'Help Center',
         "Icon": "HelpingHand",
-        "route": "/subradmin/helpcenter",
+        "route": "/subadmin/helpcenter",
         "Data": []
     },
 ]
@@ -279,7 +279,7 @@ export const Client = [
         'id': 1,
         "name": 'Dashboard',
         "Icon": "LayoutDashboard",
-        "route": "/client/dashobard",
+        "route": "/client/dashboard",
         "Data": []
     },
     {

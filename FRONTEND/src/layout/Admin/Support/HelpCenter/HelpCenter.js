@@ -1,9 +1,7 @@
-// import React from 'react'
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import React, { useEffect, useState } from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
+
 import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
 import Loader from '../../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -14,8 +12,12 @@ import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
+import BasicDataTable from '../../../../Components/ExtraComponents/Datatable/BasicDataTable'
+
+
 
 const HelpCenter = () => {
+
 
     const dispatch = useDispatch()
 
@@ -71,13 +73,13 @@ const HelpCenter = () => {
             formatter: (cell, row) => (
                 <>
                     <label class="switch" >
-                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false}/>
-                            <span class="slider round"></span>
+                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false} />
+                        <span class="slider round"></span>
                     </label>
 
                 </>
 
-                
+
             ),
         },
         {
@@ -133,4 +135,3 @@ const HelpCenter = () => {
 
 
 export default HelpCenter
-

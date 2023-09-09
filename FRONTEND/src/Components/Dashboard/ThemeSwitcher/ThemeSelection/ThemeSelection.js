@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { theme_arr } from "../CreateTheme/Data"
 import axios from "axios"
 import $ from "jquery";
+import * as Config from "../../../../Utils/Config";
+
 
 
 
@@ -10,13 +12,18 @@ const ThemeSelection = () => {
     const [toggleSelection, setToggleSelection] = useState(false)
     const [ThemeData, setThemeData] = useState([])
 
+    console.log("ThemeData", ThemeData);
+
     const AddClassName = (id) => {
         localStorage.setItem("theme_id", id)
 
-        axios.post("https://api.smartalgo.in:3001/smartalgo/getthemeById", { id: parseInt(id) }).then((res) => {
+
+        axios.post(`${Config.base_url}find_one/theme`, { _id: id }).then((res) => {
+            console.log("resresresresresresres", res);
+
             let themedata = res.data.data[0]
 
-            console.log("themedata", themedata);
+            // console.log("themedata", themedata);
             // let abc = $('body').attr('class')
             // $('body').attr('data-dashboard', `${abc}-dashboard`);
 
@@ -108,17 +115,12 @@ const ThemeSelection = () => {
 
 
     const GetAllThemes = () => {
-        axios.get("https://api.smartalgo.in:3001/smartalgo/get/theme").then((res) => {
-            // console.log("accept res`122`12`", res.data.data);
-
-            // $('body').attr('data-theme-version', themedata.theme_version);
-
+        axios.get(`${Config.base_url}getall/theme`).then((res) => {
             setThemeData(res.data.data)
         }).catch((err) => {
             console.log("error", err);
         })
     }
-
 
     useEffect(() => {
         GetAllThemes()
@@ -279,7 +281,7 @@ const ThemeSelection = () => {
                         {/* {theme_arr && theme_arr.map((item) => { */}
                         {ThemeData && ThemeData.map((item) => {
                             return <>
-                                <div className="overlay-bx dz-demo-bx">
+                                <div key={item._id} className="overlay-bx dz-demo-bx">
                                     <div className="overlay-wrapper">
                                         <img
                                             src={item.image}
@@ -292,7 +294,7 @@ const ThemeSelection = () => {
                                             // href="javascript:void(0);"
                                             data-theme={item.key}
                                             className="btn dz_theme_demo btn-secondary btn-sm mr-2"
-                                            onClick={() => AddClassName(item.id)}
+                                            onClick={() => AddClassName(item._id)}
                                         >
                                             {item.theme_name}
                                         </button>
@@ -434,7 +436,7 @@ const ThemeSelection = () => {
                         <h5 className="text-black mb-2">Demo 7</h5> */}
                     </div>
                 </div>
-                {/* <div className="fs-12 pt-3">
+                <div className="fs-12 pt-3">
                     <span className="text-danger">*Note :</span> This theme switcher is not
                     part of product. It is only for demo. you will get all guideline in
                     documentation. please checkonClick
@@ -443,7 +445,7 @@ const ThemeSelection = () => {
                         className="text-primary">
                         documentation.
                     </button>
-                </div> */}
+                </div>
             </div>
         </div>
         </div>

@@ -1,0 +1,51 @@
+"use strict";
+const bcrypt = require("bcrypt");
+const db = require('../../Models');
+const User_model = db.user;
+const Role_model = db.role;
+const Company_info = db.company_information;
+const user_logs = db.user_logs;
+
+const Subadmin_Permission = db.Subadmin_Permission;
+var dateTime = require('node-datetime');
+var dt = dateTime.create();
+
+// OK
+// Product CLASS
+class User_trading_status {
+   
+    // ONE USER GET ALL TRADING STATUS
+    async getusertradingStatus(req, res) {
+        try {
+            const { user_Id } = req.body;
+            // GET LOGIN CLIENTS
+            const getAllTrading_status = await user_logs.find({
+                user_Id: user_Id
+            });
+            const totalCount = getAllTrading_status.length;
+
+            // IF DATA NOT EXIST
+            if (getAllTrading_status.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All trading Status",
+                data: getAllTrading_status,
+                // page: Number(page),
+                // limit: Number(limit),
+                totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+        } catch (error) {
+            console.log("get user trading Status error -", error);
+        }
+    }
+
+
+}
+
+
+module.exports = new User_trading_status();

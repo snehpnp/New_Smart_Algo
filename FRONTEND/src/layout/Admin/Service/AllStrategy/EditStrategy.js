@@ -96,7 +96,6 @@ const EditStrategy = () => {
                 // "demat_userid": values.demat_userid
             }
 
-            // console.log("res", req);
             // return
 
             //   await dispatch(EditStrategys({ req: req, AdminToken: AdminToken })).then((res) => {
@@ -146,7 +145,6 @@ const EditStrategy = () => {
     const getservice = async () => {
         await dispatch(Get_All_Catagory()).unwrap()
             .then((response) => {
-                console.log("Get_All_Catagory", response);
                 if (response.status) {
                     setCatagoryData({
                         loading: false,
@@ -162,7 +160,6 @@ const EditStrategy = () => {
     const [indicatorPreview, setIndicatorPreview] = useState(null);
 const [testerPreview, setTesterPreview] = useState(null);
 
-    console.log("hello", formik.values);
 
     const get_strategy_BY_did = async () => {
         await dispatch(Get_Strategy_BY_Id({
@@ -171,7 +168,6 @@ const [testerPreview, setTesterPreview] = useState(null);
         })).unwrap()
             .then((response) => {
                 if (response.status) {
-                    console.log("response.data.", response.data);
                     setone_strategy(response.data);
                     formik.setFieldValue('strategyname', response.data.strategy_name);
                     formik.setFieldValue('perlot', response.data.strategy_amount);

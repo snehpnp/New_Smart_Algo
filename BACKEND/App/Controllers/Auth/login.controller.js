@@ -5,7 +5,9 @@ const jwt = require("jsonwebtoken");
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 
 const db = require('../../Models');
+const company_information = db.company_information;
 const User = db.user;
+
 
 const formattedDateTime = require('../../Helper/time.helper')
 const user_logs = require('../../Models/user_logs.model')
@@ -23,7 +25,6 @@ class Login {
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
-            console.log(EmailCheck);
 
             // WHERE LOGIN CHECKgetIPAddress
             if (device == "APP") {                  //App Login Check
@@ -82,7 +83,7 @@ class Login {
             }
         }
         catch (error) {
-            console.log(error);
+
             res.send({ status: false, msg: "Server Side error", data: error })
         }
 
@@ -129,13 +130,11 @@ class Login {
 
             }
 
-            console.log("addData", addData);
             // Update Successfully
             const result = await User.updateOne(
                 { Email: Email },
                 { $set: addData }
             );
-            console.log("addData", result);
 
             // If Not Update User
             if (!result) {
@@ -147,9 +146,11 @@ class Login {
                 user_Id: EmailCheck._id,
                 login_status: "Panel On",
                 role: EmailCheck.Role,
+                device: Device,
                 system_ip: getIPAddress()
             })
             await user_login.save();
+            console.log("user_login",user_login);
 
             logger.info('Very Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
             res.send({ status: true, msg: "Login Successfully", data: [] })
@@ -301,11 +302,7 @@ class Login {
             // // IF Login Time Email CHECK
             const EmailCheck = await User.findById(userid);
 
-            console.log("EmailCheck", EmailCheck)
-
-
             // return
-
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
@@ -347,7 +344,6 @@ class Login {
     // GO TO DASHBOARD
     async goToDashboard(req, res) {
         try {
-            console.log("============================");
             const { Email } = req.body;
             // IF Login Time Email CHECK
             const EmailCheck = await User.findOne({ Email: Email });
@@ -380,6 +376,46 @@ class Login {
         }
 
     }
+
+    
+    // session clear
+    async sessionClear(req, res) {
+        try {
+            const { id } = req.body;
+            // IF Login Time Email CHECK
+            const EmailCheck = await User.findOne({ Email: Email });
+            if (!EmailCheck) {
+                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+            }
+            // JWT TOKEN CREATE
+            var token = jwt.sign({ id: EmailCheck._id }, process.env.SECRET, {
+                expiresIn: 3600 // 10 hours
+            });
+            var msg = {
+                'gotodashboard': true,
+                'Email': EmailCheck.Email,
+                'user_id': EmailCheck._id,
+                'token': token,
+                'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
+
+            };
+
+            try {
+                logger.info('Go To Dashboard Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
+                res.send({ status: true, msg: "Go To Dashboard Succesfully", data: msg })
+            } catch (error) {
+                console.log("Some Error in a login", error);
+            }
+        }
+        catch (error) {
+            console.log(error);
+            res.send({ status: false, msg: "Server Side error", data: error })
+        }
+
+    }
+
+
+
 
 
 }

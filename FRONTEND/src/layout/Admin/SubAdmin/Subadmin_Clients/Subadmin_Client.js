@@ -114,13 +114,16 @@ const SubadminClient = () => {
             text: 'Actions',
             formatter: (cell, row) => (
                 <div>
+                    <Link to="/admin/allsubadmins/edit"> 
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </span>
+                    </Link>
+                    <Link>
                     <span data-toggle="tooltip" data-placement="top" title="Delete">
                         <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
                     </span>
-
+                    </Link>
                 </div>
             ),
         },
