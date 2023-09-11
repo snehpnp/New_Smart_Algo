@@ -253,7 +253,10 @@ const UserProfile = () => {
                           </div>
                         </div>
                       </div>
-                      <div id="profile-settings" className="tab-pane fade mt-5">
+                      <div id="profile-settings" className="tab-pane fade mt-3">
+                      <h4 className="text-primary mb-4">
+                            Change Password
+                          </h4>
                         <Formikform
                           fieldtype={fields.filter(
                             (field) =>

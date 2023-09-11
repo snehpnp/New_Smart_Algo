@@ -249,7 +249,7 @@ export async function GET_ALL_SERVICES_USER_NAME(data , token) {
     try {
         const res = await axios.post(`${Config.base_url}getall/services/username`, data ,{
             //  headers: header(token),
-            data: {data},
+            data: {},
         })
         return await res?.data;
     }
@@ -259,6 +259,26 @@ export async function GET_ALL_SERVICES_USER_NAME(data , token) {
     }
 
 }
+
+
+
+
+// GET SERVICES BY GROUP ID
+export async function GET_SERVICES_BY_GROUP_ID(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/services/bygroupid`, data ,{
+            //  headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
 
 // DELETE GROUP SERVICES
 export async function DELETE_GROUP_SERVICES(data , token) {

@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react'
 import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
 import Loader from '../../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+
 
 import { Pencil, Trash2, GanttChartSquare } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
@@ -19,13 +21,21 @@ import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 const ServicesList = () => {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+
 
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
     const [showModaluser, setshowModaluser] = useState(false)
 
-    const [getrefresh, setrefresh] = useState(false)
-    const [getServicesName, setServicesName] = useState([])
+    const [test, settest] = useState(false)
+
+
+    const [refresh, setrefresh] = useState(false)
+    const [getServicesName, setServicesName] = useState({
+        loading: true,
+        data: []
+    })
     const [getServicesuserName, setServicesuserName] = useState([])
     const [AllGroupServices, setAllGroupServices] = useState({
         loading: true,
@@ -33,9 +43,7 @@ const ServicesList = () => {
     });
 
 
-    const handleClose = () => setshowModal(false);
-    const handleClose1 = () => setshowModaluser(false);
-
+    console.log("getServicesName", getServicesName)
 
 
 
@@ -58,28 +66,25 @@ const ServicesList = () => {
             text: 'Services',
             formatter: (cell, row) => (
                 <div>
-                    <button
-                        className="btn  btn-color"
-                    // onClick={(e) => setshowModal(true)}
-                    >
-                        <GanttChartSquare onClick={(e) => GetAllServicesName(row)} size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    <GanttChartSquare onClick={(e) => GetAllServicesName(row)} size={20} color="#198754" strokeWidth={2} className="mx-1" />
 
-                    </button>
+
                 </div>
             ),
         },
         {
-            dataField: 'actions',
+            dataField: 'dsd',
             text: 'Client Using',
             formatter: (cell, row) => (
                 <div>
-                    <button
+                    {/* <button
                         className="btn  btn-color"
-                        onClick={(e) => setshowModaluser(true)}
+                        onClick={(e) => GetAllServicesUserName(row)}
                     >
-                        <GanttChartSquare onClick={(e) => GetAllServicesUserName(row)} size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                        OKK */}
+                    <GanttChartSquare size={20} onClick={(e) => GetAllServicesUserName(row)} color="#198754" strokeWidth={2} className="mx-1" />
 
-                    </button>
+                    {/* </button> */}
                 </div>
             ),
         },
@@ -107,6 +112,104 @@ const ServicesList = () => {
 
 
 
+
+    // GET ALL GROUP SERVICES NAME
+    const GetAllServicesName = async (row) => {
+console.log("row" ,row);
+
+        await dispatch(GET_ALL_SERVICES_NAMES({
+            data: row
+        })).unwrap()
+            .then((response) => {
+                setshowModal(true)
+
+                if (response.status) {
+                    setServicesName({
+                        loading: false,
+                        data: response.data
+                    });
+                }
+                else {
+                    setServicesName({
+                        loading: false,
+                        data: []
+                    });
+
+                }
+            })
+    }
+
+    // GET ALL GROUP SERVICES USER NAME
+    const GetAllServicesUserName = async (row) => {
+        await dispatch(GET_ALL_SERVICES_USER_NAMES({
+            _id: row._id
+        })).unwrap()
+            .then((response) => {
+                console.log("123", response);
+                settest(true);
+                if (response.status) {
+                    setServicesuserName({
+                        loading: false,
+                        data: response.data
+                    });
+                } else {
+                    setServicesuserName({
+                        loading: false,
+                        data: []
+                    });
+
+                }
+            })
+    }
+
+    // GO TO  CLIENT  DASHBOARD
+    const goToDashboard = async (email) => {
+        let req = {
+            Email: email.user.Email,
+
+        };
+        await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    localStorage.setItem("gotodashboard", JSON.stringify(true));
+                    localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
+                    localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
+                    navigate("/client/dashboard")
+
+                }
+            })
+
+    }
+
+    // DELETE GROUP
+    const DeleteGroup = async (row) => {
+
+        if (window.confirm("Do You Really Want To Delete ??")) {
+            var req = {
+                id: row._id
+            }
+            await dispatch(DELETE_GROUP_SERVICE(req)).unwrap()
+                .then((response) => {
+                    console.log("response", response)
+                    if (response.status) {
+                        toast.success(response.msg)
+                        setrefresh(!refresh)
+                        // window.location.reload()
+                    } else {
+
+                        toast.error(response.msg)
+                    }
+                })
+        }
+
+
+
+    }
+
+
+
+
+
     // GET ALL GROUP SERVICES NAME
     const data = async () => {
         await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
@@ -120,64 +223,10 @@ const ServicesList = () => {
             })
     }
 
-    // GET ALL GROUP SERVICES NAME
-    const GetAllServicesName = async (row) => {
 
-        await dispatch(GET_ALL_SERVICES_NAMES({
-            data: row
-        })).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    setshowModal(true);
-                    setServicesName({
-                        loading: false,
-                        data: response
-                    });
-                }
-            })
-    }
-
-    // GET ALL GROUP SERVICES USER NAME
-    const GetAllServicesUserName = async (row) => {
-        setshowModal(true);
-        //     await dispatch(GET_ALL_SERVICES_USER_NAMES({
-        //         data: row
-        //     })).unwrap()
-        //         .then((response) => {
-        //             console.log("123", response);
-        //             if (response.status) {
-        //                 console.log("responseresponseresponse", response.data);
-
-        //                 // setServicesuserName(response.data);
-
-
-        //             }
-        //         })
-    }
-
-    // DELETE GROUP
-    const DeleteGroup = async (row) => {
-
-        var req = {
-            id: row._id
-        }
-        await dispatch(DELETE_GROUP_SERVICE(req)).unwrap()
-            .then((response) => {
-                if (response.status) {
-
-                    toast.success("Done")
-                    // window.location.reload()
-                } else {
-
-                    toast.error(response.msg)
-                }
-            })
-    }
-
-
-        useEffect(() => {
-            data()
-        }, [])
+    useEffect(() => {
+        data()
+    }, [refresh])
 
     return (
         <>
@@ -185,7 +234,6 @@ const ServicesList = () => {
                 AllGroupServices.loading ? <Loader /> :
                     <>
                         <Theme_Content Page_title="Group Service" button_title="Add Group" route="/admin/groupservices/add">
-
                             {
                                 AllGroupServices.data && AllGroupServices.data.length === 0 ? (
                                     'No data found') :
@@ -194,11 +242,43 @@ const ServicesList = () => {
 
                                     </>
                             }
+
+
+
+                            {/* {
+                                showModal ?
+                                    <>
+                                        <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Servics" hideBtn={true}
+                                            // onHide={handleClose1}
+                                            handleClose={setshowModal(false)}
+                                        >
+                                            <BasicDataTable TableColumns={[
+                                                {
+                                                    dataField: "index",
+                                                    text: "SR. No.",
+                                                    formatter: (cell, row, rowIndex) => rowIndex + 1,
+                                                },
+                                                {
+                                                    dataField: 'user_id',
+                                                    text: 'Services Name'
+                                                },
+                                                {
+                                                    dataField: 'user_id',
+                                                    text: 'lotsize'
+                                                },
+                                            ]} tableData={getServicesName && getServicesName.data} />
+                                        </Modal >
+                                    </>
+                                    : ""
+                            } */}
+
+
                             {
                                 showModal ?
                                     <>
-                                        < Modal isOpen={showModal} backdrop="static" size="ms-5" title="Services" hideBtn={true} onHide={handleClose}
-                                         handleClose={()=>setshowModal(false)}
+                                        <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Services" hideBtn={true}
+                                            // onHide={handleClose}
+                                            handleClose={() => setshowModal(false)}
                                         >
                                             <BasicDataTable TableColumns={[
                                                 {
@@ -214,43 +294,60 @@ const ServicesList = () => {
                                                     dataField: 'lotsize',
                                                     text: 'lotsize'
                                                 },
+                                            ]} tableData={getServicesName && getServicesName.data} />
 
-                                            ]} tableData={getServicesName && getServicesName.data.data} />
-
-                                            <button onClick={handleClose}>off</button>
                                         </Modal >
                                     </>
                                     : ""
                             }
+
+
+
                             {
-                                showModaluser ?
+                                test ?
                                     <>
-                                        < Modal isOpen={showModaluser} backdrop="static" size="ms-5" title="Services" hideBtn={true} onHide={handleClose1}
-                                        handleClose={setshowModaluser(false)}
+                                        <Modal isOpen={test} backdrop="static" size="ms-5" title="Clients Using" hideBtn={true}
+                                            // onHide={handleClose}
+                                            handleClose={() => settest(false)}
                                         >
-                                            {/* <BasicDataTable TableColumns={[
+                                            <BasicDataTable TableColumns={[
                                                 {
                                                     dataField: "index",
                                                     text: "SR. No.",
                                                     formatter: (cell, row, rowIndex) => rowIndex + 1,
                                                 },
                                                 {
-                                                    dataField: 'user_id',
+                                                    dataField: 'user.FullName',
                                                     text: 'Services Name'
                                                 },
                                                 {
-                                                    dataField: 'user_id',
-                                                    text: 'lotsize'
+                                                    dataField: 'user.TradingStatus',
+                                                    text: 'Go To Dashboard',
+                                                    formatter: (cell, row, rowIndex) =>
+                                                        <>
+                                                            <button
+                                                                className={`btn  ${row.AppLoginStatus === '0' && row.WebLoginStatus === '0' ? "btn-success" : "btn-danger"} btn-new-block`}
+
+                                                                onClick={() => goToDashboard(row)}
+                                                                disabled={row.AppLoginStatus === '0' && row.WebLoginStatus === '0'}
+
+                                                            > click</button>
+                                                        </>
                                                 },
-
-                                            ]} tableData={ getServicesuserName.data} /> */}
-
-                                            {/* <button onClick={handleClose1}>off</button> */}
+                                                {
+                                                    dataField: 'user.license_type',
+                                                    text: 'Services Name',
+                                                    formatter: (cell, row, rowIndex) => cell === '2' ? "Live" : cell === '1' ? "Demo" : "2 Days Only"
+                                                },
+                                            ]} tableData={getServicesuserName && getServicesuserName.data} />
                                         </Modal >
                                     </>
                                     : ""
                             }
+
                         </Theme_Content>
+
+
                         <ToastButton />
                     </>
             }

@@ -6,7 +6,7 @@ import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form"
 import { useFormik } from 'formik';
 import * as  valid_err from "../../../../Utils/Common_Messages"
 // import { toast } from "react-toastify";
-import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Email_regex, Mobile_regex } from "../../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
 import Content from '../../../../Components/Dashboard/Content/Content';
@@ -16,8 +16,13 @@ import Theme_Content from '../../../../Components/Dashboard/Content/Theme_Conten
 import { GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
-import { Add_User } from '../../../../ReduxStore/Slice/Admin/userSlice';
+import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 
+
+import { Add_User } from '../../../../ReduxStore/Slice/Admin/userSlice';
+import toast, { Toaster } from 'react-hot-toast';
+
+import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 
 
@@ -56,6 +61,11 @@ const AddClient = () => {
   });
 
 
+  const [GetServices, setGetServices] = useState({
+    loading: true,
+    data: []
+  });
+
 
   const isValidEmail = (email) => {
     return Email_regex(email)
@@ -91,6 +101,8 @@ const AddClient = () => {
       Strategy: false
     },
     validate: (values) => {
+      console.log("values.licence", values.licence);
+
       const errors = {};
       if (!values.username) {
         errors.username = valid_err.USERNAME_ERROR;
@@ -103,26 +115,38 @@ const AddClient = () => {
       } else if (!isValidContact(values.mobile)) {
         errors.mobile = valid_err.INVALID_CONTACT_ERROR;
       }
-      // if (!values.licence) {
-      //   errors.licence = valid_err.LICENCE_TYPE_ERROR;
-      // }
 
-      // if ((values.licence === "1" || values.licence === 1) && values.licence)
 
-      // if (!values.tomonth) {
-      //   errors.tomonth = valid_err.LICENCE_ERROR;
-      // }
 
-      if (!values.broker) {
-        errors.broker = valid_err.BROKER_ERROR;
+      if (!values.licence) {
+        errors.licence = valid_err.LICENCE_TYPE_ERROR;
       }
+      else if (values.licence === '2' || values.licence === 2) {
+        if (!values.broker) {
+          errors.broker = valid_err.BROKER_ERROR;
+        }
+        if (!values.tomonth) {
+          errors.tomonth = valid_err.LICENCE_ERROR;
+        }
+      }
+      else if (values.licence === '1' || values.licence === 1) {
+        if (!values.fromDate) {
+          errors.fromDate = valid_err.FROMDATE_ERROR;
+        }
+        if (!values.todate) {
+          errors.todate = valid_err.FROMDATE_ERROR;
+        }
+      }
+
+
+
+
       if (!values.groupservice) {
         errors.groupservice = valid_err.GROUPSELECT_ERROR;
       }
       if (!values.Strategy) {
         errors.Strategy = "select test";
       }
-
 
       if (!values.email) {
         errors.email = valid_err.EMPTY_EMAIL_ERROR;
@@ -140,13 +164,10 @@ const AddClient = () => {
         "PhoneNo": values.mobile,
         "licence": values.tomonth,
         "license_type": values.licence,
-
         "Strategies": selectedStrategies,
         "fromdate": values.fromDate,
         "todate": values.todate,
-
         "service_given_month": values.service_given_month,
-
         "broker": values.broker,
         "parent_id": values.parent_id != null ? values.parent_id : user_id,
         "parent_role": values.parent_id != null ? "SUBADMIN" : "ADMIN",
@@ -161,25 +182,24 @@ const AddClient = () => {
       }
 
 
-      console.log("reqreqreqreqreq", req);
+      // console.log("reqreqreqreqreq", req);
 
       // return
 
-      await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((res) => {
-        console.log("response", res);
+      await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((response) => {
 
-        // if (res.meta.requestStatus === "fulfilled") {
-        //   if (res.payload === "Failed! Username is already in use!") {
-        //     toast.error(res.payload)
-        //   } else {
-        //     toast.success(res.payload.data)
-        //     // setshowLoader(false)
-        //     // setshowLoader(false)
-        //     setTimeout(() => {
-        //       navigate("/admin/masters")
-        //     }, 2000);
-        //   }
-        // }
+        if (response.status === 409) {
+          toast.error(response.data.msg);
+        }
+        else if (response.status) {
+          toast.success(response.msg);
+          setTimeout(() => {
+            navigate("/admin/allclients")
+          }, 1000);
+        }
+        else if (!response.status) {
+          toast.error(response.msg);
+        }
 
       })
     }
@@ -209,7 +229,7 @@ const AddClient = () => {
 
   useEffect(() => {
     let Service_Month_Arr = []
-    for (let index = 1; index < 3; index++) {
+    for (let index = 1; index < 2; index++) {
       Service_Month_Arr.push({ month: index, endDate: `${index} Month Licence Expired On ${new Date(new Date().getFullYear(), new Date().getMonth() + index, new Date().getDate()).toString().split('00:00:00')[0]}` })
     }
     console.log('Service_Month_Arr', Service_Month_Arr);
@@ -217,7 +237,22 @@ const AddClient = () => {
   }, [])
 
 
-
+  const brokerOptions = [
+    { label: 'Market Hub', value: '1' },
+    { label: 'Alice Blue', value: '2' },
+    { label: 'Master Trust', value: '3' },
+    { label: 'Motilal Oswal', value: '4' },
+    { label: 'Zebull', value: '5' },
+    { label: 'IIFl', value: '6' },
+    { label: 'Kotak', value: '7' },
+    { label: 'Mandot', value: '8' },
+    { label: 'Choice', value: '9' },
+    { label: 'Anand Rathi', value: '10' },
+    { label: 'B2C', value: '11' },
+    { label: 'Angel', value: '12' },
+    { label: 'Fyers', value: '13' },
+    { label: 'Zerodha', value: '15' }
+  ];
 
   const fields = [
 
@@ -233,7 +268,6 @@ const AddClient = () => {
         { label: '2 Days', value: '0' },
         { label: 'Demo', value: '1' },
         { label: 'Live', value: '2' },
-
       ],
     },
     {
@@ -248,29 +282,12 @@ const AddClient = () => {
       name: 'broker',
       label: 'Broker',
       type: 'select',
-      options: [
-        { label: 'Market Hub', value: '1' },
-        { label: 'Alice Blue', value: '2' },
-        { label: 'Master Trust', value: '3' },
-        { label: 'Motilal Oswal', value: '4' },
-        { label: 'Zebull', value: '5' },
-        { label: 'IIFl', value: '6' },
-        { label: 'Kotak', value: '7' },
-        { label: 'Mandot', value: '8' },
-        { label: 'Choice', value: '9' },
-        { label: 'Anand Rathi', value: '10' },
-        { label: 'B2C', value: '11' },
-        { label: 'Angel', value: '12' },
-        { label: 'Fyers', value: '13' },
-        { label: '5-Paisa', value: '14' },
-        { label: 'Zerodha', value: '15' },
-
-      ],
+      options: brokerOptions && brokerOptions.map((item) => ({ label: item.label, value: item.value })),
       showWhen: values => values.licence === '2'
     },
     //  For Demo Only Client
     {
-      name: 'fromdate', label: 'From Date', type: 'date',
+      name: 'fromDate', label: 'From Date', type: 'date',
       showWhen: values => values.licence === '1'
     },
     {
@@ -319,13 +336,10 @@ const AddClient = () => {
         values.licence === '2' && (values.broker === '7' || values.broker === '9')
     },
     {
-      name: 'groupservice',
-      label: 'Group Service',
+      name: 'parent_id',
+      label: 'Sub-Admin',
       type: 'select',
-      options:
-        AllGroupServices.data && AllGroupServices.data.map((item) => ({ label: item.name, value: item._id }))
-      ,
-      // showWhen: values => values.licence === '2'
+      options: Addsubadmin.data && Addsubadmin.data.map((item) => ({ label: item.FullName, value: item._id }))
     },
     {
       name: 'service_given_month',
@@ -350,19 +364,25 @@ const AddClient = () => {
 
     },
 
+
     {
-      name: 'parent_id',
-      label: 'Sub-Admin',
+      name: 'groupservice',
+      label: 'Group Service',
       type: 'select',
-      options: Addsubadmin.data && Addsubadmin.data.map((item) => ({ label: item.FullName, value: item._id }))
+      options:
+        AllGroupServices.data && AllGroupServices.data.map((item) => ({ label: item.name, value: item._id }))
+      ,
+      // showWhen: values => values.licence === '2'
     },
     {
       name: 'Strategy', label: 'Strategy', type: 'checkbox',
     },
 
+
   ];
 
-// console.log("fields" ,fields);
+  console.log("GetServices", formik.values);
+
 
   useEffect(() => {
     if (formik.values.broker === '1' || formik.values.broker === 1) {
@@ -474,18 +494,42 @@ const AddClient = () => {
 
 
     if (formik.values.licence === '2' || formik.values.licence === 2) {
-      formik.setFieldValue('fromdate', 'null');
-      formik.setFieldValue('todate', 'null');
+      formik.setFieldValue('fromDate', null);
+      formik.setFieldValue('todate', null);
     }
     if (formik.values.licence === '1' || formik.values.licence === 1) {
-      formik.setFieldValue('tomonth', 'null');
-
+      formik.setFieldValue('tomonth', null);
+      formik.setFieldValue('broker', null);
+    }
+    if (formik.values.licence === '0' || formik.values.licence === 0) {
+      formik.setFieldValue('tomonth', null);
+      formik.setFieldValue('broker', null);
+      formik.setFieldValue('fromDate', null);
+      formik.setFieldValue('todate', null);
     }
 
-  }, [formik.values.broker]);
+  }, [formik.values.broker, formik.values.licence]);
 
 
 
+  const getGroupeServics = async () => {
+    if (formik.values.groupservice) {
+      await dispatch(Get_Service_By_Group_Id({ _id: formik.values.groupservice })).unwrap()
+        .then((response) => {
+
+
+          if (response.status) {
+            setGetServices({
+              loading: false,
+              data: response.data,
+            });
+          }
+        });
+    }
+  };
+  useEffect(() => {
+    getGroupeServics();
+  }, [formik.values.groupservice]);
 
 
 
@@ -493,6 +537,8 @@ const AddClient = () => {
   const data = async () => {
     await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
       .then((response) => {
+
+
         if (response.status) {
           setAllGroupServices({
             loading: false,
@@ -515,7 +561,6 @@ const AddClient = () => {
       req: {
       }, token: user_token
     })).unwrap().then((response) => {
-      console.log("response", response);
       if (response.status) {
         setAllStrategy({
           loading: false,
@@ -524,6 +569,9 @@ const AddClient = () => {
       }
     })
   }
+
+
+
 
 
   useEffect(() => {
@@ -541,51 +589,56 @@ const AddClient = () => {
   return (
     <>
       <Content Page_title="Add Client" button_title='Back' route="/admin/allclients">
-        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Master"
+        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Client"
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
           additional_field={
             <>
-              {formik.values.Strategy ? <>
-                {AllStrategy.data.map((strategy) => (
-                  <div className={`col-lg-2 mt-2`} key={strategy._id}>
-                    <div className="row d-flex">
-                      <div className="col-lg-12 ">
-                        <div class="form-check custom-checkbox mb-3">
-                          <input type='checkbox' className="form-check-input" name={strategy.strategy_name}
-                            value={strategy._id}
-                            onChange={(e) => handleStrategyChange(e)}
-                          />
-                          <label className="form-check-label" for={strategy.strategy_name}>{strategy.strategy_name}</label>
+              <div>
+                <div className='d-flex'>
+
+                  {formik.values.Strategy ? <>
+                    {AllStrategy.data.map((strategy) => (
+                      <div className={`col-lg-2 mt-2`} key={strategy._id}>
+                        <div className="row d-flex">
+                          <div className="col-lg-12 ">
+                            <div class="form-check custom-checkbox mb-3">
+                              <input type='checkbox' className="form-check-input" name={strategy.strategy_name}
+                                value={strategy._id}
+                                onChange={(e) => handleStrategyChange(e)}
+                              />
+                              <label className="form-check-label" for={strategy.strategy_name}>{strategy.strategy_name}</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </> : ""}
+                </div>
+                <div>
+                  {GetServices && GetServices.data.map((strategy) => (
+                    <div className={`col-lg-3 mt-2`} key={strategy._id}>
+                      <div className="row d-flex">
+                        <div className="col-lg-12 ">
+                          <div class="form-check custom-checkbox mb-3">
+                            <label className="form-check-label bg-primary py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </> : ""}
+                  ))}
+                </div>
+              </div>
             </>
+
+
 
           }
 
         />
-        {/* <div id="app-cover">
-          <div class="row">
-            <div class="toggle-button-cover">
-              <div class="button-cover">
-                <div class="button r" id="button-1">
-                  <input type="checkbox" class="checkbox" />
-                  <div class="knobs"></div>
-                  <div class="layer"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-          <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
-        </div> */}
+        <ToastButton />
+
       </Content >
 
     </>

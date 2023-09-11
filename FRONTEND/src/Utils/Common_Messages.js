@@ -28,6 +28,12 @@ export const OLD_AND_NEW_PASSWORD_ERROR = 'Old Password And New Password Are Not
 
 
 
+
+// for add client
+export const FROMDATE_ERROR = 'Select FromDate';
+export const TODATEDATE_ERROR = 'Select ToDate';
+
+
 //For Group Details
 
 export const EMPTY_GROUP_NAME_ERR = 'Please Enter Group Name';
@@ -47,10 +53,6 @@ export const EMPTY_STRATEGY_DESCRIPTION_ERR = 'Please Enter Strategy Description
 
 //  Update Theme
 export const THEMESELECT_ERROR = 'Please Select Theme For Update';
-
-
-
-
 
 
 // ForCompany Details
