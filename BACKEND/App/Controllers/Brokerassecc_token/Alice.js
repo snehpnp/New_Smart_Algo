@@ -51,9 +51,6 @@ class AliceBlue {
                 var user_id = Get_User[0]._id;
                 var apiSecret = Get_User[0].api_secret;
 
-                console.log("user_id", user_id);
-                console.log("apiSecret", apiSecret);
-
                 var userId = req.query.userId;
 
                 var Encrypted_data = sha256(userId + authCode + apiSecret);
@@ -69,11 +66,8 @@ class AliceBlue {
                     data: data
                 };
 
-                console.log("config", config);
-
                 axios(config)
                     .then(async function (response) {
-                        console.log('respons - ', response.data.userSession);
                         if (response.data.userSession) {
                             let result = await User.findByIdAndUpdate(
                                 user_id,
@@ -94,16 +88,16 @@ class AliceBlue {
                                 console.log("user_login", user_login);
                                 if (user_login) {
                                     console.log("redirect_uri", redirect_uri);
-                                    setTimeout(() => {
-                                        return res.redirect(redirect_uri);
-                                    }, 1000);
+
+                                    return res.redirect(redirect_uri);
+
                                 }
                             }
 
 
 
                         } else {
-
+                            return res.send(redirect_uri);
                         }
 
 
@@ -115,7 +109,7 @@ class AliceBlue {
 
             }
 
-            res.send({ Get_User: Get_User })
+      
 
 
 
