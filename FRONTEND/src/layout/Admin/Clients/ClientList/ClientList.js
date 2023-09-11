@@ -55,7 +55,7 @@ const AllClients = () => {
     }, [])
 
 
-    // GO TO DASHBOARD 
+    // GO TO DASHBOARD
     const goToDashboard = async (asyncid, email) => {
 
         let req = {
@@ -79,7 +79,7 @@ const AllClients = () => {
     const activeUser = async (e, data) => {
         let req = {
             id: data._id,
-            user_active_status: e.target.checked == true ? "1" : "0"
+            user_active_status: e.target.checked === true ? "1" : "0"
 
         };
         await dispatch(UPDATE_USER_ACTIVE_STATUS(req)).unwrap()
@@ -170,7 +170,7 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <>
                     <button
-                        className="btn btn-new-block"
+                        className=" btn btn-new-block"
                         style={
                             row.AppLoginStatus === '0' && row.WebLoginStatus === '0'
                                 ? { color: "#FF0000" }

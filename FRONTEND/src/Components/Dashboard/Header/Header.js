@@ -149,68 +149,68 @@ const Header = ({ ChatBox }) => {
   useEffect(() => {
     data();
   }, []);
-return (
-  <div>
-    <Logo />
-    <div className="header">
-      <div className="header-content">
-        <nav className="navbar navbar-expand">
-          <div className="collapse navbar-collapse justify-content-between">
-            <div className="header-left">
-              {user_role === "USER" ?
-                <>
-                  <div className="headaer-title">
-                    <h3 className="font-w400 mb-0">Api Login </h3>
-                  </div>
+  return (
+    <div>
+      <Logo />
+      <div className="header">
+        <div className="header-content">
+          <nav className="navbar navbar-expand">
+            <div className="collapse navbar-collapse justify-content-between">
+              <div className="header-left">
+                {user_role === "USER" ?
+                  <>
+                    <div className="headaer-title">
+                      <h3 className="font-w400 mb-0">Api Login </h3>
+                    </div>
 
-                  <div className="Api Login m-2"><label class="switch" >
-                    <input type="checkbox" className="bg-primary"
-                      checked={UserDetails.TradingStatus === "on" ? true : false}
-                      onClick={(e) => LogIn_WIth_Api(e.target.checked, UserDetails.broker, UserDetails.TradingStatus)}
-                    />
-                    <span class="slider round"></span>
-                  </label>
-                  </div>
-                </>
-                : ""}
-            </div>
-            <ul className="navbar-nav header-right">
+                    <div className="Api Login m-2"><label class="switch" >
+                      <input type="checkbox" className="bg-primary"
+                        checked={UserDetails.TradingStatus === "on" ? true : false}
+                        onClick={(e) => LogIn_WIth_Api(e.target.checked, UserDetails.broker, UserDetails.TradingStatus)}
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                    </div>
+                  </>
+                  : ""}
+              </div>
+              <ul className="navbar-nav header-right">
 
-              {/* GO TO DASHBOARD */}
-              {gotodashboard != null ?
-                <>
-                  <li className="nav-item dropdown gotodashboard" >
+                {/* GO TO DASHBOARD */}
+                {gotodashboard != null ?
+                  <>
+                    <li className="nav-item dropdown gotodashboard" >
+                      <button
+                        onClick={redirectToAdmin}
+                        type="button"
+                        className="btn btn-color"
+                      >
+                        Go to Admin
+                      </button>
+                    </li>
+                  </>
+                  : ""
+                }
+
+                {user_role === "USER" ? <>
+                  <li className="nav-item dropdown header-profile">
                     <button
-                      onClick={redirectToAdmin}
-                      type="button"
-                      className="btn btn-color"
+                      className=" btn btn-secondary"
+                      onClick={() => setshowModal(true)}
                     >
-                      Go to Admin
+                      Set ApiKey
                     </button>
                   </li>
-                </>
-                : ""
-              }
-
-              {user_role === "USER" ? <>
-                <li className="nav-item dropdown header-profile">
-                  <button
-                    className=" btn btn-secondary"
-                    onClick={() => setshowModal(true)}
-                  >
-                    Set ApiKey
-                  </button>
-                </li>
-              </> : ""}
+                </> : ""}
 
 
 
 
 
-              {/*  For Show Notification Box */}
-              {/* <Notification /> */}
-              {/*  For Show Chat Box */}
-              {/* <li className="nav-item dropdown notification_dropdown" onClick={() => ChatBox()}>
+                {/*  For Show Notification Box */}
+                {/* <Notification /> */}
+                {/*  For Show Chat Box */}
+                {/* <li className="nav-item dropdown notification_dropdown" onClick={() => ChatBox()}>
                 <a className="nav-link bell-link nav-action" >
                   <svg
                     width={28}
@@ -231,22 +231,22 @@ return (
                   <span className="badge light text-white bg-primary rounded-circle" />
                 </a>
               </li> */}
-              <li className="nav-item dropdown header-profile">
-                <DropDown />
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </div>
+                <li className="nav-item dropdown header-profile">
+                  <DropDown />
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
 
-      <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Update Broker Key" hideBtn={true}
-        handleClose={() => setshowModal(false)}
-      >
-        <UpdateBrokerKey />
-      </Modal >
+        <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Update Broker Key" hideBtn={true}
+          handleClose={() => setshowModal(false)}
+        >
+          <UpdateBrokerKey />
+        </Modal >
+      </div>
     </div>
-  </div>
-)
+  )
 }
 
 export default Header

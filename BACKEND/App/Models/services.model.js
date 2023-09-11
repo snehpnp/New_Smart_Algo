@@ -4,27 +4,27 @@ const servicesSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-           
+
     },
     instrument_token: {
         type: String,
-       
+
     },
     zebu_token: {
         type: String,
-       
+
     }, kotak_token: {
         type: String,
-       
+
     },
     instrumenttype: {
-        type: String,      
+        type: String,
     },
     exch_seg: {
-        type: String,      
+        type: String,
     },
     lotsize: {
-        type: String,      
+        type: String,
     },
     unique_column: {
         type: String,
@@ -34,7 +34,6 @@ const servicesSchema = new mongoose.Schema({
     categorie_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "category"
-
       }
 
 },{

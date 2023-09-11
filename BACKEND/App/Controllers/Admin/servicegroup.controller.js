@@ -249,7 +249,7 @@ class GroupService {
   }
 
 
-  // DELETE GROUP SERVICES 
+  // DELETE GROUP SERVICES
 
 
   async DELETEGROUPSERVICES(req, res) {
@@ -317,16 +317,64 @@ class GroupService {
 
 
 
+  // GET SERVICES BY GROUP ID
+  async GetServicesByGroupId(req, res) {
+
+    try {
+
+      const { _id } = req.body
+      const objectId = new ObjectId(_id);
+
+      const pipeline = [
+        {
+          '$lookup': {
+            'from': 'services',
+            'localField': 'Service_id',
+            'foreignField': '_id',
+            'as': 'ServiceResult'
+          }
+        },
+        {
+          $match: {
+            Servicegroup_id: objectId,
+          }
+        },
+        {
+          $project: {
+            'ServiceResult.name': 1,
+          },
+        },
+        {
+          $unwind: '$ServiceResult', // Unwind the 'categoryResult' array
+        },
+
+      ];
+
+      const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);
+      return res.send({ status: true, msg: 'Get All successfully ', data: Service_name_get });
+
+
+
+  }
+  catch(error) {
+    console.log("GET SERVICES NAME -", error);
+  }
+
+}
+
+
+
+
   // GET SERVICES NAME
   async GetAllServicesUserNAme(req, res) {
 
-    try {
-      const { data } = req.body
-      var ServicesArr = []
-      const objectId = new ObjectId(data._id);
+  try {
+    const { _id } = req.body
+    var ServicesArr = []
+    const objectId = new ObjectId(_id);
 
 
-
+    console.log("objectId", objectId)
     // Define the aggregation pipeline
     const pipeline = [
       {
@@ -346,36 +394,40 @@ class GroupService {
         $unwind: '$user',
       },
       {
-        $project: {     
-          username: '$user.FullName', // Replace 'username' with the actual field name in 'users' collection
+        $project: {
+          'user.Email': 1, // Replace 'username' with the actual field name in 'users' collection
+          'user.FullName': 1,
+          'user.license_type': 1,
+          'user.UserName': 1,
+          'user.TradingStatus': 1,
         },
       },
     ];
 
     // Execute the aggregation pipeline
     const result = await groupServices_client1.aggregate(pipeline)
-console.log("result",result);
+    console.log("result", result);
 
 
 
 
 
 
-      const groupServices_user = await groupServices_client1.find({ groupService_id: objectId })
+    const groupServices_user = await groupServices_client1.find({ groupService_id: objectId })
 
-      if (groupServices_user.length == 0) {
-        return res.send({ status: false, msg: 'NO DATA', data: groupServices_user });
-      }
-
-      return res.send({ status: true, data: groupServices_user, msg: 'Get All successfully' });
-
-
-
-    } catch (error) {
-      console.log("GET SERVICES NAME -", error);
+    if (groupServices_user.length == 0) {
+      return res.send({ status: false, msg: 'NO DATA', data: result });
     }
 
+    return res.send({ status: true, data: result, msg: 'Get All successfully' });
+
+
+
+  } catch (error) {
+    console.log("GET SERVICES NAME -", error);
   }
+
+}
 
 }
 
