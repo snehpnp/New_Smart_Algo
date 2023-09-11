@@ -47,9 +47,11 @@ const Routing = () => {
       // else {
       //   navigate("/login");
       // }
-    }   else  if (gotodashboard != null) { 
+    } else if (gotodashboard != null) { 
       if (user_role_goTo === "USER" && location.pathname === "/") {
         navigate("/client/dashboard");
+      }  else if (roles === "SUBADMIN" && location.pathname === "/") {
+        navigate("/subadmin/dashboard");
       }
     }
 
@@ -62,8 +64,11 @@ const Routing = () => {
     <Routes>
       <Route path="/super/*" element={(roles === "SUPERADMIN") ? <SuperAdmin /> : <Login />} />
       <Route path="/admin/*" element={(roles === "ADMIN") ? <Admin /> : <Login />} />
-      <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
+      {/* <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} /> */}
       <Route path="/client/*" element={gotodashboard != null ? <Client /> :   (roles === "USER") ? <Client /> : <Login />} />
+
+      <Route path="/subadmin/*" element={gotodashboard != null ? <SubAdmin /> :   (roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
+
       <Route path="/login" element={<Login />} />
       <Route path="/forget" element={<ForgetPassword />} />
       <Route path="/profile" element={<ForgetPassword />} />
