@@ -26,7 +26,7 @@ class AliceBlue {
             var redirect = hosts.split(':')[0];
             var redirect_uri = '';
             if (redirect == "localhost") {
-                redirect_uri = "http://localhost/3000"
+                redirect_uri = "http://localhost:3000"
             } else {
                 redirect_uri = `https://${redirect}/`
             }
@@ -92,10 +92,15 @@ class AliceBlue {
                                 })
                                 await user_login.save();
                                 console.log("user_login", user_login);
-                                return res.redirect(redirect_uri);
+                                if (user_login) {
+                                    console.log("redirect_uri", redirect_uri);
+                                    setTimeout(() => {
+                                        return res.redirect(redirect_uri);
+                                    }, 1000);
+                                }
                             }
 
-                          
+
 
                         } else {
 
