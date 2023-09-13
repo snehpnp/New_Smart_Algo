@@ -7,6 +7,10 @@ const Role_model = db.role;
 const Company_info = db.company_information;
 const strategy_client = db.strategy_client;
 const groupService_User = db.groupService_User;
+const client_services = db.client_services;
+const serviceGroup_services_id = db.serviceGroup_services_id;
+
+
 
 
 
@@ -177,6 +181,8 @@ class Employee {
                 .then(async (data) => {
                     var User_id = data._id
 
+
+
                     // GROUP SERVICE ADD 
                     const User_group_service = new groupService_User(
                         {
@@ -188,17 +194,61 @@ class Employee {
 
                     // STRATEGY ADD 
                     Strategies.forEach((data) => {
-
                         const User_strategy_client = new strategy_client(
                             {
-                                strategy_id: data,
+                                strategy_id: data.id,
                                 user_id: User_id
                             })
                         User_strategy_client.save()
                     })
 
 
+                    const group_service_find = await serviceGroup_services_id.find({ Servicegroup_id: group_service })
 
+
+                    if (group_service_find.length != 0) {
+
+
+                        group_service_find.forEach((data) => {
+                            const User_client_services = new client_services(
+                                {
+                                    user_id: User_id,
+                                    group_id: group_service,
+                                    service_id: data.Service_id,
+                                    strategy_id: Strategies[0].id,
+                                    uniqueUserService: User_id + "_" + data.Service_id
+                                })
+                            User_client_services.save()
+                            console.log({
+                                user_id: User_id,
+                                group_id: group_service,
+                                service_id: data.Service_id,
+                                strategy_id: Strategies[0].id,
+                                uniqueUserService: User_id + "_" + data.Service_id
+                            });
+                        })
+
+
+
+                    } else {
+
+                    }
+
+
+
+
+
+
+                    // CLIENT SERVICE DATA ADD IN COLLECTION
+                    //    const User_client_services = new client_services(
+                    //         {
+                    //             user_id: User_id,
+                    //             group_id:group_service,
+                    //             service_id:"",
+                    //             strategy_id:Strategies[0].id,
+                    //             uniqueUserService:""
+                    //         })
+                    // User_strategy_client.save()
 
 
                     res.send({ status: true, msg: "successfully Add!", data: data })

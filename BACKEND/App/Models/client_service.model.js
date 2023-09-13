@@ -18,6 +18,16 @@ const clientServiceSchema = Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "strategy"
     },
+    order_type: {
+        type: String,
+        enum: ['1', '2', '3', '4'],
+        default: '1'
+    },
+    product_type: {
+        type: String,
+        enum: ['1', '2', '3', '4'],
+        default: '1'
+    },
     active_status: {
         type: String,
         enum: ['0', '1'],
