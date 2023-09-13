@@ -11,7 +11,7 @@ const { AddTheme, GetAllTheme , GetThemeByIdThemeId  } = require('../../Controll
 router.post('/add/theme', AddTheme)
 router.get('/getall/theme', GetAllTheme)
 
-router.post('/find_one/theme', verifyToken , GetThemeByIdThemeId)
+router.post('/find_one/theme',  GetThemeByIdThemeId)
 
 
 

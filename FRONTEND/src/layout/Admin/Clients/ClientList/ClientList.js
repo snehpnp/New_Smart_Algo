@@ -118,9 +118,6 @@ const AllClients = () => {
             dataField: 'StartDate',
             text: 'Start Date',
             formatter: (cell, row) => fDateTimeSuffix(row.StartDate)
-
-
-
         },
         {
             dataField: 'EndDate',
@@ -139,18 +136,8 @@ const AllClients = () => {
                     <label class="switch" >
                         <input type="checkbox" className="bg-primary" defaultChecked={row.ActiveStatus == "1" ? true : false} onChange={(e) => activeUser(e, row)} />
                         <span class="slider round"></span>
-                        {/* <BootstrapSwitchButton
-                            checked={row.ActiveStatus === '1' ? true : false}
-                            size="xs"
-                            onstyle="outline-success"
-                            offstyle="outline-danger"
-                            onChange={(e) => activeUser(e, row)}
-                        /> */}
                     </label>
-
                 </>
-
-
             ),
         },
         {
@@ -160,8 +147,6 @@ const AllClients = () => {
                 <>
                     Broker
                 </>
-
-
             ),
         },
         {
@@ -181,10 +166,7 @@ const AllClients = () => {
                     >
                         Dashboard
                     </button>
-
                 </>
-
-
             ),
         },
         {
@@ -194,8 +176,6 @@ const AllClients = () => {
                 <>
                     <span style={(cell == "off" || cell === null) ? { color: "#FF0000", fontSize: "40px" } : { color: "#008000", fontSize: "40px" }}>&#9679;</span>
                 </>
-
-
             ),
         },
         {
@@ -204,7 +184,7 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
                     <div>
-                        <Link to={`/admin/client/edit/${row._id}`}>
+                        <Link to={`/admin/client/edit/${row._id}`} state={row}>
                             <span data-toggle="tooltip" data-placement="top" title="Edit">
                                 <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                             </span>
@@ -219,14 +199,12 @@ const AllClients = () => {
             ),
         },
     ];
-
     return (
         <>
             {
                 getAllClients.loading ? <Loader /> :
                     <>
                         <Theme_Content Page_title="All Clients" button_title="Add Client" route="/admin/client/add">
-
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (
                                     'No data found') :
@@ -238,7 +216,6 @@ const AllClients = () => {
                                 showModal ?
                                     <>
                                         < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
-                                        //  handleClose={setshowModal(false)}
                                         >
                                         </Modal >
                                     </>

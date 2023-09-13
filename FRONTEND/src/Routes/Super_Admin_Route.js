@@ -9,6 +9,9 @@ import  History from  '../layout/Superadmin/History/History';
 import  Support from  '../layout/Superadmin/Support/Support';
 import  CompanyTheme from  '../layout/Superadmin/ThemeSelect/CompanyTheme';
 import Profile from '../layout/Superadmin/Profile/Profile';
+import Permitions from '../layout/Superadmin/AdminPermittions/AllPermitions';
+
+
 
 const Admin = () => {
 
@@ -24,6 +27,7 @@ const Admin = () => {
                 {/* <> */}
                 <Route exact path="/dashboard" element={<Dashboard />} />
                 <Route exact path="/alladmins" element={<Admins />} />
+                <Route exact path="/permitions" element={<Permitions />} />
                 <Route exact path="/history" element={<History />} />
                 <Route exact path="/support" element={<Support />} />
                 <Route exact path="/selecttheme" element={<CompanyTheme />} />

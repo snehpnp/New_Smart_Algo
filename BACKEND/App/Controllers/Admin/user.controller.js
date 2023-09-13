@@ -22,7 +22,7 @@ var dt = dateTime.create();
 // Product CLASS
 class Employee {
 
-    // USER ADD 
+    // USER ADD
     async AddEmployee(req, res) {
         try {
             const { FullName, UserName, Email, PhoneNo, license_type, licence, fromdate, Strategies, todate, service_given_month, broker, parent_id, parent_role, api_secret, app_id, client_code, api_key, app_key, api_type, demat_userid, group_service } = req.body;
@@ -39,7 +39,7 @@ class Employee {
                 return res.send({ status: false, msg: 'Role Not exists', data: [] });
             }
 
-            // IF USER ALEARDY EXIST       
+            // IF USER ALEARDY EXIST
             const existingUsername = await User_model.findOne({ UserName: UserName });
             if (existingUsername) {
                 return res.send({ status: false, msg: 'Username already exists', data: [] });
@@ -135,7 +135,7 @@ class Employee {
             const salt = await bcrypt.genSalt(10);
             var ByCryptrand_password = await bcrypt.hash(rand_password.toString(), salt);
 
-            // Panel Prifix key Find 
+            // Panel Prifix key Find
             var Panel_key = await Company_info.find()
             if (Panel_key.length == 0) {
                 return res.send({ status: false, msg: 'client prifix not exist.', data: [] });
@@ -183,7 +183,7 @@ class Employee {
 
 
 
-                    // GROUP SERVICE ADD 
+                    // GROUP SERVICE ADD
                     const User_group_service = new groupService_User(
                         {
                             groupService_id: group_service,
@@ -194,9 +194,10 @@ class Employee {
 
                     // STRATEGY ADD 
                     Strategies.forEach((data) => {
+
                         const User_strategy_client = new strategy_client(
                             {
-                                strategy_id: data.id,
+                                strategy_id: data,
                                 user_id: User_id
                             })
                         User_strategy_client.save()

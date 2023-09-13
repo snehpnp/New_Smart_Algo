@@ -71,14 +71,19 @@ const AllSubadmin = () => {
             text: 'Status',
             formatter: (cell, row) => (
                 <>
-                    <label class="switch" >
-                        <input type="checkbox" className="bg-primary" />
-                            <span class="slider round"></span>
+                    <label class="toggle ">
+                        <input class="toggle-checkbox bg-primary" type="checkbox"
+                            onChange={(e) => {
+                                //   setShowAllStratagy(e.target.checked)
+                            }}
+                        />
+                        {/* // ${ShowAllStratagy ? 'bg-primary' : "bg-secondary" } */}
+                        <div class={`toggle-switch
+                `}></div>
                     </label>
 
                 </>
 
-                
             ),
         },
         {
@@ -86,22 +91,14 @@ const AllSubadmin = () => {
             text: 'Dashboard',
             formatter: (cell, row) => (
                 <>
-                    <button
-                        className="btn btn-new-block"
-                        style={
-                            row.AppLoginStatus === '0' && row.WebLoginStatus === '0'
-                                ? { color: "#FF0000" }
-                                : { color: "#008000" }
-                        }
+                    <span
+                        className={`${row.AppLoginStatus === '0' && row.WebLoginStatus === '0' ? 'btn-success' : 'btn-danger'}  btn btn-new-block`}
                         onClick={() => goToDashboard(row._id, row.Email)}
                         disabled={row.AppLoginStatus === '0' && row.WebLoginStatus === '0'}
                     >
                         Dashboard
-                    </button>
-
+                    </span>
                 </>
-
-
             ),
         },
         {
@@ -109,15 +106,14 @@ const AllSubadmin = () => {
             text: 'Actions',
             formatter: (cell, row) => (
                 <div>
-                    <Link to="/admin/editsubadmin">
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
+                    <Link to={`/admin/editsubadmin/${row._id}`}>
+                        <span data-toggle="tooltip" data-placement="top" title="Edit">
+                            <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                        </span>
                     </Link>
                     <span data-toggle="tooltip" data-placement="top" title="Delete">
                         <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
                     </span>
-
                 </div>
             ),
         },
@@ -128,18 +124,18 @@ const AllSubadmin = () => {
 
         let req = {
             Email: email,
-          
+
         };
         await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
             .then((response) => {
                 if (response.status) {
                     // console.log(response);
 
-                    localStorage.setItem("gotodashboard","true");
+                    localStorage.setItem("gotodashboard", "true");
                     localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
                     localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
-                    navigate("/client/dashboard")     
-                
+                    navigate("/client/dashboard")
+
                 }
             })
 
@@ -150,7 +146,7 @@ const AllSubadmin = () => {
             {
                 Addsubadmin.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All Subadmins" button_title="Add SubAdmin" route="/admin/allsubadmins/add">
+                        <Content Page_title="All Subadmins" button_title="Add SubAdmin" route="/admin/allsubadmins/add">
 
                             {
                                 Addsubadmin.data && Addsubadmin.data.length === 0 ? (
@@ -169,7 +165,7 @@ const AllSubadmin = () => {
                                     </>
                                     : ""
                             }
-                        </Theme_Content>
+                        </Content>
                     </>
             }
 
@@ -177,12 +173,7 @@ const AllSubadmin = () => {
 
         </ >
     )
-    {/* <>
-        <Content Page_title="AllSubadmin">
-            <p>AllSubadmin 123</p>
-        </Content>
-        )
-    </> */}
+
 }
 
 

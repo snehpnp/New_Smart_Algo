@@ -9,8 +9,8 @@ const ApiCreateInfo = () => {
 
 
     return <>
-        <Content Page_title="ApiCreateInfo" button_title='Create Api Info' route='/admin/apicreateinfo/add'>
-            <AlertToast type={toast.error} />
+        <Content Page_title="Api Create Information" button_status={false}>
+
 
         </Content>
         )

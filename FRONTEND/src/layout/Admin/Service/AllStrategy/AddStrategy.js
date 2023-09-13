@@ -132,7 +132,7 @@ const AddStrategy = () => {
     const getservice = async () => {
         await dispatch(Get_All_Catagory()).unwrap()
             .then((response) => {
-              
+
                 if (response.status) {
                     setCatagoryData({
                         loading: false,

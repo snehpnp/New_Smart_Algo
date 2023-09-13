@@ -189,6 +189,13 @@ export const supper_admin_sidebar = [
         "Data": []
     },
     {
+        'id': 2,
+        "name": 'All Permissions',
+        "Icon": "Vote",
+        "route": "/super/permitions",
+        "Data": []
+    },
+    {
         'id': 3,
         "name": 'History',
         "Icon": "FolderClock",

@@ -13,7 +13,7 @@ var dt = dateTime.create();
 class Subadmin {
     async AddSubadmin(req, res) {
         try {
-            const { FullName, UserName, Email, PhoneNo, Role, password, Subadmin_permision_data ,parent_id,parent_role} = req.body;
+            const { FullName, UserName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role } = req.body;
 
 
             // IF ROLE NOT EXIST TO CHECK
@@ -22,7 +22,7 @@ class Subadmin {
                 return res.status(409).json({ status: false, msg: 'Role Not exists', data: [] });
             }
 
-            // IF USER ALEARDY EXIST       
+            // IF USER ALEARDY EXIST
             const existingUsername = await User_model.findOne({ UserName: UserName });
             if (existingUsername) {
                 return res.status(409).json({ status: false, msg: 'Username already exists', data: [] });
@@ -40,7 +40,7 @@ class Subadmin {
             const salt = await bcrypt.genSalt(10);
             var ByCryptrand_password = await bcrypt.hash(password.toString(), salt);
 
-            // Panel Prifix key Find 
+            // Panel Prifix key Find
             var Panel_key = await Company_info.find()
             if (Panel_key.length == 0) {
                 return res.status(409).json({ status: false, msg: 'client prifix not exist.', data: [] });
@@ -67,15 +67,14 @@ class Subadmin {
                 // EndDate: "00-00-00",
                 Role: Role.toUpperCase(),
                 client_key: client_key,
-                parent_role:parent_role,
-                parent_id:parent_id
-                
+                parent_role: parent_role,
+                parent_id: parent_id
+
 
             });
 
             const userinfo = User.save()
                 .then(async (data) => {
-
                     const SubadminPermision = new Subadmin_Permission({
                         client_add: Subadmin_permision_data.client_add,
                         go_To_Dashboard: Subadmin_permision_data.go_To_Dashboard,

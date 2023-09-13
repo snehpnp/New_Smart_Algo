@@ -11,6 +11,11 @@ import Login from "../layout/Auth/Login"
 import ForgetPassword from '../layout/Auth/ForgetPassword';
 import UpdatePassword from '../layout/Auth/UpdatePassword.js';
 import Testing from "../test"
+import Deactivate_Company from '../layout/Auth/Deactivate_Company';
+import NotFound from '../layout/Auth/Not_Found';
+
+
+
 // import NotFound from "../Layout/NotFound"
 
 
@@ -47,7 +52,7 @@ const Routing = () => {
       // else {
       //   navigate("/login");
       // }
-    } else if (gotodashboard != null) { 
+    }   else  if (gotodashboard != null) { 
       if (user_role_goTo === "USER" && location.pathname === "/") {
         navigate("/client/dashboard");
       }  else if (roles === "SUBADMIN" && location.pathname === "/") {
@@ -64,16 +69,15 @@ const Routing = () => {
     <Routes>
       <Route path="/super/*" element={(roles === "SUPERADMIN") ? <SuperAdmin /> : <Login />} />
       <Route path="/admin/*" element={(roles === "ADMIN") ? <Admin /> : <Login />} />
-      {/* <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} /> */}
+      <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
       <Route path="/client/*" element={gotodashboard != null ? <Client /> :   (roles === "USER") ? <Client /> : <Login />} />
-
-      <Route path="/subadmin/*" element={gotodashboard != null ? <SubAdmin /> :   (roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
-
       <Route path="/login" element={<Login />} />
       <Route path="/forget" element={<ForgetPassword />} />
       <Route path="/profile" element={<ForgetPassword />} />
       <Route path="/update/:id" element={<UpdatePassword />} />
       <Route path="/Testing" element={<Testing />} />
+      <Route path="/notfound" element={<Deactivate_Company />} />
+      <Route path="/*" element={<NotFound />} />
 
 
 

@@ -4,12 +4,17 @@ import { Route, Routes, NavLink, useLocation, useNavigate } from "react-router-d
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
 
 import Dashboard from '../layout/User/Dashboard/Dashboard';
-import Signals from '../layout/Admin/TradeDetails/Signals/Signals';
+import Signals from '../layout/User/Signals/Signals';
 import TradingStatus from '../layout/User/Trading status/Tradingstatus';
 import Profile from '../layout/User/Profile/Profile';
+import BrokerResponse from '../layout/User/BrokerResponse/BrokerResponse';
+import TradeHistory from '../layout/User/TradeHistory/TradeHistory';
+import ApiCreateInfo from '../layout/User/ApiCreateInfo/ApiCreateInfo';
+import HelpCenter from '../layout/User/HelpCenter/HelpCenter';
+import StrategyDesc from '../layout/User/StrategyDesc/StrategyDesc';
 
 
-
+// strategydesc
 
 const Admin = () => {
 
@@ -28,15 +33,11 @@ const Admin = () => {
                 <Route exact path="/signals" element={<Signals />} />
                 <Route exact path="/tradingstatus" element={<TradingStatus />} />
                 <Route exact path="/profile" element={<Profile />} />
-
-
-                {/* <Route exact path="/admins" element={<Admins />} />
-                <Route exact path="/admin/add" element={<AddAdmins />} />
-                <Route exact path="/admin/edit/:id" element={<EditEdmins />} />
-                <Route exact path="/system" element={<System />} />
-                <Route exact path="system/editsystem/:id" element={<Editsystem />} /> */}
-
-                {/* </> */}
+                <Route exact path="/brokerresponse" element={<BrokerResponse />} />
+                <Route exact path="/tradehistory" element={<TradeHistory />} />
+                <Route exact path="/apicreateinfo" element={<ApiCreateInfo />} />
+                <Route exact path="/helpcenter" element={<HelpCenter />} />
+                <Route exact path="/strategydesc" element={<StrategyDesc />} />
             </Routes>
 
 
