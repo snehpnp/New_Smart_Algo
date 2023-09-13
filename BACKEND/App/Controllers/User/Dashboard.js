@@ -55,6 +55,9 @@ class Dashboard {
                 {
                     $project: {
                         'service.name': 1,
+                        'service.instrument_token': 1,
+                        'service.exch_seg': 1,
+
                         'strategys.strategy_name': 1,
 
 
