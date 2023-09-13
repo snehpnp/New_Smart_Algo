@@ -191,18 +191,32 @@ class Employee {
                         })
                     User_group_service.save()
 
+                    console.log("Strategies", Strategies)
+                    // STRATEGY ADD
+                    try {
+                        Strategies.forEach((data) => {
 
-                    // STRATEGY ADD 
-                    Strategies.forEach((data) => {
-
-                        const User_strategy_client = new strategy_client(
-                            {
-                                strategy_id: data,
-                                user_id: User_id
+                            // STRATEGY ADD 
+                            Strategies.forEach((data) => {
+                                const User_strategy_client = new strategy_client(
+                                    {
+                                        strategy_id: data.id,
+                                        user_id: User_id
+                                    })
+                                User_strategy_client.save()
                             })
-                        User_strategy_client.save()
-                    })
 
+                            const User_strategy_client = new strategy_client(
+                                {
+                                    strategy_id: data._id,
+                                    user_id: User_id
+                                })
+                            User_strategy_client.save()
+                        })
+                    } catch {
+
+
+                    }
 
                     const group_service_find = await serviceGroup_services_id.find({ Servicegroup_id: group_service })
 
@@ -234,8 +248,6 @@ class Employee {
                     } else {
 
                     }
-
-
 
 
 
