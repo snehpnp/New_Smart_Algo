@@ -6,12 +6,7 @@ const serviceGroup_services_id = Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'serviceGroupName',
     },
-    // Service_id: {
-    //     type: String,
-    //     required: true,
-    //     trim: true,
-    //     default: null
-    // },
+ 
     Service_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Services"

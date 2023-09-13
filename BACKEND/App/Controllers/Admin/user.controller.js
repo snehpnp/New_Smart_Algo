@@ -170,27 +170,8 @@ class Employee {
                 api_type: api_type,
                 demat_userid: demat_userid,
                 service_given_month: service_given_month
-            }
+            };
 
-                ;
-            // return
-
-            // const User = new User_model({
-            //     FullName: FullName,
-            //     UserName: UserName,
-            //     Email: Email,
-            //     PhoneNo: PhoneNo,
-            //     // Password: UserName + "@" + PhoneNo.slice(-4),
-            //     Password: ByCryptrand_password,
-            //     Otp: rand_password,
-            //     StartDate: fromdate,
-            //     EndDate: todate,
-            //     Role: Role.toUpperCase(),
-            //     client_key: client_key,
-            //     parent_id: parent_id,
-            //     parent_role: parent_role
-
-            // });
             const User = new User_model(user_data)
             const userinfo = User.save()
                 .then(async (data) => {
