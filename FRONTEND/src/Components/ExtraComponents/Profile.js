@@ -25,8 +25,6 @@ const UserProfile = () => {
 
   // User_Profile
 
-  console.log("getAllClieUserDetailsnts ,", UserDetails.data);
-
   const data = async () => {
     await dispatch(User_Profile({ id: user_id }))
       .unwrap()

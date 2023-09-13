@@ -2,16 +2,12 @@ import React from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 
 
-const History = () => {
-
-
-
+const BasicTable = () => {
 
     return <>
-        <Content Page_title="Basic">
 
             <div className="table-responsive">
-                <table className="table table-responsive-sm table-hover">
+                <table className="table table-responsive-sm ">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -52,11 +48,9 @@ const History = () => {
                     </tbody>
                 </table>
             </div>
-
-        </Content>
     </>
 }
 
 
-export default History
+export default BasicTable
 

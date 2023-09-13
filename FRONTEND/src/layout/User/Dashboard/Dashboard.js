@@ -1,35 +1,122 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Content from "../../../Components/Dashboard/Content/Content"
+import BasicTable from '../../../Components/ExtraComponents/Tables/BasicTable'
+import { Pencil, Trash2 } from 'lucide-react';
+import { No_Negetive_Input_regex } from "../../../Utils/Common_regex"
+import { GetAliceTokenAndID, CreateSocketSession, ConnctSocket } from "../../../Service/Alice_Socket"
 
-const Dashboard = () => {
+
+const BrokerResponse = () => {
+    const [enterqty, setEnterQty] = useState("")
+
+
+
+    const RunSocket = async () => {
+
+        // let aa = No_Negetive_Input_regex(enterqty)
+
+        // if (aa) {
+        //     console.log("negetive")
+        // }
+
+
+
+        let type = { loginType: "API" }
+        let channelList = "NSE|11956"
+
+        const res = await CreateSocketSession(type)
+        if (res.data.stat) {
+            const handleResponse = (response) => {
+                // console.log("response", response);
+
+            };
+
+            await ConnctSocket(handleResponse, channelList);
+
+        }
+
+    }
+
+
+
+
     return (
-        <div>
-            <div className="content-body">
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-xl-12">
-                            <div className="mt-5 mb-4">
-                                <div className="d-flex align-items-center justify-content-between mb-sm-0 mb-2">
-                                    <h2 className="font-w500">User Dashboard</h2>
+        <Content Page_title="Dashboard" button_status={false}>
+            <button onClick={() => RunSocket()}>run socket</button>
+            <table className="table table-responsive-sm ">
+                <thead className='bg-primary'>
+                    <tr>
+                        <th>#</th>
+                        <th>Live Price</th>
+                        <th>Symboll</th>
+                        <th>Qty</th>
+                        <th>Strategy</th>
+                        <th>Order Type</th>
+                        <th>Profuct Type</th>
+                        <th>Trading </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>1</th>
+                        <td>242.06</td>
+                        <td>
+                            ADANITRANS#
+                        </td>
+                        <td>
+                            <div className="row d-flex">
+                                <div className="col-lg-12 ">
+                                    <input type='text' name='qty' className="form-control" id='qty'
+                                        placeholder='Enter Qty'
+                                        onChange={(e) => setEnterQty(e.target.value)}
+                                        value={enterqty}
+                                    />
+                                    {/* {formik.errors[field.name] && */}
+                                    {/* <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>} */}
                                 </div>
-                            </div>
+                            </div></td>
+                        <td className="color-primary">
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </td>
+                        <td className="color-primary">
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </td>
+                        <td className="color-primary">
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </td>
+                        <td className="color-primary">
+                            <label class="toggle">
+                                <input class="toggle-checkbox bg-primary" type="checkbox"
+                                // onChange={(e) => {
+                                //   setShowAllStratagy(e.target.checked)
+                                // }}
+                                />
+                                {/* //  ${ShowAllStratagy ? 'bg-primary' : "bg-secondary" } */}
+                                <div class={`toggle-switch
 
-                            <div className="row">
-                                <div className="col-xl-12">
-                                    <div className="card">
-                                        <div className="card-header border-0 pb-0 flex-wrap">
-                                            <h3>Customer Reviews</h3>
-                                        </div>
-                                        <div className="card-body">
+                 `}></div>
+                            </label>
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div></div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </Content>
     )
 }
 
-export default Dashboard
+
+export default BrokerResponse

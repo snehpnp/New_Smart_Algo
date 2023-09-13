@@ -49,8 +49,9 @@ import Report from '../layout/Admin/Report/Report';
 
 // ApiCreateInfo
 import ApiCreateInfo from '../layout/Admin/ApiCreateInfo/ApiCreateInfo';
+import AddApiCreateInfo from '../layout/Admin/ApiCreateInfo/AddApiCreateInfo';
 
-// ApiCreateInfo
+// ReleaseUpdate
 import ReleaseUpdate from '../layout/Admin/ReleaseUpdate/ReleaseUpdate';
 
 
@@ -89,7 +90,7 @@ const Admin = () => {
                 <Route exact path="/signupclients" element={<SignUpClients />} />
                 <Route exact path="/editsignupclients" element={<EditSignupClient />} />
                 <Route exact path="/allsubadmins" element={<AllSubadmin />} />
-                <Route exact path="/editsubadmin" element={<EditSubadmin />} />
+                <Route exact path="/editsubadmin/:id" element={<EditSubadmin />} />
                 <Route exact path="/subadminclients" element={<SubadminClient />} />
                 <Route exact path="/allsubadmins/add" element={<AddSubadmin />} />
                 <Route exact path="/allsubadmins/edit" element={<EditSubadminClient />} />
@@ -112,6 +113,7 @@ const Admin = () => {
                 <Route exact path="/groupservices/edit" element={<EditGroup />} />
                 <Route exact path="/reports" element={<Report />} />
                 <Route exact path="/apicreateinfo" element={<ApiCreateInfo />} />
+                <Route exact path="/apicreateinfo/add" element={<AddApiCreateInfo />} />
                 <Route exact path="/updates" element={<ReleaseUpdate />} />
             </Routes>
         </>

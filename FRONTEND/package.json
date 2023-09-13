@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "bootstrap-switch-button-react": "^1.2.0",
+    "crypto-js": "^4.1.1",
     "date-fns": "^2.30.0",
     "formik": "^2.4.3",
     "html2canvas": "^1.4.1",

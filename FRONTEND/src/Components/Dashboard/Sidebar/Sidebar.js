@@ -4,7 +4,7 @@
 import React, { useRef, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config'
-import { Signal, Users, Wrench, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Rocket, Paintbrush } from 'lucide-react';
+import { Signal, Users, Wrench, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Rocket, Paintbrush , Vote  } from 'lucide-react';
 import Test from "../../../test"
 import html2canvas from 'html2canvas';
 import $ from "jquery";
@@ -385,7 +385,8 @@ const IconComponent = ({ icon }) => {
                 return <ScatterChart className='me-3' />;
             case 'Paintbrush':
                 return <Paintbrush className='me-3' />;
-
+                case 'Vote':
+                    return <Vote className='me-3' />;
 
             default:
                 return null;

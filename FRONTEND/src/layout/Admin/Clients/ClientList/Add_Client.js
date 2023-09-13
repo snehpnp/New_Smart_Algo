@@ -1,22 +1,18 @@
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable react-hooks/exhaustive-deps */
-//okkkkkk
 import React, { useEffect, useState } from 'react'
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form"
 import { useFormik } from 'formik';
 import * as  valid_err from "../../../../Utils/Common_Messages"
-// import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { Email_regex, Mobile_regex } from "../../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
 import Content from '../../../../Components/Dashboard/Content/Content';
-
-import Theme_Content from '../../../../Components/Dashboard/Content/Theme_Content';
-
 import { GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
 import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
+import Form from 'react-bootstrap/Form';
 
 
 import { Add_User } from '../../../../ReduxStore/Slice/Admin/userSlice';
@@ -24,6 +20,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
+import "../../../../App.css"
 
 
 
@@ -39,8 +36,11 @@ const AddClient = () => {
 
 
   const [selectedStrategies, setSelectedStrategies] = useState([]);
+  const [ShowAllStratagy, setShowAllStratagy] = useState(false)
 
   const [first, setfirst] = useState([])
+
+  console.log("selectedStrategies" ,selectedStrategies)
 
 
 
@@ -118,35 +118,35 @@ const AddClient = () => {
 
 
 
-      if (!values.licence) {
-        errors.licence = valid_err.LICENCE_TYPE_ERROR;
-      }
-      else if (values.licence === '2' || values.licence === 2) {
-        if (!values.broker) {
-          errors.broker = valid_err.BROKER_ERROR;
-        }
-        if (!values.tomonth) {
-          errors.tomonth = valid_err.LICENCE_ERROR;
-        }
-      }
-      else if (values.licence === '1' || values.licence === 1) {
-        if (!values.fromDate) {
-          errors.fromDate = valid_err.FROMDATE_ERROR;
-        }
-        if (!values.todate) {
-          errors.todate = valid_err.FROMDATE_ERROR;
-        }
-      }
+      // if (!values.licence) {
+      //   errors.licence = valid_err.LICENCE_TYPE_ERROR;
+      // }
+      // else if (values.licence === '2' || values.licence === 2) {
+      //   if (!values.broker) {
+      //     errors.broker = valid_err.BROKER_ERROR;
+      //   }
+      //   if (!values.tomonth) {
+      //     errors.tomonth = valid_err.LICENCE_ERROR;
+      //   }
+      // }
+      // else if (values.licence === '1' || values.licence === 1) {
+      //   if (!values.fromDate) {
+      //     errors.fromDate = valid_err.FROMDATE_ERROR;
+      //   }
+      //   if (!values.todate) {
+      //     errors.todate = valid_err.FROMDATE_ERROR;
+      //   }
+      // }
 
 
 
 
-      if (!values.groupservice) {
-        errors.groupservice = valid_err.GROUPSELECT_ERROR;
-      }
-      if (!values.Strategy) {
-        errors.Strategy = "select test";
-      }
+      // if (!values.groupservice) {
+      //   errors.groupservice = valid_err.GROUPSELECT_ERROR;
+      // }
+      // if (!values.Strategy) {
+      //   errors.Strategy = "select test";
+      // }
 
       if (!values.email) {
         errors.email = valid_err.EMPTY_EMAIL_ERROR;
@@ -374,14 +374,13 @@ const AddClient = () => {
       ,
       // showWhen: values => values.licence === '2'
     },
-    {
-      name: 'Strategy', label: 'Strategy', type: 'checkbox',
-    },
+    // {
+    //   name: 'Strategy', label: 'Strategy', type: 'checkbox',
+    // },
 
 
   ];
 
-  console.log("GetServices", formik.values);
 
 
   useEffect(() => {
@@ -571,18 +570,9 @@ const AddClient = () => {
   }
 
 
-
-
-
   useEffect(() => {
     data()
   }, [])
-
-
-
-
-
-
 
 
 
@@ -594,57 +584,48 @@ const AddClient = () => {
           toDate={formik.values.todate}
           additional_field={
             <>
-              <div>
-                <div className='d-flex'>
+              {/*  For Show All Services */}
 
-                  {formik.values.Strategy ? <>
-                    {AllStrategy.data.map((strategy) => (
-                      <div className={`col-lg-2 mt-2`} key={strategy._id}>
-                        <div className="row d-flex">
-                          <div className="col-lg-12 ">
-                            <div class="form-check custom-checkbox mb-3">
-                              <input type='checkbox' className="form-check-input" name={strategy.strategy_name}
-                                value={strategy._id}
-                                onChange={(e) => handleStrategyChange(e)}
-                              />
-                              <label className="form-check-label" for={strategy.strategy_name}>{strategy.strategy_name}</label>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </> : ""}
+              {GetServices && GetServices.data.map((strategy) => (
+                <div className={`col-lg-2 `} key={strategy._id}>
+                  <div className="col-lg-12 ">
+                    <label className="form-check-label bg-primary py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
+                  </div>
                 </div>
-                <div>
-                  {GetServices && GetServices.data.map((strategy) => (
-                    <div className={`col-lg-3 mt-2`} key={strategy._id}>
-                      <div className="row d-flex">
-                        <div className="col-lg-12 ">
-                          <div class="form-check custom-checkbox mb-3">
-                            <label className="form-check-label bg-primary py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
-                          </div>
+              ))}
+              <label class="toggle mt-3">
+                <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
+                  setShowAllStratagy(e.target.checked)
+                }} />
+                <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary" }`}></div>
+                <span class="toggle-label">Show Strategy</span>
+              </label>
+
+              {/*  For Show All Strategy */}
+              {ShowAllStratagy ? <>
+                {AllStrategy.data.map((strategy) => (
+                  <div className={`col-lg-2 mt-2`} key={strategy._id}>
+                    <div className="row ">
+                      <div className="col-lg-12 ">
+                        <div class="form-check custom-checkbox mb-3">
+                          <input type='checkbox' className="form-check-input" name={strategy.strategy_name}
+                            value={strategy._id}
+                            onChange={(e) => handleStrategyChange(e)}
+                          />
+                          <label className="form-check-label" for={strategy.strategy_name}>{strategy.strategy_name}</label>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              </div>
+                  </div>
+                ))}
+              </> : ""}
             </>
-
-
-
           }
-
         />
-
         <ToastButton />
-
       </Content >
-
     </>
   )
 }
-
-
 export default AddClient
 
