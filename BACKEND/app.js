@@ -28,7 +28,7 @@ app.use(cors(corsOpts));
 
 
 app.use(bodyparser.urlencoded({ extended: true }));
-app.use(bodyparser.json({limit: '10mb', extended: true}));
+app.use(bodyparser.json({ limit: '10mb', extended: true }));
 
 app.use(bodyparser.json());
 const server = http.createServer(app);
@@ -40,10 +40,26 @@ const server = http.createServer(app);
 require('./App/Cron/cron')
 
 
+const { createView, dropExistingView } = require('./View/Alice_blue')
+const { TokenSymbolUpdate ,TruncateTable} = require('./App/Cron/cron')
 
+// TEST API
+app.get('/tradesymbol', async (req, res) => {
+  TokenSymbolUpdate()
+  res.send({ msg: "Done!!!" })
+})
+app.get('/tradesymbol1', async (req, res) => {
+  TruncateTable()
+  res.send({ msg: "Done!!!" })
+})
 
 // TEST API
 app.get('/get', async (req, res) => {
+  createView()
+  res.send({ msg: "Done!!!" })
+})
+app.get('/get1', async (req, res) => {
+  dropExistingView()
   res.send({ msg: "Done!!!" })
 })
 

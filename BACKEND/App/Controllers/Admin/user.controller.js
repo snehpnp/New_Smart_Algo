@@ -182,7 +182,6 @@ class Employee {
                     var User_id = data._id
 
 
-
                     // GROUP SERVICE ADD
                     const User_group_service = new groupService_User(
                         {
