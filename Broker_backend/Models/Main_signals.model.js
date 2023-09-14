@@ -44,6 +44,10 @@ const MainSignalsSchema = Schema({
     dt: {
         type: String,
     },
+    
+    dt_date: {
+        type: String,
+    },
     strike: {
         type: String,
     },

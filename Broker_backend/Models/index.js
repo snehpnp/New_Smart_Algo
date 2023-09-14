@@ -18,7 +18,7 @@ module.exports = {
     client_services: require('./client_service.model'),
     Alice_token: require('./Alice_token.model'),
     Signals: require('./Signals.model'),
-    MainSignalsSchema: require('./Main_signals.model'),
+    MainSignals: require('./Main_signals.model'),
 
 
 
