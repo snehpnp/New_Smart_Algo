@@ -1,54 +1,51 @@
 const mongoose = require('mongoose');
 
 const { Schema, model } = require('mongoose');
-const SignalsSchema = Schema({
+const MainSignalsSchema = Schema({
     symbol: {
         type: String,
     },
-    type: {
+    entry_type: {
         type: String,
     },
-    order_type: {
+    exit_type: {
         type: String,
     },
-    product_type: {
+    entry_price: {
         type: String,
     },
-    price: {
+    exit_price: {
         type: String,
     },
-    qty_percent: {
+    entry_qty_percent: {
         type: String,
     },
 
+    exit_qty_percent: {
+        type: String,
+    },
+    entry_dt_date: {
+        type: String,
+    },
+    exit_dt_date: {
+        type: String,
+    },
     exchange: {
         type: String,
     },
 
-    sq_value: {
-        type: String,
-    },
-
-    sl_value: {
-        type: String,
-    },
-    tsl: {
-        type: String,
-    },
-
-    tr_price: {
-        type: String,
-    },
-    dt: {
-        type: String,
-    },
-    dt_date: {
-        type: String,
-    },
     strategy: {
         type: String,
     },
     option_type: {
+        type: String,
+    },
+
+    dt: {
+        type: String,
+    },
+    
+    dt_date: {
         type: String,
     },
     strike: {
@@ -81,7 +78,7 @@ const SignalsSchema = Schema({
     timestamps: true
 });
 
-const signals = model('signals', SignalsSchema);
-module.exports = signals;
+const MainSignal = model('MainSignal', MainSignalsSchema);
+module.exports = MainSignal;
 
 

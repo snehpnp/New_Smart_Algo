@@ -19,8 +19,7 @@ module.exports = {
     Alice_token: require('./Alice_token.model'),
     Signals: require('./Signals.model'),
     MainSignals: require('./Main_signals.model'),
-
-
+    api_create_info: require('./api_create_info.model'),
 
 
 };
