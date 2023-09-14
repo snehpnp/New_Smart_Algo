@@ -88,9 +88,7 @@ services.find()
   const categoryResult = await categorie.aggregate(pipeline);
   //const matchingElements = categoryResult.filter(item => item.segment === "FO");
 
-  // console.log('Matching elements:', matchingElements[0]._id);
-  res.send("done");
-    return
+
      var axios = require('axios');
     var config = {
         method: 'get',
@@ -100,14 +98,7 @@ services.find()
     axios(config)
         .then(function (response) { 
 
-          // res.send(response.data);
-          // console.log(response.data);
-
-          
-          
-          // Using a loop to extract 'name' and 'instrumenttype'
-         
-             
+               
           var unique_key = []
           let count = 0
           response.data.forEach((item) => {
