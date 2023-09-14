@@ -16,7 +16,7 @@ module.exports = {
     Subadmin_Permission :require('./subadmin_permision.model'),
     groupService_User :require('./group_services_client.model'),
     client_services :require('./client_service.model'),
+    api_create_info :require('./api_create_info.model'),
 
 
 };
- 

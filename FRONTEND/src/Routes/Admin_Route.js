@@ -50,6 +50,9 @@ import Report from '../layout/Admin/Report/Report';
 // ApiCreateInfo
 import ApiCreateInfo from '../layout/Admin/ApiCreateInfo/ApiCreateInfo';
 import AddApiCreateInfo from '../layout/Admin/ApiCreateInfo/AddApiCreateInfo';
+import EditApiCreateInfo from '../layout/Admin/ApiCreateInfo/EditApiCreateInfo';
+
+
 
 // ReleaseUpdate
 import ReleaseUpdate from '../layout/Admin/ReleaseUpdate/ReleaseUpdate';
@@ -114,6 +117,7 @@ const Admin = () => {
                 <Route exact path="/reports" element={<Report />} />
                 <Route exact path="/apicreateinfo" element={<ApiCreateInfo />} />
                 <Route exact path="/apicreateinfo/add" element={<AddApiCreateInfo />} />
+                <Route exact path="/apicreateinfo/edit" element={<EditApiCreateInfo />} />
                 <Route exact path="/updates" element={<ReleaseUpdate />} />
             </Routes>
         </>

@@ -40,3 +40,59 @@ export async function UPDATE_PANEL_THEME(data , token) {
     }
 
 }
+
+
+// CREATE_API_INFORMATION
+
+export async function CREATE_API_INFORMATION(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}add/apicreateinfo`, data ,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+// UPDATE_API_INFORMATION
+
+export async function UPDATE_API_INFORMATION(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/apicreateinfo`, data ,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        return err
+
+        // custom error
+    }
+
+}
+// GET_API_INFORMATION
+
+export async function GET_API_INFORMATION(token) {
+    try {
+        const res = await axios.get(`${Config.base_url}getall/apicreateinfo`, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        console.log("error", err);
+        // custom error
+    }
+
+}

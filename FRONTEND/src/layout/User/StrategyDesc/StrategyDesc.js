@@ -9,40 +9,103 @@ const StrategyDesc = () => {
 
     return (
         <Content Page_title="Strategy Description" button_status={false}>
-            <div class="accordion" id="accordionPanelsStayOpenExample">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                            Accordion Item #1
-                        </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                        <div class="accordion-body">
-                            <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+            <div class="container-fluid">
+
+                <div class="row mb-5">
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="card card-purple-blue text-white mb-3 mb-md-0">
+                            <div class="d-flex justify-content-space-between " >
+                                <div>
+                                    <p class="new-un">Undefined</p>
+                                </div>
+                                <div>
+                                    <p class="new-de">Undefined</p>
+                                </div>
+                            </div>
+                            <h4 class="card-new-heading">Test</h4>
+                            <div class="card-body d-flex justify-content-between align-items-end">
+                                <div class="card-number">
+                                    <div class="h3">Recommended</div><small><strong>Capital : undefined PER LOT</strong></small>
+                                </div>
+                                <div class="card-description text-right">
+                                    <small class="new-sma">Info</small>
+                                </div>
+                                <div class="card-description text-right ml-3">
+                                    <small class="new-sma">Join</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                            Accordion Item #2
-                        </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-                        <div class="accordion-body">
-                            <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="card card-salmon-pink text-white">
+                            <div class="d-flex justify-content-space-between" >
+                                <div>
+                                    <p class="new-un">Undefined</p>
+                                </div>
+                                <div>
+                                    <p class="new-de">Undefined</p>
+                                </div>
+                            </div>
+                            <h4 class="card-new-heading">Test1</h4>
+                            <div class="card-body d-flex justify-content-between align-items-end">
+                                <div class="card-number">
+                                    <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
+                                </div>
+                                <div class="card-description text-right">
+                                    <small class="new-sma">Info</small>
+                                </div>
+                                <div class="card-description text-right ml-3">
+                                    <small class="new-sma">Join</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                            Accordion Item #3
-                        </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-                        <div class="accordion-body">
-                            <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="card card-blue-green text-white">
+                            <div class="d-flex justify-content-space-between" >
+                                <div>
+                                    <p class="new-un">Undefined</p>
+                                </div>
+                                <div>
+                                    <p class="new-de">Undefined</p>
+                                </div>
+                            </div>
+                            <h4 class="card-new-heading">Test2</h4>
+                            <div class="card-body d-flex justify-content-between align-items-end">
+                                <div class="card-number">
+                                    <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
+                                </div>
+                                <div class="card-description text-right">
+                                    <small class="new-sma">Info</small>
+                                </div>
+                                <div class="card-description text-right ml-3">
+                                    <small class="new-sma">Join</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-3">
+                        <div class="card card-purple-pink text-white">
+                            <div class="d-flex justify-content-space-between" >
+                                <div>
+                                    <p class="new-un">Undefined</p>
+                                </div>
+                                <div>
+                                    <p class="new-de">Undefined</p>
+                                </div>
+                            </div>
+                            <h4 class="card-new-heading">Test3</h4>
+                            <div class="card-body d-flex justify-content-between align-items-end">
+                                <div class="card-number">
+                                    <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
+                                </div>
+                                <div class="card-description text-right">
+                                    <small class="new-sma">Info</small>
+                                </div>
+                                <div class="card-description text-right ml-3">
+                                    <small class="new-sma">Join</small>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

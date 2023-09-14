@@ -8,6 +8,8 @@ import CommonSlice from "../Slice/Common/commoSlice"
 // SUPERADMIN SLICE
 
 import SuperAdminSlice from "../Slice/Superadmin/SuperAdminSlice"
+import ApiCreateInfoSlice from "../Slice/Superadmin/ApiCreateInfoSlice"
+
 import SubadminSlice from "../Slice/Subadmin/Subadminslice";
 
 //  ADMIN SLICE
@@ -17,8 +19,8 @@ import StrategyServiceSlice from "../Slice/Admin/StrategySlice";
 import AdminUserSlice from "../Slice/Admin/userSlice";
 
 
-
-
+//  DASHBOARD SLICE
+import DashboardSlice from "../Slice/Users/DashboardSlice";
 
 
 
@@ -36,11 +38,13 @@ const store = configureStore({
     ThemeSlice: ThemeSlice.reducer,
     CommonSlice: CommonSlice.reducer,
     SuperAdminSlice: SuperAdminSlice.reducer,
+    ApiCreateInfoSlice: ApiCreateInfoSlice.reducer,
     AdminSlice: AdminSlice.reducer,
     SubadminSlice: SubadminSlice.reducer,
     GroupServiceSlice: GroupServiceSlice.reducer,
     StrategyServiceSlice: StrategyServiceSlice.reducer,
-    AdminUserSlice: AdminUserSlice.reducer
+    AdminUserSlice: AdminUserSlice.reducer,
+    DashboardSlice: DashboardSlice.reducer
   },
 });
 

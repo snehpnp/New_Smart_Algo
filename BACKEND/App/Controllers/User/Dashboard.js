@@ -6,6 +6,7 @@ const Role_model = db.role;
 const Company_info = db.company_information;
 const user_logs = db.user_logs;
 const client_services = db.client_services;
+const strategy_client = db.strategy_client;
 
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
@@ -59,6 +60,8 @@ class Dashboard {
                         'service.exch_seg': 1,
 
                         'strategys.strategy_name': 1,
+                        'strategys._id': 1,
+
 
 
                         _id: 1,
@@ -73,11 +76,43 @@ class Dashboard {
                     },
                 },
             ];
-            // const GetAllClientServices = await client_services.find({
-            //     user_id: user_Id
-            // });
+
             const GetAllClientServices = await client_services.aggregate(pipeline)
-               
+
+
+
+
+
+
+            const pipeline1 = [
+                {
+                    $match: {
+                        user_id: objectId
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "strategies",
+                        localField: "strategy_id",
+                        foreignField: "_id",
+                        as: "result"
+                    },
+                },
+
+                {
+                    $unwind: '$result',
+                },
+                {
+                    $project: {
+            'result._id':1,
+            'result.strategy_name':1,
+
+                    },
+                },
+
+            ];
+            const GetAllClientStrategy = await strategy_client.aggregate(pipeline1);
+
             const totalCount = GetAllClientServices.length;
 
             // IF DATA NOT EXIST
@@ -89,7 +124,8 @@ class Dashboard {
             res.send({
                 status: true,
                 msg: "Get All Client Services ",
-                data: GetAllClientServices,
+                services: GetAllClientServices,
+                strategy: GetAllClientStrategy,
                 // page: Number(page),
                 // limit: Number(limit),
                 totalCount: totalCount

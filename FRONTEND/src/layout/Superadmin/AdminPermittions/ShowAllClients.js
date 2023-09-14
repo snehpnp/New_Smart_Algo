@@ -3,7 +3,6 @@ import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDat
 import { Pencil, Trash2 } from 'lucide-react';
 import { Link } from "react-router-dom";
 
-
 import Modal from '../../../Components/ExtraComponents/Modal';
 
 const ShowAllClients = ({ showModal, setshowModal }) => {
@@ -57,7 +56,8 @@ const ShowAllClients = ({ showModal, setshowModal }) => {
 
     ];
     return (
-        <div>   <Modal isOpen={showModal} backdrop="static" size="xl" title="Show All Clients" hideBtn={true}
+        <div>
+              <Modal isOpen={showModal} backdrop="static" size="xl" title="Show All Clients" hideBtn={true}
             handleClose={() => setshowModal(false)}
         >
             <FullDataTable TableColumns={columns}

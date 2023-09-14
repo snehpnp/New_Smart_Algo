@@ -15,7 +15,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
   const [PreviewImage, setPreviewImage] = useState([]); // Array to store individual previews
 
 
-  console.log("PreviewImage" ,PreviewImage);
+  console.log("PreviewImage", PreviewImage);
   const handleFileChange = (event, index, name) => {
     const file = event.target.files[0];
     const newPreviews = [...previews]; // Create a copy of the previews array
@@ -277,7 +277,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
                                       />
                                     </div>
                                   </div>
-                                  <img src={PreviewImage} alt={`Preview ${index}`} className="mb-3" />
+                                  <img src={PreviewImage} name={field.name} alt={`Preview ${index}`} className="mb-3" />
                                 </div>
                               </div>
                             </> :
@@ -323,7 +323,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
 
 
         </div >
-              {additional_field}
+        {additional_field}
 
         <div className="form-group mb-0">
           <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">

@@ -1,48 +1,113 @@
-import React, { useState } from 'react'
+/* eslint-disable array-callback-return */
+import React, { useState, useEffect } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import BasicTable from '../../../Components/ExtraComponents/Tables/BasicTable'
 import { Pencil, Trash2 } from 'lucide-react';
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex"
 import { GetAliceTokenAndID, CreateSocketSession, ConnctSocket } from "../../../Service/Alice_Socket"
+import { useDispatch, useSelector } from "react-redux";
+import $ from "jquery";
+
+import { User_Dashboard_Data } from "../../../ReduxStore/Slice/Users/DashboardSlice"
 
 
 const BrokerResponse = () => {
+    const dispatch = useDispatch()
     const [enterqty, setEnterQty] = useState("")
+    const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
+    const [Strategy, setStrategy] = useState({ loading: true, data: [] });
+    const [abc, setAbc] = useState([]);
+
+
+    const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
+    const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
 
 
 
-    const RunSocket = async () => {
 
-        // let aa = No_Negetive_Input_regex(enterqty)
+    const getservice = async () => {
+        await dispatch(User_Dashboard_Data({ user_Id: user_Id, AdminToken: AdminToken })).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setDashboardData({
+                        loading: false,
+                        data: response.services
+                    });
+                    const filteredArray1 = response.strategy.filter(item1 =>
+                        response.services.some(item2 => item1.result._id !== item2.strategys._id)
+                    );
+                    setStrategy({
+                        loading: false,
+                        data: filteredArray1
+                    });
+                }
+            })
+    }
+    useEffect(() => {
+        getservice()
+    }, [])
 
-        // if (aa) {
-        //     console.log("negetive")
+
+
+    var CreatechannelList = "";
+    DashboardData.data && DashboardData.data?.map((item) => {
+        // if (item.exchange.includes("NSE_") || item.exchange.includes("BSE_")) {
+        //     let xchang = item.exchange.split("_")[0]
+        //     CreatechannelList += `${xchang}|${item.instrumentToken}#`
+        //     console.log("CreatechannelList", CreatechannelList);
+        // } else {
+        CreatechannelList += `${item.service.exch_seg}|${item.service.instrument_token}#`
         // }
+    })
 
 
 
+    //  SHOW lIVE PRICE
+    const ShowLivePrice = async () => {
         let type = { loginType: "API" }
-        let channelList = "NSE|11956"
-
+        let channelList = CreatechannelList
         const res = await CreateSocketSession(type)
         if (res.data.stat) {
             const handleResponse = (response) => {
                 // console.log("response", response);
+                $(".ShowLTP_" + response.tk).html(response.lp);
 
             };
-
             await ConnctSocket(handleResponse, channelList);
+        }
+    }
+
+    useEffect(() => {
+        ShowLivePrice()
+    }, [DashboardData.data])
+
+
+
+
+
+
+
+
+    const UpdateDashboard = (e) => {
+        e.preventDefaut()
+        let request = {
 
         }
-
     }
 
 
 
 
+    const setgroup_qty_value_test = (e, symboll) => {
+        let name = e.target.name
+        let value = e.target.value
+        setEnterQty(prevState => ({ ...prevState, [name]: value }));
+        setAbc(prevState => ({ ...prevState, [symboll]: enterqty }))
+    }
+    console.log("test", abc)
     return (
         <Content Page_title="Dashboard" button_status={false}>
-            <button onClick={() => RunSocket()}>run socket</button>
+            {/* <button onClick={() => RunSocket()}>run socket</button> */}
             <table className="table table-responsive-sm ">
                 <thead className='bg-primary'>
                     <tr>
@@ -57,63 +122,85 @@ const BrokerResponse = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th>1</th>
-                        <td>242.06</td>
-                        <td>
-                            ADANITRANS#
-                        </td>
-                        <td>
-                            <div className="row d-flex">
-                                <div className="col-lg-12 ">
-                                    <input type='text' name='qty' className="form-control" id='qty'
-                                        placeholder='Enter Qty'
-                                        onChange={(e) => setEnterQty(e.target.value)}
-                                        value={enterqty}
-                                    />
-                                    {/* {formik.errors[field.name] && */}
-                                    {/* <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>} */}
-                                </div>
-                            </div></td>
-                        <td className="color-primary">
-                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </td>
-                        <td className="color-primary">
-                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </td>
-                        <td className="color-primary">
-                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                        </td>
-                        <td className="color-primary">
-                            <label class="toggle">
-                                <input class="toggle-checkbox bg-primary" type="checkbox"
-                                // onChange={(e) => {
-                                //   setShowAllStratagy(e.target.checked)
-                                // }}
-                                />
-                                {/* //  ${ShowAllStratagy ? 'bg-primary' : "bg-secondary" } */}
-                                <div class={`toggle-switch
+                    {DashboardData.data && DashboardData.data.map((data, index) => {
+                        return <>
+                            <tr>
+                                <th>{index + 1}</th>
+                                <td className={`ShowLTP_${data.service.instrument_token}`}>
+                                </td>
+                                <td>
+                                    {data.service.name}
+                                </td>
+                                <td>
+                                    <div className="row d-flex">
+                                        <div className="col-lg-12 ">
+                                            <input key={index} type='text' name='qty' className="form-control" id='qty'
+                                                placeholder='Enter Qty'
 
-                 `}></div>
-                            </label>
+                                                onChange={(e) => setgroup_qty_value_test(e, data.service.name)
 
-                        </td>
-                    </tr>
+                                                    //  setEnterQty(e.target.value)
+                                                }
+                                            // value={enterqty}
+                                            />
+                                        </div>
+                                    </div></td>
+                                <td className="color-primary">
+                                    <select name='strategy' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name)}>
+                                        <option value="1" className='text-success' selected disabled>{data.strategys.strategy_name}</option>
+                                        {Strategy.data && Strategy.data.map((item) => {
+                                            return <option className='text-danger' value={item.result._id}>{item.result.strategy_name}</option>
+                                        })}
+                                    </select>
+                                </td>
+                                <td className="color-primary">
+                                    <select name='ordertype' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name)}>
+                                        <option value="1">MARKET</option>
+                                        <option value="2">LIMIT</option>
+                                        <option value="3">STOPLOSS LIMIT</option>
+                                        <option value="4">STOPLOSS MARKET</option>
+                                    </select>
+                                </td>
+                                <td className="color-primary">
+
+                                    <select name='producttype' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name)}>
+                                        <option value="1">CNC</option>
+                                        <option value="2">MIS</option>
+                                        <option value="3">BO</option>
+                                        <option value="4">CO</option>
+                                    </select>
+                                </td>
+                                <td className="color-primary">
+                                    <label class="toggle">
+                                        <input class="toggle-checkbox bg-primary" type="checkbox"
+                                            defaultChecked={data.active_status === "1"}
+                                            name='trading'
+                                            onChange={(e) => setgroup_qty_value_test(e, data.service.name)}
+                                        // onChange={(e) => {
+                                        //   setShowAllStratagy(e.target.checked)
+                                        // }}
+                                        />
+                                        {/* //  ${ShowAllStratagy ? 'bg-primary' : "bg-secondary" } */}
+                                        <div class={`toggle-switch ${data.active_status === "1" ? 'bg-primary' : "bg-secondary"}
+
+`}></div>
+                                    </label>
+
+                                </td>
+                            </tr>
+
+                        </>
+
+                    }
+
+
+                    )}
+
+
 
                 </tbody>
             </table>
+            <button type="button" class="btn btn-outline-primary" onClick={(e) => UpdateDashboard(e)}>Update</button>
         </Content>
     )
 }

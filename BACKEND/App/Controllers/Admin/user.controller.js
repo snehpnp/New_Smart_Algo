@@ -196,19 +196,10 @@ class Employee {
                     try {
                         Strategies.forEach((data) => {
 
-                            // STRATEGY ADD 
-                            Strategies.forEach((data) => {
-                                const User_strategy_client = new strategy_client(
-                                    {
-                                        strategy_id: data.id,
-                                        user_id: User_id
-                                    })
-                                User_strategy_client.save()
-                            })
-
+                            // STRATEGY ADD
                             const User_strategy_client = new strategy_client(
                                 {
-                                    strategy_id: data._id,
+                                    strategy_id: data.id,
                                     user_id: User_id
                                 })
                             User_strategy_client.save()
@@ -234,16 +225,7 @@ class Employee {
                                     uniqueUserService: User_id + "_" + data.Service_id
                                 })
                             User_client_services.save()
-                            console.log({
-                                user_id: User_id,
-                                group_id: group_service,
-                                service_id: data.Service_id,
-                                strategy_id: Strategies[0].id,
-                                uniqueUserService: User_id + "_" + data.Service_id
-                            });
                         })
-
-
 
                     } else {
 

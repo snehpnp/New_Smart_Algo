@@ -6,6 +6,8 @@ import Content from "../../Components/Dashboard/Content/Content";
 import Formikform from "../../Components/ExtraComponents/Form/Formik_form";
 import { useFormik } from "formik";
 import * as valid_err from "../../Utils/Common_Messages";
+import { fDate, fDateTime } from "../../Utils/Date_formet";
+
 import Theme_Content from "../Dashboard/Content/Theme_Content";
 import { User_Profile } from "../../ReduxStore/Slice/Common/commoSlice.js";
 import { Reset_Password } from "../../ReduxStore/Slice/Auth/AuthSlice";
@@ -72,11 +74,11 @@ const UserProfile = () => {
       await dispatch(Reset_Password(req))
         .unwrap()
         .then((response) => {
-            console.log("test", response);
-            if (response.status) {
-                toast.success(response.message);
+          console.log("test", response);
+          if (response.status) {
+            toast.success(response.message);
 
-            } if (response.response.status === 409) {
+          } if (response.response.status === 409) {
 
             toast.error(response.response.data.message);
           }
@@ -217,44 +219,42 @@ const UserProfile = () => {
                             </div>
                             <div className="col-sm-9 col-7">
                               <span>
-                                {UserDetails && UserDetails.data.CreateDate}
+                                {UserDetails && fDateTime(UserDetails.data.CreateDate)}
                               </span>
                             </div>
                           </div>
                           <div className="row mb-2">
                             <div className="col-sm-3 col-5">
                               <h5 className="f-w-500">
-                                Location <span className="pull-end">:</span>
+                                End Date <span className="pull-end">:</span>
                               </h5>
                             </div>
                             <div className="col-sm-9 col-7">
                               <span>
-                                {UserDetails && UserDetails.data.EndDate}
+                                {UserDetails && fDateTime(UserDetails.data.EndDate)}
                               </span>
                             </div>
                           </div>
                           <div className="row mb-2">
                             <div className="col-sm-3 col-5">
                               <h5 className="f-w-500">
-                                Year Experience{" "}
+                                Client Type
                                 <span className="pull-end">:</span>
                               </h5>
                             </div>
                             <div className="col-sm-9 col-7">
                               <span>
                                 {UserDetails &&
-                                UserDetails.data.ActiveStatus === 1
-                                  ? "Live User"
-                                  : "Demo"}
+                                  UserDetails.data.license_type === "1" ? "Live" : UserDetails && UserDetails.data.license_type === "2" ? "Demo" : "2 Days"}
                               </span>
                             </div>
                           </div>
                         </div>
                       </div>
                       <div id="profile-settings" className="tab-pane fade mt-3">
-                      <h4 className="text-primary mb-4">
-                            Change Password
-                          </h4>
+                        <h4 className="text-primary mb-4">
+                          Change Password
+                        </h4>
                         <Formikform
                           fieldtype={fields.filter(
                             (field) =>

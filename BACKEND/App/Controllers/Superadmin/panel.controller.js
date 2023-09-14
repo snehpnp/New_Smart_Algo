@@ -2,6 +2,8 @@
 const db = require('../../Models');
 const panel_model = db.panel_model;
 const User = db.user;
+const ApiCreateInfo = db.api_create_info;
+
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 const { formattedDateTime } = require('../../Helper/time.helper')
 const mongoose = require('mongoose');
@@ -44,7 +46,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Theme error-", error);
+            // console.log("Theme error-", error);
             logger.error('Server Error', { role: "SUPERADMIN", user_id: parent_id });
 
         }
@@ -72,7 +74,7 @@ class Panel {
                 })
 
         } catch (error) {
-            console.log("Theme error-", error);
+            // console.log("Theme error-", error);
             logger.error('Server Error', { role: "SUPERADMIN", user_id: parent_id });
 
         }
@@ -93,7 +95,7 @@ class Panel {
             res.send({ status: true, msg: "Get User", data: EmailCheck })
 
         } catch (error) {
-            console.log("Theme error-", error);
+            // console.log("Theme error-", error);
         }
     }
 
@@ -107,21 +109,21 @@ class Panel {
             const desiredDomain = 'your_desired_domain_value'; // Replace with the desired domain value
 
             const Panle_information = await panel_model.aggregate([
-              {
-                '$match': {
-                  'domain': domain
+                {
+                    '$match': {
+                        'domain': domain
+                    }
+                },
+                {
+                    '$lookup': {
+                        'from': 'theme_lists',
+                        'localField': 'theme_id',
+                        'foreignField': '_id',
+                        'as': 'theme_data'
+                    }
                 }
-              },
-              {
-                '$lookup': {
-                  'from': 'theme_lists',
-                  'localField': 'theme_id',
-                  'foreignField': '_id',
-                  'as': 'theme_data'
-                }
-              }
             ]);
-            
+
 
 
             // CHECK IF PANEL EXIST OR NOT
@@ -131,11 +133,13 @@ class Panel {
             res.send({ status: true, msg: "Get Panel Information", data: Panle_information })
 
         } catch (error) {
-            console.log("Theme error-", error);
+            // console.log("Theme error-", error);
         }
     }
 
     // GET All Panel
+
+
     async GetAllPanel(req, res) {
         try {
 
@@ -173,6 +177,110 @@ class Panel {
         }
     }
 
+
+
+    // Create APi Infor
+    async CreateAPiInfo(req, res) {
+        try {
+            const { title, description, steponeurl, imageone, steptwourl, imagetwo, stepthree, imagethree, note, youtubeurl } = req.body;
+            // const images = req.files.map((file) => file.buffer.toString('base64'));
+
+            // Create a new entry in your MongoDB collection
+            let a = new ApiCreateInfo({
+                title,
+                description,
+                steponeurl,
+                imageone,
+                steptwourl,
+                imagetwo,
+                stepthree,
+                imagethree,
+                note,
+                youtubeurl,
+            })
+            var ass = a.save()
+                .then((data) => {
+
+                    // console.log("data", data)
+                    if (data) {
+                        res.status(200).send({ status: true, msg: 'Api Create successfully' });
+
+                    }
+                })
+                .catch((err) => {
+                    // console.log("wrro", err)
+                    if (err.keyValue) {
+                        res.send({ status: false, msg: `name already exists`, error: err.keyValue });
+                    } else {
+                        res.send({ status: false, msg: 'Internal server error', error: err });
+
+                    }
+                })
+
+
+        } catch (error) {
+            // console.error(error.keyValue);
+            res.send({ status: false, msg: 'Internal server error', error: error.keyValue });
+        }
+    }
+
+    // Get All APi Infor
+    async GetAllAPiInfo(req, res) {
+        try {
+            // THEME LIST DATA
+            const getAllpanel = await ApiCreateInfo
+                .find({})
+
+            // IF DATA NOT EXIST
+            if (getAllpanel.length == 0) {
+                res.send({ status: false, msg: "Empty data", data: getAllpanel })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All Api Info",
+                data: getAllpanel,
+            })
+
+
+        } catch (error) {
+            console.log("Get all Info error-", error);
+        }
+    }
+
+
+
+    // Update APi Info
+    async UpdateAPiInfo(req, res) {
+        try {
+            // const {  data } = req.body
+
+
+            ApiCreateInfo.findById(req.body._id)
+                .then(async (value) => {
+                    if (!value) {
+                        return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
+                    }
+
+                    const filter = { _id: req.body._id };
+                    const updateOperation = { $set: req.body };
+                    const result = await ApiCreateInfo.updateOne(filter, updateOperation);
+
+                    if (!result) {
+                        return res.status(409).json({ status: false, msg: 'Company not update', data: [] });
+                    }
+                    // logger.info('Update Successfully', { role: "SUPERADMIN", user_id: parent_id });
+                    return res.status(200).json({ status: true, msg: 'Update Successfully.', data: result });
+
+                })
+
+        } catch (error) {
+            console.log("APi Info error-", error);
+            // logger.error('Server Error', { role: "SUPERADMIN", user_id: parent_id });
+
+        }
+    }
 
 
 }

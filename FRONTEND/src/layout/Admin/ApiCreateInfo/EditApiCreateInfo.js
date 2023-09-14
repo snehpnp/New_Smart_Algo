@@ -4,8 +4,9 @@ import Content from "../../../Components/Dashboard/Content/Content"
 import AlertToast from '../../../Components/ExtraComponents/Alert_Toast'
 import Formikform1 from "../../../Components/ExtraComponents/Form/Formik_form1"
 import { useFormik } from 'formik';
+import { useNavigate, useLocation } from "react-router-dom";
+
 import * as  valid_err from "../../../Utils/Common_Messages"
-import { useNavigate } from "react-router-dom";
 import { Email_regex, Mobile_regex } from "../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
@@ -13,13 +14,17 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 
 import toast, { Toaster } from 'react-hot-toast';
-import { Create_Api_Information } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+import { Update_Api_Info_Theme } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 
 
-const Create_Api_Info = () => {
+const Edit_Create_Api_Info = () => {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const location = useLocation()
+
+    console.log("location", location.state)
+
 
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
     const token = JSON.parse(localStorage.getItem("user_details")).token;
@@ -34,27 +39,26 @@ const Create_Api_Info = () => {
 
     const formik = useFormik({
         initialValues: {
-            "title": null,
-            "description": null,
-            "steponeurl": null,
-            "imageone": null,
-            "steptwourl": null,
-            "imagetwo": null,
-            "stepthree": null,
-            "imagethree": null,
-            "note": null,
-            "youtubeurl": null
+            "title": location.state ? location.state.title : null,
+            "description": location.state ? location.state.description : null,
+            "steponeurl": location.state ? location.state.steponeurl : null,
+            "imageone": location.state ? location.state.imageone : null,
+            "steptwourl": location.state ? location.state.steptwourl : null,
+            "imagetwo": location.state ? location.state.imagetwo : null,
+            "stepthree": location.state ? location.state.stepthree : null,
+            "imagethree": location.state ? location.state.imagethree : null,
+            "note": location.state ? location.state.note : null,
+            "youtubeurl": location.state ? location.state.youtubeurl : null
         },
         validate: (values) => {
 
             const errors = {};
-            // if (!values.msgbox) {
-            //     errors.msgbox = valid_err.USERNAME_ERROR;
-            // }
+
             return errors;
         },
         onSubmit: async (values) => {
             const req = {
+                "_id": location.state && location.state._id ,
                 "title": values.title,
                 "description": values.description,
                 "steponeurl": values.steponeurl,
@@ -72,20 +76,20 @@ const Create_Api_Info = () => {
 
             // return
 
-            await dispatch(Create_Api_Information({ req: req, token: token })).unwrap().then((response) => {
+            await dispatch(Update_Api_Info_Theme({ req: req, token: token })).unwrap().then((response) => {
 
-                console.log("response" ,response)
+                console.log("response", response)
                 if (response.status === 409) {
                     toast.error(response.data.msg);
                 }
                 else if (response.status) {
-                      toast.success(response.msg);
-                      setTimeout(() => {
+                    toast.success(response.msg);
+                    setTimeout(() => {
                         navigate("/admin/apicreateinfo")
-                      }, 1000);
+                    }, 1000);
                 }
                 else if (!response.status) {
-                      toast.error(response.msg);
+                    toast.error(response.msg);
                 }
 
             })
@@ -93,7 +97,7 @@ const Create_Api_Info = () => {
     });
 
 
-
+    console.log("initialValues", formik.values)
 
 
 
@@ -127,10 +131,10 @@ const Create_Api_Info = () => {
 
 
     return <>
-        <Content Page_title="Help Center" button_title="Back" route="/admin/apicreateinfo" >
-            <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add"
+        <Content Page_title="Edit Api" button_title="Back" route="/admin/apicreateinfo" >
+            <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
             />
-        <ToastButton />
+            <ToastButton />
 
         </Content>
         )
@@ -138,7 +142,7 @@ const Create_Api_Info = () => {
 }
 
 
-export default Create_Api_Info
+export default Edit_Create_Api_Info
 
 
 
