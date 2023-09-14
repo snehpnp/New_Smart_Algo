@@ -291,7 +291,7 @@ app.post('/broker-signals', async (req, res) => {
               var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy }
 
               if (segment == "C") {
-                findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
+                findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy }
               } else if (segment == "F") {
                 findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
 
@@ -346,7 +346,7 @@ app.post('/broker-signals', async (req, res) => {
                   entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)).toString(),
                   entry_dt_date: current_date,
                 }
-
+                // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
                 const updatedDocument = await MainSignals.findByIdAndUpdate(findMainSignals[0]._id, updatedData)
 
               }
@@ -378,41 +378,38 @@ app.post('/broker-signals', async (req, res) => {
 
                 var ExitMainSignals = await MainSignals.find(findSignal)
 
+                // // ExitMainSignals  FIND IN COLLECTION
+                if (ExitMainSignals.length == 0) {
 
+                  var Exit_MainSignals_req = {
+                    symbol: input_symbol,
+                    entry_type: type,
+                    exit_type: "",
+                    entry_price: price,
+                    exit_price: "",
+                    entry_qty_percent: qty_percent,
+                    exit_qty_percent: "",
+                    entry_dt_date: current_date,
+                    exit_dt_date: "",
+                    dt: Math.round(+new Date() / 1000),
+                    dt_date: dt_date,
+                    exchange: EXCHANGE,
+                    strategy: strategy,
+                    option_type: option_type,
+                    strike: strike,
+                    expiry: expiry,
+                    segment: segment,
+                    trade_symbol: trade_symbol,
+                    client_persnal_key: "",
+                    token: token[0].instrument_token
+                  }
+                  console.log("Exit_MainSignals_req",Exit_MainSignals_req);
+                  // const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
+                  // await Entry_MainSignals.save();
 
-
-                // // MainSignals FIND IN COLLECTION
-                // var findMainSignals = await MainSignals.find({dt_date:dt_date})
-                // if (findMainSignals.length == 0) {
-
-                //   var Entry_MainSignals_req = {
-                //     symbol: input_symbol,
-                //     entry_type: type,
-                //     exit_type: "",
-                //     entry_price: price,
-                //     exit_price: "",
-                //     entry_qty_percent: qty_percent,
-                //     exit_qty_percent: "",
-                //     entry_dt_date: current_date,
-                //     exit_dt_date: "",
-                //     dt: Math.round(+new Date() / 1000),
-                //     dt_date: dt_date,
-                //     exchange: EXCHANGE,
-                //     strategy: strategy,
-                //     option_type: option_type,
-                //     strike: strike,
-                //     expiry: expiry,
-                //     segment: segment,
-                //     trade_symbol: trade_symbol,
-                //     client_persnal_key: "",
-                //     token: token[0].instrument_token
-                //   }
-                //   const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
-                //   await Entry_MainSignals.save();
-
-                // } else {
-                //   console.log("PRIVIOUS SEGNAL UPDATE");
-                // }
+                } else {
+                  console.log("PRIVIOUS SEGNAL UPDATE");
+                }
 
 
               }
