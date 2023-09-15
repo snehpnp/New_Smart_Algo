@@ -103,7 +103,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
           //  TOKEN  CREATE FUNCTION
-          var token
+          var token = ""
           var instrument_query = { name: input_symbol }
           if (segment == 'C' || segment == 'c') {
             var instrument_query = { name: input_symbol }
@@ -155,6 +155,7 @@ app.post('/broker-signals', async (req, res) => {
             d.getMinutes(),
             d.getSeconds()
             ].join(':');
+            
             var dt_date = [d.getFullYear(),
             d.getMonth() + 1,
             d.getDate(),
@@ -259,31 +260,36 @@ app.post('/broker-signals', async (req, res) => {
               strike = strike;
             }
 
+           try { 
             var Signal_req = {
-              symbol: input_symbol,
-              type: type,
-              price: price,
-              qty_percent: qty_percent,
-              exchange: EXCHANGE,
-              sq_value: sq_value,
-              sl_value: sl_value,
-              tsl: tsl,
-              tr_price: tr_price,
-              dt: Math.round(+new Date() / 1000),
-              dt_date: current_date,
-              strategy: strategy,
-              option_type: option_type,
-              strike: strike,
-              expiry: expiry,
-              segment: segment,
-              trade_symbol: trade_symbol,
-              client_persnal_key: "",
-              token: token[0].instrument_token
-            }
+            symbol: input_symbol,
+            type: type,
+            price: price,
+            qty_percent: qty_percent,
+            exchange: EXCHANGE,
+            sq_value: sq_value,
+            sl_value: sl_value,
+            tsl: tsl,
+            tr_price: tr_price,
+            dt: Math.round(+new Date() / 1000),
+            dt_date: dt_date,
+            strategy: strategy,
+            option_type: option_type,
+            strike: strike,
+            expiry: expiry,
+            segment: segment,
+            trade_symbol: trade_symbol,
+            client_persnal_key: "",
+            token: token[0].instrument_token
+          }
+          const Signal_req1 = new Signals(Signal_req)
+          await Signal_req1.save();
+           } catch (error) {
+            return res.send("ok")
+           }
 
             // SIGNALS TABLE DATA INSERT
-            const Signal_req1 = new Signals(Signal_req)
-            await Signal_req1.save();
+       
 
 
             // ENTRY OR EXIST CHECK
@@ -379,7 +385,7 @@ app.post('/broker-signals', async (req, res) => {
                 var ExitMainSignals = await MainSignals.find(findSignal)
 
                 // // ExitMainSignals  FIND IN COLLECTION
-                if (ExitMainSignals.length == 0) {
+                if (ExitMainSignals.length != 0) {
 
                   var Exit_MainSignals_req = {
                     symbol: input_symbol,
@@ -408,7 +414,13 @@ app.post('/broker-signals', async (req, res) => {
                   // await Entry_MainSignals.save();
 
                 } else {
+
+
+
                   console.log("PRIVIOUS SEGNAL UPDATE");
+
+
+                  
                 }
 
 
