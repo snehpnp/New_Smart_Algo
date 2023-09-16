@@ -171,7 +171,7 @@ console.log("CheckUser",CheckUser);
                   <div className="Api Login m-2"><label class="switch" >
                     <input type="checkbox" className="bg-primary"
                       checked={UserDetails.TradingStatus === "on" ? true : false}
-                      onClick={(e) => LogIn_WIth_Api(e.target.checked, UserDetails.broker, UserDetails.TradingStatus)}
+                      onClick={(e) => LogIn_WIth_Api(e.target.checked, UserDetails.broker, UserDetails.TradingStatus , UserDetails)}
                     />
                     <span class="slider round"></span>
                   </label>

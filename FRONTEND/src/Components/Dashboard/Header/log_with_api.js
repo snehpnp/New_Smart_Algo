@@ -5,6 +5,7 @@
 
 
 export const loginWithApi = (broker_id, UserDetails) => {
+    console.log("UserDetails",UserDetails);
     if (broker_id === "1" || broker_id === 1) {
         alert("broker-1")
     }

@@ -1,7 +1,7 @@
 
 "use strict";
 require('dotenv').config();
-const mongoConnection = require('./Connection/mongo_connection')
+const connectToDatabase = require('../BACKEND/App/Connection/mongo_connection')
 const express = require("express");
 const app = express();
 
@@ -11,12 +11,19 @@ const https = require('https');
 const socketIo = require("socket.io");
 const bodyparser = require('body-parser')
 
-const db = require('./Models');
+const db = require('../BACKEND/App/Models');
 const services = db.services;
 const Alice_token = db.Alice_token;
 const Signals = db.Signals;
 const MainSignals = db.MainSignals;
+const AliceViewModel = db.AliceViewModel;
 
+
+// CONNECTION FILE IN MONGOODE DATA BASE 
+const MongoClient = require('mongodb').MongoClient;
+
+const uri = 'mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net';
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 
@@ -155,7 +162,7 @@ app.post('/broker-signals', async (req, res) => {
             d.getMinutes(),
             d.getSeconds()
             ].join(':');
-            
+
             var dt_date = [d.getFullYear(),
             d.getMonth() + 1,
             d.getDate(),
@@ -260,36 +267,36 @@ app.post('/broker-signals', async (req, res) => {
               strike = strike;
             }
 
-           try { 
-            var Signal_req = {
-            symbol: input_symbol,
-            type: type,
-            price: price,
-            qty_percent: qty_percent,
-            exchange: EXCHANGE,
-            sq_value: sq_value,
-            sl_value: sl_value,
-            tsl: tsl,
-            tr_price: tr_price,
-            dt: Math.round(+new Date() / 1000),
-            dt_date: dt_date,
-            strategy: strategy,
-            option_type: option_type,
-            strike: strike,
-            expiry: expiry,
-            segment: segment,
-            trade_symbol: trade_symbol,
-            client_persnal_key: "",
-            token: token[0].instrument_token
-          }
-          const Signal_req1 = new Signals(Signal_req)
-          await Signal_req1.save();
-           } catch (error) {
-            return res.send("ok")
-           }
+            try {
+              var Signal_req = {
+                symbol: input_symbol,
+                type: type,
+                price: price,
+                qty_percent: qty_percent,
+                exchange: EXCHANGE,
+                sq_value: sq_value,
+                sl_value: sl_value,
+                tsl: tsl,
+                tr_price: tr_price,
+                dt: Math.round(+new Date() / 1000),
+                dt_date: dt_date,
+                strategy: strategy,
+                option_type: option_type,
+                strike: strike,
+                expiry: expiry,
+                segment: segment,
+                trade_symbol: trade_symbol,
+                client_persnal_key: "",
+                token: token[0].instrument_token
+              }
+              const Signal_req1 = new Signals(Signal_req)
+              await Signal_req1.save();
+            } catch (error) {
+              return res.send("ok")
+            }
 
             // SIGNALS TABLE DATA INSERT
-       
+
 
 
             // ENTRY OR EXIST CHECK
@@ -387,40 +394,21 @@ app.post('/broker-signals', async (req, res) => {
                 // // ExitMainSignals  FIND IN COLLECTION
                 if (ExitMainSignals.length != 0) {
 
-                  var Exit_MainSignals_req = {
-                    symbol: input_symbol,
-                    entry_type: type,
-                    exit_type: "",
-                    entry_price: price,
-                    exit_price: "",
-                    entry_qty_percent: qty_percent,
-                    exit_qty_percent: "",
-                    entry_dt_date: current_date,
-                    exit_dt_date: "",
-                    dt: Math.round(+new Date() / 1000),
-                    dt_date: dt_date,
-                    exchange: EXCHANGE,
-                    strategy: strategy,
-                    option_type: option_type,
-                    strike: strike,
-                    expiry: expiry,
-                    segment: segment,
-                    trade_symbol: trade_symbol,
-                    client_persnal_key: "",
-                    token: token[0].instrument_token
+                  // IF EXIST ENTRY OF THIS EXIT TRADE
+                  var updatedData = {
+                    exit_type: type,
+                    exit_price: price,
+                    exit_qty_percent: qty_percent,
+                    exit_dt_date: current_date,
                   }
-                  console.log("Exit_MainSignals_req",Exit_MainSignals_req);
-                  // const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
-                  // await Entry_MainSignals.save();
 
+                  // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
+                  const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
+                  console.log("updatedDocument", updatedDocument);
                 } else {
 
+                  console.log("PRIVIOUS SEGNAL UPDATE")
 
-
-                  console.log("PRIVIOUS SEGNAL UPDATE");
-
-
-                  
                 }
 
 
@@ -428,23 +416,85 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+
+              // HIT TRADE IN BROKER SERVER
+              await client.connect();
+
+              const db = client.db(); // Access the default database or specify a database name here
+              const collection = db.collection('aliceView');
+              
+              var query = {"strategys.strategy_name":strategy,"service.name":input_symbol}
+
+              // Example: Find all documents in the collection
+              getAllDocuments();
+              async function getAllDocuments() {
+                const documents = await collection.find(query).toArray();
+                console.log("All documents:", documents);
+
+                if (documents.length > 0) { 
+
+                  async function runFunctionWithArray(array) {
+
+                    // Run a function with the four elements of the array simultaneously
+
+                    const promises = array.map((item) => {
+
+                        return new Promise(resolve => {
+
+                            // Simulate an asynchronous task (replace with your own function)
+
+                            setTimeout(() => {
+
+                                const currentDate = new Date();
+
+                                const milliseconds = currentDate.getTime();
+
+                                //console.log(`Running Time -- ${new Date()} function with element: ${item.id}`);
+
+                                // connection.query('INSERT INTO `broker_response`(`client_id`,`receive_signal`,`trading_status`,`created_at`) VALUES ("' + item.id + '","' + signal_req + '","ON","' + get_date() + '")', (err1, bro_res_last) => {
+                                //     //    console.log('eroor query broker response -', err1);
+                                //     //console.log("angel result before",item.id,"Time - ",new Date() );
+
+                                //     var bro_res_last_id = bro_res_last.insertId;
+                                //     aliceblue.place_order(item, signal, connection, last_signal_id, connection2, bro_res_last_id, filePath, instrument_token_symbol[0]);
+                                // });
+
+                                resolve();
+
+                            }, 0);
+
+                        });
+
+                    });
+
+
+                    await Promise.all(promises);
+
+                }
+
+                runFunctionWithArray(documents);
+                }
+              }
+              
+
+
+
+
+
           } else {
             console.log("IF SIGNEL KEY LIKE CLIENT KEY IN TRADING VIEW")
           }
 
-
-
-          res.send({ msg: FIRST3_KEY })
-
+          return res.send({ msg: FIRST3_KEY })
 
         } else {
-          res.send('Incorrect Signal Key');
+          return res.send('Incorrect Signal Key');
         }
 
 
       } else {
         console.log('No Signal Key Recevie');
-        res.send("No Signal Key Recevie");
+        return res.send("No Signal Key Recevie");
       }
 
     } else {
