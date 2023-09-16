@@ -54,6 +54,20 @@ const corsOpts = {
 };
 app.use(cors(corsOpts));
 
+var d = new Date;
+var current_date = [d.getFullYear(),
+d.getMonth() + 1,
+d.getDate(),
+].join('/') + ' ' + [d.getHours(),
+d.getMinutes(),
+d.getSeconds()
+].join(':');
+
+var dt_date = [d.getFullYear(),
+d.getMonth() + 1,
+d.getDate(),
+].join('/');
+
 
 
 // BROKER REQUIRES
@@ -114,21 +128,76 @@ app.post('/broker-signals', async (req, res) => {
           }
 
 
+
+
+
+          // DATE MONTH SET
+          const day_expiry = expiry.substr(0, 2);
+          var dateHash = {
+            'Jan': '01',
+            'Feb': '02',
+            'Mar': '03',
+            'Apr': '04',
+            'May': '05',
+            'Jun': '06',
+            'Jul': '07',
+            'Aug': '08',
+            'Sep': '09',
+            'Oct': '10',
+            'Nov': '11',
+            'Dec': '12'
+          }; // 2009-11-10
+          const month_expiry = expiry.substr(2, 2);
+
+          function getKeyByValue(object, value) {
+            return Object.keys(object).find(key => object[key] == value);
+          }
+          const ex_day_expiry = getKeyByValue(dateHash, month_expiry).toUpperCase();
+          const ex_year_expiry = expiry.substr(-2);
+
+
+
+
           //  TOKEN  CREATE FUNCTION
           var token = ""
           var instrument_query = { name: input_symbol }
+          var EXCHANGE = "NFO";
+          var trade_symbol = '';
+          var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy }
+
           if (segment == 'C' || segment == 'c') {
             instrument_query = { name: input_symbol }
+            EXCHANGE = "NSE";
+            trade_symbol = input_symbol;
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy }
+
           } else if (segment == 'F' || segment == 'f') {
             instrument_query = { symbol: input_symbol, segment: "F", expiry: expiry }
+            EXCHANGE = "NFO";
+            trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
+
           } else if (segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
             instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
+            EXCHANGE = "NFO";
+            trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + is_CE_val_option;
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike }
+
           } else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
+            EXCHANGE = "MCX";
+            trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + is_CE_val_option;
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
+
           } else if (segment == 'MF' || segment == 'mf') {
             instrument_query = { symbol: input_symbol, segment: "MF", expiry: expiry }
+            EXCHANGE = "MCX";
+            trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
+
           } else if (segment == 'CF' || segment == 'Cf') {
             instrument_query = { symbol: input_symbol, segment: "CF", expiry: expiry }
+            EXCHANGE = "CDS";
           }
 
           // TOKEN SET IN TOKEN
@@ -138,70 +207,10 @@ app.post('/broker-signals', async (req, res) => {
             token = await Alice_token.find(instrument_query).maxTimeMS(20000).exec();
           }
 
-
-
-
-          // EXCHANGE CREATE USING SEGMENT 
-          var EXCHANGE = "NFO";
-          if (segment == 'C' || segment == 'c') {
-            EXCHANGE = "NSE";
-          } else if (segment == 'F' || segment == 'f' || segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
-            EXCHANGE = "NFO";
-          } else if (segment == 'MF' || segment == 'mf' || segment == 'MO' || segment == 'mo') {
-            EXCHANGE = "MCX";
-          }
-          else if (segment == 'CF' || segment == 'cf' || segment == 'CO' || segment == 'co') {
-            EXCHANGE = "CDS";
-          }
-
-
           // IF CHECK SIGNEL KET IS PANEL OR CLIENT
           if (process.env.PANEL_KEY == client_key) {
 
-
-            var d = new Date;
-            var current_date = [d.getFullYear(),
-            d.getMonth() + 1,
-            d.getDate(),
-            ].join('/') + ' ' + [d.getHours(),
-            d.getMinutes(),
-            d.getSeconds()
-            ].join(':');
-
-            var dt_date = [d.getFullYear(),
-            d.getMonth() + 1,
-            d.getDate(),
-            ].join('/');
-
-
-
-
-            // DATE MONTH SET
-            const day_expiry = expiry.substr(0, 2);
-            var dateHash = {
-              'Jan': '01',
-              'Feb': '02',
-              'Mar': '03',
-              'Apr': '04',
-              'May': '05',
-              'Jun': '06',
-              'Jul': '07',
-              'Aug': '08',
-              'Sep': '09',
-              'Oct': '10',
-              'Nov': '11',
-              'Dec': '12'
-            }; // 2009-11-10
-            const month_expiry = expiry.substr(2, 2);
-
-            function getKeyByValue(object, value) {
-              return Object.keys(object).find(key => object[key] == value);
-            }
-            const ex_day_expiry = getKeyByValue(dateHash, month_expiry).toUpperCase();
-            const ex_year_expiry = expiry.substr(-2);
-
             option_type = option_type.toUpperCase();
-
 
             var is_CE_val_option = 'PE';
             if (option_type == 'CALL') {
@@ -209,68 +218,25 @@ app.post('/broker-signals', async (req, res) => {
             }
 
 
-            // SEGMENT WISE TRADE_SYMBOL SET
-            var trade_symbol = '';
-            if (segment == "C") {
-              trade_symbol = input_symbol;
-            } else if (segment == "F") {
-              trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-
-            } else if ((segment == "O") || (segment == "FO")) {
-              trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + is_CE_val_option;
-
-            } else if (segment == "MO") {
-              trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + is_CE_val_option;
-
-            } else if (segment == "FO") {
-              trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + is_CE_val_option;
-
-            } else if (segment == "MF") {
-              trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-            }
-
-
             // IF SQ_PRICE
             var sq_value;
-            if (sq_value == undefined) {
-              sq_value = "0";
-            } else {
-              sq_value = sq_value
-            }
-
+            if (sq_value == undefined) { sq_value = "0" } else { sq_value = sq_value }
 
             // IF SL_PRICE
             var sl_value;
-            if (sl_value == undefined) {
-              sl_value = "0";
-            } else {
-              sl_value = sl_value
-            }
+            if (sl_value == undefined) { sl_value = "0" } else { sl_value = sl_value }
 
             // IF TR_PRICE
             var tr_price;
-            if (tr_price == undefined) {
-              tr_price = "0";
-            } else {
-              tr_price = tr_price
-            }
+            if (tr_price == undefined) { tr_price = "0" } else { tr_price = tr_price }
 
             // IF TSL
             var tsl;
-            if (tsl == undefined) {
-              tsl = "0";
-            } else {
-              tsl = tsl
-            }
-
+            if (tsl == undefined) { tsl = "0" } else { tsl = tsl }
 
             // STRICK
             var strike;
-            if (strike == undefined || strike == '') {
-              strike = "0";
-            } else {
-              strike = strike;
-            }
+            if (strike == undefined || strike == '') { strike = "0" } else { strike = strike }
 
             try {
               var Signal_req = {
@@ -294,40 +260,18 @@ app.post('/broker-signals', async (req, res) => {
                 client_persnal_key: "",
                 token: token[0].instrument_token
               }
-              const Signal_req1 = new Signals(Signal_req)
+              let Signal_req1 = new Signals(Signal_req)
               await Signal_req1.save();
             } catch (error) {
               return res.send("ok")
             }
 
-            // SIGNALS TABLE DATA INSERT
-
-
 
             // ENTRY OR EXIST CHECK
             if (type == "LE" || type == "le") {
-              var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy }
-
-              if (segment == "C") {
-                findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy }
-              } else if (segment == "F") {
-                findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
-
-              } else if ((segment == "O") || (segment == "FO")) {
-                findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike }
-
-              } else if (segment == "MO") {
-                findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
-
-              } else if (segment == "FO") {
-                findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
-
-              } else if (segment == "MF") {
-                findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
-              }
 
               var findMainSignals = await MainSignals.find(findSignal)
-
+              console.log("findMainSignals", findMainSignals);
 
 
               // MainSignals FIND IN COLLECTION
@@ -374,26 +318,6 @@ app.post('/broker-signals', async (req, res) => {
               // START FOR EXIST SIGNAL UPDATE
               if (type == "LX" || type == "lx") {
 
-                var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy }
-
-                if (segment == "C") {
-                  findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
-                } else if (segment == "F") {
-                  findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
-
-                } else if ((segment == "O") || (segment == "FO")) {
-                  findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike }
-
-                } else if (segment == "MO") {
-                  findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
-
-                } else if (segment == "FO") {
-                  findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
-
-                } else if (segment == "MF") {
-                  findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
-                }
-
                 var ExitMainSignals = await MainSignals.find(findSignal)
 
                 // // ExitMainSignals  FIND IN COLLECTION
@@ -415,8 +339,6 @@ app.post('/broker-signals', async (req, res) => {
                   console.log("PRIVIOUS SEGNAL UPDATE")
 
                 }
-
-
               }
 
 
@@ -430,66 +352,72 @@ app.post('/broker-signals', async (req, res) => {
             var query = { "strategys.strategy_name": strategy, "service.name": input_symbol }
 
             // Example: Find all documents in the collection
-            getAllDocuments();
-            async function getAllDocuments() {
-              const documents = await collection.find(query).toArray();
-              // console.log("All documents:", documents);
-
-              if (documents.length > 0) {
-
-                async function runFunctionWithArray(array) {
-
-                  // Run a function with the four elements of the array simultaneously
-
-                  const promises = array.map((item) => {
-
-                    return new Promise((resolve) => {
-
-                      // Simulate an asynchronous task (replace with your own function)
-
-                      setTimeout(async () => {
-
-                        const currentDate = new Date();
-
-                        const milliseconds = currentDate.getTime();
-
-                        console.log(`Running Time -- ${new Date()} function with element: ${item._id}`);
-
-
-                        var brokerResponse = {
-                          user_id: item._id,
-                          receive_signal: signal_req
-                        }
-
-                        const newCategory = new BrokerResponse(brokerResponse)
-                        var brokerResponse = await newCategory.save()
-                          .then((data) => {
-
-                            console.log("brokerResponse", data._id);
-                            var bro_res_last_id = data._id;
-                            aliceblue.place_order(item, splitArray, bro_res_last_id, token);
-                          })
-
-
-                        resolve();
-
-                      }, 0);
-
+           
+            try {
+              getAllDocuments();
+              async function getAllDocuments() {
+                const documents = await collection.find(query).toArray();
+                // console.log("All documents:", documents);
+  
+                if (documents.length > 0) {
+  
+                  async function runFunctionWithArray(array) {
+  
+                    // Run a function with the four elements of the array simultaneously
+  
+                    const promises = array.map((item) => {
+  
+                      return new Promise((resolve) => {
+  
+                        // Simulate an asynchronous task (replace with your own function)
+  
+                        setTimeout(async () => {
+  
+                          const currentDate = new Date();
+  
+                          const milliseconds = currentDate.getTime();
+  
+                          console.log(`Running Time -- ${new Date()} function with element: ${item._id}`);
+  
+  
+                          var brokerResponse = {
+                            user_id: item._id,
+                            receive_signal: signal_req
+                          }
+  
+                          const newCategory = new BrokerResponse(brokerResponse)
+                          var brokerResponse = await newCategory.save()
+                            .then((data) => {
+  
+                              console.log("brokerResponse", data._id);
+                              var bro_res_last_id = data._id;
+                              aliceblue.place_order(item, splitArray, bro_res_last_id, token);
+                            })
+  
+  
+                          resolve();
+  
+                        }, 0);
+  
+                      });
+  
                     });
-
-                  });
-
-
-                  await Promise.all(promises);
-
+  
+  
+                    await Promise.all(promises);
+  
+                  }
+  
+                  runFunctionWithArray(documents);
+                } else {
+                  console.log("Client Not Exit");
                 }
-
-                runFunctionWithArray(documents);
-              } else {
-                console.log("Client Not Exit");
+                
               }
+  
+            } catch (error) {
+              console.log("Error In Broker response",error);
             }
-
 
 
 
