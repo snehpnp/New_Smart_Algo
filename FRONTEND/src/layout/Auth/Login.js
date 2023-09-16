@@ -178,9 +178,7 @@ const Login = () => {
             setshowModal1(true);
 
           } else {
-
             toast.error(res.payload.msg)
-
             setTimeout(() => {
               setshowModal(false);
             }, 1000);
@@ -209,7 +207,7 @@ const Login = () => {
     setgetOtpStatus(true)
 
 
-    
+
 
 
   }

@@ -40,7 +40,7 @@ const AddClient = () => {
 
   const [first, setfirst] = useState([])
 
-  console.log("selectedStrategies" ,selectedStrategies)
+  console.log("selectedStrategies", selectedStrategies)
 
 
 
@@ -283,7 +283,7 @@ const AddClient = () => {
       label: 'Broker',
       type: 'select',
       options: brokerOptions && brokerOptions.map((item) => ({ label: item.label, value: item.value })),
-      showWhen: values => values.licence === '2'
+      showWhen: values => values.licence === '2' || values.licence === '0'
     },
     //  For Demo Only Client
     {
@@ -597,7 +597,7 @@ const AddClient = () => {
                 <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
                   setShowAllStratagy(e.target.checked)
                 }} />
-                <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary" }`}></div>
+                <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
                 <span class="toggle-label">Show Strategy</span>
               </label>
 

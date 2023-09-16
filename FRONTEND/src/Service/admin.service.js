@@ -332,3 +332,42 @@ export async function ADD_CLIENT(data , token) {
     }
 
 }
+
+
+
+
+// GET ALL SERVICE
+export async function GET_ALL_SERVICE(data , token) {
+    console.log(data);
+    try {
+        const res = await axios.post(`${Config.base_url}get/allsignals`, data ,{
+             headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error =", err);
+        return err
+        // custom error
+    }
+
+}
+
+// GET TRADEHISTORY
+export async function GET_TRADEHISTORY(data , token) {
+    console.log(data);
+    try {
+        const res = await axios.post(`${Config.base_url}get/tradhistory`, data ,{
+             headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error =", err);
+        return err
+        // custom error
+    }
+
+}

@@ -19,6 +19,10 @@ export function fDateTimeSuffix(date) {
 export function f_time(date) {
   return format(new Date(date), 'yyyy-MM-dd');
 }
+export function fa_time(date) {
+  return format(new Date(date), 'yyyy/MM/dd');
+}
+
 
 export function fToNow(date) {
   return formatDistanceToNow(new Date(date), {
@@ -30,4 +34,4 @@ export const dateFormate = (date) =>{
   const dt = dateTime.create(date);
   const ccdate = dt.format('Y-m-d');
   return ccdate
-} 
+}

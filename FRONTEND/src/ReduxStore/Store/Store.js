@@ -17,6 +17,10 @@ import AdminSlice from "../Slice/Admin/AdminSlice";
 import GroupServiceSlice from "../Slice/Admin/GroupServiceSlice";
 import StrategyServiceSlice from "../Slice/Admin/StrategySlice";
 import AdminUserSlice from "../Slice/Admin/userSlice";
+import SignalsSlice from "../Slice/Admin/SignalsSlice";
+import TradehistorySlice from "../Slice/Admin/TradehistorySlice";
+
+
 
 
 //  DASHBOARD SLICE
@@ -44,6 +48,8 @@ const store = configureStore({
     GroupServiceSlice: GroupServiceSlice.reducer,
     StrategyServiceSlice: StrategyServiceSlice.reducer,
     AdminUserSlice: AdminUserSlice.reducer,
+    SignalsSlice: SignalsSlice.reducer,
+    TradehistorySlice: TradehistorySlice.reducer,
     DashboardSlice: DashboardSlice.reducer
   },
 });
