@@ -20,9 +20,7 @@ module.exports = {
     Signals: require('./Signals.model'),
     MainSignals: require('./Main_signals.model'),
     api_create_info: require('./api_create_info.model'),
-
-
-
+    BrokerResponse: require('./broker_response.model'),
 
 
 };

@@ -17,6 +17,10 @@ const Alice_token = db.Alice_token;
 const Signals = db.Signals;
 const MainSignals = db.MainSignals;
 const AliceViewModel = db.AliceViewModel;
+const BrokerResponse = db.BrokerResponse;
+
+
+const aliceblue = require('./Broker/aliceblue')
 
 
 // CONNECTION FILE IN MONGOODE DATA BASE 
@@ -60,6 +64,7 @@ const AliceBlue = require('./Broker/aliceblue')
 // TEST API
 app.post('/broker-signals', async (req, res) => {
   try {
+
     // IF SIGNEL NOT RECIVED
     if (req.rawBody) {
       const splitArray = req.rawBody.split('|');
@@ -113,7 +118,7 @@ app.post('/broker-signals', async (req, res) => {
           var token = ""
           var instrument_query = { name: input_symbol }
           if (segment == 'C' || segment == 'c') {
-            var instrument_query = { name: input_symbol }
+            instrument_query = { name: input_symbol }
           } else if (segment == 'F' || segment == 'f') {
             instrument_query = { symbol: input_symbol, segment: "F", expiry: expiry }
           } else if (segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
@@ -416,66 +421,75 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+            // HIT TRADE IN BROKER SERVER
+            await client.connect();
 
-              // HIT TRADE IN BROKER SERVER
-              await client.connect();
+            const db = client.db(); // Access the default database or specify a database name here
+            const collection = db.collection('aliceView');
 
-              const db = client.db(); // Access the default database or specify a database name here
-              const collection = db.collection('aliceView');
-              
-              var query = {"strategys.strategy_name":strategy,"service.name":input_symbol}
+            var query = { "strategys.strategy_name": strategy, "service.name": input_symbol }
 
-              // Example: Find all documents in the collection
-              getAllDocuments();
-              async function getAllDocuments() {
-                const documents = await collection.find(query).toArray();
-                console.log("All documents:", documents);
+            // Example: Find all documents in the collection
+            getAllDocuments();
+            async function getAllDocuments() {
+              const documents = await collection.find(query).toArray();
+              // console.log("All documents:", documents);
 
-                if (documents.length > 0) { 
+              if (documents.length > 0) {
 
-                  async function runFunctionWithArray(array) {
+                async function runFunctionWithArray(array) {
 
-                    // Run a function with the four elements of the array simultaneously
+                  // Run a function with the four elements of the array simultaneously
 
-                    const promises = array.map((item) => {
+                  const promises = array.map((item) => {
 
-                        return new Promise(resolve => {
+                    return new Promise((resolve) => {
 
-                            // Simulate an asynchronous task (replace with your own function)
+                      // Simulate an asynchronous task (replace with your own function)
 
-                            setTimeout(() => {
+                      setTimeout(async () => {
 
-                                const currentDate = new Date();
+                        const currentDate = new Date();
 
-                                const milliseconds = currentDate.getTime();
+                        const milliseconds = currentDate.getTime();
 
-                                //console.log(`Running Time -- ${new Date()} function with element: ${item.id}`);
+                        console.log(`Running Time -- ${new Date()} function with element: ${item._id}`);
 
-                                // connection.query('INSERT INTO `broker_response`(`client_id`,`receive_signal`,`trading_status`,`created_at`) VALUES ("' + item.id + '","' + signal_req + '","ON","' + get_date() + '")', (err1, bro_res_last) => {
-                                //     //    console.log('eroor query broker response -', err1);
-                                //     //console.log("angel result before",item.id,"Time - ",new Date() );
 
-                                //     var bro_res_last_id = bro_res_last.insertId;
-                                //     aliceblue.place_order(item, signal, connection, last_signal_id, connection2, bro_res_last_id, filePath, instrument_token_symbol[0]);
-                                // });
+                        var brokerResponse = {
+                          user_id: item._id,
+                          receive_signal: signal_req
+                        }
 
-                                resolve();
+                        const newCategory = new BrokerResponse(brokerResponse)
+                        var brokerResponse = await newCategory.save()
+                          .then((data) => {
 
-                            }, 0);
+                            console.log("brokerResponse", data._id);
+                            var bro_res_last_id = data._id;
+                            aliceblue.place_order(item, splitArray, bro_res_last_id, token);
+                          })
 
-                        });
+
+                        resolve();
+
+                      }, 0);
 
                     });
 
+                  });
 
-                    await Promise.all(promises);
+
+                  await Promise.all(promises);
 
                 }
 
                 runFunctionWithArray(documents);
-                }
+              } else {
+                console.log("Client Not Exit");
               }
-              
+            }
+
 
 
 

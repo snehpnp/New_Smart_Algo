@@ -57,7 +57,8 @@ async function createView() {
             },
             {
                 $project: {
-                    "client_services.service_id": 1,
+                    "client_services": 1,
+
                     'service.name': 1,
                     'service.instrument_token': 1,
                     'service.exch_seg': 1,
@@ -77,7 +78,6 @@ async function createView() {
                     app_key: 1,
                     api_type: 1,
                     demat_userid: 1
-                    // Add other fields you want in the view
                 }
             }
         ];

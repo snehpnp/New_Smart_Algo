@@ -1,68 +1,67 @@
 const mongoose = require('mongoose');
 
 const { Schema, model } = require('mongoose');
-const SignalsSchema = Schema({
+const BrokerResponseSchema = Schema({
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "USER"
+    },
     symbol: {
         type: String,
     },
     type: {
         type: String,
     },
-    order_type: {
-        type: String,
-    },
-    product_type: {
-        type: String,
-    },
-    price: {
-        type: String,
-    },
-    qty_percent: {
-        type: String,
-    },
-
-    exchange: {
-        type: String,
-    },
-
-    sq_value: {
-        type: String,
-    },
-
-    sl_value: {
-        type: String,
-    },
-    tsl: {
-        type: String,
-    },
-
-    tr_price: {
-        type: String,
-    },
-    dt: {
-        type: String,
-    },
-    dt_date: {
+    trading_symbol: {
         type: String,
     },
     strategy: {
         type: String,
     },
-    option_type: {
+    exchange: {
         type: String,
     },
-    strike: {
+    option_type: {
         type: String,
     },
     expiry: {
         type: String,
     },
-    segment: {
+    broker_name: {
         type: String,
     },
-    trade_symbol: {
+    send_request: {
         type: String,
     },
+    order_status: {
+        type: String,
+    },
+    reject_reason: {
+        type: String,
+    },
+    receive_signal: {
+        type: String,
+    },
+    order_id: {
+        type: String,
+    },
+    signal: {
+        type: String,
+    },
+    order_view_status: {
+        type: String,
+        enum: ['0', '1'],
+        default: '0'
+    },
+    order_view_response: {
+        type: String,
+
+    },
+    order_view_date: {
+        type: String,
+
+    },
+  
     client_persnal_key: {
         type: String,
     },
@@ -81,7 +80,7 @@ const SignalsSchema = Schema({
     timestamps: true
 });
 
-const signals = model('signals', SignalsSchema);
-module.exports = signals;
+const BrokerResponse = model('broker_response', BrokerResponseSchema);
+module.exports = BrokerResponse;
 
 
