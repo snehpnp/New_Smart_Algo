@@ -83,15 +83,15 @@ const EditClient = () => {
       fullName: UserData.FullName ? UserData.FullName : null,
       email: UserData.Email ? UserData.Email : null,
       mobile: UserData.PhoneNo ? UserData.PhoneNo : null,
-      broker: UserData.broker ? UserData.broker :  null,
-      licence: UserData.license_type ? UserData.license_type :  null,
+      broker: UserData.broker ? UserData.broker : null,
+      licence: UserData.license_type ? UserData.license_type : null,
       groupservice: UserData.parent_id ? UserData.parent_id : null,
-      service_given_month: UserData.service_given_month ? UserData.service_given_month :  '0',
+      service_given_month: UserData.service_given_month ? UserData.service_given_month : '0',
       parent_id: UserData.parent_id ? UserData.parent_id : null,
       strategies: [],
-      tomonth: UserData.licence ? UserData.licence :  null,
+      tomonth: UserData.licence ? UserData.licence : null,
       todate: null,
-      fromDate: UserData.licence ? UserData.licence :  null,
+      fromDate: UserData.licence ? UserData.licence : null,
       app_id: 'null',
       api_type: 'null',
       client_code: 'null',
@@ -277,7 +277,7 @@ const EditClient = () => {
       label: 'Broker',
       type: 'select',
       options: brokerOptions && brokerOptions.map((item) => ({ label: item.label, value: item.value })),
-      showWhen: values => values.licence === '2'
+      showWhen: values => values.licence === '2' || values.licence === '0'
     },
     //  For Demo Only Client
     {

@@ -67,32 +67,37 @@ const ServicesList = () => {
 
 
 
-
-
     const columns = [
         {
             dataField: "index",
             text: "SR. No.",
+            sort: true,
+
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
             dataField: 'category.name',
-            text: 'Catagory'
+            text: 'Catagory',
+            sort: true,
+
+
         },
         {
             dataField: 'name',
-            text: 'Service Name'
+            text: 'Service Name',
+            sort: true,
         },
         {
             dataField: 'category.segment',
-            text: 'Segment'
+            text: 'Segment',
+            sort: true,
         },
         {
             dataField: 'category.name',
             text: 'Segment',
-            formatter: (cell, row) => (
+            formatter: (cell, row , index) => (
                 <>
-                    <input type="text" className="form-control" placeholder="Enter Quantity" aria-label="Username" aria-describedby="basic-addon1" name={row.name} onChange={(e) => EditQty(e, cell)} />
+                    <input type="text" className="form-control" placeholder="Enter Quantity" aria-label="Username" aria-describedby="basic-addon1" name={row.name} onChange={(e) => EditQty(e, cell , index)} />
 
                 </>
             )
@@ -101,34 +106,44 @@ const ServicesList = () => {
 
     ];
 
-    const [first1, setfirst1] = useState()
+    const [QtyValue, setQtyValue] = useState([])
+    const [first2, setfirst2] = useState([])
 
-    const EditQty = (e, rowdata) => {
+    const EditQty = (e, rowdata , index) => {
         let value = e.target.value
         let name = e.target.name
 
+        console.log("index" ,index);
 
-        setfirst1(prevState => ({ ...prevState, 'serviceName': name, 'setqty': value }));
+        const newData = {
+            serviceName: name,
+            setqty: value,
+        };
+        setQtyValue((prevSelected) => {
+            prevSelected.filter((id) => id.serviceName !== newData.serviceName);
+        });
+
+        setQtyValue((prevQtys) => ([
+            ...prevQtys,
+            newData
+        ]));
 
     }
 
 
     const UpdateQuantity = (e) => {
+
         e.preventDefault()
 
-        function removeDuplicates(arr) {
-            let unique = arr.reduce(function (acc, curr) {
-                if (!acc.includes(curr))
-                    acc.push(curr);
-                return acc;
-            }, []);
-            return unique;
-        }
-        console.log(removeDuplicates(first1));
+        // let unique = QtyValue.reduce(function (acc, curr) {
+        //     if (!acc.includes(curr.serviceName))
+        //         acc.push(curr);
+        //     return acc;
+        // }, []);
+        console.log("removeDuplicates", QtyValue);
 
     }
 
-    console.log("first", first1);
 
 
 

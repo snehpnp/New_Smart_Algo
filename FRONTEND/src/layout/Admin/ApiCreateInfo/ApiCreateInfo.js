@@ -70,8 +70,6 @@ const ApiCreateInfo = () => {
 
                     {UserDetails.data && UserDetails.data.map((item) => {
                         return <>
-
-
                             <div class="card__bx card__1">
                                 <div class="card__data">
                                     <div class="card__icon">
@@ -82,14 +80,13 @@ const ApiCreateInfo = () => {
 
                                     <div class="card__content">
                                         <h3>{item.title}</h3>
-
-
                                         <Link style={{
                                             marginRight: '20px',
                                             marginBottom: '20px',
                                             marginTop: '20px',
-                                        }}>
-                                            <Eye className='mx-2' onClick={() => ShowData(item)} /></Link>
+                                        }}  onClick={() => ShowData(item)} >
+                                            <Eye className='mx-2'/>
+                                            </Link>
                                         <Link to="/admin/apicreateinfo/edit" state={item}>
                                             <Pencil className='mx-2' onClick={() => ShowData(item)} />
                                         </Link>
@@ -109,7 +106,7 @@ const ApiCreateInfo = () => {
                     <ul>
                         {modalData.description && modalData.description.split("\n").map((line, index) => (
                             <>
-                            <li key={index}>{line}</li><br/>
+                                <li key={index}>{line}</li><br />
                             </>
                         ))}
                     </ul>
@@ -142,7 +139,7 @@ const ApiCreateInfo = () => {
                     <ul>
                         {modalData.note && modalData.note.split("\n").map((line, index) => (
                             <>
-                            <li className=" h3 text-alert mt-3 text-info" key={index}>{line}</li><br/>
+                                <li className=" h3 text-alert mt-3 text-info" key={index}>{line}</li><br />
                             </>
                         ))}
                     </ul>

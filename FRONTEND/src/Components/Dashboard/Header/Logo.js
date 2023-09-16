@@ -10,9 +10,9 @@ const Logo = ({ ShowSidebar }) => {
 
     }
 
-    if(togglesidebar){
+    if (togglesidebar) {
         $('#root').addClass("menu-toggle")
-    }else{
+    } else {
         $('#root').removeClass("menu-toggle")
     }
 
@@ -20,7 +20,7 @@ const Logo = ({ ShowSidebar }) => {
 
     return (
         <div>   <div className="nav-header">
-            <a href="#" className="brand-logo">
+            {/* <a href="#" className="brand-logo">
                 <svg
                     className="logo-abbr"
                     width={57}
@@ -70,6 +70,12 @@ const Logo = ({ ShowSidebar }) => {
                         stroke="#2D3134"
                     />
                 </svg>
+            </a> */}
+
+            <a href="#" className="brand-logo">
+
+
+                <img className="logo-abbr"  src="assets/icons/logo.png" alt="logo" />
             </a>
 
 

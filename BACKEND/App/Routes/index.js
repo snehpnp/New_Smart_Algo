@@ -11,6 +11,9 @@ app.use(require("./SuperAdmin/panel.route"));
 // Admin Route
 app.use(require("./Admin/user.route"));
 app.use(require("./Admin/servicegroup.route"));
+app.use(require("./Admin/signals.route"));
+app.use(require("./Admin/tradehistory.route"));
+
 
 // SUBADMIN ROUTES
 app.use(require("./Subadmin/subadmin.route"));
@@ -18,6 +21,8 @@ app.use(require("./Subadmin/subadmin.route"));
 
 // USER ROUTES
 app.use(require("./User/user.route"));
+
+
 
 
 // BROKER ACCESS TOKEN

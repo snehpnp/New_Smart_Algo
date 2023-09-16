@@ -28,18 +28,19 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions }) => {
 
 
     return <>
-    <div className='table-responsive'>
-        <BootstrapTable
-            keyField="id"
-            data={tableData}
-            columns={TableColumns}
-            pagination={paginationFactory(options)}
-            noDataIndication={() => <NoDataIndication />}
-            headerClasses="bg-primary text-primary text-center header-class"
-            rowClasses='text-center'
+        <div className='table-responsive'>
+            <BootstrapTable
+                keyField="id"
+
+                data={tableData}
+                columns={TableColumns}
+                pagination={paginationFactory(options)}
+                noDataIndication={() => <NoDataIndication />}
+                headerClasses="bg-primary text-primary text-center header-class"
+                rowClasses='text-center'
             />
 
-            </div>
+        </div>
     </>
 }
 
