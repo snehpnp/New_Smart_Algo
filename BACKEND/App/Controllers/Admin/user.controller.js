@@ -433,21 +433,76 @@ class Employee {
             // STARTEGY ADD AND EDIT
             const Strategieclient = await strategy_client.find({ user_id: existingUsername._id });
 
-            const strategyIdsFromStrategieclient = Strategieclient.map((item) =>
-                item.strategy_id.toString()
-            );
+            // EXIST STRATEGY RO CONVERT IN STRING AND ID
+            var db_exist_startegy = [];
+            Strategieclient.forEach(function (item, index) {
+                db_exist_startegy.push(item.strategy_id.toString());
+            });
 
-            const idValuesFromStrategies = Strategies.map((item) => item.id);
-        
-            const allMatch = strategyIdsFromStrategieclient.every((strategyId) =>
-                idValuesFromStrategies.includes(strategyId)
-            );
-            
-            if (!allMatch) {
-                console.log("Starategy Add edit");
+            // NEW INSERT STRATEGY TO CONVERT IN STRING AND ID
+            var insert_startegy = [];
+            Strategies.forEach(function (item, index) {
+                insert_startegy.push(item.id);
+            });
+
+            // console.log('exist - strtegy ', db_exist_startegy);
+
+            // ADD STRATEGY ARRAY
+            var add_startegy = [];
+            insert_startegy.forEach(function (item, index) {
+                if (!db_exist_startegy.includes(item)) {
+                    add_startegy.push(item);
+                }
+            });
+            // console.log('add add_startegy - ', add_startegy);
+
+
+            // DELETE STRATEGY ARRAY
+            var delete_startegy = [];
+            db_exist_startegy.forEach(function (item, index) {
+                if (!insert_startegy.includes(item)) {
+                    delete_startegy.push(item);
+                }
+            });
+            // console.log("delete_startegy", delete_startegy);
+
+
+
+            // ADD STRATEGY IN STRATEGY CLIENT
+            if (add_startegy.length > 0) {
+                add_startegy.forEach(async (data) => {
+                    const User_strategy_client = new strategy_client(
+                        {
+                            strategy_id: data,
+                            user_id: existingUsername._id
+                        })
+                    await User_strategy_client.save()
+                })
+
             }
 
+            // STEP FIRST TO DELTE IN STRATEGY CLIENT TABLE
+            if (delete_startegy.length > 0) {
 
+                delete_startegy.forEach(async (data) => {
+                    var stgId = new ObjectId(data)
+                    var deleteStrategy = await strategy_client.deleteOne({ user_id: existingUsername._id, strategy_id: stgId })
+                })
+            }
+
+            // STEP FISECONDRST TO DELTE IN CLIENT SERVICES AND UPDATE NEW STRATEGY 
+            if (delete_startegy.length > 0) {
+
+
+                delete_startegy.forEach(async (data) => {
+                    var stgId = new ObjectId(data)
+                    var deleteStrategy = await strategy_client.find({ user_id: existingUsername._id })
+
+
+                    var deleteStrategy_clientServices1 = await client_services.updateMany({ user_id: existingUsername._id, strategy_id: stgId }, { $set: { strategy_id: deleteStrategy[0].strategy_id } })
+                })
+
+            }
 
 
 
@@ -458,16 +513,36 @@ class Employee {
             const user_group_service = await groupService_User.find({ user_id: existingUsername._id, groupService_id: GroupServiceId });
             if (user_group_service.length == 0) {
 
+                // DELETE GROUP SERVICES
+                const DELTE_GROUP = await groupService_User.deleteMany({ user_id: existingUsername._id });
+
                 // IF GROUP SERVICES NOT EXIST
                 var GroupServices = await serviceGroup_services_id.find({ Servicegroup_id: GroupServiceId });
                 if (GroupServices.length == "0") {
                     return res.send({ status: false, msg: 'Your selected Group is not exist ', data: GroupServices });
                 }
 
+                var deleteStrategy = await strategy_client.find({ user_id: existingUsername._id })
+
+                GroupServices.forEach((data) => {
+                
+                    const User_client_services = new client_services(
+                        {
+                            user_id: existingUsername._id,
+                            group_id: GroupServiceId,
+                            service_id: data.Service_id,
+                            strategy_id: deleteStrategy[0].strategy_id,
+                            uniqueUserService: existingUsername._id + "_" + data.Service_id
+                        })
+                        console.log(User_client_services);
+                    User_client_services.save()
+                })
 
 
+
+            } else {
+                console.log("NO CHANGE IN GROUP SERVICES");
             }
-
 
 
 
