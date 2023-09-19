@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_CLIENTS, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS } from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_CLIENTS, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS,DELETE_USERAND_ALLSERVICES } from "../../../Service/admin.service";
 
 
 
@@ -106,6 +106,18 @@ export const UPDATE_USER_ACTIVE_STATUS = createAsyncThunk("update/useractive/sta
 });
 
 
+// DELETE API TO DELTE USER AND HIS ALL TYPE OF SERVICES
+export const DELETE_USER_SERVICES = createAsyncThunk("delete/user", async (data) => {
+    try {
+        const res = await DELETE_USERAND_ALLSERVICES(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        console.log("err",err);
+        return err;
+    }
+});
+
 const AdminSlice = createSlice({
     name: "AdminSlice",
     initialState: {
@@ -120,7 +132,8 @@ const AdminSlice = createSlice({
         companyInfo: [],
         getalltradingstatus: [],
         goTodashboard: [],
-        activeStatus: []
+        activeStatus: [],
+        deleteuser:[]
     },
 
     recuders: {},
@@ -165,6 +178,10 @@ const AdminSlice = createSlice({
         [UPDATE_USER_ACTIVE_STATUS.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, activeStatus: payload, isLoading: false };
+        },
+        [DELETE_USER_SERVICES.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, deleteuser: payload, isLoading: false };
         },
     },
 });

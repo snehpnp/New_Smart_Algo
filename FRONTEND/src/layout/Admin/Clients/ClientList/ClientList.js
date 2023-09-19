@@ -10,7 +10,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS, DELETE_USER_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
@@ -28,11 +28,29 @@ const AllClients = () => {
 
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
+    const [refresh, setrefresh] = useState(false)
+
 
     const [getAllClients, setAllClients] = useState({
         loading: true,
         data: []
     });
+
+
+    // DELETE USET FUNCTION TO DELETE ALL SERVICES
+    const Delete_user = async (id) => {
+        var req1 = {
+            id: id
+        }
+        console.log("req1", req1);
+        await dispatch(DELETE_USER_SERVICES(req1)).unwrap()
+            .then((response) => {
+                console.log("response", response);
+                if (response.status) {
+                    setrefresh(!refresh)
+                }
+            })
+    }
 
 
     const data = async () => {
@@ -52,7 +70,7 @@ const AllClients = () => {
     }
     useEffect(() => {
         data()
-    }, [])
+    }, [refresh])
 
 
     // GO TO DASHBOARD
@@ -108,26 +126,26 @@ const AllClients = () => {
             dataField: 'PhoneNo',
             text: 'Phone Number'
         },
-        {
-            dataField: 'CreateDate',
-            text: 'CreateDate',
-            formatter: (cell, row) => fDateTimeSuffix(row.CreateDate)
+        // {
+        //     dataField: 'CreateDate',
+        //     text: 'CreateDate',
+        //     formatter: (cell, row) => fDateTimeSuffix(row.CreateDate)
 
-        },
+        // },
         {
             dataField: 'StartDate',
             text: 'Start Date',
             formatter: (cell, row) => fDateTimeSuffix(row.StartDate)
         },
-        {
-            dataField: 'EndDate',
-            text: 'End Date',
-            formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
-        },
-        {
-            dataField: 'Otp',
-            text: 'Password'
-        },
+        // {
+        //     dataField: 'EndDate',
+        //     text: 'End Date',
+        //     formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
+        // },
+        // {
+        //     dataField: 'Otp',
+        //     text: 'Password'
+        // },
         {
             dataField: 'ActiveStatus',
             text: 'Status',
@@ -191,7 +209,7 @@ const AllClients = () => {
                         </Link>
                         <Link>
                             <span data-toggle="tooltip" data-placement="top" title="Delete">
-                                <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                                <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={(e) => Delete_user(row._id)} />
                             </span>
                         </Link>
                     </div>
@@ -204,7 +222,7 @@ const AllClients = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All Clients" button_title="Add Client" route="/admin/client/add">
+                        <Content Page_title="All Clients" button_title="Add Client" route="/admin/client/add">
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (
                                     'No data found') :
@@ -221,7 +239,7 @@ const AllClients = () => {
                                     </>
                                     : ""
                             }
-                        </Theme_Content>
+                        </Content>
                     </>
             }
 

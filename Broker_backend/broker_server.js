@@ -271,7 +271,7 @@ app.post('/broker-signals', async (req, res) => {
             if (type == "LE" || type == "le") {
 
               var findMainSignals = await MainSignals.find(findSignal)
-              console.log("findMainSignals", findMainSignals);
+        
 
 
               // MainSignals FIND IN COLLECTION
@@ -333,7 +333,7 @@ app.post('/broker-signals', async (req, res) => {
 
                   // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
                   const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
-                  console.log("updatedDocument", updatedDocument);
+               
                 } else {
 
                   console.log("PRIVIOUS SEGNAL UPDATE")
@@ -382,14 +382,15 @@ app.post('/broker-signals', async (req, res) => {
   
                           var brokerResponse = {
                             user_id: item._id,
-                            receive_signal: signal_req
-                          }
+                            receive_signal: signal_req,
+                            strategy:strategy,
+                            type:type
+                          };
   
                           const newCategory = new BrokerResponse(brokerResponse)
                           var brokerResponse = await newCategory.save()
                             .then((data) => {
   
-                              console.log("brokerResponse", data._id);
                               var bro_res_last_id = data._id;
                               aliceblue.place_order(item, splitArray, bro_res_last_id, token);
                             })

@@ -150,7 +150,6 @@ class Login {
                 system_ip: getIPAddress()
             })
             await user_login.save();
-            console.log("user_login",user_login);
 
             logger.info('Very Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
             res.send({ status: true, msg: "Login Successfully", data: [] })

@@ -7,8 +7,11 @@ const db = require('../../Models');
 const panel_model = db.panel_model;
 const User = db.user;
 const user_logs = db.user_logs;
+const BrokerResponse = db.BrokerResponse;
+
 
 const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 // const { formattedDateTime } = require('../../Helper/time.helper')
@@ -109,7 +112,7 @@ class AliceBlue {
 
             }
 
-      
+
 
 
 
@@ -118,6 +121,87 @@ class AliceBlue {
             console.log("Theme error-", error);
         }
     }
+
+
+    // GET ORDER ID TO ORDER FULL DATA
+    async GetOrderFullInformation(req, res) {
+        try {
+            // var OrderId = "23091800155929"
+            const { OrderId, user_id } = req.body
+
+
+            if (!OrderId || !user_id) {
+                console.log("Please Fill All Feild");
+                return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+
+            }
+            const objectId = new ObjectId(user_id);
+
+            var FindUserAccessToken = await User.find({ _id: objectId })
+            var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId, order_id: OrderId })
+
+            console.log(FindUserBrokerResponse[0]._id);
+
+            if (FindUserBrokerResponse[0].order_view_status == "0") {
+
+                let data = JSON.stringify({
+                    "nestOrderNumber": OrderId
+                });
+
+                let config = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
+                    headers: {
+                        'Authorization': "Bearer " + FindUserAccessToken[0].client_code + " " + FindUserAccessToken[0].access_token,
+                        'Content-Type': 'application/json',
+                    },
+                    data: data
+                };
+
+                axios(config)
+                    .then(async (response) => {
+                        console.log(response.data[0]);
+                        if (response.data[0]) {
+
+                            const message = (JSON.stringify(response.data[0]));
+
+                            let result = await BrokerResponse.findByIdAndUpdate(
+                                { _id: FindUserBrokerResponse[0]._id },
+                                {
+                                    order_view_date: message,
+                                    order_view_status: '1',
+                                    order_view_response: response.data[0].Status
+                                },
+                                { new: true }
+                            )
+                            if (result) {
+
+                                return res.send({ status: true, msg: 'SuccessFully Update', data: [] });
+                            }
+
+
+
+                        } else {
+                            console.log("NO DATA FOUND");
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                return res.send({ status: false, msg: 'Already Update', data: FindUserBrokerResponse });
+
+            }
+
+
+        } catch (error) {
+            console.log("Some Error In Order information get -", error);
+            return res.send({ status: false, msg: 'error in Server side', data: error });
+
+        }
+    }
+
 
 
 

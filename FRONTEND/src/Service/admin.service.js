@@ -314,7 +314,6 @@ export async function UPDATE_USERACTIVE_STATUS(data , token) {
 }
 
 
-
 // ADD USER
 export async function ADD_CLIENT(data , token) {
     console.log(data);
@@ -332,8 +331,6 @@ export async function ADD_CLIENT(data , token) {
     }
 
 }
-
-
 
 
 // GET ALL SERVICE
@@ -367,6 +364,23 @@ export async function GET_TRADEHISTORY(data , token) {
     catch (err) {
         console.log("error =", err);
         return err
+        // custom error
+    }
+
+}
+
+// DELTE USER 
+export async function DELETE_USERAND_ALLSERVICES(data , token) {
+    console.log(data);
+    try {
+        const res = await axios.post(`${Config.base_url}delete/user`, data ,{
+            //  headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error =", err);
         // custom error
     }
 

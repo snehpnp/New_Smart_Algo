@@ -34,10 +34,7 @@ class User_trading_status {
                 status: true,
                 msg: "Get All trading Status",
                 data: getAllTrading_status,
-                // page: Number(page),
-                // limit: Number(limit),
                 totalCount: totalCount,
-                // totalPages: Math.ceil(totalCount / Number(limit)),
             })
         } catch (error) {
             console.log("get user trading Status error -", error);

@@ -589,7 +589,7 @@ const AddClient = () => {
               {GetServices && GetServices.data.map((strategy) => (
                 <div className={`col-lg-2 `} key={strategy._id}>
                   <div className="col-lg-12 ">
-                    <label className="form-check-label bg-primary py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
+                    <label className="form-check-label bg-primary text-white py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
                   </div>
                 </div>
               ))}
