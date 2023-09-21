@@ -119,7 +119,7 @@ const Signals = () => {
 
 
 
-    console.log("SignalsData", SignalsData);
+    // console.log("SignalsData", SignalsData);
 
 
     return (
