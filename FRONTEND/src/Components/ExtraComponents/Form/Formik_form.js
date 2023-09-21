@@ -7,35 +7,40 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
 
 
 
+  // console.log("fieldtype", fieldtype)
   const location = useLocation()
 
   const [passwordVisible, setPasswordVisible] = useState({});
 
-  const [previews, setPreviews] = useState([]); // Array to store individual previews
-  const [PreviewImage, setPreviewImage] = useState([]); // Array to store individual previews
+
+  const [previews, setPreviews] = useState([]);
 
 
-  console.log("PreviewImage", PreviewImage);
+  // console.log("PreviewImage", PreviewImage);
   const handleFileChange = (event, index, name) => {
     const file = event.target.files[0];
-    const newPreviews = [...previews]; // Create a copy of the previews array
-
-    newPreviews[index] = URL.createObjectURL(file); // Set the preview for the specific index
-    // console.log("newPreviews[index]", newPreviews[index]);
-    setPreviews(newPreviews); // Update the previews array
-
-
-
     const reader = new FileReader();
-    reader.onload = () => {
-      setPreviewImage(reader.result);
-      formik.setFieldValue(name, reader.result); // Set Formik field value for the specific index
-    };
 
+    reader.onload = () => {
+      const base64Preview = reader.result; // Get the base64 data URL
+      const newPreviews = [...previews]; // Create a copy of the previews array
+
+      newPreviews[index] = base64Preview; // Set the base64 preview for the specific index
+
+      // Update the previews array
+      setPreviews(newPreviews);
+    };
 
     reader.readAsDataURL(file);
   }
 
+
+  // console.log("initialValues" , formik.initialValues)
+
+  const sneh = (index, name) => {
+    // formik.setFieldValue(name, 'null');
+
+  }
 
   return (
 
@@ -277,7 +282,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
                                       />
                                     </div>
                                   </div>
-                                  <img src={PreviewImage} name={field.name} alt={`Preview ${index}`} className="mb-3" />
+                                  <img src={previews[index] ? previews[index] : sneh(index, field.name)} name={field.name} alt={`Preview_${index}`} className="mb-3" />
                                 </div>
                               </div>
                             </> :

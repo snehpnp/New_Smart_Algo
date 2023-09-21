@@ -21,35 +21,46 @@ const TradingStatus = () => {
 
     const dispatch = useDispatch()
 
-    const [first, setfirst] = useState('all')
-    const [showModal, setshowModal] = useState(false)
+    const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
 
-    const [getAllClients, setAllClients] = useState({
-        loading: true,
-        data: []
-    });
+
+    const [first, setfirst] = useState('all')
+
+    const [DateFilter, setDateFilter] = useState();
+    const [DateArray, setDateArray] = useState([]);
+
+
     const [getAllUserTrading_status, setAllUserTrading_status] = useState({
         loading: true,
         data: []
     });
 
     let req = {
-        user_Id: '64c76f3032067577d02310e6',
+        user_Id: user_Id,
     };
 
     const data1 = async () => {
         await dispatch(Get_All_TRADINGSTATUS_USER(req)).unwrap()
             .then((response) => {
                 if (response.status) {
+
+                    if (first === "all") {
+                        setAllUserTrading_status({
+                            loading: false,
+                            data: response.data
+                        });
+                    }
+                    let abc = response.data.filter((item) => {
+                        return item.createdAt.split("T")[0] === first
+                    })
                     setAllUserTrading_status({
                         loading: false,
-                        data: response.data
+                        data: abc
                     });
                 }
             })
     }
     useEffect(() => {
-
         data1()
     }, [first])
 
@@ -70,7 +81,7 @@ const TradingStatus = () => {
                 <>
                     <div>
                         <span data-toggle="tooltip" data-placement="top" title="Delete">
-                            {row.login_status == null ? row.trading_status:row.login_status }
+                            {row.login_status == null ? row.trading_status : row.login_status}
                         </span>
 
                     </div>
@@ -80,10 +91,7 @@ const TradingStatus = () => {
 
             ),
         },
-        // {
-        //     dataField: 'trading_status',
-        //     text: 'trading_status'
-        // },
+
         {
             dataField: 'role',
             text: 'role'
@@ -94,6 +102,27 @@ const TradingStatus = () => {
         },
 
     ];
+
+
+    var dateArray = [];
+    const dateArr = () => {
+        for (let i = 0; i < 3; i++) {
+            const currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() - i);
+            const day = currentDate.getDate();
+            const month = currentDate.getMonth() + 1 < 10 ? `0${currentDate.getMonth() + 1}` : currentDate.getMonth() + 1;  // Months are zero-based, so add 1
+            const year = currentDate.getFullYear();
+            const formattedDate = `${year}-${month}-${day}`;
+            dateArray.push(formattedDate);
+
+        }
+        setDateArray(dateArray)
+        setfirst(dateArray[0])
+    }
+    useEffect(() => {
+        dateArr()
+    }, [])
+
     return (
         <>
             {
@@ -110,12 +139,12 @@ const TradingStatus = () => {
                                             onChange={(e) => setfirst(e.target.value)}
                                         >
 
-                                            <option selected value="all">
+                                            {/* <option selected value="all">
                                                 All
-                                            </option>
-                                            {getAllUserTrading_status.data && getAllUserTrading_status.data.map((item) => {
+                                            </option> */}
+                                            {DateArray && DateArray.map((item) => {
                                                 return <>
-                                                    <option value={item._id}>{item.FullName}</option>
+                                                    <option value={item}>{item}</option>
                                                 </>
                                             })}
 
@@ -126,9 +155,9 @@ const TradingStatus = () => {
                             </div>
                             {
                                 getAllUserTrading_status.data && getAllUserTrading_status.data.length === 0 ? (
-                                    'No data found') :
+                                    <FullDataTable TableColumns={columns} tableData={getAllUserTrading_status.data} />
+                                ) :
                                     <>
-
                                         <FullDataTable TableColumns={columns} tableData={getAllUserTrading_status.data} />
                                     </>
                             }

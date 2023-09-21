@@ -7,14 +7,14 @@ import { header } from "../Utils/ApiHeader";
 
 
 // ALL CLIENTS
-export async function ALL_CLIENTS(data , token) {
+export async function ALL_CLIENTS(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}getall/clients`, data ,{
-             headers: header(token),
+        const res = await axios.post(`${Config.base_url}getall/clients`, data, {
+            headers: header(token),
             data: {
 
-                    "page": "5",
-                    "limit": "1"
+                "page": "5",
+                "limit": "1"
 
             },
         })
@@ -28,9 +28,9 @@ export async function ALL_CLIENTS(data , token) {
 }
 
 // ALL SERVICES
-export async function ALL_SERVICES(data , token) {
+export async function ALL_SERVICES(data, token) {
     try {
-        const res = await axios.get(`${Config.base_url}getAllService`, data ,{
+        const res = await axios.get(`${Config.base_url}getAllService`, data, {
             //  headers: header(token),
             data: {},
         })
@@ -45,9 +45,9 @@ export async function ALL_SERVICES(data , token) {
 
 
 // ALL CATAGORY
-export async function ALL_CATAGORY(data , token) {
+export async function ALL_CATAGORY(data, token) {
     try {
-        const res = await axios.get(`${Config.base_url}allCatagory`, data ,{
+        const res = await axios.get(`${Config.base_url}allCatagory`, data, {
             //  headers: header(token),
             data: {},
         })
@@ -62,9 +62,9 @@ export async function ALL_CATAGORY(data , token) {
 
 
 // ALL SERVICE_BY_CATAGORY
-export async function SERVICE_BY_CATAGORY(data , token) {
+export async function SERVICE_BY_CATAGORY(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}ServiceByCatagory`, data ,{
+        const res = await axios.post(`${Config.base_url}ServiceByCatagory`, data, {
             //  headers: header(token),
             data: {},
         })
@@ -79,9 +79,9 @@ export async function SERVICE_BY_CATAGORY(data , token) {
 
 
 // ALL ALL_GROUP_SERVICES
-export async function ALL_GROUP_SERVICES(data , token) {
+export async function ALL_GROUP_SERVICES(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}getall/groupservices`, data ,{
+        const res = await axios.post(`${Config.base_url}getall/groupservices`, data, {
             //  headers: header(token),
             data: {},
         })
@@ -96,9 +96,9 @@ export async function ALL_GROUP_SERVICES(data , token) {
 
 
 // GET COMPNAY INFORMATION
-export async function GET_COMPANY_INFO(data , token) {
+export async function GET_COMPANY_INFO(data, token) {
     try {
-        const res = await axios.get(`${Config.base_url}get/company`, data ,{
+        const res = await axios.get(`${Config.base_url}get/company`, data, {
             //  headers: header(token),
             data: {},
         })
@@ -113,9 +113,9 @@ export async function GET_COMPANY_INFO(data , token) {
 
 
 // ALL ADD_GROUP_SERVICES
-export async function ADD_GROUP_SERVICES(data , token) {
+export async function ADD_GROUP_SERVICES(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}addgroupservice`, data ,{
+        const res = await axios.post(`${Config.base_url}addgroupservice`, data, {
             //  headers: header(token),
             data: {},
         })
@@ -129,10 +129,10 @@ export async function ADD_GROUP_SERVICES(data , token) {
 }
 
 // ALL GET_ALL_STRATEGY
-export async function GET_ALL_STRATEGY(data , token) {
+export async function GET_ALL_STRATEGY(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}getall/strategy`, data ,{
-             headers: header(token),
+        const res = await axios.post(`${Config.base_url}getall/strategy`, data, {
+            headers: header(token),
             data: {},
         })
         return await res?.data;
@@ -146,11 +146,27 @@ export async function GET_ALL_STRATEGY(data , token) {
 
 
 // ALL GET_STRATEGY_BY_ID
-export async function GET_STRATEGY_BY_ID(data , token) {
+export async function GET_STRATEGY_BY_ID(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}get/strategy`, data ,{
-             headers: header(token),
-            data: {data},
+        const res = await axios.post(`${Config.base_url}get/strategy`, data, {
+            headers: header(token),
+            data: { data },
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+// EDIT_STRATEGY_BY_ID
+export async function EDIT_STRATEGY_BY_ID(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}edit/strategy`, data, {
+            headers: header(token),
+            data: { data },
         })
         return await res?.data;
     }
@@ -163,11 +179,11 @@ export async function GET_STRATEGY_BY_ID(data , token) {
 
 
 // ALL REMOVE_STRATEGY_BY_ID
-export async function REMOVE_STRATEGY_BY_ID(data , token) {
+export async function REMOVE_STRATEGY_BY_ID(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}delete/strategy`, data ,{
-             headers: header(token),
-            data: {data},
+        const res = await axios.post(`${Config.base_url}delete/strategy`, data, {
+            headers: header(token),
+            data: { data },
         })
         return await res?.data;
     }
@@ -180,11 +196,11 @@ export async function REMOVE_STRATEGY_BY_ID(data , token) {
 
 
 // ALL ADD_STRATEGY
-export async function ADD_STRATEGY(data , token) {
+export async function ADD_STRATEGY(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}add/strategy`, data ,{
-             headers: header(token),
-            data: {data},
+        const res = await axios.post(`${Config.base_url}add/strategy`, data, {
+            headers: header(token),
+            data: { data },
         })
         return await res?.data;
     }
@@ -197,10 +213,10 @@ export async function ADD_STRATEGY(data , token) {
 
 
 // GET ALL TRADING STATUS
-export async function GET_ALL_TRADINGSTATUS(data , token) {
+export async function GET_ALL_TRADINGSTATUS(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}getall/tadingstatus`, data ,{
-             headers: header(token),
+        const res = await axios.post(`${Config.base_url}getall/tadingstatus`, data, {
+            headers: header(token),
             data: {},
         })
         return await res?.data;
@@ -213,11 +229,11 @@ export async function GET_ALL_TRADINGSTATUS(data , token) {
 }
 
 // GET ALL TRADING STATUS
-export async function GO_TO_DASHBOARD(data , token) {
+export async function GO_TO_DASHBOARD(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}goToDashboard`, data ,{
-             headers: header(token),
-            data: {data},
+        const res = await axios.post(`${Config.base_url}goToDashboard`, data, {
+            headers: header(token),
+            data: { data },
         })
         return await res?.data;
     }
@@ -229,11 +245,11 @@ export async function GO_TO_DASHBOARD(data , token) {
 }
 
 // GET ALL SERVICES NAMES
-export async function GET_ALL_SERVICES_NAME(data , token) {
+export async function GET_ALL_SERVICES_NAME(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}getall/servicesName`, data ,{
+        const res = await axios.post(`${Config.base_url}getall/servicesName`, data, {
             //  headers: header(token),
-            data: {data},
+            data: { data },
         })
         return await res?.data;
     }
@@ -245,9 +261,9 @@ export async function GET_ALL_SERVICES_NAME(data , token) {
 }
 
 // GET ALL SERVICES NAMES
-export async function GET_ALL_SERVICES_USER_NAME(data , token) {
+export async function GET_ALL_SERVICES_USER_NAME(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}getall/services/username`, data ,{
+        const res = await axios.post(`${Config.base_url}getall/services/username`, data, {
             //  headers: header(token),
             data: {},
         })
@@ -264,9 +280,9 @@ export async function GET_ALL_SERVICES_USER_NAME(data , token) {
 
 
 // GET SERVICES BY GROUP ID
-export async function GET_SERVICES_BY_GROUP_ID(data , token) {
+export async function GET_SERVICES_BY_GROUP_ID(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}get/services/bygroupid`, data ,{
+        const res = await axios.post(`${Config.base_url}get/services/bygroupid`, data, {
             //  headers: header(token),
             data: {},
         })
@@ -281,11 +297,11 @@ export async function GET_SERVICES_BY_GROUP_ID(data , token) {
 
 
 // DELETE GROUP SERVICES
-export async function DELETE_GROUP_SERVICES(data , token) {
+export async function DELETE_GROUP_SERVICES(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}delete/groupServices`, data ,{
+        const res = await axios.post(`${Config.base_url}delete/groupServices`, data, {
             //  headers: header(token),
-            data: {data},
+            data: { data },
         })
         return await res?.data;
     }
@@ -296,13 +312,14 @@ export async function DELETE_GROUP_SERVICES(data , token) {
 
 }
 
+
 // UPDATE ACTIVE STATUS
-export async function UPDATE_USERACTIVE_STATUS(data , token) {
+export async function UPDATE_USERACTIVE_STATUS(data, token) {
     console.log(data);
     try {
-        const res = await axios.post(`${Config.base_url}update/useractive/status`, data ,{
+        const res = await axios.post(`${Config.base_url}update/useractive/status`, data, {
             //  headers: header(token),
-            data: {data},
+            data: { data },
         })
         return await res?.data;
     }
@@ -315,12 +332,12 @@ export async function UPDATE_USERACTIVE_STATUS(data , token) {
 
 
 // ADD USER
-export async function ADD_CLIENT(data , token) {
+export async function ADD_CLIENT(data, token) {
     console.log(data);
     try {
-        const res = await axios.post(`${Config.base_url}add/employee`, data ,{
-             headers: header(token),
-            data: {data},
+        const res = await axios.post(`${Config.base_url}add/employee`, data, {
+            headers: header(token),
+            data: { data },
         })
         return await res?.data;
     }
@@ -334,12 +351,12 @@ export async function ADD_CLIENT(data , token) {
 
 
 // GET ALL SERVICE
-export async function GET_ALL_SERVICE(data , token) {
+export async function GET_ALL_SERVICE(data, token) {
     console.log(data);
     try {
-        const res = await axios.post(`${Config.base_url}get/allsignals`, data ,{
-             headers: header(token),
-            data: {data},
+        const res = await axios.post(`${Config.base_url}get/allsignals`, data, {
+            headers: header(token),
+            data: { data },
         })
         return await res?.data;
     }
@@ -352,12 +369,12 @@ export async function GET_ALL_SERVICE(data , token) {
 }
 
 // GET TRADEHISTORY
-export async function GET_TRADEHISTORY(data , token) {
+export async function GET_TRADEHISTORY(data, token) {
     console.log(data);
     try {
-        const res = await axios.post(`${Config.base_url}get/tradhistory`, data ,{
-             headers: header(token),
-            data: {data},
+        const res = await axios.post(`${Config.base_url}get/tradhistory`, data, {
+            headers: header(token),
+            data: { data },
         })
         return await res?.data;
     }
@@ -370,18 +387,62 @@ export async function GET_TRADEHISTORY(data , token) {
 }
 
 // DELTE USER 
-export async function DELETE_USERAND_ALLSERVICES(data , token) {
+export async function DELETE_USERAND_ALLSERVICES(data, token) {
     console.log(data);
     try {
-        const res = await axios.post(`${Config.base_url}delete/user`, data ,{
+        const res = await axios.post(`${Config.base_url}delete/user`, data, {
             //  headers: header(token),
-            data: {data},
+            data: { data },
+        })
+        return await res?.data;
+
+    }
+    catch (err) {
+        console.log("error =", err);
+        return err
+        // custom error
+    }
+
+}
+
+
+// GET DASHBOARD COUNT
+export async function GET_DASHBOARD_COUNT(token) {
+    let data = {}
+    try {
+        const res = await axios.post(`${Config.base_url}get/dashboard/count`, data, {
+            headers: header(token),
+            data: {},
+
         })
         return await res?.data;
     }
     catch (err) {
         console.log("error =", err);
+
+        return err
         // custom error
     }
 
 }
+
+
+// GET_HELP_REQUEST
+export async function GET_HELP_REQUEST(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}getall/helps`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error =", err);
+        return err
+        // custom error
+    }
+
+}
+
+

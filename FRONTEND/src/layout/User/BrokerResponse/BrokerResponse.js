@@ -1,89 +1,229 @@
-import React from 'react'
+/* eslint-disable react/jsx-pascal-case */
+/* eslint-disable react/jsx-no-undef */
+import React, { useState, useEffect } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
-import BasicDataTable from '../../../Components/ExtraComponents/Datatable/BasicDataTable'
-import { Pencil, Trash2 } from 'lucide-react';
+import Accordion from 'react-bootstrap/Accordion';
+import { Get_Broker_Response } from "../../../ReduxStore/Slice/Users/BrokerResponseSlice"
+import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable"
+
+import { useDispatch, useSelector } from "react-redux";
+import Modal from '../../../Components/ExtraComponents/Modal';
+import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
+import { fa_time, fDateTimeSuffix } from '../../../Utils/Date_formet'
+import { GanttChartSquare } from 'lucide-react';
+
 
 
 const BrokerResponse = () => {
-    const columns = [
-        {
-            dataField: 'index',
-            text: 'S.No.',
-            formatter: (cell, row, rowIndex) => rowIndex + 1,
+  const dispatch = useDispatch()
 
-        },
-        {
-            dataField: 'panel_name',
-            text: 'Signals ID'
-        },
-        {
-            dataField: 'panel_name',
-            text: 'Signals time'
-        },
-        {
-            dataField: 'prefix',
-            text: 'Type'
-        },
-        {
-            dataField: 'prefix',
-            text: 'Symbol'
-        },
-        {
-            dataField: 'prefix',
-            text: 'Message'
-        },
-        {
-            dataField: 'Action',
-            text: 'Price',
-        },
-        {
-            dataField: 'Action',
-            text: 'Strategy',
-        },
-    ];
 
-    return (
-        <Content Page_title="Broker Response" button_status={false}>
-          <div class="accordion" id="accordionPanelsStayOpenExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-        Accordion Item #1
-      </button>
-    </h2>
-    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-      <div class="accordion-body">
-        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-        Accordion Item #2
-      </button>
-    </h2>
-    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-      <div class="accordion-body">
-        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-        Accordion Item #3
-      </button>
-    </h2>
-    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
-      <div class="accordion-body">
-        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
-</div>
-        </Content>
-        )
+  const [showModal, setshowModal] = useState(false)
+
+  const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
+
+  const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
+  const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
+
+  console.log("DashboardData", DashboardData);
+
+
+  const getsignals11 = async (e) => {
+    await dispatch(Get_Broker_Response({ _id: user_Id, token: AdminToken })).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setDashboardData({
+            loading: false,
+            data: response.data
+          });
+          ;
+        }
+      })
+  }
+
+  useEffect(() => {
+    getsignals11()
+  }, [])
+
+
+
+  const [activeKey, setActiveKey] = useState(null);
+
+  const columns = [
+    {
+      dataField: 'index',
+      text: 'S.No.',
+      formatter: (cell, row, rowIndex) => rowIndex + 1,
+
+    },
+    {
+      dataField: 'createdAt',
+      text: 'Created At',
+      formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>
+
+    },
+    {
+      dataField: 'symbol',
+      text: 'Symbol'
+    },
+    {
+      dataField: 'broker_name',
+      text: 'Broker Name'
+    },
+
+    {
+      dataField: 'order_id',
+      text: 'Oder Id'
+    },
+    {
+      dataField: 'Details View',
+      text: 'Message',
+      formatter: (cell, row, rowIndex) =>
+        row.order_view_status === "0" || row.order_view_status === 0 ?
+          <>
+            <GanttChartSquare onClick={(e) => GetAllServicesName(row)
+            } size={20} color="#198754" strokeWidth={2} className="mx-1" />
+          </> : ""
+    },
+
+  ];
+
+
+
+
+  // GET ALL GROUP SERVICES NAME
+  const GetAllServicesName = async (row) => {
+    console.log("row", row);
+    setshowModal(true)
+
+
+    // await dispatch(GET_ALL_SERVICES_NAMES({
+    //     data: row
+    // })).unwrap()
+    //     .then((response) => {
+    //         setshowModal(true)
+
+    //         if (response.status) {
+    //             setServicesName({
+    //                 loading: false,
+    //                 data: response.data
+    //             });
+    //         }
+    //         else {
+    //             setServicesName({
+    //                 loading: false,
+    //                 data: []
+    //             });
+
+    //         }
+    //     })
+
+  }
+  return (
+
+
+
+    <Content Page_title="Broker Response" button_status={false}>
+      {
+        DashboardData.data && DashboardData.data.length === 0 ? (
+          <FullDataTable TableColumns={columns} tableData={DashboardData.data} />
+          ) :
+          <>
+            <FullDataTable TableColumns={columns} tableData={DashboardData.data} />
+          </>
+      }
+
+
+
+      {
+        showModal ?
+          <>
+            <Modal isOpen={showModal} size="lg" title="Details View" hideBtn={true}
+              // onHide={handleClose}
+              handleClose={() => setshowModal(false)}
+            >
+              <BasicDataTable TableColumns={[
+                {
+                  dataField: 'index',
+                  text: 'S.No.',
+                  formatter: (cell, row, rowIndex) => rowIndex + 1,
+
+                },
+                {
+                  dataField: 'createdAt',
+                  text: 'Created At',
+                  formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>
+
+                },
+                {
+                  dataField: 'symbol',
+                  text: 'Symbol'
+                },
+                {
+                  dataField: 'broker_name',
+                  text: 'Broker Name'
+                },
+
+                {
+                  dataField: 'order_id',
+                  text: 'Oder Id'
+                },
+              ]} tableData={DashboardData.data} />
+
+            </Modal >
+          </>
+          : ""
+      }
+
+    </Content>
+
+
+
+
+
+
+    //     <Content Page_title="Broker Response" button_status={false}>
+
+
+    //       {/* <Accordion>
+    //         {
+    //           DashboardData.data.length !== 0 ?
+    //             <>
+    //               {
+    //                 DashboardData.data && DashboardData.data.map((item, index) => {
+    //                   return <>
+    //                     <Accordion.Item eventKey={index}>
+    //                       <Accordion.Header>
+    //                         {index + 1}
+    //                         <div className="col-3 mx-3">
+    //                           {item.symbol}
+    //                         </div>
+    //                         <div className="col-3">
+    //                           {item.broker_name}
+    //                         </div>
+    //                         <div className="col-3">
+    //                           {item.order_id}
+    //                         </div>
+    //                         <div className="col-3">
+    //                           {item. createdAt
+    // }
+    //                         </div>
+    //                       </Accordion.Header>
+    //                       <Accordion.Body>
+    //                         {item.order_status}
+    //                       </Accordion.Body>
+    //                     </Accordion.Item>
+    //                   </>
+
+    //                 })
+    //               }
+    //             </>
+    //             : <img src="../../../../assets/images/norecordfound.png" className='mx-auto d-flex' />
+    //         }
+
+    //       </Accordion> */}
+    //     </Content>
+  )
 }
 
 

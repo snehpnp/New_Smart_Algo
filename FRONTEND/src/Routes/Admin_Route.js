@@ -3,7 +3,7 @@ import React from 'react'
 import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
-import Dashboard from '../layout/Admin/Dashboard/Dashbaord';
+import Dashboard from '../layout/Admin/Dashboard/DashbaordMain';
 import Profile from '../layout/Admin/Profile/Profile'
 
 //  Clients

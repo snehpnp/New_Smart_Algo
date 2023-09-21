@@ -141,7 +141,7 @@ const BrokerResponse = () => {
 
                                                     //  setEnterQty(e.target.value)
                                                 }
-                                            // value={enterqty}
+                                            value={data.service.quantity}
                                             />
                                         </div>
                                     </div></td>

@@ -9,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 import { Email_regex, Mobile_regex } from "../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
+import { Create_Help } from "../../../ReduxStore/Slice/Users/ClientHelpSlice";
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+
 
 
 import toast, { Toaster } from 'react-hot-toast';
@@ -17,9 +20,12 @@ import toast, { Toaster } from 'react-hot-toast';
 const ApiCreateInfo = () => {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+    const token = JSON.parse(localStorage.getItem("user_details")).token;
 
+    const [refresh, setRefresh] = useState(false);
 
     const [UserDetails, setUserDetails] = useState({
         loading: true,
@@ -27,52 +33,51 @@ const ApiCreateInfo = () => {
     });
 
 
-
     const formik = useFormik({
         initialValues: {
             username: null,
             fullName: null,
             mobile: null,
-            msgbox: null,
-
+            email: null,
+            msg: null,
+            admin_id: null,
         },
         validate: (values) => {
 
             const errors = {};
-            if (!values.msgbox) {
-                errors.msgbox = valid_err.USERNAME_ERROR;
+            if (!values.msg) {
+                errors.msg = valid_err.EMPTY_MSG_ERROR;
             }
             return errors;
         },
         onSubmit: async (values) => {
             const req = {
-                "FullName": values.fullName,
-                "UserName": values.username,
-                "Email": values.email,
-
+                "username": values.fullName,
+                "fullname": values.username,
+                "email": values.email,
+                "mobile": values.mobile,
+                "helpmsg": values.msg,
+                "admin_id": values.admin_id,
+                "user_id": user_id,
             }
 
+            await dispatch(Create_Help({ req: req, token: token })).unwrap().then((response) => {
+                console.log("response", response)
+                if (response.status === 409) {
+                    toast.error(response.data.msg);
+                }
+                else if (response.status) {
+                    setRefresh(!refresh)
+                    toast.success(response.msg);
+                    setTimeout(() => {
+                        navigate("/client/dashboard")
+                      }, 1000);
+                }
+                else if (!response.status) {
+                    toast.error(response.msg);
+                }
 
-            // console.log("reqreqreqreqreq", req);
-
-            // return
-
-            //   await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((response) => {
-
-            //     if (response.status === 409) {
-            //       toast.error(response.data.msg);
-            //     }
-            //     else if (response.status) {
-            //       toast.success(response.msg);
-            //       setTimeout(() => {
-            //         navigate("/admin/allclients")
-            //       }, 1000);
-            //     }
-            //     else if (!response.status) {
-            //       toast.error(response.msg);
-            //     }
-
-            //   })
+            })
         }
     });
 
@@ -82,10 +87,11 @@ const ApiCreateInfo = () => {
 
 
     const fields = [
-        { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 4, disable: true },
-        { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 4, disable: true },
-        { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 4, disable: true },
-        { name: 'msg', label: 'Your Massage', type: 'msgbox', label_size: 12, col_size: 12 },
+        { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 3, disable: true },
+        { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 3, disable: true },
+        { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 3, disable: true },
+        { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 3, disable: true },
+        { name: 'msg', label: 'Your Massage', type: 'msgbox', label_size: 12, col_size: 12, row_size: '4' },
     ];
 
 
@@ -105,7 +111,7 @@ const ApiCreateInfo = () => {
     };
     useEffect(() => {
         data();
-    }, []);
+    }, [refresh]);
 
 
 
@@ -113,10 +119,9 @@ const ApiCreateInfo = () => {
         formik.setFieldValue('username', UserDetails.data.UserName);
         formik.setFieldValue('fullName', UserDetails.data.FullName);
         formik.setFieldValue('mobile', UserDetails.data.PhoneNo);
+        formik.setFieldValue('email', UserDetails.data.Email);
+        formik.setFieldValue('admin_id', UserDetails.data.parent_id);
     }, [UserDetails]);
-
-
-
 
 
 
@@ -124,6 +129,8 @@ const ApiCreateInfo = () => {
         <Content Page_title="Help Center" button_status={false} >
             <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Send"
             />
+            <ToastButton />
+
         </Content>
         )
     </>

@@ -12,14 +12,12 @@ const ThemeSelection = () => {
     const [toggleSelection, setToggleSelection] = useState(false)
     const [ThemeData, setThemeData] = useState([])
 
-    console.log("ThemeData", ThemeData);
 
     const AddClassName = (id) => {
         localStorage.setItem("theme_id", id)
 
 
         axios.post(`${Config.base_url}find_one/theme`, { _id: id }).then((res) => {
-            console.log("resresresresresresres", res);
 
             let themedata = res.data.data[0]
 

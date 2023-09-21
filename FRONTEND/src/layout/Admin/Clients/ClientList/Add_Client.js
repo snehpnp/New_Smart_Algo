@@ -40,7 +40,6 @@ const AddClient = () => {
 
   const [first, setfirst] = useState([])
 
-  console.log("selectedStrategies", selectedStrategies)
 
 
 
@@ -101,7 +100,6 @@ const AddClient = () => {
       Strategy: false
     },
     validate: (values) => {
-      console.log("values.licence", values.licence);
 
       const errors = {};
       if (!values.username) {
@@ -182,7 +180,6 @@ const AddClient = () => {
       }
 
 
-      // console.log("reqreqreqreqreq", req);
 
       // return
 
@@ -232,7 +229,6 @@ const AddClient = () => {
     for (let index = 1; index < 2; index++) {
       Service_Month_Arr.push({ month: index, endDate: `${index} Month Licence Expired On ${new Date(new Date().getFullYear(), new Date().getMonth() + index, new Date().getDate()).toString().split('00:00:00')[0]}` })
     }
-    console.log('Service_Month_Arr', Service_Month_Arr);
     setfirst(Service_Month_Arr)
   }, [])
 
@@ -360,6 +356,8 @@ const AddClient = () => {
         { label: '11', value: '11' },
         { label: '12', value: '12' },
       ],
+      showWhen: values =>
+      values.licence === '2'
 
 
     },

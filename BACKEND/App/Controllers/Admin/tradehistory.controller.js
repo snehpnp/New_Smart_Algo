@@ -15,19 +15,11 @@ class Tradehistory {
             let startDateObj = new Date(startDate)
             let endDateObj = new Date(endDate)
 
-            if (startDateObj >= endDateObj) {
-                return res.status(400).json({ status: false, msg: 'Start date must be before end date.' });
-            }
-
-            // if (!startDate) {
-            //     return res.status(200).json({ status: true, msg: 'Can Not Find Date Specific Signals', data: [] });
+            // if (startDateObj >= endDateObj) {
+            //     return res.status(400).json({ status: false, msg: 'Start date must be before end date.' });
             // }
 
-            const filteredSignals = await MainSignals_modal.find()
-            if (startDate == "" && endDate == "") {
-                return res.status(200).json({ status: true, msg: 'All  Tradehistory Date', data: filteredSignals });
 
-            }
             try {
                 const filteredSignals = await MainSignals_modal.find({
                     dt_date: { $gte: startDate, $lte: endDate },

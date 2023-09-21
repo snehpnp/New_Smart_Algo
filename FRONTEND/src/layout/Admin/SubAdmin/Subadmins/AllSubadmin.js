@@ -29,11 +29,16 @@ const AllSubadmin = () => {
         data: []
     });
 
-
+  //  console.log("Addsubadmin", Addsubadmin)
     const data = async () => {
         await dispatch(Get_All_SUBADMIN()).unwrap()
             .then((response) => {
                 if (response.status) {
+                    setAddsubadmin({
+                        loading: false,
+                        data: response.data
+                    });
+                } else {
                     setAddsubadmin({
                         loading: false,
                         data: response.data
@@ -150,7 +155,8 @@ const AllSubadmin = () => {
 
                             {
                                 Addsubadmin.data && Addsubadmin.data.length === 0 ? (
-                                    'No data found') :
+                                    <FullDataTable TableColumns={columns} tableData={Addsubadmin.data} />
+                                ) :
                                     <>
                                         <FullDataTable TableColumns={columns} tableData={Addsubadmin.data} />
                                     </>

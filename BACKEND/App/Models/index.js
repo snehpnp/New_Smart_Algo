@@ -22,7 +22,7 @@ module.exports = {
     api_create_info: require('./api_create_info.model'),
     BrokerResponse: require('./broker_response.model'),
     count_licenses: require('./count_licens.model'),
-
+    HelpCenter: require('./HelpCenter.model'),
 
 
 };
