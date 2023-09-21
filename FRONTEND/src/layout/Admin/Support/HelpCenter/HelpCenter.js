@@ -34,11 +34,17 @@ const HelpCenter = () => {
         data: []
     });
 
+// console.log("=>",getAllClients.data[0].createdAt.split('T')[0]);
 
     const data = async () => {
         await dispatch(GET_HELPS({user_id :user_id , token : token})).unwrap()
             .then((response) => {
                 if (response.status) {
+                    setAllClients({
+                        loading: false,
+                        data: response.data
+                    });
+                }else{
                     setAllClients({
                         loading: false,
                         data: response.data
@@ -57,51 +63,62 @@ const HelpCenter = () => {
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: 'UserName',
+            dataField: 'username',
             text: 'User Name'
         },
         {
-            dataField: 'Email',
+            dataField: 'email',
             text: 'Email'
         },
         {
-            dataField: 'PhoneNo',
+            dataField: 'mobile',
             text: 'Phone Number'
         },
         {
-            dataField: 'Otp',
-            text: 'Password'
+            dataField: 'help_msg',
+            text: 'Help Message'
         },
         {
-            dataField: 'ActiveStatus',
-            text: 'Status',
+            dataField: 'createdAt',
+            text: 'Date',
             formatter: (cell, row) => (
-                <>
-                    <label class="switch" >
-                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false} />
-                        <span class="slider round"></span>
-                    </label>
+                        <><div>{cell.split('T')[0] +"   "+cell.split('T')[1].split('.')[0]}</div> </>
+                        // <><div>{cell.split('.')[0]}</div> </>
 
-                </>
-
-
-            ),
+        
+        
+                    ),
         },
-        {
-            dataField: 'actions',
-            text: 'Actions',
-            formatter: (cell, row) => (
-                <div>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-                    </span>
+        // {
+        //     dataField: 'ActiveStatus',
+        //     text: 'Status',
+        //     formatter: (cell, row) => (
+        //         <>
+        //             <label class="switch" >
+        //                 <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false} />
+        //                 <span class="slider round"></span>
+        //             </label>
 
-                </div>
-            ),
-        },
+        //         </>
+
+
+        //     ),
+        // },
+        // {
+        //     dataField: 'actions',
+        //     text: 'Actions',
+        //     formatter: (cell, row) => (
+        //         <div>
+        //             <span data-toggle="tooltip" data-placement="top" title="Edit">
+        //                 <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+        //             </span>
+        //             <span data-toggle="tooltip" data-placement="top" title="Delete">
+        //                 <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+        //             </span>
+
+        //         </div>
+        //     ),
+        // },
     ];
     return (
         <>
@@ -111,8 +128,9 @@ const HelpCenter = () => {
                         <Theme_Content Page_title="Help Center" button_status={false}>
 
                             {
-                                getAllClients.data && getAllClients.data.length === 0 ? (
-                                    'No data found') :
+                                getAllClients.data && getAllClients.data.length === 0 ? 
+                                <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
+                                :
                                     <>
                                         <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
                                     </>

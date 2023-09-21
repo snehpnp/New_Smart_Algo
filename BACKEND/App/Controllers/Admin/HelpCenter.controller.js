@@ -22,7 +22,7 @@ class AdminHelpCenter {
 
             try {
                 const result = await HelpCenter_modal.find({
-                    admin_id: objectId,
+                    // admin_id: objectId,
                     createdAt: {
                         $gte: today,
                         $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
@@ -30,12 +30,12 @@ class AdminHelpCenter {
                 })
 
                 if (result.length === 0) {
-                    return res.status(409).json({ status: false, msg: 'No Msg Found', data: [] });
+                    return res.send({ status: false, msg: 'No Msg Found', data: [] });
                 }
-                return res.status(200).json({ status: true, msg: 'All Help Msg', data: result });
+                return res.send({ status: true, msg: 'All Help Msg', data: result });
             }
             catch (error) {
-                return res.status(500).json({ status: false, msg: 'Error  to Create Generate Help Response.', error: error.message });
+                return res.send({ status: false, msg: 'Error  to Create Generate Help Response.', error: error.message });
             }
         } catch (error) {
             console.log("Help- Center error-", error);

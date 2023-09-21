@@ -40,7 +40,6 @@ const Update_Broker_Key = () => {
 
 
 
-    console.log("UserDetails", UserDetails.data.broker);
 
 
 
@@ -68,7 +67,6 @@ const Update_Broker_Key = () => {
             return errors;
         },
         onSubmit: async (values) => {
-            // console.log("test", values);
 
             const req = {
                 "api_secret": values.setapi_secret,
@@ -149,18 +147,17 @@ const Update_Broker_Key = () => {
 
     ];
 
-    console.log("fords", formik.values);
 
     useEffect(() => {
         // if (onchild && onchild.length > 0) {
         formik.setValues({
-            // setapi_secret: UserDetails.data && UserDetails.data.|| null,
-            // setclient_code: UserDetails.data && UserDetails.data. || null,
-            // setdemat_userid: UserDetails.data && UserDetails.data. || null,
-            // setapp_id: UserDetails.data && UserDetails.data. || null,
-            // setapp_key: UserDetails.data && UserDetails.data. || null,
-            // setapi_key: UserDetails.data && UserDetails.data. || null,
-            // setapi_type: UserDetails.data && UserDetails.data. || null,
+            setapi_secret: UserDetails.data && UserDetails.data.api_secret|| null,
+            setclient_code: UserDetails.data && UserDetails.data.client_code || null,
+            setdemat_userid: UserDetails.data && UserDetails.data.demat_userid || null,
+            setapp_id: UserDetails.data && UserDetails.data.app_id || null,
+            setapp_key: UserDetails.data && UserDetails.data.app_key || null,
+            setapi_key: UserDetails.data && UserDetails.data.api_key || null,
+            setapi_type: UserDetails.data && UserDetails.data.api_type || null,
             broker: UserDetails.data && UserDetails.data.broker,
 
         });
