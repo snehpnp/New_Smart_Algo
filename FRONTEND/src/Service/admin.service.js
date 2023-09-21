@@ -27,6 +27,23 @@ export async function ALL_CLIENTS(data, token) {
 
 }
 
+
+// FIND ONE CLIENT BY ID
+export async function FIND_ONE_USER(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/userinfo`, data, {
+            headers: header(token),
+
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
 // ALL SERVICES
 export async function ALL_SERVICES(data, token) {
     try {
@@ -386,7 +403,7 @@ export async function GET_TRADEHISTORY(data, token) {
 
 }
 
-// DELTE USER 
+// DELTE USER
 export async function DELETE_USERAND_ALLSERVICES(data, token) {
     console.log(data);
     try {

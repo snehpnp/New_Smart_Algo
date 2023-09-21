@@ -12,7 +12,6 @@ import { GET_ALL_GROUP_SERVICES, Find_One_User } from '../../../../ReduxStore/Sl
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
 import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
-import Form from 'react-bootstrap/Form';
 
 
 import { Add_User } from '../../../../ReduxStore/Slice/Admin/userSlice';
@@ -20,15 +19,18 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
-import "../../../../App.css"
 
 
 
 
-const AddClient = () => {
+
+
+const EditClient = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
+
+
 
 
   const user_token = JSON.parse(localStorage.getItem("user_details")).token
@@ -36,19 +38,13 @@ const AddClient = () => {
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
 
 
-  const [UserData, setUserData] = useState({
-    loading: true,
-    data: []
-  });
-
-
   const [selectedStrategies, setSelectedStrategies] = useState([]);
-  const [ShowAllStratagy, setShowAllStratagy] = useState(true)
+  const [ShowAllStratagy, setShowAllStratagy] = useState(false)
+  const [UserData, setUserData] = useState([])
+
+  console.log("UserData", UserData.data && UserData.data[0]);
 
   const [first, setfirst] = useState([])
-
-
-
 
   const [AllGroupServices, setAllGroupServices] = useState({
     loading: true,
@@ -82,14 +78,20 @@ const AddClient = () => {
 
 
 
+
+
+
+
   // GET ALL GROUP SERVICES NAME
   const data_1 = async () => {
     await dispatch(Find_One_User({ 'id': location.state._id })).unwrap()
       .then((response) => {
+
+
         if (response.status) {
           setUserData({
             loading: false,
-            data: response
+            data: response.data
           });
         }
       })
@@ -101,21 +103,23 @@ const AddClient = () => {
   }, [])
 
 
+
+
   const formik = useFormik({
     initialValues: {
-      username: null,
-      fullName: null,
-      email: null,
-      mobile: null,
-      broker: null,
-      licence: null,
-      groupservice: null,
-      service_given_month: '0',
-      parent_id: null,
+      username: UserData.data !== undefined && UserData.data[0] ? UserData.data && UserData.data[0].UserName : null,
+      fullName: UserData.FullName ? UserData.FullName : null,
+      email: UserData.Email ? UserData.Email : null,
+      mobile: UserData.PhoneNo ? UserData.PhoneNo : null,
+      broker: UserData.broker ? UserData.broker : null,
+      licence: UserData.license_type ? UserData.license_type : null,
+      groupservice: UserData.parent_id ? UserData.parent_id : null,
+      service_given_month: UserData.service_given_month ? UserData.service_given_month : '0',
+      parent_id: UserData.parent_id ? UserData.parent_id : null,
       strategies: [],
-      tomonth: null,
+      tomonth: '',
       todate: null,
-      fromDate: null,
+      fromDate: UserData.licence ? UserData.licence : null,
       app_id: 'null',
       api_type: 'null',
       client_code: 'null',
@@ -125,22 +129,22 @@ const AddClient = () => {
       demat_userid: 'null',
       parent_role: null,
       Strategy: false,
-      licence1: 'null'
+      usemonth: UserData.licence ? UserData.licence : null
     },
     validate: (values) => {
 
       const errors = {};
-      if (!values.username) {
-        errors.username = valid_err.USERNAME_ERROR;
-      }
-      if (!values.fullName) {
-        errors.fullName = valid_err.FULLNAME_ERROR;
-      }
-      if (!values.mobile) {
-        errors.mobile = valid_err.CONTACT_ERROR;
-      } else if (!isValidContact(values.mobile)) {
-        errors.mobile = valid_err.INVALID_CONTACT_ERROR;
-      }
+      // if (!values.username) {
+      //   errors.username = valid_err.USERNAME_ERROR;
+      // }
+      // if (!values.fullName) {
+      //   errors.fullName = valid_err.FULLNAME_ERROR;
+      // }
+      // if (!values.mobile) {
+      //   errors.mobile = valid_err.CONTACT_ERROR;
+      // } else if (!isValidContact(values.mobile)) {
+      //   errors.mobile = valid_err.INVALID_CONTACT_ERROR;
+      // }
 
 
 
@@ -174,11 +178,11 @@ const AddClient = () => {
       //   errors.Strategy = "select test";
       // }
 
-      if (!values.email) {
-        errors.email = valid_err.EMPTY_EMAIL_ERROR;
-      } else if (!isValidEmail(values.email)) {
-        errors.email = valid_err.INVALID_EMAIL_ERROR;
-      }
+      // if (!values.email) {
+      //   errors.email = valid_err.EMPTY_EMAIL_ERROR;
+      // } else if (!isValidEmail(values.email)) {
+      //   errors.email = valid_err.INVALID_EMAIL_ERROR;
+      // }
 
       return errors;
     },
@@ -188,7 +192,9 @@ const AddClient = () => {
         "UserName": values.username,
         "Email": values.email,
         "PhoneNo": values.mobile,
-        "licence": values.tomonth,
+        "licence": values.usemonth,
+        "licence123": values.tomonth,
+
         "license_type": values.licence,
         "Strategies": selectedStrategies,
         "fromdate": values.fromDate,
@@ -204,12 +210,13 @@ const AddClient = () => {
         "app_key": values.app_key,
         "api_type": values.api_type,
         "demat_userid": values.demat_userid,
-        "licence1": values.licence1,
+        "group_service": values.groupservice
       }
 
 
-      console.log("req", req);
+      console.log("req", req)
       return
+
 
       await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((response) => {
 
@@ -232,104 +239,23 @@ const AddClient = () => {
 
 
 
-  useEffect(() => {
 
-    //   mobile: UserData.PhoneNo ? UserData.PhoneNo : null,
-    //   broker: UserData.broker ? UserData.broker : null,
-    //   licence: UserData.license_type ? UserData.license_type : null,
-    //   groupservice: UserData.parent_id ? UserData.parent_id : null,
-    //   service_given_month: UserData.service_given_month ? UserData.service_given_month : '0',
-    //   parent_id: UserData.parent_id ? UserData.parent_id : null,
-    //   strategies: [],
-    //   tomonth: '',
-    //   todate: null,
-    //   fromDate: UserData.licence ? UserData.licence : null,
-    //   app_id: 'null',
-    //   api_type: 'null',
-    //   client_code: 'null',
-    //   api_key: 'null',
-    //   api_secret: 'null',
-    //   app_key: 'null',
-    //   demat_userid: 'null',
-    //   parent_role: null,
-    //   Strategy: false,
-    //   usemonth: UserData.licence ? UserData.licence : null
-
-
-    console.log("UserData", UserData.data.data)
-
-    formik.setFieldValue('username', UserData.data.data !== undefined && UserData.data.data[0].UserName);
-    formik.setFieldValue('fullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
-    formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
-    formik.setFieldValue('mobile', UserData.data.data !== undefined && UserData.data.data[0].PhoneNo);
-    formik.setFieldValue('licence', UserData.data.data !== undefined && UserData.data.data[0].license_type);
-    formik.setFieldValue('licence1', UserData.data.data !== undefined && UserData.data.data[0].licence);
-    formik.setFieldValue('groupservice', UserData.data.data !== undefined && UserData.data.data[0].groupservices_clients.groupService_id);
-    formik.setFieldValue('service_given_month', UserData.data.data !== undefined && UserData.data.data[0].service_given_month);
-    formik.setFieldValue('broker', UserData.data.data !== undefined && UserData.data.data[0].broker);
-    formik.setFieldValue('parent_id', UserData.data.data !== undefined && UserData.data.data[0].parent_id);
-    formik.setFieldValue('app_id', UserData.data.data !== undefined && UserData.data.data[0].app_id);
-    formik.setFieldValue('api_type', UserData.data.data !== undefined && UserData.data.data[0].api_type);
-    formik.setFieldValue('client_code', UserData.data.data !== undefined && UserData.data.data[0].client_code);
-    formik.setFieldValue('api_key', UserData.data.data !== undefined && UserData.data.data[0].api_key);
-    formik.setFieldValue('api_secret', UserData.data.data !== undefined && UserData.data.data[0].api_secret);
-    formik.setFieldValue('app_key', UserData.data.data !== undefined && UserData.data.data[0].app_key);
-    formik.setFieldValue('demat_userid', UserData.data.data !== undefined && UserData.data.data[0].demat_userid);
-
-    // UserData.data.strategy && UserData.data.strategy.map((_item) => {
-    //   return <>
-    //     formik.setFieldValue('Strategies', item.strategy_id);
-
-    //   </>
-
-    // })
-
-
-
-
-
-  }, [UserData.data]);
-
-
-
-
-
-
-
-  // const handleStrategyChange = (event) => {
-  //   const strategyId = event.target.value;
-
-
-  //   const strategyName = event.target.name; // Assuming the label contains the strategy name
-
-  //   if (event.target.checked) {
-  //     // Add the selected strategy to the array
-  //     setSelectedStrategies([...selectedStrategies, { id: strategyId, name: strategyName }]);
-  //   } else {
-  //     // Remove the deselected strategy from the array
-  //     setSelectedStrategies(selectedStrategies.filter((strategy) => strategy.id !== strategyId));
-  //   }
-  // };
 
 
   const handleStrategyChange = (event) => {
     const strategyId = event.target.value;
-    const strategyName = event.target.name;
+
+
+    const strategyName = event.target.name; // Assuming the label contains the strategy name
 
     if (event.target.checked) {
       // Add the selected strategy to the array
-      setSelectedStrategies([
-        ...selectedStrategies,
-        { id: strategyId, name: strategyName },
-      ]);
+      setSelectedStrategies([...selectedStrategies, { id: strategyId, name: strategyName }]);
     } else {
       // Remove the deselected strategy from the array
-      setSelectedStrategies(
-        selectedStrategies.filter((strategy) => strategy.id !== strategyId)
-      );
+      setSelectedStrategies(selectedStrategies.filter((strategy) => strategy.id !== strategyId));
     }
   };
-
 
 
 
@@ -376,9 +302,8 @@ const AddClient = () => {
       , label_size: 12, col_size: 6, disable: false
     },
     {
-      name: 'licence1', label: 'Use License Month', type: 'text', label_size: 12, col_size: 6, disable: true,
+      name: 'usemonth', label: 'Use License Month', type: 'text', label_size: 12, col_size: 6, disable: true,
       showWhen: values => values.licence === '2'
-
     },
     {
       name: 'tomonth',
@@ -395,6 +320,7 @@ const AddClient = () => {
       type: 'select',
       options: brokerOptions && brokerOptions.map((item) => ({ label: item.label, value: item.value })),
       showWhen: values => values.licence === '2' || values.licence === '0'
+
       , label_size: 12, col_size: 6, disable: false
     },
     //  For Demo Only Client
@@ -508,7 +434,6 @@ const AddClient = () => {
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
-
     if (formik.values.broker === '2' || formik.values.broker === 2) {
       formik.setFieldValue('api_key', 'null');
       formik.setFieldValue('app_key', 'null');
@@ -524,7 +449,6 @@ const AddClient = () => {
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
-
     if (formik.values.broker === '4' || formik.values.broker === 4) {
       formik.setFieldValue('api_secret', 'null');
       formik.setFieldValue('app_id', 'null');
@@ -532,7 +456,6 @@ const AddClient = () => {
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
-
     if (formik.values.broker === '5' || formik.values.broker === 5) {
       formik.setFieldValue('api_secret', 'null');
       formik.setFieldValue('api_key', 'null');
@@ -540,7 +463,6 @@ const AddClient = () => {
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
-
     if (formik.values.broker === '6' || formik.values.broker === 6) {
       formik.setFieldValue('app_id', 'null');
       formik.setFieldValue('app_key', 'null');
@@ -548,13 +470,11 @@ const AddClient = () => {
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
-
     if (formik.values.broker === '7' || formik.values.broker === 7) {
       formik.setFieldValue('app_key', 'null');
       formik.setFieldValue('api_type', 'null');
       // formik.setFieldValue('demat_userid', 'null');
     }
-
     if (formik.values.broker === '8' || formik.values.broker === 8) {
       formik.setFieldValue('app_id', 'null');
       formik.setFieldValue('app_key', 'null');
@@ -562,12 +482,10 @@ const AddClient = () => {
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
-
     if (formik.values.broker === '9' || formik.values.broker === 9) {
       formik.setFieldValue('app_key', 'null');
       formik.setFieldValue('api_type', 'null');
     }
-
     if (formik.values.broker === '10' || formik.values.broker === 10) {
       formik.setFieldValue('app_id', 'null');
       formik.setFieldValue('app_key', 'null');
@@ -608,8 +526,6 @@ const AddClient = () => {
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
-
-
     if (formik.values.licence === '2' || formik.values.licence === 2) {
       formik.setFieldValue('fromDate', null);
       formik.setFieldValue('todate', null);
@@ -625,7 +541,85 @@ const AddClient = () => {
       formik.setFieldValue('todate', null);
     }
 
+
+    // username: UserData.data !== undefined && UserData.data[0] ? UserData.data && UserData.data[0].UserName : null,
+    //   fullName: UserData.FullName ? UserData.FullName : null,
+    //   email: UserData.Email ? UserData.Email : null,
+    //   mobile: UserData.PhoneNo ? UserData.PhoneNo : null,
+    //   broker: UserData.broker ? UserData.broker : null,
+    //   licence: UserData.license_type ? UserData.license_type : null,
+    //   groupservice: UserData.parent_id ? UserData.parent_id : null,
+    //   service_given_month: UserData.service_given_month ? UserData.service_given_month : '0',
+    //   parent_id: UserData.parent_id ? UserData.parent_id : null,
+    //   strategies: [],
+    //   tomonth: '',
+    //   todate: null,
+    //   fromDate: UserData.licence ? UserData.licence : null,
+    //   app_id: 'null',
+    //   api_type: 'null',
+    //   client_code: 'null',
+    //   api_key: 'null',
+    //   api_secret: 'null',
+    //   app_key: 'null',
+    //   demat_userid: 'null',
+    //   parent_role: null,
+    //   Strategy: false,
+    //   usemonth: UserData.licence ? UserData.licence : null
+
+    formik.setFieldValue('username', UserData.data !== undefined && UserData.data[0].UserName);
+
+
+
+
+
+
+
   }, [formik.values.broker, formik.values.licence]);
+
+
+
+  useEffect(() => {
+
+    //   mobile: UserData.PhoneNo ? UserData.PhoneNo : null,
+    //   broker: UserData.broker ? UserData.broker : null,
+    //   licence: UserData.license_type ? UserData.license_type : null,
+    //   groupservice: UserData.parent_id ? UserData.parent_id : null,
+    //   service_given_month: UserData.service_given_month ? UserData.service_given_month : '0',
+    //   parent_id: UserData.parent_id ? UserData.parent_id : null,
+    //   strategies: [],
+    //   tomonth: '',
+    //   todate: null,
+    //   fromDate: UserData.licence ? UserData.licence : null,
+    //   app_id: 'null',
+    //   api_type: 'null',
+    //   client_code: 'null',
+    //   api_key: 'null',
+    //   api_secret: 'null',
+    //   app_key: 'null',
+    //   demat_userid: 'null',
+    //   parent_role: null,
+    //   Strategy: false,
+    //   usemonth: UserData.licence ? UserData.licence : null
+
+    formik.setFieldValue('username', UserData.data !== undefined && UserData.data[0].UserName);
+    formik.setFieldValue('fullName', UserData.data !== undefined && UserData.data[0].FullName);
+    formik.setFieldValue('email', UserData.data !== undefined && UserData.data[0].Email);
+    formik.setFieldValue('mobile', UserData.data !== undefined && UserData.data[0].PhoneNo);
+    formik.setFieldValue('licence', UserData.data !== undefined && UserData.data[0].license_type);
+    formik.setFieldValue('groupservice', UserData.data !== undefined && UserData.data[0].UserName);
+    formik.setFieldValue('username', UserData.data !== undefined && UserData.data[0].UserName);
+    formik.setFieldValue('username', UserData.data !== undefined && UserData.data[0].UserName);
+    formik.setFieldValue('username', UserData.data !== undefined && UserData.data[0].UserName);
+    formik.setFieldValue('username', UserData.data !== undefined && UserData.data[0].UserName);
+
+
+
+
+
+
+
+  }, [UserData.data]);
+
 
 
 
@@ -692,74 +686,89 @@ const AddClient = () => {
     data()
   }, [])
 
-  // console.log("selectedStrategies" ,selectedStrategies);
 
-  const returnChecked = (strt_id) => {
-    if (UserData.data.strategy) {
-      return UserData.data.strategy.some((item) => item.strategy_id.includes(strt_id));
-    }
-    return false;
-  };
+
+
 
 
   return (
     <>
-      <Content Page_title="Add Client" button_title='Back' route="/admin/allclients">
-        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Client"
+      <Content Page_title="Edit Client" button_title='Back' route="/admin/allclients">
+        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
           additional_field={
+
             <>
-              {/*  For Show All Services */}
+
+
+
+
 
               {GetServices && GetServices.data.map((strategy) => (
                 <div className={`col-lg-2 `} key={strategy._id}>
                   <div className="col-lg-12 ">
-                    <label className="form-check-label bg-primary text-white py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
+                    {/* <div class="form-check custom-checkbox mb-3"> */}
+                    <label className="form-check-label bg-primary py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
                   </div>
                 </div>
               ))}
-              <label class="toggle mt-3">
-                <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
-                  setShowAllStratagy(e.target.checked)
-                }} />
-                <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`} ></div>
-                <span class="toggle-label">Show Strategy</span>
-              </label>
 
-              {/*  For Show All Strategy */}
-              {ShowAllStratagy ? (
-                <>
-                  {AllStrategy.data.map((strategy) => (
-                    <div className={`col-lg-2 mt-2`} key={strategy._id}>
-                      <div className="row ">
-                        <div className="col-lg-12 ">
-                          <div class="form-check custom-checkbox mb-3">
-                            <input
-                              type="checkbox"
-                              className="form-check-input"
-                              name={strategy.strategy_name}
-                              value={strategy._id}
-                              onChange={(e) => handleStrategyChange(e)}
-                              defaultChecked={returnChecked(strategy._id, strategy.strategy_name)}
-                            />
-                            <label className="form-check-label" for={strategy.strategy_name}>
-                              {strategy.strategy_name}
-                            </label>
-                          </div>
+
+              <div className="">
+                <div className="row d-flex mt-3">
+                  <div className="col-lg-12 ">
+                    <div class="form-check custom-checkbox mb-3">
+                      <input type="checkbox" name="strategy" className="form-check-input" id='strategy'
+                        // {...formik.getFieldProps(field.name)}
+                        onChange={(e) => {
+                          setShowAllStratagy(e.target.checked)
+                        }}
+                      />
+                      <label className="form-check-label" for='strategy'>strategy</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* <div className='d-flex'> */}
+              {ShowAllStratagy ? <>
+                {AllStrategy.data.map((strategy) => (
+                  <div className={`col-lg-2 mt-2`} key={strategy._id}>
+                    <div className="row ">
+                      <div className="col-lg-12 ">
+                        <div class="form-check custom-checkbox mb-3">
+                          <input type='checkbox' className="form-check-input" name={strategy.strategy_name}
+                            value={strategy._id}
+                            onChange={(e) => handleStrategyChange(e)}
+                          />
+                          <label className="form-check-label" for={strategy.strategy_name}>{strategy.strategy_name}</label>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </>
-              ) : ""}
+                  </div>
+                ))}
+              </> : ""}
+              {/* </div> */}
+
+
+              {/* </div> */}
             </>
+
+
+
           }
+
         />
+
         <ToastButton />
+
       </Content >
+
     </>
   )
 }
-export default AddClient
+
+
+export default EditClient
 
