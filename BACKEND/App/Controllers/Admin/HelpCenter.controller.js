@@ -15,15 +15,18 @@ class AdminHelpCenter {
 
             const { _id } = req.body;
             const objectId = new ObjectId(_id);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Start of the day
-            const endOfDay = new Date(today);
-            endOfDay.setHours(23, 59, 59, 999); // End of the day
+
+            const today = new Date();   
+            today.setHours(0, 0, 0, 0);
+
 
             try {
                 const result = await HelpCenter_modal.find({
                     admin_id: objectId,
-                    createdAt: { $gte: today, $lte: endOfDay }
+                    createdAt: {
+                        $gte: today,
+                        $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+                    },
                 })
 
                 if (result.length === 0) {
