@@ -179,7 +179,7 @@ font-size: 14px;
     border: 2px solid var(--primary);
     border-radius: 7px;
     background: #fff;
-    margin: 32px 0px;
+    margin: 25px 0px;
     transition: .5s linear;
 }
 .theme-1-dashboard .income-data:hover
@@ -247,6 +247,17 @@ body.theme-2 .form-card .form-check-input
 .theme-3-dashboard .card {
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
     border-bottom: 5px solid var(--primary);
+    height: auto;
+    transition: 0.5s linear;
+}
+.theme-3-dashboard .card:hover{
+
+    border: 5px solid var(--primary);
+
+}
+.theme-3-dashboard .card img {
+height: 70px;
+object-fit: scale-down;
 }
 .theme-3 .form-card {
 border-style: double;
@@ -281,7 +292,7 @@ border-style: double;
   .fourth-dashboard-card:hover {
     background-color: #387ae9d6;
 }
- .fourth-dashboard-card:hover h2,  .fourth-dashboard-card:hover h6
+ .fourth-dashboard-card:hover h2,  .fourth-dashboard-card:hover h6, .fourth-dashboard-card:hover h6 a
  {
 color:#fff;
  }
@@ -462,6 +473,70 @@ body.theme-10 .deznav  {
     }
     body.theme-10 .card.form-card  {
         box-shadow: rgba(240, 46, 170, 0.4) 5px 5px 5px 5px, rgba(240, 46, 170, 0.3) -6px -15px 3px -14px;
+    }
+
+    /* --------------media Query--------------- */
+    @media screen and (max-width: 991px) {
+        /* [data-sidebar-style="full"][data-layout="vertical"] .deznav {
+            width: 6.5rem;
+            overflow: visible;
+            position: absolute;
+        } */
+      }
+      img.profile-img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+    .profile-blog {
+        margin: 0px auto;
+        display: block;
+        text-align: center;
+    }
+
+.theme-1-dashboard a:hover {
+        color: var(--primary) !important;
+        text-decoration: underline;
+    }
+
+    .theme-1-dashboard .card-title
+    {
+        font-size: 1em;
+    }
+
+    .theme-6-dashboard .widget-stat .media .media-body h3
+    {
+        font-size: 1.5em;
+        padding: 5px 0px;
+    }
+
+    .theme-7-dashboard .card-body {
+        padding: 1rem;
+    }
+    .theme-9-dashboard .card-body img {
+       width: 105px;
+    }
+    .theme-10-dashboard .widget-stat .media .media-body h3{
+        font-size: 2rem;
+
+    }
+    .theme-10-dashboard .widget-stat .media > span {
+        height: auto;
+        width: auto;
+        border-radius: 3.125rem;
+        padding: 0.625rem 0.65rem;
+        font-size: 2rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #464a53;
+        min-width: auto;
+    }
+    .theme-10-dashboard .card-body img
+    {
+       width: 80%;
+       height: 50px;
     }
 
     /* --------------media Query--------------- */

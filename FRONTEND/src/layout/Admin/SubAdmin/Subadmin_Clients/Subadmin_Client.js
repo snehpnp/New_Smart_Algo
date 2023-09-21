@@ -114,7 +114,7 @@ const SubadminClient = () => {
             text: 'Actions',
             formatter: (cell, row) => (
                 <div>
-                    <Link to="/admin/allsubadmins/edit"> 
+                    <Link to="/admin/allsubadmins/edit">
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </span>
@@ -134,7 +134,7 @@ const SubadminClient = () => {
                 getAllClients.loading ? <Loader /> :
                     <>
                         <Theme_Content Page_title="All Subadmin Clients" button_status={false}>
-                            
+
                             <div className="col-lg-6">
                                 <div className="mb-3 row">
                                     <div className="col-lg-7">
@@ -162,7 +162,8 @@ const SubadminClient = () => {
                             </div>
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (
-                                    'No data found') :
+                                    <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
+                                    ) :
                                     <>
 
                                         <FullDataTable TableColumns={columns} tableData={getAllClients.data} />

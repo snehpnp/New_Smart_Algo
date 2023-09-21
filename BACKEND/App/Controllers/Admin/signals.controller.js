@@ -23,7 +23,7 @@ class Signals {
                 });
 
                 if (filteredSignals.length === 0) {
-                    return res.status(409).json({ status: false, msg: 'No signals founddate range.', data: [] });
+                    return res.send({ status: false, msg: 'No signals founddate range.', data: [] });
                 }
                 return res.status(200).json({ status: true, msg: 'Filtered Signals', data: filteredSignals });
             } catch (error) {

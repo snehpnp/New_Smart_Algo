@@ -76,11 +76,16 @@ const Signals = () => {
                         loading: false,
                         data: response.data
                     });
+                } else {
+                    getSignalsData({
+                        loading: false,
+                        data: response.data
+                    });
+
                 }
             })
 
 
-        // Create an array to store the dates
 
 
 
@@ -114,6 +119,7 @@ const Signals = () => {
 
 
 
+    console.log("SignalsData", SignalsData);
 
 
     return (

@@ -72,3 +72,6 @@ export const INVALID_COMPANYCC_EMAIL_ERROR = 'please Enter A Valid Company CC  E
 export const EMPTY_COMPANYBCC_EMAIL_ERROR = 'Please Enter  Valid  Company BCC Email ';
 export const INVALID_COMPANYBCC_EMAIL_ERROR = 'please Enter A Valid Company BCC Email ';
 
+//  For help
+
+export const EMPTY_MSG_ERROR = 'Enter Your Message';

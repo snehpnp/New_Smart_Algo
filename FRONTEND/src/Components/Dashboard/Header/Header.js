@@ -26,7 +26,6 @@ const Header = ({ ChatBox }) => {
   const [UserDetails, setUserDetails] = useState([]);
 
   const [CheckUser, setCheckUser] = useState(check_Device());
-console.log("CheckUser",CheckUser);
 
   //  lOCAL STORAGE VALUE
   let theme_id = localStorage.getItem("theme")

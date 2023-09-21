@@ -30,9 +30,6 @@ const TradeHistory = () => {
 
     const handleFromDateChange = (e) => {
         setFromDate(e.target.value);
-
-        // setFromDate(abc);
-
     };
 
     const handleToDateChange = (e) => {
@@ -81,7 +78,12 @@ const TradeHistory = () => {
 
 
     const getsignals11 = async (e) => {
-        await dispatch(Get_Tradehisotry({ startDate: '', endDate: '', token: token })).unwrap()
+        let abc = new Date()
+        let month = abc.getMonth() + 1
+        let date = abc.getDate()
+        let year = abc.getFullYear()
+        let full = `${year}/${month}/${date}`
+        await dispatch(Get_Tradehisotry({ startDate: full, endDate: full, token: token })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setTradeHistoryData({
@@ -123,7 +125,11 @@ const TradeHistory = () => {
             text: 'S.No.',
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
-
+        {
+            dataField: 'createdAt',
+            text: 'Signals time',
+            formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>
+        },
         {
             dataField: 'trade_symbol',
             text: 'Symbol'
@@ -147,7 +153,6 @@ const TradeHistory = () => {
             dataField: 'entry_price',
             text: 'Entry Price',
             formatter: (cell, row, rowIndex) => <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
-
         },
         {
             dataField: 'exit_price',
@@ -171,12 +176,7 @@ const TradeHistory = () => {
             dataField: 'strategy',
             text: 'Strategy',
         },
-        {
-            dataField: 'createdAt',
-            text: 'Signals time',
-            formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>
 
-        },
         {
             dataField: '',
             text: 'Details View',

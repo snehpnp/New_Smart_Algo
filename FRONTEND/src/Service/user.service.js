@@ -38,3 +38,96 @@ export async function USER_DASHBOARD(data, token) {
 
 }
 
+
+
+// USER BROKER RESPONSE
+export async function GET_BROKER_RESPONSE(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/user/brokeresponse`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
+
+
+
+// USER TRADE HISTORY
+
+export async function GET_TRADE_HISTORY(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/user/tradehistory`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
+
+
+
+// USER SIGNALS
+
+export async function GET_SIGNALS(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/user/signals`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
+
+
+
+
+// USER STRATEGY_DESCRIPTION
+
+export async function STRATEGY_DESCRIPTION(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/user/strategy`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
+
+
+
+// USER CREATE HELP
+
+export async function CREATE_HELP(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}create/user/help`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
+
+
+
+

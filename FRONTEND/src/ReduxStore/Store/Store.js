@@ -19,12 +19,16 @@ import StrategyServiceSlice from "../Slice/Admin/StrategySlice";
 import AdminUserSlice from "../Slice/Admin/userSlice";
 import SignalsSlice from "../Slice/Admin/SignalsSlice";
 import TradehistorySlice from "../Slice/Admin/TradehistorySlice";
+import AdminDashboardSlice from "../Slice/Admin/DashboardSlice";
+import AdminHelpSlice from "../Slice/Admin/AdminHelpSlice";
 
 
 
 
 //  DASHBOARD SLICE
 import DashboardSlice from "../Slice/Users/DashboardSlice";
+import StrategyDescSlice from "../Slice/Users/StrategySlice";
+import ClientHelpSlice from "../Slice/Users/ClientHelpSlice";
 
 
 
@@ -50,7 +54,11 @@ const store = configureStore({
     AdminUserSlice: AdminUserSlice.reducer,
     SignalsSlice: SignalsSlice.reducer,
     TradehistorySlice: TradehistorySlice.reducer,
-    DashboardSlice: DashboardSlice.reducer
+    DashboardSlice: DashboardSlice.reducer,
+    StrategyDescSlice: StrategyDescSlice.reducer,
+    AdminDashboardSlice: AdminDashboardSlice.reducer,
+    ClientHelpSlice: ClientHelpSlice.reducer,
+    AdminHelpSlice: AdminHelpSlice.reducer,
   },
 });
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 // import React from 'react'
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable jsx-a11y/anchor-is-valid */
@@ -20,6 +21,10 @@ import { fDate, fDateTimeSuffix } from '../../../../Utils/Date_formet';
 
 const AllClients = () => {
     const navigate = useNavigate()
+    const location = useLocation()
+    var dashboard_filter = location.search.split("=")[1]
+
+    // console.log("location" ,location.search.split("=")[1])
 
     const dispatch = useDispatch()
     const Role = JSON.parse(localStorage.getItem("user_details")).Role
@@ -34,7 +39,6 @@ const AllClients = () => {
         data: []
     });
 
-
     const data = async () => {
         var req1 = {
             Find_Role: Role,
@@ -43,6 +47,45 @@ const AllClients = () => {
         await dispatch(GET_ALL_CLIENTS(req1)).unwrap()
             .then((response) => {
                 if (response.status) {
+                    if (dashboard_filter !== undefined) {
+                        let abc = response.data && response.data.filter((item) => {
+                            if (dashboard_filter === "2" || dashboard_filter === 2) {
+                                return item.license_type === dashboard_filter || item.license_type === dashboard_filter
+                            }
+                            if (dashboard_filter === "21" || dashboard_filter === 21) {
+                                return (new Date(item.EndDate) > new Date() && (item.license_type === '2' || item.license_type === 2)
+                                )
+                            }
+                            if (dashboard_filter === "20" || dashboard_filter === 20) {
+                                return (new Date(item.EndDate) < new Date() && (item.license_type === '2' || item.license_type === 2))
+                            }
+                            if (dashboard_filter === "1" || dashboard_filter === 1) {
+                                return item.license_type === dashboard_filter || item.license_type === dashboard_filter
+                            }
+                            if (dashboard_filter === "11" || dashboard_filter === 11) {
+                                return (new Date(item.EndDate) > new Date() && (item.license_type === '1' || item.license_type === 1)
+                                )
+                            }
+                            if (dashboard_filter === "10" || dashboard_filter === 10) {
+                                return (new Date(item.EndDate) < new Date() && (item.license_type === '1' || item.license_type === 1))
+                            }
+                            if (dashboard_filter === "0" || dashboard_filter === 0) {
+                                return item.license_type === dashboard_filter || item.license_type === dashboard_filter
+                            }
+                            if (dashboard_filter === "01") {
+                                return (new Date(item.EndDate) > new Date() && (item.license_type === '0' || item.license_type === 0)
+                                )
+                            }
+                            if (dashboard_filter === "00") {
+                                return (new Date(item.EndDate) < new Date() && (item.license_type === '0' || item.license_type === 0))
+                            }
+                        })
+                        setAllClients({
+                            loading: false,
+                            data: abc
+                        });
+                        return
+                    }
                     setAllClients({
                         loading: false,
                         data: response.data
@@ -57,7 +100,6 @@ const AllClients = () => {
 
     // GO TO DASHBOARD
     const goToDashboard = async (asyncid, email) => {
-
         let req = {
             Email: email,
 
@@ -90,6 +132,68 @@ const AllClients = () => {
             })
     }
 
+    const showBrokerName = (value1, licence_type) => {
+        let value = parseInt(value1)
+
+        if (licence_type === '0') {
+            return "2 Days Only"
+        }
+        else if (value === 0 || value === '0' && licence_type === '1') {
+            return "Demo"
+        } else {
+            if (value === 1) {
+                return "markethub"
+            }
+            if (value === 1) {
+                return "markethub"
+            }
+            else if (value === 2) {
+                return "alice blue"
+            }
+            else if (value === 3) {
+                return "master trust"
+            }
+            else if (value === 4) {
+                return "Motilal Oswal"
+            }
+            else if (value === 5) {
+                return "Zebull"
+            }
+            else if (value === 6) {
+                return "IIFl"
+            }
+            else if (value === 7) {
+                return "Kotak"
+            }
+            else if (value === 8) {
+                return "Mandot"
+            }
+            else if (value === 9) {
+                return "Choice"
+            }
+            else if (value === 10) {
+                return "Anand Rathi"
+            }
+            else if (value === 11) {
+                return "B2C"
+            }
+            else if (value === 12) {
+                return "Angel"
+            }
+            else if (value === 13) {
+                return "Fyers"
+            }
+            else if (value === 14) {
+                return "5-Paisa"
+            }
+            else if (value === 15) {
+                return "Zerodha"
+            }
+        }
+
+    }
+
+
     const columns = [
         {
             dataField: "index",
@@ -109,21 +213,11 @@ const AllClients = () => {
             text: 'Phone Number'
         },
         {
-            dataField: 'CreateDate',
-            text: 'CreateDate',
-            formatter: (cell, row) => fDateTimeSuffix(row.CreateDate)
+            dataField: 'broker',
+            text: 'Broker',
+            formatter: (cell, row) => showBrokerName(cell, row.license_type)
+        },
 
-        },
-        {
-            dataField: 'StartDate',
-            text: 'Start Date',
-            formatter: (cell, row) => fDateTimeSuffix(row.StartDate)
-        },
-        {
-            dataField: 'EndDate',
-            text: 'End Date',
-            formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
-        },
         {
             dataField: 'Otp',
             text: 'Password'
@@ -140,18 +234,10 @@ const AllClients = () => {
                 </>
             ),
         },
+
         {
             dataField: 'ActiveStatus',
-            text: 'Go To Dashboard',
-            formatter: (cell, row) => (
-                <>
-                    Broker
-                </>
-            ),
-        },
-        {
-            dataField: 'ActiveStatus',
-            text: 'Dashboard',
+            text: 'Broker',
             formatter: (cell, row) => (
                 <>
                     <button
@@ -179,6 +265,17 @@ const AllClients = () => {
             ),
         },
         {
+            dataField: 'StartDate',
+            text: 'Start Date',
+            formatter: (cell, row) => fDateTimeSuffix(row.StartDate)
+        },
+        {
+            dataField: 'EndDate',
+            text: 'End Date',
+            formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
+        },
+
+        {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
@@ -204,7 +301,7 @@ const AllClients = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All Clients" button_title="Add Client" route="/admin/client/add">
+                        <Content Page_title="All Clients" button_title="Add Client" route="/admin/client/add">
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (
                                     'No data found') :
@@ -215,13 +312,13 @@ const AllClients = () => {
                             {
                                 showModal ?
                                     <>
-                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
+                                        <Modal Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
                                         >
                                         </Modal >
                                     </>
                                     : ""
                             }
-                        </Theme_Content>
+                        </Content>
                     </>
             }
 

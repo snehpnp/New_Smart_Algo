@@ -8,7 +8,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { GET_HELPS } from '../../../../ReduxStore/Slice/Admin/AdminHelpSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
@@ -18,8 +18,13 @@ import BasicDataTable from '../../../../Components/ExtraComponents/Datatable/Bas
 
 const HelpCenter = () => {
 
-
     const dispatch = useDispatch()
+
+
+
+    const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
+    const token = JSON.parse(localStorage.getItem("user_details")).token
+
 
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
@@ -31,7 +36,7 @@ const HelpCenter = () => {
 
 
     const data = async () => {
-        await dispatch(GET_ALL_CLIENTS()).unwrap()
+        await dispatch(GET_HELPS({user_id :user_id , token : token})).unwrap()
             .then((response) => {
                 if (response.status) {
                     setAllClients({

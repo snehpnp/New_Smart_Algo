@@ -8,7 +8,7 @@ class strategy {
     // ADD STRATEGY IN A COLLECTION
     async AddStragegy(req, res) {
         try {
-            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester } = req.body;
+            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester, per_lot } = req.body;
 
 
             const exist_strategy = await strategy_model.findOne({ strategy_name: strategy_name });
@@ -22,7 +22,8 @@ class strategy {
                 strategy_category: strategy_category,
                 strategy_segment: strategy_segment,
                 strategy_indicator: strategy_indicator,
-                strategy_tester: strategy_tester
+                strategy_tester: strategy_tester,
+                strategy_amount: per_lot
             })
 
 
@@ -51,7 +52,7 @@ class strategy {
     // EDIT STRATEGY IN A COLLECTION
     async EditStragegy(req, res) {
         try {
-            const { _id, edit_strategy } = req.body;
+            const { _id, strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester, strategy_amount } = req.body;
 
             const strategy_check = await strategy_model.findOne({ _id: _id });
             if (!strategy_check) {
@@ -78,8 +79,19 @@ class strategy {
             }
 
 
+
             const filter = { _id: _id };
-            const update_strategy = { $set: edit_strategy };
+            const update_strategy = {
+                $set: {
+                    "strategy_name": strategy_name,
+                    "strategy_description": strategy_description,
+                    "strategy_category": strategy_category,
+                    "strategy_segment": strategy_segment,
+                    "strategy_indicator": strategy_indicator,
+                    "strategy_tester": strategy_tester,
+                    "strategy_amount": strategy_amount
+                }
+            };
 
             // UPDATE STRATEGY INFORMATION
             const result = await strategy_model.updateOne(filter, update_strategy);

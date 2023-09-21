@@ -3,10 +3,9 @@ import { useLocation } from "react-router-dom";
 
 
 
-const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size , additional_field }) => {
+const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isSelected, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size, additional_field }) => {
 
 
-  console.log("label_size", label_size);
 
 
   const location = useLocation()
@@ -61,17 +60,17 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
                         id={field.name}
                         {...formik.getFieldProps(field.name)}
                       >
-                        <option value="" selected disabled>
+                        <option value="" selected disable={field.disable}>
                           Please Select {field.label}
                         </option>
                         {field.options.map((option) => (
-                          <option key={option.value} value={option.value} s>
+                          <option key={option.value} value={option.value} >
                             {option.label}
                           </option>
                         ))}
                       </select>
                       {formik.errors[field.name] &&
-                        <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
+                        <dziv style={{ color: 'red' }}>{formik.errors[field.name]}</dziv>}
                     </div>
                   </div>
                 </div>
@@ -282,10 +281,11 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
                                     <input
                                       type="text"
                                       className="form-control"
+                                      style={{ background: field.disable ? '#eeeeee' : "" }}
                                       id={field.name}
                                       placeholder={`Enter a ${field.label}`}
                                       {...formik.getFieldProps(field.name)}
-                                      required=""
+                                      // required=""
                                       readOnly={field.disable}
                                     />
                                     <div className="invalid-feedback">

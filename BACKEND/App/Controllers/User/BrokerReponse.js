@@ -1,7 +1,10 @@
 "use strict";
 const db = require('../../Models');
-const MainSignals_modal = db.MainSignals
+const BrokerResponse_modal = db.BrokerResponse
 const { formattedDateTime } = require('../../Helper/time.helper')
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 
 class BrokerReponse {
 
@@ -12,25 +15,28 @@ class BrokerReponse {
         try {
 
             const { _id } = req.body;
+            var objectId = new ObjectId(_id);
 
-
-            const filteredSignals = await MainSignals_modal.find()
-            if (startDate == "" && endDate == "") {
-                return res.status(200).json({ status: true, msg: 'All  Tradehistory Date', data: filteredSignals });
-
-            }
             try {
-                const filteredSignals = await MainSignals_modal.find({
-                    dt_date: { $gte: startDate, $lte: endDate },
+                const currentDate = new Date();
 
+                currentDate.setHours(0, 0, 0, 0);
+                const endOfDay = new Date(currentDate);
+                endOfDay.setHours(23, 59, 59, 999);
+                const filteredSignals = await BrokerResponse_modal.find({
+                    user_id: objectId,
+                    createdAt: {
+                        $gte: currentDate, // Greater than or equal to the start of the day
+                        $lte: endOfDay,    // Less than or equal to the end of the day
+                    },
                 });
 
                 if (filteredSignals.length === 0) {
-                    return res.status(409).json({ status: false, msg: 'No signals founddate range.', data: [] });
+                    return res.json({ status: false, msg: 'No Data Found', data: [] });
                 }
-                return res.status(200).json({ status: true, msg: 'Filtered Tradehistory', data: filteredSignals });
+                return res.status(200).json({ status: true, msg: 'All Broker Response', data: filteredSignals });
             } catch (error) {
-                return res.status(500).json({ status: false, msg: 'Error fetching filtered Trade Hisoty.', error: error.message });
+                return res.status(500).json({ status: false, msg: 'Error fetching Broker Response.', error: error.message });
             }
 
         } catch (error) {

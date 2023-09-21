@@ -83,7 +83,6 @@ const AllSubadmin = () => {
         },
         validate: (values) => {
 
-            console.log("values", values);
             const errors = {};
             if (!values.username) {
                 errors.username = valid_err.USERNAME_ERROR;
@@ -114,7 +113,6 @@ const AllSubadmin = () => {
             return errors;
         },
         onSubmit: async (values) => {
-
             const req = {
                 "FullName": values.FullName,
                 "UserName": "0",
@@ -139,6 +137,8 @@ const AllSubadmin = () => {
 
                 }
             }
+
+            console.log("req" ,req)
         }
     });
 
@@ -279,7 +279,6 @@ const AllSubadmin = () => {
 
 
 
-    console.log("SelectedGroupServices", SelectedGroupServices);
     return (
         <>
             {

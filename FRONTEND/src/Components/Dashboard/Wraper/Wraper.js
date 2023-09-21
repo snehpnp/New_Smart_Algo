@@ -280,10 +280,10 @@ useEffect(() => {
           <Header ChatBox={ShowChatBox} ShowSidebar={ShowSidebar} />
           <Sidebar ShowSidebar={ShowSidebar} />
           {/* <Content /> */}
-          {roles === "SUPERADMIN" ? <>
+          {/* {roles === "SUPERADMIN" ? <> */}
           <ThemeSelection />
           <CreateTheme SelectTheme1={SelectTheme} />
-          </> : ""}
+          {/* </> : ""} */}
           <ChatBox toggleChat={toggleChatBox} />
           <Footer />
 

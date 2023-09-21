@@ -13,6 +13,9 @@ app.use(require("./Admin/user.route"));
 app.use(require("./Admin/servicegroup.route"));
 app.use(require("./Admin/signals.route"));
 app.use(require("./Admin/tradehistory.route"));
+app.use(require("./Admin/dashboard.route"));
+app.use(require("./Admin/helpcenter.route "));
+
 
 
 // SUBADMIN ROUTES
