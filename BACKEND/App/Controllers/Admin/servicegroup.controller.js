@@ -248,10 +248,7 @@ class GroupService {
     }
   }
 
-
   // DELETE GROUP SERVICES
-
-
   async DELETEGROUPSERVICES(req, res) {
     try {
       const { id } = req.body; // Assuming your ID is passed as 'id' in the request body
@@ -286,7 +283,6 @@ class GroupService {
     }
   }
 
-
   // GET SERVICES NAME
   async GetAllServicesName(req, res) {
 
@@ -315,45 +311,50 @@ class GroupService {
 
   }
 
-
-
   // GET SERVICES BY GROUP ID
   async GetServicesByGroupId(req, res) {
 
     try {
 
       const { _id } = req.body
-      const objectId = new ObjectId(_id);
+      console.log(_id);
+      if(_id != "yyyyyyyYYYYYY"){
+        const objectId = new ObjectId(_id);
 
-      const pipeline = [
-        {
-          '$lookup': {
-            'from': 'services',
-            'localField': 'Service_id',
-            'foreignField': '_id',
-            'as': 'ServiceResult'
-          }
-        },
-        {
-          $match: {
-            Servicegroup_id: objectId,
-          }
-        },
-        {
-          $project: {
-            'ServiceResult.name': 1,
+        const pipeline = [
+          {
+            '$lookup': {
+              'from': 'services',
+              'localField': 'Service_id',
+              'foreignField': '_id',
+              'as': 'ServiceResult'
+            }
           },
-        },
-        {
-          $unwind: '$ServiceResult', // Unwind the 'categoryResult' array
-        },
+          {
+            $match: {
+              Servicegroup_id: objectId,
+            }
+          },
+          {
+            $project: {
+              'ServiceResult.name': 1,
+            },
+          },
+          {
+            $unwind: '$ServiceResult', // Unwind the 'categoryResult' array
+          },
+  
+        ];
+  
+        const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);
+        return res.send({ status: true, msg: 'Get All successfully ', data: Service_name_get });
+  
+  
+      }else{
+        return res.send({ status: false, msg: 'Empty DAta', data: [] });
 
-      ];
-
-      const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);
-      return res.send({ status: true, msg: 'Get All successfully ', data: Service_name_get });
-
-
+      }
+   
 
   }
   catch(error) {
@@ -361,9 +362,6 @@ class GroupService {
   }
 
 }
-
-
-
 
   // GET SERVICES NAME
   async GetAllServicesUserNAme(req, res) {
@@ -373,8 +371,6 @@ class GroupService {
     var ServicesArr = []
     const objectId = new ObjectId(_id);
 
-
-    console.log("objectId", objectId)
     // Define the aggregation pipeline
     const pipeline = [
       {
@@ -406,12 +402,6 @@ class GroupService {
 
     // Execute the aggregation pipeline
     const result = await groupServices_client1.aggregate(pipeline)
-    console.log("result", result);
-
-
-
-
-
 
     const groupServices_user = await groupServices_client1.find({ groupService_id: objectId })
 
@@ -424,7 +414,8 @@ class GroupService {
 
 
   } catch (error) {
-    console.log("GET SERVICES NAME -", error);
+    console.error("GET SERVICES NAME -", error);
+    return res.send({ status: false, msg: 'Internal Server Error' });
   }
 
 }

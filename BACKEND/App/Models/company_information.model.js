@@ -61,6 +61,9 @@ const CompanySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    licenses: {
+        type: String
+    },
     createdAt: {
         type: Date,
         default: Date.now

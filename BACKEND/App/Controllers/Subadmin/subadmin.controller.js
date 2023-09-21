@@ -8,13 +8,16 @@ const Subadmin_Permission = db.Subadmin_Permission;
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
 
-// OK
+
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 // Product CLASS
 class Subadmin {
+    // ADD SUBAMDIN
     async AddSubadmin(req, res) {
         try {
-            const { FullName, UserName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role } = req.body;
-
+            const { FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role } = req.body;
 
             // IF ROLE NOT EXIST TO CHECK
             const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
@@ -23,7 +26,7 @@ class Subadmin {
             }
 
             // IF USER ALEARDY EXIST
-            const existingUsername = await User_model.findOne({ UserName: UserName });
+            const existingUsername = await User_model.findOne({ UserName: FullName + PhoneNo.slice(-4) });
             if (existingUsername) {
                 return res.status(409).json({ status: false, msg: 'Username already exists', data: [] });
             }
@@ -35,7 +38,6 @@ class Subadmin {
             if (existingePhone) {
                 return res.status(409).json({ status: false, msg: 'Phone Number already exists', data: [] });
             }
-
 
             const salt = await bcrypt.genSalt(10);
             var ByCryptrand_password = await bcrypt.hash(password.toString(), salt);
@@ -56,15 +58,12 @@ class Subadmin {
 
             // Company Information
             const User = new User_model({
-                FullName: FullName,
-                UserName: UserName,
+                FullName: FullName + PhoneNo.slice(-4),
+                UserName: FullName,
                 Email: Email,
                 PhoneNo: PhoneNo,
-                // Password: UserName + "@" + PhoneNo.slice(-4),
                 Password: ByCryptrand_password,
                 Otp: password,
-                // StartDate: "00-00-00",
-                // EndDate: "00-00-00",
                 Role: Role.toUpperCase(),
                 client_key: client_key,
                 parent_role: parent_role,
@@ -77,6 +76,8 @@ class Subadmin {
                 .then(async (data) => {
                     const SubadminPermision = new Subadmin_Permission({
                         client_add: Subadmin_permision_data.client_add,
+                        client_edit: Subadmin_permision_data.client_edit,
+                        license_permision: Subadmin_permision_data.license_permision,
                         go_To_Dashboard: Subadmin_permision_data.go_To_Dashboard,
                         trade_history_old: Subadmin_permision_data.trade_history_old,
                         client_activation: Subadmin_permision_data.client_activation,
@@ -105,6 +106,75 @@ class Subadmin {
 
                 })
 
+
+        }
+        catch (error) {
+            res.send({ msg: "Error=>", error })
+        }
+
+    }
+
+    // EDIT SUBADMIN
+    async EditSubadmin(req, res) {
+        try {
+            const { id, FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role } = req.body;
+
+            // IF ROLE NOT EXIST TO CHECK
+            const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
+            if (!roleCheck) {
+                return res.status(409).json({ status: false, msg: 'Role Not exists', data: [] });
+            }
+
+
+            // IF USER ALEARDY EXIST
+            const existingUsername = await User_model.findOne({ _id: id });
+            if (!existingUsername) {
+                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+            }
+            // const existingemail = await User_model.findOne({ Email: Email });
+            // if (existingemail) {
+            //     return res.status(409).json({ status: false, msg: 'Email already exists', data: [] });
+            // }
+            // const existingePhone = await User_model.findOne({ PhoneNo: PhoneNo });
+            // if (existingePhone) {
+            //     return res.status(409).json({ status: false, msg: 'Phone Number already exists', data: [] });
+            // }
+
+            const salt = await bcrypt.genSalt(10);
+            var ByCryptrand_password = await bcrypt.hash(password.toString(), salt);
+
+
+            // Company Information
+            const User = {
+                FullName: FullName,
+                Password: ByCryptrand_password,
+                Otp: password,
+                Role: Role.toUpperCase(),
+
+            };
+            let subadminUpdate = await User_model.findByIdAndUpdate(existingUsername._id, User)
+
+            var SubadminPermision = {
+                client_add: Subadmin_permision_data.client_add,
+                client_edit: Subadmin_permision_data.client_edit,
+                license_permision: Subadmin_permision_data.license_permision,
+                go_To_Dashboard: Subadmin_permision_data.go_To_Dashboard,
+                trade_history_old: Subadmin_permision_data.trade_history_old,
+                client_activation: Subadmin_permision_data.client_activation,
+                strategy: Subadmin_permision_data.strategy,
+                group_services: Subadmin_permision_data.group_services,
+            }
+
+            const filter = { user_id: existingUsername._id };
+            const updateOperation = { $set: SubadminPermision };
+
+            const result = await Subadmin_Permission.updateOne(filter, updateOperation);
+     
+
+            if (result) {
+                return res.send({ status: true, msg: "successfully Edit!", data: [] })
+
+            }
 
         }
         catch (error) {

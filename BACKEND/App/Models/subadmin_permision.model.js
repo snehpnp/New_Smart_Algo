@@ -4,7 +4,17 @@ const Subadmin_Permission_Schema = new mongoose.Schema({
 
     client_add: {
         type: Number,
-        enum: [0, 1, 2],  //0 = DEMO , 1 = LIVE , 2= 2DAYS
+        enum: [0, 1],  
+        default: 0
+    },
+    client_edit: {
+        type: Number,
+        enum: [0, 1],  
+        default: 0
+    },
+    license_permision: {
+        type: Number,
+        enum: [0, 1],  
         default: 0
     },
     go_To_Dashboard: {

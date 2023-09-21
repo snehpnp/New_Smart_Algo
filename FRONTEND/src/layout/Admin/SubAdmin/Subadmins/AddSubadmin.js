@@ -155,25 +155,26 @@ const AllSubadmin = () => {
             check_box_true: formik.values.all || formik.values.addclient ? true : false,
         },
         {
-            name: 'tradehistory', label: 'Trade History', type: 'checkbox', label_size: 12, col_size: 3,
-            check_box_true: formik.values.all || formik.values.tradehistory ? true : false,
-        },
-        {
             name: 'editclient', label: 'Edit Client', type: 'checkbox', label_size: 12, col_size: 3,
             check_box_true: formik.values.all || formik.values.editclient ? true : false,
-        },
-        {
-            name: 'gotodashboard', label: 'Go To Dashboard', type: 'checkbox', label_size: 12, col_size: 3,
-            check_box_true: formik.values.all || formik.values.gotodashboard ? true : false,
         },
         {
             name: 'licence', label: 'Licence  Permission', type: 'checkbox', label_size: 12, col_size: 3,
             check_box_true: formik.values.all || formik.values.licence ? true : false,
         },
         {
-            name: 'group', label: 'Group Permission', type: 'checkbox', label_size: 12, col_size: 3,
-            check_box_true: formik.values.all || formik.values.group ? true : false,
+            name: 'gotodashboard', label: 'Go To Dashboard', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.gotodashboard ? true : false,
         },
+        {
+            name: 'tradehistory', label: 'Trade History', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.tradehistory ? true : false,
+        },
+
+        // {
+        //     name: 'group', label: 'Group Permission', type: 'checkbox', label_size: 12, col_size: 3,
+        //     check_box_true: formik.values.all || formik.values.group ? true : false,
+        // },
         {
             name: 'groupservice', label: 'Group Service Permission', type: 'checkbox',
             check_box_true: formik.values.all || formik.values.groupservice ? true : false,

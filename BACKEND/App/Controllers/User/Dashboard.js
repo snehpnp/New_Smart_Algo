@@ -80,10 +80,6 @@ class Dashboard {
             const GetAllClientServices = await client_services.aggregate(pipeline)
 
 
-
-
-
-
             const pipeline1 = [
                 {
                     $match: {
@@ -136,6 +132,22 @@ class Dashboard {
         }
     }
 
+    // UPDATE CLIENT SERVICES
+    async updateClientServices(req,res){
+        try {   
+            const {user_id,servicesData } = req.body;
+
+            const UserData = await User_model.findOne({ _id: user_id });
+            if (!UserData) {
+                return res.send({ status: false, msg: 'User Not exists', data: [] });
+            }
+
+            console.log("servicesData",servicesData);
+
+        } catch (error) {
+            console.log("ClientServices Update-",error);
+        }
+    }
 
 }
 

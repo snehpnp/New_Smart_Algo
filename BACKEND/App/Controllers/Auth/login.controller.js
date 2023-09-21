@@ -7,6 +7,8 @@ const { logger, getIPAddress } = require('../../Helper/logger.helper')
 const db = require('../../Models');
 const company_information = db.company_information;
 const User = db.user;
+const Subadmin_Permission = db.Subadmin_Permission;
+
 
 
 const formattedDateTime = require('../../Helper/time.helper')
@@ -68,12 +70,29 @@ class Login {
             var token = jwt.sign({ id: EmailCheck._id }, process.env.SECRET, {
                 expiresIn: 36000 // 10 hours
             });
-            var msg = {
-                'Email': EmailCheck.Email,
-                'user_id': EmailCheck._id,
-                'token': token,
-                'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role
-            };
+
+            if (EmailCheck.Role == "SUBADMIN") {
+
+                var SubadminPermision = await Subadmin_Permission.find({ user_id: EmailCheck._id })
+                console.log("SubadminPermision", SubadminPermision);
+                var msg = {
+                    'Email': EmailCheck.Email,
+                    'user_id': EmailCheck._id,
+                    'token': token,
+                    'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
+                    'Subadmin_permision': SubadminPermision,
+
+                };
+            } else {
+                var msg = {
+                    'Email': EmailCheck.Email,
+                    'user_id': EmailCheck._id,
+                    'token': token,
+                    'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role
+                };
+            }
+
+
 
             try {
                 logger.info('Login Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
@@ -376,7 +395,7 @@ class Login {
 
     }
 
-    
+
     // session clear
     async sessionClear(req, res) {
         try {
