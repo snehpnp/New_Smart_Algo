@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_CLIENTS, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS,DELETE_USERAND_ALLSERVICES } from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_CLIENTS, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_USERAND_ALLSERVICES, FIND_ONE_USER } from "../../../Service/admin.service";
 
 
 
@@ -100,10 +100,24 @@ export const UPDATE_USER_ACTIVE_STATUS = createAsyncThunk("update/useractive/sta
         // console.log("res" ,res);
         return await res;
     } catch (err) {
-        console.log("err",err);
+        console.log("err", err);
         return err;
     }
 });
+
+// UPDATE USER ACTIVE STATUS FOR API
+export const Find_One_User = createAsyncThunk("update/useractive/status", async (data) => {
+    try {
+        const { id } = data
+        const res = await FIND_ONE_USER({id: id });
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        console.log("err", err);
+        return err;
+    }
+});
+
 
 
 // DELETE API TO DELTE USER AND HIS ALL TYPE OF SERVICES
@@ -113,7 +127,7 @@ export const DELETE_USER_SERVICES = createAsyncThunk("delete/user", async (data)
         // console.log("res" ,res);
         return await res;
     } catch (err) {
-        console.log("err",err);
+        console.log("err", err);
         return err;
     }
 });
@@ -133,7 +147,8 @@ const AdminSlice = createSlice({
         getalltradingstatus: [],
         goTodashboard: [],
         activeStatus: [],
-        deleteuser:[]
+        deleteuser: [],
+        oneuser: []
     },
 
     recuders: {},
@@ -154,6 +169,10 @@ const AdminSlice = createSlice({
         [Service_By_Catagory.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, servicebycatagory: payload, isLoading: false };
+        },
+        [Find_One_User.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, oneuser: payload, isLoading: false };
         },
         [GET_ALL_GROUP_SERVICES.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
