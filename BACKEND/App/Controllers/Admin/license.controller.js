@@ -48,7 +48,29 @@ class License {
         try {
 
 
-            const Transection_license = await count_licenses.find({admin_license:null}).sort({ createdAt: -1 })
+            const Transection_license = await count_licenses.aggregate([
+                {
+                    $match: { admin_license: null }
+                },
+                {
+                    $sort: { createdAt: -1 }
+                },
+                {
+                    $lookup: {
+                        from: "users", // Name of the user collection
+                        localField: "user_id", // Field in the count_licenses collection that links to users
+                        foreignField: "_id", // Field in the users collection that links to count_licenses
+                        as: "user" // Alias for the joined user information
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        count_license: "$$ROOT", // Include the entire count_license document
+                        "user.FullName": 1 // Extract only the "FullName" field from the "user" subdocument
+                      }
+                }
+            ])
 
             if (Transection_license.length == 0) {
 

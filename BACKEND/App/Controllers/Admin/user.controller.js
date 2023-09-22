@@ -158,7 +158,6 @@ class Employee {
                 UserName: UserName,
                 Email: Email,
                 PhoneNo: PhoneNo,
-                // Password: UserName + "@" + PhoneNo.slice(-4),
                 Password: ByCryptrand_password,
                 Otp: rand_password,
                 StartDate: StartDate1,
@@ -274,7 +273,7 @@ class Employee {
     async UpdateUser(req, res) {
         try {
 
-            const { FullName, UserName, Email, PhoneNo, license_type, licence, licence1, fromdate, Strategies, todate, service_given_month, broker, parent_id, parent_role, api_secret, app_id, client_code, api_key, app_key, api_type, demat_userid, group_service } = req.body;
+            // const { FullName, UserName, Email, PhoneNo, license_type, licence, licence1, fromdate, Strategies, todate, service_given_month, broker, parent_id, parent_role, api_secret, app_id, client_code, api_key, app_key, api_type, demat_userid, group_service } = req.body;
 
             var req = req.body.req
 
@@ -324,9 +323,9 @@ class Employee {
                 },
             ]);
 
-            if(totalLicense.length > 0){
+            if (totalLicense.length > 0) {
                 var TotalLicense = totalLicense[0].totalLicense
-            }else{
+            } else {
                 var TotalLicense = 0
 
             }
@@ -344,7 +343,6 @@ class Employee {
                         start_date_2days = start_date_2days.format('Y-m-d H:M:S');
                         var start_date = start_date_2days;
 
-                        // console.log("start_date", start_date);
                         StartDate1 = start_date
 
 
@@ -373,46 +371,37 @@ class Employee {
                     } else if (req.license_type == '1') {
                         StartDate1 = req.fromdate
                         EndDate1 = req.todate
-                    } else if (req.$lookuplicense_type == '2') {
+                    } else if (req.license_type == '2') {
 
                         var currentDate = new Date();
                         var start_date_2days = dateTime.create(currentDate);
                         start_date_2days = start_date_2days.format('Y-m-d H:M:S');
                         var start_date = start_date_2days;
-
-                        // console.log("start_date", start_date);
+                        ;
                         StartDate1 = start_date
-
 
                         var UpdateDate = ""
                         var StartDate = new Date(start_date)
 
-                        UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(licence1));
+                        UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(req.licence1));
 
                         var end_date_2days = dateTime.create(UpdateDate);
                         var end_date_2days = end_date_2days.format('Y-m-d H:M:S');
 
-                        // console.log("END DATE", end_date_2days);
                         EndDate1 = end_date_2days
-                        TotalMonth = licence1
+                        TotalMonth = req.licence1
 
                     }
 
                 } else {
                     if (req.license_type == '2') {
-                        console.log("test" , req.license_type)
 
                         var UserEndDate = new Date(existingUsername.EndDate);
                         var TodaysDate = new Date();
 
-                        console.log("licence2", Number(req.licence1));
                         if (Number(req.licence1) > 0) {
 
-                            console.log("licence1", Number(req.licence1));
-
                             if (UserEndDate > TodaysDate) {
-
-                                console.log("teri bhen ki ", Number(req.licence1));
 
                                 var currentDate = new Date(existingUsername.EndDate);
 
@@ -599,15 +588,14 @@ class Employee {
                 } catch (error) {
                     console.log("Group Services Error-", error);
                 }
-                console.log("User_update", User_update);
-                console.log("req.api_secret", req.api_secret);
+
 
                 var User_update = {
                     FullName: req.FullName,
                     license_type: req.license_type,
                     licence: TotalMonth,
-                    StartDate: StartDate1 == null ? existingUsername.StartDate :StartDate1,
-                    EndDate: EndDate1 == null ? existingUsername.EndDate :EndDate1,
+                    StartDate: StartDate1 == null ? existingUsername.StartDate : StartDate1,
+                    EndDate: EndDate1 == null ? existingUsername.EndDate : EndDate1,
                     broker: req.broker,
                     parent_id: req.parent_id,
                     parent_role: req.parent_role,
@@ -617,7 +605,9 @@ class Employee {
                     api_key: req.api_key,
                     app_key: req.app_key,
                     api_type: req.api_type,
-                    demat_userid: req.demat_userid
+                    demat_userid: req.demat_userid,
+                    service_given_month: req.service_given_month
+
 
                 }
                 console.log("User_uodate", User_update);
