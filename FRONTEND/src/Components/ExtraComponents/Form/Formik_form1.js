@@ -7,7 +7,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
 
 
 
-
+console.log("field.disable" , fieldtype)
   const location = useLocation()
 
   const [passwordVisible, setPasswordVisible] = useState({});
@@ -59,6 +59,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                         className="default-select wide form-control"
                         id={field.name}
                         {...formik.getFieldProps(field.name)}
+                        disabled={field.disable}
                       >
                         <option value="" selected disable={field.disable}>
                           Please Select {field.label}
@@ -70,7 +71,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                         ))}
                       </select>
                       {formik.errors[field.name] &&
-                        <dziv style={{ color: 'red' }}>{formik.errors[field.name]}</dziv>}
+                        <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
                     </div>
                   </div>
                 </div>
