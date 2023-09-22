@@ -10,11 +10,16 @@ import Dashboard7 from './Dashboard7';
 import Dashboard8 from './Dashboard8';
 import Dashboard9 from './Dashboard9';
 import Dashboard10 from './Dashboard10';
+import * as Config from "../../../Utils/Config";
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Get_Dashboard_Count } from '../../../ReduxStore/Slice/Admin/DashboardSlice';
 
+import socketIOClient from "socket.io-client";
 
+
+import toast, { Toaster } from 'react-hot-toast';
 
 
 
@@ -45,6 +50,35 @@ const Dashboard = () => {
   }, []);
 
 
+
+
+  //  Recieve Notfication
+
+
+  useEffect(() => {
+
+    const socket = socketIOClient(`${Config.base_url}`);
+
+    socket.on("test_msg_Response", (data) => {
+      // GetClientNotification()
+      // setRefresh(!refresh)
+      // setShowAlert(true);
+      // setTextAlert(data);
+      // setAlertColor('error')
+      console.log("data", data)
+
+      toast.success(`Notificatipn Received From ${data.username}`);
+      console.log("test_msg_Response", data.username);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+
+
+  }, []);
+
+
   return (<>
     <div>
       <div className="content-body">
@@ -61,7 +95,9 @@ const Dashboard = () => {
           <Dashboard10 data={DashboardData} />
         </div >
       </div >
+      <ToastButton />
     </div>
+
   </>)
 }
 

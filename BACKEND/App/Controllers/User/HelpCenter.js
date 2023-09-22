@@ -18,7 +18,7 @@ class HelpCenter {
             const { username, fullname, email, mobile, helpmsg, admin_id, user_id } = req.body;
             try {
 
-                var Req= req.body.req
+                var Req = req.body.req
                 var adminid = new ObjectId(Req.admin_id)
                 var userid = new ObjectId(Req.user_id)
 
