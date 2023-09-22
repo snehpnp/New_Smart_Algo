@@ -324,12 +324,15 @@ class Employee {
                 },
             ]);
 
-            // console.log("totalLicense", Number(totalLicense[0].totalLicense) + Number(req.licence1));
-            // console.log("Panel_key", Panel_key[0].licenses);
+            if(totalLicense.length > 0){
+                var TotalLicense = totalLicense[0].totalLicense
+            }else{
+                var TotalLicense = 0
 
-            if (Number(Panel_key[0].licenses) >= Number(totalLicense[0].totalLicense) + Number(req.licence1)) {
+            }
 
-                console.log("existingUsername", existingUsername.license_type);
+            if (Number(Panel_key[0].licenses) >= Number(TotalLicense) + Number(req.licence1)) {
+
                 // PREVIOS CLIENT IS LIVE
                 if (existingUsername.license_type != "2") {
 
@@ -442,16 +445,17 @@ class Employee {
                                 var UpdateDate = ""
                                 var StartDate = new Date(start_date)
 
-                                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(req.licence));
+                                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(req.licence1));
 
                                 var end_date_2days = dateTime.create(UpdateDate);
                                 var end_date_2days = end_date_2days.format('Y-m-d H:M:S');
 
                                 EndDate1 = end_date_2days
+                                TotalMonth = parseInt(req.licence1) + parseInt(existingUsername.licence)
+
                             }
 
                         } else {
-                            console.log("maa ki", Number(req.licence));
                             StartDate1 = existingUsername.StartDate
                             EndDate1 = existingUsername.EndDate
                             TotalMonth = req.licence
@@ -464,8 +468,8 @@ class Employee {
                     }
                 }
 
-                // console.log("StartDate1", StartDate1);
-                // console.log("EndDate1", EndDate1);
+                console.log("StartDate1", StartDate1);
+                console.log("EndDate1", StartDate1);
                 console.log("TotalMonth", TotalMonth);
 
                 try {
@@ -602,8 +606,8 @@ class Employee {
                     FullName: req.FullName,
                     license_type: req.license_type,
                     licence: TotalMonth,
-                    StartDate: StartDate1,
-                    EndDate: EndDate1,
+                    StartDate: StartDate1 == null ? existingUsername.StartDate :StartDate1,
+                    EndDate: EndDate1 == null ? existingUsername.EndDate :EndDate1,
                     broker: req.broker,
                     parent_id: req.parent_id,
                     parent_role: req.parent_role,
@@ -868,6 +872,8 @@ class Employee {
             var DeleteGroupServices = await groupService_User.deleteOne({ user_id: get_user[0]._id })
             var DeleteStartegyClient = await strategy_client.deleteMany({ user_id: get_user[0]._id })
             var DeleteClient_services = await client_services.deleteMany({ user_id: get_user[0]._id })
+            var count_licenses_delete = await count_licenses.deleteMany({ user_id: get_user[0]._id })
+
             var DeleteUser = await User_model.deleteOne({ _id: get_user[0]._id })
 
 
