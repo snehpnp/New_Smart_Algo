@@ -851,7 +851,7 @@ class Employee {
 
             const get_user = await User_model.find({ _id: id });
             if (get_user.length == 0) {
-                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+                return res.send({ status: false, msg: "Empty data", data: [] })
             }
 
 

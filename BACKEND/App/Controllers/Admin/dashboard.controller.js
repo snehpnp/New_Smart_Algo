@@ -17,29 +17,31 @@ class Dashboard {
 
             let today = new Date()
 
+
             let total_client = await user.find({ Role: "USER" }).countDocuments()
             let admin_client = await user.find({ parent_role: "ADMIN", Role: "USER" }).countDocuments()
             let subadmin_client = await user.find({ parent_role: "SUBADMIN" }).countDocuments()
             let total_Subadmin = await user.find({ Role: "SUBADMIN" }).countDocuments()
 
-            let total_live = await user.find({ Role: "USER", license_type: "2", }).countDocuments()
-            let total_active_live = await user.find({ Role: "USER", license_type: "2", }).countDocuments()
-            let total_expired_live = await user.find({ Role: "USER", license_type: "2", }).countDocuments()
+            let total_live = await user.find({ Role: "USER", license_type: "2", }).countDocuments()  
+            let total_active_live = await user.find({ Role: "USER", license_type: "2",EndDate: { $gte: today } }).countDocuments() //
+            let total_expired_live = await user.find({ Role: "USER", license_type: "2", }).countDocuments()  //
+
 
 
 
             let total_demo = await user.find({ Role: "USER", license_type: "1" }).countDocuments()
-            let total_active_demo = await user.find({ Role: "USER", license_type: "1" }).countDocuments()
-            let total_expired_demo = await user.find({ Role: "USER", license_type: "1" }).countDocuments()
+            let total_active_demo = await user.find({ Role: "USER", license_type: "1" }).countDocuments()  //
+            let total_expired_demo = await user.find({ Role: "USER", license_type: "1" }).countDocuments()  //
 
             let total_two_days = await user.find({ Role: "USER", license_type: "0" }).countDocuments()
-            let total_active_two_days = await user.find({ Role: "USER", license_type: "0" }).countDocuments()
-            let total_expired_two_days = await user.find({ Role: "USER", license_type: "0" }).countDocuments()
+            let total_active_two_days = await user.find({ Role: "USER", license_type: "0" }).countDocuments()   //
+            let total_expired_two_days = await user.find({ Role: "USER", license_type: "0" }).countDocuments() //
 
 
-            let all_licence = await user.find({ Role: "USER", license_type: "0" }).countDocuments()
-            let used_licence = await user.find({ Role: "USER", license_type: "0" }).countDocuments()
-            let remaining_licence = await user.find({ Role: "USER", license_type: "0" }).countDocuments()
+            let all_licence = await user.find({ Role: "USER", license_type: "0" }).countDocuments() //
+            let used_licence = await user.find({ Role: "USER", license_type: "0" }).countDocuments()   //
+            let remaining_licence = await user.find({ Role: "USER", license_type: "0" }).countDocuments()  //
 
             // // DATA GET SUCCESSFULLY
             res.send({

@@ -109,6 +109,11 @@ const AllClients = () => {
                         loading: false,
                         data: response.data
                     });
+                }else{
+                    setAllClients({
+                        loading: false,
+                        data: response.data
+                    });
                 }
             })
     }
@@ -242,11 +247,11 @@ const AllClients = () => {
             text: 'Start Date',
             formatter: (cell, row) => fDateTimeSuffix(row.StartDate)
         },
-        // {
-        //     dataField: 'EndDate',
-        //     text: 'End Date',
-        //     formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
-        // },
+        {
+            dataField: 'EndDate',
+            text: 'End Date',
+            formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
+        },
         // {
         //     dataField: 'Otp',
         //     text: 'Password'
@@ -257,10 +262,10 @@ const AllClients = () => {
             formatter: (cell, row) => showBrokerName(cell, row.license_type)
         },
 
-        {
-            dataField: 'Otp',
-            text: 'Password'
-        },
+        // {
+        //     dataField: 'Otp',
+        //     text: 'Password'
+        // },
         {
             dataField: 'ActiveStatus',
             text: 'Status',
@@ -342,8 +347,10 @@ const AllClients = () => {
                     <>
                         <Content Page_title="All Clients" button_title="Add Client" route="/admin/client/add">
                             {
-                                getAllClients.data && getAllClients.data.length === 0 ? (
-                                    'No data found') :
+                                getAllClients.data && getAllClients.data.length === 0 ? 
+                                <>
+                                <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
+                            </> :
                                     <>
                                         <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
                                     </>

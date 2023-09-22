@@ -53,6 +53,11 @@ const SubadminClient = () => {
                         });
                     }
 
+                }else{
+                    setAllClients({
+                        loading: false,
+                        data: response.data
+                    });
                 }
             })
     }
@@ -60,6 +65,11 @@ const SubadminClient = () => {
         await dispatch(Get_All_SUBADMIN()).unwrap()
             .then((response) => {
                 if (response.status) {
+                    setAllsubadmins({
+                        loading: false,
+                        data: response.data
+                    });
+                }else{
                     setAllsubadmins({
                         loading: false,
                         data: response.data
