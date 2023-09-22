@@ -5,6 +5,8 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const Signals_modal = db.Signals
 const user = db.user
+const company_information = db.company_information
+
 const { formattedDateTime } = require('../../Helper/time.helper')
 
 class Dashboard {
@@ -23,25 +25,38 @@ class Dashboard {
             let subadmin_client = await user.find({ parent_role: "SUBADMIN" }).countDocuments()
             let total_Subadmin = await user.find({ Role: "SUBADMIN" }).countDocuments()
 
-            let total_live = await user.find({ Role: "USER", license_type: "2", }).countDocuments()  
-            let total_active_live = await user.find({ Role: "USER", license_type: "2",EndDate: { $gte: today } }).countDocuments() //
-            let total_expired_live = await user.find({ Role: "USER", license_type: "2", }).countDocuments()  //
-
-
+            let total_live = await user.find({ Role: "USER", license_type: "2", }).countDocuments()
+            let total_active_live = await user.find({ Role: "USER", license_type: "2", EndDate: { $gte: today } }).countDocuments()
+            let total_expired_live = await user.find({ Role: "USER", license_type: "2", EndDate: { $lt: today } }).countDocuments()
 
 
             let total_demo = await user.find({ Role: "USER", license_type: "1" }).countDocuments()
-            let total_active_demo = await user.find({ Role: "USER", license_type: "1" }).countDocuments()  //
-            let total_expired_demo = await user.find({ Role: "USER", license_type: "1" }).countDocuments()  //
+            let total_active_demo = await user.find({ Role: "USER", license_type: "1", EndDate: { $gte: today } }).countDocuments()
+            let total_expired_demo = await user.find({ Role: "USER", license_type: "1", EndDate: { $lt: today } }).countDocuments()
 
             let total_two_days = await user.find({ Role: "USER", license_type: "0" }).countDocuments()
-            let total_active_two_days = await user.find({ Role: "USER", license_type: "0" }).countDocuments()   //
-            let total_expired_two_days = await user.find({ Role: "USER", license_type: "0" }).countDocuments() //
+            let total_active_two_days = await user.find({ Role: "USER", license_type: "0", EndDate: { $gte: today } }).countDocuments()
+            let total_expired_two_days = await user.find({ Role: "USER", license_type: "0", EndDate: { $lt: today } }).countDocuments()
 
 
-            let all_licence = await user.find({ Role: "USER", license_type: "0" }).countDocuments() //
-            let used_licence = await user.find({ Role: "USER", license_type: "0" }).countDocuments()   //
-            let remaining_licence = await user.find({ Role: "USER", license_type: "0" }).countDocuments()  //
+            let all_licence = await company_information.find()   
+            const used_licence = await user.aggregate([
+                // Match documents based on your criteria (e.g., specific conditions)
+                {
+                    $match: {
+                        license_type: "2",
+                    },
+                },
+                {
+                    $group: {
+                        _id: null, // Group all documents into a single group
+                        totalLicense: {
+                            $sum: { $toInt: '$licence' }
+                        },
+                    },
+                },
+            ]);
+       
 
             // // DATA GET SUCCESSFULLY
             res.send({
@@ -61,9 +76,9 @@ class Dashboard {
                     total_two_days: total_two_days,
                     total_active_two_days: total_active_two_days,
                     total_expired_two_days: total_expired_two_days,
-                    all_licence: all_licence,
-                    used_licence: used_licence,
-                    remaining_licence: remaining_licence,
+                    all_licence: all_licence[0].licenses,
+                    used_licence: used_licence[0].totalLicense,
+                    remaining_licence:Number(all_licence[0].licenses) - Number(used_licence[0].totalLicense),
 
 
                 }

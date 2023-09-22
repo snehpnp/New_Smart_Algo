@@ -8,7 +8,7 @@ const { GetAccessToken ,GetOrderFullInformation} = require('../../Controllers/Br
 
 
 
-router.get('/aliceblue/access_token', GetAccessToken);
+router.get('/AliceBlue', GetAccessToken);
 router.post('/aliceblue/get/orderinfo', GetOrderFullInformation);
 
 

@@ -40,7 +40,10 @@ const Sidebar = ({ ShowSidebar }) => {
                             data-bs-toggle="dropdown"
                         >
                             <div className="header-img position-relative">
-                                <img src="../assets/images/header-img/pic-1.jpg" alt="header-img" />
+                                {/* <img src="../assets/images/header-img/pic-1.jpg" alt="header-img" /> */}
+                                {/* <img src="https://avatars.githubusercontent.com/u/90446545?v=4" alt="header-img" /> */}
+                                <img src="https://avatars.githubusercontent.com/u/22424465?v=5" alt="header-img" />
+
                                 <svg
                                     className="header-circle"
                                     width={130}

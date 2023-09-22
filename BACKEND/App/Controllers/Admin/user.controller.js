@@ -173,7 +173,7 @@ class Employee {
                 client_code: client_code,
                 api_key: api_key,
                 app_key: app_key,
-                broker: broker,
+                broker: broker == null ? 0 : broker,
                 api_type: api_type,
                 demat_userid: demat_userid,
                 service_given_month: service_given_month

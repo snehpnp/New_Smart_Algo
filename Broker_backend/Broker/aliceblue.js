@@ -403,7 +403,6 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
 
                                 try {
 
-                                    console.log("error.response", error);
                                     if (error) {
                                         if (error.response) {
                                             const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');

@@ -25,7 +25,6 @@ const BrokerResponse = () => {
   const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
   const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
 
-  console.log("DashboardData", DashboardData);
 
 
   const getsignals11 = async (e) => {
@@ -67,13 +66,23 @@ const BrokerResponse = () => {
       text: 'Symbol'
     },
     {
+      dataField: 'type',
+      text: 'type'
+    },
+    {
       dataField: 'broker_name',
       text: 'Broker Name'
     },
 
     {
       dataField: 'order_id',
-      text: 'Oder Id'
+      text: 'Oder Id',
+      formatter: (cell, row, rowIndex) => <>{row.order_id == null ? "-" : row.order_id}</>
+
+    },
+    {
+      dataField: 'reject_reason',
+      text: 'Reason'
     },
     {
       dataField: 'Details View',

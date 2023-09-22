@@ -261,18 +261,16 @@ app.post('/broker-signals', async (req, res) => {
                 token: token[0].instrument_token
               }
               let Signal_req1 = new Signals(Signal_req)
-              await Signal_req1.save();
+              var SignalSave = await Signal_req1.save();
             } catch (error) {
               return res.send("ok")
             }
 
-
+            console.log("SignalSave", SignalSave._id);
             // ENTRY OR EXIST CHECK
             if (type == "LE" || type == "le") {
 
               var findMainSignals = await MainSignals.find(findSignal)
-        
-
 
               // MainSignals FIND IN COLLECTION
               if (findMainSignals.length == 0) {
@@ -297,6 +295,7 @@ app.post('/broker-signals', async (req, res) => {
                   segment: segment,
                   trade_symbol: trade_symbol,
                   client_persnal_key: "",
+                  signals_id: SignalSave._id,
                   token: token[0].instrument_token
                 }
                 const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
@@ -306,8 +305,10 @@ app.post('/broker-signals', async (req, res) => {
                 var updatedData = {
                   entry_price: (parseFloat(price) + parseFloat(findMainSignals[0].entry_price) / 2).toString(),
                   entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)).toString(),
-                  entry_dt_date: current_date,
+                  entry_dt_date: current_date
                 }
+                updatedData.$addToSet = { signals_id: SignalSave._id };
+
                 // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
                 const updatedDocument = await MainSignals.findByIdAndUpdate(findMainSignals[0]._id, updatedData)
 
@@ -328,12 +329,13 @@ app.post('/broker-signals', async (req, res) => {
                     exit_type: type,
                     exit_price: price,
                     exit_qty_percent: qty_percent,
-                    exit_dt_date: current_date,
+                    exit_dt_date: current_date
                   }
+                  updatedData.$addToSet = { signals_id: SignalSave._id };
 
                   // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
                   const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
-               
+
                 } else {
 
                   console.log("PRIVIOUS SEGNAL UPDATE")
@@ -352,72 +354,72 @@ app.post('/broker-signals', async (req, res) => {
             var query = { "strategys.strategy_name": strategy, "service.name": input_symbol }
 
             // Example: Find all documents in the collection
-           
+
             try {
               getAllDocuments();
               async function getAllDocuments() {
                 const documents = await collection.find(query).toArray();
                 // console.log("All documents:", documents);
-  
+
                 if (documents.length > 0) {
-  
+
                   async function runFunctionWithArray(array) {
-  
+
                     // Run a function with the four elements of the array simultaneously
-  
+
                     const promises = array.map((item) => {
-  
+
                       return new Promise((resolve) => {
-  
+
                         // Simulate an asynchronous task (replace with your own function)
-  
+
                         setTimeout(async () => {
-  
+
                           const currentDate = new Date();
-  
+
                           const milliseconds = currentDate.getTime();
-  
+
                           console.log(`Running Time -- ${new Date()} function with element: ${item._id}`);
-  
-  
+
+
                           var brokerResponse = {
                             user_id: item._id,
                             receive_signal: signal_req,
-                            strategy:strategy,
-                            type:type
+                            strategy: strategy,
+                            type: type
                           };
-  
+
                           const newCategory = new BrokerResponse(brokerResponse)
                           var brokerResponse = await newCategory.save()
                             .then((data) => {
-  
+
                               var bro_res_last_id = data._id;
                               aliceblue.place_order(item, splitArray, bro_res_last_id, token);
                             })
-  
-  
+
+
                           resolve();
-  
+
                         }, 0);
-  
+
                       });
-  
+
                     });
-  
-  
+
+
                     await Promise.all(promises);
-  
+
                   }
-  
+
                   runFunctionWithArray(documents);
                 } else {
                   console.log("Client Not Exit");
                 }
-                
+
               }
-  
+
             } catch (error) {
-              console.log("Error In Broker response",error);
+              console.log("Error In Broker response", error);
             }
 
 

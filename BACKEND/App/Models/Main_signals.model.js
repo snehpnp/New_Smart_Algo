@@ -66,6 +66,13 @@ const MainSignalsSchema = Schema({
     token: {
         type: String,
     },
+    signals_id: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'signals',
+            default: null
+        }
+    ],
 
 
     createdAt: {
