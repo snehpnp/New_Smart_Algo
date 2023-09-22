@@ -47,18 +47,21 @@ const AllClients = () => {
         var req1 = {
             id: id
         }
-        console.log("req1", req1);
-        await dispatch(DELETE_USER_SERVICES(req1)).unwrap()
-            .then((response) => {
-                console.log("response", response);
-                if (response.status) {
-                    setrefresh(!refresh)
-                }
-            })
+        if (window.confirm("Do you want to delete this User ?")) {
+            await dispatch(DELETE_USER_SERVICES(req1)).unwrap()
+                .then((response) => {
+                    console.log("response", response);
+                    if (response.status) {
+                        setrefresh(!refresh)
+                    }
+                })
+        }
+
+
     }
 
 
-   const data = async () => {
+    const data = async () => {
         var req1 = {
             Find_Role: Role,
             user_ID: user_ID
@@ -109,7 +112,7 @@ const AllClients = () => {
                         loading: false,
                         data: response.data
                     });
-                }else{
+                } else {
                     setAllClients({
                         loading: false,
                         data: response.data
@@ -347,10 +350,10 @@ const AllClients = () => {
                     <>
                         <Content Page_title="All Clients" button_title="Add Client" route="/admin/client/add">
                             {
-                                getAllClients.data && getAllClients.data.length === 0 ? 
-                                <>
-                                <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
-                            </> :
+                                getAllClients.data && getAllClients.data.length === 0 ?
+                                    <>
+                                        <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
+                                    </> :
                                     <>
                                         <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
                                     </>

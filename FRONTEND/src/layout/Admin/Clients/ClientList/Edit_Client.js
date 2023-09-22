@@ -129,6 +129,7 @@ const AddClient = () => {
     },
     validate: (values) => {
 
+
       const errors = {};
       if (!values.username) {
         errors.username = valid_err.USERNAME_ERROR;
@@ -144,35 +145,41 @@ const AddClient = () => {
 
 
 
-      // if (!values.licence) {
-      //   errors.licence = valid_err.LICENCE_TYPE_ERROR;
-      // }
-      // else if (values.licence === '2' || values.licence === 2) {
-      //   if (!values.broker) {
-      //     errors.broker = valid_err.BROKER_ERROR;
-      //   }
-      //   if (!values.tomonth) {
-      //     errors.tomonth = valid_err.LICENCE_ERROR;
-      //   }
-      // }
-      // else if (values.licence === '1' || values.licence === 1) {
-      //   if (!values.fromDate) {
-      //     errors.fromDate = valid_err.FROMDATE_ERROR;
-      //   }
-      //   if (!values.todate) {
-      //     errors.todate = valid_err.FROMDATE_ERROR;
-      //   }
-      // }
+      if (!values.licence) {
+        errors.licence = valid_err.LICENCE_TYPE_ERROR;
+      }
+      else if (values.licence === '2' || values.licence === 2) {
+        if (!values.broker) {
+          errors.broker = valid_err.BROKER_ERROR;
+        }
+        // if (!values.tomonth) {
+        //   errors.tomonth = valid_err.LICENCE_ERROR;
+        // }
+      }
+      else if (values.licence === '0' || values.licence === 0) {
+        if (!values.broker) {
+          errors.broker = valid_err.BROKER_ERROR;
+        }
+        // if (!values.tomonth) {
+        //   errors.tomonth = valid_err.LICENCE_ERROR;
+        // }
+      }
+      else if (values.licence === '1' || values.licence === 1) {
+        if (!values.fromDate) {
+          errors.fromDate = valid_err.FROMDATE_ERROR;
+        }
+        if (!values.todate) {
+          errors.todate = valid_err.FROMDATE_ERROR;
+        }
+      }
 
 
-
-
-      // if (!values.groupservice) {
-      //   errors.groupservice = valid_err.GROUPSELECT_ERROR;
-      // }
-      // if (!values.Strategy) {
-      //   errors.Strategy = "select test";
-      // }
+      if (!values.groupservice) {
+        errors.groupservice = valid_err.GROUPSELECT_ERROR;
+      }
+      if (selectedStrategies.length === 0) {
+        errors.Strategy = "select strategy";
+      }
 
       if (!values.email) {
         errors.email = valid_err.EMPTY_EMAIL_ERROR;
@@ -266,7 +273,7 @@ const AddClient = () => {
 
   useEffect(() => {
     let Service_Month_Arr = []
-    for (let index = 1; index < 2; index++) {
+    for (let index = 1; index < 3; index++) {
       Service_Month_Arr.push({ month: index, endDate: `${index} Month Licence Expired On ${new Date(new Date().getFullYear(), new Date().getMonth() + index, new Date().getDate()).toString().split('00:00:00')[0]}` })
     }
     setfirst(Service_Month_Arr)
@@ -289,7 +296,7 @@ const AddClient = () => {
     { label: 'Fyers', value: '13' },
     { label: 'Zerodha', value: '15' }
   ];
-
+  console.log("formik.values.license_type", formik.values.licence)
   const fields = [
     { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: true },
     { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },
@@ -304,7 +311,7 @@ const AddClient = () => {
         { label: 'Demo', value: '1' },
         { label: 'Live', value: '2' },
       ]
-      , label_size: 12, col_size: 6, disable: false
+      , label_size: 12, col_size: 6, disable: formik.values.licence !== "0" || "1" ? true : false
     },
     {
       name: 'licence1', label: 'Use License Month', type: 'text', label_size: 12, col_size: 6, disable: true,
@@ -386,14 +393,14 @@ const AddClient = () => {
       label: formik.values.broker == 1 ? 'Password Code' : formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker == 9 ? 'Encryption Secret Key' : formik.values.broker == 10 ? 'Api Secret Key' : formik.values.broker == 11 ? '2FA' : formik.values.broker == 14 ? 'Encryption Key' : 'Api Secret', type: 'text',
       showWhen: values => values.broker === '1'
         || values.broker === '2' || values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15',
-        label_size: 12, col_size: 6, disable: false
+      label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'api_type',
       label: formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Trade Api Password' : formik.values.broker == 9 ? 'Encryption IV' : 'Api Secret', type: 'text',
       showWhen: values =>
         values.broker === '7' || values.broker === '9',
-        label_size: 12, col_size: 6, disable: false
+      label_size: 12, col_size: 6, disable: false
     },
 
     // {
@@ -604,8 +611,8 @@ const AddClient = () => {
       formik.setFieldValue('broker', null);
     }
     if (formik.values.licence === '0' || formik.values.licence === 0) {
-      formik.setFieldValue('tomonth', null);
-      formik.setFieldValue('broker', null);
+      // formik.setFieldValue('tomonth', null);
+      // formik.setFieldValue('broker', null);
       formik.setFieldValue('fromDate', null);
       formik.setFieldValue('todate', null);
     }
@@ -708,7 +715,7 @@ const AddClient = () => {
 
   return (
     <>
-      <Content Page_title="Add Client" button_title='Back' route="/admin/allclients">
+      <Content Page_title="Edit  Client" button_title='Back' route="/admin/allclients">
         <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Client"
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
