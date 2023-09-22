@@ -33,6 +33,7 @@ const AllLicence = () => {
         data: []
     });
 
+    console.log("getAllClients", getAllClients.data);
 
     const data = async () => {
         await dispatch(Transcation_Licence({ token: token })).unwrap()
@@ -55,20 +56,23 @@ const AllLicence = () => {
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: 'UserName',
-            text: 'User Name'
+            dataField: 'user',
+            text: 'Full Name',
+            formatter: (cell, row, rowIndex) => <>{row.user[0].FullName}</>,
+
+        },
+    
+        {
+            dataField: '',
+            text: 'license',
+            formatter: (cell, row, rowIndex) => <>{row.count_license.license}</>,
+
         },
         {
-            dataField: 'Email',
-            text: 'Email'
-        },
-        {
-            dataField: 'PhoneNo',
-            text: 'Phone Number'
-        },
-        {
-            dataField: 'license',
-            text: 'License'
+            dataField: '',
+            text: 'Create At',
+            formatter: (cell, row, rowIndex) => <>{fDateTimeSuffix(row.count_license.createdAt)}</>,
+
         },
     ];
     return (

@@ -40,6 +40,11 @@ const ExpiredLicence = () => {
                         loading: false,
                         data: response.data
                     });
+                }else{
+                    setAllClients({
+                        loading: false,
+                        data: response.data
+                    });
                 }
             })
     }
@@ -91,8 +96,10 @@ const ExpiredLicence = () => {
                         <Content Page_title="Expired Soon Licence" button_status={false} >
 
                             {
-                                getAllClients.data && getAllClients.data.length === 0 ? (
-                                    'No data found') :
+                                getAllClients.data && getAllClients.data.length === 0 ? 
+                                <>
+                                <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
+                            </> :
                                     <>
                                         <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
                                     </>
