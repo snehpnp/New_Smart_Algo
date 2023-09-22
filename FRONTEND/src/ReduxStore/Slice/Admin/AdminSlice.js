@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_CLIENTS, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_USERAND_ALLSERVICES, FIND_ONE_USER } from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_CLIENTS, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_USERAND_ALLSERVICES, FIND_ONE_USER, UPDATE_USER } from "../../../Service/admin.service";
 
 
 
@@ -109,7 +109,20 @@ export const UPDATE_USER_ACTIVE_STATUS = createAsyncThunk("update/useractive/sta
 export const Find_One_User = createAsyncThunk("update/useractive/status", async (data) => {
     try {
         const { id } = data
-        const res = await FIND_ONE_USER({id: id });
+        const res = await FIND_ONE_USER({ id: id });
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        console.log("err", err);
+        return err;
+    }
+});
+
+// UPDATE USER ACTIVE STATUS FOR API
+export const Update_User = createAsyncThunk("update/useractive/status", async (data) => {
+    try {
+        const { req, token } = data
+        const res = await UPDATE_USER({ req: req }, token);
         // console.log("res" ,res);
         return await res;
     } catch (err) {
@@ -148,6 +161,7 @@ const AdminSlice = createSlice({
         goTodashboard: [],
         activeStatus: [],
         deleteuser: [],
+        updateuser: [],
         oneuser: []
     },
 
@@ -197,6 +211,10 @@ const AdminSlice = createSlice({
         [UPDATE_USER_ACTIVE_STATUS.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, activeStatus: payload, isLoading: false };
+        },
+        [Update_User.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, updateuser: payload, isLoading: false };
         },
         [DELETE_USER_SERVICES.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;

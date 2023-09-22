@@ -16,18 +16,25 @@ class HelpCenter {
         try {
 
             const { username, fullname, email, mobile, helpmsg, admin_id, user_id } = req.body;
-
             try {
+
+                var Req= req.body.req
+                var adminid = new ObjectId(Req.admin_id)
+                var userid = new ObjectId(Req.user_id)
+
+
+
                 const Help = new HelpCenter_modal({
-                    user_id: user_id,
-                    admin_id: admin_id,
-                    help_msg: helpmsg,
-                    mobile: mobile,
-                    fullname: fullname,
-                    username: username,
-                    email: email
+                    user_id: Req.user_id,
+                    admin_id: Req.admin_id,
+                    help_msg: Req.helpmsg,
+                    mobile: Req.mobile,
+                    fullname: Req.fullname,
+                    username: Req.username,
+                    email: Req.email
 
                 })
+                console.log("Help", Help)
                 Help.save()
                     .then(async (data) => {
                         return res.status(200).json({ status: true, msg: 'Message Send SuccessFully', data: [] });

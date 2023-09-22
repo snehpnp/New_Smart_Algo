@@ -84,9 +84,9 @@ const AllSubadmin = () => {
         validate: (values) => {
 
             const errors = {};
-            if (!values.username) {
-                errors.username = valid_err.USERNAME_ERROR;
-            }
+            // if (!values.username) {
+            //     errors.username = valid_err.USERNAME_ERROR;
+            // }
             if (!values.FullName) {
                 errors.FullName = valid_err.FULLNAME_ERROR;
             }
@@ -105,9 +105,6 @@ const AllSubadmin = () => {
                 errors.email = valid_err.INVALID_EMAIL_ERROR;
             }
 
-            if (!values.password) {
-                errors.password = valid_err.PASSWORD_ERROR;
-            }
 
 
             return errors;
@@ -118,7 +115,7 @@ const AllSubadmin = () => {
                 "UserName": "0",
                 "Email": values.email,
                 "PhoneNo": values.mobile,
-                "password": values.mobile,
+                "password": values.password,
                 "Role": "SUBADMIN",
                 "parent_role": Role,
                 "parent_id": user_id,

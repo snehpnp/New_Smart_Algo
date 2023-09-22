@@ -8,7 +8,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Email_regex, Mobile_regex } from "../../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
 import Content from '../../../../Components/Dashboard/Content/Content';
-import { GET_ALL_GROUP_SERVICES, Find_One_User } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
+import { GET_ALL_GROUP_SERVICES, Find_One_User, Update_User } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
 import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
@@ -21,9 +21,6 @@ import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 import "../../../../App.css"
-
-
-
 
 const AddClient = () => {
   const navigate = useNavigate()
@@ -82,7 +79,7 @@ const AddClient = () => {
 
 
 
-  // GET ALL GROUP SERVICES NAME
+  // GET USER DETAILS
   const data_1 = async () => {
     await dispatch(Find_One_User({ 'id': location.state._id })).unwrap()
       .then((response) => {
@@ -99,6 +96,9 @@ const AddClient = () => {
   useEffect(() => {
     data_1()
   }, [])
+
+
+
 
 
   const formik = useFormik({
@@ -188,9 +188,9 @@ const AddClient = () => {
         "UserName": values.username,
         "Email": values.email,
         "PhoneNo": values.mobile,
-        "licence": values.tomonth,
+        "licence1": values.tomonth,
         "license_type": values.licence,
-        "Strategies": selectedStrategies,
+        "Strategies": selectedStrategies.filter((item) => item.checked === true),
         "fromdate": values.fromDate,
         "todate": values.todate,
         "service_given_month": values.service_given_month,
@@ -204,14 +204,15 @@ const AddClient = () => {
         "app_key": values.app_key,
         "api_type": values.api_type,
         "demat_userid": values.demat_userid,
-        "licence1": values.licence1,
+        "group_service": values.groupservice,
+        "licence": values.licence1,
       }
 
 
-      console.log("req", req);
-      return
+      // console.log("req", req);
+      // return
 
-      await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((response) => {
+      await dispatch(Update_User({ req: req, token: user_token })).unwrap().then((response) => {
 
         if (response.status === 409) {
           toast.error(response.data.msg);
@@ -232,32 +233,8 @@ const AddClient = () => {
 
 
 
+
   useEffect(() => {
-
-    //   mobile: UserData.PhoneNo ? UserData.PhoneNo : null,
-    //   broker: UserData.broker ? UserData.broker : null,
-    //   licence: UserData.license_type ? UserData.license_type : null,
-    //   groupservice: UserData.parent_id ? UserData.parent_id : null,
-    //   service_given_month: UserData.service_given_month ? UserData.service_given_month : '0',
-    //   parent_id: UserData.parent_id ? UserData.parent_id : null,
-    //   strategies: [],
-    //   tomonth: '',
-    //   todate: null,
-    //   fromDate: UserData.licence ? UserData.licence : null,
-    //   app_id: 'null',
-    //   api_type: 'null',
-    //   client_code: 'null',
-    //   api_key: 'null',
-    //   api_secret: 'null',
-    //   app_key: 'null',
-    //   demat_userid: 'null',
-    //   parent_role: null,
-    //   Strategy: false,
-    //   usemonth: UserData.licence ? UserData.licence : null
-
-
-    console.log("UserData", UserData.data.data)
-
     formik.setFieldValue('username', UserData.data.data !== undefined && UserData.data.data[0].UserName);
     formik.setFieldValue('fullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
     formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
@@ -276,18 +253,6 @@ const AddClient = () => {
     formik.setFieldValue('app_key', UserData.data.data !== undefined && UserData.data.data[0].app_key);
     formik.setFieldValue('demat_userid', UserData.data.data !== undefined && UserData.data.data[0].demat_userid);
 
-    // UserData.data.strategy && UserData.data.strategy.map((_item) => {
-    //   return <>
-    //     formik.setFieldValue('Strategies', item.strategy_id);
-
-    //   </>
-
-    // })
-
-
-
-
-
   }, [UserData.data]);
 
 
@@ -295,40 +260,6 @@ const AddClient = () => {
 
 
 
-
-  // const handleStrategyChange = (event) => {
-  //   const strategyId = event.target.value;
-
-
-  //   const strategyName = event.target.name; // Assuming the label contains the strategy name
-
-  //   if (event.target.checked) {
-  //     // Add the selected strategy to the array
-  //     setSelectedStrategies([...selectedStrategies, { id: strategyId, name: strategyName }]);
-  //   } else {
-  //     // Remove the deselected strategy from the array
-  //     setSelectedStrategies(selectedStrategies.filter((strategy) => strategy.id !== strategyId));
-  //   }
-  // };
-
-
-  const handleStrategyChange = (event) => {
-    const strategyId = event.target.value;
-    const strategyName = event.target.name;
-
-    if (event.target.checked) {
-      // Add the selected strategy to the array
-      setSelectedStrategies([
-        ...selectedStrategies,
-        { id: strategyId, name: strategyName },
-      ]);
-    } else {
-      // Remove the deselected strategy from the array
-      setSelectedStrategies(
-        selectedStrategies.filter((strategy) => strategy.id !== strategyId)
-      );
-    }
-  };
 
 
 
@@ -360,10 +291,10 @@ const AddClient = () => {
   ];
 
   const fields = [
-    { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },
+    { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: true },
     { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },
-    { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, disable: false },
-    { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 6, disable: false },
+    { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, disable: true },
+    { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 6, disable: true },
     {
       name: 'licence',
       label: 'Licence',
@@ -411,51 +342,105 @@ const AddClient = () => {
     //  For Demo Only Client
 
 
+
     {
       name: 'api_key',
-      label: formik.values.broker === 4 ? 'App Key' : formik.values.broker === 7 ? "Consumer Key" : formik.values.broker === 9 ? "Vendor Key" : formik.values.broker === 8 ? 'App Key' : formik.values.broker === 10 ? 'App Key' : "'Api Key", type: 'text',
-      showWhen: values => values.licence === '2' && (values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6')
-      , label_size: 12, col_size: 6, disable: false
+      label: formik.values.broker == 4 ? 'App Key' : formik.values.broker == 7 ? "Consumer Key" : formik.values.broker == 9 ? "Vendor Key" : formik.values.broker == 8 ? 'App Key' : formik.values.broker == 10 ? 'App Key' : "'Api Key", type: 'text',
+      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6',
+      label_size: 12, col_size: 6, disable: false
+
     },
 
     {
       name: 'client_code',
-      label: formik.values.broker === 1 ? 'User' : formik.values.broker === 4 ? "Client Code" : formik.values.broker === 7 ? "User Name" : formik.values.broker === 9 ? "Vander Id" : formik.values.broker === 11 ? "Client Code" : formik.values.broker === 11 ? "client_code" : 'User Id', type: 'text',
-      showWhen: values => values.licence === '2' && (values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6')
-      , label_size: 12, col_size: 6, disable: false
+      label: formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
+      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6',
+      label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'demat_userid',
-      label: formik.values.broker === 9 ? 'User Id' : '', type: 'text',
-      showWhen: values => values.licence === '2' && values.broker === '9'
-      , label_size: 12, col_size: 6, disable: false
+      label: formik.values.broker == 9 ? 'User Id' : '', type: 'text',
+      showWhen: values => values.broker === '9',
+      label_size: 12, col_size: 6, disable: false
     },
+
+
     {
       name: 'app_id',
-      label: formik.values.broker === 1 ? 'Verification Code' : formik.values.broker === 5 ? 'Password' : formik.values.broker === 7 ? 'Demat Password' : formik.values.broker === 11 ? 'Password' : formik.values.broker === 13 ? 'App Id' : formik.values.broker === 9 ? 'Password' : formik.values.broker === 14 ? 'User Id ' : 'App Id', type: 'text',
-      showWhen: values => values.licence === '2' && (values.broker === '2' || values.broker === '1' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14')
-      , label_size: 12, col_size: 6, disable: false
+      label: formik.values.broker == 1 ? 'Verification Code' : formik.values.broker == 5 ? 'Password' : formik.values.broker == 7 ? 'Demat Password' : formik.values.broker == 11 ? 'Password' : formik.values.broker == 13 ? 'App Id' : formik.values.broker == 9 ? 'Password' : formik.values.broker == 14 ? 'User Id ' : 'App Id', type: 'text',
+      showWhen: values => values.broker === '2' || values.broker === '1' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14',
+      label_size: 12, col_size: 6, disable: false
     },
+
+
+
     {
       name: 'app_key',
-      label: formik.values.broker === 5 || 6 ? 'App Key' : "", type: 'text',
-      showWhen: values => values.licence === '2' && values.broker === '5'
-      , label_size: 12, col_size: 6, disable: false
+      label: formik.values.broker == 5 || 6 ? 'App Key' : "", type: 'text',
+      showWhen: values => values.broker === '5',
+      label_size: 12, col_size: 6, disable: false
     },
+
     {
       name: 'api_secret',
-      label: formik.values.broker === 1 ? 'Password Code' : formik.values.broker === 5 ? 'DOB' : formik.values.broker === 7 ? 'Consumer Secret' : formik.values.broker === 9 ? 'Encryption Secret Key' : formik.values.broker === 10 ? 'Api Secret Key' : formik.values.broker === 11 ? '2FA' : formik.values.broker === 14 ? 'Encryption Key' : 'Api Secret', type: 'text',
-      showWhen: values => values.licence === '2' && (values.broker === '1'
-        || values.broker === '2' || values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15')
-      , label_size: 12, col_size: 6, disable: false
+      label: formik.values.broker == 1 ? 'Password Code' : formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker == 9 ? 'Encryption Secret Key' : formik.values.broker == 10 ? 'Api Secret Key' : formik.values.broker == 11 ? '2FA' : formik.values.broker == 14 ? 'Encryption Key' : 'Api Secret', type: 'text',
+      showWhen: values => values.broker === '1'
+        || values.broker === '2' || values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15',
+        label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'api_type',
-      label: formik.values.broker === 5 ? 'DOB' : formik.values.broker === 7 ? 'Trade Api Password' : formik.values.broker === 9 ? 'Encryption IV' : 'Api Secret', type: 'text',
+      label: formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Trade Api Password' : formik.values.broker == 9 ? 'Encryption IV' : 'Api Secret', type: 'text',
       showWhen: values =>
-        values.licence === '2' && (values.broker === '7' || values.broker === '9')
-      , label_size: 12, col_size: 6, disable: false
+        values.broker === '7' || values.broker === '9',
+        label_size: 12, col_size: 6, disable: false
     },
+
+    // {
+    //   name: 'api_key',
+    //   label: formik.values.broker === 4 || '4' ? 'App Key' : formik.values.broker === 7 || "7" ? "Consumer Key" : formik.values.broker === 9 || '9' ? "Vendor Key" : formik.values.broker === 8 || "8" ? 'App Key' : formik.values.broker === 10 || "10" ? 'App Key' : "'Api Key", type: 'text',
+    //   showWhen: values => values.licence === '2' && (values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6')
+    //   , label_size: 12, col_size: 6, disable: false
+    // },
+
+    // {
+    //   name: 'client_code',
+    //   label: formik.values.broker === 1 || "1" ? 'User' : formik.values.broker === 4 || "4" ? "Client Code" : formik.values.broker === 7 || "7" ? "User Name" : formik.values.broker === 9 || "9" ? "Vander Id" : formik.values.broker === 11 || "11" ? "Client Code" : formik.values.broker === 11 || "11" ? "client_code" : 'User Id', type: 'text',
+    //   showWhen: values => values.licence === '2' && (values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6')
+    //   , label_size: 12, col_size: 6, disable: false
+    // },
+    // {
+    //   name: 'demat_userid',
+    //   label: formik.values.broker === 9 || "9" ? 'User Id' : '', type: 'text',
+    //   showWhen: values => values.licence === '2' && values.broker === '9'
+    //   , label_size: 12, col_size: 6, disable: false
+    // },
+    // {
+    //   name: 'app_id',
+    //   label: formik.values.broker === 1 || "1" ? 'Verification Code' : formik.values.broker === 5 || "5" ? 'Password' : formik.values.broker === 7 || '7' ? 'Demat Password' : formik.values.broker === 11 || "11" ? 'Password' : formik.values.broker === 13 || '13' ? 'App Id' : formik.values.broker === 9 || '9' ? 'Password' : formik.values.broker === 14 || "14" ? 'User Id ' : 'App Id', type: 'text',
+    //   showWhen: values => values.licence === '2' && (values.broker === '2' || values.broker === '1' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14')
+    //   , label_size: 12, col_size: 6, disable: false
+    // },
+    // {
+    //   name: 'app_key',
+    //   label: formik.values.broker === 5 || "5" || 6 || "6" ? 'App Key' : "", type: 'text',
+    //   showWhen: values => values.licence === '2' && values.broker === '5'
+    //   , label_size: 12, col_size: 6, disable: false
+    // },
+    // {
+    //   name: 'api_secret',
+    //   label: formik.values.broker === 1 || "1" ? 'Password Code' : formik.values.broker === 5 || "5" ? 'DOB' : formik.values.broker === 7 || "7" ? 'Consumer Secret' : formik.values.broker === 9 || "9" ? 'Encryption Secret Key' : formik.values.broker === 10 || "10" ? 'Api Secret Key' : formik.values.broker === 11 || "11" ? '2FA' : formik.values.broker === 14 || "14" ? 'Encryption Key' : 'Api Secret', type: 'text',
+    //   showWhen: values => values.licence === '2' && (values.broker === '1'
+    //     || values.broker === '2' || values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15')
+    //   , label_size: 12, col_size: 6, disable: false
+    // },
+    // {
+    //   name: 'api_type',
+    //   label: formik.values.broker === 5 || "5" ? 'DOB' : formik.values.broker === 7 || "7" ? 'Trade Api Password' : formik.values.broker === 9 || "7" ? 'Encryption IV' : 'Api Secret', type: 'text',
+    //   showWhen: values =>
+    //     values.licence === '2' && (values.broker === '7' || values.broker === '9')
+    //   , label_size: 12, col_size: 6, disable: false
+    // },
     {
       name: 'parent_id',
       label: 'Sub-Admin',
@@ -650,7 +635,7 @@ const AddClient = () => {
 
 
 
-  // GET ALL GROUP SERVICES NAME
+  // GET ALL GROUP SERVICES NAME / GET ALL SUBAMDIN / STRATEGY
   const data = async () => {
     await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
       .then((response) => {
@@ -692,14 +677,33 @@ const AddClient = () => {
     data()
   }, [])
 
-  // console.log("selectedStrategies" ,selectedStrategies);
 
-  const returnChecked = (strt_id) => {
-    if (UserData.data.strategy) {
-      return UserData.data.strategy.some((item) => item.strategy_id.includes(strt_id));
-    }
-    return false;
+
+  //  For Checked Strategy
+
+  const handleStrategyChange = (event) => {
+    console.log("setSelectedStrategies", selectedStrategies);
+    const strategyId = event.target.value;
+    setSelectedStrategies((prevStrategies) => {
+      return prevStrategies.map((strategy) => strategy.id === strategyId
+        ? { ...strategy, checked: !strategy.checked }
+        : strategy
+      );
+    });
   };
+
+  useEffect(() => {
+    if (UserData.data.strategy) {
+      const initialSelectedStrategies = AllStrategy.data.map((strategy) => ({
+        id: strategy._id,
+        name: strategy.strategy_name,
+        checked: UserData.data.strategy.some(
+          (item) => item.strategy_id === strategy._id
+        ),
+      }));
+      setSelectedStrategies(initialSelectedStrategies);
+    }
+  }, [UserData.data.strategy, AllStrategy.data]);
 
 
   return (
@@ -728,31 +732,32 @@ const AddClient = () => {
               </label>
 
               {/*  For Show All Strategy */}
-              {ShowAllStratagy ? (
-                <>
-                  {AllStrategy.data.map((strategy) => (
-                    <div className={`col-lg-2 mt-2`} key={strategy._id}>
-                      <div className="row ">
-                        <div className="col-lg-12 ">
-                          <div class="form-check custom-checkbox mb-3">
-                            <input
-                              type="checkbox"
-                              className="form-check-input"
-                              name={strategy.strategy_name}
-                              value={strategy._id}
-                              onChange={(e) => handleStrategyChange(e)}
-                              defaultChecked={returnChecked(strategy._id, strategy.strategy_name)}
-                            />
-                            <label className="form-check-label" for={strategy.strategy_name}>
-                              {strategy.strategy_name}
-                            </label>
-                          </div>
+              {/* {ShowAllStratagy ? ( */}
+              <>
+                {selectedStrategies.map((strategy) => (
+                  <div className={`col-lg-2 mt-2`} key={strategy.id}>
+                    <div className="row ">
+                      <div className="col-lg-12 ">
+                        <div className="form-check custom-checkbox mb-3">
+                          <input
+                            type="checkbox"
+                            className="form-check-input"
+                            name={strategy.id}
+                            value={strategy.id}
+                            onChange={(e) => handleStrategyChange(e)}
+                            checked={strategy.checked}
+                          />
+                          <label className="form-check-label" htmlFor={strategy.name}>
+                            {strategy.name}
+                          </label>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </>
-              ) : ""}
+                  </div>
+                ))}
+              </>
+
+              {/* ) : ""} */}
             </>
           }
         />
