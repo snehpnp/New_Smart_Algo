@@ -119,7 +119,7 @@ class Employee {
                 var UpdateDate = ""
                 var StartDate = new Date(start_date)
 
-                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseFloat(licence));
+                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(licence));
 
                 var end_date_2days = dateTime.create(UpdateDate);
                 var end_date_2days = end_date_2days.format('Y-m-d H:M:S');
@@ -216,7 +216,7 @@ class Employee {
                     const group_service_find = await serviceGroup_services_id.find({ Servicegroup_id: group_service })
 
 
-                    // CLIENT SERVICES ADD API 
+                    // CLIENT SERVICES ADD API
                     if (group_service_find.length != 0) {
 
                         group_service_find.forEach((data) => {
@@ -270,34 +270,36 @@ class Employee {
 
     }
 
-    // UPDATE USER 
+    // UPDATE USER
     async UpdateUser(req, res) {
         try {
 
             const { FullName, UserName, Email, PhoneNo, license_type, licence, licence1, fromdate, Strategies, todate, service_given_month, broker, parent_id, parent_role, api_secret, app_id, client_code, api_key, app_key, api_type, demat_userid, group_service } = req.body;
 
+            var req = req.body.req
+
             var StartDate1 = "";
             var EndDate1 = "";
 
             // IF USER ALEARDY EXIST
-            const existingUsername = await User_model.findOne({ UserName: UserName });
+            const existingUsername = await User_model.findOne({ UserName: req.UserName });
             if (!existingUsername) {
                 return res.send({ status: false, msg: 'Username Not exists', data: [] });
             }
 
 
             // IF CHECK STRATEGY NULL
-            if (Strategies.length == 0) {
+            if (req.Strategies.length == 0) {
                 return res.send({ status: false, msg: 'Please Select a one Strategy', data: [] });
             }
 
             // IF CHECK GROUP SERVICES NULL
-            if (group_service == "") {
+            if (req.group_service == "") {
                 return res.send({ status: false, msg: 'Please Select a one Group', data: [] });
             }
 
             // IF CHECK GROUP SERVICES NULL
-            if (parent_id == "") {
+            if (req.parent_id == "") {
                 return res.send({ status: false, msg: 'Please Select parent id', data: [] });
             }
 
@@ -322,17 +324,17 @@ class Employee {
                 },
             ]);
 
-            console.log("totalLicense", Number(totalLicense[0].totalLicense) + Number(licence1));
-            console.log("Panel_key", Panel_key[0].licenses);
+            // console.log("totalLicense", Number(totalLicense[0].totalLicense) + Number(req.licence1));
+            // console.log("Panel_key", Panel_key[0].licenses);
 
-            if (Number(Panel_key[0].licenses) >= Number(totalLicense[0].totalLicense) + Number(licence1)) {
+            if (Number(Panel_key[0].licenses) >= Number(totalLicense[0].totalLicense) + Number(req.licence1)) {
 
-
+                console.log("existingUsername", existingUsername.license_type);
                 // PREVIOS CLIENT IS LIVE
                 if (existingUsername.license_type != "2") {
 
                     // USER 2 DAYS LICENSE USE
-                    if (license_type == '0') {
+                    if (req.license_type == '0') {
 
                         var currentDate = new Date();
                         var start_date_2days = dateTime.create(currentDate);
@@ -365,10 +367,10 @@ class Employee {
                         // console.log("END DATE", end_date_2days);
                         EndDate1 = end_date_2days
 
-                    } else if (license_type == '1') {
-                        StartDate1 = fromdate
-                        EndDate1 = todate
-                    } else if (license_type == '2') {
+                    } else if (req.license_type == '1') {
+                        StartDate1 = req.fromdate
+                        EndDate1 = req.todate
+                    } else if (req.$lookuplicense_type == '2') {
 
                         var currentDate = new Date();
                         var start_date_2days = dateTime.create(currentDate);
@@ -382,7 +384,7 @@ class Employee {
                         var UpdateDate = ""
                         var StartDate = new Date(start_date)
 
-                        UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseFloat(licence1));
+                        UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(licence1));
 
                         var end_date_2days = dateTime.create(UpdateDate);
                         var end_date_2days = end_date_2days.format('Y-m-d H:M:S');
@@ -394,15 +396,20 @@ class Employee {
                     }
 
                 } else {
-                    if (license_type == '2') {
+                    if (req.license_type == '2') {
+                        console.log("test" , req.license_type)
 
                         var UserEndDate = new Date(existingUsername.EndDate);
                         var TodaysDate = new Date();
 
-                        if (Number(licence1) > 0) {
-                            console.log("licence1", Number(licence1));
+                        console.log("licence2", Number(req.licence1));
+                        if (Number(req.licence1) > 0) {
+
+                            console.log("licence1", Number(req.licence1));
 
                             if (UserEndDate > TodaysDate) {
+
+                                console.log("teri bhen ki ", Number(req.licence1));
 
                                 var currentDate = new Date(existingUsername.EndDate);
 
@@ -415,13 +422,13 @@ class Employee {
                                 var UpdateDate = ""
                                 var StartDate = new Date(start_date)
 
-                                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseFloat(licence1));
+                                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(req.licence1));
 
                                 var end_date_2days = dateTime.create(UpdateDate);
                                 var end_date_2days = end_date_2days.format('Y-m-d H:M:S');
 
                                 EndDate1 = end_date_2days
-                                TotalMonth = parseFloat(licence1) + parseFloat(existingUsername.licence)
+                                TotalMonth = parseInt(req.licence1) + parseInt(existingUsername.licence)
 
                             } else {
                                 var currentDate = new Date();
@@ -435,7 +442,7 @@ class Employee {
                                 var UpdateDate = ""
                                 var StartDate = new Date(start_date)
 
-                                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseFloat(licence));
+                                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(req.licence));
 
                                 var end_date_2days = dateTime.create(UpdateDate);
                                 var end_date_2days = end_date_2days.format('Y-m-d H:M:S');
@@ -444,9 +451,10 @@ class Employee {
                             }
 
                         } else {
+                            console.log("maa ki", Number(req.licence));
                             StartDate1 = existingUsername.StartDate
                             EndDate1 = existingUsername.EndDate
-                            TotalMonth = licence
+                            TotalMonth = req.licence
                         }
 
 
@@ -473,7 +481,7 @@ class Employee {
 
                     // NEW INSERT STRATEGY TO CONVERT IN STRING AND ID
                     var insert_startegy = [];
-                    Strategies.forEach(function (item, index) {
+                    req.Strategies.forEach(function (item, index) {
                         insert_startegy.push(item.id);
                     });
                     // console.log('exist - strtegy ', db_exist_startegy);
@@ -518,7 +526,7 @@ class Employee {
                         })
                     }
 
-                    // STEP FISECONDRST TO DELTE IN CLIENT SERVICES AND UPDATE NEW STRATEGY 
+                    // STEP FISECONDRST TO DELTE IN CLIENT SERVICES AND UPDATE NEW STRATEGY
                     if (delete_startegy.length > 0) {
 
 
@@ -541,8 +549,8 @@ class Employee {
 
 
                 try {
-                    // GROUP SERVICES ADD EDIT 
-                    const GroupServiceId = new ObjectId(group_service);
+                    // GROUP SERVICES ADD EDIT
+                    const GroupServiceId = new ObjectId(req.group_service);
 
                     // CHECK IF GROUP SERVICES ALEAREDY EXIST NO UPDATE
                     const user_group_service = await groupService_User.find({ user_id: existingUsername._id, groupService_id: GroupServiceId });
@@ -552,7 +560,7 @@ class Employee {
                         // DELETE GROUP SERVICES
                         // const DELTE_GROUP = await groupService_User.deleteMany({ user_id: existingUsername._id });
 
-                        const result = await groupService_User.updateOne({ user_id: existingUsername._id }, { $set: { groupService_id: new ObjectId(group_service) } });
+                        const result = await groupService_User.updateOne({ user_id: existingUsername._id }, { $set: { groupService_id: new ObjectId(req.group_service) } });
 
 
                         // IF GROUP SERVICES NOT EXIST
@@ -587,37 +595,39 @@ class Employee {
                 } catch (error) {
                     console.log("Group Services Error-", error);
                 }
+                console.log("User_update", User_update);
+                console.log("req.api_secret", req.api_secret);
 
                 var User_update = {
-                    FullName: FullName,
-                    license_type: license_type,
+                    FullName: req.FullName,
+                    license_type: req.license_type,
                     licence: TotalMonth,
                     StartDate: StartDate1,
                     EndDate: EndDate1,
-                    broker: broker,
-                    parent_id: parent_id,
-                    parent_role: parent_role,
-                    api_secret: api_secret,
-                    app_id: app_id,
-                    client_code: client_code,
-                    api_key: api_key,
-                    app_key: app_key,
-                    api_type: api_type,
-                    demat_userid: demat_userid
+                    broker: req.broker,
+                    parent_id: req.parent_id,
+                    parent_role: req.parent_role,
+                    api_secret: req.api_secret,
+                    app_id: req.app_id,
+                    client_code: req.client_code,
+                    api_key: req.api_key,
+                    app_key: req.app_key,
+                    api_type: req.api_type,
+                    demat_userid: req.demat_userid
 
                 }
                 console.log("User_uodate", User_update);
 
                 const User_Update = await User_model.updateOne({ _id: existingUsername._id }, { $set: User_update });
 
-                if (license_type == '2') {
+                if (req.license_type == '2') {
 
                     if (Number(TotalMonth) > 0) {
 
                         const count_licenses_add = new count_licenses(
                             {
                                 user_id: existingUsername._id,
-                                license: licence1,
+                                license: req.licence1,
 
                             })
                         count_licenses_add.save()
@@ -640,7 +650,7 @@ class Employee {
             console.log("Error In User Update-", error);
         }
     }
-    
+
     // GET ALL GetAllClients
     async GetAllClients(req, res) {
         try {
@@ -876,13 +886,13 @@ class Employee {
     }
 
 
-       // GET USER ALL INFORMATION
-       async GetUserInfo(req, res) {
+    // GET USER ALL INFORMATION
+    async GetUserInfo(req, res) {
         try {
             const { id } = req.body
             // UPDATE ACTTIVE STATUS CLIENT
 
-            if(!id){
+            if (!id) {
                 return res.send({ status: false, msg: "Please Entrer User Id", data: [] })
 
             }
@@ -900,7 +910,7 @@ class Employee {
                     $match: {
                         _id: userId
                     }
-                },    
+                },
                 {
                     $lookup: {
                         from: "groupservices_clients",
@@ -914,43 +924,43 @@ class Employee {
                 },
                 {
                     $project: {
-                        'groupservices_clients.groupService_id': 1,          
+                        'groupservices_clients.groupService_id': 1,
                         _id: 1,
-                        FullName: 1,                
+                        FullName: 1,
                         UserName: 1,
                         Email: 1,
                         PhoneNo: 1,
                         StartDate: 1,
                         EndDate: 1,
-                        license_type:1,
-                        licence:1,
-                        parent_id:1,
-                        parent_role:1,
-                        service_given_month:1,
-                        api_secret:1,
-                        app_id:1,
-                        client_code:1,
-                        api_key:1,
-                        app_key:1,
-                        api_type:1,
-                        demat_userid:1,
-                        broker:1
-                    
+                        license_type: 1,
+                        licence: 1,
+                        parent_id: 1,
+                        parent_role: 1,
+                        service_given_month: 1,
+                        api_secret: 1,
+                        app_id: 1,
+                        client_code: 1,
+                        api_key: 1,
+                        app_key: 1,
+                        api_type: 1,
+                        demat_userid: 1,
+                        broker: 1
+
 
                     },
                 },
             ];
 
             const GetAllClientServices = await User_model.aggregate(pipeline)
-            const userSTG = await strategy_client.find({user_id:userId})
+            const userSTG = await strategy_client.find({ user_id: userId })
 
-            
+
 
             res.send({
                 status: true,
                 msg: "Get User Successfully",
                 data: GetAllClientServices,
-                strategy:userSTG
+                strategy: userSTG
 
 
             })

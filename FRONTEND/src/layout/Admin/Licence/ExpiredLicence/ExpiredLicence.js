@@ -13,14 +13,18 @@ import FullDataTable from "../../../../Components/ExtraComponents/Datatable/Full
 import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
+import { Expired_Soon_User } from '../../../../ReduxStore/Slice/Admin/LicenceSlice';
+import { fDate, fDateTimeSuffix } from '../../../../Utils/Date_formet';
+
 
 
 const ExpiredLicence = () => {
 
     const dispatch = useDispatch()
 
-    const [first, setfirst] = useState('all')
-    const [showModal, setshowModal] = useState(false)
+    const token = JSON.parse(localStorage.getItem("user_details")).token
+
+
 
     const [getAllClients, setAllClients] = useState({
         loading: true,
@@ -29,7 +33,7 @@ const ExpiredLicence = () => {
 
 
     const data = async () => {
-        await dispatch(GET_ALL_CLIENTS()).unwrap()
+        await dispatch(Expired_Soon_User({ token: token })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setAllClients({
@@ -51,49 +55,32 @@ const ExpiredLicence = () => {
         },
         {
             dataField: 'UserName',
-            text: 'User Name'
+            text: 'User Name',
+            sort: true
         },
         {
             dataField: 'Email',
-            text: 'Email'
+            text: 'Email',
+            sort: true
         },
         {
             dataField: 'PhoneNo',
-            text: 'Phone Number'
+            text: 'Phone Number',
+            sort: true
         },
         {
-            dataField: 'Otp',
-            text: 'Password'
+            dataField: 'StartDate',
+            text: 'Start Date',
+            formatter: (cell, row) => fDateTimeSuffix(row.StartDate)
+            ,
+            sort: true
         },
         {
-            dataField: 'ActiveStatus',
-            text: 'Status',
-            formatter: (cell, row) => (
-                <>
-                    <label class="switch" >
-                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false}/>
-                            <span class="slider round"></span>
-                    </label>
-
-                </>
-
-                
-            ),
-        },
-        {
-            dataField: 'actions',
-            text: 'Actions',
-            formatter: (cell, row) => (
-                <div>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-                    </span>
-
-                </div>
-            ),
+            dataField: 'EndDate',
+            text: 'End Date',
+            formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
+            ,
+            sort: true
         },
     ];
     return (
@@ -101,7 +88,7 @@ const ExpiredLicence = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All Clients" button_title="Add Client" route="/client/add">
+                        <Content Page_title="Expired Soon Licence" button_status={false} >
 
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (
@@ -110,17 +97,8 @@ const ExpiredLicence = () => {
                                         <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
                                     </>
                             }
-                            {
-                                showModal ?
-                                    <>
-                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
-                                        //  handleClose={setshowModal(false)}
-                                        >
-                                        </Modal >
-                                    </>
-                                    : ""
-                            }
-                        </Theme_Content>
+
+                        </Content>
                     </>
             }
 

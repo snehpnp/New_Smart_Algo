@@ -13,7 +13,8 @@ import FullDataTable from "../../../../Components/ExtraComponents/Datatable/Full
 import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
-
+import { Transcation_Licence } from '../../../../ReduxStore/Slice/Admin/LicenceSlice';
+import { fDate, fDateTimeSuffix } from '../../../../Utils/Date_formet';
 
 const AllLicence = () => {
 
@@ -22,6 +23,11 @@ const AllLicence = () => {
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
 
+    const token = JSON.parse(localStorage.getItem("user_details")).token
+
+
+
+
     const [getAllClients, setAllClients] = useState({
         loading: true,
         data: []
@@ -29,7 +35,7 @@ const AllLicence = () => {
 
 
     const data = async () => {
-        await dispatch(GET_ALL_CLIENTS()).unwrap()
+        await dispatch(Transcation_Licence({ token: token })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setAllClients({
@@ -42,7 +48,6 @@ const AllLicence = () => {
     useEffect(() => {
         data()
     }, [])
-
     const columns = [
         {
             dataField: "index",
@@ -62,38 +67,8 @@ const AllLicence = () => {
             text: 'Phone Number'
         },
         {
-            dataField: 'Otp',
-            text: 'Password'
-        },
-        {
-            dataField: 'ActiveStatus',
-            text: 'Status',
-            formatter: (cell, row) => (
-                <>
-                    <label class="switch" >
-                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false}/>
-                            <span class="slider round"></span>
-                    </label>
-
-                </>
-
-                
-            ),
-        },
-        {
-            dataField: 'actions',
-            text: 'Actions',
-            formatter: (cell, row) => (
-                <div>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-                    </span>
-
-                </div>
-            ),
+            dataField: 'license',
+            text: 'License'
         },
     ];
     return (
@@ -101,7 +76,7 @@ const AllLicence = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All Clients" button_title="Add Client" route="/client/add">
+                        <Content Page_title="Transaction Licence" button_status={false} >
 
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (
@@ -120,7 +95,7 @@ const AllLicence = () => {
                                     </>
                                     : ""
                             }
-                        </Theme_Content>
+                        </Content>
                     </>
             }
 

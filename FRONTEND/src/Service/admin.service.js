@@ -44,6 +44,24 @@ export async function FIND_ONE_USER(data, token) {
 
 }
 
+
+// UPDATE CLIENT BY ID
+export async function UPDATE_USER(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/employee`, data, {
+            headers: header(token),
+
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
 // ALL SERVICES
 export async function ALL_SERVICES(data, token) {
     try {
@@ -461,5 +479,48 @@ export async function GET_HELP_REQUEST(data, token) {
     }
 
 }
+
+
+
+
+// EXPIRED_SOO_USER
+export async function EXPIRED_SOON_USER(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}getall/expired/user`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error =", err);
+        return err
+        // custom error
+    }
+
+}
+
+
+
+// TRANSACTION_LICENCE
+export async function TRANSACTION_LICENCE(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}getall/transection/license`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error =", err);
+        return err
+        // custom error
+    }
+
+}
+
+
 
 

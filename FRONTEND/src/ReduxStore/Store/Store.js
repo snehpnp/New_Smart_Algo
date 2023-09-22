@@ -21,6 +21,7 @@ import SignalsSlice from "../Slice/Admin/SignalsSlice";
 import TradehistorySlice from "../Slice/Admin/TradehistorySlice";
 import AdminDashboardSlice from "../Slice/Admin/DashboardSlice";
 import AdminHelpSlice from "../Slice/Admin/AdminHelpSlice";
+import LicenceSlice from "../Slice/Admin/LicenceSlice";
 
 
 
@@ -59,6 +60,7 @@ const store = configureStore({
     AdminDashboardSlice: AdminDashboardSlice.reducer,
     ClientHelpSlice: ClientHelpSlice.reducer,
     AdminHelpSlice: AdminHelpSlice.reducer,
+    LicenceSlice: LicenceSlice.reducer,
   },
 });
 
