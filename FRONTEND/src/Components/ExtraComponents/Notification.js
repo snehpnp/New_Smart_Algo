@@ -1,12 +1,26 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
+import { Link } from 'react-router-dom';
+import { fDate, fDateTimeSuffix } from '../../Utils/Date_formet';
+const Notification = ({ data }) => {
 
-const Notification = () => {
+    console.log("data", data.data)
+
+
+    const show_Name = (item) => {
+        // console.log(" sdadasd ", item.split("_").map((part) => part[0]).join(''))
+
+        return item.split("_").map((part) => part[0]).join('')
+    }
+
+
     return (
         <div>
             <li className="nav-item dropdown notification_dropdown">
                 <a
                     className="nav-link nav-action"
-                    // href="javascript:void(0);"
+
                     role="button"
                     data-bs-toggle="dropdown"
                 >
@@ -35,97 +49,29 @@ const Notification = () => {
                         style={{ height: 380 }}
                     >
                         <ul className="timeline">
-                            <li>
-                                <div className="timeline-panel">
-                                    <div className="media me-2">
-                                        <img
-                                            alt="image"
-                                            width={50}
-                                            src="../assets/images/avatar/1.jpg"
-                                        />
-                                    </div>
-                                    <div className="media-body">
-                                        <h6 className="mb-1">Dr sultads Send you Photo</h6>
-                                        <small className="d-block">
-                                            29 July 2020 - 02:26 PM
-                                        </small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="timeline-panel">
-                                    <div className="media me-2 media-info">KG</div>
-                                    <div className="media-body">
-                                        <h6 className="mb-1">
-                                            Resport created successfully
-                                        </h6>
-                                        <small className="d-block">
-                                            29 July 2020 - 02:26 PM
-                                        </small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="timeline-panel">
-                                    <div className="media me-2 media-success">
-                                        <i className="fa fa-home" />
-                                    </div>
-                                    <div className="media-body">
-                                        <h6 className="mb-1">Reminder : Treatment Time!</h6>
-                                        <small className="d-block">
-                                            29 July 2020 - 02:26 PM
-                                        </small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="timeline-panel">
-                                    <div className="media me-2">
-                                        <img
-                                            alt="image"
-                                            width={50}
-                                            src="../assets/images/avatar/1.jpg"
-                                        />
-                                    </div>
-                                    <div className="media-body">
-                                        <h6 className="mb-1">Dr sultads Send you Photo</h6>
-                                        <small className="d-block">
-                                            29 July 2020 - 02:26 PM
-                                        </small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="timeline-panel">
-                                    <div className="media me-2 media-danger">KG</div>
-                                    <div className="media-body">
-                                        <h6 className="mb-1">
-                                            Resport created successfully
-                                        </h6>
-                                        <small className="d-block">
-                                            29 July 2020 - 02:26 PM
-                                        </small>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div className="timeline-panel">
-                                    <div className="media me-2 media-primary">
-                                        <i className="fa fa-home" />
-                                    </div>
-                                    <div className="media-body">
-                                        <h6 className="mb-1">Reminder : Treatment Time!</h6>
-                                        <small className="d-block">
-                                            29 July 2020 - 02:26 PM
-                                        </small>
-                                    </div>
-                                </div>
-                            </li>
+                            {data.data && data.data.slice(0, 6).map((item) => {
+                                return <>
+                                    <li>
+                                        <div className="timeline-panel">
+                                            <div className="media me-2 media-info">{show_Name(item.fullname)}</div>
+                                            <div className="media-body">
+                                                <h6 className="mb-1">
+                                                    Mail Recieve From {item.username}
+                                                </h6>
+                                                <small className="d-block">
+                                                    {fDateTimeSuffix(item.createdAt)}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </li></>
+                            })}
+
+
                         </ul>
                     </div>
-                    <a className="all-notification" href="javascript:void(0);">
+                    <Link to='/admin/helpcenter' className="all-notification">
                         See all notifications <i className="ti-arrow-end" />
-                    </a>
+                    </Link>
                 </div>
             </li>
         </div>

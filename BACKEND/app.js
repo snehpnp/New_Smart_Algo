@@ -12,6 +12,7 @@ const cors = require('cors');
 const bodyparser = require('body-parser')
 
 
+
 const corsOpts = {
   origin: '*',
   methods: [
@@ -36,12 +37,13 @@ const server = http.createServer(app);
 
 
 
+
 // REQUIRE File
 require('./App/Cron/cron')
 
 
 const { createView, dropExistingView } = require('./View/Alice_blue')
-const { TokenSymbolUpdate ,TruncateTable} = require('./App/Cron/cron')
+const { TokenSymbolUpdate, TruncateTable } = require('./App/Cron/cron')
 
 // TEST API
 app.get('/tradesymbol', async (req, res) => {
@@ -74,6 +76,36 @@ require("./App/Routes")(app)
 
 // EMERGANCY
 require("./App/Emergency Apis/service")(app)
+
+
+
+
+
+//  ----------------------------   for help center ------------------
+
+const io = socketIo(server, {
+  cors: {
+    origin: "*",
+    credentials: true
+  }
+}
+);
+
+io.on("connection", (socket) => {
+  console.log("test sochet ---------", socket)
+  socket.on("help_from_client", (data) => {
+    console.log("test sochet ---------", data)
+
+    socket.broadcast.emit("test_msg_Response", data);
+  });
+})
+//  ----------------------------   for help center ------------------
+
+
+
+
+
+
 
 
 

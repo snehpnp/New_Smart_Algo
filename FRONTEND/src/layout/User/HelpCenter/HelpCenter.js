@@ -5,6 +5,8 @@ import AlertToast from '../../../Components/ExtraComponents/Alert_Toast'
 import Formikform1 from "../../../Components/ExtraComponents/Form/Formik_form1"
 import { useFormik } from 'formik';
 import * as  valid_err from "../../../Utils/Common_Messages"
+import * as Config from "../../../Utils/Config";
+
 import { useNavigate } from "react-router-dom";
 import { Email_regex, Mobile_regex } from "../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
@@ -12,12 +14,18 @@ import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { Create_Help } from "../../../ReduxStore/Slice/Users/ClientHelpSlice";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
+import socketIOClient from "socket.io-client";
+
+// import { io  , socketIOClient} from "socket.io-client";
 
 
 import toast, { Toaster } from 'react-hot-toast';
 
 
 const ApiCreateInfo = () => {
+
+
+
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -51,6 +59,8 @@ const ApiCreateInfo = () => {
             return errors;
         },
         onSubmit: async (values) => {
+
+
             const req = {
                 "username": values.fullName,
                 "fullname": values.username,
@@ -67,11 +77,17 @@ const ApiCreateInfo = () => {
                     toast.error(response.data.msg);
                 }
                 else if (response.status) {
+
+                    const socket = socketIOClient(`${Config.base_url}`);
+
+                    socket.emit("help_from_client", req);
+
+
                     setRefresh(!refresh)
                     toast.success(response.msg);
                     setTimeout(() => {
                         navigate("/client/dashboard")
-                      }, 1000);
+                    }, 1000);
                 }
                 else if (!response.status) {
                     toast.error(response.msg);
@@ -121,7 +137,16 @@ const ApiCreateInfo = () => {
         formik.setFieldValue('mobile', UserDetails.data.PhoneNo);
         formik.setFieldValue('email', UserDetails.data.Email);
         formik.setFieldValue('admin_id', UserDetails.data.parent_id);
+
+
+
+
+
     }, [UserDetails]);
+
+
+
+
 
 
 

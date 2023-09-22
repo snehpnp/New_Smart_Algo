@@ -282,7 +282,7 @@ const AddClient = () => {
       type: 'select',
       options: first && first.map((item) => ({ label: item.endDate, value: item.month })),
       showWhen: values => values.licence === '2'
-      , label_size: 12, col_size: 6, disable: true, isSelected: true
+      , label_size: 12, col_size: 6, disable: false, isSelected: true
     },
     {
       name: 'broker',

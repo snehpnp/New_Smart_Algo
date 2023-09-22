@@ -311,7 +311,7 @@ const AddClient = () => {
         { label: 'Demo', value: '1' },
         { label: 'Live', value: '2' },
       ]
-      , label_size: 12, col_size: 6, disable: formik.values.licence !== "0" || "1" ? true : false
+      , label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'licence1', label: 'Use License Month', type: 'text', label_size: 12, col_size: 6, disable: true,
