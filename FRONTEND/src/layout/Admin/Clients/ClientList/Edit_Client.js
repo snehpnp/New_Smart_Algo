@@ -296,7 +296,6 @@ const AddClient = () => {
     { label: 'Fyers', value: '13' },
     { label: 'Zerodha', value: '15' }
   ];
-  console.log("formik.values.license_type", formik.values.licence)
   const fields = [
     { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: true },
     { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },

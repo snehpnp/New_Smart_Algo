@@ -35,9 +35,6 @@ app.use(bodyparser.json());
 const server = http.createServer(app);
 
 
-
-
-
 // REQUIRE File
 require('./App/Cron/cron')
 
@@ -82,7 +79,6 @@ require("./App/Emergency Apis/service")(app)
 
 
 //  ----------------------------   for help center ------------------
-
 const io = socketIo(server, {
   cors: {
     origin: "*",
@@ -91,20 +87,16 @@ const io = socketIo(server, {
 }
 );
 
+
 io.on("connection", (socket) => {
-  // console.log("test sochet ---------", socket)
   socket.on("help_from_client", (data) => {
-    // console.log("test sochet ---------", data)
 
     socket.broadcast.emit("test_msg_Response", data);
   });
+
+
 })
 //  ----------------------------   for help center ------------------
-
-
-
-
-
 
 
 

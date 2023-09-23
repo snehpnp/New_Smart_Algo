@@ -79,9 +79,7 @@ const ApiCreateInfo = () => {
                 else if (response.status) {
 
                     const socket = socketIOClient(`${Config.base_url}`);
-
                     socket.emit("help_from_client", req);
-
 
                     setRefresh(!refresh)
                     toast.success(response.msg);
