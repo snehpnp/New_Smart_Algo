@@ -229,7 +229,6 @@ const Login = () => {
     if (getOtp && getOtp == typeOtp1) {
       const socket = socketIOClient(`${Config.base_url}`);
       socket.emit("logout_user_from_other_device_req", { "CheckUser": CheckUser, usedata: UserData });
-
     }
 
     setTimeout(async () => {
@@ -266,15 +265,13 @@ const Login = () => {
             }
           } else {
 
-            // toast.error(response.response.data.msg)
+            toast.error(response.msg)
           }
         })
         .catch((error) => {
           console.error("Error", error);
         });
     }, 1000);
-
-
 
 
   }
