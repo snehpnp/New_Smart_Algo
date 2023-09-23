@@ -238,8 +238,7 @@ const Login = () => {
         if (res.status) {
           const socket = socketIOClient(`${Config.base_url}`);
           socket.emit("logout_user_from_other_device_req", { "CheckUser": CheckUser, usedata: UserData });
-
-          const roles = ["ADMIN", "USER", "SUBADMIN"];
+            const roles = ["ADMIN", "USER", "SUBADMIN"];
           const userData = UserData;
           const role = userData && userData.Role;
 
