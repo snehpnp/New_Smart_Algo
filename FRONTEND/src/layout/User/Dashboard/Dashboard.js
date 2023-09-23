@@ -7,8 +7,10 @@ import { No_Negetive_Input_regex } from "../../../Utils/Common_regex"
 import { GetAliceTokenAndID, CreateSocketSession, ConnctSocket } from "../../../Service/Alice_Socket"
 import { useDispatch, useSelector } from "react-redux";
 import $ from "jquery";
+import toast, { Toaster } from 'react-hot-toast';
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
-import { User_Dashboard_Data } from "../../../ReduxStore/Slice/Users/DashboardSlice"
+import { User_Dashboard_Data, Update_Dashboard_Data } from "../../../ReduxStore/Slice/Users/DashboardSlice"
 
 
 const BrokerResponse = () => {
@@ -16,15 +18,14 @@ const BrokerResponse = () => {
     const [enterqty, setEnterQty] = useState("")
     const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
     const [Strategy, setStrategy] = useState({ loading: true, data: [] });
-    const [abc, setAbc] = useState([]);
-    const [checkboxState, setCheckboxState] = useState({});
 
+
+    console.log("DashboardData", DashboardData)
 
     const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
     const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
 
-    const [updatedData, setUpdatedData] = useState([]);
-    const [updatedData1, setUpdatedData1] = useState([]);
+    const [updatedData, setUpdatedData] = useState({});
 
 
 
@@ -91,19 +92,12 @@ const BrokerResponse = () => {
 
 
 
-    const UpdateDashboard = (e) => {
-        console.log("Updated Data:", updatedData);
-
-
-    }
-
 
 
 
     const setgroup_qty_value_test = (e, symboll, rowdata) => {
         let name = e.target.name;
         let value = e.target.value;
-
         let id = rowdata._id;
 
         setUpdatedData(prevData => ({
@@ -113,9 +107,26 @@ const BrokerResponse = () => {
                 [name]: name === 'active_status' ? e.target.checked : value
             }
         }));
+    }
 
+
+    const UpdateDashboard = async (e) => {
+
+
+        await dispatch(Update_Dashboard_Data({ data: { servicesData: updatedData, user_id: user_Id }, AdminToken: AdminToken })).unwrap()
+            .then((response) => {
+                console.log("response", response)
+                if (response.status) {
+                    toast.success(response.msg);
+
+                } else {
+                    toast.error("No Data For Update");
+                }
+            })
 
     }
+
+
     return (
         <Content Page_title="Dashboard" button_status={false}>
             {/* <button onClick={() => RunSocket()}>run socket</button> */}
@@ -152,7 +163,7 @@ const BrokerResponse = () => {
 
                                                     //  setEnterQty(e.target.value)
                                                 }
-                                                value={data.service.quantity}
+                                                defaultValue={data.quantity}
                                             />
                                         </div>
                                     </div></td>
@@ -203,6 +214,7 @@ const BrokerResponse = () => {
 
 
                     )}
+                    <ToastButton />
 
 
 

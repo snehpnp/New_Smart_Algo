@@ -95,7 +95,7 @@ const UserProfile = () => {
     { name: "confirmpassword", label: "Confirm Password", type: "password" },
   ];
 
-  console.log("UserDetails && fDateTime(UserDetails.data.CreateDate", UserDetails && UserDetails)
+  console.log("UserDetails ", UserDetails && UserDetails)
 
   return (
     <>
@@ -221,7 +221,7 @@ const UserProfile = () => {
                             </div>
                             <div className="col-sm-9 col-7">
                               <span>
-                                {/* {UserDetails && fDateTime(UserDetails.data.CreateDate)} */}
+                                {/* {UserDetails.data && fDateTime(UserDetails.data.StartDate)} */}
                               </span>
                             </div>
                           </div>
@@ -233,7 +233,7 @@ const UserProfile = () => {
                             </div>
                             <div className="col-sm-9 col-7">
                               <span>
-                                {/* {UserDetails && fDateTime(UserDetails.data.EndDate)} */}
+                                {/* {UserDetails.data && fDateTime(UserDetails.data.EndDate)} */}
                               </span>
                             </div>
                           </div>

@@ -226,53 +226,54 @@ const Login = () => {
   const verifyOTP_login = async () => {
     // console.log("DONE AND TEST");
 
-    if(getOtp&&getOtp == typeOtp1){
+    if (getOtp && getOtp == typeOtp1) {
       const socket = socketIOClient(`${Config.base_url}`);
       socket.emit("logout_user_from_other_device_req", { "CheckUser": CheckUser, usedata: UserData });
-  
+
     }
 
-    setTimeout( async() => {
-      
-    let req = {
-      Email: UserData.Email,
-      device: CheckUser,
-      "otp": typeOtp1
-    };
+    setTimeout(async () => {
 
-    await dispatch(Logout_From_Other_Device(req))
-      .unwrap()
-      .then((res) => {
-        if (res.status) {
-        
-          const roles = ["ADMIN", "USER", "SUBADMIN"];
-          const userData = UserData;
-          const role = userData && userData.Role;
+      let req = {
+        Email: UserData.Email,
+        device: CheckUser,
+        "otp": typeOtp1
+      };
 
-          if (roles.includes(role)) {
-            localStorage.setItem("user_details", JSON.stringify(userData));
-            localStorage.setItem("user_role", JSON.stringify(role));
-            toast.success(res.msg);
-            let redirectPath = `/${role === "USER" ? "client" : role.toLowerCase()}/dashboard`;
-            setTimeout(() => {
-              // setshowModal(false);
-              navigate(redirectPath);
-              window.location.reload()
-            }, 1000);
+      await dispatch(Logout_From_Other_Device(req))
+        .unwrap()
+        .then((res) => {
+          if (res.status) {
+
+            const roles = ["ADMIN", "USER", "SUBADMIN"];
+
+            const userData = UserData;
+            const role = userData && userData.Role;
+
+            if (roles.includes(role)) {
+              localStorage.setItem("user_details", JSON.stringify(userData));
+              localStorage.setItem("user_role", JSON.stringify(role));
+              toast.success(res.msg);
+              let redirectPath = `/${role === "USER" ? "client" : role.toLowerCase()}/dashboard`;
+              setTimeout(() => {
+                // setshowModal(false);
+                navigate(redirectPath);
+                window.location.reload()
+              }, 1000);
+            } else {
+
+              // toast.error(mobileNo);
+            }
           } else {
 
-            // toast.error(mobileNo);
+            // toast.error(response.response.data.msg)
           }
-        } else {
-
-          // toast.error(response.response.data.msg)
-        }
-      })
-      .catch((error) => {
-        console.error("Error", error);
-      });
+        })
+        .catch((error) => {
+          console.error("Error", error);
+        });
     }, 1000);
-   
+
 
 
 

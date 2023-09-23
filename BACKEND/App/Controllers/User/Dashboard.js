@@ -140,6 +140,8 @@ class Dashboard {
         try {
             const { user_id, servicesData } = req.body;
 
+
+
             const UserData = await User_model.findOne({ _id: user_id });
             if (!UserData) {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
@@ -153,16 +155,16 @@ class Dashboard {
             for (const key in servicesData) {
                 if (servicesData[key]) {
                   const matchedObject = servicesData[key];
-              
+
                   if (matchedObject.strategy_id) {
                     matchedObject.strategy_id = new ObjectId(matchedObject.strategy_id);
                   }
 
                   console.log("Matching Object:", matchedObject);
-              
+
                   const filter = { user_id: UserData._id, service_id: key };
                   const updateOperation = { $set: matchedObject };
-              
+
                   const result = await client_services.updateOne(filter, updateOperation);
 
 
@@ -172,6 +174,7 @@ class Dashboard {
                 }
               }
 
+              return res.send({ status: true, msg: 'Update Successfully', data: [] });
 
 
         } catch (error) {
