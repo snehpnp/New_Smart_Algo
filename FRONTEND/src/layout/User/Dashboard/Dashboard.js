@@ -149,8 +149,8 @@ const BrokerResponse = () => {
                                 <td>
                                     <div className="row d-flex">
                                         <div className="col-lg-12 ">
-                                            <input key={index} type='text' name='qty' className="form-control" id='qty'
-                                                placeholder='Enter Qty'
+                                            <input key={index} type='number' name='qty' className="form-control" id='qty'
+                                                placeholder='Enter Qty' min={0}
 
                                                 onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)
 

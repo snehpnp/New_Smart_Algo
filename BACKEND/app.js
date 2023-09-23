@@ -12,7 +12,6 @@ const cors = require('cors');
 const bodyparser = require('body-parser')
 
 
-
 const corsOpts = {
   origin: '*',
   methods: [
@@ -38,7 +37,6 @@ const server = http.createServer(app);
 // REQUIRE File
 require('./App/Cron/cron')
 
-
 const { createView, dropExistingView } = require('./View/Alice_blue')
 const { TokenSymbolUpdate, TruncateTable } = require('./App/Cron/cron')
 
@@ -47,16 +45,21 @@ app.get('/tradesymbol', async (req, res) => {
   TokenSymbolUpdate()
   res.send({ msg: "Done!!!" })
 })
+
+
 app.get('/tradesymbol1', async (req, res) => {
   TruncateTable()
   res.send({ msg: "Done!!!" })
 })
+
 
 // TEST API
 app.get('/get', async (req, res) => {
   createView()
   res.send({ msg: "Done!!!" })
 })
+
+
 app.get('/get1', async (req, res) => {
   dropExistingView()
   res.send({ msg: "Done!!!" })
@@ -65,16 +68,11 @@ app.get('/get1', async (req, res) => {
 //Testing Api #Shakir
 require("./shakirTeting")(app)
 
-
-
 // Routes all
 require("./App/Routes")(app)
 
-
 // EMERGANCY
 require("./App/Emergency Apis/service")(app)
-
-
 
 
 

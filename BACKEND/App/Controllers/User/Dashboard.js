@@ -144,7 +144,13 @@ class Dashboard {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
             }
 
-            console.log("servicesData",servicesData);
+            if(servicesData.length ===0){
+
+                console.log("servicesData",servicesData);
+            }else{
+                console.log("servicesData1",servicesData);
+
+            }
 
         } catch (error) {
             console.log("ClientServices Update-",error);

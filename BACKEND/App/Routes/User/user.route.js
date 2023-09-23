@@ -18,7 +18,7 @@ const { AddHelp } = require('../../Controllers/User/HelpCenter')
 
 // CLIENT SERVICES
 router.post('/getall/user/clientServices', verifyToken, getClientServices);
-router.post('/update/clientServices', verifyToken, updateClientServices);
+router.post('/update/clientServices', updateClientServices);
 
 
 // TRADING STATUS
