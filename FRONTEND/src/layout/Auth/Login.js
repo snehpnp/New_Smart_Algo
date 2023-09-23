@@ -259,7 +259,7 @@ const Login = () => {
                 navigate(redirectPath);
                 window.location.reload()
               }, 1000);
-            } else { }
+            }
           } else {
 
             toast.error(response.msg)
