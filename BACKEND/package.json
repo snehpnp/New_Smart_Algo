@@ -28,13 +28,9 @@
     "nodemailer": "^6.9.4",
     "nodemon": "^3.0.1",
     "sha256": "^0.2.0",
-<<<<<<< HEAD
     "socket.io": "^4.7.2",
-=======
-    "socket.io": "^4.7.1",
     "socket.io-client": "^4.7.2",
     "technicalindicators": "^3.1.0",
->>>>>>> 4804c817c0c255fce0d9b407406923c10c9a0569
-    "winston": "^3.10.0"
+ "winston": "^3.10.0"
   }
 }

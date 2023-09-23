@@ -261,8 +261,7 @@ const Login = () => {
               }, 1000);
             }
           } else {
-
-            toast.error(response.msg)
+            toast.error(res.msg)
           }
         })
         .catch((error) => {
