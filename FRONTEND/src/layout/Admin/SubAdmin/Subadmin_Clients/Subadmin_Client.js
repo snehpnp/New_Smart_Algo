@@ -153,9 +153,9 @@ const SubadminClient = () => {
                                             id="validationCustom05"
                                             onChange={(e) => setfirst(e.target.value)}
                                         >
-                                            <option disabled>
-                                                Please Select Catagory
-                                            </option>
+                                            {/* <option disabled>
+                                                Please Select Subadmin name
+                                            </option> */}
                                             <option selected value="all">
                                                 All
                                             </option>
