@@ -43,6 +43,7 @@ const Login = () => {
   const [getOtp, setgetOtp] = useState("")
 
 
+
   const [typeOtp, setTypeOtp] = useState('');
 
   const [typeOtp1, setTypeOtp1] = useState('');
@@ -94,6 +95,7 @@ const Login = () => {
       await dispatch(SignIn(req))
         .unwrap()
         .then((response) => {
+          console.log("response=>", response);
 
           if (response.status) {
             if (response.data.Role !== "SUPERADMIN") {
@@ -107,11 +109,9 @@ const Login = () => {
                 navigate("/super/dashboard");
               }, 1000);
             }
-          } else if (response.response.status === 409) {
-            // console.log("response", response.status);
-
-
-            toast.error(response.response.data.msg)
+          } else {
+            console.log("response", response);
+            toast.error(response.msg)
           }
         })
         .catch((error) => {
@@ -226,6 +226,14 @@ const Login = () => {
   const verifyOTP_login = async () => {
     // console.log("DONE AND TEST");
 
+    if(getOtp&&getOtp == typeOtp1){
+      const socket = socketIOClient(`${Config.base_url}`);
+      socket.emit("logout_user_from_other_device_req", { "CheckUser": CheckUser, usedata: UserData });
+  
+    }
+
+    setTimeout( async() => {
+      
     let req = {
       Email: UserData.Email,
       device: CheckUser,
@@ -236,9 +244,7 @@ const Login = () => {
       .unwrap()
       .then((res) => {
         if (res.status) {
-          const socket = socketIOClient(`${Config.base_url}`);
-          socket.emit("logout_user_from_other_device_req", { "CheckUser": CheckUser, usedata: UserData });
-
+        
           const roles = ["ADMIN", "USER", "SUBADMIN"];
           const userData = UserData;
           const role = userData && userData.Role;
@@ -265,6 +271,9 @@ const Login = () => {
       .catch((error) => {
         console.error("Error", error);
       });
+    }, 1000);
+   
+
 
 
   }
@@ -284,8 +293,11 @@ const Login = () => {
     await dispatch(OTP_SEND_USEHERES(req))
       .unwrap()
       .then((response) => {
-        console.log("response", response);
+        console.log("response", response.data);
+
+        setgetOtp(response.data)
         if (response.status) {
+
           setshowModal1(false)
           setshowModal2(true)
           setgetOtpStatus(true)

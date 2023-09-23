@@ -15,6 +15,8 @@ import { Get_All_TRADINGSTATUS_USER } from '../../../ReduxStore/Slice/User/userS
 
 import { useDispatch, useSelector } from "react-redux";
 // import Modal from '../../../../Components/ExtraComponents/Modal';
+import { fDate, fDateTimeSuffix } from '../../../Utils/Date_formet';
+
 
 
 const TradingStatus = () => {
@@ -72,7 +74,9 @@ const TradingStatus = () => {
         },
         {
             dataField: 'createdAt',
-            text: 'Time'
+            text: 'Time',
+            formatter: (cell, row, rowIndex) => fDateTimeSuffix(cell),
+
         },
         {
             dataField: 'login_status',
