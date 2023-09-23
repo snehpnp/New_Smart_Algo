@@ -58,6 +58,8 @@ class Dashboard {
                         'service.name': 1,
                         'service.instrument_token': 1,
                         'service.exch_seg': 1,
+                        'service._id': 1,
+
 
                         'strategys.strategy_name': 1,
                         'strategys._id': 1,
@@ -134,7 +136,7 @@ class Dashboard {
 
     // UPDATE CLIENT SERVICES
     async updateClientServices(req,res){
-        try {   
+        try {
             const {user_id,servicesData } = req.body;
 
             const UserData = await User_model.findOne({ _id: user_id });

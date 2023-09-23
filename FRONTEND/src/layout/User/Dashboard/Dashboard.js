@@ -17,6 +17,7 @@ const BrokerResponse = () => {
     const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
     const [Strategy, setStrategy] = useState({ loading: true, data: [] });
     const [abc, setAbc] = useState([]);
+    const [checkboxState, setCheckboxState] = useState({});
 
 
     const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
@@ -89,22 +90,36 @@ const BrokerResponse = () => {
 
 
     const UpdateDashboard = (e) => {
-        e.preventDefaut()
+
+        console.log("Updated Data:", updatedData);
+        console.log("Checkbox State:", checkboxState);
+
         let request = {
 
         }
     }
 
 
+    const [updatedData, setUpdatedData] = useState({});
 
 
-    const setgroup_qty_value_test = (e, symboll) => {
-        let name = e.target.name
-        let value = e.target.value
-        setEnterQty(prevState => ({ ...prevState, [name]: value }));
-        setAbc(prevState => ({ ...prevState, [symboll]: enterqty }))
+    const setgroup_qty_value_test = (e, symboll, rowdata) => {
+        let name = e.target.name;
+        let value = e.target.value;
+
+        let id = rowdata._id;
+
+        setUpdatedData(prevData => ({
+            ...prevData,
+            [id]: {
+                ...prevData[id],
+                [name]: name === 'trading' ? e.target.checked : value
+            }
+
+
+        }));
+
     }
-    console.log("test", abc)
     return (
         <Content Page_title="Dashboard" button_status={false}>
             {/* <button onClick={() => RunSocket()}>run socket</button> */}
@@ -137,16 +152,16 @@ const BrokerResponse = () => {
                                             <input key={index} type='text' name='qty' className="form-control" id='qty'
                                                 placeholder='Enter Qty'
 
-                                                onChange={(e) => setgroup_qty_value_test(e, data.service.name)
+                                                onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)
 
                                                     //  setEnterQty(e.target.value)
                                                 }
-                                            value={data.service.quantity}
+                                                value={data.service.quantity}
                                             />
                                         </div>
                                     </div></td>
                                 <td className="color-primary">
-                                    <select name='strategy' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name)}>
+                                    <select name='strategy' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
                                         <option value="1" className='text-success' selected disabled>{data.strategys.strategy_name}</option>
                                         {Strategy.data && Strategy.data.map((item) => {
                                             return <option className='text-danger' value={item.result._id}>{item.result.strategy_name}</option>
@@ -154,7 +169,7 @@ const BrokerResponse = () => {
                                     </select>
                                 </td>
                                 <td className="color-primary">
-                                    <select name='ordertype' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name)}>
+                                    <select name='ordertype' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
                                         <option value="1">MARKET</option>
                                         <option value="2">LIMIT</option>
                                         <option value="3">STOPLOSS LIMIT</option>
@@ -163,7 +178,7 @@ const BrokerResponse = () => {
                                 </td>
                                 <td className="color-primary">
 
-                                    <select name='producttype' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name)}>
+                                    <select name='producttype' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
                                         <option value="1">CNC</option>
                                         <option value="2">MIS</option>
                                         <option value="3">BO</option>
@@ -173,12 +188,9 @@ const BrokerResponse = () => {
                                 <td className="color-primary">
                                     <label class="toggle">
                                         <input class="toggle-checkbox bg-primary" type="checkbox"
-                                            defaultChecked={data.active_status === "1"}
                                             name='trading'
-                                            onChange={(e) => setgroup_qty_value_test(e, data.service.name)}
-                                        // onChange={(e) => {
-                                        //   setShowAllStratagy(e.target.checked)
-                                        // }}
+                                            defaultChecked={data.active_status === "1"}
+                                            onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}
                                         />
                                         {/* //  ${ShowAllStratagy ? 'bg-primary' : "bg-secondary" } */}
                                         <div class={`toggle-switch ${data.active_status === "1" ? 'bg-primary' : "bg-secondary"}
