@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { SignIn, Verify_User_Device, get_theme_details, Get_Panel_Informtion } from "../../ReduxStore/Slice/Auth/AuthSlice";
+import { SignIn, Verify_User_Device, get_theme_details, Get_Panel_Informtion, OTP_SEND_USEHERES } from "../../ReduxStore/Slice/Auth/AuthSlice";
 import Modal from "../../Components/ExtraComponents/Modal"
 import OtpInput from 'react-otp-input';
 import { check_Device } from "../../Utils/find_device";
@@ -33,6 +33,8 @@ const Login = () => {
 
   const [showModal, setshowModal] = useState(false)
   const [showModal1, setshowModal1] = useState(false)
+  const [showModal2, setshowModal2] = useState(false)
+
   const [getOtpStatus, setgetOtpStatus] = useState(false)
 
   const [getOtp, setgetOtp] = useState("")
@@ -197,16 +199,48 @@ const Login = () => {
     setgetOtpStatus(false)
   }
 
+  // CLOSE THE MODAL
+  const verifyOTP_3 = () => {
+    setshowModal1(false)
+    setshowModal2(false)
+    setshowModal(false)
+
+
+    setgetOtpStatus(false)
+  }
+  // CLOSE THE MODAL
+  const verifyOTP_login = () => {
+    console.log("DONE AND TEST");
+  }
+
 
   // USE HERE THE TH OTP GET
-  const USEHERE = () => {
-
+  const USEHERE = async () => {
 
     console.log("UserData.Email", UserData.Email);
 
-    setgetOtpStatus(true)
 
+    let req = {
+      Email: UserData.Email,
+      device: CheckUser,
+    };
 
+    await dispatch(OTP_SEND_USEHERES(req))
+      .unwrap()
+      .then((response) => {
+        console.log("response", response);
+        if (response.status) {
+          setshowModal1(false)
+          setshowModal2(true)
+          setgetOtpStatus(true)
+        } else {
+
+          toast.error(response.response.data.msg)
+        }
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
 
 
 
@@ -374,6 +408,16 @@ const Login = () => {
 
               {getOtpStatus == false ? <p><b>If you want to login only then do so, otherwise close it.</b></p> : ""}
 
+
+            </Modal >
+          </>
+          : ""
+      }
+
+      {
+        showModal2 ?
+          <>
+            < Modal isOpen={showModal2} handleClose={!showModal2} backdrop="static" size="sm" title="Login or Close the Page" btn_2={true} btn_name="CLOSE" btn_name_2="Verify Otp" Submit_Function={verifyOTP_3} Submit_Function_2={verifyOTP_login}>
 
               {getOtpStatus == true ?
                 <form onSubmit={verifyOTP}>

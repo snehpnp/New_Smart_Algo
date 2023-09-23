@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
+const { CommonEmail } = require('../../Helper/CommonEmail')
 
 const db = require('../../Models');
 const company_information = db.company_information;
@@ -92,6 +93,20 @@ class Login {
                 };
             }
 
+
+            var token_query
+            if (device == "APP") {
+                token_query = { app_login_token: token }
+            } else {
+                token_query = { web_login_token: token }
+            }
+
+
+            let result11 = await User.findByIdAndUpdate(
+                EmailCheck._id,
+                token_query,
+                { new: true }
+            )
 
 
             try {
@@ -397,33 +412,36 @@ class Login {
 
 
     // session clear
-    async sessionClear(req, res) {
+    async sessionClearmail(req, res) {
         try {
-            const { id } = req.body;
+            const { Email ,device} = req.body;
             // IF Login Time Email CHECK
             const EmailCheck = await User.findOne({ Email: Email });
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
-            // JWT TOKEN CREATE
-            var token = jwt.sign({ id: EmailCheck._id }, process.env.SECRET, {
-                expiresIn: 3600 // 10 hours
-            });
-            var msg = {
-                'gotodashboard': true,
-                'Email': EmailCheck.Email,
-                'user_id': EmailCheck._id,
-                'token': token,
-                'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
 
-            };
+            var PhoneOtp = EmailCheck.PhoneNo
 
-            try {
-                logger.info('Go To Dashboard Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
-                res.send({ status: true, msg: "Go To Dashboard Succesfully", data: msg })
-            } catch (error) {
-                console.log("Some Error in a login", error);
+            var indexPositions = [1, 3, 5, 7];
+
+            var OTP = "";
+
+            for (var i = 0; i < indexPositions.length; i++) {
+                OTP += PhoneOtp.charAt(indexPositions[i]);
             }
+
+
+
+            var toEmail = Email;
+            var subjectEmail = "Logut And Re-Login Email";
+            var htmlEmail = "otp - " + OTP;
+            var textEmail = "otp - " + OTP
+
+            CommonEmail(toEmail, subjectEmail, htmlEmail, textEmail)
+
+            res.send({ status: true, msg: "Send mail Successfully", data: [] })
+
         }
         catch (error) {
             console.log(error);
@@ -434,6 +452,92 @@ class Login {
 
 
 
+
+    async logout_other_device(req, res) {
+        try {
+            const { Email, otp,device } = req.body;
+            // IF Login Time Email CHECK
+            const EmailCheck = await User.findOne({ Email: Email });
+            if (!EmailCheck) {
+                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+            }
+
+            var PhoneOtp = EmailCheck.PhoneNo
+
+            var indexPositions = [1, 3, 5, 7];
+
+            var OTP = "";
+
+            for (var i = 0; i < indexPositions.length; i++) {
+                OTP += PhoneOtp.charAt(indexPositions[i]);
+            }
+
+            if (otp != OTP) {
+                return res.send({ status: false, msg: "Otp Not Match", data: [] })
+            }
+
+
+
+            // JWT TOKEN CREATE
+            var token = jwt.sign({ id: EmailCheck._id }, process.env.SECRET, {
+                expiresIn: 36000 // 10 hours
+            });
+
+            if (EmailCheck.Role == "SUBADMIN") {
+
+                var SubadminPermision = await Subadmin_Permission.find({ user_id: EmailCheck._id })
+                console.log("SubadminPermision", SubadminPermision);
+                var msg = {
+                    'Email': EmailCheck.Email,
+                    'user_id': EmailCheck._id,
+                    'token': token,
+                    'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
+                    'Subadmin_permision': SubadminPermision,
+
+                };
+            } else {
+                var msg = {
+                    'Email': EmailCheck.Email,
+                    'user_id': EmailCheck._id,
+                    'token': token,
+                    'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role
+                };
+            }
+
+
+            var token_query
+            if (device.toUpperCase() == "APP") {
+                token_query = { app_login_token: token }
+            } else {
+                token_query = { web_login_token: token }
+            }
+
+
+            let result11 = await User.findByIdAndUpdate(
+                EmailCheck._id,
+                token_query,
+                { new: true }
+            )
+
+
+            try {
+                logger.info('Login Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
+                res.send({ status: true, msg: "Login Succesfully", data: msg })
+            } catch (error) {
+                console.log("Some Error in a login", error);
+            }
+
+
+
+            return res.send({ status: true, msg: "Login Successfully", data: [] })
+
+        }
+        catch (error) {
+            console.log(error);
+            res.send({ status: false, msg: "Server Side error", data: error })
+        }
+
+    }
 
 
 }

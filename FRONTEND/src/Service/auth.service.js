@@ -40,7 +40,6 @@ export async function VARIFY_USER_DEVICE(data, token) {
 }
 
 
-
 // LOGOUT USER
 export async function LOG_OUT_USER(data, token) {
     try {
@@ -138,15 +137,32 @@ export async function SET_THEME_DETAILS(data, token) {
 }
 
 
-
-
 // GET_PANEL_INFORMATION
-
 export async function GET_PANEL_INFORMATION(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}get/panelinformation`, data, {
             // headers: header(token),
             data: {},
+        })
+        // console.log("res", res);
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        return err
+
+        // custom error
+    }
+
+}
+
+
+// SESSION CLEAR MAIL OTP SEND (USE HERE)
+export async function OTP_SEND_USEHERE(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}session/clear`, data, {
+            // headers: header(token),
+            data: {data},
         })
         // console.log("res", res);
         return await res?.data;

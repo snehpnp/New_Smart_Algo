@@ -92,9 +92,9 @@ const io = socketIo(server, {
 );
 
 io.on("connection", (socket) => {
-  console.log("test sochet ---------", socket)
+  // console.log("test sochet ---------", socket)
   socket.on("help_from_client", (data) => {
-    console.log("test sochet ---------", data)
+    // console.log("test sochet ---------", data)
 
     socket.broadcast.emit("test_msg_Response", data);
   });

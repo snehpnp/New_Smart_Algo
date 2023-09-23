@@ -160,6 +160,14 @@ const userModel = Schema({
         type: String,
         default: null
     },
+    web_login_token: {
+        type: String,
+        default: null
+    },
+    app_login_token: {
+        type: String,
+        default: null
+    },
 
 },
     {
