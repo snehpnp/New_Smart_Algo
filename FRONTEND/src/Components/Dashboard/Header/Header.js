@@ -15,6 +15,8 @@ import { loginWithApi } from './log_with_api';
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { check_Device } from "../../../Utils/find_device";
 import { GET_HELPS } from '../../../ReduxStore/Slice/Admin/AdminHelpSlice'
+import * as Config from "../../../Utils/Config";
+import socketIOClient from "socket.io-client";
 
 
 const Header = ({ ChatBox }) => {
@@ -189,7 +191,27 @@ const Header = ({ ChatBox }) => {
   }, [])
 
 
-  console.log("getAllClients", getAllClients)
+
+
+
+  //  Recieve Notfication
+
+
+  useEffect(() => {
+
+    const socket = socketIOClient(`${Config.base_url}`);
+
+    socket.on("logout_user_from_other_device_res", (data) => {
+
+      console.log("logout_user_from_other_device_res", data);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+
+  }, []);
+
 
   return (
     <div>

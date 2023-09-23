@@ -23,6 +23,8 @@ const BrokerResponse = () => {
     const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
     const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
 
+    const [updatedData, setUpdatedData] = useState([]);
+    const [updatedData1, setUpdatedData1] = useState([]);
 
 
 
@@ -90,17 +92,12 @@ const BrokerResponse = () => {
 
 
     const UpdateDashboard = (e) => {
-
         console.log("Updated Data:", updatedData);
-        console.log("Checkbox State:", checkboxState);
 
-        let request = {
 
-        }
     }
 
 
-    const [updatedData, setUpdatedData] = useState({});
 
 
     const setgroup_qty_value_test = (e, symboll, rowdata) => {
@@ -115,9 +112,8 @@ const BrokerResponse = () => {
                 ...prevData[id],
                 [name]: name === 'trading' ? e.target.checked : value
             }
-
-
         }));
+
 
     }
     return (

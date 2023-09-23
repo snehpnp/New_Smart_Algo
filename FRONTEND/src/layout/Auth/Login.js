@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { SignIn, Verify_User_Device, get_theme_details, Get_Panel_Informtion, OTP_SEND_USEHERES } from "../../ReduxStore/Slice/Auth/AuthSlice";
+import { SignIn, Verify_User_Device, get_theme_details, Get_Panel_Informtion, OTP_SEND_USEHERES, Logout_From_Other_Device } from "../../ReduxStore/Slice/Auth/AuthSlice";
 import Modal from "../../Components/ExtraComponents/Modal"
 import OtpInput from 'react-otp-input';
 import { check_Device } from "../../Utils/find_device";
@@ -10,6 +10,9 @@ import axios from "axios"
 import toast, { Toaster } from 'react-hot-toast';
 import $ from "jquery";
 import ToastButton from "../../Components/ExtraComponents/Alert_Toast";
+import socketIOClient from "socket.io-client";
+import * as Config from "../../Utils/Config";
+
 
 
 /* eslint-disable react/jsx-pascal-case */
@@ -41,6 +44,9 @@ const Login = () => {
 
 
   const [typeOtp, setTypeOtp] = useState('');
+
+  const [typeOtp1, setTypeOtp1] = useState('');
+
   const [Email, setEmail] = useState('');
   const [EmailErr, setEmailErr] = useState('');
   const [password, setPassword] = useState('');
@@ -129,6 +135,7 @@ const Login = () => {
   // ------------------ For Otp Varify --------------------------
 
 
+  const [test, settest] = useState([])
 
   const verifyOTP = async () => {
 
@@ -149,7 +156,6 @@ const Login = () => {
       Otp: typeOtp
     };
 
-
     await dispatch(Verify_User_Device(req))
       .then((res) => {
         if (res.payload.status) {
@@ -159,6 +165,7 @@ const Login = () => {
           const mobileNo = getLastFourDigits(userData && userData.mobile, typeOtp);
 
           if (roles.includes(role) && mobileNo === true) {
+            settest(userData)
             localStorage.setItem("user_details", JSON.stringify(userData));
             localStorage.setItem("user_role", JSON.stringify(role));
             toast.success(res.payload.msg);
@@ -173,8 +180,7 @@ const Login = () => {
           }
         }
         else {
-
-          if (res.payload.msg == "You are already logged in on the Web.") {
+          if (res.payload.msg === "You are already logged in on the Web.") {
             toast.error(res.payload.msg)
             setshowModal(false);
             setshowModal1(true);
@@ -195,12 +201,23 @@ const Login = () => {
 
   // CLOSE THE MODAL
   const verifyOTP_2 = () => {
+
+
+
     setshowModal1(false)
     setgetOtpStatus(false)
+
+
+    const socket = socketIOClient(`${Config.base_url}`);
+    socket.emit("logout_user_from_other_device_req", { "CheckUser": CheckUser, usedata: test });
   }
 
   // CLOSE THE MODAL
   const verifyOTP_3 = () => {
+
+
+
+
     setshowModal1(false)
     setshowModal2(false)
     setshowModal(false)
@@ -209,15 +226,55 @@ const Login = () => {
     setgetOtpStatus(false)
   }
   // CLOSE THE MODAL
-  const verifyOTP_login = () => {
-    console.log("DONE AND TEST");
+  const verifyOTP_login = async () => {
+    // console.log("DONE AND TEST");
+
+    let req = {
+      Email: UserData.Email,
+      device: CheckUser,
+      "otp": typeOtp1
+    };
+
+    await dispatch(Logout_From_Other_Device(req))
+      .unwrap()
+      .then((res) => {
+        if (res.status) {
+          // toast.error(res.res)
+          const roles = ["ADMIN", "USER", "SUBADMIN"];
+          const userData = UserData;
+          const role = userData && userData.Role;
+
+          if (roles.includes(role)) {
+            localStorage.setItem("user_details", JSON.stringify(userData));
+            localStorage.setItem("user_role", JSON.stringify(role));
+            toast.success(res.msg);
+            let redirectPath = `/${role === "USER" ? "client" : role.toLowerCase()}/dashboard`;
+            setTimeout(() => {
+              // setshowModal(false);
+              navigate(redirectPath);
+              window.location.reload()
+            }, 1000);
+          } else {
+
+            // toast.error(mobileNo);
+          }
+        } else {
+
+          // toast.error(response.response.data.msg)
+        }
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+
+
   }
 
 
   // USE HERE THE TH OTP GET
   const USEHERE = async () => {
 
-    console.log("UserData.Email", UserData.Email);
+    // console.log("UserData.Email", UserData.Email);
 
 
     let req = {
@@ -345,6 +402,10 @@ const Login = () => {
         $("body").attr("data-sidebar-style", "overlay");
       }
     });
+
+
+
+    console.log("typeOtp", typeOtp);
   }
 
   return (
@@ -394,32 +455,31 @@ const Login = () => {
                   numInputs={4}
                   renderSeparator={<span></span>}
                   renderInput={(props) => <input {...props} />}
-
                 />
               </form>
             </Modal >
           </>
           : ""
       }
+
+      {/*  For Set Allredy Login */}
       {
         showModal1 ?
           <>
             < Modal isOpen={showModal1} handleClose={!showModal1} backdrop="static" size="sm" title="Login or Close the Page" btn_2={true} btn_name="CLOSE" btn_name_2="USE HERE" Submit_Function={verifyOTP_2} Submit_Function_2={USEHERE}>
-
-              {getOtpStatus == false ? <p><b>If you want to login only then do so, otherwise close it.</b></p> : ""}
-
-
+              {!getOtpStatus ? <p><b>If you want to login only then do so, otherwise close it.</b></p> : ""}
             </Modal >
           </>
           : ""
       }
 
+      {/*  For Multi Login */}
       {
         showModal2 ?
           <>
             < Modal isOpen={showModal2} handleClose={!showModal2} backdrop="static" size="sm" title="Login or Close the Page" btn_2={true} btn_name="CLOSE" btn_name_2="Verify Otp" Submit_Function={verifyOTP_3} Submit_Function_2={verifyOTP_login}>
 
-              {getOtpStatus == true ?
+              {getOtpStatus ?
                 <form onSubmit={verifyOTP}>
                   <h4><b>Please Enter a otp to send you regersterd Email </b></h4>
                   <h6><b>Email :-</b> {UserData.Email}</h6>
@@ -427,11 +487,12 @@ const Login = () => {
 
                   <OtpInput
                     containerStyle="otp-div"
-                    value={""}
-                    onChange={setTypeOtp}
+                    value={typeOtp1}
+                    onChange={setTypeOtp1}
                     numInputs={4}
                     renderSeparator={<span></span>}
-                    renderInput={(props) => <input {...props} />}
+                    renderInput={(props) =>
+                      <input {...props} />}
 
                   />
                 </form>

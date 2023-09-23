@@ -92,10 +92,18 @@ io.on("connection", (socket) => {
   socket.on("help_from_client", (data) => {
 
     socket.broadcast.emit("test_msg_Response", data);
+
   });
 
 
+  socket.on("logout_user_from_other_device_req", (data) => {
+    socket.broadcast.emit("logout_user_from_other_device_res", data);
+  });
+
 })
+
+
+
 //  ----------------------------   for help center ------------------
 
 

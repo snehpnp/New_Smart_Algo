@@ -179,6 +179,28 @@ export async function OTP_SEND_USEHERE(data, token) {
 
 
 
+// LOGOUT FROM OTHER DEVICE
+
+export async function LOGOUT_FROM_OTHER_DEVICE(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}logout/other/device`, data, {
+            // headers: header(token),
+            data: {data},
+        })
+        // console.log("res", res);
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        return err
+
+        // custom error
+    }
+
+}
+
+
+
 
 
 
