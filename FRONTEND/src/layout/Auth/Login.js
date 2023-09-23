@@ -47,10 +47,7 @@ const Login = () => {
 
   const [typeOtp1, setTypeOtp1] = useState('');
 
-  const [Email, setEmail] = useState('');
-  const [EmailErr, setEmailErr] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordErr, setPasswordErr] = useState('');
+
   const [UserData, setUserData] = useState('');
 
 
@@ -198,9 +195,11 @@ const Login = () => {
         console.log("error on Otp Verify", error))
   }
 
+  console.log("UserData", UserData)
+
 
   // CLOSE THE MODAL
-  const verifyOTP_2 = () => {
+  const verifyOTP_2 = async () => {
 
 
 
@@ -208,8 +207,6 @@ const Login = () => {
     setgetOtpStatus(false)
 
 
-    const socket = socketIOClient(`${Config.base_url}`);
-    socket.emit("logout_user_from_other_device_req", { "CheckUser": CheckUser, usedata: test });
   }
 
   // CLOSE THE MODAL
@@ -239,7 +236,9 @@ const Login = () => {
       .unwrap()
       .then((res) => {
         if (res.status) {
-          // toast.error(res.res)
+          const socket = socketIOClient(`${Config.base_url}`);
+          socket.emit("logout_user_from_other_device_req", { "CheckUser": CheckUser, usedata: UserData });
+
           const roles = ["ADMIN", "USER", "SUBADMIN"];
           const userData = UserData;
           const role = userData && userData.Role;
@@ -274,7 +273,7 @@ const Login = () => {
   // USE HERE THE TH OTP GET
   const USEHERE = async () => {
 
-    // console.log("UserData.Email", UserData.Email);
+
 
 
     let req = {

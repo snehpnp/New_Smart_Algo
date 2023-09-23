@@ -60,13 +60,6 @@ const Dashboard = () => {
     const socket = socketIOClient(`${Config.base_url}`);
 
     socket.on("test_msg_Response", (data) => {
-      // GetClientNotification()
-      // setRefresh(!refresh)
-      // setShowAlert(true);
-      // setTextAlert(data);
-      // setAlertColor('error')
-      console.log("data", data)
-
       toast.success(`Notificatipn Received From ${data.username}`);
       console.log("test_msg_Response", data.username);
     });

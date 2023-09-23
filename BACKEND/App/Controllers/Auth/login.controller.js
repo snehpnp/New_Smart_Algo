@@ -438,7 +438,7 @@ class Login {
             var htmlEmail = "otp - " + OTP;
             var textEmail = "otp - " + OTP
 
-            CommonEmail(toEmail, subjectEmail, htmlEmail, textEmail)
+        //    CommonEmail(toEmail, subjectEmail, htmlEmail, textEmail)
 
             res.send({ status: true, msg: "Send mail Successfully", data: [] })
 
