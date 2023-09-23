@@ -259,10 +259,7 @@ const Login = () => {
                 navigate(redirectPath);
                 window.location.reload()
               }, 1000);
-            } else {
-
-              // toast.error(mobileNo);
-            }
+            } else { }
           } else {
 
             toast.error(response.msg)
