@@ -8,12 +8,13 @@ const user_logs = db.user_logs;
 const client_services = db.client_services;
 const strategy_client = db.strategy_client;
 
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
-
 const Subadmin_Permission = db.Subadmin_Permission;
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
+
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 
 // OK
 // Product CLASS
@@ -102,8 +103,8 @@ class Dashboard {
                 },
                 {
                     $project: {
-            'result._id':1,
-            'result.strategy_name':1,
+                        'result._id': 1,
+                        'result.strategy_name': 1,
 
                     },
                 },
@@ -135,25 +136,48 @@ class Dashboard {
     }
 
     // UPDATE CLIENT SERVICES
-    async updateClientServices(req,res){
+    async updateClientServices(req, res) {
         try {
-            const {user_id,servicesData } = req.body;
+            const { user_id, servicesData } = req.body;
 
             const UserData = await User_model.findOne({ _id: user_id });
             if (!UserData) {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
             }
 
-            if(servicesData.length ===0){
-
-                console.log("servicesData",servicesData);
-            }else{
-                console.log("servicesData1",servicesData);
-
+            if (Object.keys(servicesData).length == 0) {
+                console.log("Object is empty.");
+                return res.send({ status: false, msg: 'Object is empty.', data: [] });
             }
 
+            for (const key in servicesData) {
+                if (servicesData[key]) {
+                  const matchedObject = servicesData[key];
+              
+                  if (matchedObject.strategy_id) {
+                    matchedObject.strategy_id = new ObjectId(matchedObject.strategy_id);
+                  }
+
+                  console.log("Matching Object:", matchedObject);
+              
+                  const filter = { user_id: UserData._id, service_id: key };
+                  const updateOperation = { $set: matchedObject };
+              
+                  const result = await client_services.updateOne(filter, updateOperation);
+
+
+
+                } else {
+                  console.log("No match found for Service ID:", key);
+                }
+              }
+
+
+
         } catch (error) {
-            console.log("ClientServices Update-",error);
+            console.log("ClientServices Update-", error);
+            return res.send({ status: false, msg: 'User Not exists', data: error });
+
         }
     }
 

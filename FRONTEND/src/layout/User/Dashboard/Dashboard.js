@@ -113,7 +113,7 @@ const BrokerResponse = () => {
             ...prevData,
             [id]: {
                 ...prevData[id],
-                [name]: name === 'trading' ? e.target.checked : value
+                [name]: name === 'active_status' ? e.target.checked : value
             }
 
 
@@ -129,7 +129,7 @@ const BrokerResponse = () => {
                         <th>#</th>
                         <th>Live Price</th>
                         <th>Symboll</th>
-                        <th>Qty</th>
+                        <th>Quantity</th>
                         <th>Strategy</th>
                         <th>Order Type</th>
                         <th>Profuct Type</th>
@@ -149,7 +149,7 @@ const BrokerResponse = () => {
                                 <td>
                                     <div className="row d-flex">
                                         <div className="col-lg-12 ">
-                                            <input key={index} type='number' name='qty' className="form-control" id='qty'
+                                            <input key={index} type='number' name='quantity' className="form-control" id='quantity'
                                                 placeholder='Enter Qty' min={0}
 
                                                 onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)
@@ -161,7 +161,7 @@ const BrokerResponse = () => {
                                         </div>
                                     </div></td>
                                 <td className="color-primary">
-                                    <select name='strategy' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
+                                    <select name='strategy_id' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
                                         <option value="1" className='text-success' selected disabled>{data.strategys.strategy_name}</option>
                                         {Strategy.data && Strategy.data.map((item) => {
                                             return <option className='text-danger' value={item.result._id}>{item.result.strategy_name}</option>
@@ -169,7 +169,7 @@ const BrokerResponse = () => {
                                     </select>
                                 </td>
                                 <td className="color-primary">
-                                    <select name='ordertype' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
+                                    <select name='order_type' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
                                         <option value="1">MARKET</option>
                                         <option value="2">LIMIT</option>
                                         <option value="3">STOPLOSS LIMIT</option>
@@ -178,7 +178,7 @@ const BrokerResponse = () => {
                                 </td>
                                 <td className="color-primary">
 
-                                    <select name='producttype' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
+                                    <select name='product_type' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
                                         <option value="1">CNC</option>
                                         <option value="2">MIS</option>
                                         <option value="3">BO</option>
@@ -188,7 +188,7 @@ const BrokerResponse = () => {
                                 <td className="color-primary">
                                     <label class="toggle">
                                         <input class="toggle-checkbox bg-primary" type="checkbox"
-                                            name='trading'
+                                            name='active_status'
                                             defaultChecked={data.active_status === "1"}
                                             onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}
                                         />
