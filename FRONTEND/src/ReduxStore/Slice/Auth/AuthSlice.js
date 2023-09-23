@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { SIGN_IN_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_DETAILS, RESET_PASSWORD, UPDATE_PASSWORD, FORGET_PASSWORD ,GET_PANEL_INFORMATION,OTP_SEND_USEHERE} from "../../../Service/auth.service";
+import { SIGN_IN_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_DETAILS, RESET_PASSWORD, UPDATE_PASSWORD, FORGET_PASSWORD, GET_PANEL_INFORMATION, OTP_SEND_USEHERE, LOGOUT_FROM_OTHER_DEVICE } from "../../../Service/auth.service";
 
 
 
@@ -102,6 +102,16 @@ export const OTP_SEND_USEHERES = createAsyncThunk("/session/clear", async (data)
     return err;
   }
 });
+//  OTP_SEND_USEHERE
+export const Logout_From_Other_Device = createAsyncThunk("/session/clear", async (data) => {
+  try {
+    const res = await LOGOUT_FROM_OTHER_DEVICE(data)
+    return res;
+  }
+  catch (err) {
+    return err;
+  }
+});
 
 
 
@@ -119,9 +129,10 @@ const AuthSlice = createSlice({
     getheme: [],
     forgetpassword: [],
     updatepassword: [],
-    resetpassword: [] ,
-    panel_details : [],
-    otpStore:[]
+    resetpassword: [],
+    panel_details: [],
+    otpStore: [],
+    logout: []
   },
 
   recuders: {},
@@ -169,6 +180,9 @@ const AuthSlice = createSlice({
     // },
     [Reset_Password.fulfilled]: (state, { payload }) => {
       return { ...state, resetpassword: payload, isLoading: false };
+    },
+    [Logout_From_Other_Device.fulfilled]: (state, { payload }) => {
+      return { ...state, logout: payload, isLoading: false };
     },
     [Reset_Password.rejected]: (state, action) => {
       return { ...state, resetpassword: action, isLoading: false };

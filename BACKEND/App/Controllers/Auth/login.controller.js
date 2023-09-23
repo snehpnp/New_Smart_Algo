@@ -26,17 +26,17 @@ class Login {
             // IF Login Time Email CHECK
             const EmailCheck = await User.findOne({ Email: Email });
             if (!EmailCheck) {
-                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+                return res.json({ status: false, msg: 'User Not exists', data: [] });
             }
 
             // WHERE LOGIN CHECKgetIPAddress
             if (device == "APP") {                  //App Login Check
                 if (EmailCheck.AppLoginStatus == 1) {
-                    return res.status(409).json({ status: false, msg: 'You are already logged in on the phone.', data: [] });
+                    return res.json({ status: false, msg: 'You are already logged in on the phone.', data: [] });
                 }
             } else if (device == "WEB") {          //Web login check
                 if (EmailCheck.WebLoginStatus == 1) {
-                    return res.status(409).json({ status: false, msg: 'You are already logged in on the Web.', data: [] });
+                    return res.status.json({ status: false, msg: 'You are already logged in on the Web.', data: [] });
                 }
             }
 
@@ -438,7 +438,7 @@ class Login {
             var htmlEmail = "otp - " + OTP;
             var textEmail = "otp - " + OTP
 
-            CommonEmail(toEmail, subjectEmail, htmlEmail, textEmail)
+        //    CommonEmail(toEmail, subjectEmail, htmlEmail, textEmail)
 
             res.send({ status: true, msg: "Send mail Successfully", data: [] })
 
@@ -461,7 +461,6 @@ class Login {
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
-
             var PhoneOtp = EmailCheck.PhoneNo
 
             var indexPositions = [1, 3, 5, 7];
@@ -472,6 +471,8 @@ class Login {
                 OTP += PhoneOtp.charAt(indexPositions[i]);
             }
 
+            console.log("otp" ,otp)
+            console.log("OTP" ,OTP)
             if (otp != OTP) {
                 return res.send({ status: false, msg: "Otp Not Match", data: [] })
             }
@@ -522,19 +523,20 @@ class Login {
 
             try {
                 logger.info('Login Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
-                res.send({ status: true, msg: "Login Succesfully", data: msg })
+                return   res.send({ status: true, msg: "Login Succesfully", data: msg })
             } catch (error) {
                 console.log("Some Error in a login", error);
             }
 
 
 
-            return res.send({ status: true, msg: "Login Successfully", data: [] })
 
         }
         catch (error) {
             console.log(error);
-            res.send({ status: false, msg: "Server Side error", data: error })
+
+         return   res.send({ status: false, msg: "Server Side error", data: error })
+
         }
 
     }

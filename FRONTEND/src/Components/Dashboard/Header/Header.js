@@ -15,6 +15,10 @@ import { loginWithApi } from './log_with_api';
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { check_Device } from "../../../Utils/find_device";
 import { GET_HELPS } from '../../../ReduxStore/Slice/Admin/AdminHelpSlice'
+import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
+
+import * as Config from "../../../Utils/Config";
+import socketIOClient from "socket.io-client";
 
 
 const Header = ({ ChatBox }) => {
@@ -189,7 +193,49 @@ const Header = ({ ChatBox }) => {
   }, [])
 
 
-  console.log("getAllClients", getAllClients)
+
+
+
+  //  Recieve Notfication
+
+
+  useEffect(() => {
+
+
+
+    if (user_role === "USER") {
+      const socket = socketIOClient(`${Config.base_url}`);
+      socket.on("logout_user_from_other_device_res", async (data) => {
+        console.log("logout_user_from_other_device_res", data);
+
+
+
+        await dispatch(Log_Out_User({
+          "userId": data.usedata.user_id,
+          "Device": data.CheckUser
+        }))
+          .then((res) => {
+            if (res.payload.status) {
+              // toast.success(res.payload.msg)
+              localStorage.removeItem("user_role",);
+              localStorage.removeItem("user_details");
+              setTimeout(() => {
+                navigate("/");
+              }, 1500);
+            }
+          }).catch((error) => {
+            console.log("logout error", error);
+          });
+
+      });
+
+      return () => {
+        socket.disconnect();
+      };
+    }
+
+  }, []);
+
 
   return (
     <div>
