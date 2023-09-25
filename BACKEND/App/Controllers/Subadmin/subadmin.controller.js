@@ -169,7 +169,7 @@ class Subadmin {
             const updateOperation = { $set: SubadminPermision };
 
             const result = await Subadmin_Permission.updateOne(filter, updateOperation);
-     
+
 
             if (result) {
                 return res.send({ status: true, msg: "successfully Edit!", data: [] })
@@ -214,13 +214,40 @@ class Subadmin {
 
     async getOneSubadmin(req, res) {
         try {
-
+            const { id} = req.body
+            var subid = new ObjectId(id)
             // GET LOGIN CLIENTS
-            const getAllSubAdmins = await User_model.find({
-                Role: "SUBADMIN"
-            });
-            const totalCount = getAllSubAdmins.length;
+            const getAllSubAdmins = await User_model.aggregate([
+                {
+                    $match: {
+                        _id:subid,
+                        Role: "SUBADMIN"
+                    },
+                },
+                {
+                    $lookup: {
+                      from: 'subadmin_permissions',
+                      localField: '_id',
+                      foreignField: 'user_id',
+                      as: 'subadmin_permissions',
+                    },
+                  },
+                  {
+                    $project: {
+                      'subadmin_permissions': 1,
+                      FullName: 1,
+                      UserName: 1,
+                      Email: 1,
+                      PhoneNo: 1,
+                      Otp: 1,
+                      Role:1,
+                      
 
+                    },
+                  },
+            ]);
+
+           
             // IF DATA NOT EXIST
             if (getAllSubAdmins.length == 0) {
                 return res.send({ status: false, msg: "Empty data", data: [] })

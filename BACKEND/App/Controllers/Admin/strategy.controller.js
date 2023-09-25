@@ -64,7 +64,7 @@ class strategy {
                 // CHECK IF SAME STRATEGY AONOTHER STRATEG NAME TO SIMLER MATCH
                 const strateg_data = await strategy_model.find({
                     $and: [
-                        { strategy_name: edit_strategy.strategy_name },
+                        { strategy_name: strategy_name },
                         { _id: { $ne: _id } }
                     ]
                 })
@@ -133,15 +133,14 @@ class strategy {
             const { page, limit } = req.body;
             const skip = (page - 1) * limit;
 
-            const totalCount = await strategy_model.countDocuments();
+            // const totalCount = await strategy_model.countDocuments();
 
 
             // THEME LIST DATA
             // var getAllTheme = await strategy_model.find()
-            const getAllstrategy = await strategy_model
-                .find({})
-                .skip(skip)
-                .limit(Number(limit))
+            const getAllstrategy = await strategy_model.find({})
+                // .skip(skip)
+                // .limit(Number(limit))
 
 
             // IF DATA NOT EXIST
@@ -154,10 +153,10 @@ class strategy {
                 status: true,
                 msg: "Get All Startegy",
                 data: getAllstrategy,
-                page: Number(page),
-                limit: Number(limit),
-                totalCount: totalCount,
-                totalPages: Math.ceil(totalCount / Number(limit)),
+                // page: Number(page),
+                // limit: Number(limit),
+                // totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
             })
 
 

@@ -56,7 +56,16 @@ class Dashboard {
                     },
                 },
             ]);
+            var used_licences =""
        
+            if(used_licence .length > 0){
+                 used_licences = used_licence[0].totalLicense
+            }else{
+                used_licences = "0"
+
+            }
+
+
 
             // // DATA GET SUCCESSFULLY
             res.send({
@@ -77,8 +86,8 @@ class Dashboard {
                     total_active_two_days: total_active_two_days,
                     total_expired_two_days: total_expired_two_days,
                     all_licence: all_licence[0].licenses,
-                    used_licence: used_licence[0].totalLicense,
-                    remaining_licence:Number(all_licence[0].licenses) - Number(used_licence[0].totalLicense),
+                    used_licence: used_licences,
+                    remaining_licence:Number(all_licence[0].licenses) - Number(used_licences),
 
 
                 }
