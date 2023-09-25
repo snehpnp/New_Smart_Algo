@@ -41,8 +41,11 @@ const UserProfile = () => {
   };
   useEffect(() => {
     data();
-  }, []);
+  }, [UserDetails.data]);
 
+
+
+  //  FOR RESET PASSWORD
   const formik = useFormik({
     initialValues: {
       oldpassword: "",
@@ -221,7 +224,7 @@ const UserProfile = () => {
                             </div>
                             <div className="col-sm-9 col-7">
                               <span>
-                                {/* {UserDetails.data && fDateTime(UserDetails.data.StartDate)} */}
+                                {UserDetails.data.StartDate && fDateTime(UserDetails.data.StartDate)}
                               </span>
                             </div>
                           </div>
@@ -233,7 +236,7 @@ const UserProfile = () => {
                             </div>
                             <div className="col-sm-9 col-7">
                               <span>
-                                {/* {UserDetails.data && fDateTime(UserDetails.data.EndDate)} */}
+                                {UserDetails.data.EndDate && fDateTime(UserDetails.data.EndDate)}
                               </span>
                             </div>
                           </div>

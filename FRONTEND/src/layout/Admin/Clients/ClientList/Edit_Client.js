@@ -323,7 +323,7 @@ const AddClient = () => {
       type: 'select',
       options: first && first.map((item) => ({ label: item.endDate, value: item.month })),
       showWhen: values => values.licence === '2'
-      , label_size: 12, col_size: 6, disable: true, isSelected: true
+      , label_size: 12, col_size: 6, disable: false, isSelected: true
     },
 
     {
@@ -402,51 +402,6 @@ const AddClient = () => {
       label_size: 12, col_size: 6, disable: false
     },
 
-    // {
-    //   name: 'api_key',
-    //   label: formik.values.broker === 4 || '4' ? 'App Key' : formik.values.broker === 7 || "7" ? "Consumer Key" : formik.values.broker === 9 || '9' ? "Vendor Key" : formik.values.broker === 8 || "8" ? 'App Key' : formik.values.broker === 10 || "10" ? 'App Key' : "'Api Key", type: 'text',
-    //   showWhen: values => values.licence === '2' && (values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6')
-    //   , label_size: 12, col_size: 6, disable: false
-    // },
-
-    // {
-    //   name: 'client_code',
-    //   label: formik.values.broker === 1 || "1" ? 'User' : formik.values.broker === 4 || "4" ? "Client Code" : formik.values.broker === 7 || "7" ? "User Name" : formik.values.broker === 9 || "9" ? "Vander Id" : formik.values.broker === 11 || "11" ? "Client Code" : formik.values.broker === 11 || "11" ? "client_code" : 'User Id', type: 'text',
-    //   showWhen: values => values.licence === '2' && (values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6')
-    //   , label_size: 12, col_size: 6, disable: false
-    // },
-    // {
-    //   name: 'demat_userid',
-    //   label: formik.values.broker === 9 || "9" ? 'User Id' : '', type: 'text',
-    //   showWhen: values => values.licence === '2' && values.broker === '9'
-    //   , label_size: 12, col_size: 6, disable: false
-    // },
-    // {
-    //   name: 'app_id',
-    //   label: formik.values.broker === 1 || "1" ? 'Verification Code' : formik.values.broker === 5 || "5" ? 'Password' : formik.values.broker === 7 || '7' ? 'Demat Password' : formik.values.broker === 11 || "11" ? 'Password' : formik.values.broker === 13 || '13' ? 'App Id' : formik.values.broker === 9 || '9' ? 'Password' : formik.values.broker === 14 || "14" ? 'User Id ' : 'App Id', type: 'text',
-    //   showWhen: values => values.licence === '2' && (values.broker === '2' || values.broker === '1' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14')
-    //   , label_size: 12, col_size: 6, disable: false
-    // },
-    // {
-    //   name: 'app_key',
-    //   label: formik.values.broker === 5 || "5" || 6 || "6" ? 'App Key' : "", type: 'text',
-    //   showWhen: values => values.licence === '2' && values.broker === '5'
-    //   , label_size: 12, col_size: 6, disable: false
-    // },
-    // {
-    //   name: 'api_secret',
-    //   label: formik.values.broker === 1 || "1" ? 'Password Code' : formik.values.broker === 5 || "5" ? 'DOB' : formik.values.broker === 7 || "7" ? 'Consumer Secret' : formik.values.broker === 9 || "9" ? 'Encryption Secret Key' : formik.values.broker === 10 || "10" ? 'Api Secret Key' : formik.values.broker === 11 || "11" ? '2FA' : formik.values.broker === 14 || "14" ? 'Encryption Key' : 'Api Secret', type: 'text',
-    //   showWhen: values => values.licence === '2' && (values.broker === '1'
-    //     || values.broker === '2' || values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15')
-    //   , label_size: 12, col_size: 6, disable: false
-    // },
-    // {
-    //   name: 'api_type',
-    //   label: formik.values.broker === 5 || "5" ? 'DOB' : formik.values.broker === 7 || "7" ? 'Trade Api Password' : formik.values.broker === 9 || "7" ? 'Encryption IV' : 'Api Secret', type: 'text',
-    //   showWhen: values =>
-    //     values.licence === '2' && (values.broker === '7' || values.broker === '9')
-    //   , label_size: 12, col_size: 6, disable: false
-    // },
     {
       name: 'parent_id',
       label: 'Sub-Admin',
