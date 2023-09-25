@@ -23,6 +23,15 @@ class GroupService {
       const groupdetails = req.body.groupdetails;
       const services_id = req.body.services_id;
 
+      var groupServices = await serviceGroup_services_id.find({ name: groupdetails.name })
+      console.log("groupServices", groupServices);
+
+      if (groupServices.length > 0) {
+        return res.send({ status: false, msg: "Name Is already Exist", data: groupServices })
+
+      }
+
+
       serviceGroupName.create({
         name: groupdetails.name,
         description: groupdetails.description
@@ -51,14 +60,98 @@ class GroupService {
 
           });
 
-          res.send({ status: true, msg: "successfully Add!", data: createdServicesGroupName })
+          return res.send({ status: true, msg: "successfully Add!", data: createdServicesGroupName })
 
         })
         .catch((err) => {
           //console.error('Error creating and saving user:', err.keyValue.name);
-          res.send({ status: false, msg: "Duplicate Value", data: err.keyValue.name })
+          return res.send({ status: false, msg: "Duplicate Value", data: err.keyValue.name })
 
         });
+    }
+    catch (error) {
+      res.send({ msg: "Error=>", error })
+    }
+
+  }
+
+  // EDIT GROUP SERVICES
+  async Editgroupservice(req, res) {
+    try {
+
+      const groupdetails = req.body.groupdetails;
+      const services_id = req.body.services_id;
+
+      const objectId = new ObjectId(groupdetails.id);
+
+      var groupServices = await serviceGroupName.find({ _id: { $ne: objectId }, name: groupdetails.name })
+
+      if (groupServices.length > 0) {
+        return res.send({ status: false, msg: "Name is already Exist", data: groupServices })
+
+      }
+
+      let result = await serviceGroupName.findByIdAndUpdate(
+        objectId,
+        {
+          name: groupdetails.name,
+          description: groupdetails.description
+        },
+        { new: true }
+      )
+
+
+      var GroupServicesIds = await serviceGroup_services_id.find({Servicegroup_id:objectId})
+
+
+          console.log("GroupServicesIds",GroupServicesIds);
+
+      // serviceGroup_services_id.create({
+      //         Servicegroup_id: groupName_id,
+      //         Service_id: item.service_id,
+      //         group_qty: item.group_qty,
+      //         unique_column: groupName_id + '_' + item.service_id,
+
+      //       })
+
+
+
+      // serviceGroupName.create({
+      //   name: groupdetails.name,
+      //   description: groupdetails.description
+      // })
+      //   .then((createdServicesGroupName) => {
+      //     const groupName_id = createdServicesGroupName._id;
+
+      //     services_id.forEach(item => {
+
+      //       serviceGroup_services_id.create({
+      //         Servicegroup_id: groupName_id,
+      //         Service_id: item.service_id,
+      //         group_qty: item.group_qty,
+      //         unique_column: groupName_id + '_' + item.service_id,
+
+      //       })
+      //         .then((createdGroupServiceId) => {
+      //           // console.log('User created createdGroupServiceId and saved:', createdGroupServiceId._id)
+
+      //         })
+      //         .catch((err) => {
+      //           console.error('Error creating double service:', err.keyValue);
+
+      //         });
+
+
+      //     });
+
+      //     return res.send({ status: true, msg: "successfully Add!", data: createdServicesGroupName })
+
+      //   })
+      //   .catch((err) => {
+      //     //console.error('Error creating and saving user:', err.keyValue.name);
+      //     return res.send({ status: false, msg: "Duplicate Value", data: err.keyValue.name })
+
+      //   });
     }
     catch (error) {
       res.send({ msg: "Error=>", error })
@@ -318,7 +411,7 @@ class GroupService {
 
       const { _id } = req.body
       console.log(_id);
-      if(_id != "yyyyyyyYYYYYY"){
+      if (_id != "yyyyyyyYYYYYY") {
         const objectId = new ObjectId(_id);
 
         const pipeline = [
@@ -343,82 +436,82 @@ class GroupService {
           {
             $unwind: '$ServiceResult', // Unwind the 'categoryResult' array
           },
-  
+
         ];
-  
+
         const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);
         return res.send({ status: true, msg: 'Get All successfully ', data: Service_name_get });
-  
-  
-      }else{
+
+
+      } else {
         return res.send({ status: false, msg: 'Empty DAta', data: [] });
 
       }
-   
+
+
+    }
+    catch (error) {
+      console.log("GET SERVICES NAME -", error);
+    }
 
   }
-  catch(error) {
-    console.log("GET SERVICES NAME -", error);
-  }
-
-}
 
   // GET SERVICES NAME
   async GetAllServicesUserNAme(req, res) {
 
-  try {
-    const { _id } = req.body
-    var ServicesArr = []
-    const objectId = new ObjectId(_id);
+    try {
+      const { _id } = req.body
+      var ServicesArr = []
+      const objectId = new ObjectId(_id);
 
-    // Define the aggregation pipeline
-    const pipeline = [
-      {
-        $match: {
-          groupService_id: objectId, // Replace 'objectId' with your actual ObjectId
+      // Define the aggregation pipeline
+      const pipeline = [
+        {
+          $match: {
+            groupService_id: objectId, // Replace 'objectId' with your actual ObjectId
+          },
         },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'user_id',
-          foreignField: '_id',
-          as: 'user',
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'user_id',
+            foreignField: '_id',
+            as: 'user',
+          },
         },
-      },
-      {
-        $unwind: '$user',
-      },
-      {
-        $project: {
-          'user.Email': 1, // Replace 'username' with the actual field name in 'users' collection
-          'user.FullName': 1,
-          'user.license_type': 1,
-          'user.UserName': 1,
-          'user.TradingStatus': 1,
+        {
+          $unwind: '$user',
         },
-      },
-    ];
+        {
+          $project: {
+            'user.Email': 1, // Replace 'username' with the actual field name in 'users' collection
+            'user.FullName': 1,
+            'user.license_type': 1,
+            'user.UserName': 1,
+            'user.TradingStatus': 1,
+          },
+        },
+      ];
 
-    // Execute the aggregation pipeline
-    const result = await groupServices_client1.aggregate(pipeline)
+      // Execute the aggregation pipeline
+      const result = await groupServices_client1.aggregate(pipeline)
 
-    const groupServices_user = await groupServices_client1.find({ groupService_id: objectId })
+      const groupServices_user = await groupServices_client1.find({ groupService_id: objectId })
 
-    if (groupServices_user.length == 0) {
-      return res.send({ status: false, msg: 'NO DATA', data: result });
+      if (groupServices_user.length == 0) {
+        return res.send({ status: false, msg: 'NO DATA', data: result });
+      }
+
+      return res.send({ status: true, data: result, msg: 'Get All successfully' });
+
+
+
+    } catch (error) {
+      console.error("GET SERVICES NAME -", error);
+      return res.send({ status: false, msg: 'Internal Server Error' });
     }
 
-    return res.send({ status: true, data: result, msg: 'Get All successfully' });
-
-
-
-  } catch (error) {
-    console.error("GET SERVICES NAME -", error);
-    return res.send({ status: false, msg: 'Internal Server Error' });
   }
-
-}
 
 }
 

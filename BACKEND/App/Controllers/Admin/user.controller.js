@@ -458,9 +458,6 @@ class Employee {
                     }
                 }
 
-                console.log("StartDate1", StartDate1);
-                console.log("EndDate1", StartDate1);
-                console.log("TotalMonth", TotalMonth);
 
                 try {
 
