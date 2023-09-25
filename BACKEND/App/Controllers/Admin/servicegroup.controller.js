@@ -101,10 +101,44 @@ class GroupService {
       )
 
 
-      var GroupServicesIds = await serviceGroup_services_id.find({Servicegroup_id:objectId})
+      var GroupServicesIds = await serviceGroup_services_id.find({ Servicegroup_id: objectId })
 
 
-          console.log("GroupServicesIds",GroupServicesIds);
+      console.log("GroupServicesIds", GroupServicesIds);
+
+      // EXIST STRATEGY RO CONVERT IN STRING AND ID
+      var db_exist_group_services = [];
+      GroupServicesIds.forEach(function (item, index) {
+        db_exist_group_services.push(item.Service_id.toString());
+      });
+
+      console.log("=>",db_exist_group_services);
+
+      // NEW INSERT STRATEGY TO CONVERT IN STRING AND ID
+      var insert_Group_services = [];
+      services_id.forEach(function (item, index) {
+        insert_Group_services.push(item.service_id);
+      });
+      // console.log('insert_Group_services ', insert_Group_services);
+
+      // ADD STRATEGY ARRAY
+      var add_Group_services = [];
+      insert_Group_services.forEach(function (item, index) {
+        if (!db_exist_group_services.includes(item)) {
+          add_Group_services.push(item);
+        }
+      });
+      console.log('add add_startegy - ', add_Group_services);
+
+      // DELETE STRATEGY ARRAY
+      var delete_GroupServices = [];
+      db_exist_group_services.forEach(function (item, index) {
+        if (!insert_Group_services.includes(item)) {
+          delete_GroupServices.push(item);
+        }
+      });
+      console.log("delete_GroupServices", delete_GroupServices);
+
 
       // serviceGroup_services_id.create({
       //         Servicegroup_id: groupName_id,
