@@ -7,8 +7,6 @@ import Formikform from "../../Components/ExtraComponents/Form/Formik_form";
 import { useFormik } from "formik";
 import * as valid_err from "../../Utils/Common_Messages";
 import { fDate, fDateTime } from "../../Utils/Date_formet";
-
-import Theme_Content from "../Dashboard/Content/Theme_Content";
 import { User_Profile } from "../../ReduxStore/Slice/Common/commoSlice.js";
 import { Reset_Password } from "../../ReduxStore/Slice/Auth/AuthSlice";
 import toast from 'react-hot-toast';
@@ -19,6 +17,7 @@ import ToastButton from "../../Components/ExtraComponents/Alert_Toast";
 const UserProfile = () => {
   const dispatch = useDispatch();
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const user_role = JSON.parse(localStorage.getItem("user_role"));
 
   const [UserDetails, setUserDetails] = useState({
     loading: true,
@@ -41,7 +40,7 @@ const UserProfile = () => {
   };
   useEffect(() => {
     data();
-  }, [UserDetails.data]);
+  }, []);
 
 
 
@@ -98,8 +97,7 @@ const UserProfile = () => {
     { name: "confirmpassword", label: "Confirm Password", type: "password" },
   ];
 
-  console.log("UserDetails ", UserDetails && UserDetails)
-
+console.log("user_role" ,user_role);
   return (
     <>
       <Content Page_title="UserProfile" button_status={false}>
@@ -240,20 +238,24 @@ const UserProfile = () => {
                               </span>
                             </div>
                           </div>
-                          <div className="row mb-2">
-                            <div className="col-sm-3 col-5">
-                              <h5 className="f-w-500">
-                                Client Type
-                                <span className="pull-end">:</span>
-                              </h5>
+                          {user_role === "USER" ?
+                          <>
+                            <div className="row mb-2">
+                              <div className="col-sm-3 col-5">
+                                <h5 className="f-w-500">
+                                  Client Type
+                                  <span className="pull-end">:</span>
+                                </h5>
+                              </div>
+                              <div className="col-sm-9 col-7">
+                                <span>
+                                  {UserDetails &&
+                                    UserDetails.data.license_type === "1" ? "Live" : UserDetails && UserDetails.data.license_type === "2" ? "Demo" : "2 Days"}
+                                </span>
+                              </div>
                             </div>
-                            <div className="col-sm-9 col-7">
-                              <span>
-                                {UserDetails &&
-                                  UserDetails.data.license_type === "1" ? "Live" : UserDetails && UserDetails.data.license_type === "2" ? "Demo" : "2 Days"}
-                              </span>
-                            </div>
-                          </div>
+                          </>
+                           : ""}
                         </div>
                       </div>
                       <div id="profile-settings" className="tab-pane fade mt-3">

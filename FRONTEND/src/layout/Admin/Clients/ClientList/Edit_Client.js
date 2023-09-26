@@ -671,7 +671,7 @@ const AddClient = () => {
   return (
     <>
       <Content Page_title="Edit  Client" button_title='Back' route="/admin/allclients">
-        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Client"
+        <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
           additional_field={
