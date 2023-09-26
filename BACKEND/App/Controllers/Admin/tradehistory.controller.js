@@ -7,7 +7,6 @@ class Tradehistory {
 
 
     // GET ADMIN SIGNALS
-
     async GetAdminTradeHistory(req, res) {
         try {
 
@@ -38,6 +37,16 @@ class Tradehistory {
             console.log("Theme error-", error);
         }
     }
+
+
+    async GetpreviosEntry(req,res){
+        try {
+            
+        } catch (error) {
+            console.log("error-",error);
+        }
+    }
+
 
 
 }

@@ -8,10 +8,7 @@ const company_information = db.company_information;
 const CommonEmail = async(toEmail, subjectEmail, htmlEmail, textEmail, res) => {
     var id = 1;
     try {
-
-        // console.log(toEmail, subjectEmail, htmlEmail, textEmail);
         
-
         var Companydata= await company_information.find()
 
         if(Companydata){

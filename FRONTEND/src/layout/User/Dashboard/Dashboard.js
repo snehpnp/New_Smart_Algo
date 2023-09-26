@@ -170,8 +170,8 @@ const BrokerResponse = () => {
                                 <td className="color-primary">
                                     <select name='strategy_id' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
                                         <option value="1" className='text-success' selected disabled>{data.strategys.strategy_name}</option>
-                                        {Strategy.data && Strategy.data.map((item) => {
-                                            return <option className='text-danger' value={item.result._id}>{item.result.strategy_name}</option>
+                                        {Strategy.data && Strategy.data.map((item) => { 
+                                            return <option className='text-danger' value={item.result._id}>{item.result.strategy_name}</option> 
                                         })}
                                     </select>
                                 </td>

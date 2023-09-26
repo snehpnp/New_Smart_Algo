@@ -349,18 +349,20 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
                     if (data !== undefined) {
                         var send_rr = Buffer.from(qs.stringify(data)).toString('base64');
 
+                        console.log("data",data);
                         let config = {
                             method: 'post',
                             maxBodyLength: Infinity,
                             url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
                             headers: {
-                                'Authorization': "Bearer " + item.client_code + " " + item.access_token,
+                                'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
                                 'Content-Type': 'application/json'
                             },
                             data: JSON.stringify([data])
 
                         };
 
+                        console.log("config",config);
 
                         axios(config)
                             .then(async (response) => {
@@ -488,423 +490,423 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
 
 
 
-                                        if ((item1.Bqty - item1.Sqty) > 0 && signal.type == 'LX') {
+                                        // if ((item1.Bqty - item1.Sqty) > 0 && signal.type == 'LX') {
 
 
-                                            if (item.client_services.product_type == '3') {
-                                                data11 = {
-                                                    "complexty": complexty,
-                                                    "discqty": discqty,
-                                                    "exch": exch,
-                                                    "pCode": pCode,
-                                                    "prctyp": prctyp,
-                                                    "price": price,
-                                                    "qty": qty,
-                                                    "ret": ret,
-                                                    "stopLoss": stopLoss,
-                                                    "symbol_id": symbol_id,
-                                                    "target": target,
-                                                    "trading_symbol": trading_symbol,
-                                                    "trailing_stop_loss": trailing_stop_loss,
-                                                    "transtype": transtype,
-                                                    "trigPrice": trigPrice
-                                                };
-                                            } else {
-                                                data11 = {
-                                                    "complexty": complexty,
-                                                    "discqty": discqty,
-                                                    "exch": exch,
-                                                    "pCode": pCode,
-                                                    "prctyp": prctyp,
-                                                    "price": price,
-                                                    "qty": qty,
-                                                    "ret": ret,
-                                                    "stopLoss": stopLoss,
-                                                    "symbol_id": symbol_id,
-                                                    "target": target,
-                                                    "trading_symbol": trading_symbol,
-                                                    "trailing_stop_loss": trailing_stop_loss,
-                                                    "transtype": transtype,
-                                                    "trigPrice": trigPrice
-                                                };
-                                            }
-
-
-
-                                            var send_rr = Buffer.from(qs.stringify(data11)).toString;
-
-                                            var config = {
-                                                method: 'post',
-                                                url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-
-
-                                                headers: {
-                                                    'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
-                                                    'Content-Type': 'application/json'
-                                                },
-                                                data: JSON.stringify([data11])
-                                            };
-
-                                            console.log("config ==>", config);
-
-                                            axios(config)
-                                                .then(function (response) {
-                                                    var datetime = new Date();
-
-                                                    var send_rr1 = Buffer.from(qs.stringify(data11)).toString('base64');
-
-                                                    if (response.data[0].stat == "Ok") {
-
-                                                        var data_order = {
-                                                            "nestOrderNumber": response.data[0].NOrdNo,
-                                                        }
-                                                        connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr1 + '",`order_id`="' + response.data[0].NOrdNo + '" ,`order_status`="' + response1.data[0].Status + '" ,`reject_reason`="' + response1.data[0].rejectionreason + '" WHERE `id`=' + bro_res_last_id, (err4444, result) => {
-                                                            // console.log("err4444", err4444);
-                                                        });
+                                        //     if (item.client_services.product_type == '3') {
+                                        //         data11 = {
+                                        //             "complexty": complexty,
+                                        //             "discqty": discqty,
+                                        //             "exch": exch,
+                                        //             "pCode": pCode,
+                                        //             "prctyp": prctyp,
+                                        //             "price": price,
+                                        //             "qty": qty,
+                                        //             "ret": ret,
+                                        //             "stopLoss": stopLoss,
+                                        //             "symbol_id": symbol_id,
+                                        //             "target": target,
+                                        //             "trading_symbol": trading_symbol,
+                                        //             "trailing_stop_loss": trailing_stop_loss,
+                                        //             "transtype": transtype,
+                                        //             "trigPrice": trigPrice
+                                        //         };
+                                        //     } else {
+                                        //         data11 = {
+                                        //             "complexty": complexty,
+                                        //             "discqty": discqty,
+                                        //             "exch": exch,
+                                        //             "pCode": pCode,
+                                        //             "prctyp": prctyp,
+                                        //             "price": price,
+                                        //             "qty": qty,
+                                        //             "ret": ret,
+                                        //             "stopLoss": stopLoss,
+                                        //             "symbol_id": symbol_id,
+                                        //             "target": target,
+                                        //             "trading_symbol": trading_symbol,
+                                        //             "trailing_stop_loss": trailing_stop_loss,
+                                        //             "transtype": transtype,
+                                        //             "trigPrice": trigPrice
+                                        //         };
+                                        //     }
 
 
 
+                                        //     var send_rr = Buffer.from(qs.stringify(data11)).toString;
 
-                                                    } else {
-
-
-
-                                                        const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
-
-                                                        connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                                            //console.log("err", err);
-                                                        });
+                                        //     var config = {
+                                        //         method: 'post',
+                                        //         url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
 
 
-                                                    }
+                                        //         headers: {
+                                        //             'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
+                                        //             'Content-Type': 'application/json'
+                                        //         },
+                                        //         data: JSON.stringify([data11])
+                                        //     };
+
+                                        //     console.log("config ==>", config);
+
+                                        //     axios(config)
+                                        //         .then(function (response) {
+                                        //             var datetime = new Date();
+
+                                        //             var send_rr1 = Buffer.from(qs.stringify(data11)).toString('base64');
+
+                                        //             if (response.data[0].stat == "Ok") {
+
+                                        //                 var data_order = {
+                                        //                     "nestOrderNumber": response.data[0].NOrdNo,
+                                        //                 }
+                                        //                 connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr1 + '",`order_id`="' + response.data[0].NOrdNo + '" ,`order_status`="' + response1.data[0].Status + '" ,`reject_reason`="' + response1.data[0].rejectionreason + '" WHERE `id`=' + bro_res_last_id, (err4444, result) => {
+                                        //                     // console.log("err4444", err4444);
+                                        //                 });
 
 
 
-                                                })
-                                                .catch(function (error) {
 
-                                                    try {
-                                                        if (error) {
-                                                            if (error.response) {
+                                        //             } else {
 
-                                                                const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
 
-                                                                connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                                                    //console.log("err", err);
-                                                                });
-                                                            } else {
-                                                                const message = (JSON.stringify(error)).replace(/["',]/g, '');
 
-                                                                connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                                                    //console.log("err", err);
-                                                                });
-                                                            }
-                                                        }
-                                                    } catch (error) {
-                                                        console.log("Error");
-                                                    }
+                                        //                 const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
 
-                                                });
+                                        //                 connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
+                                        //                     //console.log("err", err);
+                                        //                 });
 
-                                        }
+
+                                        //             }
+
+
+
+                                        //         })
+                                        //         .catch(function (error) {
+
+                                        //             try {
+                                        //                 if (error) {
+                                        //                     if (error.response) {
+
+                                        //                         const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+
+                                        //                         connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
+                                        //                             //console.log("err", err);
+                                        //                         });
+                                        //                     } else {
+                                        //                         const message = (JSON.stringify(error)).replace(/["',]/g, '');
+
+                                        //                         connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
+                                        //                             //console.log("err", err);
+                                        //                         });
+                                        //                     }
+                                        //                 }
+                                        //             } catch (error) {
+                                        //                 console.log("Error");
+                                        //             }
+
+                                        //         });
+
+                                        // }
 
 
                                     }
-                                    else {
-
-                                        var possition_qty = item1.Netqty;
-                                        //  console.log('possition_qty ',possition_qty);
-
-                                        connection.query('UPDATE `broker_response` SET `open_possition_qty`="' + possition_qty + '" WHERE `id`=' + bro_res_last_id, (err11, result_p) => {
-                                            // console.log("possition broker_response ", err11);
-                                        });
-
-
-                                        if (item1.Netqty > 0 && signal.type == 'LX') {
-
-                                            if (item.client_services.product_type == '3') {
-                                                data11 = {
-                                                    "complexty": complexty,
-                                                    "discqty": discqty,
-                                                    "exch": exch,
-                                                    "pCode": pCode,
-                                                    "prctyp": prctyp,
-                                                    "price": price,
-                                                    "qty": qty,
-                                                    "ret": ret,
-                                                    "stopLoss": stopLoss,
-                                                    "symbol_id": symbol_id,
-                                                    "target": target,
-                                                    "trading_symbol": trading_symbol,
-                                                    "trailing_stop_loss": trailing_stop_loss,
-                                                    "transtype": transtype,
-                                                    "trigPrice": trigPrice
-                                                };
-                                            } else {
-                                                data11 = {
-                                                    "complexty": complexty,
-                                                    "discqty": discqty,
-                                                    "exch": exch,
-                                                    "pCode": pCode,
-                                                    "prctyp": prctyp,
-                                                    "price": price,
-                                                    "qty": qty,
-                                                    "ret": ret,
-                                                    "stopLoss": stopLoss,
-                                                    "symbol_id": symbol_id,
-                                                    "target": target,
-                                                    "trading_symbol": trading_symbol,
-                                                    "trailing_stop_loss": trailing_stop_loss,
-                                                    "transtype": transtype,
-                                                    "trigPrice": trigPrice
-                                                };
-                                            }
-                                            var send_rr = Buffer.from(qs.stringify(data11)).toString;
-
-                                            var config = {
-                                                method: 'post',
-                                                url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-
-
-                                                headers: {
-                                                    'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
-                                                    'Content-Type': 'application/json'
-                                                },
-                                                data: JSON.stringify([data11])
-                                            };
-
-                                            axios(config)
-                                                .then(function (response) {
-                                                    var datetime = new Date();
-
-                                                    fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\n Time - ' + new Date() + ' AFTER ALice Blue Place Oredr Exit  =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Exit -' + JSON.stringify(response.data) + "\n\n", function (err) {
-                                                        if (err) {
-                                                            return console.log(err);
-                                                        }
-                                                    });
-
-                                                    var send_rr1 = Buffer.from(qs.stringify(data11)).toString('base64');
-
-                                                    if (response.data[0].stat == "Ok") {
-                                                        var data_order = {
-                                                            "nestOrderNumber": response.data[0].NOrdNo,
-                                                        }
-
-                                                        var config1 = {
-                                                            method: 'post',
-                                                            url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
-                                                            headers: {
-                                                                'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
-                                                                'Content-Type': 'application/json'
-                                                            },
-                                                            data: JSON.stringify(data_order)
-                                                        };
-                                                        axios(config1)
-                                                            .then(function (response1) {
-
-                                                                connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr1 + '",`order_id`="' + response.data[0].NOrdNo + '" ,`order_status`="' + response1.data[0].Status + '" ,`reject_reason`="' + response1.data[0].rejectionreason + '" WHERE `id`=' + bro_res_last_id, (err4444, result) => {
-                                                                    // console.log("err4444", err4444);
-                                                                });
-
-
-                                                            })
-                                                            .catch(function (error_broker) {
-                                                                // console.log('error_broker -', error_broker);
-                                                            });
-
-
-                                                    } else {
-
-
-                                                        const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
-
-                                                        connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                                            //console.log("err", err);
-                                                        });
-
-
-                                                    }
-
-
-
-                                                })
-                                                .catch(function (error) {
-
-                                                    fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\nALice Blue Place Oredr Exit Catch =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Entry catch -' + JSON.stringify(error) + "\n\n", function (err) {
-                                                        if (err) {
-                                                            return console.log(err);
-                                                        }
-                                                    });
-                                                    try {
-                                                        if (error) {
-                                                            if (error.response) {
+                                    // else {
+
+                                    //     var possition_qty = item1.Netqty;
+                                    //     //  console.log('possition_qty ',possition_qty);
+
+                                    //     connection.query('UPDATE `broker_response` SET `open_possition_qty`="' + possition_qty + '" WHERE `id`=' + bro_res_last_id, (err11, result_p) => {
+                                    //         // console.log("possition broker_response ", err11);
+                                    //     });
+
+
+                                    //     if (item1.Netqty > 0 && signal.type == 'LX') {
+
+                                    //         if (item.client_services.product_type == '3') {
+                                    //             data11 = {
+                                    //                 "complexty": complexty,
+                                    //                 "discqty": discqty,
+                                    //                 "exch": exch,
+                                    //                 "pCode": pCode,
+                                    //                 "prctyp": prctyp,
+                                    //                 "price": price,
+                                    //                 "qty": qty,
+                                    //                 "ret": ret,
+                                    //                 "stopLoss": stopLoss,
+                                    //                 "symbol_id": symbol_id,
+                                    //                 "target": target,
+                                    //                 "trading_symbol": trading_symbol,
+                                    //                 "trailing_stop_loss": trailing_stop_loss,
+                                    //                 "transtype": transtype,
+                                    //                 "trigPrice": trigPrice
+                                    //             };
+                                    //         } else {
+                                    //             data11 = {
+                                    //                 "complexty": complexty,
+                                    //                 "discqty": discqty,
+                                    //                 "exch": exch,
+                                    //                 "pCode": pCode,
+                                    //                 "prctyp": prctyp,
+                                    //                 "price": price,
+                                    //                 "qty": qty,
+                                    //                 "ret": ret,
+                                    //                 "stopLoss": stopLoss,
+                                    //                 "symbol_id": symbol_id,
+                                    //                 "target": target,
+                                    //                 "trading_symbol": trading_symbol,
+                                    //                 "trailing_stop_loss": trailing_stop_loss,
+                                    //                 "transtype": transtype,
+                                    //                 "trigPrice": trigPrice
+                                    //             };
+                                    //         }
+                                    //         var send_rr = Buffer.from(qs.stringify(data11)).toString;
+
+                                    //         var config = {
+                                    //             method: 'post',
+                                    //             url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+
+
+                                    //             headers: {
+                                    //                 'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
+                                    //                 'Content-Type': 'application/json'
+                                    //             },
+                                    //             data: JSON.stringify([data11])
+                                    //         };
+
+                                    //         axios(config)
+                                    //             .then(function (response) {
+                                    //                 var datetime = new Date();
+
+                                    //                 fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\n Time - ' + new Date() + ' AFTER ALice Blue Place Oredr Exit  =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Exit -' + JSON.stringify(response.data) + "\n\n", function (err) {
+                                    //                     if (err) {
+                                    //                         return console.log(err);
+                                    //                     }
+                                    //                 });
+
+                                    //                 var send_rr1 = Buffer.from(qs.stringify(data11)).toString('base64');
+
+                                    //                 if (response.data[0].stat == "Ok") {
+                                    //                     var data_order = {
+                                    //                         "nestOrderNumber": response.data[0].NOrdNo,
+                                    //                     }
+
+                                    //                     var config1 = {
+                                    //                         method: 'post',
+                                    //                         url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
+                                    //                         headers: {
+                                    //                             'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
+                                    //                             'Content-Type': 'application/json'
+                                    //                         },
+                                    //                         data: JSON.stringify(data_order)
+                                    //                     };
+                                    //                     axios(config1)
+                                    //                         .then(function (response1) {
+
+                                    //                             connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr1 + '",`order_id`="' + response.data[0].NOrdNo + '" ,`order_status`="' + response1.data[0].Status + '" ,`reject_reason`="' + response1.data[0].rejectionreason + '" WHERE `id`=' + bro_res_last_id, (err4444, result) => {
+                                    //                                 // console.log("err4444", err4444);
+                                    //                             });
+
+
+                                    //                         })
+                                    //                         .catch(function (error_broker) {
+                                    //                             // console.log('error_broker -', error_broker);
+                                    //                         });
+
+
+                                    //                 } else {
+
+
+                                    //                     const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
+
+                                    //                     connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
+                                    //                         //console.log("err", err);
+                                    //                     });
+
+
+                                    //                 }
+
+
+
+                                    //             })
+                                    //             .catch(function (error) {
+
+                                    //                 fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\nALice Blue Place Oredr Exit Catch =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Entry catch -' + JSON.stringify(error) + "\n\n", function (err) {
+                                    //                     if (err) {
+                                    //                         return console.log(err);
+                                    //                     }
+                                    //                 });
+                                    //                 try {
+                                    //                     if (error) {
+                                    //                         if (error.response) {
 
-                                                                const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
-
-                                                                connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                                                    //console.log("err", err);
-                                                                });
-                                                            } else {
-                                                                const message = (JSON.stringify(error)).replace(/["',]/g, '');
-
-                                                                connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                                                    //console.log("err", err);
-                                                                });
-                                                            }
-                                                        }
-                                                    } catch (error) {
-                                                        console.log("Error");
-                                                    }
-
-                                                });
+                                    //                             const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+
+                                    //                             connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
+                                    //                                 //console.log("err", err);
+                                    //                             });
+                                    //                         } else {
+                                    //                             const message = (JSON.stringify(error)).replace(/["',]/g, '');
+
+                                    //                             connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
+                                    //                                 //console.log("err", err);
+                                    //                             });
+                                    //                         }
+                                    //                     }
+                                    //                 } catch (error) {
+                                    //                     console.log("Error");
+                                    //                 }
+
+                                    //             });
 
 
-
-
-                                        }
-                                        else if (item1.Netqty < 0 && signal.type == 'SX') {
+
+
+                                    //     }
+                                    //     else if (item1.Netqty < 0 && signal.type == 'SX') {
 
-                                            if (item.client_services.product_type == '3') {
-                                                data11 = {
-                                                    "complexty": complexty,
-                                                    "discqty": discqty,
-                                                    "exch": exch,
-                                                    "pCode": pCode,
-                                                    "prctyp": prctyp,
-                                                    "price": price,
-                                                    "qty": qty,
-                                                    "ret": ret,
-                                                    "stopLoss": stopLoss,
-                                                    "symbol_id": symbol_id,
-                                                    "target": target,
-                                                    "trading_symbol": trading_symbol,
-                                                    "trailing_stop_loss": trailing_stop_loss,
-                                                    "transtype": transtype,
-                                                    "trigPrice": trigPrice
-                                                };
-                                            } else {
-                                                data11 = {
-                                                    "complexty": complexty,
-                                                    "discqty": discqty,
-                                                    "exch": exch,
-                                                    "pCode": pCode,
-                                                    "prctyp": prctyp,
-                                                    "price": price,
-                                                    "qty": qty,
-                                                    "ret": ret,
-                                                    "stopLoss": stopLoss,
-                                                    "symbol_id": symbol_id,
-                                                    "target": target,
-                                                    "trading_symbol": trading_symbol,
-                                                    "trailing_stop_loss": trailing_stop_loss,
-                                                    "transtype": transtype,
-                                                    "trigPrice": trigPrice
-                                                };
-                                            }
+                                    //         if (item.client_services.product_type == '3') {
+                                    //             data11 = {
+                                    //                 "complexty": complexty,
+                                    //                 "discqty": discqty,
+                                    //                 "exch": exch,
+                                    //                 "pCode": pCode,
+                                    //                 "prctyp": prctyp,
+                                    //                 "price": price,
+                                    //                 "qty": qty,
+                                    //                 "ret": ret,
+                                    //                 "stopLoss": stopLoss,
+                                    //                 "symbol_id": symbol_id,
+                                    //                 "target": target,
+                                    //                 "trading_symbol": trading_symbol,
+                                    //                 "trailing_stop_loss": trailing_stop_loss,
+                                    //                 "transtype": transtype,
+                                    //                 "trigPrice": trigPrice
+                                    //             };
+                                    //         } else {
+                                    //             data11 = {
+                                    //                 "complexty": complexty,
+                                    //                 "discqty": discqty,
+                                    //                 "exch": exch,
+                                    //                 "pCode": pCode,
+                                    //                 "prctyp": prctyp,
+                                    //                 "price": price,
+                                    //                 "qty": qty,
+                                    //                 "ret": ret,
+                                    //                 "stopLoss": stopLoss,
+                                    //                 "symbol_id": symbol_id,
+                                    //                 "target": target,
+                                    //                 "trading_symbol": trading_symbol,
+                                    //                 "trailing_stop_loss": trailing_stop_loss,
+                                    //                 "transtype": transtype,
+                                    //                 "trigPrice": trigPrice
+                                    //             };
+                                    //         }
 
-                                            var send_rr = Buffer.from(qs.stringify(data11)).toString;
+                                    //         var send_rr = Buffer.from(qs.stringify(data11)).toString;
 
-                                            var config = {
-                                                method: 'post',
-                                                url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+                                    //         var config = {
+                                    //             method: 'post',
+                                    //             url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
 
 
-                                                headers: {
-                                                    'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
-                                                    'Content-Type': 'application/json'
-                                                },
-                                                data: JSON.stringify([data11])
-                                            };
+                                    //             headers: {
+                                    //                 'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
+                                    //                 'Content-Type': 'application/json'
+                                    //             },
+                                    //             data: JSON.stringify([data11])
+                                    //         };
 
 
-                                            axios(config)
-                                                .then(function (response) {
+                                    //         axios(config)
+                                    //             .then(function (response) {
 
-                                                    fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\n Time - ' + new Date() + ' AFTER  ALice Blue Place Oredr Exit  =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Exit -' + JSON.stringify(response) + "\n\n", function (err) {
-                                                        if (err) {
-                                                            return console.log(err);
-                                                        }
-                                                    });
+                                    //                 fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\n Time - ' + new Date() + ' AFTER  ALice Blue Place Oredr Exit  =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Exit -' + JSON.stringify(response) + "\n\n", function (err) {
+                                    //                     if (err) {
+                                    //                         return console.log(err);
+                                    //                     }
+                                    //                 });
 
 
-                                                    var datetime = new Date();
-                                                    var send_rr1 = Buffer.from(qs.stringify(data11)).toString;
+                                    //                 var datetime = new Date();
+                                    //                 var send_rr1 = Buffer.from(qs.stringify(data11)).toString;
 
-                                                    if (response.data[0].stat == "Ok") {
+                                    //                 if (response.data[0].stat == "Ok") {
 
-                                                        var data_order = {
-                                                            "nestOrderNumber": response.data[0].NOrdNo,
-                                                        }
+                                    //                     var data_order = {
+                                    //                         "nestOrderNumber": response.data[0].NOrdNo,
+                                    //                     }
 
-                                                        var config1 = {
-                                                            method: 'post',
-                                                            url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
-                                                            headers: {
-                                                                'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
-                                                                'Content-Type': 'application/json'
-                                                            },
-                                                            data: JSON.stringify(data_order)
-                                                        };
-                                                        axios(config1)
-                                                            .then(function (response1) {
+                                    //                     var config1 = {
+                                    //                         method: 'post',
+                                    //                         url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
+                                    //                         headers: {
+                                    //                             'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
+                                    //                             'Content-Type': 'application/json'
+                                    //                         },
+                                    //                         data: JSON.stringify(data_order)
+                                    //                     };
+                                    //                     axios(config1)
+                                    //                         .then(function (response1) {
 
-                                                                var send_rr = Buffer.from(qs.stringify(data11)).toString('base64');
+                                    //                             var send_rr = Buffer.from(qs.stringify(data11)).toString('base64');
 
-                                                                connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_id`="' + response.data[0].NOrdNo + '" ,`order_status`="' + response1.data[0].Status + '" ,`reject_reason`="' + response1.data[0].response1.data[0].rejectionreason + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                                                    //console.log("err", err);
-                                                                });
+                                    //                             connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_id`="' + response.data[0].NOrdNo + '" ,`order_status`="' + response1.data[0].Status + '" ,`reject_reason`="' + response1.data[0].response1.data[0].rejectionreason + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
+                                    //                                 //console.log("err", err);
+                                    //                             });
 
 
 
-                                                            })
-                                                            .catch(function (error) {
-                                                                //console.log('error_broker -', error_broker);
-                                                            });
+                                    //                         })
+                                    //                         .catch(function (error) {
+                                    //                             //console.log('error_broker -', error_broker);
+                                    //                         });
 
-                                                    } else {
+                                    //                 } else {
 
 
-                                                        const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
+                                    //                     const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
 
-                                                        connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                                            //console.log("err", err);
-                                                        });
+                                    //                     connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
+                                    //                         //console.log("err", err);
+                                    //                     });
 
-                                                    }
+                                    //                 }
 
-                                                })
-                                                .catch(function (error) {
+                                    //             })
+                                    //             .catch(function (error) {
 
-                                                    fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\nALice Blue Place Oredr Exit Catch =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Exit Catch -' + JSON.stringify(error) + "\n\n", function (err) {
-                                                        if (err) {
-                                                            // return console.log(err);
-                                                        }
-                                                    });
+                                    //                 fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\nALice Blue Place Oredr Exit Catch =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Exit Catch -' + JSON.stringify(error) + "\n\n", function (err) {
+                                    //                     if (err) {
+                                    //                         // return console.log(err);
+                                    //                     }
+                                    //                 });
 
-                                                    if (error) {
-                                                        if (error.response) {
-                                                            // console.log("error.response", error.response.data);
-                                                            const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+                                    //                 if (error) {
+                                    //                     if (error.response) {
+                                    //                         // console.log("error.response", error.response.data);
+                                    //                         const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
 
-                                                            connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                                                //console.log("err", err);
-                                                            });
-                                                        } else {
-                                                            const message = (JSON.stringify(error)).replace(/["',]/g, '');
+                                    //                         connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
+                                    //                             //console.log("err", err);
+                                    //                         });
+                                    //                     } else {
+                                    //                         const message = (JSON.stringify(error)).replace(/["',]/g, '');
 
-                                                            connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                                                //console.log("err", err);
-                                                            });
-                                                        }
-                                                    }
-                                                });
+                                    //                         connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
+                                    //                             //console.log("err", err);
+                                    //                         });
+                                    //                     }
+                                    //                 }
+                                    //             });
 
 
 
-                                        }
+                                    //     }
 
 
-                                    }
+                                    // }
 
 
                                 } else {

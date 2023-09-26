@@ -13,6 +13,8 @@ const client_services = db.client_services;
 const serviceGroup_services_id = db.serviceGroup_services_id;
 const count_licenses = db.count_licenses;
 
+const { CommonEmail } = require('../../Helper/CommonEmail')
+const { firstOptPass } = require('../../Helper/Email_formate/first_login')
 
 
 const { logger, logger1, getIPAddress } = require('../../Helper/logger.helper')
@@ -133,7 +135,9 @@ class Employee {
             const min = 1;
             const max = 1000000;
             const rand = min + Math.random() * (max - min);
-            var rand_password = Math.round(rand);
+            // var rand_password = Math.round(rand);
+            var rand_password = Math.round(123456);
+
 
             const salt = await bcrypt.genSalt(10);
             var ByCryptrand_password = await bcrypt.hash(rand_password.toString(), salt);
@@ -246,6 +250,19 @@ class Employee {
                             })
                         count_licenses_add.save()
                     }
+
+
+                    var toEmail = Email;
+                    var subjectEmail = "User ID and Password";      
+                    var email_data = {
+                        FullName:FullName,
+                        Email:Email,
+                        Password:rand_password       
+                    }
+                    var EmailData = await firstOptPass(email_data)
+                 
+                   CommonEmail(toEmail, subjectEmail, EmailData)
+
 
 
                     logger1.info('Add User By Admin', { Email: data.Email, role: data.Role, user_id: data._id });

@@ -19,6 +19,10 @@ const MainSignals = db.MainSignals;
 const AliceViewModel = db.AliceViewModel;
 const BrokerResponse = db.BrokerResponse;
 
+const { logger, getIPAddress } = require('./Helper/logger')
+
+logger1.info('Add User By Admin', { Email: data.Email, role: data.Role, user_id: data._id });
+                   
 
 const aliceblue = require('./Broker/aliceblue')
 
@@ -266,7 +270,6 @@ app.post('/broker-signals', async (req, res) => {
               return res.send("ok")
             }
 
-            console.log("SignalSave", SignalSave._id);
             // ENTRY OR EXIST CHECK
             if (type == "LE" || type == "le") {
 
@@ -353,6 +356,7 @@ app.post('/broker-signals', async (req, res) => {
 
             var query = { "strategys.strategy_name": strategy, "service.name": input_symbol }
 
+            console.log("query",query);
             // Example: Find all documents in the collection
 
             try {
