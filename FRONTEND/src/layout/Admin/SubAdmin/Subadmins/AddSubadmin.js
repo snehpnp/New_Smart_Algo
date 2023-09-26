@@ -7,7 +7,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Content from "../../../../Components/Dashboard/Content/Content"
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1"
 import * as  valid_err from "../../../../Utils/Common_Messages"
-import { Email_regex, Mobile_regex } from "../../../../Utils/Common_regex"
+import { Email_regex, Mobile_regex, Name_regex } from "../../../../Utils/Common_regex"
 
 import { useFormik } from 'formik';
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
@@ -64,6 +64,11 @@ const AllSubadmin = () => {
         return Mobile_regex(mobile)
     }
 
+    const isValidName = (mobile) => {
+        return Name_regex(mobile)
+    }
+
+
 
 
     const formik = useFormik({
@@ -91,24 +96,34 @@ const AllSubadmin = () => {
             // if (!values.username) {
             //     errors.username = valid_err.USERNAME_ERROR;
             // }
-            // if (!values.FullName) {
-            //     errors.FullName = valid_err.FULLNAME_ERROR;
-            // }
-            // if (!values.password) {
-            //     errors.password = valid_err.PASSWORD_ERROR;
-            // }
+            if (!values.FullName) {
+                errors.FullName = valid_err.FULLNAME_ERROR;
+            }
 
-            // if (!values.mobile) {
-            //     errors.mobile = valid_err.CONTACT_ERROR;
-            // } else if (!isValidContact(values.mobile)) {
-            //     errors.mobile = valid_err.INVALID_CONTACT_ERROR;
-            // }
-            // if (!values.email) {
-            //     errors.email = valid_err.EMPTY_EMAIL_ERROR;
-            // } else if (!isValidEmail(values.email)) {
-            //     errors.email = valid_err.INVALID_EMAIL_ERROR;
-            // }
+            else if (!isValidName(values.FullName)) {
+                errors.FullName = valid_err.INVALID_ERROR;
+            }
+            if (!values.password) {
+                errors.password = valid_err.PASSWORD_ERROR;
+            }
 
+            if (!values.mobile) {
+                errors.mobile = valid_err.CONTACT_ERROR;
+            } else if (!isValidContact(values.mobile)) {
+                errors.mobile = valid_err.INVALID_CONTACT_ERROR;
+            }
+            if (!values.email) {
+                errors.email = valid_err.EMPTY_EMAIL_ERROR;
+            } else if (!isValidEmail(values.email)) {
+                errors.email = valid_err.INVALID_EMAIL_ERROR;
+            }
+
+            if ((values.all || values.groupservice) && SelectedGroupServices.length === 0) {
+                errors.groupservice = "Group Select";
+            }
+            if ((values.all || values.Strategy) && selectedStrategies.length === 0) {
+                errors.groupservice = "Strategy Select  Select";
+            }
             return errors;
         },
         onSubmit: async (values) => {
@@ -133,6 +148,10 @@ const AllSubadmin = () => {
 
                 }
             }
+
+            console.log("test", req);
+            return
+
             await dispatch(Add_Subadmin({ req: req, token: user_token })).unwrap().then((response) => {
 
                 if (response.status === 409) {
@@ -187,10 +206,14 @@ const AllSubadmin = () => {
         //     check_box_true: formik.values.all || formik.values.group ? true : false,
         // },
         {
-            name: 'groupservice', label: 'Group Service Permission', type: 'checkbox',
+            name: 'groupservice',
+            label: 'Group Service Permission',
+            type: 'checkbox',
             check_box_true: formik.values.all || formik.values.groupservice ? true : false,
-            label_size: 12, col_size: 3,
+            label_size: 12,
+            col_size: 3,
         },
+
         {
             name: 'Strategy', label: 'Strategy Permission', type: 'checkbox', label_size: 12, col_size: 3,
             check_box_true: formik.values.all || formik.values.Strategy ? true : false,
@@ -331,6 +354,10 @@ const AllSubadmin = () => {
                                                 <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
                                                 <span class="toggle-label">Show Strategy</span>
                                             </label>
+                                            {formik.errors.groupservice &&
+                                                <div style={{ color: 'red' }}>{formik.errors.groupservice}</div>}
+
+
                                         </> : ""}
 
                                         {/*  For Show All Strategy */}
