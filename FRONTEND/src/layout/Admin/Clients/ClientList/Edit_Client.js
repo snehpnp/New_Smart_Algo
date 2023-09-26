@@ -5,7 +5,7 @@ import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1
 import { useFormik } from 'formik';
 import * as  valid_err from "../../../../Utils/Common_Messages"
 import { useNavigate, useLocation } from "react-router-dom";
-import { Email_regex, Mobile_regex } from "../../../../Utils/Common_regex"
+import { Email_regex, Mobile_regex, Name_regex } from "../../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
 import Content from '../../../../Components/Dashboard/Content/Content';
 import { GET_ALL_GROUP_SERVICES, Find_One_User, Update_User } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
@@ -21,6 +21,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 import "../../../../App.css"
+import { f_time } from '../../../../Utils/Date_formet';
 
 const AddClient = () => {
   const navigate = useNavigate()
@@ -77,6 +78,12 @@ const AddClient = () => {
     return Mobile_regex(mobile)
   }
 
+  const isValidName = (mobile) => {
+    return Name_regex(mobile)
+  }
+
+
+
 
 
   // GET USER DETAILS
@@ -96,8 +103,6 @@ const AddClient = () => {
   useEffect(() => {
     data_1()
   }, [])
-
-
 
 
 
@@ -137,6 +142,9 @@ const AddClient = () => {
       if (!values.fullName) {
         errors.fullName = valid_err.FULLNAME_ERROR;
       }
+      else if (!isValidName(values.fullName)) {
+        errors.fullName = valid_err.INVALID_ERROR;
+      }
       if (!values.mobile) {
         errors.mobile = valid_err.CONTACT_ERROR;
       } else if (!isValidContact(values.mobile)) {
@@ -174,6 +182,7 @@ const AddClient = () => {
       }
 
 
+
       if (!values.groupservice) {
         errors.groupservice = valid_err.GROUPSELECT_ERROR;
       }
@@ -190,6 +199,9 @@ const AddClient = () => {
       return errors;
     },
     onSubmit: async (values) => {
+
+
+
       const req = {
         "FullName": values.fullName,
         "UserName": values.username,
@@ -239,9 +251,10 @@ const AddClient = () => {
   });
 
 
-
+  console.log("testt", formik)
 
   useEffect(() => {
+    console.log("UserData", UserData)
     formik.setFieldValue('username', UserData.data.data !== undefined && UserData.data.data[0].UserName);
     formik.setFieldValue('fullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
     formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
@@ -259,6 +272,8 @@ const AddClient = () => {
     formik.setFieldValue('api_secret', UserData.data.data !== undefined && UserData.data.data[0].api_secret);
     formik.setFieldValue('app_key', UserData.data.data !== undefined && UserData.data.data[0].app_key);
     formik.setFieldValue('demat_userid', UserData.data.data !== undefined && UserData.data.data[0].demat_userid);
+    formik.setFieldValue('todate', UserData.data.data !== undefined && f_time(UserData.data.data[0].EndDate));
+    formik.setFieldValue('fromDate', UserData.data.data !== undefined && f_time(UserData.data.data[0].StartDate));
 
   }, [UserData.data]);
 
@@ -281,26 +296,26 @@ const AddClient = () => {
 
 
   const brokerOptions = [
-    { label: 'Market Hub', value: '1' },
+    // { label: 'Market Hub', value: '1' },
     { label: 'Alice Blue', value: '2' },
-    { label: 'Master Trust', value: '3' },
-    { label: 'Motilal Oswal', value: '4' },
-    { label: 'Zebull', value: '5' },
-    { label: 'IIFl', value: '6' },
-    { label: 'Kotak', value: '7' },
-    { label: 'Mandot', value: '8' },
-    { label: 'Choice', value: '9' },
-    { label: 'Anand Rathi', value: '10' },
-    { label: 'B2C', value: '11' },
-    { label: 'Angel', value: '12' },
-    { label: 'Fyers', value: '13' },
-    { label: 'Zerodha', value: '15' }
+    // { label: 'Master Trust', value: '3' },
+    // { label: 'Motilal Oswal', value: '4' },
+    // { label: 'Zebull', value: '5' },
+    // { label: 'IIFl', value: '6' },
+    // { label: 'Kotak', value: '7' },
+    // { label: 'Mandot', value: '8' },
+    // { label: 'Choice', value: '9' },
+    // { label: 'Anand Rathi', value: '10' },
+    // { label: 'B2C', value: '11' },
+    // { label: 'Angel', value: '12' },
+    // { label: 'Fyers', value: '13' },
+    // { label: 'Zerodha', value: '15' }
   ];
   const fields = [
-    { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: true },
+    { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },
     { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },
-    { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, disable: true },
-    { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 6, disable: true },
+    { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, disable: false },
+    { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 6, disable: false },
     {
       name: 'licence',
       label: 'Licence',
@@ -313,11 +328,6 @@ const AddClient = () => {
       , label_size: 12, col_size: 6, disable: false
     },
     {
-      name: 'licence1', label: 'Use License Month', type: 'text', label_size: 12, col_size: 6, disable: true,
-      showWhen: values => values.licence === '2'
-
-    },
-    {
       name: 'tomonth',
       label: 'To Month',
       type: 'select',
@@ -325,7 +335,6 @@ const AddClient = () => {
       showWhen: values => values.licence === '2'
       , label_size: 12, col_size: 6, disable: false, isSelected: true
     },
-
     {
       name: 'broker',
       label: 'Broker',
@@ -345,18 +354,12 @@ const AddClient = () => {
       showWhen: values => values.licence === '1'
       , label_size: 12, col_size: 6, disable: false
     },
-    //  For Demo Only Client
-
-
-
     {
       name: 'api_key',
       label: formik.values.broker == 4 ? 'App Key' : formik.values.broker == 7 ? "Consumer Key" : formik.values.broker == 9 ? "Vendor Key" : formik.values.broker == 8 ? 'App Key' : formik.values.broker == 10 ? 'App Key' : "'Api Key", type: 'text',
       showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6',
       label_size: 12, col_size: 6, disable: false
-
     },
-
     {
       name: 'client_code',
       label: formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
@@ -369,17 +372,14 @@ const AddClient = () => {
       showWhen: values => values.broker === '9',
       label_size: 12, col_size: 6, disable: false
     },
-
-
     {
       name: 'app_id',
-      label: formik.values.broker == 1 ? 'Verification Code' : formik.values.broker == 5 ? 'Password' : formik.values.broker == 7 ? 'Demat Password' : formik.values.broker == 11 ? 'Password' : formik.values.broker == 13 ? 'App Id' : formik.values.broker == 9 ? 'Password' : formik.values.broker == 14 ? 'User Id ' : 'App Id', type: 'text',
-      showWhen: values => values.broker === '2' || values.broker === '1' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14',
+      label: formik.values.broker == 1 ? 'Verification Code' : formik.values.broker == 5 ? 'Password' : formik.values.broker == 7 ? 'Demat Password' : formik.values.broker == 11 ? 'Password' : formik.values.broker == 2 ? 'Demat UserId' : formik.values.broker == 13 ? 'App Id' : formik.values.broker == 9 ? 'Password' : formik.values.broker == 14 ? 'User Id ' : 'App Id', type: 'text',
+      showWhen: values =>
+        //  values.broker === '2' ||
+        values.broker === '1' || values.broker === '2' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14',
       label_size: 12, col_size: 6, disable: false
     },
-
-
-
     {
       name: 'app_key',
       label: formik.values.broker == 5 || 6 ? 'App Key' : "", type: 'text',
@@ -391,7 +391,9 @@ const AddClient = () => {
       name: 'api_secret',
       label: formik.values.broker == 1 ? 'Password Code' : formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker == 9 ? 'Encryption Secret Key' : formik.values.broker == 10 ? 'Api Secret Key' : formik.values.broker == 11 ? '2FA' : formik.values.broker == 14 ? 'Encryption Key' : 'Api Secret', type: 'text',
       showWhen: values => values.broker === '1'
-        || values.broker === '2' || values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15',
+        ||
+        // values.broker === '2' ||
+        values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -643,7 +645,6 @@ const AddClient = () => {
   //  For Checked Strategy
 
   const handleStrategyChange = (event) => {
-    console.log("setSelectedStrategies", selectedStrategies);
     const strategyId = event.target.value;
     setSelectedStrategies((prevStrategies) => {
       return prevStrategies.map((strategy) => strategy.id === strategyId

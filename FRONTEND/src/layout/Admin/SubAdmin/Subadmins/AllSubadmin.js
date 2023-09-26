@@ -57,8 +57,8 @@ const AllSubadmin = () => {
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: 'UserName',
-            text: 'User Name'
+            dataField: 'FullName',
+            text: 'Full Name'
         }, {
             dataField: 'Email',
             text: 'Email'

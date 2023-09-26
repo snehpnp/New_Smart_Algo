@@ -3,6 +3,7 @@ export const INVALID_EMAIL_ERROR = 'please Enter A Valid Email ';
 export const PASSWORD_ERROR = 'Please Enter Password ';
 export const USERNAME_ERROR = 'Please Enter Username ';
 export const FULLNAME_ERROR = 'Please Enter FullName ';
+export const INVALID_ERROR = 'Number Not Allow ';
 export const CONTACT_ERROR = 'Please Enter Contact Number ';
 export const INVALID_CONTACT_ERROR = 'Please Enter Valid Contact Number ';
 export const APIKEY_ERROR = 'Please Enter APIKey ';

@@ -1,9 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// import React from 'react'
-
 import React, { useEffect, useState } from 'react'
 import Loader from '../../../../Utils/Loader'
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import Content from "../../../../Components/Dashboard/Content/Content"
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1"
 import * as  valid_err from "../../../../Utils/Common_Messages"
@@ -14,15 +11,21 @@ import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadmin
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
 import { GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
+import { Find_One_Subadmin, Edit_Subadmin } from '../../../../ReduxStore/Slice/Admin/CreateSubadminSlice'
 
+import toast, { Toaster } from 'react-hot-toast';
 
-const EditSubadmin = () => {
+import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
+const AllSubadmin = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
+    const { id } = useParams()
 
     const user_token = JSON.parse(localStorage.getItem("user_details")).token
     const Role = JSON.parse(localStorage.getItem("user_details")).Role
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
+    const token = JSON.parse(localStorage.getItem("user_details")).token
 
 
     const [first, setfirst] = useState('all')
@@ -32,6 +35,15 @@ const EditSubadmin = () => {
 
     const [selectedStrategies, setSelectedStrategies] = useState([]);
     const [SelectedGroupServices, setSelectedGroupServices] = useState([]);
+
+
+
+    const [checkedStrategies, setCheckedStrategies] = useState([]);
+    const [checkedGroupServices, setCheckedGroupServices] = useState([]);
+
+    const [selectedStrategyIds, setSelectedStrategyIds] = useState([]);
+    const [selectedGroupIds, setSelectedGroupIds] = useState([]);
+    console.log("selectedStrategyIds", selectedStrategyIds);
 
 
 
@@ -52,23 +64,44 @@ const EditSubadmin = () => {
     });
 
 
+    const [UserData, setUserData] = useState({
+        loading: true,
+        data: []
+    });
 
-    const isValidEmail = (email) => {
-        return Email_regex(email)
-    }
+
+
     const isValidContact = (mobile) => {
         return Mobile_regex(mobile)
     }
 
 
+    // GET USER DETAILS
+    const data_1 = async () => {
+        await dispatch(Find_One_Subadmin({ 'id': id, token: token })).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setUserData({
+                        loading: false,
+                        data: response
+                    });
+                }
+            })
+    }
+
+
+    useEffect(() => {
+        data_1()
+    }, [])
+
+
 
     const formik = useFormik({
         initialValues: {
-            FullName: "",
-            username: '',
-            email: '',
-            mobile: '',
-            password: '',
+            FullName: null,
+            email: null,
+            mobile: 'null',
+            password: 'null',
             Strategy: false,
             select_strategy: [],
             gotodashboard: false,
@@ -79,146 +112,96 @@ const EditSubadmin = () => {
             tradehistory: false,
             groupservice: false,
             select_group_services: [],
-            group: false,
         },
         validate: (values) => {
-
-            console.log("values", values);
             const errors = {};
-            if (!values.username) {
-                errors.username = valid_err.USERNAME_ERROR;
-            }
-            if (!values.FullName) {
-                errors.FullName = valid_err.FULLNAME_ERROR;
-            }
+
+
+
             if (!values.password) {
                 errors.password = valid_err.PASSWORD_ERROR;
             }
-
             if (!values.mobile) {
                 errors.mobile = valid_err.CONTACT_ERROR;
             } else if (!isValidContact(values.mobile)) {
                 errors.mobile = valid_err.INVALID_CONTACT_ERROR;
             }
-            if (!values.email) {
-                errors.email = valid_err.EMPTY_EMAIL_ERROR;
-            } else if (!isValidEmail(values.email)) {
-                errors.email = valid_err.INVALID_EMAIL_ERROR;
-            }
-
-            if (!values.password) {
-                errors.password = valid_err.PASSWORD_ERROR;
-            }
-
 
             return errors;
         },
         onSubmit: async (values) => {
 
+
+
+            const updatedSubadmin = {
+                // ... (other fields)
+                "Subadmin_permision_data": {
+                    // ... (other permissions)
+                    "strategy": selectedStrategyIds, // Updated selected strategy IDs
+                }
+            };
+
+            console.log("updatedSubadmin ", updatedSubadmin);
+            return
             const req = {
                 "FullName": values.FullName,
-                "UserName": "0",
                 "Email": values.email,
                 "PhoneNo": values.mobile,
-                "password": values.mobile,
+                "password": values.password,
                 "Role": "SUBADMIN",
                 "parent_role": Role,
                 "parent_id": user_id,
+                "id": id,
                 "Subadmin_permision_data": {
-                    "all_permission": values.all ? '1' : '0',
-                    "addclient": values.addclient ? '1' : values.all ? '1' : '0',
-                    "editclient": values.editclient ? '1' : values.all ? '1' : '0',
-                    "licence": values.licence ? '1' : values.all ? '1' : '0',
-                    "group": values.group ? '1' : values.all ? '1' : '0',
-                    "groupservice": values.groupservice ? '1' : values.all ? '1' : '0',
-                    "Strategy": values.Strategy ? '1' : values.all ? '1' : '0',
-                    "select_strategy": selectedStrategies,
-                    "select_group_services": SelectedGroupServices,
+                    "client_add": values.addclient ? '1' : values.all ? '1' : '0',
+                    "client_edit": values.editclient ? '1' : values.all ? '1' : '0',
+                    "license_permision": values.licence ? '1' : values.all ? '1' : '0',
                     "go_To_Dashboard": values.gotodashboard ? '1' : values.all ? '1' : '0',
                     "trade_history_old": values.tradehistory ? '1' : values.all ? '1' : '0',
+                    "strategy": selectedStrategyIds,
+                    "group_services": selectedGroupIds,
 
                 }
             }
+
+
+            await dispatch(Edit_Subadmin({ req: req, token: user_token })).unwrap().then((response) => {
+                if (response.status === 409) {
+                    toast.error(response.data.msg);
+                }
+                else if (response.status) {
+                    toast.success(response.msg);
+
+                    setTimeout(() => {
+                        navigate("/admin/allsubadmins")
+                    }, 1000);
+                }
+                else if (!response.status) {
+                    toast.error(response.msg);
+                }
+
+            })
         }
     });
 
-    const fields = [
-
-        // { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: true },
-        { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, },
-        { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 6 },
-        { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, },
-        { name: 'password', label: 'Password', type: 'password', label_size: 12, col_size: 6, },
-        { name: 'all', label: 'All Permission', type: 'checkbox', label_size: 12, col_size: 3, },
-        {
-            name: 'addclient', label: 'Add Client', type: 'checkbox', label_size: 12, col_size: 3,
-            check_box_true: formik.values.all || formik.values.addclient ? true : false,
-        },
-        {
-            name: 'tradehistory', label: 'Trade History', type: 'checkbox', label_size: 12, col_size: 3,
-            check_box_true: formik.values.all || formik.values.tradehistory ? true : false,
-        },
-        {
-            name: 'editclient', label: 'Edit Client', type: 'checkbox', label_size: 12, col_size: 3,
-            check_box_true: formik.values.all || formik.values.editclient ? true : false,
-        },
-        {
-            name: 'gotodashboard', label: 'Go To Dashboard', type: 'checkbox', label_size: 12, col_size: 3,
-            check_box_true: formik.values.all || formik.values.gotodashboard ? true : false,
-        },
-        {
-            name: 'licence', label: 'Licence  Permission', type: 'checkbox', label_size: 12, col_size: 3,
-            check_box_true: formik.values.all || formik.values.licence ? true : false,
-        },
-        {
-            name: 'group', label: 'Group Permission', type: 'checkbox', label_size: 12, col_size: 3,
-            check_box_true: formik.values.all || formik.values.group ? true : false,
-        },
-        {
-            name: 'groupservice', label: 'Group Service Permission', type: 'checkbox',
-            check_box_true: formik.values.all || formik.values.groupservice ? true : false,
-            label_size: 12, col_size: 3,
-        },
-        {
-            name: 'Strategy', label: 'Strategy Permission', type: 'checkbox', label_size: 12, col_size: 3,
-            check_box_true: formik.values.all || formik.values.Strategy ? true : false,
-        },
-
-
-    ]
-
-    const data = async () => {
-
-        await dispatch(Get_All_Service_for_Client({
-            req: {
-            }, token: user_token
-        })).unwrap().then((response) => {
-            if (response.status) {
-                setAllStrategy({
-                    loading: false,
-                    data: response.data
-                });
-            }
-        })
-
-        await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
-            .then((response) => {
-
-
-                if (response.status) {
-                    setAllGroupServices({
-                        loading: false,
-                        data: response.data
-                    });
-                }
-            })
-
-    }
-
+    //  SET INTIAL VALUE
 
     useEffect(() => {
-        data()
-    }, [])
+
+        formik.setFieldValue('FullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
+        formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
+        formik.setFieldValue('mobile', UserData.data.data !== undefined && UserData.data.data[0].PhoneNo);
+        formik.setFieldValue('password', UserData.data.data !== undefined && UserData.data.data[0].Otp);
+        const userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0]
+        formik.setFieldValue('addclient', userStrategyIds.client_add === 1 ? true : false);
+        formik.setFieldValue('editclient', userStrategyIds.client_edit === 1 ? true : false);
+        formik.setFieldValue('gotodashboard', userStrategyIds.go_To_Dashboard === 1 ? true : false);
+        formik.setFieldValue('licence', userStrategyIds.license_permision
+            === 1 ? true : false);
+        formik.setFieldValue('tradehistory', userStrategyIds.trade_history_old === 1 ? true : false);
+        formik.setFieldValue('Strategy', userStrategyIds.strategy && userStrategyIds.strategy.length > 0 ? true : false);
+        formik.setFieldValue('groupservice', userStrategyIds.group_services && userStrategyIds.group_services.length > 0 ? true : false);
+    }, [UserData.data.data]);
 
 
 
@@ -238,61 +221,229 @@ const EditSubadmin = () => {
             formik.setFieldValue('group', false);
             formik.setFieldValue('groupservice', false);
             formik.setFieldValue('Strategy', false);
-
         }
-
-
     }, [formik.values.all]);
 
 
 
 
+
+    const fields = [
+
+        { name: 'FullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: true },
+        { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 6, disable: false },
+        { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, disable: true },
+        { name: 'password', label: 'Password', type: 'password', label_size: 12, col_size: 6, disable: false },
+        { name: 'all', label: 'All Permissions', type: 'checkbox', label_size: 12, col_size: 3, },
+        {
+            name: 'addclient', label: 'Add Client', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.addclient ? true : false,
+        },
+        {
+            name: 'editclient', label: 'Edit Client', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.editclient ? true : false,
+        },
+        {
+            name: 'licence', label: 'Licence  Permission', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.licence ? true : false,
+        },
+        {
+            name: 'gotodashboard', label: 'Go To Dashboard', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.gotodashboard ? true : false,
+        },
+        {
+            name: 'tradehistory', label: 'Trade History', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.tradehistory ? true : false,
+        },
+
+        // {
+        //     name: 'group', label: 'Group Permission', type: 'checkbox', label_size: 12, col_size: 3,
+        //     check_box_true: formik.values.all || formik.values.group ? true : false,
+        // },
+        {
+            name: 'groupservice', label: 'Group Service Permission', type: 'checkbox',
+            check_box_true: formik.values.all || formik.values.groupservice ? true : false,
+            label_size: 12, col_size: 3,
+        },
+        {
+            name: 'Strategy', label: 'Strategy Permission', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.Strategy ? true : false,
+        },
+
+
+    ]
+
+    const data = async () => {
+        await dispatch(Get_All_Service_for_Client({
+            req: {
+            }, token: user_token
+        })).unwrap().then((response) => {
+            if (response.status) {
+                setAllStrategy({
+                    loading: false,
+                    data: response.data
+                });
+            }
+        })
+        await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setAllGroupServices({
+                        loading: false,
+                        data: response.data
+                    });
+                }
+            })
+
+    }
+
+
+    useEffect(() => {
+        data()
+    }, [])
+
+
+
+
+
+    // const [selectedStrategyIds, setSelectedStrategyIds] = useState([]);
+
+    useEffect(() => {
+        if (UserData.data.data !== undefined && UserData.data.data.length > 0) {
+          const userStrategyIds = UserData.data.data[0].subadmin_permissions[0].strategy;
+          setSelectedStrategyIds(userStrategyIds);
+        }
+      }, [UserData.data]);
+
+
+
+console.log("selectedStrategyIds" ,selectedStrategyIds);
+
+
+
+
+    //  For Select Strategy Change
+
+
+    useEffect(() => {
+        if (UserData.data.data !== undefined && UserData.data.data.length > 0) {
+            const userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0].strategy
+            const initialCheckedStrategies = AllStrategy.data.map((strategy) => {
+                return {
+                    id: strategy._id,
+                    name: strategy.strategy_name,
+                    checked: userStrategyIds.includes(strategy._id),
+                };
+            });
+            setCheckedStrategies(initialCheckedStrategies);
+
+
+        }
+    }, [UserData.data, AllStrategy.data]);
+
+
     const handleStrategyChange = (event) => {
-        const strategyId = event.target.value;
-
-
-        const strategyName = event.target.name; // Assuming the label contains the strategy name
-
-        if (event.target.checked) {
-            // Add the selected strategy to the array
-            setSelectedStrategies([...selectedStrategies, { id: strategyId, name: strategyName }]);
-        } else {
-            // Remove the deselected strategy from the array
-            setSelectedStrategies(selectedStrategies.filter((strategy) => strategy.id !== strategyId));
-        }
-    };
-
-    const handleGroupChange = (event) => {
-        const strategyId = event.target.value;
-
-
-        const strategyName = event.target.name; // Assuming the label contains the strategy name
-
-        if (event.target.checked) {
-            // Add the selected strategy to the array
-            setSelectedGroupServices([...SelectedGroupServices, { id: strategyId, name: strategyName }]);
-        } else {
-            // Remove the deselected strategy from the array
-            setSelectedGroupServices(SelectedGroupServices.filter((strategy) => strategy.id !== strategyId));
-        }
+        var strategyId = event.target.value
+        setCheckedStrategies((prevStrategies) => {
+            return prevStrategies.map((strategy) => {
+                if (strategy.id === strategyId) {
+                    return { ...strategy, checked: !strategy.checked };
+                }
+                return strategy;
+            });
+        });
+        // setSelectedStrategyIds((prevIds) => {
+        //     if (prevIds.includes(strategyId)) {
+        //         let abc = prevIds.filter((id) => id !== strategyId);
+        //         console.log("abc" ,abc);
+        //         return abc
+        //     } else {
+        //         return [...prevIds, strategyId];
+        //     }
+        // });
     };
 
 
 
-    console.log("SelectedGroupServices", SelectedGroupServices);
+    //  For Select Group Change Change
+
+
+    useEffect(() => {
+        if (UserData.data.data !== undefined && UserData.data.data.length > 0) {
+            const userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0].group_services
+            const initialCheckedStrategies = AllGroupServices.data && AllGroupServices.data.map((strategy) => {
+                return {
+                    id: strategy._id,
+                    name: strategy.name,
+                    checked: userStrategyIds.includes(strategy._id),
+                };
+            });
+            setCheckedGroupServices(initialCheckedStrategies);
+        }
+    }, [UserData.data, AllGroupServices.data]);
+
+    const handleStrategyChange1 = (event) => {
+        const strategyId = event.target.value;
+        setCheckedGroupServices((prevStrategies) => {
+            return prevStrategies.map((strategy) => {
+                if (strategy.id === strategyId) {
+                    return { ...strategy, checked: !strategy.checked };
+                }
+                return strategy;
+            });
+        });
+
+        setSelectedGroupIds((prevIds) => {
+            if (prevIds.includes(strategyId)) {
+                return prevIds.filter((id) => id !== strategyId);
+            } else {
+                return [...prevIds, strategyId];
+            }
+        });
+    };
+
+    console.log("checkedGroupServices", checkedGroupServices);
+
+
+
     return (
         <>
             {
                 Addsubadmin.loading ? <Loader /> :
                     <>
-                        <Content Page_title="Add Sub-Admin" button_title="Back" route="/admin/allsubadmins">
+                        <Content Page_title="Edit Sub-Admin" button_title="Back" route="/admin/allsubadmins">
                             <Formikform fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Add Sub-Admin"
                                 additional_field={
                                     <>
 
                                         {formik.values.groupservice ? <>
                                             <h6>All Group Service</h6>
-                                            {AllGroupServices.data.map((strategy) => (
+                                            {checkedGroupServices.map((strategy) => (
+                                                <div className={`col-lg-2 mt-2`} key={strategy.id}>
+                                                    <div className="row">
+                                                        <div className="col-lg-12">
+                                                            <div className="form-check custom-checkbox mb-3">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="form-check-input"
+                                                                    name={strategy.id}
+                                                                    value={strategy.id}
+                                                                    onChange={(e) => handleStrategyChange1(e)}
+                                                                    checked={strategy.checked}
+                                                                />
+                                                                <label className="form-check-label" htmlFor={strategy.id}>
+                                                                    {strategy.name}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </> : ""
+                                        }
+
+
+                                        {/* {AllGroupServices.data.map((strategy) => (
                                                 <div className={`col-lg-2 mt-2`} key={strategy._id}>
                                                     <div className="row ">
                                                         <div className="col-lg-12 ">
@@ -307,42 +458,62 @@ const EditSubadmin = () => {
                                                     </div>
                                                 </div>
                                             ))}
-                                        </> : ""}
+                                        </> : ""} */}
 
-                                        {formik.values.Strategy ? <>
-                                            <h6>All Strategy</h6>
-                                            <label class="toggle mt-3">
-                                                <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
-                                                    setShowAllStratagy(e.target.checked)
-                                                }}
-                                                    defaultChecked={formik.values.all}
-                                                />
-                                                <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
-                                                <span class="toggle-label">Show Strategy</span>
-                                            </label>
-                                        </> : ""}
-
-                                        {/*  For Show All Strategy */}
-                                        {ShowAllStratagy || formik.values.all ? <>
-                                            {AllStrategy.data.map((strategy) => (
-                                                <div className={`col-lg-2 mt-2`} key={strategy._id}>
-                                                    <div className="row ">
-                                                        <div className="col-lg-12 ">
-                                                            <div class="form-check custom-checkbox mb-3">
-                                                                <input type='checkbox' className="form-check-input" name={strategy.strategy_name}
-                                                                    value={strategy._id}
+                                        {/* {formik.values.Strategy ? <>
+                                            <h6 className='fw-bold'>All Strategy</h6>
+                                            {checkedStrategies.map((strategy) => (
+                                                <div className={`col-lg-2 mt-2`} key={strategy.id}>
+                                                    <div className="row">
+                                                        <div className="col-lg-12">
+                                                            <div className="form-check custom-checkbox mb-3">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    className="form-check-input"
+                                                                    name={strategy.id}
+                                                                    value={strategy.id}
                                                                     onChange={(e) => handleStrategyChange(e)}
+                                                                    checked={strategy.checked}
                                                                 />
-                                                                <label className="form-check-label" for={strategy.strategy_name}>{strategy.strategy_name}</label>
+                                                                <label className="form-check-label" htmlFor={strategy.id}>
+                                                                    {strategy.name}
+                                                                </label>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             ))}
-                                        </> : ""}
+                                        </> : ""} */}
+
+                                        {AllStrategy.data.map((strategy) => (
+                                            <div className={`col-lg-2 mt-2`} key={strategy._id}>
+                                                <div className="row">
+                                                    <div className="col-lg-12">
+                                                        <div className="form-check custom-checkbox mb-3">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="form-check-input"
+                                                                name={strategy._id}
+                                                                value={strategy._id}
+                                                                onChange={(e) => handleStrategyChange(e)}
+                                                                checked={selectedStrategyIds.includes(strategy._id)} // Check if the strategy ID is in the selectedStrategyIds array
+                                                            />
+                                                            <label className="form-check-label" htmlFor={strategy._id}>
+                                                                {strategy.strategy_name}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
 
                                     </>
+
                                 } />
+
+
+
+                            <ToastButton />
 
                         </Content>
                     </>
@@ -355,4 +526,4 @@ const EditSubadmin = () => {
 }
 
 
-export default EditSubadmin
+export default AllSubadmin

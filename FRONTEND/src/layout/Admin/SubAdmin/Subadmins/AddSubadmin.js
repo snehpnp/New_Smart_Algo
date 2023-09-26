@@ -7,17 +7,21 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import Content from "../../../../Components/Dashboard/Content/Content"
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1"
 import * as  valid_err from "../../../../Utils/Common_Messages"
-import { Email_regex, Mobile_regex } from "../../../../Utils/Common_regex"
+import { Email_regex, Mobile_regex, Name_regex } from "../../../../Utils/Common_regex"
 
 import { useFormik } from 'formik';
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
+import { Add_Subadmin } from '../../../../ReduxStore/Slice/Admin/CreateSubadminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
 import { GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
 
+import toast, { Toaster } from 'react-hot-toast';
+
+import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 const AllSubadmin = () => {
-
+    const navigate = useNavigate()
     const dispatch = useDispatch()
 
     const user_token = JSON.parse(localStorage.getItem("user_details")).token
@@ -60,6 +64,11 @@ const AllSubadmin = () => {
         return Mobile_regex(mobile)
     }
 
+    const isValidName = (mobile) => {
+        return Name_regex(mobile)
+    }
+
+
 
 
     const formik = useFormik({
@@ -90,6 +99,10 @@ const AllSubadmin = () => {
             if (!values.FullName) {
                 errors.FullName = valid_err.FULLNAME_ERROR;
             }
+
+            else if (!isValidName(values.FullName)) {
+                errors.FullName = valid_err.INVALID_ERROR;
+            }
             if (!values.password) {
                 errors.password = valid_err.PASSWORD_ERROR;
             }
@@ -105,14 +118,19 @@ const AllSubadmin = () => {
                 errors.email = valid_err.INVALID_EMAIL_ERROR;
             }
 
-
-
+            if ((values.all || values.groupservice) && SelectedGroupServices.length === 0) {
+                errors.groupservice = "Group Select";
+            }
+            if ((values.all || values.Strategy) && selectedStrategies.length === 0) {
+                errors.groupservice = "Strategy Select  Select";
+            }
             return errors;
         },
         onSubmit: async (values) => {
+
+            console.log("values", values)
             const req = {
                 "FullName": values.FullName,
-                "UserName": "0",
                 "Email": values.email,
                 "PhoneNo": values.mobile,
                 "password": values.password,
@@ -120,29 +138,44 @@ const AllSubadmin = () => {
                 "parent_role": Role,
                 "parent_id": user_id,
                 "Subadmin_permision_data": {
-                    "all_permission": values.all ? '1' : '0',
-                    "addclient": values.addclient ? '1' : values.all ? '1' : '0',
-                    "editclient": values.editclient ? '1' : values.all ? '1' : '0',
-                    "licence": values.licence ? '1' : values.all ? '1' : '0',
-                    "group": values.group ? '1' : values.all ? '1' : '0',
-                    "groupservice": values.groupservice ? '1' : values.all ? '1' : '0',
-                    "Strategy": values.Strategy ? '1' : values.all ? '1' : '0',
-                    "select_strategy": selectedStrategies,
-                    "select_group_services": SelectedGroupServices,
+                    "client_add": values.addclient ? '1' : values.all ? '1' : '0',
+                    "client_edit": values.editclient ? '1' : values.all ? '1' : '0',
+                    "license_permision": values.licence ? '1' : values.all ? '1' : '0',
                     "go_To_Dashboard": values.gotodashboard ? '1' : values.all ? '1' : '0',
                     "trade_history_old": values.tradehistory ? '1' : values.all ? '1' : '0',
+                    "strategy": selectedStrategies,
+                    "group_services": SelectedGroupServices,
 
                 }
             }
 
-            console.log("req" ,req)
+            console.log("test", req);
+            return
+
+            await dispatch(Add_Subadmin({ req: req, token: user_token })).unwrap().then((response) => {
+
+                if (response.status === 409) {
+                    toast.error(response.data.msg);
+                }
+                else if (response.status) {
+                    toast.success(response.msg);
+
+                    setTimeout(() => {
+                        navigate("/admin/allsubadmins")
+                    }, 1000);
+                }
+                else if (!response.status) {
+                    toast.error(response.msg);
+                }
+
+            })
         }
     });
 
     const fields = [
 
         // { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: true },
-        { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, },
+        { name: 'FullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, },
         { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 6 },
         { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, },
         { name: 'password', label: 'Password', type: 'password', label_size: 12, col_size: 6, },
@@ -173,10 +206,14 @@ const AllSubadmin = () => {
         //     check_box_true: formik.values.all || formik.values.group ? true : false,
         // },
         {
-            name: 'groupservice', label: 'Group Service Permission', type: 'checkbox',
+            name: 'groupservice',
+            label: 'Group Service Permission',
+            type: 'checkbox',
             check_box_true: formik.values.all || formik.values.groupservice ? true : false,
-            label_size: 12, col_size: 3,
+            label_size: 12,
+            col_size: 3,
         },
+
         {
             name: 'Strategy', label: 'Strategy Permission', type: 'checkbox', label_size: 12, col_size: 3,
             check_box_true: formik.values.all || formik.values.Strategy ? true : false,
@@ -253,7 +290,7 @@ const AllSubadmin = () => {
 
         if (event.target.checked) {
             // Add the selected strategy to the array
-            setSelectedStrategies([...selectedStrategies, { id: strategyId, name: strategyName }]);
+            setSelectedStrategies([...selectedStrategies, strategyId]);
         } else {
             // Remove the deselected strategy from the array
             setSelectedStrategies(selectedStrategies.filter((strategy) => strategy.id !== strategyId));
@@ -268,7 +305,7 @@ const AllSubadmin = () => {
 
         if (event.target.checked) {
             // Add the selected strategy to the array
-            setSelectedGroupServices([...SelectedGroupServices, { id: strategyId, name: strategyName }]);
+            setSelectedGroupServices([...SelectedGroupServices, strategyId]);
         } else {
             // Remove the deselected strategy from the array
             setSelectedGroupServices(SelectedGroupServices.filter((strategy) => strategy.id !== strategyId));
@@ -317,6 +354,10 @@ const AllSubadmin = () => {
                                                 <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
                                                 <span class="toggle-label">Show Strategy</span>
                                             </label>
+                                            {formik.errors.groupservice &&
+                                                <div style={{ color: 'red' }}>{formik.errors.groupservice}</div>}
+
+
                                         </> : ""}
 
                                         {/*  For Show All Strategy */}
@@ -340,6 +381,8 @@ const AllSubadmin = () => {
 
                                     </>
                                 } />
+
+                            <ToastButton />
 
                         </Content>
                     </>

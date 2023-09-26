@@ -7,7 +7,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
 
 
 
-console.log("field.disable" , fieldtype)
   const location = useLocation()
 
   const [passwordVisible, setPasswordVisible] = useState({});
@@ -29,11 +28,27 @@ console.log("field.disable" , fieldtype)
       //setPreviewImage(reader.result);
       formik.setFieldValue(name, reader.result); // Set Formik field value for the specific index
     };
-
-
     reader.readAsDataURL(file);
+
   }
 
+
+  const getCurrentDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+
+    // Add leading zeros if month or day is less than 10
+    if (month < 10) {
+      month = `0${month}`;
+    }
+    if (day < 10) {
+      day = `0${day}`;
+    }
+
+    return `${year}-${month}-${day}`;
+  };
 
   return (
 
@@ -65,7 +80,7 @@ console.log("field.disable" , fieldtype)
                           Please Select {field.label}
                         </option>
                         {field.options.map((option) => (
-                          <option key={option.value} value={option.value} >
+                          <option key={option.value} value={option.value}  >
                             {option.label}
                           </option>
                         ))}
@@ -197,7 +212,7 @@ console.log("field.disable" , fieldtype)
                                 <input type={field.type} name={field.name} className="form-control" id={field.name}
                                   {...formik.getFieldProps(field.name)}
 
-                                  min={field.name === "todate" ? fromDate : field.name}
+                                  min={field.name === "todate" ? fromDate : getCurrentDate()}
                                 />
                               </div>
                               {formik.errors[field.name] &&

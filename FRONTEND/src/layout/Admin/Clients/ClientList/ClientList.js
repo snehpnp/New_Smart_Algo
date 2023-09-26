@@ -59,7 +59,7 @@ const AllClients = () => {
 
 
     }
-
+    console.log("dashboard_filter", dashboard_filter);
 
     const data = async () => {
         var req1 = {
@@ -100,6 +100,9 @@ const AllClients = () => {
                             }
                             if (dashboard_filter === "00") {
                                 return (new Date(item.EndDate) < new Date() && (item.license_type === '0' || item.license_type === 0))
+                            }
+                            if (dashboard_filter === "ADMIN" || dashboard_filter === "SUBADMIN") {
+                                return item.parent_role === dashboard_filter
                             }
                         })
                         setAllClients({
@@ -162,10 +165,14 @@ const AllClients = () => {
     const showBrokerName = (value1, licence_type) => {
         let value = parseInt(value1)
 
+        console.log("value", value1)
+        console.log("licence_type", licence_type)
+
+
         if (licence_type === '0') {
             return "2 Days Only"
         }
-        else if (value === 0 || value === '0' && licence_type === '1') {
+        else if (licence_type === '1') {
             return "Demo"
         } else {
             if (value === 1) {
@@ -245,17 +252,7 @@ const AllClients = () => {
         //     formatter: (cell, row) => fDateTimeSuffix(row.CreateDate)
 
         // },
-        {
-            dataField: 'StartDate',
-            text: 'Start Date',
-            formatter: (cell, row) => fDateTimeSuffix(row.StartDate)
-        },
-        {
-            dataField: 'EndDate',
-            text: 'End Date',
-            formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
-        },
-        // {
+
         //     dataField: 'Otp',
         //     text: 'Password'
         // },
@@ -274,10 +271,19 @@ const AllClients = () => {
             text: 'Status',
             formatter: (cell, row) => (
                 <>
-                    <label class="switch" >
+
+                    <label class="toggle mt-3">
+                        <input class="toggle-checkbox bg-primary" type="checkbox"
+                        // onChange={(e) => {
+                        //   setShowAllStratagy(e.target.checked)
+                        // }}
+                        />
+                        <div class={`toggle-switch bg-primary`}></div>
+                    </label>
+                    {/* <label class="switch" >
                         <input type="checkbox" className="bg-primary" defaultChecked={row.ActiveStatus == "1" ? true : false} onChange={(e) => activeUser(e, row)} />
                         <span class="slider round"></span>
-                    </label>
+                    </label> */}
                 </>
             ),
         },

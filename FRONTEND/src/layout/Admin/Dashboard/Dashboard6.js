@@ -21,7 +21,7 @@ const Dashboard1 = ({ data }) => {
       name: "Admin Clients",
       value: data.data && data.data.admin_client,
       icon: 'la la-users',
-      route: "/admin/allclients"
+      route: "/admin/allclients?filter=ADMIN"
     },
     {
       index: 3,
@@ -42,14 +42,14 @@ const Dashboard1 = ({ data }) => {
       name: "Active  Live Account",
       value: data.data && data.data.total_active_live,
       icon: 'la la-users',
-      route: "/admin/subadminclients"
+      route: "/admin/allclients?filter=21"
     },
     {
       index: 6,
       name: "Expired Live Account",
       value: data.data && data.data.total_expired_live,
       icon: 'la la-users',
-      route: "/admin/subadminclients"
+      route: "/admin/allclients?filter=20"
     },
 
     {
@@ -64,14 +64,14 @@ const Dashboard1 = ({ data }) => {
       name: "Active Demo Account",
       value: data.data && data.data.total_active_demo,
       icon: 'la la-users',
-      route: "/admin/subadminclients"
+      route: "/admin/allclients?filter=11"
     },
     {
       index: 9,
       name: "Expired Demo Account",
       value: data.data && data.data.total_expired_demo,
       icon: 'la la-users',
-      route: "/admin/subadminclients"
+      route: "/admin/allclients?filter=10"
     },
     {
       index: 10,
@@ -82,36 +82,36 @@ const Dashboard1 = ({ data }) => {
     },
     {
       index: 11,
-      name: "2 Days Only Account",
+      name: "2 Days Active Account",
       value: data.data && data.data.total_active_two_days,
       icon: 'la la-users',
-      route: "/admin/allclients?filter=0"
+      route: "/admin/allclients?filter=01"
     },
     {
       index: 12,
-      name: "2 Days Only Account",
+      name: "2 Days Expired Account",
       value: data.data && data.data.total_expired_two_days,
       icon: 'la la-users',
-      route: "/admin/allclients?filter=0"
+      route: "/admin/allclients?filter=00"
     },
     {
       index: 13,
       name: "Total Licence",
       value: data.data && data.data.all_licence,
       icon: 'la la-users',
-      route: "/admin/subadminclients"
+      route: "/admin/allLicence"
     }, {
       index: 14,
       name: "Remaining  Licence",
       value: data.data && data.data.remaining_licence,
       icon: 'la la-users',
-      route: "/admin/subadminclients"
+      route: "/admin/allLicence"
     }, {
       index: 15,
       name: "Used  Licence",
       value: data.data && data.data.used_licence,
       icon: 'la la-users',
-      route: "/admin/subadminclients"
+      route: "/admin/allLicence"
     },
     {
       index: 16,
@@ -139,8 +139,8 @@ const Dashboard1 = ({ data }) => {
                       <h3 className="">{item.value}</h3>
                       <h6>
                         <Link href="#" className="mb-2" to={item.route}>
-                        <i className="fa-regular fa-eye pe-1" ></i>View</Link>
-                        </h6>
+                          <i className="fa-regular fa-eye pe-1" ></i>View</Link>
+                      </h6>
                       <div className="progress mb-2 bg-primary"></div>
                     </div>
                   </div>

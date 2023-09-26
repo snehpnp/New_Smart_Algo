@@ -520,7 +520,49 @@ export async function TRANSACTION_LICENCE(data, token) {
     }
 
 }
+// ADD SUBADMIN
+export async function ADD_SUBADMIN(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}add/subadmin`, data ,{
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
 
+}
 
+// EDIT SUBADMIN
+export async function EDIT_SUBADMIN(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}edit/subadmin`, data ,{
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
 
+}
+// EDIT ONE SUBADMIN
+export async function FIND_ONE_SUBADMIN(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/subadmin`, data ,{
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
 
+}

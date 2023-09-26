@@ -9,6 +9,8 @@ import Loader from '../../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { Pencil, Trash2 } from 'lucide-react';
+import {  DELETE_USER_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { Get_All_SUBADMIN_CLIENT } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
@@ -23,6 +25,7 @@ const SubadminClient = () => {
 
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
+    const [refresh, setrefresh] = useState(false)
 
     const [getAllClients, setAllClients] = useState({
         loading: true,
@@ -37,7 +40,7 @@ const SubadminClient = () => {
         await dispatch(Get_All_SUBADMIN_CLIENT()).unwrap()
             .then((response) => {
                 if (response.status) {
-                    if (first == "all") {
+                    if (first === "all") {
                         setAllClients({
                             loading: false,
                             data: response.data
@@ -61,6 +64,7 @@ const SubadminClient = () => {
                 }
             })
     }
+
     const data1 = async () => {
         await dispatch(Get_All_SUBADMIN()).unwrap()
             .then((response) => {
@@ -80,7 +84,27 @@ const SubadminClient = () => {
     useEffect(() => {
         data()
         data1()
-    }, [first])
+    }, [first , refresh])
+
+
+
+    // DELETE USET FUNCTION TO DELETE ALL SERVICES
+    const Delete_user = async (id) => {
+        var req1 = {
+            id: id
+        }
+        if (window.confirm("Do you want to delete this User ?")) {
+            await dispatch(DELETE_USER_SERVICES(req1)).unwrap()
+                .then((response) => {
+                    console.log("response", response);
+                    if (response.status) {
+                        setrefresh(!refresh)
+                    }
+                })
+        }
+
+
+    }
 
     const columns = [
         {
@@ -124,13 +148,13 @@ const SubadminClient = () => {
             text: 'Actions',
             formatter: (cell, row) => (
                 <div>
-                    <Link to="/admin/allsubadmins/edit">
+                    {/* <Link to="/admin/allsubadmins/edit">
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </span>
-                    </Link>
+                    </Link> */}
                     <Link>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
+                    <span data-toggle="tooltip" data-placement="top" title="Delete" onClick={(e) => Delete_user(row._id)} >
                         <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
                     </span>
                     </Link>
