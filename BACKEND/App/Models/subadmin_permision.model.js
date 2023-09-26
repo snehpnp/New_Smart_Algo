@@ -4,32 +4,27 @@ const Subadmin_Permission_Schema = new mongoose.Schema({
 
     client_add: {
         type: Number,
-        enum: [0, 1],  
+        enum: [0, 1],
         default: 0
     },
     client_edit: {
         type: Number,
-        enum: [0, 1],  
+        enum: [0, 1],
         default: 0
     },
     license_permision: {
         type: Number,
-        enum: [0, 1],  
+        enum: [0, 1],
         default: 0
     },
     go_To_Dashboard: {
         type: Number,
-        enum: [0, 1],   // 0 = NOT ACTIVE GO TO DASHBOARD  , 1 = ACTIVE GO TO DASHBOARD 
+        enum: [0, 1],   // 0 = NOT ACTIVE GO TO DASHBOARD  , 1 = ACTIVE GO TO DASHBOARD
         default: 0
     },
     trade_history_old: {
         type: Number,
-        enum: [0, 1],   // 0 == OLD VIEW ON  , 1 = ONLY TODAY VIEW 
-        default: 0
-    },
-    client_activation: {
-        type: Number,
-        enum: [0, 1], // 0 = ONLY ADMIN ACTIVATE , 1= DIRECT ACTIVATE
+        enum: [0, 1],   // 0 == OLD VIEW ON  , 1 = ONLY TODAY VIEW
         default: 0
     },
     strategy: [
@@ -48,8 +43,7 @@ const Subadmin_Permission_Schema = new mongoose.Schema({
     ],
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users',
-        default: null
+        ref: 'users'
     },
 }, {
     _id: true,

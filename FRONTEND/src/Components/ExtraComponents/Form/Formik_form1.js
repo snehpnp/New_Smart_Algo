@@ -7,7 +7,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
 
 
 
-console.log("field.disable" , fieldtype)
   const location = useLocation()
 
   const [passwordVisible, setPasswordVisible] = useState({});
@@ -65,7 +64,7 @@ console.log("field.disable" , fieldtype)
                           Please Select {field.label}
                         </option>
                         {field.options.map((option) => (
-                          <option key={option.value} value={option.value} >
+                          <option key={option.value} value={option.value}  >
                             {option.label}
                           </option>
                         ))}

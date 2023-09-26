@@ -99,8 +99,6 @@ const AddClient = () => {
 
 
 
-
-
   const formik = useFormik({
     initialValues: {
       username: null,
@@ -174,6 +172,7 @@ const AddClient = () => {
       }
 
 
+
       if (!values.groupservice) {
         errors.groupservice = valid_err.GROUPSELECT_ERROR;
       }
@@ -190,6 +189,9 @@ const AddClient = () => {
       return errors;
     },
     onSubmit: async (values) => {
+
+
+
       const req = {
         "FullName": values.fullName,
         "UserName": values.username,
@@ -305,7 +307,12 @@ const AddClient = () => {
       name: 'licence',
       label: 'Licence',
       type: 'select',
-      options: [
+      options: UserData.data.data !== undefined && UserData.data.data[0].license_type === "2" ? [
+        { label: 'Live', value: '2' },
+      ] : UserData.data.data !== undefined && UserData.data.data[0].license_type === "0" ? [
+        { label: '2 Days', value: '0' },
+        { label: 'Live', value: '2' },
+      ] : [
         { label: '2 Days', value: '0' },
         { label: 'Demo', value: '1' },
         { label: 'Live', value: '2' },
@@ -643,7 +650,6 @@ const AddClient = () => {
   //  For Checked Strategy
 
   const handleStrategyChange = (event) => {
-    console.log("setSelectedStrategies", selectedStrategies);
     const strategyId = event.target.value;
     setSelectedStrategies((prevStrategies) => {
       return prevStrategies.map((strategy) => strategy.id === strategyId

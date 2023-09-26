@@ -99,7 +99,9 @@ const ServicesList = () => {
         },
         {
             dataField: 'strategy_description',
-            text: 'Strategy Description'
+            text: 'Strategy Description',
+            width: '550px',
+
         },
         // {
         //     dataField: 'strategy_category',
@@ -107,7 +109,7 @@ const ServicesList = () => {
         // },
         {
             dataField: 'strategy_segment',
-            text: 'Strategy Segment ',
+            text: 'Segment',
         },
         // {
         //     dataField: 'strategy_tester',
