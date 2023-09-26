@@ -9,6 +9,10 @@ const services = db.services;
 const serviceGroup_services_id = db.serviceGroup_services_id;
 const categorie = db.categorie;
 const groupServices_client1 = db.groupService_User;
+const client_services = db.client_services;
+const strategy_client = db.strategy_client;
+
+
 
 
 var dt = dateTime.create();
@@ -82,9 +86,9 @@ class GroupService {
       const groupdetails = req.body.groupdetails;
       const services_id = req.body.services_id;
 
-      const objectId = new ObjectId(groupdetails.id);
+      const GroupServices_Id = new ObjectId(groupdetails.id);
 
-      var groupServices = await serviceGroupName.find({ _id: { $ne: objectId }, name: groupdetails.name })
+      var groupServices = await serviceGroupName.find({ _id: { $ne: GroupServices_Id }, name: groupdetails.name })
 
       if (groupServices.length > 0) {
         return res.send({ status: false, msg: "Name is already Exist", data: groupServices })
@@ -92,7 +96,7 @@ class GroupService {
       }
 
       let result = await serviceGroupName.findByIdAndUpdate(
-        objectId,
+        GroupServices_Id,
         {
           name: groupdetails.name,
           description: groupdetails.description
@@ -100,11 +104,7 @@ class GroupService {
         { new: true }
       )
 
-
-      var GroupServicesIds = await serviceGroup_services_id.find({ Servicegroup_id: objectId })
-
-
-      console.log("GroupServicesIds", GroupServicesIds);
+      var GroupServicesIds = await serviceGroup_services_id.find({ Servicegroup_id: GroupServices_Id })
 
       // EXIST STRATEGY RO CONVERT IN STRING AND ID
       var db_exist_group_services = [];
@@ -112,14 +112,13 @@ class GroupService {
         db_exist_group_services.push(item.Service_id.toString());
       });
 
-      console.log("=>",db_exist_group_services);
 
       // NEW INSERT STRATEGY TO CONVERT IN STRING AND ID
       var insert_Group_services = [];
       services_id.forEach(function (item, index) {
         insert_Group_services.push(item.service_id);
       });
-      // console.log('insert_Group_services ', insert_Group_services);
+
 
       // ADD STRATEGY ARRAY
       var add_Group_services = [];
@@ -128,7 +127,7 @@ class GroupService {
           add_Group_services.push(item);
         }
       });
-      console.log('add add_startegy - ', add_Group_services);
+      console.log("add_Group_services", add_Group_services);
 
       // DELETE STRATEGY ARRAY
       var delete_GroupServices = [];
@@ -137,60 +136,100 @@ class GroupService {
           delete_GroupServices.push(item);
         }
       });
+
       console.log("delete_GroupServices", delete_GroupServices);
 
 
-      // serviceGroup_services_id.create({
-      //         Servicegroup_id: groupName_id,
-      //         Service_id: item.service_id,
-      //         group_qty: item.group_qty,
-      //         unique_column: groupName_id + '_' + item.service_id,
+      try {
+        // STEP FIRST TO DELTE IN STRATEGY CLIENT TABLE
+        if (delete_GroupServices.length > 0) {
 
-      //       })
+          delete_GroupServices.forEach(async (data) => {
+            var stgId = new ObjectId(data)
+            var deleteGroupServices = await serviceGroup_services_id.deleteOne({ Servicegroup_id: GroupServices_Id, Service_id: stgId })
+          })
+        }
 
-
-
-      // serviceGroupName.create({
-      //   name: groupdetails.name,
-      //   description: groupdetails.description
-      // })
-      //   .then((createdServicesGroupName) => {
-      //     const groupName_id = createdServicesGroupName._id;
-
-      //     services_id.forEach(item => {
-
-      //       serviceGroup_services_id.create({
-      //         Servicegroup_id: groupName_id,
-      //         Service_id: item.service_id,
-      //         group_qty: item.group_qty,
-      //         unique_column: groupName_id + '_' + item.service_id,
-
-      //       })
-      //         .then((createdGroupServiceId) => {
-      //           // console.log('User created createdGroupServiceId and saved:', createdGroupServiceId._id)
-
-      //         })
-      //         .catch((err) => {
-      //           console.error('Error creating double service:', err.keyValue);
-
-      //         });
+      } catch (error) {
+        console.log("Delete Group Service In -", error);
+      }
 
 
-      //     });
+      try {
+        if (add_Group_services.length > 0) {
+          add_Group_services.forEach(async (data) => {
+            var stgId = new ObjectId(data)
+            var Qty_find = services_id.filter((data1) => data1.service_id == data)
 
-      //     return res.send({ status: true, msg: "successfully Add!", data: createdServicesGroupName })
+            const User_strategy_client = new serviceGroup_services_id({
+              Servicegroup_id: GroupServices_Id,
+              Service_id: stgId,
+              unique_column: groupdetails.id + '_' + stgId,
+              group_qty: Qty_find[0].group_qty
+            })
 
-      //   })
-      //   .catch((err) => {
-      //     //console.error('Error creating and saving user:', err.keyValue.name);
-      //     return res.send({ status: false, msg: "Duplicate Value", data: err.keyValue.name })
+            await User_strategy_client.save()
+          })
+        }
+      } catch (error) {
+        console.log("Add Group Service In -", error);
+      }
 
-      //   });
+
+      // Client Services Update 
+      if (delete_GroupServices.length > 0) {
+        delete_GroupServices.forEach(async (data) => {
+          var stgId = new ObjectId(data)
+          var find_user_service = await client_services.deleteMany({ group_id: GroupServices_Id, service_id: stgId })
+        })
+      }
+
+      // ADD GROUP  SERVICES IN CLIENT SERVICES
+      if (add_Group_services.length > 0) {
+        add_Group_services.forEach(async (data) => {
+          var stgId = new ObjectId(data)
+          var Qty_find = services_id.filter((data1) => data1.service_id == data)
+
+          var find_user_service = await groupServices_client1.find({ groupService_id: GroupServices_Id })
+
+
+          if (find_user_service.length > 0) {
+            find_user_service.map(async (user) => {
+
+              var deleteStrategy = await strategy_client.find({ user_id: user.user_id });
+              // console.log("deleteStrategy",deleteStrategy);
+
+
+              const User_client_services = new client_services({
+                user_id: user.user_id,
+                group_id: GroupServices_Id,
+                service_id: stgId,
+                strategy_id: deleteStrategy[0].strategy_id,
+                uniqueUserService: user.user_id + "_" + data
+              })
+              // console.log("User_client_services", User_client_services);
+
+              User_client_services.save()
+
+            })
+          } else {
+            console.log("User Not Available in this group");
+          }
+
+
+
+
+
+        })
+      }
+
+
+      return res.send({ status: true, msg: "Group Service Edit Succefully", data: [] })
+
     }
     catch (error) {
       res.send({ msg: "Error=>", error })
     }
-
   }
 
   // SErvices Work

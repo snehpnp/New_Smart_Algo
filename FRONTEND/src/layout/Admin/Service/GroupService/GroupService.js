@@ -219,6 +219,11 @@ console.log("row" ,row);
                         loading: false,
                         data: response.data
                     });
+                }else{
+                    setAllGroupServices({
+                        loading: false,
+                        data: response.data
+                    });
                 }
             })
     }

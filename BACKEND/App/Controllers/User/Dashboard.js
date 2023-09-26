@@ -60,13 +60,8 @@ class Dashboard {
                         'service.instrument_token': 1,
                         'service.exch_seg': 1,
                         'service._id': 1,
-
-
                         'strategys.strategy_name': 1,
                         'strategys._id': 1,
-
-
-
                         _id: 1,
                         user_id: 1,
                         // group_id: 1,

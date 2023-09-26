@@ -890,14 +890,15 @@ class Employee {
                 return res.send({ status: false, msg: "Please Entrer User Id", data: [] })
 
             }
+            var userId = new ObjectId(id)
 
-            const get_user = await User_model.find({ _id: id });
+            const get_user = await User_model.find({ _id: userId });
+
             if (get_user.length == 0) {
                 return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
             }
 
 
-            var userId = new ObjectId(id)
 
             const pipeline = [
                 {
@@ -946,6 +947,9 @@ class Employee {
             ];
 
             const GetAllClientServices = await User_model.aggregate(pipeline)
+
+console.log("GetAllClientServices",GetAllClientServices);
+
             const userSTG = await strategy_client.find({ user_id: userId })
 
 
