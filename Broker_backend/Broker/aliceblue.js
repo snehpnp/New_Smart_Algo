@@ -293,7 +293,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
 
             }
 
-
+            // SET PRODUCT TYPE / CODE
             if (item.client_services.product_type == '1') {
                 if (segment == 'F' || segment == 'f' || segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
                     pCode = "NRML";
@@ -302,54 +302,62 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
 
 
 
+            // REQUEST CREATE
+            let data;
+
+
+            if (item.client_services.product_type == '3') {
+                data = {
+                    "complexty": complexty,
+                    "discqty": discqty,
+                    "exch": exch,
+                    "pCode": pCode,
+                    "prctyp": prctyp,
+                    "price": price,
+                    "qty": qty,
+                    "ret": ret,
+                    "stopLoss": stopLoss,
+                    "symbol_id": symbol_id,
+                    "target": target,
+                    "trading_symbol": trading_symbol,
+                    "trailing_stop_loss": trailing_stop_loss,
+                    "transtype": transtype,
+                    "trigPrice": trigPrice,
+                    "orderTag": "order1"
+                };
+
+
+            } else {
+                data = {
+                    "complexty": complexty,
+                    "discqty": "0",
+                    "exch": exch,
+                    "pCode": pCode,
+                    "prctyp": prctyp,
+                    "price": price,
+                    "qty": qty,
+                    "ret": ret,
+                    "symbol_id": symbol_id,
+                    "trading_symbol": trading_symbol,
+                    "transtype": transtype,
+                    "trigPrice": trigPrice,
+                    "orderTag": "order1"
+                };
+            }
+
+
+
+
+
+
+
             if (type == 'LE' || type == 'SE') {
-                let data;
-
-
-                if (item.client_services.product_type == '3') {
-                    data = {
-                        "complexty": complexty,
-                        "discqty": discqty,
-                        "exch": exch,
-                        "pCode": pCode,
-                        "prctyp": prctyp,
-                        "price": price,
-                        "qty": qty,
-                        "ret": ret,
-                        "stopLoss": stopLoss,
-                        "symbol_id": symbol_id,
-                        "target": target,
-                        "trading_symbol": trading_symbol,
-                        "trailing_stop_loss": trailing_stop_loss,
-                        "transtype": transtype,
-                        "trigPrice": trigPrice
-                    };
-                } else {
-                    data = {
-                        "complexty": complexty,
-                        "discqty": "0",
-                        "exch": exch,
-                        "pCode": pCode,
-                        "prctyp": prctyp,
-                        "price": price,
-                        "qty": qty,
-                        "ret": ret,
-                        "stopLoss": stopLoss,
-                        "symbol_id": symbol_id,
-                        "trading_symbol": trading_symbol,
-                        "trailing_stop_loss": trailing_stop_loss,
-                        "transtype": transtype,
-                        "trigPrice": trigPrice
-                    };
-                }
-
 
                 try {
 
                     if (data !== undefined) {
                         var send_rr = Buffer.from(qs.stringify(data)).toString('base64');
 
-                        console.log("data",data);
                         let config = {
                             method: 'post',
                             maxBodyLength: Infinity,
@@ -361,8 +369,6 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
                             data: JSON.stringify([data])
 
                         };
-
-                        console.log("config",config);
 
                         axios(config)
                             .then(async (response) => {
@@ -393,7 +399,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
                                             send_request: send_rr,
                                             order_id: response.data[0].NOrdNo,
                                             order_status: "Error",
-                                            reject_reason: message
+                                            reject_reason: response.data
                                         },
                                         { new: true }
                                     )
@@ -460,25 +466,26 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
                     method: 'post',
                     url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/positionAndHoldings/positionBook',
                     headers: {
-                        'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
+                        'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
                         'Content-Type': 'application/json'
                     },
                     data: JSON.stringify(data_possition)
                 };
-
                 axios(config)
                     .then(async (response) => {
+                        console.log("run=====");
+                        console.log(response.data);
 
-                        if (response.data) {
+                        if (response.data.length > 0) {
 
                             response.data.forEach(async (item1, index) => {
-                                var possition_qty = item1.Bqty - item1.Sqty;
 
                                 if (item1.Token == symbol_id) {
 
                                     if (segment == 'C' || segment == 'c') {
 
                                         var possition_qty = item1.Bqty - item1.Sqty;
+                                        // console.log("possition_qty", possition_qty);
 
                                         let result = await BrokerResponse.findByIdAndUpdate(
                                             bro_res_last_id,
@@ -488,440 +495,298 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
                                             { new: true }
                                         )
 
+                                        if ((item1.Bqty - item1.Sqty) > 0 && type == 'LX') {
+
+                                            try {
+
+                                                if (data !== undefined) {
+                                                    var send_rr = Buffer.from(qs.stringify(data)).toString('base64');
+
+                                                    let config = {
+                                                        method: 'post',
+                                                        maxBodyLength: Infinity,
+                                                        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+                                                        headers: {
+                                                            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+                                                            'Content-Type': 'application/json'
+                                                        },
+                                                        data: JSON.stringify([data])
+
+                                                    };
+
+                                                    axios(config)
+                                                        .then(async (response) => {
 
 
-                                        // if ((item1.Bqty - item1.Sqty) > 0 && signal.type == 'LX') {
+                                                            if (response.data[0].stat == "Ok") {
+
+                                                                let result = await BrokerResponse.findByIdAndUpdate(
+                                                                    bro_res_last_id,
+                                                                    {
+                                                                        symbol: input_symbol,
+                                                                        send_request: send_rr,
+                                                                        order_id: response.data[0].NOrdNo,
+                                                                        order_status: response.data[0].stat
+                                                                    },
+                                                                    { new: true }
+                                                                )
+
+                                                            } else {
+
+                                                                const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
 
 
-                                        //     if (item.client_services.product_type == '3') {
-                                        //         data11 = {
-                                        //             "complexty": complexty,
-                                        //             "discqty": discqty,
-                                        //             "exch": exch,
-                                        //             "pCode": pCode,
-                                        //             "prctyp": prctyp,
-                                        //             "price": price,
-                                        //             "qty": qty,
-                                        //             "ret": ret,
-                                        //             "stopLoss": stopLoss,
-                                        //             "symbol_id": symbol_id,
-                                        //             "target": target,
-                                        //             "trading_symbol": trading_symbol,
-                                        //             "trailing_stop_loss": trailing_stop_loss,
-                                        //             "transtype": transtype,
-                                        //             "trigPrice": trigPrice
-                                        //         };
-                                        //     } else {
-                                        //         data11 = {
-                                        //             "complexty": complexty,
-                                        //             "discqty": discqty,
-                                        //             "exch": exch,
-                                        //             "pCode": pCode,
-                                        //             "prctyp": prctyp,
-                                        //             "price": price,
-                                        //             "qty": qty,
-                                        //             "ret": ret,
-                                        //             "stopLoss": stopLoss,
-                                        //             "symbol_id": symbol_id,
-                                        //             "target": target,
-                                        //             "trading_symbol": trading_symbol,
-                                        //             "trailing_stop_loss": trailing_stop_loss,
-                                        //             "transtype": transtype,
-                                        //             "trigPrice": trigPrice
-                                        //         };
-                                        //     }
+                                                                let result = await BrokerResponse.findByIdAndUpdate(
+                                                                    bro_res_last_id,
+                                                                    {
+                                                                        symbol: input_symbol,
+                                                                        send_request: send_rr,
+                                                                        order_id: response.data[0].NOrdNo,
+                                                                        order_status: "Error",
+                                                                        reject_reason: response.data
+                                                                    },
+                                                                    { new: true }
+                                                                )
+
+                                                            }
+
+                                                        })
+                                                        .catch(async (error) => {
+
+                                                            try {
+
+                                                                if (error) {
+                                                                    if (error.response) {
+                                                                        const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+
+                                                                        let result = await BrokerResponse.findByIdAndUpdate(
+                                                                            bro_res_last_id,
+                                                                            {
+                                                                                symbol: input_symbol,
+                                                                                send_request: send_rr,
+                                                                                order_status: "Error",
+                                                                                reject_reason: message
+                                                                            },
+                                                                            { new: true }
+                                                                        )
+                                                                    } else {
+                                                                        const message = (JSON.stringify(error)).replace(/["',]/g, '');
 
 
+                                                                        let result = await BrokerResponse.findByIdAndUpdate(
+                                                                            bro_res_last_id,
+                                                                            {
+                                                                                symbol: input_symbol,
+                                                                                send_request: send_rr,
+                                                                                order_status: "Error",
+                                                                                reject_reason: message
+                                                                            },
+                                                                            { new: true }
+                                                                        )
+                                                                    }
+                                                                }
 
-                                        //     var send_rr = Buffer.from(qs.stringify(data11)).toString;
-
-                                        //     var config = {
-                                        //         method: 'post',
-                                        //         url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-
-
-                                        //         headers: {
-                                        //             'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
-                                        //             'Content-Type': 'application/json'
-                                        //         },
-                                        //         data: JSON.stringify([data11])
-                                        //     };
-
-                                        //     console.log("config ==>", config);
-
-                                        //     axios(config)
-                                        //         .then(function (response) {
-                                        //             var datetime = new Date();
-
-                                        //             var send_rr1 = Buffer.from(qs.stringify(data11)).toString('base64');
-
-                                        //             if (response.data[0].stat == "Ok") {
-
-                                        //                 var data_order = {
-                                        //                     "nestOrderNumber": response.data[0].NOrdNo,
-                                        //                 }
-                                        //                 connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr1 + '",`order_id`="' + response.data[0].NOrdNo + '" ,`order_status`="' + response1.data[0].Status + '" ,`reject_reason`="' + response1.data[0].rejectionreason + '" WHERE `id`=' + bro_res_last_id, (err4444, result) => {
-                                        //                     // console.log("err4444", err4444);
-                                        //                 });
-
+                                                            } catch (e) {
+                                                                console.log("error 1", e);
+                                                            }
 
 
 
-                                        //             } else {
+                                                        });
+                                                }
+
+                                            } catch (e) {
+                                                console.log("place order Exit Lx Catch", e);
+                                            }
 
 
 
-                                        //                 const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
+                                        } else if ((item1.Bqty - item1.Sqty) < 0 && type == 'SX') {
+                                            try {
 
-                                        //                 connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                        //                     //console.log("err", err);
-                                        //                 });
+                                                if (data !== undefined) {
+                                                    var send_rr = Buffer.from(qs.stringify(data)).toString('base64');
+
+                                                    let config = {
+                                                        method: 'post',
+                                                        maxBodyLength: Infinity,
+                                                        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+                                                        headers: {
+                                                            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+                                                            'Content-Type': 'application/json'
+                                                        },
+                                                        data: JSON.stringify([data])
+
+                                                    };
+
+                                                    axios(config)
+                                                        .then(async (response) => {
 
 
-                                        //             }
+                                                            if (response.data[0].stat == "Ok") {
+
+                                                                let result = await BrokerResponse.findByIdAndUpdate(
+                                                                    bro_res_last_id,
+                                                                    {
+                                                                        symbol: input_symbol,
+                                                                        send_request: send_rr,
+                                                                        order_id: response.data[0].NOrdNo,
+                                                                        order_status: response.data[0].stat
+                                                                    },
+                                                                    { new: true }
+                                                                )
+
+                                                            } else {
+
+                                                                const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
+
+
+                                                                let result = await BrokerResponse.findByIdAndUpdate(
+                                                                    bro_res_last_id,
+                                                                    {
+                                                                        symbol: input_symbol,
+                                                                        send_request: send_rr,
+                                                                        order_id: response.data[0].NOrdNo,
+                                                                        order_status: "Error",
+                                                                        reject_reason: response.data
+                                                                    },
+                                                                    { new: true }
+                                                                )
+
+                                                            }
+
+                                                        })
+                                                        .catch(async (error) => {
+
+                                                            try {
+
+                                                                if (error) {
+                                                                    if (error.response) {
+                                                                        const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+
+                                                                        let result = await BrokerResponse.findByIdAndUpdate(
+                                                                            bro_res_last_id,
+                                                                            {
+                                                                                symbol: input_symbol,
+                                                                                send_request: send_rr,
+                                                                                order_status: "Error",
+                                                                                reject_reason: message
+                                                                            },
+                                                                            { new: true }
+                                                                        )
+                                                                    } else {
+                                                                        const message = (JSON.stringify(error)).replace(/["',]/g, '');
+
+
+                                                                        let result = await BrokerResponse.findByIdAndUpdate(
+                                                                            bro_res_last_id,
+                                                                            {
+                                                                                symbol: input_symbol,
+                                                                                send_request: send_rr,
+                                                                                order_status: "Error",
+                                                                                reject_reason: message
+                                                                            },
+                                                                            { new: true }
+                                                                        )
+                                                                    }
+                                                                }
+
+                                                            } catch (e) {
+                                                                console.log("error 1", e);
+                                                            }
 
 
 
-                                        //         })
-                                        //         .catch(function (error) {
+                                                        });
+                                                }
 
-                                        //             try {
-                                        //                 if (error) {
-                                        //                     if (error.response) {
+                                            } catch (e) {
+                                                console.log("place order Exit SX Catch", e);
+                                            }
 
-                                        //                         const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+                                        }
 
-                                        //                         connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                        //                             //console.log("err", err);
-                                        //                         });
-                                        //                     } else {
-                                        //                         const message = (JSON.stringify(error)).replace(/["',]/g, '');
+                                    } else {
+                                        var possition_qty = item1.Netqty;
+                                        let result = await BrokerResponse.findByIdAndUpdate(
+                                            bro_res_last_id,
+                                            {
+                                                symbol: input_symbol,
+                                                send_request: send_rr,
+                                                open_possition_qty: possition_qty
+                                            },
+                                            { new: true }
+                                        )
 
-                                        //                         connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                        //                             //console.log("err", err);
-                                        //                         });
-                                        //                     }
-                                        //                 }
-                                        //             } catch (error) {
-                                        //                 console.log("Error");
-                                        //             }
 
-                                        //         });
+                                        if (item1.Netqty > 0 && type == 'LX') {
 
-                                        // }
+                                        } else if (item1.Netqty < 0 && type == 'SX') {
+
+                                        }
 
 
                                     }
-                                    // else {
-
-                                    //     var possition_qty = item1.Netqty;
-                                    //     //  console.log('possition_qty ',possition_qty);
-
-                                    //     connection.query('UPDATE `broker_response` SET `open_possition_qty`="' + possition_qty + '" WHERE `id`=' + bro_res_last_id, (err11, result_p) => {
-                                    //         // console.log("possition broker_response ", err11);
-                                    //     });
-
-
-                                    //     if (item1.Netqty > 0 && signal.type == 'LX') {
-
-                                    //         if (item.client_services.product_type == '3') {
-                                    //             data11 = {
-                                    //                 "complexty": complexty,
-                                    //                 "discqty": discqty,
-                                    //                 "exch": exch,
-                                    //                 "pCode": pCode,
-                                    //                 "prctyp": prctyp,
-                                    //                 "price": price,
-                                    //                 "qty": qty,
-                                    //                 "ret": ret,
-                                    //                 "stopLoss": stopLoss,
-                                    //                 "symbol_id": symbol_id,
-                                    //                 "target": target,
-                                    //                 "trading_symbol": trading_symbol,
-                                    //                 "trailing_stop_loss": trailing_stop_loss,
-                                    //                 "transtype": transtype,
-                                    //                 "trigPrice": trigPrice
-                                    //             };
-                                    //         } else {
-                                    //             data11 = {
-                                    //                 "complexty": complexty,
-                                    //                 "discqty": discqty,
-                                    //                 "exch": exch,
-                                    //                 "pCode": pCode,
-                                    //                 "prctyp": prctyp,
-                                    //                 "price": price,
-                                    //                 "qty": qty,
-                                    //                 "ret": ret,
-                                    //                 "stopLoss": stopLoss,
-                                    //                 "symbol_id": symbol_id,
-                                    //                 "target": target,
-                                    //                 "trading_symbol": trading_symbol,
-                                    //                 "trailing_stop_loss": trailing_stop_loss,
-                                    //                 "transtype": transtype,
-                                    //                 "trigPrice": trigPrice
-                                    //             };
-                                    //         }
-                                    //         var send_rr = Buffer.from(qs.stringify(data11)).toString;
-
-                                    //         var config = {
-                                    //             method: 'post',
-                                    //             url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-
-
-                                    //             headers: {
-                                    //                 'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
-                                    //                 'Content-Type': 'application/json'
-                                    //             },
-                                    //             data: JSON.stringify([data11])
-                                    //         };
-
-                                    //         axios(config)
-                                    //             .then(function (response) {
-                                    //                 var datetime = new Date();
-
-                                    //                 fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\n Time - ' + new Date() + ' AFTER ALice Blue Place Oredr Exit  =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Exit -' + JSON.stringify(response.data) + "\n\n", function (err) {
-                                    //                     if (err) {
-                                    //                         return console.log(err);
-                                    //                     }
-                                    //                 });
-
-                                    //                 var send_rr1 = Buffer.from(qs.stringify(data11)).toString('base64');
-
-                                    //                 if (response.data[0].stat == "Ok") {
-                                    //                     var data_order = {
-                                    //                         "nestOrderNumber": response.data[0].NOrdNo,
-                                    //                     }
-
-                                    //                     var config1 = {
-                                    //                         method: 'post',
-                                    //                         url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
-                                    //                         headers: {
-                                    //                             'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
-                                    //                             'Content-Type': 'application/json'
-                                    //                         },
-                                    //                         data: JSON.stringify(data_order)
-                                    //                     };
-                                    //                     axios(config1)
-                                    //                         .then(function (response1) {
-
-                                    //                             connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr1 + '",`order_id`="' + response.data[0].NOrdNo + '" ,`order_status`="' + response1.data[0].Status + '" ,`reject_reason`="' + response1.data[0].rejectionreason + '" WHERE `id`=' + bro_res_last_id, (err4444, result) => {
-                                    //                                 // console.log("err4444", err4444);
-                                    //                             });
-
-
-                                    //                         })
-                                    //                         .catch(function (error_broker) {
-                                    //                             // console.log('error_broker -', error_broker);
-                                    //                         });
-
-
-                                    //                 } else {
-
-
-                                    //                     const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
-
-                                    //                     connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                    //                         //console.log("err", err);
-                                    //                     });
-
-
-                                    //                 }
-
-
-
-                                    //             })
-                                    //             .catch(function (error) {
-
-                                    //                 fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\nALice Blue Place Oredr Exit Catch =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Entry catch -' + JSON.stringify(error) + "\n\n", function (err) {
-                                    //                     if (err) {
-                                    //                         return console.log(err);
-                                    //                     }
-                                    //                 });
-                                    //                 try {
-                                    //                     if (error) {
-                                    //                         if (error.response) {
-
-                                    //                             const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
-
-                                    //                             connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                    //                                 //console.log("err", err);
-                                    //                             });
-                                    //                         } else {
-                                    //                             const message = (JSON.stringify(error)).replace(/["',]/g, '');
-
-                                    //                             connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                    //                                 //console.log("err", err);
-                                    //                             });
-                                    //                         }
-                                    //                     }
-                                    //                 } catch (error) {
-                                    //                     console.log("Error");
-                                    //                 }
-
-                                    //             });
-
-
-
-
-                                    //     }
-                                    //     else if (item1.Netqty < 0 && signal.type == 'SX') {
-
-                                    //         if (item.client_services.product_type == '3') {
-                                    //             data11 = {
-                                    //                 "complexty": complexty,
-                                    //                 "discqty": discqty,
-                                    //                 "exch": exch,
-                                    //                 "pCode": pCode,
-                                    //                 "prctyp": prctyp,
-                                    //                 "price": price,
-                                    //                 "qty": qty,
-                                    //                 "ret": ret,
-                                    //                 "stopLoss": stopLoss,
-                                    //                 "symbol_id": symbol_id,
-                                    //                 "target": target,
-                                    //                 "trading_symbol": trading_symbol,
-                                    //                 "trailing_stop_loss": trailing_stop_loss,
-                                    //                 "transtype": transtype,
-                                    //                 "trigPrice": trigPrice
-                                    //             };
-                                    //         } else {
-                                    //             data11 = {
-                                    //                 "complexty": complexty,
-                                    //                 "discqty": discqty,
-                                    //                 "exch": exch,
-                                    //                 "pCode": pCode,
-                                    //                 "prctyp": prctyp,
-                                    //                 "price": price,
-                                    //                 "qty": qty,
-                                    //                 "ret": ret,
-                                    //                 "stopLoss": stopLoss,
-                                    //                 "symbol_id": symbol_id,
-                                    //                 "target": target,
-                                    //                 "trading_symbol": trading_symbol,
-                                    //                 "trailing_stop_loss": trailing_stop_loss,
-                                    //                 "transtype": transtype,
-                                    //                 "trigPrice": trigPrice
-                                    //             };
-                                    //         }
-
-                                    //         var send_rr = Buffer.from(qs.stringify(data11)).toString;
-
-                                    //         var config = {
-                                    //             method: 'post',
-                                    //             url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-
-
-                                    //             headers: {
-                                    //                 'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
-                                    //                 'Content-Type': 'application/json'
-                                    //             },
-                                    //             data: JSON.stringify([data11])
-                                    //         };
-
-
-                                    //         axios(config)
-                                    //             .then(function (response) {
-
-                                    //                 fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\n Time - ' + new Date() + ' AFTER  ALice Blue Place Oredr Exit  =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Exit -' + JSON.stringify(response) + "\n\n", function (err) {
-                                    //                     if (err) {
-                                    //                         return console.log(err);
-                                    //                     }
-                                    //                 });
-
-
-                                    //                 var datetime = new Date();
-                                    //                 var send_rr1 = Buffer.from(qs.stringify(data11)).toString;
-
-                                    //                 if (response.data[0].stat == "Ok") {
-
-                                    //                     var data_order = {
-                                    //                         "nestOrderNumber": response.data[0].NOrdNo,
-                                    //                     }
-
-                                    //                     var config1 = {
-                                    //                         method: 'post',
-                                    //                         url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
-                                    //                         headers: {
-                                    //                             'Authorization': 'Bearer ' + item.client_code + ' ' + item.access_token,
-                                    //                             'Content-Type': 'application/json'
-                                    //                         },
-                                    //                         data: JSON.stringify(data_order)
-                                    //                     };
-                                    //                     axios(config1)
-                                    //                         .then(function (response1) {
-
-                                    //                             var send_rr = Buffer.from(qs.stringify(data11)).toString('base64');
-
-                                    //                             connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_id`="' + response.data[0].NOrdNo + '" ,`order_status`="' + response1.data[0].Status + '" ,`reject_reason`="' + response1.data[0].response1.data[0].rejectionreason + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                    //                                 //console.log("err", err);
-                                    //                             });
-
-
-
-                                    //                         })
-                                    //                         .catch(function (error) {
-                                    //                             //console.log('error_broker -', error_broker);
-                                    //                         });
-
-                                    //                 } else {
-
-
-                                    //                     const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
-
-                                    //                     connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                    //                         //console.log("err", err);
-                                    //                     });
-
-                                    //                 }
-
-                                    //             })
-                                    //             .catch(function (error) {
-
-                                    //                 fs.appendFile(filePath, '_______________________________________________________________________________________________________________________  \n\nALice Blue Place Oredr Exit Catch =   client Username - ' + item.username + '  client id - ' + item.id + ' Place Oredr Exit Catch -' + JSON.stringify(error) + "\n\n", function (err) {
-                                    //                     if (err) {
-                                    //                         // return console.log(err);
-                                    //                     }
-                                    //                 });
-
-                                    //                 if (error) {
-                                    //                     if (error.response) {
-                                    //                         // console.log("error.response", error.response.data);
-                                    //                         const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
-
-                                    //                         connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                    //                             //console.log("err", err);
-                                    //                         });
-                                    //                     } else {
-                                    //                         const message = (JSON.stringify(error)).replace(/["',]/g, '');
-
-                                    //                         connection.query('UPDATE `broker_response` SET `signal_id`="' + signal.id + '",`symbol`="' + signal.input_symbol + '" ,`send_request`="' + send_rr + '",`order_status`="Error" ,`reject_reason`="' + message + '" WHERE `id`=' + bro_res_last_id, (err, result) => {
-                                    //                             //console.log("err", err);
-                                    //                         });
-                                    //                     }
-                                    //                 }
-                                    //             });
-
-
-
-                                    //     }
-
-
-                                    // }
 
 
                                 } else {
-
+                                    let result = await BrokerResponse.findByIdAndUpdate(
+                                        bro_res_last_id,
+                                        {
+                                            symbol: input_symbol,
+                                            send_request: send_rr,
+                                            order_status: "Entry Npot Exist",
+                                            reject_reason: "This Symbol position Empty "
+                                        },
+                                        { new: true }
+                                    )
                                 }
                             })
 
 
+                        } else {
+                            let result = await BrokerResponse.findByIdAndUpdate(
+                                bro_res_last_id,
+                                {
+                                    symbol: input_symbol,
+                                    send_request: send_rr,
+                                    order_status: "Position Error",
+                                    reject_reason: "Position Error "
+                                },
+                                { new: true }
+                            )
                         }
 
                     })
-                    .catch((error) => {
+                    .catch(async (error) => {
+
+                        if (error.response.data) {
+                            const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+                            let result = await BrokerResponse.findByIdAndUpdate(
+                                bro_res_last_id,
+                                {
+                                    symbol: input_symbol,
+                                    send_request: send_rr,
+                                    order_status: "Error",
+                                    reject_reason: message
+                                },
+                                { new: true }
+                            )
+                        } else {
+                            const message = (JSON.stringify(error)).replace(/["',]/g, '');
 
 
-
+                            let result = await BrokerResponse.findByIdAndUpdate(
+                                bro_res_last_id,
+                                {
+                                    symbol: input_symbol,
+                                    send_request: send_rr,
+                                    order_status: "Error",
+                                    reject_reason: message
+                                },
+                                { new: true }
+                            )
+                        }
                     });
 
 
