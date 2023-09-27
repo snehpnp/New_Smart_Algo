@@ -4,7 +4,7 @@
 const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
-const { AddEmployee,UpdateUser, GetAllClients, loginClients, tradingOnClients,GetTradingStatus ,UpdateActiveStatus,DeleteUser,GetUserInfo} = require('../../Controllers/Admin/user.controller')
+const { AddEmployee,UpdateUser, GetAllClients, loginClients, tradingOnClients,GetTradingStatus ,UpdateActiveStatus,DeleteUser,GetUserInfo ,Update_Broker_Keys} = require('../../Controllers/Admin/user.controller')
 const { EditCompany, GetCompanyInfo, EditEmailInfo } = require('../../Controllers/Admin/company.controller')
 const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy ,DeleteStragegy ,GetAllStrategyForClient} = require('../../Controllers/Admin/strategy.controller')
 
@@ -21,6 +21,7 @@ router.post('/getall/loginclients', loginClients);
 router.post('/getall/trdingon', tradingOnClients);
 router.post('/getall/tadingstatus', GetTradingStatus);
 router.post('/getall/userinfo', GetUserInfo);
+router.post('/update/brokerkeys', Update_Broker_Keys);
 
 
 

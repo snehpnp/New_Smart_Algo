@@ -145,6 +145,7 @@ const BrokerResponse = () => {
                     {DashboardData.data && DashboardData.data.map((data, index) => {
                         return <>
                             <tr>
+                                {console.log("data" ,data)}
                                 <th>{index + 1}</th>
                                 <td className={`ShowLTP_${data.service.instrument_token}`}>
                                 </td>
@@ -174,7 +175,7 @@ const BrokerResponse = () => {
                                     </select>
                                 </td>
                                 <td className="color-primary">
-                                    <select name='order_type' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)} value={data.service.order_type}>
+                                    <select name='order_type' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)} defaultValue={data.order_type}>
                                         <option value="1">MARKET</option>
                                         <option value="2">LIMIT</option>
                                         <option value="3">STOPLOSS LIMIT</option>
@@ -183,7 +184,7 @@ const BrokerResponse = () => {
                                 </td>
                                 <td className="color-primary">
 
-                                    <select name='product_type' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)} value={data.service.product_type}>
+                                    <select name='product_type' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)} defaultValue={data.product_type}>
                                         <option value="1">CNC</option>
                                         <option value="2">MIS</option>
                                         <option value="3">BO</option>

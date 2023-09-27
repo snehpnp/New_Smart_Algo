@@ -214,6 +214,8 @@ console.log("user_role" ,user_role);
                               </span>
                             </div>
                           </div>
+                          {user_role === "USER" ?
+                          <>
                           <div className="row mb-2">
                             <div className="col-sm-3 col-5">
                               <h5 className="f-w-500">
@@ -238,8 +240,7 @@ console.log("user_role" ,user_role);
                               </span>
                             </div>
                           </div>
-                          {user_role === "USER" ?
-                          <>
+
                             <div className="row mb-2">
                               <div className="col-sm-3 col-5">
                                 <h5 className="f-w-500">

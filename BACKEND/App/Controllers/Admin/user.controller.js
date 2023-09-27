@@ -1031,6 +1031,34 @@ class Employee {
     }
 
 
+    // UPDATE BROKER KEY
+    async Update_Broker_Keys(req, res) {
+        try {
+            var userdata = req.body.data
+            var _id = req.body.id;
+
+            User_model.findById(_id)
+                .then(async (value) => {
+                    if (!value) {
+                        return res.send({ status: false, msg: 'Id not match', data: [] });
+                    }
+                    const filter = { _id: _id };
+                    const updateOperation = { $set: userdata };
+                    const result = await User_model.updateOne(filter, updateOperation);
+                    if (!result) {
+                        return res.send({ status: false, msg: 'Key not update', data: [] });
+                    }
+
+                    return res.send({ status: true, msg: 'Update Keys  Successfully.', data: [] });
+
+                })
+
+
+        } catch (error) {
+            console.log("Theme error-", error);
+        }
+    }
+
 }
 
 

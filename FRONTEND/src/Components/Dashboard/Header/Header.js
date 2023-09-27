@@ -313,7 +313,7 @@ const Header = ({ ChatBox }) => {
         <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Update Broker Key" hideBtn={true}
           handleClose={() => setshowModal(false)}
         >
-          <UpdateBrokerKey />
+          <UpdateBrokerKey  closeModal={()=>setshowModal(false)} />
         </Modal >
       </div>
     </div>
