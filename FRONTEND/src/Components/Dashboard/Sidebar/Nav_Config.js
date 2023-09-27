@@ -30,11 +30,11 @@ export const admin_sidebar = [
                 "name": 'Clients',
                 "route": "/admin/allclients",
             },
-            {
-                'id': 3,
-                "name": 'SignUp - Clients',
-                "route": "/admin/signupclients",
-            },
+            // {
+            //     'id': 3,
+            //     "name": 'SignUp - Clients',
+            //     "route": "/admin/signupclients",
+            // },
         ]
     },
     {

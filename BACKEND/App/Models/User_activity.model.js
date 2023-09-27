@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const userActivitySchema = new mongoose.Schema({
-    user_Id: {
+    user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "USER"
     },

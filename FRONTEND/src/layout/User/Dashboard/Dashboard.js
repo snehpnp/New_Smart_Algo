@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import $ from "jquery";
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+import { check_Device } from "../../../Utils/find_device";
 
 import { User_Dashboard_Data, Update_Dashboard_Data } from "../../../ReduxStore/Slice/Users/DashboardSlice"
 
@@ -19,14 +20,16 @@ const BrokerResponse = () => {
     const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
     const [Strategy, setStrategy] = useState({ loading: true, data: [] });
 
-
-    console.log("DashboardData", DashboardData)
+    const [refresh, setrefresh] = useState(false)
+    // console.log("DashboardData", DashboardData)
 
     const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
     const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
 
     const [updatedData, setUpdatedData] = useState({});
 
+    const Role = JSON.parse(localStorage.getItem("user_role"))
+    console.log("Role",Role);
 
 
     const getservice = async () => {
@@ -47,9 +50,10 @@ const BrokerResponse = () => {
                 }
             })
     }
+
     useEffect(() => {
         getservice()
-    }, [])
+    }, [refresh])
 
 
 
@@ -87,14 +91,6 @@ const BrokerResponse = () => {
 
 
 
-
-
-
-
-
-
-
-
     const setgroup_qty_value_test = (e, symboll, rowdata) => {
         let name = e.target.name;
         let value = e.target.value;
@@ -109,20 +105,22 @@ const BrokerResponse = () => {
         }));
     }
 
-
     const UpdateDashboard = async (e) => {
 
-
-        await dispatch(Update_Dashboard_Data({ data: { servicesData: updatedData, user_id: user_Id }, AdminToken: AdminToken })).unwrap()
+        await dispatch(Update_Dashboard_Data({ data: { servicesData: updatedData, user_id: user_Id,data:{"Editor_role":Role,
+        "device":check_Device()} }, AdminToken: AdminToken })).unwrap()
             .then((response) => {
                 console.log("response", response)
                 if (response.status) {
                     toast.success(response.msg);
+                    // setrefresh(!refresh)
+                    window.location.reload()
 
                 } else {
                     toast.error("No Data For Update");
                 }
             })
+
 
     }
 
@@ -176,7 +174,7 @@ const BrokerResponse = () => {
                                     </select>
                                 </td>
                                 <td className="color-primary">
-                                    <select name='order_type' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
+                                    <select name='order_type' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)} value={data.service.order_type}>
                                         <option value="1">MARKET</option>
                                         <option value="2">LIMIT</option>
                                         <option value="3">STOPLOSS LIMIT</option>
@@ -185,7 +183,7 @@ const BrokerResponse = () => {
                                 </td>
                                 <td className="color-primary">
 
-                                    <select name='product_type' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)}>
+                                    <select name='product_type' class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" onChange={(e) => setgroup_qty_value_test(e, data.service.name, data.service)} value={data.service.product_type}>
                                         <option value="1">CNC</option>
                                         <option value="2">MIS</option>
                                         <option value="3">BO</option>

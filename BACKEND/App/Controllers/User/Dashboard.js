@@ -7,6 +7,11 @@ const Company_info = db.company_information;
 const user_logs = db.user_logs;
 const client_services = db.client_services;
 const strategy_client = db.strategy_client;
+const services = db.services;
+const strategy = db.strategy;
+
+const user_activity_logs = db.user_activity_logs;
+
 
 const Subadmin_Permission = db.Subadmin_Permission;
 var dateTime = require('node-datetime');
@@ -14,6 +19,7 @@ var dt = dateTime.create();
 
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
+const { logger, logger1, getIPAddress } = require('../../Helper/logger.helper')
 
 
 // OK
@@ -133,7 +139,7 @@ class Dashboard {
     // UPDATE CLIENT SERVICES
     async updateClientServices(req, res) {
         try {
-            const { user_id, servicesData } = req.body;
+            const { user_id, servicesData, data } = req.body;
 
 
 
@@ -149,27 +155,117 @@ class Dashboard {
 
             for (const key in servicesData) {
                 if (servicesData[key]) {
-                  const matchedObject = servicesData[key];
+                    const matchedObject = servicesData[key];
 
-                  if (matchedObject.strategy_id) {
-                    matchedObject.strategy_id = new ObjectId(matchedObject.strategy_id);
-                  }
+                    if (matchedObject.strategy_id) {
+                        matchedObject.strategy_id = new ObjectId(matchedObject.strategy_id);
+                    }
 
-                  console.log("Matching Object:", matchedObject);
+                    if (matchedObject.active_status) {
+                        matchedObject.active_status = matchedObject.active_status == true ? '1' : '0'
+                    }
 
-                  const filter = { user_id: UserData._id, service_id: key };
-                  const updateOperation = { $set: matchedObject };
+                    //   console.log("Matching Object:", matchedObject);
 
-                  const result = await client_services.updateOne(filter, updateOperation);
+                    const filter = { user_id: UserData._id, service_id: key };
+                    const updateOperation = { $set: matchedObject };
+
+                    console.log(filter, updateOperation);
+
+                    const result = await client_services.updateOne(filter, updateOperation);
+
+                    const Service_name = await services.find({ _id: key });
 
 
+                    console.log("matchedObject", result);
+
+
+                    if (matchedObject.quantity) {
+
+                        const user_activity = new user_activity_logs(
+                            {
+                                user_id: UserData._id,
+                                message: Service_name[0].name + " quantity Update",
+                                quantity: matchedObject.quantity,
+                                role: data.Editor_role,
+                                system_ip: getIPAddress(),
+                                device: data.device
+                            })
+                        await user_activity.save()
+                    }
+
+                    if (matchedObject.strategy_id) {
+
+                        const Strategieclient = await strategy.find({ _id: matchedObject.strategy_id });
+
+                        const user_activity = new user_activity_logs(
+                            {
+                                user_id: UserData._id,
+                                message: Service_name[0].name + " Strategy Update",
+                                Strategy: Strategieclient[0].strategy_name,
+                                role: data.Editor_role,
+                                system_ip: getIPAddress(),
+                                device: data.device
+                            })
+                        await user_activity.save()
+                    }
+
+                    if (matchedObject.active_status || matchedObject.active_status == false) {
+
+                        var msg = matchedObject.active_status == true ? "ON" : "OFF"
+                        console.log("msg", msg);
+                        const user_activity = new user_activity_logs(
+                            {
+                                user_id: UserData._id,
+                                message: Service_name[0].name + " Service " + msg,
+                                quantity: matchedObject.quantity,
+                                role: data.Editor_role,
+                                system_ip: getIPAddress(),
+                                device: data.device
+                            })
+                        await user_activity.save()
+                    }
+
+                    if (matchedObject.order_type) {
+
+
+                        var msg = matchedObject.order_type == '1' ? "MARKET" : matchedObject.order_type == '2' ? "LIMIT" : matchedObject.order_type == '3' ? "STOPLOSS LIMIT" : "STOPLOSS MARKET"
+                        console.log(msg);
+                        const user_activity = new user_activity_logs(
+                            {
+                                user_id: UserData._id,
+                                message: Service_name[0].name + "  order_type " + msg + " Update",
+                              
+                                role: data.Editor_role,
+                                system_ip: getIPAddress(),
+                                device: data.device
+                            })
+                        await user_activity.save()
+                    }
+
+                    if (matchedObject.product_type) {
+
+
+                        var msg = matchedObject.product_type == '1' ? "CNC" : matchedObject.product_type == '2' ? "MIS" : matchedObject.product_type == '3' ? "BO" : "CO"
+                        console.log(msg);
+                        const user_activity = new user_activity_logs(
+                            {
+                                user_id: UserData._id,
+                                message: Service_name[0].name + "  product_type " + msg + " Update",
+                            
+                                role: data.Editor_role,
+                                system_ip: getIPAddress(),
+                                device: data.device
+                            })
+                        await user_activity.save()
+                    }
 
                 } else {
-                  console.log("No match found for Service ID:", key);
+                    console.log("No match found for Service ID:", key);
                 }
-              }
+            }
 
-              return res.send({ status: true, msg: 'Update Successfully', data: [] });
+            return res.send({ status: true, msg: 'Update Successfully', data: [] });
 
 
         } catch (error) {

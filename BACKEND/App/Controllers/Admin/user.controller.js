@@ -14,6 +14,8 @@ const serviceGroup_services_id = db.serviceGroup_services_id;
 const count_licenses = db.count_licenses;
 const user_activity_logs = db.user_activity_logs;
 const strategy = db.strategy;
+const serviceGroupName = db.serviceGroupName;
+
 
 
 
@@ -257,15 +259,15 @@ class Employee {
 
 
                     var toEmail = Email;
-                    var subjectEmail = "User ID and Password";      
+                    var subjectEmail = "User ID and Password";
                     var email_data = {
-                        FullName:FullName,
-                        Email:Email,
-                        Password:rand_password       
+                        FullName: FullName,
+                        Email: Email,
+                        Password: rand_password
                     }
                     var EmailData = await firstOptPass(email_data)
-                 
-                   CommonEmail(toEmail, subjectEmail, EmailData)
+
+                    CommonEmail(toEmail, subjectEmail, EmailData)
 
 
 
@@ -527,15 +529,15 @@ class Employee {
 
                             var stgId = new ObjectId(data)
 
-                            const Strategieclient = await strategy.find({ _id: stgId});                     
+                            const Strategieclient = await strategy.find({ _id: stgId });
                             const user_activity = new user_activity_logs(
-                                {                     
+                                {
                                     user_id: existingUsername._id,
-                                    message:"Strategy Add",
-                                    Strategy:Strategieclient[0].Strategieclient,
-                                    role:req.Editor_role,
-                                    system_ip:getIPAddress(),
-                                    device:req.device
+                                    message: "Strategy Add",
+                                    Strategy: Strategieclient[0].strategy_name,
+                                    role: req.Editor_role,
+                                    system_ip: getIPAddress(),
+                                    device: req.device
                                 })
                             await user_activity.save()
                         })
@@ -549,15 +551,16 @@ class Employee {
                             var stgId = new ObjectId(data)
                             var deleteStrategy = await strategy_client.deleteOne({ user_id: existingUsername._id, strategy_id: stgId })
 
-                            const Strategieclient = await strategy.find({ _id: stgId});                     
+                            const Strategieclient = await strategy.find({ _id: stgId });
+                            console.log(Strategieclient);
                             const user_activity = new user_activity_logs(
-                                {                     
+                                {
                                     user_id: existingUsername._id,
-                                    message:"Strategy Delete",
-                                    Strategy:Strategieclient[0].Strategieclient,
-                                    role:req.Editor_role,
-                                    system_ip:getIPAddress(),
-                                    device:req.device
+                                    message: "Strategy Delete",
+                                    Strategy: Strategieclient[0].strategy_name,
+                                    role: req.Editor_role,
+                                    system_ip: getIPAddress(),
+                                    device: req.device
                                 })
                             await user_activity.save()
                         })
@@ -594,10 +597,24 @@ class Employee {
 
                     if (user_group_service.length == 0) {
 
-                        // DELETE GROUP SERVICES
-                        // const DELTE_GROUP = await groupService_User.deleteMany({ user_id: existingUsername._id });
+
 
                         const result = await groupService_User.updateOne({ user_id: existingUsername._id }, { $set: { groupService_id: new ObjectId(req.group_service) } });
+
+                        var GrpId = new ObjectId(req.group_service)
+
+                        const GroupclientNAme = await serviceGroupName.find({ _id: GrpId });
+
+                        const user_activity = new user_activity_logs(
+                            {
+                                user_id: existingUsername._id,
+                                message: "Update Group ",
+                                Strategy: GroupclientNAme[0].name,
+                                role: req.Editor_role.toUpperCase(),
+                                system_ip: getIPAddress(),
+                                device: req.device
+                            })
+                        await user_activity.save()
 
 
                         // IF GROUP SERVICES NOT EXIST
@@ -994,7 +1011,7 @@ class Employee {
 
             const GetAllClientServices = await User_model.aggregate(pipeline)
 
-console.log("GetAllClientServices",GetAllClientServices);
+            console.log("GetAllClientServices", GetAllClientServices);
 
             const userSTG = await strategy_client.find({ user_id: userId })
 
