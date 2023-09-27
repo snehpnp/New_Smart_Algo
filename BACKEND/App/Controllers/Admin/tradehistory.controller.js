@@ -39,11 +39,30 @@ class Tradehistory {
     }
 
 
-    async GetpreviosEntry(req,res){
+    // GET ADMIN SIGNALS
+    async GetAdminsevenTradeHistory(req, res) {
         try {
-            
+            const today = new Date(); // Aaj ki date
+            const sevenDaysAgo = new Date(today); // Aaj ki date se 7 din pehle ki date
+            sevenDaysAgo.setDate(today.getDate() - 7);
+
+            const filteredSignals = await MainSignals_modal.find({
+                createdAt: {
+                    $gte: sevenDaysAgo, // Aaj se pichle 7 din se greater than or equal
+                    $lte: today, // Aaj se less than or equal
+                },
+                exit_price: ""
+            });
+
+            if (filteredSignals.length == 0) {
+                res.send({ status: false, data: filteredSignals, msg: "Empty Data" })
+            }
+
+            res.send({ status: true, data: filteredSignals, msg: "Get All Data" })
+
+
         } catch (error) {
-            console.log("error-",error);
+            console.log("Theme error-", error);
         }
     }
 

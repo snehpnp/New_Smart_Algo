@@ -13,6 +13,7 @@ import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadmin
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
 import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import Form from 'react-bootstrap/Form';
+import { check_Device } from "../../../../Utils/find_device";
 
 
 import { Add_User } from '../../../../ReduxStore/Slice/Admin/userSlice';
@@ -225,6 +226,8 @@ const AddClient = () => {
         "demat_userid": values.demat_userid,
         "group_service": values.groupservice,
         "licence": values.licence1,
+        "Editor_role":Role,
+        "device":check_Device()
       }
 
 

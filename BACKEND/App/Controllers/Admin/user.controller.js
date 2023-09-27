@@ -12,6 +12,10 @@ const groupService_User = db.groupService_User;
 const client_services = db.client_services;
 const serviceGroup_services_id = db.serviceGroup_services_id;
 const count_licenses = db.count_licenses;
+const user_activity_logs = db.user_activity_logs;
+const strategy = db.strategy;
+
+
 
 const { CommonEmail } = require('../../Helper/CommonEmail')
 const { firstOptPass } = require('../../Helper/Email_formate/first_login')
@@ -501,7 +505,6 @@ class Employee {
                             add_startegy.push(item);
                         }
                     });
-                    // console.log('add add_startegy - ', add_startegy);
 
                     // DELETE STRATEGY ARRAY
                     var delete_startegy = [];
@@ -521,6 +524,20 @@ class Employee {
                                     user_id: existingUsername._id
                                 })
                             await User_strategy_client.save()
+
+                            var stgId = new ObjectId(data)
+
+                            const Strategieclient = await strategy.find({ _id: stgId});                     
+                            const user_activity = new user_activity_logs(
+                                {                     
+                                    user_id: existingUsername._id,
+                                    message:"Strategy Add",
+                                    Strategy:Strategieclient[0].Strategieclient,
+                                    role:req.Editor_role,
+                                    system_ip:getIPAddress(),
+                                    device:req.device
+                                })
+                            await user_activity.save()
                         })
 
                     }
@@ -531,6 +548,18 @@ class Employee {
                         delete_startegy.forEach(async (data) => {
                             var stgId = new ObjectId(data)
                             var deleteStrategy = await strategy_client.deleteOne({ user_id: existingUsername._id, strategy_id: stgId })
+
+                            const Strategieclient = await strategy.find({ _id: stgId});                     
+                            const user_activity = new user_activity_logs(
+                                {                     
+                                    user_id: existingUsername._id,
+                                    message:"Strategy Delete",
+                                    Strategy:Strategieclient[0].Strategieclient,
+                                    role:req.Editor_role,
+                                    system_ip:getIPAddress(),
+                                    device:req.device
+                                })
+                            await user_activity.save()
                         })
                     }
 

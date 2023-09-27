@@ -421,6 +421,25 @@ export async function GET_TRADEHISTORY(data, token) {
 
 }
 
+
+// GET 7 Day TRADEHISTORY
+export async function GET_SEVAN_TRADEHISTORY(data, token) {
+    console.log(data);
+    try {
+        const res = await axios.post(`${Config.base_url}get/entry/tradhistory`, data, {
+            headers: header(token),
+            data: { data },
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error =", err);
+        return err
+        // custom error
+    }
+
+}
+
 // DELTE USER
 export async function DELETE_USERAND_ALLSERVICES(data, token) {
     console.log(data);

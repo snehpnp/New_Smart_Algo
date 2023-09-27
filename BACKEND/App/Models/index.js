@@ -29,5 +29,7 @@ module.exports = {
     Subadmin_Permission: require('./subadmin_permision.model'),
     groupService_User: require('./group_services_client.model'),
     UserMakeStrategy: require('./UserMakeStrategy.model'),
+    user_activity_logs: require('./User_activity.model'),
+
 
 };

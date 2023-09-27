@@ -65,9 +65,6 @@ const Signals = () => {
 
 
 
-
-
-
     const getsignals = async () => {
         await dispatch(Get_All_Signals({ startDate: DateFilter, token: token })).unwrap()
             .then((response) => {
@@ -96,8 +93,6 @@ const Signals = () => {
         getsignals()
     }, [DateFilter])
 
-
-
     var dateArray = [];
     const dateArr = () => {
         for (let i = 0; i < 3; i++) {
@@ -117,9 +112,6 @@ const Signals = () => {
         dateArr()
     }, [])
 
-
-
-    // console.log("SignalsData", SignalsData);
 
 
     return (
@@ -173,13 +165,7 @@ const Signals = () => {
         </ >
     );
 
-    // return (
-
-
-    //     <Content Page_title="Signals">
-    //         <BasicDataTable tableData={columns} TableColumns={SignalsData} dropdown={false} />
-    //     </Content>
-    // )
+   
 }
 
 

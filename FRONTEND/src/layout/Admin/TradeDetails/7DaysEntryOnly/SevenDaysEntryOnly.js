@@ -1,138 +1,176 @@
-// import React from 'react'
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
-import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
-import Loader from '../../../../Utils/Loader'
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-
-import { Pencil, Trash2 } from 'lucide-react';
+import BasicDataTable from '../../../../Components/ExtraComponents/Datatable/BasicDataTable'
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import Loader from '../../../../Utils/Loader'
+import { fa_time, fDateTimeSuffix } from '../../../../Utils/Date_formet'
+import { Pencil, Trash2 } from 'lucide-react';
+import { Get_All_Signals } from '../../../../ReduxStore/Slice/Admin/SignalsSlice'
+import { Get_Sevan_Tradehisotry } from '../../../../ReduxStore/Slice/Admin/TradehistorySlice'
+
 import { useDispatch, useSelector } from "react-redux";
-import Modal from '../../../../Components/ExtraComponents/Modal';
+
 
 
 const SevenDaysEntry = () => {
 
     const dispatch = useDispatch()
 
-    const [first, setfirst] = useState('all')
-    const [showModal, setshowModal] = useState(false)
+    const token = JSON.parse(localStorage.getItem("user_details")).token;
 
-    const [getAllClients, setAllClients] = useState({
+
+    const [DateFilter, setDateFilter] = useState();
+    const [DateArray, setDateArray] = useState([]);
+
+
+    const columns = [
+        {
+            dataField: 'index',
+            text: 'S.No.',
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
+
+        },
+        {
+            dataField: 'createdAt',
+            text: 'Signals Time',
+            formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>
+        },
+        {
+            dataField: 'entry_type',
+            text: 'Type'
+        },
+        {
+            dataField: 'trade_symbol',
+            text: 'Symbol'
+        },
+        {
+            dataField: 'entry_price',
+            text: 'Price'
+        },
+
+        {
+            dataField: 'strategy',
+            text: 'Strategy',
+        },
+        {
+            dataField: 'strategy',
+            text: 'Squre Off',
+            formatter: (cell, row) => ( <div> <button
+                className={`btn btn-success`} > SQURE OFF</button></div>)
+
+        },
+    ];
+
+
+
+    const [SignalsData, getSignalsData] = useState({
         loading: true,
         data: []
     });
 
 
-    const data = async () => {
-        await dispatch(GET_ALL_CLIENTS()).unwrap()
+
+    const getsignals = async () => {
+        await dispatch(Get_Sevan_Tradehisotry({ startDate: DateFilter, token: token })).unwrap()
             .then((response) => {
                 if (response.status) {
-                    setAllClients({
+                    getSignalsData({
                         loading: false,
                         data: response.data
                     });
+                } else {
+                    getSignalsData({
+                        loading: false,
+                        data: response.data
+                    });
+
                 }
             })
+
+
+
+
+
+
+
     }
     useEffect(() => {
-        data()
+        getsignals()
+    }, [DateFilter])
+
+    var dateArray = [];
+    const dateArr = () => {
+        for (let i = 0; i < 3; i++) {
+            const currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() - i);
+            const day = currentDate.getDate();
+            const month = currentDate.getMonth() + 1; // Months are zero-based, so add 1
+            const year = currentDate.getFullYear();
+            const formattedDate = `${year}/${month}/${day}`;
+            dateArray.push(formattedDate);
+
+        }
+        setDateArray(dateArray)
+        setDateFilter(dateArray[0])
+    }
+    useEffect(() => {
+        dateArr()
     }, [])
 
-    const columns = [
-        {
-            dataField: "index",
-            text: "SR. No.",
-            formatter: (cell, row, rowIndex) => rowIndex + 1,
-        },
-        {
-            dataField: 'UserName',
-            text: 'User Name'
-        },
-        {
-            dataField: 'Email',
-            text: 'Email'
-        },
-        {
-            dataField: 'PhoneNo',
-            text: 'Phone Number'
-        },
-        {
-            dataField: 'Otp',
-            text: 'Password'
-        },
-        {
-            dataField: 'ActiveStatus',
-            text: 'Status',
-            formatter: (cell, row) => (
-                <>
-                    <label class="switch" >
-                        <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false}/>
-                            <span class="slider round"></span>
-                    </label>
 
-                </>
 
-                
-            ),
-        },
-        {
-            dataField: 'actions',
-            text: 'Actions',
-            formatter: (cell, row) => (
-                <div>
-                    <Link to="/admin/Edit7days">
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
-                    </Link>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-                    </span>
-
-                </div>
-            ),
-        },
-    ];
     return (
         <>
             {
-                getAllClients.loading ? <Loader /> :
+                SignalsData.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All Clients" button_title="Add Client" route="/client/add">
+                        <Content Page_title="All Services" button_status={false}>
+                            <div className='d-flex'>
+
+                                {/* <div className="col-lg-6">
+                                    <div className="mb-3 row">
+                                        <div className="col-lg-7">
+                                            <select
+                                                className="default-select wide form-control"
+                                                id="validationCustom05"
+                                                onChange={(e) => setDateFilter(e.target.value)}
+                                            >
+                                                <option disabled> Please Select Date </option>
+
+                                                {DateArray && DateArray.map((item) => {
+                                                    return <>
+                                                        <option value={item.toString()}>{item.toString()}</option>
+                                                    </>
+                                                })}
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div> */}
+                            </div>
 
                             {
-                                getAllClients.data && getAllClients.data.length === 0 ? (
-                                    'No data found') :
+                                SignalsData.data && SignalsData.data.length === 0 ? (
+                                    // 'No data found'
+                                    <FullDataTable TableColumns={columns} tableData={SignalsData.data} />
+                                )
+                                    :
                                     <>
-                                        <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
+                                        <FullDataTable TableColumns={columns} tableData={SignalsData.data} />
                                     </>
+
+
                             }
-                            {
-                                showModal ?
-                                    <>
-                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
-                                        //  handleClose={setshowModal(false)}
-                                        >
-                                        </Modal >
-                                    </>
-                                    : ""
-                            }
-                        </Theme_Content>
+                        </Content>
                     </>
             }
 
 
 
         </ >
-    )
+    );
 
+   
 }
 
-
-export default SevenDaysEntry
-
+export default SevenDaysEntry;
