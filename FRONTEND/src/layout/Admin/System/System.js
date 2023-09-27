@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import FullDataTable from '../../../Components/ExtraComponents/Datatable/FullDataTable'
@@ -6,9 +7,15 @@ import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
 import { Pencil, Trash2 } from 'lucide-react';
 
+import UpdateCompanyInfo from './UpdateCompanyInfo';
+import UpdateImages from './UpdateImages';
+import UpdateSmptDetails from './UpdateSmptDetails';
+
 import { useDispatch, useSelector } from "react-redux";
 
 const System = () => {
+
+
 
 
     const dispatch = useDispatch()
@@ -16,6 +23,15 @@ const System = () => {
         loading: true,
         data: []
     });
+
+
+    //  for Panel Details
+    const [PanelDetailsModal, setPanelDetailsModal] = useState(false)
+
+    //  for Show Clients
+    const [ShowEmailModal, setShowEmailModal] = useState(false)
+    //  for Subadmins
+    const [showImgModal, setshowImgModal] = useState(false)
 
 
     const CompanyName = async () => {
@@ -44,11 +60,11 @@ const System = () => {
             text: 'Company Name'
         },
         {
-            dataField: 'prefix',
+            dataField: 'panel_short_name',
             text: 'Company Short Name'
         },
         {
-            dataField: 'prefix',
+            dataField: 'broker_url',
             text: 'Broker Name'
         },
         {
@@ -61,7 +77,7 @@ const System = () => {
             formatter: (cell, row) => (
                 <div>
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" onClick={() => setPanelDetailsModal(true)} />
                     </span>
 
                 </div>
@@ -105,13 +121,19 @@ const System = () => {
             formatter: (cell, row) => (
                 <div>
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" onClick={() => setShowEmailModal(true)} />
                     </span>
 
                 </div>
             ),
         },
     ];
+
+    const previewimg = (cell) => {
+        let abc = cell.split("base64,")[1]
+        console.log("cell ", abc)
+        return abc
+    }
 
     const background_images = [
         {
@@ -119,21 +141,43 @@ const System = () => {
             text: 'ID',
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
-        // {
-        //     dataField: 'smtpport',
-        //     text: 'Login Background'
-        // },
+
         {
-            dataField: 'smtpport',
-            text: 'Trade History Water'
+            dataField: 'favicon',
+            text: 'Favicon',
+            formatter: (cell, row, rowIndex) => (
+                <img src={cell} alt="Favicon" className="logo-abbr w-25"  width="100" height='100'/>
+            ),
         },
+        {
+            dataField: 'logo',
+            text: 'Logo',
+            formatter: (cell, row, rowIndex) => (
+                <img src={cell} alt="Logo" className='logo-abbr w-25' width="100" height='100' />
+            ),
+        },
+        {
+            dataField: 'loginimage',
+            text: 'Login Image',
+            formatter: (cell, row, rowIndex) => (
+                <img src={cell} alt="Login Image" className='logo-abbr w-25' width="100" height='100' />
+            ),
+        },
+        {
+            dataField: 'watermark',
+            text: 'Water Mark',
+            formatter: (cell, row, rowIndex) => (
+                <img src={cell} alt="Water Mark" className='logo-abbr ' width="100" height='100' />
+            ),
+        },
+
         {
             dataField: 'Action',
             text: 'Action',
             formatter: (cell, row) => (
                 <div>
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" onClick={() => setshowImgModal(true)} />
                     </span>
 
                 </div>
@@ -141,7 +185,7 @@ const System = () => {
         },
     ];
     return <>
-        <Theme_Content Page_title="System" button_status={false}>
+        <Content Page_title="System" button_status={false}>
 
 
             <h2>Company Information</h2>
@@ -154,13 +198,17 @@ const System = () => {
 
             <h2>Background Images</h2>
             <BasicDataTable tableData={getCompanyName.data} TableColumns={background_images} dropdown={false} />
+
+
+            <UpdateCompanyInfo data={getCompanyName && getCompanyName.data} showModal={PanelDetailsModal} setshowModal={() => setPanelDetailsModal(false)} />
+            <UpdateSmptDetails data={getCompanyName && getCompanyName.data} showModal={ShowEmailModal} setshowModal={() => setShowEmailModal(false)} />
+            <UpdateImages data={getCompanyName && getCompanyName.data} showModal={showImgModal} setshowModal={() => setshowImgModal(false)} />
             <br />
 
-        </Theme_Content>
+        </Content>
     </>
 }
 
 
 export default System
-
 
