@@ -566,3 +566,38 @@ export async function FIND_ONE_SUBADMIN(data , token) {
     }
 
 }
+//  -----------------------   update system
+
+
+
+// UPDATE_SMTP_DETAILS
+export async function UPDATE_SMTP_DETAILS(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}edit/emailinfo`, data ,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+// UPDATE_COMPANY_DETAILS
+export async function UPDATE_COMPANY_DETAILS(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}edit/company`, data ,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

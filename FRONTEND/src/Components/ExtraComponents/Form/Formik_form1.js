@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 
 
-const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isSelected, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size, additional_field }) => {
+const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isSelected, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size, additional_field ,  showImagePreview  , }) => {
 
 
 
@@ -11,27 +11,23 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
 
   const [passwordVisible, setPasswordVisible] = useState({});
 
-  const [previews, setPreviews] = useState([]); // Array to store individual previews
+  const [previews, setPreviews] = useState([]);
+
+  console.log("previews" ,previews)
 
   const handleFileChange = (event, index, name) => {
     const file = event.target.files[0];
-    const newPreviews = [...previews]; // Create a copy of the previews array
+    const newPreviews = [...previews];
 
-    newPreviews[index] = URL.createObjectURL(file); // Set the preview for the specific index
-    // console.log("newPreviews[index]", newPreviews[index]);
-    setPreviews(newPreviews); // Update the previews array
-
-
+    newPreviews[index] = URL.createObjectURL(file);
+    setPreviews(newPreviews);
 
     const reader = new FileReader();
     reader.onload = () => {
-      //setPreviewImage(reader.result);
-      formik.setFieldValue(name, reader.result); // Set Formik field value for the specific index
+      formik.setFieldValue(name, reader.result);
     };
     reader.readAsDataURL(file);
-
-  }
-
+  };
 
   const getCurrentDate = () => {
     const today = new Date();
@@ -260,7 +256,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                           </> :
 
                             field.type === "file" ? <>
-
                               <div className="col-lg-6">
                                 <div className="row d-flex">
                                   <div className={`col-lg-${title === "addgroup" ? 6 : 12}`}>
@@ -272,12 +267,14 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                       <input
                                         type="file"
                                         id={field.name}
-                                        onChange={(e) => handleFileChange(e, index, field.name)} // Pass the index to the handler
+                                        onChange={(e) => handleFileChange(e, index, field.name)}
                                         className={`form-control`}
                                       />
                                     </div>
                                   </div>
-                                  <img src={field.name} alt={`Preview ${index}`} className="mb-3" />
+                                  {showImagePreview && (
+                                    <img src={previews[index]} alt={`Preview ${index}`} className="mb-3 border border-dark" />
+                                    )}
                                 </div>
                               </div>
                             </> :

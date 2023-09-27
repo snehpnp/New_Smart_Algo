@@ -61,6 +61,12 @@ export const THEMESELECT_ERROR = 'Please Select Theme For Update';
 
 // ForCompany Details
 
+export const EMPTY_COMPANY_NAME_ERR = 'Please Enter Company Name';
+export const EMPTY_SHORT_NAME_ERR = 'Please Enter Short  Name';
+export const EMPTY_BROKER_NAME_ERR = 'Please Enter Broker Name';
+export const EMPTY_VERSION_NAME_ERR = 'Please Enter Version  Name';
+
+
 
 export const COMPANY_HOST_ERROR = 'Please Enter Valid SMTP HOST';
 export const COMPANY_PORT_ERROR = 'Please Enter Valid SMTP PORT';

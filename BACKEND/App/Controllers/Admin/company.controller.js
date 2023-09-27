@@ -12,16 +12,16 @@ class Company {
             company_information.findById(_id)
                 .then(async (value) => {
                     if (!value) {
-                        return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
+                        return res.send({ status: false, msg: 'Id not match', data: [] });
                     }
                     const filter = { _id: _id };
                     const updateOperation = { $set: companydata };
                     const result = await company_information.updateOne(filter, updateOperation);
                     if (!result) {
-                        return res.status(409).json({ status: false, msg: 'Company not update', data: [] });
+                        return res.send({ status: false, msg: 'Company not update', data: [] });
                     }
 
-                    return res.status(200).json({ status: true, msg: 'Update Successfully.', data: [] });
+                    return res.send({ status: true, msg: 'Update Successfully.', data: [] });
 
                 })
 
@@ -37,10 +37,10 @@ class Company {
 
             var compantInfo = await company_information.find()
             if (!compantInfo) {
-                return res.status(409).json({ status: false, msg: 'Server issue Not find Company information.', data: [] });
+                return res.send({ status: false, msg: 'Server issue Not find Company information.', data: [] });
             }
 
-            return res.status(200).json({ status: true, msg: 'Done', data: compantInfo });
+            return res.send({ status: true, msg: 'Done', data: compantInfo });
 
 
         } catch (error) {
@@ -57,16 +57,16 @@ class Company {
             company_information.findById(_id)
                 .then(async (value) => {
                     if (!value) {
-                        return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
+                        return res.send({ status: false, msg: 'Id not match', data: [] });
                     }
                     const filter = { _id: _id };
                     const updateOperation = { $set: companydata };
                     const result = await company_information.updateOne(filter, updateOperation);
                     if (!result) {
-                        return res.status(409).json({ status: false, msg: 'Company not update', data: [] });
+                        return res.send({ status: false, msg: 'Company not update', data: [] });
                     }
 
-                    return res.status(200).json({ status: true, msg: 'Update Successfully.', data: [] });
+                    return res.send({ status: true, msg: 'Update Successfully.', data: [] });
 
                 })
 

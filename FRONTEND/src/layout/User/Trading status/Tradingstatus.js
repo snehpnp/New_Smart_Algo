@@ -17,6 +17,9 @@ import { useDispatch, useSelector } from "react-redux";
 // import Modal from '../../../../Components/ExtraComponents/Modal';
 import { fDate, fDateTimeSuffix } from '../../../Utils/Date_formet';
 
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
+
 
 
 const TradingStatus = () => {
@@ -134,37 +137,57 @@ const TradingStatus = () => {
                     <>
                         <Theme_Content Page_title="Trading Status" button_status={false}>
 
-                            <div className="col-lg-6">
-                                <div className="mb-3 row">
-                                    <div className="col-lg-7">
-                                        <select
-                                            className="default-select wide form-control"
-                                            id="validationCustom05"
-                                            onChange={(e) => setfirst(e.target.value)}
-                                        >
+                            <Tabs
+                                defaultActiveKey="profile"
+                                id="uncontrolled-tab-example"
+                                className="mb-3"
+                            >
+                                <Tab eventKey="home" title="Panel Trading Status">
+                                    <div className="col-lg-6">
+                                        <div className="mb-3 row">
+                                            <div className="col-lg-7">
+                                                <select
+                                                    className="default-select wide form-control"
+                                                    id="validationCustom05"
+                                                    onChange={(e) => setfirst(e.target.value)}
+                                                >
 
-                                            {/* <option selected value="all">
+                                                    {/* <option selected value="all">
                                                 All
                                             </option> */}
-                                            {DateArray && DateArray.map((item) => {
-                                                return <>
-                                                    <option value={item}>{item}</option>
-                                                </>
-                                            })}
+                                                    {DateArray && DateArray.map((item) => {
+                                                        return <>
+                                                            <option value={item}>{item}</option>
+                                                        </>
+                                                    })}
 
-                                        </select>
+                                                </select>
 
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            {
-                                getAllUserTrading_status.data && getAllUserTrading_status.data.length === 0 ? (
-                                    <FullDataTable TableColumns={columns} tableData={getAllUserTrading_status.data} />
-                                ) :
-                                    <>
-                                        <FullDataTable TableColumns={columns} tableData={getAllUserTrading_status.data} />
-                                    </>
-                            }
+                                    {
+                                        getAllUserTrading_status.data && getAllUserTrading_status.data.length === 0 ? (
+                                            <FullDataTable TableColumns={columns} tableData={getAllUserTrading_status.data} />
+                                        ) :
+                                            <>
+                                                <FullDataTable TableColumns={columns} tableData={getAllUserTrading_status.data} />
+                                            </>
+                                    }
+                                </Tab>
+                                <Tab eventKey="profile" title="Update Status">
+                                {
+                                        getAllUserTrading_status.data && getAllUserTrading_status.data.length === 0 ? (
+                                            <FullDataTable TableColumns={columns} tableData={getAllUserTrading_status.data} />
+                                        ) :
+                                            <>
+                                                <FullDataTable TableColumns={columns} tableData={getAllUserTrading_status.data} />
+                                            </>
+                                    }
+                                </Tab>
+
+                            </Tabs>
+
                         </Theme_Content>
                     </>
             }

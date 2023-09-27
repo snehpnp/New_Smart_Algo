@@ -6,6 +6,11 @@ const CompanySchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    panel_short_name: {
+        type: String,
+        required: true,
+        unique: true
+    },
     panel_key: {
         type: String,
         required: true
@@ -16,6 +21,10 @@ const CompanySchema = new mongoose.Schema({
         unique: true
     },
     domain_url: {
+        type: String,
+        required: true
+    },
+    version: {
         type: String,
         required: true
     },
@@ -49,6 +58,18 @@ const CompanySchema = new mongoose.Schema({
         default: ""
     },
     logo: {
+        type: String,
+        default: ""
+    },
+    favicon: {
+        type: String,
+        default: ""
+    },
+    watermark: {
+        type: String,
+        default: ""
+    },
+    loginimage: {
         type: String,
         default: ""
     },
