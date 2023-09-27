@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { fa_time, fDateTimeSuffix } from '../../../Utils/Date_formet'
-import { GanttChartSquare } from 'lucide-react';
+import { GanttChartSquare ,Eye } from 'lucide-react';
 
 
 
@@ -81,18 +81,32 @@ const BrokerResponse = () => {
 
     },
     {
+      dataField: 'open_possition_qty',
+      text: 'Open Pisition'
+    },
+    {
       dataField: 'reject_reason',
       text: 'Reason'
     },
     {
       dataField: 'Details View',
+      text: 'View',
+      formatter: (cell, row, rowIndex) =>
+
+        <>
+          <Eye onClick={(e) => GetAllServicesName(row)
+          } size={20} color="#198754" strokeWidth={2} className="mx-1" />
+        </>
+    },
+    {
+      dataField: 'order_view_status',
       text: 'Message',
       formatter: (cell, row, rowIndex) =>
-        row.order_view_status === "0" || row.order_view_status === 0 ?
+        cell == "0" || cell == 0 ?
           <>
             <GanttChartSquare onClick={(e) => GetAllServicesName(row)
             } size={20} color="#198754" strokeWidth={2} className="mx-1" />
-          </> : ""
+          </> : "-"
     },
 
   ];
@@ -136,7 +150,7 @@ const BrokerResponse = () => {
       {
         DashboardData.data && DashboardData.data.length === 0 ? (
           <FullDataTable TableColumns={columns} tableData={DashboardData.data} />
-          ) :
+        ) :
           <>
             <FullDataTable TableColumns={columns} tableData={DashboardData.data} />
           </>

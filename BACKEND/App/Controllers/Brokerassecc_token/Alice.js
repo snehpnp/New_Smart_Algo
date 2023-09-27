@@ -121,12 +121,12 @@ class AliceBlue {
                 return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
 
             }
+
             const objectId = new ObjectId(user_id);
 
             var FindUserAccessToken = await User.find({ _id: objectId })
             var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId, order_id: OrderId })
 
-            console.log(FindUserBrokerResponse[0]._id);
 
             if (FindUserBrokerResponse[0].order_view_status == "0") {
 
@@ -139,12 +139,12 @@ class AliceBlue {
                     maxBodyLength: Infinity,
                     url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
                     headers: {
-                        'Authorization': "Bearer " + FindUserAccessToken[0].client_code + " " + FindUserAccessToken[0].access_token,
+                        'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
                         'Content-Type': 'application/json',
                     },
                     data: data
                 };
-
+                console.log("config", config);
                 axios(config)
                     .then(async (response) => {
                         console.log(response.data[0]);
@@ -172,8 +172,37 @@ class AliceBlue {
                             console.log("NO DATA FOUND");
                         }
                     })
-                    .catch((error) => {
-                        console.log(error);
+                    .catch(async (error) => {
+
+                        if (error.response.data) {
+                            const message = (JSON.stringify(error.response.data));
+
+                            let result = await BrokerResponse.findByIdAndUpdate(
+                                { _id: FindUserBrokerResponse[0]._id },
+                                {
+                                    order_view_date: message,
+                                    order_view_status: '1',
+                                    order_view_response: "Error"
+                                },
+                                { new: true }
+                            )
+                            return res.send({ status: false, msg: 'Error', data: message });
+
+                        } else {
+                            const message = (JSON.stringify(error));
+
+                            let result = await BrokerResponse.findByIdAndUpdate(
+                                { _id: FindUserBrokerResponse[0]._id },
+                                {
+                                    order_view_date: message,
+                                    order_view_status: '1',
+                                    order_view_response: "Error"
+                                },
+                                { new: true }
+                            )
+                            return res.send({ status: false, msg: 'Error', data: message });
+
+                        }
                     });
             } else {
                 return res.send({ status: false, msg: 'Already Update', data: FindUserBrokerResponse });

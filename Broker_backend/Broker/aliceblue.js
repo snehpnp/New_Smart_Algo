@@ -479,7 +479,10 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
                         if (response.data.length > 0) {
 
                             response.data.forEach(async (item1, index) => {
+                                console.log("item1.Token",item1.Token);
+                                console.log("symbol_id",symbol_id);
 
+                                
                                 if (item1.Token == symbol_id) {
 
                                     if (segment == 'C' || segment == 'c') {
@@ -708,6 +711,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
 
                                     } else {
                                         var possition_qty = item1.Netqty;
+                                        console.log("possition_qty",possition_qty);
                                         let result = await BrokerResponse.findByIdAndUpdate(
                                             bro_res_last_id,
                                             {
