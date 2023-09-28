@@ -113,7 +113,7 @@ const Admin = () => {
                 <Route exact path="/allservices" element={<Service />} />
                 <Route exact path="/groupservices" element={<GroupService />} />
                 <Route exact path="/groupservices/add" element={<AddGroup />} />
-                <Route exact path="/groupservices/edit" element={<EditGroup />} />
+                <Route exact path="/groupservices/edit/:id" element={<EditGroup />} />
                 <Route exact path="/reports" element={<Report />} />
                 <Route exact path="/apicreateinfo" element={<ApiCreateInfo />} />
                 <Route exact path="/apicreateinfo/add" element={<AddApiCreateInfo />} />

@@ -32,6 +32,8 @@ import SystemSlice from "../Slice/Admin/SystemSlice";
 import DashboardSlice from "../Slice/Users/DashboardSlice";
 import StrategyDescSlice from "../Slice/Users/StrategySlice";
 import ClientHelpSlice from "../Slice/Users/ClientHelpSlice";
+import TradingStatusSlice from "../Slice/Users/TradingStatusSlice";
+import BrokerUpdateSlice from "../Slice/Users/BrokerUpdateSlice";
 
 
 
@@ -64,6 +66,8 @@ const store = configureStore({
     AdminHelpSlice: AdminHelpSlice.reducer,
     LicenceSlice: LicenceSlice.reducer,
     SystemSlice: SystemSlice.reducer,
+    TradingStatusSlice: TradingStatusSlice.reducer,
+    BrokerUpdateSlice: BrokerUpdateSlice.reducer,
   },
 });
 

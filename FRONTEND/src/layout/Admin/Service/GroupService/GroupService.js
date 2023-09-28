@@ -67,8 +67,6 @@ const ServicesList = () => {
             formatter: (cell, row) => (
                 <div>
                     <GanttChartSquare onClick={(e) => GetAllServicesName(row)} size={20} color="#198754" strokeWidth={2} className="mx-1" />
-
-
                 </div>
             ),
         },
@@ -93,12 +91,12 @@ const ServicesList = () => {
             text: 'Actions',
             formatter: (cell, row) => (
                 <div>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
 
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 onClick={(e) => DeleteGroup(row)} size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                    <Link to={`/admin/groupservices/edit/${row._id}`} data-toggle="tooltip" data-placement="top" title="Delete">
+                        < Pencil size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                    </Link>
+                    <span data-toggle="tooltip" data-placement="top" title="Edit">
+                        <Trash2 size={20} color="#198754" strokeWidth={2} className="mx-1" onClick={(e) => DeleteGroup(row)} />
                     </span>
 
                 </div>
@@ -115,7 +113,7 @@ const ServicesList = () => {
 
     // GET ALL GROUP SERVICES NAME
     const GetAllServicesName = async (row) => {
-console.log("row" ,row);
+        console.log("row", row);
 
         await dispatch(GET_ALL_SERVICES_NAMES({
             data: row
@@ -219,7 +217,7 @@ console.log("row" ,row);
                         loading: false,
                         data: response.data
                     });
-                }else{
+                } else {
                     setAllGroupServices({
                         loading: false,
                         data: response.data

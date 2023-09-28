@@ -4,6 +4,8 @@ const db = require('../../Models');
 const User_model = db.user;
 const Role_model = db.role;
 const Company_info = db.company_information;
+const user_activity_logs = db.user_activity_logs;
+
 const user_logs = db.user_logs;
 
 const Subadmin_Permission = db.Subadmin_Permission;
@@ -13,7 +15,7 @@ var dt = dateTime.create();
 // OK
 // Product CLASS
 class User_trading_status {
-   
+
     // ONE USER GET ALL TRADING STATUS
     async getusertradingStatus(req, res) {
         try {
@@ -41,6 +43,33 @@ class User_trading_status {
         }
     }
 
+
+    // ONE USER GET ALL TRADING STATUS
+    async getuserUpdateStatus(req, res) {
+        try {
+            const { user_Id } = req.body;
+            // GET LOGIN CLIENTS
+            const getAllTrading_status = await user_activity_logs.find({
+                user_id: user_Id
+            });
+            const totalCount = getAllTrading_status.length;
+
+            // IF DATA NOT EXIST
+            if (getAllTrading_status.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All activicty Status",
+                data: getAllTrading_status,
+                totalCount: totalCount,
+            })
+        } catch (error) {
+            console.log("get user trading Status error -", error);
+        }
+    }
 
 }
 

@@ -176,7 +176,7 @@ class GroupService {
       }
 
 
-      // Client Services Update 
+      // Client Services Update
       if (delete_GroupServices.length > 0) {
         delete_GroupServices.forEach(async (data) => {
           var stgId = new ObjectId(data)
@@ -504,8 +504,7 @@ class GroupService {
           {
             $project: {
               'ServiceResult.name': 1,
-              group_qty: 1,
-
+              group_qty: 1
             },
           },
           {
@@ -515,8 +514,8 @@ class GroupService {
         ];
 
         const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);
-        if(Service_name_get.length == 0){
-        return res.send({ status: false, msg: 'No Data Found ', data: Service_name_get });
+        if (Service_name_get.length == 0) {
+          return res.send({ status: false, msg: 'No Data Found ', data: Service_name_get });
 
         }
         return res.send({ status: true, msg: 'Get All successfully ', data: Service_name_get });

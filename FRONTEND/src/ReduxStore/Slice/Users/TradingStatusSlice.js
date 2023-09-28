@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { user_getall_tradingstatus} from "../../../Service/user.service";
+import { user_getall_tradingstatus, USER_ACTIVICTY_LOGS } from "../../../Service/user.service";
 
 
 
@@ -14,35 +14,45 @@ export const Get_All_TRADINGSTATUS_USER = createAsyncThunk("getall/user/trading_
     }
 });
 
+export const user_activity_logs = createAsyncThunk("getall/user/actvictylogs", async (data) => {
+    try {
+        const res = await USER_ACTIVICTY_LOGS(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
 
 
 
-const UserSlice = createSlice({
-    name: "SubadminsSlice",
+
+const TradingStatusSlice = createSlice({
+    name: "TradingStatusSlice",
     initialState: {
         isLoading: false,
         isError: false,
         status: false,
-        alltradingstatus: [],    
+        alltradingstatus: [],
+        userlogs: [],
     },
 
     recuders: {},
     extraReducers: {
 
         [Get_All_TRADINGSTATUS_USER.pending]: (state, { payload }) => {
-            // state.isLoading = false;
             console.log("pending Get_All_TRADINGSTATUS_USER ");
-            // return { ...state, allService: [], isLoading: true };
         },
         [Get_All_TRADINGSTATUS_USER.fulfilled]: (state, { payload }) => {
-            // state.isLoading = false;
-
             return { ...state, alltradingstatus: payload, isLoading: false };
         },
-   
-    
+        [user_activity_logs.fulfilled]: (state, { payload }) => {
+            return { ...state, userlogs: payload, isLoading: false };
+        },
+
+
     },
 });
 
 
-export default UserSlice;
+export default TradingStatusSlice;

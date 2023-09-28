@@ -4,8 +4,8 @@
 const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
-const { getusertradingStatus } = require('../../Controllers/User/Trading_status')
-const { getClientServices ,updateClientServices} = require('../../Controllers/User/Dashboard')
+const { getusertradingStatus, getuserUpdateStatus } = require('../../Controllers/User/Trading_status')
+const { getClientServices, updateClientServices } = require('../../Controllers/User/Dashboard')
 const { GetUserBrokerResponse } = require('../../Controllers/User/BrokerReponse')
 const { GetUserTradeSignals } = require('../../Controllers/User/Signals')
 const { GetUserTradeHistory } = require('../../Controllers/User/TradeHistory')
@@ -23,6 +23,7 @@ router.post('/update/clientServices', updateClientServices);
 
 // TRADING STATUS
 router.post('/getall/user/trading_status', getusertradingStatus);
+router.post('/getall/user/update_somthing_status', getuserUpdateStatus);
 
 
 // BROKER RESPONSE

@@ -149,6 +149,42 @@ export async function UPDATE_DAHBOARD_DATA(data, token) {
 
 
 
+// USER ACTIVICTY LOGS
+
+export async function USER_ACTIVICTY_LOGS(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/user/update_somthing_status`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
+
+// UPDATE BROKER KEYS
+
+export async function UPDATE_BROKER_KEYS(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/brokerkeys`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
+
+
+
+
+
 
 
 

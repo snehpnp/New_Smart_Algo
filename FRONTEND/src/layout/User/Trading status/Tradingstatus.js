@@ -3,15 +3,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-// import Content from "../../../Components/Dashboard/Content/Content"
+import Content from "../../../Components/Dashboard/Content/Content"
 import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
 import Loader from '../../../Utils/Loader'
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-
-import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 // import { GET_ALL_CLIENTS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
-import { Get_All_TRADINGSTATUS_USER } from '../../../ReduxStore/Slice/User/userSlice'
+import { Get_All_TRADINGSTATUS_USER, user_activity_logs } from '../../../ReduxStore/Slice/Users/TradingStatusSlice'
 
 import { useDispatch, useSelector } from "react-redux";
 // import Modal from '../../../../Components/ExtraComponents/Modal';
@@ -39,6 +36,12 @@ const TradingStatus = () => {
         loading: true,
         data: []
     });
+    const [userLogs, setUserLogs] = useState({
+        loading: true,
+        data: []
+    });
+
+
 
     let req = {
         user_Id: user_Id,
@@ -64,10 +67,34 @@ const TradingStatus = () => {
                     });
                 }
             })
+        await dispatch(user_activity_logs(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setUserLogs({
+                        loading: false,
+                        data: response.data
+                    });
+                }
+            })
     }
     useEffect(() => {
         data1()
     }, [first])
+    const data2 = async () => {
+
+        await dispatch(user_activity_logs(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setUserLogs({
+                        loading: false,
+                        data: response.data
+                    });
+                }
+            })
+    }
+    useEffect(() => {
+        data2()
+    }, [])
 
     const columns = [
         {
@@ -110,6 +137,66 @@ const TradingStatus = () => {
 
     ];
 
+    const columns1 = [
+        {
+            dataField: "index",
+            text: "SR. No.",
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
+        },
+        {
+            dataField: 'createdAt',
+            text: 'Time',
+            formatter: (cell, row, rowIndex) => fDateTimeSuffix(cell),
+
+        },
+        {
+            dataField: 'Strategy',
+            text: 'Strategy',
+            formatter: (cell, row) => (
+                <>
+                    <div>
+                        {cell ? cell : "-"}
+                    </div>
+
+                </>
+
+
+            ),
+        },
+        {
+            dataField: 'message',
+            text: 'Update',
+            formatter: (cell, row) => (
+                <>
+                    <div>
+                        {cell ? cell : "-"}
+                    </div>
+                </>
+            ),
+        },
+        {
+            dataField: 'quantity',
+            text: 'Qty',
+            formatter: (cell, row) => (
+                <>
+                    <div>
+                        {cell ? cell : "-"}
+                    </div>
+                </>
+            ),
+        },
+
+        {
+            dataField: 'system_ip',
+            text: 'IP'
+        },
+        {
+            dataField: 'device',
+            text: 'Device'
+        },
+
+    ];
+
 
     var dateArray = [];
     const dateArr = () => {
@@ -135,10 +222,10 @@ const TradingStatus = () => {
             {
                 getAllUserTrading_status.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="Trading Status" button_status={false}>
+                        <Content Page_title="Trading Status" button_status={false}>
 
                             <Tabs
-                                defaultActiveKey="profile"
+                                defaultActiveKey="home"
                                 id="uncontrolled-tab-example"
                                 className="mb-3"
                             >
@@ -176,19 +263,19 @@ const TradingStatus = () => {
                                     }
                                 </Tab>
                                 <Tab eventKey="profile" title="Update Status">
-                                {
+                                    {
                                         getAllUserTrading_status.data && getAllUserTrading_status.data.length === 0 ? (
-                                            <FullDataTable TableColumns={columns} tableData={getAllUserTrading_status.data} />
+                                            <FullDataTable TableColumns={columns1} tableData={userLogs.data} />
                                         ) :
                                             <>
-                                                <FullDataTable TableColumns={columns} tableData={getAllUserTrading_status.data} />
+                                                <FullDataTable TableColumns={columns1} tableData={userLogs.data} />
                                             </>
-                                    }
+                                    }s
                                 </Tab>
 
                             </Tabs>
 
-                        </Theme_Content>
+                        </Content>
                     </>
             }
 
