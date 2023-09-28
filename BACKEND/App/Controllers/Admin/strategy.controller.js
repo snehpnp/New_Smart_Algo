@@ -165,7 +165,6 @@ class strategy {
         }
     }
 
-
     // GET ALL STRATEGYS FOR CLIENT
     async GetAllStrategyForClient(req, res) {
         try {
