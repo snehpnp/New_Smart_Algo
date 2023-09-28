@@ -238,7 +238,7 @@ const Header = ({ ChatBox }) => {
 
 
   return (
-    <div>
+    <div className='header-container'>
       <Logo />
       <div className="header">
         <div className="header-content">

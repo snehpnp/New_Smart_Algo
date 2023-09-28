@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_ALL_STRATEGY, GET_STRATEGY_BY_ID, ADD_STRATEGY, EDIT_STRATEGY_BY_ID, REMOVE_STRATEGY_BY_ID } from "../../../Service/admin.service";
+import { GET_ALL_STRATEGY, GET_STRATEGY_BY_ID, GET_CLIENTS_BY_STRATEG_ID, ADD_STRATEGY, EDIT_STRATEGY_BY_ID, REMOVE_STRATEGY_BY_ID } from "../../../Service/admin.service";
 
 
 
@@ -22,6 +22,18 @@ export const Get_Strategy_BY_Id = createAsyncThunk("admin/strategy/get", async (
     const { _id, token } = apireq
     try {
         const res = await GET_STRATEGY_BY_ID({ _id: _id }, token);
+
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+export const Get_client_By_strategy_Id = createAsyncThunk("admin/client/get", async (apireq) => {
+
+    const { _id, token } = apireq
+    try {
+        const res = await GET_CLIENTS_BY_STRATEG_ID({ _id: _id }, token);
 
         return await res;
     } catch (err) {
@@ -81,6 +93,7 @@ const StrategyServiceSlice = createSlice({
         removestrategy: [],
         addstrategy: [],
         editstrategy: [],
+        clients: [],
     },
     reducers: {},
     // extraReducers: (builder) => {
@@ -127,6 +140,9 @@ const StrategyServiceSlice = createSlice({
         },
         [Edit_Strategy.fulfilled]: (state, { payload }) => {
             return { ...state, editstrategy: payload, isLoading: false };
+        },
+        [Get_client_By_strategy_Id.fulfilled]: (state, { payload }) => {
+            return { ...state, clients: payload, isLoading: false };
         },
     }
 }
