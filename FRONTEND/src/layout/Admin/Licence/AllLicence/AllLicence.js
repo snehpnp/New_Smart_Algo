@@ -58,20 +58,20 @@ const AllLicence = () => {
         {
             dataField: 'user',
             text: 'Full Name',
-            formatter: (cell, row, rowIndex) => <>{row.user[0].FullName}</>,
+            formatter: (cell, row, rowIndex) => <>{row.user.FullName}</>,
 
         },
     
         {
             dataField: '',
             text: 'license',
-            formatter: (cell, row, rowIndex) => <>{row.count_license.license}</>,
+            formatter: (cell, row, rowIndex) => <>{row.license}</>,
 
         },
         {
             dataField: '',
             text: 'Create At',
-            formatter: (cell, row, rowIndex) => <>{fDateTimeSuffix(row.count_license.createdAt)}</>,
+            formatter: (cell, row, rowIndex) => <>{fDateTimeSuffix(row.createdAt)}</>,
 
         },
     ];

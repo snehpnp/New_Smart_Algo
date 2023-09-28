@@ -274,9 +274,10 @@ const AllClients = () => {
 
                     <label class="toggle mt-3">
                         <input class="toggle-checkbox bg-primary" type="checkbox"
-                        // onChange={(e) => {
-                        //   setShowAllStratagy(e.target.checked)
-                        // }}
+                        defaultChecked={row.ActiveStatus == "1" ? true : false} 
+                        onChange={(e) => {
+                            activeUser(e, row)
+                        }}
                         />
                         <div class={`toggle-switch bg-primary`}></div>
                     </label>

@@ -11,7 +11,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
-import { GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { GO_TO_DASHBOARDS ,UPDATE_USER_ACTIVE_STATUS} from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
@@ -28,6 +28,23 @@ const AllSubadmin = () => {
         loading: true,
         data: []
     });
+
+ // ACTIVE USER TO API
+ const activeUser = async (e, data) => {
+    let req = {
+        id: data._id,
+        user_active_status: e.target.checked === true ? "1" : "0"
+
+    };
+    await dispatch(UPDATE_USER_ACTIVE_STATUS(req)).unwrap()
+        .then((response) => {
+            if (response.status) {
+
+            }
+        })
+}
+
+
 
   //  console.log("Addsubadmin", Addsubadmin)
     const data = async () => {
@@ -76,15 +93,14 @@ const AllSubadmin = () => {
             text: 'Status',
             formatter: (cell, row) => (
                 <>
-                    <label class="toggle ">
+                     <label class="toggle mt-3">
                         <input class="toggle-checkbox bg-primary" type="checkbox"
-                            onChange={(e) => {
-                                //   setShowAllStratagy(e.target.checked)
-                            }}
+                        defaultChecked={row.ActiveStatus == "1" ? true : false} 
+                        onChange={(e) => {
+                            activeUser(e, row)
+                        }}
                         />
-                        {/* // ${ShowAllStratagy ? 'bg-primary' : "bg-secondary" } */}
-                        <div class={`toggle-switch
-                `}></div>
+                        <div class={`toggle-switch bg-primary`}></div>
                     </label>
 
                 </>

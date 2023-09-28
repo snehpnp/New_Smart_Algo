@@ -28,6 +28,7 @@ class License {
                     $lte: endDateThreshold,
                 },
             });
+            
             if (get_user.length == 0) {
 
                 return res.send({ status: false, msg: "Empty data", data: get_user })
@@ -64,9 +65,17 @@ class License {
                     }
                 },
                 {
+                    $unwind: "$user" // Unwind the "user" array created by the $lookup stage
+                },
+                {
+                    $match: { "user.Role": "USER" } // Filter by the user's role
+                },
+                {
                     $project: {
-                        _id: 0,
-                        count_license: "$$ROOT", // Include the entire count_license document
+                        // _id: 0,
+                        // count_license: "$$ROOT", // Include the entire count_license document
+                        license:1,
+                        createdAt:1,
                         "user.FullName": 1 // Extract only the "FullName" field from the "user" subdocument
                       }
                 }

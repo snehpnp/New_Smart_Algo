@@ -290,11 +290,9 @@ class Subadmin {
                 status: true,
                 msg: "Get All Subadmins",
                 data: getAllSubAdmins,
-                // page: Number(page),
-                // limit: Number(limit),
-                totalCount: totalCount,
-                // totalPages: Math.ceil(totalCount / Number(limit)),
+                totalCount: totalCount
             })
+            
         } catch (error) {
             console.log("getallSubadmin error -", error);
         }

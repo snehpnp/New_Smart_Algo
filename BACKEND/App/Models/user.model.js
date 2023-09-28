@@ -68,6 +68,12 @@ const userModel = Schema({
         enum: ['1', '0'],
         default: '1'
     },
+
+    Is_Active: {
+        type: String,
+        enum: ['1', '0'],
+        default: '1'
+    },
     Role: {
         type: String,
         required: true
