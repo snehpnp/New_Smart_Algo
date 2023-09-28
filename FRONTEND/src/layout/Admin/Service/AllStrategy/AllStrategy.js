@@ -5,13 +5,14 @@ import React, { useEffect, useState } from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
 import Loader from '../../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable"
 
 import { Pencil, Trash2, UserPlus, LayoutList } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
-import { Get_All_Strategy, Remove_Strategy_BY_Id } from '../../../../ReduxStore/Slice/Admin/StrategySlice';
+import { Get_All_Strategy, Remove_Strategy_BY_Id, Get_client_By_strategy_Id } from '../../../../ReduxStore/Slice/Admin/StrategySlice';
 import TableWIthCustomPaginations from '../../../../Components/ExtraComponents/Tables/TableWIthCustomPaginations';
 
 import toast, { Toaster } from 'react-hot-toast';
@@ -24,6 +25,9 @@ const ServicesList = () => {
 
     const user_token = JSON.parse(localStorage.getItem("user_details")).token
 
+    const [showModal, setshowModal] = useState(false)
+
+
     const [refresh, setRefresh] = useState(false);
 
 
@@ -34,9 +38,12 @@ const ServicesList = () => {
         data: []
     });
 
+    const [getServicesName, setServicesName] = useState({
+        loading: true,
+        data: []
+    })
 
-
-
+    console.log("getServicesName", getServicesName);
     const data = async () => {
         await dispatch(Get_All_Strategy({
             req: {
@@ -124,12 +131,12 @@ const ServicesList = () => {
             text: 'Actions',
             formatter: (cell, row) => (
                 <div>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <UserPlus size={20} strokeWidth={2} className="mx-1" />
+                    <span data-toggle="tooltip" data-placement="top" title="Get Clients">
+                        <UserPlus size={20} strokeWidth={2} className="mx-1" onClick={(e) => GetAllServicesName(row)} />
                     </span>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
+                    {/* <span data-toggle="tooltip" data-placement="top" title="Delete">
                         <LayoutList size={20} strokeWidth={2} className="mx-1" />
-                    </span>
+                    </span> */}
                     <Link to={`/admin/strategies/edit/${row._id}`} state={row}>
                         <span data-toggle="tooltip" data-placement="top" title="Edit">
                             <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
@@ -148,6 +155,33 @@ const ServicesList = () => {
 
 
 
+    // GET ALL GROUP SERVICES NAME
+    const GetAllServicesName = async (row) => {
+        console.log("row", row);
+
+        await dispatch(Get_client_By_strategy_Id({
+            _id: row._id, token: user_token
+        })).unwrap()
+            .then((response) => {
+                setshowModal(true)
+
+                if (response.status) {
+                    setServicesName({
+                        loading: false,
+                        data: response.data
+                    });
+                }
+                else {
+                    setServicesName({
+                        loading: false,
+                        data: []
+                    });
+
+                }
+            })
+    }
+
+
     return (
         <>
             {
@@ -164,9 +198,42 @@ const ServicesList = () => {
                             }
                             <ToastButton />
 
+
+                            {
+                                showModal ?
+                                    <>
+                                        <Modal isOpen={showModal}  size="ms-5" title="Clients" hideBtn={true}
+                                            // onHide={handleClose}
+                                            handleClose={() => setshowModal(false)}
+                                        >
+                                            <BasicDataTable TableColumns={[
+                                                {
+                                                    dataField: "index",
+                                                    text: "SR. No.",
+                                                    formatter: (cell, row, rowIndex) => rowIndex + 1,
+                                                },
+                                                {
+                                                    dataField: 'users.UserName',
+                                                    text: 'user Name'
+                                                },
+                                                {
+                                                    dataField: 'users.license_type',
+                                                    text: 'lotsize',
+                                                    formatter: (cell, row, rowIndex) =><>
+                                                    <span>{cell === "2" ? "LIVE" : cell === "1" ? "DEMO" : "2 Days"}</span>
+                                                    </>,
+
+                                                },
+                                            ]} tableData={getServicesName && getServicesName.data} />
+
+                                        </Modal >
+                                    </>
+                                    : ""
+                            }
                         </Content>
                     </>
             }
+
 
 
 

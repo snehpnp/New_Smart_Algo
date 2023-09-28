@@ -57,12 +57,16 @@ const TradeHistory = () => {
 
 
     const getsignals = async (e) => {
-        let startDate = getActualDateFormate(fromDate)
-        let endDate = getActualDateFormate(toDate)
+        // let startDate = getActualDateFormate(fromDate)
+        // let endDate = getActualDateFormate(toDate)
+
+        let endDate = "2023/9/27"
+        let startDate = "2023/9/1"
 
         e.preventDefault()
 
-        await dispatch(Get_Tradehisotry({ startDate: startDate, endDate: endDate, token: token })).unwrap()
+        // await dispatch(Get_Tradehisotry({ startDate: startDate, endDate: endDate, token: token })).unwrap()
+        await dispatch(Get_Tradehisotry({ startDate: "2023/9/1", endDate: "2023/9/27", token: token })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setTradeHistoryData({

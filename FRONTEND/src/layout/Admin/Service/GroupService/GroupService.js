@@ -13,7 +13,7 @@ import FullDataTable from "../../../../Components/ExtraComponents/Datatable/Full
 import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable"
 
 import { Get_All_Service, Get_All_Catagory, Service_By_Catagory, GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
-import { GET_ALL_SERVICES_NAMES, DELETE_GROUP_SERVICE, GET_ALL_SERVICES_USER_NAMES } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
+import { GET_ALL_SERVICES_NAMES, DELETE_GROUP_SERVICE, Get_client_By_strategy_Id , GET_ALL_SERVICES_USER_NAMES } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 import toast, { Toaster } from 'react-hot-toast';
@@ -199,14 +199,7 @@ const ServicesList = () => {
                     }
                 })
         }
-
-
-
     }
-
-
-
-
 
     // GET ALL GROUP SERVICES NAME
     const data = async () => {

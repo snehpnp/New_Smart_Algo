@@ -3,6 +3,9 @@ const db = require('../../Models');
 const strategy_model = db.strategy
 const strategy_client_model = db.strategy_client
 const { formattedDateTime } = require('../../Helper/time.helper')
+const mongoose = require('mongoose');
+
+const ObjectId = mongoose.Types.ObjectId;
 
 class strategy {
 
@@ -140,8 +143,8 @@ class strategy {
             // THEME LIST DATA
             // var getAllTheme = await strategy_model.find()
             const getAllstrategy = await strategy_model.find({})
-                // .skip(skip)
-                // .limit(Number(limit))
+            // .skip(skip)
+            // .limit(Number(limit))
 
 
             // IF DATA NOT EXIST
@@ -237,9 +240,9 @@ class strategy {
         try {
 
 
-            const { strategy_id } = req.body;
+            const { _id } = req.body;
             // GET LOGIN CLIENTS
-            const objectId = new ObjectId(strategy_id);
+            const objectId = new ObjectId(_id);
             const pipeline = [
                 {
                     $match: {
@@ -248,71 +251,39 @@ class strategy {
                 },
                 {
                     $lookup: {
-                        from: "strategy_client_model",
-                        localField: "strategy_id",
+                        from: "users",
+                        localField: "user_id",
                         foreignField: "_id",
-                        as: "service",
+                        as: "users",
                     },
                 },
                 {
-                    $unwind: '$service',
+                    $unwind: '$users',
                 },
-                // {
-                //     $lookup: {
-                //         from: "strategies",
-                //         localField: "strategy_id",
-                //         foreignField: "_id",
-                //         as: "strategys",
-                //     },
-                // },
-                // {
-                //     $unwind: '$strategys',
-                // },
+
                 {
                     $project: {
-                        'service': 1,
-                        // 'service.instrument_token': 1,
-                        // 'service.exch_seg': 1,
-                        // 'service._id': 1,
-                        // 'strategys.strategy_name': 1,
-                        // 'strategys._id': 1,
-                        // _id: 1,
-                        // user_id: 1,
-                        // // group_id: 1,
-                        // // service_id: 1,
-                        // active_status: 1,
-                        // quantity: 1,
-                        // product_type: 1,
-                        // order_type: 1,
-                        // createdAt: 1,
+                        'users.FullName': 1,
+                        'users.UserName': 1,
+                        'users.license_type': 1,
+
                     },
                 },
             ];
 
-            const GetAllClientServices = await client_services.aggregate(pipeline)
-
-console.log("GetAllClientServices" ,GetAllClientServices)
-            // const totalCount = await strategy_model.countDocuments();
-
-
-            // // THEME LIST DATA
-            // // var getAllTheme = await strategy_model.find()
-            // const getAllstrategy = await strategy_model
-            //     .find({}, '_id strategy_name')
-
+            const GetAllClientServices = await strategy_client_model.aggregate(pipeline)
 
 
             // // IF DATA NOT EXIST
-            // if (getAllstrategy.length == 0) {
-            //     res.send({ status: false, msg: "Empty data", data: getAllstrategy })
-            // }
+            if (GetAllClientServices.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [] })
+            }
 
-            // // DATA GET SUCCESSFULLY
-            // res.send({
-            //     status: true,
-            //     msg: "Get All Startegy",
-            //     data: getAllstrategy,
-            // })
+            return res.send({
+                status: true,
+                msg: "Get All Startegy",
+                data: GetAllClientServices,
+            })
 
 
         } catch (error) {
