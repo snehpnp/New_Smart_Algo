@@ -102,8 +102,9 @@ const BrokerResponse = () => {
       dataField: 'order_view_status',
       text: 'Message',
       formatter: (cell, row, rowIndex) =>
-        cell == "0" || cell == 0 ?
+        cell == "0" || cell == 0  ?
           <>
+          {console.log("row",row) }
             <GanttChartSquare onClick={(e) => GetAllServicesName(row)
             } size={20} color="#198754" strokeWidth={2} className="mx-1" />
           </> : "-"

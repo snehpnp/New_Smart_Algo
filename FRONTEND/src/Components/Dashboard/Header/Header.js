@@ -125,7 +125,6 @@ const Header = ({ ChatBox }) => {
 
 
 
-
   const redirectToAdmin = () => {
     user_role_goTo === "USER" ?
       navigate("/admin/allclients")
@@ -245,7 +244,7 @@ const Header = ({ ChatBox }) => {
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">
               <div className="header-left">
-                {user_role === "USER" ?
+                {user_role === "USER"  && UserDetails.license_type != 1 ?
                   <>
                     <div className="headaer-title">
                       <h3 className="font-w400 mb-0">Api Login </h3>

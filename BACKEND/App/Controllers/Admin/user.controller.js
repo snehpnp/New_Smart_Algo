@@ -300,7 +300,6 @@ class Employee {
             // const { FullName, UserName, Email, PhoneNo, license_type, licence, licence1, fromdate, Strategies, todate, service_given_month, broker, parent_id, parent_role, api_secret, app_id, client_code, api_key, app_key, api_type, demat_userid, group_service } = req.body;
 
             var req = req.body.req
-
             var StartDate1 = "";
             var EndDate1 = "";
 
@@ -326,8 +325,9 @@ class Employee {
                 return res.send({ status: false, msg: 'Please Select parent id', data: [] });
             }
 
+            
             var TotalMonth = "0"
-
+            
             var Panel_key = await Company_info.find()
 
             const totalLicense = await User_model.aggregate([
@@ -335,6 +335,8 @@ class Employee {
                 {
                     $match: {
                         license_type: "2",
+                        licence: { $exists: true, $ne: null, $not: { $type: 10 } } // Exclude undefined or NaN values
+        
                     },
                 },
                 {

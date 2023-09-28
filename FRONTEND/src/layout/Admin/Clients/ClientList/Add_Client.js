@@ -384,7 +384,9 @@ const AddClient = () => {
         { label: '10', value: '10' },
         { label: '11', value: '11' },
         { label: '12', value: '12' },
-      ]
+      ],
+      showWhen: values =>
+      values.licence === '2' || values.licence === 2
       , label_size: 12, col_size: 6, disable: false
 
     },

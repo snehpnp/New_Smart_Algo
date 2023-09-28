@@ -92,17 +92,17 @@ const ServicesList = () => {
             text: 'Segment',
             sort: true,
         },
-        {
-            dataField: 'category.name',
-            text: 'Segment',
-            formatter: (cell, row , index) => (
-                <>
-                    <input type="text" className="form-control" placeholder="Enter Quantity" aria-label="Username" aria-describedby="basic-addon1" name={row.name} onChange={(e) => EditQty(e, cell , index)} />
+        // {
+        //     dataField: 'category.name',
+        //     text: 'Segment',
+        //     formatter: (cell, row , index) => (
+        //         <>
+        //             <input type="text" className="form-control" placeholder="Enter Quantity" aria-label="Username" aria-describedby="basic-addon1" name={row.name} onChange={(e) => EditQty(e, cell , index)} />
 
-                </>
-            )
+        //         </>
+        //     )
 
-        },
+        // },
 
     ];
 

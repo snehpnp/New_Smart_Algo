@@ -322,7 +322,10 @@ app.post('/broker-signals', async (req, res) => {
               // START FOR EXIST SIGNAL UPDATE
               if (type == "LX" || type == "lx") {
 
+                
                 var ExitMainSignals = await MainSignals.find(findSignal)
+
+
 
                 // // ExitMainSignals  FIND IN COLLECTION
                 if (ExitMainSignals.length != 0) {
@@ -390,7 +393,8 @@ app.post('/broker-signals', async (req, res) => {
                             user_id: item._id,
                             receive_signal: signal_req,
                             strategy: strategy,
-                            type: type
+                            type: type,
+                            order_id:""
                           };
 
                           const newCategory = new BrokerResponse(brokerResponse)

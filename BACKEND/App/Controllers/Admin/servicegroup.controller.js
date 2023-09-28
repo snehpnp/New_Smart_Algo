@@ -496,6 +496,7 @@ class GroupService {
               'as': 'ServiceResult'
             }
           },
+     
           {
             $match: {
               Servicegroup_id: objectId,
@@ -516,9 +517,16 @@ class GroupService {
         const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);
         if (Service_name_get.length == 0) {
           return res.send({ status: false, msg: 'No Data Found ', data: Service_name_get });
-
         }
-        return res.send({ status: true, msg: 'Get All successfully ', data: Service_name_get });
+
+
+
+        const Service_name_get1 = await serviceGroupName.find({ _id: objectId});
+
+
+
+
+        return res.send({ status: true, msg: 'Get All successfully ', data: Service_name_get ,group_name:Service_name_get1});
 
 
       } else {

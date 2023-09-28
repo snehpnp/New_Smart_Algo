@@ -254,10 +254,10 @@ const AddClient = () => {
   });
 
 
-  console.log("testt", formik)
+  // console.log("testt", formik)
 
   useEffect(() => {
-    console.log("UserData", UserData)
+    // console.log("UserData", UserData)
     formik.setFieldValue('username', UserData.data.data !== undefined && UserData.data.data[0].UserName);
     formik.setFieldValue('fullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
     formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
@@ -291,7 +291,7 @@ const AddClient = () => {
 
   useEffect(() => {
     let Service_Month_Arr = []
-    for (let index = 1; index < 3; index++) {
+    for (let index = 1; index < 2; index++) {
       Service_Month_Arr.push({ month: index, endDate: `${index} Month Licence Expired On ${new Date(new Date().getFullYear(), new Date().getMonth() + index, new Date().getDate()).toString().split('00:00:00')[0]}` })
     }
     setfirst(Service_Month_Arr)
@@ -432,7 +432,9 @@ const AddClient = () => {
         { label: '10', value: '10' },
         { label: '11', value: '11' },
         { label: '12', value: '12' },
-      ]
+      ],
+      showWhen: values =>
+      values.licence === '2' || values.licence === 2
       , label_size: 12, col_size: 6, disable: false
 
     },
@@ -692,8 +694,8 @@ const AddClient = () => {
                 <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
                   setShowAllStratagy(e.target.checked)
                 }} />
-                <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`} ></div>
-                <span class="toggle-label">Show Strategy</span>
+                {/* <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`} ></div>
+                <span class="toggle-label">Show Strategy</span> */}
               </label>
 
               {/*  For Show All Strategy */}
