@@ -5,12 +5,14 @@ import { Email_regex, Mobile_regex } from '../../../../Utils/Common_regex';
 import { useDispatch } from 'react-redux';
 import Content from '../../../../Components/Dashboard/Content/Content';
 import { Service_By_Catagory, Get_All_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
-import { useLocation } from 'react-router-dom';
+import { Get_Service_By_Group_Id} from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
+import { useLocation, useParams } from 'react-router-dom';
 
 
 const EditGroup = () => {
 
     const location = useLocation()
+    const { id } = useParams()
 
     // console.log("location", location.state);
     const dispatch = useDispatch();
@@ -39,10 +41,35 @@ const EditGroup = () => {
         data: [],
     });
 
+
+
+    //  Get Edit Group Data
+    const data2 = async () => {
+        if (formik.values.selectSegment) {
+            await dispatch(Get_Service_By_Group_Id({ _id: id })).unwrap()
+                .then((response) => {
+                    if (response.status) {
+
+                        console.log("Get_Service_By_Group_Id", response);
+                        // setAllServices({
+                        //     loading: false,
+                        //     data: response.data,
+                        // });
+                    }
+                });
+        }
+    };
+
+    useEffect(() => {
+        data2();
+    }, [id]);
+
+
+
     const formik = useFormik({
         initialValues: {
-            group_name: location.state.name,
-            selectSegment: location.state._id ? location.state._id :null,
+            group_name: " location.state.name",
+            selectSegment: "location.state._id ? location.state._id :null",
             selectedServices: [],
         },
         validate: (values) => {
@@ -135,6 +162,10 @@ const EditGroup = () => {
         // console.log("uniqueArr", uniqueArr);
 
     }
+
+
+
+
 
 
 

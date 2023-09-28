@@ -3,6 +3,7 @@ const db = require('../../Models');
 const strategy_model = db.strategy
 const strategy_client_model = db.strategy_client
 const { formattedDateTime } = require('../../Helper/time.helper')
+
 class strategy {
 
     // ADD STRATEGY IN A COLLECTION
@@ -226,6 +227,97 @@ class strategy {
         } catch (error) {
             console.log("Delete Strategy Error:", error);
             return res.status(500).json({ status: false, msg: 'An error occurred', data: [] });
+        }
+    }
+
+
+
+    // GET ALL STRATEGYS FOR CLIENT
+    async ClientsAccordingToStrategy(req, res) {
+
+        try {
+
+
+            const { strategy_id } = req.body;
+            // GET LOGIN CLIENTS
+            const objectId = new ObjectId(strategy_id);
+            const pipeline = [
+                {
+                    $match: {
+                        strategy_id: objectId
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "strategy_client_model",
+                        localField: "strategy_id",
+                        foreignField: "_id",
+                        as: "service",
+                    },
+                },
+                {
+                    $unwind: '$service',
+                },
+                // {
+                //     $lookup: {
+                //         from: "strategies",
+                //         localField: "strategy_id",
+                //         foreignField: "_id",
+                //         as: "strategys",
+                //     },
+                // },
+                // {
+                //     $unwind: '$strategys',
+                // },
+                {
+                    $project: {
+                        'service': 1,
+                        // 'service.instrument_token': 1,
+                        // 'service.exch_seg': 1,
+                        // 'service._id': 1,
+                        // 'strategys.strategy_name': 1,
+                        // 'strategys._id': 1,
+                        // _id: 1,
+                        // user_id: 1,
+                        // // group_id: 1,
+                        // // service_id: 1,
+                        // active_status: 1,
+                        // quantity: 1,
+                        // product_type: 1,
+                        // order_type: 1,
+                        // createdAt: 1,
+                    },
+                },
+            ];
+
+            const GetAllClientServices = await client_services.aggregate(pipeline)
+
+console.log("GetAllClientServices" ,GetAllClientServices)
+            // const totalCount = await strategy_model.countDocuments();
+
+
+            // // THEME LIST DATA
+            // // var getAllTheme = await strategy_model.find()
+            // const getAllstrategy = await strategy_model
+            //     .find({}, '_id strategy_name')
+
+
+
+            // // IF DATA NOT EXIST
+            // if (getAllstrategy.length == 0) {
+            //     res.send({ status: false, msg: "Empty data", data: getAllstrategy })
+            // }
+
+            // // DATA GET SUCCESSFULLY
+            // res.send({
+            //     status: true,
+            //     msg: "Get All Startegy",
+            //     data: getAllstrategy,
+            // })
+
+
+        } catch (error) {
+            console.log("Get All Strategy Error-", error);
         }
     }
 

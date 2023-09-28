@@ -162,13 +162,13 @@ export const admin_sidebar = [
     //     "route": "/admin/reports",
     //     "Data": []
     // },
-    {
-        'id': 10,
-        "name": 'Release Updates',
-        "Icon": "Rocket",
-        "route": "/admin/updates",
-        "Data": []
-    },
+    // {
+    //     'id': 10,
+    //     "name": 'Release Updates',
+    //     "Icon": "Rocket",
+    //     "route": "/admin/updates",
+    //     "Data": []
+    // },
 
 ]
 

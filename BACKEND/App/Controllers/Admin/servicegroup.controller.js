@@ -176,7 +176,7 @@ class GroupService {
       }
 
 
-      // Client Services Update 
+      // Client Services Update
       if (delete_GroupServices.length > 0) {
         delete_GroupServices.forEach(async (data) => {
           var stgId = new ObjectId(data)
@@ -504,6 +504,7 @@ class GroupService {
           {
             $project: {
               'ServiceResult.name': 1,
+              'ServiceResult.lotsize': 1,
             },
           },
           {
