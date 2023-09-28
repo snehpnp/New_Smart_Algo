@@ -17,7 +17,7 @@ class strategy {
 
             const exist_strategy = await strategy_model.findOne({ strategy_name: strategy_name });
             if (exist_strategy) {
-                return res.status(409).json({ status: false, msg: 'Strategy already exists', data: [] });
+                return res.send({ status: false, msg: 'Strategy already exists', data: [] });
             }
 
             var strategy_Data = new strategy_model({
@@ -39,7 +39,7 @@ class strategy {
                 .catch((err) => {
                     console.log(" Add Time Error-", err);
                     if (err.keyValue) {
-                        return res.status(409).json({ status: false, msg: 'Key duplicate', data: err.keyValue });
+                        return res.send({ status: false, msg: 'Key duplicate', data: err.keyValue });
 
                     }
                 })
@@ -60,7 +60,7 @@ class strategy {
 
             const strategy_check = await strategy_model.findOne({ _id: _id });
             if (!strategy_check) {
-                return res.status(409).json({ status: false, msg: 'Strategy Not exist', data: [] });
+                return res.send({ status: false, msg: 'Strategy Not exist', data: [] });
             }
 
 
@@ -75,7 +75,7 @@ class strategy {
 
 
                 if (strateg_data.length > 0) {
-                    return res.status(409).json({ status: false, msg: 'Strategy Name Already Exist', data: [] });
+                    return res.send({ status: false, msg: 'Strategy Name Already Exist', data: [] });
                 }
 
             } catch (error) {
@@ -101,7 +101,7 @@ class strategy {
             const result = await strategy_model.updateOne(filter, update_strategy);
 
             if (!result) {
-                return res.status(409).json({ status: false, msg: 'Strategy not Edit', data: [] });
+                return res.send({ status: false, msg: 'Strategy not Edit', data: [] });
             }
 
             return res.status(200).json({ status: true, msg: 'Strategy Edit successfully!', data: result });
@@ -119,7 +119,7 @@ class strategy {
 
             const exist_strategy = await strategy_model.findOne({ _id: _id });
             if (!exist_strategy) {
-                return res.status(409).json({ status: false, msg: 'Strategy Not exists', data: [] });
+                return res.send({ status: false, msg: 'Strategy Not exists', data: [] });
             }
 
             return res.status(200).json({ status: true, msg: 'Strategy Get successfully!', data: exist_strategy });
@@ -209,13 +209,13 @@ class strategy {
             // CHECK IF STRATEGY EXISTS
             const strategy_check = await strategy_model.findOne({ _id: _id });
             if (!strategy_check) {
-                return res.status(409).json({ status: false, msg: 'Strategy does not exist', data: [] });
+                return res.send({ status: false, msg: 'Strategy does not exist', data: [] });
             }
 
             // CHECK IF STRATEGY EXISTS IN STRATEGY CLIENT
             const strategy_client_check = await strategy_client_model.findOne({ strategy_id: _id });
             if (strategy_client_check) {
-                return res.status(409).json({ status: false, msg: 'Strategy is assigned to a client', data: [] });
+                return res.send({ status: false, msg: 'Strategy is assigned to a client', data: [] });
             }
 
             // Delete the strategy

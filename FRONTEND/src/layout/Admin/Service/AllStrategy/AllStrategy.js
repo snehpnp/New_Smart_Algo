@@ -77,17 +77,19 @@ const ServicesList = () => {
             _id: strat_id,
             token: user_token
         })).unwrap().then((response) => {
-            if (response.status === 409) {
-                toast.error(response.data.msg);
-            }
-            else if (response.status) {
+
+            console.log("response" ,response)
+
+            if (response.status) {
                 toast.success(response.msg);
                 setRefresh(!refresh)
                 setTimeout(() => {
                     navigate("/admin/strategies")
                 }, 1000);
             }
-
+            else {
+                toast.error(response.msg);
+            }
         })
 
     }
@@ -202,7 +204,7 @@ const ServicesList = () => {
                             {
                                 showModal ?
                                     <>
-                                        <Modal isOpen={showModal}  size="ms-5" title="Clients" hideBtn={true}
+                                        <Modal isOpen={showModal} size="ms-5" title="Clients" hideBtn={true}
                                             // onHide={handleClose}
                                             handleClose={() => setshowModal(false)}
                                         >
@@ -219,8 +221,8 @@ const ServicesList = () => {
                                                 {
                                                     dataField: 'users.license_type',
                                                     text: 'lotsize',
-                                                    formatter: (cell, row, rowIndex) =><>
-                                                    <span>{cell === "2" ? "LIVE" : cell === "1" ? "DEMO" : "2 Days"}</span>
+                                                    formatter: (cell, row, rowIndex) => <>
+                                                        <span>{cell === "2" ? "LIVE" : cell === "1" ? "DEMO" : "2 Days"}</span>
                                                     </>,
 
                                                 },
