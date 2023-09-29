@@ -5,7 +5,7 @@ import { fa_time, fDateTimeSuffix } from '../../../../Utils/Date_formet'
 
 
 const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
-console.log("tradeHistoryData",tradeHistoryData.data);
+    console.log("tradeHistoryData", tradeHistoryData.data);
 
     const columns1 = [
         {
@@ -27,62 +27,45 @@ console.log("tradeHistoryData",tradeHistoryData.data);
             text: 'Segment'
         },
         {
-            dataField: 'entry_type',
+            dataField: 'type',
             text: 'Entry Type',
             formatter: (cell, row, rowIndex) =>
                 <span className='text'>
-                    {cell !== "" ? cell : "-"}
+                    {cell === "LE" || row.type === "SE" ? cell : "-"}
 
                 </span>
         },
         {
-            dataField: 'exit_type',
+            dataField: 'type',
             text: 'Exit Type',
             formatter: (cell, row, rowIndex) =>
                 <span className='text'>
-                    {cell !== "" ? cell : "-"}
+                    {cell === "LX" || row.type === "SX" ? cell : "-"}
                 </span>
 
         },
         {
-            dataField: 'entry_qty_percent',
-            text: 'Entry',
+            dataField: 'qty_percent',
+            text: 'QTY',
             formatter: (cell, row, rowIndex) =>
                 <span className='text'>
                     {cell !== "" ? parseFloat(cell).toFixed(2) : "-"}
                 </span>
         },
+
         {
-            dataField: 'exit_qty_percent',
-            text: 'Exit Qty',
-            formatter: (cell, row, rowIndex) => <span className='text'>
-                {cell !== "" ? parseFloat(cell).toFixed(2) : "-"}
-            </span>
-        },
-        {
-            dataField: 'entry_price',
+            dataField: 'price',
             text: 'Entry Price',
-            formatter: (cell, row, rowIndex) => <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
+            formatter: (cell, row, rowIndex) => <div>{row.type === "LE" || row.type === "SE" ? parseFloat(cell).toFixed(2) : "-"}</div>
 
         },
         {
-            dataField: 'exit_price',
+            dataField: 'price',
             text: 'Exit Price',
-            formatter: (cell, row, rowIndex) => <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
-        },
-        {
-            dataField: 'Action',
-            text: 'R/P&L',
-        },
-        {
-            dataField: 'Action',
-            text: 'U/P&l',
+            formatter: (cell, row, rowIndex) => <div>{row.type === "LX" || row.type === "SX" ? parseFloat(cell).toFixed(2) : "-"}</div>
+
         },
 
-        {
-            dataField: 'Action',
-            text: 'T/P&L',
-        },
         {
             dataField: 'strategy',
             text: 'Strategy',
@@ -99,7 +82,7 @@ console.log("tradeHistoryData",tradeHistoryData.data);
         <div>   <Modal isOpen={showModal} size="xl" title="Licence Details" hideBtn={true}
             handleClose={() => setshowModal(false)}
         >
-            <BasicDataTable TableColumns={columns1} tableData={tradeHistoryData.data} />
+            <BasicDataTable TableColumns={columns1} tableData={tradeHistoryData.result} />
         </Modal ></div>
     )
 }

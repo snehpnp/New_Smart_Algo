@@ -43,7 +43,6 @@ const AllSubadmin = () => {
 
     const [selectedStrategyIds, setSelectedStrategyIds] = useState([]);
     const [selectedGroupIds, setSelectedGroupIds] = useState([]);
-    console.log("selectedStrategyIds", selectedStrategyIds);
 
 
 
@@ -113,6 +112,22 @@ const AllSubadmin = () => {
             groupservice: false,
             select_group_services: [],
         },
+        touched: {
+            FullName: '',
+            email: '',
+            mobile: '',
+            password: '',
+            Strategy: false,
+            select_strategy: [],
+            gotodashboard: false,
+            licence: false,
+            all: false,
+            editclient: false,
+            addclient: false,
+            tradehistory: false,
+            groupservice: false,
+            select_group_services: [],
+        },
         validate: (values) => {
             const errors = {};
 
@@ -141,7 +156,6 @@ const AllSubadmin = () => {
                 }
             };
 
-            console.log("updatedSubadmin ", updatedSubadmin);
             return
             const req = {
                 "FullName": values.FullName,
@@ -188,19 +202,25 @@ const AllSubadmin = () => {
 
     useEffect(() => {
 
-        formik.setFieldValue('FullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
-        formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
-        formik.setFieldValue('mobile', UserData.data.data !== undefined && UserData.data.data[0].PhoneNo);
-        formik.setFieldValue('password', UserData.data.data !== undefined && UserData.data.data[0].Otp);
-        const userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0]
-        formik.setFieldValue('addclient', userStrategyIds.client_add === 1 ? true : false);
-        formik.setFieldValue('editclient', userStrategyIds.client_edit === 1 ? true : false);
-        formik.setFieldValue('gotodashboard', userStrategyIds.go_To_Dashboard === 1 ? true : false);
-        formik.setFieldValue('licence', userStrategyIds.license_permision
-            === 1 ? true : false);
-        formik.setFieldValue('tradehistory', userStrategyIds.trade_history_old === 1 ? true : false);
-        formik.setFieldValue('Strategy', userStrategyIds.strategy && userStrategyIds.strategy.length > 0 ? true : false);
-        formik.setFieldValue('groupservice', userStrategyIds.group_services && userStrategyIds.group_services.length > 0 ? true : false);
+
+        if (UserData.data.data !== undefined) {
+            let userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0]
+            console.log("UserData.data.data", userStrategyIds)
+
+            formik.setFieldValue('FullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
+            formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
+            formik.setFieldValue('mobile', UserData.data.data !== undefined && UserData.data.data[0].PhoneNo);
+            formik.setFieldValue('password', UserData.data.data !== undefined && UserData.data.data[0].Otp);
+            // const userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0]
+            formik.setFieldValue('addclient', userStrategyIds.client_add === 1 ? true : false);
+            formik.setFieldValue('editclient', userStrategyIds.client_edit === 1 ? true : false);
+            formik.setFieldValue('gotodashboard', userStrategyIds.go_To_Dashboard === 1 ? true : false);
+            formik.setFieldValue('licence', userStrategyIds.license_permision
+                === 1 ? true : false);
+            formik.setFieldValue('tradehistory', userStrategyIds.trade_history_old === 1 ? true : false);
+            // formik.setFieldValue('Strategy', userStrategyIds.strategy && userStrategyIds.strategy.length > 0 ? true : false);
+            // formik.setFieldValue('groupservice', userStrategyIds.group_services && userStrategyIds.group_services.length > 0 ? true : false);
+        }
     }, [UserData.data.data]);
 
 
@@ -310,14 +330,12 @@ const AllSubadmin = () => {
 
     useEffect(() => {
         if (UserData.data.data !== undefined && UserData.data.data.length > 0) {
-          const userStrategyIds = UserData.data.data[0].subadmin_permissions[0].strategy;
-          setSelectedStrategyIds(userStrategyIds);
+            const userStrategyIds = UserData.data.data[0].subadmin_permissions[0].strategy;
+            setSelectedStrategyIds(userStrategyIds);
         }
-      }, [UserData.data]);
+    }, [UserData.data]);
 
 
-
-console.log("selectedStrategyIds" ,selectedStrategyIds);
 
 
 
@@ -352,22 +370,20 @@ console.log("selectedStrategyIds" ,selectedStrategyIds);
                 return strategy;
             });
         });
-        // setSelectedStrategyIds((prevIds) => {
-        //     if (prevIds.includes(strategyId)) {
-        //         let abc = prevIds.filter((id) => id !== strategyId);
-        //         console.log("abc" ,abc);
-        //         return abc
-        //     } else {
-        //         return [...prevIds, strategyId];
-        //     }
-        // });
+        setSelectedStrategyIds((prevIds) => {
+            if (prevIds.includes(strategyId)) {
+                let abc = prevIds.filter((id) => id !== strategyId);
+                console.log("abc", abc);
+                return abc
+            } else {
+                return [...prevIds, strategyId];
+            }
+        });
     };
 
 
 
     //  For Select Group Change Change
-
-
     useEffect(() => {
         if (UserData.data.data !== undefined && UserData.data.data.length > 0) {
             const userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0].group_services
@@ -402,7 +418,6 @@ console.log("selectedStrategyIds" ,selectedStrategyIds);
         });
     };
 
-    console.log("checkedGroupServices", checkedGroupServices);
 
 
 
@@ -442,86 +457,65 @@ console.log("selectedStrategyIds" ,selectedStrategyIds);
                                         </> : ""
                                         }
 
-
                                         {/* {AllGroupServices.data.map((strategy) => (
-                                                <div className={`col-lg-2 mt-2`} key={strategy._id}>
-                                                    <div className="row ">
-                                                        <div className="col-lg-12 ">
-                                                            <div class="form-check custom-checkbox mb-3">
-                                                                <input type='checkbox' className="form-check-input" name={strategy.name}
-                                                                    value={strategy._id}
-                                                                    onChange={(e) => handleGroupChange(e)}
-                                                                />
-                                                                <label className="form-check-label" for={strategy.name}>{strategy.name}</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </> : ""} */}
-
-                                        {/* {formik.values.Strategy ? <>
-                                            <h6 className='fw-bold'>All Strategy</h6>
-                                            {checkedStrategies.map((strategy) => (
-                                                <div className={`col-lg-2 mt-2`} key={strategy.id}>
-                                                    <div className="row">
-                                                        <div className="col-lg-12">
-                                                            <div className="form-check custom-checkbox mb-3">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    className="form-check-input"
-                                                                    name={strategy.id}
-                                                                    value={strategy.id}
-                                                                    onChange={(e) => handleStrategyChange(e)}
-                                                                    checked={strategy.checked}
-                                                                />
-                                                                <label className="form-check-label" htmlFor={strategy.id}>
-                                                                    {strategy.name}
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </> : ""} */}
-
-                                        {AllStrategy.data.map((strategy) => (
                                             <div className={`col-lg-2 mt-2`} key={strategy._id}>
-                                                <div className="row">
-                                                    <div className="col-lg-12">
-                                                        <div className="form-check custom-checkbox mb-3">
-                                                            <input
-                                                                type="checkbox"
-                                                                className="form-check-input"
-                                                                name={strategy._id}
+                                                <div className="row ">
+                                                    <div className="col-lg-12 ">
+                                                        <div class="form-check custom-checkbox mb-3">
+                                                            <input type='checkbox' className="form-check-input" name={strategy.name}
                                                                 value={strategy._id}
-                                                                onChange={(e) => handleStrategyChange(e)}
-                                                                checked={selectedStrategyIds.includes(strategy._id)} // Check if the strategy ID is in the selectedStrategyIds array
+                                                                onChange={(e) => handleGroupChange(e)}
                                                             />
-                                                            <label className="form-check-label" htmlFor={strategy._id}>
-                                                                {strategy.strategy_name}
-                                                            </label>
+                                                            <label className="form-check-label" for={strategy.name}>{strategy.name}</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         ))}
+              */}
+
+                                        {
+                                            formik.values.Strategy ? <>
+                                                <h6 className='fw-bold'>All Strategy</h6>
+
+                                                {checkedStrategies.map((strategy) => (
+                                                    <div className={`col-lg-2 mt-2`} key={strategy.id}>
+                                                        <div className="row">
+                                                            <div className="col-lg-12">
+                                                                <div className="form-check custom-checkbox mb-3">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        className="form-check-input"
+                                                                        name={strategy.id}
+                                                                        value={strategy.id}
+                                                                        onChange={(e) => handleStrategyChange(e)}
+                                                                        checked={strategy.checked}
+                                                                    />
+                                                                    <label className="form-check-label" htmlFor={strategy.id}>
+                                                                        {strategy.name}
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))}
+
+                                            </> : ""}
+
 
                                     </>
-
                                 } />
-
-
-
                             <ToastButton />
 
                         </Content>
-                    </>
+
+
+
+                    </ >
+
             }
+        </>
 
-
-
-        </ >
     )
 }
 

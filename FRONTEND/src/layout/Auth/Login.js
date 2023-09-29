@@ -195,7 +195,6 @@ const Login = () => {
         console.log("error on Otp Verify", error))
   }
 
-  console.log("UserData", UserData)
 
 
   // CLOSE THE MODAL

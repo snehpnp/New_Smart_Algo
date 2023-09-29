@@ -153,9 +153,6 @@ const AddClient = () => {
 
 
 
-
-
-
       if (!values.groupservice) {
         errors.groupservice = valid_err.GROUPSELECT_ERROR;
       }
@@ -242,7 +239,7 @@ const AddClient = () => {
 
   useEffect(() => {
     let Service_Month_Arr = []
-    for (let index = 1; index < 3; index++) {
+    for (let index = 1; index < 2; index++) {
       Service_Month_Arr.push({ month: index, endDate: `${index} Month Licence Expired On ${new Date(new Date().getFullYear(), new Date().getMonth() + index, new Date().getDate()).toString().split('00:00:00')[0]}` })
     }
     setfirst(Service_Month_Arr)
@@ -385,7 +382,10 @@ const AddClient = () => {
         { label: '11', value: '11' },
         { label: '12', value: '12' },
       ]
-      , label_size: 12, col_size: 6, disable: false
+      , label_size: 12, col_size: 6, disable: false,
+      showWhen: values => values.licence === '2'
+
+
 
     },
 
