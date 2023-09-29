@@ -271,7 +271,7 @@ app.post('/broker-signals', async (req, res) => {
             }
 
             // ENTRY OR EXIST CHECK
-            if (type == "LE" || type == "le") {
+            if (type == "LE" || type == "le" || type == "SE" || type == "Se") {
 
               var findMainSignals = await MainSignals.find(findSignal)
 
@@ -320,7 +320,7 @@ app.post('/broker-signals', async (req, res) => {
 
             } else
               // START FOR EXIST SIGNAL UPDATE
-              if (type == "LX" || type == "lx") {
+              if (type == "LX" || type == "lx" || type == "SX" || type == "Sx") {
 
                 
                 var ExitMainSignals = await MainSignals.find(findSignal)
