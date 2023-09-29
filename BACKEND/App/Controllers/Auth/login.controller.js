@@ -82,6 +82,7 @@ class Login {
                     'token': token,
                     'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
                     'Subadmin_permision': SubadminPermision,
+                    "broker": EmailCheck.broker
 
                 };
             } else {
@@ -89,7 +90,10 @@ class Login {
                     'Email': EmailCheck.Email,
                     'user_id': EmailCheck._id,
                     'token': token,
-                    'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role
+                    'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
+                    "broker": EmailCheck.broker,
+                    "type": EmailCheck.license_type
+
                 };
             }
 
@@ -413,7 +417,7 @@ class Login {
     // session clear
     async sessionClearmail(req, res) {
         try {
-            const { Email ,device} = req.body;
+            const { Email, device } = req.body;
             // IF Login Time Email CHECK
             const EmailCheck = await User.findOne({ Email: Email });
             if (!EmailCheck) {
@@ -437,9 +441,9 @@ class Login {
             var htmlEmail = "otp - " + OTP;
             var textEmail = "otp - " + OTP
 
-           CommonEmail(toEmail, subjectEmail, htmlEmail, textEmail)
+            CommonEmail(toEmail, subjectEmail, htmlEmail, textEmail)
 
-            res.send({ status: true, msg: "Send mail Successfully", data:OTP })
+            res.send({ status: true, msg: "Send mail Successfully", data: OTP })
 
         }
         catch (error) {
@@ -454,7 +458,7 @@ class Login {
 
     async logout_other_device(req, res) {
         try {
-            const { Email, otp,device } = req.body;
+            const { Email, otp, device } = req.body;
             // IF Login Time Email CHECK
             const EmailCheck = await User.findOne({ Email: Email });
             if (!EmailCheck) {
@@ -514,7 +518,7 @@ class Login {
                 addData["WebLoginStatus"] = 1;
             }
 
-            
+
 
             // Update Successfully
             const result = await User.updateOne(
@@ -533,7 +537,7 @@ class Login {
                 user_Id: EmailCheck._id,
                 login_status: "Panel On",
                 role: EmailCheck.Role,
-                message:"The user was logged in and then logged out somewhere else. ",
+                message: "The user was logged in and then logged out somewhere else. ",
                 device: device.toUpperCase(),
                 system_ip: getIPAddress()
             })
@@ -542,7 +546,7 @@ class Login {
 
             try {
                 logger.info('Login Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
-                return   res.send({ status: true, msg: "Login Succesfully", data: msg })
+                return res.send({ status: true, msg: "Login Succesfully", data: msg })
             } catch (error) {
                 console.log("Some Error in a login", error);
             }
@@ -554,7 +558,7 @@ class Login {
         catch (error) {
             console.log(error);
 
-         return   res.send({ status: false, msg: "Server Side error", data: error })
+            return res.send({ status: false, msg: "Server Side error", data: error })
 
         }
 

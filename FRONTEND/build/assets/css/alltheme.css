@@ -1006,3 +1006,32 @@ padding: 5px 10px;
 border-radius: 5px;
 background-color: #9d7ef8;
 }
+
+.sidebar-logo .nav-header .logo-abbr {
+
+    max-width: 80%;
+
+    }
+
+
+    .sidebar-logo .nav-header {
+
+    position: unset !important;
+
+    background: transparent;
+
+    }
+
+    .sidebar-logo .nav-control.bg-primary
+
+    {
+
+    display: none;
+
+    }
+
+    .header-container .brand-logo {
+
+    display: none;
+
+    }

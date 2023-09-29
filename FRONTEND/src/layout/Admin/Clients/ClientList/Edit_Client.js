@@ -226,8 +226,8 @@ const AddClient = () => {
         "demat_userid": values.demat_userid,
         "group_service": values.groupservice,
         "licence": values.licence1,
-        "Editor_role":Role,
-        "device":check_Device()
+        "Editor_role": Role,
+        "device": check_Device()
       }
 
 
@@ -323,12 +323,22 @@ const AddClient = () => {
       name: 'licence',
       label: 'Licence',
       type: 'select',
-      options: [
+      options: UserData.data.data !== undefined && UserData.data.data[0].license_type === "2" ? [
+        { label: 'Live', value: '2' },
+      ] : UserData.data.data !== undefined && UserData.data.data[0].license_type === "0" ? [
+        { label: '2 Days', value: '0' },
+        { label: 'Live', value: '2' },
+      ] : [
         { label: '2 Days', value: '0' },
         { label: 'Demo', value: '1' },
         { label: 'Live', value: '2' },
       ]
       , label_size: 12, col_size: 6, disable: false
+    },
+    {
+      name: 'licence1', label: 'Use License Month', type: 'text', label_size: 12, col_size: 6, disable: true,
+      showWhen: values => values.licence === '2'
+
     },
     {
       name: 'tomonth',
@@ -582,12 +592,11 @@ const AddClient = () => {
 
 
 
+
   const getGroupeServics = async () => {
     if (formik.values.groupservice) {
       await dispatch(Get_Service_By_Group_Id({ _id: formik.values.groupservice })).unwrap()
         .then((response) => {
-
-
           if (response.status) {
             setGetServices({
               loading: false,
@@ -700,8 +709,11 @@ const AddClient = () => {
 
               {/*  For Show All Strategy */}
               {/* {ShowAllStratagy ? ( */}
-              <>
+              <>s
+              <h3></h3>
                 {selectedStrategies.map((strategy) => (
+
+
                   <div className={`col-lg-2 mt-2`} key={strategy.id}>
                     <div className="row ">
                       <div className="col-lg-12 ">

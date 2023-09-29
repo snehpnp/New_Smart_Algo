@@ -11,7 +11,9 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
-import { GO_TO_DASHBOARDS ,UPDATE_USER_ACTIVE_STATUS} from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { DELETE_USER_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+
+import { GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
@@ -24,29 +26,32 @@ const AllSubadmin = () => {
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
 
+    const [refresh, setrefresh] = useState(false)
+
+
     const [Addsubadmin, setAddsubadmin] = useState({
         loading: true,
         data: []
     });
 
- // ACTIVE USER TO API
- const activeUser = async (e, data) => {
-    let req = {
-        id: data._id,
-        user_active_status: e.target.checked === true ? "1" : "0"
+    // ACTIVE USER TO API
+    const activeUser = async (e, data) => {
+        let req = {
+            id: data._id,
+            user_active_status: e.target.checked === true ? "1" : "0"
 
-    };
-    await dispatch(UPDATE_USER_ACTIVE_STATUS(req)).unwrap()
-        .then((response) => {
-            if (response.status) {
+        };
+        await dispatch(UPDATE_USER_ACTIVE_STATUS(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
 
-            }
-        })
-}
+                }
+            })
+    }
 
 
 
-  //  console.log("Addsubadmin", Addsubadmin)
+    //  console.log("Addsubadmin", Addsubadmin)
     const data = async () => {
         await dispatch(Get_All_SUBADMIN()).unwrap()
             .then((response) => {
@@ -65,7 +70,27 @@ const AllSubadmin = () => {
     }
     useEffect(() => {
         data()
-    }, [])
+    }, [refresh])
+
+
+
+    // DELETE USET FUNCTION TO DELETE ALL SERVICES
+    const Delete_user = async (id) => {
+        var req1 = {
+            id: id
+        }
+        if (window.confirm("Do you want to delete this User ?")) {
+            await dispatch(DELETE_USER_SERVICES(req1)).unwrap()
+                .then((response) => {
+                    console.log("response", response);
+                    if (response.status) {
+                        setrefresh(!refresh)
+                    }
+                })
+        }
+
+
+    }
 
     const columns = [
         {
@@ -93,12 +118,12 @@ const AllSubadmin = () => {
             text: 'Status',
             formatter: (cell, row) => (
                 <>
-                     <label class="toggle mt-3">
+                    <label class="toggle mt-3">
                         <input class="toggle-checkbox bg-primary" type="checkbox"
-                        defaultChecked={row.ActiveStatus == "1" ? true : false} 
-                        onChange={(e) => {
-                            activeUser(e, row)
-                        }}
+                            defaultChecked={row.ActiveStatus == "1" ? true : false}
+                            onChange={(e) => {
+                                activeUser(e, row)
+                            }}
                         />
                         <div class={`toggle-switch bg-primary`}></div>
                     </label>
@@ -132,9 +157,11 @@ const AllSubadmin = () => {
                             <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                         </span>
                     </Link>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-                    </span>
+                    <Link>
+                        <span data-toggle="tooltip" data-placement="top" title="Delete">
+                            <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={(e) => Delete_user(row._id)} />
+                        </span>
+                    </Link>
                 </div>
             ),
         },

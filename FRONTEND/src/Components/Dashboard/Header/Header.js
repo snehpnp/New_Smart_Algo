@@ -20,6 +20,8 @@ import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import * as Config from "../../../Utils/Config";
 import socketIOClient from "socket.io-client";
 
+import jwt_decode from "jwt-decode";
+
 
 const Header = ({ ChatBox }) => {
 
@@ -193,6 +195,44 @@ const Header = ({ ChatBox }) => {
 
 
 
+  //  Clear Session  After 24 Hours
+  const ClearSession = async () => {
+    var decoded = jwt_decode(token);
+    // console.log("decoded", decoded.exp)
+    // console.log(" new Date().getTime()", new Date().getTime())
+
+    if (decoded.exp * 1000 < new Date().getTime()) {
+
+      const request = {
+        "userId": user_id,
+        "Device": CheckUser
+      }
+
+      await dispatch(Log_Out_User(request))
+        .then((res) => {
+          if (res.payload.status) {
+            localStorage.removeItem("user_role",);
+            localStorage.removeItem("user_details");
+            setTimeout(() => {
+              navigate("/");
+            }, 1000);
+          }
+        }).catch((error) => {
+          console.log("logout error", error);
+
+        })
+    }
+
+  }
+
+
+  useEffect(() => {
+
+    ClearSession()
+
+
+  }, [])
+
 
 
   //  Recieve Notfication
@@ -312,7 +352,7 @@ const Header = ({ ChatBox }) => {
         <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Update Broker Key" hideBtn={true}
           handleClose={() => setshowModal(false)}
         >
-          <UpdateBrokerKey  closeModal={()=>setshowModal(false)} />
+          <UpdateBrokerKey closeModal={() => setshowModal(false)} />
         </Modal >
       </div>
     </div>
