@@ -333,7 +333,7 @@ const AddClient = () => {
         { label: 'Demo', value: '1' },
         { label: 'Live', value: '2' },
       ]
-      , label_size: 12, col_size: 6, disable: false
+      , label_size: 12, col_size: 6, disable: UserData.data.data !== undefined && UserData.data.data[0].license_type === "2" ? true : false
     },
     {
       name: 'licence1', label: 'Use License Month', type: 'text', label_size: 12, col_size: 6, disable: true,
@@ -444,7 +444,7 @@ const AddClient = () => {
         { label: '12', value: '12' },
       ],
       showWhen: values =>
-      values.licence === '2' || values.licence === 2
+        values.licence === '2' || values.licence === 2
       , label_size: 12, col_size: 6, disable: false
 
     },
@@ -710,7 +710,7 @@ const AddClient = () => {
               {/*  For Show All Strategy */}
               {/* {ShowAllStratagy ? ( */}
               <>s
-              <h3></h3>
+                <h3></h3>
                 {selectedStrategies.map((strategy) => (
 
 
