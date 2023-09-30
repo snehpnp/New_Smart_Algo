@@ -25,6 +25,7 @@ cron.schedule('5 5 * * *', () => {
     LogoutAllUsers()
 });
 
+
 // 2. SERVICES TOKEN CREATE
 cron.schedule('42 12 * * *', () => {
     console.log('running a task every minute');
@@ -37,11 +38,11 @@ cron.schedule('42 12 * * *', () => {
 const LogoutAllUsers = async () => {
 
     // APP LOGOUT USERS  
-    const AppLoginUser = await User.find({ AppLoginStatus: 1 });
+    const AppLoginUser = await User.find({ AppLoginStatus: '1' });
     if (AppLoginUser.length > 0) {
         AppLoginUser.map(async (user) => {
 
-            const updateValues = { AppLoginStatus: 0 };
+            const updateValues = { AppLoginStatus: '0' };
             const updatedDocument = await User.findByIdAndUpdate(user._id, updateValues, {
                 new: true, // To return the updated document
             });
@@ -57,11 +58,11 @@ const LogoutAllUsers = async () => {
     }
 
     // WEB LOGOUT USERS  
-    const WebLoginUser = await User.find({ WebLoginStatus: 1 });
+    const WebLoginUser = await User.find({ WebLoginStatus: '1' });
     if (WebLoginUser.length > 0) {
         WebLoginUser.map(async (user) => {
-            const updateValues = { WebLoginStatus: 0 };
-            const updatedDocument = await User.findByIdAndUpdate(user._id, `updateValues`, {
+            const updateValues = { WebLoginStatus: '0' };
+            const updatedDocument = await User.findByIdAndUpdate(user._id, updateValues, {
                 new: true, // To return the updated document
             });
 
@@ -75,8 +76,38 @@ const LogoutAllUsers = async () => {
         })
     }
 
+
+      // TRADING ON ANY USER 
+      const TradingOffUser = await User.find({ TradingStatus: 'on' });
+      if (TradingOffUser.length > 0) {
+        TradingOffUser.map(async (user) => {
+              const updateValues = {TradingStatus: 'off' };
+              const updatedDocument = await User.findByIdAndUpdate(user._id, updateValues, {
+                  new: true, // To return the updated document
+              });
+  
+              const user_login = new user_logs({
+                  user_Id: user._id,
+                  login_status: "Trading Off By System",
+                  role: user.Role,
+                  system_ip: getIPAddress()
+              })
+              await user_login.save();
+          })
+      }
+
+
 }
 
+
+
+
+
+
+
+
+
+// =============================<< HELLO SNEH >>====================================//
 
 
 // SERVICES TOKEN CREATE

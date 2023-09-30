@@ -32,6 +32,12 @@ class Tradehistory {
                       foreignField: "_id",
                       as: "result",
                     },
+                },
+               
+                {
+                    $sort: {
+                        "result.createdAt": 1 // Sort in ascending order. Use -1 for descending.
+                    }
                 }
                
             ]);
