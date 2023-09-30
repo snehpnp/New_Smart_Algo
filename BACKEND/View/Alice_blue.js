@@ -129,45 +129,25 @@ async function TradeHistroy() {
                 }
             },
             {
-                $group: {
-                    _id: {
-                        symbol: "$symbol",
-                        strategy: "$strategy",
-                        segment: "$segment"
-                    },
-                    signals: { $push: "$$ROOT" } // Save all fields of the document in signals array
-                }
-            },
-            {
-                $addFields: {
-                    signal_id: { $toString: { $concat: ["$_id.symbol", "_", "$_id.strategy", "_", "$_id.segment"] } }
-                }
-            },
-            {
-                $unwind: "$signals"
-            },
-            {
                 $project: {
-                    _id: 0,
-                    symbol: "$signals.symbol",
-                    type: "$signals.type",
-                    price: "$signals.price",
-                    qty_percent: "$signals.qty_percent",
-                    exchange: "$signals.exchange",
-                    strategy: "$signals.strategy",
-                    strike: "$signals.strike",
-                    option_type: "$signals.option_type",
-                    segment: "$signals.segment",
-                    trade_symbol: "$signals.trade_symbol",
-                    client_personal_key: "$signals.client_personal_key",
-                    token: "$signals.token",
-                    entry_type: "$signals.entry_type",
-                    exit_type: "$signals.exit_type",
-                    entry_price: "$signals.entry_price",
-                    exit_price: "$signals.exit_price",
-                    entry_qty_percent: "$signals.entry_qty_percent",
-                    exit_qty_percent: "$signals.exit_qty_percent",
-                    signal_id: "$signal_id"
+                    symbol: 1,
+                    type:1,
+                    price:1,
+                    qty_percent:1,
+                    exchange: 1,
+                    strategy: 1,
+                    strike: 1,
+                    option_type: 1,
+                    segment: 1,
+                    trade_symbol: 1,
+                    client_persnal_key: 1,
+                    token: 1,
+                    entry_type: 1,
+                    exit_type: 1,
+                    entry_price: 1,
+                    exit_price: 1,
+                    entry_qty_percent: 1,
+                    exit_qty_percent: 1
                 }
             }
         ];
