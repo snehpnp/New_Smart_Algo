@@ -733,6 +733,8 @@
 import React from 'react'
 
 const test = () => {
+
+  console.log("hello word");
   return (
     <div>
       <div class="container-fluid">
