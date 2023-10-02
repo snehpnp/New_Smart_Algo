@@ -98,70 +98,185 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 
 async function dropExistingView() {
-    try {
-        await client.connect();
-        const db = client.db('test'); // Replace with your actual database name
-        await db.collection('trade_history').drop();
-    } catch (error) {
-        // Handle any errors if the view doesn't exist
-        console.error('Error:', error);
-    }
+  try {
+    await client.connect();
+    const db = client.db('test'); // Replace with your actual database name
+    await db.collection('trade_history').drop();
+
+  } catch (error) {
+    // Handle any errors if the view doesn't exist
+    console.error('Error:', error);
+  }
 }
 
 // ==========================================================================================
 
 
 async function TradeHistroy() {
-    try {
-        await client.connect();
-        const db = client.db('test');
+  try {
+    await client.connect();
+    const db = client.db('test');
 
-        // Define the pipeline to create the view
-        const pipeline = [
-            {
-                $addFields: {
-                    entry_type: { $ifNull: ["$entry_type", null] },
-                    exit_type: { $ifNull: ["$exit_type", null] },
-                    entry_price: { $ifNull: ["$entry_price", null] },
-                    exit_price: { $ifNull: ["$exit_price", null] },
-                    entry_qty_percent: { $ifNull: ["$entry_qty_percent", null] },
-                    exit_qty_percent: { $ifNull: ["$exit_qty_percent", null] }
-                }
-            },
-            {
-                $project: {
-                    symbol: 1,
-                    type:1,
-                    price:1,
-                    qty_percent:1,
-                    exchange: 1,
-                    strategy: 1,
-                    strike: 1,
-                    option_type: 1,
-                    segment: 1,
-                    trade_symbol: 1,
-                    client_persnal_key: 1,
-                    token: 1,
-                    entry_type: 1,
-                    exit_type: 1,
-                    entry_price: 1,
-                    exit_price: 1,
-                    entry_qty_percent: 1,
-                    exit_qty_percent: 1
-                }
+    // Define the pipeline to create the view
+    const pipeline = [
+      {
+        $addFields: {
+          entry_type: { $ifNull: ["$entry_type", 0] },
+          exit_type: { $ifNull: ["$exit_type", 0] },
+          entry_price: { $ifNull: ["$entry_price", 0] },
+          exit_price: { $ifNull: ["$exit_price", 0] },
+          entry_qty_percent: { $ifNull: ["$entry_qty_percent", 0] },
+          exit_qty_percent: { $ifNull: ["$exit_qty_percent", 0] },
+          createdAt: { $toDate: "$createdAt" },
+        }
+      },
+      {
+        $group: {
+          _id: {
+            symbol: "$symbol",
+            strategy: "$strategy",
+            dt_date: "$dt_date"
+          },
+
+          signal_id: { $push: "$_id" },
+          symbol: { $first: "$symbol" },
+          exchange: { $first: "$exchange" },
+          strategy: { $first: "$strategy" },
+          strike: { $first: "$strike" },
+          option_type: { $first: "$option_type" },
+          segment: { $first: "$segment" },
+          dt_date: { $first: "$dt_date" },
+
+          entry_type: {
+            $max: {
+              $cond: [
+                { $eq: ["$type", "LE"] },
+                "LE",
+                0
+              ]
             }
-        ];
-        
+          },
+          exit_type: {
+            $max: {
+              $cond: [
+                {
+                  $gt: [
+                    "$_id",
+                    {
+                      $min: {
+                        $cond: [{ $eq: ["$type", "LE"] }, "$_id", null]
+                      }
+                    }
+                  ]
+                },
 
-        // Create the view
-        await db.createCollection('trade_history', { viewOn: 'signals', pipeline });
+                "LX",
+                0
+              ]
+            }
+          },
+          entry_price: {
+            $sum: {
+              $cond: [
+                { $eq: ["$type", "LE"] },
+                { $toDouble: "$price" }, // Convert string to number
+                0,
+              ],
+            },
+          },
+          exit_price: {
+            $sum: {
+              $cond: [
+                {
+                  $gt: [
+                    "$_id",
+                    {
+                      $min: {
+                        $cond: [{ $eq: ["$type", "LE"] }, "$_id", null]
+                      }
+                    }
+                  ]
+                },
+                { $toDouble: "$price" }, // Convert string to number
+                0,
+              ],
+            },
+          },
+          entry_qty_percent: {
+            $sum: {
+              $cond: [
+                { $eq: ["$type", "LE"] },
+                { $toDouble: "$qty_percent" }, // Convert string to number
+                0,
+              ],
+            },
+          },
 
-        console.log('View created successfully.');
-    } catch (error) {
-        console.error('Error:', error);
-    } finally {
-        client.close();
-    }
+          exit_qty_percent: {
+            $sum: {
+              $cond: [
+                {
+                  $gt: [
+                    "$_id",
+                    {
+                      $min: {
+                        $cond: [{ $eq: ["$type", "LE"] }, "$_id", null]
+                      }
+                    }
+                  ]
+                },
+                { $toDouble: "$qty_percent" }, // Convert string to number
+                0,
+              ],
+            },
+          },
+
+
+          trade_symbol: { $first: "$trade_symbol" },
+          client_persnal_key: { $first: "$client_persnal_key" },
+          token: { $first: "$token" },
+
+
+        }
+      },
+
+      {
+        $project: {
+          _id: 0,
+          symbol: 1,
+          exchange: 1,
+          strategy: 1,
+          strike: 1,
+          option_type: 1,
+          segment: 1,
+          trade_symbol: 1,
+          client_persnal_key: 1,
+          token: 1,
+          entry_type: 1,
+          exit_type: 1,
+          entry_price: 1,
+          exit_price: 1,
+          entry_qty_percent: 1,
+          exit_qty_percent: 1,
+          signal_id: 1,
+          dt_date: 1,
+        }
+      }
+    ];
+
+
+
+
+
+    // Create the view
+    await db.createCollection('trade_history', { viewOn: 'signals', pipeline });
+
+    console.log('View created successfully.');
+  } catch (error) {
+    console.error('Error:', error);
+  } finally {
+    client.close();
+  }
 }
 // module.exports = { createView, dropExistingView,TradeHistroy }
 module.exports = { dropExistingView, TradeHistroy }
