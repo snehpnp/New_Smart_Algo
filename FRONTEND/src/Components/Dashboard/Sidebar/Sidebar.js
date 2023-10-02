@@ -1,14 +1,16 @@
 /* eslint-disable no-script-url */
 /* eslint-disable jsx-a11y/role-supports-aria-props */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config'
-import { Signal, Users, Wrench, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Rocket, Paintbrush , Vote  } from 'lucide-react';
+import { Signal, Users, Wrench, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Rocket, Paintbrush, Vote } from 'lucide-react';
 import Test from "../../../test"
 import html2canvas from 'html2canvas';
 import $ from "jquery";
 import Logo from '../Header/Logo';
+import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
+import { useDispatch, useSelector } from "react-redux";
 
 
 
@@ -17,16 +19,42 @@ import Logo from '../Header/Logo';
 const Sidebar = ({ ShowSidebar }) => {
 
     const location = useLocation()
+    const dispatch = useDispatch()
+
 
 
     const roles = JSON.parse(localStorage.getItem('user_role'))
     const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
     const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
+    const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
 
 
+    const [getPermissions, setGetPermissions] = useState([])
+
+
+
+
+
+    //  GET SUBADMIN PERMISSION
+    const data2 = async () => {
+        if (roles === 'SUBADMIN') {
+            await dispatch(Get_Sub_Admin_Permissions({ id: user_ID })).unwrap()
+                .then((response) => {
+                    if (response.status) {
+                        setGetPermissions(response.data[0])
+
+                    }
+                })
+        }
+    }
     useEffect(() => {
-        // $(".metismenu li").addClass("mm-active");
+        data2()
     }, [])
+
+
+
+
+
 
 
     return (
@@ -37,11 +65,11 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
                     <ul className="metismenu" id="menu">
-                    <div className='sidebar-logo'>
+                        <div className='sidebar-logo'>
 
-<Logo/>
+                            <Logo />
 
-</div>
+                        </div>
                         {
                             gotodashboard != null ? user_role_goTo === "USER" ? Client && Client.map((item) => {
                                 return <>
@@ -82,18 +110,15 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
                                 </>
-                            }): user_role_goTo === "SUBADMIN" ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
+                            }) : user_role_goTo === "SUBADMIN" ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
                                 return <>
                                     <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                         {item.Data.length > 0 ? <>
-
                                             <Link
                                                 className="has-arrow "
-                                                // href="javascript:void()"
                                                 aria-expanded="false"
                                             >
                                                 <IconComponent key={item.id} icon={item.Icon} />
-
                                                 <span className="nav-text mx-2">{item.name}</span>
                                             </Link>
                                         </> : ""}
@@ -121,7 +146,7 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
                                 </>
-                            }): "" :
+                            }) : "" :
                                 roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
                                     return <>
                                         <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
@@ -201,32 +226,37 @@ const Sidebar = ({ ShowSidebar }) => {
                                 }) :
                                     roles === 'SUBADMIN' ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
                                         return <>
-                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                {item.Data.length > 0 ? <>
+                                            {item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old === 1 ? <>
 
-                                                    <Link
-                                                        className="has-arrow "
-                                                        // href="javascript:void()"
-                                                        aria-expanded="false"
-                                                    >
-                                                        <IconComponent key={item.id} icon={item.Icon} />
+                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                    {item.Data.length > 0 ? <>
 
-                                                        <span className="nav-text  mx-2">{item.name}</span>
-                                                    </Link>
-                                                </> : ""}
-                                                <ul aria-expanded="false">
-                                                    {item.Data.length > 0 ?
-                                                        item.Data.map((nested_item) => {
-                                                            return <>
-                                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                                    <Link to={nested_item.route}>{nested_item.name}</Link>
-                                                                </li>
-                                                            </>
-                                                        })
-                                                        : ""}
-                                                </ul>
-                                            </li>
+                                                        <Link
+                                                            className="has-arrow "
+                                                            // href="javascript:void()"
+                                                            aria-expanded="false"
+                                                        >
+                                                            <IconComponent key={item.id} icon={item.Icon} />
+
+                                                            <span className="nav-text  mx-2">{item.name}</span>
+                                                        </Link>
+                                                    </> : ""}
+                                                    <ul aria-expanded="false">
+                                                        {item.Data.length > 0 ?
+                                                            item.Data.map((nested_item) => {
+                                                                return <>
+                                                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                                        <Link to={nested_item.route}>{nested_item.name}</Link>
+                                                                    </li>
+                                                                </>
+                                                            })
+                                                            : ""}
+                                                    </ul>
+                                                </li>
+                                            </> : ""}
+
                                             {item.Data.length === 0 ? <>
+                                                {item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old === 0 ? '' :
                                                 <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                     <Link to={item.route} className="" aria-expanded="false">
                                                         <IconComponent key={item.id} icon={item.Icon} />
@@ -234,7 +264,12 @@ const Sidebar = ({ ShowSidebar }) => {
                                                         <span className="nav-text mx-2">{item.name}</span>
                                                     </Link>
                                                 </li>
-                                            </> : ""}
+                                                }
+
+                                            </>
+
+
+                                                : ""}
 
 
                                         </>
@@ -339,8 +374,8 @@ const IconComponent = ({ icon }) => {
                 return <ScatterChart className='me-3' />;
             case 'Paintbrush':
                 return <Paintbrush className='me-3' />;
-                case 'Vote':
-                    return <Vote className='me-3' />;
+            case 'Vote':
+                return <Vote className='me-3' />;
 
             default:
                 return null;

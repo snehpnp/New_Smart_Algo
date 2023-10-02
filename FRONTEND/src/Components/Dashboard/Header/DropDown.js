@@ -73,16 +73,11 @@ const DropDown = () => {
                 <i className="fa fa-angle-down ms-3" />
             </button>
             <div className="dropdown-menu dropdown-menu-end" style={{ margin: 0, padding: "11px" }}>
-
-
-                {/* <Link to="profile" className=" my-2 text-center  text-white btn  btn-primary dropdown-item" href="#"> */}
-
-                <Link to={profile_Route()} className=" my-2 text-center  text-white btn  btn-primary dropdown-item">
-
+                <Link to={profile_Route()} className="btn btn-primary w-100 my-2 ">
                     Profile
                 </Link>
                 {gotodashboard == null ?
-                    <button className="btn text-center text-white btn-primary dropdown-item" onClick={(e) => LogoutUser(e)}>
+                    <button className="btn btn-primary  w-100 " onClick={(e) => LogoutUser(e)}>
                         Logout
                     </button>
                     : ""}

@@ -73,25 +73,28 @@ const ServicesList = () => {
 
     const RemoveStrategy = async (strat_id) => {
 
-        await dispatch(Remove_Strategy_BY_Id({
-            _id: strat_id,
-            token: user_token
-        })).unwrap().then((response) => {
+        if (window.confirm("Do you want to delete this ?")) {
 
-            console.log("response" ,response)
+            await dispatch(Remove_Strategy_BY_Id({
+                _id: strat_id,
+                token: user_token
+            })).unwrap().then((response) => {
 
-            if (response.status) {
-                toast.success(response.msg);
-                setRefresh(!refresh)
-                setTimeout(() => {
-                    navigate("/admin/strategies")
-                }, 1000);
-            }
-            else {
-                toast.error(response.msg);
-            }
-        })
+                console.log("response", response)
 
+                if (response.status) {
+                    toast.success(response.msg);
+                    setRefresh(!refresh)
+                    setTimeout(() => {
+                        navigate("/admin/strategies")
+                    }, 1000);
+                }
+                else {
+                    toast.error(response.msg);
+                }
+            })
+
+        }
     }
 
 
@@ -132,7 +135,7 @@ const ServicesList = () => {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
-                <div>
+                <div className='d-flex'>
                     <span data-toggle="tooltip" data-placement="top" title="Get Clients">
                         <UserPlus size={20} strokeWidth={2} className="mx-1" onClick={(e) => GetAllServicesName(row)} />
                     </span>

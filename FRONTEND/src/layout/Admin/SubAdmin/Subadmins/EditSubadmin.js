@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Loader from '../../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -45,6 +46,11 @@ const AllSubadmin = () => {
     const [selectedGroupIds, setSelectedGroupIds] = useState([]);
 
 
+    // console.log("checkedGroupServices", checkedGroupServices.filter(item => item.checked)
+    //     .map(item => item.id))
+
+    console.log("selectedGroupIds", selectedGroupIds)
+    console.log("selectedStrategyIds", selectedStrategyIds)
 
     const [Addsubadmin, setAddsubadmin] = useState({
         loading: false,
@@ -101,62 +107,48 @@ const AllSubadmin = () => {
             email: null,
             mobile: 'null',
             password: 'null',
-            Strategy: false,
+            Strategy1: false,
             select_strategy: [],
             gotodashboard: false,
             licence: false,
+            detailsinfo: false,
             all: false,
             editclient: false,
             addclient: false,
             tradehistory: false,
             groupservice: false,
             select_group_services: [],
+
         },
         touched: {
-            FullName: '',
-            email: '',
-            mobile: '',
-            password: '',
-            Strategy: false,
-            select_strategy: [],
-            gotodashboard: false,
-            licence: false,
-            all: false,
-            editclient: false,
-            addclient: false,
-            tradehistory: false,
-            groupservice: false,
-            select_group_services: [],
+            FullName: false,
+            email: false,
+            mobile: false,
+            password: false,
         },
         validate: (values) => {
             const errors = {};
 
-
-
             if (!values.password) {
                 errors.password = valid_err.PASSWORD_ERROR;
             }
-            if (!values.mobile) {
+            if (!values.mobile && formik.touched.mobile) {
                 errors.mobile = valid_err.CONTACT_ERROR;
-            } else if (!isValidContact(values.mobile)) {
+            } else if (!isValidContact(values.mobile) && formik.touched.mobile) {
                 errors.mobile = valid_err.INVALID_CONTACT_ERROR;
             }
 
+            if (values.groupservice && selectedGroupIds.length === 0) {
+                errors.select_group_services = valid_err.SEGEMENTSELECT_LEASTONE_ERROR;
+            }
+
+            if (values.Strategy && selectedStrategyIds.length === 0) {
+                errors.select_strategy = valid_err.SEGEMENTSELECT_LEASTONE_ERROR;
+            }
             return errors;
         },
         onSubmit: async (values) => {
 
-
-
-            const updatedSubadmin = {
-                // ... (other fields)
-                "Subadmin_permision_data": {
-                    // ... (other permissions)
-                    "strategy": selectedStrategyIds, // Updated selected strategy IDs
-                }
-            };
-
-            return
             const req = {
                 "FullName": values.FullName,
                 "Email": values.email,
@@ -172,11 +164,15 @@ const AllSubadmin = () => {
                     "license_permision": values.licence ? '1' : values.all ? '1' : '0',
                     "go_To_Dashboard": values.gotodashboard ? '1' : values.all ? '1' : '0',
                     "trade_history_old": values.tradehistory ? '1' : values.all ? '1' : '0',
+                    "detailsinfo": values.detailsinfo ? '1' : values.all ? '1' : '0',
                     "strategy": selectedStrategyIds,
                     "group_services": selectedGroupIds,
-
                 }
             }
+            console.log("test", req);
+
+
+            // return
 
 
             await dispatch(Edit_Subadmin({ req: req, token: user_token })).unwrap().then((response) => {
@@ -205,21 +201,18 @@ const AllSubadmin = () => {
 
         if (UserData.data.data !== undefined) {
             let userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0]
-            console.log("UserData.data.data", userStrategyIds)
-
             formik.setFieldValue('FullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
             formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
             formik.setFieldValue('mobile', UserData.data.data !== undefined && UserData.data.data[0].PhoneNo);
             formik.setFieldValue('password', UserData.data.data !== undefined && UserData.data.data[0].Otp);
-            // const userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0]
             formik.setFieldValue('addclient', userStrategyIds.client_add === 1 ? true : false);
             formik.setFieldValue('editclient', userStrategyIds.client_edit === 1 ? true : false);
+            formik.setFieldValue('detailsinfo', userStrategyIds.detailsinfo === 1 ? true : false);
             formik.setFieldValue('gotodashboard', userStrategyIds.go_To_Dashboard === 1 ? true : false);
-            formik.setFieldValue('licence', userStrategyIds.license_permision
-                === 1 ? true : false);
+            formik.setFieldValue('licence', userStrategyIds.license_permision === 1 ? true : false);
             formik.setFieldValue('tradehistory', userStrategyIds.trade_history_old === 1 ? true : false);
-            // formik.setFieldValue('Strategy', userStrategyIds.strategy && userStrategyIds.strategy.length > 0 ? true : false);
-            // formik.setFieldValue('groupservice', userStrategyIds.group_services && userStrategyIds.group_services.length > 0 ? true : false);
+            formik.setFieldValue('Strategy', userStrategyIds.strategy && userStrategyIds.strategy.length > 0 ? true : false);
+            formik.setFieldValue('groupservice', userStrategyIds.group_services && userStrategyIds.group_services.length !== 0 ? true : false);
         }
     }, [UserData.data.data]);
 
@@ -245,6 +238,8 @@ const AllSubadmin = () => {
     }, [formik.values.all]);
 
 
+
+    console.log("formik", formik.values)
 
 
 
@@ -274,6 +269,10 @@ const AllSubadmin = () => {
         {
             name: 'tradehistory', label: 'Trade History', type: 'checkbox', label_size: 12, col_size: 3,
             check_box_true: formik.values.all || formik.values.tradehistory ? true : false,
+        },
+        {
+            name: 'detailsinfo', label: 'Full Info View', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.detailsinfo ? true : false,
         },
 
         // {
@@ -326,12 +325,14 @@ const AllSubadmin = () => {
 
 
 
-    // const [selectedStrategyIds, setSelectedStrategyIds] = useState([]);
 
     useEffect(() => {
         if (UserData.data.data !== undefined && UserData.data.data.length > 0) {
             const userStrategyIds = UserData.data.data[0].subadmin_permissions[0].strategy;
             setSelectedStrategyIds(userStrategyIds);
+
+            const usergropupyIds = UserData.data.data[0].subadmin_permissions[0].group_services;
+            setSelectedGroupIds(usergropupyIds);
         }
     }, [UserData.data]);
 
@@ -398,6 +399,9 @@ const AllSubadmin = () => {
         }
     }, [UserData.data, AllGroupServices.data]);
 
+
+
+
     const handleStrategyChange1 = (event) => {
         const strategyId = event.target.value;
         setCheckedGroupServices((prevStrategies) => {
@@ -408,6 +412,9 @@ const AllSubadmin = () => {
                 return strategy;
             });
         });
+
+
+
 
         setSelectedGroupIds((prevIds) => {
             if (prevIds.includes(strategyId)) {
@@ -427,14 +434,15 @@ const AllSubadmin = () => {
                 Addsubadmin.loading ? <Loader /> :
                     <>
                         <Content Page_title="Edit Sub-Admin" button_title="Back" route="/admin/allsubadmins">
-                            <Formikform fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Add Sub-Admin"
+                            <Formikform fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Update"
                                 additional_field={
                                     <>
 
                                         {formik.values.groupservice ? <>
-                                            <h6>All Group Service</h6>
+                                            <h6 className='fw-bold mt-3 text-decoration-underline'>All Group Service</h6>
+
                                             {checkedGroupServices.map((strategy) => (
-                                                <div className={`col-lg-2 mt-2`} key={strategy.id}>
+                                                <div className={`col-lg-2 mt-2 `} key={strategy.id}>
                                                     <div className="row">
                                                         <div className="col-lg-12">
                                                             <div className="form-check custom-checkbox mb-3">
@@ -449,11 +457,20 @@ const AllSubadmin = () => {
                                                                 <label className="form-check-label" htmlFor={strategy.id}>
                                                                     {strategy.name}
                                                                 </label>
+
                                                             </div>
+
+
                                                         </div>
+
                                                     </div>
+
+
                                                 </div>
+
                                             ))}
+                                            {formik.errors.select_group_services && selectedGroupIds.length === 0 ?
+                                                <div style={{ color: 'red' }}>{formik.errors.select_group_services}</div> : ""}
                                         </> : ""
                                         }
 
@@ -471,12 +488,12 @@ const AllSubadmin = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                        ))}
-              */}
+                                        ))} */}
+
 
                                         {
                                             formik.values.Strategy ? <>
-                                                <h6 className='fw-bold'>All Strategy</h6>
+                                                <h6 className='fw-bold mt-3 text-decoration-underline'>All Strategy</h6>
 
                                                 {checkedStrategies.map((strategy) => (
                                                     <div className={`col-lg-2 mt-2`} key={strategy.id}>
@@ -485,7 +502,7 @@ const AllSubadmin = () => {
                                                                 <div className="form-check custom-checkbox mb-3">
                                                                     <input
                                                                         type="checkbox"
-                                                                        className="form-check-input"
+                                                                        className="form-check-input "
                                                                         name={strategy.id}
                                                                         value={strategy.id}
                                                                         onChange={(e) => handleStrategyChange(e)}
@@ -496,9 +513,12 @@ const AllSubadmin = () => {
                                                                     </label>
                                                                 </div>
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                 ))}
+                                                {formik.errors.select_strategy && selectedStrategyIds.length === 0 ?
+                                                    <div style={{ color: 'red' }}>{formik.errors.select_strategy}</div> : ""}
 
                                             </> : ""}
 

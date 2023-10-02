@@ -274,7 +274,7 @@ const AllClients = () => {
 
                     <label class="toggle mt-3">
                         <input class="toggle-checkbox bg-primary" type="checkbox"
-                        defaultChecked={row.ActiveStatus == "1" ? true : false} 
+                        defaultChecked={row.ActiveStatus === "1" ? true : false}
                         onChange={(e) => {
                             activeUser(e, row)
                         }}
@@ -294,8 +294,8 @@ const AllClients = () => {
             text: 'Broker',
             formatter: (cell, row) => (
                 <>
-                    <button
-                        className=" btn btn-new-block"
+                    <span
+                        className=" btn "
                         style={
                             row.AppLoginStatus === '0' && row.WebLoginStatus === '0'
                                 ? { color: "#FF0000" }
@@ -305,7 +305,7 @@ const AllClients = () => {
                         disabled={row.AppLoginStatus === '0' && row.WebLoginStatus === '0'}
                     >
                         Dashboard
-                    </button>
+                    </span>
                 </>
             ),
         },

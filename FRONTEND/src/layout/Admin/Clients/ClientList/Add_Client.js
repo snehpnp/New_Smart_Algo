@@ -607,26 +607,30 @@ const AddClient = () => {
           additional_field={
             <>
               {/*  For Show All Services */}
-
-              {GetServices && GetServices.data.map((strategy) => (
-                <div className={`col-lg-2 `} key={strategy._id}>
-                  <div className="col-lg-12 ">
-                    <label className="form-check-label bg-primary text-white py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
+              {formik.errors.groupservice ? <>
+                <h6>All Group Service</h6>
+                {GetServices && GetServices.data.map((strategy) => (
+                  <div className={`col-lg-2 `} key={strategy._id}>
+                    <div className="col-lg-12 ">
+                      <label className="form-check-label bg-primary text-white py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
+                    </div>
                   </div>
-                </div>
-              ))}
-              <label class="toggle mt-3">
-                <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
-                  setShowAllStratagy(e.target.checked)
-                }} />
-                <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
-                <span class="toggle-label">Show Strategy</span>
-              </label>
+                ))}
+                <label class="toggle mt-3">
+                  <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
+                    setShowAllStratagy(e.target.checked)
+                  }} />
+                  <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
+                  <span class="toggle-label">Show Strategy</span>
+                </label>
 
-              {formik.errors.Strategy &&
-                <div style={{ color: 'red' }} className='my-3'>{formik.errors.Strategy} </div>}
+                {formik.errors.Strategy &&
+                  <div style={{ color: 'red' }} className='my-3'>{formik.errors.Strategy} </div>}
+
+              </> : ""}
 
               {/*  For Show All Strategy */}
+              <h6>All Strategy</h6>
               {ShowAllStratagy ? <>
                 {AllStrategy.data.map((strategy) => (
                   <div className={`col-lg-2 mt-2`} key={strategy._id}>

@@ -30,15 +30,12 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
     }, [data && data]);
 
 
-
     const formik = useFormik({
         initialValues: {
             logo: '',
             favicon: '',
             watermark: '',
             loginimg: '',
-
-
         },
         touched: {
             logo: '',
@@ -71,7 +68,7 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
 
             await dispatch(Update_smtp_details({ req: req, token: user_token })).unwrap().then((response) => {
 
-                console.log("response" ,response);
+                console.log("response", response);
                 if (response.status === 409) {
                     toast.error(response.data.msg);
                 }
@@ -88,11 +85,11 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
         }
     });
 
-    console.log("req" , formik);
 
 
 
 
+    console.log("formik", formik.values)
 
 
     const fields = [
@@ -108,9 +105,10 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
             handleClose={() => setshowModal(false)}
         >
             <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
-           showImagePreview={true}
+                showImagePreview={true}
             />
             <ToastButton />
+
 
         </Modal ></div>
     )

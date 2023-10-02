@@ -234,20 +234,20 @@ export const sub_admin_sidebar = [
         "route": "/subadmin/clients",
         "Data": []
     },
-    {
-        'id': 3,
-        "name": 'All Services',
-        "Icon": "Wrench",
-        "route": "/subadmin/services",
-        "Data": []
-    },
-    {
-        'id': 4,
-        "name": 'Group Services',
-        "Icon": "Frame",
-        "route": "/subadmin/groupservices",
-        "Data": []
-    },
+    // {
+    //     'id': 3,
+    //     "name": 'All Services',
+    //     "Icon": "Wrench",
+    //     "route": "/subadmin/services",
+    //     "Data": []
+    // },
+    // {
+    //     'id': 4,
+    //     "name": 'Group Services',
+    //     "Icon": "Frame",
+    //     "route": "/subadmin/groupservices",
+    //     "Data": []
+    // },
     {
         'id': 5,
         "name": 'Trade History',

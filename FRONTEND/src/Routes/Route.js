@@ -59,7 +59,7 @@ const Routing = () => {
       if (user_role_goTo === "USER" && location.pathname === "/") {
         navigate("/client/dashboard");
       } else if (roles === "SUBADMIN" && location.pathname === "/") {
-        navigate("/subadmin/dashboard");
+        navigate("/subadmin/signals");
       }
     }
 

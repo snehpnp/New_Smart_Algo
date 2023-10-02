@@ -27,7 +27,9 @@ const Header = ({ ChatBox }) => {
 
   // HOOKS
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate(
+
+  )
 
   const [showModal, setshowModal] = useState(false)
   const [UserDetails, setUserDetails] = useState([]);
@@ -136,7 +138,6 @@ const Header = ({ ChatBox }) => {
     localStorage.removeItem("gotodashboard");
 
     setTimeout(() => {
-
       localStorage.removeItem("user_details_goTo");
       localStorage.removeItem("user_role_goTo");
     }, 1000);

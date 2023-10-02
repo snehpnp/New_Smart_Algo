@@ -151,7 +151,7 @@ const AllSubadmin = () => {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
-                <div>
+                <div className="d-flex">
                     <Link to={`/admin/editsubadmin/${row._id}`}>
                         <span data-toggle="tooltip" data-placement="top" title="Edit">
                             <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />

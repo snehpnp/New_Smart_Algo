@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GETALL_SUB_ADMINS,GETALL_SUB_ADMINS_CLIENTS } from "../../../Service/subadmin.service";
+import { GETALL_SUB_ADMINS,GETALL_SUB_ADMINS_CLIENTS  , GET_SUB_ADMINS_PERMISSIONS} from "../../../Service/subadmin.service";
 
 
 
@@ -24,6 +24,15 @@ export const Get_All_SUBADMIN_CLIENT = createAsyncThunk("getall/subadmin", async
         return err;
     }
 });
+export const Get_Sub_Admin_Permissions = createAsyncThunk("subadmin/permissions", async (data) => {
+    try {
+        const res = await GET_SUB_ADMINS_PERMISSIONS(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
 
 const SubadminSlice = createSlice({
     name: "SubadminsSlice",
@@ -33,8 +42,9 @@ const SubadminSlice = createSlice({
         status: false,
         allSubadmin: [],
         allSubadminClients: [],
+        allpermissions: [],
 
-        
+
     },
 
     recuders: {},
@@ -58,7 +68,11 @@ const SubadminSlice = createSlice({
             // state.isLoading = false;
             return { ...state, allSubadminClients: payload, isLoading: false };
         },
-    
+        [Get_Sub_Admin_Permissions.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, allpermissions: payload, isLoading: false };
+        },
+
     },
 });
 

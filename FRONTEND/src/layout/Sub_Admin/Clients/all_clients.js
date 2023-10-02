@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-// import Content from "../../../../Components/Dashboard/Content/Content"
+import Content from "../../../Components/Dashboard/Content/Content"
 import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
 import Loader from '../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -50,7 +50,7 @@ const AllClients = () => {
     }, [])
 
 
-    // GO TO DASHBOARD 
+    // GO TO DASHBOARD
     const goToDashboard = async (asyncid, email) => {
 
         let req = {
@@ -113,7 +113,7 @@ const AllClients = () => {
         //     dataField: 'StartDate',
         //     text: 'Start Date',
         //     formatter: (cell, row) => cell.split('T')[0],
-           
+
 
         // },
         // {
@@ -220,7 +220,7 @@ const AllClients = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="All Clients" button_title="Add Client" route="/admin/client/add">
+                        <Content Page_title="All Clients" button_title="Add Client" route="/admin/client/add">
 
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ? (
@@ -239,7 +239,7 @@ const AllClients = () => {
                                     </>
                                     : ""
                             }
-                        </Theme_Content>
+                        </Content>
                     </>
             }
 
