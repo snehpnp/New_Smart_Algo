@@ -44,7 +44,7 @@ const MainSignalsSchema = Schema({
     dt: {
         type: String,
     },
-    
+
     dt_date: {
         type: String,
     },
@@ -69,12 +69,9 @@ const MainSignalsSchema = Schema({
     signals_id: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'signals',
-            default: null
+            ref: 'signals'
         }
     ],
-
-
     createdAt: {
         type: Date,
         default: Date.now

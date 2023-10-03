@@ -72,7 +72,7 @@ const themeSchema = new mongoose.Schema({
         default: null
     },
     image: {
-        type: Buffer,
+        type: String,
         required: true,
         default: null
     },

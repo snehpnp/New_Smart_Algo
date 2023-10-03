@@ -275,6 +275,23 @@ class Dashboard {
         }
     }
 
+
+    
+    // Trading OFF 
+    async TradingOff(req, res) {
+        try {
+            const { user_id, device } = req.body
+console.log(user_id, device);
+
+
+            
+        } catch (error) {
+
+        }
+    }
+
+
+
 }
 
 
