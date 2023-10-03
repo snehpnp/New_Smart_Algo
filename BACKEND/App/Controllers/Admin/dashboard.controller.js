@@ -85,9 +85,10 @@ class Dashboard {
                     total_two_days: total_two_days,
                     total_active_two_days: total_active_two_days,
                     total_expired_two_days: total_expired_two_days,
-                    all_licence: all_licence[0].licenses,
-                    used_licence: used_licences,
-                    remaining_licence:Number(all_licence[0].licenses) - Number(used_licences),
+                    
+                    // all_licence: all_licence[0].licenses,
+                    // used_licence: used_licences,
+                    // remaining_licence:Number(all_licence[0].licenses) - Number(used_licences),
 
 
                 }

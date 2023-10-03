@@ -563,7 +563,7 @@ class Employee {
                             var deleteStrategy = await strategy_client.deleteOne({ user_id: existingUsername._id, strategy_id: stgId })
 
                             const Strategieclient = await strategy.find({ _id: stgId });
-                            console.log(Strategieclient);
+                            // console.log(Strategieclient);
                             const user_activity = new user_activity_logs(
                                 {
                                     user_id: existingUsername._id,
@@ -648,6 +648,7 @@ class Employee {
                                     strategy_id: strategFind[0].strategy_id,
                                     uniqueUserService: existingUsername._id + "_" + data.Service_id
                                 })
+                            console.log("data ",User_client_services)
                             // console.log(User_client_services);
                             User_client_services.save()
                         })

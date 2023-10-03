@@ -59,7 +59,6 @@ const AllClients = () => {
 
 
     }
-    console.log("dashboard_filter", dashboard_filter);
 
     const data = async () => {
         var req1 = {
