@@ -82,6 +82,7 @@ const AllSubadmin = () => {
             select_strategy: [],
             gotodashboard: false,
             licence: false,
+            detailsinfo: false,
             all: false,
             editclient: false,
             addclient: false,
@@ -96,6 +97,7 @@ const AllSubadmin = () => {
             // if (!values.username) {
             //     errors.username = valid_err.USERNAME_ERROR;
             // }
+
             if (!values.FullName) {
                 errors.FullName = valid_err.FULLNAME_ERROR;
             }
@@ -143,14 +145,15 @@ const AllSubadmin = () => {
                     "license_permision": values.licence ? '1' : values.all ? '1' : '0',
                     "go_To_Dashboard": values.gotodashboard ? '1' : values.all ? '1' : '0',
                     "trade_history_old": values.tradehistory ? '1' : values.all ? '1' : '0',
+                    "detailsinfo": values.detailsinfo ? '1' : values.all ? '1' : '0',
                     "strategy": selectedStrategies,
                     "group_services": SelectedGroupServices,
 
                 }
             }
 
-            console.log("test", req);
-            return
+            // console.log("test", req);
+            // return
 
             await dispatch(Add_Subadmin({ req: req, token: user_token })).unwrap().then((response) => {
 
@@ -200,11 +203,11 @@ const AllSubadmin = () => {
             name: 'tradehistory', label: 'Trade History', type: 'checkbox', label_size: 12, col_size: 3,
             check_box_true: formik.values.all || formik.values.tradehistory ? true : false,
         },
+        {
+            name: 'detailsinfo', label: 'Full Info View', type: 'checkbox', label_size: 12, col_size: 3,
+            check_box_true: formik.values.all || formik.values.detailsinfo ? true : false,
+        },
 
-        // {
-        //     name: 'group', label: 'Group Permission', type: 'checkbox', label_size: 12, col_size: 3,
-        //     check_box_true: formik.values.all || formik.values.group ? true : false,
-        // },
         {
             name: 'groupservice',
             label: 'Group Service Permission',
@@ -259,20 +262,24 @@ const AllSubadmin = () => {
 
     useEffect(() => {
         if (formik.values.all) {
+            formik.setFieldValue('addclient', true);
             formik.setFieldValue('editclient', true);
             formik.setFieldValue('gotodashboard', true);
             formik.setFieldValue('licence', true);
             formik.setFieldValue('group', true);
             formik.setFieldValue('groupservice', true);
             formik.setFieldValue('Strategy', true);
+            formik.setFieldValue('detailsinfo', true);
         }
         else {
+            formik.setFieldValue('addclient', false);
             formik.setFieldValue('editclient', false);
             formik.setFieldValue('gotodashboard', false);
             formik.setFieldValue('licence', false);
             formik.setFieldValue('group', false);
             formik.setFieldValue('groupservice', false);
             formik.setFieldValue('Strategy', false);
+            formik.setFieldValue('detailsinfo', false);
 
         }
 

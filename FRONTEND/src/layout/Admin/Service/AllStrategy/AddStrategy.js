@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form"
+import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1"
 import { useFormik } from 'formik';
 import * as  valid_err from "../../../../Utils/Common_Messages"
 // import { toast } from "react-toastify";
@@ -92,6 +92,7 @@ const AddStrategy = () => {
             }
 
 
+
             await dispatch(Add_Strategy({ req: req, token: AdminToken })).unwrap().then((response) => {
                 if (response.status === 409) {
                     toast.error(response.data.msg);
@@ -108,21 +109,38 @@ const AddStrategy = () => {
     });
 
 
+
     const fields = [
-        { name: 'strategyname', label: 'Strategy Name', type: 'text' },
-        { name: 'perlot', label: 'Per Lot Amount', type: 'text' },
-        { name: 'Catagory', label: 'catagory', type: 'text' },
+        { name: 'strategyname', label: 'Strategy Name', type: 'text', label_size: 12, col_size: 6, disable: false },
+        { name: 'perlot', label: 'Per Lot Amount', type: 'text', label_size: 12, col_size: 6, disable: false },
+        { name: 'Catagory', label: 'catagory', type: 'text', label_size: 12, col_size: 6, disable: false },
         {
             name: 'segment',
             label: 'Select Segment',
             type: 'select',
-            options: CatagoryData.data && CatagoryData.data.map((item) => ({ label: item.name, value: item.segment }))
-
+            options: CatagoryData.data && CatagoryData.data.map((item) => ({ label: item.name, value: item.segment })),
+            label_size: 12, col_size: 6, disable: false
         },
-        { name: 'indecator', label: 'Indicator ', type: 'file' },
-        { name: 'strategytester', label: 'Stratergy Tester ', type: 'file' },
-        { name: 'strategy_description', label: 'Strategy Description', type: 'msgbox' },
+        { name: 'indecator', label: 'Indicator ', type: 'file', label_size: 12, col_size: 6, disable: false },
+        { name: 'strategytester', label: 'Stratergy Tester ', type: 'file', label_size: 12, col_size: 6, disable: false },
+        { name: 'strategy_description', label: 'Strategy Description', type: 'msgbox', row_size: 4, label_size: 12, col_size: 12, disable: false },
+
     ];
+    // const fields = [
+    //     { name: 'strategyname', label: 'Strategy Name', type: 'text' },
+    //     { name: 'perlot', label: 'Per Lot Amount', type: 'text' },
+    //     { name: 'Catagory', label: 'catagory', type: 'text' },
+    //     {
+    //         name: 'segment',
+    //         label: 'Select Segment',
+    //         type: 'select',
+    //         options: CatagoryData.data && CatagoryData.data.map((item) => ({ label: item.name, value: item.segment }))
+
+    //     },
+    //     { name: 'indecator', label: 'Indicator ', type: 'file' },
+    //     { name: 'strategytester', label: 'Stratergy Tester ', type: 'file' },
+    //     { name: 'strategy_description', label: 'Strategy Description', type: 'msgbox' },
+    // ];
 
 
 
@@ -144,6 +162,8 @@ const AddStrategy = () => {
     useEffect(() => {
         getservice()
     }, [])
+
+    console.log("formik", formik.values)
 
 
 

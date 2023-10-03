@@ -145,7 +145,7 @@ const Login = () => {
       return
     }
 
-    console.log("UserData==",UserData);
+    console.log("UserData==", UserData);
 
 
     let req = {
@@ -167,7 +167,7 @@ const Login = () => {
             localStorage.setItem("user_details", JSON.stringify(userData));
             localStorage.setItem("user_role", JSON.stringify(role));
             toast.success(res.payload.msg);
-            let redirectPath = `/${role === "USER" ? "client" : role.toLowerCase()}/dashboard`;
+            let redirectPath = `/${role === "USER" ? "client" : role.toLowerCase()}/${role === "SUBADMIN" ? 'signals' : 'dashboard'}`;
             setTimeout(() => {
               setshowModal(false);
               navigate(redirectPath);

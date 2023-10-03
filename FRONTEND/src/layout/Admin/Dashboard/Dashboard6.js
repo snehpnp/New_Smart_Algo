@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 const Dashboard1 = ({ data }) => {
 
 
+  console.log("data" ,data)
+
 
   let arr = [
     {
@@ -120,30 +122,30 @@ const Dashboard1 = ({ data }) => {
       visible: true
 
     },
-    {
-      index: 13,
-      name: "Total Licence",
-      value: data.data && data.data.all_licence,
-      icon: 'la la-users',
-      route: "/admin/allLicence",
-      visible: false
-    }, {
-      index: 14,
-      name: "Remaining  Licence",
-      value: data.data && data.data.remaining_licence,
-      icon: 'la la-users',
-      route: "/admin/allLicence",
-      visible: false
+    // {
+    //   index: 13,
+    //   name: "Total Licence",
+    //   value: data.data && data.data.all_licence,
+    //   icon: 'la la-users',
+    //   route: "/admin/allLicence",
+    //   visible: false
+    // }, {
+    //   index: 14,
+    //   name: "Remaining  Licence",
+    //   value: data.data && data.data.remaining_licence,
+    //   icon: 'la la-users',
+    //   route: "/admin/allLicence",
+    //   visible: false
 
-    }, {
-      index: 15,
-      name: "Used  Licence",
-      value: data.data && data.data.used_licence,
-      icon: 'la la-users',
-      route: "/admin/allLicence",
-      visible: true
+    // }, {
+    //   index: 15,
+    //   name: "Used  Licence",
+    //   value: data.data && data.data.used_licence,
+    //   icon: 'la la-users',
+    //   route: "/admin/allLicence",
+    //   visible: true
 
-    },
+    // },
     {
       index: 16,
       name: "Total Subadmin",

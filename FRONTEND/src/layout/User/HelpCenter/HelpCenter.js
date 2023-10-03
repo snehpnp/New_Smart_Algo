@@ -32,6 +32,7 @@ const ApiCreateInfo = () => {
 
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
     const token = JSON.parse(localStorage.getItem("user_details")).token;
+    const role = JSON.parse(localStorage.getItem("user_role"));
 
     const [refresh, setRefresh] = useState(false);
 
@@ -67,7 +68,7 @@ const ApiCreateInfo = () => {
                 "email": values.email,
                 "mobile": values.mobile,
                 "helpmsg": values.msg,
-                "admin_id": values.admin_id,
+                "admin_id":  values.admin_id,
                 "user_id": user_id,
             }
 

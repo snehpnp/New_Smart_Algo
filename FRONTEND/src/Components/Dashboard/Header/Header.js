@@ -1,20 +1,20 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from 'react'
-import Logo from "./Logo"
-import DropDown from "./DropDown"
-import Notification from '../../ExtraComponents/Notification'
+import React, { useEffect, useState } from "react";
+import Logo from "./Logo";
+import DropDown from "./DropDown";
+import Notification from "../../ExtraComponents/Notification";
 import { useDispatch, useSelector } from "react-redux";
 
 import $ from "jquery";
 import { useNavigate } from "react-router-dom";
-import Modal from '../../../Components/ExtraComponents/Modal';
-import UpdateBrokerKey from './Update_Broker_Key';
-import { loginWithApi } from './log_with_api';
+import Modal from "../../../Components/ExtraComponents/Modal";
+import UpdateBrokerKey from "./Update_Broker_Key";
+import { loginWithApi } from "./log_with_api";
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { check_Device } from "../../../Utils/find_device";
-import { GET_HELPS } from '../../../ReduxStore/Slice/Admin/AdminHelpSlice'
+import { GET_HELPS } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 
 import * as Config from "../../../Utils/Config";
@@ -22,94 +22,104 @@ import socketIOClient from "socket.io-client";
 
 import jwt_decode from "jwt-decode";
 
-
 const Header = ({ ChatBox }) => {
-
   // HOOKS
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [showModal, setshowModal] = useState(false)
+  const [showModal, setshowModal] = useState(false);
   const [UserDetails, setUserDetails] = useState([]);
 
   const [CheckUser, setCheckUser] = useState(check_Device());
 
-
   const [getAllClients, setAllClients] = useState({
     loading: true,
-    data: []
+    data: [],
   });
 
-
   //  lOCAL STORAGE VALUE
-  let theme_id = localStorage.getItem("theme")
-  const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-  const user_role = JSON.parse(localStorage.getItem('user_role'))
-  const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
+  let theme_id = localStorage.getItem("theme");
+  const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
+  const user_role = JSON.parse(localStorage.getItem("user_role"));
+  const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
 
-  const token = JSON.parse(localStorage.getItem("user_details")).token
-
+  const token = JSON.parse(localStorage.getItem("user_details")).token;
 
   if (theme_id != null) {
-    let themedata = JSON.parse(theme_id)
-    $('body').removeClass('theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9  theme-10');
-    $('body').addClass(themedata.dashboard)
+    let themedata = JSON.parse(theme_id);
+    $("body").removeClass(
+      "theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9  theme-10"
+    );
+    $("body").addClass(themedata.dashboard);
 
-    $('body').attr('data-dashboard', `${themedata.dashboard}-dashboard`);
-    $('body').attr('data-theme-version', themedata.theme_version);
-    $('body').attr('data-primary', themedata.primary_col);
-    $('body').attr('data-nav-headerbg', themedata.nav_head_col);
-    $('body').attr('data-headerbg', themedata.header_col);
-    $('body').attr('data-sibebarbg', themedata.sidebar_col);
+    $("body").attr("data-dashboard", `${themedata.dashboard}-dashboard`);
+    $("body").attr("data-theme-version", themedata.theme_version);
+    $("body").attr("data-primary", themedata.primary_col);
+    $("body").attr("data-nav-headerbg", themedata.nav_head_col);
+    $("body").attr("data-headerbg", themedata.header_col);
+    $("body").attr("data-sibebarbg", themedata.sidebar_col);
 
-    if ($('body').attr('data-sidebar-style') === 'overlay') {
-      $('body').attr('data-sidebar-style', 'full');
-      $('body').attr('data-layout', themedata.layout);
+    if ($("body").attr("data-sidebar-style") === "overlay") {
+      $("body").attr("data-sidebar-style", "full");
+      $("body").attr("data-layout", themedata.layout);
       return;
     }
-    $('body').attr('data-layout', themedata.layout);
-    if ($('body').attr('data-layout') === "horizontal") {
+    $("body").attr("data-layout", themedata.layout);
+    if ($("body").attr("data-layout") === "horizontal") {
       if (themedata.sidebar === "overlay") {
         alert("Sorry! Overlay is not possible in Horizontal layout.");
         return;
       }
     }
-    if ($('body').attr('data-layout') === "vertical") {
-      if ($('body').attr('data-container') === "boxed" && themedata.sidebar === "full") {
+    if ($("body").attr("data-layout") === "vertical") {
+      if (
+        $("body").attr("data-container") === "boxed" &&
+        themedata.sidebar === "full"
+      ) {
         alert("Sorry! Full menu is not available in Vertical Boxed layout.");
         return;
       }
-      if (themedata.sidebar === "modern" && $('body').attr('data-sidebar-position') === "fixed") {
-        alert("Sorry! Modern sidebar layout is not available in the fixed position. Please change the sidebar position into Static.");
+      if (
+        themedata.sidebar === "modern" &&
+        $("body").attr("data-sidebar-position") === "fixed"
+      ) {
+        alert(
+          "Sorry! Modern sidebar layout is not available in the fixed position. Please change the sidebar position into Static."
+        );
         return;
       }
     }
-    $('body').attr('data-sidebar-style', themedata.sidebar);
-    if ($('body').attr('data-sidebar-style') === 'icon-hover') {
-      $('.deznav').on('hover', function () {
-        $('#main-wrapper').addClass('iconhover-toggle');
-      }, function () {
-        $('#main-wrapper').removeClass('iconhover-toggle');
-      });
+    $("body").attr("data-sidebar-style", themedata.sidebar);
+    if ($("body").attr("data-sidebar-style") === "icon-hover") {
+      $(".deznav").on(
+        "hover",
+        function () {
+          $("#main-wrapper").addClass("iconhover-toggle");
+        },
+        function () {
+          $("#main-wrapper").removeClass("iconhover-toggle");
+        }
+      );
     }
 
-    $('body').attr('data-header-position', themedata.header_position);
-    $('body').attr('data-sidebar-position', themedata.sidebar_position);
-    $('body').attr('data-typography', themedata.body_font);
+    $("body").attr("data-header-position", themedata.header_position);
+    $("body").attr("data-sidebar-position", themedata.sidebar_position);
+    $("body").attr("data-typography", themedata.body_font);
     if (themedata.container === "boxed") {
-      if ($('body').attr('data-layout') === "vertical" && $('body').attr('data-sidebar-style') === "full") {
-        $('body').attr('data-sidebar-style', 'overlay');
-        $('body').attr('data-container', themedata.container);
+      if (
+        $("body").attr("data-layout") === "vertical" &&
+        $("body").attr("data-sidebar-style") === "full"
+      ) {
+        $("body").attr("data-sidebar-style", "overlay");
+        $("body").attr("data-container", themedata.container);
         setTimeout(function () {
-          $(window).trigger('resize');
+          $(window).trigger("resize");
         }, 200);
         return;
       }
     }
-    $('body').attr('data-container', themedata.container);
-
-
+    $("body").attr("data-container", themedata.container);
 
     $(window).on("resize", function () {
       var windowWidth = $(this).width();
@@ -123,37 +133,27 @@ const Header = ({ ChatBox }) => {
     });
   }
 
-
-
-
-
   const redirectToAdmin = () => {
-    user_role_goTo === "USER" ?
-      navigate("/admin/allclients")
-      :
-      navigate("/admin/allsubadmins")
-
+    user_role_goTo === "USER"
+      ? navigate("/admin/allclients")
+      : navigate("/admin/allsubadmins");
+    window.location.reload();
     localStorage.removeItem("gotodashboard");
 
     setTimeout(() => {
-
       localStorage.removeItem("user_details_goTo");
       localStorage.removeItem("user_role_goTo");
     }, 1000);
-
-
   };
-
 
   //  BROKER LOGIN
   const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
     if (check) {
-      loginWithApi(brokerid, UserDetails)
+      loginWithApi(brokerid, UserDetails);
     } else {
-      alert("trading is off")
+      alert("trading is off");
     }
-  }
-
+  };
 
   //  GET_USER_DETAILS
 
@@ -170,30 +170,28 @@ const Header = ({ ChatBox }) => {
     data();
   }, []);
 
-
   //  For Show Notfication
 
   const Notfication = async () => {
-    await dispatch(GET_HELPS({ user_id: user_id, token: token })).unwrap()
+    await dispatch(GET_HELPS({ user_id: user_id, token: token }))
+      .unwrap()
       .then((response) => {
         if (response.status) {
           setAllClients({
             loading: false,
-            data: response.data
+            data: response.data,
           });
         } else {
           setAllClients({
             loading: false,
-            data: response.data
+            data: response.data,
           });
         }
-      })
-  }
+      });
+  };
   useEffect(() => {
-    Notfication()
-  }, [])
-
-
+    Notfication();
+  }, []);
 
   //  Clear Session  After 24 Hours
   const ClearSession = async () => {
@@ -202,111 +200,110 @@ const Header = ({ ChatBox }) => {
     // console.log(" new Date().getTime()", new Date().getTime())
 
     if (decoded.exp * 1000 < new Date().getTime()) {
-
       const request = {
-        "userId": user_id,
-        "Device": CheckUser
-      }
+        userId: user_id,
+        Device: CheckUser,
+      };
 
       await dispatch(Log_Out_User(request))
         .then((res) => {
           if (res.payload.status) {
-            localStorage.removeItem("user_role",);
+            localStorage.removeItem("user_role");
             localStorage.removeItem("user_details");
             setTimeout(() => {
               navigate("/");
             }, 1000);
           }
-        }).catch((error) => {
-          console.log("logout error", error);
-
         })
+        .catch((error) => {
+          console.log("logout error", error);
+        });
     }
-
-  }
-
+  };
 
   useEffect(() => {
-
-    ClearSession()
-
-
-  }, [])
-
-
+    ClearSession();
+  }, []);
 
   //  Recieve Notfication
 
-
   useEffect(() => {
-
-
-
     if (user_role === "USER") {
       const socket = socketIOClient(`${Config.base_url}`);
       socket.on("logout_user_from_other_device_res", async (data) => {
         console.log("logout_user_from_other_device_res", data);
 
-
-
-        await dispatch(Log_Out_User({
-          "userId": data.usedata.user_id,
-          "Device": data.CheckUser
-        }))
+        await dispatch(
+          Log_Out_User({
+            userId: data.usedata.user_id,
+            Device: data.CheckUser,
+          })
+        )
           .then((res) => {
             if (res.payload.status) {
               // toast.success(res.payload.msg)
-              localStorage.removeItem("user_role",);
+              localStorage.removeItem("user_role");
               localStorage.removeItem("user_details");
               setTimeout(() => {
                 navigate("/");
               }, 1500);
             }
-          }).catch((error) => {
+          })
+          .catch((error) => {
             console.log("logout error", error);
           });
-
       });
 
       return () => {
         socket.disconnect();
       };
     }
-
   }, []);
 
-
   return (
-    <div className='header-container'>
+    <div className="header-container">
       <Logo />
       <div className="header">
         <div className="header-content">
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">
               <div className="header-left">
-                {user_role === "USER"  && UserDetails.license_type != 1 ?
+                {user_role === "USER" && UserDetails.license_type != 1 ? (
                   <>
                     <div className="headaer-title">
                       <h3 className="font-w400 mb-0">Api Login </h3>
                     </div>
 
-                    <div className="Api Login m-2"><label class="switch" >
-                      <input type="checkbox" className="bg-primary"
-                        checked={UserDetails.TradingStatus === "on" ? true : false}
-                        onClick={(e) => LogIn_WIth_Api(e.target.checked, UserDetails.broker, UserDetails.TradingStatus, UserDetails)}
-                      />
-                      <span class="slider round"></span>
-                    </label>
+                    <div className="Api Login m-2">
+                      <label class="switch">
+                        <input
+                          type="checkbox"
+                          className="bg-primary"
+                          checked={
+                            UserDetails.TradingStatus === "on" ? true : false
+                          }
+                          onClick={(e) =>
+                            LogIn_WIth_Api(
+                              e.target.checked,
+                              UserDetails.broker,
+                              UserDetails.TradingStatus,
+                              UserDetails
+                            )
+                          }
+                        />
+                        <span class="slider round"></span>
+                      </label>
                     </div>
                   </>
-                  : ""}
+                ) : (
+                  ""
+                )}
               </div>
               <ul className="navbar-nav header-right">
-
                 {/* GO TO DASHBOARD */}
-                {gotodashboard != null ?
+                {gotodashboard != null ? (
                   <>
-                    <li className="nav-item dropdown gotodashboard" >
+                    <li className="nav-item dropdown gotodashboard">
                       <button
                         onClick={redirectToAdmin}
                         type="button"
@@ -316,30 +313,34 @@ const Header = ({ ChatBox }) => {
                       </button>
                     </li>
                   </>
-                  : ""
-                }
+                ) : (
+                  ""
+                )}
 
-                {user_role === "USER" ? <>
-                  <li className="nav-item dropdown header-profile">
-                    <button
-                      className=" btn btn-secondary"
-                      onClick={() => setshowModal(true)}
-                    >
-                      Set ApiKey
-                    </button>
-                  </li>
-                </> : ""}
-
-
-
-
+                {user_role === "USER" ? (
+                  <>
+                    <li className="nav-item dropdown header-profile">
+                      <button
+                        className=" btn btn-secondary"
+                        onClick={() => setshowModal(true)}
+                      >
+                        Set ApiKey
+                      </button>
+                    </li>
+                  </>
+                ) : (
+                  ""
+                )}
 
                 {/*  For Show Notification Box */}
 
-                {user_role === "ADMIN" ? <>
-                  <Notification data={getAllClients} />
-                </> : ""}
-
+                {user_role === "ADMIN" ? (
+                  <>
+                    <Notification data={getAllClients} />
+                  </>
+                ) : (
+                  ""
+                )}
 
                 <li className="nav-item dropdown header-profile">
                   <DropDown />
@@ -349,14 +350,19 @@ const Header = ({ ChatBox }) => {
           </nav>
         </div>
 
-        <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Update Broker Key" hideBtn={true}
+        <Modal
+          isOpen={showModal}
+          backdrop="static"
+          size="ms-5"
+          title="Update Broker Key"
+          hideBtn={true}
           handleClose={() => setshowModal(false)}
         >
           <UpdateBrokerKey closeModal={() => setshowModal(false)} />
-        </Modal >
+        </Modal>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

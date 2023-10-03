@@ -84,6 +84,7 @@ class Subadmin {
                     const SubadminPermision = new Subadmin_Permission({
                         client_add: Subadmin_permision_data.client_add,
                         client_edit: Subadmin_permision_data.client_edit,
+                        detailsinfo: Subadmin_permision_data.detailsinfo,
                         license_permision: Subadmin_permision_data.license_permision,
                         go_To_Dashboard: Subadmin_permision_data.go_To_Dashboard,
                         trade_history_old: Subadmin_permision_data.trade_history_old,
@@ -159,6 +160,7 @@ class Subadmin {
 
             var SubadminPermision = {
                 client_add: Subadmin_permision_data.client_add,
+                detailsinfo: Subadmin_permision_data.detailsinfo,
                 client_edit: Subadmin_permision_data.client_edit,
                 license_permision: Subadmin_permision_data.license_permision,
                 go_To_Dashboard: Subadmin_permision_data.go_To_Dashboard,
@@ -276,7 +278,7 @@ class Subadmin {
             // GET LOGIN CLIENTS
             const getAllSubAdmins = await User_model.find({
                 parent_role: "SUBADMIN",
-                
+
             });
             const totalCount = getAllSubAdmins.length;
 
@@ -292,7 +294,7 @@ class Subadmin {
                 data: getAllSubAdmins,
                 totalCount: totalCount
             })
-            
+
         } catch (error) {
             console.log("getallSubadmin error -", error);
         }

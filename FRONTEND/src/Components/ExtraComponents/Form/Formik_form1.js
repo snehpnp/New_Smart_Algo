@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 
 
-const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isSelected, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size, additional_field ,  showImagePreview  , }) => {
+const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isSelected, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size, additional_field, showImagePreview, }) => {
 
 
 
@@ -11,24 +11,29 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
 
   const [passwordVisible, setPasswordVisible] = useState({});
 
-  const [previews, setPreviews] = useState([]);
 
-  console.log("previews" ,previews)
+
+  const [previews, setPreviews] = useState([]); // Array to store individual previews
 
   const handleFileChange = (event, index, name) => {
     const file = event.target.files[0];
-    const newPreviews = [...previews];
+    const newPreviews = [...previews]; // Create a copy of the previews array
 
-    newPreviews[index] = URL.createObjectURL(file);
-    setPreviews(newPreviews);
+    newPreviews[index] = URL.createObjectURL(file); // Set the preview for the specific index
+    console.log("newPreviews[index]", newPreviews[index]);
+    setPreviews(newPreviews); // Update the previews array
+
+
 
     const reader = new FileReader();
     reader.onload = () => {
-      formik.setFieldValue(name, reader.result);
+      //setPreviewImage(reader.result);
+      formik.setFieldValue(name, reader.result); // Set Formik field value for the specific index
     };
-    reader.readAsDataURL(file);
-  };
 
+
+    reader.readAsDataURL(file);
+  }
   const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -45,6 +50,11 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
 
     return `${year}-${month}-${day}`;
   };
+
+
+
+
+
 
   return (
 
@@ -267,15 +277,23 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                       <input
                                         type="file"
                                         id={field.name}
-                                        onChange={(e) => handleFileChange(e, index, field.name)}
+                                        onChange={(e) => handleFileChange(e, index, field.name)} // Pass the index to the handler
                                         className={`form-control`}
                                       />
+
                                     </div>
+
+
                                   </div>
-                                  {showImagePreview && (
-                                    <img src={previews[index]} alt={`Preview ${index}`} className="mb-3 border border-dark" />
-                                    )}
+
+                                  {/* {console.log("{ ...formik.getFieldProps(field.name) }", { ...formik.getFieldProps(field.name) })} */}
+                                  <img src={formik.getFieldProps(field.name).value} name={field.name} id={field.name} alt={`Preview ${index}`} className="mb-3"
+
+                                  />
+
+
                                 </div>
+
                               </div>
                             </> :
 

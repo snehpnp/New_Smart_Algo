@@ -325,9 +325,9 @@ class Employee {
                 return res.send({ status: false, msg: 'Please Select parent id', data: [] });
             }
 
-            
+
             var TotalMonth = "0"
-            
+
             var Panel_key = await Company_info.find()
 
             const totalLicense = await User_model.aggregate([
@@ -336,7 +336,7 @@ class Employee {
                     $match: {
                         license_type: "2",
                         licence: { $exists: true, $ne: null, $not: { $type: 10 } } // Exclude undefined or NaN values
-        
+
                     },
                 },
                 {
@@ -356,7 +356,16 @@ class Employee {
 
             }
 
-            if (Number(Panel_key[0].licenses) >= Number(TotalLicense) + Number(req.licence1)) {
+
+            var new_licence = 0
+            if (req.licence1 === "" || req.licence1 === undefined || req.licence1 === null || req.licence1 === "null") {
+                new_licence = 0
+            } else {
+                new_licence = req.licence1
+            }
+
+
+            if (Number(Panel_key[0].licenses) >= Number(TotalLicense) + Number(new_licence)) {
 
                 // PREVIOS CLIENT IS LIVE
                 if (existingUsername.license_type != "2") {
@@ -409,13 +418,13 @@ class Employee {
                         var UpdateDate = ""
                         var StartDate = new Date(start_date)
 
-                        UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(req.licence1));
+                        UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(new_licence));
 
                         var end_date_2days = dateTime.create(UpdateDate);
                         var end_date_2days = end_date_2days.format('Y-m-d H:M:S');
 
                         EndDate1 = end_date_2days
-                        TotalMonth = req.licence1
+                        TotalMonth = new_licence
 
                     }
 
@@ -425,7 +434,7 @@ class Employee {
                         var UserEndDate = new Date(existingUsername.EndDate);
                         var TodaysDate = new Date();
 
-                        if (Number(req.licence1) > 0) {
+                        if (Number(new_licence) > 0) {
 
                             if (UserEndDate > TodaysDate) {
 
@@ -440,13 +449,13 @@ class Employee {
                                 var UpdateDate = ""
                                 var StartDate = new Date(start_date)
 
-                                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(req.licence1));
+                                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(new_licence));
 
                                 var end_date_2days = dateTime.create(UpdateDate);
                                 var end_date_2days = end_date_2days.format('Y-m-d H:M:S');
 
                                 EndDate1 = end_date_2days
-                                TotalMonth = parseInt(req.licence1) + parseInt(existingUsername.licence)
+                                TotalMonth = parseInt(new_licence) + parseInt(existingUsername.licence)
 
                             } else {
                                 var currentDate = new Date();
@@ -460,13 +469,13 @@ class Employee {
                                 var UpdateDate = ""
                                 var StartDate = new Date(start_date)
 
-                                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(req.licence1));
+                                UpdateDate = StartDate.setMonth(StartDate.getMonth() + parseInt(new_licence));
 
                                 var end_date_2days = dateTime.create(UpdateDate);
                                 var end_date_2days = end_date_2days.format('Y-m-d H:M:S');
 
                                 EndDate1 = end_date_2days
-                                TotalMonth = parseInt(req.licence1) + parseInt(existingUsername.licence)
+                                TotalMonth = parseInt(new_licence) + parseInt(existingUsername.licence)
 
                             }
 
@@ -554,7 +563,7 @@ class Employee {
                             var deleteStrategy = await strategy_client.deleteOne({ user_id: existingUsername._id, strategy_id: stgId })
 
                             const Strategieclient = await strategy.find({ _id: stgId });
-                            console.log(Strategieclient);
+                            // console.log(Strategieclient);
                             const user_activity = new user_activity_logs(
                                 {
                                     user_id: existingUsername._id,
@@ -639,6 +648,7 @@ class Employee {
                                     strategy_id: strategFind[0].strategy_id,
                                     uniqueUserService: existingUsername._id + "_" + data.Service_id
                                 })
+                            console.log("data ",User_client_services)
                             // console.log(User_client_services);
                             User_client_services.save()
                         })
@@ -677,14 +687,18 @@ class Employee {
 
                 const User_Update = await User_model.updateOne({ _id: existingUsername._id }, { $set: User_update });
 
-                if (req.license_type == '2') {
+                if (req.license_type == '2' || req.license_type == 2) {
+                    console.log("TotalMonth", new_licence)
 
-                    if (Number(TotalMonth) > 0) {
+
+
+                    if (Number(new_licence) > 0) {
+
 
                         const count_licenses_add = new count_licenses(
                             {
                                 user_id: existingUsername._id,
-                                license: req.licence1,
+                                license: new_licence,
 
                             })
                         count_licenses_add.save()

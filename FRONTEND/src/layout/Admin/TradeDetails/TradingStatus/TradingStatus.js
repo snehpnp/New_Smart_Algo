@@ -30,9 +30,14 @@ const TradingStatus = () => {
 
 
     const data = async () => {
-        await dispatch(GET_ALL_TRADING_STATUS({Role:first})).unwrap()
+        await dispatch(GET_ALL_TRADING_STATUS({ Role: first })).unwrap()
             .then((response) => {
                 if (response.status) {
+                    setAllClients({
+                        loading: false,
+                        data: response.data
+                    });
+                } else {
                     setAllClients({
                         loading: false,
                         data: response.data
@@ -124,25 +129,7 @@ const TradingStatus = () => {
                                 </div>
                             </div>
 
-
-
-                            {
-                                getAllClients.data && getAllClients.data.length === 0 ? (
-                                    'No data found') :
-                                    <>
-                                        <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
-                                    </>
-                            }
-                            {
-                                showModal ?
-                                    <>
-                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
-                                        //  handleClose={setshowModal(false)}
-                                        >
-                                        </Modal >
-                                    </>
-                                    : ""
-                            }
+                            <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
                         </Theme_Content>
                     </>
             }

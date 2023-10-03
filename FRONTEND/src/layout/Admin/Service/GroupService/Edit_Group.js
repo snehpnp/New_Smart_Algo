@@ -5,7 +5,7 @@ import { Email_regex, Mobile_regex } from '../../../../Utils/Common_regex';
 import { useDispatch } from 'react-redux';
 import Content from '../../../../Components/Dashboard/Content/Content';
 import { Service_By_Catagory, Get_All_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
-import { Get_Service_By_Group_Id} from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
+import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import { useLocation, useParams } from 'react-router-dom';
 
 
@@ -34,8 +34,13 @@ const EditGroup = () => {
         data: [],
     });
 
+    const [groupServiceInfo, setGroupServiceInfo] = useState({
+        loading: true,
+        data: [],
+    });
 
-    // console.log("allServices" ,allServices);
+
+
     const [GetAllSgments, setGetAllSgments] = useState({
         loading: true,
         data: [],
@@ -50,11 +55,10 @@ const EditGroup = () => {
                 .then((response) => {
                     if (response.status) {
 
-                        console.log("Get_Service_By_Group_Id", response);
-                        // setAllServices({
-                        //     loading: false,
-                        //     data: response.data,
-                        // });
+                        setGroupServiceInfo({
+                            loading: false,
+                            data: response,
+                        });
                     }
                 });
         }
@@ -77,10 +81,12 @@ const EditGroup = () => {
             if (!values.group_name) {
                 errors.group_name = valid_err.USERNAME_ERROR;
             }
-
             return errors;
         },
         handleSubmit: async (values) => {
+
+
+
         },
     });
 
@@ -103,6 +109,34 @@ const EditGroup = () => {
     useEffect(() => {
         data();
     }, [formik.values.selectSegment]);
+
+
+
+
+    useEffect(() => {
+
+        if (groupServiceInfo.data) {
+            if (groupServiceInfo.data.group_name !== undefined) {
+                formik.setFieldValue('group_name', groupServiceInfo.data.group_name !== undefined &&  groupServiceInfo.data.group_name[0].name);
+                console.log("groupServiceInfo", groupServiceInfo.data.group_name !== undefined &&  groupServiceInfo.data);
+
+            }
+
+
+
+
+        }
+
+        // formik.setFieldValue('editclient', true);
+
+
+    }, [groupServiceInfo.data]);
+
+
+
+
+
+
 
     const handleServiceChange = (event) => {
         const serviceId = event.target.value;

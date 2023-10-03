@@ -18,6 +18,7 @@ app.use(require("./Admin/License.route"));
 
 // SUBADMIN ROUTES
 app.use(require("./Subadmin/subadmin.route"));
+app.use(require("./Subadmin/user.route"));
 
 // USER ROUTES
 app.use(require("./User/user.route"));
