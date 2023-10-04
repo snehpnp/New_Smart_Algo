@@ -30,6 +30,6 @@ module.exports = {
     groupService_User: require('./group_services_client.model'),
     UserMakeStrategy: require('./UserMakeStrategy.model'),
     user_activity_logs: require('./User_activity.model'),
-
+    Broker_information: require('./Broker_information.model')
 
 };

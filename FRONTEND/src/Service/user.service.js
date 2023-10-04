@@ -182,8 +182,39 @@ export async function UPDATE_BROKER_KEYS(data, token) {
 }
 
 
+// TRADING OFF
+
+export async function TRADING_OFF(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}trading/logout`, data, {
+            headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
 
 
+
+
+// 
+export async function Update_broker_response(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}aliceblue/get/orderinfo`, data, {
+            headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
 
 
 

@@ -8,6 +8,8 @@ const panel_model = db.panel_model;
 const User = db.user;
 const user_logs = db.user_logs;
 const BrokerResponse = db.BrokerResponse;
+const Broker_information = db.Broker_information;
+
 
 
 const mongoose = require('mongoose');
@@ -24,7 +26,9 @@ class AliceBlue {
             const authCode = req.query.authCode;
             var userId = req.query.userId;
 
-            var apiSecret = "cZdAvCVqYHSQcQSLABpkMQMDJyvTgVYaJxaIvZZLWIxubREpjjXJSSrHhDEPiiMouMqzLaqCyurbrXoQqrrltIddWrmUzVfbCnQz";
+            var broker_infor = await Broker_information.find({ broker_name: "Alice Blue" })
+            var apiSecret = broker_infor[0].apiSecret
+            console.log("broker_infor", apiSecret);
 
             var hosts = req.headers.host;
 

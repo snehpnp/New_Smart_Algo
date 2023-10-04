@@ -6,6 +6,8 @@ const ObjectId = mongoose.Types.ObjectId;
 const Signals_modal = db.Signals
 const user = db.user
 const company_information = db.company_information
+const Broker_information = db.Broker_information
+
 
 const { formattedDateTime } = require('../../Helper/time.helper')
 
@@ -39,7 +41,7 @@ class Dashboard {
             let total_expired_two_days = await user.find({ Role: "USER", license_type: "0", EndDate: { $lt: today } }).countDocuments()
 
 
-            let all_licence = await company_information.find()   
+            let all_licence = await company_information.find()
             const used_licence = await user.aggregate([
                 // Match documents based on your criteria (e.g., specific conditions)
                 {
@@ -56,11 +58,11 @@ class Dashboard {
                     },
                 },
             ]);
-            var used_licences =""
-       
-            if(used_licence .length > 0){
-                 used_licences = used_licence[0].totalLicense
-            }else{
+            var used_licences = ""
+
+            if (used_licence.length > 0) {
+                used_licences = used_licence[0].totalLicense
+            } else {
                 used_licences = "0"
 
             }
@@ -85,7 +87,7 @@ class Dashboard {
                     total_two_days: total_two_days,
                     total_active_two_days: total_active_two_days,
                     total_expired_two_days: total_expired_two_days,
-                    
+
                     // all_licence: all_licence[0].licenses,
                     // used_licence: used_licences,
                     // remaining_licence:Number(all_licence[0].licenses) - Number(used_licences),
@@ -98,6 +100,48 @@ class Dashboard {
         }
     }
 
+    // Broker Information Update
+    async update_broker_information(req, res) {
+        try {
+
+            Broker_information.findById(_id)
+                .then(async (value) => {
+                    if (!value) {
+                        return res.send({ status: false, msg: 'Id not match', data: [] });
+                    }
+                    const filter = { _id: _id };
+                    const updateOperation = { $set: userdata };
+                    const result = await User_model.updateOne(filter, updateOperation);
+                    if (!result) {
+                        return res.send({ status: false, msg: 'Key not update', data: [] });
+                    }
+
+                    return res.send({ status: true, msg: 'Update Keys  Successfully.', data: [] });
+
+                })
+
+        } catch (error) {
+            console.log("Error In Broker Informations");
+        }
+    }
+
+    async add_broker_information(req, res) {
+        try {
+
+            var data = {
+                "broker_name": "Alice Blue",
+                "app_code": "RjFPYeubvHpGtaS",
+                "apiSecret": "UvdxLEFFzGyfvhmRNIMiIrialWteBChzLsgVHjXoDzuGVaAmgKeYnjqUpuflPzWDNhBJHFZHTsvHWzNbDrSyncOoIghVkIVSDQPx"
+            }
+            const Broker_informations = new Broker_information(data)
+            return Broker_informations.save();
+
+
+
+        } catch (error) {
+            console.log("Error In Broker Informations");
+        }
+    }
 
 }
 

@@ -16,6 +16,8 @@ import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { check_Device } from "../../../Utils/find_device";
 import { GET_HELPS } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
+import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice";
+
 
 import * as Config from "../../../Utils/Config";
 import socketIOClient from "socket.io-client";
@@ -28,6 +30,8 @@ const Header = ({ ChatBox }) => {
   const navigate = useNavigate();
 
   const [showModal, setshowModal] = useState(false);
+  const [refresh, setrefresh] = useState(false);
+
   const [UserDetails, setUserDetails] = useState([]);
 
   const [CheckUser, setCheckUser] = useState(check_Device());
@@ -151,12 +155,20 @@ const Header = ({ ChatBox }) => {
     if (check) {
       loginWithApi(brokerid, UserDetails);
     } else {
-      alert("trading is off");
+
+      dispatch(TRADING_OFF_USER({ user_id: user_id, device:CheckUser,token: token }))
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            // setUserDetails(response.data);
+            setrefresh(!refresh)
+          }
+        });
+
     }
   };
 
   //  GET_USER_DETAILS
-
   const data = async () => {
     await dispatch(User_Profile({ id: user_id }))
       .unwrap()
@@ -168,7 +180,7 @@ const Header = ({ ChatBox }) => {
   };
   useEffect(() => {
     data();
-  }, []);
+  }, [refresh]);
 
   //  For Show Notfication
 

@@ -24,24 +24,24 @@ class Tradehistory {
                         }
                     }
                 },
-              
+
                 {
                     $lookup: {
-                      from: "signals",
-                      localField: "signals_id",
-                      foreignField: "_id",
-                      as: "result",
+                        from: "signals",
+                        localField: "signals_id",
+                        foreignField: "_id",
+                        as: "result",
                     },
                 },
-               
+
                 {
                     $sort: {
-                        "result.createdAt": 1 // Sort in ascending order. Use -1 for descending.
+                        "result.createdAt": -1 // Sort in ascending order. Use -1 for descending.
                     }
                 }
-               
+
             ]);
-            
+
 
             if (filteredSignals.length === 0) {
                 return res.send({ status: false, msg: 'No signals founddate range.', data: [] });

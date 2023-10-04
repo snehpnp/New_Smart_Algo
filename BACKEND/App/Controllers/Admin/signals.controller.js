@@ -20,7 +20,7 @@ class Signals {
             try {
                 const filteredSignals = await Signals_modal.find({
                     dt_date: startDate,
-                });
+                }).sort({ createdAt: -1 })
 
                 if (filteredSignals.length === 0) {
                     return res.send({ status: false, msg: 'No signals founddate range.', data: [] });

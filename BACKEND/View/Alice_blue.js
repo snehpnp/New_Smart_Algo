@@ -321,6 +321,69 @@ async function TradeHistroy() {
         client.close();
     }
 }
+
+
+
+async function dashboard_view() {
+  try {
+      await client.connect();
+      const db = client.db('test');
+
+      // Define the pipeline to create the view
+      const pipeline = [
+        {
+          $addFields: {
+            total_client: { $cond: [{ $eq: ['$Role', 'USER'] }, 1, 0] },
+            admin_client: { $cond: [{ $and: [{ $eq: ['$parent_role', 'ADMIN'] }, { $eq: ['$Role', 'USER'] }] }, 1, 0] },
+            subadmin_client: { $cond: [{ $eq: ['$parent_role', 'SUBADMIN'] }, 1, 0] },
+            total_Subadmin: { $cond: [{ $eq: ['$Role', 'SUBADMIN'] }, 1, 0] },
+            total_live: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '2'] }] }, 1, 0] },
+            total_active_live: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '2'] }, { $gte: ['$EndDate', today] }] }, 1, 0] },
+            total_expired_live: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '2'] }, { $lt: ['$EndDate', today] }] }, 1, 0] },
+            total_demo: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '1'] }] }, 1, 0] },
+            total_active_demo: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '1'] }, { $gte: ['$EndDate', today] }] }, 1, 0] },
+            total_expired_demo: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '1'] }, { $lt: ['$EndDate', today] }] }, 1, 0] },
+            total_two_days: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '0'] }] }, 1, 0] },
+            total_active_two_days: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '0'] }, { $gte: ['$EndDate', today] }] }, 1, 0] },
+            total_expired_two_days: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '0'] }, { $lt: ['$EndDate', today] }] }, 1, 0] },
+          },
+        },
+        {
+          $lookup: {
+            from: 'company_informations', // Replace with the actual name of your company_information collection
+            localField: '_id',
+            foreignField: '_id',
+            as: 'all_licence',
+          },
+        },
+        {
+          $unwind: '$all_licence',
+        },
+        {
+          $addFields: {
+            used_licence: '$all_licence.licence',
+          },
+        },
+      ]
+
+
+
+
+
+      // Create the view
+      await db.createCollection('dashboard_view', { viewOn: 'companies', pipeline });
+
+      console.log('View created successfully.');
+  } catch (error) {
+      console.error('Error:', error);
+  } finally {
+      client.close();
+  }
+}
+
+
+
+
 // module.exports = { createView, dropExistingView,TradeHistroy }
-module.exports = { dropExistingView, TradeHistroy }
+module.exports = { dropExistingView, TradeHistroy ,dashboard_view}
 

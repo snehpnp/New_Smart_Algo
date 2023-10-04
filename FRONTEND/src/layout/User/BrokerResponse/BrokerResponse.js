@@ -3,14 +3,14 @@
 import React, { useState, useEffect } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Accordion from 'react-bootstrap/Accordion';
-import { Get_Broker_Response } from "../../../ReduxStore/Slice/Users/BrokerResponseSlice"
+import { Get_Broker_Response,UpdateBrokerResponse } from "../../../ReduxStore/Slice/Users/BrokerResponseSlice"
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable"
 
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { fa_time, fDateTimeSuffix } from '../../../Utils/Date_formet'
-import { GanttChartSquare ,Eye } from 'lucide-react';
+import { GanttChartSquare, Eye } from 'lucide-react';
 
 
 
@@ -19,6 +19,9 @@ const BrokerResponse = () => {
 
 
   const [showModal, setshowModal] = useState(false)
+  const [BrokerResponseId, setBrokerResponseId] = useState([])
+
+  console.log("BrokerResponseId", BrokerResponseId && BrokerResponseId);
 
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
 
@@ -102,12 +105,14 @@ const BrokerResponse = () => {
       dataField: 'order_view_status',
       text: 'Message',
       formatter: (cell, row, rowIndex) =>
-        cell == "0" || cell == 0  ?
+        cell == "0" || cell == 0 ?
           <>
-          {console.log("row",row) }
-            <GanttChartSquare onClick={(e) => GetAllServicesName(row)
+            {console.log("row", row)}
+            <GanttChartSquare onClick={(e) => GetBrokerInforMation(row)
             } size={20} color="#198754" strokeWidth={2} className="mx-1" />
-          </> : "-"
+          </>
+          :
+          "-"
     },
 
   ];
@@ -117,32 +122,31 @@ const BrokerResponse = () => {
 
   // GET ALL GROUP SERVICES NAME
   const GetAllServicesName = async (row) => {
-    console.log("row", row);
+
+    setBrokerResponseId(row)
     setshowModal(true)
 
+  }
 
-    // await dispatch(GET_ALL_SERVICES_NAMES({
-    //     data: row
-    // })).unwrap()
-    //     .then((response) => {
-    //         setshowModal(true)
 
-    //         if (response.status) {
-    //             setServicesName({
-    //                 loading: false,
-    //                 data: response.data
-    //             });
-    //         }
-    //         else {
-    //             setServicesName({
-    //                 loading: false,
-    //                 data: []
-    //             });
+  const GetBrokerInforMation=async(row)=>{
+    console.log("row", row);
 
-    //         }
-    //     })
+    await dispatch(UpdateBrokerResponse({ OrderId: row.order_id,user_id:row.user_id, token: AdminToken })).unwrap()
+    .then((response) => {
+      
+      if (response.status) {
+      
+        setDashboardData({
+          loading: false,
+          data: response.data
+        });
+        ;
+      }
+    })
 
   }
+
   return (
 
 
@@ -192,7 +196,21 @@ const BrokerResponse = () => {
                   dataField: 'order_id',
                   text: 'Oder Id'
                 },
-              ]} tableData={DashboardData.data} />
+                {
+                  dataField: 'send_request',
+                  text: 'Signal',
+                  formatter: (cell, row, rowIndex) => <div>{atob(cell)}</div>
+
+                },
+                {
+                  dataField: 'order_status',
+                  text: 'Order Status'
+                },
+                {
+                  dataField: 'order_view_date',
+                  text: 'order date'
+                },
+              ]} tableData={[BrokerResponseId]} />
 
             </Modal >
           </>
@@ -203,6 +221,11 @@ const BrokerResponse = () => {
 
 
 
+)
+}
+
+
+export default BrokerResponse
 
 
 
@@ -247,8 +270,27 @@ const BrokerResponse = () => {
 
     //       </Accordion> */}
     //     </Content>
-  )
-}
 
+    
 
-export default BrokerResponse
+    // await dispatch(GET_ALL_SERVICES_NAMES({
+    //     data: row
+    // })).unwrap()
+    //     .then((response) => {
+    //         setshowModal(true)
+
+    //         if (response.status) {
+    //             setServicesName({
+    //                 loading: false,
+    //                 data: response.data
+    //             });
+    //         }
+    //         else {
+    //             setServicesName({
+    //                 loading: false,
+    //                 data: []
+    //             });
+
+    //         }
+    //     })
+  

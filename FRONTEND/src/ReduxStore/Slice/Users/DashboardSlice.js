@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { USER_DASHBOARD, UPDATE_DAHBOARD_DATA } from "../../../Service/user.service";
+import { USER_DASHBOARD, UPDATE_DAHBOARD_DATA,TRADING_OFF } from "../../../Service/user.service";
 
 
 export const User_Dashboard_Data = createAsyncThunk("user/dashboard", async (data) => {
@@ -24,6 +24,16 @@ export const Update_Dashboard_Data = createAsyncThunk("user/dashboard", async (d
     }
 });
 
+export const TRADING_OFF_USER = createAsyncThunk("trading/logout", async (data1) => {
+    const { user_id, token ,device} = data1
+    // console.log(data);
+    try {
+        const res = await TRADING_OFF({user_id:user_id,device:device}, token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
 
 const DashboardSlice = createSlice({
     name: "DashboardSlice",
@@ -33,6 +43,8 @@ const DashboardSlice = createSlice({
         get_dashboard: [],
         gettheme: [],
         update_dashboard: [],
+        trading_off: [],
+
         status: false
     },
 
@@ -53,6 +65,10 @@ const DashboardSlice = createSlice({
 
         [Update_Dashboard_Data.fulfilled]: (state, { payload }) => {
             return { ...state, update_dashboard: payload, status: false };
+        },
+
+        [TRADING_OFF_USER.fulfilled]: (state, { payload }) => {
+            return { ...state, trading_off: payload, status: false };
         },
 
     },

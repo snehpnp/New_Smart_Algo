@@ -394,7 +394,16 @@ app.post('/broker-signals', async (req, res) => {
                             receive_signal: signal_req,
                             strategy: strategy,
                             type: type,
-                            order_id:""
+                            order_id:"",
+                            symbol:"",
+                            trading_symbol:"",
+                            strategy:"",
+                            broker_name:"",
+                            send_request:"",
+                            order_status:"",
+                            reject_reason:"",
+                            receive_signal:"",
+                            order_id:"",
                           };
 
                           const newCategory = new BrokerResponse(brokerResponse)

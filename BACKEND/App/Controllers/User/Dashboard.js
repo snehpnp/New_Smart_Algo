@@ -235,7 +235,7 @@ class Dashboard {
                             {
                                 user_id: UserData._id,
                                 message: Service_name[0].name + "  order_type " + msg + " Update",
-                              
+
                                 role: data.Editor_role,
                                 system_ip: getIPAddress(),
                                 device: data.device
@@ -252,7 +252,7 @@ class Dashboard {
                             {
                                 user_id: UserData._id,
                                 message: Service_name[0].name + "  product_type " + msg + " Update",
-                            
+
                                 role: data.Editor_role,
                                 system_ip: getIPAddress(),
                                 device: data.device
@@ -276,17 +276,40 @@ class Dashboard {
     }
 
 
-    
+
     // Trading OFF 
     async TradingOff(req, res) {
         try {
             const { user_id, device } = req.body
-console.log(user_id, device);
+            console.log(user_id, device);
+
+            var User_information = await User_model.find({ _id: user_id });
+
+            if (User_information.length == 0) {
+                return res.send({ status: false, msg: 'User Not exists', data: [] });
+            }
+
+            if (User_information[0].TradingStatus == "off") {
+                return res.send({ status: false, msg: 'Already Trading Off', data: [] });
+
+            }
+
+            const User_Update = await User_model.updateOne({ _id: User_information[0]._id }, { $set: { TradingStatus: "off" } });
+
+            const user_login = new user_logs({
+                user_Id: User_information[0]._id,
+                login_status: "Trading off",
+                role: User_information[0].Role,
+                // system_ip: getIPAddress()
+                device: device
+            })
+            await user_login.save();
+
+            return res.send({ status: true, msg: 'Trading Off successfully', data: [] });
 
 
-            
         } catch (error) {
-
+            console.log("error", error);
         }
     }
 
