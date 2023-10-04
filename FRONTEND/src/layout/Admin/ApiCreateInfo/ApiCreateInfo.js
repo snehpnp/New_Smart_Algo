@@ -10,6 +10,7 @@ import { All_Api_Info_List } from '../../../ReduxStore/Slice/Superadmin/ApiCreat
 import Modal from '../../../Components/ExtraComponents/Modal';
 import { Eye, CandlestickChart, Pencil } from 'lucide-react';
 import { useNavigate, Link } from "react-router-dom";
+import * as Config from "../../../Utils/Config";
 
 
 const ApiCreateInfo = () => {
@@ -68,7 +69,8 @@ const ApiCreateInfo = () => {
             <div class="row">
                 <section class="card__container">
 
-                    {UserDetails.data && UserDetails.data.map((item) => {
+                    {UserDetails.data && UserDetails.data.slice(0, 1).map((item) => {
+                    // {UserDetails.data && UserDetails.data.map((item) => {
                         return <>
                             <div class="card__bx card__1">
                                 <div class="card__data">
@@ -115,7 +117,16 @@ const ApiCreateInfo = () => {
 
                 {modalData.steptwourl || modalData.imageone ? <>
                     <h4 className="text-decoration-underline">Step 1:  Click below link and Login</h4>
-                    <a href={modalData.steponeurl} target="_blank" className="my-3" >{modalData.steponeurl} </a><br />
+                    {/* <a href={modalData.steponeurl} target="_blank" className="my-3" >{modalData.steponeurl} </a><br /> */}
+                    <a
+                    href={
+                      "https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB"
+                    }
+                    target="_blank"
+                    className="my-3"
+                  >
+                    https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB
+                  </a><br />
                     {modalData.imageone ? <img src={modalData.imageone} alt="" class="w-100 my-3 border border-dark" /> : ""}
 
                 </> : ""}
@@ -123,7 +134,13 @@ const ApiCreateInfo = () => {
                 {modalData.steptwourl || modalData.imagetwo ? <>
 
                     <h4 className="text-decoration-underline my-3">Step 2:  Enter your Details and the Redirect URL which is given below.</h4>
-                    <a href={modalData.steptwourl} target="_blank"  >{modalData.steptwourl} </a>
+                    {/* <a href={modalData.steptwourl} target="_blank"  >{modalData.steptwourl} </a> */}
+                    <a
+                    href={`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
+                    target="_blank"
+                  >
+                    {`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
+                  </a>
                     <br />
                     {modalData.imagetwo ? <img src={modalData.imagetwo} alt="" class="w-100 border border-dark" /> : ""}
                 </> : ""}

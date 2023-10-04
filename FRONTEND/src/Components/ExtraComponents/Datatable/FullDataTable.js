@@ -4,6 +4,8 @@ import Content from "../../../Components/Dashboard/Content/Content"
 import TableWithButtons from "../../../Components/ExtraComponents/Tables/TableWithIconButtons"
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import cellEditFactory from 'react-bootstrap-table2-editor';
+
 
 
 const FullDataTable = ({ tableData, TableColumns, tableoptions }) => {

@@ -9,10 +9,9 @@ import * as valid_err from "../../Utils/Common_Messages";
 import { fDate, fDateTime } from "../../Utils/Date_formet";
 import { User_Profile } from "../../ReduxStore/Slice/Common/commoSlice.js";
 import { Reset_Password } from "../../ReduxStore/Slice/Auth/AuthSlice";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 import ToastButton from "../../Components/ExtraComponents/Alert_Toast";
-
-
+import { Users } from 'lucide-react';
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -41,8 +40,6 @@ const UserProfile = () => {
   useEffect(() => {
     data();
   }, []);
-
-
 
   //  FOR RESET PASSWORD
   const formik = useFormik({
@@ -79,9 +76,8 @@ const UserProfile = () => {
           console.log("test", response);
           if (response.status) {
             toast.success(response.message);
-
-          } if (response.response.status === 409) {
-
+          }
+          if (response.response.status === 409) {
             toast.error(response.response.data.message);
           }
         })
@@ -97,7 +93,7 @@ const UserProfile = () => {
     { name: "confirmpassword", label: "Confirm Password", type: "password" },
   ];
 
-console.log("user_role" ,user_role);
+  console.log("user_role", user_role);
   return (
     <>
       <Content Page_title="UserProfile" button_status={false}>
@@ -109,8 +105,9 @@ console.log("user_role" ,user_role);
                   <div className="card-body">
                     <div className="profile-blog">
                       <h5 className="text-primary d-block">User Profile</h5>
+                      {/* <Users className="profile-img"/> */}
                       <img
-                        src="../assets/images/header-img/pic-1.jpg"
+                        src="../assets/avatar.jpg"
                         className="profile-img"
                       ></img>
                       <h4>
@@ -127,17 +124,15 @@ console.log("user_role" ,user_role);
                           />
                         </div>
                         <div className="profile-details d-block">
-                          <div className="profile-name px-3 pt-2">
-                            <h4 className="text-primary mb-0">
-                              {UserDetails && UserDetails.data.FullName}
-                            </h4>
-                            <p>{UserDetails && UserDetails.data.UserName}</p>
+                          <div className="profile-name px-3 pb-3 ">
+                            <p className="m-0"> User Name</p>
+                            <h4>{UserDetails && UserDetails.data.FullName} </h4>
                           </div>
-                          <div className="profile-email px-2 pt-2">
+                          <div className="profile-email px-2 ">
+                            <p className="m-0">Email</p>
                             <h4 className="text-muted mb-0">
                               {UserDetails && UserDetails.data.Email}
                             </h4>
-                            <p>Email</p>
                           </div>
                         </div>
                       </div>
@@ -162,15 +157,19 @@ console.log("user_role" ,user_role);
                           About Me
                         </a>
                       </li>
-                      <li className="nav-item">
-                        <a
-                          href="#profile-settings"
-                          data-bs-toggle="tab"
-                          className="nav-link"
-                        >
-                          Change Password
-                        </a>
-                      </li>
+                      {user_role === "SUBADMIN" ? (
+                        ""
+                      ) : (
+                        <li className="nav-item">
+                          <a
+                            href="#profile-settings"
+                            data-bs-toggle="tab"
+                            className="nav-link"
+                          >
+                            Change Password
+                          </a>
+                        </li>
+                      )}
                     </ul>
                     <div className="tab-content">
                       <div id="about-me" className="tab-pane fade active show">
@@ -214,67 +213,88 @@ console.log("user_role" ,user_role);
                               </span>
                             </div>
                           </div>
-                          {user_role === "USER" ?
-                          <>
-                          <div className="row mb-2">
-                            <div className="col-sm-3 col-5">
-                              <h5 className="f-w-500">
-                                Start-Date <span className="pull-end">:</span>
-                              </h5>
-                            </div>
-                            <div className="col-sm-9 col-7">
-                              <span>
-                                {UserDetails.data.StartDate && fDateTime(UserDetails.data.StartDate)}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="row mb-2">
-                            <div className="col-sm-3 col-5">
-                              <h5 className="f-w-500">
-                                End Date <span className="pull-end">:</span>
-                              </h5>
-                            </div>
-                            <div className="col-sm-9 col-7">
-                              <span>
-                                {UserDetails.data.EndDate && fDateTime(UserDetails.data.EndDate)}
-                              </span>
-                            </div>
-                          </div>
+                          {user_role === "USER" ? (
+                            <>
+                              <div className="row mb-2">
+                                <div className="col-sm-3 col-5">
+                                  <h5 className="f-w-500">
+                                    Start-Date{" "}
+                                    <span className="pull-end">:</span>
+                                  </h5>
+                                </div>
+                                <div className="col-sm-9 col-7">
+                                  <span>
+                                    {UserDetails.data.StartDate &&
+                                      fDateTime(UserDetails.data.StartDate)}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="row mb-2">
+                                <div className="col-sm-3 col-5">
+                                  <h5 className="f-w-500">
+                                    End Date <span className="pull-end">:</span>
+                                  </h5>
+                                </div>
+                                <div className="col-sm-9 col-7">
+                                  <span>
+                                    {UserDetails.data.EndDate &&
+                                      fDateTime(UserDetails.data.EndDate)}
+                                  </span>
+                                </div>
+                              </div>
 
-                            <div className="row mb-2">
-                              <div className="col-sm-3 col-5">
-                                <h5 className="f-w-500">
-                                  Client Type
-                                  <span className="pull-end">:</span>
-                                </h5>
+                              <div className="row mb-2">
+                                <div className="col-sm-3 col-5">
+                                  <h5 className="f-w-500">
+                                    Client Type
+                                    <span className="pull-end">:</span>
+                                  </h5>
+                                </div>
+                                <div className="col-sm-9 col-7">
+                                  <span>
+                                    {UserDetails &&
+                                    UserDetails.data.license_type === "1"
+                                      ? "Live"
+                                      : UserDetails &&
+                                        UserDetails.data.license_type === "2"
+                                      ? "Demo"
+                                      : "2 Days"}
+                                  </span>
+                                </div>
                               </div>
-                              <div className="col-sm-9 col-7">
-                                <span>
-                                  {UserDetails &&
-                                    UserDetails.data.license_type === "1" ? "Live" : UserDetails && UserDetails.data.license_type === "2" ? "Demo" : "2 Days"}
-                                </span>
-                              </div>
-                            </div>
-                          </>
-                           : ""}
+                            </>
+                          ) : (
+                            ""
+                          )}
                         </div>
                       </div>
-                      <div id="profile-settings" className="tab-pane fade mt-3">
-                        <h4 className="text-primary mb-4">
-                          Change Password
-                        </h4>
-                        <Formikform
-                          fieldtype={fields.filter(
-                            (field) =>
-                              !field.showWhen || field.showWhen(formik.values)
-                          )}
-                          formik={formik}
-                          btn_name="Sign In"
-                          title="forlogin"
-                        />
-                      </div>
+                      {user_role === "SUBADMIN" ? (
+                        ""
+                      ) : (
+                        <>
+                          <div
+                            id="profile-settings"
+                            className="tab-pane fade mt-3"
+                          >
+                            <h4 className="text-primary mb-4">
+                              Change Password
+                            </h4>
+                            <Formikform
+                              fieldtype={fields.filter(
+                                (field) =>
+                                  !field.showWhen ||
+                                  field.showWhen(formik.values)
+                              )}
+                              formik={formik}
+                              btn_name="Sign In"
+                              title="forlogin"
+                            />
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
+
                   {/* Modal */}
                   <div className="modal fade" id="replyModal">
                     <div
@@ -318,7 +338,6 @@ console.log("user_role" ,user_role);
               </div>
             </div>
             <ToastButton />
-
           </div>
         </div>
       </Content>

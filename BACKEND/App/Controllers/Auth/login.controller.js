@@ -42,9 +42,9 @@ class Login {
 
 
             // PASSWORD LENGTH CHECK
-            if (Password.length < 4) {
-                return res.send({ status: false, msg: 'please Enter More Than 4 Digits ', data: [] });
-            }
+            // if (Password.length < 4) {
+            //     return res.send({ status: false, msg: 'please Enter More Than 4 Digits ', data: [] });
+            // }
 
             // Password Check
             const validPassword = await bcrypt.compare(Password, EmailCheck.Password);

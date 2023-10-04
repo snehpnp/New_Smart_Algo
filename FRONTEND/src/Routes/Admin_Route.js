@@ -70,6 +70,10 @@ import { Import } from 'lucide-react';
 
 
 
+// System
+import CreateStrategy from '../layout/Admin/CreateStrategy/CreateStrategy';
+
+
 
 
 
@@ -119,6 +123,7 @@ const Admin = () => {
                 <Route exact path="/apicreateinfo/add" element={<AddApiCreateInfo />} />
                 <Route exact path="/apicreateinfo/edit" element={<EditApiCreateInfo />} />
                 <Route exact path="/updates" element={<ReleaseUpdate />} />
+                <Route exact path="/createstrategy" element={<CreateStrategy />} />
             </Routes>
         </>
     )

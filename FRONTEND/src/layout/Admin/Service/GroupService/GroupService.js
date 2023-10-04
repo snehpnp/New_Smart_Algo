@@ -113,13 +113,11 @@ const ServicesList = () => {
 
     // GET ALL GROUP SERVICES NAME
     const GetAllServicesName = async (row) => {
-        console.log("row", row);
-
+        setshowModal(true)
         await dispatch(GET_ALL_SERVICES_NAMES({
             data: row
         })).unwrap()
             .then((response) => {
-                setshowModal(true)
 
                 if (response.status) {
                     setServicesName({

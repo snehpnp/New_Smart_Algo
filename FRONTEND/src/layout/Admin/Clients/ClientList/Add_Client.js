@@ -417,7 +417,7 @@ const AddClient = () => {
       formik.setFieldValue('app_key', 'null');
       formik.setFieldValue('client_code', 'null');
       formik.setFieldValue('api_type', 'null');
-      formik.setFieldValue('demat_userid', 'null');
+      // formik.setFieldValue('demat_userid', 'null');
     }
 
     if (formik.values.broker === '3' || formik.values.broker === 3) {
@@ -596,7 +596,7 @@ const AddClient = () => {
     data()
   }, [])
 
-  console.log("formik", formik.errors.Strategy)
+  console.log("formik", AllStrategy)
 
   return (
     <>
@@ -607,7 +607,7 @@ const AddClient = () => {
           additional_field={
             <>
               {/*  For Show All Services */}
-              {formik.errors.groupservice ? <>
+              {/* {formik.errors.groupservice ? <> */}
                 <h6>All Group Service</h6>
                 {GetServices && GetServices.data.map((strategy) => (
                   <div className={`col-lg-2 `} key={strategy._id}>
@@ -627,7 +627,7 @@ const AddClient = () => {
                 {formik.errors.Strategy &&
                   <div style={{ color: 'red' }} className='my-3'>{formik.errors.Strategy} </div>}
 
-              </> : ""}
+              {/* </> : ""} */}
 
               {/*  For Show All Strategy */}
               <h6>All Strategy</h6>

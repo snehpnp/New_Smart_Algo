@@ -80,7 +80,6 @@ const ServicesList = () => {
                 token: user_token
             })).unwrap().then((response) => {
 
-                console.log("response", response)
 
                 if (response.status) {
                     toast.success(response.msg);

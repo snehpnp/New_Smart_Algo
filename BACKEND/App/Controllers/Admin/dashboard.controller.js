@@ -18,9 +18,7 @@ class Dashboard {
     async AdminDashboard(req, res) {
         try {
             const { user_Id } = req.body;
-
             let today = new Date()
-
 
             let total_client = await user.find({ Role: "USER" }).countDocuments()
             let admin_client = await user.find({ parent_role: "ADMIN", Role: "USER" }).countDocuments()

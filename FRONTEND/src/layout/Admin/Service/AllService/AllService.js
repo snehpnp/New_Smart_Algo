@@ -12,7 +12,7 @@ const ServicesList = () => {
 
     const dispatch = useDispatch()
 
-    const [first, setfirst] = useState('all')
+    const [first, setfirst] = useState('CF')
 
     const [AllServices, setAllServices] = useState({
         loading: true,
@@ -162,6 +162,7 @@ const ServicesList = () => {
                                                 className="default-select wide form-control"
                                                 id="validationCustom05"
                                                 onChange={(e) => setfirst(e.target.value)}
+                                                value={first}
                                             >
                                                 <option disabled>
                                                     Please Select Catagory
@@ -183,7 +184,7 @@ const ServicesList = () => {
                                     </div>
                                 </div>
                                 <div className="col-lg-6 ">
-                                    <button className='btn float-end btn-primary' onClick={(e) => UpdateQuantity(e)}>updateQty</button>
+                                    {/* <button className='btn float-end btn-primary' onClick={(e) => UpdateQuantity(e)}>updateQty</button> */}
                                 </div>
                             </div>
 

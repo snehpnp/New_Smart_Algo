@@ -201,7 +201,7 @@ export async function EDIT_STRATEGY_BY_ID(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}edit/strategy`, data, {
             headers: header(token),
-            data: { data },
+            data: {},
         })
         return await res?.data;
     }
@@ -624,6 +624,25 @@ export async function UPDATE_SMTP_DETAILS(data , token) {
 export async function UPDATE_COMPANY_DETAILS(data , token) {
     try {
         const res = await axios.post(`${Config.base_url}edit/company`, data ,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+
+// GET_CLIENT_BY_SUBADMIN_ID
+
+export async function GET_CLIENT_BY_SUBADMIN_ID(data , token) {
+    try {
+        const res = await axios.post(`${Config.base_url}sub/get/clientbyId`, data ,{
             headers: header(token),
             data: {},
         })
