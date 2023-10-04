@@ -61,6 +61,11 @@ class Dashboard {
                     $unwind: '$strategys',
                 },
                 {
+                    $sort: {
+                        'service.name': 1, // 1 for ascending order, -1 for descending order
+                    },
+                  },
+                {
                     $project: {
                         'service.name': 1,
                         'service.instrument_token': 1,

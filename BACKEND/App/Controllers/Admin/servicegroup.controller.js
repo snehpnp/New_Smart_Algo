@@ -327,6 +327,11 @@ class GroupService {
           $unwind: '$category', // Unwind the 'categoryResult' array
         },
         {
+          $sort: {
+            name: 1, // 1 for ascending order, -1 for descending order
+          },
+        },
+        {
           $project: {
             'category.segment': 1,
             'category.name': 1,
@@ -353,6 +358,11 @@ class GroupService {
               { 'category.segment': req.body.segment },
               { 'category.segment': 'all' },
             ],
+          },
+        },
+        {
+          $sort: {
+            name: 1, // 1 for ascending order, -1 for descending order
           },
         },
         {

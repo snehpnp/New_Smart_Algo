@@ -22,7 +22,7 @@ const BrokerResponse = db.BrokerResponse;
 // const { logger, getIPAddress } = require('./Helper/logger')
 
 // logger1.info('Add User By Admin', { Email: data.Email, role: data.Role, user_id: data._id });
-                   
+
 
 const aliceblue = require('./Broker/aliceblue')
 
@@ -134,7 +134,6 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-
           // DATE MONTH SET
           const day_expiry = expiry.substr(0, 2);
           var dateHash = {
@@ -184,13 +183,13 @@ app.post('/broker-signals', async (req, res) => {
           } else if (segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
             instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "NFO";
-            trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + is_CE_val_option;
+            trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
             findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike }
 
           } else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "MCX";
-            trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + is_CE_val_option;
+            trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
             findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
 
           } else if (segment == 'MF' || segment == 'mf') {
@@ -203,12 +202,20 @@ app.post('/broker-signals', async (req, res) => {
             instrument_query = { symbol: input_symbol, segment: "CF", expiry: expiry }
             EXCHANGE = "CDS";
           }
+          console.log("toke==>>>>",instrument_query);
 
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
             token = await services.find(instrument_query).maxTimeMS(20000).exec();
           } else {
             token = await Alice_token.find(instrument_query).maxTimeMS(20000).exec();
+          }
+
+          var instrument_token = 0
+          if(token.length == 0){
+            instrument_token = 0
+          }else{
+            instrument_token= token[0].instrument_token
           }
 
           // IF CHECK SIGNEL KET IS PANEL OR CLIENT
@@ -262,7 +269,7 @@ app.post('/broker-signals', async (req, res) => {
                 segment: segment,
                 trade_symbol: trade_symbol,
                 client_persnal_key: "",
-                token: token[0].instrument_token
+                token: instrument_token
               }
               let Signal_req1 = new Signals(Signal_req)
               var SignalSave = await Signal_req1.save();
@@ -282,9 +289,9 @@ app.post('/broker-signals', async (req, res) => {
                   symbol: input_symbol,
                   entry_type: type,
                   exit_type: "",
-                  entry_price: price,
+                  entry_price: (parseFloat(price) * parseFloat(qty_percent)),
                   exit_price: "",
-                  entry_qty_percent: qty_percent,
+                  entry_qty_percent: parseFloat(qty_percent),
                   exit_qty_percent: "",
                   entry_dt_date: current_date,
                   exit_dt_date: "",
@@ -299,17 +306,18 @@ app.post('/broker-signals', async (req, res) => {
                   trade_symbol: trade_symbol,
                   client_persnal_key: "",
                   signals_id: SignalSave._id,
-                  token: token[0].instrument_token
+                  token: instrument_token
                 }
                 const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
                 await Entry_MainSignals.save();
 
               } else {
                 var updatedData = {
-                  entry_price: (parseFloat(price) + parseFloat(findMainSignals[0].entry_price) / 2).toString(),
-                  entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)).toString(),
+                  entry_price: ((parseFloat(price) * parseFloat(qty_percent)) + parseFloat(findMainSignals[0].entry_price) / parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
+                  entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
                   entry_dt_date: current_date
                 }
+                console.log("updatedData", updatedData);
                 updatedData.$addToSet = { signals_id: SignalSave._id };
 
                 // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
@@ -321,11 +329,7 @@ app.post('/broker-signals', async (req, res) => {
             } else
               // START FOR EXIST SIGNAL UPDATE
               if (type == "LX" || type == "lx" || type == "SX" || type == "Sx") {
-
-                
                 var ExitMainSignals = await MainSignals.find(findSignal)
-
-
 
                 // // ExitMainSignals  FIND IN COLLECTION
                 if (ExitMainSignals.length != 0) {
@@ -359,7 +363,7 @@ app.post('/broker-signals', async (req, res) => {
 
             var query = { "strategys.strategy_name": strategy, "service.name": input_symbol }
 
-            console.log("query",query);
+            console.log("query", query);
             // Example: Find all documents in the collection
 
             try {
@@ -394,16 +398,16 @@ app.post('/broker-signals', async (req, res) => {
                             receive_signal: signal_req,
                             strategy: strategy,
                             type: type,
-                            order_id:"",
-                            symbol:"",
-                            trading_symbol:"",
-                            strategy:"",
-                            broker_name:"",
-                            send_request:"",
-                            order_status:"",
-                            reject_reason:"",
-                            receive_signal:"",
-                            order_id:"",
+                            order_id: "",
+                            symbol: "",
+                            trading_symbol: "",
+                            strategy: "",
+                            broker_name: "",
+                            send_request: "",
+                            order_status: "",
+                            reject_reason: "",
+                            receive_signal: "",
+                            order_id: "",
                           };
 
                           const newCategory = new BrokerResponse(brokerResponse)

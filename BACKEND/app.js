@@ -37,7 +37,7 @@ const server = http.createServer(app);
 // REQUIRE File
 require('./App/Cron/cron')
 
-const { createView, dropExistingView ,TradeHistroy} = require('./View/Alice_blue')
+const { createView, dropExistingView ,TradeHistroy,dashboard_view} = require('./View/Alice_blue')
 const { TokenSymbolUpdate, TruncateTable } = require('./App/Cron/cron')
 
 // TEST API
@@ -68,6 +68,12 @@ app.get('/get', async (req, res) => {
 
 app.get('/view-delete', async (req, res) => {
   dropExistingView()
+  res.send({ msg: "Done!!!" })
+})
+
+
+app.get('/dashboard-view', async (req, res) => {
+  dashboard_view()
   res.send({ msg: "Done!!!" })
 })
 

@@ -168,7 +168,7 @@ const BrokerResponse = () => {
       {
         showModal ?
           <>
-            <Modal isOpen={showModal} size="lg" title="Details View" hideBtn={true}
+            <Modal isOpen={showModal} size="xl" title="Details View" hideBtn={true}
               // onHide={handleClose}
               handleClose={() => setshowModal(false)}
             >
@@ -228,71 +228,3 @@ const BrokerResponse = () => {
 
 
 export default BrokerResponse
-
-
-
-    //     <Content Page_title="Broker Response" button_status={false}>
-
-
-    //       {/* <Accordion>
-    //         {
-    //           DashboardData.data.length !== 0 ?
-    //             <>
-    //               {
-    //                 DashboardData.data && DashboardData.data.map((item, index) => {
-    //                   return <>
-    //                     <Accordion.Item eventKey={index}>
-    //                       <Accordion.Header>
-    //                         {index + 1}
-    //                         <div className="col-3 mx-3">
-    //                           {item.symbol}
-    //                         </div>
-    //                         <div className="col-3">
-    //                           {item.broker_name}
-    //                         </div>
-    //                         <div className="col-3">
-    //                           {item.order_id}
-    //                         </div>
-    //                         <div className="col-3">
-    //                           {item. createdAt
-    // }
-    //                         </div>
-    //                       </Accordion.Header>
-    //                       <Accordion.Body>
-    //                         {item.order_status}
-    //                       </Accordion.Body>
-    //                     </Accordion.Item>
-    //                   </>
-
-    //                 })
-    //               }
-    //             </>
-    //             : <img src="../../../../assets/images/norecordfound.png" className='mx-auto d-flex' />
-    //         }
-
-    //       </Accordion> */}
-    //     </Content>
-
-    
-
-    // await dispatch(GET_ALL_SERVICES_NAMES({
-    //     data: row
-    // })).unwrap()
-    //     .then((response) => {
-    //         setshowModal(true)
-
-    //         if (response.status) {
-    //             setServicesName({
-    //                 loading: false,
-    //                 data: response.data
-    //             });
-    //         }
-    //         else {
-    //             setServicesName({
-    //                 loading: false,
-    //                 data: []
-    //             });
-
-    //         }
-    //     })
-  

@@ -381,7 +381,7 @@ const AddClient = () => {
     },
     {
       name: 'demat_userid',
-      label: formik.values.broker == 9 ? 'User Id' : '', type: 'text',
+      label: formik.values.broker == 9 || 2 ? 'User Id' : '', type: 'text',
       showWhen: values => values.broker === '9',
       label_size: 12, col_size: 6, disable: false
     },

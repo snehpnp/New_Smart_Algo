@@ -329,14 +329,17 @@ async function dashboard_view() {
       await client.connect();
       const db = client.db('test');
 
+      let today = new Date()
+
+      console.log("----");
       // Define the pipeline to create the view
       const pipeline = [
         {
           $addFields: {
             total_client: { $cond: [{ $eq: ['$Role', 'USER'] }, 1, 0] },
             admin_client: { $cond: [{ $and: [{ $eq: ['$parent_role', 'ADMIN'] }, { $eq: ['$Role', 'USER'] }] }, 1, 0] },
-            subadmin_client: { $cond: [{ $eq: ['$parent_role', 'SUBADMIN'] }, 1, 0] },
-            total_Subadmin: { $cond: [{ $eq: ['$Role', 'SUBADMIN'] }, 1, 0] },
+            // subadmin_client: { $cond: [{ $eq: ['$parent_role', 'SUBADMIN'] }, 1, 0] },
+            // total_Subadmin: { $cond: [{ $eq: ['$Role', 'SUBADMIN'] }, 1, 0] },
             total_live: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '2'] }] }, 1, 0] },
             total_active_live: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '2'] }, { $gte: ['$EndDate', today] }] }, 1, 0] },
             total_expired_live: { $cond: [{ $and: [{ $eq: ['$Role', 'USER'] }, { $eq: ['$license_type', '2'] }, { $lt: ['$EndDate', today] }] }, 1, 0] },
@@ -367,11 +370,8 @@ async function dashboard_view() {
       ]
 
 
-
-
-
       // Create the view
-      await db.createCollection('dashboard_view', { viewOn: 'companies', pipeline });
+      await db.createCollection('dashboard_view', { viewOn: 'users', pipeline });
 
       console.log('View created successfully.');
   } catch (error) {
