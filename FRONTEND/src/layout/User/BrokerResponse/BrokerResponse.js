@@ -84,8 +84,10 @@ const BrokerResponse = () => {
 
     },
     {
-      dataField: 'open_possition_qty',
-      text: 'Open Pisition'
+      dataField: 'order_status',
+      text: 'order status',
+      formatter: (cell, row, rowIndex) => <div>{cell}</div>
+
     },
     {
       dataField: 'reject_reason',
