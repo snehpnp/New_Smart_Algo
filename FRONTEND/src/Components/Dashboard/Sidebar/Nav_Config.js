@@ -154,6 +154,13 @@ export const admin_sidebar = [
         ]
 
     },
+       {
+        'id': 9,
+        "name": 'Create Strategy',
+        "Icon": "Repeat2",
+        "route": "/admin/createstrategy",
+        "Data": []
+    },
 
     //   {
     //     'id': 9,
@@ -256,13 +263,13 @@ export const sub_admin_sidebar = [
         "Data": []
 
     },
-    {
-        'id': 6,
-        "name": 'Trading Status',
-        "Icon": "Activity",
-        "route": "/subadmin/tradingstatus",
-        "Data": []
-    },
+    // {
+    //     'id': 6,
+    //     "name": 'Trading Status',
+    //     "Icon": "Activity",
+    //     "route": "/subadmin/tradingstatus",
+    //     "Data": []
+    // },
     {
         'id': 7,
         "name": 'Api Create Info',

@@ -133,6 +133,9 @@ const AddClient = () => {
       Strategy: false,
       licence1: 'null'
     },
+    
+
+
     validate: (values) => {
 
 
@@ -254,7 +257,7 @@ const AddClient = () => {
   });
 
 
-  // console.log("testt", formik)
+  console.log("testt", formik.values)
 
   useEffect(() => {
     // console.log("UserData", UserData)
@@ -381,8 +384,8 @@ const AddClient = () => {
     },
     {
       name: 'demat_userid',
-      label: formik.values.broker == 9 ? 'User Id' : '', type: 'text',
-      showWhen: values => values.broker === '9',
+      label: formik.values.broker === 9 ? 'User Id' : 'Demat UserId', type: 'text',
+      showWhen: values => values.broker === '9' || values.broker === '2',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -477,7 +480,7 @@ const AddClient = () => {
       formik.setFieldValue('app_key', 'null');
       formik.setFieldValue('client_code', 'null');
       formik.setFieldValue('api_type', 'null');
-      formik.setFieldValue('demat_userid', 'null');
+      // formik.setFieldValue('demat_userid', 'null');
     }
 
     if (formik.values.broker === '3' || formik.values.broker === 3) {
@@ -691,6 +694,7 @@ const AddClient = () => {
           additional_field={
             <>
               {/*  For Show All Services */}
+              <h6>All Group Service</h6>
 
               {GetServices && GetServices.data.map((strategy) => (
                 <div className={`col-lg-2 `} key={strategy._id}>
@@ -709,8 +713,9 @@ const AddClient = () => {
 
               {/*  For Show All Strategy */}
               {/* {ShowAllStratagy ? ( */}
-              <>s
-                <h3></h3>
+              <>
+              <h6>All Strategy</h6>
+
                 {selectedStrategies.map((strategy) => (
 
 

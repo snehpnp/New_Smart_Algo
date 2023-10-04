@@ -119,12 +119,7 @@ const EditGroup = () => {
             if (groupServiceInfo.data.group_name !== undefined) {
                 formik.setFieldValue('group_name', groupServiceInfo.data.group_name !== undefined &&  groupServiceInfo.data.group_name[0].name);
                 console.log("groupServiceInfo", groupServiceInfo.data.group_name !== undefined &&  groupServiceInfo.data);
-
             }
-
-
-
-
         }
 
         // formik.setFieldValue('editclient', true);
@@ -210,7 +205,7 @@ const EditGroup = () => {
 
     return (
         <>
-            <Content Page_title="Add Group" button_title="Back" route="/admin/groupservices">
+            <Content Page_title="Edit Group" button_title="Back" route="/admin/groupservices">
                 <form onSubmit={handleSubmit}>
                     <div className="row">
                         <div className="col-lg-6">
@@ -295,6 +290,18 @@ const EditGroup = () => {
                             </div>
                         )}
                     </div>
+
+
+
+
+
+
+
+
+
+
+
+                    
                     <button type="submit" className="btn btn-primary" >
                         Add Group
                     </button>

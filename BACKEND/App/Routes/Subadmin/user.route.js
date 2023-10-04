@@ -4,7 +4,7 @@
 const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
-const { AddEmployee, Subadmn_Permission , UpdateUser, GetAllClients, loginClients, tradingOnClients, GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys } = require('../../Controllers/Subadmin/user.controller')
+const { AddEmployee, Subadmn_Permission , getClientBySubadminId , UpdateUser, GetAllClients, loginClients, tradingOnClients, GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys } = require('../../Controllers/Subadmin/user.controller')
 const { EditCompany, GetCompanyInfo, EditEmailInfo } = require('../../Controllers/Admin/company.controller')
 const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy }  = require('../../Controllers/Admin/strategy.controller')
 
@@ -13,6 +13,7 @@ const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStrageg
 // USER ADD EDIT
 router.post('/sub/add/employee',  AddEmployee);
 router.post('/sub/get/permissions',  Subadmn_Permission);
+router.post('/sub/get/clientbyId',  getClientBySubadminId);
 
 // router.post('/update/employee', verifyToken, UpdateUser);
 // router.post('/getall/clients', GetAllClients);

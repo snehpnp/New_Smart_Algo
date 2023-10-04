@@ -58,6 +58,9 @@ export const Remove_Strategy_BY_Id = createAsyncThunk("admin/strategy/delete", a
 export const Edit_Strategy = createAsyncThunk("admin/strategy/edit", async (apireq) => {
 
     const { req, token } = apireq
+
+console.log("tesdt" , apireq);
+
     try {
         const res = await EDIT_STRATEGY_BY_ID(req, token);
         return await res;
