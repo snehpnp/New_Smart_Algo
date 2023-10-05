@@ -26,7 +26,8 @@ const strategySchema = Schema({
     strategy_segment: {
         type: String,
         // required: true,
-        default: null
+        default: null,
+        index: true
     },
     strategy_indicator: {
         type: String,

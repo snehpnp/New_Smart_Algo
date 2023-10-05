@@ -67,6 +67,7 @@ module.exports = function (app) {
 
 
 
+      //const db = client.db('TradeTools'); // Replace 'mydb' with your desired database name
       const db = client.db('TradeTools'); // Replace 'mydb' with your desired database name
       // console.log("db",db);
       //  const collectionName = 'shakir'; // Replace with your desired collection name
@@ -99,12 +100,12 @@ module.exports = function (app) {
 
         createView(collectionName);
         createViewM3(collectionName);
-        createViewM5(collectionName);
-        createViewM10(collectionName)
-        createViewM15(collectionName)
-        createViewM30(collectionName)
-        createViewM60(collectionName)
-        createViewM1DAY(collectionName)
+      //  createViewM5(collectionName);
+     //   createViewM10(collectionName)
+     //   createViewM15(collectionName)
+      //  createViewM30(collectionName)
+      //  createViewM60(collectionName)
+       // createViewM1DAY(collectionName)
 
       } else {
         // console.log(`Collection '${collectionName}' does not exist.`);
@@ -172,7 +173,7 @@ module.exports = function (app) {
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M_' + collectionName);
-      // console.log("collectionExists view 1 minute",collectionExists)
+      console.log("collectionExists view 1 minute",collectionExists)
       // console.log("pipeline",pipeline)
 
       if (collectionExists) {
@@ -284,6 +285,7 @@ module.exports = function (app) {
 
 
   }
+
   async function createViewM5(collectionName) {
     try {
       const db = client.db('TradeTools');
@@ -815,7 +817,7 @@ module.exports = function (app) {
         //console.log("response",response)
         connectToDB(response.tk, response);
         // console.log("token --",response.tk);
-        getTokenStrategy(response.tk) 
+       // getTokenStrategy(response.tk) 
         
 
       }
@@ -871,6 +873,7 @@ module.exports = function (app) {
           buffer_value:1,
           createdAt:1,
           updatedAt:1,
+          updatedAt:1,
          'userResult.UserName': 1, 
     
         }
@@ -911,9 +914,9 @@ module.exports = function (app) {
         let buffer_value=element.buffer_value;
         let UserName=element.userResult.UserName;
         
-        console.log("inside tokensymbol ",tokensymbol)
-        console.log("inside UserName ",UserName)
-        console.log("price_source ",price_source)
+       // console.log("inside tokensymbol ",tokensymbol)
+       // console.log("inside UserName ",UserName)
+       // console.log("price_source ",price_source)
 
         const db = client.db('TradeTools');
         let collectionName = 'M' + timeframe + '_' + tokensymbol;
@@ -972,23 +975,51 @@ module.exports = function (app) {
             get_final_data = get_view_data.map(item => item.low);
           }
       
-      
+
+        
+
+     
+          //  console.log("timeFrameViewData",timeFrameViewData);
+
+         const lastElementTimeFrameViewData = timeFrameViewData[timeFrameViewData.length - 1];
+        
+        
+         console.log("Last lastElementTimeFrameViewData: 1 ", lastElementTimeFrameViewData);
+       
+
       
           let averageData = "";
       
           if (indicator == "MA") {
             const MovingAverages = require('moving-averages');
             const MADATA = MovingAverages.ma(get_final_data, period);
+            const MovingAveragesValue = MADATA[MADATA.length - 1];
+            lastElementTimeFrameViewData.MA = parseFloat(MovingAveragesValue);
+
+
             if (inside_indicator == "EMA") {
               averageData = MovingAverages.ema(MADATA, period);
+              const EMAValue = averageData[averageData.length - 1];
+              lastElementTimeFrameViewData.EMA = parseFloat(EMAValue);
+
+
             } else if (inside_indicator == "DMA") {
               averageData = MovingAverages.dma(MADATA, period);
+              const DMAValue = averageData[averageData.length - 1];
+              lastElementTimeFrameViewData.DMA = parseFloat(DMAValue);
+
             }
             else if (inside_indicator == "SMA") {
               averageData = MovingAverages.sma(MADATA, period);
+              const SMAValue = averageData[averageData.length - 1];
+              lastElementTimeFrameViewData.SMA = parseFloat(SMAValue);
+
             }
             else if (inside_indicator == "WMA") {
               averageData = MovingAverages.wma(MADATA, period);
+              const WMAValue = averageData[averageData.length - 1];
+              lastElementTimeFrameViewData.WMA = parseFloat(WMAValue);
+
             }
            
           }
@@ -997,30 +1028,198 @@ module.exports = function (app) {
           
 
 
-        
+          console.log("Last lastElementTimeFrameViewData: 2 ", lastElementTimeFrameViewData);
            
-
-       //  console.log("timeFrameViewData",timeFrameViewData);
-
-         const lastElementTimeFrameViewData = timeFrameViewData[timeFrameViewData.length - 1];
-         console.log("Last lastElementTimeFrameViewData:", lastElementTimeFrameViewData.open);
-     
-      
+            
+       
         // console.log("averageData call strategy",averageData);
          const lastElementAverageData = averageData[averageData.length - 1];
-         console.log("Last lastElementAverageData:", lastElementAverageData);
+        // console.log("Last lastElementAverageData:", lastElementAverageData);
+
+        
+        // Split the string based on "&&" or "||" using a regular expression
+        if(condition != undefined){
+        const conditionArray = condition.split(/\s*(?:&&|\|\|)\s*/);
+        console.log(conditionArray);
+         if(conditionArray.length > 0){
+           
+           
+          
+          }
+          
+        }
 
 
 
+ // Sample data for the condition
+// const data = {
+//   close: 485, // Replace with actual values
+//   open: 480,
+//   high: 490,
+//   MA: 482, // Replace with actual moving average value
+//   EMA: 481, // Replace with actual exponential moving average value
+//   SMA: 495 // Replace with actual simple moving average value
+// };
 
+// Parse and evaluate the condition
+//const conditionString = "close > MA && open < EMA || high < SMA";
 
+// Split the condition into individual parts based on "&&" and "||"
+const conditions = condition.split(/\s*\|\|\s*/); // Split by "||" first
 
+// Initialize a result variable to store the final evaluation result
+let result = false;
 
+// Loop through each condition and evaluate it
+for (const condition of conditions) {
+  const andConditions = condition.split(/\s*&&\s*/); // Then split by "&&"
+  let andResult = true; // Initialize result for "&&" conditions as true
 
+  for (const andCondition of andConditions) {
+    const evaluated = evaluateSingleCondition(andCondition, lastElementTimeFrameViewData);
+    andResult = andResult && evaluated; // Combine "&&" conditions
+  }
 
-       
+  result = result || andResult; // Combine "||" conditions
+}
+
+ console.log("Condition evaluation result:", result);
+ if(result == true){
+   console.log("True condition - ",lastElementTimeFrameViewData);
+   console.log("elemet True Condition -  ",element)
+  }
+  
     
   }
+
+
+  function evaluateSingleCondition(condition, data) {
+    console.log("condition",condition);
+ const [variable, operator, value] = condition.split(/\s*(>|<|>=|<=|=)\s*/);
+  console.log("value",data[value]);
+ //const numericValue = parseFloat(value);
+  const numericValue = parseFloat(data[value]);
+  console.log("data[variable",data[variable]);
+  console.log("numericValue",numericValue);
+ switch (operator) {
+   case ">":
+     return data[variable] > numericValue;
+   case "<":
+     return data[variable] < numericValue;
+   case ">=":
+     return data[variable] >= numericValue;
+   case "<=":
+     return data[variable] <= numericValue;
+   case "=":
+     return data[variable] === numericValue;
+   default:
+     return false;
+ }
+}
+
+
+app.get("/StrategyBuySellView", async (req , res)=>{
+
+
+  // const pipeline1 = [
+  //   {
+  //     $group: {
+  //       _id: "$tokensymbol",
+  //       // AllDocument: { $push: "$$ROOT" },
+
+  //       type : {$push : "$type"}
+  //     },
+  //   },
+    
+  // ];
+
+  const pipeline2 = [
+    {
+      $lookup: {
+        from: "M3_40089", // View collection ka naam yahan par specify karein
+        localField: "M3_40089", // Aapke data collection ke column ka naam jiska value se view match hoga
+        foreignField: "M3_40089", // View collection ke column ka naam jiska value se view match hota hai
+        as: 'matchedViewData', // Alias jisse aap fetched data ke roop mein prapt karenge
+      },
+    },
+    {
+      $match: {
+        tokensymbol: "M3_40089", // View collection ka naam yahan par specify karein
+      },
+    },
+    {
+      $unwind: '$matchedViewData',
+    },
+  ];
+  
+  const result1 = await UserMakeStrategy.aggregate(pipeline2);
+   console.log("result - ",result1);
+   res.send(result1)
+
+
+   
+return
+   
+
+
+  const pipeline = [
+
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'user_id',
+        foreignField: '_id',
+        as: 'userResult'
+      }
+    },
+
+    {
+      $unwind: '$userResult', //
+    },
+    {
+      $match: {
+        //tokensymbol : token,
+        status:"0"
+      },
+    },
+    {
+      $project: {
+    
+        user_id:1,
+        tokensymbol:1,
+        timeframe:1,
+        indicator:1,
+        price_source:1,
+        period:1,
+        inside_indicator:1,
+        condition:1,
+        buffer_value:1,
+        type:1,
+        createdAt:1,
+        updatedAt:1,
+       'userResult.UserName': 1, 
+  
+      }
+    }
+    
+  ];
+
+  const result = await UserMakeStrategy.aggregate(pipeline);
+  
+ // console.log("result",result)
+
+
+  if(result.length > 0){
+    result.forEach(element => {
+      callStartegy(element) 
+    });
+
+  }
+
+  res.send(result);
+});
+
+
 
 
   async function dropAllCollections() {
@@ -1048,18 +1247,41 @@ module.exports = function (app) {
 
   // Call the function to drop all collections in the database
 
+  async function TriggerCollection(token){
 
+     
+    const db = client.db('TradeTools');
+    const collection = db.collection(token);
+
+    const changeStream = collection.watch();
+
+    changeStream.on('change', (change) => {
+      // Handle the change event here
+      console.log('Change event : '+token+' : -', change);
+
+
+
+
+      
+      // Implement your custom logic here based on the change event
+    });
+
+
+
+
+
+  }
 
 
 
   app.get('/socket-api', async (req, res) => {
-     //const collection = "shakir2";
+    //  const collection = "shakir2";
     // dropAllCollections();
     // res.send("okkkk"); 
     // return
     //connectToDB(collection);
 
- 
+    
 
     var BASEURL = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/";
     let AuthorizationToken;
@@ -1067,10 +1289,10 @@ module.exports = function (app) {
     const url = "wss://ws1.aliceblueonline.com/NorenWS/";
     let socket;
     // let channel = 'NSE|3045#NSE|14366#NFO|59218#NFO|59219';
-    let channel = 'NFO|59203#NFO|59204';
+    let channel = 'NFO|40092#NFO|40089';
 
     let userId = '438760';
-    let userSession = 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTUzNTMxMjEsImlhdCI6MTY5NTI3NDIzNCwianRpIjoiYjY3YWE0ZDgtNTQwMS00NzZhLWExZmEtODQzYjNlZTM1ZTk2IiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjExMWVhZTA5LWM5NTktNDZlYy04Mjg0LWE0YzViMWU5NDA0MSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMTExZWFlMDktYzk1OS00NmVjLTgyODQtYTRjNWIxZTk0MDQxIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.Er0mZxaLAQ0QRYhduVC0ufV6CjpkSnOy8ETDd-_DmZU3u5w22I3FbTpAq9FN_Y6oQMIhSqQ1JGg5kIwd2Wn49wQyRloNoZr8V93uUVmygIKAGWUZjVhuFdfDC-BnzJhIobICYNxOQy6DNe3JU1dIJsNycLHN75hZOpbftX3ljUy-yON8IbvoGw1LGEx1kqRiQx11JvLl_HZxbgyYgyivk9D4dYVDJP_vzZyfQiMadrqcJm6wgO2OV-Byd1PwVf5J-sS6jtvwZU8lOBMROeHJ6lnNwsXrbRVaQ1_6GaXZ8Jb5d5w8x3YKIIIIStqSz1-_Wi43W3n_UxwXdK1_F_lkaA'
+    let userSession = 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTY0ODMyMDAsImlhdCI6MTY5NjQwMDI5NCwianRpIjoiMzI3NWQ4NjAtMzhlOC00MTNkLWI5NDgtNzhhYWYyYmVlNDllIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6ImJmZDNhZGEyLWExNzYtNGI2Mi1iZDA5LWRjZmE2ZDNhYTg1NSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiYmZkM2FkYTItYTE3Ni00YjYyLWJkMDktZGNmYTZkM2FhODU1IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.fZdywaRNC-4Dy-x6Ceh5Iq0qd3nZUvww3mIoqvoBuCAXjdaBFd7T8KC7ABRReueo-H5GXITIwInBKRXVCwd0ekdHCjnz4_sOTAhuDHTRmHooTi4SAkDfpRIPPPMfmP_gtn4p0CrR9e18IHIg7KdVlroz2-acCA26o7oM2MIHZTDuLF60-OwndQZcduyf-TxHAK5rjNbgXjcsYhS2Jhxk02BDXOCQkHYnPl1tP3ksmQqo3duWjoE_A2F08mcU1Dljq-uWWk7OTOjqzRq9SOXAV6qhFhjlsIVlnVnaSp2GLdOgoyUX7LnQapkfqGKAlTRs13yhX0JbvMcKX0nUBIm5OA'
 
     connect(userId, userSession, channel)
 
@@ -1083,15 +1305,19 @@ module.exports = function (app) {
       };
       socket.onmessage = async function (msg) {
         var response = JSON.parse(msg.data);
-        console.log("okk socket open  1 ", response)
+        //console.log("okk socket open  1 ", response)
 
         if (response.tk) {
-          //console.log("response",response)
+        console.log("response",response.tk)
           connectToDB(response.tk, response);
+
+         // TriggerCollection(response.tk)
+
+          //getTokenStrategy(response.tk)
         }
 
 
-
+ 
         if (response.s == "OK") {
 
           var channel = token;
@@ -1227,57 +1453,58 @@ module.exports = function (app) {
 
   app.post("/make_startegy", async function (req, res) {
 
-    // const pipeline1 = [
+    const pipeline1 = [
 
-    //   {
-    //     $lookup: {
-    //       from: 'users',
-    //       localField: 'user_id',
-    //       foreignField: '_id',
-    //       as: 'userResult'
-    //     }
-    //   },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user_id',
+          foreignField: '_id',
+          as: 'userResult'
+        }
+      },
 
-    //   {
-    //     $unwind: '$userResult', //
-    //   },
-    //   {
-    //     $project: {
+      {
+        $unwind: '$userResult', //
+      },
+      {
+        $project: {
       
-    //       user_id:1,
-    //       tokensymbol:1,
-    //       timeframe:1,
-    //       indicator:1,
-    //       price_source:1,
-    //       period:1,
-    //       inside_indicator:1,
-    //       condition:1,
-    //       buffer_value:1,
-    //       createdAt:1,
-    //       updatedAt:1,
-    //      'userResult.UserName': 1, 
+          user_id:1,
+          tokensymbol:1,
+          timeframe:1,
+          indicator:1,
+          price_source:1,
+          period:1,
+          inside_indicator:1,
+          condition:1,
+          buffer_value:1,
+          type:1,
+          createdAt:1,
+          updatedAt:1,
+         'userResult.UserName': 1, 
        
     
-    //     }
-    //   }
+        }
+      }
       
-    // ];
+    ];
 
-    // const result = await UserMakeStrategy.aggregate(pipeline1);
+    const result = await UserMakeStrategy.aggregate(pipeline1);
 
-    // if (result.length > 0) {
+    if (result.length > 0) {
 
-    //   return res.json({ status: true, msg: 'Get all', data: result });
+      return res.json({ status: true, msg: 'Get all', data: result });
 
-    // } else {
+    } else {
 
-    //   return res.json({ status: false, msg: 'An error occurred', data: [] });
-    // }
+      return res.json({ status: false, msg: 'An error occurred', data: [] });
+    }
 
 
   
 
-   return
+  return
 
     let user_id = req.body.user_id;
     let tokensymbol = req.body.tokensymbol;
@@ -1288,6 +1515,7 @@ module.exports = function (app) {
     let inside_indicator = req.body.inside_indicator;
     let condition = req.body.condition;
     let buffer_value = req.body.buffer_value;
+    let type = req.body.type;
 
 
     const db = client.db('TradeTools');
@@ -1305,6 +1533,7 @@ module.exports = function (app) {
       inside_indicator: inside_indicator,
       condition: condition,
       buffer_value: buffer_value,
+      type: type,
     })
       .then((createUserMakeStrategy) => {
         res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy })
