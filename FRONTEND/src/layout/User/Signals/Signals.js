@@ -56,11 +56,12 @@ const Signals = () => {
 
   const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
   const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
+  const user_details_goTo = JSON.parse(localStorage.getItem("user_details_goTo"))
 
 
 
   const getsignals11 = async (e) => {
-    await dispatch(Get_Signals({ _id: user_Id, token: AdminToken })).unwrap()
+    await dispatch(Get_Signals({ _id: user_details_goTo && user_details_goTo ? user_details_goTo.user_id : user_Id, token: AdminToken })).unwrap()
       .then((response) => {
         if (response.status) {
           setSignalsData({

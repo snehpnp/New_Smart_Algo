@@ -44,8 +44,8 @@ const Header = ({ ChatBox }) => {
   //  lOCAL STORAGE VALUE
   let theme_id = localStorage.getItem("theme");
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
-  const user_role = JSON.parse(localStorage.getItem("user_role"));
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
+  const user_role = JSON.parse(localStorage.getItem("user_role"));
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;

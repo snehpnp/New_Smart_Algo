@@ -3,15 +3,13 @@
 import React, { useState, useEffect } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Accordion from 'react-bootstrap/Accordion';
-import { Get_Broker_Response,UpdateBrokerResponse } from "../../../ReduxStore/Slice/Users/BrokerResponseSlice"
+import { Get_Broker_Response, UpdateBrokerResponse } from "../../../ReduxStore/Slice/Users/BrokerResponseSlice"
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable"
-
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { fa_time, fDateTimeSuffix } from '../../../Utils/Date_formet'
 import { GanttChartSquare, Eye } from 'lucide-react';
-
 
 
 const BrokerResponse = () => {
@@ -21,17 +19,16 @@ const BrokerResponse = () => {
   const [showModal, setshowModal] = useState(false)
   const [BrokerResponseId, setBrokerResponseId] = useState([])
 
-  console.log("BrokerResponseId", BrokerResponseId && BrokerResponseId);
 
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
 
   const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
   const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
-
+  const user_details_goTo = JSON.parse(localStorage.getItem("user_details_goTo"))
 
 
   const getsignals11 = async (e) => {
-    await dispatch(Get_Broker_Response({ _id: user_Id, token: AdminToken })).unwrap()
+    await dispatch(Get_Broker_Response({ _id: user_details_goTo && user_details_goTo ? user_details_goTo.user_id : user_Id, token: AdminToken })).unwrap()
       .then((response) => {
         if (response.status) {
           setDashboardData({
@@ -46,10 +43,6 @@ const BrokerResponse = () => {
   useEffect(() => {
     getsignals11()
   }, [])
-
-
-
-  const [activeKey, setActiveKey] = useState(null);
 
   const columns = [
     {
@@ -120,32 +113,29 @@ const BrokerResponse = () => {
   ];
 
 
-
-
   // GET ALL GROUP SERVICES NAME
   const GetAllServicesName = async (row) => {
-
     setBrokerResponseId(row)
     setshowModal(true)
 
   }
 
 
-  const GetBrokerInforMation=async(row)=>{
+  const GetBrokerInforMation = async (row) => {
     console.log("row", row);
 
-    await dispatch(UpdateBrokerResponse({ OrderId: row.order_id,user_id:row.user_id, token: AdminToken })).unwrap()
-    .then((response) => {
-      
-      if (response.status) {
-      
-        setDashboardData({
-          loading: false,
-          data: response.data
-        });
-        ;
-      }
-    })
+    await dispatch(UpdateBrokerResponse({ OrderId: row.order_id, user_id: row.user_id, token: AdminToken })).unwrap()
+      .then((response) => {
+
+        if (response.status) {
+
+          setDashboardData({
+            loading: false,
+            data: response.data
+          });
+          ;
+        }
+      })
 
   }
 
@@ -223,7 +213,7 @@ const BrokerResponse = () => {
 
 
 
-)
+  )
 }
 
 

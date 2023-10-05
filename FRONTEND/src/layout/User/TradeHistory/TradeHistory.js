@@ -417,7 +417,7 @@ const TradeHistory = () => {
     console.log("gotodashboard");
 
 
-console.log("gotodashboard" ,gotodashboard);
+    console.log("gotodashboard", gotodashboard);
 
     return (
 

@@ -35,6 +35,9 @@ const AliceTokenSchema = new mongoose.Schema({
     },
     tradesymbol: {
         type: String,
+    },  
+    exch_seg: {
+        type: String,
     },
     tradesymbol_m_w: {
         type: String,
