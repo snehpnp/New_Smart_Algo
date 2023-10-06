@@ -289,7 +289,7 @@ app.post('/broker-signals', async (req, res) => {
                   symbol: input_symbol,
                   entry_type: type,
                   exit_type: "",
-                  entry_price: (parseFloat(price) * parseFloat(qty_percent)),
+                  entry_price: parseFloat(price),
                   exit_price: "",
                   entry_qty_percent: parseFloat(qty_percent),
                   exit_qty_percent: "",
@@ -313,7 +313,7 @@ app.post('/broker-signals', async (req, res) => {
 
               } else {
                 var updatedData = {
-                  entry_price: ((parseFloat(price) * parseFloat(qty_percent)) + parseFloat(findMainSignals[0].entry_price) / parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
+                  entry_price: (parseFloat(price) + parseFloat(findMainSignals[0].entry_price) / 2),
                   entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
                   entry_dt_date: current_date
                 }

@@ -144,7 +144,7 @@ export async function FIND_ONE_USER(data, token) {
 // UPDATE CLIENT BY ID
 export async function UPDATE_USER(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}/sub/update/employee`, data, {
+        const res = await axios.post(`${Config.base_url}sub/update/employee`, data, {
             headers: header(token),
 
         })

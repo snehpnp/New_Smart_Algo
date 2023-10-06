@@ -204,8 +204,6 @@ const AddClient = () => {
     },
     onSubmit: async (values) => {
 
-
-
       const req = {
         "FullName": values.fullName,
         "UserName": values.username,
@@ -218,7 +216,7 @@ const AddClient = () => {
         "todate": values.todate,
         "service_given_month": values.service_given_month,
         "broker": values.broker,
-        "parent_id": values.parent_id != null ? values.parent_id : user_id,
+        "parent_id": values.parent_id == null || " " ?  user_id : values.parent_id,
         "parent_role": values.parent_id != null ? "SUBADMIN" : "ADMIN",
         "api_secret": values.api_secret,
         "app_id": values.app_id,
@@ -234,8 +232,6 @@ const AddClient = () => {
       }
 
 
-      // console.log("req", req);
-      // return
 
       await dispatch(Update_User({ req: req, token: user_token })).unwrap().then((response) => {
 
@@ -257,10 +253,8 @@ const AddClient = () => {
   });
 
 
-  console.log("testt", formik.values)
 
   useEffect(() => {
-    // console.log("UserData", UserData)
     formik.setFieldValue('username', UserData.data.data !== undefined && UserData.data.data[0].UserName);
     formik.setFieldValue('fullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
     formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);

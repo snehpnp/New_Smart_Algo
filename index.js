@@ -1,3 +1,0 @@
-const base64String = 'Y29tcGxleHR5PXJlZ3VsYXImZGlzY3F0eT0wJmV4Y2g9TlNFJnBDb2RlPUNOQyZwcmN0eXA9TUtUJnByaWNlPTAmcXR5PTEmcmV0PURBWSZzeW1ib2xfaWQ9MTUyNTkmdHJhZGluZ19zeW1ib2w9UlBPV0VSLUVRJnRyYW5zdHlwZT1CVVkmdHJpZ1ByaWNlPSZvcmRlclRhZz1vcmRlcjE';
-const decoded = atob(base64String);
-console.log(atob(base64String));

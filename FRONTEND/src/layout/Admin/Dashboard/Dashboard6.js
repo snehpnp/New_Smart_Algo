@@ -44,7 +44,7 @@ const Dashboard1 = ({ data }) => {
       value: data.data && data.data.subadmin_client,
       icon: 'la la-users',
       route: "/admin/subadminclients",
-      visible: true
+      visible: false
 
     },
     {

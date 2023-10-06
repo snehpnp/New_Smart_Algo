@@ -6,9 +6,9 @@ const { verifyToken } = require('../../Middleware/authjwt')
 
 const { AddEmployee, UpdateUser, GetAllClients, loginClients, tradingOnClients, GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys } = require('../../Controllers/Admin/user.controller')
 const { EditCompany, GetCompanyInfo, EditEmailInfo } = require('../../Controllers/Admin/company.controller')
-const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy }  = require('../../Controllers/Admin/strategy.controller')
+const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy } = require('../../Controllers/Admin/strategy.controller')
 
-
+const { AddMessageBrodcast,GetAllMessageBrodcast,GetMessageBrodcast} = require('../../Controllers/Admin/messagebrodcast.controller')
 
 // USER ADD EDIT
 router.post('/add/employee', verifyToken, AddEmployee);
@@ -22,13 +22,10 @@ router.post('/getall/tadingstatus', GetTradingStatus);
 router.post('/getall/userinfo', GetUserInfo);
 router.post('/update/brokerkeys', Update_Broker_Keys);
 
-
-
 // COMPANY RELETE ROUTES
 router.post('/edit/company', verifyToken, EditCompany);
 router.post('/edit/emailinfo', verifyToken, EditEmailInfo);
 router.get('/get/company', GetCompanyInfo);
-
 
 
 // STRATEGY RELETED ROUTES
@@ -39,6 +36,14 @@ router.post('/getall/strategy', verifyToken, GetAllStrategy);
 router.get('/getall/strategy_for_add_client', GetAllStrategyForClient);
 router.post('/delete/strategy', verifyToken, DeleteStragegy);
 router.post('/get/strategy/client', ClientsAccordingToStrategy);
+
+
+// MESSAGE BRODCAST
+router.post('/add/messagebrodcast', AddMessageBrodcast);
+router.post('/getall/messagebrodcast', GetAllMessageBrodcast);
+router.post('/get/messagebrodcast', GetMessageBrodcast);
+
+
 
 
 module.exports = router;

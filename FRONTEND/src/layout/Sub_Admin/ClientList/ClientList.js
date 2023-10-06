@@ -265,7 +265,7 @@ const AllClients = () => {
             text: 'Status',
             hidden: (isgotodashboard ? true : false),
 
-            formatter: (cell, row) => (
+            formatter: (cell, row) => (  row.Is_Active === "1" ? 
                 <>
 
                     <label class="toggle mt-3">
@@ -278,7 +278,7 @@ const AllClients = () => {
                         <div class={`toggle-switch bg-primary`}></div>
                     </label>
 
-                </>
+                </> :""
             ),
         },
 
@@ -315,12 +315,12 @@ const AllClients = () => {
         {
             dataField: 'StartDate',
             text: 'Start Date',
-            formatter: (cell, row) => fDateTimeSuffix(row.StartDate)
+            formatter: (cell, row) =>row.StartDate == null ? "----" : fDateTimeSuffix(row.StartDate)
         },
         {
             dataField: 'EndDate',
             text: 'End Date',
-            formatter: (cell, row) => fDateTimeSuffix(row.EndDate)
+            formatter: (cell, row) => row.EndDate == null ? "----" : fDateTimeSuffix(row.EndDate)
         },
 
         {
@@ -331,7 +331,7 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
                     <div>
-                        {getPermissions && getPermissions.client_edit === 1 ? <>
+                        {getPermissions && getPermissions.client_edit === 1 &&  row.Is_Active === "1"  ? <>
                             <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
                                 <span data-toggle="tooltip" data-placement="top" title="Edit">
                                     <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />

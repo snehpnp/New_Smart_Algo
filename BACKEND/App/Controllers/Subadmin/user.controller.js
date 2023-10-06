@@ -28,6 +28,7 @@ var dt = dateTime.create();
 // OK
 // Product CLASS
 class Employee {
+
   // USER ADD
   async AddEmployee(req, res) {
     try {
@@ -143,13 +144,15 @@ class Employee {
         StartDate1 = fromdate;
         EndDate1 = todate;
       } else if (license_type == "2") {
+
         var currentDate = new Date();
         var start_date_2days = dateTime.create(currentDate);
         start_date_2days = start_date_2days.format("Y-m-d H:M:S");
         var start_date = start_date_2days;
 
-        // console.log("start_date", start_date);
-        StartDate1 = start_date;
+        // StartDate1 = start_date;
+        StartDate1 = null;
+
 
         var UpdateDate = "";
         var StartDate = new Date(start_date);
@@ -161,8 +164,9 @@ class Employee {
         var end_date_2days = dateTime.create(UpdateDate);
         var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
 
-        // console.log("END DATE", end_date_2days);
-        EndDate1 = end_date_2days;
+        // EndDate1 = end_date_2days;
+        EndDate1 = null;
+
       }
 
       const min = 1;
@@ -206,7 +210,7 @@ class Employee {
         EndDate: EndDate1,
         Role: Role.toUpperCase(),
         license_type: license_type,
-        licence: licence,
+        licence: license_type == "2" ? '0' : licence,
         client_key: client_key,
         parent_id: parent_id,
         parent_role: parent_role,
@@ -246,7 +250,7 @@ class Employee {
                 User_strategy_client.save();
               });
             }
-          } catch {}
+          } catch { }
 
           const group_service_find = await serviceGroup_services_id.find({
             Servicegroup_id: group_service,
@@ -308,10 +312,11 @@ class Employee {
     }
   }
 
+
+
   // UPDATE USER
   async UpdateUser(req, res) {
     try {
-      // const { FullName, UserName, Email, PhoneNo, license_type, licence, licence1, fromdate, Strategies, todate, service_given_month, broker, parent_id, parent_role, api_secret, app_id, client_code, api_key, app_key, api_type, demat_userid, group_service } = req.body;
 
       var req = req.body.req;
       var StartDate1 = "";
@@ -351,7 +356,7 @@ class Employee {
       if (req.parent_id == "") {
         return res.send({
           status: false,
-          msg: "Please Select parent id",
+          msg: "Please Select parent",
           data: [],
         });
       }
@@ -400,6 +405,9 @@ class Employee {
         Number(Panel_key[0].licenses) >=
         Number(TotalLicense) + Number(new_licence)
       ) {
+
+        var is_active = "1"
+
         // PREVIOS CLIENT IS LIVE
         if (existingUsername.license_type != "2") {
           // USER 2 DAYS LICENSE USE
@@ -439,7 +447,7 @@ class Employee {
             var start_date_2days = dateTime.create(currentDate);
             start_date_2days = start_date_2days.format("Y-m-d H:M:S");
             var start_date = start_date_2days;
-            StartDate1 = start_date;
+            StartDate1 = 0;
 
             var UpdateDate = "";
             var StartDate = new Date(start_date);
@@ -451,8 +459,9 @@ class Employee {
             var end_date_2days = dateTime.create(UpdateDate);
             var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
 
-            EndDate1 = end_date_2days;
-            TotalMonth = new_licence;
+            EndDate1 = 0;
+            TotalMonth = 0;
+            is_active = "0"
           }
         } else {
           if (req.license_type == "2") {
@@ -589,7 +598,7 @@ class Employee {
               });
 
               const Strategieclient = await strategy.find({ _id: stgId });
-              console.log(Strategieclient);
+              // console.log(Strategieclient);
               const user_activity = new user_activity_logs({
                 user_id: existingUsername._id,
                 message: "Strategy Delete",
@@ -620,6 +629,7 @@ class Employee {
         } catch (error) {
           console.log("startegy error-", error);
         }
+
 
         try {
           // GROUP SERVICES ADD EDIT
@@ -692,9 +702,8 @@ class Employee {
           FullName: req.FullName,
           license_type: req.license_type,
           licence: TotalMonth,
-          StartDate:
-            StartDate1 == null ? existingUsername.StartDate : StartDate1,
-          EndDate: EndDate1 == null ? existingUsername.EndDate : EndDate1,
+          StartDate: StartDate1 === null ? existingUsername.StartDate : StartDate1 == 0 ? null : StartDate1,
+          EndDate: EndDate1 === null ? existingUsername.EndDate : EndDate1 == 0 ? null : EndDate1,
           broker: req.broker,
           parent_id: req.parent_id,
           parent_role: req.parent_role,
@@ -706,8 +715,9 @@ class Employee {
           api_type: req.api_type,
           demat_userid: req.demat_userid,
           service_given_month: req.service_given_month,
+          Is_Active: is_active
         };
-        console.log("User_uodate", User_update);
+        // console.log("User_uodate", User_update);
 
         const User_Update = await User_model.updateOne(
           { _id: existingUsername._id },
@@ -715,7 +725,7 @@ class Employee {
         );
 
         if (req.license_type == "2" || req.license_type == 2) {
-          console.log("TotalMonth", new_licence);
+          // console.log("TotalMonth", new_licence);
 
           if (Number(new_licence) > 0) {
             const count_licenses_add = new count_licenses({
@@ -744,8 +754,8 @@ class Employee {
     }
   }
 
+
   // SUBADMIN CLIENTS ACTIVE INACTIVE STATUS UPDATE
-  
   async UpdateActiveStatus(req, res) {
     try {
       const { id, user_active_status } = req.body;
@@ -761,8 +771,39 @@ class Employee {
         });
       }
 
+
+      var StartDate1
+      var EndDate1
+      var licence = 1
+
+      var currentDate = new Date();
+      var start_date_2days = dateTime.create(currentDate);
+      start_date_2days = start_date_2days.format("Y-m-d H:M:S");
+      var start_date = start_date_2days;
+
+      StartDate1 = start_date;
+
+
+      var UpdateDate = "";
+      var StartDate = new Date(start_date);
+
+      UpdateDate = StartDate.setMonth(
+        StartDate.getMonth() + parseInt(licence)
+      );
+
+      var end_date_2days = dateTime.create(UpdateDate);
+      var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
+
+      EndDate1 = end_date_2days;
+
       const filter = { _id: id };
-      const updateOperation = { $set: { Is_Active: user_active_status } };
+
+      const updateOperation = {
+        $set: {
+          Is_Active: 1, StartDate: StartDate1,
+          EndDate: EndDate1, licence: "1"
+        }
+      };
 
       const result = await User_model.updateOne(filter, updateOperation);
 
@@ -787,37 +828,71 @@ class Employee {
   }
 
 
+  // GET USER ALL Client
+  async getClientBySubadminId(req, res) {
+    try {
+      const { id } = req.body;
+      // UPDATE ACTTIVE STATUS CLIENT
 
-// GET SUBADMIN PERMISSION
-async Subadmn_Permission(req, res) {
-  try {
-    const { id } = req.body;
-    // UPDATE ACTTIVE STATUS CLIENT
+      if (!id) {
+        return res.send({
+          status: false,
+          msg: "Please Entrer User Id",
+          data: [],
+        });
+      }
+      var userId = new ObjectId(id);
 
-    if (!id) {
-      return res.send({
-        status: false,
-        msg: "Please Entrer User Id",
-        data: [],
+      const get_user = await User_model.find({
+        parent_id: id,
+        parent_role: "SUBADMIN",
+      }).select("FullName UserName Email PhoneNo StartDate license_type");
+
+      if (get_user.length == 0) {
+        return res.send({ status: false, msg: "No Dat Found", data: [] });
+      }
+
+      res.send({
+        status: true,
+        msg: "Get Users",
+        data: get_user,
       });
+    } catch (error) {
+      console.log("trading status Error-", error);
     }
-    var userId = new ObjectId(id);
-
-    const get_user = await Subadmin_Permission.find({ user_id: userId });
-
-    if (get_user.length == 0) {
-      return res.send({ status: false, msg: "Empty data", data: [] });
-    }
-
-    res.send({
-      status: true,
-      msg: "Get Permission Successfully",
-      data: get_user,
-    });
-  } catch (error) {
-    console.log("trading status Error-", error);
   }
-}
+
+
+  // // GET SUBADMIN PERMISSION
+  async Subadmn_Permission(req, res) {
+    try {
+      const { id } = req.body;
+      // UPDATE ACTTIVE STATUS CLIENT
+
+      if (!id) {
+        return res.send({
+          status: false,
+          msg: "Please Entrer User Id",
+          data: [],
+        });
+      }
+      var userId = new ObjectId(id);
+
+      const get_user = await Subadmin_Permission.find({ user_id: userId });
+
+      if (get_user.length == 0) {
+        return res.send({ status: false, msg: "Empty data", data: [] });
+      }
+
+      res.send({
+        status: true,
+        msg: "Get Permission Successfully",
+        data: get_user,
+      });
+    } catch (error) {
+      console.log("trading status Error-", error);
+    }
+  }
 
 
 
@@ -832,7 +907,11 @@ async Subadmn_Permission(req, res) {
 
 
   // -------------------------
-  
+
+
+
+
+
 
   // GET ALL GetAllClients
   async GetAllClients(req, res) {
@@ -1125,7 +1204,7 @@ async Subadmn_Permission(req, res) {
 
       const GetAllClientServices = await User_model.aggregate(pipeline);
 
-      console.log("GetAllClientServices", GetAllClientServices);
+      // console.log("GetAllClientServices", GetAllClientServices);
 
       const userSTG = await strategy_client.find({ user_id: userId });
 
@@ -1168,41 +1247,8 @@ async Subadmn_Permission(req, res) {
     }
   }
 
-  
 
-  // GET USER ALL Client
-  async getClientBySubadminId(req, res) {
-    try {
-      const { id } = req.body;
-      // UPDATE ACTTIVE STATUS CLIENT
 
-      if (!id) {
-        return res.send({
-          status: false,
-          msg: "Please Entrer User Id",
-          data: [],
-        });
-      }
-      var userId = new ObjectId(id);
-
-      const get_user = await User_model.find({
-        parent_id: id,
-        parent_role: "SUBADMIN",
-      }).select("FullName UserName Email PhoneNo StartDate license_type");
-
-      if (get_user.length == 0) {
-        return res.send({ status: false, msg: "No Dat Found", data: [] });
-      }
-
-      res.send({
-        status: true,
-        msg: "Get Users",
-        data: get_user,
-      });
-    } catch (error) {
-      console.log("trading status Error-", error);
-    }
-  }
 }
 
 module.exports = new Employee();

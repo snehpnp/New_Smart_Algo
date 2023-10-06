@@ -83,19 +83,15 @@ const MsgBroadCast = () => {
 
 
 
-    console.log("AllStrategy", AllStrategy);
-
-
-
     const fields = [
         {
             name: 'Strategy',
             label: 'strategy',
             type: 'select',
             options: AllStrategy.data && AllStrategy.data.map((item) => ({ label: item.strategy_name, value: item._id })),
-            label_size: 12, col_size: 3 ,  disable: true
+            label_size: 12, col_size: 3, disable: false
         },
-        { name: 'username', label: 'Entery Your Message', type: 'msgbox', label_size: 12, row_size: 4 ,col_size: 12, disable: true },
+        { name: 'username', label: 'Entery Your Message', type: 'msgbox', label_size: 12, row_size: 4, col_size: 12, disable: true },
     ];
 
     const data = async () => {
