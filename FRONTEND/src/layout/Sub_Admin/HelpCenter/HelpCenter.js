@@ -26,25 +26,24 @@ const HelpCenter = () => {
     const token = JSON.parse(localStorage.getItem("user_details")).token
 
 
-    const [first, setfirst] = useState('all')
-    const [showModal, setshowModal] = useState(false)
 
+    
     const [getAllClients, setAllClients] = useState({
         loading: true,
         data: []
     });
 
-// console.log("=>",getAllClients.data[0].createdAt.split('T')[0]);
+
 
     const data = async () => {
-        await dispatch(GET_HELPS({user_id :user_id , token : token})).unwrap()
+        await dispatch(GET_HELPS({ user_id: user_id, token: token })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setAllClients({
                         loading: false,
                         data: response.data
                     });
-                }else{
+                } else {
                     setAllClients({
                         loading: false,
                         data: response.data
@@ -82,12 +81,12 @@ const HelpCenter = () => {
             dataField: 'createdAt',
             text: 'Date',
             formatter: (cell, row) => (
-                        <><div>{cell.split('T')[0] +"   "+cell.split('T')[1].split('.')[0]}</div> </>
-                        // <><div>{cell.split('.')[0]}</div> </>
+                <><div>{cell.split('T')[0] + "   " + cell.split('T')[1].split('.')[0]}</div> </>
+                // <><div>{cell.split('.')[0]}</div> </>
 
 
 
-                    ),
+            ),
         },
         // {
         //     dataField: 'ActiveStatus',
@@ -129,22 +128,13 @@ const HelpCenter = () => {
 
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ?
-                                <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
-                                :
+                                    <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
+                                    :
                                     <>
                                         <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
                                     </>
                             }
-                            {
-                                showModal ?
-                                    <>
-                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
-                                        //  handleClose={setshowModal(false)}
-                                        >
-                                        </Modal >
-                                    </>
-                                    : ""
-                            }
+                           
                         </Theme_Content>
                     </>
             }

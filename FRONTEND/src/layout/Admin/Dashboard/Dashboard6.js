@@ -20,12 +20,21 @@ const Dashboard1 = ({ data }) => {
       visible: true
 
     },
+    // {
+    //   index: 2,
+    //   name: "Admin Clients",
+    //   value: data.data && data.data.admin_client,
+    //   icon: 'la la-users',
+    //   route: "/admin/allclients",
+    //   visible: true
+
+    // },
     {
-      index: 2,
-      name: "Admin Clients",
-      value: data.data && data.data.admin_client,
+      index: 16,
+      name: "Total Subadmin",
+      value: data.data && data.data.total_Subadmin,
       icon: 'la la-users',
-      route: "/admin/allclients",
+      route: "/admin/allsubadmins",
       visible: true
 
     },
@@ -146,15 +155,15 @@ const Dashboard1 = ({ data }) => {
     //   visible: true
 
     // },
-    {
-      index: 16,
-      name: "Total Subadmin",
-      value: data.data && data.data.total_Subadmin,
-      icon: 'la la-users',
-      route: "/admin/allsubadmins",
-      visible: true
+    // {
+    //   index: 16,
+    //   name: "Total Subadmin",
+    //   value: data.data && data.data.total_Subadmin,
+    //   icon: 'la la-users',
+    //   route: "/admin/allsubadmins",
+    //   visible: true
 
-    },
+    // },
   ]
 
   return <>

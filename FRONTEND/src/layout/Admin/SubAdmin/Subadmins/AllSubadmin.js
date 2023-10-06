@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import Modal from "../../../../Components/ExtraComponents/Modal";
 import { Get_Client_By_Subadmin_Id } from "../../../../ReduxStore/Slice/Admin/CreateSubadminSlice";
+import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
 
 const AllSubadmin = () => {
   const navigate = useNavigate();
@@ -30,11 +31,21 @@ const AllSubadmin = () => {
   const token = JSON.parse(localStorage.getItem("user_details")).token;
 
   const [first, setfirst] = useState("all");
+
   const [showModal, setshowModal] = useState(false);
+
+  const [originalData, setOriginalData] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [PanelStatus, setPanelStatus] = useState("2");
 
   const [refresh, setrefresh] = useState(false);
 
   const [Addsubadmin, setAddsubadmin] = useState({
+    loading: true,
+    data: [],
+  });
+
+  const [SubAdminClients, setSubAdminClients] = useState({
     loading: true,
     data: [],
   });
@@ -69,6 +80,8 @@ const AllSubadmin = () => {
             data: response.data,
           });
         }
+
+        setOriginalData(response.data);
       });
   };
   useEffect(() => {
@@ -93,7 +106,6 @@ const AllSubadmin = () => {
   };
 
   // VIEW SUBADMIN CLIENTS BY SUBADMIN ID
-
   const ViewSubadminClients = async (id) => {
     setshowModal(true);
 
@@ -102,7 +114,15 @@ const AllSubadmin = () => {
       .then((response) => {
         console.log("response", response);
         if (response.status) {
-          setrefresh(!refresh);
+          setSubAdminClients({
+            loading: false,
+            data: response.data,
+          });
+        } else {
+          setSubAdminClients({
+            loading: false,
+            data: response.data,
+          });
         }
       });
   };
@@ -175,11 +195,11 @@ const AllSubadmin = () => {
           <span
             className={`${
               row.AppLoginStatus === "0" && row.WebLoginStatus === "0"
-                ? "btn-success"
-                : "btn-danger"
+                ? "btn-danger"
+                : "btn-success "
             }  btn btn-new-block`}
             onClick={() => goToDashboard(row._id, row.Email)}
-            disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
+            // disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
           >
             Dashboard
           </span>
@@ -241,6 +261,34 @@ const AllSubadmin = () => {
       });
   };
 
+  //  MANAGE MULTIFILTER
+  useEffect(() => {
+    const filteredData = originalData.filter((item) => {
+      return (
+        (PanelStatus === "2" || item.WebLoginStatus.includes(PanelStatus)) &&
+        (searchInput === "" ||
+          item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
+          item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
+          item.PhoneNo.includes(searchInput))
+      );
+    });
+    setAddsubadmin({
+      loading: false,
+      data: searchInput || PanelStatus !== "2" ? filteredData : originalData,
+    });
+  }, [searchInput, originalData, PanelStatus]);
+
+  const ResetDate = (e) => {
+    e.preventDefault();
+
+    setSearchInput("");
+    setPanelStatus("2");
+    setAddsubadmin({
+      loading: false,
+      data: originalData,
+    });
+  };
+
   return (
     <>
       {Addsubadmin.loading ? (
@@ -252,19 +300,55 @@ const AllSubadmin = () => {
             button_title="Add SubAdmin"
             route="/admin/allsubadmins/add"
           >
-            {Addsubadmin.data && Addsubadmin.data.length === 0 ? (
-              <FullDataTable
-                TableColumns={columns}
-                tableData={Addsubadmin.data}
-              />
-            ) : (
-              <>
-                <FullDataTable
-                  TableColumns={columns}
-                  tableData={Addsubadmin.data}
-                />
-              </>
-            )}
+            <div className="row">
+              <div className="col-lg-4">
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label">
+                    Search Something Here
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    class="form-control"
+                    id="exampleFormControlInput1"
+                  />
+                </div>
+              </div>
+              <div className="col-lg-4 ">
+                <div class="mb-3">
+                  <label for="select" class="form-label">
+                    Panel Status
+                  </label>
+
+                  <select
+                    class="default-select wide form-control"
+                    aria-label="Default select example"
+                    id="select"
+                    onChange={(e) => setPanelStatus(e.target.value)}
+                    value={PanelStatus}
+                  >
+                    <option value="2">All</option>
+                    <option value="1">On</option>
+                    <option value="0">OFf</option>
+                  </select>
+                </div>
+              </div>
+              <div className="col-lg-2 ">
+                <button
+                  className="btn btn-primary mt-2"
+                  onClick={(e) => ResetDate(e)}
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            <FullDataTable
+              TableColumns={columns}
+              tableData={Addsubadmin.data}
+            />
 
             {showModal ? (
               <>
@@ -305,7 +389,7 @@ const AllSubadmin = () => {
                             : "Live",
                       },
                     ]}
-                    tableData={Addsubadmin.data && Addsubadmin.data}
+                    tableData={SubAdminClients.data && SubAdminClients.data}
                   />
                 </Modal>
               </>

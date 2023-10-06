@@ -52,13 +52,13 @@ const SevenDaysEntry = () => {
             dataField: 'strategy',
             text: 'Strategy',
         },
-        {
-            dataField: 'strategy',
-            text: 'Squre Off',
-            formatter: (cell, row) => ( <div> <button
-                className={`btn btn-success`} > SQURE OFF</button></div>)
+        // {
+        //     dataField: 'strategy',
+        //     text: 'Squre Off',
+        //     formatter: (cell, row) => ( <div> <button
+        //         className={`btn btn-success`} > SQURE OFF</button></div>)
 
-        },
+        // },
     ];
 
 

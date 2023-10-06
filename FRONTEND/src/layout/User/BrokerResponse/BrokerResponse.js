@@ -19,7 +19,6 @@ const BrokerResponse = () => {
   const [showModal, setshowModal] = useState(false)
   const [BrokerResponseId, setBrokerResponseId] = useState([])
 
-
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
 
   const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;

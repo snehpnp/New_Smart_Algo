@@ -21,15 +21,16 @@ const Content = ({ Page_title, button_title,button_status, route, ...rest }) => 
               </div> }
             </ol>
 
+
+            
+
           </div>
+
+          
 
           <div className="row">
             <div className="col-xl-12">
-              {/* <div className="mt-5 mb-4">
-                <div className="d-flex align-items-center justify-content-between mb-sm-0 mb-2">
-                  <h2 className="font-w500">{Page_title}</h2>
-                </div>
-              </div> */}
+              
 
               <div className="row">
                 <div className="col-xl-12">

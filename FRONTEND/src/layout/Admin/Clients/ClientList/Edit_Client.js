@@ -644,6 +644,8 @@ const AddClient = () => {
       }, token: user_token
     })).unwrap().then((response) => {
       if (response.status) {
+
+      
         setAllStrategy({
           loading: false,
           data: response.data
@@ -707,12 +709,10 @@ const AddClient = () => {
                 <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
                   setShowAllStratagy(e.target.checked)
                 }} />
-                {/* <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`} ></div>
-                <span class="toggle-label">Show Strategy</span> */}
+              
               </label>
 
-              {/*  For Show All Strategy */}
-              {/* {ShowAllStratagy ? ( */}
+ 
               <>
               <h6>All Strategy</h6>
 

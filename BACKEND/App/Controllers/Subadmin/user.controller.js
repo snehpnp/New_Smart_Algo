@@ -744,7 +744,94 @@ class Employee {
     }
   }
 
+  // SUBADMIN CLIENTS ACTIVE INACTIVE STATUS UPDATE
+  
+  async UpdateActiveStatus(req, res) {
+    try {
+      const { id, user_active_status } = req.body;
+      // UPDATE ACTTIVE STATUS CLIENT
 
+      const get_user = await User_model.find({ _id: id });
+      if (get_user.length == 0) {
+        return res.send({
+          status: false,
+          msg: "Empty data",
+          data: [],
+
+        });
+      }
+
+      const filter = { _id: id };
+      const updateOperation = { $set: { Is_Active: user_active_status } };
+
+      const result = await User_model.updateOne(filter, updateOperation);
+
+      if (result) {
+        // STATUS UPDATE SUCCESSFULLY
+        var status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
+        logger1.info(`${status_msg} user Successfully`, {
+          Email: get_user[0].Email,
+          role: get_user[0].Role,
+          user_id: get_user[0]._id,
+        });
+
+        res.send({
+          status: true,
+          msg: "Update Successfully",
+          data: result,
+        });
+      }
+    } catch (error) {
+      console.log("trading status Error-", error);
+    }
+  }
+
+
+
+// GET SUBADMIN PERMISSION
+async Subadmn_Permission(req, res) {
+  try {
+    const { id } = req.body;
+    // UPDATE ACTTIVE STATUS CLIENT
+
+    if (!id) {
+      return res.send({
+        status: false,
+        msg: "Please Entrer User Id",
+        data: [],
+      });
+    }
+    var userId = new ObjectId(id);
+
+    const get_user = await Subadmin_Permission.find({ user_id: userId });
+
+    if (get_user.length == 0) {
+      return res.send({ status: false, msg: "Empty data", data: [] });
+    }
+
+    res.send({
+      status: true,
+      msg: "Get Permission Successfully",
+      data: get_user,
+    });
+  } catch (error) {
+    console.log("trading status Error-", error);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // -------------------------
   
 
   // GET ALL GetAllClients
@@ -923,46 +1010,6 @@ class Employee {
     }
   }
 
-  // CLIENTS ACTIVE INACTIVE STATUS UPDATE
-  async UpdateActiveStatus(req, res) {
-    try {
-      const { id, user_active_status } = req.body;
-      // UPDATE ACTTIVE STATUS CLIENT
-
-      const get_user = await User_model.find({ _id: id });
-      if (get_user.length == 0) {
-        return res.send({
-          status: false,
-          msg: "Empty data",
-          data: [],
-          totalCount: totalCount,
-        });
-      }
-
-      const filter = { _id: id };
-      const updateOperation = { $set: { ActiveStatus: user_active_status } };
-
-      const result = await User_model.updateOne(filter, updateOperation);
-
-      if (result) {
-        // STATUS UPDATE SUCCESSFULLY
-        var status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
-        logger1.info(`${status_msg} user Successfully`, {
-          Email: get_user[0].Email,
-          role: get_user[0].Role,
-          user_id: get_user[0]._id,
-        });
-
-        res.send({
-          status: true,
-          msg: "Update Successfully",
-          data: result,
-        });
-      }
-    } catch (error) {
-      console.log("trading status Error-", error);
-    }
-  }
 
   // DELETE USER AND USER REGARD SERVICES
   async DeleteUser(req, res) {
@@ -1121,36 +1168,7 @@ class Employee {
     }
   }
 
-  // GET SUBADMIN PERMISSION
-  async Subadmn_Permission(req, res) {
-    try {
-      const { id } = req.body;
-      // UPDATE ACTTIVE STATUS CLIENT
-
-      if (!id) {
-        return res.send({
-          status: false,
-          msg: "Please Entrer User Id",
-          data: [],
-        });
-      }
-      var userId = new ObjectId(id);
-
-      const get_user = await Subadmin_Permission.find({ user_id: userId });
-
-      if (get_user.length == 0) {
-        return res.send({ status: false, msg: "Empty data", data: [] });
-      }
-
-      res.send({
-        status: true,
-        msg: "Get Permission Successfully",
-        data: get_user,
-      });
-    } catch (error) {
-      console.log("trading status Error-", error);
-    }
-  }
+  
 
   // GET USER ALL Client
   async getClientBySubadminId(req, res) {

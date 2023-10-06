@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 // eslint-disable-next-line react-hooks/exhaustive-deps
 /* eslint-disable react/jsx-pascal-case */
 import React, { useState, useEffect } from "react";
@@ -18,6 +19,10 @@ const UserProfile = () => {
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const user_role = JSON.parse(localStorage.getItem("user_role"));
 
+  const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
+  const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+
+
   const [UserDetails, setUserDetails] = useState({
     loading: true,
     data: [],
@@ -26,7 +31,7 @@ const UserProfile = () => {
   // User_Profile
 
   const data = async () => {
-    await dispatch(User_Profile({ id: user_id }))
+    await dispatch(User_Profile({ id: isgotodashboard ? gotodashboard.user_id : user_id }))
       .unwrap()
       .then((response) => {
         if (response.status) {
@@ -93,7 +98,7 @@ const UserProfile = () => {
     { name: "confirmpassword", label: "Confirm Password", type: "password" },
   ];
 
-  console.log("user_role", user_role);
+  console.log("user_role", gotodashboard);
   return (
     <>
       <Content Page_title="UserProfile" button_status={false}>
@@ -157,7 +162,7 @@ const UserProfile = () => {
                           About Me
                         </a>
                       </li>
-                      {user_role === "SUBADMIN" ? (
+                      {user_role === "SUBADMIN" || gotodashboard && gotodashboard.Role === "SUBADMIN" ? (
                         ""
                       ) : (
                         <li className="nav-item">
@@ -253,12 +258,12 @@ const UserProfile = () => {
                                 <div className="col-sm-9 col-7">
                                   <span>
                                     {UserDetails &&
-                                    UserDetails.data.license_type === "1"
+                                      UserDetails.data.license_type === "1"
                                       ? "Live"
                                       : UserDetails &&
                                         UserDetails.data.license_type === "2"
-                                      ? "Demo"
-                                      : "2 Days"}
+                                        ? "Demo"
+                                        : "2 Days"}
                                   </span>
                                 </div>
                               </div>
@@ -268,7 +273,7 @@ const UserProfile = () => {
                           )}
                         </div>
                       </div>
-                      {user_role === "SUBADMIN" ? (
+                      {user_role === "SUBADMIN" || gotodashboard && gotodashboard.Role === "SUBADMIN" ? (
                         ""
                       ) : (
                         <>
