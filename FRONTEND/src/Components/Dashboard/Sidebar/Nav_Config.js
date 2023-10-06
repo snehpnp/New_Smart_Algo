@@ -157,7 +157,7 @@ export const admin_sidebar = [
        {
         'id': 9,
         "name": 'Create Strategy',
-        "Icon": "Repeat2",
+        "Icon": "Boxes ",
         "route": "/admin/createstrategy",
         "Data": []
     },

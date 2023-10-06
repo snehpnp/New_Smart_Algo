@@ -9,7 +9,7 @@ import Loader from '../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import {GET_ALL_CLIENTS ,   GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
+import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import { DELETE_USER_SERVICES } from '../../../ReduxStore/Slice/Subadmin/userSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -32,9 +32,14 @@ const AllClients = () => {
     const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
     const Subadmin_permision = JSON.parse(localStorage.getItem('user_details')).Subadmin_permision
 
+    const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
+    const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+
 
     const [first, setfirst] = useState('all')
-    const [showModal, setshowModal] = useState(false)
+
+
+    const [btncolor, setbtncolor] = useState(false)
     const [refresh, setrefresh] = useState(false)
 
     const [getPermissions, setGetPermissions] = useState([])
@@ -71,8 +76,8 @@ const AllClients = () => {
 
     const data = async () => {
         var req1 = {
-            Find_Role: Role,
-            user_ID: user_ID
+            Find_Role: isgotodashboard ? gotodashboard.Role : Role,
+            user_ID: isgotodashboard ? gotodashboard.user_id : user_ID
         }
         await dispatch(GET_ALL_CLIENTS(req1)).unwrap()
             .then((response) => {
@@ -101,7 +106,6 @@ const AllClients = () => {
             .then((response) => {
                 if (response.status) {
                     setGetPermissions(response.data[0])
-
                 }
             })
     }
@@ -138,21 +142,30 @@ const AllClients = () => {
             user_active_status: e.target.checked === true ? "1" : "0"
 
         };
-        await dispatch(UPDATE_USER_ACTIVE_STATUS(req)).unwrap()
-            .then((response) => {
-                if (response.status) {
 
+        if (window.confirm("Do you want To Change Status For This User ?")) {
+            await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
+              .unwrap()
+              .then((response) => {
+                if (response.status) {
+                  console.log("response" ,response)
+                  toast.success(response.msg);
+                  setTimeout(() => {
+                    setrefresh(!refresh)
+                  }, 1000);
+                } else {
+                  toast.error(response.msg);
                 }
-            })
+              });
+          }
+
+       
     }
 
 
 
-    const showBrokerName = (value1, licence_type) => {
+    const showBrokerName = (value1, licence_type) => {           
         let value = parseInt(value1)
-
-        console.log("value", value1)
-        console.log("licence_type", licence_type)
 
 
         if (licence_type === '0') {
@@ -250,6 +263,8 @@ const AllClients = () => {
         {
             dataField: 'ActiveStatus',
             text: 'Status',
+            hidden: (isgotodashboard ? true : false),
+
             formatter: (cell, row) => (
                 <>
 
@@ -311,6 +326,8 @@ const AllClients = () => {
         {
             dataField: 'actions',
             text: 'Actions',
+            hidden: (isgotodashboard ? true : false),
+
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
                     <div>
@@ -320,12 +337,14 @@ const AllClients = () => {
                                     <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                                 </span>
                             </Link>
+                            {row.license_type === "1" ? <>
+                                <Link>
+                                    <span data-toggle="tooltip" data-placement="top" title="Delete">
+                                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={(e) => Delete_user(row._id)} />
+                                    </span>
+                                </Link>
+                            </> : ""}
                         </> : ""}
-                        <Link>
-                            <span data-toggle="tooltip" data-placement="top" title="Delete">
-                                <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={(e) => Delete_user(row._id)} />
-                            </span>
-                        </Link>
                     </div>
                 </div>
             ),
@@ -339,7 +358,7 @@ const AllClients = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Content Page_title="All Clients" button_title="Add Client" route='/subadmin/client/add' button_status={getPermissions && getPermissions.client_add === 1 ? true  : false} >
+                        <Content Page_title="All Clients" button_title="Add Client" route='/subadmin/client/add' button_status={getPermissions && getPermissions.client_add === 1 ? true : false} >
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ?
                                     <>

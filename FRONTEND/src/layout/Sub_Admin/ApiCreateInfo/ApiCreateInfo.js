@@ -17,6 +17,10 @@ const ApiCreateInfo = () => {
 
     const token = JSON.parse(localStorage.getItem("user_details")).token;
 
+    const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
+    const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+  
+
 
     const [showModal, setshowModal] = useState(false)
     const [modalData, setModalData] = useState([])
@@ -68,7 +72,7 @@ const ApiCreateInfo = () => {
             <div class="row">
                 <section class="card__container">
 
-                    {UserDetails.data && UserDetails.data.map((item) => {
+                    {UserDetails.data && UserDetails.data.slice(0 ,1).map((item) => {
                         return <>
                             <div class="card__bx card__1">
                                 <div class="card__data">

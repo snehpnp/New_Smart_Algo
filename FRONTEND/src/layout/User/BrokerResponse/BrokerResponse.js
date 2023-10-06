@@ -21,7 +21,7 @@ const BrokerResponse = () => {
   const [showModal, setshowModal] = useState(false)
   const [BrokerResponseId, setBrokerResponseId] = useState([])
 
-  console.log("BrokerResponseId", BrokerResponseId && BrokerResponseId);
+
 
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
 

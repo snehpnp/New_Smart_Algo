@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
+import Content from "../../../../Components/Dashboard/Content/Content"
 import Loader from '../../../../Utils/Loader'
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
@@ -227,7 +227,7 @@ const ServicesList = () => {
             {
                 AllGroupServices.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="Group Service" button_title="Add Group" route="/admin/groupservices/add">
+                        <Content Page_title="Group Service" button_title="Add Group" route="/admin/groupservices/add">
                             {
                                 AllGroupServices.data && AllGroupServices.data.length === 0 ? (
                                     'No data found') :
@@ -339,7 +339,7 @@ const ServicesList = () => {
                                     : ""
                             }
 
-                        </Theme_Content>
+                        </Content>
 
 
                         <ToastButton />

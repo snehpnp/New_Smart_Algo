@@ -23,7 +23,7 @@ class License {
           $gte: currentDate,
           $lte: endDateThreshold,
         },
-      });
+      }).select("UserName Email PhoneNo StartDate EndDate")
 
       if (get_user.length == 0) {
         return res.send({ status: false, msg: "Empty data", data: get_user });

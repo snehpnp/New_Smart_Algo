@@ -70,19 +70,7 @@ const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
             text: 'Exit Price',
             formatter: (cell, row, rowIndex) => <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
         },
-        {
-            dataField: 'Action',
-            text: 'R/P&L',
-        },
-        {
-            dataField: 'Action',
-            text: 'U/P&l',
-        },
-
-        {
-            dataField: 'Action',
-            text: 'T/P&L',
-        },
+       
         {
             dataField: 'strategy',
             text: 'Strategy',

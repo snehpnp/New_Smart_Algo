@@ -278,6 +278,7 @@ class Subadmin {
             // GET LOGIN CLIENTS
             const getAllSubAdmins = await User_model.find({
                 parent_role: "SUBADMIN",
+                Is_Active : '0'
 
             });
             const totalCount = getAllSubAdmins.length;

@@ -5,11 +5,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
-import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content";
 import Loader from "../../../../Utils/Loader";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-
 import { Pencil, Trash2 } from "lucide-react";
+import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 import {
   GET_ALL_CLIENTS,
@@ -17,27 +16,42 @@ import {
   UPDATE_USER_ACTIVE_STATUS,
   DELETE_USER_SERVICES,
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
-import { useDispatch, useSelector } from "react-redux";
-import Modal from "../../../../Components/ExtraComponents/Modal";
-import BootstrapSwitchButton from "bootstrap-switch-button-react";
-import { fa_time, fDateTimeSuffix } from "../../../../Utils/Date_formet";
+import { useDispatch } from "react-redux";
+import { fa_time } from "../../../../Utils/Date_formet";
+
+
+import toast, { Toaster } from 'react-hot-toast';
+import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
+
 
 const AllClients = () => {
   const navigate = useNavigate();
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
 
-  // console.log("location" ,location.search.split("=")[1])
 
   const dispatch = useDispatch();
   const Role = JSON.parse(localStorage.getItem("user_details")).Role;
   const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const token = JSON.parse(localStorage.getItem("user_details")).token;
 
-  const [first, setfirst] = useState("all");
-  const [showModal, setshowModal] = useState(false);
+  // For Filter
+
+  const [originalData, setOriginalData] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [PanelStatus, setPanelStatus] = useState("2");
+  const [ClientStatus, setClientStatus] = useState("null");
+  const [SwitchButton, setSwitchButton] = useState(false);
+  const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
+
   const [refresh, setrefresh] = useState(false);
 
   const [getAllClients, setAllClients] = useState({
+    loading: true,
+    data: [],
+  });
+
+  const [getAllStrategyName, setAllStrategyName] = useState({
     loading: true,
     data: [],
   });
@@ -149,6 +163,8 @@ const AllClients = () => {
             data: response.data,
           });
         }
+
+        setOriginalData(response.data);
       });
   };
   useEffect(() => {
@@ -184,12 +200,30 @@ const AllClients = () => {
       id: data._id,
       user_active_status: e.target.checked === true ? "1" : "0",
     };
-    await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-        }
-      });
+
+
+    if (window.confirm("Do you want To Change Status For This User ?")) {
+      await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            console.log("response", response)
+            toast.success(response.msg);
+            setTimeout(() => {
+              setrefresh(!refresh)
+            }, 1000);
+          } else {
+            toast.error(response.msg);
+          }
+        });
+    }
+
+    // await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
+    //   .unwrap()
+    //   .then((response) => {
+    //     if (response.status) {
+    //     }
+    //   });
   };
 
   const showBrokerName = (value1, licence_type) => {
@@ -290,9 +324,10 @@ const AllClients = () => {
               defaultChecked={row.ActiveStatus === "1" ? true : false}
               onChange={(e) => {
                 activeUser(e, row);
+                setSwitchButton(e.target.checked)
               }}
             />
-            <div class={`toggle-switch bg-primary`}></div>
+            <div class={`toggle-switch  ${SwitchButton ? 'bg-primary' : 'bg-secondary'}`}></div>
           </label>
           {/* <label class="switch" >
                         <input type="checkbox" className="bg-primary" defaultChecked={row.ActiveStatus == "1" ? true : false} onChange={(e) => activeUser(e, row)} />
@@ -382,6 +417,67 @@ const AllClients = () => {
       ),
     },
   ];
+
+  //  GET ALL SERVICE NAME
+
+  const GetAllStrategyName = async (e) => {
+    await dispatch(
+      Get_All_Service_for_Client({
+        req: {},
+        token: token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAllStrategyName({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  };
+
+  useEffect(() => {
+    GetAllStrategyName();
+  }, []);
+
+  //  MANAGE MULTIFILTER
+  useEffect(() => {
+    const filteredData = originalData.filter((item) => {
+      return (
+        (ClientStatus === "null" || item.license_type.includes(ClientStatus)) &&
+        // (StrategyClientStatus === "null" || item.license_type.includes(ClientStatus)) &&
+        (PanelStatus === "2" || item.WebLoginStatus.includes(PanelStatus)) &&
+        (searchInput === "" ||
+          item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
+          item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
+          item.PhoneNo.includes(searchInput))
+      );
+    });
+
+
+    setAllClients({
+      loading: false,
+      data:
+        searchInput || PanelStatus !== "2" || ClientStatus !== "null"
+          ? filteredData
+          : originalData,
+    });
+  }, [searchInput, originalData, PanelStatus, ClientStatus]);
+
+  const ResetDate = (e) => {
+    e.preventDefault();
+
+    setSearchInput("");
+    setClientStatus("null");
+    setPanelStatus("2");
+    setAllClients({
+      loading: false,
+      data: originalData,
+    });
+  };
+
   return (
     <>
       {getAllClients.loading ? (
@@ -393,35 +489,101 @@ const AllClients = () => {
             button_title="Add Client"
             route="/admin/client/add"
           >
-            {getAllClients.data && getAllClients.data.length === 0 ? (
-              <>
-                <FullDataTable
-                  TableColumns={columns}
-                  tableData={getAllClients.data}
-                />
-              </>
-            ) : (
-              <>
-                <FullDataTable
-                  TableColumns={columns}
-                  tableData={getAllClients.data}
-                />
-              </>
-            )}
-            {showModal ? (
-              <>
-                <Modal
-                  Modal
-                  isOpen={showModal}
-                  backdrop="static"
-                  size="sm"
-                  title="Verify OTP"
-                  btn_name="Verify"
-                ></Modal>
-              </>
-            ) : (
-              ""
-            )}
+
+            <div className="row">
+              <div className="col-lg-3">
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label">
+                    Search Something Here
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    class="form-control"
+                    id="exampleFormControlInput1"
+                  />
+                </div>
+              </div>
+              <div className="col-lg-2 ">
+                <div class="mb-3">
+                  <label for="select" class="form-label">
+                    Client Type
+                  </label>
+
+                  <select
+                    class="default-select wide form-control"
+                    aria-label="Default select example"
+                    id="select"
+                    onChange={(e) => setClientStatus(e.target.value)}
+                    value={ClientStatus}
+                  >
+                    <option value="null">All</option>
+                    <option value="2">Live</option>
+                    <option value="1">Demo</option>
+                    <option value="0">2 Days Only</option>
+                  </select>
+                </div>
+              </div>
+              <div className="col-lg-2">
+                <div class="mb-3">
+                  <label for="select" class="form-label">
+                    Trading Type
+                  </label>
+
+                  <select
+                    class="default-select wide form-control"
+                    aria-label="Default select example"
+                    id="select"
+                    onChange={(e) => setPanelStatus(e.target.value)}
+                    value={PanelStatus}
+                  >
+                    <option value="2">All</option>
+                    <option value="1">On</option>
+                    <option value="0">OFf</option>
+                  </select>
+                </div>
+              </div>
+              {/* <div className="col-lg-2 ">
+                <div class="mb-3">
+                  <label for="select" class="form-label">
+                    Strategy Clients
+                  </label>
+                  <select
+                    class="default-select wide form-control"
+                    aria-label="Default select example"
+                    id="select"
+                    onChange={(e) => StrategyClientStatus(e.target.value)}
+                    value={ClientStatus}
+                  >
+                    <option value="null">All</option>
+                    {getAllStrategyName.data &&
+                      getAllStrategyName.data.map((item) => {
+                        return (
+                          <option value={item._id}>{item.strategy_name}</option>
+                        );
+                      })}
+                  </select>
+                </div>
+              </div> */}
+
+              <div className="col-lg-2 mt-4">
+                <button
+                  className="btn btn-primary mt-2"
+                  onClick={(e) => ResetDate(e)}
+                >
+                  Reset
+                </button>
+              </div>
+            </div>
+
+            <FullDataTable
+              TableColumns={columns}
+              tableData={getAllClients.data}
+            />
+          <ToastButton/>
+
           </Content>
         </>
       )}
