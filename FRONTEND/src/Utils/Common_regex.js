@@ -21,3 +21,11 @@ export const No_Negetive_Input_regex = (mobile) => {
     const value = /^(?!0*(\.0*)?$)\d+(\.\d+)?$/
     return value.test(mobile);
 }
+
+
+export const ValidYoutubeUrl = (url) => {
+    // Regular expression to match a YouTube URL
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|v\/)|youtu\.be\/)[\w-]+(&[\w%=]*)?$/
+
+    return youtubeRegex.test(url);
+}

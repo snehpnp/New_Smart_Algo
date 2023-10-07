@@ -122,7 +122,7 @@ const AddStrategy = () => {
             label_size: 12, col_size: 6, disable: false
         },
         { name: 'indecator', label: 'Indicator ', type: 'file', label_size: 12, col_size: 6, disable: false },
-        { name: 'strategytester', label: 'Stratergy Tester ', type: 'file', label_size: 12, col_size: 6, disable: false },
+        { name: 'strategytester', label: 'Strategy Tester ', type: 'file', label_size: 12, col_size: 6, disable: false },
         { name: 'strategy_description', label: 'Strategy Description', type: 'msgbox', row_size: 4, label_size: 12, col_size: 12, disable: false },
 
     ];

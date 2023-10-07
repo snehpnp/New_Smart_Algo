@@ -41,7 +41,7 @@ const AllClients = () => {
   const [searchInput, setSearchInput] = useState("");
   const [PanelStatus, setPanelStatus] = useState("2");
   const [ClientStatus, setClientStatus] = useState("null");
-  const [SwitchButton, setSwitchButton] = useState(false);
+  const [SwitchButton, setSwitchButton] = useState(true);
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
 
   const [refresh, setrefresh] = useState(false);
@@ -70,6 +70,8 @@ const AllClients = () => {
             setrefresh(!refresh);
           }
         });
+    } else {
+      return
     }
   };
 
@@ -196,13 +198,12 @@ const AllClients = () => {
 
   // ACTIVE USER TO API
   const activeUser = async (e, data) => {
-    let req = {
-      id: data._id,
-      user_active_status: e.target.checked === true ? "1" : "0",
-    };
 
-
-    if (window.confirm("Do you want To Change Status For This User ?")) {
+    if (window.confirm("Do you want To Change Status For This User ?") === true) {
+      let req = {
+        id: data._id,
+        user_active_status: e.target.checked === true ? "1" : "0",
+      };
       await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
         .unwrap()
         .then((response) => {
@@ -211,11 +212,15 @@ const AllClients = () => {
             toast.success(response.msg);
             setTimeout(() => {
               setrefresh(!refresh)
-            }, 1000);
+            }, 500);
           } else {
             toast.error(response.msg);
           }
         });
+    }
+    else {
+      setrefresh(!refresh)
+      return 
     }
 
     // await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
@@ -321,13 +326,13 @@ const AllClients = () => {
             <input
               class="toggle-checkbox bg-primary"
               type="checkbox"
-              defaultChecked={row.ActiveStatus === "1" ? true : false}
+              checked={row.ActiveStatus === "1" ? true : false}
               onChange={(e) => {
                 activeUser(e, row);
                 setSwitchButton(e.target.checked)
               }}
             />
-            <div class={`toggle-switch  ${SwitchButton ? 'bg-primary' : 'bg-secondary'}`}></div>
+            <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
           </label>
           {/* <label class="switch" >
                         <input type="checkbox" className="bg-primary" defaultChecked={row.ActiveStatus == "1" ? true : false} onChange={(e) => activeUser(e, row)} />
@@ -582,7 +587,7 @@ const AllClients = () => {
               TableColumns={columns}
               tableData={getAllClients.data}
             />
-          <ToastButton/>
+            <ToastButton />
 
           </Content>
         </>

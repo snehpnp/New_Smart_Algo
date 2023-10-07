@@ -145,26 +145,29 @@ const AllClients = () => {
 
         if (window.confirm("Do you want To Change Status For This User ?")) {
             await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
-              .unwrap()
-              .then((response) => {
-                if (response.status) {
-                  console.log("response" ,response)
-                  toast.success(response.msg);
-                  setTimeout(() => {
-                    setrefresh(!refresh)
-                  }, 1000);
-                } else {
-                  toast.error(response.msg);
-                }
-              });
-          }
+                .unwrap()
+                .then((response) => {
+                    if (response.status) {
+                        console.log("response", response)
+                        toast.success(response.msg);
+                        setTimeout(() => {
+                            setrefresh(!refresh)
+                        }, 500);
+                    } else {
+                        toast.error(response.msg);
+                    }
+                });
+        }
+        else {
+            setrefresh(!refresh)
 
-       
+        }
+
     }
 
 
 
-    const showBrokerName = (value1, licence_type) => {           
+    const showBrokerName = (value1, licence_type) => {
         let value = parseInt(value1)
 
 
@@ -270,12 +273,12 @@ const AllClients = () => {
 
                     <label class="toggle mt-3">
                         <input class="toggle-checkbox bg-primary" type="checkbox"
-                            defaultChecked={row.ActiveStatus === "1" ? true : false}
+                            checked={row.ActiveStatus === "1" ? true : false}
                             onChange={(e) => {
                                 activeUser(e, row)
                             }}
                         />
-                        <div class={`toggle-switch bg-primary`}></div>
+                        <div class={`toggle-switch ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
                     </label>
 
                 </>

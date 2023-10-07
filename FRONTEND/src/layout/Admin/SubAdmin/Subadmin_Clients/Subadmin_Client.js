@@ -130,11 +130,14 @@ const SubadminClient = () => {
             toast.success(response.msg);
             setTimeout(() => {
               setrefresh(!refresh)
-            }, 1000);
+            }, 500);
           } else {
             toast.error(response.msg);
           }
         });
+    }else{
+      setrefresh(!refresh)
+
     }
   };
 
@@ -186,7 +189,7 @@ const SubadminClient = () => {
             <input
               class="toggle-checkbox bg-primary"
               type="checkbox"
-              defaultChecked={row.Is_Active === "1" ? true : false}
+              checked={row.Is_Active === "1" ? true : false}
               onChange={(e) => {
                 activeUser(e, row);
                 setSwitchButton(e.target.checked)

@@ -1,0 +1,82 @@
+import React from 'react'
+import { Link } from 'react-router-dom'
+const Content = ({ Page_title, button_title, button_status, route, newtab, ...rest }) => {
+  return (
+    <div>
+      <div className="content-body">
+        <div className="container-fluid">
+          <div className="row page-titles">
+            <div className='row mb-3'>
+              <div className="col-lg-6"></div>
+            </div>
+            <ol className="breadcrumb">
+              <div className="col-lg-6">
+                <li className="breadcrumb-item">
+                  <h4 className="font-w500 mb-0">{Page_title}</h4>
+                </li>
+              </div>
+              {button_status == false ? "" : <div className="col-lg-6">
+                <Link to={route} className='btn btn-primary float-lg-end' o>
+                  <i className={`fa-solid  ${button_title === "Back" ? 'fa-arrow-left' : 'fa-plus'} `}></i> {button_title}</Link>
+              </div>}
+            </ol>
+
+
+          </div>
+          <div className="row d-flex">
+            <div className="col-xl-8">
+              <div className="row">
+                <div className="col-xl-12">
+                  <div className="card form-card">
+                    <div className="card-body">
+                      <div className="form-validation">
+                        {rest.children}
+                      </div>
+
+
+            <h6>testr</h6>
+
+                    </div>
+                  </div>
+
+                  
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-4">
+              <div className="row">
+                <div className="col-xl-12">
+                  <div className="card form-card">
+                    <div className="card-body">
+                      <div className="form-validation">
+                      <h4 className='text-center text-decoration-underline mb-5'>Select Services And Quantity</h4>
+
+                        {Object.keys(newtab).map((segement) => (
+                          <div key={segement}>
+                            <h6>{segement}</h6>
+                            {newtab[segement].map((item, index) => (
+                              < label className="form-check-label bg-primary text-white py-2 px-4" for={"dsd"}> {item.name}   {item.group_qty}</label>
+                            ))}
+
+                            {/* <ul>
+                                <li key={index}>
+                                  Service ID: {item.service_id}, Group Qty: {item.group_qty}
+                                </li>
+                            </ul> */}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div >
+  )
+}
+
+export default Content

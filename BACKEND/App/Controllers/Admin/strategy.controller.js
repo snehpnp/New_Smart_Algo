@@ -215,7 +215,7 @@ class strategy {
             // CHECK IF STRATEGY EXISTS IN STRATEGY CLIENT
             const strategy_client_check = await strategy_client_model.findOne({ strategy_id: _id });
             if (strategy_client_check) {
-                return res.send({ status: false, msg: 'Strategy is assigned to a client', data: [] });
+                return res.send({ status: false, msg: 'It cannot be deleted because it is assigned to a client.', data: [] });
             }
 
             // Delete the strategy

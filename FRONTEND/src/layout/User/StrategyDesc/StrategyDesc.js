@@ -19,6 +19,8 @@ const StrategyDesc = () => {
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
 
+  
+
   const getsignals11 = async (e) => {
     await dispatch(
       Get_Strategy_Description({

@@ -16,6 +16,45 @@ const Signals = () => {
   const dispatch = useDispatch()
 
 
+  const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
+  const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+
+
+
+
+
+
+
+  const [SignalsData, setSignalsData] = useState({ loading: true, data: [] });
+
+  const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
+  const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
+
+
+
+  const getClientsignals = async (e) => {
+    await dispatch(Get_Signals({ _id: isgotodashboard ? gotodashboard.user_id : user_Id, token: AdminToken })).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setSignalsData({
+            loading: false,
+            data: response.data
+          });
+        } else {
+          setSignalsData({
+            loading: false,
+            data: response.data
+          });
+        }
+      })
+  }
+
+  useEffect(() => {
+    getClientsignals()
+  }, [])
+
+
+
   const columns = [
     {
       dataField: 'index',
@@ -48,37 +87,6 @@ const Signals = () => {
 
   ];
 
-
-
-
-
-  const [SignalsData, setSignalsData] = useState({ loading: true, data: [] });
-
-  const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
-  const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
-
-
-
-  const getsignals11 = async (e) => {
-    await dispatch(Get_Signals({ _id: user_Id, token: AdminToken })).unwrap()
-      .then((response) => {
-        if (response.status) {
-          setSignalsData({
-            loading: false,
-            data: response.data
-          });
-        } else {
-          setSignalsData({
-            loading: false,
-            data: response.data
-          });
-        }
-      })
-  }
-
-  useEffect(() => {
-    getsignals11()
-  }, [])
 
   return (
     <>

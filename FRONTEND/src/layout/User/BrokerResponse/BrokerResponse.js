@@ -21,6 +21,10 @@ const BrokerResponse = () => {
   const [showModal, setshowModal] = useState(false)
   const [BrokerResponseId, setBrokerResponseId] = useState([])
 
+  const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
+  const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+
+
 
 
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
@@ -30,8 +34,9 @@ const BrokerResponse = () => {
 
 
 
+
   const getsignals11 = async (e) => {
-    await dispatch(Get_Broker_Response({ _id: user_Id, token: AdminToken })).unwrap()
+    await dispatch(Get_Broker_Response({ _id: isgotodashboard ? gotodashboard.user_id : user_Id, token: AdminToken })).unwrap()
       .then((response) => {
         if (response.status) {
           setDashboardData({
