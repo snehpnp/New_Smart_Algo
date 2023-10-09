@@ -124,7 +124,7 @@ const SevenDaysEntry = () => {
             {
                 SignalsData.loading ? <Loader /> :
                     <>
-                        <Content Page_title="All Services" button_status={false}>
+                        <Content Page_title="Last Week Entry" button_status={false}>
                             <div className='d-flex'>
 
                                 {/* <div className="col-lg-6">

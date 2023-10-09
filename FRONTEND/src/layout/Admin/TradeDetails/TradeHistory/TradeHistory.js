@@ -489,7 +489,7 @@ const TradeHistory = () => {
 
   return (
     <>
-      <Content Page_title="All Services" button_status={false}>
+      <Content Page_title="Trade History" button_status={false}>
         <div className="row d-flex  align-items-center justify-content-start">
           <div className="col-lg-2">
             <div className="form-check custom-checkbox mb-3">
