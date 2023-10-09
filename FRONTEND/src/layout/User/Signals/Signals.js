@@ -13,20 +13,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Signals = () => {
 
-  const dispatch = useDispatch()
-
-
-  const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
-  const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-
   const [SignalsData, setSignalsData] = useState({ loading: true, data: [] });
 
+  const dispatch = useDispatch()
+  const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
+  const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
   const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
   const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
 
   // const user_details_goTo = JSON.parse(localStorage.getItem("user_details_goTo"))
-
-
 
   const getClientsignals = async (e) => {
     await dispatch(Get_Signals({ _id: isgotodashboard ? gotodashboard.user_id : user_Id, token: AdminToken })).unwrap()
