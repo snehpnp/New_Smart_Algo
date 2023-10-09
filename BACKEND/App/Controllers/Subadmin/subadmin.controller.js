@@ -20,7 +20,7 @@ class Subadmin {
             const { FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role } = req.body;
 
 
-            console.log(FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role);
+            // console.log(FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role);
 
 
             // IF ROLE NOT EXIST TO CHECK
@@ -79,7 +79,7 @@ class Subadmin {
 
             const userinfo = User.save()
                 .then(async (data) => {
-                    console.log("data", data._id);
+                    // console.log("data", data._id);
 
                     const SubadminPermision = new Subadmin_Permission({
                         client_add: Subadmin_permision_data.client_add,

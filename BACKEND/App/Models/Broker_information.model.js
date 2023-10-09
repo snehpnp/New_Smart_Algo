@@ -3,21 +3,22 @@ const { Schema, model } = require('mongoose');
 
 
 const Broker_infor_Schema = Schema({
-   
-   
+
+
     broker_name: {
         type: String,
-        default:null
+        unique: true,
+        default: null
 
     },
     app_code: {
         type: String,
-        default:null
+        default: null
 
     },
     apiSecret: {
         type: String,
-        default:null
+        default: null
 
 
     },

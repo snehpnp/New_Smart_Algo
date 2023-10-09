@@ -15,7 +15,7 @@ const UpdateSmptDetails = ({ showModal, setshowModal, data }) => {
 
     const dispatch = useDispatch();
 
-    console.log("data", data);
+    // console.log("data", data);
     const user_id = JSON.parse(localStorage.getItem('user_details')).user_id;
     const user_token = JSON.parse(localStorage.getItem('user_details')).token;
 

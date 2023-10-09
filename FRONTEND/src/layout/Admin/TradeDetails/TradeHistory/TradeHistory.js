@@ -451,7 +451,7 @@ const TradeHistory = () => {
         }
         // }
       };
-      await ConnctSocket(handleResponse, channelList).then((res) => {});
+      await ConnctSocket(handleResponse, channelList).then((res) => { });
     } else {
       $(".UPL_").html("-");
       $(".show_rpl_").html("-");
@@ -489,7 +489,7 @@ const TradeHistory = () => {
 
   return (
     <>
-      <Content Page_title="Trade History" button_status={false}>
+      <Content Page_title="Trade History" button_status={false} button_status1={true}>
         <div className="row d-flex  align-items-center justify-content-start">
           <div className="col-lg-2">
             <div className="form-check custom-checkbox mb-3">
@@ -503,8 +503,8 @@ const TradeHistory = () => {
                 id="fromdate"
                 value={fromDate}
                 onChange={handleFromDateChange}
-                // min={new Date().toISOString().split('T')[0]} // Disable past dates
-                // disabled={disableFromDate}
+              // min={new Date().toISOString().split('T')[0]} // Disable past dates
+              // disabled={disableFromDate}
               />
             </div>
           </div>

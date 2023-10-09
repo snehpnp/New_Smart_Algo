@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const Dashboard1 = ({ data }) => {
 
 
-  console.log("data" ,data)
+  // console.log("data" ,data)
 
 
   let arr = [

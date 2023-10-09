@@ -70,6 +70,7 @@ const Signals = () => {
   //   getsignals11()
   // }, [])
 
+
   const columns = [
     {
       dataField: 'index',
@@ -101,6 +102,7 @@ const Signals = () => {
     },
 
   ];
+  
 
   return (
     <>

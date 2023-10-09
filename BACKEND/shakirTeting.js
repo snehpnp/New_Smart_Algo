@@ -1094,7 +1094,7 @@ for (const condition of conditions) {
 
 
   function evaluateSingleCondition(condition, data) {
-    console.log("condition",condition);
+    // console.log("condition",condition);
  const [variable, operator, value] = condition.split(/\s*(>|<|>=|<=|=)\s*/);
   console.log("value",data[value]);
  //const numericValue = parseFloat(value);

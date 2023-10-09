@@ -3,18 +3,14 @@ const db = require('../../Models');
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-const Signals_modal = db.Signals
 const user = db.user
 const company_information = db.company_information
 const Broker_information = db.Broker_information
 
 
-const { formattedDateTime } = require('../../Helper/time.helper')
-
 class Dashboard {
 
     // ONE USER GET ALL TRADING STATUS
-
     async AdminDashboard(req, res) {
         try {
             const { user_Id } = req.body;
@@ -98,31 +94,7 @@ class Dashboard {
         }
     }
 
-    // Broker Information Update
-    async update_broker_information(req, res) {
-        try {
-
-            Broker_information.findById(_id)
-                .then(async (value) => {
-                    if (!value) {
-                        return res.send({ status: false, msg: 'Id not match', data: [] });
-                    }
-                    const filter = { _id: _id };
-                    const updateOperation = { $set: userdata };
-                    const result = await User_model.updateOne(filter, updateOperation);
-                    if (!result) {
-                        return res.send({ status: false, msg: 'Key not update', data: [] });
-                    }
-
-                    return res.send({ status: true, msg: 'Update Keys  Successfully.', data: [] });
-
-                })
-
-        } catch (error) {
-            console.log("Error In Broker Informations");
-        }
-    }
-
+    // ADD BROKER INFORMATION
     async add_broker_information(req, res) {
         try {
 
@@ -140,6 +112,71 @@ class Dashboard {
             console.log("Error In Broker Informations");
         }
     }
+
+    // Broker Information Update
+    async update_broker_information(req, res) {
+        try {
+            const { id, broker_data } = req.body
+
+            Broker_information.findById(id)
+                .then(async (value) => {
+                    if (!value) {
+                        return res.send({ status: false, msg: 'Not match', data: [] });
+                    }
+                    const filter = { _id: id };
+                    const updateOperation = { $set: broker_data };
+                    const result = await Broker_information.updateOne(filter, updateOperation);
+                    if (!result) {
+                        return res.send({ status: false, msg: 'Key not update', data: [] });
+                    }
+
+                    return res.send({ status: true, msg: 'Update Keys  Successfully.', data: [] });
+
+                })
+
+        } catch (error) {
+            console.log("Error In Broker Informations");
+        }
+    }
+
+    // GET BROKER INFORMATION
+    async getall_broker_information(req, res) {
+        try {
+
+            var BrokerInformation = await Broker_information.find()
+
+            if (BrokerInformation.length == 0) {
+                return res.send({ status: false, msg: 'Empty data', data: [] });
+            }
+
+            return res.send({ status: true, msg: 'Get All Data', data: BrokerInformation });
+
+
+
+        } catch (error) {
+            console.log("Error In Broker Informations");
+        }
+    }
+
+    // GET ONE BROKER INFORMATION
+    async get_broker_information(req, res) {
+        try {
+            const { id } = req.body
+            Broker_information.findById(id)
+                .then(async (value) => {
+                    if (!value) {
+                        return res.send({ status: false, msg: 'Not match', data: [] });
+                    }
+
+                    return res.send({ status: true, msg: 'Get Data Successfully.', data: value });
+
+                })
+
+        } catch (error) {
+            console.log("Error In Broker Informations");
+        }
+    }
+
 
 }
 

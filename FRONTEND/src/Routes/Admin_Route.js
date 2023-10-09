@@ -62,7 +62,6 @@ import ReleaseUpdate from '../layout/Admin/ReleaseUpdate/ReleaseUpdate';
 import System from '../layout/Admin/System/System';
 
 // Strategy
-
 import AllStrategy from '../layout/Admin/Service/AllStrategy/AllStrategy';
 import AddStrategy from '../layout/Admin/Service/AllStrategy/AddStrategy';
 import EditStrategy from '../layout/Admin/Service/AllStrategy/EditStrategy';
@@ -70,11 +69,13 @@ import { Import } from 'lucide-react';
 
 
 
-// System
+// CREATE STRATEGY
 import CreateStrategy from '../layout/Admin/CreateStrategy/CreateStrategy';
 
 
 
+// BROKER INFORMATION SET
+import BrokerInfor from '../layout/Admin/BrokersInformation/Broker_info';
 
 
 
@@ -124,6 +125,8 @@ const Admin = () => {
                 <Route exact path="/apicreateinfo/edit" element={<EditApiCreateInfo />} />
                 <Route exact path="/updates" element={<ReleaseUpdate />} />
                 <Route exact path="/createstrategy" element={<CreateStrategy />} />
+                <Route exact path="/brokerinfo" element={<BrokerInfor />} />
+
             </Routes>
         </>
     )

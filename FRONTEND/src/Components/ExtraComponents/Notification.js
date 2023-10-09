@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { fDate, fDateTimeSuffix } from '../../Utils/Date_formet';
 const Notification = ({ data }) => {
 
-    console.log("data", data.data)
+    // console.log("data", data.data)
 
 
     const show_Name = (item) => {

@@ -3,7 +3,7 @@ const User = db.user;
 const company_information = db.company_information;
 
 var firstOptPass = async (data) => {
-    console.log("data", data);
+    // console.log("data", data);
     try {
         var Companydata = await company_information.find();
         

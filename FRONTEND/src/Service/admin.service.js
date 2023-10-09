@@ -675,3 +675,17 @@ export async function SUBADMIN_UPDATE_USER_STATUS(data, token) {
 }
 
 
+// GET BROKER RESPONSE
+export async function GET_BROKER_INFORMATION(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/broker_information`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

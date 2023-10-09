@@ -28,15 +28,10 @@ const TradeHistory = () => {
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
-
   const gotodashboard_Details = JSON.parse(localStorage.getItem('user_details_goTo'))
 
-
   const [showModal, setshowModal] = useState(false);
-
   const [SocketState, setSocketState] = useState("null");
-
-
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [disableFromDate, setDisableFromDate] = useState(false);
@@ -46,8 +41,6 @@ const TradeHistory = () => {
     loading: true,
     data: [],
   });
-
-
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -150,8 +143,6 @@ const TradeHistory = () => {
       data: tradeHistoryData1.data,
     });
   };
-
-
 
   const calcultateRPL = (row, livePrice) => {
     let profitLoss = null;
@@ -360,8 +351,6 @@ const TradeHistory = () => {
 
 
 
-
-
   var CreatechannelList = "";
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
@@ -376,7 +365,7 @@ const TradeHistory = () => {
     let channelList = CreatechannelList;
     const res = await CreateSocketSession(type);
 
-    console.log("resresresres", res);
+    // console.log("resresresres", res);
     if (res.status === 200) {
       setSocketState("Ok");
     }
@@ -469,13 +458,9 @@ const TradeHistory = () => {
 
 
 
-
-
-
-
   return (
     <>
-      <Content Page_title="Trade History" button_status={false}>
+      <Content Page_title="Trade History" button_status={false} button_status1={true}>
         {gotodashboard === "true" || gotodashboard === true ? (
           <>
             <div className="row d-flex  align-items-center justify-content-start">

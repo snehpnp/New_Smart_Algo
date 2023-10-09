@@ -161,7 +161,13 @@ export const admin_sidebar = [
         "route": "/admin/createstrategy",
         "Data": []
     },
-
+    {
+        'id': 10,
+        "name": 'Broker Information',
+        // "Icon": "Boxes ",
+        "route": "/admin/brokerinfo",
+        "Data": []
+    },
     //   {
     //     'id': 9,
     //     "name": 'Reports',

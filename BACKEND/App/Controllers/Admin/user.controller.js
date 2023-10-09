@@ -676,7 +676,7 @@ class Employee {
                 strategy_id: strategFind[0].strategy_id,
                 uniqueUserService: existingUsername._id + "_" + data.Service_id,
               });
-              console.log("data ", User_client_services);
+              // console.log("data ", User_client_services);
               // console.log(User_client_services);
               User_client_services.save();
             });

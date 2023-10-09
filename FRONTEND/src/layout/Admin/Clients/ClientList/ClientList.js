@@ -334,10 +334,7 @@ const AllClients = () => {
             />
             <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
           </label>
-          {/* <label class="switch" >
-                        <input type="checkbox" className="bg-primary" defaultChecked={row.ActiveStatus == "1" ? true : false} onChange={(e) => activeUser(e, row)} />
-                        <span class="slider round"></span>
-                    </label> */}
+      
         </>
       ),
     },

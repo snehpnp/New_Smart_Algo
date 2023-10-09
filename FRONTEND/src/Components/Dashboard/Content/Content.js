@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-const Content = ({ Page_title, button_title,button_status, route, ...rest }) => {
+const Content = ({ Page_title, button_title, button_status,button_status1, route, ...rest }) => {
   return (
     <div>
       <div className="content-body">
@@ -10,27 +10,41 @@ const Content = ({ Page_title, button_title,button_status, route, ...rest }) => 
               <div className="col-lg-6"></div>
             </div>
             <ol className="breadcrumb">
-            <div className="col-lg-6">
-              <li className="breadcrumb-item">
-                <h4 className="font-w500 mb-0">{Page_title}</h4>
-              </li>
-            </div>
-            {button_status == false ? "": <div className="col-lg-6">
+              <div className="col-lg-6">
+                <li className="breadcrumb-item">
+                  <h4 className="font-w500 mb-0">{Page_title}</h4>
+                </li>
+              </div>
+              {button_status == false ? "" : <div className="col-lg-6">
                 <Link to={route} className='btn btn-primary float-lg-end' o>
                   <i className={`fa-solid  ${button_title === "Back" ? 'fa-arrow-left' : 'fa-plus'} `}></i> {button_title}</Link>
-              </div> }
+              </div>}
+             
+              {button_status1 == true ? 
+                <div className="col-lg-6 d-flex">
+                <label class="switch  ms-auto">
+                  <input
+                    type="checkbox"
+                    className="bg-primary"
+                    defaultChecked={false // UserDetails.TradingStatus === "on" ? true : false
+                    }
+                    // onChange={(e) => {
+                    
+                    // }}
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div>
+              :"" 
+              
+              }
             </ol>
-
-
-            
 
           </div>
 
-          
-
           <div className="row">
             <div className="col-xl-12">
-              
+
 
               <div className="row">
                 <div className="col-xl-12">
