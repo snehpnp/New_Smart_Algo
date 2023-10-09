@@ -20,8 +20,6 @@ const Content = ({ Page_title, button_title, button_status, route, newtab, ...re
                   <i className={`fa-solid  ${button_title === "Back" ? 'fa-arrow-left' : 'fa-plus'} `}></i> {button_title}</Link>
               </div>}
             </ol>
-
-
           </div>
           <div className="row d-flex">
             <div className="col-xl-8">
@@ -32,14 +30,10 @@ const Content = ({ Page_title, button_title, button_status, route, newtab, ...re
                       <div className="form-validation">
                         {rest.children}
                       </div>
-
-
-            <h6>testr</h6>
-
                     </div>
                   </div>
 
-                  
+
                 </div>
               </div>
             </div>
@@ -49,7 +43,7 @@ const Content = ({ Page_title, button_title, button_status, route, newtab, ...re
                   <div className="card form-card">
                     <div className="card-body">
                       <div className="form-validation">
-                      <h4 className='text-center text-decoration-underline mb-5'>Select Services And Quantity</h4>
+                        <h4 className='text-center text-decoration-underline mb-5'>Select Services And Quantity</h4>
 
                         {Object.keys(newtab).map((segement) => (
                           <div key={segement}>
