@@ -1,19 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React, {} from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
-import AlertToast from '../../../Components/ExtraComponents/Alert_Toast'
 import Formikform1 from "../../../Components/ExtraComponents/Form/Formik_form1"
 import { useFormik } from 'formik';
 import { useNavigate, useLocation } from "react-router-dom";
 
 import * as  valid_err from "../../../Utils/Common_Messages"
-import { Email_regex, Mobile_regex } from "../../../Utils/Common_regex"
-import { useDispatch, useSelector } from "react-redux";
-import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
+import {  ValidYoutubeUrl } from "../../../Utils/Common_regex"
+import { useDispatch,  } from "react-redux";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
-
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { Update_Api_Info_Theme } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 
 
@@ -23,19 +20,13 @@ const Edit_Create_Api_Info = () => {
     const navigate = useNavigate()
     const location = useLocation()
 
-    console.log("location", location.state)
-
-
-    const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
     const token = JSON.parse(localStorage.getItem("user_details")).token;
 
 
-    const [UserDetails, setUserDetails] = useState({
-        loading: true,
-        data: [],
-    });
 
-
+    function isValidYouTubeUrl(url) {
+        return ValidYoutubeUrl(url)
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -54,11 +45,23 @@ const Edit_Create_Api_Info = () => {
 
             const errors = {};
 
+
+            if (!values.title) {
+                errors.title = valid_err.EMPTY_API_CREATE_TITLE_ERROR;
+            }
+            if (!values.description) {
+                errors.description = valid_err.EMPTY_API_CREATE_DESCRIPTION_ERROR;
+            }
+
+            if (!isValidYouTubeUrl(values.youtubeurl)) {
+                errors.youtubeurl = valid_err.INVALID_YOUTUBE_URL_ERROR;
+            }
+
             return errors;
         },
         onSubmit: async (values) => {
             const req = {
-                "_id": location.state && location.state._id ,
+                "_id": location.state && location.state._id,
                 "title": values.title,
                 "description": values.description,
                 "steponeurl": values.steponeurl,
@@ -70,11 +73,6 @@ const Edit_Create_Api_Info = () => {
                 "note": values.note,
                 "youtubeurl": values.youtubeurl
             }
-
-
-            // console.log("reqreqreqreqreq", req);
-
-            // return
 
             await dispatch(Update_Api_Info_Theme({ req: req, token: token })).unwrap().then((response) => {
 
@@ -95,9 +93,6 @@ const Edit_Create_Api_Info = () => {
             })
         }
     });
-
-
-    console.log("initialValues", formik.values)
 
 
 
@@ -131,7 +126,7 @@ const Edit_Create_Api_Info = () => {
 
 
     return <>
-        <Content Page_title="Edit Api" button_title="Back" route="/admin/apicreateinfo" >
+        <Content Page_title="Edit Api-Create Info" button_title="Back" route="/admin/apicreateinfo" >
             <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
             />
             <ToastButton />

@@ -7,22 +7,23 @@ import React, { useEffect, useState } from "react";
 import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content";
 import Loader from "../../../../Utils/Loader";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-
 import { Pencil, Trash2, Users } from "lucide-react";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { Get_All_SUBADMIN } from "../../../../ReduxStore/Slice/Subadmin/Subadminslice";
 import { DELETE_USER_SERVICES } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
-
 import {
   GO_TO_DASHBOARDS,
   UPDATE_USER_ACTIVE_STATUS,
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
-
 import { useDispatch, useSelector } from "react-redux";
 import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import Modal from "../../../../Components/ExtraComponents/Modal";
 import { Get_Client_By_Subadmin_Id } from "../../../../ReduxStore/Slice/Admin/CreateSubadminSlice";
-import filterFactory, { textFilter } from "react-bootstrap-table2-filter";
+
+
+
+import toast, { Toaster } from 'react-hot-toast';
+import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 const AllSubadmin = () => {
   const navigate = useNavigate();
@@ -56,15 +57,26 @@ const AllSubadmin = () => {
       id: data._id,
       user_active_status: e.target.checked === true ? "1" : "0",
     };
-    await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-        }
-      });
+
+    if (window.confirm("Do you want To Change Status For This User ?")) {
+      await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            console.log("response", response)
+            toast.success(response.msg);
+            setTimeout(() => {
+              setrefresh(!refresh)
+            }, 1000);
+          } else {
+            toast.error(response.msg);
+          }
+        });
+    }
   };
 
-  //  console.log("Addsubadmin", Addsubadmin)
+
+
   const data = async () => {
     await dispatch(Get_All_SUBADMIN())
       .unwrap()
@@ -158,12 +170,12 @@ const AllSubadmin = () => {
             <input
               class="toggle-checkbox bg-primary"
               type="checkbox"
-              defaultChecked={row.ActiveStatus == "1" ? true : false}
+              checked={row.ActiveStatus == "1" ? true : false}
               onChange={(e) => {
                 activeUser(e, row);
               }}
             />
-            <div class={`toggle-switch bg-primary`}></div>
+            <div class={`toggle-switch ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
           </label>
         </>
       ),
@@ -193,13 +205,12 @@ const AllSubadmin = () => {
       formatter: (cell, row) => (
         <>
           <span
-            className={`${
-              row.AppLoginStatus === "0" && row.WebLoginStatus === "0"
+            className={`${row.AppLoginStatus === "0" && row.WebLoginStatus === "0"
                 ? "btn-danger"
                 : "btn-success "
-            }  btn btn-new-block`}
+              }  btn btn-new-block`}
             onClick={() => goToDashboard(row._id, row.Email)}
-            // disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
+          // disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
           >
             Dashboard
           </span>
@@ -350,6 +361,15 @@ const AllSubadmin = () => {
               tableData={Addsubadmin.data}
             />
 
+
+
+
+
+
+
+            {/*  ---- FOR SHOW SUBADMIN CLIENTLIST ---- */}
+
+
             {showModal ? (
               <>
                 <Modal
@@ -385,8 +405,8 @@ const AllSubadmin = () => {
                           cell === "0"
                             ? "2 Days Only"
                             : cell === "1"
-                            ? "Demo"
-                            : "Live",
+                              ? "Demo"
+                              : "Live",
                       },
                     ]}
                     tableData={SubAdminClients.data && SubAdminClients.data}
@@ -396,6 +416,7 @@ const AllSubadmin = () => {
             ) : (
               ""
             )}
+            <ToastButton />
           </Content>
         </>
       )}

@@ -45,12 +45,13 @@ const AllSubadmin = () => {
     const [selectedStrategyIds, setSelectedStrategyIds] = useState([]);
     const [selectedGroupIds, setSelectedGroupIds] = useState([]);
 
+    console.log("selectedGroupIds ", selectedGroupIds);
+    console.log("selectedStrategyIds ", selectedStrategyIds);
 
-    // console.log("checkedGroupServices", checkedGroupServices.filter(item => item.checked)
-    //     .map(item => item.id))
+    const [state, setstate] = useState([]);
+    const [state1, setstate1] = useState([]);
 
-    console.log("selectedGroupIds", selectedGroupIds)
-    console.log("selectedStrategyIds", selectedStrategyIds)
+
 
     const [Addsubadmin, setAddsubadmin] = useState({
         loading: false,
@@ -107,7 +108,7 @@ const AllSubadmin = () => {
             email: null,
             mobile: 'null',
             password: 'null',
-            Strategy1: false,
+            Strategy: false,
             select_strategy: [],
             gotodashboard: false,
             licence: false,
@@ -118,7 +119,8 @@ const AllSubadmin = () => {
             tradehistory: false,
             groupservice: false,
             select_group_services: [],
-
+            grouper_servcice: "",
+            strateg_servcice: ""
         },
         touched: {
             FullName: false,
@@ -138,13 +140,27 @@ const AllSubadmin = () => {
                 errors.mobile = valid_err.INVALID_CONTACT_ERROR;
             }
 
-            if (values.groupservice && selectedGroupIds.length === 0) {
-                errors.select_group_services = valid_err.SEGEMENTSELECT_LEASTONE_ERROR;
+
+            if (values.Strategy) {
+                if (!values.addclient && !values.editclient) {
+                    errors.addclient = "select Add Client Also";
+                    errors.editclient = "select Edit Client Also";
+                }
+            }
+            if (values.groupservice) {
+                if (!values.addclient && !values.editclient) {
+                    errors.addclient = "select Add Client Also";
+                    errors.editclient = "select Edit Client Also";
+                }
             }
 
-            if (values.Strategy && selectedStrategyIds.length === 0) {
-                errors.select_strategy = valid_err.SEGEMENTSELECT_LEASTONE_ERROR;
+            if ((values.addclient || values.editclient) && values.groupservice && selectedGroupIds.length === 0) {
+                errors.grouper_servcice = "You must select a Group Service from the list";
             }
+            if ((values.addclient || values.editclient) && values.Strategy && selectedStrategyIds.length === 0) {
+                errors.strateg_servcice = "You must select a Strategy from the list";
+            }
+
             return errors;
         },
         onSubmit: async (values) => {
@@ -165,8 +181,8 @@ const AllSubadmin = () => {
                     "go_To_Dashboard": values.gotodashboard ? '1' : values.all ? '1' : '0',
                     "trade_history_old": values.tradehistory ? '1' : values.all ? '1' : '0',
                     "detailsinfo": values.detailsinfo ? '1' : values.all ? '1' : '0',
-                    "strategy": selectedStrategyIds,
-                    "group_services": selectedGroupIds,
+                    'strategy': selectedStrategyIds,
+                    'group_services': selectedGroupIds,
                 }
             }
             console.log("test", req);
@@ -215,6 +231,47 @@ const AllSubadmin = () => {
             formik.setFieldValue('groupservice', userStrategyIds.group_services && userStrategyIds.group_services.length !== 0 ? true : false);
         }
     }, [UserData.data.data]);
+
+
+
+    useEffect(() => {
+
+        if (formik.values.Strategy) {
+            formik.setFieldValue("Strategy", true);
+            return
+        }
+
+        if (formik.values.groupservice) {
+            formik.setFieldValue("groupservice", true);
+            return
+
+        }
+
+        if ((formik.values.addclient) || (formik.values.editclient)) {
+            formik.setFieldValue("groupservice", true);
+            formik.setFieldValue("Strategy", true);
+            setstate([])
+            setstate1([])
+            return
+        } else if (!formik.values.addclient) {
+            formik.setFieldValue("groupservice", false);
+            formik.setFieldValue("Strategy", false);
+            formik.setFieldValue("strateg_servcice", '');
+            formik.setFieldValue("grouper_servcice", '');
+            setstate([])
+            setstate1([])
+        }
+        else {
+            formik.setFieldValue("groupservice", false);
+            formik.setFieldValue("Strategy", false);
+            setstate([])
+            setstate1([])
+            return
+
+        }
+    }, [formik.values.editclient, formik.values.addclient, formik.values.Strategy, formik.values.groupservice]);
+
+
 
 
 
@@ -469,8 +526,11 @@ const AllSubadmin = () => {
                                                 </div>
 
                                             ))}
-                                            {formik.errors.select_group_services && selectedGroupIds.length === 0 ?
-                                                <div style={{ color: 'red' }}>{formik.errors.select_group_services}</div> : ""}
+                                            {formik.errors.grouper_servcice && (
+                                                <div style={{ color: "red" }}>
+                                                    {formik.errors.grouper_servcice}
+                                                </div>
+                                            )}
                                         </> : ""
                                         }
 
@@ -517,8 +577,13 @@ const AllSubadmin = () => {
                                                         </div>
                                                     </div>
                                                 ))}
-                                                {formik.errors.select_strategy && selectedStrategyIds.length === 0 ?
-                                                    <div style={{ color: 'red' }}>{formik.errors.select_strategy}</div> : ""}
+
+                                                {formik.errors.strateg_servcice && (
+                                                    <div style={{ color: "red" }}>
+                                                        {formik.errors.strateg_servcice}
+                                                    </div>
+                                                )}
+
 
                                             </> : ""}
 

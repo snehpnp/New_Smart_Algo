@@ -25,9 +25,14 @@ const TradingStatus = () => {
 
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
 
+  const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
+  const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+
+
+
+
   const [first, setfirst] = useState("all");
 
-  console.log("first", first);
   const [DateFilter, setDateFilter] = useState();
   const [DateArray, setDateArray] = useState([]);
 
@@ -41,7 +46,7 @@ const TradingStatus = () => {
   });
 
   let req = {
-    user_Id: user_Id,
+    user_Id: isgotodashboard ? gotodashboard.user_id : user_Id,
   };
 
   const data1 = async () => {
@@ -80,6 +85,8 @@ const TradingStatus = () => {
   useEffect(() => {
     data1();
   }, [first]);
+
+  
   const data2 = async () => {
     await dispatch(user_activity_logs(req))
       .unwrap()

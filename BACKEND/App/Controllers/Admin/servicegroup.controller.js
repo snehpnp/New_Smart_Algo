@@ -27,11 +27,11 @@ class GroupService {
       const groupdetails = req.body.groupdetails;
       const services_id = req.body.services_id;
 
-      var groupServices = await serviceGroup_services_id.find({ name: groupdetails.name })
+      var groupServices = await serviceGroupName.find({ name: groupdetails.name })
       console.log("groupServices", groupServices);
 
       if (groupServices.length > 0) {
-        return res.send({ status: false, msg: "Name Is already Exist", data: groupServices })
+        return res.send({ status: false, msg: "Group Name Is already Exist", data: groupServices })
 
       }
 

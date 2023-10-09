@@ -3,6 +3,10 @@ import $ from "jquery";
 
 
 export const ShowColor = (className, value, response) => {
+    console.log("className", className)
+    console.log("value", value)
+    console.log("response", response)
+
 
 
     if (parseFloat(value) < 0) {

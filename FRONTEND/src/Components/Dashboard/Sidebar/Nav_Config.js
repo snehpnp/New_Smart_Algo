@@ -49,7 +49,7 @@ export const admin_sidebar = [
             },
             {
                 'id': 2,
-                "name": 'Sub Admin Clients',
+                "name": 'In-Active Clients',
                 "route": "/admin/subadminclients",
             },
         ]

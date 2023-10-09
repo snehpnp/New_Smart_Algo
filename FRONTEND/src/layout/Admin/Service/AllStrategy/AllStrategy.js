@@ -73,7 +73,7 @@ const ServicesList = () => {
 
   useEffect(() => {
     data();
-  }, []);
+  }, [refresh]);
 
 
   
@@ -96,24 +96,13 @@ const ServicesList = () => {
       width: "550px",
       sort: true,
     },
-    // {
-    //     dataField: 'strategy_category',
-    //     text: 'Strategy Catagory ',
-    // sort: true,
-    // },
+
     {
       dataField: "strategy_segment",
       text: "Segment",
       sort: true,
     },
-    // {
-    //     dataField: 'strategy_tester',
-    //     text: 'Strategy Tester ',
-    // },
-    // {
-    //     dataField: 'strategy_indicator',
-    //     text: 'Strategy Indicator ',
-    // },
+
     {
       dataField: "actions",
       text: "Actions",
@@ -233,7 +222,7 @@ const ServicesList = () => {
             setRefresh(!refresh);
             setTimeout(() => {
               navigate("/admin/strategies");
-            }, 1000);
+            }, 5000);
           } else {
             toast.error(response.msg);
           }

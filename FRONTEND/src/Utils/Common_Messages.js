@@ -82,3 +82,15 @@ export const INVALID_COMPANYBCC_EMAIL_ERROR = 'please Enter A Valid Company BCC 
 //  For help
 
 export const EMPTY_MSG_ERROR = 'Enter Your Message';
+
+
+// FOR API CREATE INFO
+
+
+export const EMPTY_API_CREATE_TITLE_ERROR = 'Enter Your Title';
+export const EMPTY_API_CREATE_DESCRIPTION_ERROR = 'Enter Your Description';
+export const INVALID_YOUTUBE_URL_ERROR = 'Enter Valid Youtube Url';
+
+
+
+

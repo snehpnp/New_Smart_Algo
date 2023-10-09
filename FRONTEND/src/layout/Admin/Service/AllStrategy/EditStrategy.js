@@ -333,7 +333,7 @@ const EditStrategy = () => {
     },
     {
       name: "strategytester",
-      label: "Stratergy Tester ",
+      label: "Strategy Tester ",
       type: "file",
       label_size: 12,
       col_size: 6,

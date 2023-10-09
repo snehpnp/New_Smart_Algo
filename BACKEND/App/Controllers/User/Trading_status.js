@@ -47,10 +47,22 @@ class User_trading_status {
     // ONE USER GET ALL TRADING STATUS
     async getuserUpdateStatus(req, res) {
         try {
+
+
             const { user_Id } = req.body;
             // GET LOGIN CLIENTS
+
+            const today = new Date();   
+            today.setHours(0, 0, 0, 0);
+
+
             const getAllTrading_status = await user_activity_logs.find({
-                user_id: user_Id
+                user_id: user_Id,
+                createdAt: {
+                    $gte: today,
+                    $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+                },
+
             });
             const totalCount = getAllTrading_status.length;
 

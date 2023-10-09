@@ -34,6 +34,12 @@ const ApiCreateInfo = () => {
     const token = JSON.parse(localStorage.getItem("user_details")).token;
     const role = JSON.parse(localStorage.getItem("user_role"));
 
+
+    const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
+    const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+  
+
+    
     const [refresh, setRefresh] = useState(false);
 
     const [UserDetails, setUserDetails] = useState({
@@ -113,7 +119,7 @@ const ApiCreateInfo = () => {
 
 
     const data = async () => {
-        await dispatch(User_Profile({ id: user_id }))
+        await dispatch(User_Profile({ id: isgotodashboard ? gotodashboard.user_id : user_id }))
             .unwrap()
             .then((response) => {
                 if (response.status) {
@@ -136,11 +142,6 @@ const ApiCreateInfo = () => {
         formik.setFieldValue('mobile', UserDetails.data.PhoneNo);
         formik.setFieldValue('email', UserDetails.data.Email);
         formik.setFieldValue('admin_id', UserDetails.data.parent_id);
-
-
-
-
-
     }, [UserDetails]);
 
 
