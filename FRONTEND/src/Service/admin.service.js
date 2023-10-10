@@ -329,6 +329,24 @@ export async function GET_SERVICES_BY_GROUP_ID(data, token) {
     }
 
 }
+
+
+
+// UPDATE SERVICES BY GROUP ID
+export async function UPDATE_SERVICES_BY_GROUP_ID(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}edit/groupservice`, data, {
+            //  headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
 // GET CLIENTS BY STRATEG ID
 export async function GET_CLIENTS_BY_STRATEG_ID(data, token) {
     try {

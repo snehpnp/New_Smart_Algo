@@ -90,16 +90,18 @@ class GroupService {
 
       var groupServices = await serviceGroupName.find({ _id: { $ne: GroupServices_Id }, name: groupdetails.name })
 
-      if (groupServices.length > 0) {
-        return res.send({ status: false, msg: "Name is already Exist", data: groupServices })
+      // if (groupServices.length > 0) {
+      //   return res.send({ status: false, msg: "Name is already Exist", data: groupServices })
+      // }
 
-      }
+
+
 
       let result = await serviceGroupName.findByIdAndUpdate(
         GroupServices_Id,
         {
           name: groupdetails.name,
-          description: groupdetails.description
+          // description: groupdetails.description
         },
         { new: true }
       )
@@ -129,6 +131,7 @@ class GroupService {
       });
       console.log("add_Group_services", add_Group_services);
 
+
       // DELETE STRATEGY ARRAY
       var delete_GroupServices = [];
       db_exist_group_services.forEach(function (item, index) {
@@ -137,9 +140,13 @@ class GroupService {
         }
       });
 
-      console.log("delete_GroupServices", delete_GroupServices);
+      // console.log("delete_GroupServices", delete_GroupServices);
 
 
+
+
+
+      // DELETE SERVICE
       try {
         // STEP FIRST TO DELTE IN STRATEGY CLIENT TABLE
         if (delete_GroupServices.length > 0) {
@@ -154,7 +161,7 @@ class GroupService {
         console.log("Delete Group Service In -", error);
       }
 
-
+      // ADD SERVICE
       try {
         if (add_Group_services.length > 0) {
           add_Group_services.forEach(async (data) => {
@@ -183,6 +190,7 @@ class GroupService {
           var find_user_service = await client_services.deleteMany({ group_id: GroupServices_Id, service_id: stgId })
         })
       }
+
 
       // ADD GROUP  SERVICES IN CLIENT SERVICES
       if (add_Group_services.length > 0) {
@@ -222,6 +230,10 @@ class GroupService {
 
         })
       }
+
+
+
+
 
 
       return res.send({ status: true, msg: "Group Service Edit Succefully", data: [] })
@@ -506,7 +518,21 @@ class GroupService {
               'as': 'ServiceResult'
             }
           },
-     
+
+          {
+            $match: {
+              Servicegroup_id: objectId,
+            }
+          },
+          {
+            '$lookup': {
+              'from': 'categories',
+              'localField': 'ServiceResult.categorie_id',
+              'foreignField': '_id',
+              'as': 'catagory'
+            }
+          },
+
           {
             $match: {
               Servicegroup_id: objectId,
@@ -515,28 +541,41 @@ class GroupService {
           {
             $project: {
               'ServiceResult.name': 1,
+              'ServiceResult._id': 1,
+              'catagory.segment': 1,
+              'catagory.name': 1,
+              'catagory._id': 1,
+
               group_qty: 1
             },
           },
           {
             $unwind: '$ServiceResult', // Unwind the 'categoryResult' array
+          }, {
+            $unwind: '$catagory', // Unwind the 'categoryResult' array
           },
 
         ];
 
         const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);
+
         if (Service_name_get.length == 0) {
           return res.send({ status: false, msg: 'No Data Found ', data: Service_name_get });
         }
 
 
 
-        const Service_name_get1 = await serviceGroupName.find({ _id: objectId});
+        const Service_name_get1 = await serviceGroupName.find({ _id: objectId });
 
 
 
 
-        return res.send({ status: true, msg: 'Get All successfully ', data: Service_name_get ,group_name:Service_name_get1});
+        return res.send({
+          status: true, msg: 'Get All successfully ', data: {
+            Service_name_get: Service_name_get,
+            group_name: Service_name_get1
+          }
+        });
 
 
       } else {

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ADD_GROUP_SERVICES, GET_ALL_SERVICES_NAME, DELETE_GROUP_SERVICES, GET_ALL_SERVICES_USER_NAME, GET_SERVICES_BY_GROUP_ID } from "../../../Service/admin.service";
+import { ALL_SERVICES, ADD_GROUP_SERVICES, GET_ALL_SERVICES_NAME, UPDATE_SERVICES_BY_GROUP_ID , DELETE_GROUP_SERVICES, GET_ALL_SERVICES_USER_NAME, GET_SERVICES_BY_GROUP_ID } from "../../../Service/admin.service";
 
 
 
@@ -54,6 +54,16 @@ export const Get_Service_By_Group_Id = createAsyncThunk("service/byid", async (d
     }
 });
 
+export const Update_Service_By_Group_Id = createAsyncThunk("service/byid", async (data) => {
+    try {
+        const res = await UPDATE_SERVICES_BY_GROUP_ID(data);
+
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
 
 
 
@@ -68,7 +78,8 @@ const GroupServiceSlice = createSlice({
         AllservicesName: [],
         deletegroupService: [],
         AllservicesuserName: [],
-        getServiceByGroupId: []
+        getServiceByGroupId: [],
+        updatServiceByGroupId: []
     },
     reducers: {}, // Reducers should be defined here, if you have any
     // extraReducers: (builder) => { // Define extra reducers using builder
@@ -112,6 +123,9 @@ const GroupServiceSlice = createSlice({
         },
         [DELETE_GROUP_SERVICE.fulfilled]: (state, { payload }) => {
             return { ...state, deletegroupService: payload, isLoading: false };
+        },
+        [Update_Service_By_Group_Id.fulfilled]: (state, { payload }) => {
+            return { ...state, updatServiceByGroupId: payload, isLoading: false };
         },
         [Get_Service_By_Group_Id.fulfilled]: (state, { payload }) => {
             return { ...state, getServiceByGroupId: payload, isLoading: false };

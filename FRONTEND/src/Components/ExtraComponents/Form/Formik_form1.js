@@ -71,6 +71,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                     <label
                       className={`col-lg-${title === "forlogin" ? 3 : title === "update_theme" ? 12 : 7}  col-form-label`}
                       htmlFor={field.name}
+                      style={{ fontSize : '12px !important'}}
                     >
                       {field.label}
                       <span className="text-danger">*</span>
