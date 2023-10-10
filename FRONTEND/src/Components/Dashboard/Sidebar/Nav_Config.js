@@ -164,7 +164,7 @@ export const admin_sidebar = [
     {
         'id': 10,
         "name": 'Broker Information',
-        // "Icon": "Boxes ",
+        "Icon": "Info",
         "route": "/admin/brokerinfo",
         "Data": []
     },
