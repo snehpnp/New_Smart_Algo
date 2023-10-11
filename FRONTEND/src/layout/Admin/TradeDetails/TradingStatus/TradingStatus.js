@@ -8,7 +8,7 @@ import Loader from '../../../../Utils/Loader'
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_ALL_CLIENTS, GET_ALL_TRADING_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
-import { fa_time , fDateTimeSuffix } from "../../../../Utils/Date_formet";
+import { fa_time, fDateTimeSuffix } from "../../../../Utils/Date_formet";
 
 
 
@@ -23,15 +23,29 @@ const TradingStatus = () => {
         data: []
     });
 
-    const [ForGetCSV , setForGetCSV] = useState([])
+    const [ForGetCSV, setForGetCSV] = useState([])
 
 
 
     const data = async () => {
+        let csvarr = []
         await dispatch(GET_ALL_TRADING_STATUS({ Role: first })).unwrap()
             .then((response) => {
                 if (response.status) {
-console.log("response" ,response)
+
+                   response.data.map((data) => {
+                        return csvarr.push({
+                            "FullName": data.userinfo.FullName,
+                            "Trading Status": data.trading_status,
+                            "message": data.message,
+                            "System Ip": data.system_ip,
+                            "Login Status": data.login_status,
+                            "Login Time": fDateTimeSuffix(data.createdAt),
+
+                        })
+
+                    })
+                    setForGetCSV(csvarr)
 
 
                     setAllClients({
@@ -52,6 +66,10 @@ console.log("response" ,response)
     useEffect(() => {
         data()
     }, [first])
+
+
+    console.log("ForGetCSV", ForGetCSV)
+
 
     const columns = [
         {
@@ -103,38 +121,36 @@ console.log("response" ,response)
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Content Page_title="Trading Status" button_status={false} 
-                        // show_csv_button={true} csv_data={getAllClients.data}  csv_title="TradingStatus" 
+                        <Content Page_title="Trading Status" button_status={false}
+                            show_csv_button={true} csv_data={ForGetCSV} csv_title="TradingStatus"
                         >
+                            <div className="col-lg-6">
+                                <div className="mb-3 row">
+                                    <div className="col-lg-7">
+                                        <select
+                                            className="default-select wide form-control"
+                                            id="validationCustom05"
+                                            onChange={(e) => setfirst(e.target.value)}
+                                        >
+                                            <option disabled>
+                                                Please Select Catagory
+                                            </option>
 
+                                            {RoleArr && RoleArr.map((item) => {
+                                                return <>
+                                                    <option value={item}>{item}</option>
+                                                </>
+                                            })}
 
-                        <div className="col-lg-6">
-                            <div className="mb-3 row">
-                                <div className="col-lg-7">
-                                    <select
-                                        className="default-select wide form-control"
-                                        id="validationCustom05"
-                                        onChange={(e) => setfirst(e.target.value)}
-                                    >
-                                        <option disabled>
-                                            Please Select Catagory
-                                        </option>
-                               
-                                        {RoleArr && RoleArr.map((item) => {
-                                            return <>
-                                                <option value={item}>{item}</option>
-                                            </>
-                                        })}
+                                        </select>
 
-                                    </select>
-
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
-                    </Content>
-        </>
+                            <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
+                        </Content>
+                    </>
             }
 
 
@@ -142,10 +158,7 @@ console.log("response" ,response)
         </ >
     )
 
-    // <Content Page_title="Signals">
-    //     <BasicDataTable tableData={columns} TableColumns={columns} dropdown={false} />
-    // </Content>
-    // )
+
 }
 
 

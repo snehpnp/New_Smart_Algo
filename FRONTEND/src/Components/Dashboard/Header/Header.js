@@ -42,8 +42,9 @@ const Header = ({ ChatBox }) => {
   });
 
 
+  console.log("UserDetails", UserDetails)
 
-  
+
   //  lOCAL STORAGE VALUE
   let theme_id = localStorage.getItem("theme");
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
@@ -158,8 +159,7 @@ const Header = ({ ChatBox }) => {
     if (check) {
       loginWithApi(brokerid, UserDetails);
     } else {
-
-      dispatch(TRADING_OFF_USER({ user_id: user_id, device:CheckUser,token: token }))
+      dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
         .unwrap()
         .then((response) => {
           if (response.status) {
@@ -332,9 +332,9 @@ const Header = ({ ChatBox }) => {
                   ""
                 )}
 
-                {user_role === "USER" ? (
+                {(user_role === "USER" && UserDetails.broker === "2" && UserDetails.broker === 2) || user_role === "ADMIN" ? (
                   <>
-                    <li className="nav-item dropdown header-profile">
+                    <li className="nav-item dropdown header-profile me-2">
                       <button
                         className=" btn btn-secondary"
                         onClick={() => setshowModal(true)}
