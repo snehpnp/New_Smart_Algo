@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ADD_GROUP_SERVICES, GET_ALL_SERVICES_NAME, UPDATE_SERVICES_BY_GROUP_ID , DELETE_GROUP_SERVICES, GET_ALL_SERVICES_USER_NAME, GET_SERVICES_BY_GROUP_ID } from "../../../Service/admin.service";
+import { ALL_SERVICES, ADD_GROUP_SERVICES, GET_ALL_SERVICES_NAME, UPDATE_SERVICES_BY_GROUP_ID, DELETE_GROUP_SERVICES, GET_ALL_SERVICES_USER_NAME, GET_SERVICES_BY_GROUP_ID, GET_SERVICES_BY_GROUP_ID_For_Edit_update } from "../../../Service/admin.service";
 
 
 
@@ -53,6 +53,15 @@ export const Get_Service_By_Group_Id = createAsyncThunk("service/byid", async (d
         return err;
     }
 });
+export const Get_Service_By_Group_Id_For_Edit_Update = createAsyncThunk("service/byid1", async (data) => {
+    try {
+        const res = await GET_SERVICES_BY_GROUP_ID_For_Edit_update(data);
+
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
 
 export const Update_Service_By_Group_Id = createAsyncThunk("service/byid", async (data) => {
     try {
@@ -79,7 +88,8 @@ const GroupServiceSlice = createSlice({
         deletegroupService: [],
         AllservicesuserName: [],
         getServiceByGroupId: [],
-        updatServiceByGroupId: []
+        updatServiceByGroupId: [],
+        getServiceByGroupId_forEdit: []
     },
     reducers: {}, // Reducers should be defined here, if you have any
     // extraReducers: (builder) => { // Define extra reducers using builder
@@ -129,6 +139,9 @@ const GroupServiceSlice = createSlice({
         },
         [Get_Service_By_Group_Id.fulfilled]: (state, { payload }) => {
             return { ...state, getServiceByGroupId: payload, isLoading: false };
+        },
+        [Get_Service_By_Group_Id_For_Edit_Update.fulfilled]: (state, { payload }) => {
+            return { ...state, getServiceByGroupId_forEdit: payload, isLoading: false };
         },
 
     },

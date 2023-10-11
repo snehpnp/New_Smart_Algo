@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 import { Update_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 import { Trash2 } from 'lucide-react';
-import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
+import { Get_Service_By_Group_Id_For_Edit_Update } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 
 
 
@@ -53,6 +53,9 @@ const AddStrategy = () => {
     const [forShowGroupQty, setforShowGroupQty] = useState([]);
 
 
+    // for Select All BOx
+    const [selectAllFiltered, setSelectAllFiltered] = useState(false);
+
 
 
     //  ------------
@@ -62,7 +65,7 @@ const AddStrategy = () => {
         let arr = []
         let arr1 = []
 
-        await dispatch(Get_Service_By_Group_Id({ _id: id })).unwrap()
+        await dispatch(Get_Service_By_Group_Id_For_Edit_Update({ _id: id })).unwrap()
             .then((response) => {
                 if (response.status) {
                     response.data && response.data.Service_name_get
@@ -127,6 +130,46 @@ const AddStrategy = () => {
 
 
 
+    //  For Select All 
+    const handleSelectAllFilteredChange = () => {
+        setSelectAllFiltered((prevChecked) => !prevChecked);
+
+        if (!selectAllFiltered) {
+            // Filtered services ko select karo aur additional information store karo.
+            const updatedServices = state.map((service) => ({
+                service_id: service._id,
+                name: service.name,
+                segment: service.category.name,
+                group_qty: 0,
+            }));
+
+            // Set all filtered checkboxes to checked
+            state.forEach((service) => {
+                const checkboxes = document.querySelectorAll(`#service-${service._id}`);
+                checkboxes.forEach((checkbox) => {
+                    checkbox.checked = true;
+                });
+            });
+
+            setSelectedServices((prevInfo) => [...prevInfo, ...updatedServices]);
+        } else {
+            // Filtered services ko deselect karo aur unka data hatao.
+            const filteredServiceIds = state.map((service) => service._id);
+            setSelectedServices((prevInfo) =>
+                prevInfo.filter((info) => !filteredServiceIds.includes(info.service_id))
+            );
+
+            // Set all filtered checkboxes to unchecked
+            state.forEach((service) => {
+                const checkboxes = document.querySelectorAll(`#service-${service._id}`);
+                checkboxes.forEach((checkbox) => {
+                    checkbox.checked = false;
+                });
+            });
+        }
+    };
+
+
 
     const InputGroupQty = (event, id, servicename, segement, qty) => {
 
@@ -156,10 +199,14 @@ const AddStrategy = () => {
 
 
     const remoeveService = (id) => {
-        console.log("fsfsd111" ,id)
         let test = selectedServices.filter((item) => {
             return item.service_id !== id
         })
+
+        let checkboxes = document.querySelectorAll(`#service-${id}`);
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = false;
+        });
 
 
         setSelectedServices(test)
@@ -209,18 +256,16 @@ const AddStrategy = () => {
             if (!values.groupname && formik.touched.groupname) {
                 errors.groupname = valid_err.EMPTY_GROUP_NAME_ERR;
             }
-
-
             return errors;
         },
 
         onSubmit: async (values) => {
             console.log("selectedServices", {
-                groupdetails: { name: values.groupname  , id: id},
+                groupdetails: { name: values.groupname, id: id },
                 services_id: selectedServices
             })
 
-// return
+            // return
 
 
             await dispatch(Update_Service_By_Group_Id({
@@ -308,33 +353,11 @@ const AddStrategy = () => {
     }, [SerachService]);
 
 
-    const [state1, setstate1] = useState([]);
-
-    const groupedData = {};
-
-    if (forShowGroupQty.length > 0) {
-
-        const uniqueArr = Object.values(
-            forShowGroupQty.reduce((acc, cur) => {
-                acc[cur.service_id] = cur;
-                return acc;
-            }, {})
-        );
-
-        setstate1(uniqueArr)
-
-        uniqueArr.forEach((item) => {
-            if (!groupedData[item.segement]) {
-                groupedData[item.segement] = [];
-            }
-            groupedData[item.segement].push(item);
-        });
-    }
 
     useEffect(() => {
         setSerachService('')
+        setSelectAllFiltered(false)
     }, [formik.values.segment]);
-
 
 
 
@@ -388,7 +411,7 @@ const AddStrategy = () => {
                 }
 
             >
-                <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Strategy" title='addstrategy'
+                <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Edit Group" title='addstrategy'
                     additional_field={
                         <>
                             {formik.values.segment ?
@@ -411,16 +434,14 @@ const AddStrategy = () => {
                                             <div className="row mt-4">
                                                 :
                                                 <>
-                                                    <div className="col-md-4 mb-2 ">
+                                                    <div className="col-md-4 mb-2">
                                                         <div className="form-check">
                                                             <input
                                                                 type="checkbox"
-                                                                className="form-check-input "
+                                                                className="form-check-input"
                                                                 id='selectall'
-                                                            // id={`service-${service._id}`}
-                                                            // value={service._id}
-                                                            // checked={selectedServices.includes(service._id)}
-                                                            // onChange={handleServiceChange}
+                                                                checked={selectAllFiltered}
+                                                                onChange={() => handleSelectAllFilteredChange()}
                                                             />
                                                             <label className="form-check-label" htmlFor='selectall'>
                                                                 Select All

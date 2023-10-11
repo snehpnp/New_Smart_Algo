@@ -22,94 +22,47 @@ const AddStrategy = () => {
 
     const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
 
-    // For Show All The Filter's Services
-    const [state, setstate] = useState([]);
 
-    // State For Serach Service
+
     const [SerachService, setSerachService] = useState('');
+    const [refresh, setRefresh] = useState(false);
 
-    // State For Get all Segment List
     const [GetAllSgments, setGetAllSgments] = useState({
         loading: true,
         data: [],
     });
 
-    // State For Get all Services List
+
     const [allServices, setAllServices] = useState({
         loading: true,
         data: [],
     });
 
 
-    // State ForShow Selected Service After Filter And Show Into Table
     const [selectedServices, setSelectedServices] = useState([]);
-
-    // State For Set Group Qty Into Services
-
     const [GroupQty, setGroupQty] = useState([]);
-
-    const [selectAllFiltered, setSelectAllFiltered] = useState(false);
-
+    const [forShowGroupQty, setforShowGroupQty] = useState([]);
 
 
-    //  For Select Services Checkbox
+
+
+    function removeServiceFromSelected(serviceId) {
+        setSelectedServices((prevSelected) => prevSelected.filter((id) => id !== serviceId));
+    }
+
     function handleServiceChange(event, id, name, segment) {
         const serviceId = id;
         const isChecked = event.target.checked;
 
-        setSelectedServices((prevInfo) => {
-            if (isChecked) {
-                return [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0 }];
-            } else {
-                return prevInfo.filter((info) => info.service_id !== serviceId);
-            }
-        });
+        if (isChecked) {
+            setSelectedServices((prevInfo) => [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0 }]);
+        } else {
+            setSelectedServices((prevInfo) => prevInfo.filter((info) => info.service_id !== serviceId));
+        }
     }
 
 
-    //  For Select All 
-    const handleSelectAllFilteredChange = () => {
-        setSelectAllFiltered((prevChecked) => !prevChecked);
 
-        if (!selectAllFiltered) {
-            // Filtered services ko select karo aur additional information store karo.
-            const updatedServices = state.map((service) => ({
-                service_id: service._id,
-                name: service.name,
-                segment: service.category.name,
-                group_qty: 0,
-            }));
-
-            // Set all filtered checkboxes to checked
-            state.forEach((service) => {
-                const checkboxes = document.querySelectorAll(`#service-${service._id}`);
-                checkboxes.forEach((checkbox) => {
-                    checkbox.checked = true;
-                });
-            });
-
-            setSelectedServices((prevInfo) => [...prevInfo, ...updatedServices]);
-        } else {
-            // Filtered services ko deselect karo aur unka data hatao.
-            const filteredServiceIds = state.map((service) => service._id);
-            setSelectedServices((prevInfo) =>
-                prevInfo.filter((info) => !filteredServiceIds.includes(info.service_id))
-            );
-
-            // Set all filtered checkboxes to unchecked
-            state.forEach((service) => {
-                const checkboxes = document.querySelectorAll(`#service-${service._id}`);
-                checkboxes.forEach((checkbox) => {
-                    checkbox.checked = false;
-                });
-            });
-        }
-    };
-
-
-
-
-    //  For Set Group-Qty
 
     const InputGroupQty = (event, id, servicename, segement) => {
         const updatedQty = event.target.value === "" ? 0 : parseInt(event.target.value);
@@ -141,15 +94,11 @@ const AddStrategy = () => {
 
 
 
-    //  For Remove Service From Select And Table
+
     const remoeveService = (id) => {
         let test = selectedServices.filter((item) => {
             return item.service_id !== id
         })
-        let checkboxes = document.querySelectorAll(`#service-${id}`);
-        checkboxes.forEach((checkbox) => {
-            checkbox.checked = false;
-        });
 
         setSelectedServices(test)
     }
@@ -180,51 +129,6 @@ const AddStrategy = () => {
 
 
 
-    //  -------------------For Show Service According to Segment -----------------
-
-    const data = async () => {
-        if (formik.values.segment) {
-            await dispatch(Service_By_Catagory({ segment: formik.values.segment })).unwrap()
-                .then((response) => {
-                    if (response.status) {
-                        setAllServices({
-                            loading: false,
-                            data: response.data,
-                        });
-                    }
-                });
-        }
-    };
-
-
-
-
-    //  For Manage Filter Symboll 
-    const filterFunction = async () => {
-        const filteredData = allServices.data.filter((item) => {
-            return item.name.toLowerCase().includes(SerachService.toLowerCase())
-        });
-
-
-        if (SerachService === "") {
-            setstate([])
-        } else {
-            setstate(filteredData)
-        }
-    };
-
-    useEffect(() => {
-        filterFunction()
-    }, [SerachService]);
-
-
-
-
-
-
-
-
-    //  --------------------- For Manage Form ---------------
 
     const formik = useFormik({
         initialValues: {
@@ -238,10 +142,6 @@ const AddStrategy = () => {
             }
             if (!values.segment) {
                 errors.segment = valid_err.SEGEMENTSELECT_ERROR;
-            }
-            if (selectedServices.length > 50) {
-                alert("can Not Add More Than 50 Service")
-            
             }
 
             return errors;
@@ -282,18 +182,81 @@ const AddStrategy = () => {
     ];
 
 
+    //  -------------------For Show Service According to Segment -----------------
 
-
+    const data = async () => {
+        if (formik.values.segment) {
+            await dispatch(Service_By_Catagory({ segment: formik.values.segment })).unwrap()
+                .then((response) => {
+                    if (response.status) {
+                        setAllServices({
+                            loading: false,
+                            data: response.data,
+                        });
+                    }
+                });
+        }
+    };
     useEffect(() => {
         data();
     }, [formik.values.segment]);
 
 
+    const [state, setstate] = useState([]);
+
+
+
+    const filterFunction = async () => {
+        const filteredData = allServices.data.filter((item) => {
+            return item.name.toLowerCase().includes(SerachService.toLowerCase())
+        });
+
+
+        if (SerachService === "") {
+            setstate([])
+        } else {
+            setstate(filteredData)
+        }
+    };
+
+    useEffect(() => {
+        filterFunction()
+    }, [SerachService]);
+
+
+    const [state1, setstate1] = useState([]);
+
+    const groupedData = {};
+
+    if (forShowGroupQty.length > 0) {
+
+        const uniqueArr = Object.values(
+            forShowGroupQty.reduce((acc, cur) => {
+                acc[cur.service_id] = cur;
+                return acc;
+            }, {})
+        );
+
+        setstate1(uniqueArr)
+
+        uniqueArr.forEach((item) => {
+            if (!groupedData[item.segement]) {
+                groupedData[item.segement] = [];
+            }
+            groupedData[item.segement].push(item);
+        });
+
+
+
+    }
 
     useEffect(() => {
         setSerachService('')
-        setSelectAllFiltered(false)
     }, [formik.values.segment]);
+
+
+
+
 
     return (
         <>
@@ -330,8 +293,10 @@ const AddStrategy = () => {
                                             />
                                             </td> */}
                                             <td onClick={() => {
-                                                remoeveService(item.service_id)
-                                            }}><Trash2 /></td>
+                                                remoeveService(item.service_id);
+                                                removeServiceFromSelected(item.service_id);
+                                            }
+                                            }><Trash2 /></td>
 
                                         </tr>
                                     </>
@@ -369,14 +334,16 @@ const AddStrategy = () => {
                                             <div className="row mt-4">
                                                 :
                                                 <>
-                                                    <div className="col-md-4 mb-2">
+                                                    <div className="col-md-4 mb-2 ">
                                                         <div className="form-check">
                                                             <input
                                                                 type="checkbox"
-                                                                className="form-check-input"
+                                                                className="form-check-input "
                                                                 id='selectall'
-                                                                checked={selectAllFiltered}
-                                                                onChange={() => handleSelectAllFilteredChange()}
+                                                            // id={`service-${service._id}`}
+                                                            // value={service._id}
+                                                            // checked={selectedServices.includes(service._id)}
+                                                            // onChange={handleServiceChange}
                                                             />
                                                             <label className="form-check-label" htmlFor='selectall'>
                                                                 Select All
@@ -398,9 +365,23 @@ const AddStrategy = () => {
                                                                     {service.name}
                                                                 </label>
                                                             </div>
-                                                        </div>
-                                                    ))}
 
+
+                                                            {/* <input
+                                                                type="number"
+                                                                className="form-control col-md-1 my-2"
+                                                                placeholder="Enter Qty"
+                                                                onChange={(e) => InputGroupQty(e, service._id, service.category.name, service.name)}
+                                                                min={0}
+
+                                                                defaultValue="0"
+                                                                style={{ background: !enabledInputs[service._id] ? '#eeeeee' : "" }}
+                                                                readOnly={!enabledInputs[service._id]}
+                                                            /> */}
+                                                        </div>
+
+
+                                                    ))}
                                                 </>
 
                                             </div>
@@ -409,6 +390,45 @@ const AddStrategy = () => {
                                 )}
                             </div>
 
+                            {/* <table className="table table-responsive-sm ">
+                                <thead className="bg-primary">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Segment</th>
+                                        <th>Service Name</th>
+                                        <th>Qty</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {selectedServices && selectedServices.map((item, index) => {
+                                        return <>
+                                            <tr key={index + 1}>
+                                                <td>{index + 1}</td>
+                                                <td>{item.segment}</td>
+                                                <td>{item.name}</td>
+                                                <td><input
+                                                    type="number"
+                                                    className="form-control col-md-1"
+                                                    placeholder="Enter Qty"
+                                                    // onChange={(e) => InputGroupQty(e, service._id, service.category.name, service.name)}
+                                                    min={0}
+                                                    defaultValue="0"
+                                                // style={{ background: !enabledInputs[service._id] ? '#eeeeee' : "" }}
+                                                // readOnly={!enabledInputs[service._id]}
+                                                />
+                                                </td>
+                                                <td onClick={() => remoeveService(item.id)}><Trash2 /></td>
+
+                                            </tr>
+                                        </>
+                                    })
+
+
+                                    }
+
+                                </tbody >
+                            </table> */}
 
 
                         </>
@@ -428,4 +448,5 @@ const AddStrategy = () => {
 
 
 export default AddStrategy
+
 

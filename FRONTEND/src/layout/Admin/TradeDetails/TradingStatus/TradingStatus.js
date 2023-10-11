@@ -4,16 +4,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
-import BasicDataTable from '../../../../Components/ExtraComponents/Datatable/BasicDataTable'
-import { Pencil, Trash2 } from 'lucide-react';
-import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
 import Loader from '../../../../Utils/Loader'
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_ALL_CLIENTS, GET_ALL_TRADING_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
-import Modal from '../../../../Components/ExtraComponents/Modal';
+import { fa_time , fDateTimeSuffix } from "../../../../Utils/Date_formet";
+
 
 
 const TradingStatus = () => {
@@ -21,18 +17,23 @@ const TradingStatus = () => {
     const dispatch = useDispatch()
 
     const [first, setfirst] = useState('USER')
-    const [showModal, setshowModal] = useState(false)
 
     const [getAllClients, setAllClients] = useState({
         loading: true,
         data: []
     });
 
+    const [ForGetCSV , setForGetCSV] = useState([])
+
+
 
     const data = async () => {
         await dispatch(GET_ALL_TRADING_STATUS({ Role: first })).unwrap()
             .then((response) => {
                 if (response.status) {
+console.log("response" ,response)
+
+
                     setAllClients({
                         loading: false,
                         data: response.data
@@ -77,6 +78,12 @@ const TradingStatus = () => {
         },
 
         {
+            dataField: 'createdAt',
+            text: 'Panel ON/OFF Time',
+            formatter: (cell, row) => fDateTimeSuffix(cell)
+
+        },
+        {
             dataField: 'role',
             text: 'role'
         },
@@ -85,12 +92,6 @@ const TradingStatus = () => {
             text: 'system IP'
         },
 
-        {
-            dataField: 'createdAt',
-            text: 'Create Date',
-            formatter: (cell, row) => cell.split('T')[0] + "   " + cell.split('T')[1]
-
-        },
 
 
     ];
@@ -102,36 +103,38 @@ const TradingStatus = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="Trading Status" button_status={false}  >
-                            <div className="col-lg-6">
-                                <div className="mb-3 row">
-                                    <div className="col-lg-7">
-                                        <select
-                                            className="default-select wide form-control"
-                                            id="validationCustom05"
-                                            onChange={(e) => setfirst(e.target.value)}
-                                        >
-                                            <option disabled>
-                                                Please Select Catagory
-                                            </option>
-                                            {/* <option selecte d value="all">
-                                                All
-                                            </option> */}
-                                            {RoleArr && RoleArr.map((item) => {
-                                                return <>
-                                                    <option value={item}>{item}</option>
-                                                </>
-                                            })}
+                        <Content Page_title="Trading Status" button_status={false} 
+                        // show_csv_button={true} csv_data={getAllClients.data}  csv_title="TradingStatus" 
+                        >
 
-                                        </select>
 
-                                    </div>
+                        <div className="col-lg-6">
+                            <div className="mb-3 row">
+                                <div className="col-lg-7">
+                                    <select
+                                        className="default-select wide form-control"
+                                        id="validationCustom05"
+                                        onChange={(e) => setfirst(e.target.value)}
+                                    >
+                                        <option disabled>
+                                            Please Select Catagory
+                                        </option>
+                               
+                                        {RoleArr && RoleArr.map((item) => {
+                                            return <>
+                                                <option value={item}>{item}</option>
+                                            </>
+                                        })}
+
+                                    </select>
+
                                 </div>
                             </div>
+                        </div>
 
-                            <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
-                        </Theme_Content>
-                    </>
+                        <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
+                    </Content>
+        </>
             }
 
 
