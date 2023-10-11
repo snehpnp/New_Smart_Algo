@@ -760,7 +760,8 @@ class Employee {
 
       const getAllClients = await User_model.find(AdminMatch)
         .skip(skip)
-        .limit(Number(limit));
+        .limit(Number(limit))
+        .sort({ createdAt: -1 });
 
       const totalCount = getAllClients.length;
       // IF DATA NOT EXIST

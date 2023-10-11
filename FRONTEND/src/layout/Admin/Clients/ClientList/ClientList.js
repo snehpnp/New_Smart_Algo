@@ -404,17 +404,20 @@ const AllClients = () => {
                 />
               </span>
             </Link>
+            {/* {row.license_type == "1"  ? */}
             <Link>
-              <span data-toggle="tooltip" data-placement="top" title="Delete">
-                <Trash2
-                  size={20}
-                  color="#d83131"
-                  strokeWidth={2}
-                  className="mx-1"
-                  onClick={(e) => Delete_user(row._id)}
-                />
-              </span>
-            </Link>
+            <span data-toggle="tooltip" data-placement="top" title="Delete">
+              <Trash2
+                size={20}
+                color="#d83131"
+                strokeWidth={2}
+                className="mx-1"
+                onClick={(e) => Delete_user(row._id)}
+              />
+            </span>
+          </Link>
+            {/* :""} */}
+            
           </div>
         </div>
       ),
