@@ -19,10 +19,6 @@ const MainSignals = db.MainSignals;
 const AliceViewModel = db.AliceViewModel;
 const BrokerResponse = db.BrokerResponse;
 
-// const { logger, getIPAddress } = require('./Helper/logger')
-
-// logger1.info('Add User By Admin', { Email: data.Email, role: data.Role, user_id: data._id });
-
 
 const aliceblue = require('./Broker/aliceblue')
 
