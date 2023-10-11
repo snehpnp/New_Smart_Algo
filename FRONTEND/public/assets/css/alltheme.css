@@ -1268,3 +1268,26 @@ a.navigation__btn.js-btn-slide.active {
    background-color: var(--rgba-primary-2);
    border-radius: 5px;
 }
+.border-response-view
+{
+    border:1px solid  var(--primary) !important;
+}
+.table td.bg-table {
+    /* background:   var(--primary) !important;
+    color: #fff;
+*/
+width:200px;
+border-right:1px solid var(--primary) !important;
+} 
+.border-response-view> :not(caption) > * {
+    border-color:  var(--primary) !important;
+}
+
+
+.order-date-cell {
+    white-space: normal;
+    word-wrap: break-word; /* Add this property to allow text to wrap */
+    max-width: 100px; /* Adjust the max-width as needed to control cell width */
+  }
+  
+  

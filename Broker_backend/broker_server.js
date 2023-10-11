@@ -109,6 +109,8 @@ app.post('/broker-signals', async (req, res) => {
 
         const FIRST3_KEY = client_key.substring(0, 3);
 
+        console.log("FIRST3_KEY",FIRST3_KEY);
+          console.log("process.env.PANEL_FIRST_THREE",process.env.PANEL_FIRST_THREE);
         // IF SIGNEL KEY NOT MATCH CHECK
         if (FIRST3_KEY == process.env.PANEL_FIRST_THREE) {
 
@@ -364,7 +366,6 @@ app.post('/broker-signals', async (req, res) => {
             var query = { "strategys.strategy_name": strategy, "service.name": input_symbol }
 
             console.log("query", query);
-            // Example: Find all documents in the collection
 
             try {
               getAllDocuments();
@@ -398,16 +399,14 @@ app.post('/broker-signals', async (req, res) => {
                             receive_signal: signal_req,
                             strategy: strategy,
                             type: type,
+                            symbol: input_symbol,
+                            order_status: 0,
                             order_id: "",
-                            symbol: "",
                             trading_symbol: "",
-                            strategy: "",
                             broker_name: "",
                             send_request: "",
-                            order_status: "",
                             reject_reason: "",
-                            receive_signal: "",
-                            order_id: "",
+                            receive_signal: ""
                           };
 
                           const newCategory = new BrokerResponse(brokerResponse)

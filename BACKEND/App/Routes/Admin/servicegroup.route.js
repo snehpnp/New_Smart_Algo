@@ -19,12 +19,7 @@ router.post('/getall/servicesName', GetAllServicesName)
 router.post('/getall/services/username', GetAllServicesUserNAme)
 router.post('/get/services/bygroupid', GetServicesByGroupId)
 router.post('/get/services/bygroupid1', GetServicesByGroupId1)
-
-
 router.post('/delete/groupServices', DELETEGROUPSERVICES)
-
-
-
 
 
 

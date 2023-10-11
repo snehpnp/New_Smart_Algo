@@ -15,38 +15,22 @@ import { GanttChartSquare, Eye } from 'lucide-react';
 const BrokerResponse = () => {
   const dispatch = useDispatch()
 
-
+  const [refresh, setrefresh] = useState(false)
   const [showModal, setshowModal] = useState(false)
   const [BrokerResponseId, setBrokerResponseId] = useState([])
- const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
+  const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
+
+
+  const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-
- const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
-
   const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
   const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
   const user_details_goTo = JSON.parse(localStorage.getItem("user_details_goTo"))
 
 
 
-  const getsignals11 = async (e) => {
-//  await dispatch(Get_Broker_Response({ _id: user_details_goTo && user_details_goTo ? user_details_goTo.user_id : user_Id, token: AdminToken })).unwrap()
 
-    await dispatch(Get_Broker_Response({ _id: isgotodashboard ? gotodashboard.user_id : user_Id, token: AdminToken })).unwrap()
-    .then((response) => {
-        if (response.status) {
-          setDashboardData({
-            loading: false,
-            data: response.data
-          });
-          ;
-        }
-      })
-  }
 
-  useEffect(() => {
-    getsignals11()
-  }, [])
 
   const columns = [
     {
@@ -87,10 +71,6 @@ const BrokerResponse = () => {
 
     },
     {
-      dataField: 'reject_reason',
-      text: 'Reason'
-    },
-    {
       dataField: 'Details View',
       text: 'View',
       formatter: (cell, row, rowIndex) =>
@@ -117,6 +97,24 @@ const BrokerResponse = () => {
   ];
 
 
+
+  // GET BROKER RESPONSE ALL DATA
+  const getsignals11 = async (e) => {
+
+    await dispatch(Get_Broker_Response({ _id: isgotodashboard ? gotodashboard.user_id : user_Id, token: AdminToken })).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setDashboardData({
+            loading: false,
+            data: response.data
+          });
+          ;
+        }
+      })
+  }
+
+
+
   // GET ALL GROUP SERVICES NAME
   const GetAllServicesName = async (row) => {
     setBrokerResponseId(row)
@@ -125,8 +123,8 @@ const BrokerResponse = () => {
   }
 
 
+  // GET BROKER TRADE DATA
   const GetBrokerInforMation = async (row) => {
-    console.log("row", row);
 
     await dispatch(UpdateBrokerResponse({ OrderId: row.order_id, user_id: row.user_id, token: AdminToken })).unwrap()
       .then((response) => {
@@ -137,15 +135,23 @@ const BrokerResponse = () => {
             loading: false,
             data: response.data
           });
-          ;
+          setrefresh(!refresh)
+            ;
         }
       })
 
   }
 
+
+
+  // USE EFFECT
+  useEffect(() => {
+    getsignals11()
+  }, [refresh])
+
+
+
   return (
-
-
 
     <Content Page_title="Broker Response" button_status={false}>
       {
@@ -166,6 +172,42 @@ const BrokerResponse = () => {
               // onHide={handleClose}
               handleClose={() => setshowModal(false)}
             >
+              <div className='table-responsive'>
+                <table className='table table-striped table-bordered border border-response-view' style={{ width: '100%', tableLayout: 'fixed' }}>
+                  <tr>
+                    <td className="bg-table"> Created At</td>
+                    <td>{BrokerResponseId.createdAt}</td>
+                  </tr>
+                  <tr>
+                    <td className="bg-table"> Symbol</td>
+                    <td>{BrokerResponseId.symbol}</td>
+                  </tr>
+                  <tr>
+                    <td className="bg-table"> Broker Name</td>
+                    <td>{BrokerResponseId.broker_name}</td>
+                  </tr>
+                  <tr>
+                    <td className="bg-table"> Order Id</td>
+                    <td>{BrokerResponseId.order_id}</td>
+                  </tr>
+                  <tr>
+                    <td className="bg-table"> Signal</td>
+                    <td>{atob(BrokerResponseId.send_request)}</td>
+                  </tr>
+                  <tr>
+                    <td className="bg-table"> Order Status</td>
+                    <td>{BrokerResponseId.order_status}</td>
+                  </tr>
+                  <tr>
+                    <td className="bg-table"> Order Date</td>
+                    <td className="order-date-cell">{BrokerResponseId.order_view_date}</td>
+                  </tr>
+                </table>
+              </div>
+
+
+
+              {/* 
               <BasicDataTable TableColumns={[
                 {
                   dataField: 'index',
@@ -190,7 +232,7 @@ const BrokerResponse = () => {
 
                 {
                   dataField: 'order_id',
-                  text: 'Oder Id'
+                  text: 'Order Id'
                 },
                 {
                   dataField: 'send_request',
@@ -206,7 +248,7 @@ const BrokerResponse = () => {
                   dataField: 'order_view_date',
                   text: 'order date'
                 },
-              ]} tableData={[BrokerResponseId]} />
+              ]} tableData={[BrokerResponseId]} /> */}
 
             </Modal >
           </>

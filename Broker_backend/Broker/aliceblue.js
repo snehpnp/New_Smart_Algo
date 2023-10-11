@@ -56,7 +56,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
             }
 
 
-
+console.log(token);
             var complexty
             var discqty = "0";
             var pCode;
@@ -520,7 +520,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
                                                     axios(config)
                                                         .then(async (response) => {
 
-
+console.log(response);
                                                             if (response.data[0].stat == "Ok") {
 
                                                                 let result = await BrokerResponse.findByIdAndUpdate(
