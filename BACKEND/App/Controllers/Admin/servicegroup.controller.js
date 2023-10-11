@@ -501,7 +501,6 @@ class GroupService {
 
   // GET SERVICES BY GROUP ID -- for edit update
   async GetServicesByGroupId(req, res) {
-
     try {
 
       const { _id } = req.body
@@ -518,21 +517,6 @@ class GroupService {
               'as': 'ServiceResult'
             }
           },
-
-          {
-            $match: {
-              Servicegroup_id: objectId,
-            }
-          },
-          {
-            '$lookup': {
-              'from': 'categories',
-              'localField': 'ServiceResult.categorie_id',
-              'foreignField': '_id',
-              'as': 'catagory'
-            }
-          },
-
           {
             $match: {
               Servicegroup_id: objectId,
@@ -541,41 +525,16 @@ class GroupService {
           {
             $project: {
               'ServiceResult.name': 1,
-              'ServiceResult._id': 1,
-              'catagory.segment': 1,
-              'catagory.name': 1,
-              'catagory._id': 1,
-
-              group_qty: 1
             },
           },
           {
             $unwind: '$ServiceResult', // Unwind the 'categoryResult' array
-          }, {
-            $unwind: '$catagory', // Unwind the 'categoryResult' array
           },
 
         ];
 
         const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);
-
-        if (Service_name_get.length == 0) {
-          return res.send({ status: false, msg: 'No Data Found ', data: Service_name_get });
-        }
-
-
-
-        const Service_name_get1 = await serviceGroupName.find({ _id: objectId });
-
-
-
-
-        return res.send({
-          status: true, msg: 'Get All successfully ', data: {
-            Service_name_get: Service_name_get,
-            group_name: Service_name_get1
-          }
-        });
+        return res.send({ status: true, msg: 'Get All successfully ', data: Service_name_get });
 
 
       } else {
@@ -588,7 +547,6 @@ class GroupService {
     catch (error) {
       console.log("GET SERVICES NAME -", error);
     }
-
   }
 
     // GET SERVICES BY GROUP ID - for integrate other 

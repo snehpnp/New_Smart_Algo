@@ -603,7 +603,7 @@ const AddClient = () => {
       await dispatch(Get_Service_By_Group_Id({ _id: formik.values.groupservice })).unwrap()
         .then((response) => {
           if (response.status) {
-
+console.log("responseresponseresponseresponse" ,response)
             setGetServices({
               loading: false,
               data: response.data,

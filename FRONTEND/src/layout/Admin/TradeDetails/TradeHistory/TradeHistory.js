@@ -9,18 +9,14 @@ import { Get_Tradehisotry } from "../../../../ReduxStore/Slice/Admin/Tradehistor
 import { useDispatch, useSelector } from "react-redux";
 import { fa_time, fDateTimeSuffix } from "../../../../Utils/Date_formet";
 import { Eye, CandlestickChart, Pencil } from "lucide-react";
+import { loginWithApi } from "../../../../Components/Dashboard/Header/log_with_api";
 import DetailsView from "./DetailsView";
+import { User_Profile } from "../../../../ReduxStore/Slice/Common/commoSlice.js";
+import { TRADING_OFF_USER } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
-
-import {
-  GetAliceTokenAndID,
-  CreateSocketSession,
-  ConnctSocket,
-} from "../../../../Service/Alice_Socket";
-import {
-  ShowColor,
-  ShowColor_Compare_two,
-} from "../../../../Utils/ShowTradeColor";
+import { check_Device } from "../../../../Utils/find_device";
+import { CreateSocketSession, ConnctSocket, } from "../../../../Service/Alice_Socket";
+import { ShowColor, ShowColor_Compare_two, } from "../../../../Utils/ShowTradeColor";
 
 import $ from "jquery";
 
@@ -28,12 +24,17 @@ const TradeHistory = () => {
   const dispatch = useDispatch();
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
+  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+
+
 
   const [showModal, setshowModal] = useState(false);
-
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
-  const [disableFromDate, setDisableFromDate] = useState(false);
+  const [CheckUser, setCheckUser] = useState(check_Device());
+  const [refresh, setrefresh] = useState(false);
+
+
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -41,37 +42,21 @@ const TradeHistory = () => {
 
   const handleToDateChange = (e) => {
     setToDate(e.target.value);
-
-    setDisableFromDate(true);
   };
 
-  const [rowData, setRowData] = useState({
-    loading: true,
-    data: [],
-  });
+  const [rowData, setRowData] = useState({ loading: true, data: [], });
+  const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
+  const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
+  const [tradeHistoryData1, setTradeHistoryData1] = useState({ loading: true, data: [] });
 
-  const [getAllStrategyName, setAllStrategyName] = useState({
-    loading: true,
-    data: [],
-  });
 
+  const [UserDetails, setUserDetails] = useState([]);
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
-
   const [SocketState, setSocketState] = useState("null");
 
-  const [tradeHistoryData, setTradeHistoryData] = useState({
-    loading: true,
-    data: [],
-  });
 
-  const [tradeHistoryData1, setTradeHistoryData1] = useState({
-    loading: true,
-    data: [],
-  });
 
-  console.log("tradeHistoryData", tradeHistoryData);
-
-  const getsignals = async (e) => {
+  const GetTradhistory = async (e) => {
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
 
@@ -104,8 +89,7 @@ const TradeHistory = () => {
     let full = `${year}/${month}/${date}`;
     await dispatch(
       Get_Tradehisotry({ startDate: full, endDate: full, token: token })
-    )
-      .unwrap()
+    ).unwrap()
       .then((response) => {
         if (response.status) {
           setTradeHistoryData({
@@ -122,7 +106,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     getsignals11();
-  }, []);
+  }, [refresh]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -358,110 +342,152 @@ const TradeHistory = () => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
     });
 
+
+
   //  SHOW lIVE PRICE
 
   const ShowLivePrice = async () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
 
-    console.log("channelList", channelList);
-    const res = await CreateSocketSession(type);
+    // const res = await CreateSocketSession(type);
 
-    if (res.status === 200) {
-      setSocketState("Ok");
-    }
-
-    if (res.data.stat) {
-      const handleResponse = (response) => {
-
-        // UPL_
-        $(".LivePrice_" + response.tk).html(response.lp);
-        $(".ClosePrice_" + response.tk).html(response.c);
+    if (UserDetails.demat_userid !== undefined && UserDetails.access_token !== undefined) {
 
 
-        var live_price = response.lp === undefined ? "" : response.lp;
+      const res = await CreateSocketSession(type, UserDetails.demat_userid, UserDetails.access_token);
 
-        console.log("live_price", live_price);
-        // if (response.lp !== undefined) {
-        // $(".LivePrice_" + response.tk).html(response.lp === undefined ? response.c : response.lp);
-        const get_Live_price = $(".ShowLTP_" + response.tk).html();
-        const get_entry_qty = $(".entry_qty" + response.tk).html();
-        const get_exit_qty = $(".exit_qty" + response.tk).html();
-        const get_exit_price = $(".exit_price" + response.tk).html();
-        const get_entry_price = $(".entry_price" + response.tk).html();
-        const get_entry_type = $(".entry_type" + response.tk).html();
-        const get_exit_type = $(".exit_type" + response.tk).html();
-        const get_UPL_ = $(".UPL_" + response.tk).html();
+      if (res.status === 200) {
+        setSocketState("Ok");
+      }
 
-        //  if entry qty and exist qty both exist
-        if (
-          (get_entry_type === "LE" && get_exit_type === "LX") ||
-          (get_entry_type === "SE" && get_exit_type === "SX")
-        ) {
-          if (get_entry_qty !== "" && get_exit_qty !== "") {
-            if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-              let rpl =
-                (parseInt(get_exit_price) - parseInt(get_entry_price)) *
-                parseInt(get_exit_qty);
-              let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
+      if (res.data.stat) {
+        const handleResponse = (response) => {
 
-              let finalyupl =
-                (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
-              if (finalyupl === "NaN" || rpl === "NaN") {
-                return "-";
-              } else {
-                $(".UPL_" + response.tk).html(finalyupl.toFixed(2));
-                $(".show_rpl_" + response.tk).html(rpl.toFixed(2));
-                ShowColor("UPL_", finalyupl.toFixed(2), response.tk);
-                ShowColor("show_rpl_", finalyupl.toFixed(2), response.tk);
-                $(".TPL_" + response.tk).html((finalyupl + rpl).toFixed(2));
-                ShowColor("TPL_", (finalyupl + rpl).toFixed(2), response.tk);
+
+          // UPL_
+          $(".LivePrice_" + response.tk).html(response.lp);
+          $(".ClosePrice_" + response.tk).html(response.c);
+
+
+          var live_price = response.lp === undefined ? "" : response.lp;
+
+          // if (response.lp !== undefined) {
+          // $(".LivePrice_" + response.tk).html(response.lp === undefined ? response.c : response.lp);
+          const get_Live_price = $(".ShowLTP_" + response.tk).html();
+          const get_entry_qty = $(".entry_qty" + response.tk).html();
+          const get_exit_qty = $(".exit_qty" + response.tk).html();
+          const get_exit_price = $(".exit_price" + response.tk).html();
+          const get_entry_price = $(".entry_price" + response.tk).html();
+          const get_entry_type = $(".entry_type" + response.tk).html();
+          const get_exit_type = $(".exit_type" + response.tk).html();
+          const get_UPL_ = $(".UPL_" + response.tk).html();
+
+          //  if entry qty and exist qty both exist
+          if (
+            (get_entry_type === "LE" && get_exit_type === "LX") ||
+            (get_entry_type === "SE" && get_exit_type === "SX")
+          ) {
+            if (get_entry_qty !== "" && get_exit_qty !== "") {
+              if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                let rpl =
+                  (parseInt(get_exit_price) - parseInt(get_entry_price)) *
+                  parseInt(get_exit_qty);
+                let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
+
+                let finalyupl =
+                  (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
+                if (finalyupl === "NaN" || rpl === "NaN") {
+                  return "-";
+                } else {
+                  $(".UPL_" + response.tk).html(finalyupl.toFixed(2));
+                  $(".show_rpl_" + response.tk).html(rpl.toFixed(2));
+                  ShowColor("UPL_", finalyupl.toFixed(2), response.tk);
+                  ShowColor("show_rpl_", finalyupl.toFixed(2), response.tk);
+                  $(".TPL_" + response.tk).html((finalyupl + rpl).toFixed(2));
+                  ShowColor("TPL_", (finalyupl + rpl).toFixed(2), response.tk);
+                }
               }
             }
           }
-        }
-        //  if Only entry qty Exist
-        else if (
-          (get_entry_type === "LE" && get_exit_type === "") ||
-          (get_entry_type === "SE" && get_exit_type === "")
-        ) {
-          let abc = (
-            (parseFloat(live_price) - parseFloat(get_entry_price)) *
-            parseInt(get_entry_qty)
-          ).toFixed();
-          if (abc === "NaN") {
-            return "-";
-          } else {
-            $(".UPL_" + response.tk).html(abc);
-            $(".show_rpl_" + response.tk).html("-");
-            $(".TPL_" + response.tk).html("-");
+          //  if Only entry qty Exist
+          else if (
+            (get_entry_type === "LE" && get_exit_type === "") ||
+            (get_entry_type === "SE" && get_exit_type === "")
+          ) {
+            let abc = (
+              (parseFloat(live_price) - parseFloat(get_entry_price)) *
+              parseInt(get_entry_qty)
+            ).toFixed();
+            if (abc === "NaN") {
+              return "-";
+            } else {
+              $(".UPL_" + response.tk).html(abc);
+              $(".show_rpl_" + response.tk).html("-");
+              $(".TPL_" + response.tk).html("-");
 
-            ShowColor("UPL_", abc, response.tk);
-            ShowColor("show_rpl_", "-", response.tk);
-            ShowColor("TPL_", "-", response.tk);
+              ShowColor("UPL_", abc, response.tk);
+              ShowColor("show_rpl_", "-", response.tk);
+              ShowColor("TPL_", "-", response.tk);
+            }
           }
-        }
 
-        //  if Only Exist qty Exist
-        else if (
-          (get_entry_type === "" && get_exit_type === "LX") ||
-          (get_entry_type === "" && get_exit_type === "SX")
-        ) {
-        } else {
-        }
-        // }
-      };
-      await ConnctSocket(handleResponse, channelList).then((res) => { });
-    } else {
-      $(".UPL_").html("-");
-      $(".show_rpl_").html("-");
-      $(".TPL_").html("-");
+          //  if Only Exist qty Exist
+          else if (
+            (get_entry_type === "" && get_exit_type === "LX") ||
+            (get_entry_type === "" && get_exit_type === "SX")
+          ) {
+
+
+            // let abc = ((parseFloat(live_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty)).toFixed();
+            // if (abc === "NaN") {
+            //   return "-";
+            // } else {
+            //   $(".UPL_" + response.tk).html(abc);
+            //   $(".show_rpl_" + response.tk).html("-");
+            //   $(".TPL_" + response.tk).html("-");
+
+            //   ShowColor("UPL_", abc, response.tk);
+            //   ShowColor("show_rpl_", "-", response.tk);
+            //   ShowColor("TPL_", "-", response.tk);
+            // }
+
+
+
+          } else {
+
+
+          }
+          // }
+        };
+        await ConnctSocket(handleResponse, channelList, UserDetails.demat_userid, UserDetails.access_token).then((res) => { });
+      } else {
+        $(".UPL_").html("-");
+        $(".show_rpl_").html("-");
+        $(".TPL_").html("-");
+      }
+
+
+
     }
+
+
+
+
   };
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     ShowLivePrice();
-  }, [tradeHistoryData.data]);
+  }, [tradeHistoryData.data, UserDetails]);
 
   //  GET ALL SERVICE NAME
 
@@ -487,12 +513,82 @@ const TradeHistory = () => {
     GetAllStrategyName();
   }, []);
 
+
+
+
+
+
+
+  //  GET_USER_DETAILS
+  const data = async () => {
+    await dispatch(User_Profile({ id: user_id }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setUserDetails(response.data);
+        }
+      });
+  };
+  useEffect(() => {
+    data();
+  }, []);
+
+
+
+  //  LOG IN FOR GET LIVE PRICE 
+
+  const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
+    if (check) {
+      loginWithApi(brokerid, UserDetails);
+    } else {
+      dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            // setUserDetails(response.data);
+            setrefresh(!refresh)
+          }
+        });
+
+    }
+  };
+
+
+
+
   return (
     <>
-      <Content Page_title="Trade History" button_status={false} button_status1={true}>
+      <Content Page_title="Trade History" button_status={false}
+        show_csv_button={true} csv_data={[]} csv_title="TradeHistory"
+
+      >
         <div className="row d-flex  align-items-center justify-content-start">
+
           <div className="col-lg-2">
-            <div className="form-check custom-checkbox mb-3">
+            <div className="headaer-title">
+              <h3 className="font-w400 mb-0">Live Price</h3>
+            </div> <div className="Api Login m-2">
+              <label class="switch">
+                <input
+                  type="checkbox"
+                  className="bg-primary"
+                  checked={
+                    UserDetails.TradingStatus === "on" ? true : false
+                  }
+                  onClick={(e) =>
+                    LogIn_WIth_Api(
+                      e.target.checked,
+                      UserDetails.broker,
+                      UserDetails.TradingStatus,
+                      UserDetails
+                    )
+                  }
+                />
+                <span class="slider round"></span>
+              </label>
+            </div></div>
+          <div className="col-lg-2">
+            <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12" htmlFor="fromdate">
                 From Date
               </label>
@@ -509,7 +605,7 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2">
-            <div className="form-check custom-checkbox mb-3">
+            <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12" htmlFor="endDate">
                 To Date
               </label>
@@ -521,9 +617,8 @@ const TradeHistory = () => {
                 value={toDate}
                 onChange={handleToDateChange}
                 min={
-                  // new Date().toISOString().split('T')[0] &&
                   fromDate
-                } // Disable past dates
+                }
               />
             </div>
           </div>
@@ -551,10 +646,10 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
-          <div className="col-lg-3 d-flex">
+          <div className="col-lg-4">
             <button
-              className="btn btn-primary mx-2"
-              onClick={(e) => getsignals(e)}
+              className="btn btn-primary me-2"
+              onClick={(e) => GetTradhistory(e)}
             >
               Search
             </button>

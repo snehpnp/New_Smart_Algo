@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import ExportToExcel from "../../../Utils/ExportCsv";
 
-const Content = ({ Page_title, button_title, button_status, show_csv_button, csv_title, csv_data, button_status1, route, ...rest }) => {
+const Content = ({ Page_title, button_title, button_status, show_csv_button, csv_title, csv_data,  route, ...rest }) => {
   return (
     <div>
       <div className="content-body">
@@ -18,29 +18,12 @@ const Content = ({ Page_title, button_title, button_status, show_csv_button, csv
                 </li>
               </div>
 
-              {button_status == false ? "" : <div className="col-lg-6">
-                <Link to={route} className='btn btn-primary float-lg-end' o>
+              {button_status == false ? "" : <div className="col-lg-6 px-0">
+                <Link to={route} className='btn btn-primary float-lg-end px-0' style={{ padding : '10px !important'}} >
                   <i className={`fa-solid  ${button_title === "Back" ? 'fa-arrow-left' : 'fa-plus'} `}></i> {button_title}</Link>
               </div>}
 
-              {button_status1 == true ?
-                <div className="col-lg-6 d-flex">
-                  <label class="switch  ms-auto">
-                    <input
-                      type="checkbox"
-                      className="bg-primary"
-                      defaultChecked={false // UserDetails.TradingStatus === "on" ? true : false
-                      }
-                    // onChange={(e) => {
-
-                    // }}
-                    />
-                    <span class="slider round"></span>
-                  </label>
-                </div>
-                : ""
-
-              }
+             
             </ol>
 
           </div>

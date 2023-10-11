@@ -16,6 +16,9 @@ const Signals = () => {
   const [DateFilter, setDateFilter] = useState();
   const [DateArray, setDateArray] = useState([]);
 
+  const [ForGetCSV, setForGetCSV] = useState([])
+
+
   const columns = [
     {
       dataField: "index",
@@ -48,10 +51,7 @@ const Signals = () => {
       sort: true,
 
     },
-    // {
-    //     dataField: 'prefix',
-    //     text: 'Message'
-    // },
+
     {
       dataField: "strategy",
       text: "Strategy",
@@ -66,10 +66,27 @@ const Signals = () => {
   });
 
   const getsignals = async () => {
+    let csvarr = []
+
     await dispatch(Get_All_Signals({ startDate: DateFilter, token: token }))
       .unwrap()
       .then((response) => {
         if (response.status) {
+          console.log("response", response);
+
+          response.data.map((data) => {
+            return csvarr.push({
+              "Signal Time": fDateTimeSuffix(data.createdAt),
+              "type": data.type,
+              "Trading Symbol": data.trade_symbol,
+              "Price": data.price,
+              "Strategy": data.strategy,
+            })
+
+          })
+          setForGetCSV(csvarr)
+
+
           getSignalsData({
             loading: false,
             data: response.data,
@@ -106,14 +123,17 @@ const Signals = () => {
 
 
 
-  
+
   return (
     <>
       {SignalsData.loading ? (
         <Loader />
       ) : (
         <>
-          <Content Page_title="All Signals" button_status={false}>
+          <Content Page_title="All Signals" button_status={false}
+            show_csv_button={true} csv_data={ForGetCSV} csv_title="Signals"
+
+          >
             <div className="d-flex">
               <div className="col-lg-6">
                 <div className="mb-3 row">
