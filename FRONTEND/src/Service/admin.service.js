@@ -314,10 +314,26 @@ export async function GET_ALL_SERVICES_USER_NAME(data, token) {
 
 
 
-// GET SERVICES BY GROUP ID
+// GET SERVICES BY GROUP ID --- for preview any were 
 export async function GET_SERVICES_BY_GROUP_ID(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}get/services/bygroupid`, data, {
+            //  headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+// GET SERVICES BY GROUP ID  --- for edit and update Only
+export async function GET_SERVICES_BY_GROUP_ID_For_Edit_update(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/services/bygroupid1`, data, {
             //  headers: header(token),
             data: {},
         })

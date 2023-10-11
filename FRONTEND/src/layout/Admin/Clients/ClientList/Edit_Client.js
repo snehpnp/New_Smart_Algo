@@ -681,6 +681,8 @@ const AddClient = () => {
   }, [UserData.data.strategy, AllStrategy.data]);
 
 
+  console.log("GetServices && GetServices" ,GetServices && GetServices)
+
   return (
     <>
       <Content Page_title="Edit  Client" button_title='Back' route="/admin/allclients">

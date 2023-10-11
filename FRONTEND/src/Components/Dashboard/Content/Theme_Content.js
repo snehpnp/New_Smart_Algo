@@ -13,7 +13,6 @@ const Theme_Content = ({ Page_title, button_title,button_status, route, ...rest 
                             <Link to={route} className='btn btn-primary float-lg-end '>
                                 <i className={`fa-solid  ${button_title === "Back" ?  'fa-arrow-left' : 'fa-plus' } `}></i> {button_title}</Link>
                     </div>}
-                        
                 </div>
                 <div className="row">
                     <div className="col-lg-12">

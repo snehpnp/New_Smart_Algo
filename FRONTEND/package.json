@@ -13,10 +13,9 @@
     "bootstrap-switch-button-react": "^1.2.0",
     "crypto-js": "^4.1.1",
     "date-fns": "^2.30.0",
+    "file-saver": "^2.0.5",
     "formik": "^2.4.3",
     "html2canvas": "^1.4.1",
-    "i": "^0.3.7",
-    "install": "^0.13.0",
     "jquery": "^3.7.0",
     "js-base64": "^3.7.5",
     "js-cookie": "^3.0.5",
@@ -46,6 +45,7 @@
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
     "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5",
     "yup": "^1.2.0"
   },
   "scripts": {

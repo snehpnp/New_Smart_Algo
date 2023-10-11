@@ -5,10 +5,12 @@ import TableWithButtons from "../../../Components/ExtraComponents/Tables/TableWi
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
 import cellEditFactory from 'react-bootstrap-table2-editor';
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 
 
+const FullDataTable = ({ tableData, TableColumns, tableoptions , }) => {
 
-const FullDataTable = ({ tableData, TableColumns, tableoptions }) => {
 
 
 
@@ -29,8 +31,23 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions }) => {
     };
 
 
+
+    const fileType =
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileExtension = ".csv";
+    // console.log("apiData", apiData);
+    const exportToCSV = (apiData, fileName) => {
+        const ws = XLSX.utils.json_to_sheet(apiData);
+        const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const data = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data, fileName + fileExtension);
+    };
+
+
     return <>
         <div className='table-responsive'>
+
             <BootstrapTable
                 keyField="id"
 
@@ -48,5 +65,3 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions }) => {
 
 
 export default FullDataTable
-
-

@@ -43,7 +43,6 @@ const ServicesList = () => {
     });
 
 
-    console.log("getServicesName", getServicesName)
 
 
 
@@ -51,19 +50,26 @@ const ServicesList = () => {
         {
             dataField: "index",
             text: "SR. No.",
+            sort : true,
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
             dataField: 'name',
-            text: 'Group Services Name'
+            text: 'Group Services Name',
+            sort : true,
+
         },
         {
             dataField: 'resultCount',
-            text: 'Service Count'
+            text: 'Service Count',
+            sort : true,
+
         },
         {
             dataField: 'categoryResult.segment',
             text: 'Services',
+            sort : true,
+
             formatter: (cell, row) => (
                 <div>
                     <GanttChartSquare onClick={(e) => GetAllServicesName(row)} size={20} color="#198754" strokeWidth={2} className="mx-1" />
@@ -73,6 +79,9 @@ const ServicesList = () => {
         {
             dataField: 'dsd',
             text: 'Client Using',
+
+            sort : true,
+
             formatter: (cell, row) => (
                 <div>
                     {/* <button
@@ -89,14 +98,16 @@ const ServicesList = () => {
         {
             dataField: 'actions',
             text: 'Actions',
+            sort : true,
+
             formatter: (cell, row) => (
                 <div>
 
                     <Link to={`/admin/groupservices/edit/${row._id}`} data-toggle="tooltip" data-placement="top" title="Delete">
-                        < Pencil size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                        < Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Trash2 size={20} color="#198754" strokeWidth={2} className="mx-1" onClick={(e) => DeleteGroup(row)} />
+                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={(e) => DeleteGroup(row)} />
                     </span>
 
                 </div>
