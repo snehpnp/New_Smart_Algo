@@ -44,6 +44,10 @@ const userMakeStrategySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    offset : {
+        type: String,
+        required: true,
+    },
     status: {
         type: String,
         required: true,

@@ -8,6 +8,7 @@ module.exports = function (app) {
   const services = db.services;
   const categorie = db.categorie;
   const UserMakeStrategy = db.UserMakeStrategy;
+  const Alice_token = db.Alice_token;
 
   const { MongoClient } = require('mongodb');
 
@@ -79,6 +80,13 @@ module.exports = function (app) {
       const collectionExists = collections.some(coll => coll.name === collectionName);
 
       if (collectionExists) {
+
+        // const changeStream = db.collection(collectionName).watch();
+
+        // changeStream.on('change', (change) => {
+        //   // Handle the change event
+        //   console.log('Change event:', change);
+        // });
         //console.log(`Collection '${collectionName}' exists.`);
 
         const collection = db.collection(collectionName);
@@ -93,6 +101,25 @@ module.exports = function (app) {
             v: parseFloat(response.v)
           }
 
+          const changeStream = collection.watch();
+
+          changeStream.on('change', (change) => {
+            // Handle the change event
+            console.log('Change event:', change);
+            
+            // You can add your logic here to evaluate changes
+            // For example, run an eval function
+            evaluateFunction(change);
+          });
+        
+          // Define a function to evaluate changes
+          function evaluateFunction(change) {
+            // Add your evaluation logic here based on the change event
+            // For example, you can run an eval function on the inserted document
+            // This is just a placeholder; replace it with your actual logic
+            console.log('Evaluating changes:', change);
+          }
+
 
           const insertResult = await collection.insertOne(singleDocument);
           // console.log('Inserted document:', insertResult.insertedId);
@@ -100,12 +127,12 @@ module.exports = function (app) {
 
         createView(collectionName);
         createViewM3(collectionName);
-      //  createViewM5(collectionName);
-     //   createViewM10(collectionName)
-     //   createViewM15(collectionName)
-      //  createViewM30(collectionName)
-      //  createViewM60(collectionName)
-       // createViewM1DAY(collectionName)
+       createViewM5(collectionName);
+       createViewM10(collectionName)
+       createViewM15(collectionName)
+       createViewM30(collectionName)
+       createViewM60(collectionName)
+       createViewM1DAY(collectionName)
 
       } else {
         // console.log(`Collection '${collectionName}' does not exist.`);
@@ -177,6 +204,8 @@ module.exports = function (app) {
       // console.log("pipeline",pipeline)
 
       if (collectionExists) {
+
+        
 
 
       } else {
@@ -802,6 +831,11 @@ module.exports = function (app) {
 
 
 
+
+
+
+
+
   app.get("/testing_socket", function (req, res) {
 
     const io = require("socket.io-client");
@@ -817,9 +851,7 @@ module.exports = function (app) {
         //console.log("response",response)
         connectToDB(response.tk, response);
         // console.log("token --",response.tk);
-       // getTokenStrategy(response.tk) 
-        
-
+       // getTokenStrategy(response.tk)
       }
     });
 
@@ -911,10 +943,12 @@ module.exports = function (app) {
         let period=element.period;
         let inside_indicator=element.inside_indicator;
         let condition=element.condition;
+        let offset=element.offset;
         let buffer_value=element.buffer_value;
         let UserName=element.userResult.UserName;
         
-       // console.log("inside tokensymbol ",tokensymbol)
+        console.log("inside tokensymbol ",tokensymbol)
+        console.log("offset ",offset)
        // console.log("inside UserName ",UserName)
        // console.log("price_source ",price_source)
 
@@ -952,9 +986,21 @@ module.exports = function (app) {
             { $project: projection },
             { $sort: { _id: 1 } }
           ];
-          
-          const get_view_data = await collection.aggregate(pipeline).toArray();
+          let get_view_data = ""
+          if(parseInt(offset) > 0){
+            const get_view = await collection.aggregate(pipeline).toArray();
+            const lastIndex = get_view.length - parseInt(offset);
+            get_view_data = get_view.slice(0, lastIndex);
+            
+          }else{
+            get_view_data = await collection.aggregate(pipeline).toArray();
+            
+          } 
 
+
+
+         
+          console.log("get_view_data - ",get_view_data)
 
          const pipelineTimeFrameData = [
           { $sort: { _id: 1 } }
@@ -1087,6 +1133,8 @@ for (const condition of conditions) {
  if(result == true){
    console.log("True condition - ",lastElementTimeFrameViewData);
    console.log("elemet True Condition -  ",element)
+
+   
   }
   
     
@@ -1132,36 +1180,7 @@ app.get("/StrategyBuySellView", async (req , res)=>{
   //   },
     
   // ];
-
-  const pipeline2 = [
-    {
-      $lookup: {
-        from: "M3_40089", // View collection ka naam yahan par specify karein
-        localField: "M3_40089", // Aapke data collection ke column ka naam jiska value se view match hoga
-        foreignField: "M3_40089", // View collection ke column ka naam jiska value se view match hota hai
-        as: 'matchedViewData', // Alias jisse aap fetched data ke roop mein prapt karenge
-      },
-    },
-    {
-      $match: {
-        tokensymbol: "M3_40089", // View collection ka naam yahan par specify karein
-      },
-    },
-    {
-      $unwind: '$matchedViewData',
-    },
-  ];
   
-  const result1 = await UserMakeStrategy.aggregate(pipeline2);
-   console.log("result - ",result1);
-   res.send(result1)
-
-
-   
-return
-   
-
-
   const pipeline = [
 
     {
@@ -1195,6 +1214,7 @@ return
         condition:1,
         buffer_value:1,
         type:1,
+        offset:1,
         createdAt:1,
         updatedAt:1,
        'userResult.UserName': 1, 
@@ -1289,23 +1309,24 @@ return
     const url = "wss://ws1.aliceblueonline.com/NorenWS/";
     let socket;
     // let channel = 'NSE|3045#NSE|14366#NFO|59218#NFO|59219';
-    let channel = 'NFO|40092#NFO|40089';
+    let channel = 'NFO|67309#NFO|67308';
 
-    let userId = '438760';
-    let userSession = 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTY0ODMyMDAsImlhdCI6MTY5NjQwMDI5NCwianRpIjoiMzI3NWQ4NjAtMzhlOC00MTNkLWI5NDgtNzhhYWYyYmVlNDllIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6ImJmZDNhZGEyLWExNzYtNGI2Mi1iZDA5LWRjZmE2ZDNhYTg1NSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiYmZkM2FkYTItYTE3Ni00YjYyLWJkMDktZGNmYTZkM2FhODU1IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.fZdywaRNC-4Dy-x6Ceh5Iq0qd3nZUvww3mIoqvoBuCAXjdaBFd7T8KC7ABRReueo-H5GXITIwInBKRXVCwd0ekdHCjnz4_sOTAhuDHTRmHooTi4SAkDfpRIPPPMfmP_gtn4p0CrR9e18IHIg7KdVlroz2-acCA26o7oM2MIHZTDuLF60-OwndQZcduyf-TxHAK5rjNbgXjcsYhS2Jhxk02BDXOCQkHYnPl1tP3ksmQqo3duWjoE_A2F08mcU1Dljq-uWWk7OTOjqzRq9SOXAV6qhFhjlsIVlnVnaSp2GLdOgoyUX7LnQapkfqGKAlTRs13yhX0JbvMcKX0nUBIm5OA'
+    let userId = '709913';
+    let userSession = 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTcxNjQwOTksImlhdCI6MTY5NzA4MzA1MCwianRpIjoiMjM1MTAxYjItMTMxNi00YWYzLTg0YmMtM2Y0YTJmMzlhNDUzIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjdlZWNhMTY1LWI0Y2UtNDY3MC04ODljLThjODdiNWU4M2FiYSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjhhZGFiMzllLTAxN2YtNDJkNS1hMjRkLWNhNDQxZGQ2NjI3ZiIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiOGFkYWIzOWUtMDE3Zi00MmQ1LWEyNGQtY2E0NDFkZDY2MjdmIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjcwOTkxMyIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJIRU1BTEkgREFMV0FESSIsIm1vYmlsZSI6Ijk1NzQ4NDUyMzQiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI3MDk5MTMiLCJnaXZlbl9uYW1lIjoiSEVNQUxJIiwiZmFtaWx5X25hbWUiOiJEQUxXQURJIiwiZW1haWwiOiJkYWx3YWRpLmhlbWFsaTI3MTFAZ21haWwuY29tIn0.Y7Ut4ubyfJx0rhbBBVC-dAYTn022aJxbfZWJBvNCpOkZg_ox9h5MomFbnf2q2IxO581Pcs9VBgVtF4GctOpvu2IaEi0gGrMc7Zz2hxtEfZaTMVqwy-LGhiCD0abpSynZup3TKPC019befXLThyi4Zat3gcblszApTqN51ScIOUAAs5PvNoBISkm6qL4_4D9ykSArNuboQZEJd9JubuOXP1tA2fMKrouWXgb5biFk5MS7vBqp8Rld5nNeHMMQnA6tWC-JFWgt1dOcpri8EXmGxbC71qLHZITqaSvJ9ZJyUmaQd374F0NxV27q6OVC6_FW584mphCmbwiVxb-5w2O-dw'
 
     connect(userId, userSession, channel)
 
     function connect(userId, userSession, token = "") {
-
+     console.log("1")
       socket = new WebSocket(url);
       socket.onopen = function () {
+        console.log("2")
         connectionRequest(userId, userSession);
 
       };
       socket.onmessage = async function (msg) {
         var response = JSON.parse(msg.data);
-        //console.log("okk socket open  1 ", response)
+        console.log("okk socket open  1 ", response)
 
         if (response.tk) {
         console.log("response",response.tk)
@@ -1345,6 +1366,7 @@ return
     }
 
     function connectionRequest(userId, userSession) {
+      console.log("3")
       var encrcptToken = CryptoJS.SHA256(
         CryptoJS.SHA256(userSession).toString()
       ).toString();
@@ -1356,7 +1378,7 @@ return
         uid: userId + "_" + type,
         source: type,
       };
-      // console.log('initCon', JSON.stringify(initCon));
+       console.log('initCon', JSON.stringify(initCon));
       try {
         socket.send(JSON.stringify(initCon));
       } catch (error) {
@@ -1453,58 +1475,77 @@ return
 
   app.post("/make_startegy", async function (req, res) {
 
-    const pipeline1 = [
+    // const pipeline1 = [
 
-      {
-        $lookup: {
-          from: 'users',
-          localField: 'user_id',
-          foreignField: '_id',
-          as: 'userResult'
-        }
-      },
+    //   {
+    //     $lookup: {
+    //       from: 'users',
+    //       localField: 'user_id',
+    //       foreignField: '_id',
+    //       as: 'userResult'
+    //     }
+    //   },
 
-      {
-        $unwind: '$userResult', //
-      },
-      {
-        $project: {
+    //   {
+    //     $unwind: '$userResult', //
+    //   },
+    //   {
+    //     $project: {
       
-          user_id:1,
-          tokensymbol:1,
-          timeframe:1,
-          indicator:1,
-          price_source:1,
-          period:1,
-          inside_indicator:1,
-          condition:1,
-          buffer_value:1,
-          type:1,
-          createdAt:1,
-          updatedAt:1,
-         'userResult.UserName': 1, 
+    //       user_id:1,
+    //       tokensymbol:1,
+    //       timeframe:1,
+    //       indicator:1,
+    //       price_source:1,
+    //       period:1,
+    //       inside_indicator:1,
+    //       condition:1,
+    //       buffer_value:1,
+    //       type:1,
+    //       createdAt:1,
+    //       updatedAt:1,
+    //      'userResult.UserName': 1, 
        
     
-        }
-      }
+    //     }
+    //   }
       
-    ];
+    // ];
 
-    const result = await UserMakeStrategy.aggregate(pipeline1);
+   let rr = await UserMakeStrategy.aggregate([
+      {
+        $bucket: {
+          groupBy: "$buffer_value", // Field jo data ko group karne ke liye use hoga
+          boundaries: [0, 1], // Boundaries ya conditions jinme data distribute hoga
+          default: "Other", // Agar koi document specified boundaries ke bich nahi aata, to use 'Other' bucket mein store karega
+          output: {
+            count: { $sum: 1 }, // Har bucket ke liye document count
+            totalAmount: { $sum: "$buffer_value" }, 
+            name:{$push : '$buffer_value'}// Har bucket ke liye total amount
+          },
+        },
+      },
+    ]);
 
-    if (result.length > 0) {
+    res.send(rr);
+    return
 
-      return res.json({ status: true, msg: 'Get all', data: result });
 
-    } else {
+    // const result = await UserMakeStrategy.aggregate(pipeline1);
 
-      return res.json({ status: false, msg: 'An error occurred', data: [] });
-    }
+    // if (result.length > 0) {
+
+    //   return res.json({ status: true, msg: 'Get all', data: result });
+
+    // } else {
+
+    //   return res.json({ status: false, msg: 'An error occurred', data: [] });
+    // }
 
 
   
 
-  return
+  
 
     let user_id = req.body.user_id;
     let tokensymbol = req.body.tokensymbol;
@@ -1516,13 +1557,13 @@ return
     let condition = req.body.condition;
     let buffer_value = req.body.buffer_value;
     let type = req.body.type;
+    let offset = req.body.offset;
 
 
-    const db = client.db('TradeTools');
-
-// Add Strategy User..
+    
+    // Add Strategy User..
   try {
-
+    
     await UserMakeStrategy.create({
       user_id: user_id,
       tokensymbol: tokensymbol,
@@ -1534,9 +1575,69 @@ return
       condition: condition,
       buffer_value: buffer_value,
       type: type,
+      offset: offset,
     })
-      .then((createUserMakeStrategy) => {
-        res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy })
+      .then(async(createUserMakeStrategy) => {
+        res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
+       
+      const last_insert_id= createUserMakeStrategy._id;
+      const user_id= createUserMakeStrategy.user_id;
+      const tokensymbol= createUserMakeStrategy.tokensymbol;
+      const timeframe= createUserMakeStrategy.timeframe;
+      const indicator= createUserMakeStrategy.indicator;
+      const price_source= createUserMakeStrategy.price_source;
+      const period= createUserMakeStrategy.period;
+      const inside_indicator= createUserMakeStrategy.inside_indicator;
+      const condition= createUserMakeStrategy.condition;
+      const buffer_value= createUserMakeStrategy.buffer_value;
+      const type= createUserMakeStrategy.type;
+      const offset= createUserMakeStrategy.offset;
+       
+
+      const fetch_view_collection = 'M'+timeframe+'_'+tokensymbol; 
+
+      const viewPipeline = [
+       
+
+      
+        {
+          $lookup: {
+            from: fetch_view_collection, // The name of the 'orders' collection
+            localField: 'M3_40089', // Field in the 'customers' collection
+            foreignField: 'M3_40089', // Field in the 'orders' collection
+            as: 'fetch_view_collection', // Alias for the joined data
+          },
+        },
+
+         {
+          $group: {
+            _id: user_id,
+           
+             // sma: {
+             //  $avg: '$user_id',
+            // },
+          },
+        },
+
+
+
+
+       
+      ];
+      
+       const db = client.db('test');
+      // Create or replace the view
+      await db.createCollection('buy_view', {
+        viewOn: 'usermakestrategies',
+        pipeline: viewPipeline,
+      });
+  
+      console.log('SMA view created or updated.');
+
+
+    
+
+
       }).catch((err) => {
         //console.error('Error creating and saving user:', err.keyValue.name);
         res.send({ status: false, msg: "Duplicate Value", data: err.keyValue.name })
@@ -2149,6 +2250,184 @@ return
 
 })
 
+
+
+app.post("/api/test", async (req, res) => {
+  const async = require('async');
+//  console.log(Date.getTime())
+//  return
+  const pipeline = [
+
+    { $sort : { createdAt : 1 } },
+    { $limit : 1000 }
+    
+  ];
+
+  const result = await Alice_token.aggregate(pipeline);
+ // console.log("result",result)
+ 
+
+ 
+  
+ const usersData = [
+  { id: 1, name: "Object 1" },
+  { id: 2, name: "Object 2" },
+  // Add more objects here...
+];
+
+  // Sample data (100,000 objects)
+  const objects = [];
+  for (let i = 1; i <= result.length; i++) {
+    objects.push({ _id: i, symbol: `Object ${i}` });
+  }
+  
+  // Function to perform a task on an object (Simulated asynchronous task)
+  function performTaskForObject(obj, callback) {
+    setTimeout(() => {
+      console.log(`Task perform Time ${performance.now()} : ${obj.symbol}`);
+      callback(null, obj);
+    }, 0); // Simulating a very short delay
+  }
+  
+  // Use the async library to process all objects in parallel
+  async.eachLimit(objects, 1, performTaskForObject, (err) => {
+    if (err) {
+      console.error("Error:", err);
+    } else {
+      console.log("All tasks completed");
+    }
+  });
+  res.send("okk");  
+
+
+
+
+  return
+
+// const cluster = require('cluster');
+// const http = require('http');
+// const numCPUs = require('os').cpus().length;
+
+// // Sample data
+// const objects = [
+//   { id: 1, name: "Object 1" },
+//   { id: 2, name: "Object 2" },
+//   // Add more objects here...
+// ];
+
+// if (cluster.isMaster) {
+//   // Fork workers for each CPU core
+//   for (let i = 0; i < numCPUs; i++) {
+//     cluster.fork();
+//   }
+
+//   cluster.on('exit', (worker, code, signal) => {
+//     console.log(`Worker ${worker.process.pid} died`);
+//   });
+
+//   // Aggregate results from workers
+//   const aggregatedResults = [];
+
+//   cluster.on('message', (worker, message) => {
+//     aggregatedResults.push(...message);
+
+//     if (aggregatedResults.length === objects.length) {
+//       console.log("All tasks completed:", aggregatedResults);
+//       // Here you can process the aggregated results as needed
+//       // For example, send them as a response to a client
+//     }
+//   });
+// } else {
+//   // This is the worker process
+//   const workerId = cluster.worker.id;
+//   const workerResults = [];
+
+//   // Distribute objects among worker processes
+//   for (let i = workerId - 1; i < objects.length; i += numCPUs) {
+//     const obj = objects[i];
+//     // Simulate an asynchronous task
+//     const result = await performTaskForObject(obj);
+//     workerResults.push(result);
+//   }
+
+//   // Send the worker's results back to the master process
+//   process.send(workerResults);
+
+//   process.exit(0);
+// }
+
+// // Sample function to perform a task on an object
+// async function performTaskForObject(obj) {
+//   // Simulate an asynchronous task
+//   return new Promise((resolve) => {
+//     setTimeout(() => {
+//       console.log(`Task performed on object: ${obj.id}`);
+//       resolve(obj);
+//     }, 1000); // Simulating a delay of 1 second
+//   });
+// }
+
+  
+
+
+
+
+
+
+res.send("okkk");
+
+
+});
+
+
+
+// app.use((req, res, next) => {
+//   const clientIP = req.ip; // This gets the client's IP address
+//   // Do something with the IP address, e.g., pass it to your API response
+//   res.json({ clientIP });
+// });
+
+
+app.use((req, res, next) => {
+  const useragent = require('useragent');
+  const userAgentString = req.headers['user-agent'];
+  const agent = useragent.parse(userAgentString);
+  console.log('Parsed User Agent:', agent);
+  // Continue with your middleware logic or pass it to the next middleware
+  next();
+
+  // const userAgent = req.headers['user-agent'];
+  // console.log('User Agent:', userAgent);
+  // // You can parse the user agent string to get more detailed information if needed
+
+  // // Continue with your middleware logic or pass it to the next middleware
+  // next();
+});
+
+
+app.get("/getip",(req,res)=>{
+  const os = require('os');
+
+  // Get network interfaces
+const networkInterfaces = os.networkInterfaces();
+
+// Iterate through network interfaces and display IP addresses
+Object.keys(networkInterfaces).forEach((interfaceName) => {
+  const interfaces = networkInterfaces[interfaceName];
+  interfaces.forEach((iface) => {
+    if (iface.family === 'IPv4') {
+      console.log(`IPv4 Address (${interfaceName}): ${iface.address}`);
+    }
+    if (iface.family === 'IPv6') {
+      console.log(`IPv6 Address (${interfaceName}): ${iface.address}`);
+    }
+  });
+});
+
+
+
+  res.send("okk")
+})
 
 
 
