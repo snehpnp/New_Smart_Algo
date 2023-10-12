@@ -12,8 +12,8 @@ module.exports = function (app) {
 
   const { MongoClient } = require('mongodb');
 
- //  const uri = "mongodb://localhost:27017/";
- const uri = "mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net/";
+  //  const uri = "mongodb://localhost:27017/";
+  const uri = "mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net/";
   const client = new MongoClient(uri, { useUnifiedTopology: true });
   client.connect();
   console.log("Connected to MongoDB successfully!");
@@ -106,12 +106,12 @@ module.exports = function (app) {
           changeStream.on('change', (change) => {
             // Handle the change event
             console.log('Change event:', change);
-            
+
             // You can add your logic here to evaluate changes
             // For example, run an eval function
             evaluateFunction(change);
           });
-        
+
           // Define a function to evaluate changes
           function evaluateFunction(change) {
             // Add your evaluation logic here based on the change event
@@ -127,12 +127,12 @@ module.exports = function (app) {
 
         createView(collectionName);
         createViewM3(collectionName);
-       createViewM5(collectionName);
-       createViewM10(collectionName)
-       createViewM15(collectionName)
-       createViewM30(collectionName)
-       createViewM60(collectionName)
-       createViewM1DAY(collectionName)
+        createViewM5(collectionName);
+        createViewM10(collectionName)
+        createViewM15(collectionName)
+        createViewM30(collectionName)
+        createViewM60(collectionName)
+        createViewM1DAY(collectionName)
 
       } else {
         // console.log(`Collection '${collectionName}' does not exist.`);
@@ -200,12 +200,12 @@ module.exports = function (app) {
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M_' + collectionName);
-      console.log("collectionExists view 1 minute",collectionExists)
+      console.log("collectionExists view 1 minute", collectionExists)
       // console.log("pipeline",pipeline)
 
       if (collectionExists) {
 
-        
+
 
 
       } else {
@@ -851,7 +851,7 @@ module.exports = function (app) {
         //console.log("response",response)
         connectToDB(response.tk, response);
         // console.log("token --",response.tk);
-       // getTokenStrategy(response.tk)
+        // getTokenStrategy(response.tk)
       }
     });
 
@@ -868,8 +868,8 @@ module.exports = function (app) {
     res.send("okkkk ")
   })
 
-  async function getTokenStrategy(token){
-    console.log("inside token --",token);
+  async function getTokenStrategy(token) {
+    console.log("inside token --", token);
 
     const pipeline1 = [
 
@@ -887,357 +887,436 @@ module.exports = function (app) {
       },
       {
         $match: {
-          tokensymbol : token,
-          status:"0"
+          tokensymbol: token,
+          status: "0"
         },
       },
       {
         $project: {
-      
-          user_id:1,
-          tokensymbol:1,
-          timeframe:1,
-          indicator:1,
-          price_source:1,
-          period:1,
-          inside_indicator:1,
-          condition:1,
-          buffer_value:1,
-          createdAt:1,
-          updatedAt:1,
-          updatedAt:1,
-         'userResult.UserName': 1, 
-    
+
+          user_id: 1,
+          tokensymbol: 1,
+          timeframe: 1,
+          indicator: 1,
+          price_source: 1,
+          period: 1,
+          inside_indicator: 1,
+          condition: 1,
+          buffer_value: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          updatedAt: 1,
+          'userResult.UserName': 1,
+
         }
       }
-      
+
     ];
 
     const result = await UserMakeStrategy.aggregate(pipeline1);
 
     if (result.length > 0) {
-     // console.log("result ",result)
+      // console.log("result ",result)
 
       result.forEach(element => {
         callStartegy(element)
       });
-     // return res.json({ status: true, msg: 'Get all', data: result });
+      // return res.json({ status: true, msg: 'Get all', data: result });
 
     } else {
 
       console.log("No data Available ")
 
-     // return res.json({ status: false, msg: 'An error occurred', data: [] });
+      // return res.json({ status: false, msg: 'An error occurred', data: [] });
     }
-    
+
 
   }
 
-  async function callStartegy(element){
-        let id=element._id;
-        let user_id=element.user_id;
-        let tokensymbol=element.tokensymbol;
-        let timeframe=element.timeframe;
-        let indicator=element.indicator;
-        let price_source=element.price_source;
-        let period=element.period;
-        let inside_indicator=element.inside_indicator;
-        let condition=element.condition;
-        let offset=element.offset;
-        let buffer_value=element.buffer_value;
-        let UserName=element.userResult.UserName;
-        
-        console.log("inside tokensymbol ",tokensymbol)
-        console.log("offset ",offset)
-       // console.log("inside UserName ",UserName)
-       // console.log("price_source ",price_source)
+  async function callStartegy(element) {
+    let id = element._id;
+    let user_id = element.user_id;
+    let tokensymbol = element.tokensymbol;
+    let timeframe = element.timeframe;
+    let indicator = element.indicator;
+    let price_source = element.price_source;
+    let period = element.period;
+    let inside_indicator = element.inside_indicator;
+    let condition = element.condition;
+    let offset = element.offset;
+    let buffer_value = element.buffer_value;
+    let UserName = element.userResult.UserName;
 
-        const db = client.db('TradeTools');
-        let collectionName = 'M' + timeframe + '_' + tokensymbol;
+    console.log("inside tokensymbol ", tokensymbol)
+    console.log("offset ", offset)
+    // console.log("inside UserName ",UserName)
+    // console.log("price_source ",price_source)
 
-        const collection = db.collection(collectionName);
-        
-      
-          let incule_field = "";
-          if (price_source == "open") {
-            incule_field = {
-              open: 1, // Include field1
-            }
-          } else if (price_source == "close") {
-            incule_field = {
-              close: 1, // Include field1
-            }
-          }
-          else if (price_source == "high") {
-            incule_field = {
-              high: 1, // Include field1
-            }
-          }
-          else if (price_source == "low") {
-            incule_field = {
-              low: 1, // Include field1
-            }
-          }
-      
-      
-          const projection = incule_field;
-          
-          const pipeline = [
-            { $project: projection },
-            { $sort: { _id: 1 } }
-          ];
-          let get_view_data = ""
-          if(parseInt(offset) > 0){
-            const get_view = await collection.aggregate(pipeline).toArray();
-            const lastIndex = get_view.length - parseInt(offset);
-            get_view_data = get_view.slice(0, lastIndex);
-            
-          }else{
-            get_view_data = await collection.aggregate(pipeline).toArray();
-            
-          } 
+    const db = client.db('TradeTools');
+    let collectionName = 'M' + timeframe + '_' + tokensymbol;
+
+    const collections = await db.listCollections({ name: collectionName }).toArray();
+
+    if (collections.length > 0) {
+
+      // console.log("exist collection",collectionName)
+
+      const collection = db.collection(collectionName);
 
 
-
-         
-          console.log("get_view_data - ",get_view_data)
-
-         const pipelineTimeFrameData = [
-          { $sort: { _id: 1 } }
-         ];
-
-          const timeFrameViewData = await collection.aggregate(pipelineTimeFrameData).toArray();
-
-          let get_final_data = ""
-          if (price_source == "open") {
-            get_final_data = get_view_data.map(item => item.open);
-          } else if (price_source == "close") {
-            get_final_data = get_view_data.map(item => item.close);
-          }
-          else if (price_source == "high") {
-            get_final_data = get_view_data.map(item => item.high);
-          }
-          else if (price_source == "low") {
-            get_final_data = get_view_data.map(item => item.low);
-          }
-      
-
-        
-
-     
-          //  console.log("timeFrameViewData",timeFrameViewData);
-
-         const lastElementTimeFrameViewData = timeFrameViewData[timeFrameViewData.length - 1];
-        
-        
-         console.log("Last lastElementTimeFrameViewData: 1 ", lastElementTimeFrameViewData);
-       
-
-      
-          let averageData = "";
-      
-          if (indicator == "MA") {
-            const MovingAverages = require('moving-averages');
-            const MADATA = MovingAverages.ma(get_final_data, period);
-            const MovingAveragesValue = MADATA[MADATA.length - 1];
-            lastElementTimeFrameViewData.MA = parseFloat(MovingAveragesValue);
+      let incule_field = "";
+      if (price_source == "open") {
+        incule_field = {
+          open: 1, // Include field1
+        }
+      } else if (price_source == "close") {
+        incule_field = {
+          close: 1, // Include field1
+        }
+      }
+      else if (price_source == "high") {
+        incule_field = {
+          high: 1, // Include field1
+        }
+      }
+      else if (price_source == "low") {
+        incule_field = {
+          low: 1, // Include field1
+        }
+      }
 
 
-            if (inside_indicator == "EMA") {
-              averageData = MovingAverages.ema(MADATA, period);
-              const EMAValue = averageData[averageData.length - 1];
-              lastElementTimeFrameViewData.EMA = parseFloat(EMAValue);
+      const projection = incule_field;
+
+      const pipeline = [
+        { $project: projection },
+        { $sort: { _id: 1 } }
+      ];
+      let get_view_data = ""
+      if (parseInt(offset) > 0) {
+        const get_view = await collection.aggregate(pipeline).toArray();
+        const lastIndex = get_view.length - parseInt(offset);
+        get_view_data = get_view.slice(0, lastIndex);
+
+      } else {
+        get_view_data = await collection.aggregate(pipeline).toArray();
+
+      }
 
 
-            } else if (inside_indicator == "DMA") {
-              averageData = MovingAverages.dma(MADATA, period);
-              const DMAValue = averageData[averageData.length - 1];
-              lastElementTimeFrameViewData.DMA = parseFloat(DMAValue);
-
-            }
-            else if (inside_indicator == "SMA") {
-              averageData = MovingAverages.sma(MADATA, period);
-              const SMAValue = averageData[averageData.length - 1];
-              lastElementTimeFrameViewData.SMA = parseFloat(SMAValue);
-
-            }
-            else if (inside_indicator == "WMA") {
-              averageData = MovingAverages.wma(MADATA, period);
-              const WMAValue = averageData[averageData.length - 1];
-              lastElementTimeFrameViewData.WMA = parseFloat(WMAValue);
-
-            }
-           
-          }
 
 
-          
+      console.log("get_view_data - ", get_view_data)
+
+      const pipelineTimeFrameData = [
+        { $sort: { _id: 1 } }
+      ];
+
+      const timeFrameViewData = await collection.aggregate(pipelineTimeFrameData).toArray();
+
+      let get_final_data = ""
+      if (price_source == "open") {
+        get_final_data = get_view_data.map(item => item.open);
+      } else if (price_source == "close") {
+        get_final_data = get_view_data.map(item => item.close);
+      }
+      else if (price_source == "high") {
+        get_final_data = get_view_data.map(item => item.high);
+      }
+      else if (price_source == "low") {
+        get_final_data = get_view_data.map(item => item.low);
+      }
 
 
-          console.log("Last lastElementTimeFrameViewData: 2 ", lastElementTimeFrameViewData);
-           
-            
-       
-        // console.log("averageData call strategy",averageData);
-         const lastElementAverageData = averageData[averageData.length - 1];
-        // console.log("Last lastElementAverageData:", lastElementAverageData);
 
-        
-        // Split the string based on "&&" or "||" using a regular expression
-        if(condition != undefined){
-        const conditionArray = condition.split(/\s*(?:&&|\|\|)\s*/);
-        console.log(conditionArray);
-         if(conditionArray.length > 0){
-           
-           
-          
-          }
-          
+
+
+      //  console.log("timeFrameViewData",timeFrameViewData);
+
+      const lastElementTimeFrameViewData = timeFrameViewData[timeFrameViewData.length - 1];
+
+
+      console.log("Last lastElementTimeFrameViewData: 1 ", lastElementTimeFrameViewData);
+
+
+
+      let averageData = "";
+
+      if (indicator == "MA") {
+        const MovingAverages = require('moving-averages');
+        const MADATA = MovingAverages.ma(get_final_data, period);
+        const MovingAveragesValue = MADATA[MADATA.length - 1];
+        lastElementTimeFrameViewData.MA = parseFloat(MovingAveragesValue);
+
+
+        if (inside_indicator == "EMA") {
+          averageData = MovingAverages.ema(MADATA, period);
+          const EMAValue = averageData[averageData.length - 1];
+          lastElementTimeFrameViewData.EMA = parseFloat(EMAValue);
+
+
+        } else if (inside_indicator == "DMA") {
+          averageData = MovingAverages.dma(MADATA, period);
+          const DMAValue = averageData[averageData.length - 1];
+          lastElementTimeFrameViewData.DMA = parseFloat(DMAValue);
+
+        }
+        else if (inside_indicator == "SMA") {
+          averageData = MovingAverages.sma(MADATA, period);
+          const SMAValue = averageData[averageData.length - 1];
+          lastElementTimeFrameViewData.SMA = parseFloat(SMAValue);
+
+        }
+        else if (inside_indicator == "WMA") {
+          averageData = MovingAverages.wma(MADATA, period);
+          const WMAValue = averageData[averageData.length - 1];
+          lastElementTimeFrameViewData.WMA = parseFloat(WMAValue);
+
         }
 
+      }
 
 
- // Sample data for the condition
-// const data = {
-//   close: 485, // Replace with actual values
-//   open: 480,
-//   high: 490,
-//   MA: 482, // Replace with actual moving average value
-//   EMA: 481, // Replace with actual exponential moving average value
-//   SMA: 495 // Replace with actual simple moving average value
-// };
 
-// Parse and evaluate the condition
-//const conditionString = "close > MA && open < EMA || high < SMA";
 
-// Split the condition into individual parts based on "&&" and "||"
-const conditions = condition.split(/\s*\|\|\s*/); // Split by "||" first
 
-// Initialize a result variable to store the final evaluation result
-let result = false;
+      console.log("Last lastElementTimeFrameViewData: 2 ", lastElementTimeFrameViewData);
 
-// Loop through each condition and evaluate it
-for (const condition of conditions) {
-  const andConditions = condition.split(/\s*&&\s*/); // Then split by "&&"
-  let andResult = true; // Initialize result for "&&" conditions as true
 
-  for (const andCondition of andConditions) {
-    const evaluated = evaluateSingleCondition(andCondition, lastElementTimeFrameViewData);
-    andResult = andResult && evaluated; // Combine "&&" conditions
-  }
 
-  result = result || andResult; // Combine "||" conditions
-}
+      // console.log("averageData call strategy",averageData);
+      const lastElementAverageData = averageData[averageData.length - 1];
+      // console.log("Last lastElementAverageData:", lastElementAverageData);
 
- console.log("Condition evaluation result:", result);
- if(result == true){
-   console.log("True condition - ",lastElementTimeFrameViewData);
-   console.log("elemet True Condition -  ",element)
 
-   
-  }
-  
-    
+      // Split the string based on "&&" or "||" using a regular expression
+      if (condition != undefined) {
+        const conditionArray = condition.split(/\s*(?:&&|\|\|)\s*/);
+        console.log(conditionArray);
+        if (conditionArray.length > 0) {
+
+
+
+        }
+
+      }
+
+
+
+      // Sample data for the condition
+      // const data = {
+      //   close: 485, // Replace with actual values
+      //   open: 480,
+      //   high: 490,
+      //   MA: 482, // Replace with actual moving average value
+      //   EMA: 481, // Replace with actual exponential moving average value
+      //   SMA: 495 // Replace with actual simple moving average value
+      // };
+
+      // Parse and evaluate the condition
+      //const conditionString = "close > MA && open < EMA || high < SMA";
+
+      // Split the condition into individual parts based on "&&" and "||"
+      const conditions = condition.split(/\s*\|\|\s*/); // Split by "||" first
+
+      // Initialize a result variable to store the final evaluation result
+      let result = false;
+
+      // Loop through each condition and evaluate it
+      for (const condition of conditions) {
+        const andConditions = condition.split(/\s*&&\s*/); // Then split by "&&"
+        let andResult = true; // Initialize result for "&&" conditions as true
+
+        for (const andCondition of andConditions) {
+          const evaluated = evaluateSingleCondition(andCondition, lastElementTimeFrameViewData);
+          andResult = andResult && evaluated; // Combine "&&" conditions
+        }
+
+        result = result || andResult; // Combine "||" conditions
+      }
+
+      console.log("Condition evaluation result:", result);
+      if (result == true) {
+        console.log("True condition - ", lastElementTimeFrameViewData);
+        console.log("elemet True Condition -  ", element)
+
+        sendSignanl(lastElementTimeFrameViewData, element)
+
+      }
+
+    } else {
+
+      // console.log(`Collection ${collectionName} does not exist.`);
+    }
+
+
+
+
+
+
+
   }
 
 
   function evaluateSingleCondition(condition, data) {
-    console.log("condition",condition);
- const [variable, operator, value] = condition.split(/\s*(>|<|>=|<=|=)\s*/);
-  console.log("value",data[value]);
- //const numericValue = parseFloat(value);
-  const numericValue = parseFloat(data[value]);
-  console.log("data[variable",data[variable]);
-  console.log("numericValue",numericValue);
- switch (operator) {
-   case ">":
-     return data[variable] > numericValue;
-   case "<":
-     return data[variable] < numericValue;
-   case ">=":
-     return data[variable] >= numericValue;
-   case "<=":
-     return data[variable] <= numericValue;
-   case "=":
-     return data[variable] === numericValue;
-   default:
-     return false;
- }
-}
-
-
-app.get("/StrategyBuySellView", async (req , res)=>{
-
-
-  // const pipeline1 = [
-  //   {
-  //     $group: {
-  //       _id: "$tokensymbol",
-  //       // AllDocument: { $push: "$$ROOT" },
-
-  //       type : {$push : "$type"}
-  //     },
-  //   },
-    
-  // ];
-  
-  const pipeline = [
-
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'user_id',
-        foreignField: '_id',
-        as: 'userResult'
-      }
-    },
-
-    {
-      $unwind: '$userResult', //
-    },
-    {
-      $match: {
-        //tokensymbol : token,
-        status:"0"
-      },
-    },
-    {
-      $project: {
-    
-        user_id:1,
-        tokensymbol:1,
-        timeframe:1,
-        indicator:1,
-        price_source:1,
-        period:1,
-        inside_indicator:1,
-        condition:1,
-        buffer_value:1,
-        type:1,
-        offset:1,
-        createdAt:1,
-        updatedAt:1,
-       'userResult.UserName': 1, 
-  
-      }
+    console.log("condition", condition);
+    const [variable, operator, value] = condition.split(/\s*(>|<|>=|<=|=)\s*/);
+    console.log("value", data[value]);
+    //const numericValue = parseFloat(value);
+    const numericValue = parseFloat(data[value]);
+    console.log("data[variable", data[variable]);
+    console.log("numericValue", numericValue);
+    switch (operator) {
+      case ">":
+        return data[variable] > numericValue;
+      case "<":
+        return data[variable] < numericValue;
+      case ">=":
+        return data[variable] >= numericValue;
+      case "<=":
+        return data[variable] <= numericValue;
+      case "=":
+        return data[variable] === numericValue;
+      default:
+        return false;
     }
-    
-  ];
-
-  const result = await UserMakeStrategy.aggregate(pipeline);
-  
- // console.log("result",result)
+  }
 
 
-  if(result.length > 0){
-    result.forEach(element => {
-      callStartegy(element) 
+
+  function sendSignanl(lastElementTimeFrameViewData, element) {
+    console.log("signal sendd element",element)
+    console.log("signal sendd")
+    const dt_date = new Date().getTime();
+
+    //   1679060373|IDEA#|LX|0|11|0|0|0|C|20050|CALL|28092023|sneh|10|SNE132023|demo
+
+    // 1 date
+    // 2 symbol
+    // 3 type
+    // 4 tr_price
+    // 5 price
+    // 6 sq_value
+    // 7 sl_value
+    // 8 tsl
+    // 9 segment
+    // 10 strike
+    // 11 option_type
+    // 12 expiry
+    // 13 strategy
+    // 14 qty_percent
+    // 15 client_key
+    // 16 demo
+
+    let request = '1679060373|IDEA#|LX|0|11|0|0|0|C|20050|CALL|28092023|sneh|10|SNE132023|demo'
+    console.log("request", request)
+    return
+
+    var axios = require("axios").default;
+
+    var options = {
+      method: 'POST',
+      url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+      headers: {
+        Accept: '*/*',
+        'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
+        'Content-Type': 'text/plain'
+      },
+      data: '1679060373|HEG#|LX|0|11|0|0|0|C|20050|CALL|28092023|sneh|10|SNE132023|demo'
+    };
+
+    axios.request(options).then(function (response) {
+      console.log(response.data);
+    }).catch(function (error) {
+      console.error(error);
     });
+
+
+
+
 
   }
 
-  res.send(result);
-});
+
+
+  app.get("/StrategyBuySellView", async (req, res) => {
+
+
+    // const pipeline1 = [
+    //   {
+    //     $group: {
+    //       _id: "$tokensymbol",
+    //       // AllDocument: { $push: "$$ROOT" },
+
+    //       type : {$push : "$type"}
+    //     },
+    //   },
+
+    // ];
+
+    const pipeline = [
+
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'user_id',
+          foreignField: '_id',
+          as: 'userResult'
+        }
+      },
+
+      {
+        $unwind: '$userResult', //
+      },
+      {
+        $match: {
+          //tokensymbol : token,
+          status: "0"
+        },
+      },
+      {
+        $project: {
+
+          user_id: 1,
+          tokensymbol: 1,
+          symbol_name: 1,
+          strategy_name: 1,
+          segment: 1,
+          strike_price: 1,
+          option_type: 1,
+          expiry: 1,
+          timeframe: 1,
+          indicator: 1,
+          price_source: 1,
+          period: 1,
+          inside_indicator: 1,
+          condition: 1,
+          buffer_value: 1,
+          type: 1,
+          offset: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          'userResult.UserName': 1,
+
+        }
+      }
+
+    ];
+
+    const result = await UserMakeStrategy.aggregate(pipeline);
+
+    // console.log("result",result)
+
+
+    if (result.length > 0) {
+      result.forEach(element => {
+        callStartegy(element)
+      });
+
+    }
+
+    res.send(result);
+  });
 
 
 
@@ -1267,9 +1346,9 @@ app.get("/StrategyBuySellView", async (req , res)=>{
 
   // Call the function to drop all collections in the database
 
-  async function TriggerCollection(token){
+  async function TriggerCollection(token) {
 
-     
+
     const db = client.db('TradeTools');
     const collection = db.collection(token);
 
@@ -1277,12 +1356,12 @@ app.get("/StrategyBuySellView", async (req , res)=>{
 
     changeStream.on('change', (change) => {
       // Handle the change event here
-      console.log('Change event : '+token+' : -', change);
+      console.log('Change event : ' + token + ' : -', change);
 
 
 
 
-      
+
       // Implement your custom logic here based on the change event
     });
 
@@ -1301,7 +1380,7 @@ app.get("/StrategyBuySellView", async (req , res)=>{
     // return
     //connectToDB(collection);
 
-    
+
 
     var BASEURL = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/";
     let AuthorizationToken;
@@ -1317,7 +1396,7 @@ app.get("/StrategyBuySellView", async (req , res)=>{
     connect(userId, userSession, channel)
 
     function connect(userId, userSession, token = "") {
-     console.log("1")
+      console.log("1")
       socket = new WebSocket(url);
       socket.onopen = function () {
         console.log("2")
@@ -1329,16 +1408,16 @@ app.get("/StrategyBuySellView", async (req , res)=>{
         console.log("okk socket open  1 ", response)
 
         if (response.tk) {
-        console.log("response",response.tk)
+          console.log("response", response.tk)
           connectToDB(response.tk, response);
 
-         // TriggerCollection(response.tk)
+          // TriggerCollection(response.tk)
 
           //getTokenStrategy(response.tk)
         }
 
 
- 
+
         if (response.s == "OK") {
 
           var channel = token;
@@ -1378,7 +1457,7 @@ app.get("/StrategyBuySellView", async (req , res)=>{
         uid: userId + "_" + type,
         source: type,
       };
-       console.log('initCon', JSON.stringify(initCon));
+      console.log('initCon', JSON.stringify(initCon));
       try {
         socket.send(JSON.stringify(initCon));
       } catch (error) {
@@ -1475,80 +1554,15 @@ app.get("/StrategyBuySellView", async (req , res)=>{
 
   app.post("/make_startegy", async function (req, res) {
 
-    // const pipeline1 = [
-
-    //   {
-    //     $lookup: {
-    //       from: 'users',
-    //       localField: 'user_id',
-    //       foreignField: '_id',
-    //       as: 'userResult'
-    //     }
-    //   },
-
-    //   {
-    //     $unwind: '$userResult', //
-    //   },
-    //   {
-    //     $project: {
-      
-    //       user_id:1,
-    //       tokensymbol:1,
-    //       timeframe:1,
-    //       indicator:1,
-    //       price_source:1,
-    //       period:1,
-    //       inside_indicator:1,
-    //       condition:1,
-    //       buffer_value:1,
-    //       type:1,
-    //       createdAt:1,
-    //       updatedAt:1,
-    //      'userResult.UserName': 1, 
-       
-    
-    //     }
-    //   }
-      
-    // ];
-
-   let rr = await UserMakeStrategy.aggregate([
-      {
-        $bucket: {
-          groupBy: "$buffer_value", // Field jo data ko group karne ke liye use hoga
-          boundaries: [0, 1], // Boundaries ya conditions jinme data distribute hoga
-          default: "Other", // Agar koi document specified boundaries ke bich nahi aata, to use 'Other' bucket mein store karega
-          output: {
-            count: { $sum: 1 }, // Har bucket ke liye document count
-            totalAmount: { $sum: "$buffer_value" }, 
-            name:{$push : '$buffer_value'}// Har bucket ke liye total amount
-          },
-        },
-      },
-    ]);
-
-    res.send(rr);
-    return
-
-
-    // const result = await UserMakeStrategy.aggregate(pipeline1);
-
-    // if (result.length > 0) {
-
-    //   return res.json({ status: true, msg: 'Get all', data: result });
-
-    // } else {
-
-    //   return res.json({ status: false, msg: 'An error occurred', data: [] });
-    // }
-
-
-  
-
-  
 
     let user_id = req.body.user_id;
     let tokensymbol = req.body.tokensymbol;
+    let symbol_name = req.body.symbol_name;
+    let strategy_name = req.body.strategy_name;
+    let segment = req.body.segment;
+    let strike_price = req.body.strike_price;
+    let option_type = req.body.option_type;
+    let expiry = req.body.expiry;
     let timeframe = req.body.timeframe;
     let indicator = req.body.indicator;
     let price_source = req.body.price_source;
@@ -1560,122 +1574,128 @@ app.get("/StrategyBuySellView", async (req , res)=>{
     let offset = req.body.offset;
 
 
-    
+
     // Add Strategy User..
-  try {
-    
-    await UserMakeStrategy.create({
-      user_id: user_id,
-      tokensymbol: tokensymbol,
-      timeframe: timeframe,
-      indicator: indicator,
-      price_source: price_source,
-      period: period,
-      inside_indicator: inside_indicator,
-      condition: condition,
-      buffer_value: buffer_value,
-      type: type,
-      offset: offset,
-    })
-      .then(async(createUserMakeStrategy) => {
-        res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
-       
-      const last_insert_id= createUserMakeStrategy._id;
-      const user_id= createUserMakeStrategy.user_id;
-      const tokensymbol= createUserMakeStrategy.tokensymbol;
-      const timeframe= createUserMakeStrategy.timeframe;
-      const indicator= createUserMakeStrategy.indicator;
-      const price_source= createUserMakeStrategy.price_source;
-      const period= createUserMakeStrategy.period;
-      const inside_indicator= createUserMakeStrategy.inside_indicator;
-      const condition= createUserMakeStrategy.condition;
-      const buffer_value= createUserMakeStrategy.buffer_value;
-      const type= createUserMakeStrategy.type;
-      const offset= createUserMakeStrategy.offset;
-       
+    try {
 
-      const fetch_view_collection = 'M'+timeframe+'_'+tokensymbol; 
+      await UserMakeStrategy.create({
+        user_id: user_id,
+        tokensymbol: tokensymbol,
+        symbol_name: symbol_name,
+        strategy_name: strategy_name,
+        segment: segment,
+        strike_price: strike_price,
+        option_type: option_type,
+        expiry: expiry,
+        timeframe: timeframe,
+        indicator: indicator,
+        price_source: price_source,
+        period: period,
+        inside_indicator: inside_indicator,
+        condition: condition,
+        buffer_value: buffer_value,
+        type: type,
+        offset: offset,
+      })
+        .then(async (createUserMakeStrategy) => {
+          res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
+          return
+          const last_insert_id = createUserMakeStrategy._id;
+          const user_id = createUserMakeStrategy.user_id;
+          const tokensymbol = createUserMakeStrategy.tokensymbol;
+          const timeframe = createUserMakeStrategy.timeframe;
+          const indicator = createUserMakeStrategy.indicator;
+          const price_source = createUserMakeStrategy.price_source;
+          const period = createUserMakeStrategy.period;
+          const inside_indicator = createUserMakeStrategy.inside_indicator;
+          const condition = createUserMakeStrategy.condition;
+          const buffer_value = createUserMakeStrategy.buffer_value;
+          const type = createUserMakeStrategy.type;
+          const offset = createUserMakeStrategy.offset;
 
-      const viewPipeline = [
-       
 
-      
-        {
-          $lookup: {
-            from: fetch_view_collection, // The name of the 'orders' collection
-            localField: 'M3_40089', // Field in the 'customers' collection
-            foreignField: 'M3_40089', // Field in the 'orders' collection
-            as: 'fetch_view_collection', // Alias for the joined data
-          },
-        },
+          const fetch_view_collection = 'M' + timeframe + '_' + tokensymbol;
 
-         {
-          $group: {
-            _id: user_id,
-           
-             // sma: {
-             //  $avg: '$user_id',
-            // },
-          },
-        },
+          const viewPipeline = [
 
 
 
+            {
+              $lookup: {
+                from: fetch_view_collection, // The name of the 'orders' collection
+                localField: 'M3_40089', // Field in the 'customers' collection
+                foreignField: 'M3_40089', // Field in the 'orders' collection
+                as: 'fetch_view_collection', // Alias for the joined data
+              },
+            },
 
-       
-      ];
-      
-       const db = client.db('test');
-      // Create or replace the view
-      await db.createCollection('buy_view', {
-        viewOn: 'usermakestrategies',
-        pipeline: viewPipeline,
-      });
-  
-      console.log('SMA view created or updated.');
+            {
+              $group: {
+                _id: user_id,
 
-
-    
-
-
-      }).catch((err) => {
-        //console.error('Error creating and saving user:', err.keyValue.name);
-        res.send({ status: false, msg: "Duplicate Value", data: err.keyValue.name })
-    
-      });
-    
-  } catch (error) {
-    
-  }
-
- 
- 
- 
-
-
-   
-  return
+                // sma: {
+                //  $avg: '$user_id',
+                // },
+              },
+            },
 
 
 
 
-  
 
-  
-  
+          ];
+
+          const db = client.db('test');
+          // Create or replace the view
+          await db.createCollection('buy_view', {
+            viewOn: 'usermakestrategies',
+            pipeline: viewPipeline,
+          });
+
+          console.log('SMA view created or updated.');
+
+
+
+
+
+        }).catch((err) => {
+          //console.error('Error creating and saving user:', err.keyValue.name);
+          res.send({ status: false, msg: "Duplicate Value", data: err.keyValue.name })
+
+        });
+
+    } catch (error) {
+
+    }
+
+
+
+
+
+
+
+    return
+
+
+
+
+
+
+
+
     let collectionName = 'M' + timeframe + '_' + tokensymbol;
 
-  //  const collection = db.collection(collectionName);
+    //  const collection = db.collection(collectionName);
 
 
-    
-
-   
 
 
-   
-   res.send("okkk");
-   return;
+
+
+
+
+    res.send("okkk");
+    return;
 
     let incule_field = "";
     if (price_source == "open") {
@@ -1739,13 +1759,13 @@ app.get("/StrategyBuySellView", async (req , res)=>{
       else if (inside_indicator == "WMA") {
         averageData = MovingAverages.wma(MADATA, period);
       }
-     
+
     }
 
-   
-     
-    
-  
+
+
+
+
 
 
     res.send(averageData);
@@ -1838,13 +1858,13 @@ app.get("/StrategyBuySellView", async (req , res)=>{
     const categoryResult = await categorie.aggregate(pipeline);
     //const matchingElements = categoryResult.filter(item => item.segment === "FO");
 
-   var axios = require('axios');
+    var axios = require('axios');
 
     // console.log('Matching elements:', matchingElements[0]._id);
     res.send("done");
     return
     var axios = require('axios');
-   var config = {
+    var config = {
       method: 'get',
       url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
     };
@@ -1852,582 +1872,582 @@ app.get("/StrategyBuySellView", async (req , res)=>{
     axios(config)
       .then(function (response) {
 
-            
-          var unique_key = []
-          let count = 0
-          response.data.forEach((item) => {
-
-        // res.send(response.data);
-        // console.log(response.data);
-
-
-
-        // Using a loop to extract 'name' and 'instrumenttype'
-
 
         var unique_key = []
         let count = 0
         response.data.forEach((item) => {
 
-          //   function findRepeatedElements(array) {
-          //     const frequencyMap = {};
-          //     const repeatedElements = [];
-
-          //     array.forEach(element => {
-          //       if (frequencyMap[element.instrumenttype]) {
-          //         frequencyMap[element.instrumenttype]++;
-          //         if (frequencyMap[element.instrumenttype] === 2) {
-          //           repeatedElements.push(element.instrumenttype);
-          //         }
-          //       } else {
-          //         frequencyMap[element.instrumenttype] = 1;
-          //       }
-          //     });
-
-          //     return repeatedElements;
-          //   }
-
-          //   const inputArray = response.data;
-          //   const repeatedElements = findRepeatedElements(inputArray);
-
-          //   console.log('Repeated elements:', repeatedElements);
-          //   res.send(repeatedElements)
-          // return
-
-
-          //  if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
+          // res.send(response.data);
+          // console.log(response.data);
 
 
 
-          if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
-            unique_key.push(`${item.name}-${item.instrumenttype}`);
+          // Using a loop to extract 'name' and 'instrumenttype'
 
 
-            if (item.symbol.slice(-3) == '-EQ') {
-              count++
+          var unique_key = []
+          let count = 0
+          response.data.forEach((item) => {
 
-              const matchingElements = categoryResult.filter(item => item.segment === "C");
-              const category_id = matchingElements[0]._id
+            //   function findRepeatedElements(array) {
+            //     const frequencyMap = {};
+            //     const repeatedElements = [];
 
-
-              services.create({
-                name: item.name + '#',
-                instrument_token: item.token,
-                zebu_token: item.symbol,
-                kotak_token: "",
-                instrumenttype: item.instrumenttype,
-                exch_seg: item.exch_seg,
-                lotsize: item.lotsize,
-                categorie_id: category_id,
-                unique_column: item.name + '#_' + category_id
-              })
-                .then((createdServices) => {
-                  console.log('User created and saved:', createdServices._id)
-                })
-                .catch((err) => {
-                  try {
-                    console.error('Error creating and saving user:', err);
-                  } catch (e) {
-                    console.log("duplicate key")
-                  }
-
-                });
-
-
-            }
-
-
-
-
-            if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
-              count++
-              console.log('item - F ' + count + ' ', item)
-              const matchingElements = categoryResult.filter(item => item.segment === "F");
-              const category_id = matchingElements[0]._id
-
-
-
-              services.create({
-                name: item.name,
-                instrument_token: item.token,
-                zebu_token: item.symbol,
-                kotak_token: "",
-                instrumenttype: item.instrumenttype,
-                exch_seg: item.exch_seg,
-                lotsize: item.lotsize,
-                categorie_id: category_id,
-                unique_column: item.name + '_' + category_id
-              })
-                .then((createdServices) => {
-                  console.log('User created and saved:', createdServices._id)
-                })
-                .catch((err) => {
-                  try {
-                    console.error('Error creating and saving user:', err);
-                  } catch (e) {
-                    console.log("duplicate key")
-                  }
-
-                });
-
-
-
-
-            }
-
-
-
-            if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
-              count++
-              console.log('item - O ' + count + ' ', item)
-              const matchingElements = categoryResult.filter(item => item.segment === "O");
-              const category_id = matchingElements[0]._id
-
-              services.create({
-                name: item.name,
-                instrument_token: item.token,
-                zebu_token: item.symbol,
-                kotak_token: "",
-                instrumenttype: item.instrumenttype,
-                exch_seg: item.exch_seg,
-                lotsize: item.lotsize,
-                categorie_id: category_id,
-                unique_column: item.name + '_' + category_id
-              })
-                .then((createdServices) => {
-                  console.log('User created and saved:', createdServices._id)
-                })
-                .catch((err) => {
-                  try {
-                    console.error('Error creating and saving user:', err);
-                  } catch (e) {
-                    console.log("duplicate key")
-                  }
-
-                });
-
-
-
-
-            }
-
-
-            if (item.instrumenttype == 'OPTFUT') {
-              count++
-              console.log('item - MO ' + count + ' ', item)
-              const matchingElements = categoryResult.filter(item => item.segment === "MO");
-              const category_id = matchingElements[0]._id
-
-              services.create({
-                name: item.name,
-                instrument_token: item.token,
-                zebu_token: item.symbol,
-                kotak_token: "",
-                instrumenttype: item.instrumenttype,
-                exch_seg: item.exch_seg,
-                lotsize: item.lotsize,
-                categorie_id: category_id,
-                unique_column: item.name + '_' + category_id
-              })
-                .then((createdServices) => {
-                  console.log('User created and saved:', createdServices._id)
-                })
-                .catch((err) => {
-                  try {
-                    console.error('Error creating and saving user:', err);
-                  } catch (e) {
-                    console.log("duplicate key")
-                  }
-
-                });
-
-
-
-
-            }
-
-
-            if (item.instrumenttype == 'FUTCOM') {
-              count++
-              console.log('item - MF ' + count + ' ', item)
-              const matchingElements = categoryResult.filter(item => item.segment === "MF");
-              const category_id = matchingElements[0]._id
-
-              services.create({
-                name: item.name,
-                instrument_token: item.token,
-                zebu_token: item.symbol,
-                kotak_token: "",
-                instrumenttype: item.instrumenttype,
-                exch_seg: item.exch_seg,
-                lotsize: item.lotsize,
-                categorie_id: category_id,
-                unique_column: item.name + '_' + category_id
-              })
-                .then((createdServices) => {
-                  console.log('User created and saved:', createdServices._id)
-                })
-                .catch((err) => {
-                  try {
-                    console.error('Error creating and saving user:', err);
-                  } catch (e) {
-                    console.log("duplicate key")
-                  }
-
-                });
-
-
-
-            }
-
-            if (item.instrumenttype == 'FUTCUR') {
-              count++
-              console.log('item - CF ' + count + ' ', item)
-              const matchingElements = categoryResult.filter(item => item.segment === "CF");
-              const category_id = matchingElements[0]._id
-
-
-              services.create({
-                name: item.name,
-                instrument_token: item.token,
-                zebu_token: item.symbol,
-                kotak_token: "",
-                instrumenttype: item.instrumenttype,
-                exch_seg: item.exch_seg,
-                lotsize: item.lotsize,
-                categorie_id: category_id,
-                unique_column: item.name + '_' + category_id
-              })
-                .then((createdServices) => {
-                  console.log('User created and saved:', createdServices._id)
-                })
-                .catch((err) => {
-                  try {
-                    console.error('Error creating and saving user:', err);
-                  } catch (e) {
-                    console.log("duplicate key")
-                  }
-
-                });
-
-
-            }
-
-            // if(item.instrumenttype == 'AMXIDX'|| item.instrumenttype == 'OPTIRC' || item.instrumenttype == 'UNDIRC' || item.instrumenttype == 'FUTIRC' || item.instrumenttype == 'UNDCUR' || item.instrumenttype == 'INDEX' || item.instrumenttype == 'COMDTY' || item.instrumenttype == 'AUCSO'){
-            //       count++
-            //       console.log('item - OTHER CONTENT '+count+' ',item)
-            //       // const matchingElements = categoryResult.filter(item => item.segment === "C");
-            //       // const category_id = matchingElements[0]._id
-            //       services.create({
-            //         name:item.name,
-            //         instrument_token:item.token,
-            //         zebu_token:item.symbol,
-            //         kotak_token:"",
-            //         instrumenttype:item.instrumenttype,
-            //         exch_seg:item.exch_seg,
-            //         lotsize:item.lotsize,
-            //         categorie_id : "",
-            //         unique_column : item.name +'_'+'c9dbdc14a9fefd971c979'
-            //       })
-            //       .then((createdServices) => {
-            //         console.log('User created and saved:', createdServices._id)
-            //       })
-            //       .catch((err) => {
-            //         try{
-            //         console.error('Error creating and saving user:', err);
-            //         }catch(e){
-            //          console.log("duplicate key")
+            //     array.forEach(element => {
+            //       if (frequencyMap[element.instrumenttype]) {
+            //         frequencyMap[element.instrumenttype]++;
+            //         if (frequencyMap[element.instrumenttype] === 2) {
+            //           repeatedElements.push(element.instrumenttype);
             //         }
-
-            //       });
-
-
+            //       } else {
+            //         frequencyMap[element.instrumenttype] = 1;
             //       }
+            //     });
 
+            //     return repeatedElements;
+            //   }
+
+            //   const inputArray = response.data;
+            //   const repeatedElements = findRepeatedElements(inputArray);
+
+            //   console.log('Repeated elements:', repeatedElements);
+            //   res.send(repeatedElements)
+            // return
+
+
+            //  if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
+
+
+
+            if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+              unique_key.push(`${item.name}-${item.instrumenttype}`);
+
+
+              if (item.symbol.slice(-3) == '-EQ') {
+                count++
+
+                const matchingElements = categoryResult.filter(item => item.segment === "C");
+                const category_id = matchingElements[0]._id
+
+
+                services.create({
+                  name: item.name + '#',
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + '#_' + category_id
+                })
+                  .then((createdServices) => {
+                    console.log('User created and saved:', createdServices._id)
+                  })
+                  .catch((err) => {
+                    try {
+                      console.error('Error creating and saving user:', err);
+                    } catch (e) {
+                      console.log("duplicate key")
+                    }
+
+                  });
+
+
+              }
+
+
+
+
+              if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
+                count++
+                console.log('item - F ' + count + ' ', item)
+                const matchingElements = categoryResult.filter(item => item.segment === "F");
+                const category_id = matchingElements[0]._id
+
+
+
+                services.create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + '_' + category_id
+                })
+                  .then((createdServices) => {
+                    console.log('User created and saved:', createdServices._id)
+                  })
+                  .catch((err) => {
+                    try {
+                      console.error('Error creating and saving user:', err);
+                    } catch (e) {
+                      console.log("duplicate key")
+                    }
+
+                  });
+
+
+
+
+              }
+
+
+
+              if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
+                count++
+                console.log('item - O ' + count + ' ', item)
+                const matchingElements = categoryResult.filter(item => item.segment === "O");
+                const category_id = matchingElements[0]._id
+
+                services.create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + '_' + category_id
+                })
+                  .then((createdServices) => {
+                    console.log('User created and saved:', createdServices._id)
+                  })
+                  .catch((err) => {
+                    try {
+                      console.error('Error creating and saving user:', err);
+                    } catch (e) {
+                      console.log("duplicate key")
+                    }
+
+                  });
+
+
+
+
+              }
+
+
+              if (item.instrumenttype == 'OPTFUT') {
+                count++
+                console.log('item - MO ' + count + ' ', item)
+                const matchingElements = categoryResult.filter(item => item.segment === "MO");
+                const category_id = matchingElements[0]._id
+
+                services.create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + '_' + category_id
+                })
+                  .then((createdServices) => {
+                    console.log('User created and saved:', createdServices._id)
+                  })
+                  .catch((err) => {
+                    try {
+                      console.error('Error creating and saving user:', err);
+                    } catch (e) {
+                      console.log("duplicate key")
+                    }
+
+                  });
+
+
+
+
+              }
+
+
+              if (item.instrumenttype == 'FUTCOM') {
+                count++
+                console.log('item - MF ' + count + ' ', item)
+                const matchingElements = categoryResult.filter(item => item.segment === "MF");
+                const category_id = matchingElements[0]._id
+
+                services.create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + '_' + category_id
+                })
+                  .then((createdServices) => {
+                    console.log('User created and saved:', createdServices._id)
+                  })
+                  .catch((err) => {
+                    try {
+                      console.error('Error creating and saving user:', err);
+                    } catch (e) {
+                      console.log("duplicate key")
+                    }
+
+                  });
+
+
+
+              }
+
+              if (item.instrumenttype == 'FUTCUR') {
+                count++
+                console.log('item - CF ' + count + ' ', item)
+                const matchingElements = categoryResult.filter(item => item.segment === "CF");
+                const category_id = matchingElements[0]._id
+
+
+                services.create({
+                  name: item.name,
+                  instrument_token: item.token,
+                  zebu_token: item.symbol,
+                  kotak_token: "",
+                  instrumenttype: item.instrumenttype,
+                  exch_seg: item.exch_seg,
+                  lotsize: item.lotsize,
+                  categorie_id: category_id,
+                  unique_column: item.name + '_' + category_id
+                })
+                  .then((createdServices) => {
+                    console.log('User created and saved:', createdServices._id)
+                  })
+                  .catch((err) => {
+                    try {
+                      console.error('Error creating and saving user:', err);
+                    } catch (e) {
+                      console.log("duplicate key")
+                    }
+
+                  });
+
+
+              }
+
+              // if(item.instrumenttype == 'AMXIDX'|| item.instrumenttype == 'OPTIRC' || item.instrumenttype == 'UNDIRC' || item.instrumenttype == 'FUTIRC' || item.instrumenttype == 'UNDCUR' || item.instrumenttype == 'INDEX' || item.instrumenttype == 'COMDTY' || item.instrumenttype == 'AUCSO'){
+              //       count++
+              //       console.log('item - OTHER CONTENT '+count+' ',item)
+              //       // const matchingElements = categoryResult.filter(item => item.segment === "C");
+              //       // const category_id = matchingElements[0]._id
+              //       services.create({
+              //         name:item.name,
+              //         instrument_token:item.token,
+              //         zebu_token:item.symbol,
+              //         kotak_token:"",
+              //         instrumenttype:item.instrumenttype,
+              //         exch_seg:item.exch_seg,
+              //         lotsize:item.lotsize,
+              //         categorie_id : "",
+              //         unique_column : item.name +'_'+'c9dbdc14a9fefd971c979'
+              //       })
+              //       .then((createdServices) => {
+              //         console.log('User created and saved:', createdServices._id)
+              //       })
+              //       .catch((err) => {
+              //         try{
+              //         console.error('Error creating and saving user:', err);
+              //         }catch(e){
+              //          console.log("duplicate key")
+              //         }
+
+              //       });
+
+
+              //       }
+
+            }
+            //   }
+
+          });
+
+
+          return
+
+          function findRepeatedElements(array) {
+            const frequencyMap = {};
+            const repeatedElements = [];
+
+            array.forEach(element => {
+              if (frequencyMap[element.instrumenttype]) {
+                frequencyMap[element.instrumenttype]++;
+                if (frequencyMap[element.instrumenttype] === 2) {
+                  repeatedElements.push(element.instrumenttype);
+                }
+              } else {
+                frequencyMap[element.instrumenttype] = 1;
+              }
+            });
+
+            return repeatedElements;
           }
-          //   }
+
+          const inputArray = response.data;
+          const repeatedElements = findRepeatedElements(inputArray);
+
+          console.log('Repeated elements:', repeatedElements);
+
+
 
         });
 
-
-        return
-
-        function findRepeatedElements(array) {
-          const frequencyMap = {};
-          const repeatedElements = [];
-
-          array.forEach(element => {
-            if (frequencyMap[element.instrumenttype]) {
-              frequencyMap[element.instrumenttype]++;
-              if (frequencyMap[element.instrumenttype] === 2) {
-                repeatedElements.push(element.instrumenttype);
-              }
-            } else {
-              frequencyMap[element.instrumenttype] = 1;
-            }
-          });
-
-          return repeatedElements;
-        }
-
-        const inputArray = response.data;
-        const repeatedElements = findRepeatedElements(inputArray);
-
-        console.log('Repeated elements:', repeatedElements);
-
-
-
       });
 
+
+    //////// super trend logicc////////
+
+    // const calculateATR = (data, period) => {
+    //   // Calculate Average True Range (ATR)
+    //   let atr = [];
+
+    //   for (let i = 1; i < data.length; i++) {
+    //     const high = data[i].high;
+    //     const low = data[i].low;
+    //     const prevClose = data[i - 1].close;
+
+    //     const tr = Math.max(high - low, Math.abs(high - prevClose), Math.abs(low - prevClose));
+    //     atr.push(tr);
+    //   }
+
+    //   // Calculate the average ATR
+    //   const atrSum = atr.slice(0, period).reduce((acc, val) => acc + val, 0);
+    //   return atrSum / period;
+    // };
+
+    // const calculateSuperTrend = (data, atrPeriod, multiplier) => {
+    //   let superTrend = [];
+
+    //   for (let i = atrPeriod; i < data.length; i++) {
+    //     const prevSuperTrend = superTrend[i - 1] || 0;
+    //     const atr = calculateATR(data.slice(i - atrPeriod, i), atrPeriod);
+
+    //     const upperBand = (data[i].high + data[i].low - multiplier * atr);
+    //     const lowerBand = (data[i].high + data[i].low - multiplier * atr);
+
+    //     const close = data[i].close;
+
+    //     if (close <= upperBand) {
+    //       superTrend.push(upperBand);
+    //     } else if (close >= lowerBand) {
+    //       superTrend.push(lowerBand);
+    //     } else {
+    //       superTrend.push(prevSuperTrend);
+    //     }
+    //   }
+
+    //   return superTrend;
+    // };
+
+    // // Sample data (replace with your own dataset)
+    // const historicalData = [
+    //   { high: 150, low: 140, close: 145 },
+    //   { high: 155, low: 145, close: 150 },
+    //   // Add more data points
+    // ];
+
+    // const atrPeriod = 14; // ATR period
+    // const multiplier = 3; // Multiplier value
+
+    // const superTrendValues = calculateSuperTrend(historicalData, atrPeriod, multiplier);
+
+    // // Calculate the average Super Trend
+    // const averageSuperTrend = superTrendValues.reduce((acc, val) => acc + val, 0) / superTrendValues.length;
+
+    // console.log('Super Trend Values:', superTrendValues);
+    // console.log('Average Super Trend:', averageSuperTrend);
+
+
+    ////////// END SUper Trend logic///
+
+
+  })
+
+
+
+  app.post("/api/test", async (req, res) => {
+    const async = require('async');
+    //  console.log(Date.getTime())
+    //  return
+    const pipeline = [
+
+      { $sort: { createdAt: 1 } },
+      { $limit: 1000 }
+
+    ];
+
+    const result = await Alice_token.aggregate(pipeline);
+    // console.log("result",result)
+
+
+
+
+    const usersData = [
+      { id: 1, name: "Object 1" },
+      { id: 2, name: "Object 2" },
+      // Add more objects here...
+    ];
+
+    // Sample data (100,000 objects)
+    const objects = [];
+    for (let i = 1; i <= result.length; i++) {
+      objects.push({ _id: i, symbol: `Object ${i}` });
+    }
+
+    // Function to perform a task on an object (Simulated asynchronous task)
+    function performTaskForObject(obj, callback) {
+      setTimeout(() => {
+        console.log(`Task perform Time ${performance.now()} : ${obj.symbol}`);
+        callback(null, obj);
+      }, 0); // Simulating a very short delay
+    }
+
+    // Use the async library to process all objects in parallel
+    async.eachLimit(objects, 1, performTaskForObject, (err) => {
+      if (err) {
+        console.error("Error:", err);
+      } else {
+        console.log("All tasks completed");
+      }
+    });
+    res.send("okk");
+
+
+
+
+    return
+
+    // const cluster = require('cluster');
+    // const http = require('http');
+    // const numCPUs = require('os').cpus().length;
+
+    // // Sample data
+    // const objects = [
+    //   { id: 1, name: "Object 1" },
+    //   { id: 2, name: "Object 2" },
+    //   // Add more objects here...
+    // ];
+
+    // if (cluster.isMaster) {
+    //   // Fork workers for each CPU core
+    //   for (let i = 0; i < numCPUs; i++) {
+    //     cluster.fork();
+    //   }
+
+    //   cluster.on('exit', (worker, code, signal) => {
+    //     console.log(`Worker ${worker.process.pid} died`);
+    //   });
+
+    //   // Aggregate results from workers
+    //   const aggregatedResults = [];
+
+    //   cluster.on('message', (worker, message) => {
+    //     aggregatedResults.push(...message);
+
+    //     if (aggregatedResults.length === objects.length) {
+    //       console.log("All tasks completed:", aggregatedResults);
+    //       // Here you can process the aggregated results as needed
+    //       // For example, send them as a response to a client
+    //     }
+    //   });
+    // } else {
+    //   // This is the worker process
+    //   const workerId = cluster.worker.id;
+    //   const workerResults = [];
+
+    //   // Distribute objects among worker processes
+    //   for (let i = workerId - 1; i < objects.length; i += numCPUs) {
+    //     const obj = objects[i];
+    //     // Simulate an asynchronous task
+    //     const result = await performTaskForObject(obj);
+    //     workerResults.push(result);
+    //   }
+
+    //   // Send the worker's results back to the master process
+    //   process.send(workerResults);
+
+    //   process.exit(0);
+    // }
+
+    // // Sample function to perform a task on an object
+    // async function performTaskForObject(obj) {
+    //   // Simulate an asynchronous task
+    //   return new Promise((resolve) => {
+    //     setTimeout(() => {
+    //       console.log(`Task performed on object: ${obj.id}`);
+    //       resolve(obj);
+    //     }, 1000); // Simulating a delay of 1 second
+    //   });
+    // }
+
+
+
+
+
+
+
+
+    res.send("okkk");
+
+
   });
 
 
-  //////// super trend logicc////////
 
-  // const calculateATR = (data, period) => {
-  //   // Calculate Average True Range (ATR)
-  //   let atr = [];
-
-  //   for (let i = 1; i < data.length; i++) {
-  //     const high = data[i].high;
-  //     const low = data[i].low;
-  //     const prevClose = data[i - 1].close;
-
-  //     const tr = Math.max(high - low, Math.abs(high - prevClose), Math.abs(low - prevClose));
-  //     atr.push(tr);
-  //   }
-
-  //   // Calculate the average ATR
-  //   const atrSum = atr.slice(0, period).reduce((acc, val) => acc + val, 0);
-  //   return atrSum / period;
-  // };
-
-  // const calculateSuperTrend = (data, atrPeriod, multiplier) => {
-  //   let superTrend = [];
-
-  //   for (let i = atrPeriod; i < data.length; i++) {
-  //     const prevSuperTrend = superTrend[i - 1] || 0;
-  //     const atr = calculateATR(data.slice(i - atrPeriod, i), atrPeriod);
-
-  //     const upperBand = (data[i].high + data[i].low - multiplier * atr);
-  //     const lowerBand = (data[i].high + data[i].low - multiplier * atr);
-
-  //     const close = data[i].close;
-
-  //     if (close <= upperBand) {
-  //       superTrend.push(upperBand);
-  //     } else if (close >= lowerBand) {
-  //       superTrend.push(lowerBand);
-  //     } else {
-  //       superTrend.push(prevSuperTrend);
-  //     }
-  //   }
-
-  //   return superTrend;
-  // };
-
-  // // Sample data (replace with your own dataset)
-  // const historicalData = [
-  //   { high: 150, low: 140, close: 145 },
-  //   { high: 155, low: 145, close: 150 },
-  //   // Add more data points
-  // ];
-
-  // const atrPeriod = 14; // ATR period
-  // const multiplier = 3; // Multiplier value
-
-  // const superTrendValues = calculateSuperTrend(historicalData, atrPeriod, multiplier);
-
-  // // Calculate the average Super Trend
-  // const averageSuperTrend = superTrendValues.reduce((acc, val) => acc + val, 0) / superTrendValues.length;
-
-  // console.log('Super Trend Values:', superTrendValues);
-  // console.log('Average Super Trend:', averageSuperTrend);
+  // app.use((req, res, next) => {
+  //   const clientIP = req.ip; // This gets the client's IP address
+  //   // Do something with the IP address, e.g., pass it to your API response
+  //   res.json({ clientIP });
+  // });
 
 
-  ////////// END SUper Trend logic///
+  app.use((req, res, next) => {
+    const useragent = require('useragent');
+    const userAgentString = req.headers['user-agent'];
+    const agent = useragent.parse(userAgentString);
+    console.log('Parsed User Agent:', agent);
+    // Continue with your middleware logic or pass it to the next middleware
+    next();
 
+    // const userAgent = req.headers['user-agent'];
+    // console.log('User Agent:', userAgent);
+    // // You can parse the user agent string to get more detailed information if needed
 
-})
-
-
-
-app.post("/api/test", async (req, res) => {
-  const async = require('async');
-//  console.log(Date.getTime())
-//  return
-  const pipeline = [
-
-    { $sort : { createdAt : 1 } },
-    { $limit : 1000 }
-    
-  ];
-
-  const result = await Alice_token.aggregate(pipeline);
- // console.log("result",result)
- 
-
- 
-  
- const usersData = [
-  { id: 1, name: "Object 1" },
-  { id: 2, name: "Object 2" },
-  // Add more objects here...
-];
-
-  // Sample data (100,000 objects)
-  const objects = [];
-  for (let i = 1; i <= result.length; i++) {
-    objects.push({ _id: i, symbol: `Object ${i}` });
-  }
-  
-  // Function to perform a task on an object (Simulated asynchronous task)
-  function performTaskForObject(obj, callback) {
-    setTimeout(() => {
-      console.log(`Task perform Time ${performance.now()} : ${obj.symbol}`);
-      callback(null, obj);
-    }, 0); // Simulating a very short delay
-  }
-  
-  // Use the async library to process all objects in parallel
-  async.eachLimit(objects, 1, performTaskForObject, (err) => {
-    if (err) {
-      console.error("Error:", err);
-    } else {
-      console.log("All tasks completed");
-    }
+    // // Continue with your middleware logic or pass it to the next middleware
+    // next();
   });
-  res.send("okk");  
+
+
+  app.get("/getip", (req, res) => {
+    const os = require('os');
+
+    // Get network interfaces
+    const networkInterfaces = os.networkInterfaces();
+
+    // Iterate through network interfaces and display IP addresses
+    Object.keys(networkInterfaces).forEach((interfaceName) => {
+      const interfaces = networkInterfaces[interfaceName];
+      interfaces.forEach((iface) => {
+        if (iface.family === 'IPv4') {
+          console.log(`IPv4 Address (${interfaceName}): ${iface.address}`);
+        }
+        if (iface.family === 'IPv6') {
+          console.log(`IPv6 Address (${interfaceName}): ${iface.address}`);
+        }
+      });
+    });
 
 
 
-
-  return
-
-// const cluster = require('cluster');
-// const http = require('http');
-// const numCPUs = require('os').cpus().length;
-
-// // Sample data
-// const objects = [
-//   { id: 1, name: "Object 1" },
-//   { id: 2, name: "Object 2" },
-//   // Add more objects here...
-// ];
-
-// if (cluster.isMaster) {
-//   // Fork workers for each CPU core
-//   for (let i = 0; i < numCPUs; i++) {
-//     cluster.fork();
-//   }
-
-//   cluster.on('exit', (worker, code, signal) => {
-//     console.log(`Worker ${worker.process.pid} died`);
-//   });
-
-//   // Aggregate results from workers
-//   const aggregatedResults = [];
-
-//   cluster.on('message', (worker, message) => {
-//     aggregatedResults.push(...message);
-
-//     if (aggregatedResults.length === objects.length) {
-//       console.log("All tasks completed:", aggregatedResults);
-//       // Here you can process the aggregated results as needed
-//       // For example, send them as a response to a client
-//     }
-//   });
-// } else {
-//   // This is the worker process
-//   const workerId = cluster.worker.id;
-//   const workerResults = [];
-
-//   // Distribute objects among worker processes
-//   for (let i = workerId - 1; i < objects.length; i += numCPUs) {
-//     const obj = objects[i];
-//     // Simulate an asynchronous task
-//     const result = await performTaskForObject(obj);
-//     workerResults.push(result);
-//   }
-
-//   // Send the worker's results back to the master process
-//   process.send(workerResults);
-
-//   process.exit(0);
-// }
-
-// // Sample function to perform a task on an object
-// async function performTaskForObject(obj) {
-//   // Simulate an asynchronous task
-//   return new Promise((resolve) => {
-//     setTimeout(() => {
-//       console.log(`Task performed on object: ${obj.id}`);
-//       resolve(obj);
-//     }, 1000); // Simulating a delay of 1 second
-//   });
-// }
-
-  
-
-
-
-
-
-
-res.send("okkk");
-
-
-});
-
-
-
-// app.use((req, res, next) => {
-//   const clientIP = req.ip; // This gets the client's IP address
-//   // Do something with the IP address, e.g., pass it to your API response
-//   res.json({ clientIP });
-// });
-
-
-app.use((req, res, next) => {
-  const useragent = require('useragent');
-  const userAgentString = req.headers['user-agent'];
-  const agent = useragent.parse(userAgentString);
-  console.log('Parsed User Agent:', agent);
-  // Continue with your middleware logic or pass it to the next middleware
-  next();
-
-  // const userAgent = req.headers['user-agent'];
-  // console.log('User Agent:', userAgent);
-  // // You can parse the user agent string to get more detailed information if needed
-
-  // // Continue with your middleware logic or pass it to the next middleware
-  // next();
-});
-
-
-app.get("/getip",(req,res)=>{
-  const os = require('os');
-
-  // Get network interfaces
-const networkInterfaces = os.networkInterfaces();
-
-// Iterate through network interfaces and display IP addresses
-Object.keys(networkInterfaces).forEach((interfaceName) => {
-  const interfaces = networkInterfaces[interfaceName];
-  interfaces.forEach((iface) => {
-    if (iface.family === 'IPv4') {
-      console.log(`IPv4 Address (${interfaceName}): ${iface.address}`);
-    }
-    if (iface.family === 'IPv6') {
-      console.log(`IPv6 Address (${interfaceName}): ${iface.address}`);
-    }
-  });
-});
-
-
-
-  res.send("okk")
-})
+    res.send("okk")
+  })
 
 
 

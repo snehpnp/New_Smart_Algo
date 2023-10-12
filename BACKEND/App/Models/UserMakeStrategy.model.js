@@ -9,6 +9,28 @@ const userMakeStrategySchema = new mongoose.Schema({
         type: String,
         required: true,  
      },
+     symbol_name: {
+        type: String,
+        required: true,  
+     },
+     strategy_name: {
+        type: String,
+        required: true,  
+     },
+     segment: {
+        type: String,
+        required: true,  
+     },
+     strike_price: {
+        type: String,  
+     },
+     option_type: {
+        type: String, 
+     },
+     expiry: {
+        type: String, 
+     },
+     
      indicator: {
         type: String,
         required: true,      
