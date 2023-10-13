@@ -267,7 +267,8 @@ class AliceBlue {
 
 
 
-    // CANCEL ORDER API
+
+    // CANCEL ORDER API  
     async Cancel_order(req, res) {
 
         try {
@@ -287,129 +288,43 @@ class AliceBlue {
             var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId, order_id: OrderId })
 
 
-            if (FindUserBrokerResponse[0].order_view_status == "0" || "1") {
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api//placeOrder/cancelOrder',
+                headers: {
+                    'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
+                    'Content-Type': 'application/json',
+                },
+                data: {
+                    "exch": "NSE",
+                    "nestOrderNumber": OrderId,
+                    "trading_symbol": FindUserBrokerResponse[0].trading_symbol
+                }
+            };
 
-                let data = JSON.stringify({
-                    "nestOrderNumber": OrderId
-                });
+            axios(config)
+                .then(async (response) => {
+                    console.log("==>", response.data.stat);
+                    if (response.data) {
+                        if (response.data.stat == "Ok") {
 
-                let config = {
-                    method: 'post',
-                    maxBodyLength: Infinity,
-                    url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
-                    headers: {
-                        'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
-                        'Content-Type': 'application/json',
-                    },
-                    data: data
-                };
-                console.log("config", config);
-                axios(config)
-                    .then(async (response) => {
-                        console.log(response.data[0]);
-                        if (response.data[0]) {
-
-                            if (response.data[0].Status != "open") {
-                                const message = (JSON.stringify(response.data[0]));
-                                let result = await BrokerResponse.findByIdAndUpdate(
-                                    { _id: FindUserBrokerResponse[0]._id },
-                                    {
-                                        order_view_date: message,
-                                        order_view_status: '1',
-                                        order_view_response: response.data[0].Status
-                                    },
-                                    { new: true }
-                                )
-
-
-                            } else {
-                                console.log("ENTER ORDER CANCEL REQUEST");
-
-                                let config = {
-                                    method: 'post',
-                                    maxBodyLength: Infinity,
-                                    url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api//placeOrder/cancelOrder',
-                                    headers: {
-                                        'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
-                                        'Content-Type': 'application/json',
-                                    },
-                                    data: {
-                                        "exch": "NSE",
-                                        "nestOrderNumber": response.data[0].nestreqid,
-                                        "trading_symbol": response.data[0].scripname
-                                    }
-                                };
-                                console.log("config", config);
-
-                                axios(config)
-                                    .then(async (response) => {
-                                        console.log("==>", response.data);
-
-                                    })
-                                    .catch(async (error) => {
-                                        console.log("error", error);
-                                    })
-
-
-
-
-
-
-
-
-
-                            }
-
-
-
-
-
+                            GetAllBrokerResponse(user_id)
+                            return res.send({ status: true, msg: "Order Cancel Successfully", data: response.data });
 
                         } else {
-                            console.log("NO DATA FOUND");
+                            return res.send({ status: false, msg: "Order Cancel Error", data: [] });
                         }
-                    })
-                    .catch(async (error) => {
-                        try {
+                    } else {
+                        return res.send({ status: false, msg: "Order Cancel Error", data: error });
+                    }
 
-                            if (error.response.data) {
-                                const message = (JSON.stringify(error.response.data));
+                })
+                .catch(async (error) => {
+                    console.log("error", error);
+                    return res.send({ status: false, msg: "Order Cancel Error", data: error });
+                })
 
-                                let result = await BrokerResponse.findByIdAndUpdate(
-                                    { _id: FindUserBrokerResponse[0]._id },
-                                    {
-                                        order_view_date: message,
-                                        order_view_status: '1',
-                                        order_view_response: "Error"
-                                    },
-                                    { new: true }
-                                )
-                                return res.send({ status: false, msg: 'Error', data: message });
-
-                            } else {
-                                const message = (JSON.stringify(error));
-
-                                let result = await BrokerResponse.findByIdAndUpdate(
-                                    { _id: FindUserBrokerResponse[0]._id },
-                                    {
-                                        order_view_date: message,
-                                        order_view_status: '1',
-                                        order_view_response: "Error"
-                                    },
-                                    { new: true }
-                                )
-                                return res.send({ status: false, msg: 'Error', data: message });
-
-                            }
-                        } catch (error) {
-
-                        }
-
-                    });
-            } else {
-                return res.send({ status: false, msg: 'Already Update', data: FindUserBrokerResponse });
-
-            }
 
 
         } catch (error) {
@@ -422,8 +337,96 @@ class AliceBlue {
     }
 
 
+
+
+    // UPDATE ALL CLIENT BROKER RESPONSE
+    async GetOrderFullInformationAll(req, res) {
+
+        try {
+            const { user_id } = req.body
+
+            if (!user_id) {
+                return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+            }
+
+            GetAllBrokerResponse(user_id)
+
+
+        } catch (error) {
+            console.log("Some Error In Order information get -", error);
+            return res.send({ status: false, msg: 'error in Server side', data: error });
+
+        }
+
+
+    }
+
+
+
+
+
 }
 
+const GetAllBrokerResponse = async (user_id) => {
+    const objectId = new ObjectId(user_id);
+    var FindUserAccessToken = await User.find({ _id: objectId })
+    var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId })
 
+    if (FindUserBrokerResponse.length > 0) {
+
+        FindUserBrokerResponse.forEach((data1) => {
+
+            let data = JSON.stringify({
+                "nestOrderNumber": data1.order_id
+            });
+
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
+                headers: {
+                    'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
+                    'Content-Type': 'application/json',
+                },
+                data: data
+            };
+            axios(config)
+                .then(async (response) => {
+                    console.log(response.data[0]);
+                    if (response.data[0]) {
+
+                        const message = (JSON.stringify(response.data[0]));
+
+                        let result = await BrokerResponse.findByIdAndUpdate(
+                            { _id: data1._id },
+                            {
+                                order_view_date: message,
+                                order_view_status: '1',
+                                order_view_response: response.data[0].Status,
+                                reject_reason: response.data[0].rejectionreason
+
+                            },
+                            { new: true }
+                        )
+
+
+                    } else {
+                        console.log("NO DATA FOUND");
+                    }
+                })
+                .catch(async (error) => {
+
+                });
+
+
+
+        })
+
+
+    } else {
+    }
+}
 module.exports = new AliceBlue();
+
+
 

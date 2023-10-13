@@ -71,6 +71,12 @@ const BrokerResponse = () => {
 
     },
     {
+      dataField: 'order_view_response',
+      text: 'order Info',
+      formatter: (cell, row, rowIndex) => <div>{cell}</div>
+
+    },
+    {
       dataField: 'Details View',
       text: 'View',
       formatter: (cell, row, rowIndex) =>
@@ -231,6 +237,10 @@ const BrokerResponse = () => {
                   <tr>
                     <td className="bg-table"> Order Status</td>
                     <td>{BrokerResponseId.order_status}</td>
+                  </tr>
+                  <tr>
+                    <td className="bg-table"> Reject Reson</td>
+                    <td>{BrokerResponseId.reject_reason}</td>
                   </tr>
                   <tr>
                     <td className="bg-table"> Order Date</td>
