@@ -71,7 +71,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                     <label
                       className={`col-lg-${title === "forlogin" ? 3 : title === "update_theme" ? 12 : 7}  col-form-label`}
                       htmlFor={field.name}
-                      style={{ fontSize : '12px !important'}}
                     >
                       {field.label}
                       <span className="text-danger">*</span>
@@ -142,29 +141,32 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                 </> :
 
                   field.type === "radio" ? <>
-                    {field.index === '1' ? <>
-                      {/* <label
-                      className="col-lg-3 col-form-label mb-3"
-                      htmlFor={field.name}
-                    >
-                      Fullname
-                      <span className="text-danger">*</span>
-                    </label> */}
-                    </>
-                      : ""}
 
-                    <div className="col-lg-3">
-                      <div className="row d-flex">
-                        <div className="col-lg-12 ">
-                          <div class="form-check custom-checkbox mb-3">
-                            <input type={field.type} name={field.name} className="form-check-input" id={field.name}
-                              {...formik.getFieldProps(field.name)}
-                            />
-                            <label className="form-check-label" for={field.name}>{field.name}</label>
-                          </div>
-                        </div>
+                    <label
+                      className={`col-lg-${field.label_size} col-form-label fw-bold text-decoration-underline`}
+                      htmlFor={field.parent_label}
+                    
+                    >
+                      {field.parent_label}
+                    </label>
+
+                    <div className={`d-flex`}>
+                      <div className={`col-lg-${field.col_size} form-check custom-checkbox my-3`} >
+                        <input type={field.type} name={field.title1} className="form-check-input" id={field.title1}
+                          {...formik.getFieldProps(field.name)}
+                        />
+                        <label className={`col-lg-${field.label_size} col-form-label mx-2`} for={field.title1}>{field.title1}</label>
                       </div>
+                      <div className={`col-lg-${field.col_size} form-check custom-checkbox my-3`}>
+                        <input type={field.type} name={field.title2} className="form-check-input" id={field.name}
+                          {...formik.getFieldProps(field.name)}
+                        />
+                        <label className={`col-lg-${field.label_size} col-form-label  mx-2`} for={field.name}>{field.title2}</label>
+                      </div>
+
                     </div>
+
+
 
                   </> :
                     field.type === "password" ? <>
