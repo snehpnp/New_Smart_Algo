@@ -9,6 +9,8 @@ const User = db.user;
 const user_logs = db.user_logs;
 const BrokerResponse = db.BrokerResponse;
 const Broker_information = db.Broker_information;
+const live_price = db.live_price;
+
 
 
 
@@ -62,30 +64,53 @@ class AliceBlue {
                 axios(config)
                     .then(async function (response) {
                         if (response.data.userSession) {
-                            let result = await User.findByIdAndUpdate(
-                                Get_User[0]._id,
-                                {
-                                    access_token: response.data.userSession,
-                                    TradingStatus: "on"
-                                })
+                            if (Get_User[0].Role == "ADMIN") {
 
-                            if (result != "") {
-                                const user_login = new user_logs({
-                                    user_Id: Get_User[0]._id,
-                                    login_status: "Trading On",
-                                    role: Get_User[0].Role,
-                                    device: "WEB",
-                                    system_ip: getIPAddress()
-                                })
-                                await user_login.save();
-                                console.log("user_login", user_login);
-                                if (user_login) {
-                                    console.log("redirect_uri", redirect_uri);
+                                const filter = { broker_name: "ALICE_BLUE" };
+                                const updateOperation = {
+                                    $set: {
+                                        user_id: userId,
+                                        access_token: response.data.userSession,
+                                        trading_status: "on",
+                                        Role: "ADMIN"
 
-                                    return res.redirect(redirect_uri);
+                                    }
+                                };
+                                const result = await live_price.updateOne(filter, updateOperation);
+                                console.log("redirect_uri", redirect_uri);
 
+                                return res.redirect(redirect_uri);
+
+
+                            } else {
+                                let result = await User.findByIdAndUpdate(
+                                    Get_User[0]._id,
+                                    {
+                                        access_token: response.data.userSession,
+                                        TradingStatus: "on"
+                                    })
+
+                                if (result != "") {
+
+                                    const user_login = new user_logs({
+                                        user_Id: Get_User[0]._id,
+                                        login_status: "Trading On",
+                                        role: Get_User[0].Role,
+                                        device: "WEB",
+                                        system_ip: getIPAddress()
+                                    })
+                                    await user_login.save();
+                                    console.log("user_login", user_login);
+                                    if (user_login) {
+                                        console.log("redirect_uri", redirect_uri);
+
+                                        return res.redirect(redirect_uri);
+
+                                    }
                                 }
+
                             }
+
 
 
 
@@ -112,9 +137,9 @@ class AliceBlue {
         }
     }
 
-
     // GET ORDER ID TO ORDER FULL DATA
     async GetOrderFullInformation(req, res) {
+
         try {
             // var OrderId = "23091800155929"
             const { OrderId, user_id } = req.body
@@ -219,6 +244,181 @@ class AliceBlue {
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }
+
+
+    }
+
+    // GET LIVE PRICE TOKEN
+    async GetLivePrice(req, res) {
+        try {
+            const Get_live_price = await live_price.find({ broker_name: "ALICE_BLUE" })
+            if (Get_live_price) {
+                return res.send({ status: true, data: Get_live_price, msg: "Get Data" })
+            }
+
+            return res.send({ status: false, data: [], msg: "Empty" })
+
+        } catch (error) {
+            console.log("Error In Get Token Live Price", error);
+            return res.send({ status: false, data: error, msg: "Error In get live price data" })
+
+        }
+    }
+
+
+
+    // CANCEL ORDER API
+    async Cancel_order(req, res) {
+
+        try {
+            // var OrderId = "23091800155929"
+            const { OrderId, user_id } = req.body
+
+
+            if (!OrderId || !user_id) {
+                console.log("Please Fill All Feild");
+                return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+
+            }
+
+            const objectId = new ObjectId(user_id);
+
+            var FindUserAccessToken = await User.find({ _id: objectId })
+            var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId, order_id: OrderId })
+
+
+            if (FindUserBrokerResponse[0].order_view_status == "0" || "1") {
+
+                let data = JSON.stringify({
+                    "nestOrderNumber": OrderId
+                });
+
+                let config = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
+                    headers: {
+                        'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
+                        'Content-Type': 'application/json',
+                    },
+                    data: data
+                };
+                console.log("config", config);
+                axios(config)
+                    .then(async (response) => {
+                        console.log(response.data[0]);
+                        if (response.data[0]) {
+
+                            if (response.data[0].Status != "open") {
+                                const message = (JSON.stringify(response.data[0]));
+                                let result = await BrokerResponse.findByIdAndUpdate(
+                                    { _id: FindUserBrokerResponse[0]._id },
+                                    {
+                                        order_view_date: message,
+                                        order_view_status: '1',
+                                        order_view_response: response.data[0].Status
+                                    },
+                                    { new: true }
+                                )
+
+
+                            } else {
+                                console.log("ENTER ORDER CANCEL REQUEST");
+
+                                let config = {
+                                    method: 'post',
+                                    maxBodyLength: Infinity,
+                                    url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api//placeOrder/cancelOrder',
+                                    headers: {
+                                        'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
+                                        'Content-Type': 'application/json',
+                                    },
+                                    data: {
+                                        "exch": "NSE",
+                                        "nestOrderNumber": response.data[0].nestreqid,
+                                        "trading_symbol": response.data[0].scripname
+                                    }
+                                };
+                                console.log("config", config);
+
+                                axios(config)
+                                    .then(async (response) => {
+                                        console.log("==>", response.data);
+
+                                    })
+                                    .catch(async (error) => {
+                                        console.log("error", error);
+                                    })
+
+
+
+
+
+
+
+
+
+                            }
+
+
+
+
+
+
+                        } else {
+                            console.log("NO DATA FOUND");
+                        }
+                    })
+                    .catch(async (error) => {
+                        try {
+
+                            if (error.response.data) {
+                                const message = (JSON.stringify(error.response.data));
+
+                                let result = await BrokerResponse.findByIdAndUpdate(
+                                    { _id: FindUserBrokerResponse[0]._id },
+                                    {
+                                        order_view_date: message,
+                                        order_view_status: '1',
+                                        order_view_response: "Error"
+                                    },
+                                    { new: true }
+                                )
+                                return res.send({ status: false, msg: 'Error', data: message });
+
+                            } else {
+                                const message = (JSON.stringify(error));
+
+                                let result = await BrokerResponse.findByIdAndUpdate(
+                                    { _id: FindUserBrokerResponse[0]._id },
+                                    {
+                                        order_view_date: message,
+                                        order_view_status: '1',
+                                        order_view_response: "Error"
+                                    },
+                                    { new: true }
+                                )
+                                return res.send({ status: false, msg: 'Error', data: message });
+
+                            }
+                        } catch (error) {
+
+                        }
+
+                    });
+            } else {
+                return res.send({ status: false, msg: 'Already Update', data: FindUserBrokerResponse });
+
+            }
+
+
+        } catch (error) {
+            console.log("Some Error In Order information get -", error);
+            return res.send({ status: false, msg: 'error in Server side', data: error });
+
+        }
+
+
     }
 
 
@@ -227,105 +427,3 @@ class AliceBlue {
 
 module.exports = new AliceBlue();
 
-
-// try {
-//     const authCode = req.query.authCode;
-//     var userId = req.query.userId;
-
-
-//     var hosts = req.headers.host;
-
-//     var redirect = hosts.split(':')[0];
-//     var redirect_uri = '';
-//     if (redirect == "localhost") {
-//         redirect_uri = "http://localhost:3000"
-//     } else {
-//         redirect_uri = `https://${redirect}/`
-//     }
-//     console.log("redirect_uri", redirect_uri);
-
-
-
-
-//     var client_key_query = req.query.client_key;
-
-
-//     var client_key = client_key_query.split('?authCode=')[0];
-
-//     var authCode = client_key_query.split('?authCode=')[1];
-//     console.log("authCode", authCode);
-
-//     const Get_User = await User.find({ client_key: client_key })
-
-//     if (Get_User.length > 0) {
-
-
-//         var user_id = Get_User[0]._id;
-//         var apiSecret = Get_User[0].api_secret;
-
-//         var userId = req.query.userId;
-
-//         var Encrypted_data = sha256(userId + authCode + apiSecret);
-//         var data = { "checkSum": Encrypted_data }
-
-
-//         var config = {
-//             method: 'post',
-//             url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/sso/getUserDetails',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             data: data
-//         };
-
-//         axios(config)
-//             .then(async function (response) {
-//                 if (response.data.userSession) {
-//                     let result = await User.findByIdAndUpdate(
-//                         user_id,
-//                         {
-//                             access_token: response.data.userSession,
-//                             TradingStatus: "on"
-//                         })
-
-//                     if (result != "") {
-//                         const user_login = new user_logs({
-//                             user_Id: user_id,
-//                             login_status: "Trading On",
-//                             role: Get_User[0].Role,
-//                             device: "WEB",
-//                             system_ip: getIPAddress()
-//                         })
-//                         await user_login.save();
-//                         console.log("user_login", user_login);
-//                         if (user_login) {
-//                             console.log("redirect_uri", redirect_uri);
-
-//                             return res.redirect(redirect_uri);
-
-//                         }
-//                     }
-
-
-
-//                 } else {
-//                     return res.send(redirect_uri);
-//                 }
-
-
-
-//             })
-//             .catch(function (error) {
-//                 console.log('access token error ', error);
-//             });
-
-//     }
-
-
-
-
-
-
-// } catch (error) {
-//     console.log("Theme error-", error);
-// }

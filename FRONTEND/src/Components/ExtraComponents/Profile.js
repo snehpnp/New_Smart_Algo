@@ -258,12 +258,8 @@ const UserProfile = () => {
                                 <div className="col-sm-9 col-7">
                                   <span>
                                     {UserDetails &&
-                                      UserDetails.data.license_type === "1"
-                                      ? "Live"
-                                      : UserDetails &&
-                                        UserDetails.data.license_type === "2"
-                                        ? "Demo"
-                                        : "2 Days"}
+                                      UserDetails.data.license_type == "2" ? "Live"  : UserDetails &&
+                                        UserDetails.data.license_type == "1" ? "Demo" : "2 Days"}
                                   </span>
                                 </div>
                               </div>

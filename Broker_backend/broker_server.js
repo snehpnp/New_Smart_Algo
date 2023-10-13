@@ -357,7 +357,7 @@ app.post('/broker-signals', async (req, res) => {
             await client.connect();
 
             const db = client.db(); // Access the default database or specify a database name here
-            const collection = db.collection('aliceView');
+            const collection = db.collection('aliceViewAllClient');
 
             var query = { "strategys.strategy_name": strategy, "service.name": input_symbol }
 

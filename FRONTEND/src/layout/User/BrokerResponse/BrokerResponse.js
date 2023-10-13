@@ -98,10 +98,8 @@ const BrokerResponse = () => {
       text: 'Action',
       formatter: (cell, row, rowIndex) =>
         <div style={{ width: "120px" }}>
-          {console.log("-", JSON.parse(row && row.order_view_date).Status)}
 
-
-          <div>
+          {row.order_view_date !== undefined && row.order_view_date !== "undefined" && row.order_view_date !== "" ? JSON.parse(row.order_view_date).Status == "open" ? <div>
             <span data-toggle="tooltip" data-placement="top" title="Edit">
               <Pencil
                 size={20}
@@ -117,12 +115,16 @@ const BrokerResponse = () => {
                 color="#d83131"
                 strokeWidth={2}
                 className="mx-1"
-              // onClick={(e) => Delete_user(row._id)}
+              // onClick={(e) => Delete_order(row._id)}
               />
             </span>
 
 
-          </div>
+          </div> : "" : ""}
+
+
+
+
         </div>
     },
 
