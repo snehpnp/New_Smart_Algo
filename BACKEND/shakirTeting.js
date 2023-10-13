@@ -2442,21 +2442,7 @@ module.exports = function (app) {
   // });
 
 
-  app.use((req, res, next) => {
-    const useragent = require('useragent');
-    const userAgentString = req.headers['user-agent'];
-    const agent = useragent.parse(userAgentString);
-    console.log('Parsed User Agent:', agent);
-    // Continue with your middleware logic or pass it to the next middleware
-    next();
 
-    // const userAgent = req.headers['user-agent'];
-    // console.log('User Agent:', userAgent);
-    // // You can parse the user agent string to get more detailed information if needed
-
-    // // Continue with your middleware logic or pass it to the next middleware
-    // next();
-  });
 
 
   app.get("/getip", (req, res) => {
