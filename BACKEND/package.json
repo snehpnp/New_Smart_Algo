@@ -13,6 +13,7 @@
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
+    "cluster": "^0.7.7",
     "cors": "^2.8.5",
     "cron": "^2.4.0",
     "crypto-js": "^4.1.1",
@@ -28,10 +29,12 @@
     "node-datetime": "^2.1.2",
     "nodemailer": "^6.9.4",
     "nodemon": "^3.0.1",
+    "os": "^0.1.2",
     "sha256": "^0.2.0",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
     "technicalindicators": "^3.1.0",
+    "useragent": "^2.3.0",
     "winston": "^3.10.0"
   }
 }
