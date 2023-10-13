@@ -56,14 +56,6 @@ const TradeHistory = () => {
   const [SocketState, setSocketState] = useState("null");
 
 
-  const [ForGetCSV, setForGetCSV] = useState([])
-
-  const [RPL, setRPL] = useState('')
-  const [UPL, setUPL] = useState('')
-  const [TPL, setTPL] = useState('')
-
-
-
 
   const GetTradhistory = async (e) => {
     let startDate = getActualDateFormate(fromDate);
@@ -203,9 +195,29 @@ const TradeHistory = () => {
       dataField: "Action",
       text: "R/P&L",
       formatter: (cell, row, rowIndex) => {
+
+        // if (SocketState !== 'null' && SocketState === "Unauthorized") {
+        // return (
+        //   <div>
+        //     {
+        //       <span className={`fw-bold `}>
+        //         {/* test */}
+        //       </span>
+        //     }
+
+        //   </div>
+        // )
+        // }
+        // else {
+
+
+
         return (
           <div>
+            {/* {calcultateRPL(row, parseFloat($(".LivePrice_" + row.token).html()))} */}
+
             <span className={`fw-bold show_rpl_${row.token}`}></span>
+            {/* <span className={`fw-bold show_rpl_${row.token}`}>{showRPL}</span> */}
             <span className={`d-none entry_qty${row.token}`}>
               {row.entry_qty_percent}
             </span>
@@ -226,6 +238,16 @@ const TradeHistory = () => {
             </span>
           </div>
         );
+        // }
+
+        //   let showRPL = row[`show_rpl_${row.token}`];
+
+        //   if (!showRPL || showRPL === "-") {
+        //     // Call the test function when show_rpl_${row.token} is empty or "-"
+        //     showRPL = test(row);
+        //   }
+
+
       },
     },
 
@@ -235,7 +257,16 @@ const TradeHistory = () => {
       text: "U/P&l",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span className={`fw-bold UPL_${row.token}`}></span>
+          {
+            // SocketState && SocketState === "Unauthorized" ?
+            //   <span className={`fw-bold show_rpl_${row.token}`}>
+            //     {/* {calcultateRPL(row, parseFloat($(".LivePrice_" + row.token).html()))} */}
+            //   </span>
+            // :
+            <span className={`fw-bold UPL_${row.token}`}></span>
+          }
+
+
         </div>
       ),
     },
@@ -245,7 +276,13 @@ const TradeHistory = () => {
       text: "T/P&L",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span className={`fw-bold  TPL_${row.token}`}></span>
+          {
+            // SocketState && SocketState === "Unauthorized" ? <span className={`fw-bold show_rpl_${row.token}`}>
+            //   {/* {calcultateRPL(row, parseFloat($(".LivePrice_" + row.token).html()))} */}
+            // </span> : 
+            <span className={`fw-bold  TPL_${row.token}`}></span>
+          }
+
         </div>
       ),
     },
@@ -270,8 +307,6 @@ const TradeHistory = () => {
       ),
     },
   ];
-
-
 
   var CreatechannelList = "";
   tradeHistoryData.data &&
@@ -316,12 +351,16 @@ const TradeHistory = () => {
 
             var live_price = response.lp === undefined ? "" : response.lp;
 
+            // if (response.lp !== undefined) {
+            // $(".LivePrice_" + response.tk).html(response.lp === undefined ? response.c : response.lp);
+            const get_Live_price = $(".ShowLTP_" + response.tk).html();
             const get_entry_qty = $(".entry_qty" + response.tk).html();
             const get_exit_qty = $(".exit_qty" + response.tk).html();
             const get_exit_price = $(".exit_price" + response.tk).html();
             const get_entry_price = $(".entry_price" + response.tk).html();
             const get_entry_type = $(".entry_type" + response.tk).html();
             const get_exit_type = $(".exit_type" + response.tk).html();
+            const get_UPL_ = $(".UPL_" + response.tk).html();
 
             //  if entry qty and exist qty both exist
             if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
@@ -369,7 +408,26 @@ const TradeHistory = () => {
               (get_entry_type === "" && get_exit_type === "LX") ||
               (get_entry_type === "" && get_exit_type === "SX")
             ) {
+
+
+              // let abc = ((parseFloat(live_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty)).toFixed();
+              // if (abc === "NaN") {
+              //   return "-";
+              // } else {
+              //   $(".UPL_" + response.tk).html(abc);
+              //   $(".show_rpl_" + response.tk).html("-");
+              //   $(".TPL_" + response.tk).html("-");
+
+              //   ShowColor("UPL_", abc, response.tk);
+              //   ShowColor("show_rpl_", "-", response.tk);
+              //   ShowColor("TPL_", "-", response.tk);
+              // }
+
+
+
             } else {
+
+
             }
             // }
           };
@@ -390,25 +448,33 @@ const TradeHistory = () => {
 
 
   const calcultateRPL = (row, livePrice) => {
+
     if (row.entry_type !== '' && row.exit_type !== '') {
       if (row.entry_type === "LE" || row.entry_type === "SE") {
         const entryQty = parseInt(row.entry_qty_percent);
         const exitQty = parseInt(row.exit_qty_percent);
         const entryPrice = parseFloat(row.entry_price);
         const exitPrice = parseFloat(row.exit_price);
-        const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
 
-        setTPL($(".show_rpl_" + row.token).html(rpl.toFixed(2)))
-        setUPL("-")
-        setRPL(rpl.toFixed(2))
+        const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
 
         $(".show_rpl_" + row.token).html(rpl.toFixed(2));
         $(".TPL_" + row.token).html(rpl.toFixed(2));
         $(".UPL_" + row.token).html("-");
 
-        ShowColor("UPL_", "-", row.token);
-        ShowColor("show_rpl_", rpl.toFixed(2), row.token);
-        ShowColor("TPL_", rpl.toFixed(2), row.token);
+        // return rpl.toFixed(2);
+        // }
+        // else if (entryQty > exitQty) {
+        //   let rpl = (parseInt(entryPrice) - parseInt(entryPrice)) * parseInt(exitQty);
+
+        //   $(".show_rpl_" + row.token).html(rpl.toFixed(2));
+        //   $(".TPL_" + row.token).html(rpl.toFixed(2));
+        // }
+        // else {
+
+        //   $(".TPL_" + row.token).html('-');
+        //   $(".UPL_" + row.token).html('-');
+        // }
       }
 
     }
@@ -417,19 +483,47 @@ const TradeHistory = () => {
       $(".TPL_" + row.token).html('-');
       $(".UPL_" + row.token).html("-");
 
-      setTPL('-')
-      setUPL("-")
-      setRPL('-')
+
     }
     if (row.entry_type === "" && row.exit_type !== '') {
+
       $(".show_rpl_" + row.token).html('-');
       $(".TPL_" + row.token).html('-');
       $(".UPL_" + row.token).html("-");
-
-      setTPL('-')
-      setUPL("-")
-      setRPL('-')
     }
+
+
+
+    // if (row.entry_type === "LE" || row.entry_type === "SE") {
+    //   if (row.exit_price && row.entry_price !== "") {
+
+    //   } else if (row.entry_price && !row.exit_price && livePrice) {
+    //     const entryQty = parseInt(row.entry_qty_percent);
+    //     const entryPrice = parseFloat(row.entry_price);
+
+    //     const upl = (livePrice - entryPrice) * entryQty;
+
+    //     return upl.toFixed(2);
+    //   }
+    // }
+    // if ((row.entry_type === "LE" || row.entry_type === "SE") && (row.exit_type === "LE" || row.exit_type === "SE")) {
+
+    //   const entryQty = parseInt(row.entry_qty_percent);
+    //   const exitQty = parseInt(row.exit_qty_percent);
+    //   const entryPrice = parseFloat(row.entry_price);
+    //   const exitPrice = parseFloat(row.exit_price);
+
+    //   const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
+
+    //   $(".show_rpl_" + row.token).html(rpl.toFixed(2));
+    //   $(".TPL_" + row.token).html(rpl.toFixed(2));
+
+    //   // console.log("rpl", rpl)
+    //   return rpl.toFixed(2);
+    // }
+
+
+    // return "-";
   };
 
 
@@ -492,6 +586,7 @@ const TradeHistory = () => {
 
 
   //  LOG IN FOR GET LIVE PRICE 
+
   const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
     if (check) {
       loginWithApi(brokerid, UserDetails);
@@ -509,53 +604,12 @@ const TradeHistory = () => {
   };
 
 
-  const forCSVdata = () => {
-
-    let csvArr = []
-    if (tradeHistoryData.data.length > 0) {
-      tradeHistoryData.data.map((item) => {
-
-        const rpl = $(`.show_rpl_${item.token}`).html();
-        const upl = $(`.UPL_${item.token}`).html();
-        const tpl = $(`.TPL_${item.token}`).html();
-
-        console.log("rpl" ,rpl)
-
-        return csvArr.push({
-          "symbol": item.trade_symbol,
-          "EntryType": item.entry_type ? item.entry_type : "-",
-          "ExitType": item.exit_type ? item.exit_type : "-",
-          "Entry Price": item.entry_price,
-          "Entry Qty": item.entry_qty_percent,
-          "Exit Price": item.exit_price,
-          "Exit Qty": item.exit_qty_percent,
-          "Entry Time": item.entry_dt_date,
-          "Exit Time": item.exit_dt_date,
-          "Exchange": item.exchange,
-          "Strategy": item.strategy,
-          "Released-P/L": rpl,
-          "Unreleased-P/L": upl,
-          "Total-PL": tpl,
-        })
-      })
-
-      setForGetCSV(csvArr)
-    }
-
-  }
-
-  useEffect(() => {
-    forCSVdata()
-  }, [tradeHistoryData.data, RPL, UPL, TPL])
 
 
-
-
-  console.log("tradeHistoryData1", ForGetCSV)
   return (
     <>
       <Content Page_title="Trade History" button_status={false}
-        show_csv_button={true} csv_data={tradeHistoryData.data} csv_title="TradeHistory"
+        show_csv_button={true} csv_data={[]} csv_title="TradeHistory"
 
       >
         <div className="row d-flex  align-items-center justify-content-start">

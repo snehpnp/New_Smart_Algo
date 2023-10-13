@@ -18,8 +18,8 @@ const Content = ({ Page_title, button_title, button_status, show_csv_button, csv
                 </li>
               </div>
 
-              {button_status == false ? "" : <div className="col-lg-6 px-0">
-                <Link to={route} className='btn btn-primary float-lg-end px-0' style={{ padding : '10px !important'}} >
+              {button_status == false ? "" : <div className="col-lg-6 ">
+                <Link to={route} className='btn btn-primary float-lg-end ' style={{ padding : '10px !important'}} >
                   <i className={`fa-solid  ${button_title === "Back" ? 'fa-arrow-left' : 'fa-plus'} `}></i> {button_title}</Link>
               </div>}
 
