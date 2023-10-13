@@ -271,8 +271,6 @@ const TradeHistory = () => {
     },
   ];
 
-
-
   var CreatechannelList = "";
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
@@ -398,9 +396,7 @@ const TradeHistory = () => {
         const exitPrice = parseFloat(row.exit_price);
         const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
 
-        setTPL($(".show_rpl_" + row.token).html(rpl.toFixed(2)))
-        setUPL("-")
-        setRPL(rpl.toFixed(2))
+        setTPL()
 
         $(".show_rpl_" + row.token).html(rpl.toFixed(2));
         $(".TPL_" + row.token).html(rpl.toFixed(2));
@@ -416,19 +412,11 @@ const TradeHistory = () => {
       $(".show_rpl_" + row.token).html('-');
       $(".TPL_" + row.token).html('-');
       $(".UPL_" + row.token).html("-");
-
-      setTPL('-')
-      setUPL("-")
-      setRPL('-')
     }
     if (row.entry_type === "" && row.exit_type !== '') {
       $(".show_rpl_" + row.token).html('-');
       $(".TPL_" + row.token).html('-');
       $(".UPL_" + row.token).html("-");
-
-      setTPL('-')
-      setUPL("-")
-      setRPL('-')
     }
   };
 
@@ -514,13 +502,6 @@ const TradeHistory = () => {
     let csvArr = []
     if (tradeHistoryData.data.length > 0) {
       tradeHistoryData.data.map((item) => {
-
-        const rpl = $(`.show_rpl_${item.token}`).html();
-        const upl = $(`.UPL_${item.token}`).html();
-        const tpl = $(`.TPL_${item.token}`).html();
-
-        console.log("rpl" ,rpl)
-
         return csvArr.push({
           "symbol": item.trade_symbol,
           "EntryType": item.entry_type ? item.entry_type : "-",
@@ -533,9 +514,9 @@ const TradeHistory = () => {
           "Exit Time": item.exit_dt_date,
           "Exchange": item.exchange,
           "Strategy": item.strategy,
-          "Released-P/L": rpl,
-          "Unreleased-P/L": upl,
-          "Total-PL": tpl,
+          "Released-P/L": $(".show_rpl_" + item.token).html(),
+          "Unreleased-P/L": $(".UPL_" + item.token),
+          "Total-PL": $(".TPL_" + item.token),
         })
       })
 
@@ -546,7 +527,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     forCSVdata()
-  }, [tradeHistoryData.data, RPL, UPL, TPL])
+  }, [tradeHistoryData.data])
 
 
 

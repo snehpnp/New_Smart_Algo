@@ -66,13 +66,11 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
           {fieldtype.map((field, index) => (
             <>
               {field.type === 'select' ? <>
-                <div className={`col-lg-${title === "update_theme" ? 12 : 6}`}>
+                <div className={`col-lg-${field.col_size}`}>
                   <div className="mb-3 row">
                     <label
-                      className={`col-lg-${title === "forlogin" ? 3 : title === "update_theme" ? 12 : 7}  col-form-label`}
+                      className={`col-lg-${field.col_size}`}
                       htmlFor={field.name}
-                      style={{ fontSize : '12px !important'}}
-
                     >
                       {field.label}
                       <span className="text-danger">*</span>

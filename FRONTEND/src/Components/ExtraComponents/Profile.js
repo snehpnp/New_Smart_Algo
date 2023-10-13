@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Content from "../../Components/Dashboard/Content/Content";
-import Formikform from "../../Components/ExtraComponents/Form/Formik_form";
+import Formikform from "../../Components/ExtraComponents/Form/Formik_form1";
 import { useFormik } from "formik";
 import * as valid_err from "../../Utils/Common_Messages";
 import { fDate, fDateTime } from "../../Utils/Date_formet";
@@ -93,10 +93,67 @@ const UserProfile = () => {
   });
 
   const fields = [
-    { name: "oldpassword", label: "Old Password", type: "password" },
-    { name: "newpassword", label: "New Password", type: "password" },
-    { name: "confirmpassword", label: "Confirm Password", type: "password" },
+    {
+      name: "weblogin", title1: "Admin", title2: "Individual", label: "Admin ", type: "radio", parent_label: "Web Login", label_size: 12,
+      col_size: 6,
+    },
+    {
+      name: "qtytype", title1: "Admin", title2: "Individual", label: "Admin", type: "radio", parent_label: "Qty Type", label_size: 12,
+      col_size: 6,
+    },
+    {
+      name: "signalexicutiontype", title1: "Web", title2: "App", type: "radio", parent_label: "Signals Execution Type", label_size: 12,
+      col_size: 6,
+    },
+
   ];
+
+
+  const formik1 = useFormik({
+    initialValues: {
+      oldpassword: "",
+      newpassword: "",
+      confirmpassword: "",
+    },
+    validate: (values) => {
+      const errors = {};
+      if (!values.oldpassword) {
+        errors.oldpassword = valid_err.OLD_PASSWORD_ERROR;
+      }
+      if (!values.newpassword) {
+        errors.newpassword = valid_err.NEW_PASSWORD_ERROR;
+      }
+      if (!values.confirmpassword) {
+        errors.confirmpassword = valid_err.CONFIRM_PASSWORD_ERROR;
+      } else if (values.newpassword !== values.confirmpassword) {
+        errors.confirmpassword = valid_err.CONFIRM_AND_NEW_PASSWORD_ERROR;
+      }
+
+      return errors;
+    },
+    onSubmit: async (values) => {
+      let req = {
+        oldpassword: values.oldpassword,
+        newpassword: values.newpassword,
+        userid: user_id,
+      };
+      await dispatch(Reset_Password(req))
+        .unwrap()
+        .then((response) => {
+          console.log("test", response);
+          if (response.status) {
+            toast.success(response.message);
+          }
+          if (response.response.status === 409) {
+            toast.error(response.response.data.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error", error);
+        });
+    },
+  });
+
 
   console.log("user_role", gotodashboard);
   return (
@@ -174,7 +231,20 @@ const UserProfile = () => {
                             Change Password
                           </a>
                         </li>
+
                       )}
+                      {user_role === "USER" || !gotodashboard ?
+
+                        < li className="nav-item">
+                          <a
+                            href="#modify"
+                            data-bs-toggle="tab"
+                            className="nav-link"
+                          >
+                            Modify Updates
+                          </a>
+                        </li>
+                        : ""}
                     </ul>
                     <div className="tab-content">
                       <div id="about-me" className="tab-pane fade active show">
@@ -223,7 +293,7 @@ const UserProfile = () => {
                               <div className="row mb-2">
                                 <div className="col-sm-3 col-5">
                                   <h5 className="f-w-500">
-                                    Start-Date{" "}
+                                    Start-Date
                                     <span className="pull-end">:</span>
                                   </h5>
                                 </div>
@@ -274,11 +344,12 @@ const UserProfile = () => {
                       ) : (
                         <>
                           <div
-                            id="profile-settings"
+                            id="modify"
                             className="tab-pane fade mt-3"
                           >
                             <h4 className="text-primary mb-4">
-                              Change Password
+                              Modify Updates
+
                             </h4>
                             <Formikform
                               fieldtype={fields.filter(
@@ -293,55 +364,43 @@ const UserProfile = () => {
                           </div>
                         </>
                       )}
+
+
+                      {user_role === "USER" || !gotodashboard ?
+
+                        <>
+                          <div
+                            id="profile-settings"
+                            className="tab-pane fade mt-3"
+                          >
+                            <h4 className="text-primary mb-4">
+                              Change Password
+                            </h4>
+                            <Formikform
+                              fieldtype={fields.filter(
+                                (field) =>
+                                  !field.showWhen ||
+                                  field.showWhen(formik1.values)
+                              )}
+                              formik={formik1}
+                              btn_name="Update"
+                              title="forlogin"
+                            />
+                          </div>
+                        </>
+                        : ""
+                      }
                     </div>
                   </div>
 
-                  {/* Modal */}
-                  <div className="modal fade" id="replyModal">
-                    <div
-                      className="modal-dialog modal-dialog-centered"
-                      role="document"
-                    >
-                      <div className="modal-content">
-                        <div className="modal-header">
-                          <h5 className="modal-title">Post Reply</h5>
-                          <button
-                            type="button"
-                            className="btn-close"
-                            data-bs-dismiss="modal"
-                          />
-                        </div>
-                        <div className="modal-body">
-                          <form>
-                            <textarea
-                              className="form-control"
-                              rows={4}
-                              defaultValue={"Message"}
-                            />
-                          </form>
-                        </div>
-                        <div className="modal-footer">
-                          <button
-                            type="button"
-                            className="btn btn-danger light"
-                            data-bs-dismiss="modal"
-                          >
-                            btn-close
-                          </button>
-                          <button type="button" className="btn btn-primary">
-                            Reply
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+
                 </div>
               </div>
             </div>
             <ToastButton />
           </div>
         </div>
-      </Content>
+      </Content >
       )
     </>
   );

@@ -267,7 +267,7 @@ const AllSubadmin = () => {
             "user_role_goTo",
             JSON.stringify(response.data.Role)
           );
-          navigate("/client/signals");
+          navigate("/subadmin/signals");
         }
       });
   };
