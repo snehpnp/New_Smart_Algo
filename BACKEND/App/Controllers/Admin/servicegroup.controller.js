@@ -28,7 +28,7 @@ class GroupService {
       const services_id = req.body.services_id;
 
       var groupServices = await serviceGroupName.find({ name: groupdetails.name })
-      console.log("groupServices", groupServices);
+      // console.log("groupServices", groupServices);
 
       if (groupServices.length > 0) {
         return res.send({ status: false, msg: "Group Name Is already Exist", data: groupServices })
@@ -129,7 +129,7 @@ class GroupService {
           add_Group_services.push(item);
         }
       });
-      console.log("add_Group_services", add_Group_services);
+      // console.log("add_Group_services", add_Group_services);
 
 
       // DELETE STRATEGY ARRAY
@@ -144,6 +144,17 @@ class GroupService {
 
 
 
+
+        var mergedArray = GroupServicesIds.reduce((result, obj1) => {
+          const matchingObj = services_id.find((obj2) => {
+            if (obj2.service_id.toString() == obj1.Service_id.toString() && obj2.group_qty !== obj1.group_qty) {
+              result.push(obj2);
+            }
+          });
+
+          return result;
+        }, []);
+ 
 
 
       // DELETE SERVICE
@@ -181,6 +192,22 @@ class GroupService {
       } catch (error) {
         console.log("Add Group Service In -", error);
       }
+
+
+        //QUANTIY UPDATE
+        if(mergedArray.length > 0){
+          mergedArray.forEach(async(data)=>{
+            
+            const filter = { Servicegroup_id: GroupServices_Id, Service_id: data.service_id };
+            const updateOperation = { $set: {group_qty : data.group_qty} };
+            var deleteGroupServices = await serviceGroup_services_id.updateOne(filter,updateOperation)
+            
+            // console.log("-- ",deleteGroupServices);
+
+          })
+        } 
+
+        // console.log("==>", mergedArray);
 
 
       // Client Services Update
@@ -441,7 +468,7 @@ class GroupService {
     try {
       const { id } = req.body; // Assuming your ID is passed as 'id' in the request body
 
-      console.log("Received ID:", id);
+      // console.log("Received ID:", id);
 
       // Convert the string ID to an ObjectId
       const objectId = new ObjectId(id);
@@ -456,7 +483,7 @@ class GroupService {
       const result = await serviceGroupName.deleteOne({ _id: objectId });
       const result1 = await serviceGroup_services_id.deleteMany({ Servicegroup_id: objectId });
 
-      console.log("result", result.acknowledged);
+      // console.log("result", result.acknowledged);
 
 
       // Handle the results here, e.g., send them in the response
@@ -504,7 +531,7 @@ class GroupService {
     try {
 
       const { _id } = req.body
-      console.log(_id);
+      // console.log(_id);
       if (_id != "yyyyyyyYYYYYY") {
         const objectId = new ObjectId(_id);
 
@@ -549,99 +576,99 @@ class GroupService {
     }
   }
 
-    // GET SERVICES BY GROUP ID - for integrate other 
-    
-    async GetServicesByGroupId1(req, res) {
+  // GET SERVICES BY GROUP ID - for integrate other 
 
-      try {
-  
-        const { _id } = req.body
-        console.log(_id);
-        if (_id != "yyyyyyyYYYYYY") {
-          const objectId = new ObjectId(_id);
-  
-          const pipeline = [
-            {
-              '$lookup': {
-                'from': 'services',
-                'localField': 'Service_id',
-                'foreignField': '_id',
-                'as': 'ServiceResult'
-              }
-            },
-  
-            {
-              $match: {
-                Servicegroup_id: objectId,
-              }
-            },
-            {
-              '$lookup': {
-                'from': 'categories',
-                'localField': 'ServiceResult.categorie_id',
-                'foreignField': '_id',
-                'as': 'catagory'
-              }
-            },
-  
-            {
-              $match: {
-                Servicegroup_id: objectId,
-              }
-            },
-            {
-              $project: {
-                'ServiceResult.name': 1,
-                'ServiceResult._id': 1,
-                'catagory.segment': 1,
-                'catagory.name': 1,
-                'catagory._id': 1,
-  
-                group_qty: 1
-              },
-            },
-            {
-              $unwind: '$ServiceResult', // Unwind the 'categoryResult' array
-            }, {
-              $unwind: '$catagory', // Unwind the 'categoryResult' array
-            },
-  
-          ];
-  
-          const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);
-  
-          if (Service_name_get.length == 0) {
-            return res.send({ status: false, msg: 'No Data Found ', data: Service_name_get });
-          }
-  
-  
-  
-          const Service_name_get1 = await serviceGroupName.find({ _id: objectId });
-  
-  
-  
-  
-          return res.send({
-            status: true, msg: 'Get All successfully ', data: {
-              Service_name_get: Service_name_get,
-              group_name: Service_name_get1
+  async GetServicesByGroupId1(req, res) {
+
+    try {
+
+      const { _id } = req.body
+      // console.log(_id);
+      if (_id != "yyyyyyyYYYYYY") {
+        const objectId = new ObjectId(_id);
+
+        const pipeline = [
+          {
+            '$lookup': {
+              'from': 'services',
+              'localField': 'Service_id',
+              'foreignField': '_id',
+              'as': 'ServiceResult'
             }
-          });
-  
-  
-        } else {
-          return res.send({ status: false, msg: 'Empty DAta', data: [] });
-  
+          },
+
+          {
+            $match: {
+              Servicegroup_id: objectId,
+            }
+          },
+          {
+            '$lookup': {
+              'from': 'categories',
+              'localField': 'ServiceResult.categorie_id',
+              'foreignField': '_id',
+              'as': 'catagory'
+            }
+          },
+
+          {
+            $match: {
+              Servicegroup_id: objectId,
+            }
+          },
+          {
+            $project: {
+              'ServiceResult.name': 1,
+              'ServiceResult._id': 1,
+              'catagory.segment': 1,
+              'catagory.name': 1,
+              'catagory._id': 1,
+
+              group_qty: 1
+            },
+          },
+          {
+            $unwind: '$ServiceResult', // Unwind the 'categoryResult' array
+          }, {
+            $unwind: '$catagory', // Unwind the 'categoryResult' array
+          },
+
+        ];
+
+        const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);
+
+        if (Service_name_get.length == 0) {
+          return res.send({ status: false, msg: 'No Data Found ', data: Service_name_get });
         }
-  
-  
+
+
+
+        const Service_name_get1 = await serviceGroupName.find({ _id: objectId });
+
+
+
+
+        return res.send({
+          status: true, msg: 'Get All successfully ', data: {
+            Service_name_get: Service_name_get,
+            group_name: Service_name_get1
+          }
+        });
+
+
+      } else {
+        return res.send({ status: false, msg: 'Empty DAta', data: [] });
+
       }
-      catch (error) {
-        console.log("GET SERVICES NAME -", error);
-      }
-  
+
+
     }
-  
+    catch (error) {
+      console.log("GET SERVICES NAME -", error);
+    }
+
+  }
+
   // GET SERVICES NAME
   async GetAllServicesUserNAme(req, res) {
 

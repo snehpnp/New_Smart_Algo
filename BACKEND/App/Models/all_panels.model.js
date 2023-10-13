@@ -14,7 +14,7 @@ const panelSchema = new mongoose.Schema({
     port: {
         type: String,
         required: [true, "Please enter Port name unique!"],
-        unique: true
+        
     },
     key: {
         type: String,

@@ -36,14 +36,18 @@ class Panel {
 
             await client.connect();
             const db = client.db(getPanelInfo[0].db_name);
-            const users_collection = db.collection('users');
+            const users_collection = db.collection('dashboard_data');
+            const query = { _id:null };
+            
+            const userData = await users_collection.find(query).toArray();
 
-            // DATA GET SUCCESSFULLY
-            return res.send({
-                status: true,
-                msg: "Get All Api Info",
-                data: getPanelInfo,
-            })
+// If you want to send the retrieved data as a response
+return res.send({
+    status: true,
+    msg: "Get All Api Info",
+    data: getPanelInfo,
+    usersData: userData, // Add the user data to the response
+});
 
 
         } catch (error) {

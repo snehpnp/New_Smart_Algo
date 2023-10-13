@@ -107,7 +107,7 @@ class Message {
 
                 Strategy_sms.push(result[0])
 
-                console.log("Strategy_sms", Strategy_sms);
+                // console.log("Strategy_sms", Strategy_sms);
 
             })
 

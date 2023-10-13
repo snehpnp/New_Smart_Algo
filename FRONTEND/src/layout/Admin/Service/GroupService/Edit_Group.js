@@ -292,13 +292,13 @@ const AddStrategy = () => {
 
 
     const fields = [
-        { name: 'groupname', label: 'Strategy Name', type: 'text', label_size: 12, col_size: 6, disable: false },
+        { name: 'groupname', label: 'Group Name', type: 'text', label_size: 12, col_size: 6, disable: false },
         {
             name: 'segment',
-            label: 'To Month',
+            label: 'Segment',
             type: 'select',
             options: GetAllSgments.data && GetAllSgments.data.map((item) => ({ label: item.name, value: item.segment })),
-            label_size: 12, col_size: 6, disable: false,
+            label_size: 12, col_size: 12, disable: false,
         },
     ];
 
@@ -385,17 +385,17 @@ const AddStrategy = () => {
                                             <td>{index + 1}</td>
                                             <td>{item.segment}</td>
                                             <td>{item.name}</td>
-                                            {/* <td>
+                                            <td>
                                                 <input
-                                                type="number"
-                                                className="form-control col-md-2"
-                                                placeholder="Enter Qty"
-                                                onChange={(e) => InputGroupQty(e, item.service_id, item.name, item.segment, item.group_qty)}
-                                                min={0}
-                                                defaultValue={item.group_qty ? item.group_qty : 0}
+                                                    type="number"
+                                                    className="form-control col-md-2"
+                                                    placeholder="Enter Qty"
+                                                    onChange={(e) => InputGroupQty(e, item.service_id, item.name, item.segment, item.group_qty)}
+                                                    min={0}
+                                                    defaultValue={item.group_qty ? item.group_qty : 0}
 
-                                            />
-                                            </td> */}
+                                                />
+                                            </td>
                                             <td onClick={() => remoeveService(item.service_id)}><Trash2 /></td>
 
                                         </tr>

@@ -106,7 +106,7 @@ app.post('/broker-signals', async (req, res) => {
         const FIRST3_KEY = client_key.substring(0, 3);
 
         console.log("FIRST3_KEY",FIRST3_KEY);
-          console.log("process.env.PANEL_FIRST_THREE",process.env.PANEL_FIRST_THREE);
+          // console.log("process.env.PANEL_FIRST_THREE",process.env.PANEL_FIRST_THREE);
         // IF SIGNEL KEY NOT MATCH CHECK
         if (FIRST3_KEY == process.env.PANEL_FIRST_THREE) {
 
@@ -315,7 +315,7 @@ app.post('/broker-signals', async (req, res) => {
                   entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
                   entry_dt_date: current_date
                 }
-                console.log("updatedData", updatedData);
+                // console.log("updatedData", updatedData);
                 updatedData.$addToSet = { signals_id: SignalSave._id };
 
                 // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
