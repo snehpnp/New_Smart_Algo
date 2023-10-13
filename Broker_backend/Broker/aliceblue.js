@@ -35,6 +35,25 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
             var client_key = splitArray[14]
             var demo = splitArray[15]
 
+            console.log({
+                dt: splitArray[0],
+            input_symbol: splitArray[1],
+            type: splitArray[2],
+            tr_price: splitArray[3],    
+            price: splitArray[4],
+            sq_value: splitArray[5],
+            sl_value: splitArray[6],
+            tsl: splitArray[7],
+            segment: splitArray[8],
+            strike: splitArray[9],
+            option_type: splitArray[10],
+            expiry: splitArray[11],
+            strategy: splitArray[12],
+            qty_percent: splitArray[13],
+            client_key: splitArray[14],
+            demo: splitArray[15],
+            });
+
             var exch;
             if (segment == 'C' || segment == 'c') {
                 exch = "NSE";
@@ -56,12 +75,11 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
             }
 
 
-console.log(token);
+            console.log(token);
             var complexty
             var discqty = "0";
             var pCode;
             var prctyp;
-            var price = "0";
             var qty = item.client_services.quantity;
             var ret = "DAY";
             var stopLoss = "";
@@ -123,6 +141,7 @@ console.log(token);
                 price = price;
                 pCode = 'CNC';
                 complexty = "regular";
+                console.log("price",price);
 
             }
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '2' && item.client_services.product_type == '1') {
@@ -345,7 +364,7 @@ console.log(token);
                 };
             }
 
-
+            console.log("data", data);
 
 
 
@@ -479,10 +498,10 @@ console.log(token);
                         if (response.data.length > 0) {
 
                             response.data.forEach(async (item1, index) => {
-                                console.log("item1.Token",item1.Token);
-                                console.log("symbol_id",symbol_id);
+                                console.log("item1.Token", item1.Token);
+                                console.log("symbol_id", symbol_id);
 
-                                
+
                                 if (item1.Token == symbol_id) {
 
                                     if (segment == 'C' || segment == 'c') {
@@ -520,7 +539,7 @@ console.log(token);
                                                     axios(config)
                                                         .then(async (response) => {
 
-console.log(response);
+                                                            console.log(response);
                                                             if (response.data[0].stat == "Ok") {
 
                                                                 let result = await BrokerResponse.findByIdAndUpdate(
@@ -711,7 +730,7 @@ console.log(response);
 
                                     } else {
                                         var possition_qty = item1.Netqty;
-                                        console.log("possition_qty",possition_qty);
+                                        console.log("possition_qty", possition_qty);
                                         let result = await BrokerResponse.findByIdAndUpdate(
                                             bro_res_last_id,
                                             {

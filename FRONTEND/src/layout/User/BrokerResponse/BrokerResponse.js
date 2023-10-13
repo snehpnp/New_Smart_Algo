@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { fa_time, fDateTimeSuffix } from '../../../Utils/Date_formet'
-import { GanttChartSquare, Eye } from 'lucide-react';
+import { GanttChartSquare, Eye, Pencil, Trash2 } from 'lucide-react';
 
 
 const BrokerResponse = () => {
@@ -82,16 +82,48 @@ const BrokerResponse = () => {
     },
     {
       dataField: 'order_view_status',
-      text: 'Message',
+      text: 'order ',
       formatter: (cell, row, rowIndex) =>
         cell == "0" || cell == 0 ?
           <>
-            {console.log("row", row)}
+
             <GanttChartSquare onClick={(e) => GetBrokerInforMation(row)
             } size={20} color="#198754" strokeWidth={2} className="mx-1" />
           </>
           :
           "-"
+    },
+    {
+      dataField: 'order_view_status',
+      text: 'Action',
+      formatter: (cell, row, rowIndex) =>
+        <div style={{ width: "120px" }}>
+          {console.log("-", JSON.parse(row && row.order_view_date).Status)}
+
+
+          <div>
+            <span data-toggle="tooltip" data-placement="top" title="Edit">
+              <Pencil
+                size={20}
+                color="#198754"
+                strokeWidth={2}
+                className="mx-1"
+              />
+            </span>
+
+            <span data-toggle="tooltip" data-placement="top" title="Delete">
+              <Trash2
+                size={20}
+                color="#d83131"
+                strokeWidth={2}
+                className="mx-1"
+              // onClick={(e) => Delete_user(row._id)}
+              />
+            </span>
+
+
+          </div>
+        </div>
     },
 
   ];
