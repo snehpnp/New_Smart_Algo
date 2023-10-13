@@ -454,7 +454,6 @@ export async function GET_ALL_SERVICE(data, token) {
 
 // GET TRADEHISTORY
 export async function GET_TRADEHISTORY(data, token) {
-    console.log(data);
     try {
         const res = await axios.post(`${Config.base_url}get/tradhistory`, data, {
             headers: header(token),

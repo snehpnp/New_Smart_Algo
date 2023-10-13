@@ -42,7 +42,6 @@ const Header = ({ ChatBox }) => {
   });
 
 
-  console.log("UserDetails", UserDetails)
 
 
   //  lOCAL STORAGE VALUE
