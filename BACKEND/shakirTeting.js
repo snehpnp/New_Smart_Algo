@@ -907,6 +907,8 @@ module.exports = function (app) {
           updatedAt: 1,
           updatedAt: 1,
           'userResult.UserName': 1,
+          'userResult.client_key': 1,
+          
 
         }
       }
@@ -1189,6 +1191,37 @@ module.exports = function (app) {
     console.log("signal sendd")
     const dt_date = new Date().getTime();
 
+    let type = "LE";
+    if(element.type = "SELL"){
+      type = "SE"
+    }
+
+    let tr_price = "0";
+    
+    let price = "0";
+
+    let sq_value = "0";
+    let sl_value = "0";
+    let tsl = "0";
+   
+    let strike = "0";
+    if(element.strike_price != ""){
+      strike = element.strike_price
+    }
+
+    let option_type = "CALL";
+    if(element.option_type.toUpperCase() == "PE"){
+      option_type = "PUT"
+    }
+
+    let qty_percent = "100"
+   
+    let client_key = "SNE132023";
+    if(element.userResult.client_key != undefined){
+      client_key = element.userResult.client_key;
+    }
+  
+
     //   1679060373|IDEA#|LX|0|11|0|0|0|C|20050|CALL|28092023|sneh|10|SNE132023|demo
 
     // 1 date
@@ -1208,7 +1241,7 @@ module.exports = function (app) {
     // 15 client_key
     // 16 demo
 
-    let request = '1679060373|IDEA#|LX|0|11|0|0|0|C|20050|CALL|28092023|sneh|10|SNE132023|demo'
+    let request = dt_date+'|'+element.symbol_name+'|'+type+'|'+tr_price+'|'+price+'|'+sq_value+'|'+sl_value+'|'+tsl+'|'+element.segment+'|'+strike+'|'+option_type+'|'+element.expiry+'|'+element.strategy_name+'|'+qty_percent+'|'+client_key+'|demo'
     console.log("request", request)
     return
 
@@ -1297,6 +1330,7 @@ module.exports = function (app) {
           createdAt: 1,
           updatedAt: 1,
           'userResult.UserName': 1,
+          'userResult.client_key': 1,
 
         }
       }
