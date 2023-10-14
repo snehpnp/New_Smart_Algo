@@ -110,65 +110,9 @@ const UserProfile = () => {
     },
   });
 
-  const fields1 = [
-    {
-      name: "weblogin", value1: "1", value2: "2", title1: "Admin", title2: "Individual", label: "Admin ", type: "radio", parent_label: "Web Login", label_size: 12,
-      col_size: 6,
-    },
-    {
-      name: "qtytype", value1: "1", value2: "2", title1: "Admin", title2: "Individual", label: "Admin", type: "radio", parent_label: "Qty Type", label_size: 12,
-      col_size: 6,
-    },
-    {
-      name: "signalexicutiontype", value1: "1", value2: "2", title1: "Web", title2: "App", type: "radio", parent_label: "Signals Execution Type", label_size: 12,
-      col_size: 6,
-    },
-
-  ];
 
 
-  const formik1 = useFormik({
-    initialValues: {
-      weblogin: "",
-      qtytype: "",
-      signalexicutiontype: "",
-    },
-    validate: (values) => {
-      const errors = {};
 
-      return errors;
-    },
-    onSubmit: async (values) => {
-
-      console.log("values", values)
-
-      return
-
-
-      // let req = {
-      //   oldpassword: values.oldpassword,
-      //   newpassword: values.newpassword,
-      //   userid: user_id,
-      // };
-      // await dispatch(Reset_Password(req))
-      //   .unwrap()
-      //   .then((response) => {
-      //     console.log("test", response);
-      //     if (response.status) {
-      //       toast.success(response.message);
-      //     }
-      //     if (response.response.status === 409) {
-      //       toast.error(response.response.data.message);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error", error);
-      //   });
-    },
-  });
-
-
-  console.log("formik1", formik1.values);
   return (
     <>
       <Content Page_title="UserProfile" button_status={false}>
@@ -363,17 +307,8 @@ const UserProfile = () => {
                             <h4 className="text-primary mb-4">
                               Modify Updates
                             </h4>
-                            <Modify_update/>
-                            {/* <Formikform
-                              fieldtype={fields1.filter(
-                                (field) =>
-                                  !field.showWhen ||
-                                  field.showWhen(formik1.values)
-                              )}
-                              formik={formik1}
-                              btn_name="Sign In"
-                              title="forlogin"
-                            /> */}
+                            <Modify_update UserDetails={UserDetails && UserDetails} />
+                           
                           </div>
                         </>
                       )}

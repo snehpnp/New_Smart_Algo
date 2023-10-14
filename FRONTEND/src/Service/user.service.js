@@ -219,5 +219,25 @@ export async function Update_broker_response(data, token) {
 
 
 
+// 
+export async function MODIFY_DETAILS(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/modify_details`, data, {
+            headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
+
+
+
+
+
+
 
 

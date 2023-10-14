@@ -64,7 +64,7 @@ class Dashboard {
                     $sort: {
                         'service.name': 1, // 1 for ascending order, -1 for descending order
                     },
-                  },
+                },
                 {
                     $project: {
                         'service.name': 1,
@@ -317,6 +317,62 @@ class Dashboard {
             console.log("error", error);
         }
     }
+
+
+    // Update User Modifyed
+
+    async ModifyUpdates(req, res) {
+        try {
+            const { user_id, obj } = req.body
+
+
+
+            var User_information = await User_model.find({ _id: user_id }).
+                select('web_url qty_type signals_execution_type');
+
+
+            if (User_information.length == 0) {
+                return res.send({ status: false, msg: 'User Not exists', data: [] });
+            }
+            let abc = {};
+            console.log("User_information[0].web_url", User_information);
+            
+            if (User_information[0].web_url !== obj.web_url) {
+                abc['web_url'] = obj.web_url;
+            }
+            if (User_information[0].qty_type !== obj.qty_type) {
+                abc['qty_type'] = obj.qty_type;
+            }
+            if (User_information[0].signals_execution_type !== obj.signals_execution_type) {
+                abc['signals_execution_type'] = obj.signals_execution_type;
+            }
+            
+            console.log("abc" ,abc)
+
+            return
+            const User_Update = await User_model.updateMany({ _id: User_information[0]._id },
+                { $set: { TradingStatus: "off" } });
+
+
+
+            const user_login = new user_logs({
+                user_Id: User_information[0]._id,
+                login_status: "Trading off",
+                role: User_information[0].Role,
+                // system_ip: getIPAddress()
+                device: device
+            })
+            await user_login.save();
+
+            return res.send({ status: true, msg: 'Trading Off successfully', data: [] });
+
+
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+
+
 
 
 
