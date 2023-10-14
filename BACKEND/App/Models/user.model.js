@@ -174,7 +174,11 @@ const userModel = Schema({
         type: String,
         default: null
     },
-
+    web_url: {
+        type: String,
+        enum: ['1', '2'], // 1 = Admin panel status , 2 = Tradinview status
+        default: '1'
+    },
 },
     {
         timestamps: true

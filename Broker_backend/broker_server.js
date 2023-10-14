@@ -77,10 +77,17 @@ const AliceBlue = require('./Broker/aliceblue')
 
 // TEST API
 app.post('/broker-signals', async (req, res) => {
+
+ 
+  
+
+
   try {
 
     // IF SIGNEL NOT RECIVED
     if (req.rawBody) {
+
+     // console.log("req.rawBody",req.rawBody)
       const splitArray = req.rawBody.split('|');
 
       var dt = splitArray[0]
@@ -99,7 +106,9 @@ app.post('/broker-signals', async (req, res) => {
       var qty_percent = splitArray[13]
       var client_key = splitArray[14]
       var demo = splitArray[15]
+     
 
+      //console.log("client_key",client_key)
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
 
@@ -129,9 +138,6 @@ app.post('/broker-signals', async (req, res) => {
             Trade_Option_Type = "PE";
           }
 
-
-
-
           // DATE MONTH SET
           const day_expiry = expiry.substr(0, 2);
           var dateHash = {
@@ -155,9 +161,6 @@ app.post('/broker-signals', async (req, res) => {
           }
           const ex_day_expiry = getKeyByValue(dateHash, month_expiry).toUpperCase();
           const ex_year_expiry = expiry.substr(-2);
-
-
-
 
           //  TOKEN  CREATE FUNCTION
           var token = ""
@@ -216,157 +219,170 @@ app.post('/broker-signals', async (req, res) => {
             instrument_token= token[0].instrument_token
           }
 
-          // IF CHECK SIGNEL KET IS PANEL OR CLIENT
-          if (process.env.PANEL_KEY == client_key) {
 
-            option_type = option_type.toUpperCase();
+          option_type = option_type.toUpperCase();
 
-            var is_CE_val_option = 'PE';
-            if (option_type == 'CALL') {
-              is_CE_val_option = 'CE';
+          var is_CE_val_option = 'PE';
+          if (option_type == 'CALL') {
+            is_CE_val_option = 'CE';
+          }
+
+
+          // IF SQ_PRICE
+          var sq_value;
+          if (sq_value == undefined) { sq_value = "0" } else { sq_value = sq_value }
+
+          // IF SL_PRICE
+          var sl_value;
+          if (sl_value == undefined) { sl_value = "0" } else { sl_value = sl_value }
+
+          // IF TR_PRICE
+          var tr_price;
+          if (tr_price == undefined) { tr_price = "0" } else { tr_price = tr_price }
+
+          // IF TSL
+          var tsl;
+          if (tsl == undefined) { tsl = "0" } else { tsl = tsl }
+
+          // STRICK
+          var strike;
+          if (strike == undefined || strike == '') { strike = "0" } else { strike = strike }
+
+          // IF CHECK SIGNEL KET IS ADMIN OR CLIENT
+
+          console.log("process.env.PANEL_KEY",process.env.PANEL_KEY , typeof process.env.PANEL_KEY)
+          console.log("client_key",client_key , typeof client_key)
+
+         let client_persnal_key = "";
+         if(process.env.PANEL_KEY == client_key){
+          client_persnal_key = "";
+         }else{
+          client_persnal_key = client_key
+         }
+
+          try {
+            var Signal_req = {
+              symbol: input_symbol,
+              type: type,
+              price: price,
+              qty_percent: qty_percent,
+              exchange: EXCHANGE,
+              sq_value: sq_value,
+              sl_value: sl_value,
+              tsl: tsl,
+              tr_price: tr_price,
+              dt: Math.round(+new Date() / 1000),
+              dt_date: dt_date,
+              strategy: strategy,
+              option_type: option_type,
+              strike: strike,
+              expiry: expiry,
+              segment: segment,
+              trade_symbol: trade_symbol,
+              client_persnal_key: client_persnal_key,
+              token: instrument_token
             }
+            let Signal_req1 = new Signals(Signal_req)
+            var SignalSave = await Signal_req1.save();
+          } catch (error) {
+            return res.send("ok")
+          }
 
+          // ENTRY OR EXIST CHECK
+          if (type == "LE" || type == "le" || type == "SE" || type == "Se") {
 
-            // IF SQ_PRICE
-            var sq_value;
-            if (sq_value == undefined) { sq_value = "0" } else { sq_value = sq_value }
+            var findMainSignals = await MainSignals.find(findSignal)
 
-            // IF SL_PRICE
-            var sl_value;
-            if (sl_value == undefined) { sl_value = "0" } else { sl_value = sl_value }
+            // MainSignals FIND IN COLLECTION
+            if (findMainSignals.length == 0) {
 
-            // IF TR_PRICE
-            var tr_price;
-            if (tr_price == undefined) { tr_price = "0" } else { tr_price = tr_price }
-
-            // IF TSL
-            var tsl;
-            if (tsl == undefined) { tsl = "0" } else { tsl = tsl }
-
-            // STRICK
-            var strike;
-            if (strike == undefined || strike == '') { strike = "0" } else { strike = strike }
-
-            try {
-              var Signal_req = {
+              var Entry_MainSignals_req = {
                 symbol: input_symbol,
-                type: type,
-                price: price,
-                qty_percent: qty_percent,
-                exchange: EXCHANGE,
-                sq_value: sq_value,
-                sl_value: sl_value,
-                tsl: tsl,
-                tr_price: tr_price,
+                entry_type: type,
+                exit_type: "",
+                entry_price: parseFloat(price),
+                exit_price: "",
+                entry_qty_percent: parseFloat(qty_percent),
+                exit_qty_percent: "",
+                entry_dt_date: current_date,
+                exit_dt_date: "",
                 dt: Math.round(+new Date() / 1000),
                 dt_date: dt_date,
+                exchange: EXCHANGE,
                 strategy: strategy,
                 option_type: option_type,
                 strike: strike,
                 expiry: expiry,
                 segment: segment,
                 trade_symbol: trade_symbol,
-                client_persnal_key: "",
+                client_persnal_key: client_persnal_key,
+                signals_id: SignalSave._id,
                 token: instrument_token
               }
-              let Signal_req1 = new Signals(Signal_req)
-              var SignalSave = await Signal_req1.save();
-            } catch (error) {
-              return res.send("ok")
+              const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
+              await Entry_MainSignals.save();
+
+            } else {
+              var updatedData = {
+                entry_price: (parseFloat(price) + parseFloat(findMainSignals[0].entry_price) / 2),
+                entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
+                entry_dt_date: current_date
+              }
+              // console.log("updatedData", updatedData);
+              updatedData.$addToSet = { signals_id: SignalSave._id };
+
+              // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
+              const updatedDocument = await MainSignals.findByIdAndUpdate(findMainSignals[0]._id, updatedData)
+
             }
 
-            // ENTRY OR EXIST CHECK
-            if (type == "LE" || type == "le" || type == "SE" || type == "Se") {
 
-              var findMainSignals = await MainSignals.find(findSignal)
+          } else
+            // START FOR EXIST SIGNAL UPDATE
+            if (type == "LX" || type == "lx" || type == "SX" || type == "Sx") {
+              var ExitMainSignals = await MainSignals.find(findSignal)
 
-              // MainSignals FIND IN COLLECTION
-              if (findMainSignals.length == 0) {
+              // // ExitMainSignals  FIND IN COLLECTION
+              if (ExitMainSignals.length != 0) {
 
-                var Entry_MainSignals_req = {
-                  symbol: input_symbol,
-                  entry_type: type,
-                  exit_type: "",
-                  entry_price: parseFloat(price),
-                  exit_price: "",
-                  entry_qty_percent: parseFloat(qty_percent),
-                  exit_qty_percent: "",
-                  entry_dt_date: current_date,
-                  exit_dt_date: "",
-                  dt: Math.round(+new Date() / 1000),
-                  dt_date: dt_date,
-                  exchange: EXCHANGE,
-                  strategy: strategy,
-                  option_type: option_type,
-                  strike: strike,
-                  expiry: expiry,
-                  segment: segment,
-                  trade_symbol: trade_symbol,
-                  client_persnal_key: "",
-                  signals_id: SignalSave._id,
-                  token: instrument_token
-                }
-                const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
-                await Entry_MainSignals.save();
-
-              } else {
+                // IF EXIST ENTRY OF THIS EXIT TRADE
                 var updatedData = {
-                  entry_price: (parseFloat(price) + parseFloat(findMainSignals[0].entry_price) / 2),
-                  entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
-                  entry_dt_date: current_date
+                  exit_type: type,
+                  exit_price: price,
+                  exit_qty_percent: qty_percent,
+                  exit_dt_date: current_date
                 }
-                // console.log("updatedData", updatedData);
                 updatedData.$addToSet = { signals_id: SignalSave._id };
 
                 // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
-                const updatedDocument = await MainSignals.findByIdAndUpdate(findMainSignals[0]._id, updatedData)
+                const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
+
+              } else {
+
+                console.log("PRIVIOUS SEGNAL UPDATE")
 
               }
+            }
 
 
-            } else
-              // START FOR EXIST SIGNAL UPDATE
-              if (type == "LX" || type == "lx" || type == "SX" || type == "Sx") {
-                var ExitMainSignals = await MainSignals.find(findSignal)
-
-                // // ExitMainSignals  FIND IN COLLECTION
-                if (ExitMainSignals.length != 0) {
-
-                  // IF EXIST ENTRY OF THIS EXIT TRADE
-                  var updatedData = {
-                    exit_type: type,
-                    exit_price: price,
-                    exit_qty_percent: qty_percent,
-                    exit_dt_date: current_date
-                  }
-                  updatedData.$addToSet = { signals_id: SignalSave._id };
-
-                  // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
-                  const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
-
-                } else {
-
-                  console.log("PRIVIOUS SEGNAL UPDATE")
-
-                }
-              }
+          // HIT TRADE IN BROKER SERVER
+          await client.connect();
+          const db = client.db(); // Access the default database or specify a database name here
 
 
 
-            // HIT TRADE IN BROKER SERVER
-            await client.connect();
 
-            const db = client.db(); // Access the default database or specify a database name here
-            const collection = db.collection('aliceView');
 
-            var query = { "strategys.strategy_name": strategy, "service.name": input_symbol }
 
-            console.log("query", query);
+          if (process.env.PANEL_KEY == client_key) {
 
+            //Process Alice Blue
+            const AliceBlueCollection = db.collection('aliceViewAllClient');
+            var query = { "strategys.strategy_name": strategy, "service.name": input_symbol ,"category.segment": segment }
             try {
               getAllDocuments();
               async function getAllDocuments() {
-                const documents = await collection.find(query).toArray();
+                const documents = await AliceBlueCollection.find(query).toArray();
                 // console.log("All documents:", documents);
 
                 if (documents.length > 0) {
@@ -429,24 +445,111 @@ app.post('/broker-signals', async (req, res) => {
 
                   runFunctionWithArray(documents);
                 } else {
-                  console.log("Client Not Exit");
+                  console.log("Alice Blue Client Not Exit");
                 }
 
               }
 
             } catch (error) {
-              console.log("Error In Broker response", error);
+              console.log("Error In Broker Alice Blue", error);
             }
+            // End Process Alice Blue
 
+      
 
-
-
+            return res.send({ msg: client_key })
 
           } else {
             console.log("IF SIGNEL KEY LIKE CLIENT KEY IN TRADING VIEW")
+
+             //Process Tading View Client Alice Blue
+             const AliceBlueCollection = db.collection('aliceViewTradingViewClient');
+             var query = { "strategys.strategy_name": strategy, "service.name": input_symbol , "category.segment": segment , client_key : client_key}
+           
+             console.log("query - ",query)
+
+             try {
+               getAllDocuments();
+               async function getAllDocuments() {
+                 const documents = await AliceBlueCollection.find(query).toArray();
+                 // console.log("All documents:", documents);
+ 
+                 if (documents.length > 0) {
+ 
+                   async function runFunctionWithArray(array) {
+ 
+                     // Run a function with the four elements of the array simultaneously
+ 
+                     const promises = array.map((item) => {
+ 
+                       return new Promise((resolve) => {
+ 
+                         // Simulate an asynchronous task (replace with your own function)
+ 
+                         setTimeout(async () => {
+ 
+                           const currentDate = new Date();
+ 
+                           const milliseconds = currentDate.getTime();
+ 
+                           console.log(`Running Time -- ${new Date()} function with element: ${item._id}`);
+ 
+ 
+                           var brokerResponse = {
+                             user_id: item._id,
+                             receive_signal: signal_req,
+                             strategy: strategy,
+                             type: type,
+                             symbol: input_symbol,
+                             order_status: 0,
+                             order_id: "",
+                             trading_symbol: "",
+                             broker_name: "",
+                             send_request: "",
+                             reject_reason: "",
+                             receive_signal: ""
+                           };
+ 
+                           const newCategory = new BrokerResponse(brokerResponse)
+                           var brokerResponse = await newCategory.save()
+                             .then((data) => {
+                                console.log("username ",item.UserName)
+                               var bro_res_last_id = data._id;
+                               aliceblue.place_order(item, splitArray, bro_res_last_id, token);
+                             })
+ 
+ 
+                           resolve();
+ 
+                         }, 0);
+ 
+                       });
+ 
+                     });
+ 
+ 
+                     await Promise.all(promises);
+ 
+                   }
+ 
+                   runFunctionWithArray(documents);
+                 } else {
+                   console.log("Alice Blue Client Not Exit");
+                 }
+ 
+               }
+ 
+             } catch (error) {
+               console.log("Error In Broker Alice Blue", error);
+             }
+             // End Process Tading View Client Alice Blue
+             
+
+            return res.send({ msg: client_key })
+
           }
 
-          return res.send({ msg: FIRST3_KEY })
+          // return res.send({ msg: FIRST3_KEY })
 
         } else {
           return res.send('Incorrect Signal Key');
