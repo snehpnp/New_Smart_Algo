@@ -4,9 +4,11 @@ const AliceTokenSchema = new mongoose.Schema({
     symbol: {
         type: String,
         required: true,
+        index: true
     },
     expiry: {
         type: String,
+        index: true
 
     },
     expiry_month_year: {
@@ -20,12 +22,15 @@ const AliceTokenSchema = new mongoose.Schema({
     },
     strike: {
         type: String,
+        index: true
     },
     option_type: {
         type: String,
+        index: true
     },
     segment: {
         type: String,
+        index: true
     },
     instrument_token: {
         type: String,
