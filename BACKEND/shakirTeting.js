@@ -9,6 +9,7 @@ module.exports = function (app) {
   const categorie = db.categorie;
   const UserMakeStrategy = db.UserMakeStrategy;
   const Alice_token = db.Alice_token;
+  
 
   const { MongoClient } = require('mongodb');
 
@@ -1142,7 +1143,21 @@ module.exports = function (app) {
         console.log("True condition - ", lastElementTimeFrameViewData);
         console.log("elemet True Condition -  ", element)
 
-        sendSignanl(lastElementTimeFrameViewData, element)
+        const getPricecollection = db.collection(element.tokensymbol);
+
+        const pipelineGetPrice = [
+          { $sort: { _id: -1 } },
+          { $project: { lp: 1,} },
+          { $limit: 1 }
+
+        ];
+  
+        const getPriceData = await getPricecollection.aggregate(pipelineGetPrice).toArray();
+
+        console.log("getPriceData - ",getPriceData[0].lp)
+
+        sendSignanl(lastElementTimeFrameViewData, element,getPriceData[0].lp)
+
 
       }
 
@@ -1186,7 +1201,7 @@ module.exports = function (app) {
 
 
 
-  function sendSignanl(lastElementTimeFrameViewData, element) {
+  function sendSignanl(lastElementTimeFrameViewData, element , price) {
     console.log("signal sendd element",element)
     console.log("signal sendd")
     const dt_date = new Date().getTime();
@@ -1198,7 +1213,7 @@ module.exports = function (app) {
 
     let tr_price = "0";
     
-    let price = "0";
+
 
     let sq_value = "0";
     let sl_value = "0";
@@ -1241,21 +1256,22 @@ module.exports = function (app) {
     // 15 client_key
     // 16 demo
 
-    let request = dt_date+'|'+element.symbol_name+'|'+type+'|'+tr_price+'|'+price+'|'+sq_value+'|'+sl_value+'|'+tsl+'|'+element.segment+'|'+strike+'|'+option_type+'|'+element.expiry+'|'+element.strategy_name+'|'+qty_percent+'|'+client_key+'|demo'
+    let request = dt_date+'|'+element.symbol_name+'|'+type+'|'+tr_price+'|'+price.toString()+'|'+sq_value+'|'+sl_value+'|'+tsl+'|'+element.segment+'|'+strike+'|'+option_type+'|'+element.expiry+'|'+element.strategy_name+'|'+qty_percent+'|'+client_key+'|demo'
     console.log("request", request)
-    return
+   
 
     var axios = require("axios").default;
 
     var options = {
       method: 'POST',
-      url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+     // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+      url: 'http://localhost:8000/broker-signals',
       headers: {
         Accept: '*/*',
         'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
         'Content-Type': 'text/plain'
       },
-      data: '1679060373|HEG#|LX|0|11|0|0|0|C|20050|CALL|28092023|sneh|10|SNE132023|demo'
+      data: request
     };
 
     axios.request(options).then(function (response) {
