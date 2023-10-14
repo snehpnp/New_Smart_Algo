@@ -1,15 +1,37 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect } from "react";
+import { Modify_Details } from '../../../ReduxStore/Slice/Users/BrokerUpdateSlice';
+import { useDispatch, useSelector } from "react-redux";
+import toast, { Toaster } from 'react-hot-toast';
 
-const RadioButtons = () => {
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+
+
+const Modify = ({ UserDetails }) => {
+
+
+
+
+
+
+    const dispatch = useDispatch();
+
+    const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+    const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
+
     const [selectedOptions, setSelectedOptions] = useState({
-        webLogin: null,
-        qtyType: null,
-        signalsExecutionType: null,
+        web_url: '',
+        qty_type: '',
+        signals_execution_type: '',
     });
+
+
+
 
     const handleRadioChange = (e) => {
         let name = e.target.name
         let value = e.target.value
+        let checked = e.target.checked
 
         setSelectedOptions((prevSelectedOptions) => ({
             ...prevSelectedOptions,
@@ -17,11 +39,47 @@ const RadioButtons = () => {
         }));
     };
 
-    const handleFinalStep = () => {
+    const handleFinalStep = async () => {
+
+        await dispatch(Modify_Details({ user_id: user_id, AdminToken: AdminToken, req: selectedOptions }))
+            .unwrap()
+            .then((response) => {
+                if (response.status) {
+                    // setUserDetails({
+                    //     loading: false,
+                    //     data: response.data,
+                    // });
+                }
+            });
+
         // Perform the final step with selected options
         console.log("Selected Options:", selectedOptions);
         // You can implement your logic here
     };
+
+
+    // GET ALL GROUP SERVICES NAME
+    const data = async () => {
+        if (UserDetails.data !== undefined) {
+            setSelectedOptions({
+                web_url: UserDetails.data && UserDetails.data.web_url,
+                qty_type: UserDetails.data && UserDetails.data.qty_type,
+                signals_execution_type: UserDetails.data && UserDetails.data.signals_execution_type,
+            })
+        }
+
+
+    }
+
+
+    useEffect(() => {
+        data()
+    }, [UserDetails.data])
+
+
+
+    console.log("UserDetails", selectedOptions)
+
 
     return (
         <div>
@@ -32,11 +90,12 @@ const RadioButtons = () => {
                         <div className="col-6">
                             <div class="form-check">
                                 <input
-                                    class="form-check-input"
+                                    className="form-check-input"
                                     type="radio"
-                                    name="webLogin"
+                                    name="web_url"
                                     id="admin"
-                                    value={1}
+                                    value="1" // Set the actual value here
+                                    checked={selectedOptions && selectedOptions.web_url === "1"}
                                     onChange={(e) => handleRadioChange(e)}
                                 />
                                 <label class="form-check-label" for="admin">
@@ -47,13 +106,13 @@ const RadioButtons = () => {
                         <div className="col-6">
                             <div class="form-check">
                                 <input
-                                    class="form-check-input"
+                                    className="form-check-input"
                                     type="radio"
-                                    name="webLogin"
-                                    id="individual"
-                                    value={2}
+                                    name="web_url"
+                                    id="admin"
+                                    value="2" // Set the actual value here
+                                    checked={selectedOptions && selectedOptions.web_url === "2"}
                                     onChange={(e) => handleRadioChange(e)}
-
                                 />
                                 <label class="form-check-label" for="individual">
                                     Individual
@@ -70,9 +129,10 @@ const RadioButtons = () => {
                                 <input
                                     class="form-check-input"
                                     type="radio"
-                                    name="qtyType"
+                                    name="qty_type"
                                     id="adminQty"
-                                    value={1}
+                                    value='1'
+                                    checked={selectedOptions && selectedOptions.qty_type === "1"}
 
                                     onChange={(e) => handleRadioChange(e)}
 
@@ -87,9 +147,11 @@ const RadioButtons = () => {
                                 <input
                                     class="form-check-input"
                                     type="radio"
-                                    name="qtyType"
+                                    name="qty_type"
                                     id="individualQty"
-                                    value={2}
+                                    value='2'
+                                    checked={selectedOptions && selectedOptions.qty_type === "2"}
+
 
                                     onChange={(e) => handleRadioChange(e)}
 
@@ -109,9 +171,11 @@ const RadioButtons = () => {
                                 <input
                                     class="form-check-input font"
                                     type="radio"
-                                    name="signalsExecutionType"
+                                    name="signals_execution_type"
                                     id="webExecution"
-                                    value={1}
+                                    value='1'
+                                    checked={selectedOptions && selectedOptions.signals_execution_type === "1"}
+
                                     onChange={(e) => handleRadioChange(e)}
 
                                 />
@@ -125,9 +189,11 @@ const RadioButtons = () => {
                                 <input
                                     class="form-check-input"
                                     type="radio"
-                                    name="signalsExecutionType"
+                                    name="signals_execution_type"
                                     id="appExecution"
-                                    value={2}
+                                    value='2'
+                                    checked={selectedOptions && selectedOptions.signals_execution_type === "2"}
+
                                     onChange={(e) => handleRadioChange(e)}
                                 />
                                 <label class="form-check-label" for="appExecution">
@@ -142,8 +208,10 @@ const RadioButtons = () => {
             <button className="btn btn-primary mt-3" onClick={handleFinalStep}>
                 Continue
             </button>
+            <ToastButton />
+
         </div>
     );
 };
 
-export default RadioButtons;
+export default Modify;
