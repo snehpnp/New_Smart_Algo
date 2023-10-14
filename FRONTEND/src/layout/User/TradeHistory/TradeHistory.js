@@ -9,17 +9,21 @@ import { Get_Tradehisotry } from "../../../ReduxStore/Slice/Users/TradehistorySl
 import { useDispatch, useSelector } from "react-redux";
 import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
 import { Eye, CandlestickChart, Pencil } from "lucide-react";
+
+
 import DetailsView from "./DetailsView";
 import {
   GetAliceTokenAndID,
   CreateSocketSession,
   ConnctSocket,
+  GetAccessToken
 } from "../../../Service/Alice_Socket";
 import {
   ShowColor,
   ShowColor_Compare_two,
 } from "../../../Utils/ShowTradeColor";
 import $ from "jquery";
+import { FunctionForLivePriceCalculation } from "./tradehistoryCalculation";
 
 
 const TradeHistory = () => {
@@ -35,6 +39,8 @@ const TradeHistory = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [disableFromDate, setDisableFromDate] = useState(false);
+
+  const [UserDetails, setUserDetails] = useState([]);
 
 
   const [rowData, setRowData] = useState({
@@ -61,6 +67,25 @@ const TradeHistory = () => {
     loading: true,
     data: [],
   });
+
+
+
+
+
+  //  GET BROKER DETAILS
+  const data = async () => {
+    const response = await GetAccessToken({ broker_name: "aliceblue" });
+    if (response.status) {
+      setUserDetails(response.data[0]);
+    }
+
+  };
+  useEffect(() => {
+    data();
+  }, []);
+
+
+
 
   const getsignals = async (e) => {
     let startDate = getActualDateFormate(fromDate);
@@ -144,30 +169,9 @@ const TradeHistory = () => {
     });
   };
 
-  const calcultateRPL = (row, livePrice) => {
-    let profitLoss = null;
 
-    if (row.entry_type === "LE" || row.entry_type === "SE") {
-      if (row.exit_price && row.entry_price !== "") {
-        const entryQty = parseInt(row.entry_qty_percent);
-        const exitQty = parseInt(row.exit_qty_percent);
-        const entryPrice = parseFloat(row.entry_price);
-        const exitPrice = parseFloat(row.exit_price);
 
-        const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
-        return rpl.toFixed(2);
-      } else if (row.entry_price && !row.exit_price && livePrice) {
-        const entryQty = parseInt(row.entry_qty_percent);
-        const entryPrice = parseFloat(row.entry_price);
 
-        const upl = (livePrice - entryPrice) * entryQty;
-
-        return upl.toFixed(2);
-      }
-    }
-
-    return "-";
-  };
 
   const columns = [
     {
@@ -185,7 +189,7 @@ const TradeHistory = () => {
       ),
     },
     {
-      dataField: "",
+      dataField: "closeprice",
       text: "Close Price",
       formatter: (cell, row, rowIndex) => (
         <div>
@@ -234,98 +238,51 @@ const TradeHistory = () => {
       dataField: "Action",
       text: "R/P&L",
       formatter: (cell, row, rowIndex) => {
-        if (SocketState === "null") {
-          let showRPL = row[`show_rpl_${row.token}`];
-          if (!showRPL || showRPL === "-") {
-            showRPL = calcultateRPL(row, parseFloat($(".LivePrice_" + row.token).html()),
-            );
-          }
-
-          return (
-            <div>
-              <span className={`fw-bold show_rpl_${row.token}`}>{showRPL}</span>
-
-            </div>
-          );
-        } else {
-          if (
-            parseInt(row.entry_qty_percent) === parseInt(row.exit_qty_percent)
-          ) {
-            let showRPL = row[`show_rpl_${row.token}`];
-
-            if (!showRPL || showRPL === "-") {
-              showRPL = calcultateRPL(row, parseFloat($(".LivePrice_" + row.token).html()));
-            }
-
-            return (
-              <div>
-                <span className={`fw-bold show_rpl_${row.token}`}>
-                  {showRPL}
-                </span>
-              </div>
-            );
-          } else {
-            return (
-              <div>
-                <span className={`fw-bold show_rpl_${row.token}`}></span>
-                <span className={`d-none entry_qty${row.token}`}>
-                  {row.entry_qty_percent}
-                </span>
-                <span className={`d-none exit_qty${row.token}`}>
-                  {row.exit_qty_percent}
-                </span>
-                <span className={`d-none exit_price${row.token}`}>
-                  {row.exit_price}
-                </span>
-                <span className={`d-none entry_price${row.token}`}>
-                  {row.entry_price}
-                </span>
-                <span className={`d-none entry_type${row.token}`}>
-                  {row.entry_type}
-                </span>
-                <span className={`d-none exit_type${row.token}`}>
-                  {row.exit_type}
-                </span>
-              </div>
-            );
-          }
-        }
+        return (
+          <div>
+            <span className={`fw-bold show_rpl_${row.token}`}></span>
+            <span className={`d-none entry_qty${row.token}`}>
+              {row.entry_qty_percent}
+            </span>
+            <span className={`d-none exit_qty${row.token}`}>
+              {row.exit_qty_percent}
+            </span>
+            <span className={`d-none exit_price${row.token}`}>
+              {row.exit_price}
+            </span>
+            <span className={`d-none entry_price${row.token}`}>
+              {row.entry_price}
+            </span>
+            <span className={`d-none entry_type${row.token}`}>
+              {row.entry_type}
+            </span>
+            <span className={`d-none exit_type${row.token}`}>
+              {row.exit_type}
+            </span>
+          </div>
+        );
       },
     },
 
-    {
-      dataField: "Action",
-      text: "U/P&l",
-      formatter: (cell, row, rowIndex) =>
-        // SocketState === 'null' ?
-        parseInt(row.entry_qty_percent) === parseInt(row.exit_qty_percent) ? (
-          "-"
-        ) : (
-          <div>
-            <span className={`fw-bold UPL_${row.token}`}></span>
-          </div>
-        ),
-      //  : (
 
-      //   "-"
-      // ),
+    {
+      dataField: "UPL",
+      text: "U/P&l",
+      formatter: (cell, row, rowIndex) => (
+        <div>
+          <span className={`fw-bold UPL_${row.token}`}></span>
+        </div>
+      ),
     },
 
     {
-      dataField: "Action",
+      dataField: "TPL",
       text: "T/P&L",
-      formatter: (cell, row, rowIndex) =>
-        // SocketState === null ?
-        parseInt(row.entry_qty_percent) === parseInt(row.exit_qty_percent) ? (
-          "-"
-        ) : (
-          <div>
-            <span className={`fw-bold  TPL_${row.token}`}></span>
-          </div>
-        ),
-      //  : (
-      //   "-"
-      // ),
+      formatter: (cell, row, rowIndex) => (
+        <div>
+          <span className={`fw-bold  TPL_${row.token}`}></span>
+        </div>
+      ),
     },
     {
       dataField: "strategy",
@@ -351,6 +308,8 @@ const TradeHistory = () => {
 
 
 
+
+
   var CreatechannelList = "";
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
@@ -358,103 +317,23 @@ const TradeHistory = () => {
     });
 
 
+
   //  SHOW lIVE PRICE
-
   const ShowLivePrice = async () => {
-    let type = { loginType: "API" };
-    let channelList = CreatechannelList;
-    const res = await CreateSocketSession(type);
+    await FunctionForLivePriceCalculation(CreatechannelList, UserDetails, setSocketState, tradeHistoryData.data &&
+      tradeHistoryData.data)
 
-    // console.log("resresresres", res);
-    if (res.status === 200) {
-      setSocketState("Ok");
-    }
-
-    if (res.data.stat) {
-      const handleResponse = (response) => {
-        // console.log("response", response);
-
-        // UPL_
-        if (response.lp !== undefined) {
-          $(".LivePrice_" + response.tk).html(response.lp);
-          const get_Live_price = $(".ShowLTP_" + response.tk).html();
-          const get_entry_qty = $(".entry_qty" + response.tk).html();
-          const get_exit_qty = $(".exit_qty" + response.tk).html();
-          const get_exit_price = $(".exit_price" + response.tk).html();
-          const get_entry_price = $(".entry_price" + response.tk).html();
-          const get_entry_type = $(".entry_type" + response.tk).html();
-          const get_exit_type = $(".exit_type" + response.tk).html();
-          const get_UPL_ = $(".UPL_" + response.tk).html();
-
-          //  if entry qty and exist qty both exist
-          if (
-            (get_entry_type === "LE" && get_exit_type === "LX") ||
-            (get_entry_type === "SE" && get_exit_type === "SX")
-          ) {
-            if (get_entry_qty !== "" && get_exit_qty !== "") {
-              if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-                let rpl =
-                  (parseInt(get_exit_price) - parseInt(get_entry_price)) *
-                  parseInt(get_exit_qty);
-                let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
-
-                let finalyupl =
-                  (parseFloat(get_entry_price) - parseFloat(response.lp)) * upl;
-                if (finalyupl === "NaN" || rpl === "NaN") {
-                  return "-";
-                } else {
-                  $(".UPL_" + response.tk).html(finalyupl.toFixed(2));
-                  $(".show_rpl_" + response.tk).html(rpl.toFixed(2));
-                  ShowColor("UPL_", finalyupl.toFixed(2), response.tk);
-                  ShowColor("show_rpl_", finalyupl.toFixed(2), response.tk);
-                  $(".TPL_" + response.tk).html((finalyupl + rpl).toFixed(2));
-                  ShowColor("TPL_", (finalyupl + rpl).toFixed(2), response.tk);
-                }
-              }
-            }
-          }
-          //  if Only entry qty Exist
-          else if (
-            (get_entry_type === "LE" && get_exit_type === "") ||
-            (get_entry_type === "SE" && get_exit_type === "")
-          ) {
-            let abc = (
-              (parseFloat(response.lp) - parseFloat(get_entry_price)) *
-              parseInt(get_entry_qty)
-            ).toFixed();
-            if (abc === "NaN") {
-              return "-";
-            } else {
-              $(".UPL_" + response.tk).html(abc);
-              $(".show_rpl_" + response.tk).html("-");
-              $(".TPL_" + response.tk).html("-");
-
-              ShowColor("UPL_", abc, response.tk);
-              ShowColor("show_rpl_", "-", response.tk);
-              ShowColor("TPL_", "-", response.tk);
-            }
-          }
-
-          //  if Only Exist qty Exist
-          else if (
-            (get_entry_type === "" && get_exit_type === "LX") ||
-            (get_entry_type === "" && get_exit_type === "SX")
-          ) {
-          } else {
-          }
-        }
-      };
-      await ConnctSocket(handleResponse, channelList).then((res) => { });
-    } else {
-      $(".UPL_").html("-");
-      $(".show_rpl_").html("-");
-      $(".TPL_").html("-");
-    }
   };
+
+
+
+
+
+
 
   useEffect(() => {
     ShowLivePrice();
-  }, [tradeHistoryData.data]);
+  }, [tradeHistoryData.data, SocketState, UserDetails]);
 
 
 

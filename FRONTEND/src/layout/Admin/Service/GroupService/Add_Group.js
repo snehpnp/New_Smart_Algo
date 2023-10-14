@@ -50,6 +50,8 @@ const AddStrategy = () => {
 
     const [selectAllFiltered, setSelectAllFiltered] = useState(false);
 
+console.log("selectedServices" ,selectedServices)
+
 
 
     //  For Select Services Checkbox
@@ -111,34 +113,33 @@ const AddStrategy = () => {
 
     //  For Set Group-Qty
 
-    const InputGroupQty = (event, id, servicename, segement) => {
+    const InputGroupQty = (event, id, servicename, segment) => {
         const updatedQty = event.target.value === "" ? 0 : parseInt(event.target.value);
-
+      
         // Update the quantity for the selected service
         setSelectedServices((prevInfo) =>
-            prevInfo.map((info) =>
-                info.service_id === id
-                    ? {
-                        ...info,
-                        group_qty: updatedQty,
-                    }
-                    : info
-            )
+          prevInfo.map((info) =>
+            info.service_id === id
+              ? {
+                  ...info,
+                  group_qty: updatedQty,
+                }
+              : info
+          )
         );
-
+      
         // Update the quantity in the GroupQty array
         setGroupQty((prevQtys) => ([
-            ...prevQtys.filter((qtyInfo) => qtyInfo.service_id !== id),
-            {
-                service_id: id,
-                segment: segement,
-                name: servicename,
-                group_qty: updatedQty,
-            }
+          ...prevQtys.filter((qtyInfo) => qtyInfo.service_id !== id),
+          {
+            service_id: id,
+            segment: segment,
+            name: servicename,
+            group_qty: updatedQty,
+          }
         ]));
-
-    }
-
+      };
+      
 
 
     //  For Remove Service From Select And Table
@@ -247,7 +248,6 @@ const AddStrategy = () => {
             return errors;
         },
         onSubmit: async (values) => {
-
             await dispatch(Add_Group({
                 groupdetails: { name: values.groupname },
                 services_id: selectedServices
@@ -303,11 +303,11 @@ const AddStrategy = () => {
                         <h4 className='text-center text-decoration-underline mb-3'>Select Services And Quantity</h4>
                         <table className="table table-responsive-sm col-md-3 " >
                             <thead className="bg-primary">
-                                <tr>
+                                <tr className='text-center'>
                                     <th>#</th>
                                     <th>Segment</th>
                                     <th>Service Name</th>
-                                    {/* <th>Qty</th> */}
+                                    <th>Quantity</th>
                                     <th>Remove</th>
                                 </tr>
                             </thead>
@@ -318,20 +318,20 @@ const AddStrategy = () => {
                                             <td>{index + 1}</td>
                                             <td>{item.segment}</td>
                                             <td>{item.name}</td>
-                                            {/* <td>
+                                            <td>
                                                 <input
-                                                type="number"
-                                                className="form-control col-md-1"
-                                                placeholder="Enter Qty"
-                                                onChange={(e) => InputGroupQty(e, item.id, item.name, item.segment)}
-                                                min={0}
-                                                defaultValue="0"
+                                                   type="number"
+                                                   className="form-control col-md-1"
+                                                   placeholder="Enter Qty"
+                                                   value={item.group_qty} // Use item.group_qty to set the value
+                                                   onChange={(e) => InputGroupQty(e, item.service_id, item.name, item.segment)}
+                                                   min={0}
 
                                             />
-                                            </td> */}
+                                            </td>
                                             <td onClick={() => {
                                                 remoeveService(item.service_id)
-                                            }}><Trash2 /></td>
+                                            }}><Trash2  className='text-danger'/></td>
 
                                         </tr>
                                     </>

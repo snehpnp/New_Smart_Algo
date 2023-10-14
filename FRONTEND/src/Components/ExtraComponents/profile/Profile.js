@@ -3,16 +3,17 @@
 /* eslint-disable react/jsx-pascal-case */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Content from "../../Components/Dashboard/Content/Content";
-import Formikform from "../../Components/ExtraComponents/Form/Formik_form1";
+import Content from "../../Dashboard/Content/Content";
+import Formikform from "../Form/Formik_form1";
 import { useFormik } from "formik";
-import * as valid_err from "../../Utils/Common_Messages";
-import { fDate, fDateTime } from "../../Utils/Date_formet";
-import { User_Profile } from "../../ReduxStore/Slice/Common/commoSlice.js";
-import { Reset_Password } from "../../ReduxStore/Slice/Auth/AuthSlice";
+import * as valid_err from "../../../Utils/Common_Messages";
+import { fDate, fDateTime } from "../../../Utils/Date_formet";
+import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
+import { Reset_Password } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import toast from "react-hot-toast";
-import ToastButton from "../../Components/ExtraComponents/Alert_Toast";
+import ToastButton from "../Alert_Toast";
 import { Users } from 'lucide-react';
+import Modify_update from "./Modify_update";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -45,6 +46,23 @@ const UserProfile = () => {
   useEffect(() => {
     data();
   }, []);
+
+  const fields = [
+    {
+      name: "oldpassword", label: "Old Password", type: "password", label_size: 12,
+      col_size: 8,
+    },
+    {
+      name: "newpassword", label: "New Password", type: "password", label_size: 12,
+      col_size: 8,
+    },
+    {
+      name: "confirmpassword", label: "Confirm Password", type: "password", label_size: 12,
+      col_size: 8,
+    },
+  ]
+
+
 
   //  FOR RESET PASSWORD
   const formik = useFormik({
@@ -92,17 +110,17 @@ const UserProfile = () => {
     },
   });
 
-  const fields = [
+  const fields1 = [
     {
-      name: "weblogin", title1: "Admin", title2: "Individual", label: "Admin ", type: "radio", parent_label: "Web Login", label_size: 12,
+      name: "weblogin", value1: "1", value2: "2", title1: "Admin", title2: "Individual", label: "Admin ", type: "radio", parent_label: "Web Login", label_size: 12,
       col_size: 6,
     },
     {
-      name: "qtytype", title1: "Admin", title2: "Individual", label: "Admin", type: "radio", parent_label: "Qty Type", label_size: 12,
+      name: "qtytype", value1: "1", value2: "2", title1: "Admin", title2: "Individual", label: "Admin", type: "radio", parent_label: "Qty Type", label_size: 12,
       col_size: 6,
     },
     {
-      name: "signalexicutiontype", title1: "Web", title2: "App", type: "radio", parent_label: "Signals Execution Type", label_size: 12,
+      name: "signalexicutiontype", value1: "1", value2: "2", title1: "Web", title2: "App", type: "radio", parent_label: "Signals Execution Type", label_size: 12,
       col_size: 6,
     },
 
@@ -111,51 +129,46 @@ const UserProfile = () => {
 
   const formik1 = useFormik({
     initialValues: {
-      oldpassword: "",
-      newpassword: "",
-      confirmpassword: "",
+      weblogin: "",
+      qtytype: "",
+      signalexicutiontype: "",
     },
     validate: (values) => {
       const errors = {};
-      if (!values.oldpassword) {
-        errors.oldpassword = valid_err.OLD_PASSWORD_ERROR;
-      }
-      if (!values.newpassword) {
-        errors.newpassword = valid_err.NEW_PASSWORD_ERROR;
-      }
-      if (!values.confirmpassword) {
-        errors.confirmpassword = valid_err.CONFIRM_PASSWORD_ERROR;
-      } else if (values.newpassword !== values.confirmpassword) {
-        errors.confirmpassword = valid_err.CONFIRM_AND_NEW_PASSWORD_ERROR;
-      }
 
       return errors;
     },
     onSubmit: async (values) => {
-      let req = {
-        oldpassword: values.oldpassword,
-        newpassword: values.newpassword,
-        userid: user_id,
-      };
-      await dispatch(Reset_Password(req))
-        .unwrap()
-        .then((response) => {
-          console.log("test", response);
-          if (response.status) {
-            toast.success(response.message);
-          }
-          if (response.response.status === 409) {
-            toast.error(response.response.data.message);
-          }
-        })
-        .catch((error) => {
-          console.error("Error", error);
-        });
+
+      console.log("values", values)
+
+      return
+
+
+      // let req = {
+      //   oldpassword: values.oldpassword,
+      //   newpassword: values.newpassword,
+      //   userid: user_id,
+      // };
+      // await dispatch(Reset_Password(req))
+      //   .unwrap()
+      //   .then((response) => {
+      //     console.log("test", response);
+      //     if (response.status) {
+      //       toast.success(response.message);
+      //     }
+      //     if (response.response.status === 409) {
+      //       toast.error(response.response.data.message);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error", error);
+      //   });
     },
   });
 
 
-  console.log("user_role", gotodashboard);
+  console.log("formik1", formik1.values);
   return (
     <>
       <Content Page_title="UserProfile" button_status={false}>
@@ -328,7 +341,7 @@ const UserProfile = () => {
                                 <div className="col-sm-9 col-7">
                                   <span>
                                     {UserDetails &&
-                                      UserDetails.data.license_type == "2" ? "Live"  : UserDetails &&
+                                      UserDetails.data.license_type == "2" ? "Live" : UserDetails &&
                                         UserDetails.data.license_type == "1" ? "Demo" : "2 Days"}
                                   </span>
                                 </div>
@@ -349,18 +362,18 @@ const UserProfile = () => {
                           >
                             <h4 className="text-primary mb-4">
                               Modify Updates
-
                             </h4>
-                            <Formikform
-                              fieldtype={fields.filter(
+                            <Modify_update/>
+                            {/* <Formikform
+                              fieldtype={fields1.filter(
                                 (field) =>
                                   !field.showWhen ||
-                                  field.showWhen(formik.values)
+                                  field.showWhen(formik1.values)
                               )}
-                              formik={formik}
+                              formik={formik1}
                               btn_name="Sign In"
                               title="forlogin"
-                            />
+                            /> */}
                           </div>
                         </>
                       )}
@@ -380,9 +393,9 @@ const UserProfile = () => {
                               fieldtype={fields.filter(
                                 (field) =>
                                   !field.showWhen ||
-                                  field.showWhen(formik1.values)
+                                  field.showWhen(formik.values)
                               )}
-                              formik={formik1}
+                              formik={formik}
                               btn_name="Update"
                               title="forlogin"
                             />

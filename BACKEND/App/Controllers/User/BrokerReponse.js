@@ -37,7 +37,7 @@ class BrokerReponse {
                         $gte: currentDate, // Greater than or equal to the start of the day
                         $lte: endOfDay,    // Less than or equal to the end of the day
                     },
-                });
+                }).sort({ createdAt: -1 });
 
                 if (filteredSignals.length === 0) {
                     return res.json({ status: false, msg: 'No Data Found', data: [] });

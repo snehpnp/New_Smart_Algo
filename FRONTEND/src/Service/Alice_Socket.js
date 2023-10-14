@@ -15,6 +15,20 @@ var userSession21 = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFV
 //  get AliceBlueToken and Seccion Id
 
 
+export async function GetAccessToken(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/token`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err;
+
+    }
+}
+
 
 
 // // export function CreateSocketSession(type) {
@@ -82,65 +96,64 @@ var userSession21 = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFV
 
 
 // export function CreateSocketSession(type) {
-    export async function CreateSocketSession(type, userid, userSession1) {
+export async function CreateSocketSession(type, userid, userSession1) {
 
-        return axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
-            headers: {
-                // 'Authorization': `Bearer ${userid} ${token}`,
-                'Authorization': `Bearer ${userId1} ${userSession1}`,
-                // 'Authorization': `Bearer ${userid} ${userSession1}`,
-                // 'Authorization': Payload,
-                // 'Access-Control-Allow-Origin' : "*",
-                'Content-Type': 'application/json'
-            },
-    
+    return axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
+        headers: {
+            // 'Authorization': `Bearer ${userid} ${token}`,
+            'Authorization': `Bearer ${userid} ${userSession1}`,
+            // 'Authorization': `Bearer ${userid} ${userSession1}`,
+            // 'Authorization': Payload,
+            // 'Access-Control-Allow-Origin' : "*",
+            'Content-Type': 'application/json'
+        },
+
+    })
+        .then(res => {
+            return res;
         })
-            .then(res => {
-                return res;
-            })
-            .catch(error => {
-                return error.response
-            })
-    }
-    
-    
-    export async function ConnctSocket(onResponse, channelList, userId1, userSession1) {
-        const url = "wss://ws1.aliceblueonline.com/NorenWS/"
-        let socket;
-        socket = new WebSocket(url)
-        socket.onopen = function () {
-            var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession21).toString()).toString();
-            // var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession1).toString()).toString();
-            var initCon = {
-                susertoken: encrcptToken,
-                t: "c",
-                // actid: userId + "_" + "API",
-                // uid: userId + "_" + "API",
-                actid: userId1 + "_" + "API",
-                uid: userId1 + "_" + "API",
-                source: "API"
-            }
-    
-            socket.send(JSON.stringify(initCon))
+        .catch(error => {
+            return error.response
+        })
+}
+
+
+export async function ConnctSocket(onResponse, channelList, userId1, userSession1) {
+    const url = "wss://ws1.aliceblueonline.com/NorenWS/"
+    let socket;
+    socket = new WebSocket(url)
+    socket.onopen = function () {
+        // var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession21).toString()).toString();
+        var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession1).toString()).toString();
+        var initCon = {
+            susertoken: encrcptToken,
+            t: "c",
+            // actid: userId + "_" + "API",
+            // uid: userId + "_" + "API",
+            actid: userId1 + "_" + "API",
+            uid: userId1 + "_" + "API",
+            source: "API"
         }
-        socket.onmessage = async function (msg) {
-            var response = JSON.parse(msg.data)
-            await onResponse(response)
-    
-            if (response.s === 'OK') {
-                // var channel = await channelList;
-                let json = {
-                    k: channelList,
-                    t: 't'
-                };
-                await socket.send(JSON.stringify(json))
-    
-    
-            }
-        }
-    
-    
-    
+
+        socket.send(JSON.stringify(initCon))
     }
-    
-    
+    socket.onmessage = async function (msg) {
+        var response = JSON.parse(msg.data)
+        await onResponse(response)
+
+        if (response.s === 'OK') {
+            // var channel = await channelList;
+            let json = {
+                k: channelList,
+                t: 't'
+            };
+            await socket.send(JSON.stringify(json))
+
+
+        }
+    }
+
+
+
+}
+
