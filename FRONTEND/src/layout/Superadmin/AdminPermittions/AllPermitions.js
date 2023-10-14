@@ -7,7 +7,7 @@ import * as  valid_err from "../../../Utils/Common_Messages"
 import Loader from '../../../Utils/Loader'
 import { FolderLock, Plus, FileClock, HelpingHand, Users2, ScrollText } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { All_Panel_List, Update_Panel_Theme } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { All_Panel_List, Update_Panel_Theme, GET_PANEL_INFORMATIONS } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -44,8 +44,6 @@ const AllPermitions = () => {
     const [showPanelName, setshowPanelName] = useState(false)
 
 
-    console.log("showPanelName", showPanelName);
-
     //  for Add Licence
     const [showLicenceModal, setshowLicenceModal] = useState(false)
 
@@ -62,6 +60,10 @@ const AllPermitions = () => {
     });
 
 
+    const [panelInfo, setpanelInfo] = useState({
+        loading: true,
+        data: []
+    });
 
 
     const GetAllThemes = async () => {
@@ -80,6 +82,23 @@ const AllPermitions = () => {
                 });
             })
     }
+
+    const Panel_Info = async (row) => {
+
+        setPanelDetailsModal(true)
+        await dispatch(GET_PANEL_INFORMATIONS({ id: row._id })).unwrap()
+            .then((response) => {
+                console.log(":v" ,response)
+                setpanelInfo({
+                    loading: false,
+                    data: response.data
+                });
+            })
+    }
+
+
+
+
     useEffect(() => {
         data()
         GetAllThemes()
@@ -167,7 +186,7 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <FileClock size={20} color="#198754" strokeWidth={2}
-                        onClick={(e) => setPanelDetailsModal(true)}
+                        onClick={(e) => Panel_Info(row)}
                         className="mx-1" />
                 </span>
             )
@@ -286,11 +305,17 @@ const AllPermitions = () => {
                                     'No data found') :
                                     <>
                                         <SidebarPermission showModal={showModal} setshowModal={() => setshowModal(false)} />
+
                                         <ShowAllSubadmins showModal={showSubadminsModal} setshowModal={() => setshowSubadminsModal(false)} />
+
                                         <ShowAllClients showModal={ShowClientsModal} setshowModal={() => setShowClientsModal(false)} />
-                                        <PanelDetails showModal={PanelDetailsModal} setshowModal={() => setPanelDetailsModal(false)} />
+
+                                        <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
+
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
+
                                         <LicenceDetails showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
+
                                         <FullDataTable TableColumns={columns} tableData={themeData.data} />
                                         <ToastButton />
                                     </>

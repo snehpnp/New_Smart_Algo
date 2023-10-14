@@ -96,3 +96,21 @@ export async function GET_API_INFORMATION(token) {
     }
 
 }
+
+
+export async function GET_PANEL_INFORMATION(id,token) {
+    try {
+
+        const res = await axios.post(`${Config.base_url}get/panel/info`, id,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        console.log("error", err);
+        // custom error
+    }
+
+}

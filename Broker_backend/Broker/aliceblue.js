@@ -37,21 +37,21 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
 
             console.log({
                 dt: splitArray[0],
-            input_symbol: splitArray[1],
-            type: splitArray[2],
-            tr_price: splitArray[3],    
-            price: splitArray[4],
-            sq_value: splitArray[5],
-            sl_value: splitArray[6],
-            tsl: splitArray[7],
-            segment: splitArray[8],
-            strike: splitArray[9],
-            option_type: splitArray[10],
-            expiry: splitArray[11],
-            strategy: splitArray[12],
-            qty_percent: splitArray[13],
-            client_key: splitArray[14],
-            demo: splitArray[15],
+                input_symbol: splitArray[1],
+                type: splitArray[2],
+                tr_price: splitArray[3],
+                price: splitArray[4],
+                sq_value: splitArray[5],
+                sl_value: splitArray[6],
+                tsl: splitArray[7],
+                segment: splitArray[8],
+                strike: splitArray[9],
+                option_type: splitArray[10],
+                expiry: splitArray[11],
+                strategy: splitArray[12],
+                qty_percent: splitArray[13],
+                client_key: splitArray[14],
+                demo: splitArray[15],
             });
 
             var exch;
@@ -141,7 +141,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
                 price = price;
                 pCode = 'CNC';
                 complexty = "regular";
-                console.log("price",price);
+                console.log("price", price);
 
             }
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '2' && item.client_services.product_type == '1') {
@@ -492,8 +492,8 @@ const place_order = async (item, splitArray, bro_res_last_id, token) => {
                 };
                 axios(config)
                     .then(async (response) => {
-                        console.log("run=====");
-                        console.log(response.data);
+                        // console.log("run=====");
+                        // console.log(response.data);
 
                         if (response.data.length > 0) {
 

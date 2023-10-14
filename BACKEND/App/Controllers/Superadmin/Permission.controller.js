@@ -17,9 +17,14 @@ const { formattedDateTime } = require('../../Helper/time.helper')
 class Panel {
 
     // Get All APi Infor
-    async GetLicenseDetails(req, res) {
+    async GetPanelDetails(req, res) {
         try {
             const { id } = req.body
+
+            if (!id) {
+                return res.send({ status: false, msg: "Enter Panel Id", data: [] })
+            }
+
             const objectId = new ObjectId(id);
 
             // GET PANEL INFO
@@ -31,23 +36,25 @@ class Panel {
             }
 
 
+            // const uri = getPanelInfo[0].db_url;
             const uri = getPanelInfo[0].db_url;
+
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
             await client.connect();
             const db = client.db(getPanelInfo[0].db_name);
-            const users_collection = db.collection('dashboard_data');
-            const query = { _id:null };
-            
-            const userData = await users_collection.find(query).toArray();
 
-// If you want to send the retrieved data as a response
-return res.send({
-    status: true,
-    msg: "Get All Api Info",
-    data: getPanelInfo,
-    usersData: userData, // Add the user data to the response
-});
+            const viewName = 'dashboard_data';
+
+            // Query the view to get the data
+            const result = await db.collection(viewName).find().toArray();
+
+            // If you want to send the retrieved data as a response
+            return res.send({
+                status: true,
+                msg: "Get All Api Info",
+                data: result
+            });
 
 
         } catch (error) {
@@ -60,42 +67,159 @@ return res.send({
     // Get All APi Infor
     async GetAllClients(req, res) {
         try {
-            const { id } = req.body;
+            const { id } = req.body
+
+            if (!id) {
+                return res.send({ status: false, msg: "Enter Panel Id", data: [] })
+            }
+
             const objectId = new ObjectId(id);
 
             // GET PANEL INFO
-            const getPanelInfo = await panel_model.find({ _id: objectId });
+            const getPanelInfo = await panel_model.find({ _id: objectId })
 
             // IF DATA NOT EXIST
             if (getPanelInfo.length == 0) {
-                return res.send({ status: false, msg: "Empty data", data: getPanelInfo });
+                return res.send({ status: false, msg: "Empty data", data: getPanelInfo })
             }
 
+
+            // const uri = getPanelInfo[0].db_url;
             const uri = getPanelInfo[0].db_url;
+
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
             await client.connect();
             const db = client.db(getPanelInfo[0].db_name);
-            const users_collection = db.collection('users');
 
-            const query = { Role: "USER"};
-            const foundUsers = await users_collection.find(query).toArray(); // await ka istemal kiya hai yahan
+            const viewName = 'users';
 
-            // DATA GET SUCCESSFULLY
-            res.send({
+            // Query the view to get the data
+            const result = await db.collection(viewName).find({ Role: "USER" }).toArray();
+
+            // If you want to send the retrieved data as a response
+            return res.send({
                 status: true,
-                msg: "Get All Api Info",
-                data: foundUsers,
+                msg: "Get All Users",
+                data: result
             });
-            // Client ko band karein ya connection ko release karein jab aapka kaam ho gaya ho
-            client.close();
+
 
         } catch (error) {
-            console.log("Get all Info error-", error);
+            console.log("Get all User error-", error);
+        }
+    }
+    // GET ALL SUBADMINS
+    async GetAllSubadmins(req, res) {
+        try {
+            const { id } = req.body
+
+            if (!id) {
+                return res.send({ status: false, msg: "Enter Panel Id", data: [] })
+            }
+
+            const objectId = new ObjectId(id);
+
+            // GET PANEL INFO
+            const getPanelInfo = await panel_model.find({ _id: objectId })
+
+            // IF DATA NOT EXIST
+            if (getPanelInfo.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: getPanelInfo })
+            }
+
+
+            // const uri = getPanelInfo[0].db_url;
+            const uri = getPanelInfo[0].db_url;
+
+            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+            await client.connect();
+            const db = client.db(getPanelInfo[0].db_name);
+
+            const viewName = 'users';
+
+            // Query the view to get the data
+            const result = await db.collection(viewName).find({ Role: "SUBADMIN" }).toArray();
+
+            // If you want to send the retrieved data as a response
+            return res.send({
+                status: true,
+                msg: "Get All Subadmins",
+                data: result
+            });
+
+
+        } catch (error) {
+            console.log("Get all Subadmins error-", error);
         }
     }
 
 
+    // ADD LICENSE
+    async AddLicensePanle(req, res) {
+        try {
+            const { id, license } = req.body
+
+            if (!id) {
+                return res.send({ status: false, msg: "Enter Panel Id", data: [] })
+            }
+
+            const objectId = new ObjectId(id);
+
+            // GET PANEL INFO
+            const getPanelInfo = await panel_model.find({ _id: objectId })
+
+            // IF DATA NOT EXIST
+            if (getPanelInfo.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: getPanelInfo })
+            }
+
+            const uri = getPanelInfo[0].db_url;
+
+            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+            await client.connect();
+            const db = client.db(getPanelInfo[0].db_name);
+            
+            const companies_collection = db.collection('companies');
+            const viewName = 'companies';
+
+
+            // Specify the query condition for updating
+            const queryCondition = {
+                panel_key: getPanelInfo[0].key // Replace with your desired query condition
+            };
+
+
+            // Query the view to get the data
+            const findResult = await db.collection(viewName).find().project({ licenses: 1}).toArray();
+
+            const newLicensesValue = findResult[0].licenses + license;
+
+            const updateOperation = {
+                $set: {
+                    licenses: newLicensesValue
+                }
+            };
+
+            // Update documents that match the query condition
+            const updateResult = await companies_collection.updateMany(queryCondition, updateOperation);
+
+
+
+            // If you want to send the retrieved data as a response
+            return res.send({
+                status: true,
+                msg: "Add License",
+                data: updateResult
+            });
+
+
+        } catch (error) {
+            console.log("Add License error-", error);
+        }
+    }
 
 }
 

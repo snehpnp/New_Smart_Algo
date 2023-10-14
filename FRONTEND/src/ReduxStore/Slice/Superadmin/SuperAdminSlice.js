@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_ALL_PANELS_LIST, UPDATE_PANEL_THEME } from "../../../Service/superadmin.service";
+import { GET_ALL_PANELS_LIST, UPDATE_PANEL_THEME ,GET_PANEL_INFORMATION} from "../../../Service/superadmin.service";
 
 
 export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => {
@@ -11,6 +11,7 @@ export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => 
     return err;
   }
 });
+
 export const Update_Panel_Theme = createAsyncThunk("update/theme", async (data) => {
   const { theme_id, userid, token } = data
   try {
@@ -21,7 +22,16 @@ export const Update_Panel_Theme = createAsyncThunk("update/theme", async (data) 
   }
 });
 
-
+export const GET_PANEL_INFORMATIONS = createAsyncThunk("get/panel/info", async (data) => {
+  const { id, token } = data
+  
+  try {
+    const res = await GET_PANEL_INFORMATION({ id:id }, token );
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
 
 
 const SuperAdminSlice = createSlice({
@@ -30,7 +40,9 @@ const SuperAdminSlice = createSlice({
     isLoading: false,
     isError: false,
     getPanelList: [],
-    update_panel_theme: []
+    update_panel_theme: [],
+    panel_info: [],
+
   },
 
   recuders: {},
@@ -46,6 +58,10 @@ const SuperAdminSlice = createSlice({
     [Update_Panel_Theme.fulfilled]: (state, { payload }) => {
       // state.isLoading = false;
       return { ...state, update_panel_theme: payload, isLoading: false };
+    },
+    [GET_PANEL_INFORMATIONS.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, panel_info: payload, isLoading: false };
     },
   },
 
