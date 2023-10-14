@@ -95,7 +95,7 @@ class Panel {
             const viewName = 'users';
 
             // Query the view to get the data
-            const result = await db.collection(viewName).find({ Role: "USER" }).toArray();
+            const result = await db.collection(viewName).find({ Role: "USER" }).project({ _id: 1, UserName: 1,Email:1,license_type:1,licence:1 }).toArray();
 
             // If you want to send the retrieved data as a response
             return res.send({
@@ -140,7 +140,7 @@ class Panel {
             const viewName = 'users';
 
             // Query the view to get the data
-            const result = await db.collection(viewName).find({ Role: "SUBADMIN" }).toArray();
+            const result = await db.collection(viewName).find({ Role: "SUBADMIN" }).project({ _id: 1, UserName: 1,Email:1,license_type:1,licence:1 }).toArray();
 
             // If you want to send the retrieved data as a response
             return res.send({

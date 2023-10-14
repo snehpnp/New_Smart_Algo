@@ -9,6 +9,8 @@ const client_services = db.client_services;
 const strategy_client = db.strategy_client;
 const services = db.services;
 const strategy = db.strategy;
+const serviceGroup_services_id = db.serviceGroup_services_id;
+
 
 const user_activity_logs = db.user_activity_logs;
 
@@ -175,7 +177,6 @@ class Dashboard {
                     const filter = { user_id: UserData._id, service_id: key };
                     const updateOperation = { $set: matchedObject };
 
-                    console.log(filter, updateOperation);
 
                     const result = await client_services.updateOne(filter, updateOperation);
 
@@ -320,12 +321,9 @@ class Dashboard {
 
 
     // Update User Modifyed
-
     async ModifyUpdates(req, res) {
         try {
             const { user_id, obj } = req.body
-
-
 
             var User_information = await User_model.find({ _id: user_id }).
                 select('web_url qty_type signals_execution_type');
@@ -335,36 +333,56 @@ class Dashboard {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
             }
             let abc = {};
-            console.log("User_information[0].web_url", User_information);
-            
+
             if (User_information[0].web_url !== obj.web_url) {
                 abc['web_url'] = obj.web_url;
             }
             if (User_information[0].qty_type !== obj.qty_type) {
                 abc['qty_type'] = obj.qty_type;
+                if (obj.qty_type == "1") {
+                    update_qty(user_id)
+                }
             }
             if (User_information[0].signals_execution_type !== obj.signals_execution_type) {
                 abc['signals_execution_type'] = obj.signals_execution_type;
             }
-            
-            console.log("abc" ,abc)
 
-            return
-            const User_Update = await User_model.updateMany({ _id: User_information[0]._id },
-                { $set: { TradingStatus: "off" } });
+            if (Object.keys(abc).length != 0) {
 
+                const User_Update = await User_model.updateMany({ _id: User_information[0]._id },
+                    { $set: abc });
 
 
-            const user_login = new user_logs({
-                user_Id: User_information[0]._id,
-                login_status: "Trading off",
-                role: User_information[0].Role,
-                // system_ip: getIPAddress()
-                device: device
-            })
-            await user_login.save();
+                for (const key in abc) {
+                    if (abc.hasOwnProperty(key)) {
+                        const value = abc[key];
 
-            return res.send({ status: true, msg: 'Trading Off successfully', data: [] });
+                        var msg = ""
+                        if (key == "signals_execution_type") {
+                            msg = `Update Signal Execution ${value == "1" ? "Web" : "App"}`
+                        } else if (key == "web_url") {
+                            msg = `Update Web Url ${value == "1" ? "Admin" : "Individual"}`
+                        } else if (key == "qty_type") {
+                            msg = `Update Quantity Type ${value == "1" ? "Admin" : "Individual"}`
+                        }
+
+                        const user_activity = new user_activity_logs(
+                            {
+                                user_id: User_information[0]._id,
+                                message: msg,
+                                role: User_information[0].Role,
+                                system_ip: getIPAddress(),
+                                // device: data.device
+                            })
+
+
+                        await user_activity.save()
+                    }
+                }
+
+            }
+
+            return res.send({ status: true, msg: 'User Profile update', data: [] });
 
 
         } catch (error) {
@@ -377,6 +395,66 @@ class Dashboard {
 
 
 }
+
+const update_qty = async (user_id) => {
+    var UserId = new ObjectId(user_id);
+
+
+    const filter = { user_id: UserId };
+
+    // Define an aggregation pipeline with the $lookup stage
+    const pipeline = [
+        {
+            $match: filter, // Match documents that match the filter
+        },
+        {
+            $lookup: {
+                from: 'servicegroup_services_ids', // The target collection
+                let: { group_id: '$group_id', service_id: '$service_id' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ['$Servicegroup_id', '$$group_id'] }, // Match Servicegroup_id
+                                    { $eq: ['$Service_id', '$$service_id'] }, // Match Service_id
+                                ],
+                            },
+                        },
+                    },
+                ],
+                as: 'serviceGroup', // The alias for the joined documents
+            },
+        },
+        {
+            $unwind: '$serviceGroup', // Unwind the joined array to access individual documents
+        },
+        {
+            $set: {
+                quantity: {
+                    $cond: {
+                        if: { $ne: ['$serviceGroup', null] }, // Check if there's a match
+                        then: '$serviceGroup.group_qty', // Replace 'quantity' with 'group_qty'
+                        else: '$quantity', // Keep the original 'quantity'
+                    },
+                },
+            },
+        },
+        {
+            $merge: {
+                into: 'client_services', // Update the 'client_services' collection
+                whenMatched: 'merge', // Specify how to handle matching documents
+                whenNotMatched: 'insert', // Specify how to handle non-matching documents
+            },
+        },
+    ];
+
+    // Execute the aggregation pipeline
+    await client_services.aggregate(pipeline)
+
+
+}
+
 
 
 module.exports = new Dashboard();

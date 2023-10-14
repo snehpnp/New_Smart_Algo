@@ -244,7 +244,7 @@ class Employee {
                 User_strategy_client.save();
               });
             }
-          } catch {}
+          } catch { }
 
           const group_service_find = await serviceGroup_services_id.find({
             Servicegroup_id: group_service,
@@ -309,7 +309,6 @@ class Employee {
   // UPDATE USER
   async UpdateUser(req, res) {
     try {
-      // const { FullName, UserName, Email, PhoneNo, license_type, licence, licence1, fromdate, Strategies, todate, service_given_month, broker, parent_id, parent_role, api_secret, app_id, client_code, api_key, app_key, api_type, demat_userid, group_service } = req.body;
 
       var req = req.body.req;
       var StartDate1 = "";
@@ -624,12 +623,13 @@ class Employee {
           const GroupServiceId = new ObjectId(req.group_service);
 
           // CHECK IF GROUP SERVICES ALEAREDY EXIST NO UPDATE
-          const user_group_service = await groupService_User.find({
+          var user_group_service = await groupService_User.find({
             user_id: existingUsername._id,
             groupService_id: GroupServiceId,
           });
 
           if (user_group_service.length == 0) {
+
             const result = await groupService_User.updateOne(
               { user_id: existingUsername._id },
               { $set: { groupService_id: new ObjectId(req.group_service) } }
@@ -676,10 +676,15 @@ class Employee {
                 strategy_id: strategFind[0].strategy_id,
                 uniqueUserService: existingUsername._id + "_" + data.Service_id,
               });
-              // console.log("data ", User_client_services);
-              // console.log(User_client_services);
+
               User_client_services.save();
             });
+
+
+            // if (existingUsername.qty_type == "1") {
+            //   update_qty(existingUsername._id)
+            // }
+
           } else {
             console.log("NO CHANGE IN GROUP SERVICES");
           }
@@ -706,7 +711,6 @@ class Employee {
           demat_userid: req.demat_userid,
           service_given_month: req.service_given_month,
         };
-        console.log("User_uodate", User_update);
 
         const User_Update = await User_model.updateOne(
           { _id: existingUsername._id },
@@ -714,7 +718,6 @@ class Employee {
         );
 
         if (req.license_type == "2" || req.license_type == 2) {
-          console.log("TotalMonth", new_licence);
 
           if (Number(new_licence) > 0) {
             const count_licenses_add = new count_licenses({
@@ -722,6 +725,16 @@ class Employee {
               license: new_licence,
             });
             count_licenses_add.save();
+          }
+        }
+
+
+
+
+        // IF YOU ARE CHANGE GROUP AND USER SELCT GRP QTY ADMIN TO HIT FUNCTION
+        if (user_group_service.length == 0) {
+          if (existingUsername.qty_type == "1") {
+            update_qty(existingUsername._id)
           }
         }
 
@@ -1075,7 +1088,7 @@ class Employee {
 
       const GetAllClientServices = await User_model.aggregate(pipeline);
 
-      console.log("GetAllClientServices", GetAllClientServices);
+      // console.log("GetAllClientServices", GetAllClientServices);
 
       const userSTG = await strategy_client.find({ user_id: userId });
 
@@ -1125,7 +1138,88 @@ class Employee {
 
 
 
-  
+
 }
+
+
+
+
+
+
+
+// IF ADMIN SELECT QUANTITY TYPE ADMIN 
+
+const update_qty = async (user_id) => {
+  try {
+
+    var UserId
+
+    if (typeof user_id == "object") {
+      UserId = user_id
+    } else {
+      UserId = new ObjectId(user_id);
+    }
+
+    const filter = { user_id: UserId };
+
+    // Define an aggregation pipeline with the $lookup stage
+    const pipeline = [
+      {
+        $match: filter, // Match documents that match the filter
+      },
+      {
+        $lookup: {
+          from: 'servicegroup_services_ids', // The target collection
+          let: { group_id: '$group_id', service_id: '$service_id' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$Servicegroup_id', '$$group_id'] }, // Match Servicegroup_id
+                    { $eq: ['$Service_id', '$$service_id'] }, // Match Service_id
+                  ],
+                },
+              },
+            },
+          ],
+          as: 'serviceGroup', // The alias for the joined documents
+        },
+      },
+      {
+        $unwind: '$serviceGroup', // Unwind the joined array to access individual documents
+      },
+      {
+        $set: {
+          quantity: {
+            $cond: {
+              if: { $ne: ['$serviceGroup', null] }, // Check if there's a match
+              then: '$serviceGroup.group_qty', // Replace 'quantity' with 'group_qty'
+              else: '$quantity', // Keep the original 'quantity'
+            },
+          },
+        },
+      },
+      {
+        $merge: {
+          into: 'client_services', // Update the 'client_services' collection
+          whenMatched: 'merge', // Specify how to handle matching documents
+          whenNotMatched: 'insert', // Specify how to handle non-matching documents
+        },
+      },
+    ];
+
+    // Execute the aggregation pipeline
+    await client_services.aggregate(pipeline)
+
+  } catch (error) {
+    console.log("Update Group Quantity Error -", error);
+  }
+
+}
+
+
+
+
 
 module.exports = new Employee();
