@@ -5,9 +5,6 @@ import { BrowserRouter as Router, Routes, Route, Redirect } from 'react-router-d
 const App = () => {
   const pageRef = useRef(null);
 
-
-
-
   const captureScreenshot = () => {
 
     // const options = {

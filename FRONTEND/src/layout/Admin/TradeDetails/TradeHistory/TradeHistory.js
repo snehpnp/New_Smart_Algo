@@ -16,7 +16,7 @@ import { User_Profile } from "../../../../ReduxStore/Slice/Common/commoSlice.js"
 import { TRADING_OFF_USER } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import { check_Device } from "../../../../Utils/find_device";
-import { CreateSocketSession, ConnctSocket, } from "../../../../Service/Alice_Socket";
+import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../../Service/Alice_Socket";
 import { ShowColor, ShowColor_Compare_two, } from "../../../../Utils/ShowTradeColor";
 
 import $ from "jquery";
@@ -224,6 +224,9 @@ const TradeHistory = () => {
             <span className={`d-none exit_type${row.token}`}>
               {row.exit_type}
             </span>
+            <span className={`d-none strategy_${row.token}`}>
+              {row.strategy}
+            </span>
           </div>
         );
       },
@@ -280,25 +283,25 @@ const TradeHistory = () => {
 
 
   //  SHOW lIVE PRICE
-
   const ShowLivePrice = async () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
 
+
+
+
     // const res = await CreateSocketSession(type);
 
-    if (UserDetails.demat_userid !== undefined && UserDetails.access_token !== undefined) {
+    if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
 
 
-      const res = await CreateSocketSession(type, UserDetails.demat_userid, UserDetails.access_token);
+      const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
-      console.log("res", res.status)
       if (res.status === 200) {
         setSocketState("Ok");
       }
       if (res.status === 401) {
         setSocketState("Unauthorized");
-
         tradeHistoryData.data.forEach((row) => {
           calcultateRPL(row, null);
         });
@@ -306,7 +309,6 @@ const TradeHistory = () => {
       else {
         if (res.data.stat) {
           const handleResponse = (response) => {
-
             // UPL_
             $(".LivePrice_" + response.tk).html(response.lp);
             $(".ClosePrice_" + response.tk).html(response.c);
@@ -371,7 +373,7 @@ const TradeHistory = () => {
             }
             // }
           };
-          await ConnctSocket(handleResponse, channelList, UserDetails.demat_userid, UserDetails.access_token).then((res) => { });
+          await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
         } else {
           $(".UPL_").html("-");
           $(".show_rpl_").html("-");
@@ -388,16 +390,16 @@ const TradeHistory = () => {
 
 
   const calcultateRPL = (row, livePrice) => {
+
+    console.log("row", row)
     if (row.entry_type !== '' && row.exit_type !== '') {
-      if (row.entry_type === "LE" || row.entry_type === "SE") {
+      if ((row.entry_type === "LE" || row.entry_type === "SE")) {
+
         const entryQty = parseInt(row.entry_qty_percent);
         const exitQty = parseInt(row.exit_qty_percent);
         const entryPrice = parseFloat(row.entry_price);
         const exitPrice = parseFloat(row.exit_price);
         const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
-
-        setTPL()
-
         $(".show_rpl_" + row.token).html(rpl.toFixed(2));
         $(".TPL_" + row.token).html(rpl.toFixed(2));
         $(".UPL_" + row.token).html("-");
@@ -408,18 +410,17 @@ const TradeHistory = () => {
       }
 
     }
-    else if (row.entry_type && row.exit_type === "") {
-      $(".show_rpl_" + row.token).html('-');
-      $(".TPL_" + row.token).html('-');
-      $(".UPL_" + row.token).html("-");
-    }
-    if (row.entry_type === "" && row.exit_type !== '') {
-      $(".show_rpl_" + row.token).html('-');
-      $(".TPL_" + row.token).html('-');
-      $(".UPL_" + row.token).html("-");
-    }
+    // else if (row.entry_type && row.exit_type === "") {
+    //   $(".show_rpl_" + row.token).html('-');
+    //   $(".TPL_" + row.token).html('-');
+    //   $(".UPL_" + row.token).html("-");
+    // }
+    // if (row.entry_type === "" && row.exit_type !== '') {
+    //   $(".show_rpl_" + row.token).html('-');
+    //   $(".TPL_" + row.token).html('-');
+    //   $(".UPL_" + row.token).html("-");
+    // }
   };
-
 
 
 
@@ -465,13 +466,26 @@ const TradeHistory = () => {
 
   //  GET_USER_DETAILS
   const data = async () => {
-    await dispatch(User_Profile({ id: user_id }))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setUserDetails(response.data);
-        }
-      });
+    // await dispatch(User_Profile({ id: user_id }))
+    //   .unwrap()
+    //   .then((response) => {
+    //     if (response.status) {
+    //       setUserDetails(response.data);
+    //     }
+    //   });
+
+
+
+
+
+    const response = await GetAccessToken({ broker_name: "aliceblue" });
+
+    if (response.status) {
+      setUserDetails(response.data[0]);
+    }
+
+
+
   };
   useEffect(() => {
     data();
@@ -550,13 +564,13 @@ const TradeHistory = () => {
                   type="checkbox"
                   className="bg-primary"
                   checked={
-                    UserDetails.TradingStatus === "on" ? true : false
+                    UserDetails.trading_status === "on" ? true : false
                   }
                   onClick={(e) =>
                     LogIn_WIth_Api(
                       e.target.checked,
                       UserDetails.broker,
-                      UserDetails.TradingStatus,
+                      UserDetails.trading_status,
                       UserDetails
                     )
                   }

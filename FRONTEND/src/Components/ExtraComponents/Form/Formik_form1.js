@@ -145,20 +145,20 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                     <label
                       className={`col-lg-${field.label_size} col-form-label fw-bold text-decoration-underline`}
                       htmlFor={field.parent_label}
-                    
+
                     >
                       {field.parent_label}
                     </label>
 
                     <div className={`d-flex`}>
                       <div className={`col-lg-${field.col_size} form-check custom-checkbox my-3`} >
-                        <input type={field.type} name={field.title1} className="form-check-input" id={field.title1}
+                        <input type={field.type} name={field.name} value={field.value1} className="form-check-input" id={field.title1}
                           {...formik.getFieldProps(field.name)}
                         />
                         <label className={`col-lg-${field.label_size} col-form-label mx-2`} for={field.title1}>{field.title1}</label>
                       </div>
                       <div className={`col-lg-${field.col_size} form-check custom-checkbox my-3`}>
-                        <input type={field.type} name={field.title2} className="form-check-input" id={field.name}
+                        <input type={field.type} name={field.name} value={field.value2} className="form-check-input" id={field.title2}
                           {...formik.getFieldProps(field.name)}
                         />
                         <label className={`col-lg-${field.label_size} col-form-label  mx-2`} for={field.name}>{field.title2}</label>
