@@ -7,8 +7,12 @@ import Formikform1 from "../../../Components/ExtraComponents/Form/Formik_form1"
 import { useNavigate } from "react-router-dom";
 import { Email_regex, Mobile_regex } from "../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
+import { Add_Licence_To_Company } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+
 
 const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
+    const dispatch = useDispatch()
+
 
     const formik = useFormik({
         initialValues: {
@@ -26,27 +30,31 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
         },
         onSubmit: async (values) => {
             const req = {
-                "licence": values.licence,
+                "license": values.license,
+                "db_url": showPanelName.db_url,
+                "db_name": showPanelName.db_name,
+                "key": showPanelName.key,
             }
 
-            // return
 
-            //   await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((response) => {
 
-            //     if (response.status === 409) {
-            //       toast.error(response.data.msg);
-            //     }
-            //     else if (response.status) {
-            //       toast.success(response.msg);
-            //       setTimeout(() => {
-            //         navigate("/admin/allclients")
-            //       }, 1000);
-            //     }
-            //     else if (!response.status) {
-            //       toast.error(response.msg);
-            //     }
+            await dispatch(Add_Licence_To_Company(req)).unwrap().then((response) => {
 
-            //   })
+                console.log("response", response)
+                if (response.status === 409) {
+                    // toast.error(response.data.msg);
+                }
+                else if (response.status) {
+                    // toast.success(response.msg);
+                    setTimeout(() => {
+                        // navigate("/admin/allclients")
+                    }, 1000);
+                }
+                else if (!response.status) {
+                    // toast.error(response.msg);
+                }
+
+            })
         }
     });
 
@@ -56,15 +64,15 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
 
 
     const fields = [
-        { name: 'licence', label: 'Licence', type: 'text', label_size: 12, col_size: 12, disable: true },
+        { name: 'licence', label: 'Licence', type: 'text', label_size: 12, col_size: 12, disable: false },
 
     ];
 
     return (
-        <div>   <Modal isOpen={showModal}  size="sm" title="Increase Licence" hideBtn={true}
+        <div>   <Modal isOpen={showModal} size="sm" title="Increase Licence" hideBtn={true}
             handleClose={() => setshowModal(false)}
         >
-            <h6 className='my-3'>You Are Increasing <b> {showPanelName} </b>Licence</h6>
+            <h6 className='my-3'>You Are Increasing <b> {showPanelName.panel_name} </b>Licence</h6>
             <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Licence"
             />
         </Modal ></div>

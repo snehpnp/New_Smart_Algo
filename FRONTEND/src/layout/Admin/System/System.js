@@ -6,6 +6,8 @@ import BasicDataTable from '../../../Components/ExtraComponents/Datatable/BasicD
 import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
 import { Pencil, Trash2 } from 'lucide-react';
+import $ from "jquery"
+
 
 import UpdateCompanyInfo from './UpdateCompanyInfo';
 import UpdateImages from './UpdateImages';
@@ -38,16 +40,26 @@ const System = () => {
         await dispatch(GET_COMPANY_INFOS()).unwrap()
             .then((response) => {
                 if (response.status) {
+                    console.log("response.status", response.data && response.data[0].favicon)
                     setCompanyName({
                         loading: false,
                         data: response.data
                     });
+                    $(".set_Favicon")
+
+                    let favicon = $("link[rel='icon']").length
+                        ? $("link[rel='icon']")
+                        : $("<link rel='icon' type='image/x-icon' />");
+
+                    favicon.attr('href', response.data && response.data[0].favicon);
+                    $('head').append(favicon);
                 }
             })
     }
     useEffect(() => {
         CompanyName()
     }, [])
+
     const Company_columns = [
         {
             dataField: 'index',
@@ -129,11 +141,6 @@ const System = () => {
         },
     ];
 
-    const previewimg = (cell) => {
-        let abc = cell.split("base64,")[1]
-        console.log("cell ", abc)
-        return abc
-    }
 
     const background_images = [
         {
@@ -146,7 +153,7 @@ const System = () => {
             dataField: 'favicon',
             text: 'Favicon',
             formatter: (cell, row, rowIndex) => (
-                <img src={cell} alt="Favicon" className="logo-abbr w-25"  width="100" height='100'/>
+                <img src={cell} alt="Favicon" className="logo-abbr w-25" width="100" height='100' />
             ),
         },
         {

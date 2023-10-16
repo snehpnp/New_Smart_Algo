@@ -109,8 +109,58 @@ export async function GET_PANEL_INFORMATION(id,token) {
     }
     catch (err) {
         return err
-        console.log("error", err);
         // custom error
     }
 
 }
+export async function GET_ALL_ADMIN_CLIENT(id,token) {
+    try {
+
+        const res = await axios.post(`${Config.base_url}getall/panel/clients`, id,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        // custom error
+    }
+
+}
+
+
+export async function GET_ALL_SUBADMIN_CLIENT(id,token) {
+    try {
+
+        const res = await axios.post(`${Config.base_url}getall/panel/subadmins`, id,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        // custom error
+    }
+
+}
+
+
+export async function ADD_LICENCE_TO_COMPANY(id,token) {
+    try {
+
+        const res = await axios.post(`${Config.base_url}add/license`, id,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        // custom error
+    }
+
+}
+
+

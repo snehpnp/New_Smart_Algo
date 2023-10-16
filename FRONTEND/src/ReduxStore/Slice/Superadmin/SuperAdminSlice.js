@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_ALL_PANELS_LIST, UPDATE_PANEL_THEME ,GET_PANEL_INFORMATION} from "../../../Service/superadmin.service";
+import { GET_ALL_PANELS_LIST, UPDATE_PANEL_THEME, GET_PANEL_INFORMATION, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT } from "../../../Service/superadmin.service";
 
 
 export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => {
@@ -15,7 +15,7 @@ export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => 
 export const Update_Panel_Theme = createAsyncThunk("update/theme", async (data) => {
   const { theme_id, userid, token } = data
   try {
-    const res = await UPDATE_PANEL_THEME({ theme_id: theme_id, userid: userid }, token );
+    const res = await UPDATE_PANEL_THEME({ theme_id: theme_id, userid: userid }, token);
     return await res;
   } catch (err) {
     return err;
@@ -24,9 +24,44 @@ export const Update_Panel_Theme = createAsyncThunk("update/theme", async (data) 
 
 export const GET_PANEL_INFORMATIONS = createAsyncThunk("get/panel/info", async (data) => {
   const { id, token } = data
-  
+
   try {
-    const res = await GET_PANEL_INFORMATION({ id:id }, token );
+    const res = await GET_PANEL_INFORMATION(data, token);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+export const Get_All_Admin_Client = createAsyncThunk("get/all/clients", async (data) => {
+  const { id, token } = data
+
+  try {
+    const res = await GET_ALL_ADMIN_CLIENT(data, token);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+
+export const Get_All_Subadmin_Client = createAsyncThunk("get/all/clients", async (data) => {
+  const { id, token } = data
+
+  try {
+    const res = await GET_ALL_SUBADMIN_CLIENT(data, token);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+
+export const Add_Licence_To_Company = createAsyncThunk("get/all/clients", async (data) => {
+  const { id, token } = data
+
+  try {
+    const res = await ADD_LICENCE_TO_COMPANY(data, token);
     return await res;
   } catch (err) {
     return err;
@@ -42,6 +77,9 @@ const SuperAdminSlice = createSlice({
     getPanelList: [],
     update_panel_theme: [],
     panel_info: [],
+    admin_client_list: [],
+    subadmin_list: [],
+    add_licence: []
 
   },
 
@@ -62,6 +100,18 @@ const SuperAdminSlice = createSlice({
     [GET_PANEL_INFORMATIONS.fulfilled]: (state, { payload }) => {
       // state.isLoading = false;
       return { ...state, panel_info: payload, isLoading: false };
+    },
+    [Get_All_Admin_Client.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, admin_client_list: payload, isLoading: false };
+    },
+    [Get_All_Subadmin_Client.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, subadmin_list: payload, isLoading: false };
+    },
+    [Add_Licence_To_Company.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, add_licence: payload, isLoading: false };
     },
   },
 

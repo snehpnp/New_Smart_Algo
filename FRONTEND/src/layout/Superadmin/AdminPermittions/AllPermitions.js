@@ -36,8 +36,10 @@ const AllPermitions = () => {
 
     //  for Show Clients
     const [ShowClientsModal, setShowClientsModal] = useState(false)
+    const [ShowClientsList, setShowClientsList] = useState([])
     //  for Subadmins
     const [showSubadminsModal, setshowSubadminsModal] = useState(false)
+    const [ShowSubadminList, setShowSubadminList] = useState([])
 
     //  for Add Licence
     const [showAddLicenceModal, setshowAddLicenceModal] = useState(false)
@@ -46,6 +48,9 @@ const AllPermitions = () => {
 
     //  for Add Licence
     const [showLicenceModal, setshowLicenceModal] = useState(false)
+    const [showLicenceDetails, setshowLicenceDetails] = useState([])
+
+
 
 
 
@@ -84,16 +89,8 @@ const AllPermitions = () => {
     }
 
     const Panel_Info = async (row) => {
-
-        setPanelDetailsModal(true)
-        await dispatch(GET_PANEL_INFORMATIONS({ id: row._id })).unwrap()
-            .then((response) => {
-                console.log(":v" ,response)
-                setpanelInfo({
-                    loading: false,
-                    data: response.data
-                });
-            })
+        setshowLicenceDetails({ id: row._id, db_url: row.db_url, db_name: row.db_name })
+        setshowLicenceModal(true)
     }
 
 
@@ -174,7 +171,8 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <FileClock size={20} color="#198754" strokeWidth={2}
-                        onClick={(e) => { setshowLicenceModal(true) }}
+                        // onClick={(e) => { setshowLicenceModal(true) }}
+                        onClick={(e) => Panel_Info(row)}
                         className="mx-1" />
                 </span>
             )
@@ -186,7 +184,6 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <FileClock size={20} color="#198754" strokeWidth={2}
-                        onClick={(e) => Panel_Info(row)}
                         className="mx-1" />
                 </span>
             )
@@ -197,7 +194,7 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"
-                        onClick={(e) => setShowClientsModal(true)}
+                        onClick={(e) => { setShowClientsModal(true); setShowClientsList({ id: row._id, db_url: row.db_url, db_name: row.db_name }) }}
                     />
                 </span>
             )
@@ -208,7 +205,7 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"
-                        onClick={(e) => setshowSubadminsModal(true)}
+                        onClick={(e) => { setshowSubadminsModal(true); setShowSubadminList({ id: row._id, db_url: row.db_url, db_name: row.db_name }) }}
                     />
                 </span>
             )
@@ -219,7 +216,7 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Add Licence">
                     <Plus size={20} color="#198754" strokeWidth={2} className="mx-1"
-                        onClick={(e) => { setshowPanelName(row.panel_name); setshowAddLicenceModal(true) }}
+                        onClick={(e) => { setshowPanelName({ panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowAddLicenceModal(true) }}
                     />
                 </span>
             )
@@ -306,15 +303,15 @@ const AllPermitions = () => {
                                     <>
                                         <SidebarPermission showModal={showModal} setshowModal={() => setshowModal(false)} />
 
-                                        <ShowAllSubadmins showModal={showSubadminsModal} setshowModal={() => setshowSubadminsModal(false)} />
+                                        <ShowAllSubadmins List={ShowSubadminList} showModal={showSubadminsModal} setshowModal={() => setshowSubadminsModal(false)} />
 
-                                        <ShowAllClients showModal={ShowClientsModal} setshowModal={() => setShowClientsModal(false)} />
+                                        <ShowAllClients List={ShowClientsList} showModal={ShowClientsModal} setshowModal={() => setShowClientsModal(false)} />
 
                                         <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
 
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
 
-                                        <LicenceDetails showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
+                                        <LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
 
                                         <FullDataTable TableColumns={columns} tableData={themeData.data} />
                                         <ToastButton />

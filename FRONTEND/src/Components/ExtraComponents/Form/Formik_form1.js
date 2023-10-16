@@ -269,30 +269,30 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                           </> :
 
                             field.type === "file" ? <>
-                              <div className="col-lg-6">
+                              <div className={`col-lg-${field.col_size}`}>
                                 <div className="row d-flex">
-                                  <div className={`col-lg-${title === "addgroup" ? 6 : 12}`}>
-                                    <div className="mb-3">
-                                      <label className={`col-form-label`} htmlFor={field.name}>
-                                        {field.label}
-                                        <span className="text-danger">*</span>
-                                      </label>
-                                      <input
-                                        type="file"
-                                        id={field.name}
-                                        onChange={(e) => handleFileChange(e, index, field.name)} // Pass the index to the handler
-                                        className={`form-control`}
-                                      />
-
-                                    </div>
-
-
+                                  {/* <div className={`col-lg-${field.col_size}`}> */}
+                                  <div className="mb-3">
+                                    <label className={`col-form-${field.label_size}`} htmlFor={field.name}>
+                                      {field.label}
+                                      <span className="text-danger">*</span>
+                                    </label>
+                                    <input
+                                      type="file"
+                                      id={field.name}
+                                      onChange={(e) => handleFileChange(e, index, field.name)} // Pass the index to the handler
+                                      className={`form-control`}
+                                    />
                                   </div>
 
-                                  {/* {console.log("{ ...formik.getFieldProps(field.name) }", { ...formik.getFieldProps(field.name) })} */}
-                                  <img src={formik.getFieldProps(field.name).value} name={field.name} id={field.name} alt={`Preview ${index}`} className="mb-3"
 
+                                  {/* </div> */}
+                                  <img src={formik.getFieldProps(field.name).value} name={field.name} id={field.name} alt={`Preview ${index}`} className={`col-lg-11 ms-3
+                                  // ${field.label_size}
+                                   mb-3 border border-2`}
                                   />
+
+
 
 
                                 </div>

@@ -96,8 +96,10 @@ const TradeHistory = () => {
     let date = abc.getDate();
     let year = abc.getFullYear();
     let full = `${year}/${month}/${date}`;
+
     await dispatch(
-      Get_Tradehisotry({ startDate: full, endDate: full, token: token })
+      // Get_Tradehisotry({ startDate: full, endDate: full, token: token })
+      Get_Tradehisotry({ startDate: "2023/10/1", endDate: "2023/10/15", token: token })
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -410,16 +412,16 @@ const TradeHistory = () => {
       }
 
     }
-    // else if (row.entry_type && row.exit_type === "") {
-    //   $(".show_rpl_" + row.token).html('-');
-    //   $(".TPL_" + row.token).html('-');
-    //   $(".UPL_" + row.token).html("-");
-    // }
-    // if (row.entry_type === "" && row.exit_type !== '') {
-    //   $(".show_rpl_" + row.token).html('-');
-    //   $(".TPL_" + row.token).html('-');
-    //   $(".UPL_" + row.token).html("-");
-    // }
+    else if (row.entry_type && row.exit_type === "") {
+      $(".show_rpl_" + row.token).html('-');
+      $(".TPL_" + row.token).html('-');
+      $(".UPL_" + row.token).html("-");
+    }
+    if (row.entry_type === "" && row.exit_type !== '') {
+      $(".show_rpl_" + row.token).html('-');
+      $(".TPL_" + row.token).html('-');
+      $(".UPL_" + row.token).html("-");
+    }
   };
 
 
