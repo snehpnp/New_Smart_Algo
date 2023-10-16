@@ -5,7 +5,7 @@ const connectToDatabase = require('../BACKEND/App/Connection/mongo_connection')
 const express = require("express");
 const app = express();
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs'); 
 const winston = require('winston');
 // Define a custom format for the timestamp
 const customTimestamp = () => {
@@ -121,11 +121,11 @@ app.post('/broker-signals', async (req, res) => {
   
         if (file != 'PANELKEY'+process.env.PANEL_KEY+process.env.PANEL_NAME+formattedDate+'.txt') {
           //paneltxtentry = 1;
-          fs.appendFile(filePath, "INSERT FILE "+new Date()+"\n\n", function (err) {
+          fs.writeFile(filePath, "INSERT FILE "+new Date()+"\n\n", function (err) {
             if (err) {
                 return console.log(err);
             }
-            console.log("Data created");
+            console.log("Data created if");
           });
          
         }
@@ -137,7 +137,7 @@ app.post('/broker-signals', async (req, res) => {
         if (err) {
             return console.log(err);
         }
-        console.log("Data created");
+        console.log("Data created else");
       });
 
     }
@@ -163,6 +163,8 @@ app.post('/broker-signals', async (req, res) => {
       fs.appendFile(filePath,'TIME '+new Date()+' RECEIVED_SIGNALS ' + splitArray+'\n', function (err) {
         if (err) {
             return console.log(err);
+        }else{
+          console.log("doneeee")
         }
      });
 
@@ -315,7 +317,7 @@ app.post('/broker-signals', async (req, res) => {
 
             if (process.env.PANEL_KEY == client_key) {
 
-              logger.info('RECEIVED_SIGNALS_PANEl_NAME ' + PANEL_NAME + ' KEY ' + client_key);
+             // logger.info('RECEIVED_SIGNALS_PANEl_NAME ' + process.env.PANEL_NAME + ' KEY ' + client_key);
 
               //Process Alice Blue
               const AliceBlueCollection = db.collection('aliceViewAllClient');
@@ -402,11 +404,11 @@ app.post('/broker-signals', async (req, res) => {
               }
               // End Process Alice Blue
 
-              return res.send({ msg: client_key })
+              //return res.send({ msg: client_key })
 
             } else {
 
-              logger.info('RECEIVED_SIGNALS_PANEl_NAME_TADINGVIEW ' + process.env.PANEL_NAME + ' KEY ' + client_key);
+            //  logger.info('RECEIVED_SIGNALS_PANEl_NAME_TADINGVIEW ' + process.env.PANEL_NAME + ' KEY ' + client_key);
               console.log("IF SIGNEL KEY LIKE CLIENT KEY IN TRADING VIEW")
 
               //Process Tading View Client Alice Blue
@@ -498,7 +500,7 @@ app.post('/broker-signals', async (req, res) => {
               // End Process Tading View Client Alice Blue
 
 
-              return res.send({ msg: client_key })
+              // return res.send({ msg: client_key })
 
             }
 
@@ -566,6 +568,7 @@ app.post('/broker-signals', async (req, res) => {
             let Signal_req1 = new Signals(Signal_req)
             var SignalSave = await Signal_req1.save();
           } catch (error) {
+            console.log("Insert Signal - ",error)
             return res.send("ok")
           }
           // ENTRY OR EXIST CHECK
@@ -656,7 +659,7 @@ app.post('/broker-signals', async (req, res) => {
           return res.send('Incorrect Signal Key');
         }
 
-
+        return res.send({ msg: client_key });
       } else {
         console.log('No Signal Key Recevie');
         return res.send("No Signal Key Recevie");

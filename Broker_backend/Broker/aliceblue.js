@@ -399,7 +399,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token,logger,fileP
 
                         };
 
-                        axios(config)
+                          axios(config)
                             .then(async (response) => {
                            //  logger.info(' ALICE BLUE AFTER PLACE ORDER USER ENTRY - '+item.UserName+' RESPONSE -'+JSON.stringify(response.data));
 

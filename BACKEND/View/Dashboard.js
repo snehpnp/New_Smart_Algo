@@ -177,18 +177,20 @@ db.createView("dashboard_data", "users", [
                     ]
                 }
             },
+            // used_licence: { $sum: { $toInt: "$licence" } }
+
             used_licence: {
                 $sum: {
-                    $cond: [
-                        {
+                    $cond: {
+                        if: {
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "2"] }
                             ]
                         },
-                        { $toInt: "$licence" }, // Use the licence field for summing
-                        0
-                    ]
+                        then: { $toInt: "$licence" },
+                        else: 0
+                    }
                 }
             }
         }
@@ -219,7 +221,11 @@ db.createView("dashboard_data", "users", [
             total_two_days: 1,
             total_active_two_days: 1,
             total_expired_two_days: 1,
-            used_licence: { $toInt: "$used_licence" }, // Convert used_licence to integer
+           // used_licence: { $toInt: "$used_licence" }, // Convert used_licence to integer
+           used_licence : 1,
+          
+
+
             remaining_license: {
                 $subtract: [
                     { $toInt: "$company_info.licenses" }, // Convert licenses to integer
