@@ -28,7 +28,7 @@ class Dashboard {
             // Query the view to get the data
             const result = await db1.collection(viewName).find().toArray();
 
-            console.log(result);
+            // console.log(result);
             // // DATA GET SUCCESSFULLY
             res.send({
                 status: true,
@@ -78,7 +78,7 @@ class Dashboard {
 
 
         } catch (error) {
-            console.log("Error In Broker Informations");
+            console.log("Error In Broker Informations",error);
         }
     }
 
@@ -105,7 +105,7 @@ class Dashboard {
                 })
 
         } catch (error) {
-            console.log("Error In Broker Informations");
+            console.log("Error In Broker Informations",error);
         }
     }
 
@@ -124,7 +124,7 @@ class Dashboard {
 
 
         } catch (error) {
-            console.log("Error In Broker Informations");
+            console.log("Error In Broker Informations",error);
         }
     }
 
@@ -143,7 +143,7 @@ class Dashboard {
                 })
 
         } catch (error) {
-            console.log("Error In Broker Informations");
+            console.log("Error In Broker Informations",error);
         }
     }
 
