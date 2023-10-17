@@ -121,7 +121,7 @@ app.post('/broker-signals', async (req, res) => {
   
         if (file != 'PANELKEY'+process.env.PANEL_KEY+process.env.PANEL_NAME+formattedDate+'.txt') {
           //paneltxtentry = 1;
-          fs.writeFile(filePath, "INSERT FILE "+new Date()+"\n\n", function (err) {
+          fs.appendFile(filePath, '\nNEW TRADE GET '+new Date()+' \n', function (err) {
             if (err) {
                 return console.log(err);
             }

@@ -25,6 +25,76 @@ module.exports = function (app) {
     console.log("1")
     const axios = require('axios');
 
+  
+
+    let postdata = { complexty: 'regular',
+    discqty: '0',
+    exch: 'NFO',
+    pCode: 'NRML',
+    prctyp: 'MKT',
+    price: '248.15',
+    qty: 4,
+    ret: 'DAY',
+    symbol_id: '67308',
+    trading_symbol: 'NIFTY23102619700CE',
+    transtype: 'SELL',
+    trigPrice: '',
+    orderTag: 'order1',
+    }
+
+    let post_demat_userid = "438760"
+    
+    let post_access_token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc2MDM5NDAsImlhdCI6MTY5NzUxNzU1OCwianRpIjoiNjY4YjkzMDQtODJjMi00MmM4LTlhOGItOWYxNDY0NDZlNTA0IiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6ImFiYmU5YTdhLWI0ODktNDViNi1hMWM0LWRiNDQ2ZGQ3NzZhMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiYWJiZTlhN2EtYjQ4OS00NWI2LWExYzQtZGI0NDZkZDc3NmEzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.cITIwTsiFOMe5-EGRuiqaDtIVFnHezFPxD6twEflY5MxDklLQZm4s9-ZxKXayNccdrhPrU9k4m9bUaMTkFjLIeaAoLcFQI20CJNhwZLNNbJAt37ySJ7jHxWkkxuRhgn3Atk_zv9Ong4NVzj3WEnqnLCjmmsHhm8JTB6TxTpsUin9tTNK5D3Q9erBZsNjtbUiCR8e0zT47FcYex3YK8e_rU1t5JSXZoZqusgECZ0gF3ImhMj0h-vDhrXIkpDy44Ax44sdgEQnjB9lmyg6m-fY_zT4WLPH1qWEfbmT6OcsvKRdwKBfVEjgaaGPLpYTzRuvj935GfS2Fkj4Rjxg3Hi9-g";
+    
+    // An array of request data
+    const requestData = [
+      {
+        data : postdata,
+        demat_userid : post_demat_userid,
+        access_token : post_access_token,
+      },
+      // Add more request data objects as needed
+    ];
+    
+    // Create an array of promises for sending requests
+    const requestPromises = requestData.map(data => {
+      const config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+        headers: {
+          'Authorization': "Bearer " + data.demat_userid + " " + data.access_token,
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify([data.data]),
+      };
+    
+      return axios(config);
+    });
+    
+    // Send all requests concurrently using Promise.all
+    Promise.all(requestPromises)
+      .then(responses => {
+        responses.forEach(response => {
+          console.log("Response:", response.data);
+        });
+      })
+      .catch(errors => {
+        errors.forEach(error => {
+          console.log("Error:", error);
+        });
+      });
+    
+
+
+
+
+
+  res.send("doneeeee")
+
+
+    return
+
     const requests = [
         
         { demat_userid: "438760" ,access_token:"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc1MzA5NjQsImlhdCI6MTY5NzQ0NDg4MSwianRpIjoiODNhZThkMTgtMjlmZC00NWIwLWFkNzAtY2MwNjhkOTVkZGU4IiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjFmOGYxNjVlLWVlNDQtNGU3OC1hNGM0LTYwYWJlNGJhMjUzMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMWY4ZjE2NWUtZWU0NC00ZTc4LWE0YzQtNjBhYmU0YmEyNTMzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.bBVOW8AbcfthpbePNPpPf0DAR-Llk08OaXpyIqLjlOUl16Vz3LYtJqiduQKnKq8GPf3lG_Tj_gQvyD5TBeslk0gHeNFuIQ8YfQk7jJVbmT5SzPqTpIVZuAFHJQvHL8WyO0JKUWFnLOsQSDI5nPY24YV--CFLq8TjF6qcgfrTCUqvUIR7xWt6A-g0cLrTqzBcWRWd24CxMb6_7QtZ1TNJg-p7noVgwr8fWZn1Uni_eUJ5Z8chPxCaHcx9oykdeF_waDpNakgPL2AmEXB7wv-LXUeWwzx0hr86F63QFS5VSpC7TqwGk6-hhsNQo61wKs2A5gyGHnpO96d1SWio8dcdqg"},
@@ -93,11 +163,8 @@ module.exports = function (app) {
           })
           .catch(async (error) => {
             console.log("error",error)
-          
-
           });
         
-
 
     }
     
