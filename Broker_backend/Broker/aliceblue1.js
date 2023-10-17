@@ -11,8 +11,7 @@ const BrokerResponse = db.BrokerResponse;
 
 
 var dateTime = require('node-datetime');
-const place_order = async (item, splitArray, bro_res_last_id, token, logger, filePath) => {
-
+const place_order = async (item, splitArray, bro_res_last_id, token) => {
 
     try {
         console.log("ALICE BLUE BROKER");
@@ -38,23 +37,22 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
             console.log({
                 dt: splitArray[0],
-                input_symbol: splitArray[1],
-                type: splitArray[2],
-                tr_price: splitArray[3],
-                price: splitArray[4],
-                sq_value: splitArray[5],
-                sl_value: splitArray[6],
-                tsl: splitArray[7],
-                segment: splitArray[8],
-                strike: splitArray[9],
-                option_type: splitArray[10],
-                expiry: splitArray[11],
-                strategy: splitArray[12],
-                qty_percent: splitArray[13],
-                client_key: splitArray[14],
-                demo: splitArray[15],
+            input_symbol: splitArray[1],
+            type: splitArray[2],
+            tr_price: splitArray[3],    
+            price: splitArray[4],
+            sq_value: splitArray[5],
+            sl_value: splitArray[6],
+            tsl: splitArray[7],
+            segment: splitArray[8],
+            strike: splitArray[9],
+            option_type: splitArray[10],
+            expiry: splitArray[11],
+            strategy: splitArray[12],
+            qty_percent: splitArray[13],
+            client_key: splitArray[14],
+            demo: splitArray[15],
             });
-
 
             var exch;
             if (segment == 'C' || segment == 'c') {
@@ -77,7 +75,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             }
 
 
-            //console.log(token);
+            console.log(token);
             var complexty
             var discqty = "0";
             var pCode;
@@ -143,7 +141,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                 price = price;
                 pCode = 'CNC';
                 complexty = "regular";
-                console.log("price", price);
+                console.log("price",price);
 
             }
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '2' && item.client_services.product_type == '1') {
@@ -378,14 +376,8 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
                     if (data !== undefined) {
 
-                        // logger.info(' ALICE BLUE BEFORE PLACE ORDER USER ENTRY- '+item.UserName+' REQUEST -'+JSON.stringify(data));
-
-                        fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE BEFORE PLACE ORDER USER ENTRY- ' + item.UserName + ' REQUEST -' + JSON.stringify(data) + '\n', function (err) {
-                            if (err) {
-                                return console.log(err);
-                            }
-                        });
-
+                        logger.info(' ALICE BLUE BEFORE PLACE ORDER USER- '+item.UserName+' REQUEST -'+data);
+                        
                         var send_rr = Buffer.from(qs.stringify(data)).toString('base64');
 
                         let config = {
@@ -402,14 +394,8 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
                         axios(config)
                             .then(async (response) => {
-                                //  logger.info(' ALICE BLUE AFTER PLACE ORDER USER ENTRY - '+item.UserName+' RESPONSE -'+JSON.stringify(response.data));
-
-                                fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
-                                    if (err) {
-                                        return console.log(err);
-                                    }
-                                });
-
+                             logger.info(' ALICE BLUE AFTER PLACE ORDER USER ENTRY - '+item.UserName+' RESPONSE -'+response.data);
+                             
 
                                 if (response.data[0].stat == "Ok") {
 
@@ -445,14 +431,8 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
                             })
                             .catch(async (error) => {
-                                //logger.info(' ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - '+item.UserName+' ERROR -'+JSON.stringify(error));
-
-                                fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - ' + item.UserName + ' ERROR -' + JSON.stringify(error) + '\n', function (err) {
-                                    if (err) {
-                                        return console.log(err);
-                                    }
-                                });
-
+                             logger.info(' ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - '+item.UserName+' ERROR -'+error);
+                              
                                 try {
 
                                     if (error) {
@@ -517,17 +497,8 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                 };
                 axios(config)
                     .then(async (response) => {
-
-                        //console.log("run=====");
-                        //console.log(response.data);
-                        //logger.info(' ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- '+item.UserName+' POSSITION LENGTH -'+response.data.length);
-
-                        fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- ' + item.UserName + ' POSSITION LENGTH -' + response.data.length + '\n', function (err) {
-                            if (err) {
-                                return console.log(err);
-                            }
-                        });
-
+                        console.log("run=====");
+                        console.log(response.data);
 
                         if (response.data.length > 0) {
 
@@ -556,7 +527,99 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                                             try {
 
                                                 if (data !== undefined) {
-                                                    ExitPlaceOrder(data, item, filePath)
+                                                    var send_rr = Buffer.from(qs.stringify(data)).toString('base64');
+
+                                                    let config = {
+                                                        method: 'post',
+                                                        maxBodyLength: Infinity,
+                                                        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+                                                        headers: {
+                                                            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+                                                            'Content-Type': 'application/json'
+                                                        },
+                                                        data: JSON.stringify([data])
+
+                                                    };
+
+                                                    axios(config)
+                                                        .then(async (response) => {
+
+                                                            console.log(response);
+                                                            if (response.data[0].stat == "Ok") {
+
+                                                                let result = await BrokerResponse.findByIdAndUpdate(
+                                                                    bro_res_last_id,
+                                                                    {
+                                                                        symbol: input_symbol,
+                                                                        send_request: send_rr,
+                                                                        order_id: response.data[0].NOrdNo,
+                                                                        order_status: response.data[0].stat
+                                                                    },
+                                                                    { new: true }
+                                                                )
+
+                                                            } else {
+
+                                                                const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
+
+
+                                                                let result = await BrokerResponse.findByIdAndUpdate(
+                                                                    bro_res_last_id,
+                                                                    {
+                                                                        symbol: input_symbol,
+                                                                        send_request: send_rr,
+                                                                        order_id: response.data[0].NOrdNo,
+                                                                        order_status: "Error",
+                                                                        reject_reason: response.data
+                                                                    },
+                                                                    { new: true }
+                                                                )
+
+                                                            }
+
+                                                        })
+                                                        .catch(async (error) => {
+
+                                                            try {
+
+                                                                if (error) {
+                                                                    if (error.response) {
+                                                                        const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+
+                                                                        let result = await BrokerResponse.findByIdAndUpdate(
+                                                                            bro_res_last_id,
+                                                                            {
+                                                                                symbol: input_symbol,
+                                                                                send_request: send_rr,
+                                                                                order_status: "Error",
+                                                                                reject_reason: message
+                                                                            },
+                                                                            { new: true }
+                                                                        )
+                                                                    } else {
+                                                                        const message = (JSON.stringify(error)).replace(/["',]/g, '');
+
+
+                                                                        let result = await BrokerResponse.findByIdAndUpdate(
+                                                                            bro_res_last_id,
+                                                                            {
+                                                                                symbol: input_symbol,
+                                                                                send_request: send_rr,
+                                                                                order_status: "Error",
+                                                                                reject_reason: message
+                                                                            },
+                                                                            { new: true }
+                                                                        )
+                                                                    }
+                                                                }
+
+                                                            } catch (e) {
+                                                                console.log("error 1", e);
+                                                            }
+
+
+
+                                                        });
                                                 }
 
                                             } catch (e) {
@@ -569,7 +632,99 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                                             try {
 
                                                 if (data !== undefined) {
-                                                    ExitPlaceOrder(data, item, filePath)
+                                                    var send_rr = Buffer.from(qs.stringify(data)).toString('base64');
+
+                                                    let config = {
+                                                        method: 'post',
+                                                        maxBodyLength: Infinity,
+                                                        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+                                                        headers: {
+                                                            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+                                                            'Content-Type': 'application/json'
+                                                        },
+                                                        data: JSON.stringify([data])
+
+                                                    };
+
+                                                    axios(config)
+                                                        .then(async (response) => {
+
+
+                                                            if (response.data[0].stat == "Ok") {
+
+                                                                let result = await BrokerResponse.findByIdAndUpdate(
+                                                                    bro_res_last_id,
+                                                                    {
+                                                                        symbol: input_symbol,
+                                                                        send_request: send_rr,
+                                                                        order_id: response.data[0].NOrdNo,
+                                                                        order_status: response.data[0].stat
+                                                                    },
+                                                                    { new: true }
+                                                                )
+
+                                                            } else {
+
+                                                                const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
+
+
+                                                                let result = await BrokerResponse.findByIdAndUpdate(
+                                                                    bro_res_last_id,
+                                                                    {
+                                                                        symbol: input_symbol,
+                                                                        send_request: send_rr,
+                                                                        order_id: response.data[0].NOrdNo,
+                                                                        order_status: "Error",
+                                                                        reject_reason: response.data
+                                                                    },
+                                                                    { new: true }
+                                                                )
+
+                                                            }
+
+                                                        })
+                                                        .catch(async (error) => {
+
+                                                            try {
+
+                                                                if (error) {
+                                                                    if (error.response) {
+                                                                        const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+
+                                                                        let result = await BrokerResponse.findByIdAndUpdate(
+                                                                            bro_res_last_id,
+                                                                            {
+                                                                                symbol: input_symbol,
+                                                                                send_request: send_rr,
+                                                                                order_status: "Error",
+                                                                                reject_reason: message
+                                                                            },
+                                                                            { new: true }
+                                                                        )
+                                                                    } else {
+                                                                        const message = (JSON.stringify(error)).replace(/["',]/g, '');
+
+
+                                                                        let result = await BrokerResponse.findByIdAndUpdate(
+                                                                            bro_res_last_id,
+                                                                            {
+                                                                                symbol: input_symbol,
+                                                                                send_request: send_rr,
+                                                                                order_status: "Error",
+                                                                                reject_reason: message
+                                                                            },
+                                                                            { new: true }
+                                                                        )
+                                                                    }
+                                                                }
+
+                                                            } catch (e) {
+                                                                console.log("error 1", e);
+                                                            }
+
+
+
+                                                        });
                                                 }
 
                                             } catch (e) {
@@ -593,13 +748,8 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
 
                                         if (item1.Netqty > 0 && type == 'LX') {
-                                            if (data !== undefined) {
-                                                ExitPlaceOrder(data, item, filePath)
-                                            }
+
                                         } else if (item1.Netqty < 0 && type == 'SX') {
-                                            if (data !== undefined) {
-                                                ExitPlaceOrder(data, item, filePath)
-                                            }
 
                                         }
 
@@ -681,126 +831,6 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
 }
 
-const ExitPlaceOrder = async (data, item, filePath) => {
-
-    var send_rr = Buffer.from(qs.stringify(data)).toString('base64');
-
-
-    fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE BEFORE PLACE ORDER USER EXIT- ' + item.UserName + ' REQUEST -' + JSON.stringify(data) + '\n', function (err) {
-        if (err) {
-            return console.log(err);
-        }
-    });
-
-    let config = {
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-        headers: {
-            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
-            'Content-Type': 'application/json'
-        },
-        data: JSON.stringify([data])
-
-    };
-
-    axios(config)
-        .then(async (response) => {
-
-
-
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-            });
-
-
-            if (response.data[0].stat == "Ok") {
-
-                let result = await BrokerResponse.findByIdAndUpdate(
-                    bro_res_last_id,
-                    {
-                        symbol: input_symbol,
-                        send_request: send_rr,
-                        order_id: response.data[0].NOrdNo,
-                        order_status: response.data[0].stat
-                    },
-                    { new: true }
-                )
-
-            } else {
-
-                const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
-
-
-                let result = await BrokerResponse.findByIdAndUpdate(
-                    bro_res_last_id,
-                    {
-                        symbol: input_symbol,
-                        send_request: send_rr,
-                        order_id: response.data[0].NOrdNo,
-                        order_status: "Error",
-                        reject_reason: response.data
-                    },
-                    { new: true }
-                )
-
-            }
-
-        })
-        .catch(async (error) => {
-
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER USER EXIT CATCH- ' + item.UserName + ' RESPONSE -' + JSON.stringify(error) + '\n', function (err) {
-                if (err) {
-                    return console.log(err);
-                }
-            });
-
-            try {
-
-                if (error) {
-                    if (error.response) {
-                        const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
-
-                        let result = await BrokerResponse.findByIdAndUpdate(
-                            bro_res_last_id,
-                            {
-                                symbol: input_symbol,
-                                send_request: send_rr,
-                                order_status: "Error",
-                                reject_reason: message
-                            },
-                            { new: true }
-                        )
-                    } else {
-                        const message = (JSON.stringify(error)).replace(/["',]/g, '');
-
-
-                        let result = await BrokerResponse.findByIdAndUpdate(
-                            bro_res_last_id,
-                            {
-                                symbol: input_symbol,
-                                send_request: send_rr,
-                                order_status: "Error",
-                                reject_reason: message
-                            },
-                            { new: true }
-                        )
-                    }
-                }
-
-            } catch (e) {
-                console.log("error 1", e);
-            }
-
-
-
-        });
-
-
-
-}
 
 
 module.exports = { place_order }
