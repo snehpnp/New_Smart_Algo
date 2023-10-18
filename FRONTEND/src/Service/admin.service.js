@@ -588,9 +588,9 @@ export async function TRANSACTION_LICENCE(data, token) {
 
 }
 // ADD SUBADMIN
-export async function ADD_SUBADMIN(data , token) {
+export async function ADD_SUBADMIN(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}add/subadmin`, data ,{
+        const res = await axios.post(`${Config.base_url}add/subadmin`, data, {
             // headers: header(token),
             data: {},
         })
@@ -604,9 +604,9 @@ export async function ADD_SUBADMIN(data , token) {
 }
 
 // EDIT SUBADMIN
-export async function EDIT_SUBADMIN(data , token) {
+export async function EDIT_SUBADMIN(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}edit/subadmin`, data ,{
+        const res = await axios.post(`${Config.base_url}edit/subadmin`, data, {
             // headers: header(token),
             data: {},
         })
@@ -619,9 +619,9 @@ export async function EDIT_SUBADMIN(data , token) {
 
 }
 // EDIT ONE SUBADMIN
-export async function FIND_ONE_SUBADMIN(data , token) {
+export async function FIND_ONE_SUBADMIN(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}get/subadmin`, data ,{
+        const res = await axios.post(`${Config.base_url}get/subadmin`, data, {
             // headers: header(token),
             data: {},
         })
@@ -638,9 +638,9 @@ export async function FIND_ONE_SUBADMIN(data , token) {
 
 
 // UPDATE_SMTP_DETAILS
-export async function UPDATE_SMTP_DETAILS(data , token) {
+export async function UPDATE_SMTP_DETAILS(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}edit/emailinfo`, data ,{
+        const res = await axios.post(`${Config.base_url}edit/emailinfo`, data, {
             headers: header(token),
             data: {},
         })
@@ -654,9 +654,9 @@ export async function UPDATE_SMTP_DETAILS(data , token) {
 }
 
 // UPDATE_COMPANY_DETAILS
-export async function UPDATE_COMPANY_DETAILS(data , token) {
+export async function UPDATE_COMPANY_DETAILS(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}edit/company`, data ,{
+        const res = await axios.post(`${Config.base_url}edit/company`, data, {
             headers: header(token),
             data: {},
         })
@@ -673,9 +673,9 @@ export async function UPDATE_COMPANY_DETAILS(data , token) {
 
 // GET_CLIENT_BY_SUBADMIN_ID
 
-export async function GET_CLIENT_BY_SUBADMIN_ID(data , token) {
+export async function GET_CLIENT_BY_SUBADMIN_ID(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}sub/get/clientbyId`, data ,{
+        const res = await axios.post(`${Config.base_url}sub/get/clientbyId`, data, {
             headers: header(token),
             data: {},
         })
@@ -712,6 +712,54 @@ export async function SUBADMIN_UPDATE_USER_STATUS(data, token) {
 export async function GET_BROKER_INFORMATION(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}getall/broker_information`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+
+// MESSAGE BROADCAST
+
+export async function ADD_MESSAGE_BROADCAST(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}add/messagebrodcast`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+// All MESSAGE BROADCAST
+
+export async function GET_ALL_MESSAGE_BROADCAST(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/messagebrodcast`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+// All MESSAGE BROADCAST
+
+export async function REMOVE_MESSAGE_BROADCAST(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}remove/messagebrodcast`, data, {
             headers: header(token),
         })
         return await res?.data;

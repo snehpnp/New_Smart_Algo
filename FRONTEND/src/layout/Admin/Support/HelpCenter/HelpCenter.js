@@ -1,19 +1,12 @@
 
 import React, { useEffect, useState } from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
-
-import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
 import Loader from '../../../../Utils/Loader'
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
-import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_HELPS } from '../../../../ReduxStore/Slice/Admin/AdminHelpSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
-
-import BasicDataTable from '../../../../Components/ExtraComponents/Datatable/BasicDataTable'
-
 
 
 const HelpCenter = () => {
@@ -125,16 +118,10 @@ const HelpCenter = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Theme_Content Page_title="Help Center" button_status={false}>
+                        <Content Page_title="Help Center" button_status={false}>
 
-                            {
-                                getAllClients.data && getAllClients.data.length === 0 ? 
-                                <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
-                                :
-                                    <>
                                         <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
-                                    </>
-                            }
+                           
                             {
                                 showModal ?
                                     <>
@@ -145,7 +132,7 @@ const HelpCenter = () => {
                                     </>
                                     : ""
                             }
-                        </Theme_Content>
+                        </Content>
                     </>
             }
 

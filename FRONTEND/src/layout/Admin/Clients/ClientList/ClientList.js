@@ -52,6 +52,9 @@ const AllClients = () => {
     data: [],
   });
 
+  const [ForGetCSV, setForGetCSV] = useState([])
+
+
   const [getAllStrategyName, setAllStrategyName] = useState({
     loading: true,
     data: [],
@@ -484,6 +487,47 @@ const AllClients = () => {
     });
   };
 
+
+  //  For CSV
+  const forCSVdata = () => {
+    let csvArr = []
+    if (getAllClients.data.length > 0) {
+      getAllClients.data.map((item) => {
+        return csvArr.push({
+          "FullName": item.FullName,
+          "UserName": item.UserName,
+          "Email": item.Email,
+          "PhoneNo": item.PhoneNo,
+          "StartDate": fa_time(item.StartDate),
+          "EndDate": fa_time(item.EndDate),
+          "license type": showLicenceName(item.licence, item.license_type),
+          "broker": showBrokerName(item.broker, item.license_type),
+          "TradingStatus": item.TradingStatus,
+        })
+      })
+
+      setForGetCSV(csvArr)
+    }
+
+  }
+
+  useEffect(() => {
+    forCSVdata()
+  }, [getAllClients.data])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <>
       {getAllClients.loading ? (
@@ -494,6 +538,7 @@ const AllClients = () => {
             Page_title="All Clients"
             button_title="Add Client"
             route="/admin/client/add"
+            show_csv_button={true} csv_data={ForGetCSV} csv_title="Client-List"
           >
 
             <div className="row">

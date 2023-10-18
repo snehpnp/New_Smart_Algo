@@ -221,9 +221,10 @@ db.createView("dashboard_data", "users", [
             total_two_days: 1,
             total_active_two_days: 1,
             total_expired_two_days: 1,
-           // used_licence: { $toInt: "$used_licence" }, // Convert used_licence to integer
-           used_licence : 1,
-          
+            // <<<<<<< HEAD
+            // used_licence: { $toInt: "$used_licence" }, // Convert used_licence to integer
+            used_licence: 1,
+
 
 
             remaining_license: {
@@ -232,7 +233,17 @@ db.createView("dashboard_data", "users", [
                     { $toInt: "$used_licence" } // Convert used_licence to integer
                 ]
             }
+            // =======
+            //  used_licence: { $toInt: "$used_licence" }, // Convert used_licence to integer
+
+            // remaining_license: {
+            //     $subtract: [
+            //         { $toInt: "$company_info.licenses" }, // Convert licenses to integer
+            //         { $toInt: "$used_licence" } // Convert used_licence to integer
+            //     ]
+            // }
+            // >>>>>>> 68964591b01effa2222d61b11da9f179596795a7
         }
     }
-    
+
 ]);

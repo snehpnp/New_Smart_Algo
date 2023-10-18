@@ -110,8 +110,9 @@ class Message {
                 // console.log("Strategy_sms", Strategy_sms);
 
             })
+            
 
-                return res.send({ status: true, msg: 'message get successufully', data: [] });
+            return res.send({ status: true, msg: 'message get successufully', data: [] });
 
             // try {
             //     const result = await Message_brodcast.find({
@@ -136,6 +137,28 @@ class Message {
         }
     }
 
+    async RemoveBroadCast(req, res) {
+        try {
+
+            const { id } = req.body;
+            const objectId = new ObjectId(id);
+
+            const get_user = await Message_brodcast.find({ _id: objectId });
+
+            console.log("get_user", get_user)
+            if (get_user.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [] });
+            }
+
+            var DeleteUser = await Message_brodcast.deleteOne({ _id: get_user });
+
+
+            return res.send({ status: true, msg: 'Message Remove successfully', data: [] });
+
+        } catch (error) {
+            console.log("Help- Center error-", error);
+        }
+    }
 
 }
 

@@ -338,7 +338,7 @@ const Header = ({ ChatBox }) => {
                     <>
                       <li className="nav-item dropdown header-profile me-2">
                         <button
-                          className=" btn btn-secondary"
+                          className=" btn btn-primary"
                           onClick={() => setshowModal(true)}
                         >
                           Set ApiKey

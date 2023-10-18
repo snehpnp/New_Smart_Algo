@@ -6,6 +6,11 @@ const panelSchema = new mongoose.Schema({
         required: [true, "Please enter Panel name unique!"],
         unique: true
     },
+    broker_id: {
+        type: String,
+        // required: [true, "Please enter Panel name unique!"],
+        // unique: true
+    },
     description: {
         type: String,
         required: true,

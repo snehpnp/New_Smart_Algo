@@ -23,6 +23,7 @@ import AdminDashboardSlice from "../Slice/Admin/DashboardSlice";
 import AdminHelpSlice from "../Slice/Admin/AdminHelpSlice";
 import LicenceSlice from "../Slice/Admin/LicenceSlice";
 import SystemSlice from "../Slice/Admin/SystemSlice";
+import MessageBroadcastSlice from "../Slice/Admin/MessageBroadcastSlice";
 
 
 
@@ -68,6 +69,7 @@ const store = configureStore({
     SystemSlice: SystemSlice.reducer,
     TradingStatusSlice: TradingStatusSlice.reducer,
     BrokerUpdateSlice: BrokerUpdateSlice.reducer,
+    MessageBroadcastSlice: MessageBroadcastSlice.reducer,
   },
 });
 

@@ -3,14 +3,13 @@
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import * as  valid_err from "../../../Utils/Common_Messages"
-
+import { Link } from "react-router-dom";
 import Loader from '../../../Utils/Loader'
 import { FolderLock, Plus, FileClock, HelpingHand, Users2, ScrollText } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { All_Panel_List, Update_Panel_Theme, GET_PANEL_INFORMATIONS } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
-import Modal from '../../../Components/ExtraComponents/Modal';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 import SidebarPermission from './Sidebar_permission';
@@ -19,6 +18,7 @@ import ShowAllClients from './ShowAllClients';
 import ShowAllSubadmins from './ShowAllSubadmins';
 import AddLicence from './Add_Licence';
 import LicenceDetails from './LicenceDetails';
+import BrokerPermittion from './Broker_Permittion';
 
 
 const AllPermitions = () => {
@@ -36,8 +36,10 @@ const AllPermitions = () => {
 
     //  for Show Clients
     const [ShowClientsModal, setShowClientsModal] = useState(false)
+    const [ShowClientsList, setShowClientsList] = useState([])
     //  for Subadmins
     const [showSubadminsModal, setshowSubadminsModal] = useState(false)
+    const [ShowSubadminList, setShowSubadminList] = useState([])
 
     //  for Add Licence
     const [showAddLicenceModal, setshowAddLicenceModal] = useState(false)
@@ -46,6 +48,17 @@ const AllPermitions = () => {
 
     //  for Add Licence
     const [showLicenceModal, setshowLicenceModal] = useState(false)
+    const [showLicenceDetails, setshowLicenceDetails] = useState([])
+
+    // For Admin Help
+    const [getAdminHelps, setGetAdminelp] = useState('')
+
+
+
+    //  for Broker Permission
+    const [showBrokerModal, setshowBrokerModal] = useState(false)
+    const [showBrokerDetails, setshowBrokerDetails] = useState([])
+
 
 
 
@@ -84,16 +97,8 @@ const AllPermitions = () => {
     }
 
     const Panel_Info = async (row) => {
-
-        setPanelDetailsModal(true)
-        await dispatch(GET_PANEL_INFORMATIONS({ id: row._id })).unwrap()
-            .then((response) => {
-                console.log(":v" ,response)
-                setpanelInfo({
-                    loading: false,
-                    data: response.data
-                });
-            })
+        setshowLicenceDetails({ id: row._id, db_url: row.db_url, db_name: row.db_name })
+        setshowLicenceModal(true)
     }
 
 
@@ -158,6 +163,17 @@ const AllPermitions = () => {
             )
         },
         {
+            dataField: 'Broker',
+            text: 'Broker',
+            formatter: (cell, row) => (
+                <span data-toggle="tooltip" data-placement="top" title="Sidebar Permission">
+                    <FolderLock size={20} color="#198754" strokeWidth={2} className="mx-1"
+                        onClick={(e) => { setshowBrokerModal(true); setshowBrokerDetails({ id: row._id, db_url: row.db_url, db_name: row.db_name }) }}
+                    />
+                </span>
+            )
+        },
+        {
             dataField: 'panel_name',
             text: 'Permission',
             formatter: (cell, row) => (
@@ -174,7 +190,8 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <FileClock size={20} color="#198754" strokeWidth={2}
-                        onClick={(e) => { setshowLicenceModal(true) }}
+                        // onClick={(e) => { setshowLicenceModal(true) }}
+                        onClick={(e) => Panel_Info(row)}
                         className="mx-1" />
                 </span>
             )
@@ -186,7 +203,6 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <FileClock size={20} color="#198754" strokeWidth={2}
-                        onClick={(e) => Panel_Info(row)}
                         className="mx-1" />
                 </span>
             )
@@ -197,7 +213,7 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"
-                        onClick={(e) => setShowClientsModal(true)}
+                        onClick={(e) => { setShowClientsModal(true); setShowClientsList({ id: row._id, db_url: row.db_url, db_name: row.db_name }) }}
                     />
                 </span>
             )
@@ -208,7 +224,7 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"
-                        onClick={(e) => setshowSubadminsModal(true)}
+                        onClick={(e) => { setshowSubadminsModal(true); setShowSubadminList({ id: row._id, db_url: row.db_url, db_name: row.db_name }) }}
                     />
                 </span>
             )
@@ -219,7 +235,7 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Add Licence">
                     <Plus size={20} color="#198754" strokeWidth={2} className="mx-1"
-                        onClick={(e) => { setshowPanelName(row.panel_name); setshowAddLicenceModal(true) }}
+                        onClick={(e) => { setshowPanelName({ panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowAddLicenceModal(true) }}
                     />
                 </span>
             )
@@ -237,61 +253,14 @@ const AllPermitions = () => {
             dataField: 'panel_name',
             text: 'HelpingHand ',
             formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="HelpingHand ">
-                    <HelpingHand size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                </span>
+                <span data-toggle="tooltip" data-placement="top" title="HelpingHand">
+                    <Link to='/super/helps' state={row}>
+                        <HelpingHand size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    </Link>
+                </span >
             )
         },
     ];
-
-
-
-
-
-    // const formik = useFormik({
-    //     initialValues: {
-    //         theme_update: null,
-
-    //     },
-    //     validate: (values) => {
-    //         const errors = {};
-    //         if (!values.theme_update) {
-    //             errors.theme_update = valid_err.THEMESELECT_ERROR;
-    //         }
-    //         return errors;
-    //     },
-    //     onSubmit: async (values) => {
-
-    //         const req = {
-    //             userid: Panelid,
-    //             theme_id: values.theme_update,
-    //             token: token
-
-    //         }
-    //         await dispatch(Update_Panel_Theme(req)).unwrap()
-    //             .then((response) => {
-    //                 console.log("response", response);
-    //                 if (response.status) {
-    //                     toast.success(response.msg)
-    //                     setshowModal(false)
-    //                 }
-    //             })
-    //     }
-    // });
-
-    // const fields = [
-    //     {
-    //         name: 'theme_update',
-    //         label: 'Theme',
-    //         type: 'select',
-    //         options:
-    //             themeList && themeList.map((item) => ({ label: item.theme_name, value: item._id }))
-    //         ,
-    //     },
-
-    // ];
-
-
 
 
     return (
@@ -305,17 +274,12 @@ const AllPermitions = () => {
                                     'No data found') :
                                     <>
                                         <SidebarPermission showModal={showModal} setshowModal={() => setshowModal(false)} />
-
-                                        <ShowAllSubadmins showModal={showSubadminsModal} setshowModal={() => setshowSubadminsModal(false)} />
-
-                                        <ShowAllClients showModal={ShowClientsModal} setshowModal={() => setShowClientsModal(false)} />
-
+                                        <BrokerPermittion List={showBrokerDetails} showModal={showBrokerModal} setshowModal={() => setshowBrokerModal(false)} />
+                                        <ShowAllSubadmins List={ShowSubadminList} showModal={showSubadminsModal} setshowModal={() => setshowSubadminsModal(false)} />
+                                        <ShowAllClients List={ShowClientsList} showModal={ShowClientsModal} setshowModal={() => setShowClientsModal(false)} />
                                         <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
-
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
-
-                                        <LicenceDetails showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
-
+                                        <LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
                                         <FullDataTable TableColumns={columns} tableData={themeData.data} />
                                         <ToastButton />
                                     </>

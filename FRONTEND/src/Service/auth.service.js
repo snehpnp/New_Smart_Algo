@@ -137,6 +137,8 @@ export async function SET_THEME_DETAILS(data, token) {
 }
 
 
+
+
 // GET_PANEL_INFORMATION
 export async function GET_PANEL_INFORMATION(data, token) {
     try {

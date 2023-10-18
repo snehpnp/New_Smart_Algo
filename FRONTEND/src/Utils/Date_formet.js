@@ -30,7 +30,26 @@ export function fToNow(date) {
   });
 }
 
-export const dateFormate = (date) =>{
+export const getActualDateFormate = (date) => {
+  const dateParts = date.split("-");
+  const formattedDate = `${dateParts[0]}/${parseInt(
+    dateParts[1],
+    10
+  )}/${parseInt(dateParts[2], 10)}`;
+  return formattedDate;
+};
+
+
+export const today = () => {
+  let abc = new Date();
+  let month = abc.getMonth() + 1;
+  let date = abc.getDate();
+  let year = abc.getFullYear();
+  let full = `${year}-${month}-${date}`;
+  return full
+}
+
+export const dateFormate = (date) => {
   const dt = dateTime.create(date);
   const ccdate = dt.format('Y-m-d');
   return ccdate

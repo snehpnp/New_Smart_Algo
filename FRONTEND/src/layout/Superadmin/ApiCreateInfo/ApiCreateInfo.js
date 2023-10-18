@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { All_Api_Info_List } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import Modal from '../../../Components/ExtraComponents/Modal';
 import { Eye, CandlestickChart, Pencil } from 'lucide-react';
-import { Link } from "react-router-dom";
+import {  Link } from "react-router-dom";
 import * as Config from "../../../Utils/Config";
 
 
@@ -56,13 +56,15 @@ const ApiCreateInfo = () => {
 
 
     return <>
-        <Content Page_title="All Api-Create Info's" button_status={false}>
+        <Content Page_title="All Api-Create Info's" button_title='Create Api Info' route='/super/apicreateinfo/add'>
+
+
             <div class="row">
                 <section class="card__container">
 
-                    {UserDetails.data && UserDetails.data.slice(0, 1).map((item) => {
-                        // {UserDetails.data && UserDetails.data.map((item) => {
-                        return <>
+                    {/* {UserDetails.data && UserDetails.data.slice(0, 1).map((item) => { */}
+                     {UserDetails.data && UserDetails.data.map((item) => {
+                                                return <>
                             <div class="card__bx card__1">
                                 <div class="card__data">
                                     <div class="card__icon">
@@ -77,12 +79,12 @@ const ApiCreateInfo = () => {
                                             marginRight: '20px',
                                             marginBottom: '20px',
                                             marginTop: '20px',
-                                        }} onClick={() => ShowData(item)} >
-                                            <Eye className='mx-2' />
-                                        </Link>
-                                        {/* <Link to="/admin/apicreateinfo/edit" state={item}>
+                                        }}  onClick={() => ShowData(item)} >
+                                            <Eye className='mx-2'/>
+                                            </Link>
+                                        <Link to="/super/apicreateinfo/edit" state={item}>
                                             <Pencil className='mx-2' onClick={() => ShowData(item)} />
-                                        </Link> */}
+                                        </Link>
                                     </div>
                                 </div>
                             </div>
@@ -110,14 +112,14 @@ const ApiCreateInfo = () => {
                     <h4 className="text-decoration-underline">Step 1:  Click below link and Login</h4>
                     {/* <a href={modalData.steponeurl} target="_blank" className="my-3" >{modalData.steponeurl} </a><br /> */}
                     <a
-                        href={
-                            "https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB"
-                        }
-                        target="_blank"
-                        className="my-3"
-                    >
-                        https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB
-                    </a><br />
+                    href={
+                      "https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB"
+                    }
+                    target="_blank"
+                    className="my-3"
+                  >
+                    https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB
+                  </a><br />
                     {modalData.imageone ? <img src={modalData.imageone} alt="" class="w-100 my-3 border border-dark" /> : ""}
 
                 </> : ""}
@@ -127,11 +129,11 @@ const ApiCreateInfo = () => {
                     <h4 className="text-decoration-underline my-3">Step 2:  Enter your Details and the Redirect URL which is given below.</h4>
                     {/* <a href={modalData.steptwourl} target="_blank"  >{modalData.steptwourl} </a> */}
                     <a
-                        href={`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
-                        target="_blank"
-                    >
-                        {`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
-                    </a>
+                    href={`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
+                    target="_blank"
+                  >
+                    {`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
+                  </a>
                     <br />
                     {modalData.imagetwo ? <img src={modalData.imagetwo} alt="" class="w-100 border border-dark" /> : ""}
                 </> : ""}

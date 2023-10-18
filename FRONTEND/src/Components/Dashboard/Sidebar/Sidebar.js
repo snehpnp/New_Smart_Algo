@@ -4,13 +4,14 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config'
-import { Signal, Users, Wrench, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Boxes  , Rocket, Paintbrush, Vote,Info } from 'lucide-react';
+import { Signal, Users, Wrench, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Boxes, Rocket, Paintbrush, Vote, Info } from 'lucide-react';
 import Test from "../../../test"
 import html2canvas from 'html2canvas';
 import $ from "jquery";
 import Logo from '../Header/Logo';
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
 import { useDispatch, useSelector } from "react-redux";
+import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 
 
 
@@ -57,6 +58,33 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
 
+    const CompanyName = async () => {
+        await dispatch(GET_COMPANY_INFOS()).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    console.log("response.status", response.data && response.data[0].favicon)
+
+                    $(".logo-abbr").attr('src', response.data && response.data[0].logo);
+                    
+
+
+                    $(".set_Favicon")
+
+                    let favicon = $("link[rel='icon']").length
+                        ? $("link[rel='icon']")
+                        : $("<link rel='icon' type='image/x-icon' />");
+                    favicon.attr('href', response.data && response.data[0].favicon);
+                    $('head').append(favicon);
+                }
+            })
+    }
+    useEffect(() => {
+        CompanyName()
+    }, [])
+
+
+
+
     return (
         <div>
 
@@ -66,23 +94,19 @@ const Sidebar = ({ ShowSidebar }) => {
 
                     <ul className="metismenu" id="menu">
                         <div className='sidebar-logo'>
-
                             <Logo />
-
                         </div>
                         {
                             gotodashboard != null ? user_role_goTo === "USER" ? Client && Client.map((item) => {
                                 return <>
                                     <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                         {item.Data.length > 0 ? <>
-
                                             <Link
                                                 className="has-arrow "
                                                 // href="javascript:void()"
                                                 aria-expanded="false"
                                             >
                                                 <IconComponent key={item.id} icon={item.Icon} />
-
                                                 <span className="nav-text mx-2">{item.name}</span>
                                             </Link>
                                         </> : ""}
@@ -257,13 +281,13 @@ const Sidebar = ({ ShowSidebar }) => {
 
                                             {item.Data.length === 0 ? <>
                                                 {item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old === 0 ? '' :
-                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                    <Link to={item.route} className="" aria-expanded="false">
-                                                        <IconComponent key={item.id} icon={item.Icon} />
-                                                        {/* <i className="flaticon-013-checkmark" /> */}
-                                                        <span className="nav-text mx-2">{item.name}</span>
-                                                    </Link>
-                                                </li>
+                                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                        <Link to={item.route} className="" aria-expanded="false">
+                                                            <IconComponent key={item.id} icon={item.Icon} />
+                                                            {/* <i className="flaticon-013-checkmark" /> */}
+                                                            <span className="nav-text mx-2">{item.name}</span>
+                                                        </Link>
+                                                    </li>
                                                 }
 
                                             </>
@@ -377,10 +401,10 @@ const IconComponent = ({ icon }) => {
             case 'Vote':
                 return <Vote className='me-3' />;
             case 'Boxes ':
-                return <Boxes  className='me-3' />;
-                case 'Info':
-                    return <Info  className='me-3' />;
-    
+                return <Boxes className='me-3' />;
+            case 'Info':
+                return <Info className='me-3' />;
+
             default:
                 return null;
         }

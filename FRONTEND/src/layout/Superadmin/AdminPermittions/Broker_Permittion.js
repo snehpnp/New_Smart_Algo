@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Add_Licence_To_Company } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 
 
-const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
+const Broker_Permittion = ({ showModal, setshowModal, showPanelName }) => {
     const dispatch = useDispatch()
 
 
@@ -63,20 +63,13 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
 
 
 
-    const fields = [
-        { name: 'licence', label: 'Licence', type: 'text', label_size: 12, col_size: 12, disable: false },
-
-    ];
-
     return (
-        <div>   <Modal isOpen={showModal} size="md" title="Increase Licence" hideBtn={true}
+        <div>   <Modal isOpen={showModal} size="md" title="Broker Permission" hideBtn={true}
             handleClose={() => setshowModal(false)}
         >
-            <h6 className='my-3'>You Are Increasing <b> {showPanelName.panel_name} </b>Licence</h6>
-            <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Licence"
-            />
+
         </Modal ></div>
     )
 }
 
-export default Add_Licence
+export default Broker_Permittion
