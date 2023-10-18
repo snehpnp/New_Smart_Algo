@@ -3,7 +3,7 @@ const db = require('../../Models');
 const panel_model = db.panel_model;
 const User = db.user;
 const MongoClient = require('mongodb').MongoClient;
-
+const ApiCreateInfo = db.api_create_info;
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -233,6 +233,66 @@ class Panel {
 
         } catch (error) {
             console.log("Add License error-", error);
+        }
+    }
+
+    // GET ALL Help Center
+    async GetAllAdminHelps(req, res) {
+        try {
+            // const { id } = req.body
+            const { id, db_name, db_url, startdate, enddate } = req.body
+
+            const uri = db_url;
+
+            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+            await client.connect();
+            const db = client.db(db_name);
+
+            const viewName = 'helpcenters';
+
+            const startDate = new Date(startdate);
+            const endDate = new Date(enddate);
+
+            // Query the view to get the data
+            const result = await db.collection(viewName).find({}).toArray();
+
+            // If you want to send the retrieved data as a response
+            return res.send({
+                status: true,
+                msg: "Get All Subadmins",
+                data: result
+            });
+
+
+        } catch (error) {
+            console.log("Get all Subadmins error-", error);
+        }
+    }
+
+
+    // Get All APi Infor
+    async GetAll_Broker_details(req, res) {
+        try {
+            // THEME LIST DATA
+            const getAllpanel = await ApiCreateInfo
+                .find({}).select("title  broker_id _id ")
+
+            // IF DATA NOT EXIST
+            if (getAllpanel.length == 0) {
+                res.send({ status: false, msg: "Empty data", data: getAllpanel })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All Api Info",
+                data: getAllpanel,
+            })
+
+
+        } catch (error) {
+            console.log("Get all Info error-", error);
         }
     }
 

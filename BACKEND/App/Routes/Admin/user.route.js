@@ -8,7 +8,7 @@ const { AddEmployee, UpdateUser, GetAllClients, loginClients, tradingOnClients, 
 const { EditCompany, GetCompanyInfo, EditEmailInfo } = require('../../Controllers/Admin/company.controller')
 const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy } = require('../../Controllers/Admin/strategy.controller')
 
-const { AddMessageBrodcast,GetAllMessageBrodcast,GetMessageBrodcast} = require('../../Controllers/Admin/messagebrodcast.controller')
+const { AddMessageBrodcast, GetAllMessageBrodcast, GetMessageBrodcast  , RemoveBroadCast} = require('../../Controllers/Admin/messagebrodcast.controller')
 
 // USER ADD EDIT
 router.post('/add/employee', verifyToken, AddEmployee);
@@ -42,6 +42,7 @@ router.post('/get/strategy/client', ClientsAccordingToStrategy);
 router.post('/add/messagebrodcast', AddMessageBrodcast);
 router.post('/getall/messagebrodcast', GetAllMessageBrodcast);
 router.post('/get/messagebrodcast', GetMessageBrodcast);
+router.post('/remove/messagebrodcast', RemoveBroadCast);
 
 
 

@@ -126,6 +126,9 @@ const TradingStatus = () => {
                         >
                             <div className="col-lg-6">
                                 <div className="mb-3 row">
+                                     <label for="validationCustom05" class="form-label">
+                                           Select Catagory
+                                        </label>
                                     <div className="col-lg-7">
                                         <select
                                             className="default-select wide form-control"

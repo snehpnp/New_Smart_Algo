@@ -50,7 +50,6 @@ const System = () => {
                     let favicon = $("link[rel='icon']").length
                         ? $("link[rel='icon']")
                         : $("<link rel='icon' type='image/x-icon' />");
-
                     favicon.attr('href', response.data && response.data[0].favicon);
                     $('head').append(favicon);
                 }

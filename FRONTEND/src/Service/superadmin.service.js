@@ -164,3 +164,22 @@ export async function ADD_LICENCE_TO_COMPANY(id,token) {
 }
 
 
+
+
+export async function GET_ADMIN_HELPS(id,token) {
+    try {
+
+        const res = await axios.post(`${Config.base_url}getall/panel/helps`, id,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        // custom error
+    }
+
+}
+
+

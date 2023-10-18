@@ -21,7 +21,7 @@ const Logo = ({ ShowSidebar }) => {
     return (
         <div>   <div className="nav-header">
             <span className="brand-logo">
-                <img className="logo-abbr" src="assets/icons/logo.png" alt="logo" />
+                <img className="logo-abbr" src="" alt="logo" />
             </span>
 
 

@@ -10,14 +10,13 @@ import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/Bas
 import { Pencil, Trash2, UserPlus, LayoutList } from "lucide-react";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import Modal from "../../../../Components/ExtraComponents/Modal";
 import {
   Get_All_Strategy,
   Remove_Strategy_BY_Id,
   Get_client_By_strategy_Id,
 } from "../../../../ReduxStore/Slice/Admin/StrategySlice";
-import TableWIthCustomPaginations from "../../../../Components/ExtraComponents/Tables/TableWIthCustomPaginations";
 
 import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";

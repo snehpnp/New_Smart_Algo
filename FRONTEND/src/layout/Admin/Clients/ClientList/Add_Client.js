@@ -260,7 +260,14 @@ const AddClient = () => {
     // { label: 'B2C', value: '11' },
     // { label: 'Angel', value: '12' },
     // { label: 'Fyers', value: '13' },
+    // { label: '5 Paisa', value: '14' },
     // { label: 'Zerodha', value: '15' }
+    // { label: 'Arihant', value: '16' }
+    // { label: 'Arihant', value: '17' }
+    // { label: 'Laxmi', value: '18' }
+
+
+
   ];
 
   const fields = [
@@ -608,24 +615,24 @@ const AddClient = () => {
             <>
               {/*  For Show All Services */}
               {/* {formik.errors.groupservice ? <> */}
-                <h6>All Group Service</h6>
-                {GetServices && GetServices.data.map((strategy) => (
-                  <div className={`col-lg-2 `} key={strategy._id}>
-                    <div className="col-lg-12 ">
-                      <label className="form-check-label bg-primary text-white py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
-                    </div>
+              <h6>All Group Service</h6>
+              {GetServices && GetServices.data.map((strategy) => (
+                <div className={`col-lg-2 `} key={strategy._id}>
+                  <div className="col-lg-12 ">
+                    <label className="form-check-label bg-primary text-white py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
                   </div>
-                ))}
-                <label class="toggle mt-3">
-                  <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
-                    setShowAllStratagy(e.target.checked)
-                  }} />
-                  <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
-                  <span class="toggle-label">Show Strategy</span>
-                </label>
+                </div>
+              ))}
+              <label class="toggle mt-3">
+                <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
+                  setShowAllStratagy(e.target.checked)
+                }} />
+                <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
+                <span class="toggle-label">Show Strategy</span>
+              </label>
 
-                {formik.errors.Strategy &&
-                  <div style={{ color: 'red' }} className='my-3'>{formik.errors.Strategy} </div>}
+              {formik.errors.Strategy &&
+                <div style={{ color: 'red' }} className='my-3'>{formik.errors.Strategy} </div>}
 
               {/* </> : ""} */}
 
