@@ -5,7 +5,7 @@ const connectToDatabase = require('../BACKEND/App/Connection/mongo_connection')
 const express = require("express");
 const app = express();
 const path = require('path');
-const fs = require('fs'); 
+const fs = require('fs');
 const winston = require('winston');
 // Define a custom format for the timestamp
 const customTimestamp = () => {
@@ -104,44 +104,44 @@ app.post('/broker-signals', async (req, res) => {
   const formattedDate = `${year}${month.toString().padStart(2, '0')}${day.toString().padStart(2, '0')}`;
 
 
-  var filePath = path.join(__dirname + '/AllPanelTextFile', 'PANELKEY'+process.env.PANEL_KEY+process.env.PANEL_NAME+formattedDate+'.txt');
+  var filePath = path.join(__dirname + '/AllPanelTextFile', 'PANELKEY' + process.env.PANEL_KEY + process.env.PANEL_NAME + formattedDate + '.txt');
 
   var directoryfilePath = path.join(__dirname + '/AllPanelTextFile');
   var paneltxtentry = 0;
 
-  console.log("filePath",filePath)
-  console.log("directoryfilePath",directoryfilePath)
+  console.log("filePath", filePath)
+  console.log("directoryfilePath", directoryfilePath)
 
   fs.readdir(directoryfilePath, function (err1, files) {
-    console.log("files",files)
-    if(files.length > 0){
+    console.log("files", files)
+    if (files.length > 0) {
       files.forEach(async function (file) {
 
-        console.log("file",file)
-  
-        if (file != 'PANELKEY'+process.env.PANEL_KEY+process.env.PANEL_NAME+formattedDate+'.txt') {
+        console.log("file", file)
+
+        if (file != 'PANELKEY' + process.env.PANEL_KEY + process.env.PANEL_NAME + formattedDate + '.txt') {
           //paneltxtentry = 1;
-          fs.writeFile(filePath, "INSERT FILE "+new Date()+"\n\n", function (err) {
+          fs.writeFile(filePath, "INSERT FILE " + new Date() + "\n\n", function (err) {
             if (err) {
-                return console.log(err);
+              return console.log(err);
             }
             console.log("Data created if");
           });
-         
-        }
-  
-      });
-    }else{
 
-      fs.appendFile(filePath, 'INSERT FILE '+new Date()+'\n', function (err) {
+        }
+
+      });
+    } else {
+
+      fs.appendFile(filePath, 'INSERT FILE ' + new Date() + '\n', function (err) {
         if (err) {
-            return console.log(err);
+          return console.log(err);
         }
         console.log("Data created else");
       });
 
     }
-    
+
   });
 
 
@@ -156,15 +156,15 @@ app.post('/broker-signals', async (req, res) => {
       // console.log("req.rawBody",req.rawBody)
       const splitArray = req.rawBody.split('|');
 
-    //  logger.info('RECEIVED_SIGNALS ' + splitArray);
+      //  logger.info('RECEIVED_SIGNALS ' + splitArray);
 
-      fs.appendFile(filePath,'TIME '+new Date()+' RECEIVED_SIGNALS ' + splitArray+'\n', function (err) {
+      fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS ' + splitArray + '\n', function (err) {
         if (err) {
-            return console.log(err);
-        }else{
+          return console.log(err);
+        } else {
           console.log("doneeee")
         }
-     });
+      });
 
 
       var dt = splitArray[0]
@@ -176,6 +176,7 @@ app.post('/broker-signals', async (req, res) => {
       var sl_value = splitArray[6]
       var tsl = splitArray[7]
       var segment = splitArray[8]
+      var segment1 = splitArray[8]
       var strike = splitArray[9]
       var option_type = splitArray[10]
       var expiry = splitArray[11]
@@ -244,43 +245,43 @@ app.post('/broker-signals', async (req, res) => {
           var instrument_query = { name: input_symbol }
           var EXCHANGE = "NFO";
           var trade_symbol = '';
-          var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy }
+          var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy,entry_type:type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE"  }
 
           if (segment == 'C' || segment == 'c') {
             instrument_query = { name: input_symbol }
             EXCHANGE = "NSE";
             trade_symbol = input_symbol;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy,entry_type:type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE"  }
 
           } else if (segment == 'F' || segment == 'f') {
             instrument_query = { symbol: input_symbol, segment: "F", expiry: expiry }
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy,entry_type:type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE"  }
 
           } else if (segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
-            instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
+            instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type,}
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike,entry_type:type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE"  }
 
           } else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy,entry_type:type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE"  }
 
           } else if (segment == 'MF' || segment == 'mf') {
             instrument_query = { symbol: input_symbol, segment: "MF", expiry: expiry }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy,entry_type:type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE"  }
 
           } else if (segment == 'CF' || segment == 'Cf') {
-            instrument_query = { symbol: input_symbol, segment: "CF", expiry: expiry }
+            instrument_query = { symbol: input_symbol, segment: "CF", expiry: expiry,entry_type:type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE"  }
             EXCHANGE = "CDS";
           }
-          console.log("toke==>>>>", instrument_query);
+          console.log("findSignal==>>>>", findSignal);
 
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
@@ -299,13 +300,13 @@ app.post('/broker-signals', async (req, res) => {
           }
 
 
-         // logger.info('RECEIVED_SIGNALS_TOKEN ' + instrument_token);
+          // logger.info('RECEIVED_SIGNALS_TOKEN ' + instrument_token);
 
-         fs.appendFile(filePath,'TIME '+new Date()+' RECEIVED_SIGNALS_TOKEN ' + instrument_token+'\n', function (err) {
-          if (err) {
+          fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS_TOKEN ' + instrument_token + '\n', function (err) {
+            if (err) {
               return console.log(err);
-          }
-       });
+            }
+          });
 
 
           // HIT TRADE IN BROKER SERVER
@@ -316,7 +317,7 @@ app.post('/broker-signals', async (req, res) => {
 
             if (process.env.PANEL_KEY == client_key) {
 
-             // logger.info('RECEIVED_SIGNALS_PANEl_NAME ' + process.env.PANEL_NAME + ' KEY ' + client_key);
+              // logger.info('RECEIVED_SIGNALS_PANEl_NAME ' + process.env.PANEL_NAME + ' KEY ' + client_key);
 
               //Process Alice Blue
               const AliceBlueCollection = db1.collection('aliceViewAllClient');
@@ -325,13 +326,13 @@ app.post('/broker-signals', async (req, res) => {
 
                 const AliceBluedocuments = await AliceBlueCollection.find(query).toArray();
                 // console.log("All documents:", documents);
-               // logger.info(' ALICE BLUE ALL CLIENT LENGTH ' + AliceBluedocuments.length);
-            
-               fs.appendFile(filePath,'TIME '+new Date()+' ALICE BLUE ALL CLIENT LENGTH ' + AliceBluedocuments.length+'\n', function (err) {
-                if (err) {
+                // logger.info(' ALICE BLUE ALL CLIENT LENGTH ' + AliceBluedocuments.length);
+
+                fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + AliceBluedocuments.length + '\n', function (err) {
+                  if (err) {
                     return console.log(err);
-                }
-               });
+                  }
+                });
 
                 if (AliceBluedocuments.length > 0) {
 
@@ -374,7 +375,7 @@ app.post('/broker-signals', async (req, res) => {
                             .then((data) => {
 
                               var bro_res_last_id = data._id;
-                              aliceblue.place_order(item, splitArray, bro_res_last_id, token, logger,filePath);
+                              aliceblue.place_order(item, splitArray, bro_res_last_id, token, logger, filePath);
                             })
 
 
@@ -407,7 +408,7 @@ app.post('/broker-signals', async (req, res) => {
 
             } else {
 
-            //  logger.info('RECEIVED_SIGNALS_PANEl_NAME_TADINGVIEW ' + process.env.PANEL_NAME + ' KEY ' + client_key);
+              //  logger.info('RECEIVED_SIGNALS_PANEl_NAME_TADINGVIEW ' + process.env.PANEL_NAME + ' KEY ' + client_key);
               console.log("IF SIGNEL KEY LIKE CLIENT KEY IN TRADING VIEW")
 
               //Process Tading View Client Alice Blue
@@ -420,13 +421,13 @@ app.post('/broker-signals', async (req, res) => {
 
                 const AliceBluedocuments = await AliceBlueCollection.find(query).toArray();
                 // console.log("All AliceBluedocuments:", AliceBluedocuments);
-               // logger.info(' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length);
+                // logger.info(' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length);
 
-               fs.appendFile(filePath,'TIME '+new Date()+' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length+'\n', function (err) {
-                if (err) {
+                fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length + '\n', function (err) {
+                  if (err) {
                     return console.log(err);
-                   }
-               });
+                  }
+                });
 
                 if (AliceBluedocuments.length > 0) {
 
@@ -469,7 +470,7 @@ app.post('/broker-signals', async (req, res) => {
                             .then((data) => {
                               console.log("username ", item.UserName)
                               var bro_res_last_id = data._id;
-                              aliceblue.place_order(item, splitArray, bro_res_last_id, token, logger,filePath);
+                              aliceblue.place_order(item, splitArray, bro_res_last_id, token, logger, filePath);
                             })
 
 
@@ -539,7 +540,7 @@ app.post('/broker-signals', async (req, res) => {
           console.log("process.env.PANEL_KEY", process.env.PANEL_KEY, typeof process.env.PANEL_KEY)
           console.log("client_key", client_key, typeof client_key)
 
-  let client_persnal_key = "";
+          let client_persnal_key = "";
           if (process.env.PANEL_KEY == client_key) {
             client_persnal_key = "";
           } else {
@@ -571,13 +572,15 @@ app.post('/broker-signals', async (req, res) => {
             let Signal_req1 = new Signals(Signal_req)
             var SignalSave = await Signal_req1.save();
           } catch (error) {
-            console.log("Insert Signal - ",error)
+            console.log("Insert Signal - ", error)
             return res.send("ok")
           }
           // ENTRY OR EXIST CHECK
           if (type == "LE" || type == "le" || type == "SE" || type == "Se") {
 
             var findMainSignals = await MainSignals.find(findSignal)
+
+            console.log("findMainSignals",findMainSignals.length);
 
             // MainSignals FIND IN COLLECTION
             if (findMainSignals.length == 0) {
@@ -600,7 +603,7 @@ app.post('/broker-signals', async (req, res) => {
                 strike: strike,
                 expiry: expiry,
                 segment: segment,
-                trade_symbol: trade_symbol,
+                trade_symbol: trade_symbol+"["+segment1+"]",
                 client_persnal_key: client_persnal_key,
                 signals_id: SignalSave._id,
                 token: instrument_token
@@ -610,7 +613,7 @@ app.post('/broker-signals', async (req, res) => {
 
             } else {
               var updatedData = {
-                entry_price: (parseFloat(price) + parseFloat(findMainSignals[0].entry_price) / 2),
+                entry_price: ((parseFloat(price) + parseFloat(findMainSignals[0].entry_price)) / 2),
                 entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
                 entry_dt_date: current_date
               }
@@ -631,17 +634,40 @@ app.post('/broker-signals', async (req, res) => {
               // // ExitMainSignals  FIND IN COLLECTION
               if (ExitMainSignals.length != 0) {
 
-                // IF EXIST ENTRY OF THIS EXIT TRADE
-                var updatedData = {
-                  exit_type: type,
-                  exit_price: price,
-                  exit_qty_percent: qty_percent,
-                  exit_dt_date: current_date
-                }
-                updatedData.$addToSet = { signals_id: SignalSave._id };
+                if ((ExitMainSignals[0].exit_price == "" && ExitMainSignals[0].exit_qty_percent == "") || isNaN(ExitMainSignals[0].exit_price)) {
+                  console.log("ExitMainSignals 1", ExitMainSignals);
 
-                // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
-                const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
+                  // IF EXIST ENTRY OF THIS EXIT TRADE
+                  var updatedData = {
+                    exit_type: type,
+                    exit_price: parseFloat(price) + (isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)),
+                    exit_qty_percent: parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)),
+
+                    exit_dt_date: current_date
+                  }
+                  updatedData.$addToSet = { signals_id: SignalSave._id };
+
+                  // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
+                  const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
+
+                } else {
+                  console.log("ExitMainSignals 2", ExitMainSignals);
+
+                  // IF EXIST ENTRY OF THIS EXIT TRADE
+                  var updatedData = {
+                    exit_type: type,
+                    exit_price: ((parseFloat(price) + (isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price))) / 2),
+                    exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
+
+                    exit_dt_date: current_date
+                  }
+                  updatedData.$addToSet = { signals_id: SignalSave._id };
+
+                  // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
+                  const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
+                }
+
+
 
               } else {
 
@@ -651,7 +677,7 @@ app.post('/broker-signals', async (req, res) => {
             }
 
 
-        await client.connect();
+          await client.connect();
 
 
 
