@@ -7,6 +7,7 @@ const app = express();
 const path = require('path');
 const fs = require('fs'); 
 const winston = require('winston');
+const axios = require('axios');
 // Define a custom format for the timestamp
 const customTimestamp = () => {
   return new Date().toLocaleString();
@@ -46,6 +47,11 @@ const MongoClient = require('mongodb').MongoClient;
 
 const uri = 'mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net';
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+client.connect();
+console.log("Connected to MongoDB BrokerServer successfully!.....");
+const db1 = client.db('test');
+
 
 
 
@@ -146,9 +152,6 @@ app.post('/broker-signals', async (req, res) => {
 
 
  
-
-
-
 
   try {
 
@@ -306,12 +309,11 @@ app.post('/broker-signals', async (req, res) => {
           if (err) {
               return console.log(err);
           }
-       });
+         });
 
 
           // HIT TRADE IN BROKER SERVER
-          await client.connect();
-          const db = client.db(); // Access the default database or specify a database name here
+         
 
           if (instrument_token != 0) {
 
@@ -320,7 +322,7 @@ app.post('/broker-signals', async (req, res) => {
              // logger.info('RECEIVED_SIGNALS_PANEl_NAME ' + process.env.PANEL_NAME + ' KEY ' + client_key);
 
               //Process Alice Blue
-              const AliceBlueCollection = db.collection('aliceViewAllClient');
+              const AliceBlueCollection = db1.collection('aliceViewAllClient');
               var query = { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment }
               try {
 
@@ -391,13 +393,10 @@ app.post('/broker-signals', async (req, res) => {
                     await Promise.all(promises);
 
                   }
-
                   runFunctionWithArray(AliceBluedocuments);
                 } else {
                   console.log("Alice Blue Client Not Exit");
                 }
-
-
 
               } catch (error) {
                 console.log("Error In Broker Alice Blue", error);
@@ -412,15 +411,87 @@ app.post('/broker-signals', async (req, res) => {
               console.log("IF SIGNEL KEY LIKE CLIENT KEY IN TRADING VIEW")
 
               //Process Tading View Client Alice Blue
-              const AliceBlueCollection = db.collection('aliceViewTradingViewClient');
+              const AliceBlueCollection = db1.collection('aliceViewTradingViewClientTest');
               var query = { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key }
 
-              console.log("query - ", query)
+              console.log("query - ", query);
+              const AliceBluedocuments = await AliceBlueCollection.find(query).toArray();
+              console.log("All AliceBluedocuments trdaing View length:", AliceBluedocuments.length);
+
+              
+              const requestPromises = AliceBluedocuments.map(item => {
+                console.log("user id ",item.demat_userid)
+                console.log("postdata before",item.postdata)
+                console.log("instrument_token ",instrument_token)
+              
+                if(segment.toUpperCase() != "C"){
+                  item.postdata.symbol_id = instrument_token;
+                }
+
+                console.log("type",type)
+               
+                if (type == 'LE' || type == 'SX') {
+                    item.postdata.transtype = 'BUY';
+                } else if (type == 'SE' || type == 'LX') {
+                    item.postdata.transtype = 'SELL';
+                }
+                
+                console.log("price",price)
+                console.log("item.client_services.order_type",item.client_services.order_type)
+
+                if(item.client_services.order_type == "2" || item.client_services.order_type == "3"){
+                  item.postdata.price = price
+                }
+
+                console.log("postdata after",item.postdata)
+
+                //return item.demat_userid;
+
+
+
+                const config = {
+                  method: 'post',
+                  maxBodyLength: Infinity,
+                  url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+                  headers: {
+                    'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+                    'Content-Type': 'application/json',
+                  },
+                  data: JSON.stringify([item.postdata]),
+                };
+              
+                return axios(config);
+              });
+              
+              // Send all requests concurrently using Promise.all
+              Promise.all(requestPromises)
+                .then(responses => {
+                 
+                    console.log("Response:", responses);
+               
+                })
+                .catch(errors => {
+                 
+                    console.log("Error:", errors);
+                 
+                });
+
+            
+  
+
+
+
+
+
+
+
+
+              return
+            
 
               try {
 
-                const AliceBluedocuments = await AliceBlueCollection.find(query).toArray();
-                // console.log("All AliceBluedocuments:", AliceBluedocuments);
+                
                // logger.info(' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length);
 
                fs.appendFile(filePath,'TIME '+new Date()+' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length+'\n', function (err) {
@@ -489,7 +560,7 @@ app.post('/broker-signals', async (req, res) => {
 
                   runFunctionWithArray(AliceBluedocuments);
                 } else {
-                  console.log("Alice Blue Client Not Exit");
+                  console.log("Alice Blue tradingView Client Not Exit");
                 }
 
 

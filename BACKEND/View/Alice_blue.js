@@ -289,6 +289,7 @@ async function createView() {
           'service.exch_seg': 1,
           "strategys.strategy_name": 1,
           "category.segment": 1,
+          "service.zebu_token": 1,
           _id: 1,
           FullName: 1,
           UserName: 1,
@@ -488,14 +489,43 @@ async function createView() {
 
            },
 
-          // price: '248.15',
+           price: '0',
            qty: "$client_services.quantity",
            ret: 'DAY',
 
+           // symbol id token condition here
+           symbol_id: {
+            $cond: {
+              if: { 
+                $and:
+                 [
+                  { $eq: ['$category.segment', 'C'] },  
+                ]
+              }, 
+              then: "$service.instrument_token",
+              else: ""
+       
+            }
+           },
+           
 
-          //  symbol_id: '67308',
-          //  trading_symbol: 'NIFTY23102619700CE',
-          //  transtype: 'SELL',
+           // trading symbol condition here
+           trading_symbol: {
+              $cond: {
+                if: { 
+                  $and:
+                   [
+                    { $eq: ['$category.segment', 'C'] },  
+                  ]
+                }, 
+                then: "$service.zebu_token",
+                else: ""
+         
+              }
+             },
+
+
+           transtype: 'BUY',
            trigPrice: '',
            orderTag: 'order1',
         
