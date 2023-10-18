@@ -8,6 +8,7 @@ const categorysdata = require('../Models/categorie.model')
 
 const connectToDatabase = async () => {
   try {
+    console.log(process.env.MONGO_URI);
     connect(process.env.MONGO_URI)
       .then(() => {
         connection.useDb(process.env.DB_NAME);

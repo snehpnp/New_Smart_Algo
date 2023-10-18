@@ -2,6 +2,8 @@
 "use strict";
 require('dotenv').config();
 const connectToDatabase = require('../BACKEND/App/Connection/mongo_connection')
+ require('./Helper/cron')
+
 const express = require("express");
 const app = express();
 const path = require('path');
