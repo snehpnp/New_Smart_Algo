@@ -24,7 +24,7 @@ import Formikform from "../../Components/ExtraComponents/Form/Formik_form";
 import { useFormik } from "formik";
 import * as valid_err from "../../Utils/Common_Messages";
 import { Email_regex, Mobile_regex } from "../../Utils/Common_regex";
-import { GET_COMPANY_INFOS } from '../../ReduxStore/Slice/Admin/AdminSlice'
+import { Get_Company_Logo } from '../../ReduxStore/Slice/Admin/AdminSlice'
 
 
 const Login = () => {
@@ -417,12 +417,12 @@ const Login = () => {
 
 
   const CompanyName = async () => {
-    await dispatch(GET_COMPANY_INFOS()).unwrap()
+    await dispatch(Get_Company_Logo()).unwrap()
       .then((response) => {
         if (response.status) {
           console.log("response.status", response.data && response.data[0].favicon)
 
-          // $(".logo-abbr").attr('src', response.data && response.data[0].logo);
+          $(".logo-abbr").attr('src', response.data && response.data[0].logo);
 
 
 
@@ -461,7 +461,7 @@ const Login = () => {
                       <div className="text-center mb-3">
                         {/* <a href="#a"> logo </a> */}
                         <span className="brand-logo">
-                          <img className="logo-abbr" src="assets/icons/logo.png" alt="logo" />
+                          <img className="logo-abbr w-50" src="assets/icons/logo.png" alt="logo" />
                         </span>
                       </div>
                       <h4 className="text-center mb-4">Sign in your account</h4>

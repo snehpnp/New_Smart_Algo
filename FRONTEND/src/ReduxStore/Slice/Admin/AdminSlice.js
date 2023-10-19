@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_CLIENTS, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_USERAND_ALLSERVICES, FIND_ONE_USER, UPDATE_USER } from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_CLIENTS, GET_COMPANY_LOGO, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_USERAND_ALLSERVICES, FIND_ONE_USER, UPDATE_USER } from "../../../Service/admin.service";
 
 
 
@@ -60,6 +60,16 @@ export const GET_ALL_GROUP_SERVICES = createAsyncThunk("getall/groupservices", a
 export const GET_COMPANY_INFOS = createAsyncThunk("get/company", async (data) => {
     try {
         const res = await GET_COMPANY_INFO(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+// GET COMPANY INFORMATION
+export const Get_Company_Logo = createAsyncThunk("get/company", async (data) => {
+    try {
+        const res = await GET_COMPANY_LOGO(data);
         // console.log("res" ,res);
         return await res;
     } catch (err) {
@@ -163,7 +173,8 @@ const AdminSlice = createSlice({
         activeStatus: [],
         deleteuser: [],
         updateuser: [],
-        oneuser: []
+        oneuser: [],
+        logos: []
     },
 
     recuders: {},
@@ -200,6 +211,10 @@ const AdminSlice = createSlice({
         [GET_COMPANY_INFOS.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, companyInfo: payload, isLoading: false };
+        },
+        [Get_Company_Logo.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, logos: payload, isLoading: false };
         },
         [GET_ALL_TRADING_STATUS.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;

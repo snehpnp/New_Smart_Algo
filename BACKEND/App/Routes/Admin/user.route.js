@@ -5,10 +5,10 @@ const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
 const { AddEmployee, UpdateUser, GetAllClients, loginClients, tradingOnClients, GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys } = require('../../Controllers/Admin/user.controller')
-const { EditCompany, GetCompanyInfo, EditEmailInfo } = require('../../Controllers/Admin/company.controller')
+const { EditCompany, GetCompanyInfo, GetCompany_logo, EditEmailInfo } = require('../../Controllers/Admin/company.controller')
 const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy } = require('../../Controllers/Admin/strategy.controller')
 
-const { AddMessageBrodcast, GetAllMessageBrodcast, GetMessageBrodcast  , RemoveBroadCast} = require('../../Controllers/Admin/messagebrodcast.controller')
+const { AddMessageBrodcast, GetAllMessageBrodcast, GetMessageBrodcast, RemoveBroadCast } = require('../../Controllers/Admin/messagebrodcast.controller')
 
 // USER ADD EDIT
 router.post('/add/employee', verifyToken, AddEmployee);
@@ -26,6 +26,7 @@ router.post('/update/brokerkeys', Update_Broker_Keys);
 router.post('/edit/company', verifyToken, EditCompany);
 router.post('/edit/emailinfo', verifyToken, EditEmailInfo);
 router.get('/get/company', GetCompanyInfo);
+router.get('/get/company_logo', GetCompany_logo);
 
 
 // STRATEGY RELETED ROUTES

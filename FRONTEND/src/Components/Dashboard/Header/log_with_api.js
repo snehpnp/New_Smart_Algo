@@ -5,12 +5,15 @@
 
 
 export const loginWithApi = (broker_id, UserDetails) => {
-    console.log("UserDetails",UserDetails);
+    console.log("UserDetails", UserDetails)
+    console.log("broker_id", broker_id)
+
+    return
     if (broker_id === "1" || broker_id === 1) {
         alert("broker-1")
     }
     if (broker_id === "2" || broker_id === 2) {
-        var App_Code =  "RjFPYeubvHpGtaS"
+        var App_Code = "RjFPYeubvHpGtaS"
         window.location.href = `https://ant.aliceblueonline.com/?appcode=${App_Code}`;
         console.log("Alice Blue");
         console.log("UserDetails", UserDetails);

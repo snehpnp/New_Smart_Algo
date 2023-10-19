@@ -98,7 +98,7 @@ const TradeHistory = () => {
     let year = abc.getFullYear();
     let full = `${year}/${month}/${date}`;
     await dispatch(
-      // Get_Tradehisotry({ startDate: "2023/10/1", endDate: "2023/10/16", token: token })
+      // Get_Tradehisotry({ startDate: "2023/10/1", endDate: "2023/10/18", token: token })
       Get_Tradehisotry({ startDate: full, endDate: full, token: token })
     ).unwrap()
       .then((response) => {
@@ -317,9 +317,7 @@ const TradeHistory = () => {
       else {
         if (res.data.stat) {
           const handleResponse = async (response) => {
-            // console.log("response", response)
             //  let rr = $('._id_15259_652e21679fd519ac3ea46597').html();
-            //  console.log("RR",rr)
 
             // UPL_
             $(".LivePrice_" + response.tk).html(response.lp);
@@ -351,14 +349,12 @@ const TradeHistory = () => {
                     if ((isNaN(finalyupl) || isNaN(rpl))) {
                       return "-";
                     } else {
-                      console.log("testtt", ".TPL_" + response.tk + "_" + get_id_token)
                       $(".show_rpl_" + response.tk + "_" + get_id_token).html(rpl.toFixed(2));
                       $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
                       $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
 
                       ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
                       ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
-
                       ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
                     }
                   }
@@ -414,56 +410,61 @@ const TradeHistory = () => {
 
 
 
-  // const GET_ID = async (token) => {
-  //   let get_id
-  //   await tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-  //     let get_ids = '_id_' + token + '_' + row._id
-  //     let get_id_token = $('.' + get_ids).html();
-  //     console.log("get_id_token", get_id_token)
-  //     get_id = get_id_token
-  //   });
-  //   return get_id
-  // }
-
-
 
 
   const calcultateRPL = (row, livePrice, pre_row) => {
 
-    // // console.log("row", row)
-    // console.log("pre_row", pre_row)
 
-    // // // if(row pre_row)
-    // if (row.entry_type !== '' && row.exit_type !== '') {
-    //   if ((row.entry_type === "LE" || row.entry_type === "SE")) {
 
-    //     // if (row. pre_row)
-    //     const entryQty = parseInt(row.entry_qty_percent);
-    //     const exitQty = parseInt(row.exit_qty_percent);
-    //     const entryPrice = parseFloat(row.entry_price);
-    //     const exitPrice = parseFloat(row.exit_price);
-    //     const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
-    //     $(".show_rpl_" + row.token).html('0');
-    //     $(".TPL_" + row.token).html(rpl.toFixed(2));
-    //     $(".UPL_" + row.token).html("-");
+    let get_ids = '_id_' + row.token + '_' + row._id
+    let get_id_token = $('.' + get_ids).html();
 
-    //     ShowColor("UPL_", "-", row.token);
-    //     ShowColor("show_rpl_", rpl.toFixed(2), row.token);
-    //     ShowColor("TPL_", rpl.toFixed(2), row.token);
-    //   }
 
-    // }
-    // else if (row.entry_type && row.exit_type === "") {
-    //   // console.log("test")
-    //   $(".show_rpl_" + row.token).html('-');
-    //   $(".TPL_" + row.token).html('-');
-    //   $(".UPL_" + row.token).html("-");
-    // }
-    // if (row.entry_type === "" && row.exit_type !== '') {
-    //   $(".show_rpl_" + row.token).html('-');
-    //   $(".TPL_" + row.token).html('-');
-    //   $(".UPL_" + row.token).html("-");
-    // }
+    if (row.entry_type !== '' && row.exit_type !== '') {
+      if ((row.entry_type === "LE" || row.entry_type === "SE")) {
+
+        // if (row. pre_row)
+        const entryQty = parseInt(row.entry_qty_percent);
+        const exitQty = parseInt(row.exit_qty_percent);
+        const entryPrice = parseFloat(row.entry_price);
+        const exitPrice = parseFloat(row.exit_price);
+        const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
+
+
+        $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+        $(".UPL_" + row.token + "_" + get_id_token).html("-");
+        $(".TPL_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+
+        ShowColor1(".show_rpl_" + row.token + "_" + get_id_token, rpl.toFixed(2), row.token, get_id_token);
+        ShowColor1(".UPL_" + row.token + "_" + get_id_token, "-", row.token, get_id_token);
+
+        ShowColor1(".TPL_" + row.token + "_" + get_id_token, rpl.toFixed(2), row.token, get_id_token);
+
+
+      }
+
+    }
+    else if (row.entry_type && row.exit_type === "") {
+      // console.log("test")
+      // $(".show_rpl_" + row.token).html('-');
+      // $(".TPL_" + row.token).html('-');
+      // $(".UPL_" + row.token).html("-");
+
+
+      $(".show_rpl_" + row.token + "_" + row._id).html("-");
+      $(".UPL_" + row.token + "_" + row._id).html("-");
+      $(".TPL_" + row.token + "_" + row._id).html("-");
+    }
+    if (row.entry_type === "" && row.exit_type !== '') {
+      // $(".show_rpl_" + row.token).html('-');
+      // $(".TPL_" + row.token).html('-');
+      // $(".UPL_" + row.token).html("-");
+
+
+      $(".show_rpl_" + row.token + "_" + row._id).html("-");
+      $(".UPL_" + row.token + "_" + row._id).html("-");
+      $(".TPL_" + row.token + "_" + row._id).html("-");
+    }
   };
 
 
@@ -539,11 +540,14 @@ const TradeHistory = () => {
 
   //  LOG IN FOR GET LIVE PRICE 
   const LogIn_WIth_Api = async (check, brokerid, tradingstatus, UserDetails) => {
-    // console.log("check", check)
-    // console.log("brokerid", brokerid)
-    // console.log("UserDetails", UserDetails)
+    // console.log("check" ,check)
+    // console.log("brokerid" ,brokerid)
+    // console.log("tradingstatus" ,tradingstatus)
+    // console.log("UserDetails" ,UserDetails)
+
+    // return
     if (check) {
-      await loginWithApi(brokerid, UserDetails);
+      loginWithApi(brokerid, UserDetails);
     } else {
       dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
         .unwrap()
@@ -592,8 +596,6 @@ const TradeHistory = () => {
 
 
 
-
-  // console.log("UserDetails", UserDetails)
   return (
     <>
       <Content Page_title="Trade History" button_status={false}
