@@ -48,8 +48,25 @@ class Company {
         }
     }
 
-     // EDIT COMPANY Email INFORMATION
-     async EditEmailInfo(req, res) {
+    // GET COMPANY DETALIS
+    async GetCompany_logo(req, res) {
+        try {
+
+            var compantInfo = await company_information.find().select('logo favicon')
+            if (!compantInfo) {
+                return res.send({ status: false, msg: 'Server issue Not find Company information.', data: [] });
+            }
+
+            return res.send({ status: true, msg: 'Done', data: compantInfo });
+
+
+        } catch (error) {
+            console.log("Comany Get Error -", error);
+        }
+    }
+
+    // EDIT COMPANY Email INFORMATION
+    async EditEmailInfo(req, res) {
         try {
             var companydata = req.body.data
             var _id = req.body.id;

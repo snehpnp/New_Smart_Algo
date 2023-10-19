@@ -79,6 +79,23 @@ export async function ALL_SERVICES(data, token) {
 }
 
 
+// ALL SERVICES
+export async function GET_COMPANY_LOGO(data, token) {
+    try {
+        const res = await axios.get(`${Config.base_url}get/company_logo`, data, {
+            //  headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
 // ALL CATAGORY
 export async function ALL_CATAGORY(data, token) {
     try {

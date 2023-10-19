@@ -44,11 +44,11 @@ const Modify = ({ UserDetails }) => {
         await dispatch(Modify_Details({ user_id: user_id, AdminToken: AdminToken, req: selectedOptions }))
             .unwrap()
             .then((response) => {
+                console.log("response", response);
                 if (response.status) {
-                    // setUserDetails({
-                    //     loading: false,
-                    //     data: response.data,
-                    // });
+                    toast.success(response.msg);
+                } else {
+                    toast.error(response.msg);
                 }
             });
 

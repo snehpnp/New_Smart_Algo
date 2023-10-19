@@ -11,7 +11,7 @@ import $ from "jquery";
 import Logo from '../Header/Logo';
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
 import { useDispatch, useSelector } from "react-redux";
-import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
+import { Get_Company_Logo } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 
 
 
@@ -59,14 +59,10 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
     const CompanyName = async () => {
-        await dispatch(GET_COMPANY_INFOS()).unwrap()
+        await dispatch(Get_Company_Logo()).unwrap()
             .then((response) => {
                 if (response.status) {
-                    console.log("response.status", response.data && response.data[0].favicon)
-
                     $(".logo-abbr").attr('src', response.data && response.data[0].logo);
-                    
-
 
                     $(".set_Favicon")
 
@@ -88,7 +84,7 @@ const Sidebar = ({ ShowSidebar }) => {
     return (
         <div>
 
-            <div className="deznav" >
+            <div className="deznav pt-3" >
                 <div className="deznav-scroll">
 
 

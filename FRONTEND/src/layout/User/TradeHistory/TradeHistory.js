@@ -173,6 +173,7 @@ const TradeHistory = () => {
 
 
 
+
   const columns = [
     {
       dataField: "index",
@@ -240,24 +241,30 @@ const TradeHistory = () => {
       formatter: (cell, row, rowIndex) => {
         return (
           <div>
-            <span className={`fw-bold show_rpl_${row.token}`}></span>
-            <span className={`d-none entry_qty${row.token}`}>
+            <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
+            <span className={`d-none entry_qty_${row.token}_${row._id}`}>
               {row.entry_qty_percent}
             </span>
-            <span className={`d-none exit_qty${row.token}`}>
+            <span className={`d-none exit_qty_${row.token}_${row._id}`}>
               {row.exit_qty_percent}
             </span>
-            <span className={`d-none exit_price${row.token}`}>
+            <span className={`d-none exit_price_${row.token}_${row._id}`}>
               {row.exit_price}
             </span>
-            <span className={`d-none entry_price${row.token}`}>
+            <span className={`d-none entry_price_${row.token}_${row._id}`}>
               {row.entry_price}
             </span>
-            <span className={`d-none entry_type${row.token}`}>
+            <span className={`d-none entry_type_${row.token}_${row._id}`}>
               {row.entry_type}
             </span>
-            <span className={`d-none exit_type${row.token}`}>
+            <span className={`d-none exit_type_${row.token}_${row._id}`}>
               {row.exit_type}
+            </span>
+            <span className={`d-none strategy_${row.token}_${row._id}`}>
+              {row.strategy}
+            </span>
+            <span className={`d-none _id_${row.token}_${row._id}`}>
+              {row._id}
             </span>
           </div>
         );
@@ -270,7 +277,9 @@ const TradeHistory = () => {
       text: "U/P&l",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span className={`fw-bold UPL_${row.token}`}></span>
+          <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
+
+
         </div>
       ),
     },
@@ -280,7 +289,7 @@ const TradeHistory = () => {
       text: "T/P&L",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span className={`fw-bold  TPL_${row.token}`}></span>
+          <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
         </div>
       ),
     },
@@ -305,6 +314,7 @@ const TradeHistory = () => {
       ),
     },
   ];
+
 
 
 

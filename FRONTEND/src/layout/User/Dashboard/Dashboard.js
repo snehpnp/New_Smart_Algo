@@ -8,6 +8,7 @@ import {
   GetAliceTokenAndID,
   CreateSocketSession,
   ConnctSocket,
+  GetAccessToken
 } from "../../../Service/Alice_Socket";
 import { useDispatch, useSelector } from "react-redux";
 import $ from "jquery";
@@ -23,6 +24,10 @@ import {
 const BrokerResponse = () => {
   const dispatch = useDispatch();
   const [enterqty, setEnterQty] = useState("");
+
+  const [UserDetails, setUserDetails] = useState([]);
+
+
   const [DashboardData, setDashboardData] = useState({
     loading: true,
     data: [],
@@ -91,19 +96,26 @@ const BrokerResponse = () => {
   const ShowLivePrice = async () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
-    const res = await CreateSocketSession(type);
-    if (res.data.stat) {
-      const handleResponse = (response) => {
-        // console.log("response", response);
-        $(".ShowLTP_" + response.tk).html(response.lp);
-      };
-      await ConnctSocket(handleResponse, channelList);
+    if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
+
+      const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
+      if (res.data.stat) {
+        const handleResponse = (response) => {
+          // console.log("response", response);
+          $(".ShowLTP_" + response.tk).html(response.lp);
+        };
+        await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token);
+      }
     }
+
   };
 
   useEffect(() => {
     ShowLivePrice();
-  }, [DashboardData.data]);
+  }, [DashboardData.data, UserDetails]);
+
+
+
 
   const setgroup_qty_value_test = (e, symboll, rowdata) => {
     let name = e.target.name;
@@ -142,6 +154,26 @@ const BrokerResponse = () => {
         }
       });
   };
+
+
+
+  //  GET_USER_DETAILS
+  const data = async () => {
+
+    const response = await GetAccessToken({ broker_name: "aliceblue" });
+
+    if (response.status) {
+      setUserDetails(response.data[0]);
+    }
+
+
+
+  };
+  useEffect(() => {
+    data();
+  }, []);
+
+
 
   return (
     <Content Page_title="Dashboard" button_status={false}>
@@ -192,7 +224,7 @@ const BrokerResponse = () => {
                               //  setEnterQty(e.target.value)
                             }
                             defaultValue={data.quantity}
-                          
+
                           />
                         </div>
                       </div>
@@ -288,11 +320,10 @@ const BrokerResponse = () => {
                         />
                         {/* //  ${ShowAllStratagy ? 'bg-primary' : "bg-secondary" } */}
                         <div
-                          class={`toggle-switch ${
-                            data.active_status === "1"
-                              ? "bg-primary"
-                              : "bg-secondary"
-                          }
+                          class={`toggle-switch ${data.active_status === "1"
+                            ? "bg-primary"
+                            : "bg-secondary"
+                            }
 
 `}
                         ></div>
