@@ -40,6 +40,7 @@ const BrokerResponse = db.BrokerResponse;
 
 
 const aliceblue = require('./Broker/aliceblue')
+const aliceblueTest = require('./Broker/aliceblueTest')
 
 
 // CONNECTION FILE IN MONGOODE DATA BASE 
@@ -316,7 +317,7 @@ app.post('/broker-signals', async (req, res) => {
           // HIT TRADE IN BROKER SERVER
 
 
-          if (instrument_token != 0) {
+        //  if (instrument_token != 0) {
 
             if (process.env.PANEL_KEY == client_key) {
 
@@ -410,60 +411,20 @@ app.post('/broker-signals', async (req, res) => {
               //Process Tading View Client Alice Blue
               const AliceBlueCollection = db1.collection('aliceViewTradingViewClientTest');
               var query = { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key }
+             
+              console.log("query",query)
 
               const AliceBluedocuments = await AliceBlueCollection.find(query).toArray();
 
-
-              const requestPromises = AliceBluedocuments.map(item => {
-                console.log("user id ", item.demat_userid)
-                console.log("postdata before", item.postdata)
-                console.log("instrument_token ", instrument_token)
-
-                if (segment.toUpperCase() != "C") {
-                  item.postdata.symbol_id = instrument_token;
-                }
-
-
-                if (type == 'LE' || type == 'SX') {
-                  item.postdata.transtype = 'BUY';
-                } else if (type == 'SE' || type == 'LX') {
-                  item.postdata.transtype = 'SELL';
-                }
-
-                console.log("price", price)
-                console.log("item.client_services.order_type", item.client_services.order_type)
-
-                if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                  item.postdata.price = price
-                }
-
-
-                const config = {
-                  method: 'post',
-                  maxBodyLength: Infinity,
-                  url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-                  headers: {
-                    'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
-                    'Content-Type': 'application/json',
-                  },
-                  data: JSON.stringify([item.postdata]),
-                };
-
-                return axios(config);
-              });
-
-              // Send all requests concurrently using Promise.all
-              Promise.all(requestPromises)
-                .then(responses => {
-
-                  console.log("Response:", responses);
-
-                })
-                .catch(errors => {
-
-                  console.log("Error:", errors);
-
-                });
+              console.log("AliceBluedocuments trading view length",AliceBluedocuments.length)
+              
+              if(AliceBluedocuments.length > 0){
+                aliceblueTest.place_order(AliceBluedocuments, splitArray,token,filePath,signal_req);
+              }
+              
+                
+                
+              return
 
 
               try {
@@ -552,7 +513,7 @@ app.post('/broker-signals', async (req, res) => {
 
             }
 
-          }
+         // }
 
 
           option_type = option_type.toUpperCase();

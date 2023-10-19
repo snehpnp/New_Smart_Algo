@@ -45,13 +45,16 @@ module.exports = function (app) {
     let post_demat_userid = "438760"
     
     let post_access_token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc2OTk5MTcsImlhdCI6MTY5NzYyNzU1OSwianRpIjoiMzQ0NjIyZWItNjMxOS00ZjgyLTkyOWEtNTNjZmMyN2JiZTkzIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjRkNDJiMTA3LThjY2ItNDIyZC04YzRhLWNmMzc5NDE0MmVkYSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiNGQ0MmIxMDctOGNjYi00MjJkLThjNGEtY2YzNzk0MTQyZWRhIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.jYnVofPZIWZ9n9H6MvtOa-CpGAgt0BIG3hwbKI0iLiOgdmkVGILCykxL1r54WDK09K4c44eCGk-SrWWH_MHY6-vrfegbGdzpW6cVrOEEz7SpkDyd2nsYUX3SNCL1_1lUrDqjBGso5SgGE_lLLEccjfe5Nj6Qt2NOi6r-pzxuqJPFpLx_sbFcOUM3A1BZM8yFdeaex3UZ3pUzHwhDrHOg-x1VLAW8XCiW4qAzGxsBb2znErgiZTOfff2F-MoUuNbNASh8SMJsjcFpYUuMdS6OLvIIK1rGIy7zOBqP9VbEFHVzbDbQUSCh7DIUZfRdj53TbOJbKcMKz0WEF7ohM9ITM";
+
+
+    let post_access_token1 = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc3NzU3OTgsImlhdCI6MTY5NzY4OTU3OSwianRpIjoiMmQxMGRiMWEtMTA1NS00ZDkyLTllNjctYzc3OGI1ZTRkYzYzIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjE2MjU5NTYxLWQ2MmMtNDA1Ni04MWQ2LWQ0NjM0MDAwNGQ2YyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMTYyNTk1NjEtZDYyYy00MDU2LTgxZDYtZDQ2MzQwMDA0ZDZjIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.K2gg4-8VIg73tk16DJ17Nzc1RTewJvlDbfr9dmcp2w4OOBBG2sczlBkaeSAMDDXIecALVX67DDuaVFyI05UTvG3izZ11jEbygpmhV8V3Rt6jywFE4A0OVab-1O-P3d7vEDPoUqP4EuyTj0E0J5y10oIEyES3BKJRAldOSDuHUW9LLJFoVfqUD3FtQUehe6TN8oQ_gp1RxldStKO9mDjxdZOyomNRmXz2fUBbQkqcOsOEH47UerF6_PUObaGy5RF9EMJjl01H8PiIQBKbm9t7EpsHrRUS_cVXyrQCuRjXwitCcHBKwLoyeAk6LR1triCU9RVLIrzXRtFKauHV2ajFDw";
     
     // An array of request data
     const requestData = [
       {
         data : postdata,
         demat_userid : post_demat_userid,
-        access_token : post_access_token,
+        access_token : post_access_token1,
         name:"shk1"
       },
       {
@@ -62,43 +65,86 @@ module.exports = function (app) {
       }
       // Add more request data objects as needed
     ];
-    
-    // Create an array of promises for sending requests
-    const requestPromises = requestData.map(async(data) => {
-      const config = {
+
+
+
+
+    const requestPromises = requestData.map(async(item) => {
+
+
+      let config = {
         method: 'post',
         maxBodyLength: Infinity,
         url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
         headers: {
-          'Authorization': "Bearer " + data.demat_userid + " " + data.access_token,
-          'Content-Type': 'application/json',
+            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+            'Content-Type': 'application/json'
         },
-        data: JSON.stringify([data.data]),
-      };
-      const trade = await axios(config)
-      const return_data = {res:trade ,name:data.name}
+        data: JSON.stringify([item.data])
     
-      return return_data
-     // return axios(config);
+    };
+    
+      axios(config)
+        .then(async (response) => {
+            console.log("respose",response.data)
+        })
+        .catch(async (error) => {
+          console.log("Alice Blue Error",error.response)
+          console.log("name- ",item.name)
+        });
+     
     });
     
     // Send all requests concurrently using Promise.all
     Promise.all(requestPromises)
       .then(responses => {
-      //console.log("Response:", responses.data);
-        responses.forEach(response => {
-       //   console.log("Response :", response);
-          console.log("Response Trade:", response.res.data);
-          console.log("client name ", response.name);
-        });
+      console.log("Response:", responses.data);
+       
       })
       .catch(errors => {
       console.log("errors:", errors);
-
-        // errors.forEach(error => {
-        //   console.log("Error:", error);
-        // });
+      
       });
+ 
+
+
+    
+    // Create an array of promises for sending requests
+    // const requestPromises = requestData.map(async(data) => {
+    //   const config = {
+    //     method: 'post',
+    //     maxBodyLength: Infinity,
+    //     url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+    //     headers: {
+    //       'Authorization': "Bearer " + data.demat_userid + " " + data.access_token,
+    //       'Content-Type': 'application/json',
+    //     },
+    //     data: JSON.stringify([data.data]),
+    //   };
+    //   const trade = await axios(config)
+    //   const return_data = {res:trade ,name:data.name}
+    
+    //   return return_data
+    //  // return axios(config);
+    // });
+    
+    // // Send all requests concurrently using Promise.all
+    // Promise.all(requestPromises)
+    //   .then(responses => {
+    //   //console.log("Response:", responses.data);
+    //     responses.forEach(response => {
+    //    //   console.log("Response :", response);
+    //       console.log("Response Trade:", response.res.data);
+    //       console.log("client name ", response.name);
+    //     });
+    //   })
+    //   .catch(errors => {
+    //   console.log("errors:", errors);
+
+    //     // errors.forEach(error => {
+    //     //   console.log("Error:", error);
+    //     // });
+    //   });
     
 
   res.send("doneeeee")
@@ -2086,8 +2132,8 @@ module.exports = function (app) {
     var axios = require('axios');
 
     // console.log('Matching elements:', matchingElements[0]._id);
-    res.send("done");
-    return
+    // res.send("done");
+    // return
     var axios = require('axios');
     var config = {
       method: 'get',
@@ -2098,9 +2144,8 @@ module.exports = function (app) {
       .then(function (response) {
 
 
-        var unique_key = []
-        let count = 0
-        response.data.forEach((item) => {
+       
+      
 
           // res.send(response.data);
           // console.log(response.data);
@@ -2143,192 +2188,10 @@ module.exports = function (app) {
             //  if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
 
 
-
-            if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
-              unique_key.push(`${item.name}-${item.instrumenttype}`);
-
-
-              if (item.symbol.slice(-3) == '-EQ') {
+             if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
                 count++
-
-                const matchingElements = categoryResult.filter(item => item.segment === "C");
-                const category_id = matchingElements[0]._id
-
-
-                services.create({
-                  name: item.name + '#',
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '#_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
-
-                  });
-
-
-              }
-
-
-
-
-              if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
-                count++
-                console.log('item - F ' + count + ' ', item)
-                const matchingElements = categoryResult.filter(item => item.segment === "F");
-                const category_id = matchingElements[0]._id
-
-
-
-                services.create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
-
-                  });
-
-
-
-
-              }
-
-
-
-              if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
-                count++
-                console.log('item - O ' + count + ' ', item)
-                const matchingElements = categoryResult.filter(item => item.segment === "O");
-                const category_id = matchingElements[0]._id
-
-                services.create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
-
-                  });
-
-
-
-
-              }
-
-
-              if (item.instrumenttype == 'OPTFUT') {
-                count++
-                console.log('item - MO ' + count + ' ', item)
-                const matchingElements = categoryResult.filter(item => item.segment === "MO");
-                const category_id = matchingElements[0]._id
-
-                services.create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
-
-                  });
-
-
-
-
-              }
-
-
-              if (item.instrumenttype == 'FUTCOM') {
-                count++
-                console.log('item - MF ' + count + ' ', item)
-                const matchingElements = categoryResult.filter(item => item.segment === "MF");
-                const category_id = matchingElements[0]._id
-
-                services.create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
-
-                  });
-
-
-
-              }
-
-              if (item.instrumenttype == 'FUTCUR') {
-                count++
-                console.log('item - CF ' + count + ' ', item)
-                const matchingElements = categoryResult.filter(item => item.segment === "CF");
+                console.log('item - CO ' + count + ' ', item)
+                const matchingElements = categoryResult.filter(item => item.segment === "CO");
                 const category_id = matchingElements[0]._id
 
 
@@ -2357,6 +2220,265 @@ module.exports = function (app) {
 
 
               }
+
+
+
+         //   if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+            //  unique_key.push(`${item.name}-${item.instrumenttype}`);
+
+
+              // if (item.symbol.slice(-3) == '-EQ') {
+              //   count++
+
+              //   const matchingElements = categoryResult.filter(item => item.segment === "C");
+              //   const category_id = matchingElements[0]._id
+
+
+              //   services.create({
+              //     name: item.name + '#',
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '#_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
+
+
+              // }
+
+
+
+
+              // if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
+              //   count++
+              //   console.log('item - F ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "F");
+              //   const category_id = matchingElements[0]._id
+
+
+
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
+
+
+
+
+              // }
+
+
+
+              // if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
+              //   count++
+              //   console.log('item - O ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "O");
+              //   const category_id = matchingElements[0]._id
+
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
+
+
+
+
+              // }
+
+
+              // if (item.instrumenttype == 'OPTFUT') {
+              //   count++
+              //   console.log('item - MO ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "MO");
+              //   const category_id = matchingElements[0]._id
+
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
+
+
+
+
+              // }
+
+
+              // if (item.instrumenttype == 'FUTCOM') {
+              //   count++
+              //   console.log('item - MF ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "MF");
+              //   const category_id = matchingElements[0]._id
+
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
+
+
+
+              // }
+
+              // if (item.instrumenttype == 'FUTCUR') {
+              //   count++
+              //   console.log('item - CF ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "CF");
+              //   const category_id = matchingElements[0]._id
+
+
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
+
+
+              // }
+
+
+              //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+              //   count++
+              //   console.log('item - CO ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "CO");
+              //   const category_id = matchingElements[0]._id
+
+
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
+
+
+              // }
+
+
+
+
+
+
+
+
+
 
               // if(item.instrumenttype == 'AMXIDX'|| item.instrumenttype == 'OPTIRC' || item.instrumenttype == 'UNDIRC' || item.instrumenttype == 'FUTIRC' || item.instrumenttype == 'UNDCUR' || item.instrumenttype == 'INDEX' || item.instrumenttype == 'COMDTY' || item.instrumenttype == 'AUCSO'){
               //       count++
@@ -2389,40 +2511,15 @@ module.exports = function (app) {
 
               //       }
 
-            }
+           // }
             //   }
 
           });
 
 
-          return
+  
 
-          function findRepeatedElements(array) {
-            const frequencyMap = {};
-            const repeatedElements = [];
-
-            array.forEach(element => {
-              if (frequencyMap[element.instrumenttype]) {
-                frequencyMap[element.instrumenttype]++;
-                if (frequencyMap[element.instrumenttype] === 2) {
-                  repeatedElements.push(element.instrumenttype);
-                }
-              } else {
-                frequencyMap[element.instrumenttype] = 1;
-              }
-            });
-
-            return repeatedElements;
-          }
-
-          const inputArray = response.data;
-          const repeatedElements = findRepeatedElements(inputArray);
-
-          console.log('Repeated elements:', repeatedElements);
-
-
-
-        });
+        
 
       });
 

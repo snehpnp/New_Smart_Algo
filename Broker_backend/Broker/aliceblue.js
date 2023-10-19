@@ -436,7 +436,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                                             send_request: send_rr,
                                             order_id: response.data[0].NOrdNo,
                                             order_status: "Error",
-                                            reject_reason: response.data
+                                            reject_reason: message
                                         },
                                         { new: true }
                                     )
