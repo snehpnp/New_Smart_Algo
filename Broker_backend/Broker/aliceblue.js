@@ -17,13 +17,13 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
     try {
         console.log("ALICE BLUE BROKER");
 
-        if (token != undefined) {
+        if (token != 0) {
 
             var dt = splitArray[0]
             var input_symbol = splitArray[1]
             var type = splitArray[2]
             var tr_price = splitArray[3]
-            var price = splitArray[4]
+            var signal_price = splitArray[4]
             var sq_value = splitArray[5]
             var sl_value = splitArray[6]
             var tsl = splitArray[7]
@@ -36,24 +36,8 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             var client_key = splitArray[14]
             var demo = splitArray[15]
 
-            console.log({
-                dt: splitArray[0],
-                input_symbol: splitArray[1],
-                type: splitArray[2],
-                tr_price: splitArray[3],
-                price: splitArray[4],
-                sq_value: splitArray[5],
-                sl_value: splitArray[6],
-                tsl: splitArray[7],
-                segment: splitArray[8],
-                strike: splitArray[9],
-                option_type: splitArray[10],
-                expiry: splitArray[11],
-                strategy: splitArray[12],
-                qty_percent: splitArray[13],
-                client_key: splitArray[14],
-                demo: splitArray[15],
-            });
+            
+            var price = "0"
 
 
             var exch;
@@ -140,7 +124,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             }
             else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '2' && item.client_services.product_type == '1') {
                 prctyp = 'L';
-                price = price;
+                price = signal_price;
                 pCode = 'CNC';
                 complexty = "regular";
                 console.log("price", price);
@@ -148,14 +132,14 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             }
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '2' && item.client_services.product_type == '1') {
                 prctyp = 'L';
-                price = price;
+                price = signal_price;
                 pCode = 'CNC';
                 complexty = "regular";
 
             }
             else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '3' && item.client_services.product_type == '1') {
                 prctyp = 'SL';
-                price = price;
+                price = signal_price;
                 pCode = 'CNC';
                 trigPrice = tr_price;
                 complexty = "regular";
@@ -163,7 +147,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             }
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '3' && item.client_services.product_type == '1') {
                 prctyp = 'SL';
-                price = price;
+                price = signal_price;
                 pCode = 'CNC';
                 trigPrice = tr_price;
                 complexty = "regular";
@@ -172,7 +156,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '4' && item.client_services.product_type == '1') {
 
                 prctyp = 'SL-M';
-                price = price;
+                price = signal_price;
                 pCode = 'CNC';
                 trigPrice = tr_price;
                 complexty = "regular";
@@ -180,7 +164,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '4' && item.client_services.product_type == '1') {
 
                 prctyp = 'SL-M';
-                price = price;
+                price = signal_price;
                 pCode = 'CNC';
                 trigPrice = tr_price;
                 complexty = "regular";
@@ -200,20 +184,20 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '2' && item.client_services.product_type == '2') {
 
                 prctyp = 'L';
-                price = price;
+                price = signal_price;
                 pCode = 'MIS';
                 complexty = "regular";
             }
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '2' && item.client_services.product_type == '2') {
 
                 prctyp = 'L';
-                price = price;
+                price = signal_price;
                 pCode = 'MIS';
                 complexty = "regular";
             }
             else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '3' && item.client_services.product_type == '2') {
                 prctyp = 'SL';
-                price = price;
+                price = signal_price;
                 pCode = 'MIS';
                 trigPrice = tr_price;
                 complexty = "regular";
@@ -221,7 +205,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             }
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '3' && item.client_services.product_type == '2') {
                 prctyp = 'SL';
-                price = price;
+                price = signal_price;
                 pCode = 'MIS';
                 trigPrice = tr_price;
                 complexty = "regular";
@@ -230,7 +214,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '4' && item.client_services.product_type == '2') {
 
                 prctyp = 'SL-M';
-                price = price;
+                price = signal_price;
                 pCode = 'MIS';
                 trigPrice = tr_price;
                 complexty = "regular";
@@ -239,7 +223,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '4' && item.client_services.product_type == '2') {
 
                 prctyp = 'SL-M';
-                price = price;
+                price = signal_price;
                 pCode = 'MIS';
                 trigPrice = tr_price;
                 complexty = "regular";
@@ -258,14 +242,14 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '2' && item.client_services.product_type == '4') {
                 prctyp = 'L';
                 pCode = 'CO';
-                price = price;
+                price = signal_price;
                 trigPrice = tr_price;
                 complexty = "co";
             }
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '2' && item.client_services.product_type == '4') {
                 prctyp = 'L';
                 pCode = 'CO';
-                price = price;
+                price = signal_price;
                 trigPrice = tr_price;
                 complexty = "co";
             }
@@ -273,7 +257,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
                 // console.log('order BO')
                 prctyp = 'L';
-                price = price;
+                price = signal_price;
                 pCode = 'MIS';
                 complexty = 'bo';
                 stopLoss = sl_value;
@@ -282,7 +266,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             }
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '2' && item.client_services.product_type == '3') {
                 prctyp = 'L';
-                price = price;
+                price = signal_price;
                 pCode = 'MIS';
                 complexty = 'bo';
                 stopLoss = sl_value;
@@ -292,7 +276,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             else if ((type == 'LE' || type == 'SX') && item.client_services.order_typeprice == '3' && item.client_services.product_type == '3') {
 
                 prctyp = 'SL';
-                price = price;
+                price = signal_price;
                 pCode = 'MIS';
                 complexty = 'bo';
                 trigPrice = tr_price;
@@ -304,7 +288,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
             else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '3' && item.client_services.product_type == '3') {
 
                 prctyp = 'SL';
-                price = price;
+                price = signal_price;
                 pCode = 'MIS';
                 complexty = 'bo';
                 trigPrice = tr_price;
@@ -426,7 +410,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
                                 } else {
 
-                                    const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
+                                    const message = (JSON.stringify(response.data));
 
 
                                     let result = await BrokerResponse.findByIdAndUpdate(
@@ -436,7 +420,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                                             send_request: send_rr,
                                             order_id: response.data[0].NOrdNo,
                                             order_status: "Error",
-                                            reject_reason: response.data
+                                            reject_reason: message
                                         },
                                         { new: true }
                                     )
@@ -456,7 +440,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
                                     if (error) {
                                         if (error.response) {
-                                            const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+                                            const message = (JSON.stringify(error.response.data));
 
                                             let result = await BrokerResponse.findByIdAndUpdate(
                                                 bro_res_last_id,
@@ -469,7 +453,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                                                 { new: true }
                                             )
                                         } else {
-                                            const message = (JSON.stringify(error)).replace(/["',]/g, '');
+                                            const message = (JSON.stringify(error))
 
 
                                             let result = await BrokerResponse.findByIdAndUpdate(
@@ -607,7 +591,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                                         {
                                             symbol: input_symbol,
                                             send_request: send_rr,
-                                            order_status: "Entry Npot Exist",
+                                            order_status: "Entry Not Exist",
                                             reject_reason: "This Symbol position Empty "
                                         },
                                         { new: true }
@@ -665,6 +649,8 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
             }
 
+        }else{
+            console.log("TOKEN NOT MATCH");
         }
 
 
@@ -725,7 +711,7 @@ const ExitPlaceOrder = async (data, item, filePath, bro_res_last_id, input_symbo
 
             } else {
 
-                const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
+                const message = (JSON.stringify(response.data))
 
 
                 let result = await BrokerResponse.findByIdAndUpdate(
@@ -735,7 +721,7 @@ const ExitPlaceOrder = async (data, item, filePath, bro_res_last_id, input_symbo
                         send_request: send_rr,
                         order_id: response.data[0].NOrdNo,
                         order_status: "Error",
-                        reject_reason: response.data
+                        reject_reason: message
                     },
                     { new: true }
                 )
@@ -755,7 +741,7 @@ const ExitPlaceOrder = async (data, item, filePath, bro_res_last_id, input_symbo
 
                 if (error) {
                     if (error.response) {
-                        const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+                        const message = (JSON.stringify(error.response.data))
 
                         let result = await BrokerResponse.findByIdAndUpdate(
                             bro_res_last_id,
@@ -768,7 +754,7 @@ const ExitPlaceOrder = async (data, item, filePath, bro_res_last_id, input_symbo
                             { new: true }
                         )
                     } else {
-                        const message = (JSON.stringify(error)).replace(/["',]/g, '');
+                        const message = (JSON.stringify(error))
 
 
                         let result = await BrokerResponse.findByIdAndUpdate(

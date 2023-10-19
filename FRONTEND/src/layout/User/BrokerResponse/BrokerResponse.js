@@ -159,12 +159,12 @@ const BrokerResponse = () => {
 
   // GET ALL GROUP SERVICES NAME
   const GetAllServicesName = async (row) => {
-    GetBrokerInforMation(row)
-    setTimeout(() => {
-      
+    console.log(row);
+    // GetBrokerInforMation(row)
+    
       setBrokerResponseId(row)
       setshowModal(true)
-    }, 1000);
+
 
   }
 

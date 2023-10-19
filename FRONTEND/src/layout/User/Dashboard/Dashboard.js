@@ -184,6 +184,7 @@ const BrokerResponse = () => {
             <th>#</th>
             <th>Live Price</th>
             <th>Symboll</th>
+            <th>Segment</th>
             <th>Quantity</th>
             <th>Strategy</th>
             <th>Order Type</th>
@@ -202,6 +203,8 @@ const BrokerResponse = () => {
                       className={`ShowLTP_${data.service.instrument_token}`}
                     ></td>
                     <td>{data.service.name}</td>
+                    <td>{data.service.name}</td>
+
                     <td>
                       <div className="row d-flex">
                         <div className="col-lg-12 ">

@@ -46,6 +46,17 @@ class Signals {
                     $unwind: '$strategys',
                 },
                 {
+                    $lookup: {
+                        from: "signals",
+                        localField: "strategy_id",
+                        foreignField: "_id",
+                        as: "signals",
+                    },
+                },
+                {
+                    $unwind: '$strategys',
+                },
+                {
                     $project: {
                         'service.name': 1,
                         'strategys.strategy_name': 1,
@@ -74,7 +85,7 @@ class Signals {
                                 $gte: currentDate,
                                 $lte: endOfDay,
                             },
-                        });
+                        })
 
                         if (data.length > 0) {
                             abc.push(data)
@@ -86,6 +97,7 @@ class Signals {
             } else {
                 res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
             }
+            
 
             if(abc.length > 0 ){
                 res.send({ status: true, data: abc.flat(),msg:"Get Signals" })
