@@ -1,0 +1,32 @@
+TIME Tue Oct 17 2023 18:38:52 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697548132706,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Tue Oct 17 2023 18:38:52 GMT+0530 (India Standard Time) 
+TIME Tue Oct 17 2023 18:38:52 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Tue Oct 17 2023 18:38:53 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT TRADIND VIEW 1
+TIME Tue Oct 17 2023 18:38:53 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"248.15","qty":4,"ret":"DAY","symbol_id":"67308","trading_symbol":"NIFTY23102619700CE","transtype":"SELL","trigPrice":"","orderTag":"order1"}
+TIME Tue Oct 17 2023 18:38:53 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -{"stat":"Not_Ok","emsg":"You have placed more than '100' cancelled/rejected orders. You are no longer to query through API for the day. Please contact administrator for further support."}
+TIME Tue Oct 17 2023 18:38:53 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - dddd ERROR -{}
+TIME Tue Oct 17 2023 18:39:06 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697548146594,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Tue Oct 17 2023 18:39:06 GMT+0530 (India Standard Time) 
+TIME Tue Oct 17 2023 18:39:06 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Tue Oct 17 2023 18:39:07 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT TRADIND VIEW 1
+TIME Tue Oct 17 2023 18:39:07 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"248.15","qty":4,"ret":"DAY","symbol_id":"67308","trading_symbol":"NIFTY23102619700CE","transtype":"SELL","trigPrice":"","orderTag":"order1"}
+TIME Tue Oct 17 2023 18:39:07 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -{"stat":"Not_Ok","emsg":"You have placed more than '100' cancelled/rejected orders. You are no longer to query through API for the day. Please contact administrator for further support."}
+TIME Tue Oct 17 2023 18:39:07 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - dddd ERROR -{}
+TIME Tue Oct 17 2023 18:40:44 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697548244252,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Tue Oct 17 2023 18:40:44 GMT+0530 (India Standard Time) 
+TIME Tue Oct 17 2023 18:40:44 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Tue Oct 17 2023 18:40:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT TRADIND VIEW 1
+TIME Tue Oct 17 2023 18:40:45 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"248.15","qty":4,"ret":"DAY","symbol_id":"67308","trading_symbol":"NIFTY23102619700CE","transtype":"SELL","trigPrice":"","orderTag":"order1"}
+TIME Tue Oct 17 2023 18:40:45 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - dddd ERROR -{}
+TIME Tue Oct 17 2023 18:40:45 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -{"stat":"Not_Ok","emsg":"You have placed more than '100' cancelled/rejected orders. You are no longer to query through API for the day. Please contact administrator for further support."}
+TIME Tue Oct 17 2023 18:53:08 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697548988063,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Tue Oct 17 2023 18:53:08 GMT+0530 (India Standard Time) 
+TIME Tue Oct 17 2023 18:53:08 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Tue Oct 17 2023 18:53:08 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT TRADIND VIEW 1
+TIME Tue Oct 17 2023 18:53:09 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"248.15","qty":4,"ret":"DAY","symbol_id":"67308","trading_symbol":"NIFTY23102619700CE","transtype":"SELL","trigPrice":"","orderTag":"order1"}
+TIME Tue Oct 17 2023 18:53:09 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -{"stat":"Not_Ok","emsg":"You have placed more than '100' cancelled/rejected orders. You are no longer to query through API for the day. Please contact administrator for further support."}
+TIME Tue Oct 17 2023 18:53:09 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - dddd ERROR -{}

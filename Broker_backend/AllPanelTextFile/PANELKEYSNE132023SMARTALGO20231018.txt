@@ -1,0 +1,165 @@
+TIME Wed Oct 18 2023 12:42:21 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697613141086,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 12:42:21 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 12:42:21 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 12:42:21 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 12:42:21 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT TRADIND VIEW 0
+TIME Wed Oct 18 2023 13:52:57 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697617377590,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 13:52:57 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 13:52:57 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 13:52:57 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 13:52:58 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT TRADIND VIEW 0
+TIME Wed Oct 18 2023 13:55:06 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697617506722,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 13:55:06 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 13:55:06 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 13:55:07 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 13:55:07 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT TRADIND VIEW 0
+TIME Wed Oct 18 2023 14:02:53 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697617973067,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 14:02:53 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 14:02:53 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 14:02:53 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 14:02:53 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT TRADIND VIEW 1
+TIME Wed Oct 18 2023 14:02:54 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"248.15","qty":4,"ret":"DAY","symbol_id":"67308","trading_symbol":"NIFTY23102619700CE","transtype":"SELL","trigPrice":"","orderTag":"order1"}
+TIME Wed Oct 18 2023 14:02:54 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - dddd ERROR -{"message":"Request failed with status code 401","name":"AxiosError","stack":"AxiosError: Request failed with status code 401\n    at settle (C:\\NEWSMARTALGO\\NEW_ALGO\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (C:\\NEWSMARTALGO\\NEW_ALGO\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:525:35)\n    at endReadableNT (node:internal/streams/readable:1358:12)\n    at processTicksAndRejections (node:internal/process/task_queues:83:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{"Blob":null},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json","Authorization":"Bearer 0438760 eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc2MDM5NDAsImlhdCI6MTY5NzUyMTk3OCwianRpIjoiMmExNDBmMWEtNTU3MC00OTFkLThhOWUtYjE2MTE2Y2IzYTVhIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6ImFiYmU5YTdhLWI0ODktNDViNi1hMWM0LWRiNDQ2ZGQ3NzZhMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiYWJiZTlhN2EtYjQ4OS00NWI2LWExYzQtZGI0NDZkZDc3NmEzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.MshD2_VIArsSNT7ygzlDCdT9VqMELLFLcK3tX3wWrKSMD4_SST0TxFAXA8kAlv2N6VwMAYvTxak91jeesHMoRh42UlW748zv5B9OAEPdJljRLRdZ1vgXSwWPFWMWLgSuWkv23hzrZSgGuzP2xu2HEJhMdmcK2ccsSROKomi81IWIibjngSqVq5UW1OJXBw0yZ8VrwvK2yRHi0B7V9n-IyMegxLSrW9esG6GPx_rJmMrMgDUl64HEbvso8zFLC60j2FLxXfosY2Yw3-I06EClmlufcNFf6BtdjDgjCwgtW1R2LZ2zOAFdSBNXcvONZc1JozblZy8T2V41YlDlo7NpHQ","User-Agent":"axios/1.5.0","Content-Length":"230","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder","data":"[{\"complexty\":\"regular\",\"discqty\":\"0\",\"exch\":\"NFO\",\"pCode\":\"MIS\",\"prctyp\":\"MKT\",\"price\":\"248.15\",\"qty\":4,\"ret\":\"DAY\",\"symbol_id\":\"67308\",\"trading_symbol\":\"NIFTY23102619700CE\",\"transtype\":\"SELL\",\"trigPrice\":\"\",\"orderTag\":\"order1\"}]"},"code":"ERR_BAD_REQUEST","status":401}
+TIME Wed Oct 18 2023 14:45:35 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697620534949,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 14:45:35 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 14:45:35 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 14:45:35 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 14:49:40 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697620780485,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 14:49:40 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 14:49:40 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 14:49:40 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+
+NEW TRADE GET Wed Oct 18 2023 14:53:11 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 14:53:11 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697620991330,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 14:53:11 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 14:53:11 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 14:53:11 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT TRADIND VIEW 1
+TIME Wed Oct 18 2023 14:53:12 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"248.15","qty":4,"ret":"DAY","symbol_id":"67308","trading_symbol":"NIFTY23102619700CE","transtype":"SELL","trigPrice":"","orderTag":"order1"}
+TIME Wed Oct 18 2023 14:53:12 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - dddd ERROR -{"message":"Request failed with status code 401","name":"AxiosError","stack":"AxiosError: Request failed with status code 401\n    at settle (C:\\NEWSMARTALGO\\NEW_ALGO\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (C:\\NEWSMARTALGO\\NEW_ALGO\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:525:35)\n    at endReadableNT (node:internal/streams/readable:1358:12)\n    at processTicksAndRejections (node:internal/process/task_queues:83:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{"Blob":null},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json","Authorization":"Bearer 0438760 eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc2MDM5NDAsImlhdCI6MTY5NzUyMTk3OCwianRpIjoiMmExNDBmMWEtNTU3MC00OTFkLThhOWUtYjE2MTE2Y2IzYTVhIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6ImFiYmU5YTdhLWI0ODktNDViNi1hMWM0LWRiNDQ2ZGQ3NzZhMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiYWJiZTlhN2EtYjQ4OS00NWI2LWExYzQtZGI0NDZkZDc3NmEzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.MshD2_VIArsSNT7ygzlDCdT9VqMELLFLcK3tX3wWrKSMD4_SST0TxFAXA8kAlv2N6VwMAYvTxak91jeesHMoRh42UlW748zv5B9OAEPdJljRLRdZ1vgXSwWPFWMWLgSuWkv23hzrZSgGuzP2xu2HEJhMdmcK2ccsSROKomi81IWIibjngSqVq5UW1OJXBw0yZ8VrwvK2yRHi0B7V9n-IyMegxLSrW9esG6GPx_rJmMrMgDUl64HEbvso8zFLC60j2FLxXfosY2Yw3-I06EClmlufcNFf6BtdjDgjCwgtW1R2LZ2zOAFdSBNXcvONZc1JozblZy8T2V41YlDlo7NpHQ","User-Agent":"axios/1.5.0","Content-Length":"230","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder","data":"[{\"complexty\":\"regular\",\"discqty\":\"0\",\"exch\":\"NFO\",\"pCode\":\"MIS\",\"prctyp\":\"MKT\",\"price\":\"248.15\",\"qty\":4,\"ret\":\"DAY\",\"symbol_id\":\"67308\",\"trading_symbol\":\"NIFTY23102619700CE\",\"transtype\":\"SELL\",\"trigPrice\":\"\",\"orderTag\":\"order1\"}]"},"code":"ERR_BAD_REQUEST","status":401}
+TIME Wed Oct 18 2023 14:59:55 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697621395579,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 14:59:55 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 14:59:55 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 14:59:55 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:08:50 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697625530756,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:08:50 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:08:50 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:08:51 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:09:50 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697625590938,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:09:50 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:09:50 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:09:51 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:13:19 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697625799579,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:13:19 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:13:19 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:13:19 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:23:00 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697626380534,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:23:00 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:23:00 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:23:01 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:24:28 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697626467999,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:24:28 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:24:28 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:24:32 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:30:13 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697626813501,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:30:13 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:30:13 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:30:14 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:32:24 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697626944643,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:32:24 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:32:24 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:32:24 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:36:07 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697627167368,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:36:07 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:36:07 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:36:07 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:39:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697627376199,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:39:36 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:39:36 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:39:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:39:54 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697627394494,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:39:54 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:39:54 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:39:57 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:40:38 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697627438432,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:40:38 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:40:38 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:40:38 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:41:41 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697627501414,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:41:41 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:41:41 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:41:44 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:43:58 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697627638269,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:43:58 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:43:58 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:44:03 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:45:01 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697627701191,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:45:01 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:45:01 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:45:01 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:46:39 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697627799944,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:46:39 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:46:40 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:46:40 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:47:44 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697627864232,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:47:44 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:47:44 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:47:44 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:48:28 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697627908891,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:48:28 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:48:28 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:48:29 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
+TIME Wed Oct 18 2023 16:53:52 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1697628232895,NIFTY,SE,0,248.15,0,0,0,O,19700,CALL,26102023,shakir hussain,100,SNE780058230926,demo
+
+NEW TRADE GET Wed Oct 18 2023 16:53:52 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Wed Oct 18 2023 16:53:52 GMT+0530 (India Standard Time) 
+TIME Wed Oct 18 2023 16:53:53 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67308
