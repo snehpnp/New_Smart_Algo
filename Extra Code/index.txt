@@ -1,0 +1,11 @@
+id:1@@@@@input_symbol:BANKNIFTY@@@@@type:LE@@@@@price:7@@@@@dt:1679060373@@@@@qty_percent:100@@@@@order_type:Market@@@@@client_key:SMA1052022@@@@@exchange:NFO@@@@@product_type:MIS@@@@@strike:44100@@@@@segment:O@@@@@option_type:PUT@@@@@expiry:04102023@@@@@sq_value:0@@@@@sl_value:0@@@@@tsl:0@@@@@tr_price:0@@@@@strategy:demo@@@@@demo:demo 
+
+
+
+id:1@@@@@input_symbol:IDEA#@@@@@type:LE@@@@@price:7@@@@@dt:1679060373@@@@@qty_percent:100@@@@@order_type:Market@@@@@client_key:SMA1052022@@@@@exchange:NSE@@@@@product_type:MIS@@@@@strike:44100@@@@@segment:C@@@@@option_type:PUT@@@@@expiry:04102023@@@@@sq_value:0@@@@@sl_value:0@@@@@tsl:0@@@@@tr_price:0@@@@@strategy:demo@@@@@demo:demo 
+
+
+id:1@@@@@input_symbol:EURINR@@@@@type:LE@@@@@price:7@@@@@dt:1679060373@@@@@qty_percent:100@@@@@order_type:Market@@@@@client_key:SMA1052022@@@@@exchange:NSE@@@@@product_type:MIS@@@@@strike:8750000@@@@@segment:CO@@@@@option_type:PUT@@@@@expiry:01122023@@@@@sq_value:0@@@@@sl_value:0@@@@@tsl:0@@@@@tr_price:0@@@@@strategy:demo@@@@@demo:demo 
+
+
+id:1@@@@@input_symbol:GOLD@@@@@type:LE@@@@@price:7@@@@@dt:1679060373@@@@@qty_percent:100@@@@@order_type:Market@@@@@client_key:SMA1052022@@@@@exchange:NSE@@@@@product_type:MIS@@@@@strike:62600@@@@@segment:MO@@@@@option_type:PUT@@@@@expiry:24112023@@@@@sq_value:0@@@@@sl_value:0@@@@@tsl:0@@@@@tr_price:0@@@@@strategy:demo@@@@@demo:demo 

@@ -13,6 +13,8 @@ import UpdatePassword from '../layout/Auth/UpdatePassword.js';
 import Testing from "../test"
 import Deactivate_Company from '../layout/Auth/Deactivate_Company';
 import NotFound from '../layout/Auth/Not_Found';
+import SignUp from '../layout/Sign_Up_Users/Main';
+
 
 
 
@@ -85,6 +87,7 @@ const Routing = () => {
       <Route path="/update/:id" element={<UpdatePassword />} />
       <Route path="/Testing" element={<Testing />} />
       <Route path="/notfound" element={<Deactivate_Company />} />
+      <Route path="/signup" element={<SignUp />} />
       <Route path="/*" element={<NotFound />} />
 
 

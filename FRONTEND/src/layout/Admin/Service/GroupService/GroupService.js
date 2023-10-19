@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
 import Loader from '../../../../Utils/Loader'
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 
 
@@ -12,11 +12,12 @@ import { Pencil, Trash2, GanttChartSquare } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable"
 
-import { Get_All_Service, Get_All_Catagory, Service_By_Catagory, GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
-import { GET_ALL_SERVICES_NAMES, DELETE_GROUP_SERVICE, Get_client_By_strategy_Id , GET_ALL_SERVICES_USER_NAMES } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
+import { GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
+import { GET_ALL_SERVICES_NAMES, DELETE_GROUP_SERVICE, Get_client_By_strategy_Id, GET_ALL_SERVICES_USER_NAMES } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 import toast, { Toaster } from 'react-hot-toast';
+
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 const ServicesList = () => {
 
@@ -27,6 +28,12 @@ const ServicesList = () => {
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
     const [showModaluser, setshowModaluser] = useState(false)
+
+    //  For Mnage Multipfiter
+    const [searchInput, setSearchInput] = useState("");
+    const [originalData, setOriginalData] = useState([]);
+
+
 
     const [test, settest] = useState(false)
 
@@ -50,25 +57,25 @@ const ServicesList = () => {
         {
             dataField: "index",
             text: "SR. No.",
-            sort : true,
+            sort: true,
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
             dataField: 'name',
             text: 'Group Services Name',
-            sort : true,
+            sort: true,
 
         },
         {
             dataField: 'resultCount',
             text: 'Service Count',
-            sort : true,
+            sort: true,
 
         },
         {
             dataField: 'categoryResult.segment',
             text: 'Services',
-            sort : true,
+            sort: true,
 
             formatter: (cell, row) => (
                 <div>
@@ -80,7 +87,7 @@ const ServicesList = () => {
             dataField: 'dsd',
             text: 'Client Using',
 
-            sort : true,
+            sort: true,
 
             formatter: (cell, row) => (
                 <div>
@@ -98,7 +105,7 @@ const ServicesList = () => {
         {
             dataField: 'actions',
             text: 'Actions',
-            sort : true,
+            sort: true,
 
             formatter: (cell, row) => (
                 <div>
@@ -135,6 +142,7 @@ const ServicesList = () => {
                         loading: false,
                         data: response.data
                     });
+
                 }
                 else {
                     setServicesName({
@@ -219,6 +227,8 @@ const ServicesList = () => {
                         loading: false,
                         data: response.data
                     });
+                    setOriginalData(response.data);
+
                 } else {
                     setAllGroupServices({
                         loading: false,
@@ -233,49 +243,70 @@ const ServicesList = () => {
         data()
     }, [refresh])
 
+
+
+    //  MANAGE MULTIFILTER
+    useEffect(() => {
+
+        const filteredData = originalData.filter((item) => {
+            return (
+                item.name.toLowerCase().includes(searchInput.toLowerCase())
+            );
+        });
+        setAllGroupServices({
+            loading: false,
+            data: searchInput ? filteredData : originalData,
+        });
+    }, [searchInput, originalData]);
+
+    const ResetDate = (e) => {
+        e.preventDefault();
+        setSearchInput("");
+        setAllGroupServices({
+            loading: false,
+            data: AllGroupServices.data,
+        });
+    };
+
+
+
+
     return (
         <>
             {
                 AllGroupServices.loading ? <Loader /> :
                     <>
                         <Content Page_title="Group Service" button_title="Add Group" route="/admin/groupservices/add">
-                            {
-                                AllGroupServices.data && AllGroupServices.data.length === 0 ? (
-                                    'No data found') :
-                                    <>
-                                        <FullDataTable TableColumns={columns} tableData={AllGroupServices.data} />
 
-                                    </>
-                            }
+                            <div className="row">
+                                <div className="col-lg-4">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">
+                                            Search Something Here
+                                        </label>
+                                        <input
+                                            type="text"
+                                            placeholder="Search..."
+                                            value={searchInput}
+                                            onChange={(e) => setSearchInput(e.target.value)}
+                                            class="form-control"
+                                            id="exampleFormControlInput1"
+                                        />
+                                    </div>
+                                </div>
 
+                                <div className="col-lg-2 mt-3">
+                                    <button
+                                        className="btn btn-primary mt-2"
+                                        onClick={(e) => ResetDate(e)}
+                                    >
+                                        Reset
+                                    </button>
+                                </div>
+                            </div>
 
+                            <FullDataTable TableColumns={columns} tableData={AllGroupServices.data} />
 
-                            {/* {
-                                showModal ?
-                                    <>
-                                        <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Servics" hideBtn={true}
-                                            // onHide={handleClose1}
-                                            handleClose={setshowModal(false)}
-                                        >
-                                            <BasicDataTable TableColumns={[
-                                                {
-                                                    dataField: "index",
-                                                    text: "SR. No.",
-                                                    formatter: (cell, row, rowIndex) => rowIndex + 1,
-                                                },
-                                                {
-                                                    dataField: 'user_id',
-                                                    text: 'Services Name'
-                                                },
-                                                {
-                                                    dataField: 'user_id',
-                                                    text: 'lotsize'
-                                                },
-                                            ]} tableData={getServicesName && getServicesName.data} />
-                                        </Modal >
-                                    </>
-                                    : ""
-                            } */}
 
 
                             {

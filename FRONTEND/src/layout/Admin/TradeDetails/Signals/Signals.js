@@ -7,6 +7,8 @@ import { fa_time, fDateTimeSuffix } from "../../../../Utils/Date_formet";
 import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
+
 
 const Signals = () => {
   const dispatch = useDispatch();
@@ -17,6 +19,11 @@ const Signals = () => {
   const [DateArray, setDateArray] = useState([]);
 
   const [ForGetCSV, setForGetCSV] = useState([])
+
+//  For Strategy Filter
+  const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
+  const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
+
 
 
   const columns = [
@@ -68,7 +75,9 @@ const Signals = () => {
   const getsignals = async () => {
     let csvarr = []
 
-    await dispatch(Get_All_Signals({ startDate: DateFilter, token: token }))
+
+    // await dispatch(Get_All_Signals({ startDate: '2023/10/14', token: token }))
+      await dispatch(Get_All_Signals({ startDate: DateFilter, token: token }))
       .unwrap()
       .then((response) => {
         if (response.status) {
@@ -122,6 +131,34 @@ const Signals = () => {
   }, []);
 
 
+  //  GET ALL SERVICE NAME
+
+  const GetAllStrategyName = async (e) => {
+    await dispatch(
+      Get_All_Service_for_Client({
+        req: {},
+        token: token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAllStrategyName({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  };
+
+  useEffect(() => {
+    GetAllStrategyName();
+  }, []);
+
+
+
+
+
 
 
   return (
@@ -136,8 +173,11 @@ const Signals = () => {
           >
             <div className="d-flex">
               <div className="col-lg-6">
-                <div className="mb-3 row">
-                  <div className="col-lg-7">
+                <div className="mb-3 row d-flex">
+                  <div className="col-lg-6">
+                    <label className="col-lg-12" htmlFor="validationCustom05">
+                      Select Date
+                    </label>
                     <select
                       className="default-select wide form-control"
                       id="validationCustom05"
@@ -157,7 +197,30 @@ const Signals = () => {
                         })}
                     </select>
                   </div>
+                  <div className="col-lg-6">
+                    <label className="col-lg-12" htmlFor="validationCustom05">
+                      Select Strategy
+                    </label>
+                    <select
+                      class="default-select wide form-control"
+                      aria-label="Default select example"
+                      id="select"
+                      onChange={(e) => setStrategyClientStatus(e.target.value)}
+                      value={StrategyClientStatus}
+                    >
+                      <option value="null">All</option>
+                      {getAllStrategyName.data &&
+                        getAllStrategyName.data.map((item) => {
+                          return (
+                            <option value={item.strategy_name}>
+                              {item.strategy_name}
+                            </option>
+                          );
+                        })}
+                    </select>
+                  </div>
                 </div>
+
               </div>
             </div>
 

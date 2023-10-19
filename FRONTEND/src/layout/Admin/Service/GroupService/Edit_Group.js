@@ -298,7 +298,7 @@ const AddStrategy = () => {
             label: 'Segment',
             type: 'select',
             options: GetAllSgments.data && GetAllSgments.data.map((item) => ({ label: item.name, value: item.segment })),
-            label_size: 12, col_size: 12, disable: false,
+            label_size: 12, col_size: 6, disable: false,
         },
     ];
 

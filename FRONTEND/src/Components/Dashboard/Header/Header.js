@@ -331,20 +331,23 @@ const Header = ({ ChatBox }) => {
                   ""
                 )}
 
-                {(user_role === "USER" && UserDetails.broker === "2" && UserDetails.broker === 2) || user_role === "ADMIN" ? (
-                  <>
-                    <li className="nav-item dropdown header-profile me-2">
-                      <button
-                        className=" btn btn-secondary"
-                        onClick={() => setshowModal(true)}
-                      >
-                        Set ApiKey
-                      </button>
-                    </li>
-                  </>
-                ) : (
-                  ""
-                )}
+                {/* {(user_role === "USER" && UserDetails.broker === "2" && UserDetails.broker === 2) || */}
+                {(!gotodashboard && (user_role === "USER" || user_role === "ADMIN"))
+
+                  ? (
+                    <>
+                      <li className="nav-item dropdown header-profile me-2">
+                        <button
+                          className=" btn btn-primary"
+                          onClick={() => setshowModal(true)}
+                        >
+                          Set ApiKey
+                        </button>
+                      </li>
+                    </>
+                  ) : (
+                    ""
+                  )}
 
                 {/*  For Show Notification Box */}
 

@@ -32,6 +32,6 @@ module.exports = {
     user_activity_logs: require('./User_activity.model'),
     Broker_information: require('./Broker_information.model'),
     Messagebrodcast_data: require('./Messagebrodcast.model'),
-
+    live_price: require('./Live_price.model'),
 
 };

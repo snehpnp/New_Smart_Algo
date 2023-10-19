@@ -83,7 +83,7 @@ const CompanySchema = new mongoose.Schema({
         required: true
     },
     licenses: {
-        type: String
+        type: Number
     },
     createdAt: {
         type: Date,

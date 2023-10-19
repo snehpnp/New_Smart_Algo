@@ -1,0 +1,162 @@
+  async Cancel_order(req, res) {
+
+        try {
+            // var OrderId = "23091800155929"
+            const { OrderId, user_id } = req.body
+
+
+            if (!OrderId || !user_id) {
+                console.log("Please Fill All Feild");
+                return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
+
+            }
+
+            const objectId = new ObjectId(user_id);
+
+            var FindUserAccessToken = await User.find({ _id: objectId })
+            var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId, order_id: OrderId })
+
+
+            if (FindUserBrokerResponse[0].order_view_status == "0" || "1") {
+
+                let data = JSON.stringify({
+                    "nestOrderNumber": OrderId
+                });
+
+                let config = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
+                    headers: {
+                        'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
+                        'Content-Type': 'application/json',
+                    },
+                    data: data
+                };
+                console.log("config", config);
+                axios(config)
+                    .then(async (response) => {
+                        console.log(response.data[0]);
+                        if (response.data[0]) {
+
+                            if (response.data[0].Status != "open") {
+                                const message = (JSON.stringify(response.data[0]));
+                                let result = await BrokerResponse.findByIdAndUpdate(
+                                    { _id: FindUserBrokerResponse[0]._id },
+                                    {
+                                        order_view_date: message,
+                                        order_view_status: '1',
+                                        order_view_response: response.data[0].Status
+                                    },
+                                    { new: true }
+                                )
+
+
+                            } else {
+                                console.log("ENTER ORDER CANCEL REQUEST");
+
+                                let config = {
+                                    method: 'post',
+                                    maxBodyLength: Infinity,
+                                    url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api//placeOrder/cancelOrder',
+                                    headers: {
+                                        'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
+                                        'Content-Type': 'application/json',
+                                    },
+                                    data: {
+                                        "exch": "NSE",
+                                        "nestOrderNumber": response.data[0].nestreqid,
+                                        "trading_symbol": response.data[0].scripname
+                                    }
+                                };
+
+                                axios(config)
+                                    .then(async (response) => {
+                                        console.log("==>", response.data);
+                                        if (response.data) {
+                                            if (response.data.stat == "ok") {
+                                                return res.send({ status: true, msg: "Order Cancel Successfully", data: response.data });
+
+                                            } else {
+                                                return res.send({ status: false, msg: "Order Cancel Error", data: [] });
+                                            }
+                                        } else {
+                                            return res.send({ status: false, msg: "Order Cancel Error", data: error });
+                                        }
+
+                                    })
+                                    .catch(async (error) => {
+                                        console.log("error", error);
+                                        return res.send({ status: false, msg: "Order Cancel Error", data: error });
+                                    })
+
+
+
+
+
+
+
+
+
+                            }
+
+
+
+
+
+
+                        } else {
+                            console.log("NO DATA FOUND");
+                        }
+                    })
+                    .catch(async (error) => {
+                        try {
+
+                            if (error.response.data) {
+                                const message = (JSON.stringify(error.response.data));
+
+                                let result = await BrokerResponse.findByIdAndUpdate(
+                                    { _id: FindUserBrokerResponse[0]._id },
+                                    {
+                                        order_view_date: message,
+                                        order_view_status: '1',
+                                        order_view_response: "Error"
+                                    },
+                                    { new: true }
+                                )
+                                return res.send({ status: false, msg: 'Error', data: message });
+
+                            } else {
+                                const message = (JSON.stringify(error));
+
+                                let result = await BrokerResponse.findByIdAndUpdate(
+                                    { _id: FindUserBrokerResponse[0]._id },
+                                    {
+                                        order_view_date: message,
+                                        order_view_status: '1',
+                                        order_view_response: "Error"
+                                    },
+                                    { new: true }
+                                )
+                                return res.send({ status: false, msg: 'Error', data: message });
+
+                            }
+                        } catch (error) {
+
+                        }
+
+                    });
+            } else {
+                return res.send({ status: false, msg: 'Already Update', data: FindUserBrokerResponse });
+
+            }
+
+
+        } catch (error) {
+            console.log("Some Error In Order information get -", error);
+            return res.send({ status: false, msg: 'error in Server side', data: error });
+
+        }
+
+
+    }

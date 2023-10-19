@@ -9,6 +9,8 @@ const db = require('../Models')
 const User = db.user;
 const user_logs = db.user_logs;
 const Alice_token = db.Alice_token;
+const live_price = db.live_price;
+
 
 
 
@@ -39,11 +41,14 @@ cron.schedule('2 2 * * *', () => {
     tradesymbol()
 });
 
+
 // 1. LOGOUT AND TRADING OFF ALL USER 
 const LogoutAllUsers = async () => {
 
     // APP LOGOUT USERS  
     const AppLoginUser = await User.find({ AppLoginStatus: '1' });
+
+
     if (AppLoginUser.length > 0) {
         AppLoginUser.map(async (user) => {
 
@@ -100,6 +105,12 @@ const LogoutAllUsers = async () => {
             await user_login.save();
         })
     }
+
+
+    // ADMIN TRADING OFF
+    const updateOperation1 = { $set: { trading_status: 'off' } };
+    const result1 = await live_price.updateMany({}, updateOperation1);
+
 
 
 }

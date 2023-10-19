@@ -24,6 +24,8 @@ import Formikform from "../../Components/ExtraComponents/Form/Formik_form";
 import { useFormik } from "formik";
 import * as valid_err from "../../Utils/Common_Messages";
 import { Email_regex, Mobile_regex } from "../../Utils/Common_regex";
+import { GET_COMPANY_INFOS } from '../../ReduxStore/Slice/Admin/AdminSlice'
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -47,7 +49,7 @@ const Login = () => {
 
   const [UserData, setUserData] = useState("");
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   const isValidEmail = (email) => {
     return Email_regex(email);
@@ -154,17 +156,16 @@ const Login = () => {
             localStorage.setItem("user_details", JSON.stringify(userData));
             localStorage.setItem("user_role", JSON.stringify(role));
             toast.success(res.payload.msg);
-            let redirectPath = `/${
-              role === "USER"
-                ? "client/dashboard"
-                : role === "SUBADMIN"
+            let redirectPath = `/${role === "USER"
+              ? "client/dashboard"
+              : role === "SUBADMIN"
                 ? "subadmin/signals"
                 : role === "ADMIN"
-                ? "admin/dashboard"
-                : role === "SUPERADMIN"
-                ? "/super/dashboard"
-                : ""
-            }
+                  ? "admin/dashboard"
+                  : role === "SUPERADMIN"
+                    ? "/super/dashboard"
+                    : ""
+              }
            `;
 
             setTimeout(() => {
@@ -241,18 +242,17 @@ const Login = () => {
               //   role === "USER" ? "client" : role.toLowerCase()
               // }/dashboard`;
 
-              let redirectPath = `/${
-                role === "USER"
-                  ? "client/dashboard"
-                  : role === "SUBADMIN"
+              let redirectPath = `/${role === "USER"
+                ? "client/dashboard"
+                : role === "SUBADMIN"
                   ? "subadmin/signals"
                   : role === "ADMIN"
-                  ? "admin/dashboard"
-                  : role === "SUPERADMIN"
-                  ? "/super/dashboard"
-                  : ""
-              }`
-              
+                    ? "admin/dashboard"
+                    : role === "SUPERADMIN"
+                      ? "/super/dashboard"
+                      : ""
+                }`
+
               setTimeout(() => {
                 // setshowModal(false);
                 navigate(redirectPath);
@@ -314,6 +314,7 @@ const Login = () => {
 
   useEffect(() => {
     getPanelDetails();
+    CompanyName()
   }, []);
 
   let theme_id = localStorage.getItem("theme");
@@ -408,6 +409,45 @@ const Login = () => {
     console.log("typeOtp", typeOtp);
   }
 
+
+
+  //  FOR SET COMPANY LOGO
+
+
+
+
+  const CompanyName = async () => {
+    await dispatch(GET_COMPANY_INFOS()).unwrap()
+      .then((response) => {
+        if (response.status) {
+          console.log("response.status", response.data && response.data[0].favicon)
+
+          // $(".logo-abbr").attr('src', response.data && response.data[0].logo);
+
+
+
+          $(".set_Favicon")
+
+          let favicon = $("link[rel='icon']").length
+            ? $("link[rel='icon']")
+            : $("<link rel='icon' type='image/x-icon' />");
+          favicon.attr('href', response.data && response.data[0].favicon);
+          $('head').append(favicon);
+        }
+      })
+  }
+
+
+
+
+
+
+
+
+
+
+
+
   return (
     <div class="vh-100">
       <div className="authincation h-100">
@@ -419,7 +459,10 @@ const Login = () => {
                   <div className="col-xl-12">
                     <div className="auth-form">
                       <div className="text-center mb-3">
-                        <a href="#a"> logo </a>
+                        {/* <a href="#a"> logo </a> */}
+                        <span className="brand-logo">
+                          <img className="logo-abbr" src="assets/icons/logo.png" alt="logo" />
+                        </span>
                       </div>
                       <h4 className="text-center mb-4">Sign in your account</h4>
                       <Formikform

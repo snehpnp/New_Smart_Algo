@@ -1,10 +1,13 @@
 "use strict";
 const db = require('../../Models');
 const MainSignals_modal = db.MainSignals
+const live_price = db.live_price
+const user_logs = db.user_logs
+
+
 const { formattedDateTime } = require('../../Helper/time.helper')
 
 class Tradehistory {
-
 
     // GET ADMIN SIGNALS
     async GetAdminTradeHistory(req, res) {
@@ -54,7 +57,6 @@ class Tradehistory {
         }
     }
 
-
     // GET ADMIN SIGNALS
     async GetAdminsevenTradeHistory(req, res) {
         try {
@@ -82,7 +84,40 @@ class Tradehistory {
         }
     }
 
+    // ADMIN TRADING OFF
+    async AdminTradingOff(req, res) {
+        try {
+            const { broker_name, device } = req.body
 
+            var Admin_information = await live_price.find({ broker_name: broker_name });
+
+            if (Admin_information.length == 0) {
+                return res.send({ status: false, msg: 'User Not exists', data: [] });
+            }
+
+            if (Admin_information[0].trading_status == "off") {
+                return res.send({ status: false, msg: 'Already Trading Off', data: [] });
+
+            }
+
+            const User_Update = await live_price.updateOne({ broker_name: broker_name }, { $set: { trading_status: "off", access_token: "" } });
+
+            const user_login = new user_logs({
+                user_Id: Admin_information[0].user_id,
+                login_status: "Trading off",
+                role: "ADMIN",
+                // system_ip: getIPAddress()
+                device: device
+            })
+            await user_login.save();
+
+            return res.send({ status: true, msg: 'Trading Off successfully', data: [] });
+
+
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
 
 }
 

@@ -54,7 +54,6 @@ const TradingStatus = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("response", response);
           if (first === "all") {
             setAllUserTrading_status({
               loading: false,
@@ -68,6 +67,11 @@ const TradingStatus = () => {
           setAllUserTrading_status({
             loading: false,
             data: abc,
+          });
+        } else {
+          setAllUserTrading_status({
+            loading: false,
+            data: [],
           });
         }
       });
@@ -86,7 +90,7 @@ const TradingStatus = () => {
     data1();
   }, [first]);
 
-  
+
   const data2 = async () => {
     await dispatch(user_activity_logs(req))
       .unwrap()
@@ -250,7 +254,7 @@ const TradingStatus = () => {
                   </div>
                 </div>
                 {getAllUserTrading_status.data &&
-                getAllUserTrading_status.data.length === 0 ? (
+                  getAllUserTrading_status.data.length === 0 ? (
                   <FullDataTable
                     TableColumns={columns}
                     tableData={getAllUserTrading_status.data}
@@ -265,21 +269,11 @@ const TradingStatus = () => {
                 )}
               </Tab>
               <Tab eventKey="profile" title="Update Status">
-                {getAllUserTrading_status.data &&
-                getAllUserTrading_status.data.length === 0 ? (
-                  <FullDataTable
-                    TableColumns={columns1}
-                    tableData={userLogs.data}
-                  />
-                ) : (
-                  <>
-                    <FullDataTable
-                      TableColumns={columns1}
-                      tableData={userLogs.data}
-                    />
-                  </>
-                )}
-                s
+                <FullDataTable
+                  TableColumns={columns1}
+                  tableData={userLogs.data}
+                />
+
               </Tab>
             </Tabs>
           </Content>

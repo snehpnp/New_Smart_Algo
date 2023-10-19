@@ -3,6 +3,7 @@
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
@@ -16,8 +17,8 @@ import { User_Profile } from "../../../../ReduxStore/Slice/Common/commoSlice.js"
 import { TRADING_OFF_USER } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import { check_Device } from "../../../../Utils/find_device";
-import { CreateSocketSession, ConnctSocket, } from "../../../../Service/Alice_Socket";
-import { ShowColor, ShowColor_Compare_two, } from "../../../../Utils/ShowTradeColor";
+import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../../Service/Alice_Socket";
+import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../../Utils/ShowTradeColor";
 
 import $ from "jquery";
 
@@ -97,6 +98,7 @@ const TradeHistory = () => {
     let year = abc.getFullYear();
     let full = `${year}/${month}/${date}`;
     await dispatch(
+      // Get_Tradehisotry({ startDate: "2023/10/1", endDate: "2023/10/16", token: token })
       Get_Tradehisotry({ startDate: full, endDate: full, token: token })
     ).unwrap()
       .then((response) => {
@@ -205,24 +207,30 @@ const TradeHistory = () => {
       formatter: (cell, row, rowIndex) => {
         return (
           <div>
-            <span className={`fw-bold show_rpl_${row.token}`}></span>
-            <span className={`d-none entry_qty${row.token}`}>
+            <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
+            <span className={`d-none entry_qty_${row.token}_${row._id}`}>
               {row.entry_qty_percent}
             </span>
-            <span className={`d-none exit_qty${row.token}`}>
+            <span className={`d-none exit_qty_${row.token}_${row._id}`}>
               {row.exit_qty_percent}
             </span>
-            <span className={`d-none exit_price${row.token}`}>
+            <span className={`d-none exit_price_${row.token}_${row._id}`}>
               {row.exit_price}
             </span>
-            <span className={`d-none entry_price${row.token}`}>
+            <span className={`d-none entry_price_${row.token}_${row._id}`}>
               {row.entry_price}
             </span>
-            <span className={`d-none entry_type${row.token}`}>
+            <span className={`d-none entry_type_${row.token}_${row._id}`}>
               {row.entry_type}
             </span>
-            <span className={`d-none exit_type${row.token}`}>
+            <span className={`d-none exit_type_${row.token}_${row._id}`}>
               {row.exit_type}
+            </span>
+            <span className={`d-none strategy_${row.token}_${row._id}`}>
+              {row.strategy}
+            </span>
+            <span className={`d-none _id_${row.token}_${row._id}`}>
+              {row._id}
             </span>
           </div>
         );
@@ -235,7 +243,9 @@ const TradeHistory = () => {
       text: "U/P&l",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span className={`fw-bold UPL_${row.token}`}></span>
+          <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
+
+
         </div>
       ),
     },
@@ -245,7 +255,7 @@ const TradeHistory = () => {
       text: "T/P&L",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span className={`fw-bold  TPL_${row.token}`}></span>
+          <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
         </div>
       ),
     },
@@ -271,8 +281,6 @@ const TradeHistory = () => {
     },
   ];
 
-
-
   var CreatechannelList = "";
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
@@ -280,34 +288,38 @@ const TradeHistory = () => {
     });
 
 
-
   //  SHOW lIVE PRICE
-
   const ShowLivePrice = async () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
 
+
+
+
     // const res = await CreateSocketSession(type);
 
-    if (UserDetails.demat_userid !== undefined && UserDetails.access_token !== undefined) {
+    if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
 
 
-      const res = await CreateSocketSession(type, UserDetails.demat_userid, UserDetails.access_token);
+      const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
-      console.log("res", res.status)
       if (res.status === 200) {
         setSocketState("Ok");
       }
-      if (res.status === 401) {
+      if (res.status === 401 || res.status === '401') {
         setSocketState("Unauthorized");
 
-        tradeHistoryData.data.forEach((row) => {
-          calcultateRPL(row, null);
+        tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+          const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
+          calcultateRPL(row, null, previousRow);
         });
       }
       else {
         if (res.data.stat) {
-          const handleResponse = (response) => {
+          const handleResponse = async (response) => {
+            // console.log("response", response)
+            //  let rr = $('._id_15259_652e21679fd519ac3ea46597').html();
+            //  console.log("RR",rr)
 
             // UPL_
             $(".LivePrice_" + response.tk).html(response.lp);
@@ -316,68 +328,80 @@ const TradeHistory = () => {
 
             var live_price = response.lp === undefined ? "" : response.lp;
 
-            const get_entry_qty = $(".entry_qty" + response.tk).html();
-            const get_exit_qty = $(".exit_qty" + response.tk).html();
-            const get_exit_price = $(".exit_price" + response.tk).html();
-            const get_entry_price = $(".entry_price" + response.tk).html();
-            const get_entry_type = $(".entry_type" + response.tk).html();
-            const get_exit_type = $(".exit_type" + response.tk).html();
-
             //  if entry qty and exist qty both exist
-            if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
-              if (get_entry_qty !== "" && get_exit_qty !== "") {
-                if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-                  let rpl =
-                    (parseInt(get_exit_price) - parseInt(get_entry_price)) *
-                    parseInt(get_exit_qty);
-                  let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
+            tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+              let get_ids = '_id_' + response.tk + '_' + row._id
+              let get_id_token = $('.' + get_ids).html();
 
-                  let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
+              const get_entry_qty = $(".entry_qty_" + response.tk + '_' + row._id).html();
+              const get_exit_qty = $(".exit_qty_" + response.tk + '_' + row._id).html();
+              const get_exit_price = $(".exit_price_" + response.tk + '_' + row._id).html();
+              const get_entry_price = $(".entry_price_" + response.tk + '_' + row._id).html();
+              const get_entry_type = $(".entry_type_" + response.tk + '_' + row._id).html();
+              const get_exit_type = $(".exit_type_" + response.tk + '_' + row._id).html();
+              const get_Strategy = $(".strategy_" + response.tk + '_' + row._id).html();
 
-                  if ((isNaN(finalyupl) || isNaN(rpl))) {
-                    return "-";
-                  } else {
-                    $(".show_rpl_" + response.tk).html(rpl.toFixed(2));
-                    $(".UPL_" + response.tk).html(finalyupl.toFixed(2));
-                    $(".TPL_" + response.tk).html((finalyupl + rpl).toFixed(2));
+              if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+                if (get_entry_qty !== "" && get_exit_qty !== "") {
 
-                    ShowColor("UPL_", finalyupl.toFixed(2), response.tk);
-                    ShowColor("show_rpl_", rpl.toFixed(2), response.tk);
-                    ShowColor("TPL_", (finalyupl + rpl).toFixed(2), response.tk);
+                  if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                    let rpl = (parseInt(get_exit_price) - parseInt(get_entry_price)) * parseInt(get_exit_qty);
+                    let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
+                    let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
+                    if ((isNaN(finalyupl) || isNaN(rpl))) {
+                      return "-";
+                    } else {
+                      console.log("testtt", ".TPL_" + response.tk + "_" + get_id_token)
+                      $(".show_rpl_" + response.tk + "_" + get_id_token).html(rpl.toFixed(2));
+                      $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
+                      $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
+
+                      ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
+                      ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
+
+                      ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
+                    }
                   }
                 }
               }
-            }
-            //  if Only entry qty Exist
-            else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
-              let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
-              if (isNaN(abc)) {
-                return "-";
-              } else {
-                $(".UPL_" + response.tk).html(abc);
-                $(".show_rpl_" + response.tk).html("-");
-                $(".TPL_" + response.tk).html(abc);
+              //  if Only entry qty Exist
+              else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
+                let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
+                if (isNaN(abc)) {
+                  return "-";
+                } else {
+                  $(".show_rpl_" + response.tk + "_" + get_id_token).html(abc);
+                  $(".UPL_" + response.tk + "_" + get_id_token).html("-");
+                  $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
+                  ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+                  ShowColor1(".UPL_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
+                  ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+                }
 
-                ShowColor("UPL_", abc, response.tk);
-                ShowColor("show_rpl_", "-", response.tk);
-                ShowColor("TPL_", abc, response.tk);
               }
-            }
 
-            //  if Only Exist qty Exist
-            else if (
-              (get_entry_type === "" && get_exit_type === "LX") ||
-              (get_entry_type === "" && get_exit_type === "SX")
-            ) {
-            } else {
-            }
+              //  if Only Exist qty Exist
+              else if (
+                (get_entry_type === "" && get_exit_type === "LX") ||
+                (get_entry_type === "" && get_exit_type === "SX")
+              ) {
+              } else {
+              }
+
+
+            });
+
+
+
+
+
             // }
           };
-          await ConnctSocket(handleResponse, channelList, UserDetails.demat_userid, UserDetails.access_token).then((res) => { });
+          await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
         } else {
-          $(".UPL_").html("-");
-          $(".show_rpl_").html("-");
-          $(".TPL_").html("-");
+          // $(".UPL_").html("-");
+          // $(".show_rpl_").html("-");
+          // $(".TPL_").html("-");
         }
       }
     }
@@ -389,49 +413,58 @@ const TradeHistory = () => {
   };
 
 
-  const calcultateRPL = (row, livePrice) => {
-    if (row.entry_type !== '' && row.exit_type !== '') {
-      if (row.entry_type === "LE" || row.entry_type === "SE") {
-        const entryQty = parseInt(row.entry_qty_percent);
-        const exitQty = parseInt(row.exit_qty_percent);
-        const entryPrice = parseFloat(row.entry_price);
-        const exitPrice = parseFloat(row.exit_price);
-        const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
 
-        setTPL($(".show_rpl_" + row.token).html(rpl.toFixed(2)))
-        setUPL("-")
-        setRPL(rpl.toFixed(2))
+  // const GET_ID = async (token) => {
+  //   let get_id
+  //   await tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+  //     let get_ids = '_id_' + token + '_' + row._id
+  //     let get_id_token = $('.' + get_ids).html();
+  //     console.log("get_id_token", get_id_token)
+  //     get_id = get_id_token
+  //   });
+  //   return get_id
+  // }
 
-        $(".show_rpl_" + row.token).html(rpl.toFixed(2));
-        $(".TPL_" + row.token).html(rpl.toFixed(2));
-        $(".UPL_" + row.token).html("-");
 
-        ShowColor("UPL_", "-", row.token);
-        ShowColor("show_rpl_", rpl.toFixed(2), row.token);
-        ShowColor("TPL_", rpl.toFixed(2), row.token);
-      }
 
-    }
-    else if (row.entry_type && row.exit_type === "") {
-      $(".show_rpl_" + row.token).html('-');
-      $(".TPL_" + row.token).html('-');
-      $(".UPL_" + row.token).html("-");
 
-      setTPL('-')
-      setUPL("-")
-      setRPL('-')
-    }
-    if (row.entry_type === "" && row.exit_type !== '') {
-      $(".show_rpl_" + row.token).html('-');
-      $(".TPL_" + row.token).html('-');
-      $(".UPL_" + row.token).html("-");
+  const calcultateRPL = (row, livePrice, pre_row) => {
 
-      setTPL('-')
-      setUPL("-")
-      setRPL('-')
-    }
+    // // console.log("row", row)
+    // console.log("pre_row", pre_row)
+
+    // // // if(row pre_row)
+    // if (row.entry_type !== '' && row.exit_type !== '') {
+    //   if ((row.entry_type === "LE" || row.entry_type === "SE")) {
+
+    //     // if (row. pre_row)
+    //     const entryQty = parseInt(row.entry_qty_percent);
+    //     const exitQty = parseInt(row.exit_qty_percent);
+    //     const entryPrice = parseFloat(row.entry_price);
+    //     const exitPrice = parseFloat(row.exit_price);
+    //     const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
+    //     $(".show_rpl_" + row.token).html('0');
+    //     $(".TPL_" + row.token).html(rpl.toFixed(2));
+    //     $(".UPL_" + row.token).html("-");
+
+    //     ShowColor("UPL_", "-", row.token);
+    //     ShowColor("show_rpl_", rpl.toFixed(2), row.token);
+    //     ShowColor("TPL_", rpl.toFixed(2), row.token);
+    //   }
+
+    // }
+    // else if (row.entry_type && row.exit_type === "") {
+    //   // console.log("test")
+    //   $(".show_rpl_" + row.token).html('-');
+    //   $(".TPL_" + row.token).html('-');
+    //   $(".UPL_" + row.token).html("-");
+    // }
+    // if (row.entry_type === "" && row.exit_type !== '') {
+    //   $(".show_rpl_" + row.token).html('-');
+    //   $(".TPL_" + row.token).html('-');
+    //   $(".UPL_" + row.token).html("-");
+    // }
   };
-
 
 
 
@@ -477,13 +510,26 @@ const TradeHistory = () => {
 
   //  GET_USER_DETAILS
   const data = async () => {
-    await dispatch(User_Profile({ id: user_id }))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setUserDetails(response.data);
-        }
-      });
+    // await dispatch(User_Profile({ id: user_id }))
+    //   .unwrap()
+    //   .then((response) => {
+    //     if (response.status) {
+    //       setUserDetails(response.data);
+    //     }
+    //   });
+
+
+
+
+
+    const response = await GetAccessToken({ broker_name: "aliceblue" });
+
+    if (response.status) {
+      setUserDetails(response.data[0]);
+    }
+
+
+
   };
   useEffect(() => {
     data();
@@ -492,9 +538,12 @@ const TradeHistory = () => {
 
 
   //  LOG IN FOR GET LIVE PRICE 
-  const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
+  const LogIn_WIth_Api = async (check, brokerid, tradingstatus, UserDetails) => {
+    // console.log("check", check)
+    // console.log("brokerid", brokerid)
+    // console.log("UserDetails", UserDetails)
     if (check) {
-      loginWithApi(brokerid, UserDetails);
+      await loginWithApi(brokerid, UserDetails);
     } else {
       dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
         .unwrap()
@@ -514,13 +563,6 @@ const TradeHistory = () => {
     let csvArr = []
     if (tradeHistoryData.data.length > 0) {
       tradeHistoryData.data.map((item) => {
-
-        const rpl = $(`.show_rpl_${item.token}`).html();
-        const upl = $(`.UPL_${item.token}`).html();
-        const tpl = $(`.TPL_${item.token}`).html();
-
-        console.log("rpl" ,rpl)
-
         return csvArr.push({
           "symbol": item.trade_symbol,
           "EntryType": item.entry_type ? item.entry_type : "-",
@@ -533,9 +575,9 @@ const TradeHistory = () => {
           "Exit Time": item.exit_dt_date,
           "Exchange": item.exchange,
           "Strategy": item.strategy,
-          "Released-P/L": rpl,
-          "Unreleased-P/L": upl,
-          "Total-PL": tpl,
+          "Released-P/L": $(".show_rpl_" + item.token).html(),
+          "Unreleased-P/L": $(".UPL_" + item.token),
+          "Total-PL": $(".TPL_" + item.token),
         })
       })
 
@@ -546,16 +588,16 @@ const TradeHistory = () => {
 
   useEffect(() => {
     forCSVdata()
-  }, [tradeHistoryData.data, RPL, UPL, TPL])
+  }, [tradeHistoryData.data])
 
 
 
 
-  console.log("tradeHistoryData1", ForGetCSV)
+  // console.log("UserDetails", UserDetails)
   return (
     <>
       <Content Page_title="Trade History" button_status={false}
-        show_csv_button={true} csv_data={tradeHistoryData.data} csv_title="TradeHistory"
+        show_csv_button={true} csv_data={ForGetCSV} csv_title="TradeHistory"
 
       >
         <div className="row d-flex  align-items-center justify-content-start">
@@ -568,14 +610,14 @@ const TradeHistory = () => {
                 <input
                   type="checkbox"
                   className="bg-primary"
-                  checked={
-                    UserDetails.TradingStatus === "on" ? true : false
+                  defaultChecked={
+                    UserDetails.trading_status === "on" ? true : false
                   }
-                  onClick={(e) =>
+                  onChange={(e) =>
                     LogIn_WIth_Api(
                       e.target.checked,
-                      UserDetails.broker,
-                      UserDetails.TradingStatus,
+                      UserDetails.broker_id,
+                      UserDetails.trading_status,
                       UserDetails
                     )
                   }

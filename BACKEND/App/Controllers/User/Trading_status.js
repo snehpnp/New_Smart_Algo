@@ -23,7 +23,7 @@ class User_trading_status {
             // GET LOGIN CLIENTS
             const getAllTrading_status = await user_logs.find({
                 user_Id: user_Id
-            });
+            }).sort({createdAt:-1})
             const totalCount = getAllTrading_status.length;
 
             // IF DATA NOT EXIST
@@ -63,7 +63,7 @@ class User_trading_status {
                     $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
                 },
 
-            });
+            }).sort({createdAt:-1})
             const totalCount = getAllTrading_status.length;
 
             // IF DATA NOT EXIST

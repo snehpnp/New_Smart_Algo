@@ -18,6 +18,7 @@ const SevenDaysEntry = () => {
 
     const token = JSON.parse(localStorage.getItem("user_details")).token;
 
+    const [ForGetCSV, setForGetCSV] = useState([])
 
     const [DateFilter, setDateFilter] = useState();
     const [DateArray, setDateArray] = useState([]);
@@ -119,15 +120,44 @@ const SevenDaysEntry = () => {
 
 
 
-    return (
-        <>
-            {
-                SignalsData.loading ? <Loader /> :
-                    <>
-                        <Content Page_title="Last Week Entry" button_status={false}>
-                            <div className='d-flex'>
+    const forCSVdata = () => {
 
-                                {/* <div className="col-lg-6">
+        let csvArr = []
+        if (SignalsData.data.length > 0) {
+            SignalsData.data.map((item) => {
+                return csvArr.push({
+                    "symbol": item.trade_symbol,
+                    "EntryType": item.entry_type ? item.entry_type : "-",
+                    "ExitType": item.exit_type ? item.exit_type : "-",
+                    "Entry Price": item.entry_price,
+                    "Entry Qty": item.entry_qty_percent,
+                    "Exit Price": item.exit_price ? item.exit_price : "-",
+                    "Exit Qty": item.exit_qty_percent ? item.exit_qty_percent : "-",
+                    "Entry Time": item.entry_dt_date,
+                    "Exit Time": item.exit_dt_date ? item.exit_dt_date : "-",
+                    "Exchange": item.exchange,
+                    "Strategy": item.strategy,
+                })
+            })
+
+            setForGetCSV(csvArr)
+        }
+
+    }
+
+    useEffect(() => {
+        forCSVdata()
+    }, [SignalsData.data])
+
+    return (
+
+
+        <Content Page_title="Last Week Entry" button_status={false}
+            show_csv_button={true} csv_data={ForGetCSV} csv_title="LastWeekEntry"
+        >
+            {/* <div className='d-flex'> */}
+
+            {/* <div className="col-lg-6">
                                     <div className="mb-3 row">
                                         <div className="col-lg-7">
                                             <select
@@ -147,30 +177,18 @@ const SevenDaysEntry = () => {
 
                                     </div>
                                 </div> */}
-                            </div>
+            {/* </div> */}
 
-                            {
-                                SignalsData.data && SignalsData.data.length === 0 ? (
-                                    // 'No data found'
-                                    <FullDataTable TableColumns={columns} tableData={SignalsData.data} />
-                                )
-                                    :
-                                    <>
-                                        <FullDataTable TableColumns={columns} tableData={SignalsData.data} />
-                                    </>
+            <div style={{ marginTop: '50px' }}>
 
+                <FullDataTable TableColumns={columns} tableData={SignalsData.data} />
+            </div>
 
-                            }
-                        </Content>
-                    </>
-            }
+        </Content>
 
-
-
-        </ >
     );
 
-   
+
 }
 
 export default SevenDaysEntry;

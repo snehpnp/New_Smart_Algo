@@ -75,15 +75,18 @@ const AllLicence = () => {
             loading: false,
             data: response,
           });
+        } else {
+          setAllClients({
+            loading: false,
+            data: response,
+          });
         }
-        // else {
-        //   setAllClients({
-        //     loading: false,
-        //     data: response,
-        //   });
-        // }
       });
   };
+
+
+
+
   useEffect(() => {
     data();
   }, [CountLicence]);
@@ -153,14 +156,22 @@ const AllLicence = () => {
   ];
 
   const UsedLicence = (alllicence) => {
-    const filteredData = getAllClients1.data.data.filter(
-      (item) => !item.admin_license
-    );
-    const count = filteredData.length;
-    return count;
+
+    if (getAllClients1.data.length != 0) {
+
+      const filteredData = getAllClients1.data.data.filter(
+        (item) => !item.admin_license
+      );
+      const count = filteredData.length;
+      return count;
+
+    } else {
+
+      const count = 0;
+      return count;
+    }
   };
 
-  // console.log("getAllClients", getAllClients1);
   const ThisMonthUsedLicence = (alllicence) => {
     if (CountLicence) {
       if (getAllClients1.data !== undefined) {
@@ -205,6 +216,9 @@ const AllLicence = () => {
   // Calculate the minimum and maximum values to restrict the selection to the current month
   // const minDate = `${currentYear}-${currentMonth.toString().padStart(2, "0")}`;
   const maxDate = `${currentYear}-${currentMonth.toString().padStart(2, "0")}`;
+
+
+  console.log((getAllClients1.data && getAllClients1.data.total_licence));
 
   return (
     <>
@@ -253,7 +267,7 @@ const AllLicence = () => {
               <div className="col-2 mx-auto border border-dark">
                 <h6 className="text-center">Total Licence</h6>
                 <h6 className="text-center">
-                  {getAllClients1.data && getAllClients1.data.total_licence}
+                  {getAllClients1.data && getAllClients1.data.total_licence == undefined ? 0 : getAllClients1.data.total_licence}
                 </h6>
               </div>
               <div className="col-2 mx-auto border border-dark">
@@ -263,7 +277,7 @@ const AllLicence = () => {
               <div className="col-2 mx-auto  border border-dark">
                 <h6 className="text-center">Remaining Licence</h6>
                 <h6 className="text-center">
-                  {(getAllClients1.data && getAllClients1.data.total_licence) -
+                  {(getAllClients1.data && getAllClients1.data.total_licence) == undefined ? 0 : getAllClients1.data.total_licence -
                     UsedLicence(
                       getAllClients.data.total_licence,
                       getAllClients.data
@@ -281,7 +295,7 @@ const AllLicence = () => {
             <FullDataTable
               TableColumns={columns}
               tableData={getAllClients.data.data}
-              // cellEdit={cellEditFactory({ mode: 'click' })}
+            // cellEdit={cellEditFactory({ mode: 'click' })}
             />
 
             {showModal ? (
@@ -292,7 +306,7 @@ const AllLicence = () => {
                   size="sm"
                   title="Verify OTP"
                   btn_name="Verify"
-                  //  handleClose={setshowModal(false)}
+                //  handleClose={setshowModal(false)}
                 ></Modal>
               </>
             ) : (

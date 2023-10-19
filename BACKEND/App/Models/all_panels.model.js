@@ -26,7 +26,7 @@ const panelSchema = new mongoose.Schema({
     },
     db_name: {
         type: String,
-        unique: true
+        // unique: true
     },
     ip_address: {
         type: String,

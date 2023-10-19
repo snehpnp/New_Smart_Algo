@@ -192,6 +192,7 @@ const BrokerResponse = () => {
                               //  setEnterQty(e.target.value)
                             }
                             defaultValue={data.quantity}
+                          
                           />
                         </div>
                       </div>
