@@ -79,3 +79,314 @@ NEW TRADE GET Thu Oct 19 2023 10:31:32 GMT+0530 (India Standard Time)
 NEW TRADE GET Thu Oct 19 2023 10:31:32 GMT+0530 (India Standard Time) 
 TIME Thu Oct 19 2023 10:31:32 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 553
 TIME Thu Oct 19 2023 10:31:32 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Oct 19 2023 12:43:16 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LX,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 12:43:16 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 12:43:16 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 12:43:16 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 12:43:20 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 12:43:20 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 12:43:22 GMT+0530 (India Standard Time) ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- dddd POSSITION LENGTH -1
+TIME Thu Oct 19 2023 12:43:22 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER EXIT- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":"1","ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"SELL","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 12:43:22 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER EXIT- dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900194157"}]
+TIME Thu Oct 19 2023 12:43:22 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER EXIT CATCH- dddd RESPONSE -{}
+TIME Thu Oct 19 2023 12:45:16 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LX,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 12:45:16 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 12:45:16 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 12:45:16 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 12:45:16 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 12:45:16 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 12:45:17 GMT+0530 (India Standard Time) ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- dddd POSSITION LENGTH -1
+TIME Thu Oct 19 2023 12:45:17 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER EXIT- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":"1","ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"SELL","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 12:45:17 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER EXIT- dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900194985"}]
+TIME Thu Oct 19 2023 12:45:17 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER EXIT CATCH- dddd RESPONSE -{}
+TIME Thu Oct 19 2023 12:46:10 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LX,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 12:46:10 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 12:46:10 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 12:46:10 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 12:46:12 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 12:46:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 12:46:13 GMT+0530 (India Standard Time) ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- dddd POSSITION LENGTH -1
+TIME Thu Oct 19 2023 12:46:13 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER EXIT- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":"1","ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"SELL","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 12:46:14 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER EXIT- dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900195368"}]
+TIME Thu Oct 19 2023 12:46:14 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER EXIT CATCH- dddd RESPONSE -{}
+TIME Thu Oct 19 2023 12:58:59 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LX,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 12:58:59 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 12:58:59 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 12:58:59 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 12:59:03 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 12:59:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 12:59:04 GMT+0530 (India Standard Time) ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- dddd POSSITION LENGTH -1
+TIME Thu Oct 19 2023 13:00:17 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:00:17 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:00:17 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:00:17 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:00:17 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:00:17 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:00:18 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":"1","ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:00:18 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900202777"}]
+TIME Thu Oct 19 2023 13:17:30 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:17:30 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:17:30 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:17:30 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:17:30 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:17:31 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:17:31 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":"1","ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:17:31 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900210724"}]
+TIME Thu Oct 19 2023 13:18:12 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:18:12 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:18:12 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:18:12 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:18:12 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:18:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:18:12 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":"1","ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:18:13 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900211547"}]
+TIME Thu Oct 19 2023 13:18:52 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:18:53 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:18:53 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:18:53 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:18:53 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:18:53 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:18:53 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":"1","ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:18:54 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900212137"}]
+TIME Thu Oct 19 2023 13:24:55 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:24:55 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:24:55 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:24:55 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:24:56 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:24:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:24:56 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":"1","ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:24:57 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900218710"}]
+TIME Thu Oct 19 2023 13:24:58 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:24:58 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:24:58 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:24:58 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:24:58 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:24:58 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:24:58 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":"1","ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:24:59 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900218737"}]
+TIME Thu Oct 19 2023 13:31:51 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:31:51 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:31:51 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:31:51 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:31:51 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:31:51 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:31:52 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:31:52 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900224156"}]
+TIME Thu Oct 19 2023 13:31:53 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:31:53 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:31:53 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:31:53 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:31:53 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:31:53 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:31:54 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:31:54 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900224173"}]
+TIME Thu Oct 19 2023 13:31:55 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:31:55 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:31:55 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:31:55 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:31:55 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:31:55 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:31:56 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:31:56 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900224189"}]
+TIME Thu Oct 19 2023 13:31:57 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:31:57 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:31:57 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:31:57 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:31:57 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:31:57 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:31:58 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:31:58 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900224215"}]
+TIME Thu Oct 19 2023 13:35:16 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:35:16 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:35:16 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:35:16 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:35:16 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:35:17 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:35:17 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:35:17 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900225687"}]
+TIME Thu Oct 19 2023 13:35:18 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:35:18 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:35:18 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:35:18 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:35:19 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:35:19 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:35:19 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:35:19 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900225696"}]
+TIME Thu Oct 19 2023 13:35:21 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:35:21 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:35:21 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:35:21 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:35:21 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:35:21 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:35:22 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:35:22 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900225707"}]
+TIME Thu Oct 19 2023 13:35:23 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:35:23 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:35:23 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:35:23 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:35:23 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:35:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:35:24 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:35:24 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900225720"}]
+TIME Thu Oct 19 2023 13:35:25 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:35:25 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:35:25 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:35:25 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:35:25 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:35:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:35:26 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:35:26 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900225737"}]
+TIME Thu Oct 19 2023 13:50:55 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:50:55 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:50:55 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:50:55 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:50:56 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:50:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:50:56 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:50:57 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900233284"}]
+TIME Thu Oct 19 2023 13:50:58 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:50:58 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:50:58 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:50:58 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:50:58 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:50:58 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:50:59 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:50:59 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900233293"}]
+TIME Thu Oct 19 2023 13:51:00 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:51:00 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:51:00 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:51:00 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:51:00 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:51:00 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:51:01 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:51:01 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900233306"}]
+TIME Thu Oct 19 2023 13:51:02 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:51:02 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:51:02 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:51:02 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:51:02 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:51:02 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:51:03 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:51:03 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900233318"}]
+TIME Thu Oct 19 2023 13:55:30 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:55:30 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:55:30 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:55:30 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:55:30 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:55:30 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:55:31 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:55:31 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:55:31 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:55:31 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:55:31 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:55:31 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900236330"}]
+TIME Thu Oct 19 2023 13:55:31 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:55:31 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:55:32 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:55:32 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900236333"}]
+TIME Thu Oct 19 2023 13:55:32 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LE,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 13:55:32 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:55:32 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 13:55:32 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 13:55:32 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 13:55:32 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 13:55:33 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"regular","discqty":"0","exch":"NSE","pCode":"CNC","prctyp":"MKT","price":"10","qty":0,"ret":"DAY","symbol_id":"15259","trading_symbol":"RPOWER-EQ","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Thu Oct 19 2023 13:55:33 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - dddd RESPONSE -[{"stat":"Ok","NOrdNo":"23101900236348"}]
+TIME Thu Oct 19 2023 14:22:06 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LX,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 14:22:06 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 14:22:06 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 14:22:06 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 14:22:07 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 14:22:07 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 14:22:07 GMT+0530 (India Standard Time) ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- dddd POSSITION LENGTH -1
+TIME Thu Oct 19 2023 14:25:54 GMT+0530 (India Standard Time) RECEIVED_SIGNALS 1679060373,RPOWER#,LX,131,10,0,0,0,C,45000,PUT,18102023,st,100,SNE132023,demo
+
+NEW TRADE GET Thu Oct 19 2023 14:25:54 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 14:25:54 GMT+0530 (India Standard Time) 
+
+NEW TRADE GET Thu Oct 19 2023 14:25:54 GMT+0530 (India Standard Time) 
+TIME Thu Oct 19 2023 14:25:54 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 15259
+TIME Thu Oct 19 2023 14:25:54 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Oct 19 2023 14:25:55 GMT+0530 (India Standard Time) ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- dddd POSSITION LENGTH -1

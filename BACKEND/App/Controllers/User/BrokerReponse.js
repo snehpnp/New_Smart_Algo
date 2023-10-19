@@ -1,10 +1,13 @@
 "use strict";
+var axios = require('axios');
+
 const db = require('../../Models');
 const BrokerResponse_modal = db.BrokerResponse
-const { formattedDateTime } = require('../../Helper/time.helper')
+const User = db.user;
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
+const { formattedDateTime } = require('../../Helper/time.helper')
 
 class BrokerReponse {
 
@@ -15,12 +18,17 @@ class BrokerReponse {
         try {
             const { _id } = req.body;
             var objectId = new ObjectId(_id);
+            console.log("run 12");
+            try {
+                GetAllBrokerResponse(_id)
+            } catch (error) {
+
+            }
 
             try {
                 const currentDate = new Date();
-                console.log("currentDate", currentDate);
                 // Step 1: Check if today is a Saturday (6) or Sunday (0)
-                if (currentDate.getDay() === 6 ) {
+                if (currentDate.getDay() === 6) {
                     currentDate.setDate(currentDate.getDate() - 1);
                 }
 
@@ -57,4 +65,73 @@ class BrokerReponse {
 }
 
 
+
+const GetAllBrokerResponse = async (user_id) => {
+    const objectId = new ObjectId(user_id);
+    var FindUserAccessToken = await User.find({ _id: objectId });
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+
+    var FindUserBrokerResponse = await BrokerResponse_modal.find({
+        user_id: objectId, order_view_status: "0", createdAt: {
+            $gte: today
+        }
+    });
+// console.log(FindUserBrokerResponse.length);
+
+    if (FindUserBrokerResponse.length > 0) {
+
+        FindUserBrokerResponse.forEach((data1) => {
+
+
+            let data = JSON.stringify({
+                "nestOrderNumber": data1.order_id
+            });
+
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
+                headers: {
+                    'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
+                    'Content-Type': 'application/json',
+                },
+                data: data
+            };
+            axios(config)
+                .then(async (response) => {
+                    // console.log(response.data[0]);
+                    if (response.data[0]) {
+
+                        const message = (JSON.stringify(response.data[0]));
+
+                        let result = await BrokerResponse_modal.findByIdAndUpdate(
+                            { _id: data1._id },
+                            {
+                                order_view_date: message,
+                                order_view_status: '1',
+                                order_view_response: response.data[0].Status,
+                                reject_reason: response.data[0].rejectionreason
+
+                            },
+                            { new: true }
+                        )
+
+
+                    } else {
+                        // console.log("NO DATA FOUND");
+                    }
+                })
+                .catch(async (error) => {
+                    console.log(error);
+                });
+
+
+        })
+
+
+    }
+}
 module.exports = new BrokerReponse();

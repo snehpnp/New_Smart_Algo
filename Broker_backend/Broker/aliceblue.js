@@ -289,7 +289,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                 target = sq_value;
                 trailing_stop_loss = tsl;
             }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '3' && item.client_services.product_type == '3') {
+            else if ((type == 'LE' || type == 'SX') && item.client_services.order_typeprice == '3' && item.client_services.product_type == '3') {
 
                 prctyp = 'SL';
                 price = price;
@@ -445,7 +445,6 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
                             })
                             .catch(async (error) => {
-                                //logger.info(' ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - '+item.UserName+' ERROR -'+JSON.stringify(error));
 
                                 fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - ' + item.UserName + ' ERROR -' + JSON.stringify(error) + '\n', function (err) {
                                     if (err) {
@@ -518,9 +517,6 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                 axios(config)
                     .then(async (response) => {
 
-                        //console.log("run=====");
-                        //console.log(response.data);
-                        //logger.info(' ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- '+item.UserName+' POSSITION LENGTH -'+response.data.length);
 
                         fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- ' + item.UserName + ' POSSITION LENGTH -' + response.data.length + '\n', function (err) {
                             if (err) {
@@ -532,8 +528,6 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                         if (response.data.length > 0) {
 
                             response.data.forEach(async (item1, index) => {
-                                console.log("item1.Token", item1.Token);
-                                console.log("symbol_id", symbol_id);
 
 
                                 if (item1.Token == symbol_id) {
@@ -541,7 +535,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                                     if (segment == 'C' || segment == 'c') {
 
                                         var possition_qty = item1.Bqty - item1.Sqty;
-                                        // console.log("possition_qty", possition_qty);
+                                        console.log("possition_qty", possition_qty);
 
                                         let result = await BrokerResponse.findByIdAndUpdate(
                                             bro_res_last_id,
@@ -556,7 +550,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                                             try {
 
                                                 if (data !== undefined) {
-                                                    ExitPlaceOrder(data, item, filePath)
+                                                    ExitPlaceOrder(data, item, filePath, bro_res_last_id, input_symbol)
                                                 }
 
                                             } catch (e) {
@@ -569,7 +563,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
                                             try {
 
                                                 if (data !== undefined) {
-                                                    ExitPlaceOrder(data, item, filePath)
+                                                    ExitPlaceOrder(data, item, filePath, bro_res_last_id, input_symbol)
                                                 }
 
                                             } catch (e) {
@@ -594,11 +588,11 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
                                         if (item1.Netqty > 0 && type == 'LX') {
                                             if (data !== undefined) {
-                                                ExitPlaceOrder(data, item, filePath)
+                                                ExitPlaceOrder(data, item, filePath, bro_res_last_id, input_symbol)
                                             }
                                         } else if (item1.Netqty < 0 && type == 'SX') {
                                             if (data !== undefined) {
-                                                ExitPlaceOrder(data, item, filePath)
+                                                ExitPlaceOrder(data, item, filePath, bro_res_last_id, input_symbol)
                                             }
 
                                         }
@@ -681,7 +675,7 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
 }
 
-const ExitPlaceOrder = async (data, item, filePath) => {
+const ExitPlaceOrder = async (data, item, filePath, bro_res_last_id, input_symbol) => {
 
     var send_rr = Buffer.from(qs.stringify(data)).toString('base64');
 

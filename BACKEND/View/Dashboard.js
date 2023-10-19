@@ -3,7 +3,20 @@ db.createView("dashboard_data", "users", [
     {
         $group: {
             _id: null,
-            total_client: { $sum: 1 },
+            total_client: {
+                $sum: {
+                    $cond: [
+                        {
+                            $and: [
+                               
+                                { $eq: ["$Role", "USER"] }
+                            ]
+                        },
+                        1,
+                        0
+                    ]
+                }
+            },
             admin_client: {
                 $sum: {
                     $cond: [

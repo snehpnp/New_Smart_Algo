@@ -265,9 +265,6 @@ class AliceBlue {
         }
     }
 
-
-
-
     // CANCEL ORDER API  
     async Cancel_order(req, res) {
 

@@ -88,19 +88,19 @@ const BrokerResponse = () => {
           } size={20} color="#198754" strokeWidth={2} className="mx-1" />
         </>
     },
-    {
-      dataField: 'order_view_status',
-      text: 'order ',
-      formatter: (cell, row, rowIndex) =>
-        cell == "0" || cell == 0 ?
-          <>
+    // {
+    //   dataField: 'order_view_status',
+    //   text: 'order ',
+    //   formatter: (cell, row, rowIndex) =>
+    //     cell == "0" || cell == 0 ?
+    //       <>
 
-            <GanttChartSquare onClick={(e) => GetBrokerInforMation(row)
-            } size={20} color="#198754" strokeWidth={2} className="mx-1" />
-          </>
-          :
-          "-"
-    },
+    //         <GanttChartSquare onClick={(e) => GetBrokerInforMation(row)
+    //         } size={20} color="#198754" strokeWidth={2} className="mx-1" />
+    //       </>
+    //       :
+    //       "-"
+    // },
     {
       dataField: 'order_view_status',
       text: 'Action',
@@ -159,8 +159,12 @@ const BrokerResponse = () => {
 
   // GET ALL GROUP SERVICES NAME
   const GetAllServicesName = async (row) => {
-    setBrokerResponseId(row)
-    setshowModal(true)
+    GetBrokerInforMation(row)
+    setTimeout(() => {
+      
+      setBrokerResponseId(row)
+      setshowModal(true)
+    }, 1000);
 
   }
 
@@ -219,7 +223,7 @@ const BrokerResponse = () => {
                 <table className='table table-striped table-bordered border border-response-view' style={{ width: '100%', tableLayout: 'fixed' }}>
                   <tr>
                     <td className="bg-table"> Created At</td>
-                    <td>{BrokerResponseId.createdAt}</td>
+                    <td>{fDateTimeSuffix(BrokerResponseId.createdAt)}</td>
                   </tr>
                   <tr>
                     <td className="bg-table"> Symbol</td>
@@ -234,8 +238,9 @@ const BrokerResponse = () => {
                     <td>{BrokerResponseId.order_id}</td>
                   </tr>
                   <tr>
+                   
                     <td className="bg-table"> Signal</td>
-                    <td>{atob(BrokerResponseId.send_request)}</td>
+                    <td className="order-date-cell">{atob(BrokerResponseId.send_request)}</td>
                   </tr>
                   <tr>
                     <td className="bg-table"> Order Status</td>
