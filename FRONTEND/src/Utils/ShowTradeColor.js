@@ -39,6 +39,11 @@ export const ShowColor1 = (className, value, response, get_Strategy) => {
 
 export const ShowColor_Compare_two = (className, value1, value2, response) => {
 
+    // console.log("className", className)
+    // console.log("value1", value1)
+    // console.log("value2", value2)
+    // console.log("response", response)
+
     if (parseFloat(value1) < parseFloat(value2)) {
         $(`.${className}` + response).css({ "color": "Red" });
         $(`.${className}` + response).append('&#8595;')
@@ -47,6 +52,6 @@ export const ShowColor_Compare_two = (className, value1, value2, response) => {
         $(`.${className}` + response).append('&#8593;')
     } else {
         $(`.${className}` + response).css({ "color": "black" });
-        $(`.${className}` + response).html("-");
+        // $(`.${className}` + response).html("-");
     }
 }

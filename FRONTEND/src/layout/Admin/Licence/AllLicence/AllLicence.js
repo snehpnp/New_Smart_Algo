@@ -33,12 +33,18 @@ const AllLicence = () => {
     data: [],
   });
 
+  console.log("getAllClients", getAllClients)
   const [getAllClients1, setAllClients1] = useState({
     loading: true,
     data: [],
   });
   const [CountLicence, setCountLicence] = useState("");
   const [usedLicence, setUsedLicence] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [originalData, setOriginalData] = useState([]);
+
+
+
 
   const data = async () => {
     await dispatch(Transcation_Licence({ token: token }))
@@ -82,6 +88,8 @@ const AllLicence = () => {
             });
             return;
           }
+          setOriginalData(response.data);
+
           setAllClients({
             loading: false,
             data: response,
@@ -228,6 +236,31 @@ const AllLicence = () => {
 
   // ----------------------  folter =----------------------------------
 
+
+
+  //  MANAGE MULTIFILTER
+  useEffect(() => {
+    console.log("originalData", originalData)
+    // if (originalData.length > 0) {
+
+    const filteredData = originalData && originalData.filter((item) => {
+      return (
+        item.user.FullName.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.user.UserName.toLowerCase().includes(searchInput.toLowerCase())
+      )
+
+    });
+    console.log("filteredData", filteredData)
+    setAllClients({
+      loading: false,
+      data: { data: searchInput ? filteredData : originalData },
+    });
+    // }
+  }, [searchInput, originalData]);
+
+
+
+
   return (
     <>
       {getAllClients.loading ? (
@@ -239,70 +272,89 @@ const AllLicence = () => {
             Filter_tab={true}
             button_status={false}
           >
-            {dashboard_filter !== undefined ? "" : <>
-              <div className="col-lg-5 mb-4 ">
-                <div className="mb-3 row  d-flex flex-column">
-                  <label
-                    htmlFor="validationCustom05"
-                    className="col-lg-5 col-form-label"
-                  >
-                    Please Select Month
+            <div className=" row flex">
+
+              <div className="col-lg-4">
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label">
+                    Search Something Here
                   </label>
-                  <div className="col-lg-12 align-items-center d-flex ">
-                    <input
-                      type="month"
-                      className="default-select wide  me-3 form-control"
-                      id="validationCustom05"
-                      max={maxDate}
-                      onChange={(e) => setCountLicence(e.target.value)}
-                      value={CountLicence}
-                    />
-                    <button
-                      className="btn btn-primary"
-                      onClick={(e) => {
-                        resetFilter(e);
-                      }}
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    class="form-control"
+                    id="exampleFormControlInput1"
+                  />
+                </div>
+              </div>
+              {dashboard_filter !== undefined ? "" : <>
+                <div className="col-lg-5 mb-4 ">
+                  <div className="mb-3 row  d-flex flex-column">
+                    <label
+                      htmlFor="validationCustom05"
+                      className="col-lg-5 col-form-label"
                     >
-                      reset
-                    </button>
+                      Please Select Month
+                    </label>
+                    <div className="col-lg-12 align-items-center d-flex ">
+                      <input
+                        type="month"
+                        className="default-select wide  me-3 form-control"
+                        id="validationCustom05"
+                        max={maxDate}
+                        onChange={(e) => setCountLicence(e.target.value)}
+                        value={CountLicence}
+                      />
+                      <button
+                        className="btn btn-primary"
+                        onClick={(e) => {
+                          resetFilter(e);
+                        }}
+                      >
+                        reset
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
 
-              <div className="row mb-5">
-                <div className="col-2 mx-auto border border-dark text-center">
-                  <h6 >Start Date</h6>
-                  <span >2023-09-24 21:57:30</span>
+                <div className="row mb-5">
+                  <div className="col-2 mx-auto border border-dark text-center">
+                    <h6 >Start Date</h6>
+                    <span >2023-09-24 21:57:30</span>
+                  </div>
+                  <div className="col-2 mx-auto border border-dark text-center">
+                    <h6 >Total Licence</h6>
+                    <h6 >
+                      {getAllClients1.data && getAllClients1.data.total_licence === undefined ? 0 : getAllClients1.data.total_licence}
+                    </h6>
+                  </div>
+                  <div className="col-2 mx-auto border border-dark text-center">
+                    <h6 >Used Licence</h6>
+                    <h6 >{UsedLicence(getAllClients1)}</h6>
+                  </div>
+                  <div className="col-2 mx-auto  border border-dark text-center">
+                    <h6 >Remaining Licence</h6>
+                    <h6 >
+                      {(getAllClients1.data && getAllClients1.data.total_licence) === undefined ? 0 : getAllClients1.data.total_licence -
+                        UsedLicence(
+                          getAllClients.data.total_licence,
+                          getAllClients.data
+                        )}
+                    </h6>
+                  </div>
+                  <div className="col-2 mx-auto border border-dark text-center">
+                    <h6 >This Month Licence</h6>
+                    <span >
+                      {usedLicence ? usedLicence : "Please Select Month"}
+                    </span>
+                  </div>
                 </div>
-                <div className="col-2 mx-auto border border-dark text-center">
-                  <h6 >Total Licence</h6>
-                  <h6 >
-                    {getAllClients1.data && getAllClients1.data.total_licence === undefined ? 0 : getAllClients1.data.total_licence}
-                  </h6>
-                </div>
-                <div className="col-2 mx-auto border border-dark text-center">
-                  <h6 >Used Licence</h6>
-                  <h6 >{UsedLicence(getAllClients1)}</h6>
-                </div>
-                <div className="col-2 mx-auto  border border-dark text-center">
-                  <h6 >Remaining Licence</h6>
-                  <h6 >
-                    {(getAllClients1.data && getAllClients1.data.total_licence) === undefined ? 0 : getAllClients1.data.total_licence -
-                      UsedLicence(
-                        getAllClients.data.total_licence,
-                        getAllClients.data
-                      )}
-                  </h6>
-                </div>
-                <div className="col-2 mx-auto border border-dark text-center">
-                  <h6 >This Month Licence</h6>
-                  <span >
-                    {usedLicence ? usedLicence : "Please Select Month"}
-                  </span>
-                </div>
-              </div>
-            </>}
+              </>}
+
+            </div>
 
             <FullDataTable
               TableColumns={columns}

@@ -145,16 +145,16 @@ class GroupService {
 
 
 
-        var mergedArray = GroupServicesIds.reduce((result, obj1) => {
-          const matchingObj = services_id.find((obj2) => {
-            if (obj2.service_id.toString() == obj1.Service_id.toString() && obj2.group_qty !== obj1.group_qty) {
-              result.push(obj2);
-            }
-          });
+      var mergedArray = GroupServicesIds.reduce((result, obj1) => {
+        const matchingObj = services_id.find((obj2) => {
+          if (obj2.service_id.toString() == obj1.Service_id.toString() && obj2.group_qty !== obj1.group_qty) {
+            result.push(obj2);
+          }
+        });
 
-          return result;
-        }, []);
- 
+        return result;
+      }, []);
+
 
 
       // DELETE SERVICE
@@ -194,20 +194,20 @@ class GroupService {
       }
 
 
-        //QUANTIY UPDATE
-        if(mergedArray.length > 0){
-          mergedArray.forEach(async(data)=>{
-            
-            const filter = { Servicegroup_id: GroupServices_Id, Service_id: data.service_id };
-            const updateOperation = { $set: {group_qty : data.group_qty} };
-            var deleteGroupServices = await serviceGroup_services_id.updateOne(filter,updateOperation)
-            
-            // console.log("-- ",deleteGroupServices);
+      //QUANTIY UPDATE
+      if (mergedArray.length > 0) {
+        mergedArray.forEach(async (data) => {
 
-          })
-        } 
+          const filter = { Servicegroup_id: GroupServices_Id, Service_id: data.service_id };
+          const updateOperation = { $set: { group_qty: data.group_qty } };
+          var deleteGroupServices = await serviceGroup_services_id.updateOne(filter, updateOperation)
 
-        // console.log("==>", mergedArray);
+          // console.log("-- ",deleteGroupServices);
+
+        })
+      }
+
+      // console.log("==>", mergedArray);
 
 
       // Client Services Update
@@ -285,21 +285,26 @@ class GroupService {
         }
       },
 
+
       {
         $unwind: '$categoryResult', // Unwind the 'categoryResult' array
       },
       {
+        $sort: {
+          'name': 1, // 1 for ascending order, -1 for descending order
+        }
+      },
+      {
         $project: {
-          // Include fields from the original collection
           'categoryResult.segment': 1,
           'categoryResult.name': 1,
-          name: 1
-          // // Exclude the rest of the 'categoryResult' fields if needed
-          // 'categoryResult._id': 0,
-          // 'categoryResult.fieldName3': 0,
+          name: 1,
+          fullname: {
+            $concat: ['$name', '[', '$categoryResult.segment', ']']
+          }
 
-          // Include other fields as needed
         },
+
 
 
       },
