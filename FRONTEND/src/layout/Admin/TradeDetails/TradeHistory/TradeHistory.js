@@ -19,6 +19,9 @@ import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/
 import { check_Device } from "../../../../Utils/find_device";
 import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../../Service/Alice_Socket";
 import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../../Utils/ShowTradeColor";
+import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
+
 
 import $ from "jquery";
 
@@ -36,6 +39,8 @@ const TradeHistory = () => {
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [refresh, setrefresh] = useState(false);
 
+  const [originalData, setOriginalData] = useState([]);
+
 
 
   const handleFromDateChange = (e) => {
@@ -50,28 +55,31 @@ const TradeHistory = () => {
   const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
   const [tradeHistoryData1, setTradeHistoryData1] = useState({ loading: true, data: [] });
+  const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
+
+
+
+  const [CatagoryData, setCatagoryData] = useState({
+    loading: true,
+    data: []
+  });
+
 
 
   const [UserDetails, setUserDetails] = useState([]);
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
+  const [SelectSegment, setSelectSegment] = useState("null");
+  const [SelectService, setSelectService] = useState("null");
+
+
   const [SocketState, setSocketState] = useState("null");
 
-
   const [ForGetCSV, setForGetCSV] = useState([])
-
-  const [RPL, setRPL] = useState('')
-  const [UPL, setUPL] = useState('')
-  const [TPL, setTPL] = useState('')
-
-
 
 
   const GetTradhistory = async (e) => {
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
-
-    // let endDate = "2023/9/27"
-    // let startDate = "2023/9/1"
 
     e.preventDefault();
 
@@ -86,6 +94,8 @@ const TradeHistory = () => {
             loading: false,
             data: response.data,
           });
+          setOriginalData(response.data);
+
         }
       });
     // }
@@ -107,6 +117,7 @@ const TradeHistory = () => {
             loading: false,
             data: response.data,
           });
+          setOriginalData(response.data);
           setTradeHistoryData1({
             loading: false,
             data: response.data,
@@ -167,7 +178,7 @@ const TradeHistory = () => {
     {
       dataField: "createdAt",
       text: "Signals time",
-      formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>,
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
     {
       dataField: "trade_symbol",
@@ -293,9 +304,6 @@ const TradeHistory = () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
 
-
-
-
     // const res = await CreateSocketSession(type);
 
     if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
@@ -317,7 +325,6 @@ const TradeHistory = () => {
       else {
         if (res.data.stat) {
           const handleResponse = async (response) => {
-            //  let rr = $('._id_15259_652e21679fd519ac3ea46597').html();
 
             // UPL_
             $(".LivePrice_" + response.tk).html(response.lp);
@@ -346,6 +353,7 @@ const TradeHistory = () => {
                     let rpl = (parseInt(get_exit_price) - parseInt(get_entry_price)) * parseInt(get_exit_qty);
                     let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                     let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
+
                     if ((isNaN(finalyupl) || isNaN(rpl))) {
                       return "-";
                     } else {
@@ -409,12 +417,7 @@ const TradeHistory = () => {
   };
 
 
-
-
-
   const calcultateRPL = (row, livePrice, pre_row) => {
-
-
 
     let get_ids = '_id_' + row.token + '_' + row._id
     let get_id_token = $('.' + get_ids).html();
@@ -423,7 +426,6 @@ const TradeHistory = () => {
     if (row.entry_type !== '' && row.exit_type !== '') {
       if ((row.entry_type === "LE" || row.entry_type === "SE")) {
 
-        // if (row. pre_row)
         const entryQty = parseInt(row.entry_qty_percent);
         const exitQty = parseInt(row.exit_qty_percent);
         const entryPrice = parseFloat(row.entry_price);
@@ -445,34 +447,17 @@ const TradeHistory = () => {
 
     }
     else if (row.entry_type && row.exit_type === "") {
-      // console.log("test")
-      // $(".show_rpl_" + row.token).html('-');
-      // $(".TPL_" + row.token).html('-');
-      // $(".UPL_" + row.token).html("-");
-
 
       $(".show_rpl_" + row.token + "_" + row._id).html("-");
       $(".UPL_" + row.token + "_" + row._id).html("-");
       $(".TPL_" + row.token + "_" + row._id).html("-");
     }
     if (row.entry_type === "" && row.exit_type !== '') {
-      // $(".show_rpl_" + row.token).html('-');
-      // $(".TPL_" + row.token).html('-');
-      // $(".UPL_" + row.token).html("-");
-
-
       $(".show_rpl_" + row.token + "_" + row._id).html("-");
       $(".UPL_" + row.token + "_" + row._id).html("-");
       $(".TPL_" + row.token + "_" + row._id).html("-");
     }
   };
-
-
-
-
-
-
-
 
 
   useEffect(() => {
@@ -511,25 +496,11 @@ const TradeHistory = () => {
 
   //  GET_USER_DETAILS
   const data = async () => {
-    // await dispatch(User_Profile({ id: user_id }))
-    //   .unwrap()
-    //   .then((response) => {
-    //     if (response.status) {
-    //       setUserDetails(response.data);
-    //     }
-    //   });
-
-
-
-
-
     const response = await GetAccessToken({ broker_name: "aliceblue" });
 
     if (response.status) {
       setUserDetails(response.data[0]);
     }
-
-
 
   };
   useEffect(() => {
@@ -540,12 +511,6 @@ const TradeHistory = () => {
 
   //  LOG IN FOR GET LIVE PRICE 
   const LogIn_WIth_Api = async (check, brokerid, tradingstatus, UserDetails) => {
-    // console.log("check" ,check)
-    // console.log("brokerid" ,brokerid)
-    // console.log("tradingstatus" ,tradingstatus)
-    // console.log("UserDetails" ,UserDetails)
-
-    // return
     if (check) {
       loginWithApi(brokerid, UserDetails);
     } else {
@@ -596,17 +561,83 @@ const TradeHistory = () => {
 
 
 
+  const getSymbols = async (e) => {
+    await dispatch(Get_All_Service({})).unwrap()
+      .then((response) => {
+        if (response.status) {
+          console.log("response", response)
+          setServiceData({
+            loading: false,
+            data: response.data,
+          });
+          setServiceData({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  };
+
+  useEffect(() => {
+    getSymbols();
+  }, []);
+
+
+
+
+  const getservice = async () => {
+    await dispatch(Get_All_Catagory()).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setCatagoryData({
+            loading: false,
+            data: response.data
+          });
+        }
+      })
+  }
+  useEffect(() => {
+    getservice()
+  }, [])
+
+
+  console.log("originalData", originalData)
+
+  //  MANAGE MULTIFILTER
+
+  useEffect(() => {
+    const strategyFilter = StrategyClientStatus.toString().toLowerCase();
+    const serviceFilter = SelectService.toString().toLowerCase();
+
+    const filteredData = originalData.filter((item) => {
+      const itemStrategy = item.strategy.toString().toLowerCase();
+      const itemService = item.trade_symbol.toString().toLowerCase();
+
+      return (
+        (!SelectService || itemService === serviceFilter) ||
+        (!StrategyClientStatus || itemStrategy === strategyFilter)
+      );
+    });
+
+    console.log("filteredData", filteredData);
+
+  }, [SelectService, StrategyClientStatus]);
+
+
+
+
+
+
+
   return (
     <>
       <Content Page_title="Trade History" button_status={false}
         show_csv_button={true} csv_data={ForGetCSV} csv_title="TradeHistory"
-
       >
         <div className="row d-flex  align-items-center justify-content-start">
-
-          <div className="col-lg-2">
+          <div className="col-lg-12 flex-column">
             <div className="headaer-title">
-              <h3 className="font-w400 mb-0">Live Price</h3>
+              <h5 className="font-w400 mb-0">Live Price</h5>
             </div> <div className="Api Login m-2">
               <label class="switch">
                 <input
@@ -627,7 +658,7 @@ const TradeHistory = () => {
                 <span class="slider round"></span>
               </label>
             </div></div>
-          <div className="col-lg-2">
+          <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12" htmlFor="fromdate">
                 From Date
@@ -644,7 +675,7 @@ const TradeHistory = () => {
               />
             </div>
           </div>
-          <div className="col-lg-2">
+          <div className="col-lg-2  px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12" htmlFor="endDate">
                 To Date
@@ -656,16 +687,38 @@ const TradeHistory = () => {
                 id="endDate"
                 value={toDate}
                 onChange={handleToDateChange}
-                min={
-                  fromDate
-                }
+                min={fromDate}
               />
             </div>
           </div>
-          <div className="col-lg-2 ">
+          <div className="col-lg-2 px-1">
             <div class="mb-3">
               <label for="select" class="form-label">
-                Strategy Clients
+                Service
+              </label>
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectService(e.target.value)}
+                value={SelectService}
+              >
+                <option value="null" disabled>All</option>
+                {ServiceData.data &&
+                  ServiceData.data.map((item) => {
+                    return (
+                      <option className="mt-1" value={item.fullname}>
+                        {item.fullname}
+                      </option>
+                    );
+                  })}
+              </select>
+            </div>
+          </div>
+          <div className="col-lg-2  px-1">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Strategy
               </label>
               <select
                 class="default-select wide form-control"
@@ -686,7 +739,30 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
-          <div className="col-lg-4">
+
+          {/* <div className="col-lg-2 px-1">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Segment
+              </label>
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectSegment(e.target.value)}
+                value={SelectSegment}
+              >
+                <option value="null" disabled>All</option>
+                {CatagoryData.data && CatagoryData.data.map((item) => {
+                  return <>
+                    <option value={item.segment}>{item.name}</option>
+                  </>
+                })}
+              </select>
+            </div>
+          </div> */}
+
+          <div className="col-lg-2 px-1 mt-2">
             <button
               className="btn btn-primary me-2"
               onClick={(e) => GetTradhistory(e)}
@@ -700,15 +776,20 @@ const TradeHistory = () => {
         </div>
 
         {tradeHistoryData.data && tradeHistoryData.data.length === 0 ? (
-          <FullDataTable
-            TableColumns={columns}
-            tableData={tradeHistoryData.data}
-          />
+          <div className="table-responsive">
+            <FullDataTable
+              TableColumns={columns}
+              tableData={tradeHistoryData.data}
+              pagination1={true}
+            />
+          </div>
         ) : (
           <>
             <FullDataTable
               TableColumns={columns}
               tableData={tradeHistoryData.data}
+              pagination1={true}
+
             />
           </>
         )}

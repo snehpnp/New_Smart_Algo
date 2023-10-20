@@ -1651,10 +1651,35 @@ progress {
   color: #fff;
   border-color: #7d7d7d; }
 
-.table-responsive {
+.table-responsive, .react-bootstrap-table {
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch; }
-
+  -webkit-overflow-scrolling: touch;
+ }
+ .row.react-bootstrap-table-pagination {
+  margin-top: 20px;
+}
+.react-bootstrap-table::-webkit-scrollbar {
+    width: 8px !important;
+    height:8px !important;
+  }
+  
+  /* Track */
+  .react-bootstrap-table::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  .react-bootstrap-table::-webkit-scrollbar-thumb {
+    background:  var(--primary);; 
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+  .react-bootstrap-table::-webkit-scrollbar-thumb:hover {
+    background:  var(--primary);; 
+  }
+  
 @media (max-width: 575.98px) {
   .table-responsive-sm {
     overflow-x: auto;
@@ -24065,8 +24090,8 @@ button {
       background: var(--rgba-primary-1); }
   [direction="rtl"] .dropdown-menu {
     right: auto !important; }
-  .dropdown-menu.show {
-    right: 0; }
+  /* .dropdown-menu.show {
+    right: 0; } */
 
 .dropdown-toggle-split {
   padding: 0 0.625rem;

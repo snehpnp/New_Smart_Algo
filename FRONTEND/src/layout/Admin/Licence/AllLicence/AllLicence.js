@@ -20,6 +20,9 @@ import cellEditFactory from "react-bootstrap-table2-editor";
 const AllLicence = () => {
   const dispatch = useDispatch();
 
+  const location = useLocation();
+  var dashboard_filter = location.search.split("=")[1];
+
   const [first, setfirst] = useState("all");
   const [showModal, setshowModal] = useState(false);
 
@@ -30,18 +33,39 @@ const AllLicence = () => {
     data: [],
   });
 
+  console.log("getAllClients", getAllClients)
   const [getAllClients1, setAllClients1] = useState({
     loading: true,
     data: [],
   });
   const [CountLicence, setCountLicence] = useState("");
   const [usedLicence, setUsedLicence] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [originalData, setOriginalData] = useState([]);
+
+
+
 
   const data = async () => {
     await dispatch(Transcation_Licence({ token: token }))
       .unwrap()
       .then((response) => {
         if (response.status) {
+          if (dashboard_filter !== undefined) {
+            let filteredData
+            if (dashboard_filter === "0" || dashboard_filter === 0) {
+              filteredData = response.data.filter(item => item.admin_license);
+            } else if (dashboard_filter === "1" || dashboard_filter === 1) {
+              filteredData = response.data.filter(item => !item.admin_license);
+              console.log("filteredData", filteredData)
+            }
+            setAllClients({
+              loading: false,
+              data: { data: filteredData },
+            });
+            return;
+          }
+
           if (CountLicence) {
             const filteredData =
               response.data &&
@@ -62,15 +86,14 @@ const AllLicence = () => {
                 total_licence: response.total_licence,
               },
             });
-            // setUsedLicence(filteredData.length);
-
             return;
           }
+          setOriginalData(response.data);
+
           setAllClients({
             loading: false,
             data: response,
           });
-
           setAllClients1({
             loading: false,
             data: response,
@@ -90,6 +113,7 @@ const AllLicence = () => {
   useEffect(() => {
     data();
   }, [CountLicence]);
+
   const columns = [
     {
       dataField: "index",
@@ -156,17 +180,13 @@ const AllLicence = () => {
   ];
 
   const UsedLicence = (alllicence) => {
-
     if (getAllClients1.data.length != 0) {
-
       const filteredData = getAllClients1.data.data.filter(
         (item) => !item.admin_license
       );
       const count = filteredData.length;
       return count;
-
     } else {
-
       const count = 0;
       return count;
     }
@@ -186,10 +206,7 @@ const AllLicence = () => {
             );
           }
         });
-
-        console.log("filteredData", filteredData);
         const count = filteredData.length;
-
         setUsedLicence(count);
       }
     }
@@ -201,6 +218,8 @@ const AllLicence = () => {
 
   const resetFilter = (e) => {
     e.preventDefault();
+    setCountLicence("")
+    setUsedLicence("");
     setAllClients({
       loading: false,
       data: getAllClients1.data,
@@ -213,12 +232,34 @@ const AllLicence = () => {
   const currentYear = currentDate.getFullYear();
   const currentMonth = currentDate.getMonth() + 1; // Month is 0-indexed
 
-  // Calculate the minimum and maximum values to restrict the selection to the current month
-  // const minDate = `${currentYear}-${currentMonth.toString().padStart(2, "0")}`;
   const maxDate = `${currentYear}-${currentMonth.toString().padStart(2, "0")}`;
 
+  // ----------------------  folter =----------------------------------
 
-  console.log((getAllClients1.data && getAllClients1.data.total_licence));
+
+
+  //  MANAGE MULTIFILTER
+  useEffect(() => {
+    console.log("originalData", originalData)
+    // if (originalData.length > 0) {
+
+    const filteredData = originalData && originalData.filter((item) => {
+      return (
+        item.user.FullName.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.user.UserName.toLowerCase().includes(searchInput.toLowerCase())
+      )
+
+    });
+    console.log("filteredData", filteredData)
+    setAllClients({
+      loading: false,
+      data: { data: searchInput ? filteredData : originalData },
+    });
+    // }
+  }, [searchInput, originalData]);
+
+
+
 
   return (
     <>
@@ -231,65 +272,88 @@ const AllLicence = () => {
             Filter_tab={true}
             button_status={false}
           >
-            <div className="col-lg-5 mb-4 ">
-              <div className="mb-3 row  d-flex flex-column">
-                <label
-                  htmlFor="validationCustom05"
-                  className="col-lg-5 col-form-label"
-                >
-                  Please Select Month
-                </label>
-                <div className="col-lg-12 align-items-center d-flex ">
+            <div className=" row flex">
+
+              <div className="col-lg-4">
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label">
+                    Search Something Here
+                  </label>
                   <input
-                    type="month"
-                    className="default-select wide  me-3 form-control"
-                    id="validationCustom05"
-                    max={maxDate}
-                    onChange={(e) => setCountLicence(e.target.value)}
+                    type="text"
+                    placeholder="Search..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    class="form-control"
+                    id="exampleFormControlInput1"
                   />
-                  <button
-                    className="btn btn-primary"
-                    onClick={(e) => {
-                      resetFilter(e);
-                    }}
-                  >
-                    reset
-                  </button>
                 </div>
               </div>
-            </div>
+              {dashboard_filter !== undefined ? "" : <>
+                <div className="col-lg-5 mb-4 ">
+                  <div className="mb-3 row  d-flex flex-column">
+                    <label
+                      htmlFor="validationCustom05"
+                      className="col-lg-5 col-form-label"
+                    >
+                      Please Select Month
+                    </label>
+                    <div className="col-lg-12 align-items-center d-flex ">
+                      <input
+                        type="month"
+                        className="default-select wide  me-3 form-control"
+                        id="validationCustom05"
+                        max={maxDate}
+                        onChange={(e) => setCountLicence(e.target.value)}
+                        value={CountLicence}
+                      />
+                      <button
+                        className="btn btn-primary"
+                        onClick={(e) => {
+                          resetFilter(e);
+                        }}
+                      >
+                        reset
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
-            <div className="row mb-5">
-              <div className="col-2 mx-auto border border-dark">
-                <h6 className="text-center">Start Date</h6>
-                <span className="text-center">2023-09-24 21:57:30</span>
-              </div>
-              <div className="col-2 mx-auto border border-dark">
-                <h6 className="text-center">Total Licence</h6>
-                <h6 className="text-center">
-                  {getAllClients1.data && getAllClients1.data.total_licence == undefined ? 0 : getAllClients1.data.total_licence}
-                </h6>
-              </div>
-              <div className="col-2 mx-auto border border-dark">
-                <h6 className="text-center">Used Licence</h6>
-                <h6 className="text-center">{UsedLicence(getAllClients1)}</h6>
-              </div>
-              <div className="col-2 mx-auto  border border-dark">
-                <h6 className="text-center">Remaining Licence</h6>
-                <h6 className="text-center">
-                  {(getAllClients1.data && getAllClients1.data.total_licence) == undefined ? 0 : getAllClients1.data.total_licence -
-                    UsedLicence(
-                      getAllClients.data.total_licence,
-                      getAllClients.data
-                    )}
-                </h6>
-              </div>
-              <div className="col-2 mx-auto border border-dark">
-                <h6 className="text-center">This Month Licence</h6>
-                <span className="text-center">
-                  {usedLicence ? usedLicence : "Please Select Month"}
-                </span>
-              </div>
+
+                <div className="row mb-5">
+                  <div className="col-2 mx-auto border border-dark text-center">
+                    <h6 >Start Date</h6>
+                    <span >2023-09-24 21:57:30</span>
+                  </div>
+                  <div className="col-2 mx-auto border border-dark text-center">
+                    <h6 >Total Licence</h6>
+                    <h6 >
+                      {getAllClients1.data && getAllClients1.data.total_licence === undefined ? 0 : getAllClients1.data.total_licence}
+                    </h6>
+                  </div>
+                  <div className="col-2 mx-auto border border-dark text-center">
+                    <h6 >Used Licence</h6>
+                    <h6 >{UsedLicence(getAllClients1)}</h6>
+                  </div>
+                  <div className="col-2 mx-auto  border border-dark text-center">
+                    <h6 >Remaining Licence</h6>
+                    <h6 >
+                      {(getAllClients1.data && getAllClients1.data.total_licence) === undefined ? 0 : getAllClients1.data.total_licence -
+                        UsedLicence(
+                          getAllClients.data.total_licence,
+                          getAllClients.data
+                        )}
+                    </h6>
+                  </div>
+                  <div className="col-2 mx-auto border border-dark text-center">
+                    <h6 >This Month Licence</h6>
+                    <span >
+                      {usedLicence ? usedLicence : "Please Select Month"}
+                    </span>
+                  </div>
+                </div>
+              </>}
+
             </div>
 
             <FullDataTable
@@ -314,7 +378,8 @@ const AllLicence = () => {
             )}
           </Content>
         </>
-      )}
+      )
+      }
     </>
   );
 };

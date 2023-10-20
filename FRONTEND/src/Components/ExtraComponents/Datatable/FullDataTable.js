@@ -9,10 +9,7 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 
 
-const FullDataTable = ({ tableData, TableColumns, tableoptions , }) => {
-
-
-
+const FullDataTable = ({ tableData, TableColumns, tableoptions, pagination1 }) => {
 
     //  No Data Image
     const NoDataIndication = () => (
@@ -26,34 +23,24 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions , }) => {
 
     const options = {
         sizePerPage: 10,
-        hidePageListOnlyOnePage: false,
+        hidePageListOnlyOnePage: true,
         ...tableoptions
     };
 
 
 
-    const fileType =
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-    const fileExtension = ".csv";
-    // console.log("apiData", apiData);
-    const exportToCSV = (apiData, fileName) => {
-        const ws = XLSX.utils.json_to_sheet(apiData);
-        const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-        const data = new Blob([excelBuffer], { type: fileType });
-        FileSaver.saveAs(data, fileName + fileExtension);
-    };
-
+console.log("pagination1" ,pagination1)
 
     return <>
-        <div className='table-responsive'>
+        <div className=''>
 
             <BootstrapTable
                 keyField="id"
 
                 data={tableData}
                 columns={TableColumns}
-                pagination={paginationFactory(options)}
+                pagination={!pagination1 ? paginationFactory(options) : ""}
+
                 noDataIndication={() => <NoDataIndication />}
                 headerClasses="bg-primary text-primary text-center header-class"
                 rowClasses='text-center'

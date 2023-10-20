@@ -32,12 +32,17 @@ export const ShowColor1 = (className, value, response, get_Strategy) => {
         $(`${className}`).append('&#8593;')
     } else {
         $(`${className}`).css({ "color": "black" });
-        $(`${className}`).html("-");
+        // $(`${className}`).html("-");
     }
 }
 
 
 export const ShowColor_Compare_two = (className, value1, value2, response) => {
+
+    // console.log("className", className)
+    // console.log("value1", value1)
+    // console.log("value2", value2)
+    // console.log("response", response)
 
     if (parseFloat(value1) < parseFloat(value2)) {
         $(`.${className}` + response).css({ "color": "Red" });
@@ -47,6 +52,6 @@ export const ShowColor_Compare_two = (className, value1, value2, response) => {
         $(`.${className}` + response).append('&#8593;')
     } else {
         $(`.${className}` + response).css({ "color": "black" });
-        $(`.${className}` + response).html("-");
+        // $(`.${className}` + response).html("-");
     }
 }

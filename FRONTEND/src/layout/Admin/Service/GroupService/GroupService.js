@@ -262,10 +262,11 @@ const ServicesList = () => {
     const ResetDate = (e) => {
         e.preventDefault();
         setSearchInput("");
-        setAllGroupServices({
-            loading: false,
-            data: AllGroupServices.data,
-        });
+
+        // setAllGroupServices({
+        //     loading: false,
+        //     data: AllGroupServices.data,
+        // });
     };
 
 

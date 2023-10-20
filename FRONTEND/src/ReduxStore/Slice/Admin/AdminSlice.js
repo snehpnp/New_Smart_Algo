@@ -14,7 +14,7 @@ export const Get_All_Service = createAsyncThunk("admin/getallservice", async (da
     }
 });
 
-export const Get_All_Catagory = createAsyncThunk("admin/getallservice", async (data) => {
+export const Get_All_Catagory = createAsyncThunk("admin/catagory", async (data) => {
     try {
         const res = await ALL_CATAGORY(data);
         // console.log("res" ,res);
