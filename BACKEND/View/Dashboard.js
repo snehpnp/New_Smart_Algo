@@ -9,7 +9,9 @@ db.createView("dashboard_data", "users", [
                         {
                             $and: [
                                
-                                { $eq: ["$Role", "USER"] }
+                                { $eq: ["$Role", "USER"] },
+                                { $eq: ["$Is_Active", "1"] }
+
                             ]
                         },
                         1,
@@ -23,7 +25,9 @@ db.createView("dashboard_data", "users", [
                         {
                             $and: [
                                 { $eq: ["$parent_role", "ADMIN"] },
-                                { $eq: ["$Role", "USER"] }
+                                { $eq: ["$Role", "USER"] },
+                                { $eq: ["$Is_Active", "1"] }
+
                             ]
                         },
                         1,
@@ -37,7 +41,9 @@ db.createView("dashboard_data", "users", [
                         {
                             $and: [
                                 { $eq: ["$parent_role", "SUBADMIN"] },
-                                { $eq: ["$Role", "USER"] }
+                                { $eq: ["$Role", "USER"] },
+                                { $eq: ["$Is_Active", "1"] }
+
                             ]
                         },
                         1,
@@ -64,7 +70,10 @@ db.createView("dashboard_data", "users", [
                         {
                             $and: [
                                 { $eq: ["$Role", "USER"] },
-                                { $eq: ["$license_type", "2"] }
+                                { $eq: ["$license_type", "2"] },
+                                { $eq: ["$Is_Active", "1"] }
+
+
                             ]
                         },
                         1,
@@ -79,7 +88,9 @@ db.createView("dashboard_data", "users", [
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "2"] },
-                                { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] }
+                                { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                { $eq: ["$Is_Active", "1"] }
+
                             ]
                         },
                         1,
@@ -94,7 +105,9 @@ db.createView("dashboard_data", "users", [
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "2"] },
-                                { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] }
+                                { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                { $eq: ["$Is_Active", "1"] }
+
                             ]
                         },
                         1,
@@ -108,7 +121,9 @@ db.createView("dashboard_data", "users", [
                         {
                             $and: [
                                 { $eq: ["$Role", "USER"] },
-                                { $eq: ["$license_type", "1"] }
+                                { $eq: ["$license_type", "1"] },
+                                { $eq: ["$Is_Active", "1"] }
+
                             ]
                         },
                         1,
@@ -123,7 +138,9 @@ db.createView("dashboard_data", "users", [
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "1"] },
-                                { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] }
+                                { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                { $eq: ["$Is_Active", "1"] }
+
                             ]
                         },
                         1,
@@ -138,7 +155,9 @@ db.createView("dashboard_data", "users", [
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "1"] },
-                                { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] }
+                                { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                { $eq: ["$Is_Active", "1"] }
+
                             ]
                         },
                         1,
@@ -152,7 +171,9 @@ db.createView("dashboard_data", "users", [
                         {
                             $and: [
                                 { $eq: ["$Role", "USER"] },
-                                { $eq: ["$license_type", "0"] }
+                                { $eq: ["$license_type", "0"] },
+                                { $eq: ["$Is_Active", "1"] }
+
                             ]
                         },
                         1,
@@ -167,7 +188,9 @@ db.createView("dashboard_data", "users", [
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "0"] },
-                                { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] }
+                                { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                { $eq: ["$Is_Active", "1"] }
+
                             ]
                         },
                         1,
@@ -182,7 +205,9 @@ db.createView("dashboard_data", "users", [
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "0"] },
-                                { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] }
+                                { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                { $eq: ["$Is_Active", "1"] }
+
                             ]
                         },
                         1,
@@ -199,6 +224,7 @@ db.createView("dashboard_data", "users", [
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "2"] }
+
                             ]
                         },
                         then: { $toInt: "$licence" },
@@ -237,9 +263,6 @@ db.createView("dashboard_data", "users", [
             // <<<<<<< HEAD
             // used_licence: { $toInt: "$used_licence" }, // Convert used_licence to integer
             used_licence: 1,
-
-
-
             remaining_license: {
                 $subtract: [
                     { $toInt: "$company_info.licenses" }, // Convert licenses to integer
