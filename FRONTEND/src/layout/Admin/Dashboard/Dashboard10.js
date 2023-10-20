@@ -134,8 +134,12 @@ const Dashboard1 = ({ data }) => {
                     <div className="media-body text-end">
                       <p className="mb-1">{item.name}</p>
                       <h3 className="">{item.value}</h3>
-                      <h6><Link href="#" className="" to={item.route}>
+                      {item.visible ? <>
+
+                        <h6><Link href="#" className="" to={item.route}>
                           <i className="fa-regular fa-eye pe-1" ></i>View</Link></h6>
+                      </> : ""}
+
                     </div>
                   </div>
                 </div>

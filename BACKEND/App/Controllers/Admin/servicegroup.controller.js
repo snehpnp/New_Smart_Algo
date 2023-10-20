@@ -346,6 +346,32 @@ class GroupService {
     //
   }
 
+  //  GetAllCatagory
+  async allServicesSymboll(req, res) {
+    const pipeline = [
+      {
+        $project: {
+          name: 1,
+          segment: 1,
+        },
+      },
+    ];
+
+    const result = await categorie.aggregate(pipeline);
+
+    if (result.length > 0) {
+      res.send({ status: true, data: result });
+
+    } else {
+      res.send({ status: false, data: [] });
+
+    }
+
+
+
+    //
+  }
+
   async getServiceByCatagory(req, res) {
 
 

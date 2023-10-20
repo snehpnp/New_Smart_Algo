@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const Dashboard1 = ({ data }) => {
 
 
-  console.log("data" ,data && data)
+  console.log("data", data && data)
 
 
   let arr = [
@@ -20,15 +20,7 @@ const Dashboard1 = ({ data }) => {
       visible: true
 
     },
-    // {
-    //   index: 2,
-    //   name: "Admin Clients",
-    //   value: data && data.admin_client,
-    //   icon: 'la la-users',
-    //   route: "/admin/allclients",
-    //   visible: true
-
-    // },
+ 
     {
       index: 16,
       name: "Total Subadmin",
@@ -136,8 +128,8 @@ const Dashboard1 = ({ data }) => {
       name: "Total Licence",
       value: data && data.all_licence,
       icon: 'la la-users',
-      route: "/admin/allLicence",
-      visible: false
+      route: "/admin/allLicence?filter=0",
+      visible: true
     }, {
       index: 14,
       name: "Remaining  Licence",
@@ -151,12 +143,13 @@ const Dashboard1 = ({ data }) => {
       name: "Used  Licence",
       value: data && data.used_licence,
       icon: 'la la-users',
-      route: "/admin/allLicence",
+      route: "/admin/allLicence?filter=1",
       visible: true
 
     },
 
   ]
+
 
   return <>
     <div className='theme-6-dashboard'>
@@ -174,7 +167,6 @@ const Dashboard1 = ({ data }) => {
                       <p className="mb-1">{item.name}</p>
                       <h3 className="">{item.value}</h3>
                       {item.visible ? <>
-
                         <h6>
                           <Link href="#" className="mb-2" to={item.route}>
                             <i className="fa-regular fa-eye pe-1" ></i>View</Link>

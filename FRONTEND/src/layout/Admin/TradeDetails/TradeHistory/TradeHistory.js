@@ -346,6 +346,8 @@ const TradeHistory = () => {
                     let rpl = (parseInt(get_exit_price) - parseInt(get_entry_price)) * parseInt(get_exit_qty);
                     let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                     let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
+                    console.log("finalyupl", rpl)
+
                     if ((isNaN(finalyupl) || isNaN(rpl))) {
                       return "-";
                     } else {
@@ -700,15 +702,20 @@ const TradeHistory = () => {
         </div>
 
         {tradeHistoryData.data && tradeHistoryData.data.length === 0 ? (
-          <FullDataTable
-            TableColumns={columns}
-            tableData={tradeHistoryData.data}
-          />
+          <div className="table-responsive">
+            <FullDataTable
+              TableColumns={columns}
+              tableData={tradeHistoryData.data}
+              pagination1={true}
+            />
+          </div>
         ) : (
           <>
             <FullDataTable
               TableColumns={columns}
               tableData={tradeHistoryData.data}
+              pagination1={true}
+
             />
           </>
         )}

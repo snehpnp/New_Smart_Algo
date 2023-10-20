@@ -32,7 +32,7 @@ export const ShowColor1 = (className, value, response, get_Strategy) => {
         $(`${className}`).append('&#8593;')
     } else {
         $(`${className}`).css({ "color": "black" });
-        $(`${className}`).html("-");
+        // $(`${className}`).html("-");
     }
 }
 
