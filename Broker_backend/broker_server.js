@@ -119,40 +119,45 @@ app.post('/broker-signals', async (req, res) => {
   console.log("filePath", filePath)
   console.log("directoryfilePath", directoryfilePath)
 
-  fs.readdir(directoryfilePath, function (err1, files) {
-    console.log("files", files)
-    if (files.length > 0) {
-      files.forEach(async function (file) {
+  // fs.readdir(directoryfilePath, function (err1, files) {
+  //   console.log("files", files)
+  //   if (files.length > 0) {
+  //     files.forEach(async function (file) {
 
-        console.log("file", file)
+  //       console.log("file", file)
 
-        if (file != 'PANELKEY' + process.env.PANEL_KEY + process.env.PANEL_NAME + formattedDate + '.txt') {
-          //paneltxtentry = 1;
-          fs.appendFile(filePath, '\nNEW TRADE GET ' + new Date() + ' \n', function (err) {
-            if (err) {
-              return console.log(err);
-            }
-            console.log("Data created if");
-          });
+  //       if (file != 'PANELKEY' + process.env.PANEL_KEY + process.env.PANEL_NAME + formattedDate + '.txt') {
+  //         //paneltxtentry = 1;
+  //         fs.appendFile(filePath, '\nNEW TRADE GET ' + new Date() + ' \n', function (err) {
+  //           if (err) {
+  //             return console.log(err);
+  //           }
+  //           console.log("Data created if");
+  //         });
 
-        }
+  //       }
 
-      });
-    } else {
+  //     });
+  //   } else {
 
-      fs.appendFile(filePath, 'INSERT FILE ' + new Date() + '\n', function (err) {
-        if (err) {
-          return console.log(err);
-        }
-        console.log("Data created else");
-      });
+  //     fs.appendFile(filePath, 'INSERT FILE ' + new Date() + '\n', function (err) {
+  //       if (err) {
+  //         return console.log(err);
+  //       }
+  //       console.log("Data created else");
+  //     });
 
-    }
+  //   }
 
-  });
+  // });
 
 
-
+  // fs.appendFile(filePath, '\nNEW TRADE GET ' + new Date() + ' \n', function (err) {
+  //     if (err) {
+  //       return console.log(err);
+  //     }
+  //     console.log("Data created if");
+  //    });
 
   try {
 
@@ -164,12 +169,10 @@ app.post('/broker-signals', async (req, res) => {
 
       //  logger.info('RECEIVED_SIGNALS ' + splitArray);
 
-      fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS ' + splitArray + '\n', function (err) {
+      fs.appendFile(filePath, '\nNEW TRADE TIME ' + new Date() + '\nRECEIVED_SIGNALS ' + splitArray + '\n', function (err) {
         if (err) {
           return console.log(err);
-        } else {
-          console.log("doneeee")
-        }
+        } 
       });
 
 
@@ -423,89 +426,84 @@ app.post('/broker-signals', async (req, res) => {
               }
               
                 
-                
-              return
+
+              // try {
+              //   // logger.info(' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length);
+
+              //   fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length + '\n', function (err) {
+              //     if (err) {
+              //       return console.log(err);
+              //     }
+              //   });
+
+              //   if (AliceBluedocuments.length > 0) {
+
+              //     async function runFunctionWithArray(array) {
+
+              //       // Run a function with the four elements of the array simultaneously
+
+              //       const promises = array.map((item) => {
+
+              //         return new Promise((resolve) => {
+
+              //           // Simulate an asynchronous task (replace with your own function)
+
+              //           setTimeout(async () => {
+
+              //             const currentDate = new Date();
+
+              //             const milliseconds = currentDate.getTime();
+
+              //             console.log(`Running Time -- ${new Date()} function with element: ${item._id}`);
 
 
-              try {
+              //             var brokerResponse = {
+              //               user_id: item._id,
+              //               receive_signal: signal_req,
+              //               strategy: strategy,
+              //               type: type,
+              //               symbol: input_symbol,
+              //               order_status: 0,
+              //               order_id: "",
+              //               trading_symbol: "",
+              //               broker_name: "",
+              //               send_request: "",
+              //               reject_reason: "",
+              //               receive_signal: ""
+              //             };
+
+              //             const newCategory = new BrokerResponse(brokerResponse)
+              //             var brokerResponse = await newCategory.save()
+              //               .then((data) => {
+              //                 console.log("username ", item.UserName)
+              //                 var bro_res_last_id = data._id;
+              //                 aliceblue.place_order(item, splitArray, bro_res_last_id, token, logger, filePath);
+              //               })
 
 
-                // logger.info(' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length);
+              //             resolve();
 
-                fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length + '\n', function (err) {
-                  if (err) {
-                    return console.log(err);
-                  }
-                });
+              //           }, 0);
 
-                if (AliceBluedocuments.length > 0) {
+              //         });
 
-                  async function runFunctionWithArray(array) {
-
-                    // Run a function with the four elements of the array simultaneously
-
-                    const promises = array.map((item) => {
-
-                      return new Promise((resolve) => {
-
-                        // Simulate an asynchronous task (replace with your own function)
-
-                        setTimeout(async () => {
-
-                          const currentDate = new Date();
-
-                          const milliseconds = currentDate.getTime();
-
-                          console.log(`Running Time -- ${new Date()} function with element: ${item._id}`);
+              //       });
 
 
-                          var brokerResponse = {
-                            user_id: item._id,
-                            receive_signal: signal_req,
-                            strategy: strategy,
-                            type: type,
-                            symbol: input_symbol,
-                            order_status: 0,
-                            order_id: "",
-                            trading_symbol: "",
-                            broker_name: "",
-                            send_request: "",
-                            reject_reason: "",
-                            receive_signal: ""
-                          };
+              //       await Promise.all(promises);
 
-                          const newCategory = new BrokerResponse(brokerResponse)
-                          var brokerResponse = await newCategory.save()
-                            .then((data) => {
-                              console.log("username ", item.UserName)
-                              var bro_res_last_id = data._id;
-                              aliceblue.place_order(item, splitArray, bro_res_last_id, token, logger, filePath);
-                            })
+              //     }
 
-
-                          resolve();
-
-                        }, 0);
-
-                      });
-
-                    });
-
-
-                    await Promise.all(promises);
-
-                  }
-
-                  runFunctionWithArray(AliceBluedocuments);
-                } else {
-                  console.log("Alice Blue tradingView Client Not Exit");
-                }
+              //     runFunctionWithArray(AliceBluedocuments);
+              //   } else {
+              //     console.log("Alice Blue tradingView Client Not Exit");
+              //   }
 
 
 
-              } catch (error) {
-                console.log("Error In Broker Alice Blue", error);
-              }
+              // } catch (error) {
+              //   console.log("Error In Broker Alice Blue", error);
+              // }
               // End Process Tading View Client Alice Blue
 
 

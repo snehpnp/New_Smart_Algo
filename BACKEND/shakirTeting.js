@@ -2116,7 +2116,7 @@ module.exports = function (app) {
 
   //Add stoch Api.....
   app.get('/addstock', async function (req, res) {
-
+   
     const pipeline = [
 
       {
@@ -2128,9 +2128,7 @@ module.exports = function (app) {
     ];
     const categoryResult = await categorie.aggregate(pipeline);
     //const matchingElements = categoryResult.filter(item => item.segment === "FO");
-
-    var axios = require('axios');
-
+    
     // console.log('Matching elements:', matchingElements[0]._id);
     // res.send("done");
     // return
@@ -2158,6 +2156,9 @@ module.exports = function (app) {
           var unique_key = []
           let count = 0
           response.data.forEach((item) => {
+
+
+            
 
             //   function findRepeatedElements(array) {
             //     const frequencyMap = {};
@@ -2188,38 +2189,38 @@ module.exports = function (app) {
             //  if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
 
 
-             if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
-                count++
-                console.log('item - CO ' + count + ' ', item)
-                const matchingElements = categoryResult.filter(item => item.segment === "CO");
-                const category_id = matchingElements[0]._id
+            //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+            //     count++
+            //     console.log('item - CO ' + count + ' ', item)
+            //     const matchingElements = categoryResult.filter(item => item.segment === "CO");
+            //     const category_id = matchingElements[0]._id
 
 
-                services.create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
+            //     services.create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + '_' + category_id
+            //     })
+            //       .then((createdServices) => {
+            //         console.log('User created and saved:', createdServices._id)
+            //       })
+            //       .catch((err) => {
+            //         try {
+            //           console.error('Error creating and saving user:', err);
+            //         } catch (e) {
+            //           console.log("duplicate key")
+            //         }
 
-                  });
+            //       });
 
 
-              }
+            //   }
 
 
 
