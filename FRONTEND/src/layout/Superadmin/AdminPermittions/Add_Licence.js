@@ -30,7 +30,7 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
         },
         onSubmit: async (values) => {
             const req = {
-                "license": values.license,
+                "license": values.licence,
                 "db_url": showPanelName.db_url,
                 "db_name": showPanelName.db_name,
                 "key": showPanelName.key,

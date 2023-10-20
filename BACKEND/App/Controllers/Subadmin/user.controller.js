@@ -59,6 +59,8 @@ class Employee {
       var Role = "USER";
       var StartDate1 = "";
       var EndDate1 = "";
+      var is_active = "1"
+      var ActiveStatus = "1"
 
       // IF ROLE NOT EXIST TO CHECK
       const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
@@ -167,6 +169,8 @@ class Employee {
         // EndDate1 = end_date_2days;
         EndDate1 = null;
 
+        ActiveStatus="0"
+        is_active="0"
       }
 
       const min = 1;
@@ -223,7 +227,8 @@ class Employee {
         api_type: api_type,
         demat_userid: demat_userid,
         service_given_month: service_given_month,
-        Is_Active: "0",
+        Is_Active: is_active,
+        ActiveStatus:ActiveStatus
       };
 
       const User = new User_model(user_data);
@@ -407,9 +412,10 @@ class Employee {
       ) {
 
         var is_active = "1"
+        var ActiveStatus = "1"
 
         // PREVIOS CLIENT IS LIVE
-        if (existingUsername.license_type != "2") {
+        if (existingUsername.license_type != "2" ) {
           // USER 2 DAYS LICENSE USE
           if (req.license_type == "0") {
             var currentDate = new Date();
@@ -440,6 +446,7 @@ class Employee {
             // console.log("END DATE", end_date_2days);
             EndDate1 = end_date_2days;
           } else if (req.license_type == "1") {
+
             StartDate1 = req.fromdate;
             EndDate1 = req.todate;
           } else if (req.license_type == "2") {
@@ -462,6 +469,7 @@ class Employee {
             EndDate1 = 0;
             TotalMonth = 0;
             is_active = "0"
+            ActiveStatus="0"
           }
         } else {
           if (req.license_type == "2") {
@@ -715,7 +723,8 @@ class Employee {
           api_type: req.api_type,
           demat_userid: req.demat_userid,
           service_given_month: req.service_given_month,
-          Is_Active: is_active
+          Is_Active: is_active,
+          ActiveStatus:ActiveStatus
         };
         // console.log("User_uodate", User_update);
 

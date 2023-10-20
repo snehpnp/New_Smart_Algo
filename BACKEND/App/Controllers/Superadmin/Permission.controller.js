@@ -4,6 +4,8 @@ const panel_model = db.panel_model;
 const User = db.user;
 const MongoClient = require('mongodb').MongoClient;
 const ApiCreateInfo = db.api_create_info;
+const count_licenses = db.count_licenses;
+
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -69,8 +71,6 @@ class Panel {
         }
     }
 
-
-
     // Get All APi Infor
     async GetAllClients(req, res) {
         try {
@@ -119,6 +119,7 @@ class Panel {
             console.log("Get all User error-", error);
         }
     }
+
     // GET ALL SUBADMINS
     async GetAllSubadmins(req, res) {
         try {
@@ -173,22 +174,9 @@ class Panel {
             // const { id, license } = req.body
             const { id, db_name, db_url, license, key } = req.body
 
+            console.log(typeof license);
+            console.log(license);
 
-            // if (!id) {
-            //     return res.send({ status: false, msg: "Enter Panel Id", data: [] })
-            // }
-
-            // const objectId = new ObjectId(id);
-
-            // // GET PANEL INFO
-            // const getPanelInfo = await panel_model.find({ _id: objectId })
-
-            // // IF DATA NOT EXIST
-            // if (getPanelInfo.length == 0) {
-            //     return res.send({ status: false, msg: "Empty data", data: getPanelInfo })
-            // }
-
-            // const uri = getPanelInfo[0].db_url;
             const uri = db_url;
 
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -210,18 +198,20 @@ class Panel {
             // Query the view to get the data
             const findResult = await db.collection(viewName).find().project({ licenses: 1 }).toArray();
 
-            const newLicensesValue = findResult[0].licenses + license;
-
+            const newLicensesValue = Number(findResult[0].licenses) + Number(license);
+            console.log(newLicensesValue);
             const updateOperation = {
                 $set: {
                     licenses: newLicensesValue
                 }
             };
 
+            const objectId = new ObjectId("64c76f1d32067577d02310df");
+
             // Update documents that match the query condition
             const updateResult = await companies_collection.updateMany(queryCondition, updateOperation);
-
-
+            const newCompany = new count_licenses({ admin_license: Number(license), user_id:objectId  });
+            newCompany.save()
 
             // If you want to send the retrieved data as a response
             return res.send({

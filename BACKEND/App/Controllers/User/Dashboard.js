@@ -63,6 +63,17 @@ class Dashboard {
                     $unwind: '$strategys',
                 },
                 {
+                    $lookup: {
+                        from: "categories",
+                        localField: "service.categorie_id",
+                        foreignField: "_id",
+                        as: "categories",
+                    },
+                },
+                {
+                    $unwind: '$categories',
+                },
+                {
                     $sort: {
                         'service.name': 1, // 1 for ascending order, -1 for descending order
                     },
@@ -77,6 +88,9 @@ class Dashboard {
 
                         'strategys.strategy_name': 1,
                         'strategys._id': 1,
+
+                        'categories.segment': 1,
+
                         _id: 1,
                         user_id: 1,
                         // group_id: 1,

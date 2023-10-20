@@ -16,7 +16,7 @@ const TradingStatus = () => {
 
     const dispatch = useDispatch()
 
-    const [first, setfirst] = useState('on')
+    const [first, setfirst] = useState('USER')
 
     const [getAllClients, setAllClients] = useState({
         loading: true,
@@ -33,16 +33,14 @@ const TradingStatus = () => {
             .then((response) => {
                 if (response.status) {
 
-                    response.data.map((data) => {
-
+                   response.data.map((data) => {
                         return csvarr.push({
-                            "Full Name": data.FullName,
-                            "User Name": data.UserName,
-                            "Email": data.Email,
-                            "Phone No": data.PhoneNo,
-                            "Trading Status": data.TradingStatus,
-
-                            "End Date": fDateTimeSuffix(data.EndDate),
+                            "FullName": data.userinfo.FullName,
+                            "Trading Status": data.trading_status,
+                            "message": data.message,
+                            "System Ip": data.system_ip,
+                            "Login Status": data.login_status,
+                            "Login Time": fDateTimeSuffix(data.createdAt),
 
                         })
 
@@ -70,90 +68,46 @@ const TradingStatus = () => {
     }, [first])
 
 
+    console.log("ForGetCSV", ForGetCSV)
 
 
     const columns = [
         {
             dataField: 'index',
             text: 'S.No.',
-            formatter: (cell, row, rowIndex) => (
-                <div
-                  style={{
-                    color: first == 'off' ? "red" : "black",
-                  }}
-                >
-                  {rowIndex + 1}
-                </div>
-              ),
-        },
-       
-        {
-            dataField: 'UserName',
-            text: 'User Name',
-            formatter: (cell, row) => (
-                <div
-                  style={{
-                    color: first == 'off' ? "red" : "green",
-                  }}
-                >
-                  {row.UserName}
-                </div>
-              ),
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: 'Email',
-            text: 'Email',
-            formatter: (cell, row) => (
-                <div
-                  style={{
-                    color: first == 'off' ? "red" : "green",
-                  }}
-                >
-                  {row.Email}
-                </div>
-              ),
+            dataField: 'userinfo.FullName',
+            text: 'User Name'
+        },
+
+        {
+            dataField: 'login_status',
+            text: 'Login And Trading  Status',
+            // formatter: (cell, row) => cell == null || "" ? "-" : cell
+            formatter: (cell, row) => row.login_status == null ? row.trading_status : row.login_status
         },
         {
-            dataField: 'PhoneNo',
-            text: 'Phone No',
-            formatter: (cell, row) => (
-                <div
-                  style={{
-                    color: first == 'off' ? "red" : "green",
-                  }}
-                >
-                  {row.PhoneNo}
-                </div>
-              ),
+            dataField: 'message',
+            text: 'message',
+            formatter: (cell, row) => cell == null || "" ? "-" : cell
+
         },
+
         {
-            dataField: 'TradingStatus',
-            text: 'Traing ON/OFF',
-            formatter: (cell, row) => (
-                <div
-                  style={{
-                    color: first == 'off' ? "red" : "green",
-                  }}
-                >
-                  {row.TradingStatus}
-                </div>
-              ),
+            dataField: 'createdAt',
+            text: 'Panel ON/OFF Time',
+            formatter: (cell, row) => fDateTimeSuffix(cell)
 
         },
         {
-            dataField: 'EndDate',
-            text: 'End Date',
-            formatter: (cell, row) => (
-                <div
-                  style={{
-                    color: first == 'off' ? "red" : "green",
-                  }}
-                >
-                  {fDateTimeSuffix(cell)}
-                </div>
-              ),
-    
-
+            dataField: 'role',
+            text: 'role'
+        },
+        {
+            dataField: 'system_ip',
+            text: 'system IP'
         },
 
 
@@ -172,10 +126,10 @@ const TradingStatus = () => {
                         >
                             <div className="col-lg-6">
                                 <div className="mb-3 row">
-                                    <label for="validationCustom05" class="form-label">
-                                        Select Status
-                                    </label>
-                                    {/* <div className="col-lg-7">
+                                     <label for="validationCustom05" class="form-label">
+                                           Select Catagory
+                                        </label>
+                                    <div className="col-lg-7">
                                         <select
                                             className="default-select wide form-control"
                                             id="validationCustom05"
@@ -190,24 +144,6 @@ const TradingStatus = () => {
                                                     <option value={item}>{item}</option>
                                                 </>
                                             })}
-
-                                        </select>
-
-                                    </div> */}
-                                    <div className="col-lg-7">
-                                        <select
-                                            className="default-select wide form-control"
-                                            id="validationCustom05"
-                                            onChange={(e) => setfirst(e.target.value)}
-                                        >
-                                            <option disabled>
-                                                Select Status
-                                            </option>
-
-                                            <option value={'on'}>ON</option>
-                                            <option value={'off'}>OFF</option>
-
-
 
                                         </select>
 

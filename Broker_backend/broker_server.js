@@ -116,9 +116,6 @@ app.post('/broker-signals', async (req, res) => {
     var directoryfilePath = path.join(__dirname + '/AllPanelTextFile');
     var paneltxtentry = 0;
 
-    // console.log("filePath", filePath)
-    // console.log("directoryfilePath", directoryfilePath)
-
     fs.readdir(directoryfilePath, function (err1, files) {
       // console.log("files", files)
       if (files.length > 0) {
@@ -151,17 +148,12 @@ app.post('/broker-signals', async (req, res) => {
 
     });
 
-
-
     try {
 
       // IF SIGNEL NOT RECIVED
       if (req.rawBody) {
 
-        // console.log("req.rawBody",req.rawBody)
         const splitArray = req.rawBody.split('|');
-
-        //  logger.info('RECEIVED_SIGNALS ' + splitArray);
 
         fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS ' + splitArray + '\n', function (err) {
           if (err) {
@@ -170,7 +162,6 @@ app.post('/broker-signals', async (req, res) => {
             console.log("doneeee")
           }
         });
-
 
         var dt = splitArray[0]
         var input_symbol = splitArray[1]
@@ -191,21 +182,18 @@ app.post('/broker-signals', async (req, res) => {
         var demo = splitArray[15]
 
 
-        //console.log("client_key",client_key)
         // IF CLIENT KEY UNDEFINED
         if (client_key != undefined) {
 
           const FIRST3_KEY = client_key.substring(0, 3);
 
           console.log("FIRST3_KEY", FIRST3_KEY);
-          // console.log("process.env.PANEL_FIRST_THREE",process.env.PANEL_FIRST_THREE);
+
           // IF SIGNEL KEY NOT MATCH CHECK
           if (FIRST3_KEY == process.env.PANEL_FIRST_THREE) {
 
-
             // SIGNEL REQUEST
             var signal_req = Buffer.from(JSON.stringify(req.rawBody)).toString('base64');
-
 
 
             // TOKEN CREATE 

@@ -101,41 +101,41 @@ const BrokerResponse = () => {
     //       :
     //       "-"
     // },
-    {
-      dataField: 'order_view_status',
-      text: 'Action',
-      formatter: (cell, row, rowIndex) =>
-        <div style={{ width: "120px" }}>
+    // {
+    //   dataField: 'order_view_status',
+    //   text: 'Action',
+    //   formatter: (cell, row, rowIndex) =>
+    //     <div style={{ width: "120px" }}>
 
-          {row.order_view_date !== undefined && row.order_view_date !== "undefined" && row.order_view_date !== "" ? JSON.parse(row.order_view_date).Status == "open" ? <div>
-            <span data-toggle="tooltip" data-placement="top" title="Edit">
-              <Pencil
-                size={20}
-                color="#198754"
-                strokeWidth={2}
-                className="mx-1"
-                onClick={() => setshowAddLicenceModal(true)}
-              />
-            </span>
+    //       {row.order_view_date !== undefined && row.order_view_date !== "undefined" && row.order_view_date !== "" ? JSON.parse(row.order_view_date).Status == "open" ? <div>
+    //         <span data-toggle="tooltip" data-placement="top" title="Edit">
+    //           <Pencil
+    //             size={20}
+    //             color="#198754"
+    //             strokeWidth={2}
+    //             className="mx-1"
+    //             onClick={() => setshowAddLicenceModal(true)}
+    //           />
+    //         </span>
 
-            <span data-toggle="tooltip" data-placement="top" title="Delete">
-              <Trash2
-                size={20}
-                color="#d83131"
-                strokeWidth={2}
-                className="mx-1"
-              // onClick={(e) => Delete_order(row._id)}
-              />
-            </span>
-
-
-          </div> : "" : ""}
+    //         <span data-toggle="tooltip" data-placement="top" title="Delete">
+    //           <Trash2
+    //             size={20}
+    //             color="#d83131"
+    //             strokeWidth={2}
+    //             className="mx-1"
+    //           // onClick={(e) => Delete_order(row._id)}
+    //           />
+    //         </span>
 
 
+    //       </div> : "" : ""}
 
 
-        </div>
-    },
+
+
+    //     </div>
+    // },
 
   ];
 

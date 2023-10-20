@@ -39,12 +39,13 @@ class Tradehistory {
 
                 {
                     $sort: {
-                        "result.createdAt": -1 // Sort in ascending order. Use -1 for descending.
+                        "result._id": -1 // Sort in ascending order. Use -1 for descending.
                     }
                 }
 
             ]);
 
+              
 
             if (filteredSignals.length === 0) {
                 return res.send({ status: false, msg: 'No signals founddate range.', data: [] });
@@ -70,7 +71,7 @@ class Tradehistory {
                     $lte: today, // Aaj se less than or equal
                 },
                 exit_price: ""
-            });
+            }).sort({createdAt:-1})
 
             if (filteredSignals.length == 0) {
                 res.send({ status: false, data: filteredSignals, msg: "Empty Data" })

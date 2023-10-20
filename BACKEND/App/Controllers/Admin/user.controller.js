@@ -766,7 +766,7 @@ class Employee {
       var AdminMatch;
 
       if (Find_Role == "ADMIN") {
-        AdminMatch = { Role: "USER" };
+        AdminMatch = { Role: "USER" ,Is_Active:"1"};
       } else if (Find_Role == "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
@@ -873,40 +873,17 @@ class Employee {
   async GetTradingStatus(req, res) {
     try {
       const { Role } = req.body;
-      // var Role = "ADMIN"
-      const GetAlluser_logs = await user_logs.aggregate([
-        {
-          $lookup: {
-            from: "users",
-            localField: "user_Id",
-            foreignField: "_id",
-            as: "userinfo",
-          },
-        },
-        {
-          $unwind: "$userinfo",
-        },
-        {
-          $match: {
-            "userinfo.Role": Role, // Replace 'desired_role_here' with the role you want to filter by
-          },
-        },
-        {
-          $project: {
-            "userinfo.FullName": 1,
-            login_status: 1,
-            trading_status: 1,
-            message: 1,
-            role: 1,
-            system_ip: 1,
-            createdAt: 1,
-          },
-        },
-      ]);
+      // const status ="on"
 
-      // const GetAlluser_logs = await user_logs.find({
+      const currentDate = new Date(); // Get the current date
+      const GetAlluser_logs = await User_model.find({
+        Role:'USER',
+        license_type:"2",
+        TradingStatus:Role,
+        EndDate: { $gt: currentDate  }
 
-      // });
+      }).select('Email FullName EndDate TradingStatus UserName PhoneNo')
+      
       const totalCount = GetAlluser_logs.length;
       // IF DATA NOT EXIST
       if (GetAlluser_logs.length == 0) {
@@ -923,10 +900,7 @@ class Employee {
         status: true,
         msg: "Get All user_logs",
         data: GetAlluser_logs,
-        // page: Number(page),
-        // limit: Number(limit),
         totalCount: totalCount,
-        // totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
       console.log("trading status Error-", error);
@@ -1223,3 +1197,68 @@ const update_qty = async (user_id) => {
 
 
 module.exports = new Employee();
+
+
+
+// async GetTradingStatus(req, res) {
+//   try {
+//     const { Role } = req.body;
+//     // var Role = "ADMIN"
+//     const GetAlluser_logs = await user_logs.aggregate([
+//       {
+//         $lookup: {
+//           from: "users",
+//           localField: "user_Id",
+//           foreignField: "_id",
+//           as: "userinfo",
+//         },
+//       },
+//       {
+//         $unwind: "$userinfo",
+//       },
+//       {
+//         $match: {
+//           "userinfo.Role": Role, // Replace 'desired_role_here' with the role you want to filter by
+//         },
+//       },
+//       {
+//         $project: {
+//           "userinfo.FullName": 1,
+//           login_status: 1,
+//           trading_status: 1,
+//           message: 1,
+//           role: 1,
+//           system_ip: 1,
+//           createdAt: 1,
+//         },
+//       },
+//     ]);
+
+//     // const GetAlluser_logs = await user_logs.find({
+
+//     // });
+//     const totalCount = GetAlluser_logs.length;
+//     // IF DATA NOT EXIST
+//     if (GetAlluser_logs.length == 0) {
+//       return res.send({
+//         status: false,
+//         msg: "Empty data",
+//         data: [],
+//         totalCount: totalCount,
+//       });
+//     }
+
+//     // DATA GET SUCCESSFULLY
+//     res.send({
+//       status: true,
+//       msg: "Get All user_logs",
+//       data: GetAlluser_logs,
+//       // page: Number(page),
+//       // limit: Number(limit),
+//       totalCount: totalCount,
+//       // totalPages: Math.ceil(totalCount / Number(limit)),
+//     });
+//   } catch (error) {
+//     console.log("trading status Error-", error);
+//   }
+// }
