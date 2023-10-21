@@ -161,11 +161,18 @@ app.post('/broker-signals', async (req, res) => {
 
     // IF SIGNEL NOT RECIVED
     if (req.rawBody) {
-
       // console.log("req.rawBody",req.rawBody)
       const splitArray = req.rawBody.split('|');
+      
+      const signals = {};
 
-      //  logger.info('RECEIVED_SIGNALS ' + splitArray);
+    // Iterate through the pairs and split each pair into key and value
+      splitArray.forEach(pair => {
+      const [key, value] = pair.split(':');
+      signals[key] = value;
+     });
+
+     console.log("final result get signal",signals);
 
       fs.appendFile(filePath, '\nNEW TRADE TIME ' + new Date() + '\nRECEIVED_SIGNALS ' + splitArray + '\n', function (err) {
         if (err) {
@@ -174,23 +181,42 @@ app.post('/broker-signals', async (req, res) => {
       });
 
 
-      var dt = splitArray[0]
-      var input_symbol = splitArray[1]
-      var type = splitArray[2]
-      var tr_price = splitArray[3]
-      var price = splitArray[4]
-      var sq_value = splitArray[5]
-      var sl_value = splitArray[6]
-      var tsl = splitArray[7]
-      var segment = splitArray[8]
-      var segment1 = splitArray[8]
-      var strike = splitArray[9]
-      var option_type = splitArray[10]
-      var expiry = splitArray[11]
-      var strategy = splitArray[12]
-      var qty_percent = splitArray[13]
-      var client_key = splitArray[14]
-      var demo = splitArray[15]
+      var dt = signals.DTime;
+      var input_symbol = signals.Symbol;
+      var type = signals.TType;
+      var tr_price = signals.Tr_Price;
+      var price = signals.Price;
+      var sq_value = signals.Sq_Value;
+      var sl_value = signals.Sl_Value;
+      var tsl = signals.TSL;
+      var segment = signals.Segment;
+      var segment1 = signals.Segment;
+      var strike = signals.Strike;
+      var option_type = signals.OType;
+      var expiry = signals.Expiry;
+      var strategy = signals.Strategy;
+      var qty_percent = signals.Quntity;
+      var client_key = signals.Key;
+      var demo = signals.Demo;
+
+
+      // var dt = splitArray[0]
+      // var input_symbol = splitArray[1]
+      // var type = splitArray[2]
+      // var tr_price = splitArray[3]
+      // var price = splitArray[4]
+      // var sq_value = splitArray[5]
+      // var sl_value = splitArray[6]
+      // var tsl = splitArray[7]
+      // var segment = splitArray[8]
+      // var segment1 = splitArray[8]
+      // var strike = splitArray[9]
+      // var option_type = splitArray[10]
+      // var expiry = splitArray[11]
+      // var strategy = splitArray[12]
+      // var qty_percent = splitArray[13]
+      // var client_key = splitArray[14]
+      // var demo = splitArray[15]
 
 
       //console.log("client_key",client_key)
@@ -337,7 +363,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (AliceBluedocuments.length > 0) {
-                aliceblue.place_order(AliceBluedocuments, splitArray,token,filePath,signal_req);
+                aliceblue.place_order(AliceBluedocuments, signals,token,filePath,signal_req);
                } 
 
               } catch (error) {
@@ -364,7 +390,7 @@ app.post('/broker-signals', async (req, res) => {
               console.log("AliceBluedocuments trading view length",AliceBluedocuments.length)
               
               if(AliceBluedocuments.length > 0){
-                aliceblue.place_order(AliceBluedocuments, splitArray,token,filePath,signal_req);
+                aliceblue.place_order(AliceBluedocuments, signals,token,filePath,signal_req);
               }
 
             } catch (error) {

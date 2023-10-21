@@ -11,7 +11,7 @@ const MainSignals = db.MainSignals;
 const AliceViewModel = db.AliceViewModel;
 const BrokerResponse = db.BrokerResponse;
 var dateTime = require('node-datetime');
-const place_order = async (AllClientData, splitArray, token, filePath, signal_req) => {
+const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
 
 
     try {
@@ -19,24 +19,40 @@ const place_order = async (AllClientData, splitArray, token, filePath, signal_re
       
 
 
-        var dt = splitArray[0]
-        var input_symbol = splitArray[1]
-        var type = splitArray[2]
-        var tr_price = splitArray[3]
-        var price = splitArray[4]
-        var sq_value = splitArray[5]
-        var sl_value = splitArray[6]
-        var tsl = splitArray[7]
-        var segment = splitArray[8]
-        var strike = splitArray[9]
-        var option_type = splitArray[10]
-        var expiry = splitArray[11]
-        var strategy = splitArray[12]
-        var qty_percent = splitArray[13]
-        var client_key = splitArray[14]
-        var demo = splitArray[15]
+        // var dt = splitArray[0]
+        // var input_symbol = splitArray[1]
+        // var type = splitArray[2]
+        // var tr_price = splitArray[3]
+        // var price = splitArray[4]
+        // var sq_value = splitArray[5]
+        // var sl_value = splitArray[6]
+        // var tsl = splitArray[7]
+        // var segment = splitArray[8]
+        // var strike = splitArray[9]
+        // var option_type = splitArray[10]
+        // var expiry = splitArray[11]
+        // var strategy = splitArray[12]
+        // var qty_percent = splitArray[13]
+        // var client_key = splitArray[14]
+        // var demo = splitArray[15]
 
-
+        var dt = signals.DTime;
+        var input_symbol = signals.Symbol;
+        var type = signals.TType;
+        var tr_price = signals.Tr_Price;
+        var price = signals.Price;
+        var sq_value = signals.Sq_Value;
+        var sl_value = signals.Sl_Value;
+        var tsl = signals.TSL;
+        var segment = signals.Segment;
+        var segment1 = signals.Segment;
+        var strike = signals.Strike;
+        var option_type = signals.OType;
+        var expiry = signals.Expiry;
+        var strategy = signals.Strategy;
+        var qty_percent = signals.Quntity;
+        var client_key = signals.Key;
+        var demo = signals.Demo;
       
 
 
@@ -132,7 +148,7 @@ const place_order = async (AllClientData, splitArray, token, filePath, signal_re
                           //  console.log("postData after ", item.postdata);
                           
                                    
-                       EntryPlaceOrder(item, filePath, splitArray, signal_req)
+                       EntryPlaceOrder(item, filePath, signals, signal_req)
 
         
                     });
@@ -162,7 +178,7 @@ const place_order = async (AllClientData, splitArray, token, filePath, signal_re
                         item.postdata.price = price
                     }
                           
-                     EntryPlaceOrder(item, filePath, splitArray, signal_req);
+                     EntryPlaceOrder(item, filePath, signals, signal_req);
 
                 }
 
@@ -314,9 +330,9 @@ const place_order = async (AllClientData, splitArray, token, filePath, signal_re
                                                 
                                                 console.log("possition_qty Cash trade", possition_qty);
                                                 if ((item1.Bqty - item1.Sqty) > 0 && type == 'LX') {
-                                                    ExitPlaceOrder(item, filePath, possition_qty, splitArray, signal_req)
+                                                    ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
                                                 } else if ((item1.Bqty - item1.Sqty) < 0 && type == 'SX') {
-                                                    ExitPlaceOrder(item, filePath, possition_qty, splitArray, signal_req)
+                                                    ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
                                                 }
                                                } 
                                            
@@ -359,9 +375,9 @@ const place_order = async (AllClientData, splitArray, token, filePath, signal_re
                                                }else{
 
                                                 if (item1.Netqty > 0 && type == 'LX') {
-                                                    ExitPlaceOrder(item, filePath, possition_qty, splitArray, signal_req)
+                                                    ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
                                                 } else if (item1.Netqty < 0 && type == 'SX') {
-                                                    ExitPlaceOrder(item, filePath, possition_qty, splitArray, signal_req)
+                                                    ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
                                                 }
 
                                             }
@@ -539,24 +555,42 @@ const place_order = async (AllClientData, splitArray, token, filePath, signal_re
 
 }
 
-const EntryPlaceOrder = async (item, filePath, splitArray, signal_req) => {
+const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
-    var dt = splitArray[0]
-    var input_symbol = splitArray[1]
-    var type = splitArray[2]
-    var tr_price = splitArray[3]
-    var price = splitArray[4]
-    var sq_value = splitArray[5]
-    var sl_value = splitArray[6]
-    var tsl = splitArray[7]
-    var segment = splitArray[8]
-    var strike = splitArray[9]
-    var option_type = splitArray[10]
-    var expiry = splitArray[11]
-    var strategy = splitArray[12]
-    var qty_percent = splitArray[13]
-    var client_key = splitArray[14]
-    var demo = splitArray[15]
+    // var dt = splitArray[0]
+    // var input_symbol = splitArray[1]
+    // var type = splitArray[2]
+    // var tr_price = splitArray[3]
+    // var price = splitArray[4]
+    // var sq_value = splitArray[5]
+    // var sl_value = splitArray[6]
+    // var tsl = splitArray[7]
+    // var segment = splitArray[8]
+    // var strike = splitArray[9]
+    // var option_type = splitArray[10]
+    // var expiry = splitArray[11]
+    // var strategy = splitArray[12]
+    // var qty_percent = splitArray[13]
+    // var client_key = splitArray[14]
+    // var demo = splitArray[15]
+
+    var dt = signals.DTime;
+    var input_symbol = signals.Symbol;
+    var type = signals.TType;
+    var tr_price = signals.Tr_Price;
+    var price = signals.Price;
+    var sq_value = signals.Sq_Value;
+    var sl_value = signals.Sl_Value;
+    var tsl = signals.TSL;
+    var segment = signals.Segment;
+    var segment1 = signals.Segment;
+    var strike = signals.Strike;
+    var option_type = signals.OType;
+    var expiry = signals.Expiry;
+    var strategy = signals.Strategy;
+    var qty_percent = signals.Quntity;
+    var client_key = signals.Key;
+    var demo = signals.Demo;
 
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
@@ -732,27 +766,45 @@ const EntryPlaceOrder = async (item, filePath, splitArray, signal_req) => {
 
 }
 
-const ExitPlaceOrder = async (item, filePath, possition_qty, splitArray, signal_req) => {
+const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req) => {
    
    // console.log("INSIDE EXIT FUNCTION")
    // console.log("INSIDE EXIT FUNCTION possition_qty",possition_qty)
   
-    var dt = splitArray[0]
-    var input_symbol = splitArray[1]
-    var type = splitArray[2]
-    var tr_price = splitArray[3]
-    var price = splitArray[4]
-    var sq_value = splitArray[5]
-    var sl_value = splitArray[6]
-    var tsl = splitArray[7]
-    var segment = splitArray[8]
-    var strike = splitArray[9]
-    var option_type = splitArray[10]
-    var expiry = splitArray[11]
-    var strategy = splitArray[12]
-    var qty_percent = splitArray[13]
-    var client_key = splitArray[14]
-    var demo = splitArray[15]
+    // var dt = splitArray[0]
+    // var input_symbol = splitArray[1]
+    // var type = splitArray[2]
+    // var tr_price = splitArray[3]
+    // var price = splitArray[4]
+    // var sq_value = splitArray[5]
+    // var sl_value = splitArray[6]
+    // var tsl = splitArray[7]
+    // var segment = splitArray[8]
+    // var strike = splitArray[9]
+    // var option_type = splitArray[10]
+    // var expiry = splitArray[11]
+    // var strategy = splitArray[12]
+    // var qty_percent = splitArray[13]
+    // var client_key = splitArray[14]
+    // var demo = splitArray[15]
+
+    var dt = signals.DTime;
+    var input_symbol = signals.Symbol;
+    var type = signals.TType;
+    var tr_price = signals.Tr_Price;
+    var price = signals.Price;
+    var sq_value = signals.Sq_Value;
+    var sl_value = signals.Sl_Value;
+    var tsl = signals.TSL;
+    var segment = signals.Segment;
+    var segment1 = signals.Segment;
+    var strike = signals.Strike;
+    var option_type = signals.OType;
+    var expiry = signals.Expiry;
+    var strategy = signals.Strategy;
+    var qty_percent = signals.Quntity;
+    var client_key = signals.Key;
+    var demo = signals.Demo;
 
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
    
