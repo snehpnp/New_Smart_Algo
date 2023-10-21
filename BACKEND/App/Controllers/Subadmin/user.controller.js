@@ -809,7 +809,9 @@ class Employee {
 
       const updateOperation = {
         $set: {
-          Is_Active: 1, StartDate: StartDate1,
+          Is_Active: 1,
+          ActiveStatus:1,
+           StartDate: StartDate1,
           EndDate: EndDate1, licence: "1"
         }
       };
