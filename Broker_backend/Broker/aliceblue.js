@@ -1,5 +1,7 @@
 var axios = require('axios');
 var qs = require('qs');
+var path = require('path');
+const { exec } = require('child_process');
 const fs = require('fs');
 const db = require('../../BACKEND/App/Models');
 const services = db.services;
@@ -8,670 +10,526 @@ const Signals = db.Signals;
 const MainSignals = db.MainSignals;
 const AliceViewModel = db.AliceViewModel;
 const BrokerResponse = db.BrokerResponse;
-
-
 var dateTime = require('node-datetime');
-const place_order = async (item, splitArray, bro_res_last_id, token, logger, filePath) => {
+const place_order = async (AllClientData, splitArray, token, filePath, signal_req) => {
 
 
     try {
-        console.log("ALICE BLUE BROKER");
-
-        if (token != undefined) {
-
-            var dt = splitArray[0]
-            var input_symbol = splitArray[1]
-            var type = splitArray[2]
-            var tr_price = splitArray[3]
-            var price = splitArray[4]
-            var sq_value = splitArray[5]
-            var sl_value = splitArray[6]
-            var tsl = splitArray[7]
-            var segment = splitArray[8]
-            var strike = splitArray[9]
-            var option_type = splitArray[10]
-            var expiry = splitArray[11]
-            var strategy = splitArray[12]
-            var qty_percent = splitArray[13]
-            var client_key = splitArray[14]
-            var demo = splitArray[15]
-
-            console.log({
-                dt: splitArray[0],
-                input_symbol: splitArray[1],
-                type: splitArray[2],
-                tr_price: splitArray[3],
-                price: splitArray[4],
-                sq_value: splitArray[5],
-                sl_value: splitArray[6],
-                tsl: splitArray[7],
-                segment: splitArray[8],
-                strike: splitArray[9],
-                option_type: splitArray[10],
-                expiry: splitArray[11],
-                strategy: splitArray[12],
-                qty_percent: splitArray[13],
-                client_key: splitArray[14],
-                demo: splitArray[15],
-            });
-
-
-            var exch;
-            if (segment == 'C' || segment == 'c') {
-                exch = "NSE";
-            } else if (segment == 'F' || segment == 'f' || segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
-                exch = "NFO";
-            } else if (segment == 'MF' || segment == 'mf' || segment == 'MO' || segment == 'mo') {
-                exch = "MCX";
-            }
-            else if (segment == 'CF' || segment == 'cf' || segment == 'CO' || segment == 'co') {
-                exch = "CDS";
-            }
-
-
-            var transtype;
-            if (type == 'LE' || type == 'SX') {
-                transtype = 'BUY';
-            } else if (type == 'SE' || type == 'LX') {
-                transtype = 'SELL';
-            }
-
-
-            //console.log(token);
-            var complexty
-            var discqty = "0";
-            var pCode;
-            var prctyp;
-            var qty = item.client_services.quantity;
-            var ret = "DAY";
-            var stopLoss = "";
-            var symbol_id = token[0].instrument_token
-            var target = "0";
-            var trading_symbol;
-
-            trading_symbol = "";
-            var trailing_stop_loss = "0";
-            var trigPrice = "";
-
-
-            if (segment == 'C' || segment == 'c') {
-                trading_symbol = token[0].zebu_token;
-            }
-
-
-            if (segment == 'O' || segment == 'o' || segment == 'F' || segment == 'f') {
-                trading_symbol = token[0].tradesymbol_m_w;
-            }
-
-            try {
-
-                var signal_sy = "[symbol : " + input_symbol + " , Expiry : " + expiry + " , TradeSymbol : " + trading_symbol + " , Token : " + token[0].instrument_token + "]";
-                var signal_req_sy = Buffer.from(JSON.stringify(signal_sy)).toString('base64');
-
-                let result = await BrokerResponse.findByIdAndUpdate(
-                    bro_res_last_id,
-                    {
-                        broker_name: "Alice Blue",
-                        signal: signal_req_sy,
-                        trading_symbol: trading_symbol == "" ? "" : trading_symbol
-                    },
-                    { new: true }
-                )
-
-
-            } catch (e) {
-
-            }
-
-
-
-
-            if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '1' && item.client_services.product_type == '1') {
-
-                prctyp = 'MKT';
-                pCode = 'CNC';
-                complexty = "regular";
-
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '1' && item.client_services.product_type == '1') {
-                prctyp = 'MKT';
-                pCode = 'CNC';
-                complexty = "regular";
-            }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '2' && item.client_services.product_type == '1') {
-                prctyp = 'L';
-                price = price;
-                pCode = 'CNC';
-                complexty = "regular";
-                console.log("price", price);
-
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '2' && item.client_services.product_type == '1') {
-                prctyp = 'L';
-                price = price;
-                pCode = 'CNC';
-                complexty = "regular";
-
-            }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '3' && item.client_services.product_type == '1') {
-                prctyp = 'SL';
-                price = price;
-                pCode = 'CNC';
-                trigPrice = tr_price;
-                complexty = "regular";
-
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '3' && item.client_services.product_type == '1') {
-                prctyp = 'SL';
-                price = price;
-                pCode = 'CNC';
-                trigPrice = tr_price;
-                complexty = "regular";
-
-            }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '4' && item.client_services.product_type == '1') {
-
-                prctyp = 'SL-M';
-                price = price;
-                pCode = 'CNC';
-                trigPrice = tr_price;
-                complexty = "regular";
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '4' && item.client_services.product_type == '1') {
-
-                prctyp = 'SL-M';
-                price = price;
-                pCode = 'CNC';
-                trigPrice = tr_price;
-                complexty = "regular";
-            }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '1' && item.client_services.product_type == '2') {
-                prctyp = 'MKT';
-                pCode = 'MIS';
-                complexty = "regular";
-
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '1' && item.client_services.product_type == '2') {
-                prctyp = 'MKT';
-                pCode = 'MIS';
-                complexty = "regular";
-
-            }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '2' && item.client_services.product_type == '2') {
-
-                prctyp = 'L';
-                price = price;
-                pCode = 'MIS';
-                complexty = "regular";
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '2' && item.client_services.product_type == '2') {
-
-                prctyp = 'L';
-                price = price;
-                pCode = 'MIS';
-                complexty = "regular";
-            }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '3' && item.client_services.product_type == '2') {
-                prctyp = 'SL';
-                price = price;
-                pCode = 'MIS';
-                trigPrice = tr_price;
-                complexty = "regular";
-
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '3' && item.client_services.product_type == '2') {
-                prctyp = 'SL';
-                price = price;
-                pCode = 'MIS';
-                trigPrice = tr_price;
-                complexty = "regular";
-
-            }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '4' && item.client_services.product_type == '2') {
-
-                prctyp = 'SL-M';
-                price = price;
-                pCode = 'MIS';
-                trigPrice = tr_price;
-                complexty = "regular";
-
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '4' && item.client_services.product_type == '2') {
-
-                prctyp = 'SL-M';
-                price = price;
-                pCode = 'MIS';
-                trigPrice = tr_price;
-                complexty = "regular";
-
-            }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '1' && item.client_services.product_type == '4') {
-                prctyp = 'MKT';
-                pCode = 'CO';
-                complexty = "co";
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '1' && item.client_services.product_type == '4') {
-                prctyp = 'MKT';
-                pCode = 'CO';
-                complexty = "co";
-            }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '2' && item.client_services.product_type == '4') {
-                prctyp = 'L';
-                pCode = 'CO';
-                price = price;
-                trigPrice = tr_price;
-                complexty = "co";
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '2' && item.client_services.product_type == '4') {
-                prctyp = 'L';
-                pCode = 'CO';
-                price = price;
-                trigPrice = tr_price;
-                complexty = "co";
-            }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '2' && item.client_services.product_type == '3') {
-
-                // console.log('order BO')
-                prctyp = 'L';
-                price = price;
-                pCode = 'MIS';
-                complexty = 'bo';
-                stopLoss = sl_value;
-                target = sq_value;
-                trailing_stop_loss = tsl;
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '2' && item.client_services.product_type == '3') {
-                prctyp = 'L';
-                price = price;
-                pCode = 'MIS';
-                complexty = 'bo';
-                stopLoss = sl_value;
-                target = sq_value;
-                trailing_stop_loss = tsl;
-            }
-            else if ((type == 'LE' || type == 'SX') && item.client_services.order_type == '3' && item.client_services.product_type == '3') {
-
-                prctyp = 'SL';
-                price = price;
-                pCode = 'MIS';
-                complexty = 'bo';
-                trigPrice = tr_price;
-                stopLoss = sl_value;
-                target = sq_value;
-                trailing_stop_loss = tsl;
-
-            }
-            else if ((type == 'LX' || type == 'SE') && item.client_services.order_type == '3' && item.client_services.product_type == '3') {
-
-                prctyp = 'SL';
-                price = price;
-                pCode = 'MIS';
-                complexty = 'bo';
-                trigPrice = tr_price;
-                stopLoss = sl_value;
-                target = sq_value;
-                trailing_stop_loss = tsl;
-
-            }
-
-            // SET PRODUCT TYPE / CODE
-            if (item.client_services.product_type == '1') {
-                if (segment == 'F' || segment == 'f' || segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
-                    pCode = "NRML";
-                }
-            }
-
-
-
-            // REQUEST CREATE
-            let data;
-
-
-            if (item.client_services.product_type == '3') {
-                data = {
-                    "complexty": complexty,
-                    "discqty": discqty,
-                    "exch": exch,
-                    "pCode": pCode,
-                    "prctyp": prctyp,
-                    "price": price,
-                    "qty": qty,
-                    "ret": ret,
-                    "stopLoss": stopLoss,
-                    "symbol_id": symbol_id,
-                    "target": target,
-                    "trading_symbol": trading_symbol,
-                    "trailing_stop_loss": trailing_stop_loss,
-                    "transtype": transtype,
-                    "trigPrice": trigPrice,
-                    "orderTag": "order1"
-                };
-
-
-            } else {
-                data = {
-                    "complexty": complexty,
-                    "discqty": "0",
-                    "exch": exch,
-                    "pCode": pCode,
-                    "prctyp": prctyp,
-                    "price": price,
-                    "qty": qty,
-                    "ret": ret,
-                    "symbol_id": symbol_id,
-                    "trading_symbol": trading_symbol,
-                    "transtype": transtype,
-                    "trigPrice": trigPrice,
-                    "orderTag": "order1"
-                };
-            }
-
-            console.log("data", data);
-
-
-
-
-
-            if (type == 'LE' || type == 'SE') {
-
-                try {
-
-                    if (data !== undefined) {
-
-                        // logger.info(' ALICE BLUE BEFORE PLACE ORDER USER ENTRY- '+item.UserName+' REQUEST -'+JSON.stringify(data));
-
-                        fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE BEFORE PLACE ORDER USER ENTRY- ' + item.UserName + ' REQUEST -' + JSON.stringify(data) + '\n', function (err) {
-                            if (err) {
-                                return console.log(err);
-                            }
-                        });
-
-                        var send_rr = Buffer.from(qs.stringify(data)).toString('base64');
-
-                        let config = {
-                            method: 'post',
-                            maxBodyLength: Infinity,
-                            url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-                            headers: {
-                                'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
-                                'Content-Type': 'application/json'
-                            },
-                            data: JSON.stringify([data])
-
-                        };
-
-                        axios(config)
-                            .then(async (response) => {
-                                //  logger.info(' ALICE BLUE AFTER PLACE ORDER USER ENTRY - '+item.UserName+' RESPONSE -'+JSON.stringify(response.data));
-
-                                fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
-                                    if (err) {
-                                        return console.log(err);
-                                    }
-                                });
-
-
-                                if (response.data[0].stat == "Ok") {
-
-                                    let result = await BrokerResponse.findByIdAndUpdate(
-                                        bro_res_last_id,
-                                        {
-                                            symbol: input_symbol,
-                                            send_request: send_rr,
-                                            order_id: response.data[0].NOrdNo,
-                                            order_status: response.data[0].stat
-                                        },
-                                        { new: true }
-                                    )
-
-                                } else {
-
-                                    const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
-
-
-                                    let result = await BrokerResponse.findByIdAndUpdate(
-                                        bro_res_last_id,
-                                        {
-                                            symbol: input_symbol,
-                                            send_request: send_rr,
-                                            order_id: response.data[0].NOrdNo,
-                                            order_status: "Error",
-                                            reject_reason: message
-                                        },
-                                        { new: true }
-                                    )
-
-                                }
-
-                            })
-                            .catch(async (error) => {
-                                //logger.info(' ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - '+item.UserName+' ERROR -'+JSON.stringify(error));
-
-                                fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - ' + item.UserName + ' ERROR -' + JSON.stringify(error) + '\n', function (err) {
-                                    if (err) {
-                                        return console.log(err);
-                                    }
-                                });
-
-                                try {
-
-                                    if (error) {
-                                        if (error.response) {
-                                            const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
-
-                                            let result = await BrokerResponse.findByIdAndUpdate(
-                                                bro_res_last_id,
-                                                {
-                                                    symbol: input_symbol,
-                                                    send_request: send_rr,
-                                                    order_status: "Error",
-                                                    reject_reason: message
-                                                },
-                                                { new: true }
-                                            )
-                                        } else {
-                                            const message = (JSON.stringify(error)).replace(/["',]/g, '');
-
-
-                                            let result = await BrokerResponse.findByIdAndUpdate(
-                                                bro_res_last_id,
-                                                {
-                                                    symbol: input_symbol,
-                                                    send_request: send_rr,
-                                                    order_status: "Error",
-                                                    reject_reason: message
-                                                },
-                                                { new: true }
-                                            )
-                                        }
-                                    }
-
-                                } catch (e) {
-                                    console.log("error 1", e);
-                                }
-
-
-
-                            });
+        console.log("ALICE BLUE BROKER TEST FILE - ");
+      
+
+
+        var dt = splitArray[0]
+        var input_symbol = splitArray[1]
+        var type = splitArray[2]
+        var tr_price = splitArray[3]
+        var price = splitArray[4]
+        var sq_value = splitArray[5]
+        var sl_value = splitArray[6]
+        var tsl = splitArray[7]
+        var segment = splitArray[8]
+        var strike = splitArray[9]
+        var option_type = splitArray[10]
+        var expiry = splitArray[11]
+        var strategy = splitArray[12]
+        var qty_percent = splitArray[13]
+        var client_key = splitArray[14]
+        var demo = splitArray[15]
+
+
+      
+
+
+
+
+
+
+        if (type == 'LE' || type == 'SE') {
+            console.log("trade entry")
+
+
+         const requestPromises = AllClientData.map(async (item) => {
+
+         if (token != 0) {
+
+
+                if(segment.toUpperCase() != "C"){
+
+                    const pattern = token[0].instrument_token
+
+                    var filePath_token = ""
+                    var trading_symbol;
+        
+        
+                    if (segment && segment.toUpperCase() === 'C') {
+                        filePath_token = '/Aliceblue/ALICE_NSE.csv';
+                    } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
+                        filePath_token = '/Aliceblue/ALICE_NFO.csv';
+                    } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
+                        filePath_token = '/Aliceblue/ALICE_CDS.csv';
+                    } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
+                        filePath_token = '/Aliceblue/ALICE_MCX.csv';
+                    } else {
+                        console.error('Invalid segment value');
+                        return;
                     }
-
-                } catch (e) {
-                    console.log("place order Entry Catch", e);
-                }
-
-
-            }
-            else if (type == 'SX' || type == 'LX') {
-
-                var data_possition = {
-                    "ret": "NET"
-                }
-                var config = {
-                    method: 'post',
-                    url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/positionAndHoldings/positionBook',
-                    headers: {
-                        'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
-                        'Content-Type': 'application/json'
-                    },
-                    data: JSON.stringify(data_possition)
-                };
-                axios(config)
-                    .then(async (response) => {
-
-                        //console.log("run=====");
-                        //console.log(response.data);
-                        //logger.info(' ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- '+item.UserName+' POSSITION LENGTH -'+response.data.length);
-
-                        fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE EXIT-ORDER CHECK POSSITION ORDER USER- ' + item.UserName + ' POSSITION LENGTH -' + response.data.length + '\n', function (err) {
-                            if (err) {
-                                return console.log(err);
+        
+                    const filePath_aliceblue = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
+        
+                  //  const command = `grep ,${pattern}, ${filePath}`;
+                    const command = `findstr ,${pattern}, ${filePath_aliceblue}`;
+                    
+                    console.log("command ", command)
+        
+                    try{
+        
+                        exec(command, (error, stdout, stderr) => {
+                            if (error) {
+                                console.error(`exec error: ${error}`);
+                                return;
                             }
-                        });
-
-
-                        if (response.data.length > 0) {
-
-                            response.data.forEach(async (item1, index) => {
-                                console.log("item1.Token", item1.Token);
-                                console.log("symbol_id", symbol_id);
-
-
-                                if (item1.Token == symbol_id) {
-
-                                    if (segment == 'C' || segment == 'c') {
-
-                                        var possition_qty = item1.Bqty - item1.Sqty;
-                                        // console.log("possition_qty", possition_qty);
-
-                                        let result = await BrokerResponse.findByIdAndUpdate(
-                                            bro_res_last_id,
-                                            {
-                                                open_possition_qty: possition_qty,
-                                            },
-                                            { new: true }
-                                        )
-
-                                        if ((item1.Bqty - item1.Sqty) > 0 && type == 'LX') {
-
-                                            try {
-
-                                                if (data !== undefined) {
-                                                    ExitPlaceOrder(data, item, filePath)
-                                                }
-
-                                            } catch (e) {
-                                                console.log("place order Exit Lx Catch", e);
-                                            }
+                            const parts = stdout.split(','); // Extract the content inside double quotes
+                            console.log("Extracted Part:",  parts[9]);
+                            if (segment && segment.toUpperCase() === 'C') {
+                                trading_symbol = parts[8];
+                            } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
+                                trading_symbol = parts[9];
+                            } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
+                                trading_symbol = parts[8];
+                            } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
+                                trading_symbol = parts[8];
+                            } else {
+                                console.error('Invalid segment value');
+                                return;
+                            }
 
 
 
-                                        } else if ((item1.Bqty - item1.Sqty) < 0 && type == 'SX') {
-                                            try {
+                          //  console.log("user id ", item.demat_userid);
+                          //  console.log("postData before ", item.postdata);
+                            
+                           // console.log("trading_symbol ", trading_symbol);
+                
+                           
+                            item.postdata.symbol_id = token[0].instrument_token;
+                            
+                            item.postdata.trading_symbol = trading_symbol;
+                            
+                
+                            if (type == 'LE' || type == 'SX') {
+                                item.postdata.transtype = 'BUY';
+                            } else if (type == 'SE' || type == 'LX') {
+                                item.postdata.transtype = 'SELL';
+                            }
+                
+                              console.log("price", price)
+                                    //console.log("item.client_services.order_type", item.client_services.order_type)
+                
+                            if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
+                                item.postdata.price = price
+                            }
+                            
+                          //  console.log("postData after ", item.postdata);
+                          
+                                   
+                       EntryPlaceOrder(item, filePath, splitArray, signal_req)
 
-                                                if (data !== undefined) {
-                                                    ExitPlaceOrder(data, item, filePath)
-                                                }
+        
+                    });
+        
+                    }catch (error) {
+                        console.log(error);
+                    }
+         
+                   
 
-                                            } catch (e) {
-                                                console.log("place order Exit SX Catch", e);
-                                            }
+                console.log("OPTION")
+                }else{
+                    console.log("CASH")
+                   // console.log("user id ", item.demat_userid)
+                    //console.log("postdata before", item.postdata)
+        
+                    if (type == 'LE' || type == 'SX') {
+                        item.postdata.transtype = 'BUY';
+                    } else if (type == 'SE' || type == 'LX') {
+                        item.postdata.transtype = 'SELL';
+                    }
+        
+                     console.log("price", price)
+                        
+        
+                    if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
+                        item.postdata.price = price
+                    }
+                          
+                     EntryPlaceOrder(item, filePath, splitArray, signal_req);
 
-                                        }
-
-                                    } else {
-                                        var possition_qty = item1.Netqty;
-                                        console.log("possition_qty", possition_qty);
-                                        let result = await BrokerResponse.findByIdAndUpdate(
-                                            bro_res_last_id,
-                                            {
-                                                symbol: input_symbol,
-                                                send_request: send_rr,
-                                                open_possition_qty: possition_qty
-                                            },
-                                            { new: true }
-                                        )
-
-
-                                        if (item1.Netqty > 0 && type == 'LX') {
-                                            if (data !== undefined) {
-                                                ExitPlaceOrder(data, item, filePath)
-                                            }
-                                        } else if (item1.Netqty < 0 && type == 'SX') {
-                                            if (data !== undefined) {
-                                                ExitPlaceOrder(data, item, filePath)
-                                            }
-
-                                        }
+                }
 
 
-                                    }
 
+                } else {
 
-                                } else {
-                                    let result = await BrokerResponse.findByIdAndUpdate(
-                                        bro_res_last_id,
-                                        {
-                                            symbol: input_symbol,
-                                            send_request: send_rr,
-                                            order_status: "Entry Npot Exist",
-                                            reject_reason: "This Symbol position Empty "
-                                        },
-                                        { new: true }
-                                    )
-                                }
-                            })
-
-
-                        } else {
-                            let result = await BrokerResponse.findByIdAndUpdate(
-                                bro_res_last_id,
-                                {
-                                    symbol: input_symbol,
-                                    send_request: send_rr,
-                                    order_status: "Position Error",
-                                    reject_reason: "Position Error "
-                                },
-                                { new: true }
-                            )
-                        }
+                    BrokerResponse.create({
+                        user_id: item._id,
+                        receive_signal: signal_req,
+                        strategy: strategy,
+                        type: type,
+                        symbol: input_symbol,
+                        order_status: 0,
+                        order_id: "",
+                        trading_symbol: "",
+                        broker_name: "",
+                        send_request: "",
+                        reject_reason: "Token not received due to wrong trade",
 
                     })
-                    .catch(async (error) => {
+                        .then((BrokerResponseCreate) => {
+                            // console.log('User created and saved:', BrokerResponseCreate._id)
+                        })
+                        .catch((err) => {
+                            try {
+                                console.error('Error creating and saving user:', err);
+                            } catch (e) {
+                                console.log("duplicate key")
+                            }
 
-                        if (error.response.data) {
-                            const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
-                            let result = await BrokerResponse.findByIdAndUpdate(
-                                bro_res_last_id,
-                                {
+                        });
+
+                }
+
+            });
+            // Send all requests concurrently using Promise.all
+            Promise.all(requestPromises)
+                .then(responses => {
+                    console.log("Response:", responses.data);
+
+                })
+                .catch(errors => {
+                    console.log("errors:", errors);
+
+                });
+
+        } else if (type == 'SX' || type == 'LX') {
+            console.log("trade exit")
+
+
+
+
+            const requestPromises = AllClientData.map(async (item) => {
+
+                if (token != 0) {
+
+                    console.log("user id ", item.demat_userid)
+                    console.log("postdata before", item.postdata)
+
+
+                    if (segment.toUpperCase() != "C") {
+                        item.postdata.symbol_id = token[0].instrument_token;
+                    }
+
+
+                    if (type == 'LE' || type == 'SX') {
+                        item.postdata.transtype = 'BUY';
+                    } else if (type == 'SE' || type == 'LX') {
+                        item.postdata.transtype = 'SELL';
+                    }
+
+                    console.log("price", price)
+                    console.log("item.client_services.order_type", item.client_services.order_type)
+
+                    if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
+                        item.postdata.price = price
+                    }
+
+                    var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
+
+                    var data_possition = {
+                        "ret": "NET"
+                    }
+                    var config = {
+                        method: 'post',
+                        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/positionAndHoldings/positionBook',
+                        headers: {
+                            'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify(data_possition)
+                    };
+                    axios(config)
+                        .then(async (response) => {
+                            console.log("response", response.data)
+                            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
+                                if (err) {
+                                    return console.log(err);
+                                }
+                            });
+
+                          
+                            if (response.data.length > 0) {
+
+                                response.data.forEach(async (item1, index) => {
+                                   // console.log("item1.Token", item1.Token);
+                                  //  console.log("item1.Token match", token[0].instrument_token);
+                                   
+                                    
+                                    if (item1.Token == token[0].instrument_token && item1.Pcode == item.postdata.pCode) {
+                                      //  console.log("item.postdata", item.postdata);
+                                      console.log("item.postdata", item.postdata.pCode);
+                                      console.log("item.postdata 5", item1.Pcode);
+
+                                        if (segment.toUpperCase() == 'C') {
+
+                                            var possition_qty = parseInt(item1.Bqty) - parseInt(item1.Sqty);
+                                            console.log("possition_qty Cash", possition_qty);
+                                               if(possition_qty == 0){
+                                                console.log("possition_qty Not Available", possition_qty);
+                                                BrokerResponse.create({
+                                                    user_id: item._id,
+                                                    receive_signal: signal_req,
+                                                    strategy: strategy,
+                                                    type: type,
+                                                    symbol: input_symbol,
+                                                    order_status: "Entry Not Exist",
+                                                    reject_reason: "This Script position Empty ",
+                                                    broker_name: "ALICE BLUE",
+                                                    send_request: send_rr,
+                                                    open_possition_qty: possition_qty,
+                                
+                                                })
+                                                .then((BrokerResponseCreate) => {
+                                                    // console.log('User created and saved:', BrokerResponseCreate._id)
+                                                })
+                                                .catch((err) => {
+                                                    try {
+                                                        console.error('Error creating and saving user:', err);
+                                                    } catch (e) {
+                                                        console.log("duplicate key")
+                                                    }
+                            
+                                                });
+  
+
+                                               }else{
+                                                
+                                                console.log("possition_qty Cash trade", possition_qty);
+                                                if ((item1.Bqty - item1.Sqty) > 0 && type == 'LX') {
+                                                    ExitPlaceOrder(item, filePath, possition_qty, splitArray, signal_req)
+                                                } else if ((item1.Bqty - item1.Sqty) < 0 && type == 'SX') {
+                                                    ExitPlaceOrder(item, filePath, possition_qty, splitArray, signal_req)
+                                                }
+                                               } 
+                                           
+                                              
+                                             
+                                            
+
+                                        } else {
+                                            var possition_qty = item1.Netqty;
+                                            console.log("possition_qty", possition_qty);
+
+                                            if(possition_qty == 0){
+                                                console.log("possition_qty Not Available", possition_qty);
+                                                BrokerResponse.create({
+                                                    user_id: item._id,
+                                                    receive_signal: signal_req,
+                                                    strategy: strategy,
+                                                    type: type,
+                                                    symbol: input_symbol,
+                                                    order_status: "Entry Not Exist",
+                                                    reject_reason: "This Script position Empty ",
+                                                    broker_name: "ALICE BLUE",
+                                                    send_request: send_rr,
+                                                    open_possition_qty: possition_qty,
+                                
+                                                })
+                                                .then((BrokerResponseCreate) => {
+                                                    // console.log('User created and saved:', BrokerResponseCreate._id)
+                                                })
+                                                .catch((err) => {
+                                                    try {
+                                                        console.error('Error creating and saving user:', err);
+                                                    } catch (e) {
+                                                        console.log("duplicate key")
+                                                    }
+                            
+                                                });
+  
+
+                                               }else{
+
+                                                if (item1.Netqty > 0 && type == 'LX') {
+                                                    ExitPlaceOrder(item, filePath, possition_qty, splitArray, signal_req)
+                                                } else if (item1.Netqty < 0 && type == 'SX') {
+                                                    ExitPlaceOrder(item, filePath, possition_qty, splitArray, signal_req)
+                                                }
+
+                                            }
+
+                                          
+                                        }
+
+
+                                    } else {
+                                       //console.log("else")
+                                    }
+                                })
+
+                            } else {
+                             
+                                BrokerResponse.create({
+                                    user_id: item._id,
+                                    receive_signal: signal_req,
+                                    strategy: strategy,
+                                    type: type,
                                     symbol: input_symbol,
+                                    order_status: "Entry Not Exist",
+                                    order_id: "",
+                                    trading_symbol: "",
+                                    broker_name: "ALICE BLUE",
                                     send_request: send_rr,
-                                    order_status: "Error",
-                                    reject_reason: message
-                                },
-                                { new: true }
-                            )
-                        } else {
-                            const message = (JSON.stringify(error)).replace(/["',]/g, '');
+                                    reject_reason: "All position Empty",
 
+                                })
+                                .then((BrokerResponseCreate) => {
+                                    // console.log('User created and saved:', BrokerResponseCreate._id)
+                                })
+                                .catch((err) => {
+                                    try {
+                                        console.error('Error creating and saving user:', err);
+                                    } catch (e) {
+                                        console.log("duplicate key")
+                                    }
 
-                            let result = await BrokerResponse.findByIdAndUpdate(
-                                bro_res_last_id,
-                                {
+                                });
+
+                            }
+                           
+
+                           
+
+                        })
+                        .catch(async (error) => {
+
+                            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
+                                if (err) {
+                                    return console.log(err);
+                                }
+                            });
+
+                            if (error.response) {
+                                const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+                                BrokerResponse.create({
+                                    user_id: item._id,
+                                    receive_signal: signal_req,
+                                    strategy: strategy,
+                                    type: type,
                                     symbol: input_symbol,
+                                    order_status: "position request error",
+                                    order_id: "",
+                                    trading_symbol: "",
+                                    broker_name: "ALICE BLUE",
                                     send_request: send_rr,
-                                    order_status: "Error",
-                                    reject_reason: message
-                                },
-                                { new: true }
-                            )
-                        }
-                    });
+                                    reject_reason: message,
+
+                                })
+                                    .then((BrokerResponseCreate) => {
+                                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                                    })
+                                    .catch((err) => {
+                                        try {
+                                            console.error('Error creating and saving user:', err);
+                                        } catch (e) {
+                                            console.log("duplicate key")
+                                        }
+
+                                    });
+                            } else {
+                                const message = (JSON.stringify(error)).replace(/["',]/g, '');
+
+                                BrokerResponse.create({
+                                    user_id: item._id,
+                                    receive_signal: signal_req,
+                                    strategy: strategy,
+                                    type: type,
+                                    symbol: input_symbol,
+                                    order_status: "position request error",
+                                    order_id: "",
+                                    trading_symbol: "",
+                                    broker_name: "ALICE BLUE",
+                                    send_request: send_rr,
+                                    reject_reason: message,
+
+                                })
+                                    .then((BrokerResponseCreate) => {
+                                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                                    })
+                                    .catch((err) => {
+                                        try {
+                                            console.error('Error creating and saving user:', err);
+                                        } catch (e) {
+                                            console.log("duplicate key")
+                                        }
+
+                                    });
+
+
+                            }
+                        });
 
 
 
-            }
+
+
+
+                } else {
+
+                    BrokerResponse.create({
+                        user_id: item._id,
+                        receive_signal: signal_req,
+                        strategy: strategy,
+                        type: type,
+                        symbol: input_symbol,
+                        order_status: 0,
+                        order_id: "",
+                        trading_symbol: "",
+                        broker_name: "ALICE BLUE",
+                        send_request: send_rr,
+                        reject_reason: "Token not received due to wrong trade",
+
+                    })
+                        .then((BrokerResponseCreate) => {
+                            // console.log('User created and saved:', BrokerResponseCreate._id)
+                        })
+                        .catch((err) => {
+                            try {
+                                console.error('Error creating and saving user:', err);
+                            } catch (e) {
+                                console.log("duplicate key")
+                            }
+
+                        });
+
+                }
+
+
+
+
+            });
+            // Send all requests concurrently using Promise.all
+            Promise.all(requestPromises)
+                .then(responses => {
+                    console.log("Response:", responses.data);
+
+                })
+                .catch(errors => {
+                    console.log("errors:", errors);
+
+                });
 
         }
+
+
 
 
     } catch (error) {
@@ -681,12 +539,29 @@ const place_order = async (item, splitArray, bro_res_last_id, token, logger, fil
 
 }
 
-const ExitPlaceOrder = async (data, item, filePath) => {
+const EntryPlaceOrder = async (item, filePath, splitArray, signal_req) => {
 
-    var send_rr = Buffer.from(qs.stringify(data)).toString('base64');
+    var dt = splitArray[0]
+    var input_symbol = splitArray[1]
+    var type = splitArray[2]
+    var tr_price = splitArray[3]
+    var price = splitArray[4]
+    var sq_value = splitArray[5]
+    var sl_value = splitArray[6]
+    var tsl = splitArray[7]
+    var segment = splitArray[8]
+    var strike = splitArray[9]
+    var option_type = splitArray[10]
+    var expiry = splitArray[11]
+    var strategy = splitArray[12]
+    var qty_percent = splitArray[13]
+    var client_key = splitArray[14]
+    var demo = splitArray[15]
+
+    var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
 
-    fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE BEFORE PLACE ORDER USER EXIT- ' + item.UserName + ' REQUEST -' + JSON.stringify(data) + '\n', function (err) {
+    fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE BEFORE PLACE ORDER USER ENTRY- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
         if (err) {
             return console.log(err);
         }
@@ -700,53 +575,276 @@ const ExitPlaceOrder = async (data, item, filePath) => {
             'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify([data])
+        data: JSON.stringify([item.postdata])
 
     };
 
     axios(config)
         .then(async (response) => {
+            //console.log("respose ENTRY", response.data)
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
+                if (err) {
+                    return console.log(err);
+                }
+            });
+
+            if (response.data[0].stat == "Ok") {
+
+                BrokerResponse.create({
+                    user_id: item._id,
+                    receive_signal: signal_req,
+                    strategy: strategy,
+                    type: type,
+                    symbol: input_symbol,
+                    order_status: response.data[0].stat,
+                    order_id: response.data[0].NOrdNo,
+                    trading_symbol: "",
+                    broker_name: "ALICE BLUE",
+                    send_request: send_rr,
+                    
+
+                })
+                    .then((BrokerResponseCreate) => {
+                         console.log('User created and saved:', BrokerResponseCreate._id)
+                    })
+                    .catch((err) => {
+                        try {
+                            console.error('Error creating and saving user:', err);
+                        } catch (e) {
+                            console.log("duplicate key")
+                        }
+
+                    });
 
 
+            } else {
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
+                const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
+                BrokerResponse.create({
+                    user_id: item._id,
+                    receive_signal: signal_req,
+                    strategy: strategy,
+                    type: type,
+                    symbol: input_symbol,
+                    order_status: 0,
+                    order_id: "",
+                    trading_symbol: "",
+                    broker_name: "ALICE BLUE",
+                    send_request: send_rr,
+                    reject_reason: message,
+
+                })
+                    .then((BrokerResponseCreate) => {
+                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                    })
+                    .catch((err) => {
+                        try {
+                            console.error('Error creating and saving user:', err);
+                        } catch (e) {
+                            console.log("duplicate key")
+                        }
+
+                    });
+
+            }
+
+
+        })
+        .catch(async (error) => {
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - ' + item.UserName + ' ERROR -' + JSON.stringify(error) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
             });
 
 
-            if (response.data[0].stat == "Ok") {
+      
+            try {
 
-                let result = await BrokerResponse.findByIdAndUpdate(
-                    bro_res_last_id,
-                    {
-                        symbol: input_symbol,
-                        send_request: send_rr,
-                        order_id: response.data[0].NOrdNo,
-                        order_status: response.data[0].stat
-                    },
-                    { new: true }
-                )
+                if (error) {
+                    if (error.response) {
+                        const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+
+                        BrokerResponse.create({
+                            user_id: item._id,
+                            receive_signal: signal_req,
+                            strategy: strategy,
+                            type: type,
+                            symbol: input_symbol,
+                            order_status: "Error", 
+                            trading_symbol: "",
+                            broker_name: "ALICE BLUE",
+                            send_request: send_rr,
+                            reject_reason: message,
+                        })
+                        .then((BrokerResponseCreate) => {
+                            console.log('User created and saved:', BrokerResponseCreate._id)
+                        })
+                        .catch((err) => {
+                            try {
+                                console.error('Error creating and saving user:', err);
+                            } catch (e) {
+                                console.log("duplicate key")
+                            }
+
+                        });
+
+
+                    } else {
+                        const message = (JSON.stringify(error)).replace(/["',]/g, '');
+
+                        BrokerResponse.create({
+                            user_id: item._id,
+                            receive_signal: signal_req,
+                            strategy: strategy,
+                            type: type,
+                            symbol: input_symbol,
+                            order_status: "Error", 
+                            trading_symbol: "",
+                            broker_name: "ALICE BLUE",
+                            send_request: send_rr,
+                            reject_reason: message,
+                        })
+                        .then((BrokerResponseCreate) => {
+                            console.log('User created and saved:', BrokerResponseCreate._id)
+                        })
+                        .catch((err) => {
+                            try {
+                                console.error('Error creating and saving user:', err);
+                            } catch (e) {
+                                console.log("duplicate key")
+                            }
+
+                        });
+
+
+                    }
+                }
+
+            } catch (e) {
+                console.log("error 1", e);
+            }
+
+        });
+
+
+
+}
+
+const ExitPlaceOrder = async (item, filePath, possition_qty, splitArray, signal_req) => {
+   
+   // console.log("INSIDE EXIT FUNCTION")
+   // console.log("INSIDE EXIT FUNCTION possition_qty",possition_qty)
+  
+    var dt = splitArray[0]
+    var input_symbol = splitArray[1]
+    var type = splitArray[2]
+    var tr_price = splitArray[3]
+    var price = splitArray[4]
+    var sq_value = splitArray[5]
+    var sl_value = splitArray[6]
+    var tsl = splitArray[7]
+    var segment = splitArray[8]
+    var strike = splitArray[9]
+    var option_type = splitArray[10]
+    var expiry = splitArray[11]
+    var strategy = splitArray[12]
+    var qty_percent = splitArray[13]
+    var client_key = splitArray[14]
+    var demo = splitArray[15]
+
+    var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
+   
+    fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE BEFORE PLACE ORDER USER EXIT- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
+        if (err) {
+            return console.log(err);
+        }
+    });
+
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+        headers: {
+            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+            'Content-Type': 'application/json'
+        },
+        data: JSON.stringify([item.postdata])
+
+    };
+
+    axios(config)
+        .then(async (response) => {
+           // console.log("respose Exit", response.data)
+           
+           fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
+            if (err) {
+                return console.log(err);
+            }
+          });
+          
+
+
+            if (response.data[0].stat == "Ok") {
+                BrokerResponse.create({
+                    user_id: item._id,
+                    receive_signal: signal_req,
+                    strategy: strategy,
+                    type: type,
+                    symbol: input_symbol,
+                    order_status: response.data[0].stat,
+                    order_id: response.data[0].NOrdNo,
+                    trading_symbol: "",
+                    broker_name: "ALICE BLUE",
+                    send_request: send_rr,
+                    open_possition_qty: possition_qty,
+
+                })
+                    .then((BrokerResponseCreate) => {
+                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                    })
+                    .catch((err) => {
+                        try {
+                            console.error('Error creating and saving user:', err);
+                        } catch (e) {
+                            console.log("duplicate key")
+                        }
+
+                    });
+
 
             } else {
 
                 const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
+                BrokerResponse.create({
+                    user_id: item._id,
+                    receive_signal: signal_req,
+                    strategy: strategy,
+                    type: type,
+                    symbol: input_symbol,
+                    order_status: 0,
+                    order_id: "",
+                    trading_symbol: "",
+                    broker_name: "ALICE BLUE",
+                    send_request: send_rr,
+                    reject_reason: message,
 
+                })
+                    .then((BrokerResponseCreate) => {
+                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                    })
+                    .catch((err) => {
+                        try {
+                            console.error('Error creating and saving user:', err);
+                        } catch (e) {
+                            console.log("duplicate key")
+                        }
 
-                let result = await BrokerResponse.findByIdAndUpdate(
-                    bro_res_last_id,
-                    {
-                        symbol: input_symbol,
-                        send_request: send_rr,
-                        order_id: response.data[0].NOrdNo,
-                        order_status: "Error",
-                        reject_reason: response.data
-                    },
-                    { new: true }
-                )
+                    });
 
             }
+
 
         })
         .catch(async (error) => {
@@ -756,37 +854,66 @@ const ExitPlaceOrder = async (data, item, filePath) => {
                     return console.log(err);
                 }
             });
-
+            
             try {
 
                 if (error) {
                     if (error.response) {
                         const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
 
-                        let result = await BrokerResponse.findByIdAndUpdate(
-                            bro_res_last_id,
-                            {
-                                symbol: input_symbol,
-                                send_request: send_rr,
-                                order_status: "Error",
-                                reject_reason: message
-                            },
-                            { new: true }
-                        )
+                        BrokerResponse.create({
+                            user_id: item._id,
+                            receive_signal: signal_req,
+                            strategy: strategy,
+                            type: type,
+                            symbol: input_symbol,
+                            order_status: "Error", 
+                            trading_symbol: "",
+                            broker_name: "ALICE BLUE",
+                            send_request: send_rr,
+                            reject_reason: message,
+                        })
+                        .then((BrokerResponseCreate) => {
+                            console.log('User created and saved:', BrokerResponseCreate._id)
+                        })
+                        .catch((err) => {
+                            try {
+                                console.error('Error creating and saving user:', err);
+                            } catch (e) {
+                                console.log("duplicate key")
+                            }
+
+                        });
+
+
                     } else {
                         const message = (JSON.stringify(error)).replace(/["',]/g, '');
 
+                        BrokerResponse.create({
+                            user_id: item._id,
+                            receive_signal: signal_req,
+                            strategy: strategy,
+                            type: type,
+                            symbol: input_symbol,
+                            order_status: "Error", 
+                            trading_symbol: "",
+                            broker_name: "ALICE BLUE",
+                            send_request: send_rr,
+                            reject_reason: message,
+                        })
+                        .then((BrokerResponseCreate) => {
+                            console.log('User created and saved:', BrokerResponseCreate._id)
+                        })
+                        .catch((err) => {
+                            try {
+                                console.error('Error creating and saving user:', err);
+                            } catch (e) {
+                                console.log("duplicate key")
+                            }
 
-                        let result = await BrokerResponse.findByIdAndUpdate(
-                            bro_res_last_id,
-                            {
-                                symbol: input_symbol,
-                                send_request: send_rr,
-                                order_status: "Error",
-                                reject_reason: message
-                            },
-                            { new: true }
-                        )
+                        });
+
+
                     }
                 }
 
@@ -794,10 +921,7 @@ const ExitPlaceOrder = async (data, item, filePath) => {
                 console.log("error 1", e);
             }
 
-
-
         });
-
 
 
 }
