@@ -29,7 +29,7 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions, pagination1 }) =
 
 
 
-console.log("pagination1" ,pagination1)
+// console.log("pagination1" ,pagination1)
 
     return <>
         <div className=''>

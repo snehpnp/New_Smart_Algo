@@ -251,7 +251,7 @@ const BrokerResponse = () => {
                     <td>{BrokerResponseId.reject_reason}</td>
                   </tr>
                   <tr>
-                    <td className="bg-table"> Order Date</td>
+                    <td className="bg-table"> Order Data</td>
                     <td className="order-date-cell">{BrokerResponseId.order_view_date}</td>
                   </tr>
                 </table>

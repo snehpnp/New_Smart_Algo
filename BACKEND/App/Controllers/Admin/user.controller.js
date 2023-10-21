@@ -314,6 +314,17 @@ class Employee {
       var StartDate1 = "";
       var EndDate1 = "";
 
+      var PID = new ObjectId(req.parent_id);
+
+      console.log("PID",PID);
+
+      // FIND PARENT ROLE
+      const parentRole = await User_model.findOne({
+        _id: PID,
+      }).select('Role')
+
+      
+
       // IF USER ALEARDY EXIST
       const existingUsername = await User_model.findOne({
         UserName: req.UserName,
@@ -701,7 +712,7 @@ class Employee {
           EndDate: EndDate1 == null ? existingUsername.EndDate : EndDate1,
           broker: req.broker,
           parent_id: req.parent_id,
-          parent_role: req.parent_role,
+          parent_role: parentRole.Role,
           api_secret: req.api_secret,
           app_id: req.app_id,
           client_code: req.client_code,

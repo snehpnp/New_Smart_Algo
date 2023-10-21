@@ -36,7 +36,7 @@ const Broker_info = () => {
         data: []
     });
 
-    console.log("getBrokerId", typeof getBrokerId)
+    // console.log("getBrokerId", typeof getBrokerId)
 
 
     const data = async () => {
