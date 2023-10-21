@@ -161,9 +161,9 @@ const BrokerResponse = () => {
   const GetAllServicesName = async (row) => {
     console.log(row);
     // GetBrokerInforMation(row)
-    
-      setBrokerResponseId(row)
-      setshowModal(true)
+
+    setBrokerResponseId(row)
+    setshowModal(true)
 
 
   }
@@ -238,7 +238,7 @@ const BrokerResponse = () => {
                     <td>{BrokerResponseId.order_id}</td>
                   </tr>
                   <tr>
-                   
+
                     <td className="bg-table"> Signal</td>
                     <td className="order-date-cell">{atob(BrokerResponseId.send_request)}</td>
                   </tr>
