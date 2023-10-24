@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import { Add_Group } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 import { Trash2 } from 'lucide-react';
+import { No_Negetive_Input_regex } from '../../../../Utils/Common_regex';
 
 
 
@@ -50,7 +51,7 @@ const AddStrategy = () => {
 
     const [selectAllFiltered, setSelectAllFiltered] = useState(false);
 
-console.log("selectedServices" ,selectedServices)
+    console.log("selectedServices", selectedServices)
 
 
 
@@ -114,32 +115,38 @@ console.log("selectedServices" ,selectedServices)
     //  For Set Group-Qty
 
     const InputGroupQty = (event, id, servicename, segment) => {
+
+
         const updatedQty = event.target.value === "" ? 0 : parseInt(event.target.value);
-      
+
+        const aa = No_Negetive_Input_regex(updatedQty)
+
+        console.log("No_Negetive_Input_regex", aa)
+
         // Update the quantity for the selected service
         setSelectedServices((prevInfo) =>
-          prevInfo.map((info) =>
-            info.service_id === id
-              ? {
-                  ...info,
-                  group_qty: updatedQty,
-                }
-              : info
-          )
+            prevInfo.map((info) =>
+                info.service_id === id
+                    ? {
+                        ...info,
+                        group_qty: updatedQty,
+                    }
+                    : info
+            )
         );
-      
+
         // Update the quantity in the GroupQty array
         setGroupQty((prevQtys) => ([
-          ...prevQtys.filter((qtyInfo) => qtyInfo.service_id !== id),
-          {
-            service_id: id,
-            segment: segment,
-            name: servicename,
-            group_qty: updatedQty,
-          }
+            ...prevQtys.filter((qtyInfo) => qtyInfo.service_id !== id),
+            {
+                service_id: id,
+                segment: segment,
+                name: servicename,
+                group_qty: updatedQty,
+            }
         ]));
-      };
-      
+    };
+
 
 
     //  For Remove Service From Select And Table
@@ -242,7 +249,7 @@ console.log("selectedServices" ,selectedServices)
             }
             if (selectedServices.length > 50) {
                 alert("can Not Add More Than 50 Service")
-            
+
             }
 
             return errors;
@@ -271,10 +278,10 @@ console.log("selectedServices" ,selectedServices)
 
 
     const fields = [
-        { name: 'groupname', label: 'Strategy Name', type: 'text', label_size: 12, col_size: 6, disable: false },
+        { name: 'groupname', label: 'Group Name', type: 'text', label_size: 12, col_size: 6, disable: false },
         {
             name: 'segment',
-            label: 'To Month',
+            label: 'Segment',
             type: 'select',
             options: GetAllSgments.data && GetAllSgments.data.map((item) => ({ label: item.name, value: item.segment })),
             label_size: 12, col_size: 6, disable: false,
@@ -320,18 +327,18 @@ console.log("selectedServices" ,selectedServices)
                                             <td>{item.name}</td>
                                             <td>
                                                 <input
-                                                   type="number"
-                                                   className="form-control col-md-1"
-                                                   placeholder="Enter Qty"
-                                                   value={item.group_qty} // Use item.group_qty to set the value
-                                                   onChange={(e) => InputGroupQty(e, item.service_id, item.name, item.segment)}
-                                                   min={0}
+                                                    type="text"
+                                                    className="form-control col-md-1"
+                                                    placeholder="Enter Qty"
+                                                    value={item.group_qty}
+                                                    onChange={(e) => InputGroupQty(e, item.service_id, item.name, item.segment)}
+                                                    // min={0}
 
-                                            />
+                                                />
                                             </td>
                                             <td onClick={() => {
                                                 remoeveService(item.service_id)
-                                            }}><Trash2  className='text-danger'/></td>
+                                            }}><Trash2 className='text-danger' /></td>
 
                                         </tr>
                                     </>

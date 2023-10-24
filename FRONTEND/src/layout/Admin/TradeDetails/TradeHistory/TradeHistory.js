@@ -67,9 +67,9 @@ const TradeHistory = () => {
 
 
   const [UserDetails, setUserDetails] = useState([]);
-  const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
+  const [StrategyClientStatus, setStrategyClientStatus] = useState("");
   const [SelectSegment, setSelectSegment] = useState("null");
-  const [SelectService, setSelectService] = useState("null");
+  const [SelectService, setSelectService] = useState("");
 
 
   const [SocketState, setSocketState] = useState("null");
@@ -84,7 +84,7 @@ const TradeHistory = () => {
     e.preventDefault();
 
     await dispatch(
-      Get_Tradehisotry({ startDate: startDate, endDate: endDate, token: token })
+      Get_Tradehisotry({ startDate: startDate, endDate: endDate, service: SelectService, strategy: StrategyClientStatus, token: token })
     )
       .unwrap()
       // await dispatch(Get_Tradehisotry({ startDate: "2023/9/1", endDate: "2023/9/28", token: token })).unwrap()
@@ -601,27 +601,38 @@ const TradeHistory = () => {
   }, [])
 
 
-  console.log("originalData", originalData)
+  // console.log("originalData", originalData)
 
-  //  MANAGE MULTIFILTER
+  // //  MANAGE MULTIFILTER
 
-  useEffect(() => {
-    const strategyFilter = StrategyClientStatus.toString().toLowerCase();
-    const serviceFilter = SelectService.toString().toLowerCase();
+  // // Existing code...
+  // useEffect(() => {
+  //   // Multi-filtering logic
+  //   if (SelectService !== "null" || StrategyClientStatus !== "null") {
+  //     const filteredData = originalData.filter((item) => {
+  //       const itemStrategy = item.strategy.toString().toLowerCase();
+  //       const itemService = item.trade_symbol.toString().toLowerCase();
+  //       const itemService1 = item.symbol.toString().toLowerCase();
 
-    const filteredData = originalData.filter((item) => {
-      const itemStrategy = item.strategy.toString().toLowerCase();
-      const itemService = item.trade_symbol.toString().toLowerCase();
+  //       const isServiceMatch =
+  //         SelectService === "null" ||
+  //         itemService === SelectService ||
+  //         itemService1 === SelectService;
 
-      return (
-        (!SelectService || itemService === serviceFilter) ||
-        (!StrategyClientStatus || itemStrategy === strategyFilter)
-      );
-    });
+  //       const isStrategyMatch =
+  //         StrategyClientStatus === "null" || itemStrategy === StrategyClientStatus;
 
-    console.log("filteredData", filteredData);
+  //       return isServiceMatch || isStrategyMatch;
+  //     });
+  //     console.log("filteredData", filteredData);
+  //     // setTradeHistoryData({
+  //     //   loading: false,
+  //     //   data: filteredData,
+  //     // });
+  //   }
 
-  }, [SelectService, StrategyClientStatus]);
+  // }, [SelectService, StrategyClientStatus, originalData]);
+
 
 
 
@@ -703,7 +714,7 @@ const TradeHistory = () => {
                 onChange={(e) => setSelectService(e.target.value)}
                 value={SelectService}
               >
-                <option value="null" disabled>All</option>
+                <option value="null" selected>All</option>
                 {ServiceData.data &&
                   ServiceData.data.map((item) => {
                     return (
@@ -727,7 +738,7 @@ const TradeHistory = () => {
                 onChange={(e) => setStrategyClientStatus(e.target.value)}
                 value={StrategyClientStatus}
               >
-                <option value="null">All</option>
+                <option value="null" selected >All</option>
                 {getAllStrategyName.data &&
                   getAllStrategyName.data.map((item) => {
                     return (

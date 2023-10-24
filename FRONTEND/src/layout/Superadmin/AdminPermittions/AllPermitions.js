@@ -179,7 +179,7 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Sidebar Permission">
                     <FolderLock size={20} color="#198754" strokeWidth={2} className="mx-1"
-                        onClick={(e) => setshowModal(true)}
+                        onClick={(e) => { setshowPanelName({ panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowModal(true) }}
                     />
                 </span>
             )
@@ -273,7 +273,7 @@ const AllPermitions = () => {
                                 themeData.data && themeData.data.length === 0 ? (
                                     'No data found') :
                                     <>
-                                        <SidebarPermission showModal={showModal} setshowModal={() => setshowModal(false)} />
+                                        <SidebarPermission showPanelName={showPanelName} showModal={showModal} setshowModal={() => setshowModal(false)} />
                                         <BrokerPermittion List={showBrokerDetails} showModal={showBrokerModal} setshowModal={() => setshowBrokerModal(false)} />
                                         <ShowAllSubadmins List={ShowSubadminList} showModal={showSubadminsModal} setshowModal={() => setshowSubadminsModal(false)} />
                                         <ShowAllClients List={ShowClientsList} showModal={ShowClientsModal} setshowModal={() => setShowClientsModal(false)} />

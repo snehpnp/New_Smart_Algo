@@ -67,6 +67,8 @@ import AddStrategy from '../layout/Admin/Service/AllStrategy/AddStrategy';
 import EditStrategy from '../layout/Admin/Service/AllStrategy/EditStrategy';
 import { Import } from 'lucide-react';
 
+// OPTION CHAIN
+import Opation_Chain from '../layout/Admin/OptionChain/Opation_Chain';
 
 
 // CREATE STRATEGY
@@ -126,6 +128,7 @@ const Admin = () => {
                 <Route exact path="/updates" element={<ReleaseUpdate />} />
                 <Route exact path="/createstrategy" element={<CreateStrategy />} />
                 <Route exact path="/brokerinfo" element={<BrokerInfor />} />
+                <Route exact path="/optionchain" element={<Opation_Chain />} />
 
             </Routes>
         </>

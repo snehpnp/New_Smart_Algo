@@ -33,5 +33,7 @@ module.exports = {
     Broker_information: require('./Broker_information.model'),
     Messagebrodcast_data: require('./Messagebrodcast.model'),
     live_price: require('./Live_price.model'),
+    Admin_Permission: require('./admin_permision.model'),
+    option_chain_symbols: require('./Get_Option_Chain_Symboll.model'),
 
 };

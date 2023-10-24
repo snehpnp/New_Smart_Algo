@@ -321,21 +321,21 @@ const AllLicence = () => {
 
 
                 <div className="row mb-5">
-                  <div className="col-2 mx-auto border border-dark text-center">
+                  <div className="col-2 mx-auto border border-dark text-center rounded-3">
                     <h6 >Start Date</h6>
                     <span >2023-09-24 21:57:30</span>
                   </div>
-                  <div className="col-2 mx-auto border border-dark text-center">
+                  <div className="col-2 mx-auto border border-dark text-center rounded-3">
                     <h6 >Total Licence</h6>
                     <h6 >
                       {getAllClients1.data && getAllClients1.data.total_licence === undefined ? 0 : getAllClients1.data.total_licence}
                     </h6>
                   </div>
-                  <div className="col-2 mx-auto border border-dark text-center">
+                  <div className="col-2 mx-auto border border-dark text-center rounded-3">
                     <h6 >Used Licence</h6>
                     <h6 >{UsedLicence(getAllClients1)}</h6>
                   </div>
-                  <div className="col-2 mx-auto  border border-dark text-center">
+                  <div className="col-2 mx-auto  border border-dark text-center rounded-3">
                     <h6 >Remaining Licence</h6>
                     <h6 >
                       {(getAllClients1.data && getAllClients1.data.total_licence) === undefined ? 0 : getAllClients1.data.total_licence -
@@ -345,7 +345,7 @@ const AllLicence = () => {
                         )}
                     </h6>
                   </div>
-                  <div className="col-2 mx-auto border border-dark text-center">
+                  <div className="col-2 mx-auto border border-dark text-center rounded-3">
                     <h6 >This Month Licence</h6>
                     <span >
                       {usedLicence ? usedLicence : "Please Select Month"}

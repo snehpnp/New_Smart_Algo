@@ -1,0 +1,55 @@
+module.exports = function (app) {
+    const axios = require('axios');
+    const excel = require('exceljs');
+    const db = require("../Models");
+    const Get_Option_Chain_modal = db.option_chain_symbols;
+
+
+    const fs = require('fs');
+    app.get('/token_symbolls', async (req, res) => {
+        return
+        res.send("done")
+        try {
+            axios.get("https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json", {
+                maxBodyLength: Infinity,
+                headers: {}
+            }).then(async (response) => {
+                if (response) {
+
+                    var unique_key = []
+                    let count = 0
+                    response.data.forEach((item) => {
+                        if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+                            unique_key.push(`${item.name}-${item.instrumenttype}`);
+
+                            if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
+                                count++
+
+                                const User = new Get_Option_Chain_modal({
+                                    symbol: item.name,
+                                    price: 0,
+                                    token: "null"
+
+                                });
+                                const userinfo = User.save()
+
+
+                                // connection1.query('INSERT INTO option_chain (`symbol`,`created_at`) VALUES ("' + item.name + '","' + dformat + '")', (err, result) => {
+                                //     console.log("err", err)
+
+                            }
+                        }
+                    });
+                }
+                res.send("done")
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+        catch (err) {
+            console.log("err", err);
+        }
+
+
+    })
+}

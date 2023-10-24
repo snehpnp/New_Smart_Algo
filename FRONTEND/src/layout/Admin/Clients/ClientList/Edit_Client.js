@@ -12,15 +12,9 @@ import { GET_ALL_GROUP_SERVICES, Find_One_User, Update_User } from '../../../../
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
 import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
-import Form from 'react-bootstrap/Form';
 import { check_Device } from "../../../../Utils/find_device";
-
-
-import { Add_User } from '../../../../ReduxStore/Slice/Admin/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
-
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
-
 import "../../../../App.css"
 import { f_time } from '../../../../Utils/Date_formet';
 
@@ -133,7 +127,7 @@ const AddClient = () => {
       Strategy: false,
       licence1: 'null'
     },
-    
+
 
 
     validate: (values) => {
@@ -289,14 +283,27 @@ const AddClient = () => {
 
 
 
-  useEffect(() => {
-    let Service_Month_Arr = []
-    for (let index = 1; index < 2; index++) {
-      Service_Month_Arr.push({ month: index, endDate: `${index} Month Licence Expired On ${new Date(new Date().getFullYear(), new Date().getMonth() + index, new Date().getDate()).toString().split('00:00:00')[0]}` })
-    }
-    setfirst(Service_Month_Arr)
-  }, [])
 
+
+  useEffect(() => {
+    let Service_Month_Arr = [];
+    for (let index = 1; index <= 1; index++) {
+
+      const currentDate = UserData.data.data !== undefined
+        ? new Date(UserData.data.data[0].EndDate)
+        : new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+      const endMonth = (currentMonth + index) % 12;
+      const endYear = currentYear + Math.floor((currentMonth + index) / 12);
+
+      // Create the end date string
+      const endDate = `${index} Month Licence Expires On ${currentDate.getDate()}-${endMonth + 1}-${endYear}`;
+
+      Service_Month_Arr.push({ month: index, endDate });
+    }
+    setfirst(Service_Month_Arr);
+  }, [UserData.data.data]);
 
   const brokerOptions = [
     // { label: 'Market Hub', value: '1' },
@@ -310,7 +317,7 @@ const AddClient = () => {
     // { label: 'Choice', value: '9' },
     // { label: 'Anand Rathi', value: '10' },
     // { label: 'B2C', value: '11' },
-    // { label: 'Angel', value: '12' },
+    { label: 'Angel', value: '12' },
     // { label: 'Fyers', value: '13' },
     // { label: 'Zerodha', value: '15' }
   ];
@@ -383,7 +390,7 @@ const AddClient = () => {
       name: 'demat_userid',
       label: formik.values.broker === 9 ? 'User Id' : 'Demat UserId', type: 'text',
       showWhen: values => values.broker === '9' || values.broker === '2',
-     label_size: 12, col_size: 6, disable: false
+      label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'app_id',
@@ -642,7 +649,7 @@ const AddClient = () => {
     })).unwrap().then((response) => {
       if (response.status) {
 
-      
+
         setAllStrategy({
           loading: false,
           data: response.data
@@ -684,11 +691,11 @@ const AddClient = () => {
   }, [UserData.data.strategy, AllStrategy.data]);
 
 
-  // console.log("GetServices && GetServices" ,GetServices && GetServices)
 
   return (
     <>
-      <Content Page_title="Edit  Client" button_title='Back' route="/admin/allclients">
+      <Content Page_title="Edit  Client" button_title='Back' route="/admin/allclients"
+        showEdit={true} show_Stat_End_date={UserData.data.data !== undefined && UserData.data.data[0]}>
         <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
@@ -708,12 +715,12 @@ const AddClient = () => {
                 <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
                   setShowAllStratagy(e.target.checked)
                 }} />
-              
+
               </label>
 
- 
+
               <>
-              <h6>All Strategy</h6>
+                <h6>All Strategy</h6>
 
                 {selectedStrategies.map((strategy) => (
 

@@ -14,6 +14,7 @@ import { Update_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/G
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 import { Trash2 } from 'lucide-react';
 import { Get_Service_By_Group_Id_For_Edit_Update } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
+import { No_Negetive_Input_regex } from '../../../../Utils/Common_regex';
 
 
 
@@ -173,23 +174,31 @@ const AddStrategy = () => {
 
     const InputGroupQty = (event, id, servicename, segement, qty) => {
 
+        // const aa = No_Negetive_Input_regex(event.target.value)
         const updatedQty = event.target.value === "" ? qty : event.target.value;
+
+
+        // console.log("aa", aa)
+
 
         // Check if the selected service already exists in selectedServices
         const existingServiceIndex = selectedServices.findIndex((item) => item.service_id === id);
 
-        if (existingServiceIndex !== -1) {
-            // Update quantity if the service already exists
-            const updatedSelectedServices = [...selectedServices];
-            updatedSelectedServices[existingServiceIndex].group_qty = parseInt(updatedQty);
-            setSelectedServices(updatedSelectedServices);
-        } else {
-            // Add the new service to selectedServices
-            setSelectedServices((prevServices) => [
-                ...prevServices,
-                { service_id: id, name: servicename, segment: segement, group_qty: parseInt(updatedQty) },
-            ]);
-        }
+   
+
+            if (existingServiceIndex !== -1) {
+                // Update quantity if the service already exists
+                const updatedSelectedServices = [...selectedServices];
+                updatedSelectedServices[existingServiceIndex].group_qty = parseInt(updatedQty);
+                setSelectedServices(updatedSelectedServices);
+            } else {
+                // Add the new service to selectedServices
+                setSelectedServices((prevServices) => [
+                    ...prevServices,
+                    { service_id: id, name: servicename, segment: segement, group_qty: parseInt(updatedQty) },
+                ]);
+            }
+    
 
 
     };
@@ -374,7 +383,7 @@ const AddStrategy = () => {
                                     <th>#</th>
                                     <th>Segment</th>
                                     <th>Service Name</th>
-                                    {/* <th>Qty</th> */}
+                                    <th>Qty</th>
                                     <th>Remove</th>
                                 </tr>
                             </thead>
@@ -396,7 +405,7 @@ const AddStrategy = () => {
 
                                                 />
                                             </td>
-                                            <td onClick={() => remoeveService(item.service_id)}><Trash2 /></td>
+                                            <td onClick={() => remoeveService(item.service_id)} className='text-danger'><Trash2 /></td>
 
                                         </tr>
                                     </>
