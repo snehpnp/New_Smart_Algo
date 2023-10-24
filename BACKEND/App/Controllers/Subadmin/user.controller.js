@@ -169,8 +169,8 @@ class Employee {
         // EndDate1 = end_date_2days;
         EndDate1 = null;
 
-        ActiveStatus="0"
-        is_active="0"
+        ActiveStatus = "0"
+        is_active = "0"
       }
 
       const min = 1;
@@ -228,7 +228,7 @@ class Employee {
         demat_userid: demat_userid,
         service_given_month: service_given_month,
         Is_Active: is_active,
-        ActiveStatus:ActiveStatus
+        ActiveStatus: ActiveStatus
       };
 
       const User = new User_model(user_data);
@@ -276,13 +276,13 @@ class Employee {
           }
 
           // LICENSE TABLE ADD USE LICENSE OUR CLIENT
-          if (license_type == "2") {
-            const count_licenses_add = new count_licenses({
-              user_id: User_id,
-              license: licence,
-            });
-            count_licenses_add.save();
-          }
+          // if (license_type == "2") {
+          //   const count_licenses_add = new count_licenses({
+          //     user_id: User_id,
+          //     license: licence,
+          //   });
+          //   count_licenses_add.save();
+          // }
 
           var toEmail = Email;
           var subjectEmail = "User ID and Password";
@@ -415,7 +415,7 @@ class Employee {
         var ActiveStatus = "1"
 
         // PREVIOS CLIENT IS LIVE
-        if (existingUsername.license_type != "2" ) {
+        if (existingUsername.license_type != "2") {
           // USER 2 DAYS LICENSE USE
           if (req.license_type == "0") {
             var currentDate = new Date();
@@ -469,7 +469,7 @@ class Employee {
             EndDate1 = 0;
             TotalMonth = 0;
             is_active = "0"
-            ActiveStatus="0"
+            ActiveStatus = "0"
           }
         } else {
           if (req.license_type == "2") {
@@ -724,7 +724,7 @@ class Employee {
           demat_userid: req.demat_userid,
           service_given_month: req.service_given_month,
           Is_Active: is_active,
-          ActiveStatus:ActiveStatus
+          ActiveStatus: ActiveStatus
         };
         // console.log("User_uodate", User_update);
 
@@ -733,15 +733,16 @@ class Employee {
           { $set: User_update }
         );
 
-        if (req.license_type == "2" || req.license_type == 2) {
-          // console.log("TotalMonth", new_licence);
+        if (existingUsername.license_type == "2") {
+          if (req.license_type == "2" || req.license_type == 2) {
 
-          if (Number(new_licence) > 0) {
-            const count_licenses_add = new count_licenses({
-              user_id: existingUsername._id,
-              license: new_licence,
-            });
-            count_licenses_add.save();
+            if (Number(new_licence) > 0) {
+              const count_licenses_add = new count_licenses({
+                user_id: existingUsername._id,
+                license: new_licence,
+              });
+              count_licenses_add.save();
+            }
           }
         }
 
@@ -768,15 +769,14 @@ class Employee {
   async UpdateActiveStatus(req, res) {
     try {
       const { id, user_active_status } = req.body;
-      // UPDATE ACTTIVE STATUS CLIENT
-
+     
       const get_user = await User_model.find({ _id: id });
+
       if (get_user.length == 0) {
         return res.send({
           status: false,
           msg: "Empty data",
           data: [],
-
         });
       }
 
@@ -784,14 +784,11 @@ class Employee {
       var StartDate1
       var EndDate1
       var licence = 1
-
       var currentDate = new Date();
       var start_date_2days = dateTime.create(currentDate);
       start_date_2days = start_date_2days.format("Y-m-d H:M:S");
       var start_date = start_date_2days;
-
       StartDate1 = start_date;
-
 
       var UpdateDate = "";
       var StartDate = new Date(start_date);
@@ -802,7 +799,6 @@ class Employee {
 
       var end_date_2days = dateTime.create(UpdateDate);
       var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
-
       EndDate1 = end_date_2days;
 
       const filter = { _id: id };
@@ -810,14 +806,21 @@ class Employee {
       const updateOperation = {
         $set: {
           Is_Active: 1,
-          ActiveStatus:1,
-           StartDate: StartDate1,
+          ActiveStatus: 1,
+          StartDate: StartDate1,
           EndDate: EndDate1, licence: "1"
         }
       };
 
       const result = await User_model.updateOne(filter, updateOperation);
 
+      const count_licenses_add = new count_licenses({
+        user_id: get_user[0]._id,
+        license: '1',
+      });
+
+      count_licenses_add.save();
+      
       if (result) {
         // STATUS UPDATE SUCCESSFULLY
         var status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
@@ -833,6 +836,7 @@ class Employee {
           data: result,
         });
       }
+
     } catch (error) {
       console.log("trading status Error-", error);
     }
