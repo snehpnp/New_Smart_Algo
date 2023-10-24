@@ -4,7 +4,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config'
-import { Signal, Users, Wrench, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Boxes, Rocket, Paintbrush, Vote, Info } from 'lucide-react';
+import { Signal, Users, Wrench,Link2, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Boxes, Rocket, Paintbrush, Vote, Info } from 'lucide-react';
 import Test from "../../../test"
 import html2canvas from 'html2canvas';
 import $ from "jquery";
@@ -39,7 +39,7 @@ const Sidebar = ({ ShowSidebar }) => {
     //  GET SUBADMIN PERMISSION
     const data2 = async () => {
         if (roles === 'SUBADMIN') {
-            await dispatch(Get_Sub_Admin_Permissions({ id: user_ID })).unwrap()
+            await dispatch(Get_Sub_Admin_Permissions({ id: user_ID && user_ID })).unwrap()
                 .then((response) => {
                     if (response.status) {
                         setGetPermissions(response.data[0])
@@ -400,6 +400,8 @@ const IconComponent = ({ icon }) => {
                 return <Boxes className='me-3' />;
             case 'Info':
                 return <Info className='me-3' />;
+            case 'Link2':
+                return <Link2 className='me-3' />;
 
             default:
                 return null;

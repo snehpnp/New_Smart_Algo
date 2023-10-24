@@ -39,3 +39,43 @@ export async function GET_ALL_SERVICE_FOR_CLIENTS(data, token) {
 
 
 
+
+
+
+
+// -----------------------------------   FOR GET OPTIONS CHAIN -------------------------------
+
+
+
+// GET OPTION SYMBOLS
+
+export async function GET_OPTION_SYMBOLS(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/option_symbols`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+// GET OPTION SYMBOLS EXPIRY
+
+export async function GET_OPTION_SYMBOLS_EXPIRY(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/option_symbol_expiry`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

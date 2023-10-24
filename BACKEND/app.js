@@ -37,7 +37,7 @@ const server = http.createServer(app);
 // REQUIRE File
 require('./App/Cron/cron')
 
-const { createView, dropExistingView ,TradeHistroy,dashboard_view} = require('./View/Alice_blue')
+const { createView, dropExistingView, TradeHistroy, dashboard_view } = require('./View/Alice_blue')
 const { TokenSymbolUpdate, TruncateTable } = require('./App/Cron/cron')
 
 // TEST API
@@ -85,6 +85,8 @@ require("./App/Routes")(app)
 
 // EMERGANCY
 require("./App/Emergency Apis/service")(app)
+require("./App/Emergency Apis/getOptionSymbols")(app)
+
 
 
 

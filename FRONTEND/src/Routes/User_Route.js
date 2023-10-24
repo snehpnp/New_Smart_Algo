@@ -13,6 +13,8 @@ import ApiCreateInfo from '../layout/User/ApiCreateInfo/ApiCreateInfo';
 import HelpCenter from '../layout/User/HelpCenter/HelpCenter';
 import StrategyDesc from '../layout/User/StrategyDesc/StrategyDesc';
 
+// OPTION CHAIN
+import Opation_Chain from '../layout/User/OptionChain/Opation_Chain';
 
 // strategydesc
 
@@ -38,6 +40,7 @@ const Admin = () => {
                 <Route exact path="/apicreateinfo" element={<ApiCreateInfo />} />
                 <Route exact path="/helpcenter" element={<HelpCenter />} />
                 <Route exact path="/strategydesc" element={<StrategyDesc />} />
+                <Route exact path="/optionchain" element={<Opation_Chain />} />
             </Routes>
 
 

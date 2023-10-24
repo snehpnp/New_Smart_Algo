@@ -271,7 +271,7 @@ class Panel {
     }
 
 
-    // Get All APi Infor
+    // Admin Sidebar Permission
     async GetAll_Broker_details(req, res) {
         try {
             // THEME LIST DATA
@@ -293,6 +293,75 @@ class Panel {
 
         } catch (error) {
             console.log("Get all Info error-", error);
+        }
+    }
+
+    // ADMIN PERMISSIONS
+    async Admin_Permissions(req, res) {
+        try {
+            // const { id, license } = req.body
+            const { id, db_name, db_url, license, key } = req.body
+
+
+            // if (!id) {
+            //     return res.send({ status: false, msg: "Enter Panel Id", data: [] })
+            // }
+
+            // const objectId = new ObjectId(id);
+
+            // // GET PANEL INFO
+            // const getPanelInfo = await panel_model.find({ _id: objectId })
+
+            // // IF DATA NOT EXIST
+            // if (getPanelInfo.length == 0) {
+            //     return res.send({ status: false, msg: "Empty data", data: getPanelInfo })
+            // }
+
+            // const uri = getPanelInfo[0].db_url;
+            const uri = db_url;
+
+            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+            await client.connect();
+            const db = client.db(db_name);
+            // const db = db_name;
+
+            const companies_collection = db.collection('companies');
+            const viewName = 'companies';
+
+
+            // Specify the query condition for updating
+            const queryCondition = {
+                // panel_key: getPanelInfo[0].key // Replace with your desired query condition
+                panel_key: key // Replace with your desired query condition
+            };
+
+            // Query the view to get the data
+            const findResult = await db.collection(viewName).find().project({ licenses: 1 }).toArray();
+
+            const newLicensesValue = findResult[0].licenses + license;
+
+            const updateOperation = {
+                $set: {
+                    licenses: newLicensesValue
+                }
+            };
+
+            // Update documents that match the query condition
+            const updateResult = await companies_collection.updateMany(queryCondition, updateOperation);
+
+
+
+            // If you want to send the retrieved data as a response
+            return res.send({
+                status: true,
+                msg: "Add License",
+                data: updateResult
+            });
+
+
+        } catch (error) {
+            console.log("Add License error-", error);
         }
     }
 

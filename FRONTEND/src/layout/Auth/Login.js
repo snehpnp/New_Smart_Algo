@@ -420,7 +420,6 @@ const Login = () => {
     await dispatch(Get_Company_Logo()).unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("response.status", response.data && response.data[0].favicon)
 
           $(".logo-abbr").attr('src', response.data && response.data[0].logo);
 

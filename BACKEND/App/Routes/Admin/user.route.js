@@ -9,6 +9,7 @@ const { EditCompany, GetCompanyInfo, GetCompany_logo, EditEmailInfo } = require(
 const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy } = require('../../Controllers/Admin/strategy.controller')
 
 const { AddMessageBrodcast, GetAllMessageBrodcast, GetMessageBrodcast, RemoveBroadCast } = require('../../Controllers/Admin/messagebrodcast.controller')
+const { Get_Option_Symbol ,Get_Option_Symbol_Expiry} = require('../../Controllers/Admin/option_chain.controller')
 
 // USER ADD EDIT
 router.post('/add/employee', verifyToken, AddEmployee);
@@ -44,6 +45,11 @@ router.post('/add/messagebrodcast', AddMessageBrodcast);
 router.post('/getall/messagebrodcast', GetAllMessageBrodcast);
 router.post('/get/messagebrodcast', GetMessageBrodcast);
 router.post('/remove/messagebrodcast', RemoveBroadCast);
+
+
+router.post('/get/option_symbols', Get_Option_Symbol);
+router.post('/get/option_symbol_expiry', Get_Option_Symbol_Expiry);
+
 
 
 

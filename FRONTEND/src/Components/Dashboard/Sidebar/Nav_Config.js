@@ -87,6 +87,13 @@ export const admin_sidebar = [
         ]
     },
     {
+        'id': 10,
+        "name": 'Option Chain',
+        "Icon": "Link2",
+        "route": "/admin/optionchain",
+        "Data": []
+    },
+    {
         'id': 6,
         "name": 'License',
         "Icon": "Copyright",
@@ -154,7 +161,7 @@ export const admin_sidebar = [
         ]
 
     },
-       {
+    {
         'id': 9,
         "name": 'Create Strategy',
         "Icon": "Boxes ",
@@ -168,6 +175,7 @@ export const admin_sidebar = [
         "route": "/admin/brokerinfo",
         "Data": []
     },
+
     //   {
     //     'id': 9,
     //     "name": 'Reports',
@@ -339,24 +347,31 @@ export const Client = [
         "Data": []
     },
     {
-        'id': 2,
+        'id': 6,
         "name": 'Api Create Info',
         "Icon": "WalletCards",
         "route": "/client/apicreateinfo",
         "Data": []
     },
     {
-        'id': 3,
+        'id': 7,
         "name": 'Help Center',
         "Icon": "HelpingHand",
         "route": "/client/helpcenter",
         "Data": []
     },
     {
-        'id': 4,
+        'id': 8,
         "name": 'Strategy Desc.',
         "Icon": "ScatterChart",
         "route": "/client/strategydesc",
+        "Data": []
+    },
+    {
+        'id': 9,
+        "name": 'Option Chain',
+        "Icon": "Link2",
+        "route": "/admin/optionchain",
         "Data": []
     },
 ]
