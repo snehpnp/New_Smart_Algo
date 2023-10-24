@@ -48,49 +48,87 @@ const Alice_token = db.Alice_token;
 app.get('/tokenFind', async (req, res) => {
   try {
 
-    var findData = await Alice_token.aggregate([
+
+    // Your request parameters
+    const symbol = 'NIFTY';
+    const expiry = '26102023';
+    const price = '19300';
+    const limit_set = 10;
+
+    const data = await Alice_token.aggregate([
       {
         $match: {
           $and: [
-            { 'symbol': "NIFTY" },
-            { 'expiry': "26102023" },
-            { 'segment': "O" },
-
-          ]
-        }
-      },
-      {
-        $sort: {
-          'strike': 1 // Sort by 'strike' field in ascending order
-        }
+            { symbol: symbol },
+            { expiry: expiry },
+            { segment: 'O' },
+            {
+              $or: [{ option_type: 'CE' }, { option_type: 'PE' }],
+            },
+          ],
+        },
       },
       {
         $group: {
-          _id: "$option_type",
-          tokens: { $push: "$$ROOT" }
-        }
+          _id: {
+            strike: '$strike',
+            symbol: '$symbol',
+            expiry: '$expiry',
+          },
+          call_token: {
+            $first: {
+              $cond: [
+                { $eq: ['$option_type', 'CE'] },
+                '$instrument_token',
+                null,
+              ],
+            },
+          },
+          put_token: {
+            $first: {
+              $cond: [
+                { $eq: ['$option_type', 'PE'] },
+                '$instrument_token',
+                null,
+              ],
+            },
+          },
+        },
       },
       {
-        $project: {
-          tokens: {
-            $filter: {
-              input: "$tokens",
-              as: "token",
-              cond: { $lte: ["$$token.strike", '19300'] }
-            }
-          }
-        }
+        $sort: {
+          '_id.strike': 1,
+        },
       },
       {
-        $project: {
-          tokens: { $slice: ["$tokens", 10] }
-        }
-      }
+        $group: {
+          _id: null,
+          data: {
+            $push: {
+              symbol: '$_id.symbol',
+              strike_price: '$_id.strike',
+              call_token: '$call_token',
+              put_token: '$put_token',
+              expiry: '$_id.expiry',
+            },
+          },
+          channellist: {
+            $push: {
+              $concat: [
+                'NFO|',
+                { $toString: '$call_token' },
+                { $toString: '$put_token' },
+              ],
+            },
+          },
+        },
+      },
     ])
-  
 
+
+res.send({ data: data,
+  channellist: data[0].channellist.join('#')})
     // return findData
-    res.send({ msg: "Done!!!", data: findData })
 
 
   } catch (err) {

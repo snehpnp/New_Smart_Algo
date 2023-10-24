@@ -19,6 +19,12 @@ const Modify = ({ UserDetails }) => {
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
     const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
 
+    const user_role = JSON.parse(localStorage.getItem("user_role"));
+
+    const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
+    const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+
+
     const [selectedOptions, setSelectedOptions] = useState({
         web_url: '',
         qty_type: '',
@@ -204,10 +210,14 @@ const Modify = ({ UserDetails }) => {
                     </div>
                 </div>
             </div>
+            {gotodashboard ? (
+                ""
+            ) : (
+                <button className="btn btn-primary mt-3" onClick={handleFinalStep}>
+                    Continue
+                </button>
+            )}
 
-            <button className="btn btn-primary mt-3" onClick={handleFinalStep}>
-                Continue
-            </button>
             <ToastButton />
 
         </div>

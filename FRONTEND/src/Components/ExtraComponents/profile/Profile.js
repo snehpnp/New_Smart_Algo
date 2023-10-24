@@ -190,7 +190,7 @@ const UserProfile = () => {
                         </li>
 
                       )}
-                      {user_role === "USER" || !gotodashboard ?
+                      {/* {user_role === "USER" || !gotodashboard ? */}
 
                         < li className="nav-item">
                           <a
@@ -201,7 +201,7 @@ const UserProfile = () => {
                             Modify Updates
                           </a>
                         </li>
-                        : ""}
+                        {/* : ""} */}
                     </ul>
                     <div className="tab-content">
                       <div id="about-me" className="tab-pane fade active show">
@@ -296,9 +296,9 @@ const UserProfile = () => {
                           )}
                         </div>
                       </div>
-                      {user_role === "SUBADMIN" || gotodashboard && gotodashboard.Role === "SUBADMIN" ? (
+                      {/* {user_role === "SUBADMIN" || gotodashboard && gotodashboard.Role === "SUBADMIN" ? (
                         ""
-                      ) : (
+                      ) : ( */}
                         <>
                           <div
                             id="modify"
@@ -311,7 +311,7 @@ const UserProfile = () => {
                            
                           </div>
                         </>
-                      )}
+                      {/* )} */}
 
 
                       {user_role === "USER" || !gotodashboard ?

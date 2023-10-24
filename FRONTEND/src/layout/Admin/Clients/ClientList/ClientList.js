@@ -178,26 +178,31 @@ const AllClients = () => {
   }, [refresh]);
 
   // GO TO DASHBOARD
-  const goToDashboard = async (asyncid, email) => {
-    let req = {
-      Email: email,
-    };
-    await dispatch(GO_TO_DASHBOARDS(req))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          localStorage.setItem("gotodashboard", JSON.stringify(true));
-          localStorage.setItem(
-            "user_details_goTo",
-            JSON.stringify(response.data)
-          );
-          localStorage.setItem(
-            "user_role_goTo",
-            JSON.stringify(response.data.Role)
-          );
-          navigate("/client/dashboard");
-        }
-      });
+  const goToDashboard = async (row, asyncid, email) => {
+    if (row.AppLoginStatus == "1" || row.WebLoginStatus == "1") {
+      let req = {
+        Email: email,
+      };
+
+
+      await dispatch(GO_TO_DASHBOARDS(req))
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            localStorage.setItem("gotodashboard", JSON.stringify(true));
+            localStorage.setItem(
+              "user_details_goTo",
+              JSON.stringify(response.data)
+            );
+            localStorage.setItem(
+              "user_role_goTo",
+              JSON.stringify(response.data.Role)
+            );
+            navigate("/client/dashboard");
+          }
+        });
+    }
+
   };
 
   // ACTIVE USER TO API
@@ -355,8 +360,8 @@ const AllClients = () => {
                 ? { color: "#FF0000" }
                 : { color: "#008000" }
             }
-            onClick={() => goToDashboard(row._id, row.Email)}
-            disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
+            onClick={() => goToDashboard(row, row._id, row.Email)}
+            disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
           >
             Dashboard
           </span>
@@ -407,19 +412,19 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-            {/* {row.license_type == "1" ? */}
-              <Link>
-                <span data-toggle="tooltip" data-placement="top" title="Delete">
-                  <Trash2
-                    size={20}
-                    color="#d83131"
-                    strokeWidth={2}
-                    className="mx-1"
-                    onClick={(e) => Delete_user(row._id)}
-                  />
-                </span>
-              </Link>
-              {/* : ""} */}
+            {row.license_type == "1" ?
+            <Link>
+              <span data-toggle="tooltip" data-placement="top" title="Delete">
+                <Trash2
+                  size={20}
+                  color="#d83131"
+                  strokeWidth={2}
+                  className="mx-1"
+                  onClick={(e) => Delete_user(row._id)}
+                />
+              </span>
+            </Link>
+            : ""}
 
           </div>
         </div>

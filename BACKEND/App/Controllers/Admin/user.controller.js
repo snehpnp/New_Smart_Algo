@@ -322,14 +322,12 @@ class Employee {
         _id: PID,
       }).select('Role')
 
-      
+
 
       // IF USER ALEARDY EXIST
       const existingUsername = await User_model.findOne({
         UserName: req.UserName,
       });
-      console.log(`Running Time 1 -- ${new Date()}`);
-
       if (!existingUsername) {
         return res.send({
           status: false,
@@ -369,9 +367,6 @@ class Employee {
 
       var Panel_key = await Company_info.find();
 
-      console.log(`Running Time 2 -- ${new Date()}`);
-
-
       const totalLicense = await User_model.aggregate([
         // Match documents based on your criteria (e.g., specific conditions)
         {
@@ -389,7 +384,6 @@ class Employee {
           },
         },
       ]);
-      console.log(`Running Time 3 -- ${new Date()}`);
 
       if (totalLicense.length > 0) {
         var TotalLicense = totalLicense[0].totalLicense;
@@ -408,7 +402,6 @@ class Employee {
       } else {
         new_licence = req.licence1;
       }
-      console.log(`Running Time 4 -- ${new Date()}`);
 
       if (
         Number(Panel_key[0].licenses) >=
@@ -533,9 +526,6 @@ class Employee {
           }
         }
 
-      console.log(`Running Time 5 -- ${new Date()}`);
-
-
         try {
           // STARTEGY ADD AND EDIT
           const Strategieclient = await strategy_client.find({
@@ -562,8 +552,6 @@ class Employee {
               add_startegy.push(item);
             }
           });
-          console.log(`Running Time 6 -- ${new Date()}`);
-
 
           // DELETE STRATEGY ARRAY
           var delete_startegy = [];
@@ -572,7 +560,7 @@ class Employee {
               delete_startegy.push(item);
             }
           });
-          // console.log("delete_startegy", delete_startegy);
+          console.log("delete_startegy", delete_startegy);
 
           // ADD STRATEGY IN STRATEGY CLIENT
           if (add_startegy.length > 0) {
@@ -624,18 +612,41 @@ class Employee {
           // STEP FISECONDRST TO DELTE IN CLIENT SERVICES AND UPDATE NEW STRATEGY
           if (delete_startegy.length > 0) {
             delete_startegy.forEach(async (data) => {
+
               var stgId = new ObjectId(data);
               var deleteStrategy = await strategy_client.find({
                 user_id: existingUsername._id,
+                strategy_id: { $ne: stgId }
               });
 
-              var deleteStrategy_clientServices1 =
-                await client_services.updateMany(
+              // console.log("deleteStrategy", stgId);
+              // console.log("exist stg", deleteStrategy);
+              // console.log("add_startegy", add_startegy[0]);
+
+
+              if (deleteStrategy.length > 0) {
+
+                var update_services = await client_services.updateMany(
                   { user_id: existingUsername._id, strategy_id: stgId },
                   { $set: { strategy_id: deleteStrategy[0].strategy_id } }
                 );
+
+              } else {
+                var update_stg = new ObjectId(add_startegy[0]);
+
+                var update_services = await client_services.updateMany(
+                  { user_id: existingUsername._id, strategy_id: stgId },
+                  { $set: { strategy_id: update_stg } }
+                );
+              }
+
+
+
             });
           }
+
+
+
         } catch (error) {
           console.log("startegy error-", error);
         }
@@ -713,7 +724,6 @@ class Employee {
         } catch (error) {
           console.log("Group Services Error-", error);
         }
-        console.log(`Running Time 7 -- ${new Date()}`);
 
         var User_update = {
           FullName: req.FullName,
@@ -752,7 +762,6 @@ class Employee {
         }
 
 
-        console.log(`Running Time 8 -- ${new Date()}`);
 
 
         // IF YOU ARE CHANGE GROUP AND USER SELCT GRP QTY ADMIN TO HIT FUNCTION
@@ -790,7 +799,7 @@ class Employee {
       var AdminMatch;
 
       if (Find_Role == "ADMIN") {
-        AdminMatch = { Role: "USER" ,Is_Active:"1"};
+        AdminMatch = { Role: "USER", Is_Active: "1" };
       } else if (Find_Role == "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
@@ -901,13 +910,13 @@ class Employee {
 
       const currentDate = new Date(); // Get the current date
       const GetAlluser_logs = await User_model.find({
-        Role:'USER',
-        license_type:"2",
-        TradingStatus:Role,
-        EndDate: { $gt: currentDate  }
+        Role: 'USER',
+        license_type: "2",
+        TradingStatus: Role,
+        EndDate: { $gt: currentDate }
 
       }).select('Email FullName EndDate TradingStatus UserName PhoneNo')
-      
+
       const totalCount = GetAlluser_logs.length;
       // IF DATA NOT EXIST
       if (GetAlluser_logs.length == 0) {

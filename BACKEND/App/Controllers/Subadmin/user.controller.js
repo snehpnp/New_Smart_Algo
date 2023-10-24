@@ -627,11 +627,22 @@ class Employee {
                 user_id: existingUsername._id,
               });
 
-              var deleteStrategy_clientServices1 =
-                await client_services.updateMany(
+
+              if (deleteStrategy.length > 0) {
+
+                var update_services = await client_services.updateMany(
                   { user_id: existingUsername._id, strategy_id: stgId },
                   { $set: { strategy_id: deleteStrategy[0].strategy_id } }
                 );
+
+              } else {
+                var update_stg = new ObjectId(add_startegy[0]);
+
+                var update_services = await client_services.updateMany(
+                  { user_id: existingUsername._id, strategy_id: stgId },
+                  { $set: { strategy_id: update_stg } }
+                );
+              }
             });
           }
         } catch (error) {
