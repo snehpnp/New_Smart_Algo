@@ -38,7 +38,65 @@ const server = http.createServer(app);
 require('./App/Cron/cron')
 
 const { createView, dropExistingView, TradeHistroy, dashboard_view } = require('./View/Alice_blue')
-const { TokenSymbolUpdate, TruncateTable } = require('./App/Cron/cron')
+const { TokenSymbolUpdate, TruncateTable, tokenFind } = require('./App/Cron/cron')
+
+const db = require('../BACKEND/App/Models')
+const Alice_token = db.Alice_token;
+
+
+// TEST API
+app.get('/tokenFind', async (req, res) => {
+  try {
+
+    var findData = await Alice_token.aggregate([
+      {
+        $match: {
+          $and: [
+            { 'symbol': "NIFTY" },
+            { 'expiry': "26102023" },
+            { 'segment': "O" },
+
+          ]
+        }
+      },
+      {
+        $sort: {
+          'strike': 1 // Sort by 'strike' field in ascending order
+        }
+      },
+      {
+        $group: {
+          _id: "$option_type",
+          tokens: { $push: "$$ROOT" }
+        }
+      },
+      {
+        $project: {
+          tokens: {
+            $filter: {
+              input: "$tokens",
+              as: "token",
+              cond: { $lte: ["$$token.strike", '19300'] }
+            }
+          }
+        }
+      },
+      {
+        $project: {
+          tokens: { $slice: ["$tokens", 10] }
+        }
+      }
+    ])
+  
+
+    // return findData
+    res.send({ msg: "Done!!!", data: findData })
+
+
+  } catch (err) {
+    console.log(err);
+  }
+})
 
 // TEST API
 app.get('/tradesymbol', async (req, res) => {

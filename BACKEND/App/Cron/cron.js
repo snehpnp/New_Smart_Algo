@@ -6,9 +6,9 @@ const { logger, getIPAddress } = require('../Helper/logger.helper')
 var dateTime = require('node-datetime');
 var moment = require('moment');
 const db = require('../Models')
+const Alice_token = db.Alice_token;
 const User = db.user;
 const user_logs = db.user_logs;
-const Alice_token = db.Alice_token;
 const live_price = db.live_price;
 
 
@@ -468,5 +468,33 @@ const TokenSymbolUpdate = () => {
 
 
 
+const tokenFind = async () => {
+    try {
 
-module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable }
+        var findData = await Alice_token.aggregate([
+            {
+                $match: {
+                    $and: [
+                        { 'symbol': "NIFTY" },
+                        { 'expiry': "26102023" },
+                        { 'strike': { $gte: '19250', $lte: '19300' } }
+                    ]
+                }
+            },
+            {
+                $group: {
+                    _id: "$option_type",
+                    tokens: { $push: "$$ROOT" }
+                }
+            }
+        ])
+
+        return findData
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind }

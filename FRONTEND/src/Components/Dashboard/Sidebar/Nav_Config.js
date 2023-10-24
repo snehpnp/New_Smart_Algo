@@ -86,13 +86,13 @@ export const admin_sidebar = [
             },
         ]
     },
-    {
-        'id': 10,
-        "name": 'Option Chain',
-        "Icon": "Link2",
-        "route": "/admin/optionchain",
-        "Data": []
-    },
+    // {
+    //     'id': 10,
+    //     "name": 'Option Chain',
+    //     "Icon": "Link2",
+    //     "route": "/admin/optionchain",
+    //     "Data": []
+    // },
     {
         'id': 6,
         "name": 'License',
@@ -368,11 +368,11 @@ export const Client = [
         "route": "/client/strategydesc",
         "Data": []
     },
-    {
-        'id': 9,
-        "name": 'Option Chain',
-        "Icon": "Link2",
-        "route": "/admin/optionchain",
-        "Data": []
-    },
+    // {
+    //     'id': 9,
+    //     "name": 'Option Chain',
+    //     "Icon": "Link2",
+    //     "route": "/admin/optionchain",
+    //     "Data": []
+    // },
 ]
