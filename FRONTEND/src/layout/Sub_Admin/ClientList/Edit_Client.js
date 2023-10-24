@@ -704,7 +704,7 @@ console.log("responseresponseresponseresponse" ,response)
 
   return (
     <>
-      <Content Page_title="Edit  Client" button_title='Back' route="/subadmin/clients">
+      <Content Page_title="Edit  Client" button_title='Back' route="/subadmin/clients"  showEdit={true} show_Stat_End_date={UserData.data.data !== undefined && UserData.data.data[0]}>
         <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
@@ -717,7 +717,7 @@ console.log("responseresponseresponseresponse" ,response)
               {GetServices && GetServices.data.map((strategy) => (
                 <div className={`col-lg-2 `} key={strategy._id}>
                   <div className="col-lg-12 ">
-                    <label className="form-check-label bg-primary text-white py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
+                    <label className="form-check-label bg-primary text-white py-2 px-4" for={strategy.ServiceResult.name}>{`${strategy.ServiceResult.name}[${strategy.categories.segment}]`}</label>
                   </div>
                 </div>
               ))}

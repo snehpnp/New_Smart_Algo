@@ -568,6 +568,11 @@ class GroupService {
 
         const pipeline = [
           {
+            $match: {
+              Servicegroup_id: objectId,
+            }
+          },
+          {
             '$lookup': {
               'from': 'services',
               'localField': 'Service_id',
@@ -576,19 +581,28 @@ class GroupService {
             }
           },
           {
-            $match: {
-              Servicegroup_id: objectId,
+            $unwind: '$ServiceResult', // Unwind the 'categoryResult' array
+          },
+          {
+            '$lookup': {
+              'from': 'categories',
+              'localField': 'ServiceResult.categorie_id',
+              'foreignField': '_id',
+              'as': 'categories'
             }
+          },
+          {
+            $unwind: '$categories', // Unwind the 'categoryResult' array
           },
           {
             $project: {
               'ServiceResult.name': 1,
+              'categories.segment': 1,
+
             },
           },
-          {
-            $unwind: '$ServiceResult', // Unwind the 'categoryResult' array
-          },
-
+          
+         
         ];
 
         const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);

@@ -316,7 +316,6 @@ class Employee {
 
       var PID = new ObjectId(req.parent_id);
 
-      console.log("PID",PID);
 
       // FIND PARENT ROLE
       const parentRole = await User_model.findOne({
@@ -329,6 +328,8 @@ class Employee {
       const existingUsername = await User_model.findOne({
         UserName: req.UserName,
       });
+      console.log(`Running Time 1 -- ${new Date()}`);
+
       if (!existingUsername) {
         return res.send({
           status: false,
@@ -368,6 +369,9 @@ class Employee {
 
       var Panel_key = await Company_info.find();
 
+      console.log(`Running Time 2 -- ${new Date()}`);
+
+
       const totalLicense = await User_model.aggregate([
         // Match documents based on your criteria (e.g., specific conditions)
         {
@@ -385,6 +389,7 @@ class Employee {
           },
         },
       ]);
+      console.log(`Running Time 3 -- ${new Date()}`);
 
       if (totalLicense.length > 0) {
         var TotalLicense = totalLicense[0].totalLicense;
@@ -403,6 +408,7 @@ class Employee {
       } else {
         new_licence = req.licence1;
       }
+      console.log(`Running Time 4 -- ${new Date()}`);
 
       if (
         Number(Panel_key[0].licenses) >=
@@ -527,6 +533,9 @@ class Employee {
           }
         }
 
+      console.log(`Running Time 5 -- ${new Date()}`);
+
+
         try {
           // STARTEGY ADD AND EDIT
           const Strategieclient = await strategy_client.find({
@@ -553,6 +562,8 @@ class Employee {
               add_startegy.push(item);
             }
           });
+          console.log(`Running Time 6 -- ${new Date()}`);
+
 
           // DELETE STRATEGY ARRAY
           var delete_startegy = [];
@@ -702,6 +713,7 @@ class Employee {
         } catch (error) {
           console.log("Group Services Error-", error);
         }
+        console.log(`Running Time 7 -- ${new Date()}`);
 
         var User_update = {
           FullName: req.FullName,
@@ -740,6 +752,7 @@ class Employee {
         }
 
 
+        console.log(`Running Time 8 -- ${new Date()}`);
 
 
         // IF YOU ARE CHANGE GROUP AND USER SELCT GRP QTY ADMIN TO HIT FUNCTION

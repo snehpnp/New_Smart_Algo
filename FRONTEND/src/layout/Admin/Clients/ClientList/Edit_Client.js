@@ -197,9 +197,9 @@ const AddClient = () => {
       return errors;
     },
     onSubmit: async (values) => {
-      console.log("values",values);
-      console.log("=>  subadmin",values.parent_id);
-      console.log("admin",user_id);
+      console.log("values", values);
+      console.log("=>  subadmin", values.parent_id);
+      console.log("admin", user_id);
 
       const req = {
         "FullName": values.fullName,
@@ -213,7 +213,7 @@ const AddClient = () => {
         "todate": values.todate,
         "service_given_month": values.service_given_month,
         "broker": values.broker,
-        "parent_id": values.parent_id == null || values.parent_id == "" ?  user_id : values.parent_id,
+        "parent_id": values.parent_id == null || values.parent_id == "" ? user_id : values.parent_id,
         "parent_role": values.parent_id != null ? "SUBADMIN" : "ADMIN",
         "api_secret": values.api_secret,
         "app_id": values.app_id,
@@ -707,7 +707,7 @@ const AddClient = () => {
               {GetServices && GetServices.data.map((strategy) => (
                 <div className={`col-lg-2 `} key={strategy._id}>
                   <div className="col-lg-12 ">
-                    <label className="form-check-label bg-primary text-white py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
+                    <label className="form-check-label bg-primary text-white py-2 px-4" for={strategy.ServiceResult.name}>{`${strategy.ServiceResult.name}[${strategy.categories.segment}]`}</label>
                   </div>
                 </div>
               ))}
