@@ -321,7 +321,8 @@ const Header = ({ ChatBox }) => {
                       <button
                         onClick={redirectToAdmin}
                         type="button"
-                        className="btn btn-color"
+                        className="btn btn-primary text-white"
+
                       >
                         Go to Admin
                       </button>
