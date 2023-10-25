@@ -1400,30 +1400,44 @@ a.navigation__btn.js-btn-slide.active {
 
     padding: 10px !important;
 
-    display: none;
+    /* display: none; */
 
     transition: 0.3s linear;
 
-    margin: 0px auto !important;
+    /* margin: 0px auto !important; */
 
+}
+
+.new-b-s{
+    width: 30%;
 }
 
 .button-grp-bs button.btn.text-success:hover {
 
     background-color: rgb(193, 236, 193);
+    margin: 0 !important;
+    border-radius: 0 !important; 
 
+}
 
+.button-grp-bs .active {
+    background-color: rgb(193, 236, 193);
+    border-radius: 0 !important; 
 }
 
 .button-grp-bs button.btn.text-success {
-
+    margin: 0 !important;
     color: #0ba30b !important
 }
 
+.new-sell{
+    margin: 0 !important;
+}
 
 .button-grp-bs button.btn.text-danger:hover {
 
     background-color: rgb(236, 202, 193);
+    border-radius: 0 !important; 
 
 
 }

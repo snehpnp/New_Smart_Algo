@@ -79,3 +79,20 @@ export async function GET_OPTION_SYMBOLS_EXPIRY(data, token) {
     }
 
 }
+
+
+// GET OPTION SYMBOLS EXPIRY
+
+export async function GET_OPTION_ALL_ROUND_TOKEN(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/all_round_token`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

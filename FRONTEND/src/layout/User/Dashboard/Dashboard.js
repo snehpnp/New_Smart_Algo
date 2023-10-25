@@ -204,7 +204,7 @@ const BrokerResponse = () => {
                     <td>{data.service.name}</td>
                     <td>
                       <div className="row d-flex">
-                        <div className="col-lg-12 ">
+                        <div className="col-lg-12">
                           <input
                             key={index}
                             type="number"
@@ -229,7 +229,7 @@ const BrokerResponse = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="color-primary">
+                    <td className="color-primary col-md-3">
                       <select
                         name="strategy_id"
                         class="form-select form-select-lg mb-3"

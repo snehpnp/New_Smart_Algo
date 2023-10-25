@@ -43,7 +43,7 @@ class OptionChain {
                     }
                 },
                 {
-                    $unwind: "$uniqueExpiryValues" 
+                    $unwind: "$uniqueExpiryValues"
                 },
                 {
                     $addFields: {
@@ -74,6 +74,185 @@ class OptionChain {
             return res.status(500).json({ status: false, msg: 'Server error', data: [] });
         }
 
+    }
+
+    // GET All ROUND TOKEN
+
+    async Get_Option_All_Round_Token(req, res) {
+
+
+        const symbol = req.body.symbol;
+        const expiry = req.body.expiry;
+
+        // let price = "19300"
+        // let symbol = "NIFTY"
+        // let expiry = "26102023"
+
+        let limit_set = 40
+        if (symbol == "FINNIFTY" || symbol == "BANKNIFTY" || symbol == "NIFTY" || symbol == "MIDCPNIFTY") {
+            let price = ""
+            let price_symbol = ""
+            if (symbol == "FINNIFTY") {
+                price = "19500"
+                price_symbol = "Nifty Financial Services";
+            } else if (symbol == "BANKNIFTY") {
+                price = "44200"
+                price_symbol = "Nifty Bank";
+            } else if (symbol == "NIFTY") {
+                price_symbol = "NIFTY 50";
+                price = "19500"
+            } else if (symbol == "MIDCPNIFTY") {
+                price_symbol = "NIFTY Midcap 100";
+            }
+
+
+            console.log("symbol", symbol)
+            console.log("expiry", expiry)
+            console.log("price", price)
+
+
+
+            const pipeline2 = [
+                {
+                    $match: {
+                        $or: [
+                            {
+                                $and: [
+                                    { strike: { $lt: price } },
+                                    { segment: "O" },
+                                    { symbol: symbol },
+                                    { expiry: expiry }
+                                ]
+                            },
+                            {
+                                $and: [
+                                    { strike: price },
+                                    { symbol: symbol },
+                                    { expiry: expiry }
+                                ]
+                            },
+                            {
+                                $and: [
+                                    { strike: { $gt: price } },
+                                    { symbol: symbol },
+                                    { expiry: expiry }
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    $sort: {
+                        strike: 1
+                    }
+                },
+                {
+                    $limit: limit_set
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        strike: 1,
+                        option_type: 1,
+                        exch_seg: 1,
+                        instrument_token: 1,
+                        // option_type: 1
+                    }
+                }
+            ]
+
+            const pipeline3 = [
+                {
+                    $match: {
+                        $or: [
+                            {
+                                strike: { $lt: price },
+                                segment: "O",
+                                symbol: symbol,
+                                expiry: expiry,
+                            },
+                            {
+                                strike: price,
+                                segment: "O",
+                                symbol: symbol,
+                                expiry: expiry,
+                            },
+                            {
+                                strike: { $gt: price },
+                                segment: "O",
+                                symbol: symbol,
+                                expiry: expiry,
+                            },
+                        ],
+                    },
+                },
+                {
+                    $sort: {
+                        strike: 1
+                    }
+                },
+                {
+                    $limit: limit_set
+                },
+                {
+                    $group: {
+                        _id: "$strike",
+                        symbol: { $first: "$symbol" },
+                        expiry: { $first: "$expiry" },
+                        instrument_token: { $first: "$instrument_token" },
+                        option_type: { $first: "$option_type" }
+                    }
+                },
+                {
+                    $sort: {
+                        _id: 1
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        strike: "$_id",
+                    }
+                }
+            ]
+
+            const result = await Alice_token.aggregate(pipeline2);
+            const resultStrike = await Alice_token.aggregate(pipeline3);
+
+            const final_data = [];
+            var channelstr = ""
+            if (result.length > 0) {
+                resultStrike.forEach(element => {
+                    let call_token = "";
+                    let put_token = "";
+                    result.forEach(element1 => {
+                        if (element.strike == element1.strike) {
+                            if (element1.option_type == "CE") {
+                                call_token = element1.instrument_token;
+                            } else if (element1.option_type == "PE") {
+                                put_token = element1.instrument_token;
+                            }
+                            channelstr += element1.exch_seg + "|" + element1.instrument_token + "#"
+                        }
+                    });
+
+                    const push_object = {
+                        symbol: element.symbol,
+                        strike_price: element.strike,
+                        call_token: call_token,
+                        put_token: put_token,
+                        expiry: element.expiry
+                    }
+                    final_data.push(push_object)
+                });
+
+                var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+                res.send({ status: true, data: final_data, channellist: alltokenchannellist })
+            }
+            else {
+                res.send({ status: false, data: [], channellist: "" })
+            }
+        }
     }
 
 }

@@ -211,11 +211,14 @@ const AllClients = () => {
       await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
         .unwrap()
         .then((response) => {
+          setrefresh(!refresh)
+          window.location.reload();
+
           if (response.status) {
+            setrefresh(!refresh)
             console.log("response", response)
             toast.success(response.msg);
             setTimeout(() => {
-              setrefresh(!refresh)
             }, 500);
           } else {
             toast.error(response.msg);
@@ -223,8 +226,8 @@ const AllClients = () => {
         });
     }
     else {
-      setrefresh(!refresh)
-      return
+      return setrefresh(!refresh)
+
     }
 
     // await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
