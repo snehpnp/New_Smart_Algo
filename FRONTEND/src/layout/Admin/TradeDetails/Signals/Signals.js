@@ -174,7 +174,7 @@ const Signals = () => {
             <div className="d-flex">
               <div className="col-lg-6">
                 <div className="mb-3 row d-flex">
-                  <div className="col-lg-6">
+                  {/* <div className="col-lg-6">
                     <label className="col-lg-12" htmlFor="validationCustom05">
                       Select Date
                     </label>
@@ -196,7 +196,8 @@ const Signals = () => {
                           );
                         })}
                     </select>
-                  </div>
+                  </div> */}
+
                   <div className="col-lg-6">
                     <label className="col-lg-12" htmlFor="validationCustom05">
                       Select Strategy

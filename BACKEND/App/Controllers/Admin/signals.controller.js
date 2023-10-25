@@ -18,8 +18,15 @@ class Signals {
             }
 
             try {
+                
+            const today = new Date();   
+            today.setHours(0, 0, 0, 0);
+            
                 const filteredSignals = await Signals_modal.find({
-                    dt_date: startDate,
+                    createdAt: {
+                        $gte: today,
+                        $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+                    },
                 }).sort({ createdAt: -1 })
 
                 if (filteredSignals.length === 0) {

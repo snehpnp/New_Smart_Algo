@@ -186,7 +186,7 @@ const BrokerResponse = () => {
             <th>#</th>
             <th>Live Price</th>
             <th>Symboll</th>
-            <th>Segment</th>
+            <th>lot size</th>
             <th>Quantity</th>
             <th>Strategy</th>
             <th>Order Type</th>
@@ -204,12 +204,12 @@ const BrokerResponse = () => {
                     <td
                       className={`ShowLTP_${data.service.instrument_token}`}
                     ></td>
-                    <td>{data.service.name}</td>
-                    <td>{data.categories.segment}</td>
+                    <td>{`${data.service.name}[${data.categories.segment}]`}</td>
+                    <td>{data.service.lotsize}</td>
 
                     <td>
                       <div className="row d-flex">
-                        <div className="col-lg-10 ">
+                        <div className="col-lg-12 ">
                           <input
                             key={index}
                             type="number"

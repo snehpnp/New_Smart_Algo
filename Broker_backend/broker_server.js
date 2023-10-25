@@ -79,18 +79,22 @@ const corsOpts = {
 app.use(cors(corsOpts));
 
 var d = new Date;
-var current_date = [d.getFullYear(),
-d.getMonth() + 1,
-d.getDate(),
-].join('/') + ' ' + [d.getHours(),
-d.getMinutes(),
-d.getSeconds()
-].join(':');
+var current_date =new Date()
+var dt_date = new Date()
 
-var dt_date = [d.getFullYear(),
-d.getMonth() + 1,
-d.getDate(),
-].join('/');
+
+// var current_date = [d.getFullYear(),
+// d.getMonth() + 1,
+// d.getDate(),
+// ].join('/') + ' ' + [d.getHours(),
+// d.getMinutes(),
+// d.getSeconds()
+// ].join(':');
+
+// var dt_date = [d.getFullYear(),
+// d.getMonth() + 1,
+// d.getDate(),
+// ].join('/');
 
 
 
