@@ -115,6 +115,8 @@ const BrokerResponse = () => {
   }, [DashboardData.data, UserDetails]);
 
 
+  console.log("UserDetails", UserDetails);
+  // console.log("12",UserDetails);
 
 
   const setgroup_qty_value_test = (e, symboll, rowdata) => {
@@ -207,7 +209,7 @@ const BrokerResponse = () => {
 
                     <td>
                       <div className="row d-flex">
-                        <div className="col-lg-12 ">
+                        <div className="col-lg-10 ">
                           <input
                             key={index}
                             type="number"
@@ -227,15 +229,16 @@ const BrokerResponse = () => {
                               //  setEnterQty(e.target.value)
                             }
                             defaultValue={data.quantity}
+                            disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
 
                           />
                         </div>
                       </div>
                     </td>
-                    <td className="color-primary">
+                    <td className="color-primary col-md-3">
                       <select
                         name="strategy_id"
-                        class="form-select form-select-lg mb-3"
+                        class="form-select form-select-lg mb-3 "
                         aria-label=".form-select-lg example"
                         onChange={(e) =>
                           setgroup_qty_value_test(
@@ -266,6 +269,7 @@ const BrokerResponse = () => {
                           })}
                       </select>
                     </td>
+
                     <td className="color-primary">
                       <select
                         name="order_type"

@@ -52,9 +52,8 @@ app.get('/tokenFind', async (req, res) => {
     // Your request parameters
     const symbol = 'NIFTY';
     const expiry = '26102023';
-    const price = '19300';
+    const strike = '19300';
     const limit_set = 10;
-
     const data = await Alice_token.aggregate([
       {
         $match: {
@@ -65,9 +64,16 @@ app.get('/tokenFind', async (req, res) => {
             {
               $or: [{ option_type: 'CE' }, { option_type: 'PE' }],
             },
+            {
+              $or: [
+                { strike: { $gte: (strike - 10) } }, // Get documents with strike 10 or more below
+                { strike: { $lte: (strike + 10) } }, // Get documents with strike 10 or more above
+              ],
+            },
           ],
         },
       },
+      // Add the remaining stages as in your original code
       {
         $group: {
           _id: {
@@ -123,7 +129,8 @@ app.get('/tokenFind', async (req, res) => {
           },
         },
       },
-    ])
+    ]);
+    
 
 
 res.send({ data: data,
