@@ -209,7 +209,7 @@ const BrokerResponse = () => {
 
                     <td>
                       <div className="row d-flex">
-                        <div className="col-lg-12 ">
+                        <div className="col-lg-12">
                           <input
                             key={index}
                             type="number"

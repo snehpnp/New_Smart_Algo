@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_OPTION_SYMBOLS_EXPIRY, GET_OPTION_SYMBOLS } from "../../../Service/common.service";
+import { GET_OPTION_SYMBOLS_EXPIRY, GET_OPTION_ALL_ROUND_TOKEN, GET_OPTION_SYMBOLS } from "../../../Service/common.service";
 
 
 export const Get_Option_Symbols = createAsyncThunk("get/option_symbols", async (data) => {
@@ -17,12 +17,22 @@ export const Get_Option_Symbols_Expiry = createAsyncThunk("/get/option_symbols",
     const { req, token } = apireq
 
     try {
-        const res = await GET_OPTION_SYMBOLS_EXPIRY({ req: "" }, token);
+        const res = await GET_OPTION_SYMBOLS_EXPIRY({ symbol: req }, token);
         return await res;
     } catch (err) {
         return err;
     }
 });
+
+export const Get_Option_All_Round_token = createAsyncThunk("/get/token", async (apireq, token) => {
+    try {
+        const res = await GET_OPTION_ALL_ROUND_TOKEN(apireq, token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
 
 
 const OptionChainSlice = createSlice({
@@ -31,7 +41,8 @@ const OptionChainSlice = createSlice({
         isLoading: false,
         isError: false,
         symbolls: [],
-        symbol_expiry: []
+        symbol_expiry: [],
+        Option_Token: []
     },
 
     recuders: {},
@@ -41,6 +52,9 @@ const OptionChainSlice = createSlice({
         },
         [Get_Option_Symbols_Expiry.fulfilled]: (state, { payload }) => {
             return { ...state, symbol_expiry: payload, isLoading: false };
+        },
+        [Get_Option_All_Round_token.fulfilled]: (state, { payload }) => {
+            return { ...state, Option_Token: payload, isLoading: false };
         },
     }
 })

@@ -216,12 +216,16 @@ const AllClients = () => {
       await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
         .unwrap()
         .then((response) => {
+          setrefresh(!refresh)
+          window.location.reload();
+
           if (response.status) {
-            // console.log("response", response)
+
+            setrefresh(!refresh)
             toast.success(response.msg);
+            
             window.location.reload()
             setTimeout(() => {
-              setrefresh(!refresh)
             }, 500);
           } else {
             toast.error(response.msg);
@@ -229,8 +233,8 @@ const AllClients = () => {
         });
     }
     else {
-      setrefresh(!refresh)
-      return
+      return setrefresh(!refresh)
+
     }
 
     // await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
@@ -414,18 +418,18 @@ const AllClients = () => {
               </span>
             </Link>
             {row.license_type == "1" ?
-            <Link>
-              <span data-toggle="tooltip" data-placement="top" title="Delete">
-                <Trash2
-                  size={20}
-                  color="#d83131"
-                  strokeWidth={2}
-                  className="mx-1"
-                  onClick={(e) => Delete_user(row._id)}
-                />
-              </span>
-            </Link>
-            : ""}
+              <Link>
+                <span data-toggle="tooltip" data-placement="top" title="Delete">
+                  <Trash2
+                    size={20}
+                    color="#d83131"
+                    strokeWidth={2}
+                    className="mx-1"
+                    onClick={(e) => Delete_user(row._id)}
+                  />
+                </span>
+              </Link>
+              : ""}
 
           </div>
         </div>

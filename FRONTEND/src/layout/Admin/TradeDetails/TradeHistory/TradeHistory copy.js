@@ -38,8 +38,6 @@ const TradeHistory = () => {
   const [toDate, setToDate] = useState("");
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [refresh, setrefresh] = useState(false);
-  const [refresh1, setrefresh1] = useState(false);
-
 
   const [originalData, setOriginalData] = useState([]);
 
@@ -56,6 +54,7 @@ const TradeHistory = () => {
   const [rowData, setRowData] = useState({ loading: true, data: [], });
   const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
+  const [tradeHistoryData1, setTradeHistoryData1] = useState({ loading: true, data: [] });
   const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
 
 
@@ -77,18 +76,53 @@ const TradeHistory = () => {
 
   const [ForGetCSV, setForGetCSV] = useState([])
 
-  const Get_TradHistory = async (e) => {
+
+  // const GetTradhistory = async (e) => {
+  //   let startDate = getActualDateFormate(fromDate);
+  //   let endDate = getActualDateFormate(toDate);
+
+
+  //   let current_day = today();
+
+
+  //   e.preventDefault();
+
+  //   await dispatch(
+  //     Get_Tradehisotry({ startDate: startDate, endDate: endDate, service: SelectService, strategy: StrategyClientStatus, token: token })
+  //   )
+  //     .unwrap()
+  //     // await dispatch(Get_Tradehisotry({ startDate: "2023/9/1", endDate: "2023/9/28", token: token })).unwrap()
+  //     .then((response) => {
+  //       if (response.status) {
+  //         setTradeHistoryData({
+  //           loading: false,
+  //           data: response.data,
+  //         });
+  //         setOriginalData(response.data);
+
+  //       }
+  //     });
+  //   // }
+  // };
+
+
+
+  const getsignals11 = async (e) => {
     let abc = new Date();
     let month = abc.getMonth() + 1;
     let date = abc.getDate();
     let year = abc.getFullYear();
     let full = `${year}/${month}/${date}`;
 
+
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
 
+
     await dispatch(
+      // Get_Tradehisotry({ startDate: "2023/10/01", endDate: "2023/10/25", service: "null", strategy: 'null', token: token })
       Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, token: token })
+      // Get_Tradehisotry({ startDate: full, endDate: full, token: token })
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -96,8 +130,8 @@ const TradeHistory = () => {
             loading: false,
             data: response.data,
           });
-        } else {
-          setTradeHistoryData({
+          setOriginalData(response.data);
+          setTradeHistoryData1({
             loading: false,
             data: response.data,
           });
@@ -106,7 +140,7 @@ const TradeHistory = () => {
   };
 
   useEffect(() => {
-    Get_TradHistory();
+    getsignals11();
   }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus]);
 
   const getActualDateFormate = (date) => {
@@ -126,7 +160,7 @@ const TradeHistory = () => {
     setToDate("");
     setTradeHistoryData({
       loading: false,
-      data: tradeHistoryData.data,
+      data: tradeHistoryData1.data,
     });
   };
 
@@ -582,6 +616,29 @@ const TradeHistory = () => {
   }, [])
 
 
+  // console.log("originalData", originalData)
+
+  //  MANAGE MULTIFILTER
+
+  // Existing code...
+  useEffect(() => {
+    // Multi-filtering logic
+    if (SelectService !== "null" || StrategyClientStatus !== "null") {
+      const filteredData = originalData.filter((item) => {
+        const itemStrategy = item.strategy.toString().toLowerCase();
+        const itemService = item.trade_symbol.toString().toLowerCase();
+        const itemService1 = item.symbol.toString().toLowerCase();
+        const isServiceMatch = SelectService === "null" || itemService.includes(SelectService.toLowerCase()) || itemService1.includes(SelectService.toLowerCase());
+
+        const isStrategyMatch = StrategyClientStatus === "null" || itemStrategy === StrategyClientStatus.toLowerCase();
+        return isStrategyMatch && isServiceMatch
+      });
+      console.log("filteredData", filteredData);
+    }
+
+  }, [SelectService, StrategyClientStatus, originalData]);
+
+
 
   return (
     <>
@@ -729,14 +786,24 @@ const TradeHistory = () => {
           </div>
         </div>
 
+        {tradeHistoryData.data && tradeHistoryData.data.length === 0 ? (
+          <div className="table-responsive">
+            <FullDataTable
+              TableColumns={columns}
+              tableData={tradeHistoryData.data}
+              pagination1={true}
+            />
+          </div>
+        ) : (
+          <>
+            <FullDataTable
+              TableColumns={columns}
+              tableData={tradeHistoryData.data}
+              pagination1={true}
 
-        <FullDataTable
-          TableColumns={columns}
-          tableData={tradeHistoryData.data}
-          pagination1={true}
-
-        />
-
+            />
+          </>
+        )}
 
         {/*  For Detailed View  */}
         <DetailsView

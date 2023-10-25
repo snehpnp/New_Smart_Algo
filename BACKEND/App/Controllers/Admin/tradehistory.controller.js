@@ -13,18 +13,34 @@ class Tradehistory {
     async GetAdminTradeHistory(req, res) {
         try {
 
-            const { startDate, endDate } = req.body;
+            const { startDate, endDate, strategy, service } = req.body;
             let startDateObj = new Date(startDate)
             let endDateObj = new Date(endDate)
+            let stg1
+            let ser1
+            //  For Strategy
+            if (strategy === "null") {
+                stg1 = { $exists: true }
 
+            } else {
+                stg1 = strategy
+            }
 
+            //  For Service
+            if (service === "null") {
+                ser1 = { $exists: true }
+            } else {
+                ser1 = service
+            }
             const filteredSignals = await MainSignals_modal.aggregate([
                 {
                     $match: {
                         dt_date: {
                             $gte: startDate,
                             $lte: endDate
-                        }
+                        },
+                        strategy: stg1,
+                        trade_symbol: ser1
                     }
                 },
 

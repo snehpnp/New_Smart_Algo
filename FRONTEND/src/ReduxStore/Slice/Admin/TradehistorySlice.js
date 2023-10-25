@@ -2,16 +2,15 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_TRADEHISTORY ,GET_SEVAN_TRADEHISTORY} from "../../../Service/admin.service";
+import { GET_TRADEHISTORY, GET_SEVAN_TRADEHISTORY } from "../../../Service/admin.service";
 
 
 
 export const Get_Tradehisotry = createAsyncThunk("admin/tradhistory", async (apireq) => {
 
-    const { startDate, endDate, token } = apireq
+    const { startDate, endDate, service, strategy, token } = apireq
     try {
-        const res = await GET_TRADEHISTORY({ startDate: startDate, endDate: endDate }, token);
-
+        const res = await GET_TRADEHISTORY({ startDate: startDate, endDate: endDate, service: service, strategy: strategy }, token);
         return await res;
     } catch (err) {
         return err;
