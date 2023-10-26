@@ -1,10 +1,4 @@
-var a = 10;
-var b = 20;
-
-[a, b] = [b, a];
-
-// console.log("a =", a, "b =", b);
-console.log(new Date);
-console.log(new Date());
+https://masterswift-beta.mastertrust.co.in/oauth2/fallbacks/error?error=invalid_request&error_description=The+request+is+missing+a+required+parameter%2C+includes+an+invalid+parameter+value%2C+includes+a+parameter+more+than+once%2C+or+is+otherwise+malformed&error_hint=The+%22redirect_uri%22+parameter+does+not+match+any+of+the+OAuth+2.0+Client%27s+pre-registered+redirect+urls.
 
 
+https://masterswift-beta.mastertrust.co.in/oauth2/auth?scope=orders%20holdings&state=eyJ1c2VyX2lkIjoiMTAwIiwicGFuZWwiOiJtZWdoYXNvZnRlY2giLCJ1cmwiOiJodHRwczovL3NvZnR3YXJlLm1lZ2hhc29mdGVjaC5jb20vIn0=&redirect_uri=https://software.meghasoftech.com:3137/mastertrust/access_token&response_type=code&client_id=TFTLLcTuB3
