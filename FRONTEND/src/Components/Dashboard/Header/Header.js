@@ -357,7 +357,13 @@ const Header = ({ ChatBox }) => {
                     <Notification data={getAllClients} />
                   </>
                 ) : (
-                  ""
+                  user_role === "USER" ? (
+                    <>
+                      <Notification data={getAllClients} />
+                    </>
+                  ) : (
+                    ""
+                  )
                 )}
 
                 <li className="nav-item dropdown header-profile">
