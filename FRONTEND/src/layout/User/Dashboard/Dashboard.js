@@ -238,7 +238,8 @@ const BrokerResponse = () => {
                     <td className="color-primary col-md-3">
                       <select
                         name="strategy_id"
-                        class="form-select form-select-lg mb-3 "
+
+                        class="form-select form-select-lg "
                         aria-label=".form-select-lg example"
                         onChange={(e) =>
                           setgroup_qty_value_test(
@@ -273,7 +274,7 @@ const BrokerResponse = () => {
                     <td className="color-primary">
                       <select
                         name="order_type"
-                        class="form-select form-select-lg mb-3"
+                        class="form-select form-select-lg "
                         aria-label=".form-select-lg example"
                         onChange={(e) =>
                           setgroup_qty_value_test(
@@ -293,7 +294,7 @@ const BrokerResponse = () => {
                     <td className="color-primary">
                       <select
                         name="product_type"
-                        class="form-select form-select-lg mb-3"
+                        class="form-select form-select-lg "
                         aria-label=".form-select-lg example"
                         onChange={(e) =>
                           setgroup_qty_value_test(

@@ -1110,6 +1110,10 @@ class Employee {
     }
   }
 
+
+
+
+
   // UPDATE BROKER KEY
   async Update_Broker_Keys(req, res) {
     try {
@@ -1140,12 +1144,24 @@ class Employee {
 
 
 
+  // GET ONLY CLIENT KEY
+  async GetclientKey(req, res) {
+    try {
+      const { id } = req.body
+      var _id = new ObjectId(id);
+      const Client_key = await User_model.findOne({ _id }, 'client_key');
+      // CHECK IF PANEL EXIST OR NOT
 
 
 
-
-
-
+      if (!Client_key) {
+        return res.status(409).json({ status: false, msg: 'Client Not exists', data: [] });
+      }
+      res.send({ status: true, msg: "Get Client key", data: Client_key })
+    } catch (error) {
+      // console.log("Theme error-", error);
+    }
+  }
 
 }
 
@@ -1234,65 +1250,3 @@ module.exports = new Employee();
 
 
 
-// async GetTradingStatus(req, res) {
-//   try {
-//     const { Role } = req.body;
-//     // var Role = "ADMIN"
-//     const GetAlluser_logs = await user_logs.aggregate([
-//       {
-//         $lookup: {
-//           from: "users",
-//           localField: "user_Id",
-//           foreignField: "_id",
-//           as: "userinfo",
-//         },
-//       },
-//       {
-//         $unwind: "$userinfo",
-//       },
-//       {
-//         $match: {
-//           "userinfo.Role": Role, // Replace 'desired_role_here' with the role you want to filter by
-//         },
-//       },
-//       {
-//         $project: {
-//           "userinfo.FullName": 1,
-//           login_status: 1,
-//           trading_status: 1,
-//           message: 1,
-//           role: 1,
-//           system_ip: 1,
-//           createdAt: 1,
-//         },
-//       },
-//     ]);
-
-//     // const GetAlluser_logs = await user_logs.find({
-
-//     // });
-//     const totalCount = GetAlluser_logs.length;
-//     // IF DATA NOT EXIST
-//     if (GetAlluser_logs.length == 0) {
-//       return res.send({
-//         status: false,
-//         msg: "Empty data",
-//         data: [],
-//         totalCount: totalCount,
-//       });
-//     }
-
-//     // DATA GET SUCCESSFULLY
-//     res.send({
-//       status: true,
-//       msg: "Get All user_logs",
-//       data: GetAlluser_logs,
-//       // page: Number(page),
-//       // limit: Number(limit),
-//       totalCount: totalCount,
-//       // totalPages: Math.ceil(totalCount / Number(limit)),
-//     });
-//   } catch (error) {
-//     console.log("trading status Error-", error);
-//   }
-// }

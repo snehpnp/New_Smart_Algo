@@ -492,6 +492,7 @@ const TradeHistory = () => {
 
   //  LOG IN FOR GET LIVE PRICE 
   const LogIn_WIth_Api = async (check, brokerid, tradingstatus, UserDetails) => {
+
     if (check) {
       loginWithApi(brokerid, UserDetails);
     } else {
@@ -499,7 +500,6 @@ const TradeHistory = () => {
         .unwrap()
         .then((response) => {
           if (response.status) {
-            // setUserDetails(response.data);
             setrefresh(!refresh)
           }
         });
@@ -581,8 +581,7 @@ const TradeHistory = () => {
     getservice()
   }, [])
 
-
-
+  console.log("UserDetails.trading_status", UserDetails.trading_status !== undefined && UserDetails.trading_status)
   return (
     <>
       <Content Page_title="Trade History" button_status={false}
@@ -598,8 +597,7 @@ const TradeHistory = () => {
                   type="checkbox"
                   className="bg-primary"
                   defaultChecked={
-                    UserDetails.trading_status === "on" ? true : false
-                  }
+                    UserDetails.trading_status !== undefined && UserDetails.trading_status === "on"}
                   onChange={(e) =>
                     LogIn_WIth_Api(
                       e.target.checked,
