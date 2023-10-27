@@ -22,6 +22,7 @@
     "exceljs": "^4.3.0",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.1",
+    "mathjs": "^11.11.2",
     "moment": "^2.29.4",
     "mongoose": "^7.3.4",
     "moving-averages": "^4.0.6",
@@ -35,6 +36,7 @@
     "socket.io-client": "^4.7.2",
     "technicalindicators": "^3.1.0",
     "useragent": "^2.3.0",
-    "winston": "^3.10.0"
+    "winston": "^3.10.0",
+    "yahoo-finance": "^0.3.8"
   }
 }

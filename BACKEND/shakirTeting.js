@@ -18,6 +18,9 @@ module.exports = function (app) {
   const client = new MongoClient(uri, { useUnifiedTopology: true });
   client.connect();
   console.log("Connected to MongoDB successfully!.....");
+
+
+  const dbTradeTools = client.db('TradeTools');
  
 
   app.get("/pro",async (req , res)=>{
@@ -288,8 +291,6 @@ module.exports = function (app) {
   async function connectToDB(collectionName, response) {
     try {
 
-
-
       //const db = client.db('TradeTools'); // Replace 'mydb' with your desired database name
       const db = client.db('TradeTools'); // Replace 'mydb' with your desired database name
       // console.log("db",db);
@@ -323,22 +324,17 @@ module.exports = function (app) {
             v: parseFloat(response.v)
           }
 
-          const changeStream = collection.watch();
-
-          changeStream.on('change', (change) => {
-            // Handle the change event
-            console.log('Change event:', change);
-
-            // You can add your logic here to evaluate changes
-            // For example, run an eval function
-            evaluateFunction(change);
-          });
+          // const changeStream = collection.watch();
+          // changeStream.on('change', (change) => {
+          //   console.log('Change event:', change);
+          //   // You can add your logic here to evaluate changes
+          //   // For example, run an eval function
+          //   evaluateFunction(change);
+          // });
 
           // Define a function to evaluate changes
           function evaluateFunction(change) {
-            // Add your evaluation logic here based on the change event
-            // For example, you can run an eval function on the inserted document
-            // This is just a placeholder; replace it with your actual logic
+        
             console.log('Evaluating changes:', change);
           }
 
@@ -349,12 +345,12 @@ module.exports = function (app) {
 
         createView(collectionName);
         createViewM3(collectionName);
-        createViewM5(collectionName);
-        createViewM10(collectionName)
-        createViewM15(collectionName)
-        createViewM30(collectionName)
-        createViewM60(collectionName)
-        createViewM1DAY(collectionName)
+      //  createViewM5(collectionName);
+       // createViewM10(collectionName)
+       // createViewM15(collectionName)
+       // createViewM30(collectionName)
+       // createViewM60(collectionName)
+       // createViewM1DAY(collectionName)
 
       } else {
         // console.log(`Collection '${collectionName}' does not exist.`);
@@ -422,7 +418,7 @@ module.exports = function (app) {
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M_' + collectionName);
-      console.log("collectionExists view 1 minute", collectionExists)
+      //console.log("collectionExists view 1 minute", collectionExists)
       // console.log("pipeline",pipeline)
 
       if (collectionExists) {
@@ -1059,6 +1055,9 @@ module.exports = function (app) {
 
 
   app.get("/testing_socket", function (req, res) {
+    //  dropAllCollections();
+    // res.send("okkkk"); 
+    // return
 
     const io = require("socket.io-client");
 
@@ -1070,7 +1069,7 @@ module.exports = function (app) {
       console.log("Received data ':", response);
       // Do something with the received data here
       if (response.tk) {
-        //console.log("response",response)
+        console.log("response",response)
         connectToDB(response.tk, response);
         // console.log("token --",response.tk);
         // getTokenStrategy(response.tk)
@@ -1822,10 +1821,152 @@ module.exports = function (app) {
   });
 
 
+app.get("/testing_condition",async(req,res)=>{
+  const math = require('mathjs');
+
+
+  let data = {
+    a: 8,
+    b: 7,
+    c: 9,
+  };
+
+  // Define the condition as a function
+  const condition = (data) => ((data.a >= data.b || data.c < data.b) && data.b > data.a)||data.b < data.a;
+  
+  // Evaluate the condition with the data
+  let result = condition(data);
+  
+ // console.log(result);
+
+ //res.send("okkkkk")
+  
+
+  const pipeline = [
+    {
+    $match : {
+      tokensymbol:"3045"
+     }
+    }
+  ];
+
+
+  const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
+ if(allStrategyResult.length > 0){
+  for (const val of allStrategyResult) {
+    console.log("startegy",val.condition)
+    console.log("timeframe",val.timeframe)
+    console.log("tokensymbol",val.tokensymbol)
+
+    //console.log("condition_source",val.condition_source.split(','))
+    
+    let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
+
+    const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+
+    if (ExistView.length > 0) {
+
+     // console.log("exist collection if ",collectionName)
+      const collection = dbTradeTools.collection(collectionName);
+      const get_view_data = await collection.aggregate([{$sort :{_id:1}}]).toArray();
+
+
+   // console.log("get_view_data",get_view_data)
+
+  
+
+   let checkData = {}
+    if(val.condition_source != null){
+    let condition_source = val.condition_source.split(',');
+    console.log("condition_source",condition_source)
+    if(condition_source.length > 0){
+      for (const sourceVal of condition_source) {
+    
+        console.log("condition_source",sourceVal)
+
+        const matches = sourceVal.match(/(\w+)\((\d+)\)/);
+
+      
+        
+        
+        if (matches) {
+         
+          const OFFSET_KEY = matches[2]; //
+          
+          console.log("OFFSET_KEY",OFFSET_KEY)
+          console.log("OFFSET_KEY",parseInt(OFFSET_KEY)+1)
+            
+          const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY)+1)];
+
+         // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
+          console.log("matches[1]",matches[1]); // This will output: 'close(1)'
+         
+           
+          let source
+          if(matches[1] == "close"){
+            source = viewSourceValue.close;
+          }else if(matches[1] == "open"){
+            source = viewSourceValue.open;
+          }else if(matches[1] == "low"){
+            source = viewSourceValue.low;
+          }else if(matches[1] == "high"){
+            source = viewSourceValue.high;
+          }
+
+           
+       
+           console.log("source" ,matches[1])
+           console.log("source value" ,source)
+       
+
+        } else {
+          console.log("No match found");
+        }
+
+     //  const key = sourceVal.replace(/[^a-zA-Z0-9]/g, ''); // Extract the key from the string
+       checkData[sourceVal] = '123';
+
+      }
+      }
+
+    }
+    console.log("checkData - ",checkData)
+
+     // console.log("get_view_data",get_view_data)
+     
+    }
+
+   res.send("okk done")
+    return
+    // Assuming you have some data to use for the condition evaluation
+    const data = {
+      // close: [480],
+      // low: [485],
+      // high: [685],
+    }; 
+    
+    // let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
+
+    // const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+
+    // if (ExistView.length > 0) {
+
+    //  // console.log("exist collection if ",collectionName)
+    //   const collection = dbTradeTools.collection(collectionName);
+    //   const get_view_data = await collection.aggregate([]).toArray();
+     
+    // }
+
+
+   }
+  }
+  res.send("okk")
+
+});
 
   app.post("/make_startegy", async function (req, res) {
-
-
+     return
+    
     let user_id = req.body.user_id;
     let tokensymbol = req.body.tokensymbol;
     let symbol_name = req.body.symbol_name;
@@ -1843,12 +1984,13 @@ module.exports = function (app) {
     let buffer_value = req.body.buffer_value;
     let type = req.body.type;
     let offset = req.body.offset;
+    let condition_source = req.body.condition_source;
 
-
+    console.log("1")
 
     // Add Strategy User..
     try {
-
+      console.log("2")
       await UserMakeStrategy.create({
         user_id: user_id,
         tokensymbol: tokensymbol,
@@ -1867,8 +2009,10 @@ module.exports = function (app) {
         buffer_value: buffer_value,
         type: type,
         offset: offset,
-      })
+        condition_source: condition_source,
+       })
         .then(async (createUserMakeStrategy) => {
+          console.log("3")
           res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
           return
           const last_insert_id = createUserMakeStrategy._id;
@@ -1930,39 +2074,21 @@ module.exports = function (app) {
 
 
         }).catch((err) => {
-          //console.error('Error creating and saving user:', err.keyValue.name);
-          res.send({ status: false, msg: "Duplicate Value", data: err.keyValue.name })
+          console.log("4")
+          console.error('Error creating and saving user:', err);
+          res.send({ status: false, msg: err.message})
 
         });
 
     } catch (error) {
-
+      console.log("5",error)
     }
 
-
-
-
-
-
-
     return
-
-
-
-
-
-
-
 
     let collectionName = 'M' + timeframe + '_' + tokensymbol;
 
     //  const collection = db.collection(collectionName);
-
-
-
-
-
-
 
 
     res.send("okkk");
@@ -2012,8 +2138,6 @@ module.exports = function (app) {
       get_final_data = get_view_data.map(item => item.low);
     }
 
-
-
     let averageData = "";
 
     if (indicator == "MA") {
@@ -2034,18 +2158,7 @@ module.exports = function (app) {
     }
 
 
-
-
-
-
-
     res.send(averageData);
-
-
-
-
-
-
 
   });
 
@@ -2141,24 +2254,14 @@ module.exports = function (app) {
     axios(config)
       .then(function (response) {
 
-
-       
-      
-
           // res.send(response.data);
           // console.log(response.data);
-
-
-
           // Using a loop to extract 'name' and 'instrumenttype'
 
 
           var unique_key = []
           let count = 0
           response.data.forEach((item) => {
-
-
-            
 
             //   function findRepeatedElements(array) {
             //     const frequencyMap = {};
@@ -2756,6 +2859,170 @@ module.exports = function (app) {
 
 
     res.send("okk")
+  })
+
+
+
+  app.get("/tt",async(req,res)=>{
+    
+    let price = "19300"
+    let symbol = "NIFTY"
+    let expiry = "26102023"
+    let limit_set = 40
+   
+    
+    const pipeline2 = [
+      {
+        $match: {
+          $or: [
+            {
+              $and: [
+                { strike: { $lt: price} },
+                { segment: "O" },
+                { symbol: symbol},
+                { expiry: expiry}
+              ]
+            },
+            {
+              $and: [
+                { strike: price},
+                { symbol: symbol},
+                { expiry: expiry}
+              ]
+            },
+            {
+              $and: [
+                { strike: { $gt: price} },
+                { symbol: symbol},
+                { expiry: expiry}
+              ]
+            }
+          ]
+        }
+      },
+      {
+        $sort: {
+          strike: 1
+        }
+      },
+      {
+        $limit: limit_set
+      },
+      {
+        $project: {
+          _id: 0,
+          strike: 1,
+          option_type: 1,
+          exch_seg: 1,
+          instrument_token: 1,
+         // option_type: 1
+        }
+      }
+    ]
+
+
+
+
+
+    const pipeline3 = [
+      {
+        $match: {
+          $or: [
+            {
+              strike: { $lt: price },
+              segment: "O",
+              symbol: symbol,
+              expiry: expiry,
+            },
+            {
+              strike: price,
+              segment: "O",
+              symbol: symbol,
+              expiry: expiry,
+            },
+            {
+              strike: { $gt: price },
+              segment: "O",
+              symbol: symbol,
+              expiry: expiry,
+            },
+          ],
+        },
+      },
+      {
+        $sort: {
+          strike: 1
+        }
+      },
+      {
+        $limit: limit_set
+      },
+      {
+        $group: {
+          _id: "$strike",
+          symbol: { $first: "$symbol" },
+          expiry: { $first: "$expiry" },
+          instrument_token: { $first: "$instrument_token" },
+          option_type: { $first: "$option_type" }
+        }
+      },
+      {
+        $sort: {
+          _id: 1
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          strike: "$_id",
+        
+        }
+      }
+    ]
+
+
+    const result = await Alice_token.aggregate(pipeline2);
+    
+    const resultStrike = await Alice_token.aggregate(pipeline3);
+
+    const final_data = [];
+          var channelstr = ""
+          if(result.length > 0){
+          resultStrike.forEach(element => {
+              let call_token = "";
+              let put_token = "";
+              result.forEach(element1 => {
+
+                  if (element.strike == element1.strike) {
+                      if (element1.option_type == "CE") {
+                          call_token = element1.instrument_token;
+                      } else if (element1.option_type == "PE") {
+                          put_token = element1.instrument_token;
+                      }
+
+                      channelstr += element1.exch_seg+"|" + element1.instrument_token + "#"
+                  }
+
+              });
+
+
+              const push_object = {
+                  symbol: element.symbol,
+                  strike_price: element.strike,
+                  call_token: call_token,
+                  put_token: put_token,
+                  expiry: element.expiry
+              }
+
+              final_data.push(push_object)
+
+          });
+          var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+          res.send({status:true, data: final_data, channellist: alltokenchannellist} )
+          }  
+       else{
+          res.send({status:false, data: [], channellist: ""} )
+     }
   })
 
 

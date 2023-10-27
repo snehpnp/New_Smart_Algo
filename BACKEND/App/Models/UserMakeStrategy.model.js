@@ -58,6 +58,9 @@ const userMakeStrategySchema = new mongoose.Schema({
         required: true,
        
     },
+    condition_source: {
+        type: String,   
+    },
     buffer_value: {
         type: String,
         required: true,
