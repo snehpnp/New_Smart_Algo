@@ -22,6 +22,7 @@
     "exceljs": "^4.3.0",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.1",
+    "live-stock-price": "^1.0.4",
     "moment": "^2.29.4",
     "mongoose": "^7.3.4",
     "moving-averages": "^4.0.6",
@@ -29,12 +30,16 @@
     "node-datetime": "^2.1.2",
     "nodemailer": "^6.9.4",
     "nodemon": "^3.0.1",
+    "nse-data": "^1.0.4",
     "os": "^0.1.2",
+    "quandl": "^0.0.6",
     "sha256": "^0.2.0",
     "socket.io": "^4.7.2",
     "socket.io-client": "^4.7.2",
+    "stock-nse-india": "^1.1.3",
     "technicalindicators": "^3.1.0",
     "useragent": "^2.3.0",
-    "winston": "^3.10.0"
+    "winston": "^3.10.0",
+    "yahoo-finance": "^0.3.8"
   }
 }

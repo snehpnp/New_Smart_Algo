@@ -1,4 +1,18 @@
-https://masterswift-beta.mastertrust.co.in/oauth2/fallbacks/error?error=invalid_request&error_description=The+request+is+missing+a+required+parameter%2C+includes+an+invalid+parameter+value%2C+includes+a+parameter+more+than+once%2C+or+is+otherwise+malformed&error_hint=The+%22redirect_uri%22+parameter+does+not+match+any+of+the+OAuth+2.0+Client%27s+pre-registered+redirect+urls.
+let a = 10;
+let b = 20;
+
+// 1.
+// let temp = a;
+// a = b;
+// b = temp;
+
+// 2. 
+// a = a + b;
+// b = a - b;
+// a = a - b;
+
+// 3
+// [a, b] = [b, a];
 
 
-https://masterswift-beta.mastertrust.co.in/oauth2/auth?scope=orders%20holdings&state=eyJ1c2VyX2lkIjoiMTAwIiwicGFuZWwiOiJtZWdoYXNvZnRlY2giLCJ1cmwiOiJodHRwczovL3NvZnR3YXJlLm1lZ2hhc29mdGVjaC5jb20vIn0=&redirect_uri=https://software.meghasoftech.com:3137/mastertrust/access_token&response_type=code&client_id=TFTLLcTuB3
+console.log("a :",a," b:",b);

@@ -29,15 +29,18 @@ class Login {
                 return res.json({ status: false, msg: 'User Not exists', data: [] });
             }
 
-            // WHERE LOGIN CHECKgetIPAddress
-            if (device == "APP") {                  //App Login Check
-                if (EmailCheck.AppLoginStatus == 1) {
-                    return res.json({ status: false, msg: 'You are already logged in on the phone.', data: [] });
+            if (EmailCheck.Role == "USER" || EmailCheck.Role == "SUBADMIN") {
+                // WHERE LOGIN CHECKgetIPAddress
+                if (device == "APP") {                  //App Login Check
+                    if (EmailCheck.AppLoginStatus == 1) {
+                        return res.json({ status: false, msg: 'You are already logged in on the phone.', data: [] });
+                    }
+                } else if (device == "WEB") {          //Web login check
+                    if (EmailCheck.WebLoginStatus == 1) {
+                        return res.send({ status: false, msg: 'You are already logged in on the Web.', data: [] });
+                    }
                 }
-            } else if (device == "WEB") {          //Web login check
-                if (EmailCheck.WebLoginStatus == 1) {
-                    return res.send({ status: false, msg: 'You are already logged in on the Web.', data: [] });
-                }
+
             }
 
 
@@ -145,22 +148,40 @@ class Login {
             }
 
             try {
-                // WHERE LOGIN CHECK
-                if (Device.toUpperCase() == "APP") {                  //App Login Check
-                    if (EmailCheck.AppLoginStatus == 1) {
-                        logger.info('You are already logged in on the phone.', { role: EmailCheck.Role, user_id: EmailCheck._id });
-                        return res.send({ status: false, msg: 'You are already logged in on the phone.', data: [] });
-                    } else {
+                if (EmailCheck.Role == "USER" || EmailCheck.Role == "SUBADMIN") {
+
+                    // WHERE LOGIN CHECK
+                    if (Device.toUpperCase() == "APP") {                  //App Login Check
+                        if (EmailCheck.AppLoginStatus == 1) {
+                            logger.info('You are already logged in on the phone.', { role: EmailCheck.Role, user_id: EmailCheck._id });
+                            return res.send({ status: false, msg: 'You are already logged in on the phone.', data: [] });
+                        } else {
+                            addData["AppLoginStatus"] = 1;
+                        }
+                    } else if (Device.toUpperCase() == "WEB") {          //Web login check
+                        if (EmailCheck.WebLoginStatus == 1) {
+                            logger.info('You are already logged in on the Web.', { role: EmailCheck.Role, user_id: EmailCheck._id });
+                            return res.send({ status: false, msg: 'You are already logged in on the Web.', data: [] });
+                        } else {
+                            addData["WebLoginStatus"] = 1;
+                        }
+                    }
+                } else {
+
+
+                    // WHERE LOGIN CHECK
+                    if (Device.toUpperCase() == "APP") {                  //App Login Check
+
                         addData["AppLoginStatus"] = 1;
-                    }
-                } else if (Device.toUpperCase() == "WEB") {          //Web login check
-                    if (EmailCheck.WebLoginStatus == 1) {
-                        logger.info('You are already logged in on the Web.', { role: EmailCheck.Role, user_id: EmailCheck._id });
-                        return res.send({ status: false, msg: 'You are already logged in on the Web.', data: [] });
-                    } else {
+
+                    } else if (Device.toUpperCase() == "WEB") {          //Web login check
+
                         addData["WebLoginStatus"] = 1;
+
                     }
+
                 }
+
 
             } catch (error) {
                 console.log("Verfiy error", error);
