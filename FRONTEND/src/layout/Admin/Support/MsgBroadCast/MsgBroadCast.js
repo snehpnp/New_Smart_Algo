@@ -15,6 +15,9 @@ import { Trash2 } from "lucide-react";
 
 import { Add_Message_Broadcast, Getl_All_Message_Broadcast, Remove_Message_Broadcast } from "../../../../ReduxStore/Slice/Admin/MessageBroadcastSlice";
 
+
+import { GET_PANEL_BROKERS } from "../../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
+
 const MsgBroadCast = () => {
 
     const dispatch = useDispatch()
@@ -26,6 +29,8 @@ const MsgBroadCast = () => {
         loading: true,
         data: []
     });
+
+    const [AllBrokers, setBrokers] = useState([]);
     const [AllMessage, setAllMessages] = useState({
         loading: true,
         data: []
@@ -40,6 +45,15 @@ const MsgBroadCast = () => {
     });
 
 
+
+    const broker_list = async () => {
+        await dispatch(GET_PANEL_BROKERS({ domain: "sneh.com" })).unwrap().then((response) => {
+            if (response.status) {
+                // console.log(response.data.broker_id);
+                setBrokers(response.data.broker_id)
+            }
+        })
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -80,35 +94,36 @@ const MsgBroadCast = () => {
     });
 
 
-
     const fields = [
         {
-            name: 'Strategy',
-            label: 'strategy',
+            name: 'Broker',
+            label: 'Broker',
             type: 'select',
-            options: AllStrategy.data && AllStrategy.data.map((item) => ({ label: item.strategy_name, value: item._id })),
+            options: AllBrokers && AllBrokers.map((item) => ({ label: item.name, value: item.id })),
             label_size: 12, col_size: 3, disable: false
         },
         { name: 'message', label: 'Entery Your Message', type: 'msgbox', label_size: 12, row_size: 3, col_size: 12, disable: true },
     ];
 
-    const data = async () => {
-        await dispatch(Get_All_Service_for_Client({
-            req: {
-            }, token: user_token
-        })).unwrap().then((response) => {
-            if (response.status) {
-                setAllStrategy({
-                    loading: false,
-                    data: response.data
-                });
-            }
-        })
-    }
+    // const data = async () => {
+    //     await dispatch(Get_All_Service_for_Client({
+    //         req: {
+    //         }, token: user_token
+    //     })).unwrap().then((response) => {
+    //         if (response.status) {
+    //             setAllStrategy({
+    //                 loading: false,
+    //                 data: response.data
+    //             });
+    //         }
+    //     })
+    // }
+
 
 
     useEffect(() => {
-        data()
+        // data()
+        broker_list()
     }, [])
 
 
@@ -143,7 +158,7 @@ const MsgBroadCast = () => {
                 if (response.status === 409) {
                     toast.error(response.data.msg);
                 }
-                else if(response.status) {
+                else if (response.status) {
                     toast.success(response.msg);
                     setRefresh(!refresh)
                 }
@@ -157,20 +172,16 @@ const MsgBroadCast = () => {
     }
 
 
-
-
-
-
     const columns = [
         {
             dataField: "index",
             text: "SR. No.",
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
-        {
-            dataField: "_id",
-            text: "SR. No.",
-        },
+        // {
+        //     dataField: "_id",
+        //     text: "SR. No.",
+        // },
         {
             dataField: 'Message',
             text: 'Message'

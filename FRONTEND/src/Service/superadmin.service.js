@@ -25,7 +25,6 @@ export async function GET_ALL_PANELS_LIST(data, token) {
 
 
 // UPDATE_PANEL_THEME
-
 export async function UPDATE_PANEL_THEME(data , token) {
     try {
         const res = await axios.post(`${Config.base_url}update/panel_theme`, data ,{
@@ -43,7 +42,6 @@ export async function UPDATE_PANEL_THEME(data , token) {
 
 
 // CREATE_API_INFORMATION
-
 export async function CREATE_API_INFORMATION(data , token) {
     try {
         const res = await axios.post(`${Config.base_url}add/apicreateinfo`, data ,{
@@ -62,7 +60,6 @@ export async function CREATE_API_INFORMATION(data , token) {
 }
 
 // UPDATE_API_INFORMATION
-
 export async function UPDATE_API_INFORMATION(data , token) {
     try {
         const res = await axios.post(`${Config.base_url}update/apicreateinfo`, data ,{
@@ -79,8 +76,8 @@ export async function UPDATE_API_INFORMATION(data , token) {
     }
 
 }
-// GET_API_INFORMATION
 
+// GET_API_INFORMATION
 export async function GET_API_INFORMATION(token) {
     try {
         const res = await axios.get(`${Config.base_url}getall/apicreateinfo`, {
@@ -97,7 +94,7 @@ export async function GET_API_INFORMATION(token) {
 
 }
 
-
+// GET PANEL INFORMATION TO DOMAIN FIND
 export async function GET_PANEL_INFORMATION(id,token) {
     try {
 
@@ -113,6 +110,8 @@ export async function GET_PANEL_INFORMATION(id,token) {
     }
 
 }
+
+// FIND ALL PANEL DATA
 export async function GET_ALL_ADMIN_CLIENT(id,token) {
     try {
 
@@ -129,7 +128,7 @@ export async function GET_ALL_ADMIN_CLIENT(id,token) {
 
 }
 
-
+// GET ALL SUBADMIN TO ADMIN PANEL
 export async function GET_ALL_SUBADMIN_CLIENT(id,token) {
     try {
 
@@ -146,7 +145,7 @@ export async function GET_ALL_SUBADMIN_CLIENT(id,token) {
 
 }
 
-
+// ADD LICENSE TO SUPERADMIN
 export async function ADD_LICENCE_TO_COMPANY(id,token) {
     try {
 
@@ -163,9 +162,7 @@ export async function ADD_LICENCE_TO_COMPANY(id,token) {
 
 }
 
-
-
-
+// GET 
 export async function GET_ADMIN_HELPS(id,token) {
     try {
 
@@ -200,4 +197,20 @@ export async function UPDATE_ADMIN_PERMISSION(id,token) {
 }
 
 
+// GET PANEL INFORMATION TO DOMAIN FIND
+export async function GET_PANEL_BROKER(domain) {
+    try {
+
+        const res = await axios.post(`${Config.base_url}get/panel/broker`, domain,{
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        // custom error
+    }
+
+}
 

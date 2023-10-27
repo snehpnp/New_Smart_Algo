@@ -14,7 +14,7 @@ const panelSchema = new mongoose.Schema({
     port: {
         type: String,
         required: [true, "Please enter Port name unique!"],
-        
+
     },
     key: {
         type: String,
@@ -46,7 +46,11 @@ const panelSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'theme_list',
 
-    }
+    },
+    broker_id: [{
+        id: String,
+        name: String
+    }]
 }, {
     timestamps: true
 });

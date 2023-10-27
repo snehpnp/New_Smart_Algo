@@ -127,7 +127,7 @@ const Modify = ({ UserDetails }) => {
                         </div>
                     </div>
                 </div>
-                <div className="my-2">
+                {/* <div className="my-2">
                     <h4>Qty Type</h4>
                     <div className="d-flex">
                         <div className="col-6">
@@ -168,7 +168,7 @@ const Modify = ({ UserDetails }) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <div className="my-2">
                     <h4>Signals Execution Type</h4>
                     <div className="d-flex mt-2">

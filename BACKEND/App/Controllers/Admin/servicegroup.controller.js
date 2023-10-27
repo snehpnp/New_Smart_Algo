@@ -34,7 +34,10 @@ class GroupService {
         return res.send({ status: false, msg: "Group Name Is already Exist", data: groupServices })
 
       }
+      if (groupServices.length < 50) {
+        return res.send({ status: false, msg: "You are Select Only 50 Services", data: groupServices })
 
+      }
 
       serviceGroupName.create({
         name: groupdetails.name,
@@ -93,7 +96,10 @@ class GroupService {
       // if (groupServices.length > 0) {
       //   return res.send({ status: false, msg: "Name is already Exist", data: groupServices })
       // }
+        // if (groupServices.length < 50) {
+        //   return res.send({ status: false, msg: "You are Select Only 50 Services", data: groupServices })
 
+        // }
 
 
 

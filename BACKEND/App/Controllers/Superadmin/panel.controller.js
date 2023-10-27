@@ -137,9 +137,8 @@ class Panel {
         }
     }
 
+
     // GET All Panel
-
-
     async GetAllPanel(req, res) {
         try {
 
@@ -224,6 +223,8 @@ class Panel {
         }
     }
 
+
+
     // Get All APi Infor
     async GetAllAPiInfo(req, res) {
         try {
@@ -282,6 +283,28 @@ class Panel {
         }
     }
 
+
+
+      // GET ONE PANEL AND HIS 
+      async GetPanlebroker(req, res) {
+        try {
+            const { domain } = req.body
+            
+            // FIND PANEL NAME DUPLICATE
+            const desiredDomain = 'your_desired_domain_value'; // Replace with the desired domain value
+
+            const Panel_information = await panel_model.findOne({ domain }, 'broker_id'); 
+
+            // CHECK IF PANEL EXIST OR NOT
+            if (!Panel_information) {
+                return res.status(409).json({ status: false, msg: 'Panle Not exist Not exists', data: [] });
+            }
+            res.send({ status: true, msg: "Get Panel Broker", data: Panel_information })
+
+        } catch (error) {
+            // console.log("Theme error-", error);
+        }
+    }
 
 }
 

@@ -190,7 +190,9 @@ const UserProfile = () => {
                         </li>
 
                       )}
-                      {/* {user_role === "USER" || !gotodashboard ? */}
+{console.log(user_role , " ---",gotodashboard)}
+
+                      {user_role === "USER" || gotodashboard  || user_role !== "ADMIN" || user_role !== "SUBADMIN" ?
 
                         < li className="nav-item">
                           <a
@@ -201,7 +203,7 @@ const UserProfile = () => {
                             Modify Updates
                           </a>
                         </li>
-                        {/* : ""} */}
+                         : ""} 
                     </ul>
                     <div className="tab-content">
                       <div id="about-me" className="tab-pane fade active show">
