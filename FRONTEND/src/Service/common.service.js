@@ -96,3 +96,20 @@ export async function GET_OPTION_ALL_ROUND_TOKEN(data, token) {
     }
 
 }
+
+
+// GET_PANEL_KEY
+
+export async function GET_PANEL_KEY(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/panel_key`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

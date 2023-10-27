@@ -1103,6 +1103,10 @@ class Employee {
     }
   }
 
+
+
+
+
   // UPDATE BROKER KEY
   async Update_Broker_Keys(req, res) {
     try {
@@ -1133,12 +1137,23 @@ class Employee {
 
 
 
+  // GET ONLY CLIENT KEY
 
+  async GetclientKey(req, res) {
+    try {
+      const { id } = req.body
+      var _id = new ObjectId(id);
+      const Client_key = await User_model.findOne({ _id }, 'client_key');
+      // CHECK IF PANEL EXIST OR NOT
 
-
-
-
-
+      if (!Client_key) {
+        return res.status(409).json({ status: false, msg: 'Client Not exists', data: [] });
+      }
+      res.send({ status: true, msg: "Get Client key", data: Client_key })
+    } catch (error) {
+      // console.log("Theme error-", error);
+    }
+  }
 }
 
 

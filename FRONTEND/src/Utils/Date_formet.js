@@ -53,6 +53,57 @@ export const today = () => {
   return full
 }
 
+
+
+export const convert_string_to_month = (moth_str) => {
+  var day_expiry = moth_str.slice(0, 2);
+  var moth_str = moth_str.slice(2, 4);
+  var year_expiry = moth_str.slice(-2);
+
+  console.log("year_expiry", year_expiry)
+  console.log("moth_str", moth_str)
+  console.log("day_expiry", day_expiry)
+
+  let month_string
+  if (moth_str === "01") {
+    month_string = "JAN";
+  } else if (moth_str === "02") {
+    month_string = "FEB";
+  }
+  else if (moth_str === "03") {
+    month_string = "MAR";
+  }
+  else if (moth_str === "04") {
+    month_string = "APR";
+  }
+  else if (moth_str === "05") {
+    month_string = "MAY";
+  }
+  else if (moth_str === "06") {
+    month_string = "JUN";
+  }
+  else if (moth_str === "07") {
+    month_string = "JUL";
+  }
+  else if (moth_str === "08") {
+    month_string = "AUG";
+  }
+  else if (moth_str === "09") {
+    month_string = "SEP";
+  }
+  else if (moth_str === "10") {
+    month_string = "OCT";
+  }
+  else if (moth_str === "11") {
+    month_string = "NOV";
+  }
+  else if (moth_str === "12") {
+    month_string = "DEC";
+  }
+
+  return `${year_expiry}${month_string}${day_expiry}`
+
+}
 export const dateFormate = (date) => {
   const dt = dateTime.create(date);
   const ccdate = dt.format('Y-m-d');

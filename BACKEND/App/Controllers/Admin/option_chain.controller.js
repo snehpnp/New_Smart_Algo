@@ -11,7 +11,7 @@ class OptionChain {
     async Get_Option_Symbol(req, res) {
         try {
 
-            var symbols = await Get_Option_Chain_modal.find().select('symbol token price')
+            var symbols = await Get_Option_Chain_modal.find().select('symbol token price').sort({ symbol: 1 });
             if (!symbols) {
                 return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
             }
@@ -32,6 +32,7 @@ class OptionChain {
                 return res.status(400).json({ status: false, msg: 'Symbol is required.', data: [] });
             }
 
+            const currentDateTime = new Date();
             const pipeline = [
                 {
                     $match: { symbol: req.body.symbol }
@@ -53,6 +54,11 @@ class OptionChain {
                                 format: "%d%m%Y"
                             }
                         }
+                    }
+                },
+                {
+                    $match: {
+                        expiryDate: { $gte: currentDateTime }
                     }
                 },
                 {
@@ -156,6 +162,8 @@ class OptionChain {
                         option_type: 1,
                         exch_seg: 1,
                         instrument_token: 1,
+                        symbol: 1,
+                        segment: 1,
                         // option_type: 1
                     }
                 }
@@ -219,17 +227,31 @@ class OptionChain {
             const result = await Alice_token.aggregate(pipeline2);
             const resultStrike = await Alice_token.aggregate(pipeline3);
 
+
+
+
             const final_data = [];
             var channelstr = ""
             if (result.length > 0) {
                 resultStrike.forEach(element => {
+                 
                     let call_token = "";
                     let put_token = "";
+                    let symbol = ""
+                    let segment = ""
                     result.forEach(element1 => {
                         if (element.strike == element1.strike) {
+                            console.log("symbol", symbol)
+                            console.log("segment", segment)
+
+                              
                             if (element1.option_type == "CE") {
+                                symbol = element1.symbol
+                                segment = element1.segment
                                 call_token = element1.instrument_token;
                             } else if (element1.option_type == "PE") {
+                                symbol = element1.symbol
+                                segment = element1.segment
                                 put_token = element1.instrument_token;
                             }
                             channelstr += element1.exch_seg + "|" + element1.instrument_token + "#"
@@ -237,7 +259,8 @@ class OptionChain {
                     });
 
                     const push_object = {
-                        symbol: element.symbol,
+                        symbol: symbol,
+                        segment: segment,
                         strike_price: element.strike,
                         call_token: call_token,
                         put_token: put_token,
