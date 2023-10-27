@@ -39,6 +39,9 @@ const AliceViewModel = db.AliceViewModel;
 const BrokerResponse = db.BrokerResponse;
 
 
+const aliceblue = require('./Broker/aliceblue')
+const aliceblueTest = require('./Broker/aliceblueTest')
+
 
 // CONNECTION FILE IN MONGOODE DATA BASE 
 const MongoClient = require('mongodb').MongoClient;
@@ -93,8 +96,7 @@ d.getDate(),
 
 
 // BROKER REQUIRES
-const aliceblue = require('./Broker/aliceblue')
-//const aliceblueTest = require('./Broker/aliceblue')
+const AliceBlue = require('./Broker/aliceblue')
 
 
 
@@ -161,18 +163,11 @@ app.post('/broker-signals', async (req, res) => {
 
     // IF SIGNEL NOT RECIVED
     if (req.rawBody) {
+
       // console.log("req.rawBody",req.rawBody)
       const splitArray = req.rawBody.split('|');
-      
-      const signals = {};
 
-    // Iterate through the pairs and split each pair into key and value
-      splitArray.forEach(pair => {
-      const [key, value] = pair.split(':');
-      signals[key] = value;
-     });
-
-     console.log("final result get signal",signals);
+      //  logger.info('RECEIVED_SIGNALS ' + splitArray);
 
       fs.appendFile(filePath, '\nNEW TRADE TIME ' + new Date() + '\nRECEIVED_SIGNALS ' + splitArray + '\n', function (err) {
         if (err) {
@@ -181,42 +176,23 @@ app.post('/broker-signals', async (req, res) => {
       });
 
 
-      var dt = signals.DTime;
-      var input_symbol = signals.Symbol;
-      var type = signals.TType;
-      var tr_price = signals.Tr_Price;
-      var price = signals.Price;
-      var sq_value = signals.Sq_Value;
-      var sl_value = signals.Sl_Value;
-      var tsl = signals.TSL;
-      var segment = signals.Segment.toUpperCase();
-      var segment1 = signals.Segment.toUpperCase();
-      var strike = signals.Strike;
-      var option_type = signals.OType;
-      var expiry = signals.Expiry;
-      var strategy = signals.Strategy;
-      var qty_percent = signals.Quntity;
-      var client_key = signals.Key;
-      var demo = signals.Demo;
-
-
-      // var dt = splitArray[0]
-      // var input_symbol = splitArray[1]
-      // var type = splitArray[2]
-      // var tr_price = splitArray[3]
-      // var price = splitArray[4]
-      // var sq_value = splitArray[5]
-      // var sl_value = splitArray[6]
-      // var tsl = splitArray[7]
-      // var segment = splitArray[8]
-      // var segment1 = splitArray[8]
-      // var strike = splitArray[9]
-      // var option_type = splitArray[10]
-      // var expiry = splitArray[11]
-      // var strategy = splitArray[12]
-      // var qty_percent = splitArray[13]
-      // var client_key = splitArray[14]
-      // var demo = splitArray[15]
+      var dt = splitArray[0]
+      var input_symbol = splitArray[1]
+      var type = splitArray[2]
+      var tr_price = splitArray[3]
+      var price = splitArray[4]
+      var sq_value = splitArray[5]
+      var sl_value = splitArray[6]
+      var tsl = splitArray[7]
+      var segment = splitArray[8]
+      var segment1 = splitArray[8]
+      var strike = splitArray[9]
+      var option_type = splitArray[10]
+      var expiry = splitArray[11]
+      var strategy = splitArray[12]
+      var qty_percent = splitArray[13]
+      var client_key = splitArray[14]
+      var demo = splitArray[15]
 
 
       //console.log("client_key",client_key)
@@ -343,62 +319,200 @@ app.post('/broker-signals', async (req, res) => {
 
           // HIT TRADE IN BROKER SERVER
 
+
+        //  if (instrument_token != 0) {
+
             if (process.env.PANEL_KEY == client_key) {
-              //Process Alice Blue admin client
-              const AliceBlueCollection = db1.collection('aliceblueView');
-              // var query = {"strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment,web_url:"1"}
-              // console.log("query",query)
+
+              // logger.info('RECEIVED_SIGNALS_PANEl_NAME ' + process.env.PANEL_NAME + ' KEY ' + client_key);
+
+              //Process Alice Blue
+              const AliceBlueCollection = db1.collection('aliceViewAllClient');
+              var query = { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment }
               try {
 
-                const AliceBluedocuments = await AliceBlueCollection.find({"strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment,web_url:"1"}).toArray();
-          
+                const AliceBluedocuments = await AliceBlueCollection.find(query).toArray();
+                // console.log("All documents:", documents);
+                // logger.info(' ALICE BLUE ALL CLIENT LENGTH ' + AliceBluedocuments.length);
 
                 fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + AliceBluedocuments.length + '\n', function (err) {
                   if (err) {
                     return console.log(err);
                   }
                 });
-              
-                console.log("ALICE BLUE ALL CLIENT LENGTH",AliceBluedocuments.length)
+
+                if (AliceBluedocuments.length > 0) {
+
+                  async function runFunctionWithArray(array) {
+
+                    // Run a function with the four elements of the array simultaneously
+
+                    const promises = array.map((item) => {
+
+                      return new Promise((resolve) => {
+
+                        // Simulate an asynchronous task (replace with your own function)
+
+                        setTimeout(async () => {
+
+                          const currentDate = new Date();
+
+                          const milliseconds = currentDate.getTime();
+
+                          console.log(`Running Time -- ${new Date()} function with element: ${item._id}`);
 
 
-              if (AliceBluedocuments.length > 0) {
-                aliceblue.place_order(AliceBluedocuments, signals,token,filePath,signal_req);
-               } 
+                          var brokerResponse = {
+                            user_id: item._id,
+                            receive_signal: signal_req,
+                            strategy: strategy,
+                            type: type,
+                            symbol: input_symbol,
+                            order_status: 0,
+                            order_id: "",
+                            trading_symbol: "",
+                            broker_name: "",
+                            send_request: "",
+                            reject_reason: "",
+                            receive_signal: ""
+                          };
+
+                          const newCategory = new BrokerResponse(brokerResponse)
+                          var brokerResponse = await newCategory.save()
+                            .then((data) => {
+
+                              var bro_res_last_id = data._id;
+                              aliceblue.place_order(item, splitArray, bro_res_last_id, token, logger, filePath);
+                            })
+
+
+                          resolve();
+
+                        }, 0);
+
+                      });
+
+                    });
+
+
+                    await Promise.all(promises);
+
+                  }
+                  runFunctionWithArray(AliceBluedocuments);
+                } else {
+                  console.log("Alice Blue Client Not Exit");
+                }
 
               } catch (error) {
-                console.log("Error Get Aliceblue Client In view", error);
+                console.log("Error In Broker Alice Blue", error);
               }
-              //End Process Alice Blue admin client
 
 
             } else {
 
-              //Process Tading View Client Alice Blue
-              const AliceBlueCollection = db1.collection('aliceblueView');
-              // var query = {"strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key,web_url : "2"}
-              //console.log("query",query)
-              try {
-              const AliceBluedocuments = await AliceBlueCollection.find({"strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key,web_url : "2"}).toArray();
 
-              fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE TRADING VIEW CLIENT LENGTH ' + AliceBluedocuments.length + '\n', function (err) {
-                if (err) {
-                  return console.log(err);
-                }
-              });
+              //Process Tading View Client Alice Blue
+              const AliceBlueCollection = db1.collection('aliceViewTradingViewClientTest');
+              var query = { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key }
+             
+              console.log("query",query)
+
+              const AliceBluedocuments = await AliceBlueCollection.find(query).toArray();
 
               console.log("AliceBluedocuments trading view length",AliceBluedocuments.length)
               
               if(AliceBluedocuments.length > 0){
-                aliceblue.place_order(AliceBluedocuments, signals,token,filePath,signal_req);
+                aliceblueTest.place_order(AliceBluedocuments, splitArray,token,filePath,signal_req);
               }
+              
+                
 
-            } catch (error) {
-              console.log("Error Get Aliceblue Client In view", error);
-            }
-              //End Process Tading View Client Alice Blue  
+              // try {
+              //   // logger.info(' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length);
+
+              //   fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT TRADIND VIEW ' + AliceBluedocuments.length + '\n', function (err) {
+              //     if (err) {
+              //       return console.log(err);
+              //     }
+              //   });
+
+              //   if (AliceBluedocuments.length > 0) {
+
+              //     async function runFunctionWithArray(array) {
+
+              //       // Run a function with the four elements of the array simultaneously
+
+              //       const promises = array.map((item) => {
+
+              //         return new Promise((resolve) => {
+
+              //           // Simulate an asynchronous task (replace with your own function)
+
+              //           setTimeout(async () => {
+
+              //             const currentDate = new Date();
+
+              //             const milliseconds = currentDate.getTime();
+
+              //             console.log(`Running Time -- ${new Date()} function with element: ${item._id}`);
+
+
+              //             var brokerResponse = {
+              //               user_id: item._id,
+              //               receive_signal: signal_req,
+              //               strategy: strategy,
+              //               type: type,
+              //               symbol: input_symbol,
+              //               order_status: 0,
+              //               order_id: "",
+              //               trading_symbol: "",
+              //               broker_name: "",
+              //               send_request: "",
+              //               reject_reason: "",
+              //               receive_signal: ""
+              //             };
+
+              //             const newCategory = new BrokerResponse(brokerResponse)
+              //             var brokerResponse = await newCategory.save()
+              //               .then((data) => {
+              //                 console.log("username ", item.UserName)
+              //                 var bro_res_last_id = data._id;
+              //                 aliceblue.place_order(item, splitArray, bro_res_last_id, token, logger, filePath);
+              //               })
+
+
+              //             resolve();
+
+              //           }, 0);
+
+              //         });
+
+              //       });
+
+
+              //       await Promise.all(promises);
+
+              //     }
+
+              //     runFunctionWithArray(AliceBluedocuments);
+              //   } else {
+              //     console.log("Alice Blue tradingView Client Not Exit");
+              //   }
+
+
+
+              // } catch (error) {
+              //   console.log("Error In Broker Alice Blue", error);
+              // }
+              // End Process Tading View Client Alice Blue
+
+
+              // return res.send({ msg: client_key })
 
             }
+
+         // }
+
 
           option_type = option_type.toUpperCase();
 
@@ -525,7 +639,7 @@ app.post('/broker-signals', async (req, res) => {
             if (ExitMainSignals.length != 0) {
 
               if ((ExitMainSignals[0].exit_price == "" && ExitMainSignals[0].exit_qty_percent == "") || isNaN(ExitMainSignals[0].exit_price)) {
-               // console.log("ExitMainSignals 1", ExitMainSignals);
+                console.log("ExitMainSignals 1", ExitMainSignals);
 
                 // IF EXIST ENTRY OF THIS EXIT TRADE
                 var updatedData = {
@@ -541,7 +655,7 @@ app.post('/broker-signals', async (req, res) => {
                 const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
 
               } else {
-               // console.log("ExitMainSignals 2", ExitMainSignals);
+                console.log("ExitMainSignals 2", ExitMainSignals);
 
                 // IF EXIST ENTRY OF THIS EXIT TRADE
                 var updatedData = {

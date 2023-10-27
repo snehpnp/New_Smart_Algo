@@ -18,6 +18,9 @@ module.exports = function (app) {
   const client = new MongoClient(uri, { useUnifiedTopology: true });
   client.connect();
   console.log("Connected to MongoDB successfully!.....");
+
+
+  const dbTradeTools = client.db('TradeTools');
  
 
   app.get("/pro",async (req , res)=>{
@@ -44,14 +47,17 @@ module.exports = function (app) {
 
     let post_demat_userid = "438760"
     
-    let post_access_token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc2OTk5MTcsImlhdCI6MTY5NzYyNzU1OSwianRpIjoiMzQ0NjIyZWItNjMxOS00ZjgyLTkyOWEtNTNjZmMyN2JiZTkzIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjRkNDJiMTA3LThjY2ItNDIyZC04YzRhLWNmMzc5NDE0MmVkYSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiNGQ0MmIxMDctOGNjYi00MjJkLThjNGEtY2YzNzk0MTQyZWRhIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.jYnVofPZIWZ9n9H6MvtOa-CpGAgt0BIG3hwbKI0iLiOgdmkVGILCykxL1r54WDK09K4c44eCGk-SrWWH_MHY6-vrfegbGdzpW6cVrOEEz7SpkDyd2nsYUX3SNCL1_1lUrDqjBGso5SgGE_lLLEccjfe5Nj6Qt2NOi6r-pzxuqJPFpLx_sbFcOUM3A1BZM8yFdeaex3UZ3pUzHwhDrHOg-x1VLAW8XCiW4qAzGxsBb2znErgiZTOfff2F-MoUuNbNASh8SMJsjcFpYUuMdS6OLvIIK1rGIy7zOBqP9VbEFHVzbDbQUSCh7DIUZfRdj53TbOJbKcMKz0WEF7ohM9ITMA";
+    let post_access_token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc2OTk5MTcsImlhdCI6MTY5NzYyNzU1OSwianRpIjoiMzQ0NjIyZWItNjMxOS00ZjgyLTkyOWEtNTNjZmMyN2JiZTkzIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjRkNDJiMTA3LThjY2ItNDIyZC04YzRhLWNmMzc5NDE0MmVkYSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiNGQ0MmIxMDctOGNjYi00MjJkLThjNGEtY2YzNzk0MTQyZWRhIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.jYnVofPZIWZ9n9H6MvtOa-CpGAgt0BIG3hwbKI0iLiOgdmkVGILCykxL1r54WDK09K4c44eCGk-SrWWH_MHY6-vrfegbGdzpW6cVrOEEz7SpkDyd2nsYUX3SNCL1_1lUrDqjBGso5SgGE_lLLEccjfe5Nj6Qt2NOi6r-pzxuqJPFpLx_sbFcOUM3A1BZM8yFdeaex3UZ3pUzHwhDrHOg-x1VLAW8XCiW4qAzGxsBb2znErgiZTOfff2F-MoUuNbNASh8SMJsjcFpYUuMdS6OLvIIK1rGIy7zOBqP9VbEFHVzbDbQUSCh7DIUZfRdj53TbOJbKcMKz0WEF7ohM9ITM";
+
+
+    let post_access_token1 = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc3NzU3OTgsImlhdCI6MTY5NzY4OTU3OSwianRpIjoiMmQxMGRiMWEtMTA1NS00ZDkyLTllNjctYzc3OGI1ZTRkYzYzIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjE2MjU5NTYxLWQ2MmMtNDA1Ni04MWQ2LWQ0NjM0MDAwNGQ2YyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMTYyNTk1NjEtZDYyYy00MDU2LTgxZDYtZDQ2MzQwMDA0ZDZjIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.K2gg4-8VIg73tk16DJ17Nzc1RTewJvlDbfr9dmcp2w4OOBBG2sczlBkaeSAMDDXIecALVX67DDuaVFyI05UTvG3izZ11jEbygpmhV8V3Rt6jywFE4A0OVab-1O-P3d7vEDPoUqP4EuyTj0E0J5y10oIEyES3BKJRAldOSDuHUW9LLJFoVfqUD3FtQUehe6TN8oQ_gp1RxldStKO9mDjxdZOyomNRmXz2fUBbQkqcOsOEH47UerF6_PUObaGy5RF9EMJjl01H8PiIQBKbm9t7EpsHrRUS_cVXyrQCuRjXwitCcHBKwLoyeAk6LR1triCU9RVLIrzXRtFKauHV2ajFDw";
     
     // An array of request data
     const requestData = [
       {
         data : postdata,
         demat_userid : post_demat_userid,
-        access_token : post_access_token,
+        access_token : post_access_token1,
         name:"shk1"
       },
       {
@@ -62,38 +68,86 @@ module.exports = function (app) {
       }
       // Add more request data objects as needed
     ];
-    
-    // Create an array of promises for sending requests
-    const requestPromises = requestData.map(data => {
-      const config = {
+
+
+
+
+    const requestPromises = requestData.map(async(item) => {
+
+
+      let config = {
         method: 'post',
         maxBodyLength: Infinity,
         url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
         headers: {
-          'Authorization': "Bearer " + data.demat_userid + " " + data.access_token,
-          'Content-Type': 'application/json',
+            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+            'Content-Type': 'application/json'
         },
-        data: JSON.stringify([data.data]),
-      };
+        data: JSON.stringify([item.data])
     
-      return axios(config);
+    };
+    
+      axios(config)
+        .then(async (response) => {
+            console.log("respose",response.data)
+        })
+        .catch(async (error) => {
+          console.log("Alice Blue Error",error.response)
+          console.log("name- ",item.name)
+        });
+     
     });
     
     // Send all requests concurrently using Promise.all
     Promise.all(requestPromises)
       .then(responses => {
-      //console.log("Response:", responses.data);
-        responses.forEach(response => {
-          console.log("Response:", response.data);
-        });
+      console.log("Response:", responses.data);
+       
       })
       .catch(errors => {
       console.log("errors:", errors);
-
-        errors.forEach(error => {
-          console.log("Error:", error);
-        });
+      
       });
+ 
+
+
+    
+    // Create an array of promises for sending requests
+    // const requestPromises = requestData.map(async(data) => {
+    //   const config = {
+    //     method: 'post',
+    //     maxBodyLength: Infinity,
+    //     url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+    //     headers: {
+    //       'Authorization': "Bearer " + data.demat_userid + " " + data.access_token,
+    //       'Content-Type': 'application/json',
+    //     },
+    //     data: JSON.stringify([data.data]),
+    //   };
+    //   const trade = await axios(config)
+    //   const return_data = {res:trade ,name:data.name}
+    
+    //   return return_data
+    //  // return axios(config);
+    // });
+    
+    // // Send all requests concurrently using Promise.all
+    // Promise.all(requestPromises)
+    //   .then(responses => {
+    //   //console.log("Response:", responses.data);
+    //     responses.forEach(response => {
+    //    //   console.log("Response :", response);
+    //       console.log("Response Trade:", response.res.data);
+    //       console.log("client name ", response.name);
+    //     });
+    //   })
+    //   .catch(errors => {
+    //   console.log("errors:", errors);
+
+    //     // errors.forEach(error => {
+    //     //   console.log("Error:", error);
+    //     // });
+    //   });
     
 
   res.send("doneeeee")
@@ -237,8 +291,6 @@ module.exports = function (app) {
   async function connectToDB(collectionName, response) {
     try {
 
-
-
       //const db = client.db('TradeTools'); // Replace 'mydb' with your desired database name
       const db = client.db('TradeTools'); // Replace 'mydb' with your desired database name
       // console.log("db",db);
@@ -272,22 +324,17 @@ module.exports = function (app) {
             v: parseFloat(response.v)
           }
 
-          const changeStream = collection.watch();
-
-          changeStream.on('change', (change) => {
-            // Handle the change event
-            console.log('Change event:', change);
-
-            // You can add your logic here to evaluate changes
-            // For example, run an eval function
-            evaluateFunction(change);
-          });
+          // const changeStream = collection.watch();
+          // changeStream.on('change', (change) => {
+          //   console.log('Change event:', change);
+          //   // You can add your logic here to evaluate changes
+          //   // For example, run an eval function
+          //   evaluateFunction(change);
+          // });
 
           // Define a function to evaluate changes
           function evaluateFunction(change) {
-            // Add your evaluation logic here based on the change event
-            // For example, you can run an eval function on the inserted document
-            // This is just a placeholder; replace it with your actual logic
+        
             console.log('Evaluating changes:', change);
           }
 
@@ -298,12 +345,12 @@ module.exports = function (app) {
 
         createView(collectionName);
         createViewM3(collectionName);
-        createViewM5(collectionName);
-        createViewM10(collectionName)
-        createViewM15(collectionName)
-        createViewM30(collectionName)
-        createViewM60(collectionName)
-        createViewM1DAY(collectionName)
+      //  createViewM5(collectionName);
+       // createViewM10(collectionName)
+       // createViewM15(collectionName)
+       // createViewM30(collectionName)
+       // createViewM60(collectionName)
+       // createViewM1DAY(collectionName)
 
       } else {
         // console.log(`Collection '${collectionName}' does not exist.`);
@@ -371,7 +418,7 @@ module.exports = function (app) {
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M_' + collectionName);
-      console.log("collectionExists view 1 minute", collectionExists)
+      //console.log("collectionExists view 1 minute", collectionExists)
       // console.log("pipeline",pipeline)
 
       if (collectionExists) {
@@ -1008,6 +1055,9 @@ module.exports = function (app) {
 
 
   app.get("/testing_socket", function (req, res) {
+    //  dropAllCollections();
+    // res.send("okkkk"); 
+    // return
 
     const io = require("socket.io-client");
 
@@ -1019,7 +1069,7 @@ module.exports = function (app) {
       console.log("Received data ':", response);
       // Do something with the received data here
       if (response.tk) {
-        //console.log("response",response)
+        console.log("response",response)
         connectToDB(response.tk, response);
         // console.log("token --",response.tk);
         // getTokenStrategy(response.tk)
@@ -1771,10 +1821,152 @@ module.exports = function (app) {
   });
 
 
+app.get("/testing_condition",async(req,res)=>{
+  const math = require('mathjs');
+
+
+  let data = {
+    a: 8,
+    b: 7,
+    c: 9,
+  };
+
+  // Define the condition as a function
+  const condition = (data) => ((data.a >= data.b || data.c < data.b) && data.b > data.a)||data.b < data.a;
+  
+  // Evaluate the condition with the data
+  let result = condition(data);
+  
+ // console.log(result);
+
+ //res.send("okkkkk")
+  
+
+  const pipeline = [
+    {
+    $match : {
+      tokensymbol:"3045"
+     }
+    }
+  ];
+
+
+  const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
+ if(allStrategyResult.length > 0){
+  for (const val of allStrategyResult) {
+    console.log("startegy",val.condition)
+    console.log("timeframe",val.timeframe)
+    console.log("tokensymbol",val.tokensymbol)
+
+    //console.log("condition_source",val.condition_source.split(','))
+    
+    let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
+
+    const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+
+    if (ExistView.length > 0) {
+
+     // console.log("exist collection if ",collectionName)
+      const collection = dbTradeTools.collection(collectionName);
+      const get_view_data = await collection.aggregate([{$sort :{_id:1}}]).toArray();
+
+
+   // console.log("get_view_data",get_view_data)
+
+  
+
+   let checkData = {}
+    if(val.condition_source != null){
+    let condition_source = val.condition_source.split(',');
+    console.log("condition_source",condition_source)
+    if(condition_source.length > 0){
+      for (const sourceVal of condition_source) {
+    
+        console.log("condition_source",sourceVal)
+
+        const matches = sourceVal.match(/(\w+)\((\d+)\)/);
+
+      
+        
+        
+        if (matches) {
+         
+          const OFFSET_KEY = matches[2]; //
+          
+          console.log("OFFSET_KEY",OFFSET_KEY)
+          console.log("OFFSET_KEY",parseInt(OFFSET_KEY)+1)
+            
+          const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY)+1)];
+
+         // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
+          console.log("matches[1]",matches[1]); // This will output: 'close(1)'
+         
+           
+          let source
+          if(matches[1] == "close"){
+            source = viewSourceValue.close;
+          }else if(matches[1] == "open"){
+            source = viewSourceValue.open;
+          }else if(matches[1] == "low"){
+            source = viewSourceValue.low;
+          }else if(matches[1] == "high"){
+            source = viewSourceValue.high;
+          }
+
+           
+       
+           console.log("source" ,matches[1])
+           console.log("source value" ,source)
+       
+
+        } else {
+          console.log("No match found");
+        }
+
+     //  const key = sourceVal.replace(/[^a-zA-Z0-9]/g, ''); // Extract the key from the string
+       checkData[sourceVal] = '123';
+
+      }
+      }
+
+    }
+    console.log("checkData - ",checkData)
+
+     // console.log("get_view_data",get_view_data)
+     
+    }
+
+   res.send("okk done")
+    return
+    // Assuming you have some data to use for the condition evaluation
+    const data = {
+      // close: [480],
+      // low: [485],
+      // high: [685],
+    }; 
+    
+    // let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
+
+    // const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+
+    // if (ExistView.length > 0) {
+
+    //  // console.log("exist collection if ",collectionName)
+    //   const collection = dbTradeTools.collection(collectionName);
+    //   const get_view_data = await collection.aggregate([]).toArray();
+     
+    // }
+
+
+   }
+  }
+  res.send("okk")
+
+});
 
   app.post("/make_startegy", async function (req, res) {
-
-
+     return
+    
     let user_id = req.body.user_id;
     let tokensymbol = req.body.tokensymbol;
     let symbol_name = req.body.symbol_name;
@@ -1792,12 +1984,13 @@ module.exports = function (app) {
     let buffer_value = req.body.buffer_value;
     let type = req.body.type;
     let offset = req.body.offset;
+    let condition_source = req.body.condition_source;
 
-
+    console.log("1")
 
     // Add Strategy User..
     try {
-
+      console.log("2")
       await UserMakeStrategy.create({
         user_id: user_id,
         tokensymbol: tokensymbol,
@@ -1816,8 +2009,10 @@ module.exports = function (app) {
         buffer_value: buffer_value,
         type: type,
         offset: offset,
-      })
+        condition_source: condition_source,
+       })
         .then(async (createUserMakeStrategy) => {
+          console.log("3")
           res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
           return
           const last_insert_id = createUserMakeStrategy._id;
@@ -1879,39 +2074,21 @@ module.exports = function (app) {
 
 
         }).catch((err) => {
-          //console.error('Error creating and saving user:', err.keyValue.name);
-          res.send({ status: false, msg: "Duplicate Value", data: err.keyValue.name })
+          console.log("4")
+          console.error('Error creating and saving user:', err);
+          res.send({ status: false, msg: err.message})
 
         });
 
     } catch (error) {
-
+      console.log("5",error)
     }
 
-
-
-
-
-
-
     return
-
-
-
-
-
-
-
 
     let collectionName = 'M' + timeframe + '_' + tokensymbol;
 
     //  const collection = db.collection(collectionName);
-
-
-
-
-
-
 
 
     res.send("okkk");
@@ -1961,8 +2138,6 @@ module.exports = function (app) {
       get_final_data = get_view_data.map(item => item.low);
     }
 
-
-
     let averageData = "";
 
     if (indicator == "MA") {
@@ -1983,18 +2158,7 @@ module.exports = function (app) {
     }
 
 
-
-
-
-
-
     res.send(averageData);
-
-
-
-
-
-
 
   });
 
@@ -2065,7 +2229,7 @@ module.exports = function (app) {
 
   //Add stoch Api.....
   app.get('/addstock', async function (req, res) {
-
+   
     const pipeline = [
 
       {
@@ -2077,12 +2241,10 @@ module.exports = function (app) {
     ];
     const categoryResult = await categorie.aggregate(pipeline);
     //const matchingElements = categoryResult.filter(item => item.segment === "FO");
-
-    var axios = require('axios');
-
+    
     // console.log('Matching elements:', matchingElements[0]._id);
-    res.send("done");
-    return
+    // res.send("done");
+    // return
     var axios = require('axios');
     var config = {
       method: 'get',
@@ -2092,16 +2254,8 @@ module.exports = function (app) {
     axios(config)
       .then(function (response) {
 
-
-        var unique_key = []
-        let count = 0
-        response.data.forEach((item) => {
-
           // res.send(response.data);
           // console.log(response.data);
-
-
-
           // Using a loop to extract 'name' and 'instrumenttype'
 
 
@@ -2138,220 +2292,297 @@ module.exports = function (app) {
             //  if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
 
 
-
-            if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
-              unique_key.push(`${item.name}-${item.instrumenttype}`);
-
-
-              if (item.symbol.slice(-3) == '-EQ') {
-                count++
-
-                const matchingElements = categoryResult.filter(item => item.segment === "C");
-                const category_id = matchingElements[0]._id
+            //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+            //     count++
+            //     console.log('item - CO ' + count + ' ', item)
+            //     const matchingElements = categoryResult.filter(item => item.segment === "CO");
+            //     const category_id = matchingElements[0]._id
 
 
-                services.create({
-                  name: item.name + '#',
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '#_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
+            //     services.create({
+            //       name: item.name,
+            //       instrument_token: item.token,
+            //       zebu_token: item.symbol,
+            //       kotak_token: "",
+            //       instrumenttype: item.instrumenttype,
+            //       exch_seg: item.exch_seg,
+            //       lotsize: item.lotsize,
+            //       categorie_id: category_id,
+            //       unique_column: item.name + '_' + category_id
+            //     })
+            //       .then((createdServices) => {
+            //         console.log('User created and saved:', createdServices._id)
+            //       })
+            //       .catch((err) => {
+            //         try {
+            //           console.error('Error creating and saving user:', err);
+            //         } catch (e) {
+            //           console.log("duplicate key")
+            //         }
 
-                  });
+            //       });
 
 
-              }
+            //   }
 
 
 
-
-              if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
-                count++
-                console.log('item - F ' + count + ' ', item)
-                const matchingElements = categoryResult.filter(item => item.segment === "F");
-                const category_id = matchingElements[0]._id
+         //   if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+            //  unique_key.push(`${item.name}-${item.instrumenttype}`);
 
 
+              // if (item.symbol.slice(-3) == '-EQ') {
+              //   count++
 
-                services.create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
-
-                  });
+              //   const matchingElements = categoryResult.filter(item => item.segment === "C");
+              //   const category_id = matchingElements[0]._id
 
 
+              //   services.create({
+              //     name: item.name + '#',
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '#_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
 
 
-              }
-
-
-
-              if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
-                count++
-                console.log('item - O ' + count + ' ', item)
-                const matchingElements = categoryResult.filter(item => item.segment === "O");
-                const category_id = matchingElements[0]._id
-
-                services.create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
-
-                  });
+              // }
 
 
 
 
-              }
-
-
-              if (item.instrumenttype == 'OPTFUT') {
-                count++
-                console.log('item - MO ' + count + ' ', item)
-                const matchingElements = categoryResult.filter(item => item.segment === "MO");
-                const category_id = matchingElements[0]._id
-
-                services.create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
-
-                  });
+              // if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
+              //   count++
+              //   console.log('item - F ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "F");
+              //   const category_id = matchingElements[0]._id
 
 
 
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
 
-              }
-
-
-              if (item.instrumenttype == 'FUTCOM') {
-                count++
-                console.log('item - MF ' + count + ' ', item)
-                const matchingElements = categoryResult.filter(item => item.segment === "MF");
-                const category_id = matchingElements[0]._id
-
-                services.create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
-
-                  });
+              //     });
 
 
 
-              }
 
-              if (item.instrumenttype == 'FUTCUR') {
-                count++
-                console.log('item - CF ' + count + ' ', item)
-                const matchingElements = categoryResult.filter(item => item.segment === "CF");
-                const category_id = matchingElements[0]._id
+              // }
 
 
-                services.create({
-                  name: item.name,
-                  instrument_token: item.token,
-                  zebu_token: item.symbol,
-                  kotak_token: "",
-                  instrumenttype: item.instrumenttype,
-                  exch_seg: item.exch_seg,
-                  lotsize: item.lotsize,
-                  categorie_id: category_id,
-                  unique_column: item.name + '_' + category_id
-                })
-                  .then((createdServices) => {
-                    console.log('User created and saved:', createdServices._id)
-                  })
-                  .catch((err) => {
-                    try {
-                      console.error('Error creating and saving user:', err);
-                    } catch (e) {
-                      console.log("duplicate key")
-                    }
 
-                  });
+              // if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
+              //   count++
+              //   console.log('item - O ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "O");
+              //   const category_id = matchingElements[0]._id
+
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
 
 
-              }
+
+
+              // }
+
+
+              // if (item.instrumenttype == 'OPTFUT') {
+              //   count++
+              //   console.log('item - MO ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "MO");
+              //   const category_id = matchingElements[0]._id
+
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
+
+
+
+
+              // }
+
+
+              // if (item.instrumenttype == 'FUTCOM') {
+              //   count++
+              //   console.log('item - MF ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "MF");
+              //   const category_id = matchingElements[0]._id
+
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
+
+
+
+              // }
+
+              // if (item.instrumenttype == 'FUTCUR') {
+              //   count++
+              //   console.log('item - CF ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "CF");
+              //   const category_id = matchingElements[0]._id
+
+
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
+
+
+              // }
+
+
+              //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+              //   count++
+              //   console.log('item - CO ' + count + ' ', item)
+              //   const matchingElements = categoryResult.filter(item => item.segment === "CO");
+              //   const category_id = matchingElements[0]._id
+
+
+              //   services.create({
+              //     name: item.name,
+              //     instrument_token: item.token,
+              //     zebu_token: item.symbol,
+              //     kotak_token: "",
+              //     instrumenttype: item.instrumenttype,
+              //     exch_seg: item.exch_seg,
+              //     lotsize: item.lotsize,
+              //     categorie_id: category_id,
+              //     unique_column: item.name + '_' + category_id
+              //   })
+              //     .then((createdServices) => {
+              //       console.log('User created and saved:', createdServices._id)
+              //     })
+              //     .catch((err) => {
+              //       try {
+              //         console.error('Error creating and saving user:', err);
+              //       } catch (e) {
+              //         console.log("duplicate key")
+              //       }
+
+              //     });
+
+
+              // }
+
+
+
+
+
+
+
+
+
 
               // if(item.instrumenttype == 'AMXIDX'|| item.instrumenttype == 'OPTIRC' || item.instrumenttype == 'UNDIRC' || item.instrumenttype == 'FUTIRC' || item.instrumenttype == 'UNDCUR' || item.instrumenttype == 'INDEX' || item.instrumenttype == 'COMDTY' || item.instrumenttype == 'AUCSO'){
               //       count++
@@ -2384,40 +2615,15 @@ module.exports = function (app) {
 
               //       }
 
-            }
+           // }
             //   }
 
           });
 
 
-          return
+  
 
-          function findRepeatedElements(array) {
-            const frequencyMap = {};
-            const repeatedElements = [];
-
-            array.forEach(element => {
-              if (frequencyMap[element.instrumenttype]) {
-                frequencyMap[element.instrumenttype]++;
-                if (frequencyMap[element.instrumenttype] === 2) {
-                  repeatedElements.push(element.instrumenttype);
-                }
-              } else {
-                frequencyMap[element.instrumenttype] = 1;
-              }
-            });
-
-            return repeatedElements;
-          }
-
-          const inputArray = response.data;
-          const repeatedElements = findRepeatedElements(inputArray);
-
-          console.log('Repeated elements:', repeatedElements);
-
-
-
-        });
+        
 
       });
 
@@ -2653,6 +2859,170 @@ module.exports = function (app) {
 
 
     res.send("okk")
+  })
+
+
+
+  app.get("/tt",async(req,res)=>{
+    
+    let price = "19300"
+    let symbol = "NIFTY"
+    let expiry = "26102023"
+    let limit_set = 40
+   
+    
+    const pipeline2 = [
+      {
+        $match: {
+          $or: [
+            {
+              $and: [
+                { strike: { $lt: price} },
+                { segment: "O" },
+                { symbol: symbol},
+                { expiry: expiry}
+              ]
+            },
+            {
+              $and: [
+                { strike: price},
+                { symbol: symbol},
+                { expiry: expiry}
+              ]
+            },
+            {
+              $and: [
+                { strike: { $gt: price} },
+                { symbol: symbol},
+                { expiry: expiry}
+              ]
+            }
+          ]
+        }
+      },
+      {
+        $sort: {
+          strike: 1
+        }
+      },
+      {
+        $limit: limit_set
+      },
+      {
+        $project: {
+          _id: 0,
+          strike: 1,
+          option_type: 1,
+          exch_seg: 1,
+          instrument_token: 1,
+         // option_type: 1
+        }
+      }
+    ]
+
+
+
+
+
+    const pipeline3 = [
+      {
+        $match: {
+          $or: [
+            {
+              strike: { $lt: price },
+              segment: "O",
+              symbol: symbol,
+              expiry: expiry,
+            },
+            {
+              strike: price,
+              segment: "O",
+              symbol: symbol,
+              expiry: expiry,
+            },
+            {
+              strike: { $gt: price },
+              segment: "O",
+              symbol: symbol,
+              expiry: expiry,
+            },
+          ],
+        },
+      },
+      {
+        $sort: {
+          strike: 1
+        }
+      },
+      {
+        $limit: limit_set
+      },
+      {
+        $group: {
+          _id: "$strike",
+          symbol: { $first: "$symbol" },
+          expiry: { $first: "$expiry" },
+          instrument_token: { $first: "$instrument_token" },
+          option_type: { $first: "$option_type" }
+        }
+      },
+      {
+        $sort: {
+          _id: 1
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          strike: "$_id",
+        
+        }
+      }
+    ]
+
+
+    const result = await Alice_token.aggregate(pipeline2);
+    
+    const resultStrike = await Alice_token.aggregate(pipeline3);
+
+    const final_data = [];
+          var channelstr = ""
+          if(result.length > 0){
+          resultStrike.forEach(element => {
+              let call_token = "";
+              let put_token = "";
+              result.forEach(element1 => {
+
+                  if (element.strike == element1.strike) {
+                      if (element1.option_type == "CE") {
+                          call_token = element1.instrument_token;
+                      } else if (element1.option_type == "PE") {
+                          put_token = element1.instrument_token;
+                      }
+
+                      channelstr += element1.exch_seg+"|" + element1.instrument_token + "#"
+                  }
+
+              });
+
+
+              const push_object = {
+                  symbol: element.symbol,
+                  strike_price: element.strike,
+                  call_token: call_token,
+                  put_token: put_token,
+                  expiry: element.expiry
+              }
+
+              final_data.push(push_object)
+
+          });
+          var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+          res.send({status:true, data: final_data, channellist: alltokenchannellist} )
+          }  
+       else{
+          res.send({status:false, data: [], channellist: ""} )
+     }
   })
 
 
