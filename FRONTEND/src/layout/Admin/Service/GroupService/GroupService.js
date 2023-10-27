@@ -189,6 +189,8 @@ const ServicesList = () => {
                     localStorage.setItem("gotodashboard", JSON.stringify(true));
                     localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
                     localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
+                    localStorage.setItem("page", "groupservices");
+
                     navigate("/client/dashboard")
 
                 }
@@ -362,11 +364,12 @@ const ServicesList = () => {
                                                     text: 'Go To Dashboard',
                                                     formatter: (cell, row, rowIndex) =>
                                                         <>
+                                                        {console.log("==>",row.user)}
                                                             <button
-                                                                className={`btn  ${row.AppLoginStatus === '0' && row.WebLoginStatus === '0' ? "btn-success" : "btn-danger"} btn-new-block`}
+                                                                className={`btn  ${row.user.AppLoginStatus == '1' || row.user.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
 
                                                                 onClick={() => goToDashboard(row)}
-                                                                disabled={row.AppLoginStatus === '0' && row.WebLoginStatus === '0'}
+                                                                disabled={row.user.AppLoginStatus === '0' && row.user.WebLoginStatus === '0'}
 
                                                             > click</button>
                                                         </>

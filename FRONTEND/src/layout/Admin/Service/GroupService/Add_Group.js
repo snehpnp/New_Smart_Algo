@@ -51,18 +51,18 @@ const AddStrategy = () => {
 
     const [selectAllFiltered, setSelectAllFiltered] = useState(false);
 
-    console.log("selectedServices", selectedServices)
+    console.log("selectedServices", selectedServices && selectedServices)
 
 
 
     //  For Select Services Checkbox
-    function handleServiceChange(event, id, name, segment) {
+    function handleServiceChange(event, id, name, segment,lotsize) {
         const serviceId = id;
         const isChecked = event.target.checked;
 
         setSelectedServices((prevInfo) => {
             if (isChecked) {
-                return [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0 }];
+                return [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0,lotsize:lotsize }];
             } else {
                 return prevInfo.filter((info) => info.service_id !== serviceId);
             }
@@ -81,6 +81,8 @@ const AddStrategy = () => {
                 name: service.name,
                 segment: service.category.name,
                 group_qty: 0,
+                lotsize:service.lotsize
+
             }));
 
             // Set all filtered checkboxes to checked
@@ -121,7 +123,7 @@ const AddStrategy = () => {
 
         const aa = No_Negetive_Input_regex(updatedQty)
 
-        console.log("No_Negetive_Input_regex", aa)
+        // console.log("No_Negetive_Input_regex", aa)
 
         // Update the quantity for the selected service
         setSelectedServices((prevInfo) =>
@@ -151,15 +153,17 @@ const AddStrategy = () => {
 
     //  For Remove Service From Select And Table
     const remoeveService = (id) => {
-        let test = selectedServices.filter((item) => {
-            return item.service_id !== id
-        })
-        let checkboxes = document.querySelectorAll(`#service-${id}`);
-        checkboxes.forEach((checkbox) => {
-            checkbox.checked = false;
-        });
-
-        setSelectedServices(test)
+        if(window.confirm("Do you want to delete")){
+            let test = selectedServices.filter((item) => {
+                return item.service_id !== id
+            })
+            let checkboxes = document.querySelectorAll(`#service-${id}`);
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = false;
+            });
+    
+            setSelectedServices(test)
+        }
     }
 
 
@@ -213,7 +217,6 @@ const AddStrategy = () => {
             return item.name.toLowerCase().includes(SerachService.toLowerCase())
         });
 
-
         if (SerachService === "") {
             setstate([])
         } else {
@@ -247,10 +250,10 @@ const AddStrategy = () => {
             if (!values.segment) {
                 errors.segment = valid_err.SEGEMENTSELECT_ERROR;
             }
-            if (selectedServices.length > 50) {
-                alert("can Not Add More Than 50 Service")
-
-            }
+            // if (selectedServices.length > 50) {
+            //     alert("can Not Add More Than 50 Service")
+            //     return
+            // }
 
             return errors;
         },
@@ -302,6 +305,11 @@ const AddStrategy = () => {
         setSelectAllFiltered(false)
     }, [formik.values.segment]);
 
+    console.log("state", state)
+
+
+
+
     return (
         <>
             <Content Page_title="Add Group" button_title="Back" route="/admin/groupservices"
@@ -314,6 +322,7 @@ const AddStrategy = () => {
                                     <th>#</th>
                                     <th>Segment</th>
                                     <th>Service Name</th>
+                                    <th>lotsize</th>
                                     <th>Quantity</th>
                                     <th>Remove</th>
                                 </tr>
@@ -325,6 +334,8 @@ const AddStrategy = () => {
                                             <td>{index + 1}</td>
                                             <td>{item.segment}</td>
                                             <td>{item.name}</td>
+                                            <td>{item.lotsize}</td>
+
                                             <td>
                                                 <input
                                                     type="text"
@@ -332,7 +343,7 @@ const AddStrategy = () => {
                                                     placeholder="Enter Qty"
                                                     value={item.group_qty}
                                                     onChange={(e) => InputGroupQty(e, item.service_id, item.name, item.segment)}
-                                                    // min={0}
+                                                // min={0}
 
                                                 />
                                             </td>
@@ -399,7 +410,7 @@ const AddStrategy = () => {
                                                                     id={`service-${service._id}`}
                                                                     value={service._id}
                                                                     defaultChecked={selectedServices.includes(service._id)}
-                                                                    onChange={(e) => handleServiceChange(e, service._id, service.name, service.category.name)}
+                                                                    onChange={(e) => handleServiceChange(e, service._id, service.name, service.category.name ,service.lotsize)}
                                                                 />
                                                                 <label className="form-check-label" htmlFor={`service-${service._id}`}>
                                                                     {service.name}

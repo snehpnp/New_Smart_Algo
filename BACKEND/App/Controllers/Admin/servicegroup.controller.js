@@ -32,9 +32,10 @@ class GroupService {
 
       if (groupServices.length > 0) {
         return res.send({ status: false, msg: "Group Name Is already Exist", data: groupServices })
-
       }
-      if (groupServices.length < 50) {
+
+
+      if (services_id.length > 50) {
         return res.send({ status: false, msg: "You are Select Only 50 Services", data: groupServices })
 
       }
@@ -93,13 +94,16 @@ class GroupService {
 
       var groupServices = await serviceGroupName.find({ _id: { $ne: GroupServices_Id }, name: groupdetails.name })
 
-      // if (groupServices.length > 0) {
-      //   return res.send({ status: false, msg: "Name is already Exist", data: groupServices })
-      // }
-        // if (groupServices.length < 50) {
-        //   return res.send({ status: false, msg: "You are Select Only 50 Services", data: groupServices })
+      if (groupServices.length > 0) {
+        return res.send({ status: false, msg: "Name is already Exist", data: groupServices })
+      }
 
-        // }
+
+
+      if (services_id.length > 50) {
+        return res.send({ status: false, msg: "You are Select Only 50 Services", data: groupServices })
+
+      }
 
 
 
@@ -412,6 +416,8 @@ class GroupService {
             'category.segment': 1,
             'category.name': 1,
             name: 1,
+            lotsize: 1,
+
           },
         },
       ];
@@ -446,6 +452,7 @@ class GroupService {
             'category.segment': 1,
             'category.name': 1,
             name: 1,
+            lotsize: 1
 
           },
         },
@@ -607,8 +614,8 @@ class GroupService {
 
             },
           },
-          
-         
+
+
         ];
 
         const Service_name_get = await serviceGroup_services_id.aggregate(pipeline);
@@ -670,6 +677,7 @@ class GroupService {
           {
             $project: {
               'ServiceResult.name': 1,
+              'ServiceResult.lotsize': 1,
               'ServiceResult._id': 1,
               'catagory.segment': 1,
               'catagory.name': 1,
@@ -753,6 +761,9 @@ class GroupService {
             'user.license_type': 1,
             'user.UserName': 1,
             'user.TradingStatus': 1,
+            'user.AppLoginStatus': 1,
+            'user.WebLoginStatus': 1,
+
           },
         },
       ];

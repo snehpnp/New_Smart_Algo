@@ -229,7 +229,7 @@ const BrokerResponse = () => {
                               //  setEnterQty(e.target.value)
                             }
                             defaultValue={data.quantity}
-                            disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
+                            // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
 
                           />
                         </div>

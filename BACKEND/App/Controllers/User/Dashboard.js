@@ -73,17 +73,7 @@ class Dashboard {
                 {
                     $unwind: '$categories',
                 },
-                {
-                    $lookup: {
-                        from: "users",
-                        localField: "user_id",
-                        foreignField: "_id",
-                        as: "users",
-                    },
-                },
-                {
-                    $unwind: '$users',
-                },
+             
                 {
                     $sort: {
                         'service.name': 1, // 1 for ascending order, -1 for descending order
@@ -101,7 +91,6 @@ class Dashboard {
                         'strategys._id': 1,
 
                         'categories.segment': 1,
-                        'users.qty_type':1,
 
                         _id: 1,
                         user_id: 1,
@@ -354,7 +343,7 @@ class Dashboard {
             const { user_id, obj } = req.body
 
             var User_information = await User_model.find({ _id: user_id }).
-                select('web_url qty_type signals_execution_type');
+                select('web_url signals_execution_type');
 
 
             if (User_information.length == 0) {
@@ -365,12 +354,12 @@ class Dashboard {
             if (User_information[0].web_url !== obj.web_url) {
                 abc['web_url'] = obj.web_url;
             }
-            if (User_information[0].qty_type !== obj.qty_type) {
-                abc['qty_type'] = obj.qty_type;
-                if (obj.qty_type == "1") {
-                    update_qty(user_id)
-                }
-            }
+            // if (User_information[0].qty_type !== obj.qty_type) {
+            //     abc['qty_type'] = obj.qty_type;
+            //     if (obj.qty_type == "1") {
+            //         update_qty(user_id)
+            //     }
+            // }
             if (User_information[0].signals_execution_type !== obj.signals_execution_type) {
                 abc['signals_execution_type'] = obj.signals_execution_type;
             }
@@ -390,9 +379,10 @@ class Dashboard {
                             msg = `Update Signal Execution ${value == "1" ? "Web" : "App"}`
                         } else if (key == "web_url") {
                             msg = `Update Web Url ${value == "1" ? "Admin" : "Individual"}`
-                        } else if (key == "qty_type") {
-                            msg = `Update Quantity Type ${value == "1" ? "Admin" : "Individual"}`
                         }
+                        //  else if (key == "qty_type") {
+                        //     msg = `Update Quantity Type ${value == "1" ? "Admin" : "Individual"}`
+                        // }
 
                         const user_activity = new user_activity_logs(
                             {

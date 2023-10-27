@@ -27,7 +27,7 @@ const Modify = ({ UserDetails }) => {
 
     const [selectedOptions, setSelectedOptions] = useState({
         web_url: '',
-        qty_type: '',
+        // qty_type: '',
         signals_execution_type: '',
     });
 
@@ -69,7 +69,7 @@ const Modify = ({ UserDetails }) => {
         if (UserDetails.data !== undefined) {
             setSelectedOptions({
                 web_url: UserDetails.data && UserDetails.data.web_url,
-                qty_type: UserDetails.data && UserDetails.data.qty_type,
+                // qty_type: UserDetails.data && UserDetails.data.qty_type,
                 signals_execution_type: UserDetails.data && UserDetails.data.signals_execution_type,
             })
         }
