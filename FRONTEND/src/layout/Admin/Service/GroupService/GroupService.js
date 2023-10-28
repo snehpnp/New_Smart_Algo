@@ -50,6 +50,7 @@ const ServicesList = () => {
     });
 
 
+console.log("=>",getServicesName && getServicesName);
 
 
 
@@ -326,12 +327,12 @@ const ServicesList = () => {
                                                     formatter: (cell, row, rowIndex) => rowIndex + 1,
                                                 },
                                                 {
-                                                    dataField: 'name',
+                                                    dataField: 'data.name',
                                                     text: 'Services Name'
                                                 },
                                                 {
-                                                    dataField: 'lotsize',
-                                                    text: 'lotsize'
+                                                    dataField: 'data1.group_qty',
+                                                    text: 'group_qty'
                                                 },
                                             ]} tableData={getServicesName && getServicesName.data} />
 

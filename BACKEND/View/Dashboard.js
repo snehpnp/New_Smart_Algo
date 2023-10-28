@@ -19,13 +19,14 @@ db.createView("dashboard_data", "users", [
                     ]
                 }
             },
-            admin_client: {
+            total_active_client: {
                 $sum: {
                     $cond: [
                         {
                             $and: [
-                                { $eq: ["$parent_role", "ADMIN"] },
                                 { $eq: ["$Role", "USER"] },
+                                // { $eq: ["$license_type", "2"] },
+                                { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
                                 { $eq: ["$Is_Active", "1"] }
 
                             ]
@@ -35,13 +36,14 @@ db.createView("dashboard_data", "users", [
                     ]
                 }
             },
-            subadmin_client: {
+            total_expired_client: {
                 $sum: {
                     $cond: [
                         {
                             $and: [
-                                { $eq: ["$parent_role", "SUBADMIN"] },
                                 { $eq: ["$Role", "USER"] },
+                                // { $eq: ["$license_type", "2"] },
+                                { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
                                 { $eq: ["$Is_Active", "1"] }
 
                             ]
@@ -51,20 +53,7 @@ db.createView("dashboard_data", "users", [
                     ]
                 }
             },
-            total_Subadmin: {
-                $sum: {
-                    $cond: [
-                        {
-                            $and: [
-                                { $eq: ["$Role", "SUBADMIN"] }
-                            ]
-                        },
-                        1,
-                        0
-                    ]
-                }
-            },
-            total_live: {
+            total_live_client: {
                 $sum: {
                     $cond: [
                         {
@@ -115,7 +104,7 @@ db.createView("dashboard_data", "users", [
                     ]
                 }
             },
-            total_demo: {
+            total_demo_client: {
                 $sum: {
                     $cond: [
                         {
@@ -215,8 +204,7 @@ db.createView("dashboard_data", "users", [
                     ]
                 }
             },
-            // used_licence: { $sum: { $toInt: "$licence" } }
-
+        
             used_licence: {
                 $sum: {
                     $cond: {
@@ -247,22 +235,19 @@ db.createView("dashboard_data", "users", [
     {
         $project: {
             total_client: 1,
-            admin_client: 1,
-            subadmin_client: 1,
-            total_Subadmin: 1,
-            licenses: "$company_info.licenses",
-            total_live: 1,
+            total_active_client: 1,
+            total_expired_client: 1,
+            total_live_client: 1,
             total_active_live: 1,
             total_expired_live: 1,
-            total_demo: 1,
+            total_demo_client: 1,
             total_active_demo: 1,
             total_expired_demo: 1,
             total_two_days: 1,
             total_active_two_days: 1,
             total_expired_two_days: 1,
-            // <<<<<<< HEAD
-            // used_licence: { $toInt: "$used_licence" }, // Convert used_licence to integer
             used_licence: 1,
+            licenses: "$company_info.licenses",
             remaining_license: {
                 $subtract: [
                     { $toInt: "$company_info.licenses" }, // Convert licenses to integer
@@ -283,3 +268,48 @@ db.createView("dashboard_data", "users", [
     }
 
 ]);
+ // admin_client: {
+            //     $sum: {
+            //         $cond: [
+            //             {
+            //                 $and: [
+            //                     { $eq: ["$parent_role", "ADMIN"] },
+            //                     { $eq: ["$Role", "USER"] },
+            //                     { $eq: ["$Is_Active", "1"] }
+
+            //                 ]
+            //             },
+            //             1,
+            //             0
+            //         ]
+            //     }
+            // },
+            // subadmin_client: {
+            //     $sum: {
+            //         $cond: [
+            //             {
+            //                 $and: [
+            //                     { $eq: ["$parent_role", "SUBADMIN"] },
+            //                     { $eq: ["$Role", "USER"] },
+            //                     { $eq: ["$Is_Active", "1"] }
+
+            //                 ]
+            //             },
+            //             1,
+            //             0
+            //         ]
+            //     }
+            // },
+            // total_Subadmin: {
+            //     $sum: {
+            //         $cond: [
+            //             {
+            //                 $and: [
+            //                     { $eq: ["$Role", "SUBADMIN"] }
+            //                 ]
+            //             },
+            //             1,
+            //             0
+            //         ]
+            //     }
+            // },

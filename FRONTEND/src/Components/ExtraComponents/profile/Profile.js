@@ -1,6 +1,4 @@
-/* eslint-disable no-mixed-operators */
-// eslint-disable-next-line react-hooks/exhaustive-deps
-/* eslint-disable react/jsx-pascal-case */
+
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Content from "../../Dashboard/Content/Content";
@@ -128,12 +126,9 @@ const UserProfile = () => {
                       <img
                         src="../assets/avatar.jpg"
                         className="profile-img"
+                        alt="Profile Photo"
                       ></img>
-                      <h4>
-                        <a href="post-details.html" className="text-black">
-                          Details
-                        </a>
-                      </h4>
+                     
                       <div className="profile-info">
                         <div className="profile-photo">
                           <img
@@ -142,7 +137,7 @@ const UserProfile = () => {
                             alt=""
                           />
                         </div>
-                        <div className="profile-details d-block">
+                        {/* <div className="profile-details d-block">
                           <div className="profile-name px-3 pb-3 ">
                             <p className="m-0"> User Name</p>
                             <h4>{UserDetails && UserDetails.data.FullName} </h4>
@@ -153,7 +148,7 @@ const UserProfile = () => {
                               {UserDetails && UserDetails.data.Email}
                             </h4>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
@@ -190,9 +185,8 @@ const UserProfile = () => {
                         </li>
 
                       )}
-{console.log(user_role , " ---",gotodashboard)}
 
-                      {user_role === "USER" || gotodashboard  || user_role !== "ADMIN" || user_role !== "SUBADMIN" ?
+                      {user_role === "USER" || gotodashboard || user_role !== "ADMIN" || user_role !== "SUBADMIN" ?
 
                         < li className="nav-item">
                           <a
@@ -203,7 +197,7 @@ const UserProfile = () => {
                             Modify Updates
                           </a>
                         </li>
-                         : ""} 
+                        : ""}
                     </ul>
                     <div className="tab-content">
                       <div id="about-me" className="tab-pane fade active show">
@@ -301,22 +295,22 @@ const UserProfile = () => {
                       {/* {user_role === "SUBADMIN" || gotodashboard && gotodashboard.Role === "SUBADMIN" ? (
                         ""
                       ) : ( */}
-                        <>
-                          <div
-                            id="modify"
-                            className="tab-pane fade mt-3"
-                          >
-                            <h4 className="text-primary mb-4">
-                              Modify Updates
-                            </h4>
-                            <Modify_update UserDetails={UserDetails && UserDetails} />
-                           
-                          </div>
-                        </>
+                      <>
+                        <div
+                          id="modify"
+                          className="tab-pane fade mt-3"
+                        >
+                          <h4 className="text-primary mb-4">
+                            Modify Updates
+                          </h4>
+                          <Modify_update UserDetails={UserDetails && UserDetails} />
+
+                        </div>
+                      </>
                       {/* )} */}
 
 
-                      {user_role === "USER" || !gotodashboard ?
+                      {user_role === "USER" || user_role === "ADMIN" || !gotodashboard ?
 
                         <>
                           <div

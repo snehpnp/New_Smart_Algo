@@ -41,7 +41,7 @@ const BrokerResponse = () => {
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
 
-  console.log("GoToDahboard_id", GoToDahboard_id);
+  // console.log("GoToDahboard_id", GoToDahboard_id);
 
   const [updatedData, setUpdatedData] = useState({});
 
@@ -115,11 +115,21 @@ const BrokerResponse = () => {
   }, [DashboardData.data, UserDetails]);
 
 
-  console.log("UserDetails", UserDetails);
+  // console.log("UserDetails", UserDetails);
   // console.log("12",UserDetails);
 
 
   const setgroup_qty_value_test = (e, symboll, rowdata) => {
+
+    console.log("rowdata",rowdata);
+    // console.log("e",e.target);
+
+
+
+
+
+
+
     let name = e.target.name;
     let value = e.target.value;
     let id = rowdata._id;
@@ -146,7 +156,7 @@ const BrokerResponse = () => {
     )
       .unwrap()
       .then((response) => {
-        console.log("response", response);
+        // console.log("response", response);
         if (response.status) {
           toast.success(response.msg);
           // setrefresh(!refresh)
@@ -205,7 +215,7 @@ const BrokerResponse = () => {
                       className={`ShowLTP_${data.service.instrument_token}`}
                     ></td>
                     <td>{`${data.service.name}[${data.categories.segment}]`}</td>
-                    <td>{data.service.lotsize}</td>
+                    <td>{data.service.lotsize +"--"+data.servicegroup_services_ids.group_qty}</td>
 
                     <td>
                       <div className="row d-flex">
@@ -218,6 +228,7 @@ const BrokerResponse = () => {
                             id="quantity"
                             placeholder="Enter Qty"
                             min={0}
+                           
                             onChange={
                               (e) =>
                                 setgroup_qty_value_test(

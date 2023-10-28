@@ -553,7 +553,7 @@ class GroupService {
 
         const Service_name_get = await services.findOne({ _id: info.Service_id });
         if (Service_name_get) {
-          ServicesArr.push(Service_name_get)
+          ServicesArr.push({data:Service_name_get,data1:info})
 
           if (data.result.length == ServicesArr.length) {
             return res.send({ status: true, msg: 'Get All successfully ', data: ServicesArr });

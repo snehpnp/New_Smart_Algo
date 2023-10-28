@@ -250,6 +250,9 @@ class Employee {
             Servicegroup_id: group_service,
           });
 
+
+          console.log("group_service_find===  ",group_service_find.length);
+
           // CLIENT SERVICES ADD API
           if (group_service_find.length != 0) {
             group_service_find.forEach((data) => {
@@ -661,6 +664,7 @@ class Employee {
             groupService_id: GroupServiceId,
           });
 
+          console.log("=",user_group_service.length);
           if (user_group_service.length == 0) {
 
             const result = await groupService_User.updateOne(
@@ -683,9 +687,36 @@ class Employee {
             await user_activity.save();
 
             // IF GROUP SERVICES NOT EXIST
-            var GroupServices = await serviceGroup_services_id.find({
-              Servicegroup_id: GroupServiceId,
-            });
+            // var GroupServices = await serviceGroup_services_id.find({
+            //   Servicegroup_id: GroupServiceId,
+            // });
+            const GroupServices = await serviceGroup_services_id.aggregate([
+              {
+                  $match: {
+                      Servicegroup_id: GroupServiceId
+                  }
+              },
+              {
+                  $lookup: {
+                      from: "services",
+                      localField: "Service_id",
+                      foreignField: "_id",
+                      as: "serviceInfo"
+                  }
+              },
+              {
+                  $unwind: "$serviceInfo"
+              },
+              {
+                  $project: {
+                      _id: 0, // Exclude the _id field if you don't need it
+                      Service_id: "$Service_id",
+                      lotsize: "$serviceInfo.lotsize"
+                  }
+              }
+          ]);
+
+
             if (GroupServices.length == "0") {
               return res.send({
                 status: false,
@@ -702,12 +733,14 @@ class Employee {
             });
 
             GroupServices.forEach((data) => {
+              console.log(data);
               const User_client_services = new client_services({
                 user_id: existingUsername._id,
                 group_id: GroupServiceId,
                 service_id: data.Service_id,
                 strategy_id: strategFind[0].strategy_id,
                 uniqueUserService: existingUsername._id + "_" + data.Service_id,
+                quantity:data.lotsize
               });
 
               User_client_services.save();

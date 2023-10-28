@@ -73,8 +73,27 @@ class Dashboard {
                 {
                     $unwind: '$categories',
                 },
-             
                 {
+                    $lookup: {
+                        from: "servicegroup_services_ids",
+                        localField: "group_id",
+                        foreignField: "Servicegroup_id",
+                        as: "servicegroup_services_ids",
+                    },
+                },
+                {
+                    $unwind: '$servicegroup_services_ids',
+                },
+                {
+                    $match: {
+                        $expr: {
+                            $eq: ['$servicegroup_services_ids.Service_id', '$service_id']
+                        }
+                    }
+                }
+,                
+                
+               {
                     $sort: {
                         'service.name': 1, // 1 for ascending order, -1 for descending order
                     },
@@ -86,16 +105,12 @@ class Dashboard {
                         'service.exch_seg': 1,
                         'service._id': 1,
                         'service.lotsize': 1,
-
+                        'servicegroup_services_ids.group_qty':1,
                         'strategys.strategy_name': 1,
                         'strategys._id': 1,
-
                         'categories.segment': 1,
-
                         _id: 1,
                         user_id: 1,
-                        // group_id: 1,
-                        // service_id: 1,
                         active_status: 1,
                         quantity: 1,
                         product_type: 1,
