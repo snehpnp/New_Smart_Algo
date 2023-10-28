@@ -27,14 +27,16 @@ const AddStrategy = () => {
     const dispatch = useDispatch()
 
     const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
-
-
-
     const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
     const [refresh, setRefresh] = useState(false);
 
-    const [SelectPlan, setSelectPlan] = useState(false);
+    const [SelectPlan, setSelectPlan] = useState(true);
     const [SelectPlanArr, setSelectPlanArr] = useState([]);
+
+    const [strategy_amount_month, setStrategy_amount_month] = useState('');
+    const [strategy_amount_quarterly, setStrategy_amount_quarterly] = useState('');
+    const [strategy_amount_half_early, setStrategy_amount_half_early] = useState([]);
+    const [strategy_amount_early, setStrategy_amount_early] = useState([]);
 
 
 
@@ -59,7 +61,8 @@ const AddStrategy = () => {
             segment: '',
             indecator: '',
             strategytester: '',
-            strategy_description: ''
+            strategy_description: '',
+            starategylogo: ''
         },
         validate: (values) => {
             const errors = {};
@@ -93,6 +96,11 @@ const AddStrategy = () => {
                 "strategy_tester": values.strategytester,
                 "strategy_segment": values.segment,
                 "strategy_description": values.strategy_description,
+                "strategy_amount_month": strategy_amount_month,
+                "strategy_amount_quarterly": strategy_amount_quarterly,
+                "strategy_amount_half_early": strategy_amount_half_early,
+                "strategy_image": values.starategylogo,
+                "strategy_amount_early": strategy_amount_early,
                 "plans": SelectPlanArr
             }
 
@@ -207,7 +215,9 @@ const AddStrategy = () => {
                                                     className="form-control"
                                                     id='Monthly'
                                                     placeholder={`Enter A Monthly Plan Amount`}
-                                                    onChange={(e) => SelectPlanValues("monthly", e.target.value)}
+                                                    onChange={(e) => { SelectPlanValues("monthly", e.target.value); setStrategy_amount_month(e.target.value) }}
+                                                    value={strategy_amount_month}
+
                                                 />
                                                 <div className="invalid-feedback">
                                                     Enter A Monthly Plan Amount
@@ -231,7 +241,8 @@ const AddStrategy = () => {
                                                     className="form-control"
                                                     id='Quaterly'
                                                     placeholder={`Enter A Quaterly Plan Amount`}
-                                                    onChange={(e) => SelectPlanValues("quaterly", e.target.value)}
+                                                    onChange={(e) => { SelectPlanValues("quaterly", e.target.value); setStrategy_amount_quarterly(e.target.value) }}
+                                                    value={strategy_amount_quarterly}
 
 
                                                 />
@@ -258,7 +269,9 @@ const AddStrategy = () => {
                                                     className="form-control"
                                                     id='Half-Yearly'
                                                     placeholder={`Enter a Half-Yearly Plan Value`}
-                                                    onChange={(e) => SelectPlanValues("halfyearly", e.target.value)}
+                                                    onChange={(e) => { SelectPlanValues("halfyearly", e.target.value); setStrategy_amount_half_early(e.target.value) }}
+                                                    value={strategy_amount_half_early}
+
 
                                                 />
                                                 <div className="invalid-feedback">
@@ -284,25 +297,19 @@ const AddStrategy = () => {
                                                     className="form-control"
                                                     id='Yearly'
                                                     placeholder={`Enter a Yearly Plan Value`}
-                                                    onChange={(e) => SelectPlanValues("yearly", e.target.value)}
+                                                    onChange={(e) => { SelectPlanValues("yearly", e.target.value); setStrategy_amount_early(e.target.value) }}
+                                                    value={strategy_amount_early}
 
                                                 />
                                                 <div className="invalid-feedback">
                                                     Please enter a Yearly Plan Value
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </> : ""}
-
                             </div>
-
                         </>
-
-
                     }
                 />
                 < ToastButton />

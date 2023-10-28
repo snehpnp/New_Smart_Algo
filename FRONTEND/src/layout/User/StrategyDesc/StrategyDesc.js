@@ -53,93 +53,89 @@ const StrategyDesc = () => {
 
   return (
     <Content Page_title="Strategy Description" button_status={false}>
-      <div className="card-new-main">
-        <div className="card-body" style={{ padding: 0 }}>
-          {/* <div className="container" style={{ paddingLeft: 8, paddingRight: 8 }}> */}
-            <div className="row custom-dashboard-new1 mt-2 mb-2">
-              <div className="col-lg-3 col-md-4 col-sm-6 col-xs-6 mt-2 mb-2">
-                <div className="card-final">
-                  <div className="card_head_new">
-                    <img src="https://test.smartalgo.in/images/smartalgologo16523435536611695017624260.png" alt="logo" className="logo" />
-                    <img src="https://test.smartalgo.in/images/smartalgologo16523435536611695017624260.png" alt="algocrab" className="shoes" />
-                    <span className="shoes_caption">
-                      <h4>Eagle Trading System</h4>
-                    </span>
-                    <span className="more_info mt-3">
-                      <a
-                        href="javascript:void(0)"
-                        data-description=""
-                      // onclick="LoadStrategyDescription(this)"
-                      >
-                        <i className="fa-solid fa-plus" /> More Info
-                      </a>
-                    </span>
-                    <span className="back_text">Pro</span>
-                  </div>
-                  <div className="card_body_main_new">
-                    <div className="shoes_desc">
-                      <input
-                        type="hidden"
-                        className="strategyID"
-                        defaultValue="1a6c53e21d"
-                      />
-                      <input type="hidden" className="planID" defaultValue={1} />
-                      <span className="shoes_info">Eagle Trading System</span>
-                      <span className="badge">Intraday/Positional</span>
-                      <span className="shoes_rating">
-                        <i className="" />
-                        <i className="" />
-                        <i className="" />
-                        <i className="" />
-                        <i className=" gray" />
-                      </span>
-                      <span className="shoes_price">
-                        <span>
-                          <span>PRICE : </span>
-                          <i className="fa-solid fa-indian-rupee-sign price tag" />
-                          <span className="rs txt-custom-strategy-price">1999</span>
-                        </span>
-                      </span>
-                      <span className="shoes_size">
-                        <span>
-                          <span>PLANS : </span>
-                        </span>
-                        <select
-                          name="select"
-                          className="ddl-custom-stratey-plans form-select select"
-                        >
-                          <option data-planid={1} value={1999} selected="">
-                            MONTHLY
-                          </option>
-                          <option data-planid={2} value={4999}>
-                            QUATERLY
-                          </option>
-                          <option data-planid={3} value={8999}>
-                            HALF-YEARLY
-                          </option>
-                          <option data-planid={4} value={14999}>
-                            YEARLY
-                          </option>
-                        </select>
-                      </span>
-                      <span className="shoes_buy">
-                        <button className="mb-2" type="submit">
-                          <i className="fas fa-bolt" /> WATCH VIDEO
-                        </button>
-                        <button type="submit" onclick="StrategyPurchase(this)">
-                          <i className="fas fa-cart-plus" /> BUY NOW
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                </div>
+
+      <div className="row custom-dashboard-new1 mt-2 mb-2">
+        <div className="col-lg-3 col-md-4 col-sm-6 col-xs-6 mt-2 mb-2">
+          <div className="card-final">
+            <div className="card_head_new">
+              <img src="https://test.smartalgo.in/images/smartalgologo16523435536611695017624260.png" alt="logo" className="logo" />
+              <img src="https://test.smartalgo.in/images/smartalgologo16523435536611695017624260.png" alt="algocrab" className="shoes" />
+              <span className="shoes_caption">
+                <h4>Eagle Trading System</h4>
+              </span>
+              <span className="more_info mt-3">
+                <a
+                  href="javascript:void(0)"
+                  data-description=""
+                // onclick="LoadStrategyDescription(this)"
+                >
+                  <i className="fa-solid fa-plus" /> More Info
+                </a>
+              </span>
+              <span className="back_text">Pro</span>
+            </div>
+            <div className="card_body_main_new">
+              <div className="shoes_desc">
+                <input
+                  type="hidden"
+                  className="strategyID"
+                  defaultValue="1a6c53e21d"
+                />
+                <input type="hidden" className="planID" defaultValue={1} />
+                <span className="shoes_info">Eagle Trading System</span>
+                <span className="badge">Intraday/Positional</span>
+                <span className="shoes_rating">
+                  <i className="" />
+                  <i className="" />
+                  <i className="" />
+                  <i className="" />
+                  <i className=" gray" />
+                </span>
+                <span className="shoes_price">
+                  <span>
+                    <span>PRICE : </span>
+                    <i className="fa-solid fa-indian-rupee-sign price tag" />
+                    <span className="rs txt-custom-strategy-price">1999</span>
+                  </span>
+                </span>
+                <span className="shoes_size">
+                  <span>
+                    <span>PLANS : </span>
+                  </span>
+                  <select
+                    name="select"
+                    className="ddl-custom-stratey-plans form-select select"
+                  >
+                    <option data-planid={1} value={1999} selected="">
+                      MONTHLY
+                    </option>
+                    <option data-planid={2} value={4999}>
+                      QUATERLY
+                    </option>
+                    <option data-planid={3} value={8999}>
+                      HALF-YEARLY
+                    </option>
+                    <option data-planid={4} value={14999}>
+                      YEARLY
+                    </option>
+                  </select>
+                </span>
+                <span className="shoes_buy">
+                  <button className="mb-2" type="submit">
+                    <i className="fas fa-bolt" /> WATCH VIDEO
+                  </button>
+                  <button type="submit" onclick="StrategyPurchase(this)">
+                    <i className="fas fa-cart-plus" /> BUY NOW
+                  </button>
+                </span>
               </div>
             </div>
-          {/* </div> */}
+          </div>
         </div>
       </div>
 
-      <div class="row mb-5">
+
+      {/* <div class="row mb-5">
         {StrategyData.data &&
           StrategyData.data.map((item) => {
             return (
@@ -262,7 +258,8 @@ const StrategyDesc = () => {
         ) : (
           ""
         )}
-      </div>
+      </div> */}
+      
     </Content >
   );
 };
