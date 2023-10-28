@@ -53,7 +53,7 @@ class Employee {
         demat_userid,
         group_service,
       } = req.body;
-
+      console.log(req.body);
       var Role = "USER";
       var StartDate1 = "";
       var EndDate1 = "";
@@ -246,13 +246,35 @@ class Employee {
             }
           } catch { }
 
-          const group_service_find = await serviceGroup_services_id.find({
-            Servicegroup_id: group_service,
-          });
+          const GroupServiceId = new ObjectId(group_service);
 
+          const group_service_find = await serviceGroup_services_id.aggregate([
+            {
+              $match: {
+                Servicegroup_id: GroupServiceId
+              }
+            },
+            {
+              $lookup: {
+                from: "services",
+                localField: "Service_id",
+                foreignField: "_id",
+                as: "serviceInfo"
+              }
+            },
+            {
+              $unwind: "$serviceInfo"
+            },
+            {
+              $project: {
+                _id: 0, // Exclude the _id field if you don't need it
+                Service_id: "$Service_id",
+                lotsize: "$serviceInfo.lotsize"
+              }
+            }
+          ]);
 
-          console.log("group_service_find===  ",group_service_find.length);
-
+          console.log("->",group_service_find);
           // CLIENT SERVICES ADD API
           if (group_service_find.length != 0) {
             group_service_find.forEach((data) => {
@@ -262,6 +284,8 @@ class Employee {
                 service_id: data.Service_id,
                 strategy_id: Strategies[0].id,
                 uniqueUserService: User_id + "_" + data.Service_id,
+                quantity: data.lotsize
+
               });
               User_client_services.save();
             });
@@ -664,7 +688,7 @@ class Employee {
             groupService_id: GroupServiceId,
           });
 
-          console.log("=",user_group_service.length);
+          console.log("=", user_group_service.length);
           if (user_group_service.length == 0) {
 
             const result = await groupService_User.updateOne(
@@ -692,29 +716,29 @@ class Employee {
             // });
             const GroupServices = await serviceGroup_services_id.aggregate([
               {
-                  $match: {
-                      Servicegroup_id: GroupServiceId
-                  }
+                $match: {
+                  Servicegroup_id: GroupServiceId
+                }
               },
               {
-                  $lookup: {
-                      from: "services",
-                      localField: "Service_id",
-                      foreignField: "_id",
-                      as: "serviceInfo"
-                  }
+                $lookup: {
+                  from: "services",
+                  localField: "Service_id",
+                  foreignField: "_id",
+                  as: "serviceInfo"
+                }
               },
               {
-                  $unwind: "$serviceInfo"
+                $unwind: "$serviceInfo"
               },
               {
-                  $project: {
-                      _id: 0, // Exclude the _id field if you don't need it
-                      Service_id: "$Service_id",
-                      lotsize: "$serviceInfo.lotsize"
-                  }
+                $project: {
+                  _id: 0, // Exclude the _id field if you don't need it
+                  Service_id: "$Service_id",
+                  lotsize: "$serviceInfo.lotsize"
+                }
               }
-          ]);
+            ]);
 
 
             if (GroupServices.length == "0") {
@@ -733,14 +757,14 @@ class Employee {
             });
 
             GroupServices.forEach((data) => {
-              console.log(data);
+
               const User_client_services = new client_services({
                 user_id: existingUsername._id,
                 group_id: GroupServiceId,
                 service_id: data.Service_id,
                 strategy_id: strategFind[0].strategy_id,
                 uniqueUserService: existingUsername._id + "_" + data.Service_id,
-                quantity:data.lotsize
+                quantity: data.lotsize
               });
 
               User_client_services.save();
@@ -800,7 +824,7 @@ class Employee {
         //     update_qty(existingUsername._id)
         //   }
         // }
-
+        console.log("Date :-", new Date());
         // USER GET ALL TYPE OF DATA
         return res.send({
           status: true,

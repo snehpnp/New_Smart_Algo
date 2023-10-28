@@ -17,6 +17,8 @@ const UserProfile = () => {
   const dispatch = useDispatch();
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const user_role = JSON.parse(localStorage.getItem("user_role"));
+  const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
+  // console.log("user_role_goTo",user_role_goTo);
 
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
@@ -128,7 +130,7 @@ const UserProfile = () => {
                         className="profile-img"
                         alt="Profile Photo"
                       ></img>
-                     
+
                       <div className="profile-info">
                         <div className="profile-photo">
                           <img
@@ -185,8 +187,7 @@ const UserProfile = () => {
                         </li>
 
                       )}
-
-                      {user_role === "USER" || gotodashboard || user_role !== "ADMIN" || user_role !== "SUBADMIN" ?
+                      {user_role === "USER" ?
 
                         < li className="nav-item">
                           <a
@@ -197,7 +198,18 @@ const UserProfile = () => {
                             Modify Updates
                           </a>
                         </li>
-                        : ""}
+                        : user_role_goTo === "USER" && gotodashboard ?
+
+                          < li className="nav-item">
+                            <a
+                              href="#modify"
+                              data-bs-toggle="tab"
+                              className="nav-link"
+                            >
+                              Modify Updates
+                            </a>
+                          </li>
+                          : ""}
                     </ul>
                     <div className="tab-content">
                       <div id="about-me" className="tab-pane fade active show">
@@ -320,16 +332,21 @@ const UserProfile = () => {
                             <h4 className="text-primary mb-4">
                               Change Password
                             </h4>
-                            <Formikform
-                              fieldtype={fields.filter(
-                                (field) =>
-                                  !field.showWhen ||
-                                  field.showWhen(formik.values)
-                              )}
-                              formik={formik}
-                              btn_name="Update"
-                              title="forlogin"
-                            />
+                            {gotodashboard ? (
+                              ""
+                            ) : (
+                              <Formikform
+                                fieldtype={fields.filter(
+                                  (field) =>
+                                    !field.showWhen ||
+                                    field.showWhen(formik.values)
+                                )}
+                                formik={formik}
+                                btn_name="Update"
+                                title="forlogin"
+                              />
+                            )}
+
                           </div>
                         </>
                         : ""

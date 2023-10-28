@@ -84,7 +84,7 @@ const Modify = ({ UserDetails }) => {
 
 
 
-    console.log("UserDetails", selectedOptions)
+    // console.log("UserDetails", selectedOptions)
 
 
     return (

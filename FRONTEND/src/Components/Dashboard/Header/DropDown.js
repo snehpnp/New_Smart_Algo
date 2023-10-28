@@ -31,6 +31,7 @@ const DropDown = () => {
                     toast.success(res.payload.msg)
                     localStorage.removeItem("user_role",);
                     localStorage.removeItem("user_details");
+                    localStorage.clear();
                     setTimeout(() => {
                         navigate("/");
                     }, 1500);

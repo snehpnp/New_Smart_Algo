@@ -151,6 +151,8 @@ const Header = ({ ChatBox }) => {
         : navigate("/admin/allsubadmins");
       window.location.reload();
       localStorage.removeItem("gotodashboard");
+      localStorage.removeItem("user_details_goTo");
+      localStorage.removeItem("user_role_goTo");
 
       setTimeout(() => {
         localStorage.removeItem("user_details_goTo");

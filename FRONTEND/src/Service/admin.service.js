@@ -787,3 +787,20 @@ export async function REMOVE_MESSAGE_BROADCAST(data, token) {
     }
 
 }
+
+
+// FIND BROKER RESPONSE BY ID
+export async function FIND_BROKER_RESPONSE(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/broker_information`, data, {
+            // headers: header(token),
+
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
