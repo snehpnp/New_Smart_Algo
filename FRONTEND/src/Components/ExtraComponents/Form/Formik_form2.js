@@ -67,7 +67,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
             <>
               {field.type === 'select' ? <>
                 <div className={`col-lg-${field.col_size}`}>
-                  <div className="mb-3 row">
+                  <div className="mb-1 row">
                     <label
                       className={`col-lg-${field.col_size}`}
                       htmlFor={field.name}

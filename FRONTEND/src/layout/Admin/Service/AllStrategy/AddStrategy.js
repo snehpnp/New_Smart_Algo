@@ -33,6 +33,10 @@ const AddStrategy = () => {
     const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
     const [refresh, setRefresh] = useState(false);
 
+    const [SelectPlan, setSelectPlan] = useState(false);
+    const [SelectPlanArr, setSelectPlanArr] = useState([]);
+
+
 
 
 
@@ -89,6 +93,7 @@ const AddStrategy = () => {
                 "strategy_tester": values.strategytester,
                 "strategy_segment": values.segment,
                 "strategy_description": values.strategy_description,
+                "plans": SelectPlanArr
             }
 
 
@@ -123,28 +128,10 @@ const AddStrategy = () => {
         },
         { name: 'indecator', label: 'Indicator ', type: 'file', label_size: 12, col_size: 6, disable: false },
         { name: 'strategytester', label: 'Strategy Tester ', type: 'file', label_size: 12, col_size: 6, disable: false },
-        { name: 'strategy_description', label: 'Strategy Description', type: 'msgbox', row_size: 4, label_size: 12, col_size: 12, disable: false },
+        { name: 'starategylogo', label: 'Strategy Logo ', type: 'file', label_size: 6, col_size: 6, disable: false },
+        { name: 'strategy_description', label: 'Strategy Description', type: 'msgbox', row_size: 7, label_size: 6, col_size: 6, disable: false },
 
     ];
-    // const fields = [
-    //     { name: 'strategyname', label: 'Strategy Name', type: 'text' },
-    //     { name: 'perlot', label: 'Per Lot Amount', type: 'text' },
-    //     { name: 'Catagory', label: 'catagory', type: 'text' },
-    //     {
-    //         name: 'segment',
-    //         label: 'Select Segment',
-    //         type: 'select',
-    //         options: CatagoryData.data && CatagoryData.data.map((item) => ({ label: item.name, value: item.segment }))
-
-    //     },
-    //     { name: 'indecator', label: 'Indicator ', type: 'file' },
-    //     { name: 'strategytester', label: 'Stratergy Tester ', type: 'file' },
-    //     { name: 'strategy_description', label: 'Strategy Description', type: 'msgbox' },
-    // ];
-
-
-
-
 
 
     const getservice = async () => {
@@ -163,16 +150,162 @@ const AddStrategy = () => {
         getservice()
     }, [])
 
-    console.log("formik", formik.values)
+
+
+    const SelectPlanValues = (name, value) => {
+        setSelectPlanArr((prev) => {
+            // Check if an entry with the same "type" already exists
+            const index = prev.findIndex((obj) => obj.type === name);
+
+            if (index !== -1) {
+                // Update the existing entry
+                prev[index] = { type: name, price: value };
+            } else {
+                // If the "type" is unique, add a new entry
+                prev.push({ type: name, price: value });
+            }
+
+            return [...prev];
+        });
+    }
+
+
+    console.log("SelectPlanArr", SelectPlanArr)
 
 
 
     return (
         <>
             <Content Page_title="Add Strategy " button_title="Back" route="/admin/strategies">
-                <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Strategy" title='addstrategy' />
+                <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Strategy" title='addstrategy'
+                    additional_field={
+                        <>
+                            <div className='row'>
+                                <div className="col-12">
+                                    {/* <h6>Select Plans</h6> */}
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onChange={() => setSelectPlan(!SelectPlan)} />
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            Select Plans
+                                        </label>
+                                    </div>
+                                </div>
+                                {SelectPlan ? <>
+                                    <div className={`col-lg-3`}>
+                                        <div className="mb-3 row flex-column">
+                                            <label
+                                                className={`col-lg-4`}
+                                                htmlFor="Monthly"
+                                            >
+                                                Monthly
+                                                <span className="text-danger">*</span>
+                                            </label>
+                                            <div
+                                            >
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id='Monthly'
+                                                    placeholder={`Enter A Monthly Plan Amount`}
+                                                    onChange={(e) => SelectPlanValues("monthly", e.target.value)}
+                                                />
+                                                <div className="invalid-feedback">
+                                                    Enter A Monthly Plan Amount
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={`col-lg-3`}>
+                                        <div className="mb-3 row flex-column">
+                                            <label
+                                                className={`col-lg-4`}
+                                                htmlFor="Quaterly"
+                                            >
+                                                Quaterly
+                                                <span className="text-danger">*</span>
+                                            </label>
+                                            <div
+                                            >
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id='Quaterly'
+                                                    placeholder={`Enter A Quaterly Plan Amount`}
+                                                    onChange={(e) => SelectPlanValues("quaterly", e.target.value)}
 
-                <ToastButton />
+
+                                                />
+                                                <div className="invalid-feedback">
+                                                    Enter A Quaterly Plan Amount
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={`col-lg-3`}>
+                                        <div className="mb-3 row flex-column">
+                                            <label
+                                                className={`col-lg-4`}
+                                                htmlFor="monthly"
+                                            >
+                                                monthly
+                                                <span className="text-danger">*</span>
+                                            </label>
+                                            <div
+                                            >
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id='Half-Yearly'
+                                                    placeholder={`Enter a Half-Yearly Plan Value`}
+                                                    onChange={(e) => SelectPlanValues("halfyearly", e.target.value)}
+
+                                                />
+                                                <div className="invalid-feedback">
+                                                    Enter A Half-Yearly Plan Amount
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className={`col-lg-3`}>
+                                        <div className="mb-3 row flex-column">
+                                            <label
+                                                className={`col-lg-4`}
+                                                htmlFor="Yearly"
+                                            >
+                                                Yearly
+                                                <span className="text-danger">*</span>
+                                            </label>
+                                            <div
+                                            >
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    id='Yearly'
+                                                    placeholder={`Enter a Yearly Plan Value`}
+                                                    onChange={(e) => SelectPlanValues("yearly", e.target.value)}
+
+                                                />
+                                                <div className="invalid-feedback">
+                                                    Please enter a Yearly Plan Value
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </> : ""}
+
+                            </div>
+
+                        </>
+
+
+                    }
+                />
+                < ToastButton />
             </Content >
 
         </>
