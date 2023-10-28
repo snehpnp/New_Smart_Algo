@@ -210,7 +210,7 @@ const EditStrategy = () => {
 
   const [one_strategy, setone_strategy] = useState("");
 
-  const [SelectPlan, setSelectPlan] = useState(false);
+  const [SelectPlan, setSelectPlan] = useState(true);
   const [SelectPlanArr, setSelectPlanArr] = useState([]);
 
 
@@ -436,7 +436,7 @@ const EditStrategy = () => {
             (field) => !field.showWhen || field.showWhen(formik.values)
           )}
           formik={formik}
-          btn_name="Add Strategy"
+          btn_name="Edit Strategy"
           title="EditStrategy"
 
           additional_field={
