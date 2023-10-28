@@ -35,13 +35,12 @@ class Dashboard {
                 msg: "Get Dashboard Data",
                 totalCount: {
                     total_client: result[0].total_client,
-                    admin_client: result[0].admin_client,
-                    subadmin_client: result[0].subadmin_client,
-                    total_Subadmin: result[0].total_Subadmin,
-                    total_live: result[0].total_live,
+                    total_active_client: result[0].total_active_client,
+                    total_expired_client: result[0].total_expired_client,
+                    total_live_client: result[0].total_live_client,
                     total_active_live: result[0].total_active_live,
                     total_expired_live: result[0].total_expired_live,
-                    total_demo: result[0].total_demo,
+                    total_demo_client: result[0].total_demo_client,
                     total_active_demo: result[0].total_active_demo,
                     total_expired_demo: result[0].total_expired_demo,
                     total_two_days: result[0].total_two_days,
@@ -50,8 +49,6 @@ class Dashboard {
                     all_licence: result[0].licenses,
                     used_licence: result[0].used_licence,
                     remaining_licence: result[0].remaining_license,
-
-
                 }
             })
         } catch (error) {
@@ -78,7 +75,7 @@ class Dashboard {
 
 
         } catch (error) {
-            console.log("Error In Broker Informations",error);
+            console.log("Error In Broker Informations", error);
         }
     }
 
@@ -105,7 +102,7 @@ class Dashboard {
                 })
 
         } catch (error) {
-            console.log("Error In Broker Informations",error);
+            console.log("Error In Broker Informations", error);
         }
     }
 
@@ -124,7 +121,7 @@ class Dashboard {
 
 
         } catch (error) {
-            console.log("Error In Broker Informations",error);
+            console.log("Error In Broker Informations", error);
         }
     }
 
@@ -143,7 +140,7 @@ class Dashboard {
                 })
 
         } catch (error) {
-            console.log("Error In Broker Informations",error);
+            console.log("Error In Broker Informations", error);
         }
     }
 

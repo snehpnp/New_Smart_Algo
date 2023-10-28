@@ -53,12 +53,18 @@ const AllLicence = () => {
         if (response.status) {
           if (dashboard_filter !== undefined) {
             let filteredData
-            if (dashboard_filter === "0" || dashboard_filter === 0) {
-              filteredData = response.data.filter(item => item.admin_license);
-            } else if (dashboard_filter === "1" || dashboard_filter === 1) {
-              filteredData = response.data.filter(item => !item.admin_license);
-              console.log("filteredData", filteredData)
-            }
+            filteredData = response.data.filter(item => {
+              const itemDate = new Date(item.createdAt);
+              const itemMonth = itemDate.getMonth() + 1;
+              const itemYear = itemDate.getFullYear();
+              if (dashboard_filter === "0" || dashboard_filter === 0) {
+                return (item.admin_license) && (!CountLicence || `${itemYear}-${itemMonth.toString().padStart(2, "0")}` === CountLicence);
+              } else if (dashboard_filter === "1" || dashboard_filter === 1) {
+                return (!item.admin_license) && (!CountLicence || `${itemYear}-${itemMonth.toString().padStart(2, "0")}` === CountLicence);
+              }
+            });
+
+
             setAllClients({
               loading: false,
               data: { data: filteredData },
@@ -193,21 +199,23 @@ const AllLicence = () => {
   };
 
   const ThisMonthUsedLicence = (alllicence) => {
-    if (CountLicence) {
-      if (getAllClients1.data !== undefined) {
-        const filteredData = getAllClients1.data.data.filter((item) => {
-          if (!item.admin_license) {
-            const itemDate = new Date(item.createdAt);
-            const itemMonth = itemDate.getMonth() + 1; // Month is 0-indexed
-            const itemYear = itemDate.getFullYear();
-            return (
-              `${itemYear}-${itemMonth.toString().padStart(2, "0")}` ===
-              CountLicence
-            );
-          }
-        });
-        const count = filteredData.length;
-        setUsedLicence(count);
+    if (dashboard_filter === undefined) {
+      if (CountLicence) {
+        if (getAllClients1.data !== undefined) {
+          const filteredData = getAllClients1.data.data.filter((item) => {
+            if (!item.admin_license) {
+              const itemDate = new Date(item.createdAt);
+              const itemMonth = itemDate.getMonth() + 1; // Month is 0-indexed
+              const itemYear = itemDate.getFullYear();
+              return (
+                `${itemYear}-${itemMonth.toString().padStart(2, "0")}` ===
+                CountLicence
+              );
+            }
+          });
+          const count = filteredData.length;
+          setUsedLicence(count);
+        }
       }
     }
   };
@@ -220,10 +228,17 @@ const AllLicence = () => {
     e.preventDefault();
     setCountLicence("")
     setUsedLicence("");
-    setAllClients({
-      loading: false,
-      data: getAllClients1.data,
-    });
+    if (dashboard_filter === undefined) {
+      setAllClients({
+        loading: false,
+        data: getAllClients1.data,
+      });
+    } else {
+      setAllClients({
+        loading: false,
+        data: getAllClients.data,
+      });
+    }
   };
 
   // --------------    For Hide Next Months ------------
@@ -289,36 +304,36 @@ const AllLicence = () => {
                   />
                 </div>
               </div>
-              {dashboard_filter !== undefined ? "" : <>
-                <div className="col-lg-5 mb-4 ">
-                  <div className="mb-3 row  d-flex flex-column">
-                    <label
-                      htmlFor="validationCustom05"
-                      className="col-lg-5 col-form-label"
+              <div className="col-lg-5 mb-4 ">
+                <div className="mb-3 row  d-flex flex-column">
+                  <label
+                    htmlFor="validationCustom05"
+                    className="col-lg-5 col-form-label"
+                  >
+                    Please Select Month
+                  </label>
+                  <div className="col-lg-12 align-items-center d-flex ">
+                    <input
+                      type="month"
+                      className="default-select wide  me-3 form-control"
+                      id="validationCustom05"
+                      max={maxDate}
+                      onChange={(e) => setCountLicence(e.target.value)}
+                      value={CountLicence}
+                    />
+                    <button
+                      className="btn btn-primary"
+                      onClick={(e) => {
+                        resetFilter(e);
+                      }}
                     >
-                      Please Select Month
-                    </label>
-                    <div className="col-lg-12 align-items-center d-flex ">
-                      <input
-                        type="month"
-                        className="default-select wide  me-3 form-control"
-                        id="validationCustom05"
-                        max={maxDate}
-                        onChange={(e) => setCountLicence(e.target.value)}
-                        value={CountLicence}
-                      />
-                      <button
-                        className="btn btn-primary"
-                        onClick={(e) => {
-                          resetFilter(e);
-                        }}
-                      >
-                        reset
-                      </button>
-                    </div>
+                      reset
+                    </button>
                   </div>
                 </div>
+              </div>
 
+              {dashboard_filter !== undefined ? "" : <>
 
                 <div className="row mb-5">
                   <div className="col-2 mx-auto border border-dark text-center rounded-3">

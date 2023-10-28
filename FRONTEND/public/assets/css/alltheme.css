@@ -1549,4 +1549,219 @@ span.button_sell.active {
 
     appearance: none;
 
-} 
+}
+
+/* -----------------  For Strateg Desc - */
+
+
+.custom-dashboard-new1 .card-final {
+    border-radius: 24px;
+}
+
+.card-new-main {
+    box-shadow: 0 0 10px 0 rgba(183, 192, 206, 0.2);
+    -webkit-box-shadow: 0 0 10px 0 rgba(183, 192, 206, 0.2);
+    -moz-box-shadow: 0 0 10px 0 rgba(183, 192, 206, 0.2);
+    -ms-box-shadow: 0 0 10px 0 rgba(183, 192, 206, 0.2);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid #f2f4f9;
+    border-radius: 0.25rem;
+}
+
+.custom-dashboard-new1 .card_head_new {
+    position: relative;
+    height: 180px;
+    border-radius: 20px 20px 0 0;
+    background: linear-gradient(-90deg, #ffffff, var(--primary));
+    border: 1px solid #ffc7b3;
+}
+
+.custom-dashboard-new1 .logo {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    width: 20px;
+}
+
+.custom-dashboard-new1 .shoes {
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+    width: 64px;
+    z-index: 1;
+}
+
+.custom-dashboard-new1 .shoes_caption {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 230px;
+    letter-spacing: 1px;
+    font-weight: 400;
+}
+
+.custom-dashboard-new1 h4 {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.custom-dashboard-new1 .more_info {
+    position: absolute;
+    top: 80px;
+    left: 20px;
+}
+
+.custom-dashboard-new1 .more_info a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+.mdi:before,
+.mdi-set {
+    display: inline-block;
+    font: normal normal normal 24px/1 "Material Design Icons";
+    font-size: inherit;
+    text-rendering: auto;
+    line-height: inherit;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.custom-dashboard-new1 .card_body_main_new {
+    position: relative;
+    height: 250px;
+    border: 1px solid #ffc7b3;
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+}
+
+.custom-dashboard-new1 .shoes_info {
+    font-size: 20px;
+    position: relative;
+    top: 12px;
+    left: 10px;
+}
+
+.custom-dashboard-new1 .badge {
+    position: relative;
+    left: 12px;
+    top: 10px;
+    background-color: #00b862;
+    color: #ffffff;
+    font-size: 10px;
+    padding: 3px 6px 3px 6px;
+    border-radius: 3px;
+    letter-spacing: .5px;
+}
+
+.custom-dashboard-new1 .shoes_rating {
+    position: relative;
+    left: 10px;
+    top: 17px;
+    display: block;
+    font-size: 10px;
+}
+
+.custom-dashboard-new1 .shoes_rating i.gray {
+    color: #acacab;
+}
+
+.custom-dashboard-new1 .shoes_price {
+    position: relative;
+    left: 10px;
+    top: 24px;
+    font-size: 12px;
+    display: block;
+}
+
+.custom-dashboard-new1 .shoes_price .tag {
+    margin-left: 5px;
+}
+
+.custom-dashboard-new1 .shoes_price .price {
+    font-size: 11px;
+}
+
+.custom-dashboard-new1 .shoes_price .rs {
+    font-size: 16px;
+}
+
+.custom-dashboard-new1 .shoes_size {
+    position: relative;
+    left: 10px;
+    top: 30px;
+    font-size: 12px;
+}
+
+.custom-dashboard-new1 .select {
+    border-radius: 5px;
+    opacity: 1;
+    text-align: center;
+    margin-left: 1px;
+    cursor: pointer;
+    display: inherit;
+    width: auto;
+    height: 100%;
+    color: inherit;
+    font-size: 12px;
+    padding: 0.469rem 2.4rem 0.469rem 0.8rem;
+    -moz-padding-start: calc(0.8rem - 3px);
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #000;
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    appearance: none;
+}
+
+.custom-dashboard-new1 .shoes_buy {
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    display: inline;
+    float: left;
+}
+
+.custom-dashboard-new1 .shoes_buy button {
+    display: inline;
+    background-color: #ff4500;
+    border: none;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 10px 10px;
+    opacity: .7;
+    font-size: 11px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.custom-dashboard-new1 .shoes_buy button:hover {
+    background-color: #2EE59D ! important;
+    border-color: #2EE59D ! important;
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4) ! important;
+    color: #fff ! important;
+    transform: translateY(-7px) ! important;
+}
+
+.custom-dashboard-new1 .shoes_buy i {
+    font-size: 10px;
+}
+
+.custom-dashboard-new1 .back_text {
+    position: absolute;
+    bottom: 0px;
+    left: 5px;
+    opacity: .07;
+    font-size: 45px;
+    font-weight: bold;
+}
