@@ -20,7 +20,7 @@ const Admin_Permission_Schema = new mongoose.Schema({
 
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'users'
+        ref: 'all_panels'
     },
 }, {
     _id: true,
