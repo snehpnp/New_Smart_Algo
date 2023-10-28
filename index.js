@@ -62,3 +62,7 @@
 //  api_type: 'null',
 //  demat_userid: 'null',
 //  group_service: '653367df827128bcdfae41c8' } 
+
+
+
+[{ "type": "monthly", "price": "100" },{ "type": "quaterly", "price": "200" },{ "type": "halfyearly", "price": "300" },{ "type": "yearly", "price": "400" } ]

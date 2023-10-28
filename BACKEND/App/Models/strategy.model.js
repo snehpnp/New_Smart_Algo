@@ -53,8 +53,8 @@ const strategySchema = Schema({
         default: null
     },
     plans: [{
-        type: String,
-        Price: String
+        type: String, // Define the type for 'type' property
+        price: Number // Define the type for 'price' property
     }],
     createdAt: {
         type: Date,

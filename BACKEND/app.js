@@ -32,6 +32,7 @@ app.use(bodyparser.json({ limit: '10mb', extended: true }));
 
 app.use(bodyparser.json());
 const server = http.createServer(app);
+app.use(express.json());
 
 
 // REQUIRE File

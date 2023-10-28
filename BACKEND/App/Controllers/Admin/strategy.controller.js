@@ -12,7 +12,7 @@ class strategy {
     // ADD STRATEGY IN A COLLECTION
     async AddStragegy(req, res) {
         try {
-            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester, per_lot, strategy_image, strategy_amount_month, strategy_amount_quarterly, strategy_amount_half_early, strategy_amount_early,plans } = req.body;
+            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester, per_lot, strategy_image, strategy_amount_month, strategy_amount_quarterly, strategy_amount_half_early, strategy_amount_early, plans } = req.body;
 
 
             const exist_strategy = await strategy_model.findOne({ strategy_name: strategy_name });
@@ -33,9 +33,8 @@ class strategy {
                 strategy_amount_quarterly: strategy_amount_quarterly,
                 strategy_amount_half_early: strategy_amount_half_early,
                 strategy_amount_early: strategy_amount_early,
-                plans:plans
+                plans: JSON.stringify(plans)
             })
-
 
             strategy_Data.save()
                 .then(async (data) => {
@@ -62,7 +61,7 @@ class strategy {
     // EDIT STRATEGY IN A COLLECTION
     async EditStragegy(req, res) {
         try {
-            const { _id, strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester, strategy_amount,strategy_image, strategy_amount_month, strategy_amount_quarterly, strategy_amount_half_early, strategy_amount_early,plans } = req.body;
+            const { _id, strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester, strategy_amount, strategy_image, strategy_amount_month, strategy_amount_quarterly, strategy_amount_half_early, strategy_amount_early, plans } = req.body;
 
             const strategy_check = await strategy_model.findOne({ _id: _id });
             if (!strategy_check) {
@@ -100,13 +99,14 @@ class strategy {
                     "strategy_indicator": strategy_indicator,
                     "strategy_tester": strategy_tester,
                     "strategy_amount": strategy_amount,
-                    "strategy_image":strategy_image,
+                    "strategy_image": strategy_image,
                     "strategy_amount_month": strategy_amount_month,
                     "strategy_amount_quarterly": strategy_amount_quarterly,
                     "strategy_amount_half_early": strategy_amount_half_early,
                     "strategy_amount_early": strategy_amount_early,
-                    "plans":plans
-               
+                    "plans": JSON.stringify(plans)
+
+
                 }
             };
 
