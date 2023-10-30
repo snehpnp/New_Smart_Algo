@@ -50,7 +50,7 @@ const Modify = ({ UserDetails }) => {
         await dispatch(Modify_Details({ user_id: user_id, AdminToken: AdminToken, req: selectedOptions }))
             .unwrap()
             .then((response) => {
-                console.log("response", response);
+                // console.log("response", response);
                 if (response.status) {
                     toast.success(response.msg);
                 } else {

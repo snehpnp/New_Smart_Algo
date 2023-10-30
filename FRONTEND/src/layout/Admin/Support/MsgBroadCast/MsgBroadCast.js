@@ -80,7 +80,7 @@ const MsgBroadCast = () => {
                     toast.error(response.data.msg);
                 }
                 else if (response.status) {
-                    console.log("response.status", response.status)
+                    // console.log("response.status", response.status)
                     setRefresh(!refresh)
                     formik.setFieldValue('message', "")
                     formik.setFieldValue('Strategy', "")

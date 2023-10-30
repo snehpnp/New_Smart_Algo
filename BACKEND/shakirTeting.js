@@ -101,7 +101,7 @@ module.exports = function (app) {
     // Send all requests concurrently using Promise.all
     Promise.all(requestPromises)
       .then(responses => {
-      console.log("Response:", responses.data);
+      // console.log("Response:", responses.data);
        
       })
       .catch(errors => {
@@ -218,7 +218,7 @@ module.exports = function (app) {
 
         axios(config)
           .then(async (response) => {
-           console.log("response",response)
+          //  console.log("response",response)
 
           })
           .catch(async (error) => {
@@ -1069,7 +1069,7 @@ module.exports = function (app) {
       console.log("Received data ':", response);
       // Do something with the received data here
       if (response.tk) {
-        console.log("response",response)
+        // console.log("response",response)
         connectToDB(response.tk, response);
         // console.log("token --",response.tk);
         // getTokenStrategy(response.tk)
@@ -1678,7 +1678,7 @@ module.exports = function (app) {
         console.log("okk socket open  1 ", response)
 
         if (response.tk) {
-          console.log("response", response.tk)
+          // console.log("response", response.tk)
           connectToDB(response.tk, response);
 
           // TriggerCollection(response.tk)

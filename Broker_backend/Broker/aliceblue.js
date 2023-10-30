@@ -218,7 +218,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
                 .then(responses => {
-                    console.log("Response:", responses.data);
+                    // console.log("Response:", responses.data);
 
                 })
                 .catch(errors => {
@@ -274,7 +274,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     };
                     axios(config)
                         .then(async (response) => {
-                            console.log("response", response.data)
+                            // console.log("response", response.data)
                             fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
                                 if (err) {
                                     return console.log(err);

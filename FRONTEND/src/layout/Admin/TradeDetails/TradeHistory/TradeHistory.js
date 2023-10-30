@@ -546,7 +546,7 @@ const TradeHistory = () => {
     await dispatch(Get_All_Service({})).unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("response", response)
+          // console.log("response", response)
           setServiceData({
             loading: false,
             data: response.data,
@@ -581,7 +581,7 @@ const TradeHistory = () => {
     getservice()
   }, [])
 
-  console.log("UserDetails.trading_status", UserDetails.trading_status !== undefined && UserDetails.trading_status)
+  // console.log("UserDetails.trading_status", UserDetails.trading_status !== undefined && UserDetails.trading_status)
   return (
     <>
       <Content Page_title="Trade History" button_status={false}

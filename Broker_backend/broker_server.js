@@ -197,6 +197,8 @@ app.post('/broker-signals', async (req, res) => {
       var strategy = signals.Strategy;
       var qty_percent = signals.Quntity;
       var client_key = signals.Key;
+      var TradeType = signals.TradeType;
+
       var demo = signals.Demo;
 
 
@@ -457,6 +459,7 @@ app.post('/broker-signals', async (req, res) => {
               segment: segment,
               trade_symbol: trade_symbol,
               client_persnal_key: client_persnal_key,
+              TradeType:TradeType,
               token: instrument_token
             }
 

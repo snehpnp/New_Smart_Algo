@@ -111,7 +111,7 @@ const AllSubadmin = () => {
       await dispatch(DELETE_USER_SERVICES(req1))
         .unwrap()
         .then((response) => {
-          console.log("response", response);
+          // console.log("response", response);
           if (response.status) {
             setrefresh(!refresh);
           }
@@ -126,7 +126,7 @@ const AllSubadmin = () => {
     await dispatch(Get_Client_By_Subadmin_Id({ id: id, token: token }))
       .unwrap()
       .then((response) => {
-        console.log("response", response);
+        // console.log("response", response);
         if (response.status) {
           setSubAdminClients({
             loading: false,

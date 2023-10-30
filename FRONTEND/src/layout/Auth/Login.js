@@ -84,7 +84,7 @@ const Login = () => {
       await dispatch(SignIn(req))
         .unwrap()
         .then((response) => {
-          console.log("response=>", response);
+          // console.log("response=>", response);
 
           if (response.status) {
             if (response.data.Role !== "SUPERADMIN") {
@@ -105,7 +105,7 @@ const Login = () => {
               }, 1000);
             }
           } else {
-            console.log("response", response);
+            // console.log("response", response);
             toast.error(response.msg);
           }
         })
@@ -279,7 +279,7 @@ const Login = () => {
     await dispatch(OTP_SEND_USEHERES(req))
       .unwrap()
       .then((response) => {
-        console.log("response", response.data);
+        // console.log("response", response.data);
 
         setgetOtp(response.data);
         if (response.status) {

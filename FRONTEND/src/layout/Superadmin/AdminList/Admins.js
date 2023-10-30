@@ -157,7 +157,7 @@ const AdminsList = () => {
 
             await dispatch(Update_Panel_Theme(req)).unwrap()
                 .then((response) => {
-                    console.log("response", response);
+                    // console.log("response", response);
                     if (response.status) {
                         toast.success(response.msg)
                         setshowModal(false)

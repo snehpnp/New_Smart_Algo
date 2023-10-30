@@ -208,7 +208,7 @@ console.log("=>",getServicesName && getServicesName);
             }
             await dispatch(DELETE_GROUP_SERVICE(req)).unwrap()
                 .then((response) => {
-                    console.log("response", response)
+                    // console.log("response", response)
                     if (response.status) {
                         toast.success(response.msg)
                         setrefresh(!refresh)

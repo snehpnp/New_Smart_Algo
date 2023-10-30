@@ -32,16 +32,16 @@ class Tradehistory {
             } else {
                 ser1 = service
             }
-            console.log(   {
-                match: {
-                    createdAt: {
-                        $gte: startDateObj,
-                        $lte: endDateObj
-                    },
-                    strategy: stg1,
-                    trade_symbol: ser1
-                }
-            });
+            // console.log(   {
+            //     match: {
+            //         createdAt: {
+            //             $gte: startDateObj,
+            //             $lte: endDateObj
+            //         },
+            //         strategy: stg1,
+            //         trade_symbol: ser1
+            //     }
+            // });
 
             const filteredSignals = await MainSignals_modal.aggregate([
                 {
@@ -66,7 +66,7 @@ class Tradehistory {
 
                 {
                     $sort: {
-                        "result._id": -1 // Sort in ascending order. Use -1 for descending.
+                        _id: -1 // Sort in ascending order. Use -1 for descending.
                     }
                 }
 
