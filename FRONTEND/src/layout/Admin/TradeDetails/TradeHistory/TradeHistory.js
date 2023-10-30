@@ -38,12 +38,6 @@ const TradeHistory = () => {
   const [toDate, setToDate] = useState("");
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [refresh, setrefresh] = useState(false);
-  const [refresh1, setrefresh1] = useState(false);
-
-
-  const [originalData, setOriginalData] = useState([]);
-
-
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -72,6 +66,7 @@ const TradeHistory = () => {
   const [SelectSegment, setSelectSegment] = useState("null");
   const [SelectService, setSelectService] = useState("null");
 
+  console.log("UserDetails", UserDetails)
 
   const [SocketState, setSocketState] = useState("null");
 
@@ -139,6 +134,19 @@ const TradeHistory = () => {
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
     {
+      dataField: "squreoff",
+      text: "Square OFF",
+      formatter: (cell, row, rowIndex) =>
+        <div>
+          {console.log("aaaaaaaaaaa", row)}
+          <button className=" btn-primary"
+          onClick={(e) => ResetDate(e)}
+          >
+            Square Off
+          </button>
+        </div>,
+    },
+    {
       dataField: "live",
       text: "Live Price",
       formatter: (cell, row, rowIndex) => (
@@ -156,11 +164,7 @@ const TradeHistory = () => {
         </div>
       ),
     },
-    {
-      dataField: "createdAt",
-      text: "Signals time",
-      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-    },
+
     {
       dataField: "trade_symbol",
       text: "Symbol",
@@ -193,6 +197,7 @@ const TradeHistory = () => {
         <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
       ),
     },
+
     {
       dataField: "Action",
       text: "R/P&L",
@@ -250,6 +255,11 @@ const TradeHistory = () => {
           <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
         </div>
       ),
+    },
+    {
+      dataField: "createdAt",
+      text: "Signals time",
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
     {
       dataField: "strategy",
@@ -475,18 +485,20 @@ const TradeHistory = () => {
 
 
 
+  var a = 2
   //  GET_USER_DETAILS
   const data = async () => {
+    if (a < 2) {
+    }
     const response = await GetAccessToken({ broker_name: "aliceblue" });
-
     if (response.status) {
-      setUserDetails(response.data[0]);
+      setUserDetails(response.data && response.data[0]);
     }
 
   };
   useEffect(() => {
     data();
-  }, []);
+  }, [a]);
 
 
 
@@ -581,7 +593,7 @@ const TradeHistory = () => {
     getservice()
   }, [])
 
-  console.log("UserDetails.trading_status", UserDetails.trading_status !== undefined && UserDetails.trading_status)
+  console.log("UserDetails.trading_status", UserDetails && UserDetails.trading_status !== undefined && UserDetails.trading_status)
   return (
     <>
       <Content Page_title="Trade History" button_status={false}

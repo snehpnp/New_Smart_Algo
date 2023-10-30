@@ -15,8 +15,7 @@ import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Da
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
 import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Service/Alice_Socket";
 import $ from "jquery";
-
-
+import axios from "axios"
 
 
 const HelpCenter = () => {
@@ -159,7 +158,7 @@ const HelpCenter = () => {
                 setCreateSignalRequest(oldValues => {
                     return oldValues.filter(item => item.indexcallput !== (option_type === "CALL" ? `${option_type}_${row_data.call_token}` : `${option_type}_${row_data.put_token}`))
                 })
-                
+
                 setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
             }
         }
@@ -173,13 +172,7 @@ const HelpCenter = () => {
     const ExcuteTradeButton = () => {
         let Arr = []
 
-        console.log("CreateSignalRequest", expiry && expiry)
-
         const expiry_i = convert_string_to_month(expiry && expiry)
-
-        console.log("sadasdsada", expiry_i)
-
-
 
         CreateSignalRequest && CreateSignalRequest.map((item) => {
             // const expiry_i = get_thre_digit_month()
@@ -250,13 +243,30 @@ const HelpCenter = () => {
 
     const Done_For_Trade = (id) => {
         const currentTimestamp = Math.floor(Date.now() / 1000);
+        // let ttt = []
+        let abc = ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
+            let req = `DTime:${currentTimestamp}|Symbol:${symbol && symbol}|TType:${item.trading_type}|Tr_Price:131|Price:${item.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.call_type}|Expiry:${expiry && expiry}|Strategy:${strategy && strategy}|Quntity:100|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION-CHAIN|Demo:demo`
 
-        console.log(currentTimestamp);
 
-        ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
-            let req = `DTime: ${currentTimestamp} | Symbol: ${symbol && symbol} | TType: ${item.trading_type} | Tr_Price: 131 | Price: ${item.price} | Sq_Value: 0.00 | Sl_Value: 0.00 | TSL: 0.00 | Segment: ${item.segment} | Strike: ${item.strike} | OType: ${item.call_type} | Expiry: ${expiry && expiry} | Strategy: ${strategy && strategy} | Quntity: 100 | Key: ${PanelKey && PanelKey.client_key} | Demo: demo`
 
-            console.log("req", req)
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                data: req
+            };
+
+            axios.request(config)
+                .then((response) => {
+                    console.log("Trade", response.data);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+
         })
 
 
@@ -405,7 +415,6 @@ const HelpCenter = () => {
 
 
         if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
-
 
             const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 

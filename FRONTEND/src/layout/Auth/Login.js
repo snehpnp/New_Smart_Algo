@@ -298,10 +298,10 @@ const Login = () => {
   //  for set theme
 
   const getPanelDetails = async () => {
-    // let domain = window.location.host
+    let domain = window.location.host
     const req = {
-      // domain:  domain
-      domain: "sneh.com",
+      domain: Config.react_domain
+      // domain: "sneh.com",
     };
 
     await dispatch(Get_Panel_Informtion(req))
