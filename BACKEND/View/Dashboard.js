@@ -42,7 +42,6 @@ db.createView("dashboard_data", "users", [
                         {
                             $and: [
                                 { $eq: ["$Role", "USER"] },
-                                // { $eq: ["$license_type", "2"] },
                                 { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
                                 { $eq: ["$Is_Active", "1"] }
 
@@ -254,62 +253,8 @@ db.createView("dashboard_data", "users", [
                     { $toInt: "$used_licence" } // Convert used_licence to integer
                 ]
             }
-            // =======
-            //  used_licence: { $toInt: "$used_licence" }, // Convert used_licence to integer
 
-            // remaining_license: {
-            //     $subtract: [
-            //         { $toInt: "$company_info.licenses" }, // Convert licenses to integer
-            //         { $toInt: "$used_licence" } // Convert used_licence to integer
-            //     ]
-            // }
-            // >>>>>>> 68964591b01effa2222d61b11da9f179596795a7
         }
     }
 
 ]);
- // admin_client: {
-            //     $sum: {
-            //         $cond: [
-            //             {
-            //                 $and: [
-            //                     { $eq: ["$parent_role", "ADMIN"] },
-            //                     { $eq: ["$Role", "USER"] },
-            //                     { $eq: ["$Is_Active", "1"] }
-
-            //                 ]
-            //             },
-            //             1,
-            //             0
-            //         ]
-            //     }
-            // },
-            // subadmin_client: {
-            //     $sum: {
-            //         $cond: [
-            //             {
-            //                 $and: [
-            //                     { $eq: ["$parent_role", "SUBADMIN"] },
-            //                     { $eq: ["$Role", "USER"] },
-            //                     { $eq: ["$Is_Active", "1"] }
-
-            //                 ]
-            //             },
-            //             1,
-            //             0
-            //         ]
-            //     }
-            // },
-            // total_Subadmin: {
-            //     $sum: {
-            //         $cond: [
-            //             {
-            //                 $and: [
-            //                     { $eq: ["$Role", "SUBADMIN"] }
-            //                 ]
-            //             },
-            //             1,
-            //             0
-            //         ]
-            //     }
-            // },
