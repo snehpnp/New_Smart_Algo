@@ -19,7 +19,7 @@ class Tradehistory {
             if(type.toUpperCase() == "ADMIN"){
                 client_persnal_key = { client_persnal_key: { $ne: "" } }
             }else{
-                client_persnal_key = ""
+                client_persnal_key = {client_persnal_key:""}
             }
 
 
