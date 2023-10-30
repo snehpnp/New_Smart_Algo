@@ -71,6 +71,12 @@ const HelpCenter = () => {
     const [rows, setRows] = useState([]);
     const [first, setFirst] = useState(false);
 
+    const [activeButton, setActiveButton] = useState('LE');
+
+    const handleButtonClick = (value) => {
+        setActiveButton(value);
+    };
+
 
     const columns = [
 
@@ -79,10 +85,8 @@ const HelpCenter = () => {
             text: 'BUY/SELL',
             formatter: (cell, row, rowIndex) => (
                 <div key={rowIndex}>
-
-                    <button value="LE" className={`button_BUY ${first ? 'active' : ''}`} onClick={(e) => { CreateRequest("CALL", row, "LE", rowIndex) }} >B</button>
-                    <button value="SE" className={`button_sell`} onClick={(e) => CreateRequest("CALL", row, "SE", rowIndex)}>S</button>
-
+                    <button value="LE" className={`button_BUY ${activeButton === 'LE' ? 'active' : ''}`} onClick={(e) => { handleButtonClick('SE'); CreateRequest("CALL", row, "LE", rowIndex) }} >B</button>
+                    <button value="SE" className={`button_sell  ${activeButton === 'SE' ? 'active' : ''}`} onClick={(e) => { handleButtonClick('SE'); CreateRequest("CALL", row, "SE", rowIndex) }}>S</button>
                 </div >
             ),
         },
@@ -134,6 +138,7 @@ const HelpCenter = () => {
 
 
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
+
 
     const CreateRequest = (option_type, row_data, call_type, index) => {
         if (strategyRef.current === "") {
@@ -201,7 +206,7 @@ const HelpCenter = () => {
             data: Arr
         })
         setshowModal(true)
-        console.log("Arr", Arr)
+
     }
 
 
@@ -245,7 +250,7 @@ const HelpCenter = () => {
         const currentTimestamp = Math.floor(Date.now() / 1000);
         // let ttt = []
         let abc = ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
-            let req = `DTime:${currentTimestamp}|Symbol:${symbol && symbol}|TType:${item.trading_type}|Tr_Price:131|Price:${item.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.call_type}|Expiry:${expiry && expiry}|Strategy:${strategy && strategy}|Quntity:100|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION-CHAIN|Demo:demo`
+            let req = `DTime:${currentTimestamp}|Symbol:${symbol && symbol}|TType:${item.trading_type}|Tr_Price:131|Price:${item.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.call_type}|Expiry:${expiry && expiry}|Strategy:${strategy && strategy}|Quntity:100|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
 
 
 
@@ -262,6 +267,12 @@ const HelpCenter = () => {
             axios.request(config)
                 .then((response) => {
                     console.log("Trade", response.data);
+                    setshowModal(false)
+                    setExecuteTradeData({
+                        loading: false,
+                        data: []
+                    })
+
                 })
                 .catch((error) => {
                     console.log(error);

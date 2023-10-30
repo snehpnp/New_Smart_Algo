@@ -96,6 +96,14 @@ const AllClients = () => {
             let abc =
               response.data &&
               response.data.filter((item) => {
+                if (dashboard_filter === "000") {
+                  return (item.Role === "USER" && item.Is_Active === '1' && new Date(item.EndDate) <= new Date())
+                }
+                if (dashboard_filter === "111") {
+                  return (item.Role === "USER" && item.Is_Active === '1' && new Date(item.EndDate) >= new Date())
+
+                }
+
                 if (dashboard_filter === "2" || dashboard_filter === 2) {
                   return (
                     item.license_type === dashboard_filter ||

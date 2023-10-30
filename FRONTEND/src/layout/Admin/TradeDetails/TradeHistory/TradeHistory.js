@@ -66,7 +66,6 @@ const TradeHistory = () => {
   const [SelectSegment, setSelectSegment] = useState("null");
   const [SelectService, setSelectService] = useState("null");
 
-  console.log("UserDetails", UserDetails)
 
   const [SocketState, setSocketState] = useState("null");
 
@@ -131,20 +130,39 @@ const TradeHistory = () => {
     {
       dataField: "index",
       text: "S.No.",
+      // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
     {
       dataField: "squreoff",
       text: "Square OFF",
-      formatter: (cell, row, rowIndex) =>
-        <div>
-          {console.log("aaaaaaaaaaa", row)}
-          <button className=" btn-primary"
-          onClick={(e) => ResetDate(e)}
-          >
-            Square Off
-          </button>
-        </div>,
+      formatter: (cell, row, rowIndex) => {
+        if (
+          row.exit_qty_percent &&
+          row.entry_qty_percent &&
+          parseInt(row.entry_qty_percent) > parseInt(row.exit_qty_percent)
+        ) {
+          return (
+            <button className="btn-primary"
+              onClick={() => SquareOff(row, rowIndex)}
+
+            >
+              Square Off
+            </button>
+          );
+        } else if (!row.exit_qty_percent &&
+          row.entry_qty_percent) {
+          return (
+            <button className="btn-primary"
+              onClick={() => SquareOff(row, rowIndex)}
+            >
+              Square Off
+            </button>
+          );
+        } else {
+          return null
+        }
+      },
     },
     {
       dataField: "live",
@@ -283,6 +301,54 @@ const TradeHistory = () => {
     },
   ];
 
+
+
+
+
+  const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
+
+  // ----------------------------- SQUARE OFF ----------------------------
+
+  const SquareOff = (rowdata, rowIndex) => {
+    // $('.BP1_Put_Price_' + item.token).html();
+    // $('.SP1_Call_Price_' + item.token).html();
+    console.log("rowdata", rowdata)
+
+    var pre_tag = {
+      option_type: rowdata.option_type,
+      type: rowdata.entry_type === "LE" ? "LX" : rowdata.entry_type === "SE" ? 'SX' : "",
+      token: rowdata.token,
+      indexcallput: rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`,
+      indexing: rowIndex,
+      segment: rowdata.segment,
+      strike: rowdata.strike_price,
+    };
+    console.log("pre_tag", pre_tag)
+
+    if (rowdata.entry_type === "") {
+      setCreateSignalRequest(oldValues => {
+        return oldValues.filter(item => item.token !== rowdata.token)
+      })
+    }
+    else {
+      setCreateSignalRequest(oldValues => {
+        return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`))
+      })
+
+      setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
+    }
+
+
+  }
+
+  console.log("CreateSignalRequest", CreateSignalRequest)
+
+  // ----------------------------- SQUARE OFF ----------------------------
+
+
+
+
+
   var CreatechannelList = "";
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
@@ -316,6 +382,10 @@ const TradeHistory = () => {
       else {
         if (res.data.stat) {
           const handleResponse = async (response) => {
+
+
+            $('.BP1_Put_Price_' + response.tk).html();
+            $('.SP1_Call_Price_' + response.tk).html();
 
             // UPL_
             $(".LivePrice_" + response.tk).html(response.lp);
@@ -558,7 +628,6 @@ const TradeHistory = () => {
     await dispatch(Get_All_Service({})).unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("response", response)
           setServiceData({
             loading: false,
             data: response.data,
@@ -593,7 +662,14 @@ const TradeHistory = () => {
     getservice()
   }, [])
 
-  console.log("UserDetails.trading_status", UserDetails && UserDetails.trading_status !== undefined && UserDetails.trading_status)
+
+
+
+
+
+
+
+
   return (
     <>
       <Content Page_title="Trade History" button_status={false}
