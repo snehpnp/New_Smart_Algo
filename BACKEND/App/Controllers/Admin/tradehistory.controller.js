@@ -13,7 +13,16 @@ class Tradehistory {
     async GetAdminTradeHistory(req, res) {
         try {
 
-            const { startDate, endDate, strategy, service } = req.body;
+            const { startDate, endDate, strategy, service,type } = req.body;
+
+            var client_persnal_key = ""
+            if(type.toUpperCase() == "ADMIN"){
+                client_persnal_key = { client_persnal_key: { $ne: "" } }
+            }else{
+                client_persnal_key = ""
+            }
+
+
             let startDateObj = new Date(startDate)
             let endDateObj = new Date(endDate)
             let stg1
@@ -32,16 +41,6 @@ class Tradehistory {
             } else {
                 ser1 = service
             }
-            // console.log(   {
-            //     match: {
-            //         createdAt: {
-            //             $gte: startDateObj,
-            //             $lte: endDateObj
-            //         },
-            //         strategy: stg1,
-            //         trade_symbol: ser1
-            //     }
-            // });
 
             const filteredSignals = await MainSignals_modal.aggregate([
                 {

@@ -22,11 +22,16 @@ import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../../Utils
 import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { today } from "../../../../Utils/Date_formet";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+
 
 import $ from "jquery";
 
 const TradeHistory = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  var dashboard_filter = location.search.split("=")[1];
+  console.log("dashboard_filter",dashboard_filter);
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
@@ -88,7 +93,7 @@ const TradeHistory = () => {
     let endDate = getActualDateFormate(toDate);
 
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus,type:dashboard_filter, token: token })
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -107,7 +112,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
-  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus]);
+  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus,dashboard_filter]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");

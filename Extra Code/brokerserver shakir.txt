@@ -105,11 +105,57 @@ app.post('/broker-signals', async (req, res) => {
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1; // Months are zero-based, so add 1
   const day = currentDate.getDate();
+
   const formattedDate = `${year}${month.toString().padStart(2, '0')}${day.toString().padStart(2, '0')}`;
+
+
   var filePath = path.join(__dirname + '/AllPanelTextFile', 'PANELKEY' + process.env.PANEL_KEY + process.env.PANEL_NAME + formattedDate + '.txt');
 
   var directoryfilePath = path.join(__dirname + '/AllPanelTextFile');
   var paneltxtentry = 0;
+
+  console.log("filePath", filePath)
+  console.log("directoryfilePath", directoryfilePath)
+
+  // fs.readdir(directoryfilePath, function (err1, files) {
+  //   console.log("files", files)
+  //   if (files.length > 0) {
+  //     files.forEach(async function (file) {
+
+  //       console.log("file", file)
+
+  //       if (file != 'PANELKEY' + process.env.PANEL_KEY + process.env.PANEL_NAME + formattedDate + '.txt') {
+  //         //paneltxtentry = 1;
+  //         fs.appendFile(filePath, '\nNEW TRADE GET ' + new Date() + ' \n', function (err) {
+  //           if (err) {
+  //             return console.log(err);
+  //           }
+  //           console.log("Data created if");
+  //         });
+
+  //       }
+
+  //     });
+  //   } else {
+
+  //     fs.appendFile(filePath, 'INSERT FILE ' + new Date() + '\n', function (err) {
+  //       if (err) {
+  //         return console.log(err);
+  //       }
+  //       console.log("Data created else");
+  //     });
+
+  //   }
+
+  // });
+
+
+  // fs.appendFile(filePath, '\nNEW TRADE GET ' + new Date() + ' \n', function (err) {
+  //     if (err) {
+  //       return console.log(err);
+  //     }
+  //     console.log("Data created if");
+  //    });
 
   try {
 
@@ -155,13 +201,34 @@ app.post('/broker-signals', async (req, res) => {
 
       var demo = signals.Demo;
 
+
+      // var dt = splitArray[0]
+      // var input_symbol = splitArray[1]
+      // var type = splitArray[2]
+      // var tr_price = splitArray[3]
+      // var price = splitArray[4]
+      // var sq_value = splitArray[5]
+      // var sl_value = splitArray[6]
+      // var tsl = splitArray[7]
+      // var segment = splitArray[8]
+      // var segment1 = splitArray[8]
+      // var strike = splitArray[9]
+      // var option_type = splitArray[10]
+      // var expiry = splitArray[11]
+      // var strategy = splitArray[12]
+      // var qty_percent = splitArray[13]
+      // var client_key = splitArray[14]
+      // var demo = splitArray[15]
+
+
+      //console.log("client_key",client_key)
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
 
         const FIRST3_KEY = client_key.substring(0, 3);
 
         console.log("FIRST3_KEY", FIRST3_KEY);
-        console.log("process.env.PANEL_FIRST_THREE", process.env.PANEL_FIRST_THREE);
+        // console.log("process.env.PANEL_FIRST_THREE",process.env.PANEL_FIRST_THREE);
         // IF SIGNEL KEY NOT MATCH CHECK
         if (FIRST3_KEY == process.env.PANEL_FIRST_THREE) {
 
@@ -228,30 +295,30 @@ app.post('/broker-signals', async (req, res) => {
             instrument_query = { name: input_symbol }
             EXCHANGE = "NSE";
             trade_symbol = input_symbol;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key }
           } else if (segment == 'F' || segment == 'f') {
             instrument_query = { symbol: input_symbol, segment: "F", expiry: expiry }
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key }
 
           } else if (segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
-            instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
+            instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type}
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" ,client_persnal_key:client_persnal_key}
 
           } else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key }
 
           } else if (segment == 'MF' || segment == 'mf') {
             instrument_query = { symbol: input_symbol, segment: "MF", expiry: expiry }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" ,client_persnal_key:client_persnal_key}
 
           } else if (segment == 'CF' || segment == 'Cf') {
             instrument_query = { symbol: input_symbol, segment: "CF", expiry: expiry, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" }
@@ -529,8 +596,6 @@ app.post('/broker-signals', async (req, res) => {
   } catch (error) {
     console.log("error", error);
   }
-
-
 })
 
 

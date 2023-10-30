@@ -67,10 +67,15 @@ export const admin_sidebar = [
             {
                 'id': 2,
                 "name": 'Trade History',
-                "route": "/admin/tradehistory",
+                "route": "/admin/tradehistory?type=admin",
             },
             {
                 'id': 3,
+                "name": 'Client Trade',
+                "route": "/admin/tradehistory?type=client",
+            },
+            {
+                'id': 4,
                 "name": 'Trading Status',
                 "route": "/admin/tradingstatus",
             },
@@ -79,6 +84,7 @@ export const admin_sidebar = [
             //     "name": 'Trade Execution Report',
             //     "route": "/admin/tradeexecution",
             // },
+            
             {
                 'id': 5,
                 "name": '7 Days Entry',

@@ -28,11 +28,11 @@ cron.schedule('5 5 * * *', () => {
 });
 
 
-// 1.1 LOGOUT AND TRADING OFF ALL USER 
-cron.schedule('* * * * *', () => {
-    console.log('Run Second Time');
-    LogoutAllUsers()
-});
+// // 1.1 LOGOUT AND TRADING OFF ALL USER 
+// cron.schedule('* * * * *', () => {
+//     console.log('Run Second Time');
+//     LogoutAllUsers()
+// });
 
 // 2. SERVICES TOKEN CREATE
 cron.schedule('42 12 * * *', () => {
