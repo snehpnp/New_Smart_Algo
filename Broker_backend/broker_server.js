@@ -96,7 +96,7 @@ d.getDate(),
 const aliceblue = require('./Broker/aliceblue')
 //const aliceblueTest = require('./Broker/aliceblue')
 
-
+// MT_4 , OPTION_CHAIN , MAKE_STG, SQUAR_OFF
 
 // TEST API
 app.post('/broker-signals', async (req, res) => {
@@ -289,36 +289,38 @@ app.post('/broker-signals', async (req, res) => {
             client_persnal_key = client_key
           }
 
-          var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: "" }
+          // MT_4 , OPTION_CHAIN , MAKE_STG, SQUAR_OFF
+
+          var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: "",TradeType:"MT_4" }
 
           if (segment == 'C' || segment == 'c') {
             instrument_query = { name: input_symbol }
             EXCHANGE = "NSE";
             trade_symbol = input_symbol;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key,TradeType:TradeType }
           } else if (segment == 'F' || segment == 'f') {
             instrument_query = { symbol: input_symbol, segment: "F", expiry: expiry }
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key ,TradeType:TradeType}
 
           } else if (segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
             instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type}
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" ,client_persnal_key:client_persnal_key}
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" ,client_persnal_key:client_persnal_key,TradeType:TradeType}
 
           } else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key ,TradeType:TradeType}
 
           } else if (segment == 'MF' || segment == 'mf') {
             instrument_query = { symbol: input_symbol, segment: "MF", expiry: expiry }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" ,client_persnal_key:client_persnal_key}
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" ,client_persnal_key:client_persnal_key,TradeType:TradeType}
 
           } else if (segment == 'CF' || segment == 'Cf') {
             instrument_query = { symbol: input_symbol, segment: "CF", expiry: expiry, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" }
@@ -501,6 +503,7 @@ app.post('/broker-signals', async (req, res) => {
                 segment: segment,
                 trade_symbol: trade_symbol + "[" + segment1 + "]",
                 client_persnal_key: client_persnal_key,
+                TradeType:TradeType,
                 signals_id: SignalSave._id,
                 token: instrument_token
               }

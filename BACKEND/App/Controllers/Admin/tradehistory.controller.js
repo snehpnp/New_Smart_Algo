@@ -13,15 +13,15 @@ class Tradehistory {
     async GetAdminTradeHistory(req, res) {
         try {
 
-            const { startDate, endDate, strategy, service,type } = req.body;
+            const { startDate, endDate, strategy, service, type } = req.body;
 
-            var client_persnal_key = ""
-            if(type.toUpperCase() == "ADMIN"){
-                client_persnal_key = { client_persnal_key: { $ne: "" } }
-            }else{
-                client_persnal_key = {client_persnal_key:""}
+            var client_persnal_key1 = ""
+            if (type.toUpperCase() == "ADMIN") {
+                client_persnal_key1 = ""
+            } else {
+                client_persnal_key1 = { $ne: "" } 
             }
-
+            console.log("client_persnal_key", client_persnal_key1);
 
             let startDateObj = new Date(startDate)
             let endDateObj = new Date(endDate)
@@ -50,7 +50,9 @@ class Tradehistory {
                             $lte: endDate
                         },
                         strategy: stg1,
-                        trade_symbol: ser1
+                        trade_symbol: ser1,
+                        client_persnal_key:client_persnal_key1
+                     
                     }
                 },
 
@@ -71,7 +73,7 @@ class Tradehistory {
 
             ]);
 
-              
+
 
             if (filteredSignals.length === 0) {
                 return res.send({ status: false, msg: 'No signals founddate range.', data: [] });
@@ -97,7 +99,7 @@ class Tradehistory {
                     $lte: today, // Aaj se less than or equal
                 },
                 exit_price: ""
-            }).sort({createdAt:-1})
+            }).sort({ createdAt: -1 })
 
             if (filteredSignals.length == 0) {
                 res.send({ status: false, data: filteredSignals, msg: "Empty Data" })
