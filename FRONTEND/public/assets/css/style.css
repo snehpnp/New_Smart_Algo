@@ -39033,6 +39033,11 @@ code {
 .table tbody tr td {
   vertical-align: middle;
   border-color: #d3d3d3;
+  max-width: 600px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
 }
 
 [data-theme-version="dark"] .table tbody tr td {
@@ -46288,5 +46293,3 @@ body {
 .loader__coin {
   animation: flip 0.5s ease-in-out infinite alternate-reverse both;
 }
-
-

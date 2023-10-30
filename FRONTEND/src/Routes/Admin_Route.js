@@ -69,6 +69,8 @@ import { Import } from 'lucide-react';
 
 // OPTION CHAIN
 import Opation_Chain from '../layout/Admin/OptionChain/Opation_Chain';
+import Open_Positions from '../layout/Admin/OptionChain/Open_Positions';
+
 
 
 // CREATE STRATEGY
@@ -129,6 +131,7 @@ const Admin = () => {
                 <Route exact path="/createstrategy" element={<CreateStrategy />} />
                 <Route exact path="/brokerinfo" element={<BrokerInfor />} />
                 <Route exact path="/optionchain" element={<Opation_Chain />} />
+                <Route exact path="/openposition" element={<Open_Positions />} />
 
             </Routes>
         </>

@@ -169,11 +169,6 @@ const AddClient = () => {
       return errors;
     },
     onSubmit: async (values) => {
-
-
-
-      return
-
       const req = {
         "FullName": values.fullName,
         "UserName": values.username,

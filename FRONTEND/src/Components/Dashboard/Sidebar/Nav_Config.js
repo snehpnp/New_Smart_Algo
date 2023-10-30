@@ -93,11 +93,22 @@ export const admin_sidebar = [
         ]
     },
     {
-        'id': 10,
+        'id': 8,
         "name": 'Option Chain',
         "Icon": "Link2",
-        "route": "/admin/optionchain",
-        "Data": []
+        "Data": [
+            {
+                'id': 1,
+                "name": 'Option Chain',
+                "route": "/admin/optionchain",
+            },
+            {
+                'id': 2,
+                "name": 'Open Position',
+                "route": "/admin/openpostion",
+
+            },
+        ]
     },
     {
         'id': 6,

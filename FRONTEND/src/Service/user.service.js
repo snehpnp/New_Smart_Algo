@@ -237,6 +237,23 @@ export async function MODIFY_DETAILS(data, token) {
 
 
 
+// 
+export async function GET_PERMISSION(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/panel/permission`, data, {
+            headers: header(token),
+            data: {data},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
+
+
+
 
 
 

@@ -121,7 +121,8 @@ const BrokerResponse = () => {
 
   const setgroup_qty_value_test = (e, symboll, rowdata) => {
 
-    console.log("rowdata",rowdata);
+    console.log("rowdata", rowdata);
+    console.log("symboll", symboll);
     // console.log("e",e.target);
 
 
@@ -187,6 +188,29 @@ const BrokerResponse = () => {
 
 
 
+  const setMax = (rowdata) => {
+    // console.log("setMax", rowdata.servicegroup_services_ids.group_qty)
+    // console.log("servicegroup_services_ids", rowdata.service.lotsize)
+    // if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
+    //   return rowdata.servicegroup_services_ids.group_qty
+
+    // } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) < 0) {
+
+    // }
+  }
+  const setMin = (rowdata) => {
+    // console.log("setMin", rowdata.servicegroup_services_ids.group_qty)
+
+    // if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
+    //   // return rowdata.servicegroup_services_ids.group_qty
+
+    // } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) === 0) {
+    //   return (parseInt(rowdata.service.lotsize) * 2)
+
+    // }
+  }
+
+
   return (
     <Content Page_title="Dashboard" button_status={false}>
       {/* <button onClick={() => RunSocket()}>run socket</button> */}
@@ -215,7 +239,7 @@ const BrokerResponse = () => {
                       className={`ShowLTP_${data.service.instrument_token}`}
                     ></td>
                     <td>{`${data.service.name}[${data.categories.segment}]`}</td>
-                    <td>{data.service.lotsize +"--"+data.servicegroup_services_ids.group_qty}</td>
+                    <td>{data.service.lotsize + "--" + data.servicegroup_services_ids.group_qty}</td>
 
                     <td>
                       <div className="row d-flex">
@@ -227,8 +251,9 @@ const BrokerResponse = () => {
                             className="form-control"
                             id="quantity"
                             placeholder="Enter Qty"
-                            min={0}
-                           
+                            min={setMin(data)}
+                            max={setMax(data)}
+
                             onChange={
                               (e) =>
                                 setgroup_qty_value_test(
@@ -240,7 +265,7 @@ const BrokerResponse = () => {
                               //  setEnterQty(e.target.value)
                             }
                             defaultValue={data.quantity}
-                            // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
+                          // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
 
                           />
                         </div>
