@@ -512,7 +512,7 @@ app.post('/broker-signals', async (req, res) => {
 
             } else {
               var updatedData = {
-                entry_price: ((parseFloat(price) + parseFloat(findMainSignals[0].entry_price)) / 2),
+                entry_price: (( ( parseFloat(price) * parseFloat(qty_percent) )+ ( parseFloat(findMainSignals[0].entry_price) * parseFloat(findMainSignals[0].entry_qty_percent))) / (parseFloat(findMainSignals[0].entry_qty_percent) + parseFloat(qty_percent))),
                 entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
                 entry_dt_date: current_date
               }
@@ -554,7 +554,10 @@ app.post('/broker-signals', async (req, res) => {
                 // IF EXIST ENTRY OF THIS EXIT TRADE
                 var updatedData = {
                   exit_type: type,
-                  exit_price: ((parseFloat(price) + (isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price))) / 2),
+                  // exit_price: ((parseFloat(price) + (isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price))) / 2),
+
+                  exit_price: (((parseFloat(price) * parseFloat(qty_percent)) + ((isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)) *(isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) / ((isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)) + parseFloat(qty_percent))),
+
                   exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
 
                   exit_dt_date: current_date
