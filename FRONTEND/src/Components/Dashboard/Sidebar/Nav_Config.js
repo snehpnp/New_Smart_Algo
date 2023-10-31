@@ -105,7 +105,7 @@ export const admin_sidebar = [
             {
                 'id': 2,
                 "name": 'Open Position',
-                "route": "/admin/openpostion",
+                "route": "/admin/openposition",
 
             },
         ]

@@ -16,6 +16,7 @@ import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/com
 import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Service/Alice_Socket";
 import $ from "jquery";
 import axios from "axios"
+import * as Config from "../../../Utils/Config";
 
 
 const HelpCenter = () => {
@@ -258,6 +259,7 @@ const HelpCenter = () => {
                 method: 'post',
                 maxBodyLength: Infinity,
                 url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                // url: `${Config.broker_url}broker-signals`,
                 headers: {
                     'Content-Type': 'text/plain'
                 },

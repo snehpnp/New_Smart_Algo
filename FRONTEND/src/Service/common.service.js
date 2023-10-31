@@ -113,3 +113,20 @@ export async function GET_PANEL_KEY(data, token) {
     }
 
 }
+
+
+// GET_PANEL_KEY
+
+export async function GET_OPEN_POSITION(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/open_position`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

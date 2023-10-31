@@ -189,26 +189,33 @@ const BrokerResponse = () => {
 
 
   const setMax = (rowdata) => {
-    // console.log("setMax", rowdata.servicegroup_services_ids.group_qty)
-    // console.log("servicegroup_services_ids", rowdata.service.lotsize)
-    // if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
-    //   return rowdata.servicegroup_services_ids.group_qty
+    console.log("setMax", rowdata.servicegroup_services_ids.group_qty)
+    console.log("servicegroup_services_ids", rowdata.service.lotsize)
+    if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
+      return rowdata.servicegroup_services_ids.group_qty
 
-    // } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) < 0) {
+    } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) < 0) {
 
-    // }
+    }
   }
+  let abc
   const setMin = (rowdata) => {
-    // console.log("setMin", rowdata.servicegroup_services_ids.group_qty)
 
-    // if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
-    //   // return rowdata.servicegroup_services_ids.group_qty
+    console.log("setMin", rowdata.servicegroup_services_ids.group_qty)
 
-    // } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) === 0) {
-    //   return (parseInt(rowdata.service.lotsize) * 2)
+    if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
+      // return rowdata.servicegroup_services_ids.group_qty
 
-    // }
+    } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) === 0) {
+      abc += parseInt(rowdata.service.lotsize) * 2
+
+      return (parseInt(rowdata.service.lotsize) * 2)
+
+    }
   }
+
+
+
 
 
   return (

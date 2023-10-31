@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_OPTION_SYMBOLS_EXPIRY, GET_OPTION_ALL_ROUND_TOKEN, GET_PANEL_KEY, GET_OPTION_SYMBOLS } from "../../../Service/common.service";
+import { GET_OPTION_SYMBOLS_EXPIRY, GET_OPTION_ALL_ROUND_TOKEN, GET_OPEN_POSITION, GET_PANEL_KEY, GET_OPTION_SYMBOLS } from "../../../Service/common.service";
 
 
 export const Get_Option_Symbols = createAsyncThunk("get/option_symbols", async (data) => {
@@ -42,6 +42,14 @@ export const Get_Panel_key = createAsyncThunk("/get/key", async (apireq, token) 
 });
 
 
+export const Get_Open_Position = createAsyncThunk("/get/oper_position", async (apireq, token) => {
+    try {
+        const res = await GET_OPEN_POSITION(apireq, token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
 
 const OptionChainSlice = createSlice({
     name: "OptionChainSlice",
@@ -52,6 +60,7 @@ const OptionChainSlice = createSlice({
         symbol_expiry: [],
         Option_Token: [],
         panel_key: [],
+        open_position: [],
     },
 
     recuders: {},
@@ -67,6 +76,9 @@ const OptionChainSlice = createSlice({
         },
         [Get_Panel_key.fulfilled]: (state, { payload }) => {
             return { ...state, panel_key: payload, isLoading: false };
+        },
+        [Get_Open_Position.fulfilled]: (state, { payload }) => {
+            return { ...state, open_position: payload, isLoading: false };
         },
     }
 })
