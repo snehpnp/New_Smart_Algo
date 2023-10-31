@@ -1,6 +1,9 @@
 "use strict";
 const db = require('../../Models');
 const Get_Option_Chain_modal = db.option_chain_symbols;
+const MainSignals_modal = db.MainSignals
+
+
 const Alice_token = db.Alice_token;
 
 
@@ -234,7 +237,7 @@ class OptionChain {
             var channelstr = ""
             if (result.length > 0) {
                 resultStrike.forEach(element => {
-                 
+
                     let call_token = "";
                     let put_token = "";
                     let symbol = ""
@@ -244,7 +247,7 @@ class OptionChain {
                             console.log("symbol", symbol)
                             console.log("segment", segment)
 
-                              
+
                             if (element1.option_type == "CE") {
                                 symbol = element1.symbol
                                 segment = element1.segment
@@ -275,6 +278,23 @@ class OptionChain {
             else {
                 res.send({ status: false, data: [], channellist: "" })
             }
+        }
+    }
+
+    // GET All ROUND TOKEN
+
+    async Open_Position(req, res) {
+        try {
+
+            var symbols = await MainSignals_modal.find({"TradeType" : "OPTION_CHAIN"});
+            if (!symbols) {
+                return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
+            }
+
+            return res.send({ status: true, msg: 'Done', data: symbols });
+
+        } catch (error) {
+            console.log("Theme error-", error);
         }
     }
 

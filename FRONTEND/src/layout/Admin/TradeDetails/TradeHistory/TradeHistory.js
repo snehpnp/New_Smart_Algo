@@ -23,6 +23,7 @@ import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Sl
 import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { today } from "../../../../Utils/Date_formet";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+// import * as Config from "../../Utils/Config";
 
 
 import $ from "jquery";
