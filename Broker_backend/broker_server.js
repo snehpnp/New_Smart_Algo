@@ -478,7 +478,7 @@ app.post('/broker-signals', async (req, res) => {
 
             var findMainSignals = await MainSignals.find(findSignal)
 
-            console.log("findMainSignals", findMainSignals.length);
+            // console.log("findMainSignals", findMainSignals.length);
 
             // MainSignals FIND IN COLLECTION
             if (findMainSignals.length == 0) {
