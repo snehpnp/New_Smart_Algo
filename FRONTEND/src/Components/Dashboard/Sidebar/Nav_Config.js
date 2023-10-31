@@ -179,13 +179,13 @@ export const admin_sidebar = [
 
     },
 
-    // {
-    //     'id': 9,
-    //     "name": 'Create Strategy',
-    //     "Icon": "Boxes ",
-    //     "route": "/admin/createstrategy",
-    //     "Data": []
-    // },
+    {
+        'id': 9,
+        "name": 'Create Strategy',
+        "Icon": "Boxes ",
+        "route": "/admin/createstrategy",
+        "Data": []
+    },
     {
         'id': 10,
         "name": 'Broker Information',
