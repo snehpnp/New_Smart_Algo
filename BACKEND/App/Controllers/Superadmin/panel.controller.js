@@ -104,6 +104,14 @@ class Panel {
         try {
             const { domain } = req.body
 
+            var domain1= "http://localhost:3000"
+
+            if( domain == "sneh.com") {
+                domain1 = "http://localhost:3000"
+            }else{
+                domain1 = domain
+            }
+            console.log(domain1);
             // FIND PANEL NAME DUPLICATE
             // const Panle_information = await panel_model.findOne({ _id: id })
             const desiredDomain = 'your_desired_domain_value'; // Replace with the desired domain value
@@ -111,7 +119,7 @@ class Panel {
             const Panle_information = await panel_model.aggregate([
                 {
                     '$match': {
-                        'domain': domain
+                        'domain': domain1
                     }
                 },
                 {
@@ -285,15 +293,15 @@ class Panel {
 
 
 
-      // GET ONE PANEL AND HIS 
-      async GetPanlebroker(req, res) {
+    // GET ONE PANEL AND HIS 
+    async GetPanlebroker(req, res) {
         try {
             const { domain } = req.body
-            
+
             // FIND PANEL NAME DUPLICATE
             const desiredDomain = 'your_desired_domain_value'; // Replace with the desired domain value
 
-            const Panel_information = await panel_model.findOne({ domain }, 'broker_id'); 
+            const Panel_information = await panel_model.findOne({ domain }, 'broker_id');
 
             // CHECK IF PANEL EXIST OR NOT
             if (!Panel_information) {

@@ -10,7 +10,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import Formikform from "../../../Components/ExtraComponents/Form/Formik_form"
 import { useFormik } from 'formik';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_BROKER_INFORMATIONS } from '../../../ReduxStore/Slice/Admin/DashboardSlice'
+import { GET_BROKER_INFORMATIONS,FIND_BROKER_RESPONSES } from '../../../ReduxStore/Slice/Admin/DashboardSlice'
 import { useDispatch, useSelector } from "react-redux";
 import { fa_time } from "../../../Utils/Date_formet";
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -31,11 +31,37 @@ const Broker_info = () => {
     const [showModal, setshowModal] = useState(false)
     const [getBrokerId, setGetBrokerId] = useState('')
 
+    const [getBrokerInfo, setBrokerInfo] = useState({
+        loading: true,
+        data: []
+    });
     const [GetBrokerInfo, setGetBrokerInfo] = useState({
         loading: true,
         data: []
     });
 
+    const Find_broker_info = async (id) => {
+        await dispatch(FIND_BROKER_RESPONSES({id:id})).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setBrokerInfo({
+                        loading: false,
+                        data: response.data
+                    });
+                } else {
+                    setBrokerInfo({
+                        loading: false,
+                        data: response.data
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log("err", err);
+            })
+    }
+
+
+    console.log("===?",getBrokerInfo);
 
     const data = async () => {
         await dispatch(GET_BROKER_INFORMATIONS()).unwrap()
@@ -59,6 +85,7 @@ const Broker_info = () => {
     useEffect(() => {
         data()
     }, [])
+
 
     const columns = [
         {
@@ -110,6 +137,10 @@ const Broker_info = () => {
 
     // GET ALL GROUP SERVICES NAME
     const GetBrokerInformation = async (row) => {
+// console.log("row",row);
+
+
+        Find_broker_info(row._id)
         setGetBrokerId(row.broker_id)
         setshowModal(true)
     }
@@ -190,10 +221,20 @@ const Broker_info = () => {
 
     ];
 
-
+  
     useEffect(() => {
 
         formik.setFieldValue('broker', getBrokerId && getBrokerId);
+        formik.setFieldValue('app_id', getBrokerInfo.data && getBrokerInfo.data.app_code);
+        formik.setFieldValue('api_type', getBrokerInfo.data && getBrokerInfo.data);
+        formik.setFieldValue('client_code', getBrokerInfo.data && getBrokerInfo.data);
+        formik.setFieldValue('api_key', getBrokerInfo.data && getBrokerInfo.data);
+        formik.setFieldValue('api_secret', getBrokerInfo.data && getBrokerInfo.data.apiSecret);
+        formik.setFieldValue('app_key', getBrokerInfo.data && getBrokerInfo.data);
+        formik.setFieldValue('demat_userid', getBrokerInfo.data && getBrokerInfo.data);
+
+
+
     }, [getBrokerId]);
 
 

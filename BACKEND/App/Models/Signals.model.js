@@ -66,6 +66,9 @@ const SignalsSchema = Schema({
     client_persnal_key: {
         type: String,
     },
+    TradeType: {
+        type: String,
+    },
     token: {
         type: String,
     },

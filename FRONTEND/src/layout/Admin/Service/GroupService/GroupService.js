@@ -50,6 +50,7 @@ const ServicesList = () => {
     });
 
 
+console.log("=>",getServicesName && getServicesName);
 
 
 
@@ -189,6 +190,8 @@ const ServicesList = () => {
                     localStorage.setItem("gotodashboard", JSON.stringify(true));
                     localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
                     localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
+                    localStorage.setItem("page", "groupservices");
+
                     navigate("/client/dashboard")
 
                 }
@@ -205,7 +208,7 @@ const ServicesList = () => {
             }
             await dispatch(DELETE_GROUP_SERVICE(req)).unwrap()
                 .then((response) => {
-                    console.log("response", response)
+                    // console.log("response", response)
                     if (response.status) {
                         toast.success(response.msg)
                         setrefresh(!refresh)
@@ -324,12 +327,12 @@ const ServicesList = () => {
                                                     formatter: (cell, row, rowIndex) => rowIndex + 1,
                                                 },
                                                 {
-                                                    dataField: 'name',
+                                                    dataField: 'data.name',
                                                     text: 'Services Name'
                                                 },
                                                 {
-                                                    dataField: 'lotsize',
-                                                    text: 'lotsize'
+                                                    dataField: 'data1.group_qty',
+                                                    text: 'group_qty'
                                                 },
                                             ]} tableData={getServicesName && getServicesName.data} />
 
@@ -362,11 +365,12 @@ const ServicesList = () => {
                                                     text: 'Go To Dashboard',
                                                     formatter: (cell, row, rowIndex) =>
                                                         <>
+                                                        {console.log("==>",row.user)}
                                                             <button
-                                                                className={`btn  ${row.AppLoginStatus === '0' && row.WebLoginStatus === '0' ? "btn-success" : "btn-danger"} btn-new-block`}
+                                                                className={`btn  ${row.user.AppLoginStatus == '1' || row.user.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
 
                                                                 onClick={() => goToDashboard(row)}
-                                                                disabled={row.AppLoginStatus === '0' && row.WebLoginStatus === '0'}
+                                                                disabled={row.user.AppLoginStatus === '0' && row.user.WebLoginStatus === '0'}
 
                                                             > click</button>
                                                         </>

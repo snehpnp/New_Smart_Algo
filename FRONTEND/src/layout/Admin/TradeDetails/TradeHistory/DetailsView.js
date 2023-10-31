@@ -5,6 +5,69 @@ import { fa_time, fDateTimeSuffix } from '../../../../Utils/Date_formet'
 
 
 const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
+
+    const mergedArray = [];
+    
+    if (tradeHistoryData && tradeHistoryData.result) {
+
+        var data = tradeHistoryData && tradeHistoryData.result
+
+        const leArray = [];
+        const lxArray = [];
+        const SeArray = [];
+        const SxArray = [];
+
+        data.forEach(record => {
+            if (record.type === "LE") {
+                leArray.push(record);
+            } else if (record.type === "LX") {
+                lxArray.push(record);
+            } else if (record.type === "SE") {
+                SeArray.push(record);
+            } else if (record.type === "SX") {
+                SxArray.push(record);
+            }
+        });
+
+
+
+        if (data[0].type == "LE" || data[0].type == "LX") {
+            while (leArray.length > 0 || lxArray.length > 0) {
+                if (leArray.length > 0) {
+                    mergedArray.push(leArray.shift());
+                }
+
+                if (lxArray.length > 0) {
+                    mergedArray.push(lxArray.shift());
+                }
+            }
+        } else if (data[0].type == "SE" || data[0].type == "SX") {
+
+            while (SeArray.length > 0 || SxArray.length > 0) {
+                if (SeArray.length > 0) {
+                    mergedArray.push(SeArray.shift());
+                }
+
+                if (SxArray.length > 0) {
+                    mergedArray.push(SxArray.shift());
+                }
+            }
+        }
+
+
+
+        console.log(mergedArray);
+
+
+
+    }
+
+
+
+
+
+
+
     const columns1 = [
         {
             dataField: 'index',
@@ -80,7 +143,7 @@ const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
         <div>   <Modal isOpen={showModal} size="xl" title="Licence Details" hideBtn={true}
             handleClose={() => setshowModal(false)}
         >
-            <BasicDataTable TableColumns={columns1} tableData={tradeHistoryData.result} />
+            <BasicDataTable TableColumns={columns1} tableData={mergedArray} />
         </Modal ></div>
     )
 }

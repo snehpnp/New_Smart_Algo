@@ -55,14 +55,18 @@ export const today = () => {
 
 
 
-export const convert_string_to_month = (moth_str) => {
-  var day_expiry = moth_str.slice(0, 2);
-  var moth_str = moth_str.slice(2, 4);
-  var year_expiry = moth_str.slice(-2);
+export const convert_string_to_month = (expiry) => {
 
-  console.log("year_expiry", year_expiry)
-  console.log("moth_str", moth_str)
-  console.log("day_expiry", day_expiry)
+
+  const day_expiry = expiry.substring(0, 2);
+  const moth_str = expiry.substring(2, 4);
+  const year_expiry = expiry.substring(4);
+
+
+  // console.log("moth_str", moth_str)
+  // console.log("year_expiry", year_expiry)
+  // console.log("moth_str", moth_str)
+  // console.log("day_expiry", day_expiry)
 
   let month_string
   if (moth_str === "01") {
@@ -101,7 +105,7 @@ export const convert_string_to_month = (moth_str) => {
     month_string = "DEC";
   }
 
-  return `${year_expiry}${month_string}${day_expiry}`
+  return `${day_expiry}${month_string}${year_expiry}`
 
 }
 export const dateFormate = (date) => {

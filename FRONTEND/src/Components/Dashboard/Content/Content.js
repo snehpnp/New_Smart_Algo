@@ -39,9 +39,9 @@ const Content = ({ Page_title, button_title, button_status, show_csv_button, sho
                 <div className="col-xl-12">
                   <div className="card form-card">
                     {showEdit ? <>
-                      <div className='p-2 ms-auto'>
-                        <h6>Start Date - {f_time(show_Stat_End_date.StartDate !== undefined && show_Stat_End_date.StartDate)}</h6>
-                        <h6>End Date     - {f_time(show_Stat_End_date.EndDate !== undefined && show_Stat_End_date.EndDate)}</h6>
+                      <div className='p-2 mt-3 ms-auto'>
+                        <h6 className="fw-bold">Start Date - {f_time(show_Stat_End_date.StartDate !== undefined && show_Stat_End_date.StartDate)}</h6>
+                        <h6 className="fw-bold">End Date - {f_time(show_Stat_End_date.EndDate !== undefined && show_Stat_End_date.EndDate)}</h6>
                       </div>
                     </> : ""}
 

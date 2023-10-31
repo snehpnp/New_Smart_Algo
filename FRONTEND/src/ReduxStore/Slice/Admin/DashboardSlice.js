@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_DASHBOARD_COUNT, GET_BROKER_INFORMATION } from "../../../Service/admin.service";
+import { GET_DASHBOARD_COUNT, GET_BROKER_INFORMATION,FIND_BROKER_RESPONSE } from "../../../Service/admin.service";
 
 
 
@@ -27,6 +27,17 @@ export const GET_BROKER_INFORMATIONS = createAsyncThunk("getall/broker_informati
 });
 
 
+
+export const FIND_BROKER_RESPONSES = createAsyncThunk("get/broker_information", async (data) => {
+    try {
+        const res = await FIND_BROKER_RESPONSE(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
 const DashboardSlice = createSlice({
     name: "DashboardSlice",
     initialState: {
@@ -35,6 +46,8 @@ const DashboardSlice = createSlice({
         status: false,
         dashboard: [],
         brokerinfo: [],
+        Onebrokerinfo: [],
+
 
 
     },
@@ -47,6 +60,9 @@ const DashboardSlice = createSlice({
         },
         [GET_BROKER_INFORMATIONS.fulfilled]: (state, { payload }) => {
             return { ...state, brokerinfo: payload, isLoading: false };
+        },
+        [FIND_BROKER_RESPONSES.fulfilled]: (state, { payload }) => {
+            return { ...state, Onebrokerinfo: payload, isLoading: false };
         },
     },
 });

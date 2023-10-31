@@ -193,9 +193,7 @@ const AddClient = () => {
         "group_service": values.groupservice
       }
 
-
       await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((response) => {
-
         if (response.status === 409) {
           toast.error(response.data.msg);
         }
@@ -208,7 +206,6 @@ const AddClient = () => {
         else if (!response.status) {
           toast.error(response.msg);
         }
-
       })
     }
   });
@@ -345,7 +342,6 @@ const AddClient = () => {
       showWhen: values => values.broker === '5',
       label_size: 12, col_size: 6, disable: false
     },
-
     {
       name: 'api_secret',
       label: formik.values.broker == 1 ? 'Password Code' : formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker == 9 ? 'Encryption Secret Key' : formik.values.broker == 10 ? 'Api Secret Key' : formik.values.broker == 11 ? '2FA' : formik.values.broker == 14 ? 'Encryption Key' : 'Api Secret', type: 'text',
@@ -388,20 +384,15 @@ const AddClient = () => {
         { label: '10', value: '10' },
         { label: '11', value: '11' },
         { label: '12', value: '12' },
-
       ],
       showWhen: values =>
         values.licence === '2' || values.licence === 2
       , label_size: 12, col_size: 6, disable: false
-
     },
-
-
     {
       name: 'groupservice',
       label: 'Group Service',
       type: 'select',
-
       options:
         AllGroupServices.data && AllGroupServices.data.map((item) => ({ label: item.name, value: item._id }))
       , label_size: 12, col_size: 6, disable: false
@@ -544,8 +535,6 @@ const AddClient = () => {
     if (formik.values.groupservice) {
       await dispatch(Get_Service_By_Group_Id({ _id: formik.values.groupservice })).unwrap()
         .then((response) => {
-
-
           if (response.status) {
             setGetServices({
               loading: false,
@@ -603,8 +592,6 @@ const AddClient = () => {
     data()
   }, [])
 
-  console.log("formik", AllStrategy)
-
   return (
     <>
       <Content Page_title="Add Client" button_title='Back' route="/admin/allclients">
@@ -658,6 +645,9 @@ const AddClient = () => {
 
             </>
           }
+
+
+
 
         />
 

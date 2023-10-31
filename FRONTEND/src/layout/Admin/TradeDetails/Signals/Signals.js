@@ -65,6 +65,12 @@ const Signals = () => {
       sort: true,
 
     },
+    {
+      dataField: "TradeType",
+      text: "Trade  Type",
+      sort: true,
+
+    },
   ];
 
   const [SignalsData, getSignalsData] = useState({
@@ -81,7 +87,7 @@ const Signals = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("response", response);
+          // console.log("response", response);
 
           response.data.map((data) => {
             return csvarr.push({

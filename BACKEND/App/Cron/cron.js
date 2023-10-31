@@ -28,6 +28,12 @@ cron.schedule('5 5 * * *', () => {
 });
 
 
+// // 1.1 LOGOUT AND TRADING OFF ALL USER 
+// cron.schedule('* * * * *', () => {
+//     console.log('Run Second Time');
+//     LogoutAllUsers()
+// });
+
 // 2. SERVICES TOKEN CREATE
 cron.schedule('42 12 * * *', () => {
     console.log('running a task every minute');
@@ -91,7 +97,7 @@ const LogoutAllUsers = async () => {
     const TradingOffUser = await User.find({ TradingStatus: 'on' });
     if (TradingOffUser.length > 0) {
         TradingOffUser.map(async (user) => {
-            const updateValues = { TradingStatus: 'off' };
+            const updateValues = { TradingStatus: 'off',access_token:"" };
             const updatedDocument = await User.findByIdAndUpdate(user._id, updateValues, {
                 new: true, // To return the updated document
             });
@@ -108,7 +114,7 @@ const LogoutAllUsers = async () => {
 
 
     // ADMIN TRADING OFF
-    const updateOperation1 = { $set: { trading_status: 'off' } };
+    const updateOperation1 = { $set: { trading_status: 'off',access_token:"" } };
     const result1 = await live_price.updateMany({}, updateOperation1);
 
 

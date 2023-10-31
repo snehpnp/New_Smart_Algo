@@ -53,7 +53,7 @@ class Employee {
         demat_userid,
         group_service,
       } = req.body;
-
+      console.log(req.body);
       var Role = "USER";
       var StartDate1 = "";
       var EndDate1 = "";
@@ -246,10 +246,35 @@ class Employee {
             }
           } catch { }
 
-          const group_service_find = await serviceGroup_services_id.find({
-            Servicegroup_id: group_service,
-          });
+          const GroupServiceId = new ObjectId(group_service);
 
+          const group_service_find = await serviceGroup_services_id.aggregate([
+            {
+              $match: {
+                Servicegroup_id: GroupServiceId
+              }
+            },
+            {
+              $lookup: {
+                from: "services",
+                localField: "Service_id",
+                foreignField: "_id",
+                as: "serviceInfo"
+              }
+            },
+            {
+              $unwind: "$serviceInfo"
+            },
+            {
+              $project: {
+                _id: 0, // Exclude the _id field if you don't need it
+                Service_id: "$Service_id",
+                lotsize: "$serviceInfo.lotsize"
+              }
+            }
+          ]);
+
+          console.log("->",group_service_find);
           // CLIENT SERVICES ADD API
           if (group_service_find.length != 0) {
             group_service_find.forEach((data) => {
@@ -259,6 +284,8 @@ class Employee {
                 service_id: data.Service_id,
                 strategy_id: Strategies[0].id,
                 uniqueUserService: User_id + "_" + data.Service_id,
+                quantity: data.lotsize
+
               });
               User_client_services.save();
             });
@@ -661,6 +688,7 @@ class Employee {
             groupService_id: GroupServiceId,
           });
 
+          console.log("=", user_group_service.length);
           if (user_group_service.length == 0) {
 
             const result = await groupService_User.updateOne(
@@ -683,9 +711,36 @@ class Employee {
             await user_activity.save();
 
             // IF GROUP SERVICES NOT EXIST
-            var GroupServices = await serviceGroup_services_id.find({
-              Servicegroup_id: GroupServiceId,
-            });
+            // var GroupServices = await serviceGroup_services_id.find({
+            //   Servicegroup_id: GroupServiceId,
+            // });
+            const GroupServices = await serviceGroup_services_id.aggregate([
+              {
+                $match: {
+                  Servicegroup_id: GroupServiceId
+                }
+              },
+              {
+                $lookup: {
+                  from: "services",
+                  localField: "Service_id",
+                  foreignField: "_id",
+                  as: "serviceInfo"
+                }
+              },
+              {
+                $unwind: "$serviceInfo"
+              },
+              {
+                $project: {
+                  _id: 0, // Exclude the _id field if you don't need it
+                  Service_id: "$Service_id",
+                  lotsize: "$serviceInfo.lotsize"
+                }
+              }
+            ]);
+
+
             if (GroupServices.length == "0") {
               return res.send({
                 status: false,
@@ -702,21 +757,20 @@ class Employee {
             });
 
             GroupServices.forEach((data) => {
+
               const User_client_services = new client_services({
                 user_id: existingUsername._id,
                 group_id: GroupServiceId,
                 service_id: data.Service_id,
                 strategy_id: strategFind[0].strategy_id,
                 uniqueUserService: existingUsername._id + "_" + data.Service_id,
+                quantity: data.lotsize
               });
 
               User_client_services.save();
             });
 
 
-            // if (existingUsername.qty_type == "1") {
-            //   update_qty(existingUsername._id)
-            // }
 
           } else {
             console.log("NO CHANGE IN GROUP SERVICES");
@@ -765,12 +819,12 @@ class Employee {
 
 
         // IF YOU ARE CHANGE GROUP AND USER SELCT GRP QTY ADMIN TO HIT FUNCTION
-        if (user_group_service.length == 0) {
-          if (existingUsername.qty_type == "1") {
-            update_qty(existingUsername._id)
-          }
-        }
-
+        // if (user_group_service.length == 0) {
+        //   if (existingUsername.qty_type == "1") {
+        //     update_qty(existingUsername._id)
+        //   }
+        // }
+        console.log("Date :-", new Date());
         // USER GET ALL TYPE OF DATA
         return res.send({
           status: true,
@@ -1170,77 +1224,6 @@ class Employee {
 
 
 
-
-// IF ADMIN SELECT QUANTITY TYPE ADMIN 
-
-const update_qty = async (user_id) => {
-  try {
-
-    var UserId
-
-    if (typeof user_id == "object") {
-      UserId = user_id
-    } else {
-      UserId = new ObjectId(user_id);
-    }
-
-    const filter = { user_id: UserId };
-
-    // Define an aggregation pipeline with the $lookup stage
-    const pipeline = [
-      {
-        $match: filter, // Match documents that match the filter
-      },
-      {
-        $lookup: {
-          from: 'servicegroup_services_ids', // The target collection
-          let: { group_id: '$group_id', service_id: '$service_id' },
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $and: [
-                    { $eq: ['$Servicegroup_id', '$$group_id'] }, // Match Servicegroup_id
-                    { $eq: ['$Service_id', '$$service_id'] }, // Match Service_id
-                  ],
-                },
-              },
-            },
-          ],
-          as: 'serviceGroup', // The alias for the joined documents
-        },
-      },
-      {
-        $unwind: '$serviceGroup', // Unwind the joined array to access individual documents
-      },
-      {
-        $set: {
-          quantity: {
-            $cond: {
-              if: { $ne: ['$serviceGroup', null] }, // Check if there's a match
-              then: '$serviceGroup.group_qty', // Replace 'quantity' with 'group_qty'
-              else: '$quantity', // Keep the original 'quantity'
-            },
-          },
-        },
-      },
-      {
-        $merge: {
-          into: 'client_services', // Update the 'client_services' collection
-          whenMatched: 'merge', // Specify how to handle matching documents
-          whenNotMatched: 'insert', // Specify how to handle non-matching documents
-        },
-      },
-    ];
-
-    // Execute the aggregation pipeline
-    await client_services.aggregate(pipeline)
-
-  } catch (error) {
-    console.log("Update Group Quantity Error -", error);
-  }
-
-}
 
 
 

@@ -96,6 +96,8 @@ const AddStrategy = () => {
                                         name: item1.ServiceResult.name,
                                         segment: item1.catagory.name,
                                         group_qty: item1.group_qty,
+                                        lotsize: item1.ServiceResult.lotsize,
+
                                     })
                                 })
                         })
@@ -116,13 +118,13 @@ const AddStrategy = () => {
 
 
 
-    function handleServiceChange(event, id, name, segment) {
+    function handleServiceChange(event, id, name, segment,lotsize) {
         const serviceId = id;
         const isChecked = event.target.checked;
 
         if (isChecked) {
             // Add the selected service's information to the array
-            setSelectedServices((prevInfo) => [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0 }]);
+            setSelectedServices((prevInfo) => [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0,lotsize:lotsize}]);
         } else {
             // Remove the selected service's information from the array
             setSelectedServices((prevInfo) => prevInfo.filter((info) => info.id !== serviceId));
@@ -142,6 +144,7 @@ const AddStrategy = () => {
                 name: service.name,
                 segment: service.category.name,
                 group_qty: 0,
+                lotsize:service.lotsize
             }));
 
             // Set all filtered checkboxes to checked
@@ -208,17 +211,21 @@ const AddStrategy = () => {
 
 
     const remoeveService = (id) => {
-        let test = selectedServices.filter((item) => {
-            return item.service_id !== id
-        })
 
-        let checkboxes = document.querySelectorAll(`#service-${id}`);
-        checkboxes.forEach((checkbox) => {
-            checkbox.checked = false;
-        });
-
-
-        setSelectedServices(test)
+        if(window.confirm("Do you want to delete")){
+            let test = selectedServices.filter((item) => {
+                return item.service_id !== id
+            })
+    
+            let checkboxes = document.querySelectorAll(`#service-${id}`);
+            checkboxes.forEach((checkbox) => {
+                checkbox.checked = false;
+            });
+    
+    
+            setSelectedServices(test)
+        }
+ 
     }
 
 
@@ -383,17 +390,21 @@ const AddStrategy = () => {
                                     <th>#</th>
                                     <th>Segment</th>
                                     <th>Service Name</th>
+                                    <th>lotsize</th>
                                     <th>Qty</th>
                                     <th>Remove</th>
                                 </tr>
                             </thead>
                             <tbody >
+                                {console.log("-->",selectedServices)}
                                 {selectedServices && selectedServices.map((item, index) => {
                                     return <>
                                         <tr key={index}>
                                             <td>{index + 1}</td>
                                             <td>{item.segment}</td>
                                             <td>{item.name}</td>
+                                            <td>{item.lotsize}</td>
+
                                             <td>
                                                 <input
                                                     type="number"
@@ -466,7 +477,7 @@ const AddStrategy = () => {
                                                                     id={`service-${service._id}`}
                                                                     value={service._id}
                                                                     // checked={selectedServices.includes(service._id)}
-                                                                    onChange={(e) => handleServiceChange(e, service._id, service.name, service.category.name)}
+                                                                    onChange={(e) => handleServiceChange(e, service._id, service.name, service.category.name,service.lotsize)}
                                                                 />
                                                                 <label className="form-check-label" htmlFor={`service-${service._id}`}>
                                                                     {service.name}

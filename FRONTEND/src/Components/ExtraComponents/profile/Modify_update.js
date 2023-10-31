@@ -27,7 +27,7 @@ const Modify = ({ UserDetails }) => {
 
     const [selectedOptions, setSelectedOptions] = useState({
         web_url: '',
-        qty_type: '',
+        // qty_type: '',
         signals_execution_type: '',
     });
 
@@ -50,7 +50,7 @@ const Modify = ({ UserDetails }) => {
         await dispatch(Modify_Details({ user_id: user_id, AdminToken: AdminToken, req: selectedOptions }))
             .unwrap()
             .then((response) => {
-                console.log("response", response);
+                // console.log("response", response);
                 if (response.status) {
                     toast.success(response.msg);
                 } else {
@@ -69,7 +69,7 @@ const Modify = ({ UserDetails }) => {
         if (UserDetails.data !== undefined) {
             setSelectedOptions({
                 web_url: UserDetails.data && UserDetails.data.web_url,
-                qty_type: UserDetails.data && UserDetails.data.qty_type,
+                // qty_type: UserDetails.data && UserDetails.data.qty_type,
                 signals_execution_type: UserDetails.data && UserDetails.data.signals_execution_type,
             })
         }
@@ -84,7 +84,7 @@ const Modify = ({ UserDetails }) => {
 
 
 
-    console.log("UserDetails", selectedOptions)
+    // console.log("UserDetails", selectedOptions)
 
 
     return (

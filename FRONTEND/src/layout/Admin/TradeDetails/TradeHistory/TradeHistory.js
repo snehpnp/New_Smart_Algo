@@ -22,11 +22,16 @@ import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../../Utils
 import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { today } from "../../../../Utils/Date_formet";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+
 
 import $ from "jquery";
 
 const TradeHistory = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  var dashboard_filter = location.search.split("=")[1];
+  console.log("dashboard_filter", dashboard_filter);
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
@@ -38,12 +43,6 @@ const TradeHistory = () => {
   const [toDate, setToDate] = useState("");
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [refresh, setrefresh] = useState(false);
-  const [refresh1, setrefresh1] = useState(false);
-
-
-  const [originalData, setOriginalData] = useState([]);
-
-
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -88,7 +87,7 @@ const TradeHistory = () => {
     let endDate = getActualDateFormate(toDate);
 
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter, token: token })
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -107,7 +106,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
-  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus]);
+  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -136,7 +135,39 @@ const TradeHistory = () => {
     {
       dataField: "index",
       text: "S.No.",
+      // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
+    },
+    {
+      dataField: "squreoff",
+      text: "Square OFF",
+      formatter: (cell, row, rowIndex) => {
+        if (
+          row.exit_qty_percent &&
+          row.entry_qty_percent &&
+          parseInt(row.entry_qty_percent) > parseInt(row.exit_qty_percent)
+        ) {
+          return (
+            <button className="btn-primary"
+              onClick={() => SquareOff(row, rowIndex)}
+
+            >
+              Square Off
+            </button>
+          );
+        } else if (!row.exit_qty_percent &&
+          row.entry_qty_percent) {
+          return (
+            <button className="btn-primary"
+              onClick={() => SquareOff(row, rowIndex)}
+            >
+              Square Off
+            </button>
+          );
+        } else {
+          return null
+        }
+      },
     },
     {
       dataField: "live",
@@ -156,11 +187,7 @@ const TradeHistory = () => {
         </div>
       ),
     },
-    {
-      dataField: "createdAt",
-      text: "Signals time",
-      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-    },
+
     {
       dataField: "trade_symbol",
       text: "Symbol",
@@ -193,6 +220,7 @@ const TradeHistory = () => {
         <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
       ),
     },
+
     {
       dataField: "Action",
       text: "R/P&L",
@@ -252,6 +280,11 @@ const TradeHistory = () => {
       ),
     },
     {
+      dataField: "createdAt",
+      text: "Signals time",
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
+    },
+    {
       dataField: "strategy",
       text: "Strategy",
     },
@@ -272,6 +305,54 @@ const TradeHistory = () => {
       ),
     },
   ];
+
+
+
+
+
+  const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
+
+  // ----------------------------- SQUARE OFF ----------------------------
+
+  const SquareOff = (rowdata, rowIndex) => {
+    // $('.BP1_Put_Price_' + item.token).html();
+    // $('.SP1_Call_Price_' + item.token).html();
+    console.log("rowdata", rowdata)
+
+    var pre_tag = {
+      option_type: rowdata.option_type,
+      type: rowdata.entry_type === "LE" ? "LX" : rowdata.entry_type === "SE" ? 'SX' : "",
+      token: rowdata.token,
+      indexcallput: rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`,
+      indexing: rowIndex,
+      segment: rowdata.segment,
+      strike: rowdata.strike_price,
+    };
+    console.log("pre_tag", pre_tag)
+
+    if (rowdata.entry_type === "") {
+      setCreateSignalRequest(oldValues => {
+        return oldValues.filter(item => item.token !== rowdata.token)
+      })
+    }
+    else {
+      setCreateSignalRequest(oldValues => {
+        return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`))
+      })
+
+      setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
+    }
+
+
+  }
+
+  console.log("CreateSignalRequest", CreateSignalRequest)
+
+  // ----------------------------- SQUARE OFF ----------------------------
+
+
+
+
 
   var CreatechannelList = "";
   tradeHistoryData.data &&
@@ -306,6 +387,10 @@ const TradeHistory = () => {
       else {
         if (res.data.stat) {
           const handleResponse = async (response) => {
+
+
+            $('.BP1_Put_Price_' + response.tk).html();
+            $('.SP1_Call_Price_' + response.tk).html();
 
             // UPL_
             $(".LivePrice_" + response.tk).html(response.lp);
@@ -475,18 +560,20 @@ const TradeHistory = () => {
 
 
 
+  var a = 2
   //  GET_USER_DETAILS
   const data = async () => {
+    if (a < 2) {
+    }
     const response = await GetAccessToken({ broker_name: "aliceblue" });
-
     if (response.status) {
-      setUserDetails(response.data[0]);
+      setUserDetails(response.data && response.data[0]);
     }
 
   };
   useEffect(() => {
     data();
-  }, []);
+  }, [a]);
 
 
 
@@ -546,7 +633,6 @@ const TradeHistory = () => {
     await dispatch(Get_All_Service({})).unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("response", response)
           setServiceData({
             loading: false,
             data: response.data,
@@ -581,7 +667,6 @@ const TradeHistory = () => {
     getservice()
   }, [])
 
-  console.log("UserDetails.trading_status", UserDetails.trading_status !== undefined && UserDetails.trading_status)
   return (
     <>
       <Content Page_title="Trade History" button_status={false}

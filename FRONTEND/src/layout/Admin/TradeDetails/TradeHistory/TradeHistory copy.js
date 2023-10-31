@@ -580,7 +580,7 @@ const TradeHistory = () => {
     await dispatch(Get_All_Service({})).unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("response", response)
+          // console.log("response", response)
           setServiceData({
             loading: false,
             data: response.data,

@@ -167,7 +167,6 @@ class Panel {
         }
     }
 
-
     // ADD LICENSE
     async AddLicensePanle(req, res) {
         try {
@@ -210,7 +209,7 @@ class Panel {
 
             // Update documents that match the query condition
             const updateResult = await companies_collection.updateMany(queryCondition, updateOperation);
-            const newCompany = new count_licenses({ admin_license: Number(license), user_id:objectId  });
+            const newCompany = new count_licenses({ admin_license: Number(license), user_id: objectId });
             newCompany.save()
 
             // If you want to send the retrieved data as a response
@@ -260,7 +259,6 @@ class Panel {
         }
     }
 
-
     // Admin Sidebar Permission
     async GetAll_Broker_details(req, res) {
         try {
@@ -292,22 +290,6 @@ class Panel {
             // const { id, license } = req.body
             const { id, db_name, db_url, license, key } = req.body
 
-
-            // if (!id) {
-            //     return res.send({ status: false, msg: "Enter Panel Id", data: [] })
-            // }
-
-            // const objectId = new ObjectId(id);
-
-            // // GET PANEL INFO
-            // const getPanelInfo = await panel_model.find({ _id: objectId })
-
-            // // IF DATA NOT EXIST
-            // if (getPanelInfo.length == 0) {
-            //     return res.send({ status: false, msg: "Empty data", data: getPanelInfo })
-            // }
-
-            // const uri = getPanelInfo[0].db_url;
             const uri = db_url;
 
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -355,6 +337,26 @@ class Panel {
         }
     }
 
+    // PANEL PERMISSION GET 
+    async GetPanlePermistion(req, res) {
+        try {
+            const { domain } = req.body
+
+
+            const Panle_information = await panel_model.find({ domain }).select('broker_id Create_Strategy Option_chain Strategy_plan')
+
+
+
+            // CHECK IF PANEL EXIST OR NOT
+            if (!Panle_information) {
+                return res.status(409).json({ status: false, msg: 'Panle Not exist Not exists', data: [] });
+            }
+            res.send({ status: true, msg: "Get Panel Permissions", data: Panle_information })
+
+        } catch (error) {
+            // console.log("Theme error-", error);
+        }
+    }
 }
 
 

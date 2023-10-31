@@ -210,6 +210,16 @@ const EditStrategy = () => {
 
   const [one_strategy, setone_strategy] = useState("");
 
+  const [SelectPlan, setSelectPlan] = useState(true);
+  const [SelectPlanArr, setSelectPlanArr] = useState([]);
+
+
+  const [strategy_amount_month, setStrategy_amount_month] = useState('');
+  const [strategy_amount_quarterly, setStrategy_amount_quarterly] = useState('');
+  const [strategy_amount_half_early, setStrategy_amount_half_early] = useState('');
+  const [strategy_amount_early, setStrategy_amount_early] = useState('');
+
+
   const NoOnlyRegex = (value) => {
     return No_Negetive_Input_regex(value);
   };
@@ -223,6 +233,7 @@ const EditStrategy = () => {
       indecator: "null",
       strategytester: "null",
       strategy_description: "",
+      starategylogo: "",
     },
     touched: {
       strategyname: false,
@@ -232,6 +243,7 @@ const EditStrategy = () => {
       indecator: false,
       strategytester: false,
       strategy_description: false,
+      starategylogo: false,
     },
     validate: (values) => {
       const errors = {};
@@ -256,17 +268,22 @@ const EditStrategy = () => {
       return errors;
     },
     onSubmit: async (values) => {
-      // alert("helo")
 
       const req = {
         _id: id,
-        strategy_name: values.strategyname,
-        strategy_amount: values.perlot,
-        strategy_category: values.Catagory,
-        strategy_indicator: values.indecator,
-        strategy_tester: values.strategytester,
-        strategy_segment: values.segment,
-        strategy_description: values.strategy_description,
+        'strategy_name': values.strategyname,
+        'strategy_amount': values.perlot,
+        'strategy_category': values.Catagory,
+        'strategy_indicator': values.indecator,
+        'strategy_tester': values.strategytester,
+        'strategy_segment': values.segment,
+        'strategy_description': values.strategy_description,
+        "strategy_amount_month": strategy_amount_month,
+        "strategy_amount_quarterly": strategy_amount_quarterly,
+        "strategy_amount_half_early": strategy_amount_half_early,
+        "strategy_image": values.starategylogo,
+        "strategy_amount_early": strategy_amount_early,
+        "plans": SelectPlanArr
       };
 
       await dispatch(Edit_Strategy({ req: req, token: user_token }))
@@ -339,18 +356,10 @@ const EditStrategy = () => {
       col_size: 6,
       disable: false,
     },
-    {
-      name: "strategy_description",
-      label: "Strategy Description",
-      type: "msgbox",
-      row_size: 4,
-      label_size: 12,
-      col_size: 12,
-      disable: false,
-    },
+    { name: 'starategylogo', label: 'Strategy Logo ', type: 'file', label_size: 6, col_size: 6, disable: false },
+    { name: 'strategy_description', label: 'Strategy Description', type: 'msgbox', row_size: 7, label_size: 6, col_size: 6, disable: false },
   ];
 
-  console.log("test", formik.values);
 
   const getservice = async () => {
     await dispatch(Get_All_Catagory())
@@ -379,7 +388,6 @@ const EditStrategy = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("response", response);
           setone_strategy(response.data);
           formik.setFieldValue("strategyname", response.data.strategy_name);
           formik.setFieldValue("perlot", response.data.strategy_amount);
@@ -387,10 +395,13 @@ const EditStrategy = () => {
           formik.setFieldValue("segment", response.data.strategy_segment);
           formik.setFieldValue("indecator", response.data.strategy_indicator);
           formik.setFieldValue("strategytester", response.data.strategy_tester);
-          formik.setFieldValue(
-            "strategy_description",
-            response.data.strategy_description
+          formik.setFieldValue("starategylogo", response.data.strategy_image);
+          formik.setFieldValue("strategy_description", response.data.strategy_description
           );
+          setStrategy_amount_early(response.data.strategy_amount_early)
+          setStrategy_amount_half_early(response.data.strategy_amount_half_early)
+          setStrategy_amount_quarterly(response.data.strategy_amount_quarterly)
+          setStrategy_amount_month(response.data.strategy_amount_month)
         }
       });
   };
@@ -398,6 +409,21 @@ const EditStrategy = () => {
     get_strategy_BY_did();
   }, [id]);
 
+
+
+  const SelectPlanValues = (name, value) => {
+    setSelectPlanArr((prev) => {
+      const index = prev.findIndex((obj) => obj.type === name);
+
+      if (index !== -1) {
+        prev[index] = { type: name, price: value };
+      } else {
+        prev.push({ type: name, price: value });
+      }
+
+      return [...prev];
+    });
+  }
   return (
     <>
       <Content
@@ -410,8 +436,134 @@ const EditStrategy = () => {
             (field) => !field.showWhen || field.showWhen(formik.values)
           )}
           formik={formik}
-          btn_name="Add Strategy"
+          btn_name="Edit Strategy"
           title="EditStrategy"
+
+          additional_field={
+            <>
+              <div className='row'>
+                <div className="col-12">
+                  {/* <h6>Select Plans</h6> */}
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onChange={() => setSelectPlan(!SelectPlan)} />
+                    <label class="form-check-label" for="flexCheckDefault">
+                      Select Plans
+                    </label>
+                  </div>
+                </div>
+                {SelectPlan ? <>
+                  <div className={`col-lg-3`}>
+                    <div className="mb-3 row flex-column">
+                      <label
+                        className={`col-lg-4`}
+                        htmlFor="Monthly"
+                      >
+                        Monthly
+                        <span className="text-danger">*</span>
+                      </label>
+                      <div
+                      >
+                        <input
+                          type="text"
+                          className="form-control"
+                          id='Monthly'
+                          placeholder={`Enter A Monthly Plan Amount`}
+                          onChange={(e) => { SelectPlanValues("monthly", e.target.value); setStrategy_amount_month(e.target.value) }}
+                          value={strategy_amount_month}
+
+                        />
+                        <div className="invalid-feedback">
+                          Enter A Monthly Plan Amount
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`col-lg-3`}>
+                    <div className="mb-3 row flex-column">
+                      <label
+                        className={`col-lg-4`}
+                        htmlFor="Quaterly"
+                      >
+                        Quaterly
+                        <span className="text-danger">*</span>
+                      </label>
+                      <div
+                      >
+                        <input
+                          type="text"
+                          className="form-control"
+                          id='Quaterly'
+                          placeholder={`Enter A Quaterly Plan Amount`}
+                          onChange={(e) => { SelectPlanValues("quaterly", e.target.value); setStrategy_amount_quarterly(e.target.value) }}
+                          value={strategy_amount_quarterly}
+
+
+                        />
+                        <div className="invalid-feedback">
+                          Enter A Quaterly Plan Amount
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`col-lg-3`}>
+                    <div className="mb-3 row flex-column">
+                      <label
+                        className={`col-lg-4`}
+                        htmlFor="monthly"
+                      >
+                        monthly
+                        <span className="text-danger">*</span>
+                      </label>
+                      <div
+                      >
+                        <input
+                          type="text"
+                          className="form-control"
+                          id='Half-Yearly'
+                          placeholder={`Enter a Half-Yearly Plan Value`}
+                          onChange={(e) => { SelectPlanValues("halfyearly", e.target.value); setStrategy_amount_half_early(e.target.value) }}
+                          value={strategy_amount_half_early}
+
+
+                        />
+                        <div className="invalid-feedback">
+                          Enter A Half-Yearly Plan Amount
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <div className={`col-lg-3`}>
+                    <div className="mb-3 row flex-column">
+                      <label
+                        className={`col-lg-4`}
+                        htmlFor="Yearly"
+                      >
+                        Yearly
+                        <span className="text-danger">*</span>
+                      </label>
+                      <div
+                      >
+                        <input
+                          type="text"
+                          className="form-control"
+                          id='Yearly'
+                          placeholder={`Enter a Yearly Plan Value`}
+                          onChange={(e) => { SelectPlanValues("yearly", e.target.value); setStrategy_amount_early(e.target.value) }}
+                          value={strategy_amount_early}
+
+                        />
+                        <div className="invalid-feedback">
+                          Please enter a Yearly Plan Value
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </> : ""}
+              </div>
+            </>
+          }
         />
         <ToastButton />
 

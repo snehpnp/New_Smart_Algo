@@ -67,7 +67,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
             <>
               {field.type === 'select' ? <>
                 <div className={`col-lg-${title === "update_theme" ? 12 : 6}`}>
-                  <div className="mb-3 row">
+                  <div className=" row">
                     <label
                       className={`col-lg-${title === "forlogin" ? 3 : title === "update_theme" ? 12 : 7}  col-form-label`}
                       htmlFor={field.name}
@@ -284,12 +284,10 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                       className={`form-control`}
                                     />
                                   </div>
-
-
-                                  {/* </div> */}
                                   <img src={formik.getFieldProps(field.name).value} name={field.name} id={field.name} alt={`Preview ${index}`} className={`col-lg-11 ms-3
                                   // ${field.label_size}
                                    mb-3 border border-2`}
+                                    style={{ height: formik.getFieldProps(field.name).value ? '150px' : "", width: "95%" }}
                                   />
 
 
@@ -334,12 +332,8 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
             </>
           ))}
 
-
-
-
         </div >
         {additional_field}
-
         <div className="form-group mb-0">
           <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
             {btn_name}

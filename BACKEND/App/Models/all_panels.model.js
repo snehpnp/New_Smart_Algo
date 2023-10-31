@@ -50,7 +50,23 @@ const panelSchema = new mongoose.Schema({
     broker_id: [{
         id: String,
         name: String
-    }]
+    }],
+    Option_chain: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+    },
+    Create_Strategy: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+    },
+    
+    Strategy_plan: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+    },
 }, {
     timestamps: true
 });

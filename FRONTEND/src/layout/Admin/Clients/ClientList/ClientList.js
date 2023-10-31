@@ -69,9 +69,13 @@ const AllClients = () => {
       await dispatch(DELETE_USER_SERVICES(req1))
         .unwrap()
         .then((response) => {
-          console.log("response", response);
           if (response.status) {
+            toast.success(response.msg);
+
             setrefresh(!refresh);
+          } else {
+            toast.error(response.msg);
+
           }
         });
     } else {
@@ -92,6 +96,14 @@ const AllClients = () => {
             let abc =
               response.data &&
               response.data.filter((item) => {
+                if (dashboard_filter === "000") {
+                  return (item.Role === "USER" && item.Is_Active === '1' && new Date(item.EndDate) <= new Date())
+                }
+                if (dashboard_filter === "111") {
+                  return (item.Role === "USER" && item.Is_Active === '1' && new Date(item.EndDate) >= new Date())
+
+                }
+
                 if (dashboard_filter === "2" || dashboard_filter === 2) {
                   return (
                     item.license_type === dashboard_filter ||
@@ -223,7 +235,7 @@ const AllClients = () => {
 
             setrefresh(!refresh)
             toast.success(response.msg);
-            
+
             window.location.reload()
             setTimeout(() => {
             }, 500);
@@ -417,19 +429,19 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-            {row.license_type == "1" ?
-              <Link>
-                <span data-toggle="tooltip" data-placement="top" title="Delete">
-                  <Trash2
-                    size={20}
-                    color="#d83131"
-                    strokeWidth={2}
-                    className="mx-1"
-                    onClick={(e) => Delete_user(row._id)}
-                  />
-                </span>
-              </Link>
-              : ""}
+            {/* {row.license_type == "1" ? */}
+            <Link>
+              <span data-toggle="tooltip" data-placement="top" title="Delete">
+                <Trash2
+                  size={20}
+                  color="#d83131"
+                  strokeWidth={2}
+                  className="mx-1"
+                  onClick={(e) => Delete_user(row._id)}
+                />
+              </span>
+            </Link>
+            {/* : ""} */}
 
           </div>
         </div>

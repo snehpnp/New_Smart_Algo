@@ -25,6 +25,9 @@ module.exports = function (app) {
     // USER ROUTES
     app.use(require("./User/user.route"));
 
+    app.use(require("./Strategy/strategy.route"));
+
+
     // BROKER ACCESS TOKEN
     app.use(require("./Brokerassecc_token/broker_access_toke.route"));
 

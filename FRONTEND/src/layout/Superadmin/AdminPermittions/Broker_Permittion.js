@@ -40,7 +40,7 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName }) => {
 
             await dispatch(Add_Licence_To_Company(req)).unwrap().then((response) => {
 
-                console.log("response", response)
+                // console.log("response", response)
                 if (response.status === 409) {
                     // toast.error(response.data.msg);
                 }

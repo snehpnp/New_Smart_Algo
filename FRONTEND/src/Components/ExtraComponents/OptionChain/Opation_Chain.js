@@ -10,13 +10,12 @@ import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicD
 import Modal from "../../../Components/ExtraComponents/Modal";
 import { Trash2 } from 'lucide-react';
 
-import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Option_All_Round_token } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
+import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
-import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../Service/Alice_Socket";
+import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Service/Alice_Socket";
 import $ from "jquery";
-
-
+import axios from "axios"
 
 
 const HelpCenter = () => {
@@ -57,10 +56,11 @@ const HelpCenter = () => {
         data: [],
     });
 
+    const [PanelKey, setPanelKey] = useState('');
+
     const [TokenSymbolChain, setTokenSymbolChain] = useState('')
     const [UserDetails, setUserDetails] = useState([]);
     const [showModal, setshowModal] = useState(false);
-
 
 
     const [symbol, setSymbol] = useState('')
@@ -71,6 +71,12 @@ const HelpCenter = () => {
     const [rows, setRows] = useState([]);
     const [first, setFirst] = useState(false);
 
+    const [activeButton, setActiveButton] = useState('LE');
+
+    const handleButtonClick = (value) => {
+        setActiveButton(value);
+    };
+
 
     const columns = [
 
@@ -79,10 +85,8 @@ const HelpCenter = () => {
             text: 'BUY/SELL',
             formatter: (cell, row, rowIndex) => (
                 <div key={rowIndex}>
-
-                    <button value="LE" className={`button_BUY ${first ? 'active' : ''}`} onClick={(e) => { CreateRequest("CALL", row, "LE", rowIndex) }} >B</button>
-                    <button value="SE" className={`button_sell`} onClick={(e) => CreateRequest("CALL", row, "SE", rowIndex)}>S</button>
-
+                    <button value="LE" className={`button_BUY ${activeButton === 'LE' ? 'active' : ''}`} onClick={(e) => { handleButtonClick('SE'); CreateRequest("CALL", row, "LE", rowIndex) }} >B</button>
+                    <button value="SE" className={`button_sell  ${activeButton === 'SE' ? 'active' : ''}`} onClick={(e) => { handleButtonClick('SE'); CreateRequest("CALL", row, "SE", rowIndex) }}>S</button>
                 </div >
             ),
         },
@@ -135,6 +139,7 @@ const HelpCenter = () => {
 
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
 
+
     const CreateRequest = (option_type, row_data, call_type, index) => {
         if (strategyRef.current === "") {
             alert("Please Select Strategy First")
@@ -158,6 +163,7 @@ const HelpCenter = () => {
                 setCreateSignalRequest(oldValues => {
                     return oldValues.filter(item => item.indexcallput !== (option_type === "CALL" ? `${option_type}_${row_data.call_token}` : `${option_type}_${row_data.put_token}`))
                 })
+
                 setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
             }
         }
@@ -171,11 +177,8 @@ const HelpCenter = () => {
     const ExcuteTradeButton = () => {
         let Arr = []
 
-        console.log("CreateSignalRequest", strategy && strategy)
-
         const expiry_i = convert_string_to_month(expiry && expiry)
 
-        console.log("expiry_i", expiry_i)
         CreateSignalRequest && CreateSignalRequest.map((item) => {
             // const expiry_i = get_thre_digit_month()
             const buy = $('.BP1_Put_Price_' + item.token).html();
@@ -203,7 +206,7 @@ const HelpCenter = () => {
             data: Arr
         })
         setshowModal(true)
-        console.log("Arr", Arr)
+
     }
 
 
@@ -231,6 +234,12 @@ const HelpCenter = () => {
 
     }
 
+    const Cancel_Request = () => {
+        setshowModal(false)
+
+
+    }
+
     // ------------------------------------ REMOVE SELECTED------------------------------------
 
 
@@ -239,13 +248,36 @@ const HelpCenter = () => {
 
     const Done_For_Trade = (id) => {
         const currentTimestamp = Math.floor(Date.now() / 1000);
+        // let ttt = []
+        let abc = ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
+            let req = `DTime:${currentTimestamp}|Symbol:${symbol && symbol}|TType:${item.trading_type}|Tr_Price:131|Price:${item.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.call_type}|Expiry:${expiry && expiry}|Strategy:${strategy && strategy}|Quntity:100|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
 
-        console.log(currentTimestamp);
 
-        ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
-            let req = `DTime: ${currentTimestamp} | Symbol: ${symbol && symbol} | TType: ${item.trading_type} | Tr_Price: 131 | Price: ${item.price} | Sq_Value: 0.00 | Sl_Value: 0.00 | TSL: 0.00 | Segment: ${item.segment} | Strike: ${item.strike} | OType: ${item.call_type} | Expiry: ${expiry && expiry} | Strategy: ${strategy && strategy} | Quntity: 100 | Key: SNE132023 | Demo: demo`
 
-            console.log("req", req)
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                data: req
+            };
+
+            axios.request(config)
+                .then((response) => {
+                    console.log("Trade", response.data);
+                    setshowModal(false)
+                    setExecuteTradeData({
+                        loading: false,
+                        data: []
+                    })
+
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+
         })
 
 
@@ -273,6 +305,7 @@ const HelpCenter = () => {
     }
     useEffect(() => {
         symbols()
+        getPanelKey()
         GetAllStrategyName();
     }, [])
 
@@ -328,6 +361,28 @@ const HelpCenter = () => {
     // --------------- FOR GET OPTIONS SYMBOLS -----------------------
 
 
+    // --------------- FOR GET PANEL KEY-----------------------
+
+
+    const getPanelKey = async (e) => {
+        await dispatch(
+            Get_Panel_key({
+                id: user_id,
+                token: token,
+            })
+        )
+            .unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setPanelKey(response.data)
+                }
+
+            });
+    };
+
+    // --------------- FOR GET PANEL KEY-----------------------
+
+
     // --------------- FOR GET OPTIONS SYMBOLS -----------------------
 
     const getAllRoundToken = async () => {
@@ -371,7 +426,6 @@ const HelpCenter = () => {
 
 
         if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
-
 
             const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
@@ -459,13 +513,9 @@ const HelpCenter = () => {
     const test = (e) => {
         if (e.target.value !== "") {
             strategyRef.current = e.target.value
-            // alert("if")
         } else {
             strategyRef.current = ""
-            // alert("else")
-
         }
-        //setStrategy(e.target.value)
     }
 
 
@@ -577,10 +627,12 @@ const HelpCenter = () => {
                                         isOpen={showModal}
                                         size="lg"
                                         title="Request Confirmation"
-                                        hideBtn={false}
-                                        btn_name="Done For Trade"
-                                        // onHide={handleClose}
+                                        cancel_btn={true}
+                                        // hideBtn={false}
+                                        btn_name="Confirm"
                                         Submit_Function={Done_For_Trade}
+                                        Submit_Cancel_Function={Cancel_Request}
+
                                         handleClose={() => setshowModal(false)}
                                     >
                                         <BasicDataTable
@@ -600,8 +652,8 @@ const HelpCenter = () => {
                                                     formatter: (cell, row, rowIndex) => (
                                                         <div>
                                                             {row.type === "BUY" ?
-                                                                <span className={`Put_Price_${row.token} `}></span>
-                                                                : <span className={`Call_Price_${row.token}`}></span>
+                                                                <span className={`BP1_Put_Price_${row.token} `}></span>
+                                                                : <span className={`SP1_Call_Price_${row.token}`}></span>
                                                             }
                                                         </div>
                                                     ),
@@ -610,6 +662,10 @@ const HelpCenter = () => {
                                                 {
                                                     dataField: "type",
                                                     text: "Trade Type",
+                                                },
+                                                {
+                                                    dataField: "call_type",
+                                                    text: "Call Type",
                                                 },
                                                 {
                                                     dataField: "strategy",

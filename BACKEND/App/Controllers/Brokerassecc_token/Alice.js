@@ -64,6 +64,7 @@ class AliceBlue {
                 axios(config)
                     .then(async function (response) {
                         if (response.data.userSession) {
+
                             if (Get_User[0].Role == "ADMIN") {
 
                                 const filter = { broker_name: "ALICE_BLUE" };
@@ -76,8 +77,10 @@ class AliceBlue {
 
                                     }
                                 };
+                                console.log("updateOperation", updateOperation);
+
                                 const result = await live_price.updateOne(filter, updateOperation);
-                                console.log("redirect_uri", redirect_uri);
+                                console.log("redirect_uri 1", redirect_uri);
 
                                 return res.redirect(redirect_uri);
 

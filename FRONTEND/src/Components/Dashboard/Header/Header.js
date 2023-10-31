@@ -50,6 +50,7 @@ const Header = ({ ChatBox }) => {
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
   const user_role = JSON.parse(localStorage.getItem("user_role"));
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const page = localStorage.getItem("page")
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
 
@@ -141,16 +142,26 @@ const Header = ({ ChatBox }) => {
   }
 
   const redirectToAdmin = () => {
-    user_role_goTo === "USER"
-      ? navigate("/admin/allclients")
-      : navigate("/admin/allsubadmins");
-    window.location.reload();
-    localStorage.removeItem("gotodashboard");
-
-    setTimeout(() => {
+    if (page != null) {
+      navigate("/admin/groupservices")
+      localStorage.removeItem("page")
+    } else {
+      user_role_goTo === "USER"
+        ? navigate("/admin/allclients")
+        : navigate("/admin/allsubadmins");
+      window.location.reload();
+      localStorage.removeItem("gotodashboard");
       localStorage.removeItem("user_details_goTo");
       localStorage.removeItem("user_role_goTo");
-    }, 1000);
+
+      setTimeout(() => {
+        localStorage.removeItem("user_details_goTo");
+        localStorage.removeItem("user_role_goTo");
+      }, 1000);
+    }
+
+
+
   };
 
   //  BROKER LOGIN

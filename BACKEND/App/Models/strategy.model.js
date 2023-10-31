@@ -4,41 +4,58 @@ const { Schema, model } = require('mongoose');
 const strategySchema = Schema({
     strategy_name: {
         type: String,
-        // required: true,
         unique: true
     },
     strategy_amount: {
         type: String,
-        // required: true,
         default: null
 
     },
+    strategy_amount_month: {
+        type: String,
+        default: null
+    },
+    strategy_amount_quarterly: {
+        type: String,
+        default: null
+    },
+    strategy_amount_half_early: {
+        type: String,
+        default: null
+    },
+    strategy_amount_early: {
+        type: String,
+        default: null
+    },
     strategy_description: {
         type: String,
-        // required: true,
         default: null
     },
     strategy_category: {
         type: String,
-        // required: true,
         default: null
     },
     strategy_segment: {
         type: String,
-        // required: true,
         default: null,
         index: true
     },
     strategy_indicator: {
         type: String,
-        // required: true,
         default: null
     },
     strategy_tester: {
         type: String,
-        // required: true,
         default: null
     },
+    strategy_image: {
+        type: String,
+        default: null
+    },
+    plans: [{
+        type: String, // Define the type for 'type' property
+        price: Number // Define the type for 'price' property
+    }],
     createdAt: {
         type: Date,
         default: Date.now

@@ -40,7 +40,7 @@ const System = () => {
         await dispatch(GET_COMPANY_INFOS()).unwrap()
             .then((response) => {
                 if (response.status) {
-                    console.log("response.status", response.data && response.data[0].favicon)
+                    // console.log("response.status", response.data && response.data[0].favicon)
                     setCompanyName({
                         loading: false,
                         data: response.data

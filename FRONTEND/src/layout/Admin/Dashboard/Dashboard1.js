@@ -14,87 +14,76 @@ const Dashboard1 = ({ data }) => {
       icon: 'la la-users',
       route: "/admin/allclients",
       visible: true
-
-    },
- 
-    {
-      index: 16,
-      name: "Total Subadmin",
-      value: data && data.total_Subadmin,
-      icon: 'la la-users',
-      route: "/admin/allsubadmins",
-      visible: true
-
     },
     {
-      index: 3,
-      name: "Sub-Admin Clients",
-      value: data && data.subadmin_client,
-      icon: 'la la-users',
-      route: "/admin/subadminclients",
-      visible: false
-
-    },
-    {
-      index: 4,
-      name: "Total Live Account",
-      value: data && data.total_live,
+      index: 2,
+      name: "Total Active Client",
+      value: data && data.total_active_client,
       icon: 'la la-users',
       route: '/admin/allclients?filter=2',
       visible: true
 
     },
     {
+      index: 3,
+      name: "Total Expired Client",
+      value: data && data.total_expired_client,
+      icon: 'la la-users',
+      route: "/admin/allclients?filter=21",
+      visible: true
+    },
+    {
+      index: 4,
+      name: "Total Live Client",
+      value: data && data.total_live_client,
+      icon: 'la la-users',
+      route: "/admin/allclients?filter=2",
+      visible: true
+    },
+    {
       index: 5,
-      name: "Active  Live Account",
+      name: "Active Live Client",
       value: data && data.total_active_live,
       icon: 'la la-users',
       route: "/admin/allclients?filter=21",
       visible: true
-
-
-
     },
     {
       index: 6,
-      name: "Expired Live Account",
+      name: "Expired Live Client",
       value: data && data.total_expired_live,
       icon: 'la la-users',
       route: "/admin/allclients?filter=20",
       visible: true
-
     },
-
     {
       index: 7,
-      name: "Total Demo Account",
-      value: data && data.total_demo,
+      name: "Total Demo Client",
+      value: data && data.total_demo_client,
       icon: 'la la-users',
       route: "/admin/allclients?filter=1",
       visible: true
-
     },
     {
       index: 8,
-      name: "Active Demo Account",
+      name: "Active Demo Client",
       value: data && data.total_active_demo,
       icon: 'la la-users',
       route: "/admin/allclients?filter=11",
       visible: true
-
     },
     {
       index: 9,
-      name: "Expired Demo Account",
+      name: "Expired Demo Client",
       value: data && data.total_expired_demo,
       icon: 'la la-users',
-      route: "/admin/allclients?filter=10",
+      route: "/admin/allclients??filter=10",
       visible: true
 
     },
     {
       index: 10,
-      name: "2 Days Only Account",
+      name: "Total 2 Days Client",
       value: data && data.total_two_days,
       icon: 'la la-users',
       route: "/admin/allclients?filter=0",
@@ -103,7 +92,7 @@ const Dashboard1 = ({ data }) => {
     },
     {
       index: 11,
-      name: "2 Days Active Account",
+      name: "Active 2 Days Client",
       value: data && data.total_active_two_days,
       icon: 'la la-users',
       route: "/admin/allclients?filter=01",
@@ -112,7 +101,7 @@ const Dashboard1 = ({ data }) => {
     },
     {
       index: 12,
-      name: "2 Days Expired Account",
+      name: "Expired 2 Days Client",
       value: data && data.total_expired_two_days,
       icon: 'la la-users',
       route: "/admin/allclients?filter=00",
@@ -133,7 +122,6 @@ const Dashboard1 = ({ data }) => {
       icon: 'la la-users',
       route: "/admin/allLicence",
       visible: false
-
     }, {
       index: 15,
       name: "Used  Licence",
@@ -141,10 +129,10 @@ const Dashboard1 = ({ data }) => {
       icon: 'la la-users',
       route: "/admin/allLicence?filter=1",
       visible: true
-
     },
 
   ]
+
   return <>
     <div className='theme-1-dashboard'>
       <div className="row">

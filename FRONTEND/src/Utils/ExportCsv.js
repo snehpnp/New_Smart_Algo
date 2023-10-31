@@ -60,7 +60,7 @@ export default function ExportToExport({ apiData, fileName }) {
 
   return (
     // <button onClick={(e) => exportToCSV(apiData, fileName)}><i class="fa-solid fa-file-csv fs-5"></i></button>
-    <button onClick={(e) => exportToCSV(apiData, fileName)} type="button" class="btn btn-primary float-end px-0" data-toggle="tooltip" data-placement="top" title="Export To Excel" delay={{ show: "0", hide: "100" }}>
+    <button onClick={(e) => exportToCSV(apiData, fileName)} type="button" class="btn btn-primary float-end " data-toggle="tooltip" data-placement="top" title="Export To Excel" delay={{ show: "0", hide: "100" }}>
       <i class="fa fa-download" aria-hidden="true"></i> Export-Excel
     </button>
   );

@@ -189,6 +189,10 @@ const TradingStatus = () => {
       dataField: "device",
       text: "Device",
     },
+    {
+      dataField: "role",
+      text: "Update By",
+    },
   ];
 
   var dateArray = [];

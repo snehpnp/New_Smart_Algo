@@ -67,10 +67,15 @@ export const admin_sidebar = [
             {
                 'id': 2,
                 "name": 'Trade History',
-                "route": "/admin/tradehistory",
+                "route": "/admin/tradehistory?type=admin",
             },
             {
                 'id': 3,
+                "name": 'Client Trade',
+                "route": "/admin/tradehistory?type=client",
+            },
+            {
+                'id': 4,
                 "name": 'Trading Status',
                 "route": "/admin/tradingstatus",
             },
@@ -79,6 +84,7 @@ export const admin_sidebar = [
             //     "name": 'Trade Execution Report',
             //     "route": "/admin/tradeexecution",
             // },
+            
             {
                 'id': 5,
                 "name": '7 Days Entry',
@@ -86,13 +92,24 @@ export const admin_sidebar = [
             },
         ]
     },
-    // {
-    //     'id': 10,
-    //     "name": 'Option Chain',
-    //     "Icon": "Link2",
-    //     "route": "/admin/optionchain",
-    //     "Data": []
-    // },
+    {
+        'id': 8,
+        "name": 'Option Chain',
+        "Icon": "Link2",
+        "Data": [
+            {
+                'id': 1,
+                "name": 'Option Chain',
+                "route": "/admin/optionchain",
+            },
+            {
+                'id': 2,
+                "name": 'Open Position',
+                "route": "/admin/openpostion",
+
+            },
+        ]
+    },
     {
         'id': 6,
         "name": 'License',
@@ -162,13 +179,13 @@ export const admin_sidebar = [
 
     },
 
-    // {
-    //     'id': 9,
-    //     "name": 'Create Strategy',
-    //     "Icon": "Boxes ",
-    //     "route": "/admin/createstrategy",
-    //     "Data": []
-    // },
+    {
+        'id': 9,
+        "name": 'Create Strategy',
+        "Icon": "Boxes ",
+        "route": "/admin/createstrategy",
+        "Data": []
+    },
     {
         'id': 10,
         "name": 'Broker Information',
