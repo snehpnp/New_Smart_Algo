@@ -15,12 +15,28 @@ import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
 import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
+
+
 
 const Signals = () => {
+
+  const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
+  ///console.log("AdminToken",AdminToken)
+  const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
+  const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
+
+
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [storeServiceData, setStoreServiceData] = useState([])
   const [filterServices, setFilterServices] = useState("")
+
+  //console.log("filterServices - ",filterServices)
   const [selectedItems, setSelectedItems] = useState([]);
+  //console.log("selectedItems",selectedItems)
+
   const [getIndicators, setGetIndicators] = useState([])
   const [getSources, setGetSources] = useState([])
   console.log("getSources", getSources);
@@ -71,6 +87,9 @@ const Signals = () => {
     getIndicatorApi()
   }, [filterServices]);
 
+
+  
+
   const handleShow = () => {
     setShow(true);
 
@@ -84,7 +103,7 @@ const Signals = () => {
 
     axios(config)
       .then(function (response) {
-        // console.log(response.data);
+       // console.log("get service name",response.data);
         setStoreServiceData(response.data.data);
       })
       .catch(function (error) {
@@ -162,11 +181,102 @@ const Signals = () => {
 
   const conditionText = "((close(2) < MA(2)) && (close(1) > MA(11))";
 
+
+  useEffect(() => {
+    getAllSteategyApi();
+  }, []);
+
+  //const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState([]);
+  const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState({ loading: true, data: [] });
+  const [selectStrategy, setSelectStrategy] = useState("");
+
+  
+  
+ // console.log("strategyDataAllAdmin",strategyDataAllAdmin)
+ // console.log("selectStrategy",selectStrategy)
+
+ 
+
+  const getAllSteategyApi = async () => {
+    await dispatch(
+      Get_All_Strategy({
+        req: {
+          page: "1",
+          limit: "100",
+        },
+        token: AdminToken,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        //console.log("response strategy - ",response)
+        if (response.status) {
+          if (response.status) {
+             setStrategyDataAllAdmin({
+              loading: false,
+              data: response.data,
+            });
+          } else {
+            setStrategyDataAllAdmin({
+              loading: false,
+              data: response.data,
+            });
+          }
+        }
+      });
+  };  
+
+  const saveStrategy = () => {
+    if(selectStrategy == ""){
+     alert("Please select a strategy");
+     return;
+    }
+
+   
+     
+     let data = {
+      "scriptArray":selectedItems,
+      "user_id": "6512c8f2eb5673dd61bb931a",
+     // "tokensymbol": "3045",
+     // "symbol_name": "SBIN",
+     // "segment": "C",
+      "strategy_name": selectStrategy,
+     // "strike_price":"19300",
+     // "option_type":"CE",
+    //  "expiry":"26102023",
+      "timeframe": "3",
+      "type": "BUY",
+      "indicator": "MA",
+      "price_source": "open",
+      "period": "1",
+      "inside_indicator": "EMA",
+      "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
+      "condition_source":"['close(0)','low(1)',low(2),close(1),high(2)]",
+      "buffer_value": "2",
+      "offset": "0"
+  }
+  }
+
+ 
+
   return (
     <>
       <>
         <Content Page_title="All Services" button_status={false}>
           <div>
+
+            <div className="col-md-2 ">
+              <label className="text-secondary" style={{ fontWeight: 'bold', color: 'black' }}>STRATEGY</label>
+              <select className="form-select" onChange={(e) => setSelectStrategy(e.target.value)} name="strategyname">
+                <option value="">-- Select Strategy --</option>
+                {strategyDataAllAdmin.data &&strategyDataAllAdmin.data.map((sm, i) =>
+                  <option value={sm.strategy_name}>{sm.strategy_name}</option>)}
+              </select>
+            </div>
+
+
+
+
             <Modal show={show} onHide={handleClose} className="right">
               <Modal.Header>
                 <input
@@ -558,6 +668,16 @@ const Signals = () => {
             </div> */}
 
           </div>
+
+
+
+
+
+          <div className="col-md-4">
+          <button className='btn btn-info float-end m-0'  onClick={saveStrategy}>save</button>
+        </div>
+
+
 
         </Content>
       </>
