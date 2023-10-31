@@ -94,7 +94,7 @@ class OptionChain {
         // let symbol = "NIFTY"
         // let expiry = "26102023"
 
-        let limit_set = 40
+        let limit_set = 60
         if (symbol == "FINNIFTY" || symbol == "BANKNIFTY" || symbol == "NIFTY" || symbol == "MIDCPNIFTY") {
             let price = ""
             let price_symbol = ""
@@ -102,7 +102,7 @@ class OptionChain {
                 price = "19500"
                 price_symbol = "Nifty Financial Services";
             } else if (symbol == "BANKNIFTY") {
-                price = "44200"
+                price = "44500"
                 price_symbol = "Nifty Bank";
             } else if (symbol == "NIFTY") {
                 price_symbol = "NIFTY 50";
@@ -241,8 +241,8 @@ class OptionChain {
                     let segment = ""
                     result.forEach(element1 => {
                         if (element.strike == element1.strike) {
-                            console.log("symbol", symbol)
-                            console.log("segment", segment)
+                            console.log("symbol", element.strike)
+                            console.log("segment", element1.strike)
 
                               
                             if (element1.option_type == "CE") {

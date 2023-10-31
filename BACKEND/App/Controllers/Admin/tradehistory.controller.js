@@ -42,6 +42,16 @@ class Tradehistory {
                 ser1 = service
             }
 
+            console.log(  {
+                dt_date: {
+                    $gte: startDate,
+                    $lte: endDate
+                },
+                strategy: stg1,
+                trade_symbol: ser1,
+                client_persnal_key:client_persnal_key1
+             
+            });
             const filteredSignals = await MainSignals_modal.aggregate([
                 {
                     $match: {
