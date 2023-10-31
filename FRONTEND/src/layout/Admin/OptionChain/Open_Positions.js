@@ -2,24 +2,22 @@
 import React, { useEffect, useState } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
-import { Get_Tradehisotry } from "../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
-import { loginWithApi } from "../../../Components/Dashboard/Header/log_with_api";
-import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
-import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice";
-import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
+import { Get_Panel_key } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
+import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
 
 import { check_Device } from "../../../Utils/find_device";
 import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../Service/Alice_Socket";
 import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../Utils/ShowTradeColor";
-import { Get_All_Catagory, Service_By_Catagory } from '../../../ReduxStore/Slice/Admin/AdminSlice'
-import { Get_All_Service } from "../../../ReduxStore/Slice/Admin/AdminSlice";
-import { today } from "../../../Utils/Date_formet";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Get_Open_Position } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice'
 import $ from "jquery";
 import BootstrapTable from 'react-bootstrap-table-next';
+import * as Config from "../../../Utils/Config";
+import axios from "axios"
+import Modal from "../../../Components/ExtraComponents/Modal";
+import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
 
 
 const TradeHistory = () => {
@@ -65,10 +63,43 @@ const TradeHistory = () => {
     const [SelectSegment, setSelectSegment] = useState("null");
     const [SelectService, setSelectService] = useState("null");
 
+    const [PanelKey, setPanelKey] = useState('');
+
+
 
     const [SocketState, setSocketState] = useState("null");
 
     const [ForGetCSV, setForGetCSV] = useState([])
+
+
+
+    // --------------- FOR GET OPTIONS SYMBOLS -----------------------
+
+
+    // --------------- FOR GET PANEL KEY-----------------------
+
+
+    const getPanelKey = async (e) => {
+        await dispatch(
+            Get_Panel_key({
+                id: user_id,
+                token: token,
+            })
+        )
+            .unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setPanelKey(response.data)
+                }
+
+            });
+    };
+
+
+    useEffect(() => {
+        getPanelKey();
+    }, []);
+    // --------------- FOR GET PANEL KEY-----------------------
 
     const Get_TradHistory = async (e) => {
         await dispatch(
@@ -91,7 +122,7 @@ const TradeHistory = () => {
 
     useEffect(() => {
         Get_TradHistory();
-    }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus]);
+    }, [refresh, SocketState]);
 
     const columns = [
         {
@@ -142,8 +173,9 @@ const TradeHistory = () => {
             text: "Live Price bp",
             formatter: (cell, row, rowIndex) => (
                 <div>
-                    {/* <span className={`LivePrice_${row.token}`}></span> */}
-                    <span className={`SP1_Call_Price_${row.token}`}></span>
+                    <span className={`LivePrice_${row.token}`}></span>
+                    <span className={`SP1_Call_Price_${row.token} d-none`}></span>
+                    {/* <span className={`SP1_Call_Price_${row.token}`}></span> */}
                     {/* <span className={`BP1_Put_Price_${row.token}_${row._id} d-none`}></span> */}
 
                 </div>
@@ -154,8 +186,9 @@ const TradeHistory = () => {
             text: "Close Price sp",
             formatter: (cell, row, rowIndex) => (
                 <div>
-                    {/* <span className={`ClosePrice_${row.token}`}></span> */}
-                    <span className={`BP1_Put_Price_${row.token}`}></span>
+                    <span className={`ClosePrice_${row.token}`}></span>
+                    <span className={`BP1_Put_Price_${row.token}  d-none`}></span>
+                    {/* <span className={`BP1_Put_Price_${row.token}`}></span> */}
 
                 </div>
             ),
@@ -274,44 +307,30 @@ const TradeHistory = () => {
 
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
 
+    // console.log("CreateSignalRequest", CreateSignalRequest)
     // ----------------------------- SQUARE OFF ----------------------------
-
-    // const buy = $('.BP1_Put_Price_' + item.token).html();
-    // const sell = $('.SP1_Call_Price_' + item.token).html();
-
-    // const Symbol = `${symbol && symbol}${expiry_i}${item.strike}${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`
-
-    // Arr.push({
-    //     "price": buy ? buy : sell,
-    //     "Symbol": Symbol,
-    //     'option_type': `${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`,
-    //     "type": item.type === "SE" ? "SELL" : item.type === "LE" ? "BUY" : "",
-    //     "token": item.token,
-    //     "strategy": strategy && strategy,
-    //     "call_type": item.option_type,
-    //     "trading_type": item.type,
-    //     "segment": item.segment,
-    //     "strike": item.strike,
-    //     // "expiry": expiry_i,
-    // })
 
 
     const SquareOff = (rowdata, rowIndex, tt) => {
         // $('.BP1_Put_Price_' + item.token).html();
         // $('.SP1_Call_Price_' + item.token).html(); 
 
+        console.log("rowdata", rowdata)
+
+        setshowModal(true)
+
+        // return
         const buy = $('.BP1_Put_Price_' + rowdata.token).html();
         const sell = $('.SP1_Call_Price_' + rowdata.token).html();
 
-
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-
-        console.log("rowdata", rowdata)
+        const show_expiry = convert_string_to_month(rowdata.expiry)
 
 
         var pre_tag = {
             option_type: rowdata.option_type,
             type: rowdata.entry_type === "LE" ? "LX" : rowdata.entry_type === "SE" ? 'SX' : "",
+            trade_symbol: `${rowdata.symbol}${show_expiry}${rowdata.strike}${rowdata.option_type === "CALL" ? "CE" : rowdata.option_type === "PUT" ? "PE" : ""}`,
+            showexpiry: rowdata.expiry,
             token: rowdata.token,
             indexcallput: rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`,
             indexing: rowIndex,
@@ -320,9 +339,11 @@ const TradeHistory = () => {
             price: rowdata.entry_type === "LE" ? buy : rowdata.entry_type === "SE" ? sell : "",
             symbol: rowdata.symbol,
             expiry: rowdata.expiry,
-
-
+            strategy: rowdata.strategy,
+            old_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent,
+            new_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent
         };
+
         console.log("pre_tag", pre_tag)
 
         if (rowdata.entry_type === "") {
@@ -341,10 +362,72 @@ const TradeHistory = () => {
 
 
 
-        //     let req = `DTime:${currentTimestamp}|Symbol:${symbol && symbol}|TType:${item.trading_type}|Tr_Price:131|Price:${item.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.call_type}|Expiry:${expiry && expiry}|Strategy:${strategy && strategy}|Quntity:100|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
+
+    }
+
+
+    const [Test, setTest] = useState([]);
+
+
+    const Set_Entry_Exit_Qty = (row, event, qty_persent) => {
+        setCreateSignalRequest((prev) => {
+            return prev.map((item) => {
+                // if (item.qty_persent === qty_persent) {
+                // Update only the new_qty_persent property for the specified item
+                return { ...item, new_qty_persent: event ? event : item.old_qty_persent };
+                // }
+                // return item;
+            });
+        });
+
+    }
+    console.log("CreateSignalRequest", CreateSignalRequest)
+
+
+
+
+
+
+
+    const Done_For_Trade = () => {
+
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+
+        console.log("CreateSignalRequest", CreateSignalRequest)
+
+        let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
+            let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${pre_tag.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
+
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                url: `${Config.broker_url}broker-signals`,
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                data: req
+            };
+
+            axios.request(config)
+                .then((response) => {
+                    console.log("Trade", response.data);
+
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        })
+
+        console.log("abc", abc)
+
+        return
+
+
 
 
     }
+
 
 
 
@@ -536,29 +619,6 @@ const TradeHistory = () => {
 
     //  GET ALL SERVICE NAME
 
-    const GetAllStrategyName = async (e) => {
-        await dispatch(
-            Get_All_Service_for_Client({
-                req: {},
-                token: token,
-            })
-        )
-            .unwrap()
-            .then((response) => {
-                if (response.status) {
-                    setAllStrategyName({
-                        loading: false,
-                        data: response.data,
-                    });
-                }
-            });
-    };
-
-    useEffect(() => {
-        GetAllStrategyName();
-    }, []);
-
-
 
 
 
@@ -625,6 +685,9 @@ const TradeHistory = () => {
 
 
 
+
+
+
     return (
         <>
             <Content Page_title="Open Position" button_status={false}
@@ -638,6 +701,114 @@ const TradeHistory = () => {
                 // selectRow={selectRow}
 
                 />
+
+
+                {showModal ? (
+                    <>
+                        <Modal
+                            isOpen={showModal}
+                            size="xl"
+                            title="Request Confirmation"
+                            cancel_btn={true}
+                            // hideBtn={false}
+                            btn_name="Confirm"
+                            Submit_Function={Done_For_Trade}
+                            // Submit_Cancel_Function={Cancel_Request}
+
+                            handleClose={() => setshowModal(false)}
+                        >
+                            <BasicDataTable
+                                TableColumns={[
+                                    {
+                                        dataField: "index",
+                                        text: "SR. No.",
+                                        formatter: (cell, row, rowIndex) => rowIndex + 1,
+                                    },
+                                    {
+                                        dataField: "trade_symbol",
+                                        text: "Symbol",
+                                    },
+                                    {
+                                        dataField: "price",
+                                        text: "Price",
+                                        formatter: (cell, row, rowIndex) => (
+                                            <div>
+                                                {row.type === "BUY" ?
+                                                    <span className={`BP1_Put_Price_${row.token} `}></span>
+                                                    : <span className={`SP1_Call_Price_${row.token}`}></span>
+                                                }
+                                            </div>
+                                        ),
+
+                                    },
+                                    {
+                                        dataField: "type",
+                                        text: "Trade Type",
+                                    },
+                                    {
+                                        dataField: "old_qty_persent",
+                                        text: "Qty Persent",
+                                    },
+                                    {
+                                        dataField: "qty_persent",
+                                        text: "Qty Persent",
+                                        formatter: (cell, row, rowIndex) => (
+                                            <div>
+                                                <input
+                                                    // key={index}
+                                                    type="number"
+                                                    name="quantity"
+                                                    className=""
+                                                    id="quantity"
+                                                    placeholder="Enter Qty"
+
+                                                    onChange={
+                                                        (e) =>
+                                                            Set_Entry_Exit_Qty(
+                                                                row,
+                                                                e.target.value,
+                                                                row.old_qty_persent
+                                                            )
+
+                                                        //  setEnterQty(e.target.value)
+                                                    }
+                                                    defaultValue={row.old_qty_persent}
+                                                    max={row.old_qty_persent}
+                                                // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
+
+                                                />
+                                            </div>
+                                        ),
+
+
+
+                                    },
+                                    {
+                                        dataField: "option_type",
+                                        text: "Call Type",
+                                    },
+                                    {
+                                        dataField: "strategy",
+                                        text: "Strategy",
+                                    },
+                                    // {
+                                    //     dataField: "Remove",
+                                    //     text: "Remove",
+                                    //     formatter: (cell, row, rowIndex) => <Trash2 className='text-danger' onClick={() => {
+                                    //         remoeveService(row.token)
+                                    //     }} />,
+
+                                    // },
+                                ]}
+                                tableData={CreateSignalRequest && CreateSignalRequest}
+                            />
+                        </Modal>
+                    </>
+                ) : (
+                    ""
+                )}
+
+
 
             </Content>
         </>

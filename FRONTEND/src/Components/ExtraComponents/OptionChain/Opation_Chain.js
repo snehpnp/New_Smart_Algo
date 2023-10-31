@@ -258,8 +258,8 @@ const HelpCenter = () => {
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                url: `${Config.broker_url}broker-signals`,
+                url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                // url: `${Config.broker_url}broker-signals`,
                 headers: {
                     'Content-Type': 'text/plain'
                 },
