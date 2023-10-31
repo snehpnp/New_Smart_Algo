@@ -1825,21 +1825,65 @@ app.get("/testing_condition",async(req,res)=>{
   const math = require('mathjs');
 
 
-  let data = {
-    a: 8,
-    b: 7,
-    c: 9,
-  };
-
-  // Define the condition as a function
-  const condition = (data) => ((data.a >= data.b || data.c < data.b) && data.b > data.a)||data.b < data.a;
+  // const abc = (data, conditionString) => {
+  //   try {
+  //     // Use eval to dynamically evaluate the condition string
+  //     const condition = eval(conditionString);
   
-  // Evaluate the condition with the data
-  let result = condition(data);
+  //     // Check if the condition is true or false based on the data
+  //     if (condition) {
+  //       // Your code for when the condition is true
+  //       console.log("Condition is true");
+  //     } else {
+  //       // Your code for when the condition is false
+  //       console.log("Condition is false");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error in evaluating the condition:", error);
+  //   }
+  // };
   
- // console.log(result);
+  // // Example usage:
+  // const data1 = {
+  //   close: [/* data for close(0) */],
+  //   low: [/* data for low(1) */],
+  //   high: [/* data for high(2) */],
+  // };
+  
+  // const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
+  
+  // abc(data1, conditionString);
 
- //res.send("okkkkk")
+  // res.send("okk")
+  //return
+
+
+  // let data = {
+  //   a: 8,
+  //   b: 7,
+  //   c: 9,
+  // };
+
+  // // Define the condition as a function
+  // const condition = (data) => ((data.a >= data.b || data.c < data.b) && data.b > data.a)||data.b < data.a;
+  
+  
+  // let result = condition(data);
+
+  // let data = {
+  //   close(0): 480.5,
+  //   low(1): 480.5,
+  //   low(2): 480.5,
+  //   close(1): 480.5,
+  //   high(2): 480.5
+  // };
+
+
+
+ // return
+
+
+
   
 
   const pipeline = [
@@ -1871,7 +1915,7 @@ app.get("/testing_condition",async(req,res)=>{
       const get_view_data = await collection.aggregate([{$sort :{_id:1}}]).toArray();
 
 
-   // console.log("get_view_data",get_view_data)
+    console.log("get_view_data",get_view_data)
 
   
 
@@ -1880,11 +1924,11 @@ app.get("/testing_condition",async(req,res)=>{
     let condition_source = val.condition_source.split(',');
     console.log("condition_source",condition_source)
     if(condition_source.length > 0){
-      for (const sourceVal of condition_source) {
+      for (const source of condition_source) {
     
-        console.log("condition_source",sourceVal)
+        console.log("condition_source",source)
 
-        const matches = sourceVal.match(/(\w+)\((\d+)\)/);
+        const matches = source.match(/(\w+)\((\d+)\)/);
 
       
         
@@ -1899,24 +1943,25 @@ app.get("/testing_condition",async(req,res)=>{
           const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY)+1)];
 
          // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
-          console.log("matches[1]",matches[1]); // This will output: 'close(1)'
+         // console.log("matches[1]",matches[1]); // This will output: 'close(1)'
          
            
-          let source
+          let sourceVal
           if(matches[1] == "close"){
-            source = viewSourceValue.close;
+            sourceVal = get_view_data.map(item => item.close);
           }else if(matches[1] == "open"){
-            source = viewSourceValue.open;
+            sourceVal = get_view_data.map(item => item.open);
           }else if(matches[1] == "low"){
-            source = viewSourceValue.low;
+            sourceVal =  get_view_data.map(item => item.low);
           }else if(matches[1] == "high"){
-            source = viewSourceValue.high;
+            sourceVal = get_view_data.map(item => item.high);
           }
 
-           
+          const openValues = get_view_data.map(item => item.open);
        
-           console.log("source" ,matches[1])
-           console.log("source value" ,source)
+          // console.log("source" ,matches[1])
+        //   console.log("source value" ,sourceVal)
+           checkData[matches[1]] = sourceVal;
        
 
         } else {
@@ -1924,15 +1969,70 @@ app.get("/testing_condition",async(req,res)=>{
         }
 
      //  const key = sourceVal.replace(/[^a-zA-Z0-9]/g, ''); // Extract the key from the string
-       checkData[sourceVal] = '123';
 
       }
       }
 
     }
-    console.log("checkData - ",checkData)
+   // console.log("checkData - ",checkData)
+   // console.log("val.condition - ",val.condition)
 
-     // console.log("get_view_data",get_view_data)
+
+   
+
+    // let data = {
+    //   a: 8,
+    //   b: 7,
+    //   c: 9,
+    // };
+  
+    // Define the condition as a function
+
+
+    const abc = (data, conditionString) => {
+      console.log("data - ",data)
+      console.log("conditionString - ",conditionString)
+      try {
+        // Use eval to dynamically evaluate the condition string
+        const condition = eval(conditionString);
+    
+        // Check if the condition is true or false based on the data
+        if (condition) {
+          // Your code for when the condition is true
+          console.log("Condition is true");
+        } else {
+          // Your code for when the condition is false
+          console.log("Condition is false");
+        }
+      } catch (error) {
+        console.error("Error in evaluating the condition:", error);
+      }
+    };
+    
+    // Example usage:
+    const data1 = {
+      close: [/* data for close(0) */],
+      low: [/* data for low(1) */],
+      high: [/* data for high(2) */],
+      open: [/* data for high(2) */],
+    };
+    
+    const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
+
+    const conditiostring1 ="(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
+
+
+    
+    abc(checkData, conditiostring1);
+  
+    res.send("okk")
+
+    return
+    const condition = (checkData) => val.condition;
+    
+    // Evaluate the condition with the data
+    let resultCondition = condition(checkData);
+     console.log("get_view_data",resultCondition)
      
     }
 
@@ -1964,9 +2064,140 @@ app.get("/testing_condition",async(req,res)=>{
 
 });
 
-  app.post("/make_startegy", async function (req, res) {
-     return
+
+app.get("/work_startegy",async(req,res)=>{
+  const pipeline = [
+    {
+    $match : {
+      //tokensymbol:"67308",
+      status:"0"
+     }
+    }
+  ];
+
+
+  const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
+ if(allStrategyResult.length > 0){
+  for (const val of allStrategyResult) {
+    //console.log("startegy",val.condition)
+    //console.log("timeframe",val.timeframe)
+   // console.log("tokensymbol",val.tokensymbol)
+
+    //console.log("condition_source",val.condition_source.split(','))
     
+    let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
+
+    const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+
+    if (ExistView.length > 0) {
+
+     // console.log("exist collection if ",collectionName)
+      const collection = dbTradeTools.collection(collectionName);
+      const get_view_data = await collection.aggregate([{$sort :{_id:1}}]).toArray();
+
+
+   // console.log("get_view_data",get_view_data)
+
+  
+
+   let checkData = {}
+    if(val.condition_source != null){
+    let condition_source = val.condition_source.split(',');
+   // console.log("condition_source",condition_source)
+    if(condition_source.length > 0){
+      for (const source of condition_source) {
+    
+       // console.log("condition_source",source)
+
+        const matches = source.match(/(\w+)\((\d+)\)/);
+
+      
+        
+        
+        if (matches) {
+         
+          const OFFSET_KEY = matches[2]; //
+          
+        //  console.log("OFFSET_KEY",OFFSET_KEY)
+        //  console.log("OFFSET_KEY",parseInt(OFFSET_KEY)+1)
+            
+          const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY)+1)];
+
+         // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
+         // console.log("matches[1]",matches[1]); // This will output: 'close(1)'
+         
+           
+          let sourceVal
+          if(matches[1] == "close"){
+            sourceVal = get_view_data.map(item => item.close);
+          }else if(matches[1] == "open"){
+            sourceVal = get_view_data.map(item => item.open);
+          }else if(matches[1] == "low"){
+            sourceVal =  get_view_data.map(item => item.low);
+          }else if(matches[1] == "high"){
+            sourceVal = get_view_data.map(item => item.high);
+          }
+
+      
+          
+           checkData[matches[1]] = sourceVal;
+       
+
+        } else {
+          console.log("No match found");
+        }
+
+   
+
+      }
+      }
+
+    }
+  
+  
+   //console.log("checkData - ",checkData)
+   //console.log("val.condition - ",val.condition)
+
+    
+    const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
+
+    const conditiostring1 ="(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
+
+
+     console.log("symbol_name",val.symbol_name)
+    abc(checkData, val.condition);
+    }
+
+
+   }
+  }
+  res.send("okk")
+})
+
+const abc = (data, conditionString) => {
+  console.log("data - ",data)
+  console.log("conditionString - ",conditionString)
+  try {
+    // Use eval to dynamically evaluate the condition string
+    const condition = eval(conditionString);
+
+    // Check if the condition is true or false based on the data
+    if (condition) {
+      // Your code for when the condition is true
+      console.log("Condition is true");
+    } else {
+      // Your code for when the condition is false
+      console.log("Condition is false");
+    }
+  } catch (error) {
+    console.error("Error in evaluating the condition:", error);
+  }
+};
+
+  app.post("/make_startegy", async function (req, res) {
+     
+     return
+     
     let user_id = req.body.user_id;
     let tokensymbol = req.body.tokensymbol;
     let symbol_name = req.body.symbol_name;
