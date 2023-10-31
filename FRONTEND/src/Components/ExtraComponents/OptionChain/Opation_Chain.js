@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import Modal from "../../../Components/ExtraComponents/Modal";
 import { Trash2 } from 'lucide-react';
+import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
+
 
 import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
@@ -17,7 +19,9 @@ import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Ser
 import $ from "jquery";
 import axios from "axios"
 import * as Config from "../../../Utils/Config";
+import toast, { Toaster } from 'react-hot-toast';
 
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 const HelpCenter = () => {
 
@@ -67,6 +71,8 @@ const HelpCenter = () => {
     const [symbol, setSymbol] = useState('')
     const [expiry, setExpiry] = useState('')
     const [strategy, setStrategy] = useState('')
+    const [ButtonDisabled, setButtonDisabled] = useState(false)
+
     const [expiry_for_Send_Signal, setExpiry_for_Send_Signal] = useState('')
 
     const [rows, setRows] = useState([]);
@@ -153,6 +159,7 @@ const HelpCenter = () => {
                 indexing: index,
                 segment: row_data.segment,
                 strike: row_data.strike_price,
+                entry_qty: '100'
             };
 
             if (call_type === "") {
@@ -198,6 +205,8 @@ const HelpCenter = () => {
                 "trading_type": item.type,
                 "segment": item.segment,
                 "strike": item.strike,
+                "entry_qty": item.entry_qty,
+
                 // "expiry": expiry_i,
             })
         })
@@ -237,11 +246,57 @@ const HelpCenter = () => {
 
     const Cancel_Request = () => {
         setshowModal(false)
-
-
     }
 
     // ------------------------------------ REMOVE SELECTED------------------------------------
+    // ------------------------------------ OnCHange------------------------------------
+
+    // //  For Select Services Checkbox
+    // function handleServiceChange(event, id, name, segment, lotsize) {
+    //     const serviceId = id;
+    //     const isChecked = event.target.checked;
+
+    //     setSelectedServices((prevInfo) => {
+    //         if (isChecked) {
+    //             return [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0, lotsize: lotsize }];
+    //         } else {
+    //             return prevInfo.filter((info) => info.service_id !== serviceId);
+    //         }
+    //     });
+    // }
+
+
+    const Set_Entry_Exit_Qty = (row, event, symbol) => {
+        let newValue = parseInt(event); // Convert input value to an integer
+        // let maxQty = parseInt(qty_persent);
+
+        if (isNaN(newValue) || newValue < 0) {
+            alert('Please enter a valid positive number.');
+            return; // Prevent setting invalid input
+        }
+
+        // if (newValue > maxQty) {
+        //     alert(`Entry Qty cannot be more than ${maxQty}`);
+        //     return; // Prevent setting a value higher than maxQty
+        // }
+
+        setExecuteTradeData((prev) => ({
+            ...prev,
+            loading: false,
+            data: prev.data.map((item) => {
+                if (item.symbol === symbol) { // Assuming 'symbol' is the unique identifier
+                    return {
+                        ...item,
+                        entry_qty: newValue || 100,
+                    };
+                }
+                return item;
+            }),
+        })
+        )
+    }
+    // ------------------------------------ OnCHange ------------------------------------
+
 
 
     // ------------------------------------ REMOVE SELECTED------------------------------------
@@ -250,10 +305,10 @@ const HelpCenter = () => {
     const Done_For_Trade = (id) => {
         const currentTimestamp = Math.floor(Date.now() / 1000);
         // let ttt = []
+        console.log("setExecuteTradeData", ExecuteTradeData)
+        return
         let abc = ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
             let req = `DTime:${currentTimestamp}|Symbol:${symbol && symbol}|TType:${item.trading_type}|Tr_Price:131|Price:${item.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.call_type}|Expiry:${expiry && expiry}|Strategy:${strategy && strategy}|Quntity:100|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
-
-
 
             let config = {
                 method: 'post',
@@ -268,8 +323,11 @@ const HelpCenter = () => {
 
             axios.request(config)
                 .then((response) => {
-                    console.log("Trade", response.data);
+                    toast.success("Order Place Sucessfully");
+                    setButtonDisabled(!ButtonDisabled)
+
                     setshowModal(false)
+                    // setButtonDisabled(false)
                     setExecuteTradeData({
                         loading: false,
                         data: []
@@ -627,10 +685,12 @@ const HelpCenter = () => {
                                 <>
                                     <Modal
                                         isOpen={showModal}
-                                        size="lg"
+                                        size="xl"
                                         title="Request Confirmation"
                                         cancel_btn={true}
                                         // hideBtn={false}
+                                        disabled_submit={ButtonDisabled}
+
                                         btn_name="Confirm"
                                         Submit_Function={Done_For_Trade}
                                         Submit_Cancel_Function={Cancel_Request}
@@ -647,6 +707,40 @@ const HelpCenter = () => {
                                                 {
                                                     dataField: "Symbol",
                                                     text: "Symbol",
+                                                },
+                                                {
+                                                    dataField: "",
+                                                    text: "Entry Qty",
+                                                    formatter: (cell, row, rowIndex) => (
+                                                        <div>
+                                                            <input
+                                                                // key={index}
+                                                                type="text"
+                                                                name="quantity"
+                                                                className=""
+                                                                id="quantity"
+                                                                placeholder="Enter Qty"
+
+                                                                onChange={
+                                                                    (e) =>
+                                                                        Set_Entry_Exit_Qty(
+                                                                            row,
+                                                                            e.target.value,
+                                                                            row.Symbol
+                                                                        )
+
+                                                                    //  setEnterQty(e.target.value)
+                                                                }
+                                                            // value={inputValue ? inputValue : row.old_qty_persent}
+                                                            // max={row.old_qty_persent}
+                                                            // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
+
+                                                            />
+                                                        </div>
+                                                    ),
+
+
+
                                                 },
                                                 {
                                                     dataField: "price",
@@ -696,7 +790,7 @@ const HelpCenter = () => {
             }
 
 
-
+            <ToastButton />
         </ >
     )
 

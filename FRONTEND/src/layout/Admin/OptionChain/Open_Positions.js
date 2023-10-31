@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
 import { Get_Panel_key } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
-
 import { check_Device } from "../../../Utils/find_device";
 import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../Service/Alice_Socket";
 import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../Utils/ShowTradeColor";
@@ -17,13 +16,16 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import * as Config from "../../../Utils/Config";
 import axios from "axios"
 import Modal from "../../../Components/ExtraComponents/Modal";
-import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
+import { convert_string_to_month } from "../../../Utils/Date_formet";
+import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
+import toast, { Toaster } from 'react-hot-toast';
+
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 
 const TradeHistory = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    var dashboard_filter = location.search.split("=")[1];
 
     const token = JSON.parse(localStorage.getItem("user_details")).token;
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
@@ -35,6 +37,8 @@ const TradeHistory = () => {
     const [toDate, setToDate] = useState("");
     const [CheckUser, setCheckUser] = useState(check_Device());
     const [refresh, setrefresh] = useState(false);
+    const [ButtonDisabled, setButtonDisabled] = useState(false);
+
 
     const handleFromDateChange = (e) => {
         setFromDate(e.target.value);
@@ -194,7 +198,7 @@ const TradeHistory = () => {
             ),
         },
         {
-            dataField: "trade_symbol",
+            dataField: "type",
             text: "Type",
             formatter: (cell, row, rowIndex) => (
                 <span className={``}>{row.entry_type ? row.entry_type : row.exit_type}</span>
@@ -312,14 +316,6 @@ const TradeHistory = () => {
 
 
     const SquareOff = (rowdata, rowIndex, tt) => {
-        // $('.BP1_Put_Price_' + item.token).html();
-        // $('.SP1_Call_Price_' + item.token).html(); 
-
-        console.log("rowdata", rowdata)
-
-        setshowModal(true)
-
-        // return
         const buy = $('.BP1_Put_Price_' + rowdata.token).html();
         const sell = $('.SP1_Call_Price_' + rowdata.token).html();
 
@@ -340,7 +336,7 @@ const TradeHistory = () => {
             symbol: rowdata.symbol,
             expiry: rowdata.expiry,
             strategy: rowdata.strategy,
-            old_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent,
+            old_qty_persent: rowdata.entry_qty_percent && rowdata.exit_qty_percent ? (parseInt(rowdata.entry_qty_percent) - parseInt(rowdata.exit_qty_percent)) : rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent,
             new_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent
         };
 
@@ -358,43 +354,39 @@ const TradeHistory = () => {
 
             setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
         }
-
-
-
-
-
+        setshowModal(true)
     }
 
-
-    const [Test, setTest] = useState([]);
-
+    const [inputValue, setInputValue] = useState('')
 
     const Set_Entry_Exit_Qty = (row, event, qty_persent) => {
-        setCreateSignalRequest((prev) => {
-            return prev.map((item) => {
-                // if (item.qty_persent === qty_persent) {
-                // Update only the new_qty_persent property for the specified item
-                return { ...item, new_qty_persent: event ? event : item.old_qty_persent };
-                // }
-                // return item;
-            });
-        });
+        let a = No_Negetive_Input_regex(event)
 
+        if (a) {
+
+            if (parseInt(event) > parseInt(qty_persent)) {
+                alert('Error: Value cannot be greater than ' + qty_persent);
+                setInputValue('');
+            } else {
+                setInputValue(event);
+
+                setCreateSignalRequest((prev) => {
+                    return prev.map((item) => {
+                        return { ...item, new_qty_persent: event ? event : item.old_qty_persent };
+                    });
+
+                });
+
+            }
+        } else {
+            alert('text not allow');
+
+        }
     }
-    console.log("CreateSignalRequest", CreateSignalRequest)
-
-
-
-
-
 
 
     const Done_For_Trade = () => {
-
         const currentTimestamp = Math.floor(Date.now() / 1000);
-
-        console.log("CreateSignalRequest", CreateSignalRequest)
-
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
             let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${pre_tag.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
 
@@ -411,21 +403,28 @@ const TradeHistory = () => {
 
             axios.request(config)
                 .then((response) => {
-                    console.log("Trade", response.data);
-
+                    setshowModal(false)
+                    toast.success("Order Place Sucessfully");
+                    setrefresh(!refresh)
+                    setButtonDisabled(!ButtonDisabled)
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         })
 
-        console.log("abc", abc)
 
         return
 
 
 
 
+    }
+
+
+    const Cancel_Request = () => {
+        setshowModal(false)
+        setCreateSignalRequest([])
     }
 
 
@@ -470,9 +469,6 @@ const TradeHistory = () => {
             else {
                 if (res.data.stat) {
                     const handleResponse = async (response) => {
-
-
-
                         $('.SP1_Call_Price_' + response.tk).html(response.sp1);
                         $('.BP1_Put_Price_' + response.tk).html(response.bp1);
 
@@ -503,9 +499,11 @@ const TradeHistory = () => {
                                 if (get_entry_qty !== "" && get_exit_qty !== "") {
 
                                     if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-                                        let rpl = (parseInt(get_exit_price) - parseInt(get_entry_price)) * parseInt(get_exit_qty);
+                                        let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
                                         let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                                         let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
+
+
 
                                         if ((isNaN(finalyupl) || isNaN(rpl))) {
                                             return "-";
@@ -571,20 +569,16 @@ const TradeHistory = () => {
 
 
     const calcultateRPL = (row, livePrice, pre_row) => {
-
         let get_ids = '_id_' + row.token + '_' + row._id
         let get_id_token = $('.' + get_ids).html();
 
-
         if (row.entry_type !== '' && row.exit_type !== '') {
             if ((row.entry_type === "LE" || row.entry_type === "SE")) {
-
                 const entryQty = parseInt(row.entry_qty_percent);
                 const exitQty = parseInt(row.exit_qty_percent);
                 const entryPrice = parseFloat(row.entry_price);
                 const exitPrice = parseFloat(row.exit_price);
                 const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
-
 
                 $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
                 $(".UPL_" + row.token + "_" + get_id_token).html("-");
@@ -592,15 +586,11 @@ const TradeHistory = () => {
 
                 ShowColor1(".show_rpl_" + row.token + "_" + get_id_token, rpl.toFixed(2), row.token, get_id_token);
                 ShowColor1(".UPL_" + row.token + "_" + get_id_token, "-", row.token, get_id_token);
-
                 ShowColor1(".TPL_" + row.token + "_" + get_id_token, rpl.toFixed(2), row.token, get_id_token);
-
-
             }
 
         }
         else if (row.entry_type && row.exit_type === "") {
-
             $(".show_rpl_" + row.token + "_" + row._id).html("-");
             $(".UPL_" + row.token + "_" + row._id).html("-");
             $(".TPL_" + row.token + "_" + row._id).html("-");
@@ -616,10 +606,6 @@ const TradeHistory = () => {
     useEffect(() => {
         ShowLivePrice();
     }, [tradeHistoryData.data, SocketState, UserDetails, SquareOff]);
-
-    //  GET ALL SERVICE NAME
-
-
 
 
 
@@ -641,48 +627,46 @@ const TradeHistory = () => {
 
 
 
-    // const [selectedRows, setSelectedRows] = useState([]); // State to track selected rows
+    const [selectedRows, setSelectedRows] = useState([]); // State to track selected rows
 
-    // const handleSelect = (row, isSelected) => {
-    //     // Update the selectedRows state based on the row selection
+    const handleSelect = (row, isSelected) => {
+        // Update the selectedRows state based on the row selection
 
-    //     console.log("row", row)
-    //     console.log("isSelected", isSelected)
-    //     if (isSelected) {
-    //         setSelectedRows([...selectedRows, row]);
-    //     } else {
-    //         setSelectedRows(selectedRows.filter(selectedRow => selectedRow['_id'] !== row['_id']));
-    //     }
-    // };
+        console.log("row", row)
+        console.log("isSelected", isSelected)
+        if (isSelected) {
+            setSelectedRows([...selectedRows, row]);
+        } else {
+            setSelectedRows(selectedRows.filter(selectedRow => selectedRow['_id'] !== row['_id']));
+        }
+    };
 
-    const [selectedRows, setSelectedRows] = useState([]);
 
-    let selectRow = {
+    const selectRow = {
         // mode: 'checkbox',
         // clickToSelect: true,
-        // selected: selectedRows,
         // onSelect: (row, isSelect, rowIndex, e) => {
-        //     console.log("row", row);
-        //     console.log("isSelect", isSelect);
-        //     console.log("rowIndex", rowIndex);
-        //     console.log("e", e);
 
-        //     // Handle row selection here
         //     if (isSelect) {
-        //         setSelectedRows([...selectedRows, { index: rowIndex, row: row }]);
+        //         setSelectedRows((x) => [...x, row])
         //     } else {
-        //         setSelectedRows(selectedRows.filter(selectedRow => selectedRow.index !== rowIndex));
+        //         setSelectedRows((x) => (x.filter((y) => y._id != row._id)))
         //     }
+
+        //     console.log(row.id);
+        //     console.log(isSelect);
+        //     console.log(rowIndex);
+        //     console.log(e);
         // },
-        // onSelectAll: (isSelect, rows) => {
-        //     if (isSelect) {
-        //         setSelectedRows(rows);
-        //     } else {
-        //         setSelectedRows([]);
-        //     }
+        // onSelectAll: (isSelect, rows, e) => {
+        //     console.log(isSelect);
+        //     console.log(rows);
+        //     console.log(e);
         // }
-    }
+    };
 
+
+    console.log('selectedRows', selectedRows);
 
 
 
@@ -694,7 +678,7 @@ const TradeHistory = () => {
             >
 
                 <FullDataTable
-                    keyField='_id'
+                    keyField="_id"
                     TableColumns={columns}
                     tableData={tradeHistoryData.data}
                     pagination1={true}
@@ -712,9 +696,9 @@ const TradeHistory = () => {
                             cancel_btn={true}
                             // hideBtn={false}
                             btn_name="Confirm"
+                            disabled_submit={ButtonDisabled}
                             Submit_Function={Done_For_Trade}
-                            // Submit_Cancel_Function={Cancel_Request}
-
+                            Submit_Cancel_Function={Cancel_Request}
                             handleClose={() => setshowModal(false)}
                         >
                             <BasicDataTable
@@ -747,16 +731,16 @@ const TradeHistory = () => {
                                     },
                                     {
                                         dataField: "old_qty_persent",
-                                        text: "Qty Persent",
+                                        text: "Remaining Qty",
                                     },
                                     {
                                         dataField: "qty_persent",
-                                        text: "Qty Persent",
+                                        text: "Exit Qty",
                                         formatter: (cell, row, rowIndex) => (
                                             <div>
                                                 <input
                                                     // key={index}
-                                                    type="number"
+                                                    type="text"
                                                     name="quantity"
                                                     className=""
                                                     id="quantity"
@@ -772,7 +756,7 @@ const TradeHistory = () => {
 
                                                         //  setEnterQty(e.target.value)
                                                     }
-                                                    defaultValue={row.old_qty_persent}
+                                                    value={inputValue ? inputValue : row.old_qty_persent}
                                                     max={row.old_qty_persent}
                                                 // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
 
@@ -808,7 +792,7 @@ const TradeHistory = () => {
                     ""
                 )}
 
-
+                <ToastButton />
 
             </Content>
         </>
