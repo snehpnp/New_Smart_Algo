@@ -340,7 +340,6 @@ const TradeHistory = () => {
             new_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent
         };
 
-        console.log("pre_tag", pre_tag)
 
         if (rowdata.entry_type === "") {
             setCreateSignalRequest(oldValues => {
