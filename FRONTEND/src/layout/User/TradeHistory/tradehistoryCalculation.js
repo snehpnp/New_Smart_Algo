@@ -181,6 +181,9 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                                     let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                                     let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
 
+                                    console.log("finalyupl" ,finalyupl)
+                                    console.log("rpl" ,rpl)
+
                                     if ((isNaN(finalyupl) || isNaN(rpl))) {
                                         return "-";
                                     } else {
