@@ -43,10 +43,7 @@ const TradeHistory = () => {
   const [UserDetails, setUserDetails] = useState([]);
 
 
-  const [rowData, setRowData] = useState({
-    loading: true,
-    data: [],
-  });
+  const [rowData, setRowData] = useState("");
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -143,6 +140,10 @@ const TradeHistory = () => {
             data: response.data,
           });
         }
+        setTradeHistoryData({
+          loading: false,
+          data: response.data,
+        });
       });
   };
 
@@ -178,8 +179,10 @@ const TradeHistory = () => {
     {
       dataField: "index",
       text: "S.No.",
+      // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
+
     {
       dataField: "live",
       text: "Live Price",
@@ -198,11 +201,7 @@ const TradeHistory = () => {
         </div>
       ),
     },
-    {
-      dataField: "createdAt",
-      text: "Signals time",
-      formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>,
-    },
+
     {
       dataField: "trade_symbol",
       text: "Symbol",
@@ -235,6 +234,7 @@ const TradeHistory = () => {
         <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
       ),
     },
+
     {
       dataField: "Action",
       text: "R/P&L",
@@ -294,6 +294,11 @@ const TradeHistory = () => {
       ),
     },
     {
+      dataField: "createdAt",
+      text: "Signals time",
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
+    },
+    {
       dataField: "strategy",
       text: "Strategy",
     },
@@ -314,6 +319,7 @@ const TradeHistory = () => {
       ),
     },
   ];
+
 
 
 
@@ -427,7 +433,7 @@ const TradeHistory = () => {
         <DetailsView
           showModal={showModal}
           setshowModal={() => setshowModal(false)}
-          tradeHistoryData={tradeHistoryData}
+          tradeHistoryData={rowData}
         />
       </Content>
     </>
