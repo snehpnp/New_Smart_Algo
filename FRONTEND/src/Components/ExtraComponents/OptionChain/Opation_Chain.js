@@ -75,8 +75,6 @@ const HelpCenter = () => {
 
     const [expiry_for_Send_Signal, setExpiry_for_Send_Signal] = useState('')
 
-    const [rows, setRows] = useState([]);
-    const [first, setFirst] = useState(false);
 
     const [activeButton, setActiveButton] = useState('LE');
 
@@ -152,6 +150,7 @@ const HelpCenter = () => {
             alert("Please Select Strategy First")
         } else {
             var pre_tag = {
+                entry_qty: '100',
                 option_type: option_type,
                 type: call_type,
                 token: option_type === "CALL" ? row_data.call_token : row_data.put_token,
@@ -159,7 +158,6 @@ const HelpCenter = () => {
                 indexing: index,
                 segment: row_data.segment,
                 strike: row_data.strike_price,
-                entry_qty: '100'
             };
 
             if (call_type === "") {
@@ -195,6 +193,7 @@ const HelpCenter = () => {
             const Symbol = `${symbol && symbol}${expiry_i}${item.strike}${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`
 
             Arr.push({
+                "entry_qty": item.entry_qty,
                 "price": buy ? buy : sell,
                 "Symbol": Symbol,
                 'option_type': `${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`,
@@ -205,9 +204,6 @@ const HelpCenter = () => {
                 "trading_type": item.type,
                 "segment": item.segment,
                 "strike": item.strike,
-                "entry_qty": item.entry_qty,
-
-                // "expiry": expiry_i,
             })
         })
 
@@ -249,45 +245,26 @@ const HelpCenter = () => {
     }
 
     // ------------------------------------ REMOVE SELECTED------------------------------------
-    // ------------------------------------ OnCHange------------------------------------
 
-    // //  For Select Services Checkbox
-    // function handleServiceChange(event, id, name, segment, lotsize) {
-    //     const serviceId = id;
-    //     const isChecked = event.target.checked;
-
-    //     setSelectedServices((prevInfo) => {
-    //         if (isChecked) {
-    //             return [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0, lotsize: lotsize }];
-    //         } else {
-    //             return prevInfo.filter((info) => info.service_id !== serviceId);
-    //         }
-    //     });
-    // }
+    // ------------------------------------ QTY CHANGE ------------------------------------
 
 
     const Set_Entry_Exit_Qty = (row, event, symbol) => {
         let newValue = parseInt(event); // Convert input value to an integer
-        // let maxQty = parseInt(qty_persent);
 
         if (isNaN(newValue) || newValue < 0) {
             alert('Please enter a valid positive number.');
-            return; // Prevent setting invalid input
+            return;
         }
-
-        // if (newValue > maxQty) {
-        //     alert(`Entry Qty cannot be more than ${maxQty}`);
-        //     return; // Prevent setting a value higher than maxQty
-        // }
 
         setExecuteTradeData((prev) => ({
             ...prev,
             loading: false,
             data: prev.data.map((item) => {
-                if (item.symbol === symbol) { // Assuming 'symbol' is the unique identifier
+                if (item.Symbol === symbol) { // Assuming 'symbol' is the unique identifier
                     return {
                         ...item,
-                        entry_qty: newValue || 100,
+                        entry_qty: newValue.toString() || '100',
                     };
                 }
                 return item;
@@ -295,7 +272,7 @@ const HelpCenter = () => {
         })
         )
     }
-    // ------------------------------------ OnCHange ------------------------------------
+    // ------------------------------------ QTY CHANGE ------------------------------------
 
 
 
@@ -303,18 +280,19 @@ const HelpCenter = () => {
 
 
     const Done_For_Trade = (id) => {
+
+        // console.log("ExecuteTradeData", ExecuteTradeData)
+        // return
         const currentTimestamp = Math.floor(Date.now() / 1000);
-        // let ttt = []
-        console.log("setExecuteTradeData", ExecuteTradeData)
-        return
+
         let abc = ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
-            let req = `DTime:${currentTimestamp}|Symbol:${symbol && symbol}|TType:${item.trading_type}|Tr_Price:131|Price:${item.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.call_type}|Expiry:${expiry && expiry}|Strategy:${strategy && strategy}|Quntity:100|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
+            let req = `DTime:${currentTimestamp}|Symbol:${symbol && symbol}|TType:${item.trading_type}|Tr_Price:131|Price:${item.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.call_type}|Expiry:${expiry && expiry}|Strategy:${strategy && strategy}|Quntity:${item.entry_qty}|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
 
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                // url: `${Config.broker_url}broker-signals`,
+                // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                url: `${Config.broker_url}broker-signals`,
                 headers: {
                     'Content-Type': 'text/plain'
                 },
