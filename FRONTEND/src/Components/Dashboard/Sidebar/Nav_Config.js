@@ -84,7 +84,7 @@ export const admin_sidebar = [
             //     "name": 'Trade Execution Report',
             //     "route": "/admin/tradeexecution",
             // },
-            
+
             {
                 'id': 5,
                 "name": '7 Days Entry',

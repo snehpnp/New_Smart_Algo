@@ -291,42 +291,42 @@ app.post('/broker-signals', async (req, res) => {
 
           // MT_4 , OPTION_CHAIN , MAKE_STG, SQUAR_OFF
 
-          var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: "",TradeType:"MT_4" }
+          var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: "", TradeType: "MT_4" }
 
           if (segment == 'C' || segment == 'c') {
             instrument_query = { name: input_symbol }
             EXCHANGE = "NSE";
             trade_symbol = input_symbol;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key,TradeType:TradeType }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
           } else if (segment == 'F' || segment == 'f') {
             instrument_query = { symbol: input_symbol, segment: "F", expiry: expiry }
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key ,TradeType:TradeType}
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
 
           } else if (segment == 'O' || segment == 'o' || segment == 'FO' || segment == 'fo') {
-            instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type}
+            instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" ,client_persnal_key:client_persnal_key,TradeType:TradeType}
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
 
           } else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE",client_persnal_key:client_persnal_key ,TradeType:TradeType}
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
 
           } else if (segment == 'MF' || segment == 'mf') {
             instrument_query = { symbol: input_symbol, segment: "MF", expiry: expiry }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + 'FUT';
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" ,client_persnal_key:client_persnal_key,TradeType:TradeType}
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
 
           } else if (segment == 'CF' || segment == 'Cf') {
             instrument_query = { symbol: input_symbol, segment: "CF", expiry: expiry, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" }
             EXCHANGE = "CDS";
           }
-          console.log("findSignal==>>>>", findSignal);
+          // console.log("findSignal==>>>>", findSignal);
 
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
@@ -478,8 +478,6 @@ app.post('/broker-signals', async (req, res) => {
 
             var findMainSignals = await MainSignals.find(findSignal)
 
-            console.log("findMainSignals", findMainSignals.length);
-
             // MainSignals FIND IN COLLECTION
             if (findMainSignals.length == 0) {
 
@@ -503,7 +501,7 @@ app.post('/broker-signals', async (req, res) => {
                 segment: segment,
                 trade_symbol: trade_symbol + "[" + segment1 + "]",
                 client_persnal_key: client_persnal_key,
-                TradeType:TradeType,
+                TradeType: TradeType,
                 signals_id: SignalSave._id,
                 token: instrument_token
               }
@@ -512,7 +510,7 @@ app.post('/broker-signals', async (req, res) => {
 
             } else {
               var updatedData = {
-                entry_price: ((parseFloat(price) + parseFloat(findMainSignals[0].entry_price)) / 2),
+                entry_price: (((parseFloat(price) * parseFloat(qty_percent)) + (parseFloat(findMainSignals[0].entry_price) * parseFloat(findMainSignals[0].entry_qty_percent))) / (parseFloat(findMainSignals[0].entry_qty_percent) + parseFloat(qty_percent))),
                 entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
                 entry_dt_date: current_date
               }
@@ -549,20 +547,23 @@ app.post('/broker-signals', async (req, res) => {
                 const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
 
               } else {
-                // console.log("ExitMainSignals 2", ExitMainSignals);
+                if (ExitMainSignals[0].entry_qty_percent >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
+                  var updatedData = {
+                    exit_type: type,  
+                    exit_price: (((parseFloat(price) * parseFloat(qty_percent)) + ((isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)) * (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) / ((isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)) + parseFloat(qty_percent))),
 
-                // IF EXIST ENTRY OF THIS EXIT TRADE
-                var updatedData = {
-                  exit_type: type,
-                  exit_price: ((parseFloat(price) + (isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price))) / 2),
-                  exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
+                    exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
 
-                  exit_dt_date: current_date
+                    exit_dt_date: current_date
+                  }
+                  updatedData.$addToSet = { signals_id: SignalSave._id };
+
+                  // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
+                  const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
                 }
-                updatedData.$addToSet = { signals_id: SignalSave._id };
 
-                // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
-                const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
+
+
               }
 
 

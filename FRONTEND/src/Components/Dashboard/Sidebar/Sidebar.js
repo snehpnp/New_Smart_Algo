@@ -42,7 +42,7 @@ const Sidebar = ({ ShowSidebar }) => {
     //  GET SUBADMIN PERMISSION
     const data2 = async () => {
         if (roles === 'SUBADMIN') {
-            await dispatch(Get_Sub_Admin_Permissions({ id: user_ID && user_ID })).unwrap()
+            await dispatch(Get_Sub_Admin_Permissions({ id: user_ID && user_ID.user_id })).unwrap()
                 .then((response) => {
                     if (response.status) {
                         setGetPermissions(response.data[0])

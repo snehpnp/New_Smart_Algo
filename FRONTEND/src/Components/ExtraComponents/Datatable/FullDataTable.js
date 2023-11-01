@@ -36,8 +36,7 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions, selectRow, keyFi
         <div className=''>
 
             <BootstrapTable
-                keyField='id'
-
+                keyField={keyField ? keyField : "id"}
                 data={tableData}
                 columns={TableColumns}
                 pagination={!pagination1 ? paginationFactory(options) : ""}

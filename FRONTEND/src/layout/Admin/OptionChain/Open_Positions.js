@@ -1,4 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
+// /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
@@ -25,7 +25,6 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 const TradeHistory = () => {
     const dispatch = useDispatch();
-    const location = useLocation();
 
     const token = JSON.parse(localStorage.getItem("user_details")).token;
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
@@ -33,49 +32,13 @@ const TradeHistory = () => {
 
 
     const [showModal, setshowModal] = useState(false);
-    const [fromDate, setFromDate] = useState("");
-    const [toDate, setToDate] = useState("");
-    const [CheckUser, setCheckUser] = useState(check_Device());
     const [refresh, setrefresh] = useState(false);
     const [ButtonDisabled, setButtonDisabled] = useState(false);
-
-
-    const handleFromDateChange = (e) => {
-        setFromDate(e.target.value);
-    };
-
-    const handleToDateChange = (e) => {
-        setToDate(e.target.value);
-    };
-
-    const [rowData, setRowData] = useState({ loading: true, data: [], });
-    const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
     const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
-    const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
-
-
-
-    const [CatagoryData, setCatagoryData] = useState({
-        loading: true,
-        data: []
-    });
-
-
-
     const [UserDetails, setUserDetails] = useState([]);
-    const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
-    const [SelectSegment, setSelectSegment] = useState("null");
-    const [SelectService, setSelectService] = useState("null");
-
+    const [inputValue, setInputValue] = useState('')
     const [PanelKey, setPanelKey] = useState('');
-
-
-
     const [SocketState, setSocketState] = useState("null");
-
-    const [ForGetCSV, setForGetCSV] = useState([])
-
-
 
     // --------------- FOR GET OPTIONS SYMBOLS -----------------------
 
@@ -129,45 +92,49 @@ const TradeHistory = () => {
     }, [refresh, SocketState]);
 
     const columns = [
-        {
-            dataField: "index",
-            text: "S.No.",
-            // hidden: true,
-            formatter: (cell, row, rowIndex) => rowIndex + 1,
-        },
+        // {
+        //     dataField: "index",
+        //     text: "S.No.",
+        //     // hidden: true,
+        //     isKey: true,
+        //     formatter: (original) => {
+        //         return <input type="checkbox"></input>;
+        //     }
+        // },
+        // formatter: (cell, row, rowIndex) => rowIndex + 1,
 
-        {
-            dataField: "squreoff",
-            text: "Square OFF",
-            formatter: (cell, row, rowIndex) => {
-                if (
-                    row.exit_qty_percent &&
-                    row.entry_qty_percent &&
-                    parseInt(row.entry_qty_percent) > parseInt(row.exit_qty_percent)
-                ) {
-                    return (
+        // {
+        //     dataField: "squreoff",
+        //     text: "Square OFF",
+        //     formatter: (cell, row, rowIndex) => {
+        //         if (
+        //             row.exit_qty_percent &&
+        //             row.entry_qty_percent &&
+        //             parseInt(row.entry_qty_percent) > parseInt(row.exit_qty_percent)
+        //         ) {
+        //             return (
 
-                        <button className="btn-primary"
-                            onClick={() => SquareOff(row, rowIndex, `.SP1_Call_Price_${row.token}`)}
+        //                 <button className="btn-primary"
+        //                     onClick={() => SquareOff(row, rowIndex, `.SP1_Call_Price_${row.token}`)}
 
-                        >
-                            Square Off
-                        </button>
-                    );
-                } else if (!row.exit_qty_percent &&
-                    row.entry_qty_percent) {
-                    return (
-                        <button className="btn-primary"
-                            onClick={() => SquareOff(row, rowIndex, `.SP1_Call_Price_${row.token}`)}
-                        >
-                            Square Off
-                        </button>
-                    );
-                } else {
-                    return null
-                }
-            },
-        },
+        //                 >
+        //                     Square Off
+        //                 </button>
+        //             );
+        //         } else if (!row.exit_qty_percent &&
+        //             row.entry_qty_percent) {
+        //             return (
+        //                 <button className="btn-primary"
+        //                     onClick={() => SquareOff(row, rowIndex, `.SP1_Call_Price_${row.token}`)}
+        //                 >
+        //                     Square Off
+        //                 </button>
+        //             );
+        //         } else {
+        //             return null
+        //         }
+        //     },
+        // },
         {
             dataField: "TradeType",
             text: "Trade Type",
@@ -239,7 +206,7 @@ const TradeHistory = () => {
 
         {
             dataField: "Action",
-            text: "R/P&L",
+            text: "Realised",
             formatter: (cell, row, rowIndex) => {
                 return (
                     <div>
@@ -276,7 +243,7 @@ const TradeHistory = () => {
 
         {
             dataField: "UPL",
-            text: "U/P&l",
+            text: "Un-Realised",
             formatter: (cell, row, rowIndex) => (
                 <div>
                     <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
@@ -288,7 +255,7 @@ const TradeHistory = () => {
 
         {
             dataField: "TPL",
-            text: "T/P&L",
+            text: "Total",
             formatter: (cell, row, rowIndex) => (
                 <div>
                     <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
@@ -315,12 +282,42 @@ const TradeHistory = () => {
     // ----------------------------- SQUARE OFF ----------------------------
 
 
-    const SquareOff = (rowdata, rowIndex, tt) => {
-        const buy = $('.BP1_Put_Price_' + rowdata.token).html();
-        const sell = $('.SP1_Call_Price_' + rowdata.token).html();
+    // const SquareOff = (rowdata, rowIndex, tt) => {
+    //     const buy = $('.BP1_Put_Price_' + rowdata.token).html();
+    //     const sell = $('.SP1_Call_Price_' + rowdata.token).html();
 
-        const show_expiry = convert_string_to_month(rowdata.expiry)
+    //     const show_expiry = convert_string_to_month(rowdata.expiry)
+    //     var pre_tag = {
+    //         option_type: rowdata.option_type,
+    //         type: rowdata.entry_type === "LE" ? "LX" : rowdata.entry_type === "SE" ? 'SX' : "",
+    //         trade_symbol: `${rowdata.symbol}${show_expiry}${rowdata.strike}${rowdata.option_type === "CALL" ? "CE" : rowdata.option_type === "PUT" ? "PE" : ""}`,
+    //         showexpiry: rowdata.expiry,
+    //         token: rowdata.token,
+    //         indexcallput: rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`,
+    //         indexing: rowIndex,
+    //         segment: rowdata.segment,
+    //         strike: rowdata.strike,
+    //         price: rowdata.entry_type === "LE" ? buy : rowdata.entry_type === "SE" ? sell : "",
+    //         symbol: rowdata.symbol,
+    //         expiry: rowdata.expiry,
+    //         strategy: rowdata.strategy,
+    //         old_qty_persent: rowdata.entry_qty_percent && rowdata.exit_qty_percent ? (parseInt(rowdata.entry_qty_percent) - parseInt(rowdata.exit_qty_percent)) : rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent,
+    //         new_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent
+    //     };
+    //     if (rowdata.entry_type === "") {
+    //         setCreateSignalRequest(oldValues => {
+    //             return oldValues.filter(item => item.token !== rowdata.token)
+    //         })
+    //     }
+    //     else {
+    //         setCreateSignalRequest(oldValues => {
+    //             return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`))
+    //         })
 
+    //         setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
+    //     }
+    //     setshowModal(true)
+    // }
 
         var pre_tag = {
             option_type: rowdata.option_type,
@@ -386,6 +383,7 @@ const TradeHistory = () => {
 
     const Done_For_Trade = () => {
         const currentTimestamp = Math.floor(Date.now() / 1000);
+
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
             let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${pre_tag.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
 
@@ -402,10 +400,10 @@ const TradeHistory = () => {
 
             axios.request(config)
                 .then((response) => {
-                    setshowModal(false)
-                    toast.success("Order Place Sucessfully");
-                    setrefresh(!refresh)
                     setButtonDisabled(!ButtonDisabled)
+                    setrefresh(!refresh)
+                    toast.success("Order Place Sucessfully");
+                    setshowModal(false)
                 })
                 .catch((error) => {
                     console.log(error);
@@ -429,7 +427,63 @@ const TradeHistory = () => {
 
 
 
+
+
     // ----------------------------- SQUARE OFF ----------------------------
+    // ----------------------------- SQUARE OFF All  ----------------------------
+    const SquareOfAll = () => {
+
+        if (selected1.length > 0) {
+            setshowModal(true)
+
+            selected1.map((rowdata) => {
+
+
+                const buy = $('.BP1_Put_Price_' + rowdata.token).html();
+                const sell = $('.SP1_Call_Price_' + rowdata.token).html();
+
+                const show_expiry = convert_string_to_month(rowdata.expiry)
+                var pre_tag = {
+                    option_type: rowdata.option_type,
+                    type: rowdata.entry_type === "LE" ? "LX" : rowdata.entry_type === "SE" ? 'SX' : "",
+                    trade_symbol: `${rowdata.symbol}${show_expiry}${rowdata.strike}${rowdata.option_type === "CALL" ? "CE" : rowdata.option_type === "PUT" ? "PE" : ""}`,
+                    showexpiry: rowdata.expiry,
+                    token: rowdata.token,
+                    indexcallput: rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`,
+                    segment: rowdata.segment,
+                    strike: rowdata.strike,
+                    price: rowdata.entry_type === "LE" ? buy : rowdata.entry_type === "SE" ? sell : "",
+                    symbol: rowdata.symbol,
+                    expiry: rowdata.expiry,
+                    strategy: rowdata.strategy,
+                    old_qty_persent: rowdata.entry_qty_percent && rowdata.exit_qty_percent ? (parseInt(rowdata.entry_qty_percent) - parseInt(rowdata.exit_qty_percent)) : rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent,
+                    new_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent
+                };
+                if (rowdata.entry_type === "") {
+                    setCreateSignalRequest(oldValues => {
+                        return oldValues.filter(item => item.token !== rowdata.token)
+                    })
+                }
+                else {
+                    setCreateSignalRequest(oldValues => {
+                        return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`))
+                    })
+
+                    setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
+                }
+            })
+
+
+        } else {
+            alert("Emplty Data")
+        }
+
+
+        console.log("selected1", selected1)
+
+    }
+
+    // ----------------------------- SQUARE OFF All ----------------------------
 
 
 
@@ -501,7 +555,6 @@ const TradeHistory = () => {
                                         let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
                                         let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                                         let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
-
 
 
                                         if ((isNaN(finalyupl) || isNaN(rpl))) {
@@ -604,7 +657,7 @@ const TradeHistory = () => {
 
     useEffect(() => {
         ShowLivePrice();
-    }, [tradeHistoryData.data, SocketState, UserDetails, SquareOff]);
+    }, [tradeHistoryData.data, SocketState, UserDetails]);
 
 
 
@@ -625,49 +678,37 @@ const TradeHistory = () => {
     }, [a]);
 
 
+    const [selected, setSelected] = useState([]);
+    const [selected1, setSelected1] = useState([]);
 
-    const [selectedRows, setSelectedRows] = useState([]); // State to track selected rows
-
-    const handleSelect = (row, isSelected) => {
-        // Update the selectedRows state based on the row selection
-
-        console.log("row", row)
-        console.log("isSelected", isSelected)
-        if (isSelected) {
-            setSelectedRows([...selectedRows, row]);
+    const handleOnSelect = (row, isSelect) => {
+        if (isSelect) {
+            setSelected([...selected, row._id]);
+            setSelected1([...selected1, row]);
         } else {
-            setSelectedRows(selectedRows.filter(selectedRow => selectedRow['_id'] !== row['_id']));
+            setSelected(selected.filter(x => x !== row._id));
+            setSelected1(selected1.filter(x => x.key !== row._id));
         }
-    };
+    }
 
+    const handleOnSelectAll = (isSelect, rows) => {
+        const ids = rows.map(r => r._id);
+        if (isSelect) {
+            setSelected(ids);
+            setSelected1(rows);
+        } else {
+            setSelected([]);
+            setSelected1([]);
+        }
+    }
 
     const selectRow = {
-        // mode: 'checkbox',
-        // clickToSelect: true,
-        // onSelect: (row, isSelect, rowIndex, e) => {
-
-        //     if (isSelect) {
-        //         setSelectedRows((x) => [...x, row])
-        //     } else {
-        //         setSelectedRows((x) => (x.filter((y) => y._id != row._id)))
-        //     }
-
-        //     console.log(row.id);
-        //     console.log(isSelect);
-        //     console.log(rowIndex);
-        //     console.log(e);
-        // },
-        // onSelectAll: (isSelect, rows, e) => {
-        //     console.log(isSelect);
-        //     console.log(rows);
-        //     console.log(e);
-        // }
+        mode: 'checkbox',
+        clickToSelect: true,
+        selected: selected,
+        onSelect: handleOnSelect,
+        onSelectAll: handleOnSelectAll
     };
-
-
-    console.log('selectedRows', selectedRows);
-
-
 
 
 
@@ -675,14 +716,14 @@ const TradeHistory = () => {
         <>
             <Content Page_title="Open Position" button_status={false}
             >
+                <button className="btn btn-primary mb-4 ms-auto" onClick={(e) => SquareOfAll()}>Square Off All</button>
 
                 <FullDataTable
                     keyField="_id"
                     TableColumns={columns}
                     tableData={tradeHistoryData.data}
                     pagination1={true}
-                // selectRow={selectRow}
-
+                    selectRow={selectRow}
                 />
 
 
@@ -753,7 +794,6 @@ const TradeHistory = () => {
                                                                 row.old_qty_persent
                                                             )
 
-                                                        //  setEnterQty(e.target.value)
                                                     }
                                                     value={inputValue ? inputValue : row.old_qty_persent}
                                                     max={row.old_qty_persent}
@@ -762,9 +802,6 @@ const TradeHistory = () => {
                                                 />
                                             </div>
                                         ),
-
-
-
                                     },
                                     {
                                         dataField: "option_type",
@@ -774,14 +811,6 @@ const TradeHistory = () => {
                                         dataField: "strategy",
                                         text: "Strategy",
                                     },
-                                    // {
-                                    //     dataField: "Remove",
-                                    //     text: "Remove",
-                                    //     formatter: (cell, row, rowIndex) => <Trash2 className='text-danger' onClick={() => {
-                                    //         remoeveService(row.token)
-                                    //     }} />,
-
-                                    // },
                                 ]}
                                 tableData={CreateSignalRequest && CreateSignalRequest}
                             />

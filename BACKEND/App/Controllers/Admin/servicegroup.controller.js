@@ -234,7 +234,7 @@ class GroupService {
         add_Group_services.forEach(async (data) => {
           var stgId = new ObjectId(data)
           var Qty_find = services_id.filter((data1) => data1.service_id == data)
-
+          // console.log("Qty_find", Qty_find[0].lotsize);
           var find_user_service = await groupServices_client1.find({ groupService_id: GroupServices_Id })
 
 
@@ -242,15 +242,14 @@ class GroupService {
             find_user_service.map(async (user) => {
 
               var deleteStrategy = await strategy_client.find({ user_id: user.user_id });
-              // console.log("deleteStrategy",deleteStrategy);
-
 
               const User_client_services = new client_services({
                 user_id: user.user_id,
                 group_id: GroupServices_Id,
                 service_id: stgId,
                 strategy_id: deleteStrategy[0].strategy_id,
-                uniqueUserService: user.user_id + "_" + data
+                uniqueUserService: user.user_id + "_" + data,
+                quantity:Qty_find[0].lotsize
               })
               // console.log("User_client_services", User_client_services);
 
@@ -553,7 +552,7 @@ class GroupService {
 
         const Service_name_get = await services.findOne({ _id: info.Service_id });
         if (Service_name_get) {
-          ServicesArr.push({data:Service_name_get,data1:info})
+          ServicesArr.push({ data: Service_name_get, data1: info })
 
           if (data.result.length == ServicesArr.length) {
             return res.send({ status: true, msg: 'Get All successfully ', data: ServicesArr });

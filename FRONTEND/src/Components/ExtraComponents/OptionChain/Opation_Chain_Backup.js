@@ -2,14 +2,15 @@
 /* eslint-disable react/jsx-pascal-case */
 import React, { useEffect, useState, useRef } from 'react'
 // import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
-import Theme_Content from "../../../Components/Dashboard/Content/Content"
+import Theme_Content from "../../Dashboard/Content/Content"
 import Loader from '../../../Utils/Loader'
-import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
+import FullDataTable from "../Datatable/FullDataTable"
 import { useDispatch, useSelector } from "react-redux";
-import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
-import Modal from "../../../Components/ExtraComponents/Modal";
+import BasicDataTable from "../Datatable/BasicDataTable";
+import Modal from "../Modal";
 import { Trash2 } from 'lucide-react';
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
+
 
 import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
@@ -20,7 +21,7 @@ import axios from "axios"
 import * as Config from "../../../Utils/Config";
 import toast, { Toaster } from 'react-hot-toast';
 
-import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+import ToastButton from "../Alert_Toast";
 
 const HelpCenter = () => {
 
@@ -66,7 +67,6 @@ const HelpCenter = () => {
     const [UserDetails, setUserDetails] = useState([]);
     const [showModal, setshowModal] = useState(false);
 
-    console.log("UserDetails", UserDetails != undefined && UserDetails.trading_status)
 
     const [symbol, setSymbol] = useState('NIFTY')
     const [expiry, setExpiry] = useState('02112023')
@@ -74,8 +74,69 @@ const HelpCenter = () => {
     const [ButtonDisabled, setButtonDisabled] = useState(false)
     const [refresh, setRefresh] = useState(false)
 
+    const [expiry_for_Send_Signal, setExpiry_for_Send_Signal] = useState('')
 
 
+    const [activeButton, setActiveButton] = useState({ type: "", call: "" });
+
+
+    // const columns = [
+
+    //     {
+    //         dataField: 'BUY/Sell',
+    //         text: 'BUY/SELL',
+    //         formatter: (cell, row, rowIndex) => (
+    //             <div key={rowIndex}>
+    //                 <button value="LE" className={`button_BUY ${activeButton === 'LE' ? 'active' : ''}`} onClick={(e) => { handleButtonClick('SE'); CreateRequest("CALL", row, "LE", rowIndex) }} >B</button>
+    //                 <button value="SE" className={`button_sell  ${activeButton === 'SE' ? 'active' : ''}`} onClick={(e) => { handleButtonClick('SE'); CreateRequest("CALL", row, "SE", rowIndex) }}>S</button>
+    //             </div >
+    //         ),
+    //     },
+    //     {
+    //         dataField: 'CALL/LP',
+    //         text: 'CALL/LP',
+    //         formatter: (cell, row, rowIndex) => (
+    //             <div>
+    //                 <span className={`Call_Price_${row.call_token} `} ></span>
+    //                 <span className={`SP1_Call_Price_${row.call_token} d-none `}></span>
+    //             </div>
+    //         ),
+    //     },
+    //     {
+    //         dataField: 'strike_price',
+    //         text: 'STRIKE PRICE',
+    //         formatter: (cell, row, rowIndex) => (
+    //             <div>
+    //                 <span className={`fw-bold`}>{cell}</span>
+    //             </div>
+    //         ),
+    //     },
+    //     {
+    //         dataField: 'PUT/LP',
+    //         text: 'PUT/LP',
+    //         formatter: (cell, row, rowIndex) => (
+    //             <div>
+    //                 <span className={`Put_Price_${row.put_token} `}></span>
+    //                 <span className={`BP1_Put_Price_${row.put_token} d-none `}></span>
+
+    //             </div>
+    //         ),
+    //     },
+    //     {
+    //         dataField: 'BUY/Sell',
+    //         text: 'BUY/SELL',
+    //         formatter: (cell, row, rowIndex) => (
+    //             <div key={rowIndex}>
+    //                 <span value="LE" className={`button_BUY`} onClick={(e) => CreateRequest("PUT", row, "LE", rowIndex)} >B</span>
+    //                 <span value="SE" className={`button_sell`} onClick={(e) => CreateRequest("PUT", row, "SE", rowIndex)}>S</span>
+    //             </div>
+    //         ),
+    //     },
+    // ];
+
+
+
+    // ------- MAKE REQUEST ----
 
 
 
@@ -164,41 +225,46 @@ const HelpCenter = () => {
 
 
     const CreateRequest = (option_type, row_data, call_type, index) => {
+
+
+        OptionChainData.data && OptionChainData.data.filter((item) => {
+            if (item.call_token === row_data.call_token && call_type === "LE" && option_type === "CALL") {
+                const element = $('.button_call_buy_' + item.call_token);
+                element.addClass('active');
+                const element1 = $('.button_call_sell_' + item.call_token);
+                element1.removeClass('active');
+            } else if (item.call_token === row_data.call_token && call_type === "SE" && option_type === "CALL") {
+                const element = $('.button_call_sell_' + item.call_token);
+                element.addClass('active');
+                const element1 = $('.button_call_buy_' + item.call_token);
+                element1.removeClass('active');
+
+            }
+            if (item.put_token === row_data.put_token && call_type === "LE" && option_type === "PUT") {
+                const element = $('.button_put_buy_' + item.put_token);
+                element.addClass('active');
+                const element1 = $('.button_put_sell_' + item.put_token);
+                element1.removeClass('active');
+
+            } else if (item.put_token === row_data.put_token && call_type === "SE" && option_type === "PUT") {
+                const element = $('.button_put_sell_' + item.put_token);
+                element.addClass('active');
+                const element1 = $('.button_put_buy_' + item.put_token);
+                element1.removeClass('active');
+
+            }
+
+        })
+
+
+
+
+
+
+
         if (strategyRef.current === "") {
             alert("Please Select Strategy First")
         } else {
-
-            //  ------ For Add Class To Button
-
-            OptionChainData.data && OptionChainData.data.filter((item) => {
-                if (item.call_token === row_data.call_token && call_type === "LE" && option_type === "CALL") {
-                    const element = $('.button_call_buy_' + item.call_token);
-                    element.addClass('active');
-                    const element1 = $('.button_call_sell_' + item.call_token);
-                    element1.removeClass('active');
-                } else if (item.call_token === row_data.call_token && call_type === "SE" && option_type === "CALL") {
-                    const element = $('.button_call_sell_' + item.call_token);
-                    element.addClass('active');
-                    const element1 = $('.button_call_buy_' + item.call_token);
-                    element1.removeClass('active');
-
-                }
-                if (item.put_token === row_data.put_token && call_type === "LE" && option_type === "PUT") {
-                    const element = $('.button_put_buy_' + item.put_token);
-                    element.addClass('active');
-                    const element1 = $('.button_put_sell_' + item.put_token);
-                    element1.removeClass('active');
-
-                } else if (item.put_token === row_data.put_token && call_type === "SE" && option_type === "PUT") {
-                    const element = $('.button_put_sell_' + item.put_token);
-                    element.addClass('active');
-                    const element1 = $('.button_put_buy_' + item.put_token);
-                    element1.removeClass('active');
-                }
-            })
-
-
-
             var pre_tag = {
                 entry_qty: '100',
                 option_type: option_type,
@@ -231,41 +297,37 @@ const HelpCenter = () => {
     // ------------------------------------ CREATE-CHAIN-FOR-EXECUTE-TRADE ------------------------------------
 
     const ExcuteTradeButton = () => {
-        if (UserDetails != undefined && UserDetails.trading_status === "on") {
-            let Arr = []
+        let Arr = []
 
-            const expiry_i = convert_string_to_month(expiry && expiry)
+        const expiry_i = convert_string_to_month(expiry && expiry)
 
-            CreateSignalRequest && CreateSignalRequest.map((item) => {
-                // const expiry_i = get_thre_digit_month()
-                const buy = $('.BP1_Put_Price_' + item.token).html();
-                const sell = $('.SP1_Call_Price_' + item.token).html();
+        CreateSignalRequest && CreateSignalRequest.map((item) => {
+            // const expiry_i = get_thre_digit_month()
+            const buy = $('.BP1_Put_Price_' + item.token).html();
+            const sell = $('.SP1_Call_Price_' + item.token).html();
 
-                const Symbol = `${symbol && symbol}${expiry_i}${item.strike}${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`
+            const Symbol = `${symbol && symbol}${expiry_i}${item.strike}${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`
 
-                Arr.push({
-                    "entry_qty": item.entry_qty,
-                    "price": buy ? buy : sell,
-                    "Symbol": Symbol,
-                    'option_type': `${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`,
-                    "type": item.type === "SE" ? "SELL" : item.type === "LE" ? "BUY" : "",
-                    "token": item.token,
-                    "strategy": strategy && strategy,
-                    "call_type": item.option_type,
-                    "trading_type": item.type,
-                    "segment": item.segment,
-                    "strike": item.strike,
-                })
+            Arr.push({
+                "entry_qty": item.entry_qty,
+                "price": buy ? buy : sell,
+                "Symbol": Symbol,
+                'option_type': `${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`,
+                "type": item.type === "SE" ? "SELL" : item.type === "LE" ? "BUY" : "",
+                "token": item.token,
+                "strategy": strategy && strategy,
+                "call_type": item.option_type,
+                "trading_type": item.type,
+                "segment": item.segment,
+                "strike": item.strike,
             })
+        })
 
-            setExecuteTradeData({
-                loading: false,
-                data: Arr
-            })
-            setshowModal(true)
-        } else {
-            alert("Please Login With Broker Account")
-        }
+        setExecuteTradeData({
+            loading: false,
+            data: Arr
+        })
+        setshowModal(true)
 
     }
 
@@ -277,23 +339,9 @@ const HelpCenter = () => {
 
 
     const remoeveService = (id) => {
-
-
         let test = ExecuteTradeData && ExecuteTradeData.data.filter((item) => {
-
-            const element1 = $('.button_call_sell_' + id);
-            element1.removeClass('active');
-            const element2 = $('.button_call_buy_' + id);
-            element2.removeClass('active');
-            const element4 = $('.button_put_sell_' + id);
-            element4.removeClass('active');
-            const element3 = $('.button_put_buy_' + id);
-            element3.removeClass('active');
-
             return item.token !== id
         })
-
-
 
         setExecuteTradeData({
             loading: false,
@@ -307,21 +355,6 @@ const HelpCenter = () => {
             loading: false,
             data: []
         })
-
-        OptionChainData.data && OptionChainData.data.filter((item) => {
-            const element1 = $('.button_call_sell_' + item.call_token);
-            element1.removeClass('active');
-            const element2 = $('.button_call_buy_' + item.call_token);
-            element2.removeClass('active');
-            const element4 = $('.button_put_sell_' + item.put_token);
-            element4.removeClass('active');
-            const element3 = $('.button_put_buy_' + item.put_token);
-            element3.removeClass('active');
-        })
-
-
-
-
     }
 
     // ------------------------------------ REMOVE SELECTED------------------------------------
@@ -365,7 +398,7 @@ const HelpCenter = () => {
         // return
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
-        ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
+        let abc = ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
             let req = `DTime:${currentTimestamp}|Symbol:${symbol && symbol}|TType:${item.trading_type}|Tr_Price:131|Price:${item.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.call_type}|Expiry:${expiry && expiry}|Strategy:${strategy && strategy}|Quntity:${item.entry_qty}|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
 
             let config = {
@@ -390,20 +423,6 @@ const HelpCenter = () => {
                         loading: false,
                         data: []
                     })
-
-
-
-                    OptionChainData.data && OptionChainData.data.filter((item) => {
-                        const element1 = $('.button_call_sell_' + item.call_token);
-                        element1.removeClass('active');
-                        const element2 = $('.button_call_buy_' + item.call_token);
-                        element2.removeClass('active');
-                        const element4 = $('.button_put_sell_' + item.put_token);
-                        element4.removeClass('active');
-                        const element3 = $('.button_put_buy_' + item.put_token);
-                        element3.removeClass('active');
-                    })
-
 
                 })
                 .catch((error) => {
@@ -626,6 +645,44 @@ const HelpCenter = () => {
 
 
 
+
+    // const cccc = () => {
+
+
+
+
+    //     if (call_type === "LE" && option_type === "CALL") {
+    //         const element = $('.button_BUY');
+    //         element.addClass('active');
+    //         const element1 = $('.button_sell');
+    //         element1.removeClass('active');
+    //     } else if (call_type === "SE" && option_type === "CALL") {
+    //         const element = $('.button_sell');
+    //         element.addClass('active');
+    //         const element1 = $('.button_BUY');
+    //         element1.removeClass('active');
+
+    //     }
+
+    // }
+
+
+
+
+    // useEffect(() => {
+    //     cccc();
+    // }, []);
+
+
+
+
+
+
+
+
+
+
+
     //  GET_USER_DETAILS
     const UserBrokerDetails = async () => {
         const response = await GetAccessToken({ broker_name: "aliceblue" });
@@ -690,6 +747,7 @@ const HelpCenter = () => {
                                     <select className="default-select wide form-control" name="expiry_date"
                                         onChange={(e) => {
                                             setExpiry(e.target.value)
+                                            setExpiry_for_Send_Signal(e.target.name)
                                         }}
                                         value={expiry}
 
@@ -737,7 +795,7 @@ const HelpCenter = () => {
                                     <button
                                         className="btn btn-primary me-2"
                                         onClick={(e) => ExcuteTradeButton()}
-                                        disabled={CreateSignalRequest.length === 0}
+                                    // disabled={ExecuteTradeData.data.length === 0}
                                     >
                                         Execute Trade
                                     </button>
@@ -867,20 +925,3 @@ const HelpCenter = () => {
 
 
 export default HelpCenter
-
-
-
-export const sneh = (OptionChainData) => {
-
-    OptionChainData && OptionChainData.filter((item) => {
-        const element1 = $('.button_call_sell_' + item.call_token);
-        element1.removeClass('active');
-        const element2 = $('.button_call_buy_' + item.call_token);
-        element2.removeClass('active');
-        const element4 = $('.button_put_sell_' + item.put_token);
-        element4.removeClass('active');
-        const element3 = $('.button_put_buy_' + item.put_token);
-        element3.removeClass('active');
-    })
-
-}

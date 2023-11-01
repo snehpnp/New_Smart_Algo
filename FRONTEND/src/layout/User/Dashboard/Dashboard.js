@@ -119,14 +119,30 @@ const BrokerResponse = () => {
   // console.log("12",UserDetails);
 
 
-  const setgroup_qty_value_test = (e, symboll, rowdata) => {
+  const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
 
-    console.log("rowdata", rowdata);
-    console.log("symboll", symboll);
-    // console.log("e",e.target);
+    // console.log("rowdata", rowdata);
+    // console.log("symboll", data.servicegroup_services_ids.group_qty
+    // );
+    // console.log("e", e.target);
+    // return
 
+    // let min
+    // let max
+    // if (data.servicegroup_services_ids.group_qty > 0) {
+    //   // When group_qty is greater than 0, set min to 1 and max to group_qty
+    //   min = 1;
+    //   max = data.servicegroup_services_ids.group_qty;
+    // } else if (data.servicegroup_services_ids.group_qty === 0) {
 
-
+    //   const lotsize = data.service.lotsize;
+    //   min = lotsize;
+    //   max = lotsize * Math.ceil(2 / lotsize);
+    // } else if (data.servicegroup_services_ids.group_qty === 1) {
+    //   // When group_qty is 1, set min and max both to 1
+    //   min = 1;
+    //   max = 1;
+    // }
 
 
 
@@ -187,17 +203,33 @@ const BrokerResponse = () => {
   }, []);
 
 
+  const [inputValue, setInputValue] = useState('');
 
-  const setMax = (rowdata) => {
-    console.log("setMax", rowdata.servicegroup_services_ids.group_qty)
-    console.log("servicegroup_services_ids", rowdata.service.lotsize)
-    if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
-      return rowdata.servicegroup_services_ids.group_qty
+  const setMax = (rowdata, e) => {
 
-    } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) < 0) {
+    if (parseInt(rowdata.servicegroup_services_ids.group_qty) != 0) {
 
+      if (parseInt(rowdata.servicegroup_services_ids.group_qty) < e) {
+        toast.error(`You can't update more than ${rowdata.servicegroup_services_ids.group_qty}`);
+        return
+
+      } else {
+        console.log("Working");
+      }
+    } else {
+      console.log("Nothing");
     }
+
+    // if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
+    //   return rowdata.servicegroup_services_ids.group_qty
+
+    // } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) < 0) {
+
+    // }
   }
+
+
+  // SET MINIMUM VALUE
   let abc
   const setMin = (rowdata) => {
 
@@ -225,9 +257,10 @@ const BrokerResponse = () => {
         <thead className="bg-primary">
           <tr>
             <th>#</th>
-            <th>Live Price</th>
-            <th>Symboll</th>
+            {/* <th>Live Price</th> */}
+            <th>Symbol</th>
             <th>lot size</th>
+            <th>max Qty</th>
             <th>Quantity</th>
             <th>Strategy</th>
             <th>Order Type</th>
@@ -242,11 +275,11 @@ const BrokerResponse = () => {
                 <>
                   <tr>
                     <th>{index + 1}</th>
-                    <td
-                      className={`ShowLTP_${data.service.instrument_token}`}
-                    ></td>
+                    {/* <td className={`ShowLTP_${data.service.instrument_token}`} ></td> */}
                     <td>{`${data.service.name}[${data.categories.segment}]`}</td>
-                    <td>{data.service.lotsize + "--" + data.servicegroup_services_ids.group_qty}</td>
+                    <td>{data.service.lotsize}</td>
+                    <td>{data.servicegroup_services_ids.group_qty}</td>
+
 
                     <td>
                       <div className="row d-flex">
@@ -258,18 +291,19 @@ const BrokerResponse = () => {
                             className="form-control"
                             id="quantity"
                             placeholder="Enter Qty"
-                            min={setMin(data)}
-                            max={setMax(data)}
+                            // min={setMin(data)}
+                            // max={setMax(data)}
 
                             onChange={
-                              (e) =>
+                              (e) => {
+                                setMax(data, e.target.value)
                                 setgroup_qty_value_test(
                                   e,
                                   data.service.name,
-                                  data.service
+                                  data.service,
+                                  data
                                 )
-
-                              //  setEnterQty(e.target.value)
+                              }
                             }
                             defaultValue={data.quantity}
                           // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
@@ -288,7 +322,8 @@ const BrokerResponse = () => {
                           setgroup_qty_value_test(
                             e,
                             data.service.name,
-                            data.service
+                            data.service,
+                            data
                           )
                         }
                       >
@@ -323,7 +358,8 @@ const BrokerResponse = () => {
                           setgroup_qty_value_test(
                             e,
                             data.service.name,
-                            data.service
+                            data.service,
+                            data
                           )
                         }
                         defaultValue={data.order_type}
@@ -343,13 +379,14 @@ const BrokerResponse = () => {
                           setgroup_qty_value_test(
                             e,
                             data.service.name,
-                            data.service
+                            data.service,
+                            data
                           )
                         }
                         defaultValue={data.product_type}
                       >
-                        <option value="1">CNC</option>
                         <option value="2">MIS</option>
+                        <option value="1">CNC</option>
                         <option value="3">BO</option>
                         <option value="4">CO</option>
                       </select>
@@ -365,7 +402,8 @@ const BrokerResponse = () => {
                             setgroup_qty_value_test(
                               e,
                               data.service.name,
-                              data.service
+                              data.service,
+                              data
                             )
                           }
                         />

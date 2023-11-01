@@ -130,3 +130,20 @@ export async function GET_OPEN_POSITION(data, token) {
     }
 
 }
+
+
+// FIND BROKER RESPONSE BY ID
+export async function GET_MESSAGE_BROD(id) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/messagebrodcast`, id, {
+            // headers: header(token),
+
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

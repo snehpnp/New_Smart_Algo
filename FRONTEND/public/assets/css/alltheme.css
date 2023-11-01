@@ -1765,3 +1765,11 @@ span.button_sell.active {
     font-size: 45px;
     font-weight: bold;
 }
+button.button_BUY.active {
+    background: #4BB543;
+    color: white;
+}
+button.button_sell.active {
+    background: #FF0000;
+    color: white;
+}
