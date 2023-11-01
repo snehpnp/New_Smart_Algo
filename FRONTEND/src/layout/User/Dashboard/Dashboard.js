@@ -371,8 +371,8 @@ const BrokerResponse = () => {
                         }
                         defaultValue={data.product_type}
                       >
-                        <option value="1">MIS</option>
-                        <option value="2">CNC</option>
+                        <option value="2">MIS</option>
+                        <option value="1">CNC</option>
                         <option value="3">BO</option>
                         <option value="4">CO</option>
                       </select>
