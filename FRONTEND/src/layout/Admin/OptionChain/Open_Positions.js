@@ -319,41 +319,6 @@ const TradeHistory = () => {
     //     setshowModal(true)
     // }
 
-        var pre_tag = {
-            option_type: rowdata.option_type,
-            type: rowdata.entry_type === "LE" ? "LX" : rowdata.entry_type === "SE" ? 'SX' : "",
-            trade_symbol: `${rowdata.symbol}${show_expiry}${rowdata.strike}${rowdata.option_type === "CALL" ? "CE" : rowdata.option_type === "PUT" ? "PE" : ""}`,
-            showexpiry: rowdata.expiry,
-            token: rowdata.token,
-            indexcallput: rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`,
-            indexing: rowIndex,
-            segment: rowdata.segment,
-            strike: rowdata.strike,
-            price: rowdata.entry_type === "LE" ? buy : rowdata.entry_type === "SE" ? sell : "",
-            symbol: rowdata.symbol,
-            expiry: rowdata.expiry,
-            strategy: rowdata.strategy,
-            old_qty_persent: rowdata.entry_qty_percent && rowdata.exit_qty_percent ? (parseInt(rowdata.entry_qty_percent) - parseInt(rowdata.exit_qty_percent)) : rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent,
-            new_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent
-        };
-
-
-        if (rowdata.entry_type === "") {
-            setCreateSignalRequest(oldValues => {
-                return oldValues.filter(item => item.token !== rowdata.token)
-            })
-        }
-        else {
-            setCreateSignalRequest(oldValues => {
-                return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`))
-            })
-
-            setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
-        }
-        setshowModal(true)
-    }
-
-    const [inputValue, setInputValue] = useState('')
 
     const Set_Entry_Exit_Qty = (row, event, qty_persent) => {
         let a = No_Negetive_Input_regex(event)
@@ -411,7 +376,6 @@ const TradeHistory = () => {
         })
 
 
-        return
 
 
 

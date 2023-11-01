@@ -68,8 +68,8 @@ const HelpCenter = () => {
 
     console.log("UserDetails", UserDetails != undefined && UserDetails.trading_status)
 
-    const [symbol, setSymbol] = useState('NIFTY')
-    const [expiry, setExpiry] = useState('02112023')
+    const [symbol, setSymbol] = useState('')
+    const [expiry, setExpiry] = useState('')
     const [strategy, setStrategy] = useState('')
     const [ButtonDisabled, setButtonDisabled] = useState(false)
     const [refresh, setRefresh] = useState(false)
@@ -302,12 +302,12 @@ const HelpCenter = () => {
     }
 
     const Cancel_Request = () => {
-        setshowModal(false)
         setExecuteTradeData({
             loading: false,
             data: []
         })
 
+        setCreateSignalRequest([])
         OptionChainData.data && OptionChainData.data.filter((item) => {
             const element1 = $('.button_call_sell_' + item.call_token);
             element1.removeClass('active');
@@ -319,6 +319,7 @@ const HelpCenter = () => {
             element3.removeClass('active');
         })
 
+        setshowModal(false)
 
 
 
@@ -386,11 +387,8 @@ const HelpCenter = () => {
                     setButtonDisabled(!ButtonDisabled)
                     setshowModal(false)
                     // setButtonDisabled(false)
-                    setExecuteTradeData({
-                        loading: false,
-                        data: []
-                    })
 
+                    setCreateSignalRequest([])
 
 
                     OptionChainData.data && OptionChainData.data.filter((item) => {

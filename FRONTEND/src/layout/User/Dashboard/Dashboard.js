@@ -121,32 +121,29 @@ const BrokerResponse = () => {
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
 
-    // console.log("rowdata", rowdata);
-    // console.log("symboll", data.servicegroup_services_ids.group_qty
-    // );
-    // console.log("e", e.target);
-    // return
+    // let abc = No_Negetive_Input_regex(e.target.value)
+    // setInputValue(e.target.value)
+    setInputValue((prevPrices) => ({ ...prevPrices, [symboll]: e.target.value }))
+    const numericValue = e.target.value.replace(/[^0-9]/g, '');
 
-    // let min
-    // let max
-    // if (data.servicegroup_services_ids.group_qty > 0) {
-    //   // When group_qty is greater than 0, set min to 1 and max to group_qty
-    //   min = 1;
-    //   max = data.servicegroup_services_ids.group_qty;
-    // } else if (data.servicegroup_services_ids.group_qty === 0) {
-
-    //   const lotsize = data.service.lotsize;
-    //   min = lotsize;
-    //   max = lotsize * Math.ceil(2 / lotsize);
-    // } else if (data.servicegroup_services_ids.group_qty === 1) {
-    //   // When group_qty is 1, set min and max both to 1
-    //   min = 1;
-    //   max = 1;
-    // }
+    // console.log("rowdata", data.servicegroup_services_ids.group_qty)
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    return
     let name = e.target.name;
     let value = e.target.value;
     let id = rowdata._id;
@@ -205,46 +202,49 @@ const BrokerResponse = () => {
 
   const [inputValue, setInputValue] = useState('');
 
+  console.log("symboll", inputValue)
+
   const setMax = (rowdata, e) => {
 
-    if (parseInt(rowdata.servicegroup_services_ids.group_qty) != 0) {
+    //   if (parseInt(rowdata.servicegroup_services_ids.group_qty) != 0) {
 
-      if (parseInt(rowdata.servicegroup_services_ids.group_qty) < e) {
-        toast.error(`You can't update more than ${rowdata.servicegroup_services_ids.group_qty}`);
-        return
+    //     if (parseInt(rowdata.servicegroup_services_ids.group_qty) < e) {
+    //       toast.error(`You can't update more than ${rowdata.servicegroup_services_ids.group_qty}`);
+    //       return
 
-      } else {
-        console.log("Working");
-      }
-    } else {
-      console.log("Nothing");
-    }
+    //     } else {
+    //       console.log("Working");
+    //     }
+    //   } else {
+    //     console.log("Nothing");
+    //   }
 
-    // if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
-    //   return rowdata.servicegroup_services_ids.group_qty
+    //   // if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
+    //   //   return rowdata.servicegroup_services_ids.group_qty
 
-    // } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) < 0) {
+    //   // } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) < 0) {
 
-    // }
+    //   // }
   }
 
 
   // SET MINIMUM VALUE
-  let abc
-  const setMin = (rowdata) => {
 
-    console.log("setMin", rowdata.servicegroup_services_ids.group_qty)
+  // let abc
+  // const setMin = (rowdata) => {
 
-    if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
-      // return rowdata.servicegroup_services_ids.group_qty
+  //   console.log("setMin", rowdata.servicegroup_services_ids.group_qty)
 
-    } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) === 0) {
-      abc += parseInt(rowdata.service.lotsize) * 2
+  //   if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
+  //     // return rowdata.servicegroup_services_ids.group_qty
 
-      return (parseInt(rowdata.service.lotsize) * 2)
+  //   } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) === 0) {
+  //     abc += parseInt(rowdata.service.lotsize) * 2
 
-    }
-  }
+  //     return (parseInt(rowdata.service.lotsize) * 2)
+
+  //   }
+  // }
 
 
 
@@ -261,7 +261,9 @@ const BrokerResponse = () => {
             <th>Symbol</th>
             <th>lot size</th>
             <th>max Qty</th>
-            <th>Quantity</th>
+            <th>LotSize</th>
+            <th>test</th>
+
             <th>Strategy</th>
             <th>Order Type</th>
             <th>Profuct Type</th>
@@ -279,8 +281,6 @@ const BrokerResponse = () => {
                     <td>{`${data.service.name}[${data.categories.segment}]`}</td>
                     <td>{data.service.lotsize}</td>
                     <td>{data.servicegroup_services_ids.group_qty}</td>
-
-
                     <td>
                       <div className="row d-flex">
                         <div className="col-lg-12">
@@ -291,7 +291,7 @@ const BrokerResponse = () => {
                             className="form-control"
                             id="quantity"
                             placeholder="Enter Qty"
-                            // min={setMin(data)}
+                            min={1}
                             // max={setMax(data)}
 
                             onChange={
@@ -305,14 +305,17 @@ const BrokerResponse = () => {
                                 )
                               }
                             }
-                            defaultValue={data.quantity}
+                            // defaultValue={data.quantity}
+                            defaultValue={enterqty ? enterqty : data.quantity}
                           // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
 
                           />
                         </div>
                       </div>
                     </td>
-                    <td className="color-primary col-md-3">
+                    <td>{inputValue[data.service.name] ? parseInt(inputValue[data.service.name]) * parseInt(data.service.lotsize) : "0"}</td>
+
+                    <td className="color-primary col-md-2">
                       <select
                         name="strategy_id"
 
