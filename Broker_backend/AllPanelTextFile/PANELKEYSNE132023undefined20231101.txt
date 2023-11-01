@@ -84,3 +84,15 @@ TIME Wed Nov 01 2023 13:56:22 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TO
 TIME Wed Nov 01 2023 13:56:22 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
 TIME Wed Nov 01 2023 13:56:22 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"REGULAR","discqty":"0","exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"15","ret":"DAY","symbol_id":"48183","trading_symbol":"BANKNIFTY01NOV23C46000","transtype":"BUY","trigPrice":"","orderTag":"order1"}
 TIME Wed Nov 01 2023 13:56:22 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - dddd ERROR -{"code":"ERR_INVALID_CHAR"}
+
+NEW TRADE TIME Wed Nov 01 2023 14:50:25 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698830425,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:33.80,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:19050,OType:CALL,Expiry:02112023,Strategy:TEST_1,Quntity:3000,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Wed Nov 01 2023 14:50:26 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 50082
+TIME Wed Nov 01 2023 14:50:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Wed Nov 01 2023 14:50:26 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- dddd REQUEST -{"complexty":"REGULAR","discqty":"0","exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","ret":"DAY","symbol_id":"50082","trading_symbol":"NIFTY02NOV23C19050","transtype":"BUY","trigPrice":"","orderTag":"order1"}
+TIME Wed Nov 01 2023 14:50:26 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - dddd ERROR -{"code":"ERR_INVALID_CHAR"}
+
+NEW TRADE TIME Wed Nov 01 2023 15:52:32 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698834152,Symbol:BANKNIFTY,TType:LX,Tr_Price:131,Price:2070.10,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:40700,OType:CALL,Expiry:08112023,Strategy:TEST_1,Quntity:50,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Wed Nov 01 2023 15:52:33 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 40595
+TIME Wed Nov 01 2023 15:52:33 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0

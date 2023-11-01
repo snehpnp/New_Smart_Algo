@@ -68,8 +68,8 @@ const HelpCenter = () => {
     const [showModal, setshowModal] = useState(false);
 
 
-    const [symbol, setSymbol] = useState('')
-    const [expiry, setExpiry] = useState('')
+    const [symbol, setSymbol] = useState('NIFTY')
+    const [expiry, setExpiry] = useState('02112023')
     const [strategy, setStrategy] = useState('')
     const [ButtonDisabled, setButtonDisabled] = useState(false)
 
@@ -78,7 +78,6 @@ const HelpCenter = () => {
 
     const [activeButton, setActiveButton] = useState({ type: "", call: "" });
 
-    console.log("activeButton", activeButton)
 
     // const columns = [
 
@@ -139,18 +138,18 @@ const HelpCenter = () => {
     // ------- MAKE REQUEST ----
 
     const handleButtonClick = (buttonType, Call, rowIndex) => {
-        if (buttonType === "LE" && Call === "CALL") {
-            const element = $('.button_BUY');
-            element.addClass('active');
-            const element1 = $('.button_sell');
-            element1.removeClass('active');
-        } else if (buttonType === "SE" && Call === "CALL") {
-            const element = $('.button_sell');
-            element.addClass('active');
-            const element1 = $('.button_BUY');
-            element1.removeClass('active');
+        // if (buttonType === "LE" && Call === "CALL") {
+        //     const element = $('.button_BUY');
+        //     element.addClass('active');
+        //     const element1 = $('.button_sell');
+        //     element1.removeClass('active');
+        // } else if (buttonType === "SE" && Call === "CALL") {
+        //     const element = $('.button_sell');
+        //     element.addClass('active');
+        //     const element1 = $('.button_BUY');
+        //     element1.removeClass('active');
 
-        }
+        // }
     };
 
     const columns = [
@@ -161,10 +160,10 @@ const HelpCenter = () => {
                 <div key={rowIndex}>
                     <button
                         value="LE"
-                        className={`button_BUY ${activeButton.type === 'LE' && activeButton.type === 'CALL' ? 'active' : ''
+                        className={`button_BUY  button_call_buy_${row.call_token} ${activeButton.type === 'LE' && activeButton.call === 'CALL' ? 'active' : ''
                             }`}
                         onClick={(e) => {
-                            handleButtonClick('LE', "CALL", rowIndex);
+                            handleButtonClick('LE', "CALL", rowIndex, row._id);
                             CreateRequest('CALL', row, 'LE', rowIndex);
                         }}
                     >
@@ -172,7 +171,7 @@ const HelpCenter = () => {
                     </button>
                     <button
                         value="SE"
-                        className={`button_sell ${activeButton.type === 'SE' && activeButton.type === 'CALL' ? 'active' : ''
+                        className={`button_sell button_call_sell_${row.call_token} ${activeButton.type === 'SE' && activeButton.call === 'CALL' ? 'active' : ''
                             }`}
                         onClick={(e) => {
                             handleButtonClick('SE', "CALL");
@@ -218,7 +217,7 @@ const HelpCenter = () => {
             text: 'BUY/SELL',
             formatter: (cell, row, rowIndex) => (
                 <div key={rowIndex}>
-                    {/* <button
+                    <button
                         value="LE"
                         className={`button_BUY ${row.option_type === 'PUT' && activeButton === 'LE' ? 'active' : ''}`}
                         onClick={(e) => { CreateRequest("PUT", row, "LE", rowIndex) }}
@@ -231,13 +230,13 @@ const HelpCenter = () => {
                         onClick={(e) => { CreateRequest("PUT", row, "SE", rowIndex) }}
                     >
                         S
-                    </button> */}
+                    </button>
 
-                    <button
+                    {/* <button
                         value="LE"
-                        className={`button_BUY ${activeButton.type === 'LE' && activeButton.type === 'PUT' ? 'active' : ''}`}
+                        className={`button_BUY ${activeButton.type === 'LE' && activeButton.call === 'PUT' ? 'active' : ''}`}
                         onClick={(e) => {
-                            handleButtonClick('LE', "CALL", rowIndex);
+                            handleButtonClick('LE', "PUT", rowIndex);
                             setActiveButton('LE'); // Set the active button to 'LE'
                             CreateRequest('PUT', row, 'LE', rowIndex);
                         }}
@@ -246,15 +245,15 @@ const HelpCenter = () => {
                     </button>
                     <button
                         value="SE"
-                        className={`button_sell ${activeButton.type === 'SE' && activeButton.type === 'PUT' ? 'active' : ''}`}
+                        className={`button_sell ${activeButton.type === 'SE' && activeButton.call === 'PUT' ? 'active' : ''}`}
                         onClick={(e) => {
-                            handleButtonClick('SE', "CALL");
+                            handleButtonClick('SE', "PUT");
                             setActiveButton('SE'); // Set the active button to 'SE'
                             CreateRequest('PUT', row, 'SE', rowIndex);
                         }}
                     >
                         S
-                    </button>
+                    </button> */}
 
                 </div>
             ),
@@ -266,6 +265,41 @@ const HelpCenter = () => {
 
 
     const CreateRequest = (option_type, row_data, call_type, index) => {
+
+
+        OptionChainData.data && OptionChainData.data.filter((item) => {
+            if (item.call_token === row_data.call_token && call_type === "LE" && option_type === "CALL") {
+                const element = $('.button_call_buy_' + item.call_token);
+                element.addClass('active');
+                const element1 = $('.button_call_sell_' + item.call_token);
+                element1.removeClass('active');
+            } else if (item.call_token === row_data.call_token && call_type === "SE" && option_type === "CALL") {
+                const element = $('.button_call_sell_' + item.call_token);
+                element.addClass('active');
+                const element1 = $('.button_call_buy_' + item.call_token);
+                element1.removeClass('active');
+
+            }
+            else if (item.put_token === row_data.put_token && call_type === "LE" && option_type === "PUT") {
+                const element = $('.button_put_buy_' + item.put_token);
+                element.addClass('active');
+                const element1 = $('.button_put_sell_' + item.put_token);
+                element1.removeClass('active');
+
+            } else if (item.put_token === row_data.put_token && call_type === "SE" && option_type === "PUT") {
+                const element = $('.button_put_sell_' + item.put_token);
+                element.addClass('active');
+                const element1 = $('.button_put_buy_' + item.put_token);
+                element1.removeClass('active');
+
+            }
+
+        })
+
+
+
+
+
 
 
         if (strategyRef.current === "") {
@@ -573,7 +607,7 @@ const HelpCenter = () => {
 
     useEffect(() => {
         getAllRoundToken()
-    }, [expiry, activeButton])
+    }, [expiry])
 
 
     // --------------- FOR GET OPTIONS SYMBOLS -----------------------
@@ -651,6 +685,42 @@ const HelpCenter = () => {
     useEffect(() => {
         ShowLivePrice();
     }, [UserDetails, TokenSymbolChain, showModal]);
+
+
+
+
+    // const cccc = () => {
+
+
+
+
+    //     if (call_type === "LE" && option_type === "CALL") {
+    //         const element = $('.button_BUY');
+    //         element.addClass('active');
+    //         const element1 = $('.button_sell');
+    //         element1.removeClass('active');
+    //     } else if (call_type === "SE" && option_type === "CALL") {
+    //         const element = $('.button_sell');
+    //         element.addClass('active');
+    //         const element1 = $('.button_BUY');
+    //         element1.removeClass('active');
+
+    //     }
+
+    // }
+
+
+
+
+    // useEffect(() => {
+    //     cccc();
+    // }, []);
+
+
+
+
+
+
 
 
 
