@@ -11,7 +11,6 @@ class TradeHistory {
 
 
     // GET ADMIN SIGNALS
-
     async GetUserTradeHistory(req, res) {
         try {
             const { user_id, startDate, endDate } = req.body;
@@ -37,6 +36,17 @@ class TradeHistory {
                 },
                 {
                     $lookup: {
+                        from: "users",
+                        localField: 'user_id',
+                        foreignField: "_id",
+                        as: "users",
+                    },
+                },
+                {
+                    $unwind: '$users',
+                },
+                {
+                    $lookup: {
                         from: "strategies",
                         localField: "strategy_id",
                         foreignField: "_id",
@@ -46,10 +56,14 @@ class TradeHistory {
                 {
                     $unwind: '$strategys',
                 },
+
                 {
                     $project: {
                         'service.name': 1,
                         'strategys.strategy_name': 1,
+                        'users.web_url': 1,
+                        'users.client_key': 1
+
                     },
                 },
             ];
@@ -60,16 +74,64 @@ class TradeHistory {
 
             if (GetAllClientServices.length > 0) {
                 for (const item of GetAllClientServices) {
+                    console.log("item", item.users.web_url);
 
                     try {
-                        let data = await MainSignals.find({
-                            symbol: item.service.name,
-                            strategy: item.strategys.strategy_name,
-                            dt_date: {
-                                $gte: startDate,
-                                $lte: endDate,
+                        // let data = await MainSignals.find({
+                        //     symbol: item.service.name,
+                        //     strategy: item.strategys.strategy_name,
+                        //     dt_date: {
+                        //         $gte: startDate,
+                        //         $lte: endDate,
+                        //     },
+                        // });
+
+
+
+
+                        var data = await MainSignals.aggregate([
+                            {
+                                $match: {
+                                    symbol: item.service.name,
+                                    strategy: item.strategys.strategy_name,
+                                    dt_date: {
+                                        $gte: startDate,
+                                        $lte: endDate,
+                                    },
+                                    // client_persnal_key:client_persnal_key1
+
+                                }
                             },
-                        });
+
+                            {
+                                $lookup: {
+                                    from: "signals",
+                                    localField: "signals_id",
+                                    foreignField: "_id",
+                                    as: "result",
+                                },
+                            },
+
+                            {
+                                $sort: {
+                                    _id: -1 // Sort in ascending order. Use -1 for descending.
+                                }
+                            }
+
+                        ]);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                         if (data.length > 0) {
                             abc.push(data)

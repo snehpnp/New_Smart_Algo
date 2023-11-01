@@ -106,7 +106,7 @@ class Panel {
 
             var domain1= "http://localhost:3000"
 
-            if( domain == "sneh.com") {
+            if( domain == "sneh.com" || domain== "https://trade.pandpinfotech.com") {
                 domain1 = "http://localhost:3000"
             }else{
                 domain1 = domain
