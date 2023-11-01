@@ -76,23 +76,112 @@ const HelpCenter = () => {
     const [expiry_for_Send_Signal, setExpiry_for_Send_Signal] = useState('')
 
 
-    const [activeButton, setActiveButton] = useState('LE');
+    const [activeButton, setActiveButton] = useState({ type: "", call: "" });
 
-    const handleButtonClick = (value) => {
-        setActiveButton(value);
+    console.log("activeButton", activeButton)
+
+    // const columns = [
+
+    //     {
+    //         dataField: 'BUY/Sell',
+    //         text: 'BUY/SELL',
+    //         formatter: (cell, row, rowIndex) => (
+    //             <div key={rowIndex}>
+    //                 <button value="LE" className={`button_BUY ${activeButton === 'LE' ? 'active' : ''}`} onClick={(e) => { handleButtonClick('SE'); CreateRequest("CALL", row, "LE", rowIndex) }} >B</button>
+    //                 <button value="SE" className={`button_sell  ${activeButton === 'SE' ? 'active' : ''}`} onClick={(e) => { handleButtonClick('SE'); CreateRequest("CALL", row, "SE", rowIndex) }}>S</button>
+    //             </div >
+    //         ),
+    //     },
+    //     {
+    //         dataField: 'CALL/LP',
+    //         text: 'CALL/LP',
+    //         formatter: (cell, row, rowIndex) => (
+    //             <div>
+    //                 <span className={`Call_Price_${row.call_token} `} ></span>
+    //                 <span className={`SP1_Call_Price_${row.call_token} d-none `}></span>
+    //             </div>
+    //         ),
+    //     },
+    //     {
+    //         dataField: 'strike_price',
+    //         text: 'STRIKE PRICE',
+    //         formatter: (cell, row, rowIndex) => (
+    //             <div>
+    //                 <span className={`fw-bold`}>{cell}</span>
+    //             </div>
+    //         ),
+    //     },
+    //     {
+    //         dataField: 'PUT/LP',
+    //         text: 'PUT/LP',
+    //         formatter: (cell, row, rowIndex) => (
+    //             <div>
+    //                 <span className={`Put_Price_${row.put_token} `}></span>
+    //                 <span className={`BP1_Put_Price_${row.put_token} d-none `}></span>
+
+    //             </div>
+    //         ),
+    //     },
+    //     {
+    //         dataField: 'BUY/Sell',
+    //         text: 'BUY/SELL',
+    //         formatter: (cell, row, rowIndex) => (
+    //             <div key={rowIndex}>
+    //                 <span value="LE" className={`button_BUY`} onClick={(e) => CreateRequest("PUT", row, "LE", rowIndex)} >B</span>
+    //                 <span value="SE" className={`button_sell`} onClick={(e) => CreateRequest("PUT", row, "SE", rowIndex)}>S</span>
+    //             </div>
+    //         ),
+    //     },
+    // ];
+
+
+
+    // ------- MAKE REQUEST ----
+
+    const handleButtonClick = (buttonType, Call, rowIndex) => {
+        if (buttonType === "LE" && Call === "CALL") {
+            const element = $('.button_BUY');
+            element.addClass('active');
+            const element1 = $('.button_sell');
+            element1.removeClass('active');
+        } else if (buttonType === "SE" && Call === "CALL") {
+            const element = $('.button_sell');
+            element.addClass('active');
+            const element1 = $('.button_BUY');
+            element1.removeClass('active');
+
+        }
     };
 
-
     const columns = [
-
         {
-            dataField: 'BUY/Sell',
+            dataField: 'CALL',
             text: 'BUY/SELL',
             formatter: (cell, row, rowIndex) => (
                 <div key={rowIndex}>
-                    <button value="LE" className={`button_BUY ${activeButton === 'LE' ? 'active' : ''}`} onClick={(e) => { handleButtonClick('SE'); CreateRequest("CALL", row, "LE", rowIndex) }} >B</button>
-                    <button value="SE" className={`button_sell  ${activeButton === 'SE' ? 'active' : ''}`} onClick={(e) => { handleButtonClick('SE'); CreateRequest("CALL", row, "SE", rowIndex) }}>S</button>
-                </div >
+                    <button
+                        value="LE"
+                        className={`button_BUY ${activeButton.type === 'LE' && activeButton.type === 'CALL' ? 'active' : ''
+                            }`}
+                        onClick={(e) => {
+                            handleButtonClick('LE', "CALL", rowIndex);
+                            CreateRequest('CALL', row, 'LE', rowIndex);
+                        }}
+                    >
+                        B
+                    </button>
+                    <button
+                        value="SE"
+                        className={`button_sell ${activeButton.type === 'SE' && activeButton.type === 'CALL' ? 'active' : ''
+                            }`}
+                        onClick={(e) => {
+                            handleButtonClick('SE', "CALL");
+                            CreateRequest('CALL', row, 'SE', rowIndex);
+                        }}
+                    >
+                        S
+                    </button>
+                </div>
             ),
         },
         {
@@ -100,8 +189,8 @@ const HelpCenter = () => {
             text: 'CALL/LP',
             formatter: (cell, row, rowIndex) => (
                 <div>
-                    <span className={`Call_Price_${row.call_token} `} ></span>
-                    <span className={`SP1_Call_Price_${row.call_token} d-none `}></span>
+                    <span className={`Call_Price_${row.call_token} `}></span>
+                    <span className={`SP1_Call_Price_${row.call_token} d-none`}></span>
                 </div>
             ),
         },
@@ -120,32 +209,65 @@ const HelpCenter = () => {
             formatter: (cell, row, rowIndex) => (
                 <div>
                     <span className={`Put_Price_${row.put_token} `}></span>
-                    <span className={`BP1_Put_Price_${row.put_token} d-none `}></span>
-
+                    <span className={`BP1_Put_Price_${row.put_token} d-none`}></span>
                 </div>
             ),
         },
         {
-            dataField: 'BUY/Sell',
+            dataField: 'PUT',
             text: 'BUY/SELL',
             formatter: (cell, row, rowIndex) => (
                 <div key={rowIndex}>
-                    <span value="LE" className={`button_BUY`} onClick={(e) => CreateRequest("PUT", row, "LE", rowIndex)} >B</span>
-                    <span value="SE" className={`button_sell`} onClick={(e) => CreateRequest("PUT", row, "SE", rowIndex)}>S</span>
+                    {/* <button
+                        value="LE"
+                        className={`button_BUY ${row.option_type === 'PUT' && activeButton === 'LE' ? 'active' : ''}`}
+                        onClick={(e) => { CreateRequest("PUT", row, "LE", rowIndex) }}
+                    >
+                        B
+                    </button>
+                    <button
+                        value="SE"
+                        className={`button_sell ${row.option_type === 'PUT' && activeButton === 'SE' ? 'active' : ''}`}
+                        onClick={(e) => { CreateRequest("PUT", row, "SE", rowIndex) }}
+                    >
+                        S
+                    </button> */}
+
+                    <button
+                        value="LE"
+                        className={`button_BUY ${activeButton.type === 'LE' && activeButton.type === 'PUT' ? 'active' : ''}`}
+                        onClick={(e) => {
+                            handleButtonClick('LE', "CALL", rowIndex);
+                            setActiveButton('LE'); // Set the active button to 'LE'
+                            CreateRequest('PUT', row, 'LE', rowIndex);
+                        }}
+                    >
+                        B
+                    </button>
+                    <button
+                        value="SE"
+                        className={`button_sell ${activeButton.type === 'SE' && activeButton.type === 'PUT' ? 'active' : ''}`}
+                        onClick={(e) => {
+                            handleButtonClick('SE', "CALL");
+                            setActiveButton('SE'); // Set the active button to 'SE'
+                            CreateRequest('PUT', row, 'SE', rowIndex);
+                        }}
+                    >
+                        S
+                    </button>
+
                 </div>
             ),
         },
     ];
 
 
-
-    // ------- MAKE REQUEST ----
-
-
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
 
 
     const CreateRequest = (option_type, row_data, call_type, index) => {
+
+
         if (strategyRef.current === "") {
             alert("Please Select Strategy First")
         } else {
@@ -451,7 +573,7 @@ const HelpCenter = () => {
 
     useEffect(() => {
         getAllRoundToken()
-    }, [expiry])
+    }, [expiry, activeButton])
 
 
     // --------------- FOR GET OPTIONS SYMBOLS -----------------------

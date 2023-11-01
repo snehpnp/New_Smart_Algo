@@ -128,9 +128,6 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
 
-
-
-
     // const res = await CreateSocketSession(type);
 
     if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
@@ -145,16 +142,17 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
             setSocketState("Unauthorized");
 
             tradeHistoryData && tradeHistoryData.forEach((row, i) => {
-                const previousRow = i > 0 ? tradeHistoryData[i - 1] : null;
+                const previousRow = i > 0 ? tradeHistoryData && tradeHistoryData[i - 1] : null;
                 calcultateRPL(row, null, previousRow);
             });
         }
         else {
             if (res.data.stat) {
                 const handleResponse = async (response) => {
-                    // console.log("response", response)
-                    //  let rr = $('._id_15259_652e21679fd519ac3ea46597').html();
-                    //  console.log("RR",rr)
+
+
+                    $('.BP1_Put_Price_' + response.tk).html();
+                    $('.SP1_Call_Price_' + response.tk).html();
 
                     // UPL_
                     $(".LivePrice_" + response.tk).html(response.lp);
@@ -162,9 +160,8 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
 
 
                     var live_price = response.lp === undefined ? "" : response.lp;
-
                     //  if entry qty and exist qty both exist
-                    tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+                    tradeHistoryData && tradeHistoryData.forEach((row, i) => {
                         let get_ids = '_id_' + response.tk + '_' + row._id
                         let get_id_token = $('.' + get_ids).html();
 
@@ -180,20 +177,19 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                             if (get_entry_qty !== "" && get_exit_qty !== "") {
 
                                 if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-                                    let rpl = (parseInt(get_exit_price) - parseInt(get_entry_price)) * parseInt(get_exit_qty);
+                                    let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
                                     let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                                     let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
+
                                     if ((isNaN(finalyupl) || isNaN(rpl))) {
                                         return "-";
                                     } else {
-                                        console.log("testtt", ".TPL_" + response.tk + "_" + get_id_token)
                                         $(".show_rpl_" + response.tk + "_" + get_id_token).html(rpl.toFixed(2));
                                         $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
                                         $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
 
                                         ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
                                         ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
-
                                         ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
                                     }
                                 }
