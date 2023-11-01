@@ -63,7 +63,7 @@ class TradeHistory {
                         'strategys.strategy_name': 1,
                         'users.web_url': 1,
                         'users.client_key': 1,
-                        quantity:1
+                        quantity: 1
 
                     },
                 },
@@ -81,9 +81,9 @@ class TradeHistory {
                     } else if (item.users.web_url == '2') {
                         client_persnal_key1 = item.users.client_key
                     }
-                    console.log("client_persnal_key1", item.quantity);
-
+                    
                     try {
+                        // console.log("client_persnal_key1", item.quantity);
 
                         var data = await MainSignals.aggregate([
                             {
@@ -95,10 +95,8 @@ class TradeHistory {
                                         $lte: endDate,
                                     },
                                     client_persnal_key: client_persnal_key1
-
                                 }
                             },
-
                             {
                                 $lookup: {
                                     from: "signals",
@@ -107,17 +105,61 @@ class TradeHistory {
                                     as: "result",
                                 },
                             },
-
                             {
                                 $sort: {
                                     _id: -1 // Sort in ascending order. Use -1 for descending.
                                 }
                             }
-
                         ]);
 
 
                         if (data.length > 0) {
+
+
+                            data.forEach(function (item) {
+                                var LECount = 0;
+                                var LXCount = 0;
+                                var SECount = 0;
+                                var SXCount = 0;
+
+                                var findstg = GetAllClientServices.find((data)=> data.service.name == item.symbol && data.strategys.strategy_name == item.strategy )
+                              
+
+                                item.result.forEach(function (signal) {
+                                    if (signal.type === "LE") {
+                                        LECount++;
+                                        signal.qty_percent = findstg.quantity
+                                    } else if (signal.type === "LX") {
+                                        LXCount++;
+                                        signal.qty_percent = findstg.quantity
+                                    }
+                                });
+
+
+                                item.entry_qty_percent = LECount * findstg.quantity,
+                                item.exit_qty_percent = LXCount * findstg.quantity
+
+                           
+
+                            });
+
+                            // Aapke data ko console par dekhne ke liye
+                            // console.log("=======?",data);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             abc.push(data)
                         }
                     } catch (error) {
@@ -131,6 +173,7 @@ class TradeHistory {
             }
 
             if (abc.length > 0) {
+                // console.log("DATA==>", abc.flat());
                 res.send({ status: true, data: abc.flat(), msg: "Get Signals" })
             } else {
                 res.send({ status: false, data: [], msg: "Data Empty" })
