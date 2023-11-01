@@ -205,18 +205,31 @@ const BrokerResponse = () => {
 
   const [inputValue, setInputValue] = useState('');
 
-  const setMax = (rowdata) => {
-    console.log("setMax", rowdata.servicegroup_services_ids.group_qty)
-    console.log("servicegroup_services_ids", rowdata.service.lotsize)
+  const setMax = (rowdata, e) => {
 
+    if (parseInt(rowdata.servicegroup_services_ids.group_qty) != 0) {
 
-    if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
-      return rowdata.servicegroup_services_ids.group_qty
+      if (parseInt(rowdata.servicegroup_services_ids.group_qty) < e) {
+        toast.error(`You can't update more than ${rowdata.servicegroup_services_ids.group_qty}`);
+        return
 
-    } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) < 0) {
-
+      } else {
+        console.log("Working");
+      }
+    } else {
+      console.log("Nothing");
     }
+
+    // if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
+    //   return rowdata.servicegroup_services_ids.group_qty
+
+    // } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) < 0) {
+
+    // }
   }
+
+
+  // SET MINIMUM VALUE
   let abc
   const setMin = (rowdata) => {
 
@@ -244,9 +257,10 @@ const BrokerResponse = () => {
         <thead className="bg-primary">
           <tr>
             <th>#</th>
-            <th>Live Price</th>
-            <th>Symboll</th>
+            {/* <th>Live Price</th> */}
+            <th>Symbol</th>
             <th>lot size</th>
+            <th>max Qty</th>
             <th>Quantity</th>
             <th>Strategy</th>
             <th>Order Type</th>
@@ -261,11 +275,11 @@ const BrokerResponse = () => {
                 <>
                   <tr>
                     <th>{index + 1}</th>
-                    <td
-                      className={`ShowLTP_${data.service.instrument_token}`}
-                    ></td>
+                    {/* <td className={`ShowLTP_${data.service.instrument_token}`} ></td> */}
                     <td>{`${data.service.name}[${data.categories.segment}]`}</td>
-                    <td>{data.service.lotsize + "--" + data.servicegroup_services_ids.group_qty}</td>
+                    <td>{data.service.lotsize}</td>
+                    <td>{data.servicegroup_services_ids.group_qty}</td>
+
 
                     <td>
                       <div className="row d-flex">
@@ -277,19 +291,19 @@ const BrokerResponse = () => {
                             className="form-control"
                             id="quantity"
                             placeholder="Enter Qty"
-                            min={setMin(data)}
-                            max={setMax(data)}
+                            // min={setMin(data)}
+                            // max={setMax(data)}
 
                             onChange={
-                              (e) =>
+                              (e) => {
+                                setMax(data, e.target.value)
                                 setgroup_qty_value_test(
                                   e,
                                   data.service.name,
                                   data.service,
                                   data
                                 )
-
-                              //  setEnterQty(e.target.value)
+                              }
                             }
                             defaultValue={data.quantity}
                           // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}

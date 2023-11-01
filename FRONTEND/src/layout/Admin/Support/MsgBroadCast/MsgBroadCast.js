@@ -49,7 +49,6 @@ const MsgBroadCast = () => {
     const broker_list = async () => {
         await dispatch(GET_PANEL_BROKERS({ domain: "sneh.com" })).unwrap().then((response) => {
             if (response.status) {
-                // console.log(response.data.broker_id);
                 setBrokers(response.data.broker_id)
             }
         })
@@ -72,7 +71,7 @@ const MsgBroadCast = () => {
         onSubmit: async (values) => {
             console.log(values);
             const req = {
-                "Broker":values.Broker ,
+                "Broker": values.Broker,
                 "message": values.message,
                 "starteg_id": values.Strategy ? values.Strategy : "All",
             }
@@ -95,13 +94,15 @@ const MsgBroadCast = () => {
         }
     });
 
+   
 
     const fields = [
         {
             name: 'Broker',
             label: 'Broker',
             type: 'select',
-            options: AllBrokers && AllBrokers.map((item) => ({ label: item.name, value: item.id })),
+            options:  [{ label: "Demo", value: "0" },
+            ...AllBrokers && AllBrokers.map((item) => ({ label: item.name, value: item.id }))],
             label_size: 12, col_size: 3, disable: false
         },
         { name: 'message', label: 'Entery Your Message', type: 'msgbox', label_size: 12, row_size: 3, col_size: 12, disable: true },

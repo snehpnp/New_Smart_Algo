@@ -3,6 +3,8 @@ const db = require('../../Models');
 const Message_brodcast = db.Messagebrodcast_data
 const strategy = db.strategy
 const strategy_client = db.strategy_client
+const user = db.user
+
 
 
 // const { formattedDateTime } = require('../../Helper/time.helper')
@@ -18,14 +20,14 @@ class Message {
 
             const { Broker, message } = req.body
             // var Find_strategy = await strategy.find({ _id: starteg_id })
-          
+
             // if (Find_strategy.length == 0) {
             //     return res.send({ status: false, msg: 'Strategy not exist', data: [] });
             // }
 
             var data = {
                 // strategy_id: Find_strategy[0]._id,
-                broker_id:Broker,
+                broker_id: Broker,
                 Message: message
             }
 
@@ -46,8 +48,6 @@ class Message {
     async GetAllMessageBrodcast(req, res) {
         try {
 
-            // const { _id } = req.body;
-            // const objectId = new ObjectId(_id);
 
             const today = new Date();
             today.setHours(0, 0, 0, 0);
@@ -81,59 +81,42 @@ class Message {
 
             const { id } = req.body;
             const objectId = new ObjectId(id);
-
+            var broker_id1
             const today = new Date();
             today.setHours(0, 0, 0, 0);
 
-            const result1 = await strategy_client.find({
-                user_id: objectId,
-
-            })
-
+            const result1 = await user.find({
+                _id: objectId,
+            }).select('license_type broker')
 
             if (result1.length == 0) {
                 return res.send({ status: false, msg: 'Client Not Exist', data: [] });
-
             }
+
+            if (result1[0].license_type == '0') {
+                broker_id1 = '0'
+            } else {
+                broker_id1 = result1[0].broker
+            }
+
 
             var Strategy_sms = []
 
-            result1.forEach(async (data) => {
-
-                const result = await Message_brodcast.find({
-                    strategy_id: data.strategy_id,
-                    createdAt: {
-                        $gte: today,
-                        $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
-                    },
-                })
-
-                Strategy_sms.push(result[0])
-
-                // console.log("Strategy_sms", Strategy_sms);
-
+            const result = await Message_brodcast.find({
+                broker_id: broker_id1,
+                createdAt: {
+                    $gte: today,
+                    $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+                },
             })
-            
 
-            return res.send({ status: true, msg: 'message get successufully', data: [] });
+            if (result.length == 0) {
+                return res.send({ status: false, msg: 'message Empty', data: result });
 
-            // try {
-            //     const result = await Message_brodcast.find({
-            //         // admin_id: objectId,
-            //         createdAt: {
-            //             $gte: today,
-            //             $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
-            //         },
-            //     })
+            }
+            return res.send({ status: true, msg: 'message get successufully', data: result });
 
-            //     if (result.length === 0) {
-            //         return res.send({ status: false, msg: 'No Msg Found', data: [] });
-            //     }
-            //     return res.send({ status: true, msg: 'All Help Msg', data: result });
-            // }
-            // catch (error) {
-            //     return res.send({ status: false, msg: 'Error  to Create Generate Help Response.', error: error.message });
-            // }
+
 
         } catch (error) {
             console.log("Help- Center error-", error);
