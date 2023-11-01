@@ -333,7 +333,6 @@ const Header = ({ ChatBox }) => {
                         onClick={redirectToAdmin}
                         type="button"
                         className="btn btn-primary text-white"
-
                       >
                         Go to Admin
                       </button>
@@ -365,7 +364,7 @@ const Header = ({ ChatBox }) => {
 
                 {user_role === "ADMIN" ? (
                   <>
-                    <Notification data={getAllClients} />
+                    <Notification data={[]} />
                   </>
                 ) : (
                   user_role === "USER" ? (

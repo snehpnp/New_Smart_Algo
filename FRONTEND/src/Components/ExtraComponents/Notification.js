@@ -9,7 +9,7 @@ const Notification = ({ data }) => {
 
 
     const show_Name = (item) => {
-        // console.log(" sdadasd ", item.split("_").map((part) => part[0]).join(''))
+        console.log(" sdadasd ", item.split("_").map((part) => part[0]).join(''))
 
         return item.split("_").map((part) => part[0]).join('')
     }
@@ -46,7 +46,7 @@ const Notification = ({ data }) => {
                     <div
                         id="DZ_W_Notification1"
                         className="widget-media dz-scroll p-3"
-                        style={{ height: 380 }}
+                        // style={{ height: auto }}
                     >
                         <ul className="timeline">
                             {data.data && data.data.slice(0, 6).map((item) => {
@@ -56,7 +56,7 @@ const Notification = ({ data }) => {
                                             <div className="media me-2 media-info">{show_Name(item.fullname)}</div>
                                             <div className="media-body">
                                                 <h6 className="mb-1">
-                                                    Mail Recieve From {item.username}
+                                                    Recieved From {item.username}
                                                 </h6>
                                                 <small className="d-block">
                                                     {fDateTimeSuffix(item.createdAt)}
