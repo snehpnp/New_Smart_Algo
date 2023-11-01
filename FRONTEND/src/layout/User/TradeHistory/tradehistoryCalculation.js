@@ -181,6 +181,9 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                                     let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                                     let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
 
+                                    console.log("finalyupl" ,finalyupl)
+                                    console.log("rpl" ,rpl)
+
                                     if ((isNaN(finalyupl) || isNaN(rpl))) {
                                         return "-";
                                     } else {
@@ -201,12 +204,13 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                             if (isNaN(abc)) {
                                 return "-";
                             } else {
-                                $(".show_rpl_" + response.tk + "_" + get_id_token).html(abc);
-                                $(".UPL_" + response.tk + "_" + get_id_token).html("-");
+                                $(".show_rpl_" + response.tk + "_" + get_id_token).html("-");
+                                $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
                                 $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
-                                ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
-                                ShowColor1(".UPL_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
+                                ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
+                                ShowColor1(".UPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
                                 ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+
                             }
 
                         }

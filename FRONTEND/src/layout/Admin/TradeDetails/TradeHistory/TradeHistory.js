@@ -224,7 +224,7 @@ const TradeHistory = () => {
 
     {
       dataField: "Action",
-      text: "R/P&L",
+      text: "Realised",
       formatter: (cell, row, rowIndex) => {
         return (
           <div>
@@ -261,7 +261,7 @@ const TradeHistory = () => {
 
     {
       dataField: "UPL",
-      text: "U/P&l",
+      text: "Un-Realised",
       formatter: (cell, row, rowIndex) => (
         <div>
           <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
@@ -273,7 +273,7 @@ const TradeHistory = () => {
 
     {
       dataField: "TPL",
-      text: "T/P&L",
+      text: "Total",
       formatter: (cell, row, rowIndex) => (
         <div>
           <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
@@ -441,11 +441,11 @@ const TradeHistory = () => {
                 if (isNaN(abc)) {
                   return "-";
                 } else {
-                  $(".show_rpl_" + response.tk + "_" + get_id_token).html(abc);
-                  $(".UPL_" + response.tk + "_" + get_id_token).html("-");
+                  $(".show_rpl_" + response.tk + "_" + get_id_token).html("-");
+                  $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
                   $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
-                  ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
-                  ShowColor1(".UPL_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
+                  ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
+                  ShowColor1(".UPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
                   ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
                 }
 

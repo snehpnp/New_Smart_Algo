@@ -206,7 +206,7 @@ const TradeHistory = () => {
 
         {
             dataField: "Action",
-            text: "R/P&L",
+            text: "Realised",
             formatter: (cell, row, rowIndex) => {
                 return (
                     <div>
@@ -243,7 +243,7 @@ const TradeHistory = () => {
 
         {
             dataField: "UPL",
-            text: "U/P&l",
+            text: "Un-Realised",
             formatter: (cell, row, rowIndex) => (
                 <div>
                     <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
@@ -255,7 +255,7 @@ const TradeHistory = () => {
 
         {
             dataField: "TPL",
-            text: "T/P&L",
+            text: "Total",
             formatter: (cell, row, rowIndex) => (
                 <div>
                     <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
@@ -355,8 +355,8 @@ const TradeHistory = () => {
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                // url: `${Config.broker_url}broker-signals`,
+                // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                url: `${Config.broker_url}broker-signals`,
                 headers: {
                     'Content-Type': 'text/plain'
                 },
