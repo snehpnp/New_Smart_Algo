@@ -77,17 +77,7 @@ class TradeHistory {
                     console.log("item", item.users);
                     if (item.users.web_url == '1') {
                         try {
-                            // let data = await MainSignals.find({
-                            //     symbol: item.service.name,
-                            //     strategy: item.strategys.strategy_name,
-                            //     dt_date: {
-                            //         $gte: startDate,
-                            //         $lte: endDate,
-                            //     },
-                            // });
-    
-    
-    
+
                             var data = await MainSignals.aggregate([
                                 {
                                     $match: {
@@ -97,11 +87,11 @@ class TradeHistory {
                                             $gte: startDate,
                                             $lte: endDate,
                                         },
-                                        client_persnal_key:""
-    
+                                        client_persnal_key: ""
+
                                     }
                                 },
-    
+
                                 {
                                     $lookup: {
                                         from: "signals",
@@ -110,18 +100,16 @@ class TradeHistory {
                                         as: "result",
                                     },
                                 },
-    
+
                                 {
                                     $sort: {
                                         _id: -1 // Sort in ascending order. Use -1 for descending.
                                     }
                                 }
-    
+
                             ]);
-    
-    
-    
-    
+
+
                             if (data.length > 0) {
                                 abc.push(data)
                             }
@@ -130,16 +118,7 @@ class TradeHistory {
                         }
                     } else if (item.users.web_url == '2') {
                         try {
-                            // let data = await MainSignals.find({
-                            //     symbol: item.service.name,
-                            //     strategy: item.strategys.strategy_name,
-                            //     dt_date: {
-                            //         $gte: startDate,
-                            //         $lte: endDate,
-                            //     },
-                            // });
-    
-    
+
                             var data = await MainSignals.aggregate([
                                 {
                                     $match: {
@@ -149,11 +128,11 @@ class TradeHistory {
                                             $gte: startDate,
                                             $lte: endDate,
                                         },
-                                        client_persnal_key:item.users.client_key
-    
+                                        client_persnal_key: item.users.client_key
+
                                     }
                                 },
-    
+
                                 {
                                     $lookup: {
                                         from: "signals",
@@ -162,18 +141,18 @@ class TradeHistory {
                                         as: "result",
                                     },
                                 },
-    
+
                                 {
                                     $sort: {
                                         _id: -1 // Sort in ascending order. Use -1 for descending.
                                     }
                                 }
-    
+
                             ]);
-    
-    
-    
-    
+
+
+
+
                             if (data.length > 0) {
                                 abc.push(data)
                             }
@@ -181,7 +160,7 @@ class TradeHistory {
                             console.error("Error fetching data:", error);
                         }
                     }
-                  
+
                 }
             } else {
                 res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
