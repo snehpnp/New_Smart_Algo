@@ -4,7 +4,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
-import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
+import FullDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import { Get_Tradehisotry } from "../../../ReduxStore/Slice/Users/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
