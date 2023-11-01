@@ -70,7 +70,9 @@ const MsgBroadCast = () => {
             return errors;
         },
         onSubmit: async (values) => {
+            console.log(values);
             const req = {
+                "Broker":values.Broker ,
                 "message": values.message,
                 "starteg_id": values.Strategy ? values.Strategy : "All",
             }

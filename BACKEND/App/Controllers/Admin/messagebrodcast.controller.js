@@ -16,13 +16,16 @@ class Message {
     async AddMessageBrodcast(req, res) {
         try {
 
-            const { starteg_id, message } = req.body
-            var Find_strategy = await strategy.find({ _id: starteg_id })
-            if (Find_strategy.length == 0) {
-                return res.send({ status: false, msg: 'Strategy not exist', data: [] });
-            }
+            const { Broker, message } = req.body
+            // var Find_strategy = await strategy.find({ _id: starteg_id })
+          
+            // if (Find_strategy.length == 0) {
+            //     return res.send({ status: false, msg: 'Strategy not exist', data: [] });
+            // }
+
             var data = {
-                strategy_id: Find_strategy[0]._id,
+                // strategy_id: Find_strategy[0]._id,
+                broker_id:Broker,
                 Message: message
             }
 
