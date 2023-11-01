@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import Modal from "../../../Components/ExtraComponents/Modal";
 import { Trash2 } from 'lucide-react';
+import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
+
 
 import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
@@ -17,7 +19,9 @@ import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Ser
 import $ from "jquery";
 import axios from "axios"
 import * as Config from "../../../Utils/Config";
+import toast, { Toaster } from 'react-hot-toast';
 
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 const HelpCenter = () => {
 
@@ -67,10 +71,10 @@ const HelpCenter = () => {
     const [symbol, setSymbol] = useState('')
     const [expiry, setExpiry] = useState('')
     const [strategy, setStrategy] = useState('')
+    const [ButtonDisabled, setButtonDisabled] = useState(false)
+
     const [expiry_for_Send_Signal, setExpiry_for_Send_Signal] = useState('')
 
-    const [rows, setRows] = useState([]);
-    const [first, setFirst] = useState(false);
 
     const [activeButton, setActiveButton] = useState('LE');
 
@@ -146,6 +150,7 @@ const HelpCenter = () => {
             alert("Please Select Strategy First")
         } else {
             var pre_tag = {
+                entry_qty: '100',
                 option_type: option_type,
                 type: call_type,
                 token: option_type === "CALL" ? row_data.call_token : row_data.put_token,
@@ -188,6 +193,7 @@ const HelpCenter = () => {
             const Symbol = `${symbol && symbol}${expiry_i}${item.strike}${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`
 
             Arr.push({
+                "entry_qty": item.entry_qty,
                 "price": buy ? buy : sell,
                 "Symbol": Symbol,
                 'option_type': `${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`,
@@ -198,7 +204,6 @@ const HelpCenter = () => {
                 "trading_type": item.type,
                 "segment": item.segment,
                 "strike": item.strike,
-                // "expiry": expiry_i,
             })
         })
 
@@ -237,29 +242,57 @@ const HelpCenter = () => {
 
     const Cancel_Request = () => {
         setshowModal(false)
-
-
     }
 
     // ------------------------------------ REMOVE SELECTED------------------------------------
+
+    // ------------------------------------ QTY CHANGE ------------------------------------
+
+
+    const Set_Entry_Exit_Qty = (row, event, symbol) => {
+        let newValue = parseInt(event); // Convert input value to an integer
+
+        if (isNaN(newValue) || newValue < 0) {
+            alert('Please enter a valid positive number.');
+            return;
+        }
+
+        setExecuteTradeData((prev) => ({
+            ...prev,
+            loading: false,
+            data: prev.data.map((item) => {
+                if (item.Symbol === symbol) { // Assuming 'symbol' is the unique identifier
+                    return {
+                        ...item,
+                        entry_qty: newValue.toString() || '100',
+                    };
+                }
+                return item;
+            }),
+        })
+        )
+    }
+    // ------------------------------------ QTY CHANGE ------------------------------------
+
 
 
     // ------------------------------------ REMOVE SELECTED------------------------------------
 
 
     const Done_For_Trade = (id) => {
+
+        // console.log("ExecuteTradeData", ExecuteTradeData)
+        // return
         const currentTimestamp = Math.floor(Date.now() / 1000);
-        // let ttt = []
+
         let abc = ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
-            let req = `DTime:${currentTimestamp}|Symbol:${symbol && symbol}|TType:${item.trading_type}|Tr_Price:131|Price:${item.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.call_type}|Expiry:${expiry && expiry}|Strategy:${strategy && strategy}|Quntity:100|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
-
-
+            let req = `DTime:${currentTimestamp}|Symbol:${symbol && symbol}|TType:${item.trading_type}|Tr_Price:131|Price:${item.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.call_type}|Expiry:${expiry && expiry}|Strategy:${strategy && strategy}|Quntity:${item.entry_qty}|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
 
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                // url: `${Config.broker_url}broker-signals`,
+                // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                url: `${Config.broker_url}broker-signals`,
                 headers: {
                     'Content-Type': 'text/plain'
                 },
@@ -268,8 +301,11 @@ const HelpCenter = () => {
 
             axios.request(config)
                 .then((response) => {
-                    console.log("Trade", response.data);
+                    toast.success("Order Place Sucessfully");
+                    setButtonDisabled(!ButtonDisabled)
+
                     setshowModal(false)
+                    // setButtonDisabled(false)
                     setExecuteTradeData({
                         loading: false,
                         data: []
@@ -627,10 +663,12 @@ const HelpCenter = () => {
                                 <>
                                     <Modal
                                         isOpen={showModal}
-                                        size="lg"
+                                        size="xl"
                                         title="Request Confirmation"
                                         cancel_btn={true}
                                         // hideBtn={false}
+                                        disabled_submit={ButtonDisabled}
+
                                         btn_name="Confirm"
                                         Submit_Function={Done_For_Trade}
                                         Submit_Cancel_Function={Cancel_Request}
@@ -647,6 +685,40 @@ const HelpCenter = () => {
                                                 {
                                                     dataField: "Symbol",
                                                     text: "Symbol",
+                                                },
+                                                {
+                                                    dataField: "",
+                                                    text: "Entry Qty",
+                                                    formatter: (cell, row, rowIndex) => (
+                                                        <div>
+                                                            <input
+                                                                // key={index}
+                                                                type="text"
+                                                                name="quantity"
+                                                                className=""
+                                                                id="quantity"
+                                                                placeholder="Enter Qty"
+
+                                                                onChange={
+                                                                    (e) =>
+                                                                        Set_Entry_Exit_Qty(
+                                                                            row,
+                                                                            e.target.value,
+                                                                            row.Symbol
+                                                                        )
+
+                                                                    //  setEnterQty(e.target.value)
+                                                                }
+                                                            // value={inputValue ? inputValue : row.old_qty_persent}
+                                                            // max={row.old_qty_persent}
+                                                            // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
+
+                                                            />
+                                                        </div>
+                                                    ),
+
+
+
                                                 },
                                                 {
                                                     dataField: "price",
@@ -696,7 +768,7 @@ const HelpCenter = () => {
             }
 
 
-
+            <ToastButton />
         </ >
     )
 

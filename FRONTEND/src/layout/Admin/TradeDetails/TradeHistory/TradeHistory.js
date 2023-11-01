@@ -417,7 +417,7 @@ const TradeHistory = () => {
                 if (get_entry_qty !== "" && get_exit_qty !== "") {
 
                   if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-                    let rpl = (parseInt(get_exit_price) - parseInt(get_entry_price)) * parseInt(get_exit_qty);
+                    let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
                     let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                     let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
 
