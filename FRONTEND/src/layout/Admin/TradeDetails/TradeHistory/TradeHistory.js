@@ -139,37 +139,37 @@ const TradeHistory = () => {
       // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
-    {
-      dataField: "squreoff",
-      text: "Square OFF",
-      formatter: (cell, row, rowIndex) => {
-        if (
-          row.exit_qty_percent &&
-          row.entry_qty_percent &&
-          parseInt(row.entry_qty_percent) > parseInt(row.exit_qty_percent)
-        ) {
-          return (
-            <button className="btn-primary"
-              onClick={() => SquareOff(row, rowIndex)}
+    // {
+    //   dataField: "squreoff",
+    //   text: "Square OFF",
+    //   formatter: (cell, row, rowIndex) => {
+    //     if (
+    //       row.exit_qty_percent &&
+    //       row.entry_qty_percent &&
+    //       parseInt(row.entry_qty_percent) > parseInt(row.exit_qty_percent)
+    //     ) {
+    //       return (
+    //         <button className="btn-primary"
+    //           onClick={() => SquareOff(row, rowIndex)}
 
-            >
-              Square Off
-            </button>
-          );
-        } else if (!row.exit_qty_percent &&
-          row.entry_qty_percent) {
-          return (
-            <button className="btn-primary"
-              onClick={() => SquareOff(row, rowIndex)}
-            >
-              Square Off
-            </button>
-          );
-        } else {
-          return null
-        }
-      },
-    },
+    //         >
+    //           Square Off
+    //         </button>
+    //       );
+    //     } else if (!row.exit_qty_percent &&
+    //       row.entry_qty_percent) {
+    //       return (
+    //         <button className="btn-primary"
+    //           onClick={() => SquareOff(row, rowIndex)}
+    //         >
+    //           Square Off
+    //         </button>
+    //       );
+    //     } else {
+    //       return null
+    //     }
+    //   },
+    // },
     {
       dataField: "live",
       text: "Live Price",
@@ -181,7 +181,7 @@ const TradeHistory = () => {
     },
     {
       dataField: "closeprice",
-      text: "Close Price",
+      text: "Previous Price",
       formatter: (cell, row, rowIndex) => (
         <div>
           <span className={`ClosePrice_${row.token}`}></span>
