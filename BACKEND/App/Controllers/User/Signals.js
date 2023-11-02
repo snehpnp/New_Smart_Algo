@@ -17,11 +17,18 @@ class Signals {
 
             const objectId = new ObjectId(user_id);
 
+            var currentDate = new Date();
+
+            currentDate.setHours(0, 0, 0, 0);
+            var endOfDay = new Date(currentDate);
+            endOfDay.setHours(23, 59, 59, 999);
+
+
             const pipeline = [
                 {
                     $match: {
-                        user_id: objectId
-                    }
+                        user_id: objectId,
+                    },
                 },
                 {
                     $lookup: {
@@ -48,69 +55,57 @@ class Signals {
                 {
                     $lookup: {
                         from: "signals",
-                        localField: "strategy_id",
-                        foreignField: "_id",
-                        as: "signals",
+                        let: {
+                            service_name: '$service.name',
+                            strategy_name: '$strategys.strategy_name',
+                            currentDate: currentDate,
+                            endOfDay: endOfDay,
+                        },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            { $eq: ['$symbol', '$$service_name'] },
+                                            { $eq: ['$strategy', '$$strategy_name'] },
+                                            { $gte: ['$createdAt', '$$currentDate'] },
+                                            { $lte: ['$createdAt', '$$endOfDay'] },
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                        as: 'signals',
                     },
                 },
                 {
-                    $unwind: '$strategys',
+                    $group: {
+                        _id: null,
+                        allSignals: { $push: '$signals' },
+                    },
                 },
                 {
                     $project: {
-                        'service.name': 1,
-                        'strategys.strategy_name': 1,
+                        _id: 0,
+                        allSignals: 1,
                     },
                 },
             ];
 
-            const GetAllClientServices = await client_services.aggregate(pipeline)
+            const GetAllClientServices = await client_services.aggregate(pipeline);
+     
 
-            var abc = [];
 
-            var currentDate = new Date();
+            if (GetAllClientServices[0].allSignals.flat().length > 0) {
 
-            currentDate.setHours(0, 0, 0, 0);
-            var endOfDay = new Date(currentDate);
-            endOfDay.setHours(23, 59, 59, 999);
-
-            if (GetAllClientServices.length > 0) {
-
-                for (const item of GetAllClientServices) {
-                    try {
-                        let data = await Signals_modal.find({
-                            symbol: item.service.name,
-                            strategy: item.strategys.strategy_name,
-                            createdAt: {
-                                $gte: currentDate,
-                                $lte: endOfDay,
-                            },
-                        })
-
-                        if (data.length > 0) {
-                            abc.push(data)
-                        }
-                    } catch (error) {
-                        console.error("Error fetching data:", error);
-                    }
-                }
+                return res.send({ status: true, data: GetAllClientServices[0].allSignals.flat(), msg: "Get Signals" })
             } else {
-                res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
-            }
-            
-
-            if(abc.length > 0 ){
-                res.send({ status: true, data: abc.flat(),msg:"Get Signals" })
-            }else{
                 res.send({ status: false, data: [], msg: "Data Empty" })
             }
 
 
-
-
-
         } catch (error) {
-            console.log("get user trading Status error -", error);
+            console.log("Signals  error -", error);
         }
     }
 

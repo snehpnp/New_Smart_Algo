@@ -114,8 +114,8 @@ app.post('/broker-signals', async (req, res) => {
   var directoryfilePath = path.join(__dirname + '/AllPanelTextFile');
   var paneltxtentry = 0;
 
-  console.log("filePath", filePath)
-  console.log("directoryfilePath", directoryfilePath)
+  // console.log("filePath", filePath)
+  // console.log("directoryfilePath", directoryfilePath)
 
   // fs.readdir(directoryfilePath, function (err1, files) {
   //   console.log("files", files)
@@ -172,7 +172,7 @@ app.post('/broker-signals', async (req, res) => {
         signals[key] = value;
       });
 
-      console.log("final result get signal", signals);
+      // console.log("final result get signal", signals);
 
       fs.appendFile(filePath, '\nNEW TRADE TIME ' + new Date() + '\nRECEIVED_SIGNALS ' + splitArray + '\n', function (err) {
         if (err) {
@@ -227,7 +227,7 @@ app.post('/broker-signals', async (req, res) => {
 
         const FIRST3_KEY = client_key.substring(0, 3);
 
-        console.log("FIRST3_KEY", FIRST3_KEY);
+        // console.log("FIRST3_KEY", FIRST3_KEY);
         // console.log("process.env.PANEL_FIRST_THREE",process.env.PANEL_FIRST_THREE);
         // IF SIGNEL KEY NOT MATCH CHECK
         if (FIRST3_KEY == process.env.PANEL_FIRST_THREE) {
@@ -336,6 +336,7 @@ app.post('/broker-signals', async (req, res) => {
             token = await Alice_token.find(instrument_query).maxTimeMS(20000).exec();
           }
 
+          // console.log("token",token[0]);
           var instrument_token = 0
           if (token.length == 0) {
             instrument_token = 0
@@ -343,8 +344,13 @@ app.post('/broker-signals', async (req, res) => {
             instrument_token = token[0].instrument_token
           }
 
-
-          // logger.info('RECEIVED_SIGNALS_TOKEN ' + instrument_token);
+          var find_lot_size = 1
+          if (token.length == 0) {
+            find_lot_size = 0
+          } else {
+            find_lot_size = token[0].lotsize
+          }
+          // console.log(find_lot_size);
 
           fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS_TOKEN ' + instrument_token + '\n', function (err) {
             if (err) {
@@ -464,7 +470,8 @@ app.post('/broker-signals', async (req, res) => {
               trade_symbol: trade_symbol,
               client_persnal_key: client_persnal_key,
               TradeType: TradeType,
-              token: instrument_token
+              token: instrument_token,
+              lot_size:find_lot_size
             }
 
             let Signal_req1 = new Signals(Signal_req)
@@ -503,7 +510,9 @@ app.post('/broker-signals', async (req, res) => {
                 client_persnal_key: client_persnal_key,
                 TradeType: TradeType,
                 signals_id: SignalSave._id,
-                token: instrument_token
+                token: instrument_token,
+              lot_size:find_lot_size
+
               }
               const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
               await Entry_MainSignals.save();

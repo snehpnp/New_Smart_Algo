@@ -16,27 +16,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
     try {
-        console.log("ALICE BLUE BROKER TEST FILE - ");
-
-
-
-        // var dt = splitArray[0]
-        // var input_symbol = splitArray[1]
-        // var type = splitArray[2]
-        // var tr_price = splitArray[3]
-        // var price = splitArray[4]
-        // var sq_value = splitArray[5]
-        // var sl_value = splitArray[6]
-        // var tsl = splitArray[7]
-        // var segment = splitArray[8]
-        // var strike = splitArray[9]
-        // var option_type = splitArray[10]
-        // var expiry = splitArray[11]
-        // var strategy = splitArray[12]
-        // var qty_percent = splitArray[13]
-        // var client_key = splitArray[14]
-        // var demo = splitArray[15]
-
+   
         var dt = signals.DTime;
         var input_symbol = signals.Symbol;
         var type = signals.TType;
@@ -56,13 +36,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         var demo = signals.Demo;
 
 
-
-
-
-
-
         if (type == 'LE' || type == 'SE') {
-            console.log("trade entry")
+            // console.log("trade entry")
 
 
             const requestPromises = AllClientData.map(async (item) => {
@@ -106,9 +81,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     return;
                                 }
                                 const parts = stdout.split(','); // Extract the content inside double quotes
-                                console.log("Extracted Part:", parts[9]);
+                                // console.log("Extracted Part:", parts[9]);
                                 if (segment && segment.toUpperCase() === 'C') {
-                                    trading_symbol = parts[8];
+                                    trading_symbol = token[0].instrument_token
                                 } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
                                     trading_symbol = parts[9];
                                 } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
@@ -133,7 +108,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     item.postdata.transtype = 'SELL';
                                 }
 
-                                console.log("price", price)
+                                // console.log("price", price)
                                 //console.log("item.client_services.order_type", item.client_services.order_type)
 
                                 if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
@@ -154,9 +129,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
 
-                        console.log("OPTION")
+                        // console.log("OPTION")
                     } else {
-                        console.log("CASH")
+                        // console.log("CASH")
                         // console.log("user id ", item.demat_userid)
                         //console.log("postdata before", item.postdata)
 
@@ -166,7 +141,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                             item.postdata.transtype = 'SELL';
                         }
 
-                        console.log("price", price)
+                        // console.log("price", price)
 
 
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
@@ -231,8 +206,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                 if (token != 0) {
 
-                    console.log("user id ", item.demat_userid)
-                    console.log("postdata before", item.postdata)
+                    // console.log("user id ", item.demat_userid)
+                    // console.log("postdata before", item.postdata)
 
 
                     if (segment.toUpperCase() != "C") {
@@ -246,8 +221,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         item.postdata.transtype = 'SELL';
                     }
 
-                    console.log("price", price)
-                    console.log("item.client_services.order_type", item.client_services.order_type)
+                    // console.log("price", price)
+                    // console.log("item.client_services.order_type", item.client_services.order_type)
 
                     if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                         item.postdata.price = price
@@ -286,15 +261,15 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                                     if (item1.Token == token[0].instrument_token && item1.Pcode == item.postdata.pCode) {
                                         //  console.log("item.postdata", item.postdata);
-                                        console.log("item.postdata", item.postdata.pCode);
-                                        console.log("item.postdata 5", item1.Pcode);
+                                        // console.log("item.postdata", item.postdata.pCode);
+                                        // console.log("item.postdata 5", item1.Pcode);
 
                                         if (segment.toUpperCase() == 'C') {
 
                                             var possition_qty = parseInt(item1.Bqty) - parseInt(item1.Sqty);
-                                            console.log("possition_qty Cash", possition_qty);
+                                            // console.log("possition_qty Cash", possition_qty);
                                             if (possition_qty == 0) {
-                                                console.log("possition_qty Not Available", possition_qty);
+                                                // console.log("possition_qty Not Available", possition_qty);
                                                 BrokerResponse.create({
                                                     user_id: item._id,
                                                     receive_signal: signal_req,
@@ -337,10 +312,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                                         } else {
                                             var possition_qty = item1.Netqty;
-                                            console.log("possition_qty", possition_qty);
+                                            // console.log("possition_qty", possition_qty);
 
                                             if (possition_qty == 0) {
-                                                console.log("possition_qty Not Available", possition_qty);
+                                                // console.log("possition_qty Not Available", possition_qty);
                                                 BrokerResponse.create({
                                                     user_id: item._id,
                                                     receive_signal: signal_req,
@@ -530,7 +505,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
                 .then(responses => {
-                    console.log("Response:", responses.data);
+                    // console.log("Response:", responses.data);
 
                 })
                 .catch(errors => {
@@ -609,6 +584,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
         data: JSON.stringify([item.postdata])
 
     };
+    // console.log(config);
     axios(config)
         .then(async (response) => {
             // console.log("respose ENTRY", response.data)
@@ -635,7 +611,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
                 })
                     .then((BrokerResponseCreate) => {
-                        console.log('User created and saved:', BrokerResponseCreate._id)
+                        // console.log('User created and saved:', BrokerResponseCreate._id)
                     })
                     .catch((err) => {
                         try {
@@ -708,7 +684,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                console.log('User created and saved:', BrokerResponseCreate._id)
+                                // console.log('User created and saved:', BrokerResponseCreate._id)
                             })
                             .catch((err) => {
                                 try {
@@ -736,7 +712,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                console.log('User created and saved:', BrokerResponseCreate._id)
+                                // console.log('User created and saved:', BrokerResponseCreate._id)
                             })
                             .catch((err) => {
                                 try {
@@ -921,7 +897,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                console.log('User created and saved:', BrokerResponseCreate._id)
+                                // console.log('User created and saved:', BrokerResponseCreate._id)
                             })
                             .catch((err) => {
                                 try {
@@ -949,7 +925,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                console.log('User created and saved:', BrokerResponseCreate._id)
+                                // console.log('User created and saved:', BrokerResponseCreate._id)
                             })
                             .catch((err) => {
                                 try {

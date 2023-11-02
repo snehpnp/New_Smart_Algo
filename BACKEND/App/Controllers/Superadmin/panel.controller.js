@@ -87,7 +87,7 @@ class Panel {
             const { id } = req.body
 
             // FIND PANEL NAME DUPLICATE
-            const EmailCheck = await User.findOne({ _id: id })
+            const EmailCheck = await User.findOne({ _id: id }).select('UserName Email PhoneNo StartDate EndDate ActiveStatus Role AppLoginStatus WebLoginStatus TradingStatus client_key parent_id parent_role broker web_url qty_type signals_execution_type Is_Active')
 
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });

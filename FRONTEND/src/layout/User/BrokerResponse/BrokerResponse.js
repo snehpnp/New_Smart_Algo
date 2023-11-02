@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Accordion from 'react-bootstrap/Accordion';
-import { Get_Broker_Response, UpdateBrokerResponse } from "../../../ReduxStore/Slice/Users/BrokerResponseSlice"
+import { Get_Broker_Response, UpdateBrokerResponse ,GET_ALL_BROKER_RESPONSES} from "../../../ReduxStore/Slice/Users/BrokerResponseSlice"
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable"
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -142,7 +142,7 @@ const BrokerResponse = () => {
 
 
   // GET BROKER RESPONSE ALL DATA
-  const getsignals11 = async (e) => {
+  const BrokerResponse = async (e) => {
     await dispatch(Get_Broker_Response({ _id: isgotodashboard ? gotodashboard.user_id : user_Id, token: AdminToken })).unwrap()
       .then((response) => {
         if (response.status) {
@@ -156,10 +156,19 @@ const BrokerResponse = () => {
   }
 
 
+  const updateBrokerResponse = async (e) => {
+    await dispatch(GET_ALL_BROKER_RESPONSES({user_id:user_Id})).unwrap()
+      .then((response) => {
+        if (response.status) {
+    
+        }
+      })
+  }
+
+
 
   // GET ALL GROUP SERVICES NAME
   const GetAllServicesName = async (row) => {
-    console.log(row);
     // GetBrokerInforMation(row)
 
     setBrokerResponseId(row)
@@ -197,7 +206,8 @@ const BrokerResponse = () => {
 
   // USE EFFECT
   useEffect(() => {
-    getsignals11()
+    updateBrokerResponse()
+    BrokerResponse()
   }, [refresh])
 
 
@@ -206,8 +216,8 @@ const BrokerResponse = () => {
 
     <Content Page_title="Broker Response" button_status={false}>
 
+<button className='btn btn-primary d-flex ms-auto mb-3' type="reset" onClick={(e)=>setrefresh(!refresh)}>Refresh</button>
       <FullDataTable TableColumns={columns} tableData={DashboardData.data} />
-
 
 
       <OrderPending showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
