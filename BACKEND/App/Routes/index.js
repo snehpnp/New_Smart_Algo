@@ -17,6 +17,7 @@ module.exports = function (app) {
     app.use(require("./Admin/dashboard.route"));
     app.use(require("./Admin/helpcenter.route "));
     app.use(require("./Admin/License.route"));
+    app.use(require("./Admin/License.route"));
 
     // SUBADMIN ROUTES
     app.use(require("./Subadmin/subadmin.route"));
@@ -30,5 +31,9 @@ module.exports = function (app) {
 
     // BROKER ACCESS TOKEN
     app.use(require("./Brokerassecc_token/broker_access_toke.route"));
+
+    
+    // MAKE STRATEGY ROUTE
+     app.use(require("./MakeStartegy/makestrategy.route"));
 
 };

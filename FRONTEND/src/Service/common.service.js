@@ -113,3 +113,22 @@ export async function GET_PANEL_KEY(data, token) {
     }
 
 }
+
+
+//----------------------------Make Strategy--------------------------------------------//
+
+// Get Time Frame
+export async function GET_TIMEFRAME(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}get/getAlltimeframe`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

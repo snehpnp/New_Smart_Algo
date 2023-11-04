@@ -29,6 +29,7 @@ class Dashboard {
             const result = await db1.collection(viewName).find().toArray();
 
 
+            
             // // DATA GET SUCCESSFULLY
             res.send({
                 status: true,

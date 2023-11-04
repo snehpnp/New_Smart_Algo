@@ -25,6 +25,10 @@ class OptionChain {
 
     // GET SYMBOLL EXPIRY
     async Get_Option_Symbol_Expiry(req, res) {
+     
+        console.log(" req.body.symbol ",req.body.symbol);
+
+
         try {
             const symbol = req.body.symbol;
 
@@ -32,44 +36,149 @@ class OptionChain {
                 return res.status(400).json({ status: false, msg: 'Symbol is required.', data: [] });
             }
 
-            const currentDateTime = new Date();
-            const pipeline = [
+          
+            const date = new Date(); // Month is 0-based, so 10 represents November
+
+            const formattedDate = date.toISOString();
+
+
+            const pipeline =    [
+
+
                 {
-                    $match: { symbol: req.body.symbol }
+                
+                
+                $match: { symbol: symbol }
+                
+                
                 },
+                
+                
                 {
-                    $group: {
-                        _id: "$symbol",
-                        uniqueExpiryValues: { $addToSet: "$expiry" }
-                    }
-                },
-                {
-                    $unwind: "$uniqueExpiryValues"
-                },
-                {
-                    $addFields: {
-                        expiryDate: {
-                            $dateFromString: {
-                                dateString: "$uniqueExpiryValues",
-                                format: "%d%m%Y"
-                            }
-                        }
-                    }
-                },
-                {
-                    $match: {
-                        expiryDate: { $gte: currentDateTime }
-                    }
-                },
-                {
-                    $sort: { expiryDate: 1 } // Sort ascending
-                },
-                {
-                    $limit: 6 // Limit to the first 6 values
+                
+                
+                $group: {
+                
+                
+                _id: "$symbol",
+                
+                
+                uniqueExpiryValues: { $addToSet: "$expiry" }
+                
+                
                 }
-            ];
+                
+                
+                },
+                
+                
+                {
+                
+                
+                $unwind: "$uniqueExpiryValues"
+                
+                
+                },
+                
+                
+                {
+                
+                
+                $addFields: {
+                
+                
+                expiryDate: {
+                
+                
+                $dateFromString: {
+                
+                
+                dateString: "$uniqueExpiryValues",
+                
+                
+                format: "%d%m%Y"
+                
+                
+                }
+                
+                
+                }
+                
+                
+                }
+                
+                
+                },
+                
+                
+                {
+                
+                
+                $match: {
+                
+                
+                expiryDate: { $gte:new Date(formattedDate) }
+                
+                
+                }
+                
+                
+                },
+                
+                
+                {
+                
+                
+                $addFields: {
+                
+                
+                formattedExpiryDate: {
+                
+                
+                $dateToString: {
+                
+                
+                date: "$expiryDate",
+                
+                
+                format: "%d%m%Y"
+                
+                
+                }
+                
+                
+                }
+                
+                
+                }
+                
+                
+                },
+                
+                
+                {
+                
+                
+                $sort: { expiryDate: 1 }
+                
+                
+                },
+                
+                
+                {
+                
+                
+                $limit: 4
+                
+                
+                }
+                
+                
+                ]
 
             const result = await Alice_token.aggregate(pipeline);
+
+          //  console.log(" result -",result)
             if (result.length === 0) {
                 return res.json({ status: false, msg: 'Symbol not found.', data: [] });
             }

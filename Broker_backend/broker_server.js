@@ -76,7 +76,7 @@ const corsOpts = {
 };
 app.use(cors(corsOpts));
 
-var d = new Date;
+var d = new Date();
 var current_date = [d.getFullYear(),
 d.getMonth() + 1,
 d.getDate(),
