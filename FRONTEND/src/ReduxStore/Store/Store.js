@@ -4,6 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import AuthSlice from "../Slice/Auth/AuthSlice";
 import ThemeSlice from "../Slice/ThemeSlice"
 import CommonSlice from "../Slice/Common/commoSlice"
+import make_strategy_slice from "../Slice/Common/make_strategy_slice"
 
 // SUPERADMIN SLICE
 
@@ -37,15 +38,6 @@ import TradingStatusSlice from "../Slice/Users/TradingStatusSlice";
 import BrokerUpdateSlice from "../Slice/Users/BrokerUpdateSlice";
 
 
-
-
-
-
-
-
-
-
-
 const store = configureStore({
   reducer: {
     AuthSlice: AuthSlice.reducer,
@@ -70,6 +62,8 @@ const store = configureStore({
     TradingStatusSlice: TradingStatusSlice.reducer,
     BrokerUpdateSlice: BrokerUpdateSlice.reducer,
     MessageBroadcastSlice: MessageBroadcastSlice.reducer,
+    make_strategy_slice: make_strategy_slice.reducer,
+    
   },
 });
 

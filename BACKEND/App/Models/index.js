@@ -35,5 +35,5 @@ module.exports = {
     live_price: require('./Live_price.model'),
     Admin_Permission: require('./admin_permision.model'),
     option_chain_symbols: require('./Get_Option_Chain_Symboll.model'),
-
+    timeFrame: require('./timeFrame.model'),
 };

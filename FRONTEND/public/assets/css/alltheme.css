@@ -1104,7 +1104,7 @@ input:checked+.slider:before {
 }
 
 .StepProgress::before {
-    display: inline-block;
+    display: none;
     content: '';
     position: absolute;
     top: 0;
@@ -1124,17 +1124,21 @@ input:checked+.slider:before {
 }
 
 .StepProgress-item::before {
-    display: inline-block;
+    display: none;
     content: '';
     position: absolute;
     left: -30px;
     height: 100%;
     width: 10px;
 }
-
+.stratergy-box
+{
+    margin-left: 45px;
+    margin-bottom:15px
+}
 .StepProgress-item::after {
     content: '';
-    display: inline-block;
+    display: none;
     position: absolute;
     top: 0;
     left: -40px;
@@ -1156,6 +1160,7 @@ input:checked+.slider:before {
     text-align: center;
     border: 2px solid var(--primary);
     background-color: var(--primary);
+    display: none;
 }
 
 .StepProgress-item.current::before {
