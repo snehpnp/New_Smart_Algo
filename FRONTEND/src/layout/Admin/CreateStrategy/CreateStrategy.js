@@ -15,12 +15,29 @@ import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
 import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
+import { get_time_frame } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
+
+
 
 const Signals = () => {
+
+  const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
+  ///console.log("AdminToken",AdminToken)
+  const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
+  const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
+
+
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   const [storeServiceData, setStoreServiceData] = useState([])
   const [filterServices, setFilterServices] = useState("")
+
+  //console.log("filterServices - ",filterServices)
   const [selectedItems, setSelectedItems] = useState([]);
+  //console.log("selectedItems",selectedItems)
+
   const [getIndicators, setGetIndicators] = useState([])
   const [getSources, setGetSources] = useState([])
   console.log("getSources", getSources);
@@ -71,6 +88,9 @@ const Signals = () => {
     getIndicatorApi()
   }, [filterServices]);
 
+
+
+
   const handleShow = () => {
     setShow(true);
 
@@ -84,7 +104,7 @@ const Signals = () => {
 
     axios(config)
       .then(function (response) {
-        // console.log(response.data);
+        // console.log("get service name",response.data);
         setStoreServiceData(response.data.data);
       })
       .catch(function (error) {
@@ -162,11 +182,188 @@ const Signals = () => {
 
   const conditionText = "((close(2) < MA(2)) && (close(1) > MA(11))";
 
+
+  useEffect(() => {
+    getAllSteategyApi();
+    getAllTimeFrameApi();
+  }, []);
+
+  //const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState([]);
+  const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState({ loading: true, data: [] });
+  const [selectStrategy, setSelectStrategy] = useState("");
+
+  // get data time frame 
+  const [timeFrameData, setTimeFrameData] = useState({ loading: true, data: [] });
+
+
+
+
+  // console.log("timeFrameData",timeFrameData)
+  // console.log("selectStrategy",selectStrategy)
+
+
+  const getAllTimeFrameApi = async () => {
+    await dispatch(
+      get_time_frame({
+        req: {
+          page: "1",
+          limit: "100",
+        },
+        token: AdminToken,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        //console.log("response get_time_frame - ",response)
+        if (response.status) {
+          if (response.status) {
+            setTimeFrameData({
+              loading: false,
+              data: response.data,
+            });
+          } else {
+            setTimeFrameData({
+              loading: false,
+              data: response.data,
+            });
+          }
+        }
+      });
+  };
+
+  const getAllSteategyApi = async () => {
+    await dispatch(
+      Get_All_Strategy({
+        req: {
+          page: "1",
+          limit: "100",
+        },
+        token: AdminToken,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        //console.log("response strategy - ",response)
+        if (response.status) {
+          if (response.status) {
+            setStrategyDataAllAdmin({
+              loading: false,
+              data: response.data,
+            });
+          } else {
+            setStrategyDataAllAdmin({
+              loading: false,
+              data: response.data,
+            });
+          }
+        }
+      });
+  };
+
+
+  const [timeFrameVal, setTimeFrameVal] = useState("1");
+ 
+ 
+  const [buyCheck, setBuyCheck] = useState(false);
+ 
+  const [sellCheck, setSellCheck] = useState(false);
+
+
+  const selectTimeFrame = (item) => {
+    console.log("dd -", item.value)
+    setTimeFrameVal(item.value);
+  }
+
+
+
+  console.log("timeFrameVal - ", timeFrameVal)
+ 
+  console.log("buyCheck - ", buyCheck)
+
+  const saveStrategy = () => {
+    if (selectStrategy == "") {
+      alert("Please select a strategy");
+      return;
+    }
+
+
+   // Send Request Buy ------
+   if(buyCheck){
+    let data = {
+      "scriptArray": selectedItems,
+      "user_id": "6512c8f2eb5673dd61bb931a",
+      // "tokensymbol": "3045",
+      // "symbol_name": "SBIN",
+      // "segment": "C",
+      "strategy_name": selectStrategy,
+      // "strike_price":"19300",
+      // "option_type":"CE",
+      //  "expiry":"26102023",
+      "timeframe": timeFrameVal,
+      "type": "BUY",
+      "indicator": "MA",
+      "price_source": "open",
+      "period": "1",
+      "inside_indicator": "EMA",
+      "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
+      "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
+      "buffer_value": "2",
+      "offset": "0"
+    }
+   } 
+
+
+  
+
+   // Send Request Sell ------
+   if(sellCheck){
+    let data = {
+      "scriptArray": selectedItems,
+      "user_id": "6512c8f2eb5673dd61bb931a",
+      // "tokensymbol": "3045",
+      // "symbol_name": "SBIN",
+      // "segment": "C",
+      "strategy_name": selectStrategy,
+      // "strike_price":"19300",
+      // "option_type":"CE",
+      //  "expiry":"26102023",
+      "timeframe": timeFrameVal,
+      "type": "SELL",
+      "indicator": "MA",
+      "price_source": "open",
+      "period": "1",
+      "inside_indicator": "EMA",
+      "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
+      "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
+      "buffer_value": "2",
+      "offset": "0"
+    }
+   }
+
+    
+
+  }
+
+
+
   return (
     <>
       <>
         <Content Page_title="All Services" button_status={false}>
           <div>
+
+            <div className="col-md-2 ">
+              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize:'20px' }}>Strategy</label>
+              <select className="form-select stratergy-box" onChange={(e) => setSelectStrategy(e.target.value)} name="strategyname">
+                <option value="">-- Select Strategy --</option>
+                {strategyDataAllAdmin.data && strategyDataAllAdmin.data.map((sm, i) =>
+                  <option value={sm.strategy_name}>{sm.strategy_name}</option>)}
+              </select>
+            </div>
+
+
+
+
             <Modal show={show} onHide={handleClose} className="right">
               <Modal.Header>
                 <input
@@ -232,6 +429,8 @@ const Signals = () => {
             </Modal>
             <ul class="StepProgress">
               <li class="StepProgress-item is-done">
+
+                
                 <strong>Instruments</strong>
                 <div className="row">
                   <div className="col-md-2">
@@ -274,7 +473,10 @@ const Signals = () => {
               </li>
               <li class="StepProgress-item is-done">
                 <div className="row">
-                  <div className="col-md-3">
+
+                  
+                 
+                   {/* <div className="col-md-3">
                     <div class="columns">
                       <label>Position I would take</label>
                       <div class="column is-12">
@@ -297,7 +499,10 @@ const Signals = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
+
+
+
                   <div className="col-xl-6">
                     <div className="card">
                       <div className="">
@@ -305,88 +510,38 @@ const Signals = () => {
                       </div>
                       <div className="card-body px-0 pt-0">
                         <ul className="nav nav-pills justify-content-between mb-4">
-                          <li className=" nav-item">
+
+                          {
+                            timeFrameData.data && timeFrameData.data.map((item, index) => (
+                              <li className=" nav-item">
+                                <a
+                                  href="#navpills2-1"
+                                  className={`nav-link ${timeFrameVal === item.value ? "active" : ""}`}
+                                  data-bs-toggle="tab"
+                                  aria-expanded="false"
+                                  onClick={() => selectTimeFrame(item)}
+                                >
+                                  {item.name}
+                                </a>
+                              </li>
+                            ))
+                          }
+
+
+
+                          {/* <li className=" nav-item">
                             <a
                               href="#navpills2-1"
                               className="nav-link"
                               data-bs-toggle="tab"
                               aria-expanded="false"
                             >
-                              min
+                             3 min
                             </a>
-                          </li>
-                          <li className="nav-item">
-                            <a
-                              href="#navpills2-2"
-                              className="nav-link"
-                              data-bs-toggle="tab"
-                              aria-expanded="false"
-                            >
-                              3 min
-                            </a>
-                          </li>
-                          <li className="nav-item">
-                            <a
-                              href="#navpills2-3"
-                              className="nav-link active"
-                              data-bs-toggle="tab"
-                              aria-expanded="true"
-                            >
-                              5 min
-                            </a>
-                          </li>
-                          <li className="nav-item">
-                            <a
-                              href="#navpills2-4"
-                              className="nav-link "
-                              data-bs-toggle="tab"
-                              aria-expanded="true"
-                            >
-                              10 min
-                            </a>
-                          </li>
-                          <li className="nav-item">
-                            <a
-                              href="#navpills2-5"
-                              className="nav-link "
-                              data-bs-toggle="tab"
-                              aria-expanded="true"
-                            >
-                              15 min
-                            </a>
-                          </li>
-                          <li className="nav-item">
-                            <a
-                              href="#navpills2-6"
-                              className="nav-link "
-                              data-bs-toggle="tab"
-                              aria-expanded="true"
-                            >
-                              30 min
-                            </a>
-                          </li>
-                          <li className="nav-item">
-                            <a
-                              href="#navpills2-7"
-                              className="nav-link "
-                              data-bs-toggle="tab"
-                              aria-expanded="true"
-                            >
-                              hour
-                            </a>
-                          </li>
-                          <li className="nav-item">
-                            <a
-                              href="#navpills2-8"
-                              className="nav-link "
-                              data-bs-toggle="tab"
-                              aria-expanded="true"
-                            >
-                              day
-                            </a>
-                          </li>
+                          </li> */}
+                  
                         </ul>
-                        <div className="tab-content">
+                        {/* <div className="tab-content">
                           <div id="navpills2-1" className="tab-pane">
                             <div className="row">
                               <div className="col-md-12">
@@ -426,20 +581,31 @@ const Signals = () => {
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-3">
+
+                   {/* <div className="col-md-3">
                     <div className="form-group">
                       <label>Quantity ( in lots )</label>
                       <input type="number" className="form-control"></input>
                     </div>
-                  </div>
+                  </div> */}
+
                 </div>
               </li>
+
+
               <li class="StepProgress-item current is-done">
-                <strong>Entry Condition</strong>
+
+              <div className="form-check form-check-inline">
+                <input className="form-check-input" onChange={(e) => setBuyCheck(e.target.checked)} type="checkbox" id="inlineCheckbox1" value="option1" />
+                <label className="form-check-label" for="inlineCheckbox1">Buy</label>
+              </div>
+
+               
+                <strong>Buy Entry Condition</strong>
 
                 <Form.Select aria-label="Default select example">
                   <option>Select</option>
@@ -449,6 +615,26 @@ const Signals = () => {
                 </Form.Select>
 
               </li>
+
+              <li class="StepProgress-item current is-done">
+
+              <div className="form-check form-check-inline">
+                <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" />
+                <label className="form-check-label" for="inlineCheckbox2">Sell</label>
+              </div>
+
+                <strong>Sell Entry Condition</strong>
+
+                <Form.Select aria-label="Default select example">
+                  <option>Select</option>
+                  <option value="price">Price</option>
+                  <option value="time">Time</option>
+                  <option value="indicator">Indicator</option>
+                </Form.Select>
+
+              </li>
+
+
 
               <li class="StepProgress-item">
                 <strong>Exit Condition</strong>
@@ -558,6 +744,16 @@ const Signals = () => {
             </div> */}
 
           </div>
+
+
+
+
+
+          <div className="col-md-4">
+            <button className='btn btn-info float-end m-0' onClick={saveStrategy}>save</button>
+          </div>
+
+
 
         </Content>
       </>

@@ -1,6 +1,7 @@
 
 // Front-End Url
 export const react_domain = `${window.location.origin}`;
+
 // export const base_url = "https://trade.pandpinfotech.com/backend/";
 // export const broker_url = "https://trade.pandpinfotech.com/signal/";
 

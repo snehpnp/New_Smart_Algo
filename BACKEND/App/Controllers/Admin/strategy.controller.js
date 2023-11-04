@@ -163,6 +163,7 @@ class strategy {
             // IF DATA NOT EXIST
             if (getAllstrategy.length == 0) {
                 res.send({ status: false, msg: "Empty data", data: getAllstrategy })
+                return
             }
 
             // DATA GET SUCCESSFULLY

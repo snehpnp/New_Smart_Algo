@@ -376,7 +376,6 @@ const TradeHistory = () => {
         })
 
 
-        return
 
 
 
