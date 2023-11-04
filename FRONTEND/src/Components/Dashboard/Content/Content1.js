@@ -26,7 +26,7 @@ const Content = ({ Page_title, button_title, button_status, route, additional_fi
             </ol>
           </div>
           <div className="row d-flex">
-            <div className="col-xl-6">
+            <div className="col-xl-5">
               <div className="row">
                 <div className="col-xl-12">
                   <div className="card form-card">
@@ -41,7 +41,7 @@ const Content = ({ Page_title, button_title, button_status, route, additional_fi
                 </div>
               </div>
             </div>
-            <div className="col-xl-6">
+            <div className="col-xl-7">
               <div className="row">
                 <div className="col-xl-12">
                   <div className="card form-card">

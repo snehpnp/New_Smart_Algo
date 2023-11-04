@@ -7,6 +7,8 @@ import { fa_time, fDateTimeSuffix } from '../../../Utils/Date_formet'
 import { Pencil, Trash2 } from 'lucide-react';
 import { Get_All_Signals } from '../../../ReduxStore/Slice/Admin/SignalsSlice'
 import { Get_Sevan_Tradehisotry } from '../../../ReduxStore/Slice/Admin/TradehistorySlice'
+import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Service/Alice_Socket";
+
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,7 +21,7 @@ const Open_Position = () => {
     const token = JSON.parse(localStorage.getItem("user_details")).token;
 
     const [ForGetCSV, setForGetCSV] = useState([])
-
+    const [UserDetails, setUserDetails] = useState([]);
     const [DateFilter, setDateFilter] = useState();
     const [DateArray, setDateArray] = useState([]);
 
@@ -139,15 +141,39 @@ const Open_Position = () => {
                     "Strategy": item.strategy,
                 })
             })
-
             setForGetCSV(csvArr)
         }
-
     }
 
     useEffect(() => {
         forCSVdata()
     }, [SignalsData.data])
+
+
+
+
+    //  GET_USER_DETAILS
+    const UserBrokerDetails = async () => {
+        const response = await GetAccessToken({ broker_name: "aliceblue" });
+
+        if (response.status) {
+            setUserDetails(response.data[0]);
+        }
+
+    };
+    useEffect(() => {
+        UserBrokerDetails();
+    }, []);
+
+
+
+
+
+
+
+
+
+
 
     return (
 

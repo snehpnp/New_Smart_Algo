@@ -14,7 +14,7 @@ export function fDateTime(date) {
 }
 
 export function fDateTimeSuffix(date) {
-  return format(new Date(date), 'MM/dd/yyyy hh:mm:ss');
+  return format(new Date(date), 'dd/MM/yyyy hh:mm:ss');
 }
 export function f_time(date) {
   return format(new Date(date), 'yyyy-MM-dd');

@@ -79,14 +79,13 @@ const ApiCreateInfo = () => {
             }
 
             await dispatch(Create_Help({ req: req, token: token })).unwrap().then((response) => {
-                // console.log("response", response)
                 if (response.status === 409) {
                     toast.error(response.data.msg);
                 }
                 else if (response.status) {
 
-                    const socket = socketIOClient(`${Config.base_url}`);
-                    socket.emit("help_from_client", req);
+                    // const socket = socketIOClient(`${Config.base_url}`);
+                    // socket.emit("help_from_client", req);
 
                     setRefresh(!refresh)
                     toast.success(response.msg);

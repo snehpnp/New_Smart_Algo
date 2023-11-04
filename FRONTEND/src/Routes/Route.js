@@ -26,7 +26,7 @@ const Routing = () => {
   const location = useLocation();
 
   const navigate = useNavigate()
-  // const accessToken = localStorage.getItem("user_details").accessToken
+  const accessToken = JSON.parse(localStorage.getItem("user_details"))
 
   const roles = JSON.parse(localStorage.getItem('user_role'))
   const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
@@ -39,6 +39,11 @@ const Routing = () => {
     if (location.pathname === "/") {
       navigate("/login");
     }
+    if (accessToken === null || accessToken === undefined || accessToken === "null") {
+      navigate("/login");
+      return
+    }
+
     if (roles != null) {
       if (roles === "ADMIN" && location.pathname === "/") {
         navigate("/admin/dashboard");

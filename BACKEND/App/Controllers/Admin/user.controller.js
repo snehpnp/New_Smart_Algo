@@ -284,7 +284,9 @@ class Employee {
                 service_id: data.Service_id,
                 strategy_id: Strategies[0].id,
                 uniqueUserService: User_id + "_" + data.Service_id,
-                quantity: data.lotsize
+                quantity: data.lotsize,
+                lot_size: 1
+
 
               });
               User_client_services.save();
@@ -764,9 +766,10 @@ class Employee {
                 service_id: data.Service_id,
                 strategy_id: strategFind[0].strategy_id,
                 uniqueUserService: existingUsername._id + "_" + data.Service_id,
-                quantity: data.lotsize
+                quantity: data.lotsize,
+                lot_size: 1
               });
-
+console.log("User_client_services" ,User_client_services)
               User_client_services.save();
             });
 

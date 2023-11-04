@@ -106,7 +106,7 @@ class Panel {
 
             var domain1= "http://localhost:3000"
 
-            if( domain == "sneh.com") {
+            if( domain == "sneh.com" || domain== "https://trade.pandpinfotech.com") {
                 domain1 = "http://localhost:3000"
             }else{
                 domain1 = domain
@@ -299,9 +299,16 @@ class Panel {
             const { domain } = req.body
 
             // FIND PANEL NAME DUPLICATE
-            const desiredDomain = 'your_desired_domain_value'; // Replace with the desired domain value
+            var domain1= "http://localhost:3000"
 
-            const Panel_information = await panel_model.findOne({ domain }, 'broker_id');
+            if( domain == "sneh.com" || domain== "https://trade.pandpinfotech.com") {
+                domain1 = "http://localhost:3000"
+            }else{
+                domain1 = domain
+            }
+            console.log(domain1);
+
+            const Panel_information = await panel_model.findOne({ domain:domain1 }, 'broker_id');
 
             // CHECK IF PANEL EXIST OR NOT
             if (!Panel_information) {

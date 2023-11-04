@@ -253,6 +253,22 @@ export async function GET_PERMISSION(data, token) {
 }
 
 
+// 
+export async function GET_ALL_BROKER_RESPONSE(user_id) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/order/info`, user_id, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
+
+
 
 
 

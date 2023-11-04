@@ -194,6 +194,7 @@ class OptionChain {
 
     }
 
+
     // GET All ROUND TOKEN
 
     async Get_Option_All_Round_Token(req, res) {
@@ -395,7 +396,7 @@ class OptionChain {
     async Open_Position(req, res) {
         try {
 
-            var symbols = await MainSignals_modal.find({"TradeType" : "OPTION_CHAIN" , });
+            var symbols = await MainSignals_modal.find({ "TradeType": "OPTION_CHAIN", });
             if (!symbols) {
                 return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
             }

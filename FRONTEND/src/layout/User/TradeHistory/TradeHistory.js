@@ -4,7 +4,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
-import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
+import FullDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import { Get_Tradehisotry } from "../../../ReduxStore/Slice/Users/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
@@ -43,10 +43,7 @@ const TradeHistory = () => {
   const [UserDetails, setUserDetails] = useState([]);
 
 
-  const [rowData, setRowData] = useState({
-    loading: true,
-    data: [],
-  });
+  const [rowData, setRowData] = useState("");
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -143,6 +140,10 @@ const TradeHistory = () => {
             data: response.data,
           });
         }
+        setTradeHistoryData({
+          loading: false,
+          data: response.data,
+        });
       });
   };
 
@@ -178,8 +179,10 @@ const TradeHistory = () => {
     {
       dataField: "index",
       text: "S.No.",
+      // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
+
     {
       dataField: "live",
       text: "Live Price",
@@ -198,11 +201,7 @@ const TradeHistory = () => {
         </div>
       ),
     },
-    {
-      dataField: "createdAt",
-      text: "Signals time",
-      formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>,
-    },
+
     {
       dataField: "trade_symbol",
       text: "Symbol",
@@ -235,9 +234,10 @@ const TradeHistory = () => {
         <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
       ),
     },
+
     {
       dataField: "Action",
-      text: "R/P&L",
+      text: "Realised",
       formatter: (cell, row, rowIndex) => {
         return (
           <div>
@@ -274,7 +274,7 @@ const TradeHistory = () => {
 
     {
       dataField: "UPL",
-      text: "U/P&l",
+      text: "Un-Realised",
       formatter: (cell, row, rowIndex) => (
         <div>
           <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
@@ -286,12 +286,17 @@ const TradeHistory = () => {
 
     {
       dataField: "TPL",
-      text: "T/P&L",
+      text: "Total",
       formatter: (cell, row, rowIndex) => (
         <div>
           <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
         </div>
       ),
+    },
+    {
+      dataField: "createdAt",
+      text: "Signals time",
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
     {
       dataField: "strategy",
@@ -314,6 +319,7 @@ const TradeHistory = () => {
       ),
     },
   ];
+
 
 
 
@@ -427,7 +433,7 @@ const TradeHistory = () => {
         <DetailsView
           showModal={showModal}
           setshowModal={() => setshowModal(false)}
-          tradeHistoryData={tradeHistoryData}
+          tradeHistoryData={rowData}
         />
       </Content>
     </>

@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "../../../Components/ExtraComponents/Modal";
 import UpdateBrokerKey from "./Update_Broker_Key";
 import { loginWithApi } from "./log_with_api";
-import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
+import { User_Profile, GET_MESSAGE_BRODS } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { check_Device } from "../../../Utils/find_device";
 import { GET_HELPS } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
@@ -191,8 +191,23 @@ const Header = ({ ChatBox }) => {
         }
       });
   };
+
+  // GET MESSGAE BRODCAST DATA 
+  //  GET_USER_DETAILS
+  const message_brod = async () => {
+    await dispatch(GET_MESSAGE_BRODS({ id: user_id }))
+      .unwrap()
+      .then((response) => {
+        console.log("response", response);
+        if (response.status) {
+          // setUserDetails(response.data);
+        }
+      });
+  };
+
   useEffect(() => {
     data();
+    message_brod()
   }, [refresh]);
 
   //  For Show Notfication
@@ -252,37 +267,49 @@ const Header = ({ ChatBox }) => {
 
   //  Recieve Notfication
 
+
+  const test = async () => {
+
+    // if (user_role === "USER") {
+    //   const socket = socketIOClient(`${Config.base_url}`);
+
+    //   // console.log("Config.base_url", Config.base_url)
+    //   socket.on("logout_user_from_other_device_res", async (data) => {
+    //     console.log("logout_user_from_other_device_res", data);
+
+    //     await dispatch(
+    //       Log_Out_User({
+    //         userId: data.usedata.user_id,
+    //         Device: data.CheckUser,
+    //       })
+    //     )
+    //       .then((res) => {
+    //         if (res.payload.status) {
+    //           // toast.success(res.payload.msg)
+    //           localStorage.removeItem("user_role");
+    //           localStorage.removeItem("user_details");
+    //           setTimeout(() => {
+    //             navigate("/");
+    //           }, 1500);
+    //         }
+    //       })
+    //       .catch((error) => {
+    //         console.log("logout error", error);
+    //       });
+    //   });
+
+    //   return () => {
+    //     socket.disconnect();
+    //   };
+
+    // }
+
+  }
+
+
+
   useEffect(() => {
-    if (user_role === "USER") {
-      const socket = socketIOClient(`${Config.base_url}`);
-      socket.on("logout_user_from_other_device_res", async (data) => {
-        console.log("logout_user_from_other_device_res", data);
-
-        await dispatch(
-          Log_Out_User({
-            userId: data.usedata.user_id,
-            Device: data.CheckUser,
-          })
-        )
-          .then((res) => {
-            if (res.payload.status) {
-              // toast.success(res.payload.msg)
-              localStorage.removeItem("user_role");
-              localStorage.removeItem("user_details");
-              setTimeout(() => {
-                navigate("/");
-              }, 1500);
-            }
-          })
-          .catch((error) => {
-            console.log("logout error", error);
-          });
-      });
-
-      return () => {
-        socket.disconnect();
-      };
-    }
+    test()
   }, []);
 
   return (
@@ -333,7 +360,6 @@ const Header = ({ ChatBox }) => {
                         onClick={redirectToAdmin}
                         type="button"
                         className="btn btn-primary text-white"
-
                       >
                         Go to Admin
                       </button>
@@ -366,11 +392,13 @@ const Header = ({ ChatBox }) => {
                 {user_role === "ADMIN" ? (
                   <>
                     <Notification data={getAllClients} />
+
                   </>
                 ) : (
                   user_role === "USER" ? (
                     <>
-                      <Notification data={getAllClients} />
+                      <Notification data={[]} />
+
                     </>
                   ) : (
                     ""

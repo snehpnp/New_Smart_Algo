@@ -113,6 +113,7 @@ class Dashboard {
                         user_id: 1,
                         active_status: 1,
                         quantity: 1,
+                        lot_size: 1,
                         product_type: 1,
                         order_type: 1,
                         createdAt: 1,
@@ -213,10 +214,6 @@ class Dashboard {
                     const result = await client_services.updateOne(filter, updateOperation);
 
                     const Service_name = await services.find({ _id: key });
-
-
-                    console.log("matchedObject", result);
-
 
                     if (matchedObject.quantity) {
 
