@@ -368,63 +368,70 @@ class AliceBlue {
 }
 
 const GetAllBrokerResponse = async (user_id) => {
-    const objectId = new ObjectId(user_id);
-    var FindUserAccessToken = await User.find({ _id: objectId })
-    var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId })
 
-    if (FindUserBrokerResponse.length > 0) {
-
-        FindUserBrokerResponse.forEach((data1) => {
-
-            let data = JSON.stringify({
-                "nestOrderNumber": data1.order_id
-            });
-
-            let config = {
-                method: 'post',
-                maxBodyLength: Infinity,
-                url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
-                headers: {
-                    'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
-                    'Content-Type': 'application/json',
-                },
-                data: data
-            };
-            axios(config)
-                .then(async (response) => {
-                    console.log(response.data[0]);
-                    if (response.data[0]) {
-
-                        const message = (JSON.stringify(response.data[0]));
-
-                        let result = await BrokerResponse.findByIdAndUpdate(
-                            { _id: data1._id },
-                            {
-                                order_view_date: message,
-                                order_view_status: '1',
-                                order_view_response: response.data[0].Status,
-                                reject_reason: response.data[0].rejectionreason
-
-                            },
-                            { new: true }
-                        )
-
-
-                    } else {
-                        console.log("NO DATA FOUND");
-                    }
-                })
-                .catch(async (error) => {
-
+    try {
+        const objectId = new ObjectId(user_id);
+        var FindUserAccessToken = await User.find({ _id: objectId })
+        var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId })
+    
+        if (FindUserBrokerResponse.length > 0) {
+    
+            FindUserBrokerResponse.forEach((data1) => {
+    
+                let data = JSON.stringify({
+                    "nestOrderNumber": data1.order_id
                 });
-
-
-
-        })
-
-
-    } else {
+    
+                let config = {
+                    method: 'post',
+                    maxBodyLength: Infinity,
+                    url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/orderHistory',
+                    headers: {
+                        'Authorization': "Bearer " + FindUserAccessToken[0].demat_userid + " " + FindUserAccessToken[0].access_token,
+                        'Content-Type': 'application/json',
+                    },
+                    data: data
+                };
+                axios(config)
+                    .then(async (response) => {
+                        console.log(response.data[0]);
+                        if (response.data[0]) {
+    
+                            const message = (JSON.stringify(response.data[0]));
+    
+                            let result = await BrokerResponse.findByIdAndUpdate(
+                                { _id: data1._id },
+                                {
+                                    order_view_date: message,
+                                    order_view_status: '1',
+                                    order_view_response: response.data[0].Status,
+                                    reject_reason: response.data[0].rejectionreason
+    
+                                },
+                                { new: true }
+                            )
+    
+    
+                        } else {
+                            console.log("NO DATA FOUND");
+                        }
+                    })
+                    .catch(async (error) => {
+    
+                    });
+    
+    
+    
+            })
+    
+    
+        } else {
+        }
+    } catch (error) {
+        console.log("Error in broker response in order Id".error);
     }
+    
+ 
 }
 module.exports = new AliceBlue();
 

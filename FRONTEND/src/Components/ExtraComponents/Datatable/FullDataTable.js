@@ -9,7 +9,7 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 
 
-const FullDataTable = ({ tableData, TableColumns, tableoptions, pagination1 }) => {
+const FullDataTable = ({ tableData, TableColumns, tableoptions, selectRow, keyField, pagination1 }) => {
 
     //  No Data Image
     const NoDataIndication = () => (
@@ -29,17 +29,18 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions, pagination1 }) =
 
 
 
-// console.log("pagination1" ,pagination1)
+
+    // console.log("pagination1" ,pagination1)
 
     return <>
         <div className=''>
 
             <BootstrapTable
-                keyField="id"
-
+                keyField={keyField ? keyField : "id"}
                 data={tableData}
                 columns={TableColumns}
                 pagination={!pagination1 ? paginationFactory(options) : ""}
+                selectRow={selectRow}
 
                 noDataIndication={() => <NoDataIndication />}
                 headerClasses="bg-primary text-primary text-center header-class"

@@ -342,8 +342,17 @@ class Panel {
         try {
             const { domain } = req.body
 
+            var domain1= "http://localhost:3000"
 
-            const Panle_information = await panel_model.find({ domain }).select('broker_id Create_Strategy Option_chain Strategy_plan')
+            if( domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
+                domain1 = "http://localhost:3000"
+            }else{
+                domain1 = domain
+            }
+            console.log(domain1);
+
+            const Panle_information = await panel_model.find({ domain:domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan')
+
 
 
 

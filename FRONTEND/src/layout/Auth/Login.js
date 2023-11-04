@@ -211,11 +211,11 @@ const Login = () => {
     // console.log("DONE AND TEST");
 
     if (getOtp && getOtp == typeOtp1) {
-      const socket = socketIOClient(`${Config.base_url}`);
-      socket.emit("logout_user_from_other_device_req", {
-        CheckUser: CheckUser,
-        usedata: UserData,
-      });
+      // const socket = socketIOClient(`${Config.base_url}`);
+      // socket.emit("logout_user_from_other_device_req", {
+      //   CheckUser: CheckUser,
+      //   usedata: UserData,
+      // });
     }
 
     setTimeout(async () => {

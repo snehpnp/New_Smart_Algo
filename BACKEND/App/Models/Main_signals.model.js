@@ -69,6 +69,9 @@ const MainSignalsSchema = Schema({
     token: {
         type: String,
     },
+    lot_size: {
+        type: String,
+    },
     signals_id: [
         {
             type: mongoose.Schema.Types.ObjectId,

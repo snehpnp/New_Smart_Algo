@@ -167,8 +167,8 @@ class Employee {
       const min = 1;
       const max = 1000000;
       const rand = min + Math.random() * (max - min);
-      // var rand_password = Math.round(rand);
-      var rand_password = Math.round(123456);
+      var rand_password = Math.round(rand);
+      // var rand_password = Math.round(123456);
 
       const salt = await bcrypt.genSalt(10);
       var ByCryptrand_password = await bcrypt.hash(
@@ -284,7 +284,9 @@ class Employee {
                 service_id: data.Service_id,
                 strategy_id: Strategies[0].id,
                 uniqueUserService: User_id + "_" + data.Service_id,
-                quantity: data.lotsize
+                quantity: data.lotsize,
+                lot_size: 1
+
 
               });
               User_client_services.save();
@@ -764,9 +766,10 @@ class Employee {
                 service_id: data.Service_id,
                 strategy_id: strategFind[0].strategy_id,
                 uniqueUserService: existingUsername._id + "_" + data.Service_id,
-                quantity: data.lotsize
+                quantity: data.lotsize,
+                lot_size: 1
               });
-
+console.log("User_client_services" ,User_client_services)
               User_client_services.save();
             });
 

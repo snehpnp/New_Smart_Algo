@@ -84,7 +84,7 @@ export const admin_sidebar = [
             //     "name": 'Trade Execution Report',
             //     "route": "/admin/tradeexecution",
             // },
-            
+
             {
                 'id': 5,
                 "name": '7 Days Entry',
@@ -105,7 +105,7 @@ export const admin_sidebar = [
             {
                 'id': 2,
                 "name": 'Open Position',
-                "route": "/admin/openpostion",
+                "route": "/admin/openposition",
 
             },
         ]
@@ -179,13 +179,13 @@ export const admin_sidebar = [
 
     },
 
-    {
-        'id': 9,
-        "name": 'Create Strategy',
-        "Icon": "Boxes ",
-        "route": "/admin/createstrategy",
-        "Data": []
-    },
+    // {
+    //     'id': 9,
+    //     "name": 'Create Strategy',
+    //     "Icon": "Boxes ",
+    //     "route": "/admin/createstrategy",
+    //     "Data": []
+    // },
     {
         'id': 10,
         "name": 'Broker Information',

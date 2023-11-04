@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_BROKER_RESPONSE,Update_broker_response } from "../../../Service/user.service";
+import { GET_BROKER_RESPONSE,Update_broker_response,GET_ALL_BROKER_RESPONSE } from "../../../Service/user.service";
 
 
 export const Get_Broker_Response = createAsyncThunk("user/brokerresponse", async (data) => {
@@ -26,6 +26,15 @@ export const UpdateBrokerResponse = createAsyncThunk("user/brokerresponse", asyn
     }
 });
 
+export const GET_ALL_BROKER_RESPONSES = createAsyncThunk("getall/order/info", async (user_id) => {
+ 
+    try {
+        const res = await GET_ALL_BROKER_RESPONSE( user_id );
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
 
 
 
@@ -36,6 +45,8 @@ const BrokerResponseSlice = createSlice({
         isLoading: false,
         isError: false,
         brokerReponse: [],
+        brokerReponse1: [],
+
         status: false
     },
 

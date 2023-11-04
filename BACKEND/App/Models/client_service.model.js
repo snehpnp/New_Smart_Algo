@@ -26,7 +26,7 @@ const clientServiceSchema = Schema({
     product_type: {
         type: String,
         enum: ['1', '2', '3', '4'],
-        default: '1'
+        default: '2'
     },
     active_status: {
         type: String,
@@ -34,6 +34,10 @@ const clientServiceSchema = Schema({
         default: '1'
     },
     quantity: {
+        type: String,
+        default: '0'
+    },
+    lot_size: {
         type: String,
         default: '0'
     },

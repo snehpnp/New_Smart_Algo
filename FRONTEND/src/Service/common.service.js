@@ -115,15 +115,18 @@ export async function GET_PANEL_KEY(data, token) {
 }
 
 
+<<<<<<< HEAD
 
 
 //----------------------------Make Strategy--------------------------------------------//
+=======
+>>>>>>> 6584bc4d9a732f406dfb1483f37722f0a7863c5e
 
-// Get Time Frame
-export async function GET_TIMEFRAME(data, token) {
+// GET_PANEL_KEY
 
+export async function GET_OPEN_POSITION(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}get/getAlltimeframe`, data, {
+        const res = await axios.post(`${Config.base_url}get/open_position`, data, {
             headers: header(token),
         })
         return await res?.data;
@@ -133,4 +136,40 @@ export async function GET_TIMEFRAME(data, token) {
         // custom error
     }
 
+}
+
+
+// FIND BROKER RESPONSE BY ID
+export async function GET_MESSAGE_BROD(id) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/messagebrodcast`, id, {
+            // headers: header(token),
+
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+//----------------------------Make Strategy--------------------------------------------//
+
+// Get Time Frame
+export async function GET_TIMEFRAME(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}get/getAlltimeframe`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
 }

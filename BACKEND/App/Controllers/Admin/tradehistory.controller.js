@@ -16,12 +16,14 @@ class Tradehistory {
             const { startDate, endDate, strategy, service, type } = req.body;
 
             var client_persnal_key1 = ""
-            if (type.toUpperCase() == "ADMIN") {
-                client_persnal_key1 = ""
-            } else {
-                client_persnal_key1 = { $ne: "" } 
+            if (type != undefined || type != 'undefined') {
+                if (type.toUpperCase() == "ADMIN") {
+                    client_persnal_key1 = ""
+                } else {
+                    client_persnal_key1 = { $ne: "" }
+                }
             }
-            console.log("client_persnal_key", client_persnal_key1);
+
 
             let startDateObj = new Date(startDate)
             let endDateObj = new Date(endDate)
@@ -42,6 +44,7 @@ class Tradehistory {
                 ser1 = service
             }
 
+
             const filteredSignals = await MainSignals_modal.aggregate([
                 {
                     $match: {
@@ -51,8 +54,8 @@ class Tradehistory {
                         },
                         strategy: stg1,
                         trade_symbol: ser1,
-                        client_persnal_key:client_persnal_key1
-                     
+                        client_persnal_key: client_persnal_key1
+
                     }
                 },
 
@@ -64,7 +67,14 @@ class Tradehistory {
                         as: "result",
                     },
                 },
-
+                {
+                    $lookup: {
+                        from: "services",
+                        localField: "symbol",
+                        foreignField: "name",
+                        as: "result1",
+                    },
+                },
                 {
                     $sort: {
                         _id: -1 // Sort in ascending order. Use -1 for descending.
@@ -73,7 +83,22 @@ class Tradehistory {
 
             ]);
 
+            if (filteredSignals.length > 0) {
 
+                filteredSignals.forEach(function (item) {
+
+                    item.result.forEach(function (signal) {
+
+                        // signal.qty_percent = Number(signal.lot_size) * (Math.ceil(Number(signal.qty_percent) / 100) * 100) * 0.01
+
+                    });
+
+                    item.entry_qty_percent = Number(item.lot_size) * (Math.ceil(Number(item.entry_qty_percent) / 100)),
+                        item.exit_qty_percent = Number(item.lot_size) * (Math.ceil(Number(item.exit_qty_percent) / 100))
+
+                });
+
+            }
 
             if (filteredSignals.length === 0) {
                 return res.send({ status: false, msg: 'No signals founddate range.', data: [] });
@@ -82,7 +107,7 @@ class Tradehistory {
 
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Trade History Error-", error);
         }
     }
 
@@ -109,7 +134,7 @@ class Tradehistory {
 
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Get All Trade History Data-", error);
         }
     }
 

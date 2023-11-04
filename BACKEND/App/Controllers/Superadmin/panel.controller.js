@@ -87,7 +87,7 @@ class Panel {
             const { id } = req.body
 
             // FIND PANEL NAME DUPLICATE
-            const EmailCheck = await User.findOne({ _id: id })
+            const EmailCheck = await User.findOne({ _id: id }).select('UserName Email PhoneNo StartDate EndDate ActiveStatus Role AppLoginStatus WebLoginStatus TradingStatus client_key parent_id parent_role broker web_url qty_type signals_execution_type Is_Active')
 
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
@@ -106,7 +106,7 @@ class Panel {
 
             var domain1= "http://localhost:3000"
 
-            if( domain == "sneh.com") {
+            if( domain == "sneh.com" || domain== "https://trade.pandpinfotech.com") {
                 domain1 = "http://localhost:3000"
             }else{
                 domain1 = domain
@@ -299,9 +299,16 @@ class Panel {
             const { domain } = req.body
 
             // FIND PANEL NAME DUPLICATE
-            const desiredDomain = 'your_desired_domain_value'; // Replace with the desired domain value
+            var domain1= "http://localhost:3000"
 
-            const Panel_information = await panel_model.findOne({ domain }, 'broker_id');
+            if( domain == "sneh.com" || domain== "https://trade.pandpinfotech.com") {
+                domain1 = "http://localhost:3000"
+            }else{
+                domain1 = domain
+            }
+            console.log(domain1);
+
+            const Panel_information = await panel_model.findOne({ domain:domain1 }, 'broker_id');
 
             // CHECK IF PANEL EXIST OR NOT
             if (!Panel_information) {

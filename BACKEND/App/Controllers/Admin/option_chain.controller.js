@@ -1,6 +1,9 @@
 "use strict";
 const db = require('../../Models');
 const Get_Option_Chain_modal = db.option_chain_symbols;
+const MainSignals_modal = db.MainSignals
+
+
 const Alice_token = db.Alice_token;
 
 
@@ -191,6 +194,7 @@ class OptionChain {
 
     }
 
+
     // GET All ROUND TOKEN
 
     async Get_Option_All_Round_Token(req, res) {
@@ -203,7 +207,7 @@ class OptionChain {
         // let symbol = "NIFTY"
         // let expiry = "26102023"
 
-        let limit_set = 40
+        let limit_set = 60
         if (symbol == "FINNIFTY" || symbol == "BANKNIFTY" || symbol == "NIFTY" || symbol == "MIDCPNIFTY") {
             let price = ""
             let price_symbol = ""
@@ -211,7 +215,7 @@ class OptionChain {
                 price = "19500"
                 price_symbol = "Nifty Financial Services";
             } else if (symbol == "BANKNIFTY") {
-                price = "44200"
+                price = "44500"
                 price_symbol = "Nifty Bank";
             } else if (symbol == "NIFTY") {
                 price_symbol = "NIFTY 50";
@@ -343,17 +347,17 @@ class OptionChain {
             var channelstr = ""
             if (result.length > 0) {
                 resultStrike.forEach(element => {
-                 
+
                     let call_token = "";
                     let put_token = "";
                     let symbol = ""
                     let segment = ""
                     result.forEach(element1 => {
                         if (element.strike == element1.strike) {
-                            console.log("symbol", symbol)
-                            console.log("segment", segment)
+                            console.log("symbol", element.strike)
+                            console.log("segment", element1.strike)
 
-                              
+
                             if (element1.option_type == "CE") {
                                 symbol = element1.symbol
                                 segment = element1.segment
@@ -384,6 +388,23 @@ class OptionChain {
             else {
                 res.send({ status: false, data: [], channellist: "" })
             }
+        }
+    }
+
+    // GET All ROUND TOKEN
+
+    async Open_Position(req, res) {
+        try {
+
+            var symbols = await MainSignals_modal.find({ "TradeType": "OPTION_CHAIN", });
+            if (!symbols) {
+                return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
+            }
+
+            return res.send({ status: true, msg: 'Done', data: symbols });
+
+        } catch (error) {
+            console.log("Theme error-", error);
         }
     }
 

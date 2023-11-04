@@ -265,7 +265,7 @@ const UserProfile = () => {
                                 <div className="col-sm-9 col-7">
                                   <span>
                                     {UserDetails.data.StartDate &&
-                                      fDateTime(UserDetails.data.StartDate)}
+                                      fDate(UserDetails.data.StartDate)}
                                   </span>
                                 </div>
                               </div>
@@ -278,7 +278,7 @@ const UserProfile = () => {
                                 <div className="col-sm-9 col-7">
                                   <span>
                                     {UserDetails.data.EndDate &&
-                                      fDateTime(UserDetails.data.EndDate)}
+                                      fDate(UserDetails.data.EndDate)}
                                   </span>
                                 </div>
                               </div>

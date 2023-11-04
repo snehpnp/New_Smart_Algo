@@ -25,7 +25,7 @@ const BrokerResponse = () => {
   const dispatch = useDispatch();
   const [enterqty, setEnterQty] = useState("");
 
-  const [UserDetails, setUserDetails] = useState([]);
+  const [inputValue, setInputValue] = useState('1');
 
 
   const [DashboardData, setDashboardData] = useState({
@@ -78,63 +78,49 @@ const BrokerResponse = () => {
     getservice();
   }, [refresh]);
 
-  //  ---------------   For Create Chanel List  ------------
 
-  var CreatechannelList = "";
-  DashboardData.data &&
-    DashboardData.data?.map((item) => {
-      // if (item.exchange.includes("NSE_") || item.exchange.includes("BSE_")) {
-      //     let xchang = item.exchange.split("_")[0]
-      //     CreatechannelList += `${xchang}|${item.instrumentToken}#`
-      //     console.log("CreatechannelList", CreatechannelList);
-      // } else {
-      CreatechannelList += `${item.service.exch_seg}|${item.service.instrument_token}#`;
-      // }
-    });
 
-  //  SHOW lIVE PRICE
-  const ShowLivePrice = async () => {
-    let type = { loginType: "API" };
-    let channelList = CreatechannelList;
-    if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
 
-      const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
-      if (res.data.stat) {
-        const handleResponse = (response) => {
-          // console.log("response", response);
-          $(".ShowLTP_" + response.tk).html(response.lp);
-        };
-        await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token);
+  const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
+    const numericValue = e.target.value.replace(/[^0-9]/g, '');
+
+    if (e.target.name === "lot_size") {
+
+      if (numericValue) {
+        setInputValue((prevPrices) => ({ ...prevPrices, [symboll]: e.target.value }))
+        if ((data.servicegroup_services_ids.group_qty !== 0) && ((parseInt(e.target.value) * parseInt(data.service.lotsize)) > parseInt(data.servicegroup_services_ids.group_qty))) {
+          toast.error(`cant update more then ${data.servicegroup_services_ids.group_qty} In ${symboll}`);
+          e.target.value = 1
+          return
+        }
+      } else {
+        // toast.error("no negetive or empty value allow ");
+
+        // alert("no negetive or empty value allow ")
+        e.target.value = 1
+        return
       }
     }
-
-  };
-
-  useEffect(() => {
-    ShowLivePrice();
-  }, [DashboardData.data, UserDetails]);
-
-
-  // console.log("UserDetails", UserDetails);
-  // console.log("12",UserDetails);
-
-
-  const setgroup_qty_value_test = (e, symboll, rowdata) => {
-
-    console.log("rowdata", rowdata);
-    console.log("symboll", symboll);
-    // console.log("e",e.target);
-
-
-
-
-
-
 
     let name = e.target.name;
     let value = e.target.value;
     let id = rowdata._id;
 
+
+
+
+
+    setUpdatedData((prevData) => ({
+      ...prevData,
+      [id]: {
+        ...prevData[id],
+        [name]: name === "active_status" ? e.target.checked : value,
+        ...(name === "lot_size" && { "quantity": parseInt(e.target.value) * parseInt(data.service.lotsize) }),
+        ...(name !== "lot_size" && { "quantity": data.service.lotsize, "lot_size": "1" }),
+      },
+    }));
+
+    return
     setUpdatedData((prevData) => ({
       ...prevData,
       [id]: {
@@ -145,6 +131,10 @@ const BrokerResponse = () => {
   };
 
   const UpdateDashboard = async (e) => {
+
+
+
+
     await dispatch(
       Update_Dashboard_Data({
         data: {
@@ -170,57 +160,24 @@ const BrokerResponse = () => {
 
 
 
-  //  GET_USER_DETAILS
-  const data = async () => {
-
-    const response = await GetAccessToken({ broker_name: "aliceblue" });
-
-    if (response.status) {
-      setUserDetails(response.data[0]);
-    }
 
 
 
-  };
-  useEffect(() => {
-    data();
-  }, []);
 
 
-
-  const setMax = (rowdata) => {
-    // console.log("setMax", rowdata.servicegroup_services_ids.group_qty)
-    // console.log("servicegroup_services_ids", rowdata.service.lotsize)
-    // if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
-    //   return rowdata.servicegroup_services_ids.group_qty
-
-    // } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) < 0) {
-
-    // }
-  }
-  const setMin = (rowdata) => {
-    // console.log("setMin", rowdata.servicegroup_services_ids.group_qty)
-
-    // if (parseInt(rowdata.servicegroup_services_ids.group_qty) > 0) {
-    //   // return rowdata.servicegroup_services_ids.group_qty
-
-    // } else if (parseInt(rowdata.servicegroup_services_ids.group_qty) === 0) {
-    //   return (parseInt(rowdata.service.lotsize) * 2)
-
-    // }
-  }
 
 
   return (
     <Content Page_title="Dashboard" button_status={false}>
-      {/* <button onClick={() => RunSocket()}>run socket</button> */}
       <table className="table table-responsive-sm ">
         <thead className="bg-primary">
           <tr>
             <th>#</th>
-            <th>Live Price</th>
-            <th>Symboll</th>
+            {/* <th>Live Price</th> */}
+            <th>Symbol</th>
             <th>lot size</th>
+            <th>max Qty</th>
+            <th>LotSize</th>
             <th>Quantity</th>
             <th>Strategy</th>
             <th>Order Type</th>
@@ -235,43 +192,45 @@ const BrokerResponse = () => {
                 <>
                   <tr>
                     <th>{index + 1}</th>
-                    <td
-                      className={`ShowLTP_${data.service.instrument_token}`}
-                    ></td>
                     <td>{`${data.service.name}[${data.categories.segment}]`}</td>
-                    <td>{data.service.lotsize + "--" + data.servicegroup_services_ids.group_qty}</td>
-
+                    <td>{data.service.lotsize}</td>
+                    <td>{data.servicegroup_services_ids.group_qty}</td>
                     <td>
                       <div className="row d-flex">
                         <div className="col-lg-12">
                           <input
                             key={index}
                             type="number"
-                            name="quantity"
+                            name="lot_size"
                             className="form-control"
-                            id="quantity"
+                            id="lot_size"
                             placeholder="Enter Qty"
-                            min={setMin(data)}
-                            max={setMax(data)}
+                            min={1}
+                            // max={setMax(data)}
+                            // defaultValue={data.service.lotsize}
 
                             onChange={
-                              (e) =>
+                              (e) => {
                                 setgroup_qty_value_test(
                                   e,
                                   data.service.name,
-                                  data.service
+                                  data.service,
+                                  data
                                 )
-
-                              //  setEnterQty(e.target.value)
+                              }
                             }
-                            defaultValue={data.quantity}
+                            defaultValue={data.lot_size}
+                          // defaultValue={enterqty ? enterqty : data.quantity}
                           // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
-
                           />
                         </div>
                       </div>
                     </td>
-                    <td className="color-primary col-md-3">
+                    {console.log("data.service.lotsize", data.service.lotsize)}
+                    <td>{inputValue[data.service.name] ? parseInt(inputValue[data.service.name]) * parseInt(data.service.lotsize) :
+                      parseInt(data.lot_size) * parseInt(data.service.lotsize)}</td>
+
+                    <td className="color-primary col-md-2">
                       <select
                         name="strategy_id"
 
@@ -281,7 +240,8 @@ const BrokerResponse = () => {
                           setgroup_qty_value_test(
                             e,
                             data.service.name,
-                            data.service
+                            data.service,
+                            data
                           )
                         }
                       >
@@ -316,7 +276,8 @@ const BrokerResponse = () => {
                           setgroup_qty_value_test(
                             e,
                             data.service.name,
-                            data.service
+                            data.service,
+                            data
                           )
                         }
                         defaultValue={data.order_type}
@@ -336,13 +297,14 @@ const BrokerResponse = () => {
                           setgroup_qty_value_test(
                             e,
                             data.service.name,
-                            data.service
+                            data.service,
+                            data
                           )
                         }
                         defaultValue={data.product_type}
                       >
-                        <option value="1">CNC</option>
                         <option value="2">MIS</option>
+                        <option value="1">CNC</option>
                         <option value="3">BO</option>
                         <option value="4">CO</option>
                       </select>
@@ -358,7 +320,8 @@ const BrokerResponse = () => {
                             setgroup_qty_value_test(
                               e,
                               data.service.name,
-                              data.service
+                              data.service,
+                              data
                             )
                           }
                         />
