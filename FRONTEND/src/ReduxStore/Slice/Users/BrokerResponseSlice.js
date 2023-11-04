@@ -29,7 +29,7 @@ export const UpdateBrokerResponse = createAsyncThunk("user/brokerresponse", asyn
 export const GET_ALL_BROKER_RESPONSES = createAsyncThunk("getall/order/info", async (user_id) => {
  
     try {
-        const res = await GET_ALL_BROKER_RESPONSE({ user_id: user_id} );
+        const res = await GET_ALL_BROKER_RESPONSE( user_id );
         return await res;
     } catch (err) {
         return err;

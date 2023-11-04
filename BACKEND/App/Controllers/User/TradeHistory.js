@@ -81,7 +81,7 @@ class TradeHistory {
                     } else if (item.users.web_url == '2') {
                         client_persnal_key1 = item.users.client_key
                     }
-                    
+
                     try {
                         // console.log("client_persnal_key1", item.quantity);
 
@@ -112,53 +112,22 @@ class TradeHistory {
                             }
                         ]);
 
-
                         if (data.length > 0) {
 
-
                             data.forEach(function (item) {
-                                var LECount = 0;
-                                var LXCount = 0;
-                                var SECount = 0;
-                                var SXCount = 0;
-
-                                var findstg = GetAllClientServices.find((data)=> data.service.name == item.symbol && data.strategys.strategy_name == item.strategy )
-                              
+                          
+                                var findstg = GetAllClientServices.find((data) => data.service.name == item.symbol && data.strategys.strategy_name == item.strategy)
 
                                 item.result.forEach(function (signal) {
-                                    if (signal.type === "LE") {
-                                        LECount++;
-                                        signal.qty_percent = findstg.quantity
-                                    } else if (signal.type === "LX") {
-                                        LXCount++;
-                                        signal.qty_percent = findstg.quantity
-                                    }
+
+                                    signal.qty_percent = findstg.quantity * (Math.ceil(Number(signal.qty_percent) / 100) * 100) * 0.01
+
                                 });
 
-
-                                item.entry_qty_percent = LECount * findstg.quantity,
-                                item.exit_qty_percent = LXCount * findstg.quantity
-
-                           
+                                item.entry_qty_percent = findstg.quantity * (Math.ceil(Number(item.entry_qty_percent) / 100) * 100) * 0.01,
+                                    item.exit_qty_percent = findstg.quantity * (Math.ceil(Number(item.exit_qty_percent) / 100) * 100) * 0.01
 
                             });
-
-                            // Aapke data ko console par dekhne ke liye
-                            // console.log("=======?",data);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                             abc.push(data)
                         }

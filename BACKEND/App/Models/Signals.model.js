@@ -72,7 +72,9 @@ const SignalsSchema = Schema({
     token: {
         type: String,
     },
-
+    lot_size: {
+        type: String,
+    },
 
     createdAt: {
         type: Date,
