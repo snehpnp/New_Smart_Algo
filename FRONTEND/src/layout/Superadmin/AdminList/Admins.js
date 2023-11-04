@@ -2,40 +2,73 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
+import * as  valid_err from "../../../Utils/Common_Messages"
+
 import Loader from '../../../Utils/Loader'
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, Pointer } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { All_Panel_List, panellist } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { All_Panel_List, Update_Panel_Theme } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
+import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
+import Modal from '../../../Components/ExtraComponents/Modal';
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+
+import { useFormik } from 'formik';
+import toast from 'react-hot-toast';
+
+
+import Formikform from "../../../Components/ExtraComponents/Form/Formik_form"
+
 
 const AdminsList = () => {
 
     const dispatch = useDispatch()
-    const theme_list = useSelector(panellist && panellist)
 
-    console.log("theme_list", theme_list);
+    const token = JSON.parse(localStorage.getItem('user_details')).token
+
+
+    const [showModal, setshowModal] = useState(false)
+    const [Panelid, setPanelid] = useState('')
+    const [themeList, setThemeList] = useState();
+
+
     const [themeData, setThemeData] = useState({
         loading: true,
         data: []
     });
 
 
-    useEffect(async () => {
+
+
+    const GetAllThemes = async () => {
+        await dispatch(Get_All_Theme()).unwrap()
+            .then((response) => {
+                setThemeList(response && response.data);
+            })
+    }
+
+    const data = async () => {
         await dispatch(All_Panel_List()).unwrap()
             .then((response) => {
-                console.log("rest", response.data);
                 setThemeData({
                     loading: false,
                     data: response.data
                 });
             })
+    }
+    useEffect(() => {
+        data()
+        GetAllThemes()
     }, [])
 
 
 
 
-
-
+    const panelDetails = (panel_id) => {
+        console.log("setshowModal(true)", panel_id);
+        setPanelid(panel_id)
+        setshowModal(true)
+    }
 
 
     const columns = [
@@ -68,15 +101,22 @@ const AdminsList = () => {
             dataField: 'is_expired',
             text: 'Expired'
         },
+
         {
-            dataField: 'ip_address',
-            text: 'IP Address'
+            dataField: 'a',
+            text: 'Update Theme',
+            formatter: (cell, row) => (
+                <span data-toggle="tooltip" data-placement="top" title="Edit">
+                    <Pointer size={20} color="#198754" strokeWidth={2} className="mx-1" onClick={() => panelDetails(row._id)} />
+                </span>
+            ),
         },
+
         {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
-                <div>
+                <div className='d-flex'>
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </span>
@@ -90,16 +130,91 @@ const AdminsList = () => {
     ];
 
 
+
+
+
+    const formik = useFormik({
+        initialValues: {
+            theme_update: null,
+
+        },
+        validate: (values) => {
+            const errors = {};
+            if (!values.theme_update) {
+                errors.theme_update = valid_err.THEMESELECT_ERROR;
+            }
+            return errors;
+        },
+        onSubmit: async (values) => {
+            console.log("test", values.theme_update);
+
+            const req = {
+                userid: Panelid,
+                theme_id: values.theme_update,
+                token: token
+
+            }
+
+            await dispatch(Update_Panel_Theme(req)).unwrap()
+                .then((response) => {
+                    // console.log("response", response);
+                    if (response.status) {
+                        toast.success(response.msg)
+                        setshowModal(false)
+
+                    }
+                })
+        }
+    });
+
+
+
+
+    const fields = [
+        {
+            name: 'theme_update',
+            label: 'Theme',
+            type: 'select',
+            options:
+                themeList && themeList.map((item) => ({ label: item.theme_name, value: item._id }))
+            ,
+            // showWhen: values => values.licence === '2'
+        },
+
+    ];
+
+
+
+
     return (
         <>
             {
                 themeData.loading ? <Loader /> :
                     <>
-                        <Content Page_title="Company Theme">
+                        <Content Page_title="Company Theme" button_status={false}>
                             {
                                 themeData.data && themeData.data.length === 0 ? (
                                     'No data found') :
-                                    <FullDataTable TableColumns={columns} tableData={themeData.data} />
+                                    <>
+                                        <FullDataTable TableColumns={columns} tableData={themeData.data} />
+
+
+
+                                        <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
+                                            handleClose={() => setshowModal(false)}
+                                        >
+
+                                            <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update Theme"
+                                                title="update_theme"
+                                            />
+
+
+                                        </Modal >
+
+                                        <ToastButton />
+
+                                    </>
+
 
 
                             }
@@ -108,30 +223,6 @@ const AdminsList = () => {
             }
 
 
-
-            {/*
-            <Content Page_title="Company Theme">
-                {themeData.loading ? (
-                    <Loader />
-                ) : themeData.data && themeData.data.length === 0 ? (
-                    'No data found'
-                ) : (
-                    <FullDataTable TableColumns={columns} tableData={themeData.data} />
-                )}
-            </Content>
- */}
-
-            {/*
-<Content Page_title="Company Theme">
-            {themeData.loading ? (
-                <Loader />
-            ) : themeData.data && themeData.data.length === 0 ? (
-                'No data found'
-            ) : (
-                <FullDataTable TableColumns={columns} tableData={themeData.data} />
-            )}
-        </Content>
- */}
 
         </ >
     );

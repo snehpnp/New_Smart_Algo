@@ -14,11 +14,19 @@ const panelSchema = new mongoose.Schema({
     port: {
         type: String,
         required: [true, "Please enter Port name unique!"],
-        unique: true
+
     },
     key: {
         type: String,
         unique: true
+    },
+    db_url: {
+        type: String,
+        unique: true
+    },
+    db_name: {
+        type: String,
+        // unique: true
     },
     ip_address: {
         type: String,
@@ -37,8 +45,28 @@ const panelSchema = new mongoose.Schema({
     theme_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'theme_list',
-        default: null
-    }
+
+    },
+    broker_id: [{
+        id: String,
+        name: String
+    }],
+    Option_chain: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+    },
+    Create_Strategy: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+    },
+    
+    Strategy_plan: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+    },
 }, {
     timestamps: true
 });

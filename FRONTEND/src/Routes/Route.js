@@ -11,6 +11,13 @@ import Login from "../layout/Auth/Login"
 import ForgetPassword from '../layout/Auth/ForgetPassword';
 import UpdatePassword from '../layout/Auth/UpdatePassword.js';
 import Testing from "../test"
+import Deactivate_Company from '../layout/Auth/Deactivate_Company';
+import NotFound from '../layout/Auth/Not_Found';
+import SignUp from '../layout/Sign_Up_Users/Main';
+
+
+
+
 // import NotFound from "../Layout/NotFound"
 
 
@@ -19,26 +26,24 @@ const Routing = () => {
   const location = useLocation();
 
   const navigate = useNavigate()
-  // const accessToken = localStorage.getItem("user_details").accessToken
+  const accessToken = JSON.parse(localStorage.getItem("user_details"))
 
   const roles = JSON.parse(localStorage.getItem('user_role'))
+  const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+  const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
 
 
-  // let roles = {
-  //   roles: ["SUPERADMIN"]
-  // }
-  // let roles = {
-  //   roles: ["ADMIN"]
-  // }
-  // let roles = {
-  //   roles: ["SUBADMIN"]
-  // }
 
 
   useEffect(() => {
     if (location.pathname === "/") {
       navigate("/login");
     }
+    if (accessToken === null || accessToken === undefined || accessToken === "null") {
+      navigate("/login");
+      return
+    }
+
     if (roles != null) {
       if (roles === "ADMIN" && location.pathname === "/") {
         navigate("/admin/dashboard");
@@ -54,10 +59,16 @@ const Routing = () => {
       // else {
       //   navigate("/login");
       // }
+    } else if (gotodashboard != null) {
+
+    } else if (gotodashboard != null) {
+
+      if (user_role_goTo === "USER" && location.pathname === "/") {
+        navigate("/client/dashboard");
+      } else if (roles === "SUBADMIN" && location.pathname === "/") {
+        navigate("/subadmin/signals");
+      }
     }
-    // else {
-    //   navigate("/login");
-    // }
 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,13 +79,21 @@ const Routing = () => {
     <Routes>
       <Route path="/super/*" element={(roles === "SUPERADMIN") ? <SuperAdmin /> : <Login />} />
       <Route path="/admin/*" element={(roles === "ADMIN") ? <Admin /> : <Login />} />
+      {/* <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} /> */}
+      <Route path="/client/*" element={gotodashboard != null ? <Client /> : (roles === "USER") ? <Client /> : <Login />} />
+
+      <Route path="/subadmin/*" element={gotodashboard != null ? <SubAdmin /> : (roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
+
       <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
-      <Route path="/client/*" element={(roles === "USER") ? <Client /> : <Login />} />
+      <Route path="/client/*" element={gotodashboard != null ? <Client /> : (roles === "USER") ? <Client /> : <Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forget" element={<ForgetPassword />} />
       <Route path="/profile" element={<ForgetPassword />} />
       <Route path="/update/:id" element={<UpdatePassword />} />
       <Route path="/Testing" element={<Testing />} />
+      <Route path="/notfound" element={<Deactivate_Company />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/*" element={<NotFound />} />
 
 
 

@@ -3,22 +3,28 @@ import React from 'react'
 import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
-import Dashboard from '../layout/Admin/Dashboard/Dashbaord';
+import Dashboard from '../layout/Admin/Dashboard/DashbaordMain';
+import Profile from '../layout/Admin/Profile/Profile'
 
 //  Clients
 import ClientList from '../layout/Admin/Clients/ClientList/ClientList'
 import AddClient from '../layout/Admin/Clients/ClientList/Add_Client'
+import EditClient from '../layout/Admin/Clients/ClientList/Edit_Client'
 import SignUpClients from '../layout/Admin/Clients/Sign_Up_Clients/Sign_Up_Clients';
+import EditSignupClient from '../layout/Admin/Clients/Sign_Up_Clients/EditSignupClients';
 
-//  Clients
+//  Sub Admin
 import AllSubadmin from '../layout/Admin/SubAdmin/Subadmins/AllSubadmin';
+import EditSubadmin from '../layout/Admin/SubAdmin/Subadmins/EditSubadmin';
 import SubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/Subadmin_Client"
+import EditSubadminClient from "../layout/Admin/SubAdmin/Subadmin_Clients/EditSubadminClients"
 import AddSubadmin from "../layout/Admin/SubAdmin/Subadmins/AddSubadmin"
 
 
 // Trade Details
 import Signals from "../layout/Admin/TradeDetails/Signals/Signals"
 import SevenDaysEntry from "../layout/Admin/TradeDetails/7DaysEntryOnly/SevenDaysEntryOnly"
+import Edit7days from "../layout/Admin/TradeDetails/7DaysEntryOnly/Edit7days"
 import TradeExecutionReport from "../layout/Admin/TradeDetails/TradeExecutionReport/TradeExecutionReport"
 import TradingStatus from "../layout/Admin/TradeDetails/TradingStatus/TradingStatus"
 import TradeHistory from "../layout/Admin/TradeDetails/TradeHistory/TradeHistory"
@@ -43,8 +49,12 @@ import Report from '../layout/Admin/Report/Report';
 
 // ApiCreateInfo
 import ApiCreateInfo from '../layout/Admin/ApiCreateInfo/ApiCreateInfo';
+import AddApiCreateInfo from '../layout/Admin/ApiCreateInfo/AddApiCreateInfo';
+import EditApiCreateInfo from '../layout/Admin/ApiCreateInfo/EditApiCreateInfo';
 
-// ApiCreateInfo
+
+
+// ReleaseUpdate
 import ReleaseUpdate from '../layout/Admin/ReleaseUpdate/ReleaseUpdate';
 
 
@@ -52,14 +62,24 @@ import ReleaseUpdate from '../layout/Admin/ReleaseUpdate/ReleaseUpdate';
 import System from '../layout/Admin/System/System';
 
 // Strategy
-
 import AllStrategy from '../layout/Admin/Service/AllStrategy/AllStrategy';
 import AddStrategy from '../layout/Admin/Service/AllStrategy/AddStrategy';
 import EditStrategy from '../layout/Admin/Service/AllStrategy/EditStrategy';
+import { Import } from 'lucide-react';
+
+// OPTION CHAIN
+import Opation_Chain from '../layout/Admin/OptionChain/Opation_Chain';
+import Open_Positions from '../layout/Admin/OptionChain/Open_Positions';
 
 
 
+// CREATE STRATEGY
+import CreateStrategy from '../layout/Admin/CreateStrategy/CreateStrategy';
 
+
+
+// BROKER INFORMATION SET
+import BrokerInfor from '../layout/Admin/BrokersInformation/Broker_info';
 
 
 
@@ -74,17 +94,23 @@ const Admin = () => {
             {location.pathname !== "/admin" && location.pathname !== "/admin/*" ? <Wraper /> : null}
             <Routes>
                 <Route exact path="/dashboard" element={<Dashboard />} />
+                <Route exact path="/profile" element={<Profile />} />
                 <Route exact path="/system" element={<System />} />
                 <Route exact path="/allclients" element={<ClientList />} />
                 <Route exact path="/client/add" element={<AddClient />} />
+                <Route exact path="/client/edit/:id" element={<EditClient />} />
                 <Route exact path="/signupclients" element={<SignUpClients />} />
+                <Route exact path="/editsignupclients" element={<EditSignupClient />} />
                 <Route exact path="/allsubadmins" element={<AllSubadmin />} />
+                <Route exact path="/editsubadmin/:id" element={<EditSubadmin />} />
                 <Route exact path="/subadminclients" element={<SubadminClient />} />
                 <Route exact path="/allsubadmins/add" element={<AddSubadmin />} />
+                <Route exact path="/allsubadmins/edit" element={<EditSubadminClient />} />
                 <Route exact path="/strategies" element={<AllStrategy />} />
                 <Route exact path="/strategies/add" element={<AddStrategy />} />
                 <Route exact path="/strategies/edit/:id" element={<EditStrategy />} />
                 <Route exact path="/sevendaysentry" element={<SevenDaysEntry />} />
+                <Route exact path="/Edit7days" element={<Edit7days />} />
                 <Route exact path="/tradeexecution" element={<TradeExecutionReport />} />
                 <Route exact path="/tradingstatus" element={<TradingStatus />} />
                 <Route exact path="/tradehistory" element={<TradeHistory />} />
@@ -96,10 +122,17 @@ const Admin = () => {
                 <Route exact path="/allservices" element={<Service />} />
                 <Route exact path="/groupservices" element={<GroupService />} />
                 <Route exact path="/groupservices/add" element={<AddGroup />} />
-                <Route exact path="/groupservices/edit" element={<EditGroup />} />
+                <Route exact path="/groupservices/edit/:id" element={<EditGroup />} />
                 <Route exact path="/reports" element={<Report />} />
                 <Route exact path="/apicreateinfo" element={<ApiCreateInfo />} />
+                <Route exact path="/apicreateinfo/add" element={<AddApiCreateInfo />} />
+                <Route exact path="/apicreateinfo/edit" element={<EditApiCreateInfo />} />
                 <Route exact path="/updates" element={<ReleaseUpdate />} />
+                <Route exact path="/createstrategy" element={<CreateStrategy />} />
+                <Route exact path="/brokerinfo" element={<BrokerInfor />} />
+                <Route exact path="/optionchain" element={<Opation_Chain />} />
+                <Route exact path="/openposition" element={<Open_Positions />} />
+
             </Routes>
         </>
     )

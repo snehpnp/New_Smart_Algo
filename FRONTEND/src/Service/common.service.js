@@ -1,7 +1,7 @@
 import axios from "axios";
 // import Files
 import * as Config from "../Utils/Config";
-// import { header } from "../Utils/api_header";
+import { header } from "../Utils/ApiHeader";
 
 
 
@@ -12,11 +12,138 @@ export async function USER_PROFILE(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
         return err
+    }
+}
+
+
+
+// GET ALL SERVICE FOR CLIENTS
+export async function GET_ALL_SERVICE_FOR_CLIENTS(data, token) {
+    try {
+        const res = await axios.get(`${Config.base_url}getall/strategy_for_add_client`, data, {
+            headers: header(token),
+            data: {},
+        })
+        // console.log("res", res);
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+    }
+}
+
+
+
+
+
+
+
+// -----------------------------------   FOR GET OPTIONS CHAIN -------------------------------
+
+
+
+// GET OPTION SYMBOLS
+
+export async function GET_OPTION_SYMBOLS(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/option_symbols`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+// GET OPTION SYMBOLS EXPIRY
+
+export async function GET_OPTION_SYMBOLS_EXPIRY(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/option_symbol_expiry`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+// GET OPTION SYMBOLS EXPIRY
+
+export async function GET_OPTION_ALL_ROUND_TOKEN(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/all_round_token`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+// GET_PANEL_KEY
+
+export async function GET_PANEL_KEY(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/panel_key`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+// GET_PANEL_KEY
+
+export async function GET_OPEN_POSITION(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/open_position`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+// FIND BROKER RESPONSE BY ID
+export async function GET_MESSAGE_BROD(id) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/messagebrodcast`, id, {
+            // headers: header(token),
+
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
     }
 
 }

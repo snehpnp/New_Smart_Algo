@@ -4,11 +4,12 @@ import Content from "../../../Components/Dashboard/Content/Content"
 import TableWithButtons from "../../../Components/ExtraComponents/Tables/TableWithIconButtons"
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
+import cellEditFactory from 'react-bootstrap-table2-editor';
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 
 
-const FullDataTable = ({ tableData, TableColumns, tableoptions }) => {
-
-
+const FullDataTable = ({ tableData, TableColumns, tableoptions, selectRow, keyField, pagination1 }) => {
 
     //  No Data Image
     const NoDataIndication = () => (
@@ -22,28 +23,33 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions }) => {
 
     const options = {
         sizePerPage: 10,
-        hidePageListOnlyOnePage: false,
+        hidePageListOnlyOnePage: true,
         ...tableoptions
     };
 
 
+
+
+    // console.log("pagination1" ,pagination1)
+
     return <>
-    <div className='table-responsive'>
-        <BootstrapTable
-            keyField="id"
-            data={tableData}
-            columns={TableColumns}
-            pagination={paginationFactory(options)}
-            noDataIndication={() => <NoDataIndication />}
-            headerClasses="bg-primary text-primary text-center header-class"
-            rowClasses='text-center'
+        <div className=''>
+
+            <BootstrapTable
+                keyField={keyField ? keyField : "id"}
+                data={tableData}
+                columns={TableColumns}
+                pagination={!pagination1 ? paginationFactory(options) : ""}
+                selectRow={selectRow}
+
+                noDataIndication={() => <NoDataIndication />}
+                headerClasses="bg-primary text-primary text-center header-class"
+                rowClasses='text-center'
             />
 
-            </div>
+        </div>
     </>
 }
 
 
 export default FullDataTable
-
-

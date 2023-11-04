@@ -1,41 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
-import Content from '../../Dashboard/Content/Content';
+import { useLocation } from "react-router-dom";
 
 
 
-const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, formik, btn_name, forlogin, title }) => {
+const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fieldtype, formik, btn_name, forlogin, title, additional_field }) => {
 
+
+
+  // console.log("fieldtype", fieldtype)
   const location = useLocation()
 
   const [passwordVisible, setPasswordVisible] = useState({});
 
-  const [previews, setPreviews] = useState([]); // Array to store individual previews
 
+  const [previews, setPreviews] = useState([]);
+
+
+  // console.log("PreviewImage", PreviewImage);
   const handleFileChange = (event, index, name) => {
     const file = event.target.files[0];
-    const newPreviews = [...previews]; // Create a copy of the previews array
-
-    newPreviews[index] = URL.createObjectURL(file); // Set the preview for the specific index
-    console.log("newPreviews[index]", newPreviews[index]);
-    setPreviews(newPreviews); // Update the previews array
-
-
-
     const reader = new FileReader();
-    reader.onload = () => {
-      //setPreviewImage(reader.result);
-      formik.setFieldValue(name, reader.result); // Set Formik field value for the specific index
-    };
 
+    reader.onload = () => {
+      const base64Preview = reader.result; // Get the base64 data URL
+      const newPreviews = [...previews]; // Create a copy of the previews array
+
+      newPreviews[index] = base64Preview; // Set the base64 preview for the specific index
+
+      // Update the previews array
+      setPreviews(newPreviews);
+    };
 
     reader.readAsDataURL(file);
   }
 
 
+  // console.log("initialValues" , formik.initialValues)
+
+  const sneh = (index, name) => {
+    // formik.setFieldValue(name, 'null');
+
+  }
+
   return (
+
 
     // <Content Page_title="HelpCenter">
     <form onSubmit={formik.handleSubmit}>
@@ -44,10 +52,10 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
           {fieldtype.map((field, index) => (
             <>
               {field.type === 'select' ? <>
-                <div className="col-lg-6">
-                  <div className="mb-3 row">
+                <div className={`col-lg-${title === "update_theme" ? 12 : 6}`}>
+                  <div className="mb-1 row">
                     <label
-                      className={`col-lg-${title === "forlogin" ? 3 : 7}  col-form-label`}
+                      className={`col-lg-${title === "forlogin" ? 3 : title === "update_theme" ? 12 : 7}  col-form-label`}
                       htmlFor={field.name}
                     >
                       {field.label}
@@ -63,7 +71,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
                           Please Select {field.label}
                         </option>
                         {field.options.map((option) => (
-                          <option key={option.value} value={option.value}>
+                          <option key={option.value} value={option.value} s>
                             {option.label}
                           </option>
                         ))}
@@ -74,30 +82,67 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
                   </div>
                 </div>
               </> :
-
                 field.type === "checkbox" ? <>
-                  {/* {field.index === '1' ? <>
-                </>
-                  : ""} */}
-                  {field.options.map((option, index) => (
-                    <>
+                  {/* {field.name === "Permissions" ?
+                    <label className="form-check-label" for={field.name} >{field.name}</label>
+                    : ""} */}
 
-                      <div className={`col-lg-${title === "addgroup" ? 2 : 3}`} key={option.id}>
-                        <div className="row d-flex">
-                          <div className="col-lg-12 ">
-                            <div class="form-check custom-checkbox mb-3">
-                              <input type={field.type} className="form-check-input" id={option.label}   {...formik.getFieldProps(option.label)}
-                              />
-                              <label className="form-check-label" for={option.label} >{option.label}</label>
+                  {field.options && field.options.length > 0 ? <>
+                    {field.options && field.options.map((option, index) => (
+                      <>
+                        <div className={`col-lg-${title === "addgroup" ? 2 : 3}`} key={option.id}>
+                          <div className="row d-flex">
+                            <div className="col-lg-12 ">
+                              <div class="form-check custom-checkbox mb-3">
+                                <input type={field.type} className="form-check-input" id={option.label}   {...formik.getFieldProps(option.label)}
+                                />
+                                <label className="form-check-label" for={option.label} >{option.label}</label>
+                              </div>
+                              {formik.errors[field.name] &&
+                                <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ))}
+                  </> :
+
+
+                    field.s === "toggle" ? <>
+                      <div id="app-cover">
+                        {/* <div class="row"> */}
+                        <div class="toggle-button-cover">
+                          <div class="button-cover">
+                            <div class="button r" id="button-1">
+                              <input type="checkbox" class="checkbox" />
+                              <div class="knobs"></div>
+                              <div class="layer"></div>
+                              <label className="form-check-label" for={field.label} >{field.label}</label>
                             </div>
                           </div>
                         </div>
                       </div>
+                      {/* </div> */}
+                    </> :
 
-                    </>
-                  ))}
+                      <>
+
+                        <div className={`col-lg-${title === "addgroup" ? 2 : 3}`} key={field.id}>
+                          <div className="row d-flex">
+                            <div className="col-lg-12 ">
+                              <div class="form-check custom-checkbox mb-3">
+                                <input type={field.type} className="form-check-input" id={field.label}   {...formik.getFieldProps(field.label)}
+                                />
+                                <label className="form-check-label" for={field.label} >{field.label}</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                  }
+
+
                 </> :
-
 
                   field.type === "radio" ? <>
                     {field.index === '1' ? <>
@@ -171,11 +216,15 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
                           <div className="row d-flex">
                             <div className="col-lg-12 ">
                               <div class="form-check custom-checkbox mb-3">
-                                <label className="col-lg-4 " for={field.name}>{field.name}</label>
+                                <label className="col-lg-6 " for={field.name}>{field.name}</label>
                                 <input type={field.type} name={field.name} className="form-control" id={field.name}
                                   {...formik.getFieldProps(field.name)}
+
+                                  min={field.name === "todate" ? fromDate : field.name}
                                 />
                               </div>
+                              {formik.errors[field.name] &&
+                                <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
                             </div>
                           </div>
                         </div>
@@ -199,88 +248,75 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
                             </div>
                           </div>
                         </> :
-                          field.type === "file" ? <>
 
-                            <div className="col-lg-6">
-                              <div className="row d-flex">
-                                <div className={`col-lg-${title === "addgroup" ? 6 : 12}`}>
-                                  <div className="mb-3">
-                                    <label className={`col-form-label`} htmlFor={field.name}>
-                                      {field.label}
-                                      <span className="text-danger">*</span>
-                                    </label>
-                                    <input
-                                      type="file"
-                                      id={field.name}
-                                      onChange={(e) => handleFileChange(e, index, field.name)} // Pass the index to the handler
-                                      className={`form-control`}
-                                    />
-                                  </div>
-                                </div>
-                                <img src={field.name} alt={`Preview ${index}`} className="mb-3" />
-                              </div>
-                            </div>
-
-
-                            {/* <div className="col-lg-6">
+                          field.type === "test" ? <>
+                            <div className="col-lg-3">
                               <div className="row d-flex">
                                 <div className="col-lg-12 ">
-                                  <div class="mb-3">
-                                    <label className="col-lg-4 " for={field.name}>{field.label}</label>
-                                    <input type={field.type} name={field.name} className="form-control" id={field.name}
-                                      // {...formik.getFieldProps(field.name)}
-                                      onChange={(event) => handleImageChange(field.name, event)}
-
+                                  <div class="form-check custom-checkbox mb-3">
+                                    <input type={field.type} name={field.name} className="form-check-input" id={field.name}
+                                      {...formik.getFieldProps(field.name)}
                                     />
+                                    <label className="form-check-label" for={field.name}>{field.name}</label>
                                   </div>
-                                </div>
-                                {Object.entries(imagePreviews).map(([fieldName, previews]) => (
-                                  <div key={fieldName}>
-                                    {console.log("fieldName", fieldName)}
-                                    {previews.map((preview, index) => (
-                                      <div key={index} className="image-preview">
-                                        <img
-                                          src={preview}
-                                          alt={`Preview ${index + 1}`}
-                                          style={{ maxWidth: '100%', maxHeight: '200px' }}
-                                        />
-                                      </div>
-                                    ))}
-                                  </div>
-                                ))}
-                              </div>
-                            </div> */}
-                          </> :
-
-
-
-                            <div className={`col-lg-${title === "forlogin" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
-                              <div className="mb-3 row">
-                                <label
-                                  className={`col-lg-${title === "forlogin" ? 3 : 4} col-form-label `}
-                                  htmlFor={field.name}
-                                >
-                                  {field.label}
-                                  <span className="text-danger">*</span>
-                                </label>
-                                <div className={`col-lg-${title === "forlogin" ? 8 : title === "forResetPassword" || "forUpdatePassword" ? 12 : 7} `}>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    id={field.name}
-                                    placeholder={`Enter a ${field.label}`}
-                                    {...formik.getFieldProps(field.name)}
-                                    required=""
-                                  />
-                                  <div className="invalid-feedback">
-                                    Please enter a {field.label}
-                                  </div>
-                                  {formik.errors[field.name] &&
-                                    <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
-
                                 </div>
                               </div>
                             </div>
+
+                          </> :
+
+                            field.type === "file" ? <>
+                              <div className="col-lg-6">
+                                <div className="row d-flex">
+                                  <div className={`col-lg-${title === "addgroup" ? 6 : 12}`}>
+                                    <div className="mb-3">
+                                      <label className={`col-form-label`} htmlFor={field.name}>
+                                        {field.label}
+                                        <span className="text-danger">*</span>
+                                      </label>
+                                      <input
+                                        type="file"
+                                        id={field.name}
+                                        onChange={(e) => handleFileChange(e, index, field.name)} // Pass the index to the handler
+                                        className={`form-control`}
+                                      />
+                                    </div>
+                                  </div>
+                                  <img src={previews[index] ? previews[index] : sneh(index, field.name)} name={field.name} alt={`Preview_${index}`} className="mb-3" />
+                                </div>
+                              </div>
+                            </> :
+
+                              <div className={`col-lg-${title === "forlogin" || title === "brokerkey" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
+                                <div className="mb-3 row">
+                                  <label
+                                    className={`col-lg-${title === "forlogin" ? 3 : title === "brokerkey" ? 6 : 4} col-form-label `}
+                                    htmlFor={field.name}
+                                  >
+                                    {field.label}
+                                    <span className="text-danger">*</span>
+                                  </label>
+                                  <div className={`col-lg-${title === "forlogin" ? 8 : title === "forResetPassword" || "forUpdatePassword" ? 12 : 7} `}>
+                                    <input
+                                      type="text"
+                                      className="form-control"
+                                      id={field.name}
+                                      placeholder={`Enter a ${field.label}`}
+                                      {...formik.getFieldProps(field.name)}
+                                      required=""
+                                    />
+                                    <div className="invalid-feedback">
+                                      Please enter a {field.label}
+                                    </div>
+                                    {formik.errors[field.name] &&
+                                      <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
+
+                                  </div>
+                                </div>
+
+                              </div>
+
+
 
 
               }
@@ -289,7 +325,11 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
           ))}
 
 
+
+
         </div >
+        {additional_field}
+
         <div className="form-group mb-0">
           <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
             {btn_name}
@@ -297,7 +337,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fieldtype, fo
         </div>
       </div>
 
-    </form >
+    </form>
 
   );
 };

@@ -4,120 +4,218 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
-import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content"
 import Loader from '../../../../Utils/Loader'
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-
-import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_ALL_CLIENTS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
+import { GET_ALL_CLIENTS, GET_ALL_TRADING_STATUS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useDispatch, useSelector } from "react-redux";
-import Modal from '../../../../Components/ExtraComponents/Modal';
+import { fa_time, fDateTimeSuffix } from "../../../../Utils/Date_formet";
+
 
 
 const TradingStatus = () => {
 
     const dispatch = useDispatch()
 
-    const [first, setfirst] = useState('all')
-    const [showModal, setshowModal] = useState(false)
-    const [gettype, settype] = useState('on');
-    
-    console.log(gettype);
+    const [first, setfirst] = useState('on')
 
     const [getAllClients, setAllClients] = useState({
         loading: true,
         data: []
     });
 
+    const [ForGetCSV, setForGetCSV] = useState([])
+
+
 
     const data = async () => {
-        await dispatch(GET_ALL_CLIENTS()).unwrap()
+        let csvarr = []
+        await dispatch(GET_ALL_TRADING_STATUS({ Role: first })).unwrap()
             .then((response) => {
                 if (response.status) {
 
-                    const alData = response.data.filter((item) => {
-                        return item.TradingStatus == gettype
+                    response.data.map((data) => {
+
+                        return csvarr.push({
+                            "Full Name": data.FullName,
+                            "User Name": data.UserName,
+                            "Email": data.Email,
+                            "Phone No": data.PhoneNo,
+                            "Trading Status": data.TradingStatus,
+
+                            "End Date": fDateTimeSuffix(data.EndDate),
+
+                        })
+
                     })
+                    setForGetCSV(csvarr)
+
 
                     setAllClients({
                         loading: false,
-                        data: alData
+                        data: response.data
                     });
-
+                } else {
+                    setAllClients({
+                        loading: false,
+                        data: response.data
+                    });
                 }
+            })
+            .catch((err) => {
+                console.log("err", err);
             })
     }
     useEffect(() => {
         data()
-    }, [gettype])
+    }, [first])
+
+
+
 
     const columns = [
         {
-            dataField: "index",
-            text: "SR. No.",
-            formatter: (cell, row, rowIndex) => rowIndex + 1,
+            dataField: 'index',
+            text: 'S.No.',
+            formatter: (cell, row, rowIndex) => (
+                <div
+                  style={{
+                    color: first == 'off' ? "red" : "black",
+                  }}
+                >
+                  {rowIndex + 1}
+                </div>
+              ),
         },
+       
         {
             dataField: 'UserName',
-            text: 'User Name'
+            text: 'User Name',
+            formatter: (cell, row) => (
+                <div
+                  style={{
+                    color: first == 'off' ? "red" : "green",
+                  }}
+                >
+                  {row.UserName}
+                </div>
+              ),
         },
         {
             dataField: 'Email',
-            text: 'Email'
+            text: 'Email',
+            formatter: (cell, row) => (
+                <div
+                  style={{
+                    color: first == 'off' ? "red" : "green",
+                  }}
+                >
+                  {row.Email}
+                </div>
+              ),
         },
         {
             dataField: 'PhoneNo',
-            text: 'Phone Number'
+            text: 'Phone No',
+            formatter: (cell, row) => (
+                <div
+                  style={{
+                    color: first == 'off' ? "red" : "green",
+                  }}
+                >
+                  {row.PhoneNo}
+                </div>
+              ),
         },
         {
-            dataField: '',
-            text: 'Trading Status'
-        }
+            dataField: 'TradingStatus',
+            text: 'Traing ON/OFF',
+            formatter: (cell, row) => (
+                <div
+                  style={{
+                    color: first == 'off' ? "red" : "green",
+                  }}
+                >
+                  {row.TradingStatus}
+                </div>
+              ),
+
+        },
+        {
+            dataField: 'EndDate',
+            text: 'End Date',
+            formatter: (cell, row) => (
+                <div
+                  style={{
+                    color: first == 'off' ? "red" : "green",
+                  }}
+                >
+                  {fDateTimeSuffix(cell)}
+                </div>
+              ),
+    
+
+        },
+
+
 
     ];
+
+    var RoleArr = ["ADMIN", "USER", "SUBADMIN"]
+
     return (
         <>
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Content Page_title="Trading Status" button_title="#" route="/client/add">
+                        <Content Page_title="Trading Status" button_status={false}
+                            show_csv_button={true} csv_data={ForGetCSV} csv_title="TradingStatus"
+                        >
                             <div className="col-lg-6">
                                 <div className="mb-3 row">
+                                    <label for="validationCustom05" class="form-label">
+                                        Select Status
+                                    </label>
+                                    {/* <div className="col-lg-7">
+                                        <select
+                                            className="default-select wide form-control"
+                                            id="validationCustom05"
+                                            onChange={(e) => setfirst(e.target.value)}
+                                        >
+                                            <option disabled>
+                                                Please Select Catagory
+                                            </option>
+
+                                            {RoleArr && RoleArr.map((item) => {
+                                                return <>
+                                                    <option value={item}>{item}</option>
+                                                </>
+                                            })}
+
+                                        </select>
+
+                                    </div> */}
                                     <div className="col-lg-7">
                                         <select
                                             className="default-select wide form-control"
                                             id="validationCustom05"
-                                            onChange={(e) => settype(e.target.value)}
+                                            onChange={(e) => setfirst(e.target.value)}
                                         >
                                             <option disabled>
-                                                Please Select Type
+                                                Select Status
                                             </option>
-                                            <option value={"on"}>On</option>
-                                            <option value={"off"}>Off</option>
+
+                                            <option value={'on'}>ON</option>
+                                            <option value={'off'}>OFF</option>
+
+
 
                                         </select>
 
                                     </div>
                                 </div>
                             </div>
-                            {
-                                getAllClients.data && getAllClients.data.length === 0 ? (
-                                    'No data found') :
-                                    <>
-                                        <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
-                                    </>
-                            }
-                            {
-                                showModal ?
-                                    <>
-                                        < Modal isOpen={showModal} backdrop="static" size="sm" title="Verify OTP" btn_name="Verify"
-                                        //  handleClose={setshowModal(false)}
-                                        >
-                                        </Modal >
-                                    </>
-                                    : ""
-                            }
+
+                            <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
                         </Content>
                     </>
             }
@@ -127,8 +225,10 @@ const TradingStatus = () => {
         </ >
     )
 
+
 }
 
 
-export default TradingStatus
+export default TradingStatus;
+
 

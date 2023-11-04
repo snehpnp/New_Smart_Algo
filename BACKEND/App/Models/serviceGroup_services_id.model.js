@@ -6,12 +6,11 @@ const serviceGroup_services_id = Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'serviceGroupName',
     },
+ 
     Service_id: {
-        type: String,
-        required: true,
-        trim: true,
-        default: null
-    },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Services"
+      },
     group_qty: {
         type: Number,  // Change the data type to Number
         default: 0
@@ -20,9 +19,7 @@ const serviceGroup_services_id = Schema({
         type: String,
         unique: true,
     },
-   
-        
-    
+
 },
     {
         timestamps: true

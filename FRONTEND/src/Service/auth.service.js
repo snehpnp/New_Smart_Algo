@@ -40,7 +40,6 @@ export async function VARIFY_USER_DEVICE(data, token) {
 }
 
 
-
 // LOGOUT USER
 export async function LOG_OUT_USER(data, token) {
     try {
@@ -48,7 +47,7 @@ export async function LOG_OUT_USER(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
@@ -68,7 +67,7 @@ export async function FORGET_PASSWORD(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
@@ -85,13 +84,13 @@ export async function UPDATE_PASSWORD(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
         return err
 
-        console.log("error", err);
+        // console.log("error", err);/
         // custom error
     }
 
@@ -105,7 +104,7 @@ export async function RESET_PASSWORD(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
@@ -125,7 +124,7 @@ export async function SET_THEME_DETAILS(data, token) {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
@@ -141,14 +140,13 @@ export async function SET_THEME_DETAILS(data, token) {
 
 
 // GET_PANEL_INFORMATION
-
 export async function GET_PANEL_INFORMATION(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}get/panelinformation`, data, {
             // headers: header(token),
             data: {},
         })
-        console.log("res", res);
+        // console.log("res", res);
         return await res?.data;
     }
     catch (err) {
@@ -160,6 +158,48 @@ export async function GET_PANEL_INFORMATION(data, token) {
 
 }
 
+
+// SESSION CLEAR MAIL OTP SEND (USE HERE)
+export async function OTP_SEND_USEHERE(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}session/clear`, data, {
+            // headers: header(token),
+            data: {data},
+        })
+        // console.log("res", res);
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        return err
+
+        // custom error
+    }
+
+}
+
+
+
+
+// LOGOUT FROM OTHER DEVICE
+
+export async function LOGOUT_FROM_OTHER_DEVICE(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}logout/other/device`, data, {
+            // headers: header(token),
+            data: {data},
+        })
+        // console.log("res", res);
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        return err
+
+        // custom error
+    }
+
+}
 
 
 

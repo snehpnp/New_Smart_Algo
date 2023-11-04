@@ -12,16 +12,16 @@ class Company {
             company_information.findById(_id)
                 .then(async (value) => {
                     if (!value) {
-                        return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
+                        return res.send({ status: false, msg: 'Id not match', data: [] });
                     }
                     const filter = { _id: _id };
                     const updateOperation = { $set: companydata };
                     const result = await company_information.updateOne(filter, updateOperation);
                     if (!result) {
-                        return res.status(409).json({ status: false, msg: 'Company not update', data: [] });
+                        return res.send({ status: false, msg: 'Company not update', data: [] });
                     }
 
-                    return res.status(200).json({ status: true, msg: 'Update Successfully.', data: [] });
+                    return res.send({ status: true, msg: 'Update Successfully.', data: [] });
 
                 })
 
@@ -37,10 +37,10 @@ class Company {
 
             var compantInfo = await company_information.find()
             if (!compantInfo) {
-                return res.status(409).json({ status: false, msg: 'Server issue Not find Company information.', data: [] });
+                return res.send({ status: false, msg: 'Server issue Not find Company information.', data: [] });
             }
 
-            return res.status(200).json({ status: true, msg: 'Done', data: compantInfo });
+            return res.send({ status: true, msg: 'Done', data: compantInfo });
 
 
         } catch (error) {
@@ -48,8 +48,25 @@ class Company {
         }
     }
 
-     // EDIT COMPANY Email INFORMATION
-     async EditEmailInfo(req, res) {
+    // GET COMPANY DETALIS
+    async GetCompany_logo(req, res) {
+        try {
+
+            var compantInfo = await company_information.find().select('logo favicon')
+            if (!compantInfo) {
+                return res.send({ status: false, msg: 'Server issue Not find Company information.', data: [] });
+            }
+
+            return res.send({ status: true, msg: 'Done', data: compantInfo });
+
+
+        } catch (error) {
+            console.log("Comany Get Error -", error);
+        }
+    }
+
+    // EDIT COMPANY Email INFORMATION
+    async EditEmailInfo(req, res) {
         try {
             var companydata = req.body.data
             var _id = req.body.id;
@@ -57,16 +74,16 @@ class Company {
             company_information.findById(_id)
                 .then(async (value) => {
                     if (!value) {
-                        return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
+                        return res.send({ status: false, msg: 'Id not match', data: [] });
                     }
                     const filter = { _id: _id };
                     const updateOperation = { $set: companydata };
                     const result = await company_information.updateOne(filter, updateOperation);
                     if (!result) {
-                        return res.status(409).json({ status: false, msg: 'Company not update', data: [] });
+                        return res.send({ status: false, msg: 'Company not update', data: [] });
                     }
 
-                    return res.status(200).json({ status: true, msg: 'Update Successfully.', data: [] });
+                    return res.send({ status: true, msg: 'Update Successfully.', data: [] });
 
                 })
 

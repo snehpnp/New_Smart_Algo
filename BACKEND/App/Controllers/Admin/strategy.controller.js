@@ -3,17 +3,21 @@ const db = require('../../Models');
 const strategy_model = db.strategy
 const strategy_client_model = db.strategy_client
 const { formattedDateTime } = require('../../Helper/time.helper')
+const mongoose = require('mongoose');
+
+const ObjectId = mongoose.Types.ObjectId;
+
 class strategy {
 
     // ADD STRATEGY IN A COLLECTION
     async AddStragegy(req, res) {
         try {
-            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester , strategy_amount } = req.body;
+            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester, per_lot, strategy_image, strategy_amount_month, strategy_amount_quarterly, strategy_amount_half_early, strategy_amount_early, plans } = req.body;
 
 
             const exist_strategy = await strategy_model.findOne({ strategy_name: strategy_name });
             if (exist_strategy) {
-                return res.status(409).json({ status: false, msg: 'Strategy already exists', data: [] });
+                return res.send({ status: false, msg: 'Strategy already exists', data: [] });
             }
 
             var strategy_Data = new strategy_model({
@@ -23,9 +27,14 @@ class strategy {
                 strategy_segment: strategy_segment,
                 strategy_indicator: strategy_indicator,
                 strategy_tester: strategy_tester,
-                strategy_amount :strategy_amount
+                strategy_amount: per_lot,
+                strategy_image: strategy_image,
+                strategy_amount_month: strategy_amount_month,
+                strategy_amount_quarterly: strategy_amount_quarterly,
+                strategy_amount_half_early: strategy_amount_half_early,
+                strategy_amount_early: strategy_amount_early,
+                plans: JSON.stringify(plans)
             })
-
 
             strategy_Data.save()
                 .then(async (data) => {
@@ -35,7 +44,7 @@ class strategy {
                 .catch((err) => {
                     console.log(" Add Time Error-", err);
                     if (err.keyValue) {
-                        return res.status(409).json({ status: false, msg: 'Key duplicate', data: err.keyValue });
+                        return res.send({ status: false, msg: 'Key duplicate', data: err.keyValue });
 
                     }
                 })
@@ -52,13 +61,11 @@ class strategy {
     // EDIT STRATEGY IN A COLLECTION
     async EditStragegy(req, res) {
         try {
-            const { _id, edit_strategy } = req.body;
-
-            // console.log(_id, edit_strategy);
+            const { _id, strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester, strategy_amount, strategy_image, strategy_amount_month, strategy_amount_quarterly, strategy_amount_half_early, strategy_amount_early, plans } = req.body;
 
             const strategy_check = await strategy_model.findOne({ _id: _id });
             if (!strategy_check) {
-                return res.status(409).json({ status: false, msg: 'Strategy Not exist', data: [] });
+                return res.send({ status: false, msg: 'Strategy Not exist', data: [] });
             }
 
 
@@ -66,14 +73,14 @@ class strategy {
                 // CHECK IF SAME STRATEGY AONOTHER STRATEG NAME TO SIMLER MATCH
                 const strateg_data = await strategy_model.find({
                     $and: [
-                        { strategy_name: edit_strategy.strategy_name },
+                        { strategy_name: strategy_name },
                         { _id: { $ne: _id } }
                     ]
                 })
 
 
                 if (strateg_data.length > 0) {
-                    return res.status(409).json({ status: false, msg: 'Strategy Name Already Exist', data: [] });
+                    return res.send({ status: false, msg: 'Strategy Name Already Exist', data: [] });
                 }
 
             } catch (error) {
@@ -81,14 +88,33 @@ class strategy {
             }
 
 
+
             const filter = { _id: _id };
-            const update_strategy = { $set: edit_strategy };
+            const update_strategy = {
+                $set: {
+                    "strategy_name": strategy_name,
+                    "strategy_description": strategy_description,
+                    "strategy_category": strategy_category,
+                    "strategy_segment": strategy_segment,
+                    "strategy_indicator": strategy_indicator,
+                    "strategy_tester": strategy_tester,
+                    "strategy_amount": strategy_amount,
+                    "strategy_image": strategy_image,
+                    "strategy_amount_month": strategy_amount_month,
+                    "strategy_amount_quarterly": strategy_amount_quarterly,
+                    "strategy_amount_half_early": strategy_amount_half_early,
+                    "strategy_amount_early": strategy_amount_early,
+                    "plans": JSON.stringify(plans)
+
+
+                }
+            };
 
             // UPDATE STRATEGY INFORMATION
             const result = await strategy_model.updateOne(filter, update_strategy);
 
             if (!result) {
-                return res.status(409).json({ status: false, msg: 'Strategy not Edit', data: [] });
+                return res.send({ status: false, msg: 'Strategy not Edit', data: [] });
             }
 
             return res.status(200).json({ status: true, msg: 'Strategy Edit successfully!', data: result });
@@ -106,8 +132,9 @@ class strategy {
 
             const exist_strategy = await strategy_model.findOne({ _id: _id });
             if (!exist_strategy) {
-                return res.status(409).json({ status: false, msg: 'Strategy Not exists', data: [] });
+                return res.send({ status: false, msg: 'Strategy Not exists', data: [] });
             }
+
             return res.status(200).json({ status: true, msg: 'Strategy Get successfully!', data: exist_strategy });
 
 
@@ -123,15 +150,14 @@ class strategy {
             const { page, limit } = req.body;
             const skip = (page - 1) * limit;
 
-            const totalCount = await strategy_model.countDocuments();
+            // const totalCount = await strategy_model.countDocuments();
 
 
             // THEME LIST DATA
             // var getAllTheme = await strategy_model.find()
-            const getAllstrategy = await strategy_model
-                .find({})
-                .skip(skip)
-                .limit(Number(limit))
+            const getAllstrategy = await strategy_model.find({})
+            // .skip(skip)
+            // .limit(Number(limit))
 
 
             // IF DATA NOT EXIST
@@ -144,10 +170,10 @@ class strategy {
                 status: true,
                 msg: "Get All Startegy",
                 data: getAllstrategy,
-                page: Number(page),
-                limit: Number(limit),
-                totalCount: totalCount,
-                totalPages: Math.ceil(totalCount / Number(limit)),
+                // page: Number(page),
+                // limit: Number(limit),
+                // totalCount: totalCount,
+                // totalPages: Math.ceil(totalCount / Number(limit)),
             })
 
 
@@ -156,6 +182,38 @@ class strategy {
         }
     }
 
+    // GET ALL STRATEGYS FOR CLIENT
+    async GetAllStrategyForClient(req, res) {
+        try {
+
+
+            const totalCount = await strategy_model.countDocuments();
+
+
+            // THEME LIST DATA
+            // var getAllTheme = await strategy_model.find()
+            const getAllstrategy = await strategy_model
+                .find({}, '_id strategy_name')
+
+
+
+            // IF DATA NOT EXIST
+            if (getAllstrategy.length == 0) {
+                res.send({ status: false, msg: "Empty data", data: getAllstrategy })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All Startegy",
+                data: getAllstrategy,
+            })
+
+
+        } catch (error) {
+            console.log("Get All Strategy Error-", error);
+        }
+    }
     // DELETE STRATEGY IN A COLLECTION
     async DeleteStragegy(req, res) {
         try {
@@ -164,13 +222,13 @@ class strategy {
             // CHECK IF STRATEGY EXISTS
             const strategy_check = await strategy_model.findOne({ _id: _id });
             if (!strategy_check) {
-                return res.status(409).json({ status: false, msg: 'Strategy does not exist', data: [] });
+                return res.send({ status: false, msg: 'Strategy does not exist', data: [] });
             }
 
             // CHECK IF STRATEGY EXISTS IN STRATEGY CLIENT
             const strategy_client_check = await strategy_client_model.findOne({ strategy_id: _id });
             if (strategy_client_check) {
-                return res.status(409).json({ status: false, msg: 'Strategy is assigned to a client', data: [] });
+                return res.send({ status: false, msg: 'It cannot be deleted because it is assigned to a client.', data: [] });
             }
 
             // Delete the strategy
@@ -186,21 +244,67 @@ class strategy {
             return res.status(500).json({ status: false, msg: 'An error occurred', data: [] });
         }
     }
-    //  DELETE STRATEGY
-    async DeleteStrategy(req, res) {
-        try {
-            const { _id } = req.body;
 
-            const exist_strategy = await strategy_model.findOneAndDelete({ _id: _id });
-            if (!exist_strategy) {
-                return res.status(409).json({ status: false, msg: 'Strategy Not exists', data: [] });
+
+
+    // GET ALL STRATEGYS FOR CLIENT
+    async ClientsAccordingToStrategy(req, res) {
+
+        try {
+
+
+            const { _id } = req.body;
+            // GET LOGIN CLIENTS
+            const objectId = new ObjectId(_id);
+            const pipeline = [
+                {
+                    $match: {
+                        strategy_id: objectId
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "user_id",
+                        foreignField: "_id",
+                        as: "users",
+                    },
+                },
+                {
+                    $unwind: '$users',
+                },
+
+                {
+                    $project: {
+                        'users.FullName': 1,
+                        'users.UserName': 1,
+                        'users.license_type': 1,
+
+                    },
+                },
+            ];
+
+            const GetAllClientServices = await strategy_client_model.aggregate(pipeline)
+
+
+            // // IF DATA NOT EXIST
+            if (GetAllClientServices.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [] })
             }
-            return res.status(200).json({ status: true, msg: 'Strategy Delete  Successfully!', data: [] });
+
+            return res.send({
+                status: true,
+                msg: "Get All Startegy",
+                data: GetAllClientServices,
+            })
+
 
         } catch (error) {
-            console.log("Strategy Get One error -", error.keyValue);
+            console.log("Get All Strategy Error-", error);
         }
     }
+
+
 
 }
 

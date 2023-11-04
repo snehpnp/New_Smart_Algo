@@ -1,73 +1,133 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react/jsx-pascal-case */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react'
-import Logo from "./Logo"
-import DropDown from "./DropDown"
-import Notification from '../../ExtraComponents/Notification'
-import $ from "jquery";
+import React, { useEffect, useState } from "react";
+import Logo from "./Logo";
+import DropDown from "./DropDown";
+import Notification from "../../ExtraComponents/Notification";
+import { useDispatch, useSelector } from "react-redux";
 
+import $ from "jquery";
+import { useNavigate } from "react-router-dom";
+import Modal from "../../../Components/ExtraComponents/Modal";
+import UpdateBrokerKey from "./Update_Broker_Key";
+import { loginWithApi } from "./log_with_api";
+import { User_Profile, GET_MESSAGE_BRODS } from "../../../ReduxStore/Slice/Common/commoSlice.js";
+import { check_Device } from "../../../Utils/find_device";
+import { GET_HELPS } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
+import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
+import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice";
+
+
+import * as Config from "../../../Utils/Config";
+import socketIOClient from "socket.io-client";
+
+import jwt_decode from "jwt-decode";
 
 const Header = ({ ChatBox }) => {
-//  For Set Theme
-  let theme_id = localStorage.getItem("theme")
+  // HOOKS
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [showModal, setshowModal] = useState(false);
+  const [refresh, setrefresh] = useState(false);
+
+  const [UserDetails, setUserDetails] = useState([]);
+
+  const [CheckUser, setCheckUser] = useState(check_Device());
+
+  const [getAllClients, setAllClients] = useState({
+    loading: true,
+    data: [],
+  });
+
+
+
+
+  //  lOCAL STORAGE VALUE
+  let theme_id = localStorage.getItem("theme");
+  const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
+  const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
+  const user_role = JSON.parse(localStorage.getItem("user_role"));
+  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const page = localStorage.getItem("page")
+
+  const token = JSON.parse(localStorage.getItem("user_details")).token;
+
   if (theme_id != null) {
-    let themedata = JSON.parse(theme_id)
-    $('body').removeClass('theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9  theme-10');
-    $('body').addClass(themedata.dashboard)
+    let themedata = JSON.parse(theme_id);
+    $("body").removeClass(
+      "theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9  theme-10"
+    );
+    $("body").addClass(themedata.dashboard);
 
-    $('body').attr('data-dashboard', `${themedata.dashboard}-dashboard`);
-    $('body').attr('data-theme-version', themedata.theme_version);
-    $('body').attr('data-primary', themedata.primary_col);
-    $('body').attr('data-nav-headerbg', themedata.nav_head_col);
-    $('body').attr('data-headerbg', themedata.header_col);
-    $('body').attr('data-sibebarbg', themedata.sidebar_col);
+    $("body").attr("data-dashboard", `${themedata.dashboard}-dashboard`);
+    $("body").attr("data-theme-version", themedata.theme_version);
+    $("body").attr("data-primary", themedata.primary_col);
+    $("body").attr("data-nav-headerbg", themedata.nav_head_col);
+    $("body").attr("data-headerbg", themedata.header_col);
+    $("body").attr("data-sibebarbg", themedata.sidebar_col);
 
-    if ($('body').attr('data-sidebar-style') === 'overlay') {
-      $('body').attr('data-sidebar-style', 'full');
-      $('body').attr('data-layout', themedata.layout);
+    if ($("body").attr("data-sidebar-style") === "overlay") {
+      $("body").attr("data-sidebar-style", "full");
+      $("body").attr("data-layout", themedata.layout);
       return;
     }
-    $('body').attr('data-layout', themedata.layout);
-    if ($('body').attr('data-layout') === "horizontal") {
+    $("body").attr("data-layout", themedata.layout);
+    if ($("body").attr("data-layout") === "horizontal") {
       if (themedata.sidebar === "overlay") {
         alert("Sorry! Overlay is not possible in Horizontal layout.");
         return;
       }
     }
-    if ($('body').attr('data-layout') === "vertical") {
-      if ($('body').attr('data-container') === "boxed" && themedata.sidebar === "full") {
+    if ($("body").attr("data-layout") === "vertical") {
+      if (
+        $("body").attr("data-container") === "boxed" &&
+        themedata.sidebar === "full"
+      ) {
         alert("Sorry! Full menu is not available in Vertical Boxed layout.");
         return;
       }
-      if (themedata.sidebar === "modern" && $('body').attr('data-sidebar-position') === "fixed") {
-        alert("Sorry! Modern sidebar layout is not available in the fixed position. Please change the sidebar position into Static.");
+      if (
+        themedata.sidebar === "modern" &&
+        $("body").attr("data-sidebar-position") === "fixed"
+      ) {
+        alert(
+          "Sorry! Modern sidebar layout is not available in the fixed position. Please change the sidebar position into Static."
+        );
         return;
       }
     }
-    $('body').attr('data-sidebar-style', themedata.sidebar);
-    if ($('body').attr('data-sidebar-style') === 'icon-hover') {
-      $('.deznav').on('hover', function () {
-        $('#main-wrapper').addClass('iconhover-toggle');
-      }, function () {
-        $('#main-wrapper').removeClass('iconhover-toggle');
-      });
+    $("body").attr("data-sidebar-style", themedata.sidebar);
+    if ($("body").attr("data-sidebar-style") === "icon-hover") {
+      $(".deznav").on(
+        "hover",
+        function () {
+          $("#main-wrapper").addClass("iconhover-toggle");
+        },
+        function () {
+          $("#main-wrapper").removeClass("iconhover-toggle");
+        }
+      );
     }
 
-    $('body').attr('data-header-position', themedata.header_position);
-    $('body').attr('data-sidebar-position', themedata.sidebar_position);
-    $('body').attr('data-typography', themedata.body_font);
+    $("body").attr("data-header-position", themedata.header_position);
+    $("body").attr("data-sidebar-position", themedata.sidebar_position);
+    $("body").attr("data-typography", themedata.body_font);
     if (themedata.container === "boxed") {
-      if ($('body').attr('data-layout') === "vertical" && $('body').attr('data-sidebar-style') === "full") {
-        $('body').attr('data-sidebar-style', 'overlay');
-        $('body').attr('data-container', themedata.container);
+      if (
+        $("body").attr("data-layout") === "vertical" &&
+        $("body").attr("data-sidebar-style") === "full"
+      ) {
+        $("body").attr("data-sidebar-style", "overlay");
+        $("body").attr("data-container", themedata.container);
         setTimeout(function () {
-          $(window).trigger('resize');
+          $(window).trigger("resize");
         }, 200);
         return;
       }
     }
-    $('body').attr('data-container', themedata.container);
-
-
+    $("body").attr("data-container", themedata.container);
 
     $(window).on("resize", function () {
       var windowWidth = $(this).width();
@@ -81,59 +141,291 @@ const Header = ({ ChatBox }) => {
     });
   }
 
+  const redirectToAdmin = () => {
+    if (page != null) {
+      navigate("/admin/groupservices")
+      localStorage.removeItem("page")
+    } else {
+      user_role_goTo === "USER"
+        ? navigate("/admin/allclients")
+        : navigate("/admin/allsubadmins");
+      window.location.reload();
+      localStorage.removeItem("gotodashboard");
+      localStorage.removeItem("user_details_goTo");
+      localStorage.removeItem("user_role_goTo");
+
+      setTimeout(() => {
+        localStorage.removeItem("user_details_goTo");
+        localStorage.removeItem("user_role_goTo");
+      }, 1000);
+    }
 
 
 
-    return (
-        <div>
-            <Logo />
-            <div className="header">
-                <div className="header-content">
-                    <nav className="navbar navbar-expand">
-                        <div className="collapse navbar-collapse justify-content-between">
-                            <div className="header-left">
-                                {/* <div className="headaer-title">
-                                    <h1 className="font-w600 mb-0">Dashboard</h1>
-                                </div> */}
-                            </div>
-                            <ul className="navbar-nav header-right">
-                                {/*  For Show Notification Box */}
-                                <Notification />
+  };
 
-                                {/*  For Show Chat Box */}
-                                <li className="nav-item dropdown notification_dropdown" onClick={() => ChatBox()}>
-                                    <a className="nav-link bell-link nav-action" >
-                                        <svg
-                                            width={28}
-                                            height={28}
-                                            viewBox="0 0 28 28"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                            <path
-                                                d="M14.8257 17.5282C14.563 17.6783 14.2627 17.7534 14 17.7534C13.7373 17.7534 13.437 17.6783 13.1743 17.5282L0 9.49598V20.193C0 22.4826 1.83914 24.3217 4.12869 24.3217H23.8713C26.1609 24.3217 28 22.4826 28 20.193V9.49598L14.8257 17.5282Z"
-                                                fill="#737B8B"
-                                            />
-                                            <path
-                                                d="M23.8713 3.67829H4.12863C2.17689 3.67829 0.525417 5.06703 0.112549 6.90617L13.9999 15.3887L27.8873 6.90617C27.4745 5.06703 25.823 3.67829 23.8713 3.67829Z"
-                                                fill="#737B8B"
-                                            />
-                                        </svg>
-                                        <span className="badge light text-white bg-primary rounded-circle" />
-                                    </a>
-                                </li>
-                                <li className="nav-item dropdown header-profile">
+  //  BROKER LOGIN
+  const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
+    if (check) {
+      loginWithApi(brokerid, UserDetails);
+    } else {
+      dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            // setUserDetails(response.data);
+            setrefresh(!refresh)
+          }
+        });
 
-                                    {/* </li>
-                                <li> */}
-                                    <DropDown />
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-            </div></div>
-    )
-}
+    }
+  };
 
-export default Header
+  //  GET_USER_DETAILS
+  const data = async () => {
+    await dispatch(User_Profile({ id: user_id }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setUserDetails(response.data);
+        }
+      });
+  };
+
+  // GET MESSGAE BRODCAST DATA 
+  //  GET_USER_DETAILS
+  const message_brod = async () => {
+    await dispatch(GET_MESSAGE_BRODS({ id: user_id }))
+      .unwrap()
+      .then((response) => {
+        console.log("response", response);
+        if (response.status) {
+          // setUserDetails(response.data);
+        }
+      });
+  };
+
+  useEffect(() => {
+    data();
+    message_brod()
+  }, [refresh]);
+
+  //  For Show Notfication
+
+  const Notfication = async () => {
+    await dispatch(GET_HELPS({ user_id: user_id, token: token }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAllClients({
+            loading: false,
+            data: response.data,
+          });
+        } else {
+          setAllClients({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  };
+  useEffect(() => {
+    Notfication();
+  }, []);
+
+  //  Clear Session  After 24 Hours
+  const ClearSession = async () => {
+    var decoded = jwt_decode(token);
+    // console.log("decoded", decoded.exp)
+    // console.log(" new Date().getTime()", new Date().getTime())
+
+    if (decoded.exp * 1000 < new Date().getTime()) {
+      const request = {
+        userId: user_id,
+        Device: CheckUser,
+      };
+
+      await dispatch(Log_Out_User(request))
+        .then((res) => {
+          if (res.payload.status) {
+            localStorage.removeItem("user_role");
+            localStorage.removeItem("user_details");
+            setTimeout(() => {
+              navigate("/");
+            }, 1000);
+          }
+        })
+        .catch((error) => {
+          console.log("logout error", error);
+        });
+    }
+  };
+
+  useEffect(() => {
+    ClearSession();
+  }, []);
+
+  //  Recieve Notfication
+
+
+  const test = async () => {
+
+    // if (user_role === "USER") {
+    //   const socket = socketIOClient(`${Config.base_url}`);
+
+    //   // console.log("Config.base_url", Config.base_url)
+    //   socket.on("logout_user_from_other_device_res", async (data) => {
+    //     console.log("logout_user_from_other_device_res", data);
+
+    //     await dispatch(
+    //       Log_Out_User({
+    //         userId: data.usedata.user_id,
+    //         Device: data.CheckUser,
+    //       })
+    //     )
+    //       .then((res) => {
+    //         if (res.payload.status) {
+    //           // toast.success(res.payload.msg)
+    //           localStorage.removeItem("user_role");
+    //           localStorage.removeItem("user_details");
+    //           setTimeout(() => {
+    //             navigate("/");
+    //           }, 1500);
+    //         }
+    //       })
+    //       .catch((error) => {
+    //         console.log("logout error", error);
+    //       });
+    //   });
+
+    //   return () => {
+    //     socket.disconnect();
+    //   };
+
+    // }
+
+  }
+
+
+
+  useEffect(() => {
+    test()
+  }, []);
+
+  return (
+    <div className="header-container">
+      <Logo />
+      <div className="header">
+        <div className="header-content">
+          <nav className="navbar navbar-expand">
+            <div className="collapse navbar-collapse justify-content-between">
+              <div className="header-left">
+                {user_role === "USER" && UserDetails.license_type != 1 ? (
+                  <>
+                    <div className="headaer-title">
+                      <h3 className="font-w400 mb-0">Api Login </h3>
+                    </div>
+
+                    <div className="Api Login m-2">
+                      <label class="switch">
+                        <input
+                          type="checkbox"
+                          className="bg-primary"
+                          checked={
+                            UserDetails.TradingStatus === "on" ? true : false
+                          }
+                          onClick={(e) =>
+                            LogIn_WIth_Api(
+                              e.target.checked,
+                              UserDetails.broker,
+                              UserDetails.TradingStatus,
+                              UserDetails
+                            )
+                          }
+                        />
+                        <span class="slider round"></span>
+                      </label>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
+              </div>
+              <ul className="navbar-nav header-right">
+                {/* GO TO DASHBOARD */}
+                {gotodashboard != null ? (
+                  <>
+                    <li className="nav-item dropdown gotodashboard">
+                      <button
+                        onClick={redirectToAdmin}
+                        type="button"
+                        className="btn btn-primary text-white"
+                      >
+                        Go to Admin
+                      </button>
+                    </li>
+                  </>
+                ) : (
+                  ""
+                )}
+
+                {/* {(user_role === "USER" && UserDetails.broker === "2" && UserDetails.broker === 2) || */}
+                {(!gotodashboard && (user_role === "USER" || user_role === "ADMIN"))
+
+                  ? (
+                    <>
+                      <li className="nav-item dropdown header-profile me-2">
+                        <button
+                          className=" btn btn-primary"
+                          onClick={() => setshowModal(true)}
+                        >
+                          Set ApiKey
+                        </button>
+                      </li>
+                    </>
+                  ) : (
+                    ""
+                  )}
+
+                {/*  For Show Notification Box */}
+
+                {user_role === "ADMIN" ? (
+                  <>
+                    <Notification data={getAllClients} />
+
+                  </>
+                ) : (
+                  user_role === "USER" ? (
+                    <>
+                      <Notification data={[]} />
+
+                    </>
+                  ) : (
+                    ""
+                  )
+                )}
+
+                <li className="nav-item dropdown header-profile">
+                  <DropDown />
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+
+        <Modal
+          isOpen={showModal}
+          backdrop="static"
+          size="ms-5"
+          title="Update Broker Key"
+          hideBtn={true}
+          handleClose={() => setshowModal(false)}
+        >
+          <UpdateBrokerKey closeModal={() => setshowModal(false)} />
+        </Modal>
+      </div>
+    </div>
+  );
+};
+
+export default Header;

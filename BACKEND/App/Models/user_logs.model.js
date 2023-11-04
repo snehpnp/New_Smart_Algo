@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const userActivitySchema = new mongoose.Schema({
     user_Id: {
-        type: String,
-        default: null
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "USER"
     },
     login_status: {
         type: String,
@@ -18,6 +18,10 @@ const userActivitySchema = new mongoose.Schema({
         default: null
     },
     role: {
+        type: String,
+        default: null
+    },
+    device: {
         type: String,
         default: null
     },

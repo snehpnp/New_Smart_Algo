@@ -1,282 +1,194 @@
-
-
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
+import BasicDataTable from '../../../../Components/ExtraComponents/Datatable/BasicDataTable'
+import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
+import Loader from '../../../../Utils/Loader'
+import { fa_time, fDateTimeSuffix } from '../../../../Utils/Date_formet'
+import { Pencil, Trash2 } from 'lucide-react';
+import { Get_All_Signals } from '../../../../ReduxStore/Slice/Admin/SignalsSlice'
+import { Get_Sevan_Tradehisotry } from '../../../../ReduxStore/Slice/Admin/TradehistorySlice'
+
+import { useDispatch, useSelector } from "react-redux";
 
 
-const SevenDaysEntryOnly = () => {
-    return <>
 
-        <Content Page_title="SevenDaysEntryOnly">
-            <div className="row">
-                <div className="col-xl-4">
-                    <div className="row">
+const SevenDaysEntry = () => {
 
-                        <div className="col-xl-12">
-                            <div className="card form-card">
-                                <div className="card-body">
-                                    <div className="profile-blog">
-                                        <h5 className="text-primary d-block">User Profile</h5>
-                                        {/* <img src="../assets/images/header-img/pic-1.jpg"  className="profile-img"></img> */}
+    const dispatch = useDispatch()
 
-                                        <h4>
-                                            <a href="a" className="text-black">
-                                                Details
-                                            </a>
-                                        </h4>
-                                        <div className="profile-info">
-                                            <div className="profile-photo">
-                                                <img
-                                                    src="images/profile/profile.png"
-                                                    className="img-fluid rounded-circle"
-                                                    alt=""
-                                                />
-                                            </div>
-                                            <div className="profile-details d-block">
-                                                <div className="profile-name px-3 pt-2">
-                                                    <h4 className="text-primary mb-0">Mitchell C. Shay</h4>
-                                                    <p>UX / UI Designer</p>
-                                                </div>
-                                                <div className="profile-email px-2 pt-2">
-                                                    <h4 className="text-muted mb-0">info@example.com</h4>
-                                                    <p>Email</p>
-                                                </div>
+    const token = JSON.parse(localStorage.getItem("user_details")).token;
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    const [ForGetCSV, setForGetCSV] = useState([])
+
+    const [DateFilter, setDateFilter] = useState();
+    const [DateArray, setDateArray] = useState([]);
 
 
-                    </div>
-                </div>
-                <div className="col-xl-8">
-                    <div className="card form-card">
-                        <div className="card-body">
-                            <div className="profile-tab">
-                                <div className="custom-tab-1">
-                                    <ul className="nav nav-tabs">
+    const columns = [
+        {
+            dataField: 'index',
+            text: 'S.No.',
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
 
-                                        <li className="nav-item">
-                                            <a href="#about-me" data-bs-toggle="tab" className="nav-link">
-                                                About Me
-                                            </a>
-                                        </li>
-                                        <li className="nav-item">
-                                            <a
-                                                href="#profile-settings"
-                                                data-bs-toggle="tab"
-                                                className="nav-link"
+        },
+        {
+            dataField: 'createdAt',
+            text: 'Signals Time',
+            formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>
+        },
+        {
+            dataField: 'entry_type',
+            text: 'Type'
+        },
+        {
+            dataField: 'trade_symbol',
+            text: 'Symbol'
+        },
+        {
+            dataField: 'entry_price',
+            text: 'Price'
+        },
+
+        {
+            dataField: 'strategy',
+            text: 'Strategy',
+        },
+        // {
+        //     dataField: 'strategy',
+        //     text: 'Squre Off',
+        //     formatter: (cell, row) => ( <div> <button
+        //         className={`btn btn-success`} > SQURE OFF</button></div>)
+
+        // },
+    ];
+
+
+
+    const [SignalsData, getSignalsData] = useState({
+        loading: true,
+        data: []
+    });
+
+
+
+    const getsignals = async () => {
+        await dispatch(Get_Sevan_Tradehisotry({ startDate: DateFilter, token: token })).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    getSignalsData({
+                        loading: false,
+                        data: response.data
+                    });
+                } else {
+                    getSignalsData({
+                        loading: false,
+                        data: response.data
+                    });
+
+                }
+            })
+
+
+
+
+
+
+
+    }
+    useEffect(() => {
+        getsignals()
+    }, [DateFilter])
+
+    var dateArray = [];
+    const dateArr = () => {
+        for (let i = 0; i < 3; i++) {
+            const currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() - i);
+            const day = currentDate.getDate();
+            const month = currentDate.getMonth() + 1; // Months are zero-based, so add 1
+            const year = currentDate.getFullYear();
+            const formattedDate = `${year}/${month}/${day}`;
+            dateArray.push(formattedDate);
+
+        }
+        setDateArray(dateArray)
+        setDateFilter(dateArray[0])
+    }
+    useEffect(() => {
+        dateArr()
+    }, [])
+
+
+
+    const forCSVdata = () => {
+
+        let csvArr = []
+        if (SignalsData.data.length > 0) {
+            SignalsData.data.map((item) => {
+                return csvArr.push({
+                    "symbol": item.trade_symbol,
+                    "EntryType": item.entry_type ? item.entry_type : "-",
+                    "ExitType": item.exit_type ? item.exit_type : "-",
+                    "Entry Price": item.entry_price,
+                    "Entry Qty": item.entry_qty_percent,
+                    "Exit Price": item.exit_price ? item.exit_price : "-",
+                    "Exit Qty": item.exit_qty_percent ? item.exit_qty_percent : "-",
+                    "Entry Time": item.entry_dt_date,
+                    "Exit Time": item.exit_dt_date ? item.exit_dt_date : "-",
+                    "Exchange": item.exchange,
+                    "Strategy": item.strategy,
+                })
+            })
+
+            setForGetCSV(csvArr)
+        }
+
+    }
+
+    useEffect(() => {
+        forCSVdata()
+    }, [SignalsData.data])
+
+    return (
+
+
+        <Content Page_title="Last Week Entry" button_status={false}
+            show_csv_button={true} csv_data={ForGetCSV} csv_title="LastWeekEntry"
+        >
+            {/* <div className='d-flex'> */}
+
+            {/* <div className="col-lg-6">
+                                    <div className="mb-3 row">
+                                        <div className="col-lg-7">
+                                            <select
+                                                className="default-select wide form-control"
+                                                id="validationCustom05"
+                                                onChange={(e) => setDateFilter(e.target.value)}
                                             >
-                                                Setting
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div className="tab-content">
+                                                <option disabled> Please Select Date </option>
 
-                                        <div id="about-me" className="tab-pane fade active show">
-                                            <div className="profile-personal-info pt-3">
-                                                <h4 className="text-primary mb-4">Personal Information</h4>
-                                                <div className="row mb-2">
-                                                    <div className="col-sm-3 col-5">
-                                                        <h5 className="f-w-500">
-                                                            Name <span className="pull-end">:</span>
-                                                        </h5>
-                                                    </div>
-                                                    <div className="col-sm-9 col-7">
-                                                        <span>Mitchell C.Shay</span>
-                                                    </div>
-                                                </div>
-                                                <div className="row mb-2">
-                                                    <div className="col-sm-3 col-5">
-                                                        <h5 className="f-w-500">
-                                                            Email <span className="pull-end">:</span>
-                                                        </h5>
-                                                    </div>
-                                                    <div className="col-sm-9 col-7">
-                                                        <span>example@examplel.com</span>
-                                                    </div>
-                                                </div>
-                                                <div className="row mb-2">
-                                                    <div className="col-sm-3 col-5">
-                                                        <h5 className="f-w-500">
-                                                            Availability <span className="pull-end">:</span>
-                                                        </h5>
-                                                    </div>
-                                                    <div className="col-sm-9 col-7">
-                                                        <span>Full Time (Free Lancer)</span>
-                                                    </div>
-                                                </div>
-                                                <div className="row mb-2">
-                                                    <div className="col-sm-3 col-5">
-                                                        <h5 className="f-w-500">
-                                                            Age <span className="pull-end">:</span>
-                                                        </h5>
-                                                    </div>
-                                                    <div className="col-sm-9 col-7">
-                                                        <span>27</span>
-                                                    </div>
-                                                </div>
-                                                <div className="row mb-2">
-                                                    <div className="col-sm-3 col-5">
-                                                        <h5 className="f-w-500">
-                                                            Location <span className="pull-end">:</span>
-                                                        </h5>
-                                                    </div>
-                                                    <div className="col-sm-9 col-7">
-                                                        <span>Rosemont Avenue Melbourne, Florida</span>
-                                                    </div>
-                                                </div>
-                                                <div className="row mb-2">
-                                                    <div className="col-sm-3 col-5">
-                                                        <h5 className="f-w-500">
-                                                            Year Experience <span className="pull-end">:</span>
-                                                        </h5>
-                                                    </div>
-                                                    <div className="col-sm-9 col-7">
-                                                        <span>07 Year Experiences</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                {DateArray && DateArray.map((item) => {
+                                                    return <>
+                                                        <option value={item.toString()}>{item.toString()}</option>
+                                                    </>
+                                                })}
+                                            </select>
                                         </div>
-                                        <div id="profile-settings" className="tab-pane fade">
-                                            <div className="pt-3">
-                                                <div className="settings-form">
-                                                    <h4 className="text-primary">Account Setting</h4>
-                                                    <form>
-                                                        <div className="row">
-                                                            <div className="mb-3 col-md-6">
-                                                                <label className="form-label">Email</label>
-                                                                <input
-                                                                    type="email"
-                                                                    placeholder="Email"
-                                                                    className="form-control"
-                                                                />
-                                                            </div>
-                                                            <div className="mb-3 col-md-6">
-                                                                <label className="form-label">Password</label>
-                                                                <input
-                                                                    type="password"
-                                                                    placeholder="Password"
-                                                                    className="form-control"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="mb-3">
-                                                            <label className="form-label">Address</label>
-                                                            <input
-                                                                type="text"
-                                                                placeholder="1234 Main St"
-                                                                className="form-control"
-                                                            />
-                                                        </div>
-                                                        <div className="mb-3">
-                                                            <label className="form-label">Address 2</label>
-                                                            <input
-                                                                type="text"
-                                                                placeholder="Apartment, studio, or floor"
-                                                                className="form-control"
-                                                            />
-                                                        </div>
-                                                        <div className="row">
-                                                            <div className="mb-3 col-md-6">
-                                                                <label className="form-label">City</label>
-                                                                <input type="text" className="form-control" />
-                                                            </div>
-                                                            <div className="mb-3 col-md-4">
-                                                                <label className="form-label">State</label>
-                                                                <select
-                                                                    className="form-control default-select wide"
-                                                                    id="inputState"
-                                                                >
-                                                                    <option selected="">Choose...</option>
-                                                                    <option>Option 1</option>
-                                                                    <option>Option 2</option>
-                                                                    <option>Option 3</option>
-                                                                </select>
-                                                            </div>
-                                                            <div className="mb-3 col-md-2">
-                                                                <label className="form-label">Zip</label>
-                                                                <input type="text" className="form-control" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="mb-3">
-                                                            <div className="form-check custom-checkbox">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    className="form-check-input"
-                                                                    id="gridCheck"
-                                                                />
-                                                                <label
-                                                                    className="form-check-label form-label"
-                                                                    htmlFor="gridCheck"
-                                                                >
-                                                                    {" "}
-                                                                    Check me out
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <button className="btn btn-primary" type="submit">
-                                                            Sign in
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                     </div>
-                                </div>
-                                {/ Modal /}
-                                <div className="modal fade" id="replyModal">
-                                    <div
-                                        className="modal-dialog modal-dialog-centered"
-                                        role="document"
-                                    >
-                                        <div className="modal-content">
-                                            <div className="modal-header">
-                                                <h5 className="modal-title">Post Reply</h5>
-                                                <button
-                                                    type="button"
-                                                    className="btn-close"
-                                                    data-bs-dismiss="modal"
-                                                />
-                                            </div>
-                                            <div className="modal-body">
-                                                <form>
-                                                    <textarea
-                                                        className="form-control"
-                                                        rows={4}
-                                                        defaultValue={"Message"}
-                                                    />
-                                                </form>
-                                            </div>
-                                            <div className="modal-footer">
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-danger light"
-                                                    data-bs-dismiss="modal"
-                                                >
-                                                    btn-close
-                                                </button>
-                                                <button type="button" className="btn btn-primary">
-                                                    Reply
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                                </div> */}
+            {/* </div> */}
+
+            <div style={{ marginTop: '50px' }}>
+
+                <FullDataTable TableColumns={columns} tableData={SignalsData.data} />
             </div>
+
         </Content>
 
+    );
 
-        )
-    </>
+
 }
 
-
-export default SevenDaysEntryOnly
+export default SevenDaysEntry;

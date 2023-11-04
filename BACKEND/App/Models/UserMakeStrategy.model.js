@@ -1,0 +1,92 @@
+const mongoose = require('mongoose');
+
+const userMakeStrategySchema = new mongoose.Schema({
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "USER"
+      },
+      tokensymbol: {
+        type: String,
+        required: true,  
+     },
+     symbol_name: {
+        type: String,
+        required: true,  
+     },
+     strategy_name: {
+        type: String,
+        required: true,  
+     },
+     segment: {
+        type: String,
+        required: true,  
+     },
+     strike_price: {
+        type: String,  
+     },
+     option_type: {
+        type: String, 
+     },
+     expiry: {
+        type: String, 
+     },
+     
+     indicator: {
+        type: String,
+        required: true,      
+    },
+    timeframe: {
+        type: String,
+        required: true,     
+    },
+    price_source: {
+        type: String,
+        required: true,     
+    },
+    period: {
+        type: String,
+        required: true,
+       
+    },
+    inside_indicator: {
+        type: String,
+        required: true,
+       
+    },
+    condition: {
+        type: String,
+        required: true,
+       
+    },
+    condition_source: {
+        type: String,   
+    },
+    buffer_value: {
+        type: String,
+        required: true,
+    },
+    type : {
+        type: String,
+        required: true,
+    },
+    offset : {
+        type: String,
+        required: true,
+    },
+    status: {
+        type: String,
+        required: true,
+        trim: true,
+        default: '0'
+    }
+
+},{
+    // This enables Mongoose to handle the _id field automatically
+    strictPopulate: false,
+
+    timestamps: true,
+    _id: true,
+  });
+
+const userMakeStrategy = mongoose.model('usermakestrategy', userMakeStrategySchema);
+module.exports = userMakeStrategy;
