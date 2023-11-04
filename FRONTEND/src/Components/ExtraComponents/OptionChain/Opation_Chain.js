@@ -89,8 +89,10 @@ const HelpCenter = () => {
                         value="LE"
                         className={`button_BUY  button_call_buy_${row.call_token}`}
                         onClick={(e) => {
-                            CreateRequest('CALL', row, 'LE', rowIndex);
+                            CreateRequest('CALL', row, 'LE', rowIndex, e);
                         }}
+                        onDoubleClick={(e) => { RemoveClases('CALL', row, 'LE', rowIndex, e) }}
+
                     >
                         B
                     </button>
@@ -98,12 +100,14 @@ const HelpCenter = () => {
                         value="SE"
                         className={`button_sell button_call_sell_${row.call_token}`}
                         onClick={(e) => {
-                            CreateRequest('CALL', row, 'SE', rowIndex);
+                            CreateRequest('CALL', row, 'SE', rowIndex, e);
                         }}
+                        onDoubleClick={(e) => { RemoveClases('CALL', row, 'SE', rowIndex, e) }}
+
                     >
                         S
-                    </button>
-                </div>
+                    </button >
+                </div >
             ),
         },
         {
@@ -143,18 +147,21 @@ const HelpCenter = () => {
                     <button
                         value="LE"
                         className={`button_BUY  button_put_buy_${row.put_token}`}
-                        onClick={(e) => { CreateRequest("PUT", row, "LE", rowIndex) }}
+                        onClick={(e) => { CreateRequest("PUT", row, "LE", rowIndex, e) }}
+                        onDoubleClick={(e) => { RemoveClases("PUT", row, "LE", rowIndex, e) }}
                     >
                         B
                     </button>
                     <button
                         value="SE"
                         className={`button_sell button_put_sell_${row.put_token}`}
-                        onClick={(e) => { CreateRequest("PUT", row, "SE", rowIndex) }}
+                        onClick={(e) => { CreateRequest("PUT", row, "SE", rowIndex, e) }}
+                        onDoubleClick={(e) => { RemoveClases("PUT", row, "SE", rowIndex, e) }}
+
                     >
                         S
-                    </button>
-                </div>
+                    </button >
+                </div >
             ),
         },
     ];
@@ -163,7 +170,32 @@ const HelpCenter = () => {
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
 
 
-    const CreateRequest = (option_type, row_data, call_type, index) => {
+    const RemoveClases = (option_type, row_data, call_type, index,) => {
+
+        ExecuteTradeData && ExecuteTradeData.data.filter((item) => {
+            const element1 = $('.button_call_sell_' + item.call_token._id);
+            console.log("element1", element1)
+            element1.removeClass('active');
+            const element2 = $('.button_call_buy_' + item.call_token);
+            element2.removeClass('active');
+            const element4 = $('.button_put_sell_' + item.put_token);
+            element4.removeClass('active');
+            const element3 = $('.button_put_buy_' + item.put_token);
+            element3.removeClass('active');
+
+        })
+
+
+
+    }
+
+
+
+    const CreateRequest = (option_type, row_data, call_type, index, e) => {
+
+
+
+
         if (strategyRef.current === "") {
             alert("Please Select Strategy First")
         } else {
@@ -670,7 +702,6 @@ const HelpCenter = () => {
                                             setStrategy("")
                                             setExpiry("")
                                         }}
-
                                     >
                                         <option value="" >Select Stock Name</option>
                                         {All_Symbols.data && All_Symbols.data.map((item) => {
@@ -690,7 +721,6 @@ const HelpCenter = () => {
                                             setExpiry(e.target.value)
                                         }}
                                         value={expiry}
-
                                     >
                                         <option value="" >Select Expiry</option>
                                         {All_Symbols_Expiry.data && All_Symbols_Expiry.data.map((item) => {
@@ -702,7 +732,6 @@ const HelpCenter = () => {
                                     <label
                                         className="text-secondary"
                                         style={{ fontWeight: "bold", color: "black" }}
-
                                     >
                                         STRATEGY
                                     </label>
@@ -710,8 +739,10 @@ const HelpCenter = () => {
                                         setStrategy(e.target.value);
                                         test(e);
 
-                                    }} value={strategy}>
+                                    }} value={strategy}
 
+                                    // disabled={CreateSignalRequest.length === 0}
+                                    >
                                         <option value="">Select Strategy</option>
                                         {getAllStrategyName.data &&
                                             getAllStrategyName.data.map((item) => {
@@ -761,7 +792,6 @@ const HelpCenter = () => {
                                         btn_name="Confirm"
                                         Submit_Function={Done_For_Trade}
                                         Submit_Cancel_Function={Cancel_Request}
-
                                         handleClose={() => setshowModal(false)}
                                     >
                                         <BasicDataTable

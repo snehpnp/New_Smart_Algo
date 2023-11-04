@@ -71,7 +71,6 @@ const AddStrategy = () => {
                 if (response.status) {
                     response.data && response.data.Service_name_get
                         .map((item1) => {
-                            console.log("item1", item1)
 
                             response.data && response.data.group_name
                                 .map((item) => {
@@ -118,13 +117,12 @@ const AddStrategy = () => {
 
 
 
-    function handleServiceChange(event, id, name, segment,lotsize) {
+    function handleServiceChange(event, id, name, segment, lotsize) {
         const serviceId = id;
         const isChecked = event.target.checked;
-
         if (isChecked) {
             // Add the selected service's information to the array
-            setSelectedServices((prevInfo) => [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0,lotsize:lotsize}]);
+            setSelectedServices((prevInfo) => [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0, lotsize: lotsize }]);
         } else {
             // Remove the selected service's information from the array
             setSelectedServices((prevInfo) => prevInfo.filter((info) => info.id !== serviceId));
@@ -144,7 +142,7 @@ const AddStrategy = () => {
                 name: service.name,
                 segment: service.category.name,
                 group_qty: 0,
-                lotsize:service.lotsize
+                lotsize: service.lotsize
             }));
 
             // Set all filtered checkboxes to checked
@@ -175,19 +173,17 @@ const AddStrategy = () => {
 
 
 
-    const InputGroupQty = (event, id, servicename, segement, qty) => {
+    const InputGroupQty = (event, id, servicename, segement, qty, lotsize) => {
 
-        // const aa = No_Negetive_Input_regex(event.target.value)
-        const updatedQty = event.target.value === "" ? qty : event.target.value;
+        const numericValue = event.target.value.replace(/[^0-9]/g, '');
+
+        if (numericValue) {
+            const updatedQty = event.target.value === "" ? qty : numericValue;
+
+            // Check if the selected service already exists in selectedServices
+            const existingServiceIndex = selectedServices.findIndex((item) => item.service_id === id);
 
 
-        // console.log("aa", aa)
-
-
-        // Check if the selected service already exists in selectedServices
-        const existingServiceIndex = selectedServices.findIndex((item) => item.service_id === id);
-
-   
 
             if (existingServiceIndex !== -1) {
                 // Update quantity if the service already exists
@@ -201,7 +197,15 @@ const AddStrategy = () => {
                     { service_id: id, name: servicename, segment: segement, group_qty: parseInt(updatedQty) },
                 ]);
             }
-    
+
+        }
+        // else {
+        //     // alert("Negetive/Decimal/Character/Empty Field Not Allow")
+        //     // event.target.value = ''
+        //     return
+        //     // }
+        // }
+
 
 
     };
@@ -212,20 +216,20 @@ const AddStrategy = () => {
 
     const remoeveService = (id) => {
 
-        if(window.confirm("Do you want to delete")){
+        if (window.confirm("Do you want to delete")) {
             let test = selectedServices.filter((item) => {
                 return item.service_id !== id
             })
-    
+
             let checkboxes = document.querySelectorAll(`#service-${id}`);
             checkboxes.forEach((checkbox) => {
                 checkbox.checked = false;
             });
-    
-    
+
+
             setSelectedServices(test)
         }
- 
+
     }
 
 
@@ -275,32 +279,42 @@ const AddStrategy = () => {
             return errors;
         },
 
+
+
         onSubmit: async (values) => {
-            console.log("selectedServices", {
-                groupdetails: { name: values.groupname, id: id },
-                services_id: selectedServices
+            let checkValid = true
+
+            selectedServices && selectedServices.map((item) => {
+                if (item.lotsize !== 1) {
+                    if ((item.group_qty) % (item.lotsize) !== 0) {
+                        alert(`Please Enter Valid Lot Size Inside ${item.name}`)
+                        checkValid = false
+                        return
+                    }
+                    return
+                 }
+                return
             })
 
-            // return
 
+            
 
-            await dispatch(Update_Service_By_Group_Id({
-                groupdetails: { name: values.groupname, id: id },
-                services_id: selectedServices
+            if (checkValid) {
+                await dispatch(Update_Service_By_Group_Id({
+                    groupdetails: { name: values.groupname, id: id },
+                    services_id: selectedServices
 
-            })).then((response) => {
-
-                if (response.payload.status) {
-                    toast.success(response.payload.msg);
-                    setTimeout(() => {
-                        navigate("/admin/groupservices")
-                    }, 1000);
-                } else {
-                    toast.error(response.payload.msg);
-
-                }
-            })
-
+                })).then((response) => {
+                    if (response.payload.status) {
+                        toast.success(response.payload.msg);
+                        setTimeout(() => {
+                            navigate("/admin/groupservices")
+                        }, 1000);
+                    } else {
+                        toast.error(response.payload.msg);
+                    }
+                })
+            }
 
         }
     });
@@ -396,7 +410,6 @@ const AddStrategy = () => {
                                 </tr>
                             </thead>
                             <tbody >
-                                {console.log("-->",selectedServices)}
                                 {selectedServices && selectedServices.map((item, index) => {
                                     return <>
                                         <tr key={index}>
@@ -410,7 +423,7 @@ const AddStrategy = () => {
                                                     type="number"
                                                     className="form-control col-md-2"
                                                     placeholder="Enter Qty"
-                                                    onChange={(e) => InputGroupQty(e, item.service_id, item.name, item.segment, item.group_qty)}
+                                                    onChange={(e) => InputGroupQty(e, item.service_id, item.name, item.segment, item.group_qty, item.lotsize)}
                                                     min={0}
                                                     defaultValue={item.group_qty ? item.group_qty : 0}
 
@@ -477,19 +490,15 @@ const AddStrategy = () => {
                                                                     id={`service-${service._id}`}
                                                                     value={service._id}
                                                                     // checked={selectedServices.includes(service._id)}
-                                                                    onChange={(e) => handleServiceChange(e, service._id, service.name, service.category.name,service.lotsize)}
+                                                                    onChange={(e) => handleServiceChange(e, service._id, service.name, service.category.name, service.lotsize)}
                                                                 />
                                                                 <label className="form-check-label" htmlFor={`service-${service._id}`}>
                                                                     {service.name}
                                                                 </label>
                                                             </div>
-
                                                         </div>
-
-
                                                     ))}
                                                 </>
-
                                             </div>
                                         </div>
                                     </div>
@@ -498,9 +507,6 @@ const AddStrategy = () => {
                         </>
                     }
                 />
-
-
-
                 < ToastButton />
             </Content >
         </>

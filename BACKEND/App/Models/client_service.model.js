@@ -37,6 +37,10 @@ const clientServiceSchema = Schema({
         type: String,
         default: '0'
     },
+    lot_size: {
+        type: String,
+        default: '0'
+    },
     uniqueUserService: {
         type: String,
         default: null

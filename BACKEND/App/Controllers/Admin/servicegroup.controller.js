@@ -249,7 +249,9 @@ class GroupService {
                 service_id: stgId,
                 strategy_id: deleteStrategy[0].strategy_id,
                 uniqueUserService: user.user_id + "_" + data,
-                quantity:Qty_find[0].lotsize
+                quantity:Qty_find[0].lotsize,
+                lot_size: 1
+
               })
               // console.log("User_client_services", User_client_services);
 

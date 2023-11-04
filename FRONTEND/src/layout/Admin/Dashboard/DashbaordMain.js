@@ -59,18 +59,18 @@ const Dashboard = () => {
 
   //  Recieve Notfication
 
-  useEffect(() => {
-    const socket = socketIOClient(`${Config.base_url}`);
+  // useEffect(() => {
+  //   const socket = socketIOClient(`${Config.base_url}`);
 
-    socket.on("test_msg_Response", (data) => {
-      toast.success(`Notificatipn Received From ${data.username}`);
-      console.log("test_msg_Response", data.username);
-    });
+  //   socket.on("test_msg_Response", (data) => {
+  //     toast.success(`Notificatipn Received From ${data.username}`);
+  //     console.log("test_msg_Response", data.username);
+  //   });
 
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     socket.disconnect();
+  //   };
+  // }, []);
 
   return (
     <>

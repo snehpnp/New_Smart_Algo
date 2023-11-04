@@ -35,10 +35,14 @@ class OptionChain {
                 return res.status(400).json({ status: false, msg: 'Symbol is required.', data: [] });
             }
 
-            const currentDateTime = new Date();
+            const date = new Date(); // Month is 0-based, so 10 represents November
+
+
+            const formattedDate = date.toISOString();
+
             const pipeline = [
                 {
-                    $match: { symbol: req.body.symbol }
+                    $match: { symbol: symbol }
                 },
                 {
                     $group: {
@@ -61,16 +65,26 @@ class OptionChain {
                 },
                 {
                     $match: {
-                        expiryDate: { $gte: currentDateTime }
+                        expiryDate: { $gte: new Date(formattedDate) }
                     }
                 },
                 {
-                    $sort: { expiryDate: 1 } // Sort ascending
+                    $addFields: {
+                        formattedExpiryDate: {
+                            $dateToString: {
+                                date: "$expiryDate",
+                                format: "%d%m%Y"
+                            }
+                        }
+                    }
                 },
                 {
-                    $limit: 6 // Limit to the first 6 values
+                    $sort: { expiryDate: 1 }
+                },
+                {
+                    $limit: 4
                 }
-            ];
+            ]
 
             const result = await Alice_token.aggregate(pipeline);
             if (result.length === 0) {
@@ -286,7 +300,7 @@ class OptionChain {
     async Open_Position(req, res) {
         try {
 
-            var symbols = await MainSignals_modal.find({"TradeType" : "OPTION_CHAIN" , });
+            var symbols = await MainSignals_modal.find({ "TradeType": "OPTION_CHAIN", });
             if (!symbols) {
                 return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
             }

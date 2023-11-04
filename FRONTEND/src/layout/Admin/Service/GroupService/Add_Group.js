@@ -56,13 +56,13 @@ const AddStrategy = () => {
 
 
     //  For Select Services Checkbox
-    function handleServiceChange(event, id, name, segment,lotsize) {
+    function handleServiceChange(event, id, name, segment, lotsize) {
         const serviceId = id;
         const isChecked = event.target.checked;
 
         setSelectedServices((prevInfo) => {
             if (isChecked) {
-                return [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0,lotsize:lotsize }];
+                return [...prevInfo, { service_id: serviceId, name: name, segment: segment, group_qty: 0, lotsize: lotsize }];
             } else {
                 return prevInfo.filter((info) => info.service_id !== serviceId);
             }
@@ -81,7 +81,7 @@ const AddStrategy = () => {
                 name: service.name,
                 segment: service.category.name,
                 group_qty: 0,
-                lotsize:service.lotsize
+                lotsize: service.lotsize
 
             }));
 
@@ -116,12 +116,38 @@ const AddStrategy = () => {
 
     //  For Set Group-Qty
 
-    const InputGroupQty = (event, id, servicename, segment) => {
+    const InputGroupQty = (event, id, servicename, segment, lotsize) => {
 
+
+
+        // const numericValue = event.target.value.replace(/[^0-9]/g, '');
+        // // const aa = No_Negetive_Input_regex(updatedQty) 
+
+
+        // if (event.target.value === "") {
+        //     toast.error("Can Not Set Less Then Its Lot Size ")
+        //     event.target.value = 0
+
+        //     return
+        // } else {
+        //     if (numericValue) {
+
+        //         if (numericValue >= parseInt(lotsize)) {
+        //             // console.log("segement", (numericValue % parseInt(lotsize)))
+
+        //             if ((numericValue % parseInt(lotsize)) !== 0) {
+        //                 toast.error(`Set Qty According Which Is Multiple to Its LotSize In  ${servicename}`);
+        //                 event.target.value = lotsize
+        //                 return
+        //             }
+        //         } else {
+        //             toast.error("Can Not Set Less Then Its Lot Size ")
+        //             // event.target.value = lotsize
+        //             return
+        //         }
 
         const updatedQty = event.target.value === "" ? 0 : parseInt(event.target.value);
 
-        const aa = No_Negetive_Input_regex(updatedQty)
 
         // console.log("No_Negetive_Input_regex", aa)
 
@@ -147,117 +173,135 @@ const AddStrategy = () => {
                 group_qty: updatedQty,
             }
         ]));
-    };
 
 
 
-    //  For Remove Service From Select And Table
-    const remoeveService = (id) => {
-        if(window.confirm("Do you want to delete")){
-            let test = selectedServices.filter((item) => {
-                return item.service_id !== id
-            })
-            let checkboxes = document.querySelectorAll(`#service-${id}`);
-            checkboxes.forEach((checkbox) => {
-                checkbox.checked = false;
-            });
-    
-            setSelectedServices(test)
-        }
+};
+
+
+
+//  For Remove Service From Select And Table
+const remoeveService = (id) => {
+    if (window.confirm("Do you want to delete")) {
+        let test = selectedServices.filter((item) => {
+            return item.service_id !== id
+        })
+        let checkboxes = document.querySelectorAll(`#service-${id}`);
+        checkboxes.forEach((checkbox) => {
+            checkbox.checked = false;
+        });
+
+        setSelectedServices(test)
     }
+}
 
 
 
-    //  -------------------For Show Segment List-----------------
+//  -------------------For Show Segment List-----------------
 
 
-    const getservice = async () => {
-        await dispatch(Get_All_Catagory())
-            .unwrap()
+const getservice = async () => {
+    await dispatch(Get_All_Catagory())
+        .unwrap()
+        .then((response) => {
+
+            if (response.status) {
+                setGetAllSgments({
+                    loading: false,
+                    data: response.data,
+                });
+            }
+        });
+};
+useEffect(() => {
+    getservice();
+}, []);
+
+
+
+
+
+//  -------------------For Show Service According to Segment -----------------
+
+const data = async () => {
+    if (formik.values.segment) {
+        await dispatch(Service_By_Catagory({ segment: formik.values.segment })).unwrap()
             .then((response) => {
-
                 if (response.status) {
-                    setGetAllSgments({
+                    setAllServices({
                         loading: false,
                         data: response.data,
                     });
                 }
             });
-    };
-    useEffect(() => {
-        getservice();
-    }, []);
+    }
+};
+
+
+
+
+//  For Manage Filter Symboll 
+const filterFunction = async () => {
+    const filteredData = allServices.data.filter((item) => {
+        return item.name.toLowerCase().includes(SerachService.toLowerCase())
+    });
+
+    if (SerachService === "") {
+        setstate([])
+    } else {
+        setstate(filteredData)
+    }
+};
+
+useEffect(() => {
+    filterFunction()
+}, [SerachService]);
 
 
 
 
 
-    //  -------------------For Show Service According to Segment -----------------
 
-    const data = async () => {
-        if (formik.values.segment) {
-            await dispatch(Service_By_Catagory({ segment: formik.values.segment })).unwrap()
-                .then((response) => {
-                    if (response.status) {
-                        setAllServices({
-                            loading: false,
-                            data: response.data,
-                        });
-                    }
-                });
+
+
+//  --------------------- For Manage Form ---------------
+
+const formik = useFormik({
+    initialValues: {
+        groupname: '',
+        segment: false
+    },
+    validate: (values) => {
+        const errors = {};
+        if (!values.groupname) {
+            errors.groupname = valid_err.EMPTY_GROUP_NAME_ERR;
         }
-    };
-
-
-
-
-    //  For Manage Filter Symboll 
-    const filterFunction = async () => {
-        const filteredData = allServices.data.filter((item) => {
-            return item.name.toLowerCase().includes(SerachService.toLowerCase())
-        });
-
-        if (SerachService === "") {
-            setstate([])
-        } else {
-            setstate(filteredData)
+        if (!values.segment) {
+            errors.segment = valid_err.SEGEMENTSELECT_ERROR;
         }
-    };
+        // if (selectedServices.length > 50) {
+        //     alert("can Not Add More Than 50 Service")
+        //     return
+        // }
 
-    useEffect(() => {
-        filterFunction()
-    }, [SerachService]);
-
-
-
-
-
-
-
-
-    //  --------------------- For Manage Form ---------------
-
-    const formik = useFormik({
-        initialValues: {
-            groupname: '',
-            segment: false
-        },
-        validate: (values) => {
-            const errors = {};
-            if (!values.groupname) {
-                errors.groupname = valid_err.EMPTY_GROUP_NAME_ERR;
+        return errors;
+    },
+    onSubmit: async (values) => {
+        let checkValid = true
+        selectedServices && selectedServices.map((item) => {
+            if (item.lotsize !== 1) {
+                if ((item.group_qty) % (item.lotsize) !== 0) {
+                    alert(`Please Enter Valid Lot Size Inside ${item.name}`)
+                    checkValid = false
+                    return
+                }
+                return
             }
-            if (!values.segment) {
-                errors.segment = valid_err.SEGEMENTSELECT_ERROR;
-            }
-            // if (selectedServices.length > 50) {
-            //     alert("can Not Add More Than 50 Service")
-            //     return
-            // }
+            return
+        })
 
-            return errors;
-        },
-        onSubmit: async (values) => {
+
+        if (checkValid) {
             await dispatch(Add_Group({
                 groupdetails: { name: values.groupname },
                 services_id: selectedServices
@@ -274,171 +318,171 @@ const AddStrategy = () => {
                 }
             })
 
-
         }
-    });
+    }
+});
 
 
 
-    const fields = [
-        { name: 'groupname', label: 'Group Name', type: 'text', label_size: 12, col_size: 6, disable: false },
-        {
-            name: 'segment',
-            label: 'Segment',
-            type: 'select',
-            options: GetAllSgments.data && GetAllSgments.data.map((item) => ({ label: item.name, value: item.segment })),
-            label_size: 12, col_size: 6, disable: false,
-        },
-    ];
-
-
-
-
-    useEffect(() => {
-        data();
-    }, [formik.values.segment]);
-
-
-
-    useEffect(() => {
-        setSerachService('')
-        setSelectAllFiltered(false)
-    }, [formik.values.segment]);
-
-    console.log("state", state)
+const fields = [
+    { name: 'groupname', label: 'Group Name', type: 'text', label_size: 12, col_size: 6, disable: false },
+    {
+        name: 'segment',
+        label: 'Segment',
+        type: 'select',
+        options: GetAllSgments.data && GetAllSgments.data.map((item) => ({ label: item.name, value: item.segment })),
+        label_size: 12, col_size: 6, disable: false,
+    },
+];
 
 
 
 
-    return (
-        <>
-            <Content Page_title="Add Group" button_title="Back" route="/admin/groupservices"
+useEffect(() => {
+    data();
+}, [formik.values.segment]);
+
+
+
+useEffect(() => {
+    setSerachService('')
+    setSelectAllFiltered(false)
+}, [formik.values.segment]);
+
+console.log("state", state)
+
+
+
+
+return (
+    <>
+        <Content Page_title="Add Group" button_title="Back" route="/admin/groupservices"
+            additional_field={
+                <div style={{ overflowY: 'scroll', height: '65vh' }}>
+                    <h4 className='text-center text-decoration-underline mb-3'>Select Services And Quantity</h4>
+                    <table className="table table-responsive-sm col-md-3 " >
+                        <thead className="bg-primary">
+                            <tr className='text-center'>
+                                <th>#</th>
+                                <th>Segment</th>
+                                <th>Service Name</th>
+                                <th>lotsize</th>
+                                <th>Quantity</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {selectedServices && selectedServices.map((item, index) => {
+                                return <>
+                                    <tr key={index + 1}>
+                                        <td>{index + 1}</td>
+                                        <td>{item.segment}</td>
+                                        <td>{item.name}</td>
+                                        <td>{item.lotsize}</td>
+
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control col-md-1"
+                                                placeholder="Enter Qty"
+                                                value={item.group_qty}
+                                                onChange={(e) => InputGroupQty(e, item.service_id, item.name, item.segment, item.lotsize)}
+                                            // min={0}
+
+                                            />
+                                        </td>
+                                        <td onClick={() => {
+                                            remoeveService(item.service_id)
+                                        }}><Trash2 className='text-danger' /></td>
+
+                                    </tr>
+                                </>
+                            })
+
+
+                            }
+
+                        </tbody >
+                    </table>
+                </div>
+            }
+
+        >
+            <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Group" title='addstrategy'
                 additional_field={
-                    <div style={{ overflowY: 'scroll', height: '65vh' }}>
-                        <h4 className='text-center text-decoration-underline mb-3'>Select Services And Quantity</h4>
-                        <table className="table table-responsive-sm col-md-3 " >
-                            <thead className="bg-primary">
-                                <tr className='text-center'>
-                                    <th>#</th>
-                                    <th>Segment</th>
-                                    <th>Service Name</th>
-                                    <th>lotsize</th>
-                                    <th>Quantity</th>
-                                    <th>Remove</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {selectedServices && selectedServices.map((item, index) => {
-                                    return <>
-                                        <tr key={index + 1}>
-                                            <td>{index + 1}</td>
-                                            <td>{item.segment}</td>
-                                            <td>{item.name}</td>
-                                            <td>{item.lotsize}</td>
+                    <>
+                        {formik.values.segment ?
+                            <div className='col-md-11 px-2 ms-2 '>
+                                <input
+                                    type="test"
+                                    className="form-control"
+                                    placeholder="Search ..."
+                                    onChange={(e) => { setSerachService(e.target.value) }}
+                                    value={SerachService}
 
-                                            <td>
-                                                <input
-                                                    type="text"
-                                                    className="form-control col-md-1"
-                                                    placeholder="Enter Qty"
-                                                    value={item.group_qty}
-                                                    onChange={(e) => InputGroupQty(e, item.service_id, item.name, item.segment)}
-                                                // min={0}
+                                />
+                            </div>
 
-                                                />
-                                            </td>
-                                            <td onClick={() => {
-                                                remoeveService(item.service_id)
-                                            }}><Trash2 className='text-danger' /></td>
-
-                                        </tr>
-                                    </>
-                                })
-
-
-                                }
-
-                            </tbody >
-                        </table>
-                    </div>
-                }
-
-            >
-                <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Group" title='addstrategy'
-                    additional_field={
-                        <>
-                            {formik.values.segment ?
-                                <div className='col-md-11 px-2 ms-2 '>
-                                    <input
-                                        type="test"
-                                        className="form-control"
-                                        placeholder="Search ..."
-                                        onChange={(e) => { setSerachService(e.target.value) }}
-                                        value={SerachService}
-
-                                    />
-                                </div>
-
-                                : ""}
-                            <div className="col-lg-12" style={{ overflowY: 'scroll', height: '50vh' }}>
-                                {state.length > 0 && (
-                                    <div className="mb-3 row">
-                                        <div className="col-lg-12">
-                                            <div className="row mt-4">
-                                                :
-                                                <>
-                                                    <div className="col-md-4 mb-2">
+                            : ""}
+                        <div className="col-lg-12" style={{ overflowY: 'scroll', height: '50vh' }}>
+                            {state.length > 0 && (
+                                <div className="mb-3 row">
+                                    <div className="col-lg-12">
+                                        <div className="row mt-4">
+                                            :
+                                            <>
+                                                <div className="col-md-4 mb-2">
+                                                    <div className="form-check">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="form-check-input"
+                                                            id='selectall'
+                                                            checked={selectAllFiltered}
+                                                            onChange={() => handleSelectAllFilteredChange()}
+                                                        />
+                                                        <label className="form-check-label" htmlFor='selectall'>
+                                                            Select All
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                {state.map((service) => (
+                                                    <div key={service._id} className="col-md-4 mb-2">
                                                         <div className="form-check">
                                                             <input
                                                                 type="checkbox"
                                                                 className="form-check-input"
-                                                                id='selectall'
-                                                                checked={selectAllFiltered}
-                                                                onChange={() => handleSelectAllFilteredChange()}
+                                                                id={`service-${service._id}`}
+                                                                value={service._id}
+                                                                defaultChecked={selectedServices.includes(service._id)}
+                                                                onChange={(e) => handleServiceChange(e, service._id, service.name, service.category.name, service.lotsize)}
                                                             />
-                                                            <label className="form-check-label" htmlFor='selectall'>
-                                                                Select All
+                                                            <label className="form-check-label" htmlFor={`service-${service._id}`}>
+                                                                {service.name}
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    {state.map((service) => (
-                                                        <div key={service._id} className="col-md-4 mb-2">
-                                                            <div className="form-check">
-                                                                <input
-                                                                    type="checkbox"
-                                                                    className="form-check-input"
-                                                                    id={`service-${service._id}`}
-                                                                    value={service._id}
-                                                                    defaultChecked={selectedServices.includes(service._id)}
-                                                                    onChange={(e) => handleServiceChange(e, service._id, service.name, service.category.name ,service.lotsize)}
-                                                                />
-                                                                <label className="form-check-label" htmlFor={`service-${service._id}`}>
-                                                                    {service.name}
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    ))}
+                                                ))}
 
-                                                </>
+                                            </>
 
-                                            </div>
                                         </div>
                                     </div>
-                                )}
-                            </div>
+                                </div>
+                            )}
+                        </div>
 
 
 
-                        </>
-                    }
-                />
+                    </>
+                }
+            />
 
 
 
-                < ToastButton />
-            </Content >
-        </>
-    )
+            < ToastButton />
+        </Content >
+    </>
+)
 
 
 
