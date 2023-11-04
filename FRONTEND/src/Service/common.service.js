@@ -164,6 +164,6 @@ export async function GET_TIMEFRAME(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
+        
     }
-
 }
