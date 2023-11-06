@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_CLIENTS, GET_COMPANY_LOGO, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_USERAND_ALLSERVICES, FIND_ONE_USER, UPDATE_USER } from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_EXPIRED_CLIENTS, ALL_CLIENTS, GET_COMPANY_LOGO, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_USERAND_ALLSERVICES, FIND_ONE_USER, UPDATE_USER } from "../../../Service/admin.service";
 
 
 
@@ -37,6 +37,17 @@ export const Service_By_Catagory = createAsyncThunk("admin/catogory", async (dat
 export const GET_ALL_CLIENTS = createAsyncThunk("getall/clients", async (data) => {
     try {
         const res = await ALL_CLIENTS(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+// ADMIN GET ALL CLIENTS
+export const GET_ALL_EXPIRED_CLIENTS = createAsyncThunk("getall/clients", async (data) => {
+    try {
+        const res = await ALL_EXPIRED_CLIENTS(data);
         // console.log("res" ,res);
         return await res;
     } catch (err) {
@@ -167,6 +178,7 @@ const AdminSlice = createSlice({
         servicebycatagory: [],
         allGroupServices: [],
         allClients: [],
+        allExpiredClients: [],
         companyInfo: [],
         getalltradingstatus: [],
         goTodashboard: [],
@@ -207,6 +219,10 @@ const AdminSlice = createSlice({
         [GET_ALL_CLIENTS.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, allClients: payload, isLoading: false };
+        },
+        [GET_ALL_EXPIRED_CLIENTS.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, allExpiredClients: payload, isLoading: false };
         },
         [GET_COMPANY_INFOS.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;

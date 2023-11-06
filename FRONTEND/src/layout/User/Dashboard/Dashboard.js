@@ -224,9 +224,11 @@ const BrokerResponse = () => {
                           // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
                           />
                         </div>
+                      
                       </div>
                     </td>
                     {console.log("data.service.lotsize", data.service.lotsize)}
+                    {console.log("data.lot_size", data.lot_size)}
                     <td>{inputValue[data.service.name] ? parseInt(inputValue[data.service.name]) * parseInt(data.service.lotsize) :
                       parseInt(data.lot_size) * parseInt(data.service.lotsize)}</td>
 

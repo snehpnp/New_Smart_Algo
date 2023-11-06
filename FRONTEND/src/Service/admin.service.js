@@ -26,6 +26,26 @@ export async function ALL_CLIENTS(data, token) {
     }
 
 }
+// ALL CLIENTS
+export async function ALL_EXPIRED_CLIENTS(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/expiredclients`, data, {
+            headers: header(token),
+            data: {
+
+                "page": "5",
+                "limit": "1"
+
+            },
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
 
 
 // FIND ONE CLIENT BY ID

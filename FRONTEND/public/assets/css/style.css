@@ -14587,9 +14587,9 @@ svg.pulse-svg .third-circle {
 }
 
 .header-profile img {
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 0.5rem;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.5rem;
 }
 
 @media only screen and (max-width: 87.5rem) {

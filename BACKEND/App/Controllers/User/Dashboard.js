@@ -91,9 +91,9 @@ class Dashboard {
                         }
                     }
                 }
-,                
-                
-               {
+                ,
+
+                {
                     $sort: {
                         'service.name': 1, // 1 for ascending order, -1 for descending order
                     },
@@ -105,7 +105,7 @@ class Dashboard {
                         'service.exch_seg': 1,
                         'service._id': 1,
                         'service.lotsize': 1,
-                        'servicegroup_services_ids.group_qty':1,
+                        'servicegroup_services_ids.group_qty': 1,
                         'strategys.strategy_name': 1,
                         'strategys._id': 1,
                         'categories.segment': 1,
@@ -420,6 +420,27 @@ class Dashboard {
         }
     }
 
+
+    async GetUserApiCreate(req, res) {
+
+        try {
+            const { user_id } = req.body
+
+            var User_information = await User_model.find({ _id: user_id  }).
+                select('license_type Role broker');
+
+
+            if (User_information.length == 0) {
+                return res.send({ status: false, msg: 'User Not exists', data: [] });
+            }else{
+                return res.send({ status: true, msg: 'User Info', data: User_information });
+            }
+
+        } catch (error) {
+            console.log("Error ", error)
+        }
+
+    }
 
 
 

@@ -7,6 +7,7 @@ import AlertToast from "../../../Components/ExtraComponents/Alert_Toast";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import { All_Api_Info_List } from "../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice";
+import { User_Api_Create_Info } from "../../../ReduxStore/Slice/Users/ApiCreateInfoSlice";
 import Modal from "../../../Components/ExtraComponents/Modal";
 import { Eye, CandlestickChart, Pencil } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
@@ -19,6 +20,7 @@ const ApiCreateInfo = () => {
   const dispatch = useDispatch();
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
+  const userInfo = JSON.parse(localStorage.getItem("user_details"))
   const broker = JSON.parse(localStorage.getItem("user_details")).broker;
   const type = JSON.parse(localStorage.getItem("user_details")).type;
 
@@ -29,11 +31,11 @@ const ApiCreateInfo = () => {
     loading: true,
     data: [],
   });
+  const [UserInfo, setUserInfo] = useState({});
 
-  console.log("UserDetails", UserDetails);
 
   const data = async () => {
-    await dispatch(All_Api_Info_List(token))
+    await dispatch(All_Api_Info_List(userInfo.token))
       .unwrap()
       .then((response) => {
         if (response.status) {
@@ -43,9 +45,40 @@ const ApiCreateInfo = () => {
           });
         }
       });
+    await dispatch(User_Api_Create_Info({ user_id: userInfo.user_id, token: userInfo.token }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setUserInfo(
+            response.data[0],
+          );
+        } else {
+          setUserInfo(
+            response.data,
+          );
+        }
+      });
+  };
+
+  const data1 = async () => {
+
+    await dispatch(User_Api_Create_Info({ user_id: userInfo.user_id, token: userInfo.token }))
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setUserInfo(
+            response.data[0],
+          );
+        } else {
+          setUserInfo(
+            response.data,
+          );
+        }
+      });
   };
   useEffect(() => {
     data();
+    data1();
   }, []);
 
   const ShowData = (item) => {
@@ -53,11 +86,13 @@ const ApiCreateInfo = () => {
     setModalData(item);
   };
 
+  console.log("UserInfo", UserInfo && UserInfo.license_type)
+
   return (
     <>
       <Content Page_title="ApiCreateInfo" button_status={false}>
-        {type === "1" ? (
-          <div>Client is Demo</div>
+        {UserInfo && UserInfo.license_type === "1" ? (
+          <div><h5>Client is Demo</h5> </div>
         ) : (
           <>
             <div class="row">

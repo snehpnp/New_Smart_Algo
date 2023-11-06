@@ -46,80 +46,30 @@ class OptionChain {
 
 
             const pipeline =    [
-
-
                 {
-                
-                
                 $match: { symbol: symbol }
-                
-                
                 },
-                
-                
                 {
-                
-                
                 $group: {
-                
-                
                 _id: "$symbol",
-                
-                
                 uniqueExpiryValues: { $addToSet: "$expiry" }
-                
-                
                 }
-                
-                
                 },
-                
-                
                 {
-                
-                
                 $unwind: "$uniqueExpiryValues"
-                
-                
                 },
-                
-                
                 {
-                
-                
                 $addFields: {
-                
-                
                 expiryDate: {
-                
-                
                 $dateFromString: {
-                
-                
                 dateString: "$uniqueExpiryValues",
-                
-                
                 format: "%d%m%Y"
-                
-                
                 }
-                
-                
                 }
-                
-                
                 }
-                
-                
                 },
-                
-                
                 {
-                
-                
                 $match: {
-                
-                
                 expiryDate: { $gte:new Date(formattedDate) }
                 
                 

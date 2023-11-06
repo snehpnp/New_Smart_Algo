@@ -4,7 +4,7 @@
 const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
-const { AddEmployee, UpdateUser, GetAllClients, loginClients, tradingOnClients, GetclientKey , GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys } = require('../../Controllers/Admin/user.controller')
+const { AddEmployee, UpdateUser, GetAllClients, GetAllExpiredClients ,loginClients, tradingOnClients, GetclientKey , GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys } = require('../../Controllers/Admin/user.controller')
 const { EditCompany, GetCompanyInfo, GetCompany_logo, EditEmailInfo } = require('../../Controllers/Admin/company.controller')
 const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy } = require('../../Controllers/Admin/strategy.controller')
 
@@ -15,6 +15,7 @@ const { Get_Option_Symbol, Get_Option_Symbol_Expiry, Get_Option_All_Round_Token 
 router.post('/add/employee', verifyToken, AddEmployee);
 router.post('/update/employee', verifyToken, UpdateUser);
 router.post('/getall/clients', GetAllClients);
+router.post('/getall/expiredclients', GetAllExpiredClients);
 router.post('/update/useractive/status', UpdateActiveStatus);
 router.post('/delete/user', DeleteUser);
 router.post('/getall/loginclients', loginClients);
