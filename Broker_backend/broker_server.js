@@ -76,24 +76,6 @@ const corsOpts = {
 };
 app.use(cors(corsOpts));
 
-var d = new Date();
-var current_date = [d.getFullYear(),
-d.getMonth() + 1,
-d.getDate(),
-].join('/') + ' ' + [d.getHours(),
-d.getMinutes(),
-d.getSeconds()
-].join(':');
-
-// var dt_date = [d.getFullYear(),
-// d.getMonth() + 1,
-// d.getDate(),
-// ].join('/');
-
-
-
-
-
 
 // BROKER REQUIRES
 const aliceblue = require('./Broker/aliceblue')
@@ -104,7 +86,19 @@ const aliceblue = require('./Broker/aliceblue')
 // TEST API
 app.post('/broker-signals', async (req, res) => {
 
-
+  var d = new Date();
+  var current_date = [d.getFullYear(),
+  d.getMonth() + 1,
+  d.getDate(),
+  ].join('/') + ' ' + [d.getHours(),
+  d.getMinutes(),
+  d.getSeconds()
+  ].join(':');
+  
+  var dt_date = [d.getFullYear(),
+  d.getMonth() + 1,
+  d.getDate(),
+  ].join('/');
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -193,7 +187,6 @@ app.post('/broker-signals', async (req, res) => {
 const date = new Date(epochTimestamp * 1000); // Convert to milliseconds by multiplying by 1000
 const formattedDate1 = date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
 const parts = formattedDate1.split('/');
-const dt_date = `${parts[2]}/${parts[0]}/${parseInt(parts[1], 10)}`;
 console.log(dt_date); 
 
 
