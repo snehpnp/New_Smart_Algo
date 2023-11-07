@@ -19,7 +19,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
    
         var dt = signals.DTime;
         var input_symbol = signals.Symbol;
-        var type = signals.TType;
+        var type = signals.TType.toUpperCase();
         var tr_price = signals.Tr_Price;
         var price = signals.Price;
         var sq_value = signals.Sq_Value;
@@ -527,26 +527,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
-    // var dt = splitArray[0]
-    // var input_symbol = splitArray[1]
-    // var type = splitArray[2]
-    // var tr_price = splitArray[3]
-    // var price = splitArray[4]
-    // var sq_value = splitArray[5]
-    // var sl_value = splitArray[6]
-    // var tsl = splitArray[7]
-    // var segment = splitArray[8]
-    // var strike = splitArray[9]
-    // var option_type = splitArray[10]
-    // var expiry = splitArray[11]
-    // var strategy = splitArray[12]
-    // var qty_percent = splitArray[13]
-    // var client_key = splitArray[14]
-    // var demo = splitArray[15]
-
     var dt = signals.DTime;
     var input_symbol = signals.Symbol;
-    var type = signals.TType;
+    var type = signals.TType.toUpperCase();
     var tr_price = signals.Tr_Price;
     var price = signals.Price;
     var sq_value = signals.Sq_Value;
@@ -739,29 +722,9 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
 const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req) => {
 
-    // console.log("INSIDE EXIT FUNCTION")
-    // console.log("INSIDE EXIT FUNCTION possition_qty",possition_qty)
-
-    // var dt = splitArray[0]
-    // var input_symbol = splitArray[1]
-    // var type = splitArray[2]
-    // var tr_price = splitArray[3]
-    // var price = splitArray[4]
-    // var sq_value = splitArray[5]
-    // var sl_value = splitArray[6]
-    // var tsl = splitArray[7]
-    // var segment = splitArray[8]
-    // var strike = splitArray[9]
-    // var option_type = splitArray[10]
-    // var expiry = splitArray[11]
-    // var strategy = splitArray[12]
-    // var qty_percent = splitArray[13]
-    // var client_key = splitArray[14]
-    // var demo = splitArray[15]
-
     var dt = signals.DTime;
     var input_symbol = signals.Symbol;
-    var type = signals.TType;
+    var type = signals.TType.toUpperCase();
     var tr_price = signals.Tr_Price;
     var price = signals.Price;
     var sq_value = signals.Sq_Value;

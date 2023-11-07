@@ -54,6 +54,9 @@ const Header = ({ ChatBox }) => {
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
 
+
+  console.log("==================",user_role);
+
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id);
     $("body").removeClass(
@@ -211,26 +214,31 @@ const Header = ({ ChatBox }) => {
   }, [refresh]);
 
   //  For Show Notfication
-
   const Notfication = async () => {
-    await dispatch(GET_HELPS({ user_id: user_id, token: token }))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setAllClients({
-            loading: false,
-            data: response.data,
-          });
-        } else {
-          setAllClients({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
+    if (user_role == "ADMIN") {
+      await dispatch(GET_HELPS({ user_id: user_id, token: token }))
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            setAllClients({
+              loading: false,
+              data: response.data,
+            });
+          } else {
+            setAllClients({
+              loading: false,
+              data: response.data,
+            });
+          }
+        });
+    }
   };
+
   useEffect(() => {
-    Notfication();
+    if (user_role == "ADMIN") {
+      console.log("===========================================");
+      Notfication();
+    }
   }, []);
 
   //  Clear Session  After 24 Hours
@@ -265,7 +273,6 @@ const Header = ({ ChatBox }) => {
     ClearSession();
   }, []);
 
-  //  Recieve Notfication
 
 
   const test = async () => {

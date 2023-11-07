@@ -326,7 +326,8 @@ app.post('/broker-signals', async (req, res) => {
             instrument_query = { symbol: input_symbol, segment: "CF", expiry: expiry, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" }
             EXCHANGE = "CDS";
           }
-          // console.log("findSignal==>>>>", findSignal);
+
+
 
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
@@ -350,7 +351,24 @@ app.post('/broker-signals', async (req, res) => {
           } else {
             find_lot_size = token[0].lotsize
           }
-          // console.log(find_lot_size);
+
+
+          var tradesymbol1
+          if (token.length == 0) {
+            tradesymbol1 = ""
+          } else {
+            if (segment == 'C' || segment == 'c') {
+              tradesymbol1 = token[0].zebu_token
+            } else {
+              tradesymbol1 = token[0].tradesymbol
+            }
+          }
+          console.log("tradesymbol1", tradesymbol1);
+
+
+
+
+
 
           fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS_TOKEN ' + instrument_token + '\n', function (err) {
             if (err) {
@@ -471,7 +489,7 @@ app.post('/broker-signals', async (req, res) => {
               client_persnal_key: client_persnal_key,
               TradeType: TradeType,
               token: instrument_token,
-              lot_size:find_lot_size
+              lot_size: find_lot_size
             }
 
             let Signal_req1 = new Signals(Signal_req)
@@ -511,7 +529,7 @@ app.post('/broker-signals', async (req, res) => {
                 TradeType: TradeType,
                 signals_id: SignalSave._id,
                 token: instrument_token,
-              lot_size:find_lot_size
+                lot_size: find_lot_size
 
               }
               const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
@@ -558,7 +576,7 @@ app.post('/broker-signals', async (req, res) => {
               } else {
                 if (ExitMainSignals[0].entry_qty_percent >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
                   var updatedData = {
-                    exit_type: type,  
+                    exit_type: type,
                     exit_price: (((parseFloat(price) * parseFloat(qty_percent)) + ((isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)) * (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) / ((isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)) + parseFloat(qty_percent))),
 
                     exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
@@ -578,8 +596,8 @@ app.post('/broker-signals', async (req, res) => {
 
 
             } else {
-
-              console.log("PRIVIOUS SEGNAL UPDATE")
+              console.log(findSignal);
+              console.log("PRIVIOUS SIGNAL UPDATE")
 
             }
           }

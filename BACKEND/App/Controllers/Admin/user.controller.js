@@ -53,42 +53,61 @@ class Employee {
         demat_userid,
         group_service,
       } = req.body;
-      console.log(req.body);
+
       var Role = "USER";
       var StartDate1 = "";
       var EndDate1 = "";
 
       // IF ROLE NOT EXIST TO CHECK
-      const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
-      if (!roleCheck) {
-        return res.send({ status: false, msg: "Role Not exists", data: [] });
-      }
+      // const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
+
+      // if (!roleCheck) {
+      //   return res.send({ status: false, msg: "Role Not exists", data: [] });
+      // }
 
       // IF USER ALEARDY EXIST
-      const existingUsername = await User_model.findOne({ UserName: UserName });
-      if (existingUsername) {
-        return res.send({
-          status: false,
-          msg: "Username already exists",
-          data: [],
-        });
+      const existingUser = await User_model.findOne({
+        $or: [
+          { UserName: UserName },
+          { Email: Email },
+          { PhoneNo: PhoneNo },
+        ],
+      });
+
+
+      if (existingUser) {
+        // let errors = [];
+
+        if (existingUser.UserName === UserName) {
+          // errors.push("Username already exists");
+
+          return res.send({
+            status: false,
+            msg: "Username already exists",
+            data: [],
+          });
+        }
+
+        if (existingUser.Email === Email) {
+          // errors.push("Email already exists");
+          return res.send({
+            status: false,
+            msg: "Email already exists",
+            data: [],
+          });
+        }
+
+        if (existingUser.PhoneNo === PhoneNo) {
+          // errors.push("Phone Number already exists");
+          return res.send({
+            status: false,
+            msg: "Phone Number already exists",
+            data: [],
+          });
+        }
+
       }
-      const existingemail = await User_model.findOne({ Email: Email });
-      if (existingemail) {
-        return res.send({
-          status: false,
-          msg: "Email already exists",
-          data: [],
-        });
-      }
-      const existingePhone = await User_model.findOne({ PhoneNo: PhoneNo });
-      if (existingePhone) {
-        return res.send({
-          status: false,
-          msg: "Phone Number already exists",
-          data: [],
-        });
-      }
+
 
       // IF CHECK STRATEGY NULL
       if (Strategies.length == 0) {
@@ -107,6 +126,8 @@ class Employee {
           data: [],
         });
       }
+
+      console.log("empty check", new Date());
 
       // USER 2 DAYS LICENSE USE
       if (license_type == "0") {
@@ -163,6 +184,7 @@ class Employee {
         // console.log("END DATE", end_date_2days);
         EndDate1 = end_date_2days;
       }
+      console.log("license add ", new Date());
 
       const min = 1;
       const max = 1000000;
@@ -175,9 +197,12 @@ class Employee {
         rand_password.toString(),
         salt
       );
+      console.log("ganrate pass ", new Date());
+
 
       // Panel Prifix key Find
-      var Panel_key = await Company_info.find();
+
+      var Panel_key = await Company_info.find({}, { prefix: 1, licenses: 1, _id: 0 }).limit(1);
       if (Panel_key.length == 0) {
         return res.send({
           status: false,
@@ -185,45 +210,55 @@ class Employee {
           data: [],
         });
       }
+      console.log("Compant data  ", new Date());
+
 
       const mins = 1;
       const maxs = 1000000;
       const rands = mins + Math.random() * (maxs - mins);
       var cli_key = Math.round(rands);
+      console.log("ganrate randome pass ", new Date());
 
       var ccd = dt.format("ymd");
       var client_key = Panel_key[0].prefix + cli_key + ccd;
 
-      var user_data = {
-        FullName: FullName,
-        UserName: UserName,
-        Email: Email,
-        PhoneNo: PhoneNo,
-        Password: ByCryptrand_password,
-        Otp: rand_password,
-        StartDate: StartDate1,
-        EndDate: EndDate1,
-        Role: Role.toUpperCase(),
-        license_type: license_type,
-        licence: licence,
-        client_key: client_key,
-        parent_id: parent_id,
-        parent_role: parent_role,
-        api_secret: api_secret,
-        app_id: app_id,
-        client_code: client_code,
-        api_key: api_key,
-        app_key: app_key,
-        broker: broker == null ? 0 : broker,
-        api_type: api_type,
-        demat_userid: demat_userid,
-        service_given_month: service_given_month,
-      };
+      console.log("Employee add 1", new Date());
 
-      const User = new User_model(user_data);
-      const userinfo = User.save()
+
+
+      User_model.insertMany([
+        {
+          FullName: FullName,
+          UserName: UserName,
+          Email: Email,
+          PhoneNo: PhoneNo,
+          Password: ByCryptrand_password,
+          Otp: rand_password,
+          StartDate: StartDate1,
+          EndDate: EndDate1,
+          Role: Role.toUpperCase(),
+          license_type: license_type,
+          licence: licence,
+          client_key: client_key,
+          parent_id: parent_id,
+          parent_role: parent_role,
+          api_secret: api_secret,
+          app_id: app_id,
+          client_code: client_code,
+          api_key: api_key,
+          app_key: app_key,
+          broker: broker == null ? 0 : broker,
+          api_type: api_type,
+          demat_userid: demat_userid,
+          service_given_month: service_given_month,
+        },
+        // Add more documents if needed
+      ])
         .then(async (data) => {
-          var User_id = data._id;
+          var User_id = data[0]._id;
+
+
+          console.log("Employee add 2", new Date());
 
           // GROUP SERVICE ADD
           const User_group_service = new groupService_User({
@@ -232,19 +267,22 @@ class Employee {
           });
           User_group_service.save();
 
+
           // STRATEGY ADD
-          try {
-            if (Strategies.length > 0) {
-              Strategies.forEach((data) => {
-                // STRATEGY ADD
-                const User_strategy_client = new strategy_client({
-                  strategy_id: data.id,
-                  user_id: User_id,
-                });
-                User_strategy_client.save();
+          if (Strategies.length > 0) {
+            Strategies.forEach((data) => {
+              // STRATEGY ADD
+              const User_strategy_client = new strategy_client({
+                strategy_id: data.id,
+                user_id: User_id,
               });
-            }
-          } catch { }
+              User_strategy_client.save();
+            });
+          }
+
+
+          console.log("stg and group add", new Date());
+
 
           const GroupServiceId = new ObjectId(group_service);
 
@@ -274,11 +312,13 @@ class Employee {
             }
           ]);
 
-          console.log("->",group_service_find);
-          // CLIENT SERVICES ADD API
-          if (group_service_find.length != 0) {
+
+          const clientServicesData = [];
+
+          // Build the array with client_services documents
+          if (group_service_find.length !== 0) {
             group_service_find.forEach((data) => {
-              const User_client_services = new client_services({
+              const clientService = {
                 user_id: User_id,
                 group_id: group_service,
                 service_id: data.Service_id,
@@ -286,12 +326,20 @@ class Employee {
                 uniqueUserService: User_id + "_" + data.Service_id,
                 quantity: data.lotsize,
                 lot_size: 1
+              };
 
-
-              });
-              User_client_services.save();
+              clientServicesData.push(clientService);
             });
           }
+
+          // Use insertMany to insert the documents in a single database call
+          client_services.insertMany(clientServicesData)
+            .then((result) => {
+            })
+
+
+          console.log("client service add", new Date());
+
 
           // LICENSE TABLE ADD USE LICENSE OUR CLIENT
           if (license_type == "2") {
@@ -309,16 +357,19 @@ class Employee {
             Email: Email,
             Password: rand_password,
           };
-          var EmailData = await firstOptPass(email_data);
+          console.log("Done final", new Date());
 
+          res.send({ status: true, msg: "successfully Add!", data: data[0] });
+          console.log("last add", new Date());
+          var EmailData = await firstOptPass(email_data);
           CommonEmail(toEmail, subjectEmail, EmailData);
 
           logger1.info("Add User By Admin", {
-            Email: data.Email,
-            role: data.Role,
-            user_id: data._id,
+            Email: data[0].Email,
+            role: data[0].Role,
+            user_id: data[0]._id,
           });
-          res.send({ status: true, msg: "successfully Add!", data: data });
+
         })
         .catch((err) => {
           console.log(" Add Time Error-", err);
@@ -347,9 +398,9 @@ class Employee {
 
 
       // FIND PARENT ROLE
-      const parentRole = await User_model.findOne({
-        _id: PID,
-      }).select('Role')
+      // const parentRole = await User_model.findOne({
+      //   _id: PID,
+      // }).select('Role')
 
 
 
@@ -589,7 +640,7 @@ class Employee {
               delete_startegy.push(item);
             }
           });
-          console.log("delete_startegy", delete_startegy);
+          // console.log("delete_startegy", delete_startegy);
 
           // ADD STRATEGY IN STRATEGY CLIENT
           if (add_startegy.length > 0) {
@@ -690,7 +741,7 @@ class Employee {
             groupService_id: GroupServiceId,
           });
 
-          console.log("=", user_group_service.length);
+          // console.log("=", user_group_service.length);
           if (user_group_service.length == 0) {
 
             const result = await groupService_User.updateOne(
@@ -769,7 +820,7 @@ class Employee {
                 quantity: data.lotsize,
                 lot_size: 1
               });
-console.log("User_client_services" ,User_client_services)
+              // console.log("User_client_services", User_client_services)
               User_client_services.save();
             });
 
@@ -791,7 +842,7 @@ console.log("User_client_services" ,User_client_services)
           EndDate: EndDate1 == null ? existingUsername.EndDate : EndDate1,
           broker: req.broker,
           parent_id: req.parent_id,
-          parent_role: parentRole.Role,
+          parent_role: existingUsername.Role,
           api_secret: req.api_secret,
           app_id: req.app_id,
           client_code: req.client_code,
