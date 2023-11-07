@@ -21,7 +21,6 @@ const connectToDatabase = async () => {
               RoleCreate()  //Role create function
             }
             return role;
-
           })
 
         // Company Information table check

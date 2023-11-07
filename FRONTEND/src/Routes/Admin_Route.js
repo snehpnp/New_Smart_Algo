@@ -13,6 +13,11 @@ import EditClient from '../layout/Admin/Clients/ClientList/Edit_Client'
 import SignUpClients from '../layout/Admin/Clients/Sign_Up_Clients/Sign_Up_Clients';
 import EditSignupClient from '../layout/Admin/Clients/Sign_Up_Clients/EditSignupClients';
 
+
+// Expired Client List
+import ExpiredClients from '../layout/Admin/Clients/ExpiredClients/ExpiredClients'
+
+
 //  Sub Admin
 import AllSubadmin from '../layout/Admin/SubAdmin/Subadmins/AllSubadmin';
 import EditSubadmin from '../layout/Admin/SubAdmin/Subadmins/EditSubadmin';
@@ -97,6 +102,7 @@ const Admin = () => {
                 <Route exact path="/profile" element={<Profile />} />
                 <Route exact path="/system" element={<System />} />
                 <Route exact path="/allclients" element={<ClientList />} />
+                <Route exact path="/expiredclients" element={<ExpiredClients />} />
                 <Route exact path="/client/add" element={<AddClient />} />
                 <Route exact path="/client/edit/:id" element={<EditClient />} />
                 <Route exact path="/signupclients" element={<SignUpClients />} />

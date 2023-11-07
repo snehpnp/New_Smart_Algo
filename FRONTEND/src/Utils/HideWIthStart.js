@@ -21,5 +21,12 @@ export const maskNumber = (number) => {
 };
 
 
+export const maskPassword = (number) => {
+    var replaced = number.replace(/.(?=.{0,}$)/g, '*');
+    return replaced;
+    // console.log("number", replaced);
+};
+
+
 
 

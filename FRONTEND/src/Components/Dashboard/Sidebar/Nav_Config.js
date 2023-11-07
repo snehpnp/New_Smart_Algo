@@ -35,6 +35,11 @@ export const admin_sidebar = [
             //     "name": 'SignUp - Clients',
             //     "route": "/admin/signupclients",
             // },
+            {
+                'id': 4,
+                "name": 'Expired-Clients',
+                "route": "/admin/expiredclients",
+            },
         ]
     },
     {

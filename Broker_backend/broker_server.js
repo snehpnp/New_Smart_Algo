@@ -85,10 +85,13 @@ d.getMinutes(),
 d.getSeconds()
 ].join(':');
 
-var dt_date = [d.getFullYear(),
-d.getMonth() + 1,
-d.getDate(),
-].join('/');
+// var dt_date = [d.getFullYear(),
+// d.getMonth() + 1,
+// d.getDate(),
+// ].join('/');
+
+
+
 
 
 
@@ -96,10 +99,12 @@ d.getDate(),
 const aliceblue = require('./Broker/aliceblue')
 //const aliceblueTest = require('./Broker/aliceblue')
 
-// MT_4 , OPTION_CHAIN , MAKE_STG, SQUAR_OFF
+// MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
 
 // TEST API
 app.post('/broker-signals', async (req, res) => {
+
+
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -179,6 +184,17 @@ app.post('/broker-signals', async (req, res) => {
           return console.log(err);
         }
       });
+
+
+
+      const epochTimestamp = signals.DTime; // Replace with your timestamp
+
+// Create a new Date object using the epoch timestamp
+const date = new Date(epochTimestamp * 1000); // Convert to milliseconds by multiplying by 1000
+const formattedDate1 = date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+const parts = formattedDate1.split('/');
+const dt_date = `${parts[2]}/${parts[0]}/${parseInt(parts[1], 10)}`;
+console.log(dt_date); 
 
 
       var dt = signals.DTime;

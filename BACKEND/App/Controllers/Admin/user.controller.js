@@ -317,59 +317,64 @@ class Employee {
 
           // Build the array with client_services documents
           if (group_service_find.length !== 0) {
-            group_service_find.forEach((data) => {
-              const clientService = {
+
+            // CLIENT SERVICES ADD API
+            if (group_service_find.length != 0) {
+              group_service_find.forEach((data) => {
+                const clientService = {
+                  user_id: User_id,
+                  group_id: group_service,
+                  service_id: data.Service_id,
+                  strategy_id: Strategies[0].id,
+                  uniqueUserService: User_id + "_" + data.Service_id,
+                  quantity: data.lotsize,
+                  lot_size: 1
+                };
+
+                clientServicesData.push(clientService);
+              });
+            }
+
+            // Use insertMany to insert the documents in a single database call
+            client_services.insertMany(clientServicesData)
+              .then((result) => {
+              })
+
+
+            console.log("client service add", new Date());
+
+
+            // LICENSE TABLE ADD USE LICENSE OUR CLIENT
+            if (license_type == "2") {
+              const count_licenses_add = new count_licenses({
                 user_id: User_id,
-                group_id: group_service,
-                service_id: data.Service_id,
-                strategy_id: Strategies[0].id,
-                uniqueUserService: User_id + "_" + data.Service_id,
-                quantity: data.lotsize,
-                lot_size: 1
-              };
+                license: licence,
+              });
+              count_licenses_add.save();
+            }
 
-              clientServicesData.push(clientService);
+            var toEmail = Email;
+            var subjectEmail = "User ID and Password";
+            var email_data = {
+              FullName: FullName,
+              Email: Email,
+              Password: rand_password,
+            };
+            console.log("Done final", new Date());
+
+            res.send({ status: true, msg: "successfully Add!", data: data[0] });
+            console.log("last add", new Date());
+            var EmailData = await firstOptPass(email_data);
+            CommonEmail(toEmail, subjectEmail, EmailData);
+
+            logger1.info("Add User By Admin", {
+              Email: data[0].Email,
+              role: data[0].Role,
+              user_id: data[0]._id,
             });
+
+
           }
-
-          // Use insertMany to insert the documents in a single database call
-          client_services.insertMany(clientServicesData)
-            .then((result) => {
-            })
-
-
-          console.log("client service add", new Date());
-
-
-          // LICENSE TABLE ADD USE LICENSE OUR CLIENT
-          if (license_type == "2") {
-            const count_licenses_add = new count_licenses({
-              user_id: User_id,
-              license: licence,
-            });
-            count_licenses_add.save();
-          }
-
-          var toEmail = Email;
-          var subjectEmail = "User ID and Password";
-          var email_data = {
-            FullName: FullName,
-            Email: Email,
-            Password: rand_password,
-          };
-          console.log("Done final", new Date());
-
-          res.send({ status: true, msg: "successfully Add!", data: data[0] });
-          console.log("last add", new Date());
-          var EmailData = await firstOptPass(email_data);
-          CommonEmail(toEmail, subjectEmail, EmailData);
-
-          logger1.info("Add User By Admin", {
-            Email: data[0].Email,
-            role: data[0].Role,
-            user_id: data[0]._id,
-          });
-
         })
         .catch((err) => {
           console.log(" Add Time Error-", err);
@@ -820,7 +825,6 @@ class Employee {
                 quantity: data.lotsize,
                 lot_size: 1
               });
-              // console.log("User_client_services", User_client_services)
               User_client_services.save();
             });
 
@@ -897,6 +901,117 @@ class Employee {
     }
   }
 
+  // GET ALL EXPIRED USERS
+  async GetAllExpiredClients(req, res) {
+    // try {
+
+    //   const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
+    //   const skip = (page - 1) * limit;
+
+
+    //   const USER_ID = new ObjectId(user_ID);
+
+
+    //   const date = new Date();
+    //   const formattedDate = date.toISOString();
+
+    //   const pipeline = [
+    //     {
+    //       $match: {
+    //         $or: [
+    //           {
+    //             Role: "ADMIN",
+    //             Is_Active: "1",
+    //             EndDate: { $lte: new Date(formattedDate) }
+    //           },
+    //           {
+    //             $and: [
+    //               { Role: "SUBADMIN" },
+    //               { parent_id: USER_ID },
+
+    //             ]
+    //           }
+    //         ]
+    //       }
+    //     },
+    //     {
+    //       $sort: {
+    //         _id: -1
+    //       }
+    //     }
+    //   ];
+
+    //   const filteredSignals = await User_model.aggregate(pipeline);
+    //   if (filteredSignals.length === 0) {
+    //     res.send({
+    //       status: true,
+    //       msg: "No Data Found",
+    //       data: []
+    //     });
+    //   } else {
+    //     res.send({
+    //       status: true,
+    //       msg: "Get All dd Clients",
+    //       data: filteredSignals
+    //     });
+    //   }
+    // } catch(error) {
+    //   console.log("loginClients Error-", error);
+    // }
+
+
+
+    // return
+
+    try {
+      const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
+      const skip = (page - 1) * limit;
+
+      // GET ALL CLIENTS
+      var AdminMatch;
+
+      const date = new Date();
+      const formattedDate = date.toISOString();
+
+      if (Find_Role == "ADMIN") {
+        AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $lt: new Date(formattedDate) } };
+      } else if (Find_Role == "SUBADMIN") {
+        AdminMatch = { Role: "USER", parent_id: user_ID };
+      }
+
+      const getAllClients = await User_model.find(AdminMatch)
+        .skip(skip)
+        .limit(Number(limit))
+        .sort({ createdAt: -1 });
+
+      const totalCount = getAllClients.length;
+      // IF DATA NOT EXIST
+      if (getAllClients.length == 0) {
+        return res.send({
+          status: false,
+          msg: "Empty data",
+          data: [],
+          totalCount: totalCount,
+        });
+      }
+
+      // DATA GET SUCCESSFULLY
+      res.send({
+        status: true,
+        msg: "Get All Clients",
+        totalCount: totalCount,
+        data: getAllClients,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(totalCount / Number(limit)),
+      });
+    } catch (error) {
+      console.log("loginClients Error-", error);
+    }
+
+  }
+
+
   // GET ALL GetAllClients
   async GetAllClients(req, res) {
     try {
@@ -906,8 +1021,11 @@ class Employee {
       // GET ALL CLIENTS
       var AdminMatch;
 
+      const date = new Date();
+      const formattedDate = date.toISOString();
+
       if (Find_Role == "ADMIN") {
-        AdminMatch = { Role: "USER", Is_Active: "1" };
+        AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $gt: new Date(formattedDate) } };
       } else if (Find_Role == "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
@@ -942,7 +1060,6 @@ class Employee {
       console.log("loginClients Error-", error);
     }
   }
-
   // GET ALL LOGIN CLIENTS
   async loginClients(req, res) {
     try {
@@ -1019,7 +1136,10 @@ class Employee {
       const currentDate = new Date(); // Get the current date
       const GetAlluser_logs = await User_model.find({
         Role: 'USER',
-        license_type: "2",
+        $or: [
+          { license_type: "2" },
+          { license_type: "0" }
+        ],
         TradingStatus: Role,
         EndDate: { $gt: currentDate }
 
@@ -1270,6 +1390,8 @@ class Employee {
       // console.log("Theme error-", error);
     }
   }
+
+
 
 }
 

@@ -15,7 +15,7 @@ import * as Config from "../../../Utils/Config";
 const ApiCreateInfo = () => {
     const dispatch = useDispatch()
 
-    const token = JSON.parse(localStorage.getItem("user_details")).token;
+    const token = JSON.parse(localStorage.getItem("user_details"));
 
 
     const [showModal, setshowModal] = useState(false)
@@ -29,11 +29,12 @@ const ApiCreateInfo = () => {
     });
 
 
+    const goToDashboard = JSON.parse(localStorage.getItem("user_details_goTo"));
 
 
     const data = async () => {
 
-        await dispatch(All_Api_Info_List(token)).unwrap()
+        await dispatch(All_Api_Info_List(token.token)).unwrap()
             .then((response) => {
                 if (response.status) {
                     setUserDetails({
@@ -60,6 +61,7 @@ const ApiCreateInfo = () => {
             <div class="row">
                 <section class="card__container">
 
+                    {/* {goToDashboard ? } */}
                     {UserDetails.data && UserDetails.data.slice(0, 1).map((item) => {
                         // {UserDetails.data && UserDetails.data.map((item) => {
                         return <>

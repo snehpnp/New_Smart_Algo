@@ -11,7 +11,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 import {
-  GET_ALL_CLIENTS,
+  GET_ALL_EXPIRED_CLIENTS,
   GO_TO_DASHBOARDS,
   UPDATE_USER_ACTIVE_STATUS,
   DELETE_USER_SERVICES,
@@ -88,7 +88,7 @@ const AllClients = () => {
       Find_Role: Role,
       user_ID: user_ID,
     };
-    await dispatch(GET_ALL_CLIENTS(req1))
+    await dispatch(GET_ALL_EXPIRED_CLIENTS(req1))
       .unwrap()
       .then((response) => {
         if (response.status) {
@@ -328,7 +328,7 @@ const AllClients = () => {
       dataField: "Email",
       text: "Email",
     },
-        {
+    {
       dataField: "FullName",
       text: "Full Name",
     },
@@ -433,18 +433,18 @@ const AllClients = () => {
               </span>
             </Link>
             {row.license_type == "1" ?
-            <Link>
-              <span data-toggle="tooltip" data-placement="top" title="Delete">
-                <Trash2
-                  size={20}
-                  color="#d83131"
-                  strokeWidth={2}
-                  className="mx-1"
-                  onClick={(e) => Delete_user(row._id)}
-                />
-              </span>
-            </Link>
-             : ""} 
+              <Link>
+                <span data-toggle="tooltip" data-placement="top" title="Delete">
+                  <Trash2
+                    size={20}
+                    color="#d83131"
+                    strokeWidth={2}
+                    className="mx-1"
+                    onClick={(e) => Delete_user(row._id)}
+                  />
+                </span>
+              </Link>
+              : ""}
 
           </div>
         </div>
@@ -560,10 +560,10 @@ const AllClients = () => {
       ) : (
         <>
           <Content
-            Page_title="All Clients"
-            button_title="Add Client"
-            route="/admin/client/add"
-            show_csv_button={true} csv_data={ForGetCSV} csv_title="Client-List"
+            Page_title="Expired Clients"
+       
+            button_status={false}
+            show_csv_button={true} csv_data={ForGetCSV} csv_title="Expired Client-List"
           >
 
             <div className="row">
