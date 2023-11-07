@@ -115,13 +115,6 @@ export async function GET_PANEL_KEY(data, token) {
 }
 
 
-<<<<<<< HEAD
-
-
-//----------------------------Make Strategy--------------------------------------------//
-=======
->>>>>>> 6584bc4d9a732f406dfb1483f37722f0a7863c5e
-
 // GET_PANEL_KEY
 
 export async function GET_OPEN_POSITION(data, token) {

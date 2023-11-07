@@ -11,16 +11,6 @@ var firstOptPass = async (data) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
     } catch (error) {
         console.error("Error fetching company information:", error);
         // Handle the error as needed
