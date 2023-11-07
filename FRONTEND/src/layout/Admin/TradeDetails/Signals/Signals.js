@@ -20,7 +20,13 @@ const Signals = () => {
 
   const [ForGetCSV, setForGetCSV] = useState([])
 
-//  For Strategy Filter
+  //  For search filter
+  const [originalData, setOriginalData] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
+
+
+
+  //  For Strategy Filter
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
   const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
 
@@ -83,7 +89,7 @@ const Signals = () => {
 
 
     // await dispatch(Get_All_Signals({ startDate: '2023/10/14', token: token }))
-      await dispatch(Get_All_Signals({ startDate: DateFilter, token: token }))
+    await dispatch(Get_All_Signals({ startDate: DateFilter, token: token }))
       .unwrap()
       .then((response) => {
         if (response.status) {
@@ -101,6 +107,7 @@ const Signals = () => {
           })
           setForGetCSV(csvarr)
 
+          setOriginalData(response.data);
 
           getSignalsData({
             loading: false,
@@ -163,6 +170,27 @@ const Signals = () => {
 
 
 
+  // MANAGE MULTIFILTER
+  useEffect(() => {
+    const filteredData = originalData.filter((item) => {
+      return (
+        item.strategy.toString().toLowerCase().includes(StrategyClientStatus.toString().toLowerCase())
+        ||
+        item.symbol.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.trade_symbol.toLowerCase().includes(searchInput.toLowerCase())
+      );
+    });
+
+    // Set the filtered data to the state or variable you want to use
+    getSignalsData({
+      loading: false,
+      data: searchInput ? filteredData : originalData,
+    });
+
+    console.log("StrategyClientStatus", StrategyClientStatus);
+    console.log("filteredData", filteredData);
+  }, [searchInput, originalData, StrategyClientStatus]);
+
 
 
 
@@ -180,29 +208,21 @@ const Signals = () => {
             <div className="d-flex">
               <div className="col-lg-6">
                 <div className="mb-3 row d-flex">
-                  {/* <div className="col-lg-6">
-                    <label className="col-lg-12" htmlFor="validationCustom05">
-                      Select Date
-                    </label>
-                    <select
-                      className="default-select wide form-control"
-                      id="validationCustom05"
-                      onChange={(e) => setDateFilter(e.target.value)}
-                    >
-                      <option disabled> Please Select Date </option>
-
-                      {DateArray &&
-                        DateArray.map((item) => {
-                          return (
-                            <>
-                              <option value={item.toString()}>
-                                {item.toString()}
-                              </option>
-                            </>
-                          );
-                        })}
-                    </select>
-                  </div> */}
+                  <div className="col-lg-6">
+                    <div class="mb-3">
+                      <label for="exampleFormControlInput1" class="form-label">
+                        Search Something Here
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        class="form-control"
+                        id="exampleFormControlInput1"
+                      />
+                    </div>
+                  </div>
 
                   <div className="col-lg-6">
                     <label className="col-lg-12" htmlFor="validationCustom05">

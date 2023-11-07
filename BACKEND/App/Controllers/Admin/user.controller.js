@@ -274,7 +274,7 @@ class Employee {
             }
           ]);
 
-          console.log("->",group_service_find);
+          console.log("->", group_service_find);
           // CLIENT SERVICES ADD API
           if (group_service_find.length != 0) {
             group_service_find.forEach((data) => {
@@ -769,7 +769,7 @@ class Employee {
                 quantity: data.lotsize,
                 lot_size: 1
               });
-console.log("User_client_services" ,User_client_services)
+              console.log("User_client_services", User_client_services)
               User_client_services.save();
             });
 
@@ -846,6 +846,117 @@ console.log("User_client_services" ,User_client_services)
     }
   }
 
+  // GET ALL EXPIRED USERS
+  async GetAllExpiredClients(req, res) {
+    // try {
+
+    //   const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
+    //   const skip = (page - 1) * limit;
+
+
+    //   const USER_ID = new ObjectId(user_ID);
+
+
+    //   const date = new Date();
+    //   const formattedDate = date.toISOString();
+
+    //   const pipeline = [
+    //     {
+    //       $match: {
+    //         $or: [
+    //           {
+    //             Role: "ADMIN",
+    //             Is_Active: "1",
+    //             EndDate: { $lte: new Date(formattedDate) }
+    //           },
+    //           {
+    //             $and: [
+    //               { Role: "SUBADMIN" },
+    //               { parent_id: USER_ID },
+
+    //             ]
+    //           }
+    //         ]
+    //       }
+    //     },
+    //     {
+    //       $sort: {
+    //         _id: -1
+    //       }
+    //     }
+    //   ];
+
+    //   const filteredSignals = await User_model.aggregate(pipeline);
+    //   if (filteredSignals.length === 0) {
+    //     res.send({
+    //       status: true,
+    //       msg: "No Data Found",
+    //       data: []
+    //     });
+    //   } else {
+    //     res.send({
+    //       status: true,
+    //       msg: "Get All dd Clients",
+    //       data: filteredSignals
+    //     });
+    //   }
+    // } catch(error) {
+    //   console.log("loginClients Error-", error);
+    // }
+
+
+
+    // return
+
+    try {
+      const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
+      const skip = (page - 1) * limit;
+
+      // GET ALL CLIENTS
+      var AdminMatch;
+
+      const date = new Date();
+      const formattedDate = date.toISOString();
+
+      if (Find_Role == "ADMIN") {
+        AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $lt: new Date(formattedDate) } };
+      } else if (Find_Role == "SUBADMIN") {
+        AdminMatch = { Role: "USER", parent_id: user_ID };
+      }
+
+      const getAllClients = await User_model.find(AdminMatch)
+        .skip(skip)
+        .limit(Number(limit))
+        .sort({ createdAt: -1 });
+
+      const totalCount = getAllClients.length;
+      // IF DATA NOT EXIST
+      if (getAllClients.length == 0) {
+        return res.send({
+          status: false,
+          msg: "Empty data",
+          data: [],
+          totalCount: totalCount,
+        });
+      }
+
+      // DATA GET SUCCESSFULLY
+      res.send({
+        status: true,
+        msg: "Get All Clients",
+        totalCount: totalCount,
+        data: getAllClients,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(totalCount / Number(limit)),
+      });
+    } catch (error) {
+      console.log("loginClients Error-", error);
+    }
+
+  }
+
+
   // GET ALL GetAllClients
   async GetAllClients(req, res) {
     try {
@@ -855,8 +966,11 @@ console.log("User_client_services" ,User_client_services)
       // GET ALL CLIENTS
       var AdminMatch;
 
+      const date = new Date();
+      const formattedDate = date.toISOString();
+
       if (Find_Role == "ADMIN") {
-        AdminMatch = { Role: "USER", Is_Active: "1" };
+        AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $gt: new Date(formattedDate) } };
       } else if (Find_Role == "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
@@ -891,7 +1005,6 @@ console.log("User_client_services" ,User_client_services)
       console.log("loginClients Error-", error);
     }
   }
-
   // GET ALL LOGIN CLIENTS
   async loginClients(req, res) {
     try {
@@ -968,7 +1081,10 @@ console.log("User_client_services" ,User_client_services)
       const currentDate = new Date(); // Get the current date
       const GetAlluser_logs = await User_model.find({
         Role: 'USER',
-        license_type: "2",
+        $or: [
+          { license_type: "2" },
+          { license_type: "0" }
+        ],
         TradingStatus: Role,
         EndDate: { $gt: currentDate }
 
@@ -1219,6 +1335,8 @@ console.log("User_client_services" ,User_client_services)
       // console.log("Theme error-", error);
     }
   }
+
+
 
 }
 

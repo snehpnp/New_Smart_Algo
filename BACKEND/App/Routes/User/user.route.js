@@ -5,7 +5,7 @@ const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
 const { getusertradingStatus, getuserUpdateStatus } = require('../../Controllers/User/Trading_status')
-const { getClientServices, updateClientServices, TradingOff , ModifyUpdates } = require('../../Controllers/User/Dashboard')
+const { getClientServices, updateClientServices, TradingOff, ModifyUpdates, GetUserApiCreate } = require('../../Controllers/User/Dashboard')
 const { GetUserBrokerResponse } = require('../../Controllers/User/BrokerReponse')
 const { GetUserTradeSignals } = require('../../Controllers/User/Signals')
 const { GetUserTradeHistory } = require('../../Controllers/User/TradeHistory')
@@ -50,6 +50,10 @@ router.post('/create/user/help', AddHelp);
 
 // Make Strategy...
 router.get('/getall/user/symbols', GetAllSymbols);
+
+// get User Api Create Info
+router.post('/get/user_api_create', GetUserApiCreate);
+
 
 
 

@@ -188,7 +188,7 @@ export async function TRADING_OFF(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}trading/logout`, data, {
             headers: header(token),
-            data: {data},
+            data: { data },
         })
         return await res?.data;
     }
@@ -206,7 +206,7 @@ export async function Update_broker_response(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}aliceblue/get/orderinfo`, data, {
             headers: header(token),
-            data: {data},
+            data: { data },
         })
         return await res?.data;
     }
@@ -224,7 +224,7 @@ export async function MODIFY_DETAILS(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}update/modify_details`, data, {
             headers: header(token),
-            data: {data},
+            data: { data },
         })
         return await res?.data;
     }
@@ -242,7 +242,7 @@ export async function GET_PERMISSION(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}get/panel/permission`, data, {
             headers: header(token),
-            data: {data},
+            data: { data },
         })
         return await res?.data;
     }
@@ -268,6 +268,22 @@ export async function GET_ALL_BROKER_RESPONSE(user_id) {
 
 }
 
+
+
+// 
+export async function GET_USER_BROKER_INFO(user_id, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/user_api_create`, user_id, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
+    }
+
+}
 
 
 

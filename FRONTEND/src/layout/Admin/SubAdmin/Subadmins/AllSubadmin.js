@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import Modal from "../../../../Components/ExtraComponents/Modal";
 import { Get_Client_By_Subadmin_Id } from "../../../../ReduxStore/Slice/Admin/CreateSubadminSlice";
+import { maskEmail, maskNumber, maskPassword } from "../../../../Utils/HideWIthStart";
 
 
 
@@ -154,14 +155,24 @@ const AllSubadmin = () => {
     {
       dataField: "Email",
       text: "Email",
+      formatter: (cell, row) => (
+        <span>{maskEmail(cell)}</span>
+      )
+
     },
     {
       dataField: "PhoneNo",
       text: "Phone Number",
+      formatter: (cell, row) => (
+        <span>{maskNumber(cell)}</span>
+      )
     },
     {
       dataField: "Otp",
       text: "Password",
+      formatter: (cell, row) => (
+        <span>{maskPassword(cell)}</span>
+      )
     },
     {
       dataField: "ActiveStatus",
@@ -208,8 +219,8 @@ const AllSubadmin = () => {
         <>
           <span
             className={`${row.AppLoginStatus === "0" && row.WebLoginStatus === "0"
-                ? "btn-danger"
-                : "btn-success "
+              ? "btn-danger"
+              : "btn-success "
               }  btn btn-new-block`}
             onClick={() => goToDashboard(row._id, row.Email)}
           // disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
@@ -291,16 +302,16 @@ const AllSubadmin = () => {
     });
   }, [searchInput, originalData, PanelStatus]);
 
-  const ResetDate = (e) => {
-    e.preventDefault();
+  // const ResetDate = (e) => {
+  //   e.preventDefault();
 
-    setSearchInput("");
-    setPanelStatus("2");
-    setAddsubadmin({
-      loading: false,
-      data: originalData,
-    });
-  };
+  //   setSearchInput("");
+  //   setPanelStatus("2");
+  //   setAddsubadmin({
+  //     loading: false,
+  //     data: originalData,
+  //   });
+  // };
 
   return (
     <>
@@ -329,7 +340,7 @@ const AllSubadmin = () => {
                   />
                 </div>
               </div>
-              <div className="col-lg-4 ">
+              {/* <div className="col-lg-4 ">
                 <div class="mb-3">
                   <label for="select" class="form-label">
                     Panel Status
@@ -355,7 +366,7 @@ const AllSubadmin = () => {
                 >
                   Reset
                 </button>
-              </div>
+              </div> */}
             </div>
 
             <FullDataTable
