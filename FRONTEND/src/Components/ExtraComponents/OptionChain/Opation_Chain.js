@@ -21,6 +21,10 @@ import * as Config from "../../../Utils/Config";
 import toast, { Toaster } from 'react-hot-toast';
 
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+// import { Get_Panel_Informtion  } from "../../../ReduxStore/Slice/Auth/AuthSlice";
+import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
+
+
 
 const HelpCenter = () => {
 
@@ -66,7 +70,7 @@ const HelpCenter = () => {
     const [UserDetails, setUserDetails] = useState([]);
     const [showModal, setshowModal] = useState(false);
 
-    console.log("UserDetails", UserDetails != undefined && UserDetails.trading_status)
+    const [getBrokerUrl, setBrokerUrl] = useState('')
 
     const [symbol, setSymbol] = useState('')
     const [expiry, setExpiry] = useState('')
@@ -76,7 +80,17 @@ const HelpCenter = () => {
 
 
 
+    const getPanelDetails = async () => {
+    
+    
+        await dispatch(GET_COMPANY_INFOS())
 
+          .unwrap()
+          .then((response) => {
+            let res = response.data[0]
+           setBrokerUrl(res.broker_url)
+          });
+      };
 
 
     const columns = [
@@ -405,7 +419,7 @@ const HelpCenter = () => {
                 method: 'post',
                 maxBodyLength: Infinity,
                 // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                url: `${Config.broker_url}broker-signals`,
+                url: `${getBrokerUrl && getBrokerUrl}broker-signals`,
                 headers: {
                     'Content-Type': 'text/plain'
                 },
@@ -466,6 +480,7 @@ const HelpCenter = () => {
             })
     }
     useEffect(() => {
+        getPanelDetails()
         symbols()
         getPanelKey()
         GetAllStrategyName();

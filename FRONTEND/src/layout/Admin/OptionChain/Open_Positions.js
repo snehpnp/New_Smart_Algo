@@ -23,6 +23,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 
+
+
 const TradeHistory = () => {
     const dispatch = useDispatch();
 
@@ -44,6 +46,9 @@ const TradeHistory = () => {
 
 
     // --------------- FOR GET PANEL KEY-----------------------
+
+
+    
 
 
     const getPanelKey = async (e) => {

@@ -55,7 +55,6 @@ const Header = ({ ChatBox }) => {
   const token = JSON.parse(localStorage.getItem("user_details")).token;
 
 
-  console.log("==================",user_role);
 
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id);
@@ -201,7 +200,7 @@ const Header = ({ ChatBox }) => {
     await dispatch(GET_MESSAGE_BRODS({ id: user_id }))
       .unwrap()
       .then((response) => {
-        console.log("response", response);
+        // console.log("response", response);
         if (response.status) {
           // setUserDetails(response.data);
         }
@@ -236,7 +235,6 @@ const Header = ({ ChatBox }) => {
 
   useEffect(() => {
     if (user_role == "ADMIN") {
-      console.log("===========================================");
       Notfication();
     }
   }, []);
