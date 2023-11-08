@@ -8,6 +8,11 @@ const Role = require('./role.model')
 
 // Employee Financial Information Collection
 const userModel = Schema({
+    _id: {
+        type: mongoose.Schema.Types.ObjectId,
+        index: true,
+        unique: true
+    },
     FullName: {
         type: String,
         required: true,
