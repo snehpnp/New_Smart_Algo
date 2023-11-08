@@ -507,6 +507,9 @@ console.log(dt_date);
             console.log("Insert Signal - ", error)
             return res.send("ok")
           }
+
+
+
           // ENTRY OR EXIST CHECK
           if (type == "LE" || type == "le" || type == "SE" || type == "Se") {
 
@@ -610,12 +613,6 @@ console.log(dt_date);
 
             }
           }
-
-
-
-
-
-
 
           // return res.send({ msg: FIRST3_KEY })
 

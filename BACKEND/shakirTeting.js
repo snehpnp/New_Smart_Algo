@@ -2026,8 +2026,8 @@ app.get("/testing_condition",async(req,res)=>{
     
     abc(checkData, conditiostring1);
   
+  
     res.send("okk")
-
     return
     const condition = (checkData) => val.condition;
     
