@@ -22,6 +22,7 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
+import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 
 
 
@@ -41,14 +42,28 @@ const TradeHistory = () => {
     const [inputValue, setInputValue] = useState('')
     const [PanelKey, setPanelKey] = useState('');
     const [SocketState, setSocketState] = useState("null");
+    const [getBrokerUrl, setBrokerUrl] = useState('')
 
+    const [disabled, setDisabled] = useState(false);
+
+    const handleClickDisabled = () => {
+        setDisabled(true);
+      }
     // --------------- FOR GET OPTIONS SYMBOLS -----------------------
-
+console.log("inputValue",inputValue);
 
     // --------------- FOR GET PANEL KEY-----------------------
 
 
-    
+    const getPanelDetails = async () => {
+        await dispatch(GET_COMPANY_INFOS())
+
+          .unwrap()
+          .then((response) => {
+            let res = response.data[0]
+           setBrokerUrl(res.broker_url)
+          });
+      };
 
 
     const getPanelKey = async (e) => {
@@ -69,6 +84,7 @@ const TradeHistory = () => {
 
 
     useEffect(() => {
+        getPanelDetails()
         getPanelKey();
     }, []);
     // --------------- FOR GET PANEL KEY-----------------------
@@ -328,7 +344,8 @@ const TradeHistory = () => {
     const Set_Entry_Exit_Qty = (row, event, qty_persent) => {
         let a = No_Negetive_Input_regex(event)
 
-        if (a) {
+        console.log(event);
+        // if (a) {
 
             if (parseInt(event) > parseInt(qty_persent)) {
                 alert('Error: Value cannot be greater than ' + qty_persent);
@@ -344,14 +361,17 @@ const TradeHistory = () => {
                 });
 
             }
-        } else {
-            alert('text not allow');
+        // } else {
+        //     alert('text not allow');
 
-        }
+        // }
     }
 
 
     const Done_For_Trade = () => {
+
+        handleClickDisabled();
+        
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
@@ -361,7 +381,7 @@ const TradeHistory = () => {
                 method: 'post',
                 maxBodyLength: Infinity,
                 // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                url: `${Config.broker_url}broker-signals`,
+                url: `${getBrokerUrl && getBrokerUrl}`,
                 headers: {
                     'Content-Type': 'text/plain'
                 },
@@ -685,7 +705,7 @@ const TradeHistory = () => {
         <>
             <Content Page_title="Open Position" button_status={false}
             >
-                <button className="btn btn-primary mb-4 ms-auto" onClick={(e) => SquareOfAll()}>Square Off All</button>
+                <button className="btn btn-primary mb-4 ms-auto" onClick={(e) => SquareOfAll()}>Square Off</button>
 
                 <FullDataTable
                     keyField="_id"
@@ -705,7 +725,8 @@ const TradeHistory = () => {
                             cancel_btn={true}
                             // hideBtn={false}
                             btn_name="Confirm"
-                            disabled_submit={ButtonDisabled}
+                            disabled_submit={disabled}
+                            // disabled_submit={ButtonDisabled}
                             Submit_Function={Done_For_Trade}
                             Submit_Cancel_Function={Cancel_Request}
                             handleClose={() => setshowModal(false)}
@@ -762,9 +783,8 @@ const TradeHistory = () => {
                                                                 e.target.value,
                                                                 row.old_qty_persent
                                                             )
-
                                                     }
-                                                    value={inputValue ? inputValue : row.old_qty_persent}
+                                                    value={inputValue ? inputValue : inputValue}
                                                     max={row.old_qty_persent}
                                                 // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
 

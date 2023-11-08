@@ -159,7 +159,7 @@ const UpdateSmptDetails = ({ showModal, setshowModal, data }) => {
         <div>   <Modal isOpen={showModal} size="lg" title="Update SMTP Details" hideBtn={true}
             handleClose={() => setshowModal(false)}
         >
-            <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Licence"
+            <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
 
             />
             <ToastButton />
