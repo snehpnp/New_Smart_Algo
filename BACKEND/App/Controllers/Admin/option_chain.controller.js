@@ -39,10 +39,14 @@ class OptionChain {
                 return res.status(400).json({ status: false, msg: 'Symbol is required.', data: [] });
             }
 
-
             const date = new Date(); // Month is 0-based, so 10 represents November
 
-            const formattedDate = date.toISOString();
+            const currentDate = new Date();
+            const previousDate = new Date(currentDate);
+            previousDate.setDate(currentDate.getDate() - 1);
+            //  const date = new Date(); // Month is 0-based, so 10 represents November
+
+            const formattedDate = previousDate.toISOString();
 
 
             const pipeline = [
