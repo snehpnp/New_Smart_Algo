@@ -77,7 +77,7 @@ class AliceBlue {
 
                                     }
                                 };
-                                console.log("updateOperation", updateOperation);
+                                // console.log("updateOperation", updateOperation);
 
                                 const result = await live_price.updateOne(filter, updateOperation);
                                 console.log("redirect_uri 1", redirect_uri);

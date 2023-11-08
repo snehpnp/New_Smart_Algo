@@ -18,7 +18,7 @@ module.exports = function (app) {
   const uri = "mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net/";
   const client = new MongoClient(uri, { useUnifiedTopology: true });
   client.connect();
-  console.log("Connected to MongoDB successfully!.....");
+  // console.log("Connected to MongoDB successfully!.....");
 
 
   const dbTradeTools = client.db('TradeTools');
