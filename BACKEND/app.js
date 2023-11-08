@@ -38,7 +38,9 @@ app.use(express.json());
 // REQUIRE File
 require('./App/Cron/cron')
 
-const { createView, dropExistingView, TradeHistroy, dashboard_view } = require('./View/Alice_blue')
+const { createView, dashboard_view } = require('./View/Alice_blue')
+const {  dropExistingView, TradeHistroy } = require('./View/TradeHistory')
+
 const { TokenSymbolUpdate, TruncateTable, tokenFind } = require('./App/Cron/cron')
 
 const db = require('../BACKEND/App/Models')
@@ -153,7 +155,7 @@ app.get('/tradesymbol', async (req, res) => {
 
 // TEST API
 app.get('/tradehistory/view', async (req, res) => {
-  TradeHistroy()
+  TradeHistroy(req, res)
   res.send({ msg: "View Create!!!" })
 })
 
