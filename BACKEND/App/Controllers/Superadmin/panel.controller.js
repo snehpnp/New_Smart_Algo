@@ -111,7 +111,7 @@ class Panel {
             }else{
                 domain1 = domain
             }
-            console.log(domain1);
+            // console.log(domain1);
             // FIND PANEL NAME DUPLICATE
             // const Panle_information = await panel_model.findOne({ _id: id })
             const desiredDomain = 'your_desired_domain_value'; // Replace with the desired domain value
@@ -306,7 +306,7 @@ class Panel {
             }else{
                 domain1 = domain
             }
-            console.log(domain1);
+            // console.log(domain1);
 
             const Panel_information = await panel_model.findOne({ domain:domain1 }, 'broker_id');
 

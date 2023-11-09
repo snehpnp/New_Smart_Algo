@@ -132,7 +132,7 @@ const Update_Broker_Key = ({ closeModal }) => {
         },
         {
             name: 'demat_userid',
-            label: formik.values.broker === 9 ? 'User Id' : formik.values.broker === '2' ? 'Demat UserId' : '', type: 'text',
+            label: formik.values.broker === 9 ? 'User Id' : formik.values.broker === '2' ? 'Demat User ID' : '', type: 'text',
             showWhen: values => values.broker === '9' || values.broker === '2',
             label_size: 12, col_size: 6, disable: false
         },

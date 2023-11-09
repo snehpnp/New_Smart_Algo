@@ -239,7 +239,7 @@ const AddClient = () => {
           toast.success(response.msg);
           setTimeout(() => {
             navigate("/admin/allclients")
-          }, 1000);
+          }, 500);
         }
         else if (!response.status) {
           toast.error(response.msg);

@@ -407,7 +407,7 @@ class Employee {
       //   _id: PID,
       // }).select('Role')
 
-
+      console.log("sTART", new Date());
 
       // IF USER ALEARDY EXIST
       const existingUsername = await User_model.findOne({
@@ -450,7 +450,10 @@ class Employee {
 
       var TotalMonth = "0";
 
-      var Panel_key = await Company_info.find();
+      // var Panel_key = await Company_info.find();
+      console.log("COMPANY", new Date());
+
+      var Panel_key = await Company_info.find({}, { prefix: 1, licenses: 1, _id: 0 }).limit(1);
 
       const totalLicense = await User_model.aggregate([
         // Match documents based on your criteria (e.g., specific conditions)
@@ -487,6 +490,9 @@ class Employee {
       } else {
         new_licence = req.licence1;
       }
+
+      console.log("cOMPANY 1", new Date());
+
 
       if (
         Number(Panel_key[0].licenses) >=
@@ -611,130 +617,133 @@ class Employee {
           }
         }
 
-        try {
-          // STARTEGY ADD AND EDIT
-          const Strategieclient = await strategy_client.find({
-            user_id: existingUsername._id,
-          });
+        console.log("STG ADD 1", new Date());
 
-          // EXIST STRATEGY RO CONVERT IN STRING AND ID
-          var db_exist_startegy = [];
-          Strategieclient.forEach(function (item, index) {
-            db_exist_startegy.push(item.strategy_id.toString());
-          });
 
-          // NEW INSERT STRATEGY TO CONVERT IN STRING AND ID
-          var insert_startegy = [];
-          req.Strategies.forEach(function (item, index) {
-            insert_startegy.push(item.id);
-          });
-          // console.log('exist - strtegy ', db_exist_startegy);
+        // STARTEGY ADD AND EDIT
+        const Strategieclient = await strategy_client.find({
+          user_id: existingUsername._id,
+        });
 
-          // ADD STRATEGY ARRAY
-          var add_startegy = [];
-          insert_startegy.forEach(function (item, index) {
-            if (!db_exist_startegy.includes(item)) {
-              add_startegy.push(item);
-            }
-          });
+        // EXIST STRATEGY RO CONVERT IN STRING AND ID
+        var db_exist_startegy = [];
+        Strategieclient.forEach(function (item, index) {
+          db_exist_startegy.push(item.strategy_id.toString());
+        });
 
-          // DELETE STRATEGY ARRAY
-          var delete_startegy = [];
-          db_exist_startegy.forEach(function (item, index) {
-            if (!insert_startegy.includes(item)) {
-              delete_startegy.push(item);
-            }
-          });
-          // console.log("delete_startegy", delete_startegy);
+        // NEW INSERT STRATEGY TO CONVERT IN STRING AND ID
+        var insert_startegy = [];
+        req.Strategies.forEach(function (item, index) {
+          insert_startegy.push(item.id);
+        });
+        // console.log('exist - strtegy ', db_exist_startegy);
 
-          // ADD STRATEGY IN STRATEGY CLIENT
-          if (add_startegy.length > 0) {
-            add_startegy.forEach(async (data) => {
-              const User_strategy_client = new strategy_client({
-                strategy_id: data,
-                user_id: existingUsername._id,
-              });
-              await User_strategy_client.save();
-
-              var stgId = new ObjectId(data);
-
-              const Strategieclient = await strategy.find({ _id: stgId });
-              const user_activity = new user_activity_logs({
-                user_id: existingUsername._id,
-                message: "Strategy Add",
-                Strategy: Strategieclient[0].strategy_name,
-                role: req.Editor_role,
-                system_ip: getIPAddress(),
-                device: req.device,
-              });
-              await user_activity.save();
-            });
+        // ADD STRATEGY ARRAY
+        var add_startegy = [];
+        insert_startegy.forEach(function (item, index) {
+          if (!db_exist_startegy.includes(item)) {
+            add_startegy.push(item);
           }
+        });
 
-          // STEP FIRST TO DELTE IN STRATEGY CLIENT TABLE
-          if (delete_startegy.length > 0) {
-            delete_startegy.forEach(async (data) => {
-              var stgId = new ObjectId(data);
-              var deleteStrategy = await strategy_client.deleteOne({
-                user_id: existingUsername._id,
-                strategy_id: stgId,
-              });
-
-              const Strategieclient = await strategy.find({ _id: stgId });
-              // console.log(Strategieclient);
-              const user_activity = new user_activity_logs({
-                user_id: existingUsername._id,
-                message: "Strategy Delete",
-                Strategy: Strategieclient[0].strategy_name,
-                role: req.Editor_role,
-                system_ip: getIPAddress(),
-                device: req.device,
-              });
-              await user_activity.save();
-            });
+        // DELETE STRATEGY ARRAY
+        var delete_startegy = [];
+        db_exist_startegy.forEach(function (item, index) {
+          if (!insert_startegy.includes(item)) {
+            delete_startegy.push(item);
           }
+        });
+        // console.log("delete_startegy", delete_startegy);
 
-          // STEP FISECONDRST TO DELTE IN CLIENT SERVICES AND UPDATE NEW STRATEGY
-          if (delete_startegy.length > 0) {
-            delete_startegy.forEach(async (data) => {
+        console.log("STG ADD 2", new Date());
 
-              var stgId = new ObjectId(data);
-              var deleteStrategy = await strategy_client.find({
-                user_id: existingUsername._id,
-                strategy_id: { $ne: stgId }
-              });
-
-              // console.log("deleteStrategy", stgId);
-              // console.log("exist stg", deleteStrategy);
-              // console.log("add_startegy", add_startegy[0]);
-
-
-              if (deleteStrategy.length > 0) {
-
-                var update_services = await client_services.updateMany(
-                  { user_id: existingUsername._id, strategy_id: stgId },
-                  { $set: { strategy_id: deleteStrategy[0].strategy_id } }
-                );
-
-              } else {
-                var update_stg = new ObjectId(add_startegy[0]);
-
-                var update_services = await client_services.updateMany(
-                  { user_id: existingUsername._id, strategy_id: stgId },
-                  { $set: { strategy_id: update_stg } }
-                );
-              }
-
-
-
+        // ADD STRATEGY IN STRATEGY CLIENT
+        if (add_startegy.length > 0) {
+          add_startegy.forEach(async (data) => {
+            const User_strategy_client = new strategy_client({
+              strategy_id: data,
+              user_id: existingUsername._id,
             });
-          }
+            await User_strategy_client.save();
 
+            var stgId = new ObjectId(data);
 
-
-        } catch (error) {
-          console.log("startegy error-", error);
+            const Strategieclient = await strategy.find({ _id: stgId });
+            const user_activity = new user_activity_logs({
+              user_id: existingUsername._id,
+              message: "Strategy Add",
+              Strategy: Strategieclient[0].strategy_name,
+              role: req.Editor_role,
+              system_ip: getIPAddress(),
+              device: req.device,
+            });
+            await user_activity.save();
+          });
         }
+
+        // STEP FIRST TO DELTE IN STRATEGY CLIENT TABLE
+        if (delete_startegy.length > 0) {
+          delete_startegy.forEach(async (data) => {
+            var stgId = new ObjectId(data);
+            var deleteStrategy = await strategy_client.deleteOne({
+              user_id: existingUsername._id,
+              strategy_id: stgId,
+            });
+
+            const Strategieclient = await strategy.find({ _id: stgId });
+            // console.log(Strategieclient);
+            const user_activity = new user_activity_logs({
+              user_id: existingUsername._id,
+              message: "Strategy Delete",
+              Strategy: Strategieclient[0].strategy_name,
+              role: req.Editor_role,
+              system_ip: getIPAddress(),
+              device: req.device,
+            });
+            await user_activity.save();
+          });
+        }
+
+        // STEP FISECONDRST TO DELTE IN CLIENT SERVICES AND UPDATE NEW STRATEGY
+        if (delete_startegy.length > 0) {
+          delete_startegy.forEach(async (data) => {
+
+            var stgId = new ObjectId(data);
+            var deleteStrategy = await strategy_client.find({
+              user_id: existingUsername._id,
+              strategy_id: { $ne: stgId }
+            });
+
+            // console.log("deleteStrategy", stgId);
+            // console.log("exist stg", deleteStrategy);
+            // console.log("add_startegy", add_startegy[0]);
+
+
+            if (deleteStrategy.length > 0) {
+
+              var update_services = await client_services.updateMany(
+                { user_id: existingUsername._id, strategy_id: stgId },
+                { $set: { strategy_id: deleteStrategy[0].strategy_id } }
+              );
+
+            } else {
+              var update_stg = new ObjectId(add_startegy[0]);
+
+              var update_services = await client_services.updateMany(
+                { user_id: existingUsername._id, strategy_id: stgId },
+                { $set: { strategy_id: update_stg } }
+              );
+            }
+
+
+
+          });
+        }
+
+        console.log("STG ADD 3", new Date());
+
+
+
 
         try {
           // GROUP SERVICES ADD EDIT
@@ -837,6 +846,9 @@ class Employee {
           console.log("Group Services Error-", error);
         }
 
+        console.log("GROP ADD 1", new Date());
+
+
         var User_update = {
           FullName: req.FullName,
           license_type: req.license_type,
@@ -862,6 +874,8 @@ class Employee {
           { $set: User_update }
         );
 
+        console.log("uSER eDIT 1", new Date());
+
         if (req.license_type == "2" || req.license_type == 2) {
 
           if (Number(new_licence) > 0) {
@@ -874,21 +888,18 @@ class Employee {
         }
 
 
+        console.log("eND :-", new Date());
 
-
-        // IF YOU ARE CHANGE GROUP AND USER SELCT GRP QTY ADMIN TO HIT FUNCTION
-        // if (user_group_service.length == 0) {
-        //   if (existingUsername.qty_type == "1") {
-        //     update_qty(existingUsername._id)
-        //   }
-        // }
-        console.log("Date :-", new Date());
+        
         // USER GET ALL TYPE OF DATA
         return res.send({
           status: true,
           msg: "User Update successfully",
           data: [],
         });
+
+
+
       } else {
         return res.send({
           status: false,
@@ -901,67 +912,11 @@ class Employee {
     }
   }
 
+
+
   // GET ALL EXPIRED USERS
   async GetAllExpiredClients(req, res) {
-    // try {
-
-    //   const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
-    //   const skip = (page - 1) * limit;
-
-
-    //   const USER_ID = new ObjectId(user_ID);
-
-
-    //   const date = new Date();
-    //   const formattedDate = date.toISOString();
-
-    //   const pipeline = [
-    //     {
-    //       $match: {
-    //         $or: [
-    //           {
-    //             Role: "ADMIN",
-    //             Is_Active: "1",
-    //             EndDate: { $lte: new Date(formattedDate) }
-    //           },
-    //           {
-    //             $and: [
-    //               { Role: "SUBADMIN" },
-    //               { parent_id: USER_ID },
-
-    //             ]
-    //           }
-    //         ]
-    //       }
-    //     },
-    //     {
-    //       $sort: {
-    //         _id: -1
-    //       }
-    //     }
-    //   ];
-
-    //   const filteredSignals = await User_model.aggregate(pipeline);
-    //   if (filteredSignals.length === 0) {
-    //     res.send({
-    //       status: true,
-    //       msg: "No Data Found",
-    //       data: []
-    //     });
-    //   } else {
-    //     res.send({
-    //       status: true,
-    //       msg: "Get All dd Clients",
-    //       data: filteredSignals
-    //     });
-    //   }
-    // } catch(error) {
-    //   console.log("loginClients Error-", error);
-    // }
-
-
-
-    // return
+   
 
     try {
       const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE

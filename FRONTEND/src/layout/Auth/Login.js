@@ -406,7 +406,7 @@ const Login = () => {
       }
     });
 
-    console.log("typeOtp", typeOtp);
+    // console.log("typeOtp", typeOtp);
   }
 
 

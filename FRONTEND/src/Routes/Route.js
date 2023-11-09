@@ -33,16 +33,18 @@ const Routing = () => {
   const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
 
 
-
+console.log("location.pathname-",location.pathname,"-");
 
   useEffect(() => {
-    if (location.pathname === "/") {
-      navigate("/login");
-    }
-    if (accessToken === null || accessToken === undefined || accessToken === "null") {
-      navigate("/login");
-      return
-    }
+    // if (location.pathname === "/") {
+    //   navigate("/login");
+    // }
+
+    // if (accessToken === null || accessToken === undefined || accessToken === "null" && location.pathname != " /forget " ) {
+    //   console.log("test1");
+    //   navigate("/login");
+    //   return
+    // }
 
     if (roles != null) {
       if (roles === "ADMIN" && location.pathname === "/") {

@@ -384,7 +384,7 @@ const Header = ({ ChatBox }) => {
                           className=" btn btn-primary"
                           onClick={() => setshowModal(true)}
                         >
-                          Set ApiKey
+                         Set API Key
                         </button>
                       </li>
                     </>

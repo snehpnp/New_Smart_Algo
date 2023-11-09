@@ -80,7 +80,7 @@ class AliceBlue {
                                 // console.log("updateOperation", updateOperation);
 
                                 const result = await live_price.updateOne(filter, updateOperation);
-                                console.log("redirect_uri 1", redirect_uri);
+                                // console.log("redirect_uri 1", redirect_uri);
 
                                 return res.redirect(redirect_uri);
 
@@ -105,7 +105,7 @@ class AliceBlue {
                                     await user_login.save();
                                     console.log("user_login", user_login);
                                     if (user_login) {
-                                        console.log("redirect_uri", redirect_uri);
+                                        // console.log("redirect_uri", redirect_uri);
 
                                         return res.redirect(redirect_uri);
 

@@ -349,7 +349,7 @@ class Panel {
             }else{
                 domain1 = domain
             }
-            console.log(domain1);
+            // console.log(domain1);
 
             const Panle_information = await panel_model.find({ domain:domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan')
 
