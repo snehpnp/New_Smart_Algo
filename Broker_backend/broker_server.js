@@ -97,6 +97,9 @@ d.getSeconds()
 
 // BROKER REQUIRES
 const aliceblue = require('./Broker/aliceblue')
+const angel = require('./Broker/angel')
+const fivepaisa = require('./Broker/fivepaisa')
+
 //const aliceblueTest = require('./Broker/aliceblue')
 
 // MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
@@ -380,8 +383,6 @@ console.log(dt_date);
           if (process.env.PANEL_KEY == client_key) {
             //Process Alice Blue admin client
             const AliceBlueCollection = db1.collection('aliceblueView');
-            // var query = {"strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment,web_url:"1"}
-            // console.log("query",query)
             try {
 
               const AliceBluedocuments = await AliceBlueCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
@@ -406,12 +407,60 @@ console.log(dt_date);
             //End Process Alice Blue admin client
 
 
+            //Process Angel admin client
+            const angelCollection = db1.collection('angelView');
+            try {
+              console.log("Query -",{ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+              const angelBluedocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + angelBluedocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+              console.log("ANGEL ALL CLIENT LENGTH", angelBluedocuments.length)
+
+
+              if (angelBluedocuments.length > 0) {
+                angel.place_order(angelBluedocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get ANGEL Client In view", error);
+            }
+            //End Process Angel admin client
+
+
+             //Process fivepaisa admin client
+             const fivepaisaCollection = db1.collection('fivepaisaView');
+             try {
+               console.log("Query -",{ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+               const fivepaisaBluedocuments = await fivepaisaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+ 
+               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + fivepaisaBluedocuments.length + '\n', function (err) {
+                 if (err) {
+                   return console.log(err);
+                 }
+               });
+ 
+               console.log("fivepaisa ALL CLIENT LENGTH", fivepaisaBluedocuments.length)
+ 
+ 
+               if (fivepaisaBluedocuments.length > 0) {
+                 fivepaisa.place_order(fivepaisaBluedocuments, signals, token, filePath, signal_req);
+               }
+ 
+             } catch (error) {
+               console.log("Error Get fivepaisa Client In view", error);
+             }
+             //End Process fivepaisa admin client
+
+
           } else {
 
             //Process Tading View Client Alice Blue
             const AliceBlueCollection = db1.collection('aliceblueView');
-            // var query = {"strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key,web_url : "2"}
-            //console.log("query",query)
             try {
               const AliceBluedocuments = await AliceBlueCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
 
@@ -431,6 +480,53 @@ console.log(dt_date);
               console.log("Error Get Aliceblue Client In view", error);
             }
             //End Process Tading View Client Alice Blue  
+
+
+             //Process Tading View Client ANGEL
+             const angelCollection = db1.collection('angelView');
+             try {
+               const angeldocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+ 
+               fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL TRADING VIEW CLIENT LENGTH ' + angeldocuments.length + '\n', function (err) {
+                 if (err) {
+                   return console.log(err);
+                 }
+               });
+ 
+               console.log("Angeldocuments trading view length", angeldocuments.length)
+ 
+               if (angeldocuments.length > 0) {
+                 angel.place_order(angeldocuments, signals, token, filePath, signal_req);
+               }
+ 
+             } catch (error) {
+               console.log("Error Get Angel Client In view", error);
+             }
+             //End Process Tading View Client ANGEL 
+
+
+
+              //Process Tading View Client fivepaisa
+              const fivepaisaCollection = db1.collection('fivepaisaView');
+              try {
+                const fivepaisadocuments = await fivepaisaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+  
+                fs.appendFile(filePath, 'TIME ' + new Date() + ' fivepaisa TRADING VIEW CLIENT LENGTH ' + fivepaisadocuments.length + '\n', function (err) {
+                  if (err) {
+                    return console.log(err);
+                  }
+                });
+  
+                console.log("fivepaisadocuments trading view length", fivepaisadocuments.length)
+  
+                if (fivepaisadocuments.length > 0) {
+                  fivepaisa.place_order(fivepaisadocuments, signals, token, filePath, signal_req);
+                }
+  
+              } catch (error) {
+                console.log("Error Get fivepaisa Client In view", error);
+              }
+              //End Process Tading View Client fivepaisa 
 
           }
 

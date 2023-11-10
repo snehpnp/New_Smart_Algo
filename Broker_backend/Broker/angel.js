@@ -13,7 +13,10 @@ const BrokerResponse = db.BrokerResponse;
 var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
-
+    
+    console.log("ANGEL token - ",token[0].instrument_token)
+    console.log("ANGEL tradesymbol -",token[0].tradesymbol)
+    
 
     try {
    
@@ -41,71 +44,22 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
             const requestPromises = AllClientData.map(async (item) => {
-
+              //  console.log("item postdata - ",item.postdata)
                 if (token != 0) {
 
 
                     if (segment.toUpperCase() != "C") {
 
-                        const pattern = token[0].instrument_token
 
-                        var filePath_token = ""
-                        var trading_symbol;
+                                item.postdata.symboltoken = token[0].instrument_token;
 
-
-                        if (segment && segment.toUpperCase() === 'C') {
-                            filePath_token = '/Aliceblue/ALICE_NSE.csv';
-                        } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
-                            filePath_token = '/Aliceblue/ALICE_NFO.csv';
-                        } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
-                            filePath_token = '/Aliceblue/ALICE_CDS.csv';
-                        } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
-                            filePath_token = '/Aliceblue/ALICE_MCX.csv';
-                        } else {
-                            console.error('Invalid segment value');
-                            return;
-                        }
-
-                        const filePath_aliceblue = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
-
-                        //  const command = `grep ,${pattern}, ${filePath}`;
-                        const command = `findstr ,${pattern}, ${filePath_aliceblue}`;
-
-                        console.log("command ", command)
-
-                        try {
-
-                            exec(command, (error, stdout, stderr) => {
-                                if (error) {
-                                    console.error(`exec error: ${error}`);
-                                    return;
-                                }
-                                const parts = stdout.split(','); // Extract the content inside double quotes
-                                // console.log("Extracted Part:", parts[9]);
-                                if (segment && segment.toUpperCase() === 'C') {
-                                    trading_symbol = token[0].instrument_token
-                                } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
-                                    trading_symbol = parts[9];
-                                } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
-                                    trading_symbol = parts[8];
-                                } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
-                                    trading_symbol = parts[8];
-                                } else {
-                                    console.error('Invalid segment value');
-                                    return;
-                                }
-
-
-
-                                item.postdata.symbol_id = token[0].instrument_token;
-
-                                item.postdata.trading_symbol = trading_symbol;
+                                item.postdata.tradingsymbol = token[0].tradesymbol;
 
 
                                 if (type == 'LE' || type == 'SX') {
-                                    item.postdata.transtype = 'BUY';
+                                    item.postdata.transactiontype = 'BUY';
                                 } else if (type == 'SE' || type == 'LX') {
-                                    item.postdata.transtype = 'SELL';
+                                    item.postdata.transactiontype = 'SELL';
                                 }
 
                                 // console.log("price", price)
@@ -121,24 +75,18 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                 EntryPlaceOrder(item, filePath, signals, signal_req)
 
 
-                            });
-
-                        } catch (error) {
-                            console.log(error);
-                        }
+                            
 
 
 
                         // console.log("OPTION")
                     } else {
                         // console.log("CASH")
-                        // console.log("user id ", item.demat_userid)
-                        //console.log("postdata before", item.postdata)
-
+                       
                         if (type == 'LE' || type == 'SX') {
-                            item.postdata.transtype = 'BUY';
+                            item.postdata.transactiontype = 'BUY';
                         } else if (type == 'SE' || type == 'LX') {
-                            item.postdata.transtype = 'SELL';
+                            item.postdata.transactiontype = 'SELL';
                         }
 
                         // console.log("price", price)
@@ -165,7 +113,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         order_status: 0,
                         order_id: "",
                         trading_symbol: "",
-                        broker_name: "",
+                        broker_name: "ANGEL",
                         send_request: "",
                         reject_reason: "Token not received due to wrong trade",
 
@@ -200,6 +148,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             console.log("trade exit")
 
 
+
+
             const requestPromises = AllClientData.map(async (item) => {
 
                 if (token != 0) {
@@ -209,14 +159,15 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
                     if (segment.toUpperCase() != "C") {
-                        item.postdata.symbol_id = token[0].instrument_token;
+                       item.postdata.symboltoken = token[0].instrument_token;
+                       item.postdata.tradingsymbol = token[0].tradesymbol;
                     }
 
 
                     if (type == 'LE' || type == 'SX') {
-                        item.postdata.transtype = 'BUY';
+                        item.postdata.transactiontype = 'BUY';
                     } else if (type == 'SE' || type == 'LX') {
-                        item.postdata.transtype = 'SELL';
+                        item.postdata.transactiontype = 'SELL';
                     }
 
                     // console.log("price", price)
@@ -228,36 +179,40 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
-                    var data_possition = {
-                        "ret": "NET"
-                    }
                     var config = {
-                        method: 'post',
-                        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/positionAndHoldings/positionBook',
+                        method: 'get',
+                        url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition',
                         headers: {
-                            'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
-                            'Content-Type': 'application/json'
+                            'Authorization': 'Bearer ' + item.access_token,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-UserType': 'USER',
+                            'X-SourceID': 'WEB',
+                            'X-ClientLocalIP': 'CLIENT_LOCAL_IP',
+                            'X-ClientPublicIP': 'CLIENT_PUBLIC_IP',
+                            'X-MACAddress': 'MAC_ADDRESS',
+                            'X-PrivateKey': item.api_key
                         },
-                        data: JSON.stringify(data_possition)
                     };
                     axios(config)
                         .then(async (response) => {
                             // console.log("response", response.data)
-                            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
-                                if (err) {
-                                    return console.log(err);
-                                }
-                            });
+                            // fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
+                            //     if (err) {
+                            //         return console.log(err);
+                            //     }
+                            // });
 
 
-                            if (response.data.length > 0) {
+                            if (response.data.data.length > 0) {
 
-                                const Exist_entry_order = response.data.body.NetPositionDetail.find(item1 => item1.Token === token[0].instrument_token && item1.Pcode == item.postdata.pCode);
+                                const Exist_entry_order = response.data.body.NetPositionDetail.find(item1 => item1.symboltoken === token[0].instrument_token);
 
                                 if(Exist_entry_order != undefined){
+
                                     if (segment.toUpperCase() == 'C') {
 
-                                        const possition_qty = parseInt(Exist_entry_order.Bqty) - parseInt(Exist_entry_order.Sqty);
+                                        var possition_qty = parseInt(Exist_entry_order.buyqty) - parseInt(Exist_entry_order.sellqty);
                                         // console.log("possition_qty Cash", possition_qty);
                                         if (possition_qty == 0) {
                                             // console.log("possition_qty Not Available", possition_qty);
@@ -269,7 +224,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                                 symbol: input_symbol,
                                                 order_status: "Entry Not Exist",
                                                 reject_reason: "This Script position Empty ",
-                                                broker_name: "ALICE BLUE",
+                                                broker_name: "ANGEL",
                                                 send_request: send_rr,
                                                 open_possition_qty: possition_qty,
 
@@ -299,7 +254,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
                                     } else {
-                                        const possition_qty = Exist_entry_order.Netqty;
+                                        const possition_qty = Exist_entry_order.netqty;
                                         // console.log("possition_qty", possition_qty);
 
                                         if (possition_qty == 0) {
@@ -312,7 +267,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                                 symbol: input_symbol,
                                                 order_status: "Entry Not Exist",
                                                 reject_reason: "This Script position Empty ",
-                                                broker_name: "ALICE BLUE",
+                                                broker_name: "ANGEL",
                                                 send_request: send_rr,
                                                 open_possition_qty: possition_qty,
 
@@ -340,12 +295,13 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                                         }
 
+
                                     }
+
                                 }else{
 
                                 }
 
-                               
                             } else {
 
                                 BrokerResponse.create({
@@ -357,7 +313,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     order_status: "Entry Not Exist",
                                     order_id: "",
                                     trading_symbol: "",
-                                    broker_name: "ALICE BLUE",
+                                    broker_name: "ANGEL",
                                     send_request: send_rr,
                                     reject_reason: "All position Empty",
 
@@ -382,7 +338,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         })
                         .catch(async (error) => {
 
-                            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
+                            fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
                                 if (err) {
                                     return console.log(err);
                                 }
@@ -399,7 +355,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     order_status: "position request error",
                                     order_id: "",
                                     trading_symbol: "",
-                                    broker_name: "ALICE BLUE",
+                                    broker_name: "ANGEL",
                                     send_request: send_rr,
                                     reject_reason: message,
 
@@ -427,7 +383,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     order_status: "position request error",
                                     order_id: "",
                                     trading_symbol: "",
-                                    broker_name: "ALICE BLUE",
+                                    broker_name: "ANGEL",
                                     send_request: send_rr,
                                     reject_reason: message,
 
@@ -449,10 +405,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         });
 
 
-
-
-
-
                 } else {
 
                     BrokerResponse.create({
@@ -464,7 +416,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         order_status: 0,
                         order_id: "",
                         trading_symbol: "",
-                        broker_name: "ALICE BLUE",
+                        broker_name: "ANGEL",
                         send_request: send_rr,
                         reject_reason: "Token not received due to wrong trade",
 
@@ -548,36 +500,41 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
 
-    fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE BEFORE PLACE ORDER USER ENTRY- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
+    fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL BEFORE PLACE ORDER USER ENTRY- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
         if (err) {
             return console.log(err);
         }
     });
 
 
-    let config = {
+    var config = {
         method: 'post',
-        maxBodyLength: Infinity,
-        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+        url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/placeOrder',
         headers: {
-            'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
-
+            'Authorization': 'Bearer ' + item.access_token,
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-UserType': 'USER',
+            'X-SourceID': 'WEB',
+            'X-ClientLocalIP': 'CLIENT_LOCAL_IP',
+            'X-ClientPublicIP': 'CLIENT_PUBLIC_IP',
+            'X-MACAddress': 'MAC_ADDRESS',
+            'X-PrivateKey': item.api_key
         },
-        data: JSON.stringify([item.postdata])
+        data: JSON.stringify(data)
 
     };
     // console.log(config);
     axios(config)
         .then(async (response) => {
             // console.log("respose ENTRY", response.data)
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
             });
 
-            if (response.data[0].stat == "Ok") {
+            if (response.data.message == 'SUCCESS') {
 
                 BrokerResponse.create({
                     user_id: item._id,
@@ -585,10 +542,10 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data[0].stat,
-                    order_id: response.data[0].NOrdNo,
+                    order_status: response.data.message,
+                    order_id: response.data.data.orderid,
                     trading_symbol: "",
-                    broker_name: "ALICE BLUE",
+                    broker_name: "ANGEL",
                     send_request: send_rr,
 
 
@@ -618,7 +575,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     order_status: 0,
                     order_id: "",
                     trading_symbol: "",
-                    broker_name: "ALICE BLUE",
+                    broker_name: "ANGEL",
                     send_request: send_rr,
                     reject_reason: message,
 
@@ -640,7 +597,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
         })
         .catch(async (error) => {
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER CATCH ENTRY - ' + item.UserName + ' ERROR -' + JSON.stringify(error) + '\n', function (err) {
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL AFTER PLACE ORDER CATCH ENTRY - ' + item.UserName + ' ERROR -' + JSON.stringify(error) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
@@ -662,7 +619,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "ALICE BLUE",
+                            broker_name: "ANGEL",
                             send_request: send_rr,
                             reject_reason: message,
                         })
@@ -690,7 +647,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "ALICE BLUE",
+                            broker_name: "ANGEL",
                             send_request: send_rr,
                             reject_reason: message,
                         })
@@ -762,29 +719,34 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
-    fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE BEFORE PLACE ORDER USER EXIT- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
+    fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL BEFORE PLACE ORDER USER EXIT- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
         if (err) {
             return console.log(err);
         }
     });
 
-    let config = {
+    var config = {
         method: 'post',
-        maxBodyLength: Infinity,
-        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+        url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/placeOrder',
         headers: {
-            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
-            'Content-Type': 'application/json'
+            'Authorization': 'Bearer ' + item.access_token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-UserType': 'USER',
+            'X-SourceID': 'WEB',
+            'X-ClientLocalIP': 'CLIENT_LOCAL_IP',
+            'X-ClientPublicIP': 'CLIENT_PUBLIC_IP',
+            'X-MACAddress': 'MAC_ADDRESS',
+            'X-PrivateKey': item.api_key
         },
-        data: JSON.stringify([item.postdata])
+        data: JSON.stringify(data)
 
     };
-
     axios(config)
         .then(async (response) => {
             // console.log("respose Exit", response.data)
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
@@ -792,17 +754,17 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
 
 
-            if (response.data[0].stat == "Ok") {
+            if (response.data.message == 'SUCCESS') {
                 BrokerResponse.create({
                     user_id: item._id,
                     receive_signal: signal_req,
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data[0].stat,
-                    order_id: response.data[0].NOrdNo,
+                    order_status: response.data.message,
+                    order_id: response.data.data.orderid,
                     trading_symbol: "",
-                    broker_name: "ALICE BLUE",
+                    broker_name: "ANGEL",
                     send_request: send_rr,
                     open_possition_qty: possition_qty,
 
@@ -832,7 +794,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                     order_status: 0,
                     order_id: "",
                     trading_symbol: "",
-                    broker_name: "ALICE BLUE",
+                    broker_name: "ANGEL",
                     send_request: send_rr,
                     reject_reason: message,
 
@@ -855,7 +817,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
         })
         .catch(async (error) => {
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE AFTER PLACE ORDER USER EXIT CATCH- ' + item.UserName + ' RESPONSE -' + JSON.stringify(error) + '\n', function (err) {
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL AFTER PLACE ORDER USER EXIT CATCH- ' + item.UserName + ' RESPONSE -' + JSON.stringify(error) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
@@ -875,7 +837,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "ALICE BLUE",
+                            broker_name: "ANGEL",
                             send_request: send_rr,
                             reject_reason: message,
                         })
@@ -903,7 +865,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "ALICE BLUE",
+                            broker_name: "ANGEL",
                             send_request: send_rr,
                             reject_reason: message,
                         })

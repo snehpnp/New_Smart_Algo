@@ -319,7 +319,11 @@ const AddClient = () => {
     // { label: 'B2C', value: '11' },
     { label: 'Angel', value: '12' },
     // { label: 'Fyers', value: '13' },
+    { label: '5 Paisa', value: '14' },
     // { label: 'Zerodha', value: '15' }
+    // { label: 'Arihant', value: '16' }
+    // { label: 'Arihant', value: '17' }
+    // { label: 'Laxmi', value: '18' }
   ];
   const fields = [
     { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },
