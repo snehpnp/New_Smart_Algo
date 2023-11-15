@@ -314,13 +314,13 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                       className="form-control"
                                       style={{ background: field.disable ? '#eeeeee' : "" }}
                                       id={field.name}
-                                      placeholder={`Enter a ${field.label}`}
+                                      placeholder={`Enter ${field.label}`}
                                       {...formik.getFieldProps(field.name)}
                                       // required=""
                                       readOnly={field.disable}
                                     />
                                     <div className="invalid-feedback">
-                                      Please enter a {field.label}
+                                      Please enter {field.label}
                                     </div>
                                     {formik.errors[field.name] &&
                                       <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}

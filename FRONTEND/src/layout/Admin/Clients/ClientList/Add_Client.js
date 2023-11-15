@@ -611,7 +611,7 @@ const AddClient = () => {
                 </div>
               ))}
               <label class="toggle mt-3">
-                <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
+                <input class="toggle-checkbox bg-primary"  type="checkbox" onChange={(e) => {
                   setShowAllStratagy(e.target.checked)
                 }} />
                 <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
@@ -623,8 +623,8 @@ const AddClient = () => {
 
               {/* </> : ""} */}
 
+                <h6>All Strategy</h6>
               {/*  For Show All Strategy */}
-              <h6>All Strategy</h6>
               {ShowAllStratagy ? <>
                 {AllStrategy.data.map((strategy) => (
                   <div className={`col-lg-2 mt-2`} key={strategy._id}>

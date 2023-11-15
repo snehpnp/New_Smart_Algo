@@ -301,12 +301,12 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
                                       type="text"
                                       className="form-control"
                                       id={field.name}
-                                      placeholder={`Enter a ${field.label}`}
+                                      placeholder={`Enter ${field.label}`}
                                       {...formik.getFieldProps(field.name)}
                                       required=""
                                     />
                                     <div className="invalid-feedback">
-                                      Please enter a {field.label}
+                                      Please enter {field.label}
                                     </div>
                                     {formik.errors[field.name] &&
                                       <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
