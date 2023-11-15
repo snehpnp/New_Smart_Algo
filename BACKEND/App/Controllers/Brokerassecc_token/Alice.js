@@ -30,7 +30,7 @@ class AliceBlue {
 
             var broker_infor = await Broker_information.find({ broker_name: "Alice Blue" })
             var apiSecret = broker_infor[0].apiSecret
-            console.log("broker_infor", apiSecret);
+            // console.log("broker_infor", apiSecret);
 
             var hosts = req.headers.host;
 
@@ -103,7 +103,7 @@ class AliceBlue {
                                         system_ip: getIPAddress()
                                     })
                                     await user_login.save();
-                                    console.log("user_login", user_login);
+                                    // console.log("user_login", user_login);
                                     if (user_login) {
                                         // console.log("redirect_uri", redirect_uri);
 
@@ -176,10 +176,10 @@ class AliceBlue {
                     },
                     data: data
                 };
-                console.log("config", config);
+                // console.log("config", config);
                 axios(config)
                     .then(async (response) => {
-                        console.log(response.data[0]);
+                        // console.log(response.data[0]);
                         if (response.data[0]) {
 
                             const message = (JSON.stringify(response.data[0]));
@@ -201,7 +201,7 @@ class AliceBlue {
 
 
                         } else {
-                            console.log("NO DATA FOUND");
+                            // console.log("NO DATA FOUND");
                         }
                     })
                     .catch(async (error) => {
@@ -305,7 +305,7 @@ class AliceBlue {
 
             axios(config)
                 .then(async (response) => {
-                    console.log("==>", response.data.stat);
+                    // console.log("==>", response.data.stat);
                     if (response.data) {
                         if (response.data.stat == "Ok") {
 
@@ -394,7 +394,7 @@ const GetAllBrokerResponse = async (user_id) => {
                 };
                 axios(config)
                     .then(async (response) => {
-                        console.log(response.data[0]);
+                        // console.log(response.data[0]);
                         if (response.data[0]) {
     
                             const message = (JSON.stringify(response.data[0]));
@@ -413,7 +413,7 @@ const GetAllBrokerResponse = async (user_id) => {
     
     
                         } else {
-                            console.log("NO DATA FOUND");
+                            // console.log("NO DATA FOUND");
                         }
                     })
                     .catch(async (error) => {

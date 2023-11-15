@@ -35,6 +35,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         var client_key = signals.Key;
         var demo = signals.Demo;
 
+        console.log("token",token[0].lotsize);
 
         if (type == 'LE' || type == 'SE') {
             // console.log("trade entry")
