@@ -10,7 +10,7 @@ module.exports = function (app) {
         downloadAlicetoken()
     });
     
-    cron.schedule('* * * * *', () => {
+    cron.schedule('* 2 * * *', () => {
         console.log('Run First Time');
         downloadZerodhatoken()
     });

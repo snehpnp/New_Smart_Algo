@@ -186,34 +186,11 @@ app.post('/broker-signals', async (req, res) => {
 
       var demo = signals.Demo;
 
-
-      // var dt = splitArray[0]
-      // var input_symbol = splitArray[1]
-      // var type = splitArray[2]
-      // var tr_price = splitArray[3]
-      // var price = splitArray[4]
-      // var sq_value = splitArray[5]
-      // var sl_value = splitArray[6]
-      // var tsl = splitArray[7]
-      // var segment = splitArray[8]
-      // var segment1 = splitArray[8]
-      // var strike = splitArray[9]
-      // var option_type = splitArray[10]
-      // var expiry = splitArray[11]
-      // var strategy = splitArray[12]
-      // var qty_percent = splitArray[13]
-      // var client_key = splitArray[14]
-      // var demo = splitArray[15]
-
-
-      //console.log("client_key",client_key)
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
 
         const FIRST3_KEY = client_key.substring(0, 3);
 
-        // console.log("FIRST3_KEY", FIRST3_KEY);
-        // console.log("process.env.PANEL_FIRST_THREE",process.env.PANEL_FIRST_THREE);
         // IF SIGNEL KEY NOT MATCH CHECK
         if (FIRST3_KEY == process.env.PANEL_FIRST_THREE) {
 

@@ -44,11 +44,11 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
      // const command = `grep ,${pattern}, ${filePath}`;
 
-     //const command = `grep -E ".*(${pattern}).*.*(${input_symbol}).*" ${filePath1}`;
+     const command = `grep -E ".*(${pattern}).*.*(${input_symbol}).*" ${filePath1}`;
      
        //  const command = `grep -E ".*(${pattern}).*.*(${input_symbol}).*" ${filePath1}`;
 
-         const command = `findstr ,${pattern}, ${filePath1}`;
+        //  const command = `findstr ,${pattern}, ${filePath1}`;
 
 
         console.log("command ", command)
@@ -65,7 +65,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
         const parts = stdout.split(','); // Extract the content inside double quotes
 
-      // console.log("Extracted Part:", parts);
+      console.log("Extracted Part:", parts);
 
         if (segment && segment.toLowerCase() === 'c') {
 
