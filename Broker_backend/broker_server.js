@@ -76,14 +76,28 @@ const corsOpts = {
 };
 app.use(cors(corsOpts));
 
+require('./Helper/cron')(app);
+
+
+
+
+
+
+
+
+
+
+
+
+// ==================================================================================================
+// MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
+
+
 
 // BROKER REQUIRES
 const aliceblue = require('./Broker/aliceblue')
-//const aliceblueTest = require('./Broker/aliceblue')
 
-// MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
-
-// TEST API
+// BROKER SIGNAL
 app.post('/broker-signals', async (req, res) => {
 
   var d = new Date();
@@ -94,7 +108,7 @@ app.post('/broker-signals', async (req, res) => {
   d.getMinutes(),
   d.getSeconds()
   ].join(':');
-  
+
   var dt_date = [d.getFullYear(),
   d.getMonth() + 1,
   d.getDate(),
@@ -112,49 +126,6 @@ app.post('/broker-signals', async (req, res) => {
 
   var directoryfilePath = path.join(__dirname + '/AllPanelTextFile');
   var paneltxtentry = 0;
-
-  // console.log("filePath", filePath)
-  // console.log("directoryfilePath", directoryfilePath)
-
-  // fs.readdir(directoryfilePath, function (err1, files) {
-  //   console.log("files", files)
-  //   if (files.length > 0) {
-  //     files.forEach(async function (file) {
-
-  //       console.log("file", file)
-
-  //       if (file != 'PANELKEY' + process.env.PANEL_KEY + process.env.PANEL_NAME + formattedDate + '.txt') {
-  //         //paneltxtentry = 1;
-  //         fs.appendFile(filePath, '\nNEW TRADE GET ' + new Date() + ' \n', function (err) {
-  //           if (err) {
-  //             return console.log(err);
-  //           }
-  //           console.log("Data created if");
-  //         });
-
-  //       }
-
-  //     });
-  //   } else {
-
-  //     fs.appendFile(filePath, 'INSERT FILE ' + new Date() + '\n', function (err) {
-  //       if (err) {
-  //         return console.log(err);
-  //       }
-  //       console.log("Data created else");
-  //     });
-
-  //   }
-
-  // });
-
-
-  // fs.appendFile(filePath, '\nNEW TRADE GET ' + new Date() + ' \n', function (err) {
-  //     if (err) {
-  //       return console.log(err);
-  //     }
-  //     console.log("Data created if");
-  //    });
 
   try {
 
@@ -183,11 +154,11 @@ app.post('/broker-signals', async (req, res) => {
 
       const epochTimestamp = signals.DTime; // Replace with your timestamp
 
-// Create a new Date object using the epoch timestamp
-const date = new Date(epochTimestamp * 1000); // Convert to milliseconds by multiplying by 1000
-const formattedDate1 = date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
-const parts = formattedDate1.split('/');
-console.log(dt_date); 
+      // Create a new Date object using the epoch timestamp
+      const date = new Date(epochTimestamp * 1000); // Convert to milliseconds by multiplying by 1000
+      const formattedDate1 = date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      const parts = formattedDate1.split('/');
+      console.log(dt_date);
 
 
       var dt = signals.DTime;
@@ -634,8 +605,6 @@ console.log(dt_date);
     console.log("error", error);
   }
 })
-
-
 
 
 
