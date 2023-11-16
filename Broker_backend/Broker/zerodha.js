@@ -155,36 +155,31 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
-                    var data_possition = {
-                        "ret": "NET"
-                    }
+                   
                     var config = {
-                        method: 'post',
-                        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/positionAndHoldings/positionBook',
+                        method: 'get',
+                        url: 'https://api.kite.trade/portfolio/positions',
                         headers: {
-                            'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
-                            'Content-Type': 'application/json'
-                        },
-                        data: JSON.stringify(data_possition)
+                            'Authorization': 'token ' + item.api_key + ':' + item.access_token
+                        }
                     };
                     axios(config)
                         .then(async (response) => {
                             // console.log("response", response.data)
-                            fs.appendFile(filePath, 'TIME ' + new Date() + ' ZERODHA POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
-                                if (err) {
-                                    return console.log(err);
-                                }
-                            });
+                            // fs.appendFile(filePath, 'TIME ' + new Date() + ' ZERODHA POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
+                            //     if (err) {
+                            //         return console.log(err);
+                            //     }
+                            // });
 
 
-                            if (response.data.length > 0) {
+                            if (response) {
 
-                                const Exist_entry_order = response.data.body.NetPositionDetail.find(item1 => item1.Token === token[0].instrument_token && item1.Pcode == item.postdata.pCode);
+                                const Exist_entry_order = response.data.data.net.find(item1 => item1.tradingsymbol == tradingsymbol);
 
                                 if(Exist_entry_order != undefined){
-                                    if (segment.toUpperCase() == 'C') {
-
-                                        const possition_qty = parseInt(Exist_entry_order.Bqty) - parseInt(Exist_entry_order.Sqty);
+                                    
+                                        const possition_qty = parseInt(Exist_entry_order.buy_quantity) - parseInt(Exist_entry_order.sell_quantity);
                                         // console.log("possition_qty Cash", possition_qty);
                                         if (possition_qty == 0) {
                                             // console.log("possition_qty Not Available", possition_qty);
@@ -224,51 +219,34 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                             }
                                         }
 
-
-                                    } else {
-                                        const possition_qty = Exist_entry_order.Netqty;
-                                        // console.log("possition_qty", possition_qty);
-
-                                        if (possition_qty == 0) {
-                                            // console.log("possition_qty Not Available", possition_qty);
-                                            BrokerResponse.create({
-                                                user_id: item._id,
-                                                receive_signal: signal_req,
-                                                strategy: strategy,
-                                                type: type,
-                                                symbol: input_symbol,
-                                                order_status: "Entry Not Exist",
-                                                reject_reason: "This Script position Empty ",
-                                                broker_name: "ZERODHA",
-                                                send_request: send_rr,
-                                                open_possition_qty: possition_qty,
-
-                                            })
-                                                .then((BrokerResponseCreate) => {
-                                                    // console.log('User created and saved:', BrokerResponseCreate._id)
-                                                })
-                                                .catch((err) => {
-                                                    try {
-                                                        console.error('Error creating and saving user:', err);
-                                                    } catch (e) {
-                                                        console.log("duplicate key")
-                                                    }
-
-                                                });
-
-
-                                        } else {
-
-                                            if (possition_qty > 0 && type == 'LX') {
-                                                ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                            } else if (possition_qty < 0 && type == 'SX') {
-                                                ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                            }
-
-                                        }
-
-                                    }
+                                    
                                 }else{
+
+                                    BrokerResponse.create({
+                                        user_id: item._id,
+                                        receive_signal: signal_req,
+                                        strategy: strategy,
+                                        type: type,
+                                        symbol: input_symbol,
+                                        order_status: "Entry Not Exist",
+                                        order_id: "",
+                                        trading_symbol: "",
+                                        broker_name: "ZERODHA",
+                                        send_request: send_rr,
+                                        reject_reason: "All position Empty",
+    
+                                    })
+                                    .then((BrokerResponseCreate) => {
+                                            // console.log('User created and saved:', BrokerResponseCreate._id)
+                                    })
+                                        .catch((err) => {
+                                            try {
+                                                console.error('Error creating and saving user:', err);
+                                            } catch (e) {
+                                                console.log("duplicate key")
+                                            }
+    
+                                   });
 
                                 }
 
@@ -289,9 +267,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     reject_reason: "All position Empty",
 
                                 })
-                                    .then((BrokerResponseCreate) => {
+                                .then((BrokerResponseCreate) => {
                                         // console.log('User created and saved:', BrokerResponseCreate._id)
-                                    })
+                                })
                                     .catch((err) => {
                                         try {
                                             console.error('Error creating and saving user:', err);
@@ -299,7 +277,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                             console.log("duplicate key")
                                         }
 
-                                    });
+                               });
 
                             }
 
@@ -477,16 +455,14 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     var client_key = signals.Key;
     var demo = signals.Demo;
 
-    console.log("item.postdata -",item.postdata)
+   // console.log("item.postdata -",item.postdata)
 
 
-   const data = 'tradingsymbol=' + item.postdata.tradingsymbol + '&exchange=' + item.postdata.exchange + '&transaction_type=' + item.postdata.transaction_type + '&quantity=' + item.postdata.quantity + '&order_type=' + item.postdata.order_type + '&product=' + item.postdata.product + '&price=' + item.postdata.price + '&trigger_price=' + item.postdata.trigger_price + '&validity=' + item.postdata.validity;
+   let data = 'tradingsymbol=' + item.postdata.tradingsymbol + '&exchange=' + item.postdata.exchange + '&transaction_type=' + item.postdata.transaction_type + '&quantity=' + item.postdata.quantity + '&order_type=' + item.postdata.order_type + '&product=' + item.postdata.product + '&price=' + item.postdata.price + '&trigger_price=' + item.postdata.trigger_price + '&validity=' + item.postdata.validity;
 
-    console.log("data request ",data)
+   // console.log("data request ",data)
 
-    return
     
-
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
 
@@ -499,15 +475,11 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
     let config = {
         method: 'post',
-        maxBodyLength: Infinity,
-        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+        url: 'https://api.kite.trade/orders/regular',
         headers: {
-            'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
-
-            'Content-Type': 'application/json',
+            'Authorization': 'token ' + item.api_key + ':' + item.access_token
         },
-        data: JSON.stringify([item.postdata])
-
+        data: data
     };
     // console.log(config);
     axios(config)
@@ -519,7 +491,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                 }
             });
 
-            if (response.data[0].stat == "Ok") {
+            if (response.data.status == "success") {
 
                 BrokerResponse.create({
                     user_id: item._id,
@@ -527,8 +499,8 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data[0].stat,
-                    order_id: response.data[0].NOrdNo,
+                    order_status: response.data.status,
+                    order_id: response.data.data.order_id,
                     trading_symbol: "",
                     broker_name: "ZERODHA",
                     send_request: send_rr,
@@ -702,6 +674,8 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
     var client_key = signals.Key;
     var demo = signals.Demo;
 
+    let data = 'tradingsymbol=' + item.postdata.tradingsymbol + '&exchange=' + item.postdata.exchange + '&transaction_type=' + item.postdata.transaction_type + '&quantity=' + item.postdata.quantity + '&order_type=' + item.postdata.order_type + '&product=' + item.postdata.product + '&price=' + item.postdata.price + '&trigger_price=' + item.postdata.trigger_price + '&validity=' + item.postdata.validity;
+
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
     fs.appendFile(filePath, 'TIME ' + new Date() + ' ZERODHA BEFORE PLACE ORDER USER EXIT- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
@@ -712,14 +686,11 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
     let config = {
         method: 'post',
-        maxBodyLength: Infinity,
-        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+        url: 'https://api.kite.trade/orders/regular',
         headers: {
-            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
-            'Content-Type': 'application/json'
+            'Authorization': 'token ' + item.api_key + ':' + item.access_token
         },
-        data: JSON.stringify([item.postdata])
-
+        data: data
     };
 
     axios(config)
@@ -734,15 +705,15 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
 
 
-            if (response.data[0].stat == "Ok") {
+            if (response.data.status == "success") {
                 BrokerResponse.create({
                     user_id: item._id,
                     receive_signal: signal_req,
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data[0].stat,
-                    order_id: response.data[0].NOrdNo,
+                    order_status: response.data.status,
+                    order_id: response.data.data.order_id,
                     trading_symbol: "",
                     broker_name: "ZERODHA",
                     send_request: send_rr,
