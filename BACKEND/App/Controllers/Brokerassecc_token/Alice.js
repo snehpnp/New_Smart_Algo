@@ -309,7 +309,7 @@ class AliceBlue {
                     if (response.data) {
                         if (response.data.stat == "Ok") {
 
-                            GetAllBrokerResponse(user_id)
+                            GetAllBrokerResponse(user_id,res)
                             return res.send({ status: true, msg: "Order Cancel Successfully", data: response.data });
 
                         } else {
@@ -336,12 +336,9 @@ class AliceBlue {
 
     }
 
-
-
-
     // UPDATE ALL CLIENT BROKER RESPONSE
     async GetOrderFullInformationAll(req, res) {
-
+       
         try {
             const { user_id } = req.body
 
@@ -349,7 +346,7 @@ class AliceBlue {
                 return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
             }
 
-            GetAllBrokerResponse(user_id)
+            GetAllBrokerResponse(user_id,res)
 
 
         } catch (error) {
@@ -367,13 +364,13 @@ class AliceBlue {
 
 }
 
-const GetAllBrokerResponse = async (user_id) => {
+const GetAllBrokerResponse = async (user_id,res) => {
 
     try {
         const objectId = new ObjectId(user_id);
         var FindUserAccessToken = await User.find({ _id: objectId })
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId })
-    
+    // 
         if (FindUserBrokerResponse.length > 0) {
     
             FindUserBrokerResponse.forEach((data1) => {
@@ -423,10 +420,12 @@ const GetAllBrokerResponse = async (user_id) => {
     
     
             })
-    
+           res.send({status:true,msg:"broker response updated successfully"})
     
         } else {
-        }
+            res.send({status:false,msg:"no user found"})
+         }
+
     } catch (error) {
         console.log("Error in broker response in order Id".error);
     }

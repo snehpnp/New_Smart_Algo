@@ -177,7 +177,7 @@ const Update_Broker_Key = ({ closeModal }) => {
         formik.setFieldValue('app_id', UserDetails.data !== undefined && UserDetails.data.app_id);
         formik.setFieldValue('api_type', UserDetails.data !== undefined && UserDetails.data.api_key);
         formik.setFieldValue('client_code', UserDetails.data !== undefined && UserDetails.data.client_code);
-        formik.setFieldValue('api_key', UserDetails.data !== undefined && UserDetails.data.api_type);
+        formik.setFieldValue('api_key', UserDetails.data !== undefined && UserDetails.data.api_key);
         formik.setFieldValue('api_secret', UserDetails.data !== undefined && UserDetails.data.api_secret);
         formik.setFieldValue('app_key', UserDetails.data !== undefined && UserDetails.data.app_key);
         formik.setFieldValue('demat_userid', UserDetails.data !== undefined && UserDetails.data.demat_userid);

@@ -97,6 +97,11 @@ require('./Helper/cron')(app);
 // BROKER REQUIRES
 const aliceblue = require('./Broker/aliceblue')
 
+const angel = require('./Broker/angel')
+const fivepaisa = require('./Broker/fivepaisa')
+const zerodha = require('./Broker/zerodha')
+
+
 // BROKER SIGNAL
 app.post('/broker-signals', async (req, res) => {
 
@@ -361,11 +366,8 @@ app.post('/broker-signals', async (req, res) => {
 
           if (process.env.PANEL_KEY == client_key) {
             //Process Alice Blue admin client
-            const AliceBlueCollection = db1.collection('aliceblueView');
-            // var query = {"strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment,web_url:"1"}
-            // console.log("query",query)
             try {
-
+              const AliceBlueCollection = db1.collection('aliceblueView');
               const AliceBluedocuments = await AliceBlueCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
 
@@ -388,13 +390,87 @@ app.post('/broker-signals', async (req, res) => {
             //End Process Alice Blue admin client
 
 
+            //Process Angel admin client
+            try {
+              const angelCollection = db1.collection('angelView');
+              console.log("Query -",{ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+              const angelBluedocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + angelBluedocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+              console.log("ANGEL ALL CLIENT LENGTH", angelBluedocuments.length)
+
+
+              if (angelBluedocuments.length > 0) {
+                angel.place_order(angelBluedocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get ANGEL Client In view", error);
+            }
+            //End Process Angel admin client
+
+
+             //Process fivepaisa admin client
+             try {
+               const fivepaisaCollection = db1.collection('fivepaisaView');
+               console.log("Query -",{ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+               const fivepaisaBluedocuments = await fivepaisaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+ 
+               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + fivepaisaBluedocuments.length + '\n', function (err) {
+                 if (err) {
+                   return console.log(err);
+                 }
+               });
+ 
+               console.log("fivepaisa ALL CLIENT LENGTH", fivepaisaBluedocuments.length)
+ 
+ 
+               if (fivepaisaBluedocuments.length > 0) {
+                 fivepaisa.place_order(fivepaisaBluedocuments, signals, token, filePath, signal_req);
+               }
+ 
+             } catch (error) {
+               console.log("Error Get fivepaisa Client In view", error);
+             }
+             //End Process fivepaisa admin client
+
+
+
+              //Process zerodha admin client
+              try {
+                const zerodhaCollection = db1.collection('zerodhaView');
+                console.log("Query -",{ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+                const zerodhaBluedocuments = await zerodhaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+  
+                fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + zerodhaBluedocuments.length + '\n', function (err) {
+                  if (err) {
+                    return console.log(err);
+                  }
+                });
+  
+                console.log("zerodha ALL CLIENT LENGTH", zerodhaBluedocuments.length)
+  
+  
+                if (zerodhaBluedocuments.length > 0) {
+                  zerodha.place_order(zerodhaBluedocuments, signals, token, filePath, signal_req);
+                }
+  
+              } catch (error) {
+                console.log("Error Get zerodha Client In view", error);
+              }
+              //End Process zerodha admin client
+
+
           } else {
 
             //Process Tading View Client Alice Blue
-            const AliceBlueCollection = db1.collection('aliceblueView');
-            // var query = {"strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key,web_url : "2"}
-            //console.log("query",query)
             try {
+              const AliceBlueCollection = db1.collection('aliceblueView');
               const AliceBluedocuments = await AliceBlueCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
 
               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE TRADING VIEW CLIENT LENGTH ' + AliceBluedocuments.length + '\n', function (err) {
@@ -413,6 +489,76 @@ app.post('/broker-signals', async (req, res) => {
               console.log("Error Get Aliceblue Client In view", error);
             }
             //End Process Tading View Client Alice Blue  
+
+
+             //Process Tading View Client ANGEL
+             try {
+               const angelCollection = db1.collection('angelView');
+               const angeldocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+ 
+               fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL TRADING VIEW CLIENT LENGTH ' + angeldocuments.length + '\n', function (err) {
+                 if (err) {
+                   return console.log(err);
+                 }
+               });
+ 
+               console.log("Angeldocuments trading view length", angeldocuments.length)
+ 
+               if (angeldocuments.length > 0) {
+                 angel.place_order(angeldocuments, signals, token, filePath, signal_req);
+               }
+ 
+             } catch (error) {
+               console.log("Error Get Angel Client In view", error);
+             }
+             //End Process Tading View Client ANGEL 
+
+
+
+              //Process Tading View Client fivepaisa
+              try {
+                const fivepaisaCollection = db1.collection('fivepaisaView');
+                const fivepaisadocuments = await fivepaisaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+  
+                fs.appendFile(filePath, 'TIME ' + new Date() + ' fivepaisa TRADING VIEW CLIENT LENGTH ' + fivepaisadocuments.length + '\n', function (err) {
+                  if (err) {
+                    return console.log(err);
+                  }
+                });
+  
+                console.log("fivepaisadocuments trading view length", fivepaisadocuments.length)
+  
+                if (fivepaisadocuments.length > 0) {
+                  fivepaisa.place_order(fivepaisadocuments, signals, token, filePath, signal_req);
+                }
+  
+              } catch (error) {
+                console.log("Error Get fivepaisa Client In view", error);
+              }
+              //End Process Tading View Client fivepaisa 
+
+
+                //Process Tading View Client zerodha
+                try {
+                  const zerodhaCollection = db1.collection('zerodhaView');
+                  const zerodhadocuments = await zerodhaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+    
+                  fs.appendFile(filePath, 'TIME ' + new Date() + ' zerodha TRADING VIEW CLIENT LENGTH ' + zerodhadocuments.length + '\n', function (err) {
+                    if (err) {
+                      return console.log(err);
+                    }
+                  });
+    
+                  console.log("zerodhadocuments trading view length", zerodhadocuments.length)
+    
+                  if (zerodhadocuments.length > 0) {
+                    zerodha.place_order(zerodhadocuments, signals, token, filePath, signal_req);
+                  }
+    
+                } catch (error) {
+                  console.log("Error Get zerodha Client In view", error);
+                }
+                //End Process Tading View Client zerodha 
 
           }
 

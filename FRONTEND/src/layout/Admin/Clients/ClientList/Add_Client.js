@@ -255,10 +255,10 @@ const AddClient = () => {
     // { label: 'Choice', value: '9' },
     // { label: 'Anand Rathi', value: '10' },
     // { label: 'B2C', value: '11' },
-    // { label: 'Angel', value: '12' },
+     { label: 'Angel', value: '12' },
     // { label: 'Fyers', value: '13' },
-    // { label: '5 Paisa', value: '14' },
-    // { label: 'Zerodha', value: '15' }
+     { label: '5 Paisa', value: '14' },
+     { label: 'Zerodha', value: '15' }
     // { label: 'Arihant', value: '16' }
     // { label: 'Arihant', value: '17' }
     // { label: 'Laxmi', value: '18' }
