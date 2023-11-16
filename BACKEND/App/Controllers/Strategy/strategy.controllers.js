@@ -14,7 +14,7 @@ var dt = dateTime.create();
 const { MongoClient } = require('mongodb');
 
 //  const uri = "mongodb://localhost:27017/";
-const uri = "mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net/";
+const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri, { useUnifiedTopology: true });
 client.connect();
 console.log("Connected to MongoDB successfully!");
@@ -78,7 +78,7 @@ class Strategy {
     async get_indicators(req, res) {
         try {
 
-            const db = client.db('test');
+            const db = client.db(process.env.DB_NAME);
 
             const collection = db.collection('indicators');
             const get_indicator = await collection.aggregate([]).toArray();
@@ -97,7 +97,7 @@ class Strategy {
     async get_sources(req, res) {
         try {
 
-            const db = client.db('test');
+            const db = client.db(process.env.DB_NAME);
 
             const collection = db.collection('sources');
             const get_sources = await collection.aggregate([]).toArray();

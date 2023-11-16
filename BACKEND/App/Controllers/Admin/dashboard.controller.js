@@ -22,7 +22,7 @@ class Dashboard {
 
             await client.connect();
 
-            const db1 = client.db('test');
+            const db1 = client.db(process.env.DB_NAME);
             const viewName = 'dashboard_data';
 
             // Query the view to get the data

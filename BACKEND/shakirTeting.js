@@ -15,7 +15,7 @@ module.exports = function (app) {
   const { MongoClient } = require('mongodb');
 
   //  const uri = "mongodb://localhost:27017/";
-  const uri = "mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net/";
+  const uri = process.env.MONGO_URI;
   const client = new MongoClient(uri, { useUnifiedTopology: true });
   client.connect();
   // console.log("Connected to MongoDB successfully!.....");
@@ -2292,7 +2292,7 @@ const abc = (data, conditionString) => {
 
           ];
 
-          const db = client.db('test');
+          const db = client.db(process.env.DB_NAME);
           // Create or replace the view
           await db.createCollection('buy_view', {
             viewOn: 'usermakestrategies',

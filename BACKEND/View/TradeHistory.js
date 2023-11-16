@@ -11,7 +11,7 @@ async function dropExistingView() {
 
     try {
         await client.connect();
-        const db = client.db('test'); // Replace with your actual database name
+        const db = client.db(process.env.DB_NAME); // Replace with your actual database name
         await db.collection('trade_history').drop();
 
     } catch (error) {
@@ -28,7 +28,7 @@ async function TradeHistroy(req, res) {
 
 
         await client.connect();
-        const db = client.db('test');
+        const db = client.db(process.env.DB_NAME);
 
         // Define the pipeline to create the view
         // const pipeline = [

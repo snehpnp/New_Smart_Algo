@@ -14,7 +14,7 @@ async function createViewFivepaisa() {
   try {
     await client.connect();
 
-    const db = client.db('test'); // Replace with your actual database name
+    const db = client.db(process.env.DB_NAME); // Replace with your actual database name
     const currentDate = new Date(); // Get the current date and time
 
     // Define the pipeline to create the view

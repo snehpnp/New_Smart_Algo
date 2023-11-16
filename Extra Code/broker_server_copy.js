@@ -51,7 +51,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 client.connect();
 console.log("Connected to MongoDB BrokerServer successfully!.....");
-const db1 = client.db('test');
+const db1 = client.db(process.env.DB_NAME);
 
 
 
