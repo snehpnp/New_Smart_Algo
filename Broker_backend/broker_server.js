@@ -372,7 +372,7 @@ app.post('/broker-signals', async (req, res) => {
             //Process Angel admin client
             try {
               const angelCollection = db1.collection('angelView');
-              console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+             // console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
               const angelBluedocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + angelBluedocuments.length + '\n', function (err) {
