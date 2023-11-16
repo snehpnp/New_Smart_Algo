@@ -20,6 +20,10 @@ const { GetAccessTokenAngel,GetOrderFullInformationAngel} = require('../../Contr
 const { GetAccessTokenFivepaisa,GetOrderFullInformationFivepaisa} = require('../../Controllers/Brokerassecc_token/Fivepaisa')
 
 
+// ZERODHA CONTROLLER FILE
+const { GetAccessTokenZerodha,GetOrderFullInformationZerodha} = require('../../Controllers/Brokerassecc_token/Zerodha')
+
+
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req,res)=>{
     
@@ -55,6 +59,11 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
     GetOrderFullInformationFivepaisa(req,res,result);
    }
 
+   // ZERODHA   -  15
+   else if(broker == 15){
+    GetOrderFullInformationZerodha(req,res,result);
+   }
+
    else{
     res.send({status:false,msg:"broker not found"});
    }
@@ -70,6 +79,8 @@ router.get('/AliceBlue', GetAccessToken);
 //router.post('/aliceblue/get/orderinfo', GetOrderFullInformation);
  router.post('/get/token', GetLivePrice);
  router.post('/order/cancel', Cancel_order);
+
+ 
  //router.post('/getall/order/info', GetOrderFullInformationAll);
 router.post('/getall/order/info', GetOrderFullInformationAll_broker);
 
@@ -81,6 +92,9 @@ router.get('/angel', GetAccessTokenAngel);
 
 // 5 PPAISA
 router.get('/fivepaisa', GetAccessTokenFivepaisa);
+
+// ZERODHA
+router.get('/zerodha', GetAccessTokenZerodha);
 
 
 module.exports = router;

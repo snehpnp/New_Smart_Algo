@@ -204,6 +204,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                 if (token != 0) {
 
+                    
+
                     // console.log("user id ", item.demat_userid)
                     // console.log("postdata before", item.postdata)
 
@@ -225,6 +227,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                         item.postdata.price = price
                     }
+
+
 
                     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 

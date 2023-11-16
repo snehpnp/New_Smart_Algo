@@ -123,7 +123,6 @@ class Angel {
 
 }
 
-
 const GetAllBrokerResponse = async (user_info,res) => {
     console.log("user_info[0]._id",user_info[0]._id)
     console.log("user_info roker ",user_info[0].broker)

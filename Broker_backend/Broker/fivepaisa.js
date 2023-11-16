@@ -15,7 +15,7 @@ var dateTime = require('node-datetime');
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
     
     console.log("FIVEPAISA token - ",token[0].instrument_token)
-    console.log("FIVEPAISA tradesymbol -",token[0].tradesymbol)
+    
     
 
     try {
@@ -44,24 +44,24 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
             const requestPromises = AllClientData.map(async (item) => {
-                console.log("item postdata - ",item.postdata.data.ScripCode)
+                console.log("item postdata - ",item.postdata.body.ScripCode)
                 if (token != 0) {
 
 
                     if (segment.toUpperCase() != "C") {
 
 
-                                item.postdata.data.ScripCode = token[0].instrument_token;
+                                item.postdata.body.ScripCode = token[0].instrument_token;
 
                                 if (type == 'LE' || type == 'SX') {
-                                    item.postdata.data.OrderType = 'Buy';
+                                    item.postdata.body.OrderType = 'Buy';
                                 } else if (type == 'SE' || type == 'LX') {
-                                    item.postdata.data.OrderType = 'Sell';
+                                    item.postdata.body.OrderType = 'Sell';
                                 }
 
                             
                                 if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                                    item.postdata.data.Price = price
+                                    item.postdata.body.Price = price
                                 }
 
                                 //  console.log("postData after ", item.postdata);
@@ -75,14 +75,14 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                        
                        
                         if (type == 'LE' || type == 'SX') {
-                            item.postdata.data.OrderType = 'Buy';
+                            item.postdata.body.OrderType = 'Buy';
                         } else if (type == 'SE' || type == 'LX') {
-                            item.postdata.data.OrderType = 'Sell';
+                            item.postdata.body.OrderType = 'Sell';
                         }
 
                     
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                            item.postdata.data.Price = price
+                            item.postdata.body.Price = price
                         }
 
                         EntryPlaceOrder(item, filePath, signals, signal_req);
@@ -144,19 +144,19 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     // console.log("postdata before", item.postdata)
 
                     if (segment.toUpperCase() != "C") {
-                        item.postdata.data.ScripCode = token[0].instrument_token;
+                        item.postdata.body.ScripCode = token[0].instrument_token;
                     }
 
 
                     if (type == 'LE' || type == 'SX') {
-                        item.postdata.data.OrderType = 'Buy';
+                        item.postdata.body.OrderType = 'Buy';
                     } else if (type == 'SE' || type == 'LX') {
-                        item.postdata.data.OrderType = 'Sell';
+                        item.postdata.body.OrderType = 'Sell';
                     }
 
                 
                     if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                        item.postdata.data.Price = price
+                        item.postdata.body.Price = price
                     }
                     
 
@@ -449,7 +449,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
         }
     });
 
-
+   let url = 'https://openapi.5paisa.com/VendorsAPI/Service1.svc/V1/PlaceOrderRequest';
     var config = {
         method: 'post',
         url: url,
@@ -660,6 +660,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
         }
     });
 
+    let url = 'https://openapi.5paisa.com/VendorsAPI/Service1.svc/V1/PlaceOrderRequest';
     var config = {
         method: 'post',
         url: url,

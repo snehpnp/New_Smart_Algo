@@ -258,7 +258,7 @@ const AddClient = () => {
      { label: 'Angel', value: '12' },
     // { label: 'Fyers', value: '13' },
      { label: '5 Paisa', value: '14' },
-    // { label: 'Zerodha', value: '15' }
+     { label: 'Zerodha', value: '15' }
     // { label: 'Arihant', value: '16' }
     // { label: 'Arihant', value: '17' }
     // { label: 'Laxmi', value: '18' }

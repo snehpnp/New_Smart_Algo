@@ -41,6 +41,7 @@ require('./App/Cron/cron')
 const { createView, dashboard_view } = require('./View/Alice_blue')
 const { createViewAngel } = require('./View/Angel')
 const { createViewFivepaisa } = require('./View/fivepaisa')
+const { createViewZerodha } = require('./View/zerodha')
 
 const {  dropExistingView, TradeHistroy } = require('./View/TradeHistory')
 
@@ -170,6 +171,7 @@ app.get('/tradesymbol1', async (req, res) => {
 
 // TEST API
 app.get('/get', async (req, res) => {
+   createViewZerodha()
   // createViewFivepaisa()
   // createViewAngel()
   //createView()

@@ -65,7 +65,8 @@ export const loginWithApi = (broker_id, UserDetails) => {
 
     }
     else if (broker_id === "15" || broker_id === 15) {
-        alert("broker-15")
+        window.location.href ="https://kite.zerodha.com/connect/login?v=3&api_key="+UserDetails.api_key;
+       // alert("broker-15")
     }
     else if (broker_id === "16" || broker_id === 16) {
         alert("broker-16")

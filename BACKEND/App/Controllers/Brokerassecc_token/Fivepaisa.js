@@ -230,41 +230,43 @@ const GetAllBrokerResponse = async (user_info,res) => {
     console.log("user_info roker ",user_info[0].broker)
     try {
         const objectId = new ObjectId(user_info[0]._id);
-       // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
+        
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
+
+        //console.log("FindUserBrokerResponse - ",FindUserBrokerResponse)
      
         if (FindUserBrokerResponse.length > 0) {
-    
-            FindUserBrokerResponse.forEach((data1) => {    
+
+            var data_order = {
+
+                "head": {
+                    "key": user_info[0].api_key
+                },
+                "body": {
+                    "ClientCode": user_info[0].client_code
+                }
+
+            }
+           await FindUserBrokerResponse.forEach((data1) => {    
+
                 var config = {
-                    method: 'get',
-                    url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getOrderBook',
+                    method: 'post',
+                    url: 'https://Openapi.5paisa.com/VendorsAPI/Service1.svc/V2/OrderBook',
                     headers: {
                         'Authorization': 'Bearer ' + user_info[0].access_token,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-UserType': 'USER',
-                        'X-SourceID': 'WEB',
-                        'X-ClientLocalIP': 'CLIENT_LOCAL_IP',
-                        'X-ClientPublicIP': 'CLIENT_PUBLIC_IP',
-                        'X-MACAddress': 'MAC_ADDRESS',
-                        'X-PrivateKey': user_info[0].api_key
+                        'Content-Type': 'application/json'
                     },
+
+                    data: JSON.stringify(data_order)
+
                 };
                 axios(config)
                     .then(async (response) => {
-                       
-                        if(response.data.data.length > 0){
+                        if(response){
+                            const result_order = response.data.body.OrderBookDetail.find(item2 => parseInt(item2.BrokerOrderId) === parseInt(data1.order_id));
                             
-                            const result_order = response.data.data.find(item2 => item2.orderid === data1.order_id);
+                            //console.log("result_order - ",result_order)
                             if(result_order != undefined){
-
-                                    var reject_reason;
-                                    if (result_order.text) {
-                                        reject_reason = result_order.text;
-                                    } else {
-                                        reject_reason = '';
-                                    }
 
                                 const message = (JSON.stringify(result_order));
     
@@ -273,8 +275,8 @@ const GetAllBrokerResponse = async (user_info,res) => {
                                     {
                                         order_view_date: message,
                                         order_view_status: '1',
-                                        order_view_response: result_order.status,
-                                        reject_reason: reject_reason
+                                        order_view_response: result_order.OrderStatus,
+                                        reject_reason: result_order.Reason
         
                                     },
                                     { new: true }
