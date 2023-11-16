@@ -34,7 +34,7 @@ class Zerodha {
                 const key = keystr.split('?request_token=')[0]; 
                 const request_token = req.query.request_token;
         
-                console.log("key -",key)
+               // console.log("key -",key)
            
                 var hosts = req.headers.host;
     
@@ -158,36 +158,22 @@ const GetAllBrokerResponse = async (user_info,res) => {
      
         if (FindUserBrokerResponse.length > 0) {
     
-            FindUserBrokerResponse.forEach((data1) => {    
+           await FindUserBrokerResponse.forEach(async(data1) => {    
                 var config = {
                     method: 'get',
-                    url: 'https://apiconnect.Angelbroking.com/rest/secure/Angelbroking/order/v1/getOrderBook',
+                    url: 'https://api.kite.trade/orders/'+data1.order_id,
                     headers: {
-                        'Authorization': 'Bearer ' + user_info[0].access_token,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-UserType': 'USER',
-                        'X-SourceID': 'WEB',
-                        'X-ClientLocalIP': 'CLIENT_LOCAL_IP',
-                        'X-ClientPublicIP': 'CLIENT_PUBLIC_IP',
-                        'X-MACAddress': 'MAC_ADDRESS',
-                        'X-PrivateKey': user_info[0].api_key
-                    },
+                        'Authorization': 'token ' + user_info[0].api_key + ':' + user_info[0].access_token
+                    }
                 };
-                axios(config)
+               await axios(config)
                     .then(async (response) => {
                        
-                        if(response.data.data.length > 0){
-                            
-                            const result_order = response.data.data.find(item2 => item2.orderid === data1.order_id);
-                            if(result_order != undefined){
+                        if(response){
+                             
+                            let result_order = response.data.data[response.data.data.length - 1];
 
-                                    var reject_reason;
-                                    if (result_order.text) {
-                                        reject_reason = result_order.text;
-                                    } else {
-                                        reject_reason = '';
-                                    }
+                            if(result_order != undefined){
 
                                 const message = (JSON.stringify(result_order));
     
@@ -197,7 +183,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
                                         order_view_date: message,
                                         order_view_status: '1',
                                         order_view_response: result_order.status,
-                                        reject_reason: reject_reason
+                                        reject_reason: result_order.status_message
         
                                     },
                                     { new: true }
