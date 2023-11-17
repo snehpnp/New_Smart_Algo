@@ -103,7 +103,7 @@ class Zerodha {
 
                     })
                     .catch(function(error) {
-                       console.log('access token error ',error);
+                    //    console.log('access token error ',error);
                     }); 
     
                 }else{
@@ -208,7 +208,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
                           
                           
                         }else{
-                            console.log("NO DATA FOUND");
+                            // console.log("NO DATA FOUND");
                         }
 
                        

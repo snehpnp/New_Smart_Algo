@@ -34,7 +34,7 @@ class HelpCenter {
                     email: Req.email
 
                 })
-                console.log("Help", Help)
+                // console.log("Help", Help)
                 Help.save()
                     .then(async (data) => {
                         return res.status(200).json({ status: true, msg: 'Message Send SuccessFully', data: [] });

@@ -51,7 +51,7 @@ const CommonEmail = async(toEmail, subjectEmail, htmlEmail, textEmail, res) => {
                     console.log(err);
                     return res.send({ status: 'Failed!!!' })
                 } else {
-                    console.log("Email has been sent", info.response);
+                    // console.log("Email has been sent", info.response);
                     return res.send({ status: 'success', msg: "Mail send successfully" ,data:info.response })
                 }
             });

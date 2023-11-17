@@ -72,7 +72,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                        const command = `grep ,${pattern}, ${filePath_aliceblue}`;
                      //   const command = `findstr ,${pattern}, ${filePath_aliceblue}`;
 
-                        console.log("command ", command)
+                        // console.log("command ", command)
 
                         try {
 
@@ -176,9 +176,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         })
                         .catch((err) => {
                             try {
-                                console.error('Error creating and saving user:', err);
+                                // console.error('Error creating and saving user:', err);
                             } catch (e) {
-                                console.log("duplicate key")
+                                // console.log("duplicate key")
                             }
 
                         });
