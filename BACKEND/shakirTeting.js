@@ -5,6 +5,7 @@ module.exports = function (app) {
 
   const db = require('./App/Models');
 
+  
   const services = db.services;
   const categorie = db.categorie;
   const UserMakeStrategy = db.UserMakeStrategy;

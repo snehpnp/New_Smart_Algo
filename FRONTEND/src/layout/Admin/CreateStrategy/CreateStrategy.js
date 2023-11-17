@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { Row, Col } from 'react-bootstrap';
 import Select from 'react-select'
 import Content from "../../../Components/Dashboard/Content/Content";
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
@@ -262,10 +263,9 @@ const Signals = () => {
 
 
   const [timeFrameVal, setTimeFrameVal] = useState("1");
- 
- 
+
   const [buyCheck, setBuyCheck] = useState(false);
- 
+
   const [sellCheck, setSellCheck] = useState(false);
 
 
@@ -277,7 +277,7 @@ const Signals = () => {
 
 
   console.log("timeFrameVal - ", timeFrameVal)
- 
+
   console.log("buyCheck - ", buyCheck)
 
   const saveStrategy = () => {
@@ -311,6 +311,10 @@ const Signals = () => {
       "offset": "0"
     }
    } 
+
+
+  
+
    // Send Request Sell ------
    if(sellCheck){
     let data = {
@@ -336,7 +340,7 @@ const Signals = () => {
     }
    }
 
-    
+
 
   }
 
@@ -349,13 +353,16 @@ const Signals = () => {
           <div>
 
             <div className="col-md-2 ">
-              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize:'20px' }}>Strategy</label>
+              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '20px' }}>Strategy</label>
               <select className="form-select stratergy-box" onChange={(e) => setSelectStrategy(e.target.value)} name="strategyname">
                 <option value="">-- Select Strategy --</option>
                 {strategyDataAllAdmin.data && strategyDataAllAdmin.data.map((sm, i) =>
                   <option value={sm.strategy_name}>{sm.strategy_name}</option>)}
               </select>
             </div>
+
+
+
 
             <Modal show={show} onHide={handleClose} className="right">
               <Modal.Header>
@@ -420,7 +427,7 @@ const Signals = () => {
             <ul class="StepProgress">
               <li class="StepProgress-item is-done">
 
-                
+
                 <strong>Instruments</strong>
                 <div className="row">
                   <div className="col-md-2">
@@ -464,9 +471,9 @@ const Signals = () => {
               <li class="StepProgress-item is-done">
                 <div className="row">
 
-                  
-                 
-                   {/* <div className="col-md-3">
+
+
+                  {/* <div className="col-md-3">
                     <div class="columns">
                       <label>Position I would take</label>
                       <div class="column is-12">
@@ -529,7 +536,7 @@ const Signals = () => {
                              3 min
                             </a>
                           </li> */}
-                  
+
                         </ul>
                         {/* <div className="tab-content">
                           <div id="navpills2-1" className="tab-pane">
@@ -576,7 +583,7 @@ const Signals = () => {
                     </div>
                   </div>
 
-                   {/* <div className="col-md-3">
+                  {/* <div className="col-md-3">
                     <div className="form-group">
                       <label>Quantity ( in lots )</label>
                       <input type="number" className="form-control"></input>
@@ -589,12 +596,12 @@ const Signals = () => {
 
               <li class="StepProgress-item current is-done">
 
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" onChange={(e) => setBuyCheck(e.target.checked)} type="checkbox" id="inlineCheckbox1" value="option1" />
-                <label className="form-check-label" for="inlineCheckbox1">Buy</label>
-              </div>
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" onChange={(e) => setBuyCheck(e.target.checked)} type="checkbox" id="inlineCheckbox1" value="option1" />
+                  <label className="form-check-label" for="inlineCheckbox1">Buy</label>
+                </div>
 
-               
+
                 <strong>Buy Entry Condition</strong>
 
                 {/* <Form.Select aria-label="Default select example">
@@ -602,21 +609,16 @@ const Signals = () => {
                   <option value="price">Price</option>
                   <option value="time">Time</option>
                   <option value="indicator">Indicator</option>
-                </Form.Select> */}
-
-                
-
-
-
+                </Form.Select>
 
               </li>
 
               <li class="StepProgress-item current is-done">
 
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" />
-                <label className="form-check-label" for="inlineCheckbox2">Sell</label>
-              </div>
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" />
+                  <label className="form-check-label" for="inlineCheckbox2">Sell</label>
+                </div>
 
                 <strong>Sell Entry Condition</strong>
 
@@ -642,7 +644,7 @@ const Signals = () => {
                   </div>
                   <div className="col-md-4">
                     <div className="form-group">
-                      <label className="text-success">Tarhet Profit %</label>
+                      <label className="text-success">Target Profit %</label>
                       <input type="text" className="form-control"></input>
                     </div>
                   </div>
@@ -731,18 +733,7 @@ const Signals = () => {
             </>
 
 
-
-            {/* <div style={jumbotronStyles}>
-
-              <p><h2>{conditionText}</h2></p>
-
-            </div> */}
-
           </div>
-
-
-
-
 
           <div className="col-md-4">
             <button className='btn btn-info float-end m-0' onClick={saveStrategy}>save</button>
