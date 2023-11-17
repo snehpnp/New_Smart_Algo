@@ -287,58 +287,58 @@ const Signals = () => {
     }
 
 
-   // Send Request Buy ------
-   if(buyCheck){
-    let data = {
-      "scriptArray": selectedItems,
-      "user_id": "6512c8f2eb5673dd61bb931a",
-      // "tokensymbol": "3045",
-      // "symbol_name": "SBIN",
-      // "segment": "C",
-      "strategy_name": selectStrategy,
-      // "strike_price":"19300",
-      // "option_type":"CE",
-      //  "expiry":"26102023",
-      "timeframe": timeFrameVal,
-      "type": "BUY",
-      "indicator": "MA",
-      "price_source": "open",
-      "period": "1",
-      "inside_indicator": "EMA",
-      "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
-      "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
-      "buffer_value": "2",
-      "offset": "0"
+    // Send Request Buy ------
+    if (buyCheck) {
+      let data = {
+        "scriptArray": selectedItems,
+        "user_id": "6512c8f2eb5673dd61bb931a",
+        // "tokensymbol": "3045",
+        // "symbol_name": "SBIN",
+        // "segment": "C",
+        "strategy_name": selectStrategy,
+        // "strike_price":"19300",
+        // "option_type":"CE",
+        //  "expiry":"26102023",
+        "timeframe": timeFrameVal,
+        "type": "BUY",
+        "indicator": "MA",
+        "price_source": "open",
+        "period": "1",
+        "inside_indicator": "EMA",
+        "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
+        "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
+        "buffer_value": "2",
+        "offset": "0"
+      }
     }
-   } 
 
 
-  
 
-   // Send Request Sell ------
-   if(sellCheck){
-    let data = {
-      "scriptArray": selectedItems,
-      "user_id": "6512c8f2eb5673dd61bb931a",
-      // "tokensymbol": "3045",
-      // "symbol_name": "SBIN",
-      // "segment": "C",
-      "strategy_name": selectStrategy,
-      // "strike_price":"19300",
-      // "option_type":"CE",
-      //  "expiry":"26102023",
-      "timeframe": timeFrameVal,
-      "type": "SELL",
-      "indicator": "MA",
-      "price_source": "open",
-      "period": "1",
-      "inside_indicator": "EMA",
-      "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
-      "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
-      "buffer_value": "2",
-      "offset": "0"
+
+    // Send Request Sell ------
+    if (sellCheck) {
+      let data = {
+        "scriptArray": selectedItems,
+        "user_id": "6512c8f2eb5673dd61bb931a",
+        // "tokensymbol": "3045",
+        // "symbol_name": "SBIN",
+        // "segment": "C",
+        "strategy_name": selectStrategy,
+        // "strike_price":"19300",
+        // "option_type":"CE",
+        //  "expiry":"26102023",
+        "timeframe": timeFrameVal,
+        "type": "SELL",
+        "indicator": "MA",
+        "price_source": "open",
+        "period": "1",
+        "inside_indicator": "EMA",
+        "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
+        "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
+        "buffer_value": "2",
+        "offset": "0"
+      }
     }
-   }
 
 
 
@@ -360,8 +360,6 @@ const Signals = () => {
                   <option value={sm.strategy_name}>{sm.strategy_name}</option>)}
               </select>
             </div>
-
-
 
 
             <Modal show={show} onHide={handleClose} className="right">
@@ -407,6 +405,9 @@ const Signals = () => {
                             >
                               <i className="fa-solid fa-pen-to-square"></i>
                             </button> */}
+
+
+
                             <button className="btn border-0">
                               <i
                                 className="fa-regular fa-square-plus"
@@ -609,7 +610,104 @@ const Signals = () => {
                   <option value="price">Price</option>
                   <option value="time">Time</option>
                   <option value="indicator">Indicator</option>
-                </Form.Select>
+                </Form.Select> */}
+
+                <Tabs
+                  // defaultActiveKey="profile"
+                  id="uncontrolled-tab-example"
+                  className="mb-3"
+                >
+                  <Tab eventKey="home" title="Price">
+                    <Row>
+                      <Col md={3}>
+                        <label>First Element</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open">Open</option>
+                          <option value="hign">High</option>
+                          <option value="low">Low</option>
+                          <option value="close">Close</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <label>Offset</label>
+                        <Form.Control type="number" id="text2" />
+                      </Col>
+                      <Col md={2}>
+                        <label>Operators</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open"> Greater Than </option>
+                          <option value="hign">Less Than</option>
+                          <option value="low">OR</option>
+                          <option value="close">And</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={3}>
+                        <label>Second Element</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open">Open</option>
+                          <option value="hign">High</option>
+                          <option value="low">Low</option>
+                          <option value="close">Close</option>
+                          <option value="number">Number</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <label>Offset</label>
+                        <Form.Control type="number" id="text3" />
+                      </Col>
+                    </Row>
+                  </Tab>
+                  <Tab eventKey="profile" title="Time">
+
+                    {/* Entry Time */}
+                    <Row>
+                      <Col md={3}>
+                        <h5 className="mt-4">Entry Time</h5>
+                      </Col>
+                      <Col md={2}>
+                        <label>Operator</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open"> Greater Than </option>
+                          <option value="hign">Less Than</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <label>Time</label>
+                        <Form.Control type="time" id="text3" />
+                      </Col>
+                    </Row>
+
+                    <br />
+
+                    {/* Exit Time */}
+
+                    <Row>
+                      <Col md={3}>
+                        <h5 className="mt-4">Exit Time</h5>
+                      </Col>
+                      <Col md={2}>
+                        <label>Operator</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open"> Greater Than </option>
+                          <option value="hign">Less Than</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <label>Time</label>
+                        <Form.Control type="time" id="text3" />
+                      </Col>
+                    </Row>
+
+                  </Tab>
+                  <Tab eventKey="contact" title="Indicator">
+                    Tab content for Indicator
+                  </Tab>
+                </Tabs>
 
               </li>
 
