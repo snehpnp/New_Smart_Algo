@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { Row, Col } from 'react-bootstrap';
 import Select from 'react-select'
 import Content from "../../../Components/Dashboard/Content/Content";
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
@@ -262,10 +263,9 @@ const Signals = () => {
 
 
   const [timeFrameVal, setTimeFrameVal] = useState("1");
- 
- 
+
   const [buyCheck, setBuyCheck] = useState(false);
- 
+
   const [sellCheck, setSellCheck] = useState(false);
 
 
@@ -277,7 +277,7 @@ const Signals = () => {
 
 
   console.log("timeFrameVal - ", timeFrameVal)
- 
+
   console.log("buyCheck - ", buyCheck)
 
   const saveStrategy = () => {
@@ -287,60 +287,60 @@ const Signals = () => {
     }
 
 
-   // Send Request Buy ------
-   if(buyCheck){
-    let data = {
-      "scriptArray": selectedItems,
-      "user_id": "6512c8f2eb5673dd61bb931a",
-      // "tokensymbol": "3045",
-      // "symbol_name": "SBIN",
-      // "segment": "C",
-      "strategy_name": selectStrategy,
-      // "strike_price":"19300",
-      // "option_type":"CE",
-      //  "expiry":"26102023",
-      "timeframe": timeFrameVal,
-      "type": "BUY",
-      "indicator": "MA",
-      "price_source": "open",
-      "period": "1",
-      "inside_indicator": "EMA",
-      "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
-      "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
-      "buffer_value": "2",
-      "offset": "0"
+    // Send Request Buy ------
+    if (buyCheck) {
+      let data = {
+        "scriptArray": selectedItems,
+        "user_id": "6512c8f2eb5673dd61bb931a",
+        // "tokensymbol": "3045",
+        // "symbol_name": "SBIN",
+        // "segment": "C",
+        "strategy_name": selectStrategy,
+        // "strike_price":"19300",
+        // "option_type":"CE",
+        //  "expiry":"26102023",
+        "timeframe": timeFrameVal,
+        "type": "BUY",
+        "indicator": "MA",
+        "price_source": "open",
+        "period": "1",
+        "inside_indicator": "EMA",
+        "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
+        "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
+        "buffer_value": "2",
+        "offset": "0"
+      }
     }
-   } 
 
 
-  
 
-   // Send Request Sell ------
-   if(sellCheck){
-    let data = {
-      "scriptArray": selectedItems,
-      "user_id": "6512c8f2eb5673dd61bb931a",
-      // "tokensymbol": "3045",
-      // "symbol_name": "SBIN",
-      // "segment": "C",
-      "strategy_name": selectStrategy,
-      // "strike_price":"19300",
-      // "option_type":"CE",
-      //  "expiry":"26102023",
-      "timeframe": timeFrameVal,
-      "type": "SELL",
-      "indicator": "MA",
-      "price_source": "open",
-      "period": "1",
-      "inside_indicator": "EMA",
-      "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
-      "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
-      "buffer_value": "2",
-      "offset": "0"
+
+    // Send Request Sell ------
+    if (sellCheck) {
+      let data = {
+        "scriptArray": selectedItems,
+        "user_id": "6512c8f2eb5673dd61bb931a",
+        // "tokensymbol": "3045",
+        // "symbol_name": "SBIN",
+        // "segment": "C",
+        "strategy_name": selectStrategy,
+        // "strike_price":"19300",
+        // "option_type":"CE",
+        //  "expiry":"26102023",
+        "timeframe": timeFrameVal,
+        "type": "SELL",
+        "indicator": "MA",
+        "price_source": "open",
+        "period": "1",
+        "inside_indicator": "EMA",
+        "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
+        "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
+        "buffer_value": "2",
+        "offset": "0"
+      }
     }
-   }
 
-    
+
 
   }
 
@@ -353,15 +353,13 @@ const Signals = () => {
           <div>
 
             <div className="col-md-2 ">
-              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize:'20px' }}>Strategy</label>
+              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '20px' }}>Strategy</label>
               <select className="form-select stratergy-box" onChange={(e) => setSelectStrategy(e.target.value)} name="strategyname">
                 <option value="">-- Select Strategy --</option>
                 {strategyDataAllAdmin.data && strategyDataAllAdmin.data.map((sm, i) =>
                   <option value={sm.strategy_name}>{sm.strategy_name}</option>)}
               </select>
             </div>
-
-
 
 
             <Modal show={show} onHide={handleClose} className="right">
@@ -430,7 +428,7 @@ const Signals = () => {
             <ul class="StepProgress">
               <li class="StepProgress-item is-done">
 
-                
+
                 <strong>Instruments</strong>
                 <div className="row">
                   <div className="col-md-2">
@@ -474,9 +472,9 @@ const Signals = () => {
               <li class="StepProgress-item is-done">
                 <div className="row">
 
-                  
-                 
-                   {/* <div className="col-md-3">
+
+
+                  {/* <div className="col-md-3">
                     <div class="columns">
                       <label>Position I would take</label>
                       <div class="column is-12">
@@ -539,7 +537,7 @@ const Signals = () => {
                              3 min
                             </a>
                           </li> */}
-                  
+
                         </ul>
                         {/* <div className="tab-content">
                           <div id="navpills2-1" className="tab-pane">
@@ -586,7 +584,7 @@ const Signals = () => {
                     </div>
                   </div>
 
-                   {/* <div className="col-md-3">
+                  {/* <div className="col-md-3">
                     <div className="form-group">
                       <label>Quantity ( in lots )</label>
                       <input type="number" className="form-control"></input>
@@ -599,29 +597,126 @@ const Signals = () => {
 
               <li class="StepProgress-item current is-done">
 
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" onChange={(e) => setBuyCheck(e.target.checked)} type="checkbox" id="inlineCheckbox1" value="option1" />
-                <label className="form-check-label" for="inlineCheckbox1">Buy</label>
-              </div>
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" onChange={(e) => setBuyCheck(e.target.checked)} type="checkbox" id="inlineCheckbox1" value="option1" />
+                  <label className="form-check-label" for="inlineCheckbox1">Buy</label>
+                </div>
 
-               
+
                 <strong>Buy Entry Condition</strong>
 
-                <Form.Select aria-label="Default select example">
+                {/* <Form.Select aria-label="Default select example">
                   <option>Select</option>
                   <option value="price">Price</option>
                   <option value="time">Time</option>
                   <option value="indicator">Indicator</option>
-                </Form.Select>
+                </Form.Select> */}
+
+                <Tabs
+                  // defaultActiveKey="profile"
+                  id="uncontrolled-tab-example"
+                  className="mb-3"
+                >
+                  <Tab eventKey="home" title="Price">
+                    <Row>
+                      <Col md={3}>
+                        <label>First Element</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open">Open</option>
+                          <option value="hign">High</option>
+                          <option value="low">Low</option>
+                          <option value="close">Close</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <label>Offset</label>
+                        <Form.Control type="number" id="text2" />
+                      </Col>
+                      <Col md={2}>
+                        <label>Operators</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open"> Greater Than </option>
+                          <option value="hign">Less Than</option>
+                          <option value="low">OR</option>
+                          <option value="close">And</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={3}>
+                        <label>Second Element</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open">Open</option>
+                          <option value="hign">High</option>
+                          <option value="low">Low</option>
+                          <option value="close">Close</option>
+                          <option value="number">Number</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <label>Offset</label>
+                        <Form.Control type="number" id="text3" />
+                      </Col>
+                    </Row>
+                  </Tab>
+                  <Tab eventKey="profile" title="Time">
+
+                    {/* Entry Time */}
+                    <Row>
+                      <Col md={3}>
+                        <h5 className="mt-4">Entry Time</h5>
+                      </Col>
+                      <Col md={2}>
+                        <label>Operator</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open"> Greater Than </option>
+                          <option value="hign">Less Than</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <label>Time</label>
+                        <Form.Control type="time" id="text3" />
+                      </Col>
+                    </Row>
+
+                    <br />
+
+                    {/* Exit Time */}
+
+                    <Row>
+                      <Col md={3}>
+                        <h5 className="mt-4">Exit Time</h5>
+                      </Col>
+                      <Col md={2}>
+                        <label>Operator</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open"> Greater Than </option>
+                          <option value="hign">Less Than</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <label>Time</label>
+                        <Form.Control type="time" id="text3" />
+                      </Col>
+                    </Row>
+
+                  </Tab>
+                  <Tab eventKey="contact" title="Indicator">
+                    Tab content for Indicator
+                  </Tab>
+                </Tabs>
 
               </li>
 
               <li class="StepProgress-item current is-done">
 
-              <div className="form-check form-check-inline">
-                <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" />
-                <label className="form-check-label" for="inlineCheckbox2">Sell</label>
-              </div>
+                <div className="form-check form-check-inline">
+                  <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" />
+                  <label className="form-check-label" for="inlineCheckbox2">Sell</label>
+                </div>
 
                 <strong>Sell Entry Condition</strong>
 
@@ -647,7 +742,7 @@ const Signals = () => {
                   </div>
                   <div className="col-md-4">
                     <div className="form-group">
-                      <label className="text-success">Tarhet Profit %</label>
+                      <label className="text-success">Target Profit %</label>
                       <input type="text" className="form-control"></input>
                     </div>
                   </div>
@@ -736,18 +831,7 @@ const Signals = () => {
             </>
 
 
-
-            {/* <div style={jumbotronStyles}>
-
-              <p><h2>{conditionText}</h2></p>
-
-            </div> */}
-
           </div>
-
-
-
-
 
           <div className="col-md-4">
             <button className='btn btn-info float-end m-0' onClick={saveStrategy}>save</button>
