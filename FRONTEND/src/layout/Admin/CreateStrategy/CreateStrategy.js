@@ -311,10 +311,6 @@ const Signals = () => {
       "offset": "0"
     }
    } 
-
-
-  
-
    // Send Request Sell ------
    if(sellCheck){
     let data = {
@@ -361,9 +357,6 @@ const Signals = () => {
               </select>
             </div>
 
-
-
-
             <Modal show={show} onHide={handleClose} className="right">
               <Modal.Header>
                 <input
@@ -407,9 +400,6 @@ const Signals = () => {
                             >
                               <i className="fa-solid fa-pen-to-square"></i>
                             </button> */}
-
-
-
                             <button className="btn border-0">
                               <i
                                 className="fa-regular fa-square-plus"
@@ -607,12 +597,17 @@ const Signals = () => {
                
                 <strong>Buy Entry Condition</strong>
 
-                <Form.Select aria-label="Default select example">
+                {/* <Form.Select aria-label="Default select example">
                   <option>Select</option>
                   <option value="price">Price</option>
                   <option value="time">Time</option>
                   <option value="indicator">Indicator</option>
-                </Form.Select>
+                </Form.Select> */}
+
+                
+
+
+
 
               </li>
 
