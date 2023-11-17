@@ -685,11 +685,7 @@ const TradeHistory = () => {
         if (response.status) {
           //setAdminTradingStatus(response.data)
           checkStatusReff.current = true
-        } else {
-        
-          //setAdminTradingStatus(response.data)
-
-        }
+        } 
       });
   };
 
@@ -709,7 +705,7 @@ const TradeHistory = () => {
                 <input
                   type="checkbox"
                   className="bg-primary"
-                  defaultChecked={true}
+                  checked={checkStatusReff.current}
                   onChange={(e) =>
                     LogIn_WIth_Api(
                       e.target.checked,
