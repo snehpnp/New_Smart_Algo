@@ -116,7 +116,7 @@ const ThemeSelection = () => {
     const GetAllThemes = () => {
         if (Role === "SUPERADMIN") {
 
-            axios.get(`${Config.base_url}getall/theme`).then((res) => {
+            axios.get(`https://trade.pandpinfotech.com/backend/getall/theme`).then((res) => {
                 setThemeData(res.data.data)
             }).catch((err) => {
                 console.log("error", err);

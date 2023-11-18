@@ -25,13 +25,6 @@ router.post('/update/apicreateinfo', verifyToken, UpdateAPiInfo)
 
 
 
-
-
-
-// router.post('/getall/theme', GetAllTheme)
-
-
-
 module.exports = router;
 
 
