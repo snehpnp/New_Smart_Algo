@@ -166,3 +166,19 @@ export async function GET_TIMEFRAME(data, token) {
         
     }
 }
+
+export async function GET_SOURCE(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}get_sources`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}

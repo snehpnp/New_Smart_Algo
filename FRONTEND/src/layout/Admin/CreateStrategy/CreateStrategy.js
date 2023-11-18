@@ -17,17 +17,16 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
-import { get_time_frame } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
-
+import { get_time_frame , get_source } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
 
 
 const Signals = () => {
-
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
   ///console.log("AdminToken",AdminToken)
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
+
 
 
   const dispatch = useDispatch();
@@ -40,15 +39,12 @@ const Signals = () => {
   //console.log("selectedItems",selectedItems)
 
   const [getIndicators, setGetIndicators] = useState([])
-  const [getSources, setGetSources] = useState([])
-  console.log("getSources", getSources);
   const [selectAddIndicators, setSelectAddIndicators] = useState([])
   const [indicatorModalRowData, setIndicatorModalRowData] = useState([])
 
   const [showEnterPrice, setShowEnterPrice] = useState(false);
   const handleCloseEnterPrice = () => setShowEnterPrice(false);
   const handleShowEnterPrice = () => {
-    getSourcesApi()
     setShowEnterPrice(true)
   }
   const jumbotronStyles = {
@@ -144,22 +140,7 @@ const Signals = () => {
       });
   };
 
-  const getSourcesApi = () => {
-
-    const config = {
-      method: 'get',
-      url: 'http://localhost:7700/get_sources',
-    };
-
-    axios(config)
-      .then(function (response) {
-        // console.log(response.data);
-        setGetSources(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+ 
 
   const indicatorAddItem = (item) => {
     const isItemAlreadySelected = selectAddIndicators.some(
@@ -187,6 +168,7 @@ const Signals = () => {
   useEffect(() => {
     getAllSteategyApi();
     getAllTimeFrameApi();
+    getAllSourceApi();
   }, []);
 
   //const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState([]);
@@ -196,7 +178,11 @@ const Signals = () => {
   // get data time frame 
   const [timeFrameData, setTimeFrameData] = useState({ loading: true, data: [] });
 
-
+  // get data Source 
+  const [getSources, setGetSources] = useState({ loading: true, data: [] });
+ 
+   console.log("getSources - ",getSources)
+    
 
 
   // console.log("timeFrameData",timeFrameData)
@@ -224,6 +210,35 @@ const Signals = () => {
             });
           } else {
             setTimeFrameData({
+              loading: false,
+              data: response.data,
+            });
+          }
+        }
+      });
+  };
+
+  const getAllSourceApi = async () => {
+    await dispatch(
+      get_source({
+        req: {
+          page: "1",
+          limit: "100",
+        },
+        token: AdminToken,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        //console.log("response get_time_frame - ",response)
+        if (response) {
+          if (response) {
+            setGetSources({
+              loading: false,
+              data: response.data,
+            });
+          } else {
+            setGetSources({
               loading: false,
               data: response.data,
             });
@@ -788,11 +803,11 @@ const Signals = () => {
 
                     <label>Source</label><br />
                     <select name="sources">
-                      {getSources && getSources.map((item, index) => (
+                      {/* {getSources && getSources.map((item, index) => (
                         <option key={index} value={item.name}>
                           {item.name}
                         </option>
-                      ))}
+                      ))} */}
                     </select>
                     <br />
 
