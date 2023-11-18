@@ -17,7 +17,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
-import { get_time_frame , get_source } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
+import { get_time_frame , get_source , get_comparators } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
 
 
 const Signals = () => {
@@ -169,6 +169,7 @@ const Signals = () => {
     getAllSteategyApi();
     getAllTimeFrameApi();
     getAllSourceApi();
+    getAllComparatorsApi();
   }, []);
 
   //const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState([]);
@@ -180,6 +181,9 @@ const Signals = () => {
 
   // get data Source 
   const [getSources, setGetSources] = useState({ loading: true, data: [] });
+
+   // get data comparators 
+   const [getComparators, setGetComparators] = useState({ loading: true, data: [] });
  
    console.log("getSources - ",getSources)
     
@@ -202,7 +206,7 @@ const Signals = () => {
       .unwrap()
       .then((response) => {
         //console.log("response get_time_frame - ",response)
-        if (response.status) {
+        if (response) {
           if (response.status) {
             setTimeFrameData({
               loading: false,
@@ -230,15 +234,44 @@ const Signals = () => {
     )
       .unwrap()
       .then((response) => {
-        //console.log("response get_time_frame - ",response)
+        console.log("response source - ",response)
         if (response) {
-          if (response) {
+          if (response.status) {
             setGetSources({
               loading: false,
               data: response.data,
             });
           } else {
             setGetSources({
+              loading: false,
+              data: response.data,
+            });
+          }
+        }
+      });
+  };
+
+  const getAllComparatorsApi = async () => {
+    await dispatch(
+      get_comparators({
+        req: {
+          page: "1",
+          limit: "100",
+        },
+        token: AdminToken,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        console.log("response get_comparators - ",response)
+        if (response) {
+          if (response.status) {
+            setGetComparators({
+              loading: false,
+              data: response.data,
+            });
+          } else {
+            setGetComparators({
               loading: false,
               data: response.data,
             });
@@ -358,6 +391,55 @@ const Signals = () => {
 
 
   }
+ 
+
+  const [selectedSource, setSelectedSource] = useState('');
+  const [showModalOffset, setShowModalOffset] = useState(false);
+
+  const selectSource = (e) => {
+    console.log("e -",e)
+    if(e.target.value != ""){
+       //alert(e.target.value)
+       setSelectedSource(e.target.value);
+       openModalOffset();
+   }
+  }
+
+  const selectComparators = (e) => {
+    console.log(" comparators - ",e.target.value)
+  }
+
+
+  const openModalOffset = () => {
+    setShowModalOffset(true);
+  };
+
+  const closeModalOffset = () => {
+    setShowModalOffset(false);
+  };
+
+  const handleModalConfirm = () => {
+    // Do something with the selected value
+    console.log('Selected Value:', selectedSource);
+
+    // Close the modal
+    closeModalOffset();
+  };
+
+
+  //Condition Array
+  const [coditionRequestArr, setCoditionRequestArr] = useState([])
+
+ 
+  // setCoditionRequestArr(oldValues => {
+  //   return oldValues.filter(item => item.key !== key)
+  // })
+
+  // setCoditionRequestArr((oldArray) => [pre_tag, ...oldArray]);
+
+  const conditionAdd = (e) => {
+    alert("okk")
+  }
 
 
 
@@ -420,9 +502,6 @@ const Signals = () => {
                             >
                               <i className="fa-solid fa-pen-to-square"></i>
                             </button> */}
-
-
-
                             <button className="btn border-0">
                               <i
                                 className="fa-regular fa-square-plus"
@@ -627,6 +706,13 @@ const Signals = () => {
                   <option value="indicator">Indicator</option>
                 </Form.Select> */}
 
+                    
+                 
+                    <button onClick={() => conditionAdd("e")}>
+                      Click Me
+                    </button>
+
+
                 <Tabs
                   // defaultActiveKey="profile"
                   id="uncontrolled-tab-example"
@@ -636,27 +722,29 @@ const Signals = () => {
                     <Row>
                       <Col md={3}>
                         <label>First Element</label>
-                        <Form.Select aria-label="Default select example">
-                          <option>Select</option>
-                          <option value="open">Open</option>
-                          <option value="hign">High</option>
-                          <option value="low">Low</option>
-                          <option value="close">Close</option>
-                        </Form.Select>
+                        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e); }}>
+                              {/* <option value="">Select Expiry Date</option> */}
+                              <option value="" >--Select source--</option>
+                              {
+                                getSources.data.map((sm, i) =>
+                                  <option value={sm.value}>{sm.name}</option>)
+                              }
+                      </select>
                       </Col>
-                      <Col md={2}>
+                      {/* <Col md={2}>
                         <label>Offset</label>
                         <Form.Control type="number" id="text2" />
-                      </Col>
+                      </Col> */}
                       <Col md={2}>
-                        <label>Operators</label>
-                        <Form.Select aria-label="Default select example">
-                          <option>Select</option>
-                          <option value="open"> Greater Than </option>
-                          <option value="hign">Less Than</option>
-                          <option value="low">OR</option>
-                          <option value="close">And</option>
-                        </Form.Select>
+                        <label>Comparators</label>
+                        <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e); }}>
+                              {/* <option value="">Select Expiry Date</option> */}
+                              <option value="" >--Select comparators--</option>
+                              {
+                                getComparators.data.map((sm, i) =>
+                                  <option value={sm.value}>{sm.name}</option>)
+                              }
+                      </select>
                       </Col>
                       <Col md={3}>
                         <label>Second Element</label>
@@ -669,10 +757,10 @@ const Signals = () => {
                           <option value="number">Number</option>
                         </Form.Select>
                       </Col>
-                      <Col md={2}>
+                      {/* <Col md={2}>
                         <label>Offset</label>
                         <Form.Control type="number" id="text3" />
-                      </Col>
+                      </Col> */}
                     </Row>
                   </Tab>
                   <Tab eventKey="profile" title="Time">
@@ -855,6 +943,25 @@ const Signals = () => {
 
 
         </Content>
+
+        <Modal show={showModalOffset} onHide={closeModalOffset}>
+        <Modal.Body>
+          <p><b>{selectedSource}</b></p>
+
+          <Col md={2}>
+          <label>Offset</label>
+          <Form.Control type="number" id="text2" />
+          </Col>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModalOffset}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleModalConfirm}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
       </>
     </>
   );
