@@ -51,6 +51,7 @@ const Header = ({ ChatBox }) => {
   const user_role = JSON.parse(localStorage.getItem("user_role"));
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const page = localStorage.getItem("page")
+  const Role = JSON.parse(localStorage.getItem("user_details")).Role
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
 
@@ -197,14 +198,17 @@ const Header = ({ ChatBox }) => {
   // GET MESSGAE BRODCAST DATA 
   //  GET_USER_DETAILS
   const message_brod = async () => {
-    await dispatch(GET_MESSAGE_BRODS({ id: user_id }))
-      .unwrap()
-      .then((response) => {
-        // console.log("response", response);
-        if (response.status) {
-          // setUserDetails(response.data);
-        }
-      });
+if(Role == "USER"){
+  await dispatch(GET_MESSAGE_BRODS({ id: user_id }))
+  .unwrap()
+  .then((response) => {
+    // console.log("response", response);
+    if (response.status) {
+      // setUserDetails(response.data);
+    }
+  });
+}
+    
   };
 
   useEffect(() => {

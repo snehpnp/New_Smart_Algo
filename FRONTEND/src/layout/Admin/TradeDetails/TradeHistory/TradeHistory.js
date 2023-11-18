@@ -463,7 +463,6 @@ const TradeHistory = () => {
                   ShowColor1(".UPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
                   ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
                 }
-
               }
 
               //  if Only Exist qty Exist
@@ -473,12 +472,7 @@ const TradeHistory = () => {
               ) {
               } else {
               }
-
-
             });
-
-
-
 
 
             // }
@@ -507,13 +501,11 @@ const TradeHistory = () => {
 
     if (row.entry_type !== '' && row.exit_type !== '') {
       if ((row.entry_type === "LE" || row.entry_type === "SE")) {
-
         const entryQty = parseInt(row.entry_qty_percent);
         const exitQty = parseInt(row.exit_qty_percent);
         const entryPrice = parseFloat(row.entry_price);
         const exitPrice = parseFloat(row.exit_price);
         const rpl = (exitPrice - entryPrice) * Math.min(entryQty, exitQty);
-
 
         $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
         $(".UPL_" + row.token + "_" + get_id_token).html("-");
@@ -521,15 +513,11 @@ const TradeHistory = () => {
 
         ShowColor1(".show_rpl_" + row.token + "_" + get_id_token, rpl.toFixed(2), row.token, get_id_token);
         ShowColor1(".UPL_" + row.token + "_" + get_id_token, "-", row.token, get_id_token);
-
         ShowColor1(".TPL_" + row.token + "_" + get_id_token, rpl.toFixed(2), row.token, get_id_token);
-
-
       }
 
     }
     else if (row.entry_type && row.exit_type === "") {
-
       $(".show_rpl_" + row.token + "_" + row._id).html("-");
       $(".UPL_" + row.token + "_" + row._id).html("-");
       $(".TPL_" + row.token + "_" + row._id).html("-");
@@ -609,7 +597,6 @@ const TradeHistory = () => {
 
 
   const forCSVdata = () => {
-
     let csvArr = []
     if (tradeHistoryData.data.length > 0) {
       tradeHistoryData.data.map((item) => {
