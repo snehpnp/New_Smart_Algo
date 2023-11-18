@@ -4,9 +4,12 @@ const panel_model = db.panel_model;
 const User = db.user;
 const ApiCreateInfo = db.api_create_info;
 
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 const { formattedDateTime } = require('../../Helper/time.helper')
-const mongoose = require('mongoose');
+
 class Panel {
 
     // ADD PANEL IN A COLLECTION
@@ -236,9 +239,24 @@ class Panel {
     // Get All APi Infor
     async GetAllAPiInfo(req, res) {
         try {
+
+
+            const panel_data = await panel_model.find({ domain: "http://localhost:3000" }).select('broker_id')
+            if (!panel_data) {
+                return res.status(409).json({ status: false, msg: 'Panel Not exists', data: [] });
+            }
+
+            const objectIds = panel_data[0].broker_id.map((data) => data.id);
+
+            // Find documents with matching ids
+            const getAllpanel = await ApiCreateInfo.find({ broker_id: { $in: objectIds } })
+    
+            // console.log(getAllpanel);
+
+
             // THEME LIST DATA
-            const getAllpanel = await ApiCreateInfo
-                .find({})
+            // const getAllpanel = await ApiCreateInfo
+            //     .find({})
 
             // IF DATA NOT EXIST
             if (getAllpanel.length == 0) {

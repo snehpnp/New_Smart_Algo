@@ -4,7 +4,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useRef} from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { Get_Tradehisotry } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
@@ -21,6 +21,8 @@ import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../../S
 import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../../Utils/ShowTradeColor";
 import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
+import { GET_ADMIN_TRADE_STATUS } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
+
 import { today } from "../../../../Utils/Date_formet";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 // import * as Config from "../../Utils/Config";
@@ -32,7 +34,7 @@ const TradeHistory = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
-  console.log("dashboard_filter", dashboard_filter);
+  // console.log("dashboard_filter", dashboard_filter);
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
@@ -44,6 +46,8 @@ const TradeHistory = () => {
   const [toDate, setToDate] = useState("");
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [refresh, setrefresh] = useState(false);
+  
+
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -72,10 +76,21 @@ const TradeHistory = () => {
   const [SelectSegment, setSelectSegment] = useState("null");
   const [SelectService, setSelectService] = useState("null");
 
-
   const [SocketState, setSocketState] = useState("null");
 
   const [ForGetCSV, setForGetCSV] = useState([])
+ 
+  const [adminTradingStatus, setAdminTradingStatus] = useState(false);
+
+
+  const checkStatusReff = useRef(false);
+
+  useEffect(() => {
+    GetAdminTradingStatus()
+  }, []);
+
+  console.log("Shk", adminTradingStatus);
+
 
   const Get_TradHistory = async (e) => {
     let abc = new Date();
@@ -347,7 +362,7 @@ const TradeHistory = () => {
 
   }
 
-  console.log("CreateSignalRequest", CreateSignalRequest)
+  // console.log("CreateSignalRequest", CreateSignalRequest)
 
   // ----------------------------- SQUARE OFF ----------------------------
 
@@ -558,9 +573,6 @@ const TradeHistory = () => {
 
 
 
-
-
-
   var a = 2
   //  GET_USER_DETAILS
   const data = async () => {
@@ -651,8 +663,6 @@ const TradeHistory = () => {
   }, []);
 
 
-
-
   const getservice = async () => {
     await dispatch(Get_All_Catagory()).unwrap()
       .then((response) => {
@@ -668,6 +678,19 @@ const TradeHistory = () => {
     getservice()
   }, [])
 
+
+  const GetAdminTradingStatus = async (e) => {
+    await dispatch(GET_ADMIN_TRADE_STATUS({ broker_name: "ALICE_BLUE" })).unwrap()
+      .then((response) => {
+        if (response.status) {
+          //setAdminTradingStatus(response.data)
+          checkStatusReff.current = true
+        } 
+      });
+  };
+
+
+
   return (
     <>
       <Content Page_title="Trade History" button_status={false}
@@ -682,8 +705,7 @@ const TradeHistory = () => {
                 <input
                   type="checkbox"
                   className="bg-primary"
-                  defaultChecked={
-                    UserDetails.trading_status !== undefined && UserDetails.trading_status === "on"}
+                  checked={checkStatusReff.current}
                   onChange={(e) =>
                     LogIn_WIth_Api(
                       e.target.checked,

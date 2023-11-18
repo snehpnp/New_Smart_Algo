@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 const LicenceDetails = ({ showModal, setshowModal, id }) => {
 
     const [showLicenceDetails, setshowLicenceDetails] = useState('')
-
+console.log("showLicenceDetails",showLicenceDetails);
     const dispatch = useDispatch()
 
     const data = async () => {
@@ -69,7 +69,7 @@ const LicenceDetails = ({ showModal, setshowModal, id }) => {
                     <tr>
                         <th>4</th>
                         <td>Total Live Account</td>
-                        <td>{showLicenceDetails && showLicenceDetails.total_live}</td>
+                        <td>{showLicenceDetails && showLicenceDetails.total_live_client}</td>
                     </tr>
                     <tr>
                         <th>5</th>
@@ -84,7 +84,7 @@ const LicenceDetails = ({ showModal, setshowModal, id }) => {
                     <tr>
                         <th>7</th>
                         <td>Total Demo Account</td>
-                        <td>{showLicenceDetails && showLicenceDetails.total_demo}</td>
+                        <td>{showLicenceDetails && showLicenceDetails.total_demo_client}</td>
                     </tr>           <tr>
                         <th>8</th>
                         <td>Active Demo Account</td>

@@ -33,7 +33,7 @@ const Routing = () => {
   const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
 
 
-console.log("location.pathname-"+location.pathname+"-");
+// console.log("location.pathname-"+location.pathname+"-");
 // console.log(location.pathname != '/forget');
 
 

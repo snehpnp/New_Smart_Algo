@@ -125,7 +125,7 @@ class AliceBlue {
 
                     })
                     .catch(function (error) {
-                        console.log('access token error ', error);
+                        // console.log('access token error ', error);
                     });
 
             }
@@ -149,7 +149,7 @@ class AliceBlue {
 
 
             if (!OrderId || !user_id) {
-                console.log("Please Fill All Feild");
+                // console.log("Please Fill All Feild");
                 return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
 
             }
@@ -277,7 +277,7 @@ class AliceBlue {
 
 
             if (!OrderId || !user_id) {
-                console.log("Please Fill All Feild");
+                // console.log("Please Fill All Feild");
                 return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
 
             }
@@ -321,7 +321,7 @@ class AliceBlue {
 
                 })
                 .catch(async (error) => {
-                    console.log("error", error);
+                    // console.log("error", error);
                     return res.send({ status: false, msg: "Order Cancel Error", data: error });
                 })
 

@@ -272,8 +272,8 @@ class OptionChain {
                     let segment = ""
                     result.forEach(element1 => {
                         if (element.strike == element1.strike) {
-                            console.log("symbol", element.strike)
-                            console.log("segment", element1.strike)
+                            // console.log("symbol", element.strike)
+                            // console.log("segment", element1.strike)
 
 
                             if (element1.option_type == "CE") {

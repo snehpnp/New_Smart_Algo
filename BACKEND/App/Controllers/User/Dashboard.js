@@ -189,7 +189,7 @@ class Dashboard {
             }
 
             if (Object.keys(servicesData).length == 0) {
-                console.log("Object is empty.");
+                // console.log("Object is empty.");
                 return res.send({ status: false, msg: 'Object is empty.', data: [] });
             }
 
@@ -248,7 +248,7 @@ class Dashboard {
                     if (matchedObject.active_status || matchedObject.active_status == false) {
 
                         var msg = matchedObject.active_status == true ? "ON" : "OFF"
-                        console.log("msg", msg);
+                        // console.log("msg", msg);
                         const user_activity = new user_activity_logs(
                             {
                                 user_id: UserData._id,
@@ -265,7 +265,7 @@ class Dashboard {
 
 
                         var msg = matchedObject.order_type == '1' ? "MARKET" : matchedObject.order_type == '2' ? "LIMIT" : matchedObject.order_type == '3' ? "STOPLOSS LIMIT" : "STOPLOSS MARKET"
-                        console.log(msg);
+                        // console.log(msg);
                         const user_activity = new user_activity_logs(
                             {
                                 user_id: UserData._id,
@@ -282,7 +282,7 @@ class Dashboard {
 
 
                         var msg = matchedObject.product_type == '1' ? "CNC" : matchedObject.product_type == '2' ? "MIS" : matchedObject.product_type == '3' ? "BO" : "CO"
-                        console.log(msg);
+                        // console.log(msg);
                         const user_activity = new user_activity_logs(
                             {
                                 user_id: UserData._id,
@@ -296,7 +296,7 @@ class Dashboard {
                     }
 
                 } else {
-                    console.log("No match found for Service ID:", key);
+                    // console.log("No match found for Service ID:", key);
                 }
             }
 

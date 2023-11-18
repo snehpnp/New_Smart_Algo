@@ -23,6 +23,8 @@ const ApiCreateInfo = () => {
   const userInfo = JSON.parse(localStorage.getItem("user_details"))
   const broker = JSON.parse(localStorage.getItem("user_details")).broker;
   const type = JSON.parse(localStorage.getItem("user_details")).type;
+  const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
+  const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
 
   const [showModal, setshowModal] = useState(false);
   const [modalData, setModalData] = useState([]);
@@ -45,7 +47,7 @@ const ApiCreateInfo = () => {
           });
         }
       });
-    await dispatch(User_Api_Create_Info({ user_id: userInfo.user_id, token: userInfo.token }))
+    await dispatch(User_Api_Create_Info({ user_id: gotodashboard ? GoToDahboard_id.user_id :  userInfo.user_id, token: userInfo.token }))
       .unwrap()
       .then((response) => {
         if (response.status) {

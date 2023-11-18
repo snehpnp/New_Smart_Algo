@@ -43,7 +43,7 @@ module.exports = function (app) {
                 }
                 res.send("done")
             }).catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
         }
         catch (err) {

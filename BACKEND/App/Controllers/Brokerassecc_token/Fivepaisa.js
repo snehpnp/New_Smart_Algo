@@ -71,7 +71,7 @@ class Fivepaisa {
                 axios(config)
                     .then(async function(response) {
     
-                        console.log('aceestoken - ',response);
+                        // console.log('aceestoken - ',response);
     
                         var access_token = response.data.body.AccessToken;
                         var ClientCode = response.data.body.ClientCode;
@@ -97,7 +97,7 @@ class Fivepaisa {
                                 system_ip: getIPAddress()
                             })
                             await user_login.save();
-                            console.log("user_login", user_login);
+                            // console.log("user_login", user_login);
                             if (user_login) {
                                // console.log("redirect_uri", redirect_uri);
                                 return res.redirect(redirect_uri);
@@ -112,7 +112,7 @@ class Fivepaisa {
     
                     })
                     .catch(function(error) {
-                        console.log(error);
+                        // console.log(error);
                     });
 
           
@@ -138,8 +138,8 @@ class Fivepaisa {
            
                 var auth_token = keystr.split('?auth_token=')[1]; 
                 
-                console.log("key -",key)
-                console.log("auth_token -",auth_token)
+                // console.log("key -",key)
+                // console.log("auth_token -",auth_token)
 
 
                 var hosts = req.headers.host;
@@ -173,9 +173,9 @@ class Fivepaisa {
                             system_ip: getIPAddress()
                         })
                         await user_login.save();
-                        console.log("user_login", user_login);
+                        // console.log("user_login", user_login);
                         if (user_login) {
-                            console.log("redirect_uri", redirect_uri);
+                            // console.log("redirect_uri", redirect_uri);
 
                             return res.redirect(redirect_uri);
 
@@ -301,7 +301,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
                           
                           
                         }else{
-                            console.log("NO DATA FOUND");
+                            // console.log("NO DATA FOUND");
                         }
 
                        

@@ -62,7 +62,7 @@ const ApiCreateInfo = () => {
                 <section class="card__container">
 
                     {/* {goToDashboard ? } */}
-                    {UserDetails.data && UserDetails.data.slice(0, 1).map((item) => {
+                    {UserDetails.data && UserDetails.data.map((item) => {
                         // {UserDetails.data && UserDetails.data.map((item) => {
                         return <>
                             <div class="card__bx card__1">
