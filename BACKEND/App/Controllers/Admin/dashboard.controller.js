@@ -28,7 +28,7 @@ class Dashboard {
             // Query the view to get the data
             const result = await db1.collection(viewName).find().toArray();
 
-            console.log("result", result)
+            // console.log("result", result)
             if (result) {
                 res.send({
                     status: true,
@@ -100,8 +100,10 @@ class Dashboard {
                     if (!value) {
                         return res.send({ status: false, msg: 'Not match', data: [] });
                     }
-                    const filter = { _id: id };
+                    const filter = { _id: new ObjectId(id) };
                     const updateOperation = { $set: broker_data };
+                    console.log(filter, updateOperation);
+
                     const result = await Broker_information.updateOne(filter, updateOperation);
                     if (!result) {
                         return res.send({ status: false, msg: 'Key not update', data: [] });

@@ -759,6 +759,20 @@ export async function GET_BROKER_INFORMATION(data, token) {
     }
 
 }
+// GET BROKER RESPONSE
+export async function UPDATE_BROKER_INFORMATION(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/broker_information`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
 
 
 
