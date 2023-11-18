@@ -37,7 +37,7 @@ const Sidebar = ({ ShowSidebar }) => {
     const [admin_permission, setAdmin_permission] = useState([]);
 
 
-    console.log("admin_permission", admin_permission.data && admin_permission.data[0])
+    // console.log("admin_permission", admin_permission.data && admin_permission.data[0])
 
     //  GET SUBADMIN PERMISSION
     const data2 = async () => {

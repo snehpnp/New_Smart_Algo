@@ -28,8 +28,8 @@ class OptionChain {
 
     // GET SYMBOLL EXPIRY
     async Get_Option_Symbol_Expiry(req, res) {
-     
-        console.log(" req.body.symbol ",req.body.symbol);
+
+        console.log(" req.body.symbol ", req.body.symbol);
 
 
         try {
@@ -39,99 +39,67 @@ class OptionChain {
                 return res.status(400).json({ status: false, msg: 'Symbol is required.', data: [] });
             }
 
-          
             const date = new Date(); // Month is 0-based, so 10 represents November
 
-            const formattedDate = date.toISOString();
+            const currentDate = new Date();
+            const previousDate = new Date(currentDate);
+            previousDate.setDate(currentDate.getDate() - 1);
+            //  const date = new Date(); // Month is 0-based, so 10 represents November
+
+            const formattedDate = previousDate.toISOString();
 
 
-            const pipeline =    [
+            const pipeline = [
                 {
-                $match: { symbol: symbol }
+                    $match: { symbol: symbol }
                 },
                 {
-                $group: {
-                _id: "$symbol",
-                uniqueExpiryValues: { $addToSet: "$expiry" }
-                }
+                    $group: {
+                        _id: "$symbol",
+                        uniqueExpiryValues: { $addToSet: "$expiry" }
+                    }
                 },
                 {
-                $unwind: "$uniqueExpiryValues"
+                    $unwind: "$uniqueExpiryValues"
                 },
                 {
-                $addFields: {
-                expiryDate: {
-                $dateFromString: {
-                dateString: "$uniqueExpiryValues",
-                format: "%d%m%Y"
-                }
-                }
-                }
+                    $addFields: {
+                        expiryDate: {
+                            $dateFromString: {
+                                dateString: "$uniqueExpiryValues",
+                                format: "%d%m%Y"
+                            }
+                        }
+                    }
                 },
                 {
-                $match: {
-                expiryDate: { $gte:new Date(formattedDate) }
-                
-                
-                }
-                
-                
+                    $match: {
+                        expiryDate: { $gte: new Date(formattedDate) }
+                    }
                 },
-                
-                
                 {
-                
-                
-                $addFields: {
-                
-                
-                formattedExpiryDate: {
-                
-                
-                $dateToString: {
-                
-                
-                date: "$expiryDate",
-                
-                
-                format: "%d%m%Y"
-                
-                
-                }
-                
-                
-                }
-                
-                
-                }
-                
-                
+                    $addFields: {
+                        formattedExpiryDate: {
+                            $dateToString: {
+                                date: "$expiryDate",
+                                format: "%d%m%Y"
+                            }
+                        }
+                    }
                 },
-                
-                
                 {
-                
-                
-                $sort: { expiryDate: 1 }
-                
-                
+                    $sort: { expiryDate: 1 }
                 },
-                
-                
                 {
-                
-                
-                $limit: 4
-                
-                
+                    $limit: 4
                 }
-                
-                
-                ]
+
+
+            ]
 
             const result = await Alice_token.aggregate(pipeline);
 
-          //  console.log(" result -",result)
+            //  console.log(" result -",result)
             if (result.length === 0) {
                 return res.json({ status: false, msg: 'Symbol not found.', data: [] });
             }
@@ -304,8 +272,8 @@ class OptionChain {
                     let segment = ""
                     result.forEach(element1 => {
                         if (element.strike == element1.strike) {
-                            console.log("symbol", element.strike)
-                            console.log("segment", element1.strike)
+                            // console.log("symbol", element.strike)
+                            // console.log("segment", element1.strike)
 
 
                             if (element1.option_type == "CE") {
@@ -342,16 +310,23 @@ class OptionChain {
     }
 
     // GET All ROUND TOKEN
-
     async Open_Position(req, res) {
         try {
 
-            var symbols = await MainSignals_modal.find({ "TradeType": "OPTION_CHAIN", });
-            if (!symbols) {
+            var GetTrade = await MainSignals_modal.aggregate([
+                {
+                    $match: {
+                        "TradeType": "OPTION_CHAIN",
+                        $expr: { $gt: ["$entry_qty_percent", "$exit_qty_percent"] }
+                    }
+                }
+            ]);
+
+            if (!GetTrade) {
                 return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
             }
 
-            return res.send({ status: true, msg: 'Done', data: symbols });
+            return res.send({ status: true, msg: 'Done', data: GetTrade });
 
         } catch (error) {
             console.log("Theme error-", error);

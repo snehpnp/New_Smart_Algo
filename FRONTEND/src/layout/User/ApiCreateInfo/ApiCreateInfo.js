@@ -23,6 +23,8 @@ const ApiCreateInfo = () => {
   const userInfo = JSON.parse(localStorage.getItem("user_details"))
   const broker = JSON.parse(localStorage.getItem("user_details")).broker;
   const type = JSON.parse(localStorage.getItem("user_details")).type;
+  const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
+  const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
 
   const [showModal, setshowModal] = useState(false);
   const [modalData, setModalData] = useState([]);
@@ -45,7 +47,7 @@ const ApiCreateInfo = () => {
           });
         }
       });
-    await dispatch(User_Api_Create_Info({ user_id: userInfo.user_id, token: userInfo.token }))
+    await dispatch(User_Api_Create_Info({ user_id: gotodashboard ? GoToDahboard_id.user_id :  userInfo.user_id, token: userInfo.token }))
       .unwrap()
       .then((response) => {
         if (response.status) {
@@ -83,10 +85,11 @@ const ApiCreateInfo = () => {
 
   const ShowData = (item) => {
     setshowModal(true);
+    console.log("item",item);
     setModalData(item);
   };
 
-  console.log("UserInfo", UserInfo && UserInfo.license_type)
+  console.log("UserInfo", UserInfo && UserInfo.broker)
 
   return (
     <>
@@ -98,7 +101,8 @@ const ApiCreateInfo = () => {
             <div class="row">
               <section class="card__container">
                 {UserDetails.data &&
-                  UserDetails.data.slice(0, 1).map((item) => {
+                  UserDetails.data.map((item) => {
+                   if(item.broker_id == UserInfo.broker){
                     return (
                       <>
                         <div class="card__bx card__1">
@@ -129,6 +133,9 @@ const ApiCreateInfo = () => {
                         </div>
                       </>
                     );
+
+                    }
+
                   })}
               </section>
             </div>
@@ -163,12 +170,12 @@ const ApiCreateInfo = () => {
                   {/* <a href={modalData.steponeurl} target="_blank" className="my-3" >{modalData.steponeurl} </a><br /> */}
                   <a
                     href={
-                      "https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB"
+                      modalData.steponeurl
                     }
                     target="_blank"
                     className="my-3"
                   >
-                    https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB
+                    {modalData.steponeurl}
                   </a>
                   <br />
                   {modalData.imageone ? (
@@ -193,13 +200,13 @@ const ApiCreateInfo = () => {
                   </h4>
                   {/* <a href={modalData.steptwourl} target="_blank"  >{modalData.steptwourl} </a> */}
                   <a
-                    href={`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
+                    href={`${Config.base_url+modalData.steptwourl}`}
                     target="_blank"
                   >
-                    {`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
+                    {`${Config.base_url+modalData.steptwourl}`}
                   </a>
                   <br />
-                  {modalData.imagetwo ? (
+                  {/* {modalData.imagetwo ? (
                     <img
                       src={modalData.imagetwo}
                       alt=""
@@ -207,7 +214,7 @@ const ApiCreateInfo = () => {
                     />
                   ) : (
                     ""
-                  )}
+                  )} */}
                 </>
               ) : (
                 ""

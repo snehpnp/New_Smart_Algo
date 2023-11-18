@@ -8,6 +8,7 @@ const Role = require('./role.model')
 
 // Employee Financial Information Collection
 const userModel = Schema({
+  
     FullName: {
         type: String,
         required: true,
@@ -131,7 +132,7 @@ const userModel = Schema({
     },
     broker: {
         type: String,
-        enum: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], //1 = Market Hub,2=Alice Blue,3=Master Trust , 4 = Motilal Oswal
+        enum: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10','11','12', '13', '14', '15', '16', '17', '18', '19',], //1 = Market Hub,2=Alice Blue,3=Master Trust , 4 = Motilal Oswal
         default: '0'
     },
     access_token: {

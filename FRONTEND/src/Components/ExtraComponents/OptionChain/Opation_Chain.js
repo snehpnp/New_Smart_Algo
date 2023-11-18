@@ -21,6 +21,10 @@ import * as Config from "../../../Utils/Config";
 import toast, { Toaster } from 'react-hot-toast';
 
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+// import { Get_Panel_Informtion  } from "../../../ReduxStore/Slice/Auth/AuthSlice";
+import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
+
+
 
 const HelpCenter = () => {
 
@@ -66,7 +70,7 @@ const HelpCenter = () => {
     const [UserDetails, setUserDetails] = useState([]);
     const [showModal, setshowModal] = useState(false);
 
-    console.log("UserDetails", UserDetails != undefined && UserDetails.trading_status)
+    const [getBrokerUrl, setBrokerUrl] = useState('')
 
     const [symbol, setSymbol] = useState('')
     const [expiry, setExpiry] = useState('')
@@ -74,9 +78,23 @@ const HelpCenter = () => {
     const [ButtonDisabled, setButtonDisabled] = useState(false)
     const [refresh, setRefresh] = useState(false)
 
+    const [disabled, setDisabled] = useState(false);
+
+    const handleClickDisabled = () => {
+        setDisabled(true);
+      }
 
 
 
+    const getPanelDetails = async () => {
+        await dispatch(GET_COMPANY_INFOS())
+
+          .unwrap()
+          .then((response) => {
+            let res = response.data[0]
+           setBrokerUrl(res.broker_url)
+          });
+      };
 
 
     const columns = [
@@ -393,7 +411,7 @@ const HelpCenter = () => {
 
 
     const Done_For_Trade = (id) => {
-
+        handleClickDisabled();
         // console.log("ExecuteTradeData", ExecuteTradeData)
         // return
         const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -405,7 +423,7 @@ const HelpCenter = () => {
                 method: 'post',
                 maxBodyLength: Infinity,
                 // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                url: `${Config.broker_url}broker-signals`,
+                url: `${getBrokerUrl && getBrokerUrl}`,
                 headers: {
                     'Content-Type': 'text/plain'
                 },
@@ -466,6 +484,7 @@ const HelpCenter = () => {
             })
     }
     useEffect(() => {
+        getPanelDetails()
         symbols()
         getPanelKey()
         GetAllStrategyName();
@@ -765,8 +784,9 @@ const HelpCenter = () => {
                                 <div className="col-md-4 d-flex justify-content-end align-items-center text-secondary ">
                                     <button
                                         className="btn btn-primary me-2"
-                                        onClick={(e) => ExcuteTradeButton()}
-                                        disabled={CreateSignalRequest.length === 0}
+                                        onClick={(e) =>ExcuteTradeButton() }
+                                       disabled={CreateSignalRequest.length === 0}
+                                     
                                     >
                                         Execute Trade
                                     </button>
@@ -787,7 +807,7 @@ const HelpCenter = () => {
                                         title="Request Confirmation"
                                         cancel_btn={true}
                                         // hideBtn={false}
-                                        disabled_submit={ButtonDisabled}
+                                        disabled_submit={disabled}
                                         hideCloseButton={true}
                                         btn_name="Confirm"
                                         Submit_Function={Done_For_Trade}

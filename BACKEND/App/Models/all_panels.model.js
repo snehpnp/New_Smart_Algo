@@ -9,7 +9,8 @@ const panelSchema = new mongoose.Schema({
     domain: {
         type: String,
         required: [true, "Please enter Domain name unique!"],
-        unique: true
+        unique: true,
+        index: true
     },
     port: {
         type: String,

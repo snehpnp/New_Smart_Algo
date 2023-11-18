@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Accordion from 'react-bootstrap/Accordion';
-import { Get_Broker_Response, UpdateBrokerResponse ,GET_ALL_BROKER_RESPONSES} from "../../../ReduxStore/Slice/Users/BrokerResponseSlice"
+import { Get_Broker_Response, UpdateBrokerResponse, GET_ALL_BROKER_RESPONSES } from "../../../ReduxStore/Slice/Users/BrokerResponseSlice"
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable"
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -157,20 +157,18 @@ const BrokerResponse = () => {
 
 
   const updateBrokerResponse = async (e) => {
-    await dispatch(GET_ALL_BROKER_RESPONSES({user_id:user_Id})).unwrap()
+    await dispatch(GET_ALL_BROKER_RESPONSES({ user_id: user_Id })).unwrap()
       .then((response) => {
         if (response.status) {
-    
+
         }
       })
   }
 
 
-
   // GET ALL GROUP SERVICES NAME
   const GetAllServicesName = async (row) => {
     // GetBrokerInforMation(row)
-
     setBrokerResponseId(row)
     setshowModal(true)
 
@@ -216,7 +214,7 @@ const BrokerResponse = () => {
 
     <Content Page_title="Broker Response" button_status={false}>
 
-<button className='btn btn-primary d-flex ms-auto mb-3' type="reset" onClick={(e)=>setrefresh(!refresh)}>Refresh</button>
+      <button className='btn btn-primary d-flex ms-auto mb-3' type="reset" onClick={(e) => setrefresh(!refresh)}>Refresh</button>
       <FullDataTable TableColumns={columns} tableData={DashboardData.data} />
 
 
@@ -246,6 +244,11 @@ const BrokerResponse = () => {
                   <tr>
                     <td className="bg-table"> Order Id</td>
                     <td>{BrokerResponseId.order_id}</td>
+                  </tr>
+                  <tr>
+
+                    <td className="bg-table"> Receive Signal</td>
+                    <td className="order-date-cell">{atob(BrokerResponseId.receive_signal)}</td>
                   </tr>
                   <tr>
 

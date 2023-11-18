@@ -110,21 +110,21 @@ const Dashboard1 = ({ data }) => {
     },
     {
       index: 13,
-      name: "Total Licence",
+      name: "Total License",
       value: data && data.all_licence,
       icon: 'la la-users',
       route: "/admin/allLicence?filter=0",
       visible: true
     }, {
       index: 14,
-      name: "Remaining  Licence",
+      name: "Remaining  License",
       value: data && data.remaining_licence,
       icon: 'la la-users',
       route: "/admin/allLicence",
       visible: false
     }, {
       index: 15,
-      name: "Used  Licence",
+      name: "Used  License",
       value: data && data.used_licence,
       icon: 'la la-users',
       route: "/admin/allLicence?filter=1",

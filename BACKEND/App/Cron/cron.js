@@ -183,7 +183,7 @@ const TokenSymbolUpdate = () => {
     axios(config)
         .then(function (response) {
             response.data.forEach(function (element) {
-                console.log("element");
+                // console.log("element");
 
                 var option_type = element.symbol.slice(-2);
                 var expiry_s = element.expiry

@@ -43,12 +43,14 @@ const BrokerResponse = db.BrokerResponse;
 // CONNECTION FILE IN MONGOODE DATA BASE 
 const MongoClient = require('mongodb').MongoClient;
 
-const uri = 'mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net';
+const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 client.connect();
 console.log("Connected to MongoDB BrokerServer successfully!.....");
-const db1 = client.db('test');
+const db1 = client.db(process.env.DB_NAME);
+// console.log("Connected to MongoDB " + process.env.DB_NAME);
+
 
 
 
@@ -76,35 +78,48 @@ const corsOpts = {
 };
 app.use(cors(corsOpts));
 
-var d = new Date();
-var current_date = [d.getFullYear(),
-d.getMonth() + 1,
-d.getDate(),
-].join('/') + ' ' + [d.getHours(),
-d.getMinutes(),
-d.getSeconds()
-].join(':');
-
-// var dt_date = [d.getFullYear(),
-// d.getMonth() + 1,
-// d.getDate(),
-// ].join('/');
+require('./Helper/cron')(app);
 
 
 
+
+
+
+
+
+
+
+
+
+// ==================================================================================================
+// MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
 
 
 
 // BROKER REQUIRES
 const aliceblue = require('./Broker/aliceblue')
-//const aliceblueTest = require('./Broker/aliceblue')
 
-// MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
+const angel = require('./Broker/angel')
+const fivepaisa = require('./Broker/fivepaisa')
+const zerodha = require('./Broker/zerodha')
 
-// TEST API
+
+// BROKER SIGNAL
 app.post('/broker-signals', async (req, res) => {
 
+  var d = new Date();
+  var current_date = [d.getFullYear(),
+  d.getMonth() + 1,
+  d.getDate(),
+  ].join('/') + ' ' + [d.getHours(),
+  d.getMinutes(),
+  d.getSeconds()
+  ].join(':');
 
+  var dt_date = [d.getFullYear(),
+  d.getMonth() + 1,
+  d.getDate(),
+  ].join('/');
 
   const currentDate = new Date();
   const year = currentDate.getFullYear();
@@ -118,49 +133,6 @@ app.post('/broker-signals', async (req, res) => {
 
   var directoryfilePath = path.join(__dirname + '/AllPanelTextFile');
   var paneltxtentry = 0;
-
-  // console.log("filePath", filePath)
-  // console.log("directoryfilePath", directoryfilePath)
-
-  // fs.readdir(directoryfilePath, function (err1, files) {
-  //   console.log("files", files)
-  //   if (files.length > 0) {
-  //     files.forEach(async function (file) {
-
-  //       console.log("file", file)
-
-  //       if (file != 'PANELKEY' + process.env.PANEL_KEY + process.env.PANEL_NAME + formattedDate + '.txt') {
-  //         //paneltxtentry = 1;
-  //         fs.appendFile(filePath, '\nNEW TRADE GET ' + new Date() + ' \n', function (err) {
-  //           if (err) {
-  //             return console.log(err);
-  //           }
-  //           console.log("Data created if");
-  //         });
-
-  //       }
-
-  //     });
-  //   } else {
-
-  //     fs.appendFile(filePath, 'INSERT FILE ' + new Date() + '\n', function (err) {
-  //       if (err) {
-  //         return console.log(err);
-  //       }
-  //       console.log("Data created else");
-  //     });
-
-  //   }
-
-  // });
-
-
-  // fs.appendFile(filePath, '\nNEW TRADE GET ' + new Date() + ' \n', function (err) {
-  //     if (err) {
-  //       return console.log(err);
-  //     }
-  //     console.log("Data created if");
-  //    });
 
   try {
 
@@ -189,12 +161,11 @@ app.post('/broker-signals', async (req, res) => {
 
       const epochTimestamp = signals.DTime; // Replace with your timestamp
 
-// Create a new Date object using the epoch timestamp
-const date = new Date(epochTimestamp * 1000); // Convert to milliseconds by multiplying by 1000
-const formattedDate1 = date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
-const parts = formattedDate1.split('/');
-const dt_date = `${parts[2]}/${parts[0]}/${parseInt(parts[1], 10)}`;
-console.log(dt_date); 
+      // Create a new Date object using the epoch timestamp
+      const date = new Date(epochTimestamp * 1000); // Convert to milliseconds by multiplying by 1000
+      const formattedDate1 = date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      const parts = formattedDate1.split('/');
+      console.log(dt_date);
 
 
       var dt = signals.DTime;
@@ -217,34 +188,11 @@ console.log(dt_date);
 
       var demo = signals.Demo;
 
-
-      // var dt = splitArray[0]
-      // var input_symbol = splitArray[1]
-      // var type = splitArray[2]
-      // var tr_price = splitArray[3]
-      // var price = splitArray[4]
-      // var sq_value = splitArray[5]
-      // var sl_value = splitArray[6]
-      // var tsl = splitArray[7]
-      // var segment = splitArray[8]
-      // var segment1 = splitArray[8]
-      // var strike = splitArray[9]
-      // var option_type = splitArray[10]
-      // var expiry = splitArray[11]
-      // var strategy = splitArray[12]
-      // var qty_percent = splitArray[13]
-      // var client_key = splitArray[14]
-      // var demo = splitArray[15]
-
-
-      //console.log("client_key",client_key)
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
 
         const FIRST3_KEY = client_key.substring(0, 3);
 
-        // console.log("FIRST3_KEY", FIRST3_KEY);
-        // console.log("process.env.PANEL_FIRST_THREE",process.env.PANEL_FIRST_THREE);
         // IF SIGNEL KEY NOT MATCH CHECK
         if (FIRST3_KEY == process.env.PANEL_FIRST_THREE) {
 
@@ -342,7 +290,8 @@ console.log(dt_date);
             instrument_query = { symbol: input_symbol, segment: "CF", expiry: expiry, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE" }
             EXCHANGE = "CDS";
           }
-          // console.log("findSignal==>>>>", findSignal);
+
+
 
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
@@ -366,7 +315,24 @@ console.log(dt_date);
           } else {
             find_lot_size = token[0].lotsize
           }
-          // console.log(find_lot_size);
+
+
+          var tradesymbol1
+          if (token.length == 0) {
+            tradesymbol1 = ""
+          } else {
+            if (segment == 'C' || segment == 'c') {
+              tradesymbol1 = token[0].zebu_token
+            } else {
+              tradesymbol1 = token[0].tradesymbol
+            }
+          }
+          console.log("tradesymbol1", tradesymbol1);
+
+
+
+
+
 
           fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS_TOKEN ' + instrument_token + '\n', function (err) {
             if (err) {
@@ -379,11 +345,8 @@ console.log(dt_date);
 
           if (process.env.PANEL_KEY == client_key) {
             //Process Alice Blue admin client
-            const AliceBlueCollection = db1.collection('aliceblueView');
-            // var query = {"strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment,web_url:"1"}
-            // console.log("query",query)
             try {
-
+              const AliceBlueCollection = db1.collection('aliceblueView');
               const AliceBluedocuments = await AliceBlueCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
 
@@ -406,13 +369,87 @@ console.log(dt_date);
             //End Process Alice Blue admin client
 
 
+            //Process Angel admin client
+            try {
+              const angelCollection = db1.collection('angelView');
+             // console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+              const angelBluedocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + angelBluedocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+              console.log("ANGEL ALL CLIENT LENGTH", angelBluedocuments.length)
+
+
+              if (angelBluedocuments.length > 0) {
+                angel.place_order(angelBluedocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get ANGEL Client In view", error);
+            }
+            //End Process Angel admin client
+
+
+            //Process fivepaisa admin client
+            try {
+              const fivepaisaCollection = db1.collection('fivepaisaView');
+              console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+              const fivepaisaBluedocuments = await fivepaisaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + fivepaisaBluedocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+              console.log("fivepaisa ALL CLIENT LENGTH", fivepaisaBluedocuments.length)
+
+
+              if (fivepaisaBluedocuments.length > 0) {
+                fivepaisa.place_order(fivepaisaBluedocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get fivepaisa Client In view", error);
+            }
+            //End Process fivepaisa admin client
+
+
+
+            //Process zerodha admin client
+            try {
+              const zerodhaCollection = db1.collection('zerodhaView');
+              console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+              const zerodhaBluedocuments = await zerodhaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + zerodhaBluedocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+              console.log("zerodha ALL CLIENT LENGTH", zerodhaBluedocuments.length)
+
+
+              if (zerodhaBluedocuments.length > 0) {
+                zerodha.place_order(zerodhaBluedocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get zerodha Client In view", error);
+            }
+            //End Process zerodha admin client
+
+
           } else {
 
             //Process Tading View Client Alice Blue
-            const AliceBlueCollection = db1.collection('aliceblueView');
-            // var query = {"strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key,web_url : "2"}
-            //console.log("query",query)
             try {
+              const AliceBlueCollection = db1.collection('aliceblueView');
               const AliceBluedocuments = await AliceBlueCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
 
               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE TRADING VIEW CLIENT LENGTH ' + AliceBluedocuments.length + '\n', function (err) {
@@ -431,6 +468,76 @@ console.log(dt_date);
               console.log("Error Get Aliceblue Client In view", error);
             }
             //End Process Tading View Client Alice Blue  
+
+
+            //Process Tading View Client ANGEL
+            try {
+              const angelCollection = db1.collection('angelView');
+              const angeldocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL TRADING VIEW CLIENT LENGTH ' + angeldocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+              console.log("Angeldocuments trading view length", angeldocuments.length)
+
+              if (angeldocuments.length > 0) {
+                angel.place_order(angeldocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get Angel Client In view", error);
+            }
+            //End Process Tading View Client ANGEL 
+
+
+
+            //Process Tading View Client fivepaisa
+            try {
+              const fivepaisaCollection = db1.collection('fivepaisaView');
+              const fivepaisadocuments = await fivepaisaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' fivepaisa TRADING VIEW CLIENT LENGTH ' + fivepaisadocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+              console.log("fivepaisadocuments trading view length", fivepaisadocuments.length)
+
+              if (fivepaisadocuments.length > 0) {
+                fivepaisa.place_order(fivepaisadocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get fivepaisa Client In view", error);
+            }
+            //End Process Tading View Client fivepaisa 
+
+
+            //Process Tading View Client zerodha
+            try {
+              const zerodhaCollection = db1.collection('zerodhaView');
+              const zerodhadocuments = await zerodhaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' zerodha TRADING VIEW CLIENT LENGTH ' + zerodhadocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+              console.log("zerodhadocuments trading view length", zerodhadocuments.length)
+
+              if (zerodhadocuments.length > 0) {
+                zerodha.place_order(zerodhadocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get zerodha Client In view", error);
+            }
+            //End Process Tading View Client zerodha 
 
           }
 
@@ -487,7 +594,7 @@ console.log(dt_date);
               client_persnal_key: client_persnal_key,
               TradeType: TradeType,
               token: instrument_token,
-              lot_size:find_lot_size
+              lot_size: find_lot_size
             }
 
             let Signal_req1 = new Signals(Signal_req)
@@ -496,6 +603,9 @@ console.log(dt_date);
             console.log("Insert Signal - ", error)
             return res.send("ok")
           }
+
+
+
           // ENTRY OR EXIST CHECK
           if (type == "LE" || type == "le" || type == "SE" || type == "Se") {
 
@@ -527,7 +637,7 @@ console.log(dt_date);
                 TradeType: TradeType,
                 signals_id: SignalSave._id,
                 token: instrument_token,
-              lot_size:find_lot_size
+                lot_size: find_lot_size
 
               }
               const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
@@ -574,7 +684,7 @@ console.log(dt_date);
               } else {
                 if (ExitMainSignals[0].entry_qty_percent >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
                   var updatedData = {
-                    exit_type: type,  
+                    exit_type: type,
                     exit_price: (((parseFloat(price) * parseFloat(qty_percent)) + ((isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)) * (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) / ((isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)) + parseFloat(qty_percent))),
 
                     exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
@@ -594,17 +704,11 @@ console.log(dt_date);
 
 
             } else {
-
-              console.log("PRIVIOUS SEGNAL UPDATE")
+              console.log(findSignal);
+              console.log("PRIVIOUS SIGNAL UPDATE")
 
             }
           }
-
-
-
-
-
-
 
           // return res.send({ msg: FIRST3_KEY })
 
@@ -626,8 +730,6 @@ console.log(dt_date);
     console.log("error", error);
   }
 })
-
-
 
 
 

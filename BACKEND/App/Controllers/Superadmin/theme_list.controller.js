@@ -57,7 +57,7 @@ class Theme {
                     res.send({ status: true, msg: "successfully Add!", data: data });
                 })
                 .catch((err) => {
-                    console.log("err", err);
+                    // console.log("err", err);
                     if (err.keyValue) {
                         res.send({ status: false, msg: "Duplicate data", data: err.keyValue });
                     }

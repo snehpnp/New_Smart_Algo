@@ -30,7 +30,7 @@ class AliceBlue {
 
             var broker_infor = await Broker_information.find({ broker_name: "Alice Blue" })
             var apiSecret = broker_infor[0].apiSecret
-            console.log("broker_infor", apiSecret);
+            // console.log("broker_infor", apiSecret);
 
             var hosts = req.headers.host;
 
@@ -77,10 +77,10 @@ class AliceBlue {
 
                                     }
                                 };
-                                console.log("updateOperation", updateOperation);
+                                // console.log("updateOperation", updateOperation);
 
                                 const result = await live_price.updateOne(filter, updateOperation);
-                                console.log("redirect_uri 1", redirect_uri);
+                                // console.log("redirect_uri 1", redirect_uri);
 
                                 return res.redirect(redirect_uri);
 
@@ -103,9 +103,9 @@ class AliceBlue {
                                         system_ip: getIPAddress()
                                     })
                                     await user_login.save();
-                                    console.log("user_login", user_login);
+                                    // console.log("user_login", user_login);
                                     if (user_login) {
-                                        console.log("redirect_uri", redirect_uri);
+                                        // console.log("redirect_uri", redirect_uri);
 
                                         return res.redirect(redirect_uri);
 
@@ -125,7 +125,7 @@ class AliceBlue {
 
                     })
                     .catch(function (error) {
-                        console.log('access token error ', error);
+                        // console.log('access token error ', error);
                     });
 
             }
@@ -149,7 +149,7 @@ class AliceBlue {
 
 
             if (!OrderId || !user_id) {
-                console.log("Please Fill All Feild");
+                // console.log("Please Fill All Feild");
                 return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
 
             }
@@ -176,10 +176,10 @@ class AliceBlue {
                     },
                     data: data
                 };
-                console.log("config", config);
+                // console.log("config", config);
                 axios(config)
                     .then(async (response) => {
-                        console.log(response.data[0]);
+                        // console.log(response.data[0]);
                         if (response.data[0]) {
 
                             const message = (JSON.stringify(response.data[0]));
@@ -201,7 +201,7 @@ class AliceBlue {
 
 
                         } else {
-                            console.log("NO DATA FOUND");
+                            // console.log("NO DATA FOUND");
                         }
                     })
                     .catch(async (error) => {
@@ -277,7 +277,7 @@ class AliceBlue {
 
 
             if (!OrderId || !user_id) {
-                console.log("Please Fill All Feild");
+                // console.log("Please Fill All Feild");
                 return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
 
             }
@@ -305,11 +305,11 @@ class AliceBlue {
 
             axios(config)
                 .then(async (response) => {
-                    console.log("==>", response.data.stat);
+                    // console.log("==>", response.data.stat);
                     if (response.data) {
                         if (response.data.stat == "Ok") {
 
-                            GetAllBrokerResponse(user_id)
+                            GetAllBrokerResponse(user_id,res)
                             return res.send({ status: true, msg: "Order Cancel Successfully", data: response.data });
 
                         } else {
@@ -321,7 +321,7 @@ class AliceBlue {
 
                 })
                 .catch(async (error) => {
-                    console.log("error", error);
+                    // console.log("error", error);
                     return res.send({ status: false, msg: "Order Cancel Error", data: error });
                 })
 
@@ -336,12 +336,9 @@ class AliceBlue {
 
     }
 
-
-
-
     // UPDATE ALL CLIENT BROKER RESPONSE
     async GetOrderFullInformationAll(req, res) {
-
+       
         try {
             const { user_id } = req.body
 
@@ -349,7 +346,7 @@ class AliceBlue {
                 return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
             }
 
-            GetAllBrokerResponse(user_id)
+            GetAllBrokerResponse(user_id,res)
 
 
         } catch (error) {
@@ -367,13 +364,13 @@ class AliceBlue {
 
 }
 
-const GetAllBrokerResponse = async (user_id) => {
+const GetAllBrokerResponse = async (user_id,res) => {
 
     try {
         const objectId = new ObjectId(user_id);
         var FindUserAccessToken = await User.find({ _id: objectId })
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId })
-    
+    // 
         if (FindUserBrokerResponse.length > 0) {
     
             FindUserBrokerResponse.forEach((data1) => {
@@ -394,7 +391,7 @@ const GetAllBrokerResponse = async (user_id) => {
                 };
                 axios(config)
                     .then(async (response) => {
-                        console.log(response.data[0]);
+                        // console.log(response.data[0]);
                         if (response.data[0]) {
     
                             const message = (JSON.stringify(response.data[0]));
@@ -413,7 +410,7 @@ const GetAllBrokerResponse = async (user_id) => {
     
     
                         } else {
-                            console.log("NO DATA FOUND");
+                            // console.log("NO DATA FOUND");
                         }
                     })
                     .catch(async (error) => {
@@ -423,10 +420,12 @@ const GetAllBrokerResponse = async (user_id) => {
     
     
             })
-    
+           res.send({status:true,msg:"broker response updated successfully"})
     
         } else {
-        }
+            res.send({status:false,msg:"no user found"})
+         }
+
     } catch (error) {
         console.log("Error in broker response in order Id".error);
     }

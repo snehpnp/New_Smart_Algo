@@ -9,6 +9,9 @@ import { Email_regex, Mobile_regex } from "../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
 import { Add_Licence_To_Company } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 
+import toast, { Toaster } from 'react-hot-toast';
+
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
     const dispatch = useDispatch()
@@ -40,14 +43,15 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
 
             await dispatch(Add_Licence_To_Company(req)).unwrap().then((response) => {
 
-                // console.log("response", response)
-                if (response.status === 409) {
-                    // toast.error(response.data.msg);
+                console.log("response", response)
+                if (response.status == false) {
+                    toast.error(response.data.msg);
                 }
                 else if (response.status) {
-                    // toast.success(response.msg);
+                    toast.success(response.msg);
                     setTimeout(() => {
                         // navigate("/admin/allclients")
+                        window.location.reload()
                     }, 1000);
                 }
                 else if (!response.status) {

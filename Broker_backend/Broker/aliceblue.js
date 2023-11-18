@@ -19,7 +19,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
    
         var dt = signals.DTime;
         var input_symbol = signals.Symbol;
-        var type = signals.TType;
+        var type = signals.TType.toUpperCase();
         var tr_price = signals.Tr_Price;
         var price = signals.Price;
         var sq_value = signals.Sq_Value;
@@ -35,6 +35,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         var client_key = signals.Key;
         var demo = signals.Demo;
 
+        console.log("token",token[0].lotsize);
 
         if (type == 'LE' || type == 'SE') {
             // console.log("trade entry")
@@ -68,10 +69,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                         const filePath_aliceblue = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
 
-                        //  const command = `grep ,${pattern}, ${filePath}`;
-                        const command = `findstr ,${pattern}, ${filePath_aliceblue}`;
+                       const command = `grep ,${pattern}, ${filePath_aliceblue}`;
+                     //   const command = `findstr ,${pattern}, ${filePath_aliceblue}`;
 
-                        console.log("command ", command)
+                        // console.log("command ", command)
 
                         try {
 
@@ -175,9 +176,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         })
                         .catch((err) => {
                             try {
-                                console.error('Error creating and saving user:', err);
+                                // console.error('Error creating and saving user:', err);
                             } catch (e) {
-                                console.log("duplicate key")
+                                // console.log("duplicate key")
                             }
 
                         });
@@ -200,11 +201,11 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             console.log("trade exit")
 
 
-
-
             const requestPromises = AllClientData.map(async (item) => {
 
                 if (token != 0) {
+
+                    
 
                     // console.log("user id ", item.demat_userid)
                     // console.log("postdata before", item.postdata)
@@ -227,6 +228,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                         item.postdata.price = price
                     }
+
+
 
                     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
@@ -254,113 +257,100 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                             if (response.data.length > 0) {
 
-                                response.data.forEach(async (item1, index) => {
-                                    // console.log("item1.Token", item1.Token);
-                                    //  console.log("item1.Token match", token[0].instrument_token);
+                                const Exist_entry_order = response.data.body.NetPositionDetail.find(item1 => item1.Token === token[0].instrument_token && item1.Pcode == item.postdata.pCode);
 
+                                if(Exist_entry_order != undefined){
+                                    if (segment.toUpperCase() == 'C') {
 
-                                    if (item1.Token == token[0].instrument_token && item1.Pcode == item.postdata.pCode) {
-                                        //  console.log("item.postdata", item.postdata);
-                                        // console.log("item.postdata", item.postdata.pCode);
-                                        // console.log("item.postdata 5", item1.Pcode);
+                                        const possition_qty = parseInt(Exist_entry_order.Bqty) - parseInt(Exist_entry_order.Sqty);
+                                        // console.log("possition_qty Cash", possition_qty);
+                                        if (possition_qty == 0) {
+                                            // console.log("possition_qty Not Available", possition_qty);
+                                            BrokerResponse.create({
+                                                user_id: item._id,
+                                                receive_signal: signal_req,
+                                                strategy: strategy,
+                                                type: type,
+                                                symbol: input_symbol,
+                                                order_status: "Entry Not Exist",
+                                                reject_reason: "This Script position Empty ",
+                                                broker_name: "ALICE BLUE",
+                                                send_request: send_rr,
+                                                open_possition_qty: possition_qty,
 
-                                        if (segment.toUpperCase() == 'C') {
-
-                                            var possition_qty = parseInt(item1.Bqty) - parseInt(item1.Sqty);
-                                            // console.log("possition_qty Cash", possition_qty);
-                                            if (possition_qty == 0) {
-                                                // console.log("possition_qty Not Available", possition_qty);
-                                                BrokerResponse.create({
-                                                    user_id: item._id,
-                                                    receive_signal: signal_req,
-                                                    strategy: strategy,
-                                                    type: type,
-                                                    symbol: input_symbol,
-                                                    order_status: "Entry Not Exist",
-                                                    reject_reason: "This Script position Empty ",
-                                                    broker_name: "ALICE BLUE",
-                                                    send_request: send_rr,
-                                                    open_possition_qty: possition_qty,
-
+                                            })
+                                                .then((BrokerResponseCreate) => {
+                                                    // console.log('User created and saved:', BrokerResponseCreate._id)
                                                 })
-                                                    .then((BrokerResponseCreate) => {
-                                                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                                                    })
-                                                    .catch((err) => {
-                                                        try {
-                                                            console.error('Error creating and saving user:', err);
-                                                        } catch (e) {
-                                                            console.log("duplicate key")
-                                                        }
+                                                .catch((err) => {
+                                                    try {
+                                                        console.error('Error creating and saving user:', err);
+                                                    } catch (e) {
+                                                        console.log("duplicate key")
+                                                    }
 
-                                                    });
-
-
-                                            } else {
-
-                                                console.log("possition_qty Cash trade", possition_qty);
-                                                if ((item1.Bqty - item1.Sqty) > 0 && type == 'LX') {
-                                                    ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                                } else if ((item1.Bqty - item1.Sqty) < 0 && type == 'SX') {
-                                                    ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                                }
-                                            }
-
-
-
+                                                });
 
 
                                         } else {
-                                            var possition_qty = item1.Netqty;
-                                            // console.log("possition_qty", possition_qty);
 
-                                            if (possition_qty == 0) {
-                                                // console.log("possition_qty Not Available", possition_qty);
-                                                BrokerResponse.create({
-                                                    user_id: item._id,
-                                                    receive_signal: signal_req,
-                                                    strategy: strategy,
-                                                    type: type,
-                                                    symbol: input_symbol,
-                                                    order_status: "Entry Not Exist",
-                                                    reject_reason: "This Script position Empty ",
-                                                    broker_name: "ALICE BLUE",
-                                                    send_request: send_rr,
-                                                    open_possition_qty: possition_qty,
-
-                                                })
-                                                    .then((BrokerResponseCreate) => {
-                                                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                                                    })
-                                                    .catch((err) => {
-                                                        try {
-                                                            console.error('Error creating and saving user:', err);
-                                                        } catch (e) {
-                                                            console.log("duplicate key")
-                                                        }
-
-                                                    });
-
-
-                                            } else {
-
-                                                if (item1.Netqty > 0 && type == 'LX') {
-                                                    ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                                } else if (item1.Netqty < 0 && type == 'SX') {
-                                                    ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                                }
-
+                                            console.log("possition_qty Cash trade", possition_qty);
+                                            if (possition_qty > 0 && type == 'LX') {
+                                                ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
+                                            } else if (possition_qty < 0 && type == 'SX') {
+                                                ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
                                             }
-
-
                                         }
 
 
                                     } else {
-                                        //console.log("else")
-                                    }
-                                })
+                                        const possition_qty = Exist_entry_order.Netqty;
+                                        // console.log("possition_qty", possition_qty);
 
+                                        if (possition_qty == 0) {
+                                            // console.log("possition_qty Not Available", possition_qty);
+                                            BrokerResponse.create({
+                                                user_id: item._id,
+                                                receive_signal: signal_req,
+                                                strategy: strategy,
+                                                type: type,
+                                                symbol: input_symbol,
+                                                order_status: "Entry Not Exist",
+                                                reject_reason: "This Script position Empty ",
+                                                broker_name: "ALICE BLUE",
+                                                send_request: send_rr,
+                                                open_possition_qty: possition_qty,
+
+                                            })
+                                                .then((BrokerResponseCreate) => {
+                                                    // console.log('User created and saved:', BrokerResponseCreate._id)
+                                                })
+                                                .catch((err) => {
+                                                    try {
+                                                        console.error('Error creating and saving user:', err);
+                                                    } catch (e) {
+                                                        console.log("duplicate key")
+                                                    }
+
+                                                });
+
+
+                                        } else {
+
+                                            if (possition_qty > 0 && type == 'LX') {
+                                                ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
+                                            } else if (possition_qty < 0 && type == 'SX') {
+                                                ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
+                                            }
+
+                                        }
+
+                                    }
+                                }else{
+
+                                }
+
+                               
                             } else {
 
                                 BrokerResponse.create({
@@ -516,8 +506,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         }
 
 
-
-
     } catch (error) {
 
         console.log("error", error);
@@ -527,26 +515,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
-    // var dt = splitArray[0]
-    // var input_symbol = splitArray[1]
-    // var type = splitArray[2]
-    // var tr_price = splitArray[3]
-    // var price = splitArray[4]
-    // var sq_value = splitArray[5]
-    // var sl_value = splitArray[6]
-    // var tsl = splitArray[7]
-    // var segment = splitArray[8]
-    // var strike = splitArray[9]
-    // var option_type = splitArray[10]
-    // var expiry = splitArray[11]
-    // var strategy = splitArray[12]
-    // var qty_percent = splitArray[13]
-    // var client_key = splitArray[14]
-    // var demo = splitArray[15]
-
     var dt = signals.DTime;
     var input_symbol = signals.Symbol;
-    var type = signals.TType;
+    var type = signals.TType.toUpperCase();
     var tr_price = signals.Tr_Price;
     var price = signals.Price;
     var sq_value = signals.Sq_Value;
@@ -739,29 +710,9 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
 const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req) => {
 
-    // console.log("INSIDE EXIT FUNCTION")
-    // console.log("INSIDE EXIT FUNCTION possition_qty",possition_qty)
-
-    // var dt = splitArray[0]
-    // var input_symbol = splitArray[1]
-    // var type = splitArray[2]
-    // var tr_price = splitArray[3]
-    // var price = splitArray[4]
-    // var sq_value = splitArray[5]
-    // var sl_value = splitArray[6]
-    // var tsl = splitArray[7]
-    // var segment = splitArray[8]
-    // var strike = splitArray[9]
-    // var option_type = splitArray[10]
-    // var expiry = splitArray[11]
-    // var strategy = splitArray[12]
-    // var qty_percent = splitArray[13]
-    // var client_key = splitArray[14]
-    // var demo = splitArray[15]
-
     var dt = signals.DTime;
     var input_symbol = signals.Symbol;
-    var type = signals.TType;
+    var type = signals.TType.toUpperCase();
     var tr_price = signals.Tr_Price;
     var price = signals.Price;
     var sq_value = signals.Sq_Value;

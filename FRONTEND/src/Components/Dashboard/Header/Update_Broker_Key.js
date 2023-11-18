@@ -132,7 +132,7 @@ const Update_Broker_Key = ({ closeModal }) => {
         },
         {
             name: 'demat_userid',
-            label: formik.values.broker === 9 ? 'User Id' : formik.values.broker === '2' ? 'Demat UserId' : '', type: 'text',
+            label: formik.values.broker === 9 ? 'User Id' : formik.values.broker === '2' ? 'Demat User ID' : '', type: 'text',
             showWhen: values => values.broker === '9' || values.broker === '2',
             label_size: 12, col_size: 6, disable: false
         },
@@ -177,7 +177,7 @@ const Update_Broker_Key = ({ closeModal }) => {
         formik.setFieldValue('app_id', UserDetails.data !== undefined && UserDetails.data.app_id);
         formik.setFieldValue('api_type', UserDetails.data !== undefined && UserDetails.data.api_key);
         formik.setFieldValue('client_code', UserDetails.data !== undefined && UserDetails.data.client_code);
-        formik.setFieldValue('api_key', UserDetails.data !== undefined && UserDetails.data.api_type);
+        formik.setFieldValue('api_key', UserDetails.data !== undefined && UserDetails.data.api_key);
         formik.setFieldValue('api_secret', UserDetails.data !== undefined && UserDetails.data.api_secret);
         formik.setFieldValue('app_key', UserDetails.data !== undefined && UserDetails.data.app_key);
         formik.setFieldValue('demat_userid', UserDetails.data !== undefined && UserDetails.data.demat_userid);

@@ -22,36 +22,45 @@ class Dashboard {
 
             await client.connect();
 
-            const db1 = client.db('test');
+            const db1 = client.db(process.env.DB_NAME);
             const viewName = 'dashboard_data';
 
             // Query the view to get the data
             const result = await db1.collection(viewName).find().toArray();
 
+            console.log("result", result)
+            if (result) {
+                res.send({
+                    status: true,
+                    msg: "Get Dashboard Data",
+                    totalCount: {
+                        total_client: result[0].total_client,
+                        total_active_client: result[0].total_active_client,
+                        total_expired_client: result[0].total_expired_client,
+                        total_live_client: result[0].total_live_client,
+                        total_active_live: result[0].total_active_live,
+                        total_expired_live: result[0].total_expired_live,
+                        total_demo_client: result[0].total_demo_client,
+                        total_active_demo: result[0].total_active_demo,
+                        total_expired_demo: result[0].total_expired_demo,
+                        total_two_days: result[0].total_two_days,
+                        total_active_two_days: result[0].total_active_two_days,
+                        total_expired_two_days: result[0].total_expired_two_days,
+                        all_licence: result[0].licenses,
+                        used_licence: result[0].used_licence,
+                        remaining_licence: result[0].remaining_license,
+                    }
+                })
+            } else {
+                res.send({
+                    status: false,
+                    msg: "Dashboard Data Not found",
+                    totalCount: {
 
-            
-            // // DATA GET SUCCESSFULLY
-            res.send({
-                status: true,
-                msg: "Get Dashboard Data",
-                totalCount: {
-                    total_client: result[0].total_client,
-                    total_active_client: result[0].total_active_client,
-                    total_expired_client: result[0].total_expired_client,
-                    total_live_client: result[0].total_live_client,
-                    total_active_live: result[0].total_active_live,
-                    total_expired_live: result[0].total_expired_live,
-                    total_demo_client: result[0].total_demo_client,
-                    total_active_demo: result[0].total_active_demo,
-                    total_expired_demo: result[0].total_expired_demo,
-                    total_two_days: result[0].total_two_days,
-                    total_active_two_days: result[0].total_active_two_days,
-                    total_expired_two_days: result[0].total_expired_two_days,
-                    all_licence: result[0].licenses,
-                    used_licence: result[0].used_licence,
-                    remaining_licence: result[0].remaining_license,
-                }
-            })
+                    }
+                })
+            }
+
         } catch (error) {
             console.log("get user trading Status error -", error);
         }

@@ -11,8 +11,7 @@ const connectToDatabase = async () => {
     console.log(process.env.MONGO_URI);
     connect(process.env.MONGO_URI)
       .then(() => {
-        connection.useDb(process.env.DB_NAME);
-        console.log("Connected to MongoDB " + process.env.DB_NAME);
+        // connection.useDb(process.env.DB_NAME);
 
         // Role Tabel Exist or not check
         Role.find()

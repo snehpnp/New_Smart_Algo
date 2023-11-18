@@ -89,7 +89,7 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
 
 
 
-    console.log("formik", formik.values)
+    // console.log("formik", formik.values)
 
 
     const fields = [

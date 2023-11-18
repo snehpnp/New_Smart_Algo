@@ -38,7 +38,13 @@ app.use(express.json());
 // REQUIRE File
 require('./App/Cron/cron')
 
-const { createView, dropExistingView, TradeHistroy, dashboard_view } = require('./View/Alice_blue')
+const { createView, dashboard_view } = require('./View/Alice_blue')
+const { createViewAngel } = require('./View/Angel')
+const { createViewFivepaisa } = require('./View/fivepaisa')
+const { createViewZerodha } = require('./View/zerodha')
+
+const {  dropExistingView, TradeHistroy } = require('./View/TradeHistory')
+
 const { TokenSymbolUpdate, TruncateTable, tokenFind } = require('./App/Cron/cron')
 
 const db = require('../BACKEND/App/Models')
@@ -153,7 +159,7 @@ app.get('/tradesymbol', async (req, res) => {
 
 // TEST API
 app.get('/tradehistory/view', async (req, res) => {
-  TradeHistroy()
+  TradeHistroy(req, res)
   res.send({ msg: "View Create!!!" })
 })
 
@@ -165,7 +171,10 @@ app.get('/tradesymbol1', async (req, res) => {
 
 // TEST API
 app.get('/get', async (req, res) => {
-  createView()
+   createViewZerodha()
+  // createViewFivepaisa()
+  // createViewAngel()
+  //createView()
   res.send({ msg: "Done!!!" })
 })
 

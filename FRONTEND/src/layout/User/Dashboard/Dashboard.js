@@ -227,8 +227,8 @@ const BrokerResponse = () => {
                       
                       </div>
                     </td>
-                    {console.log("data.service.lotsize", data.service.lotsize)}
-                    {console.log("data.lot_size", data.lot_size)}
+                    {/* {console.log("data.service.lotsize", data.service.lotsize)}
+                    {console.log("data.lot_size", data.lot_size)} */}
                     <td>{inputValue[data.service.name] ? parseInt(inputValue[data.service.name]) * parseInt(data.service.lotsize) :
                       parseInt(data.lot_size) * parseInt(data.service.lotsize)}</td>
 

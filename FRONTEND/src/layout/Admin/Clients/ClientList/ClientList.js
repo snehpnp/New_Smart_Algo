@@ -432,7 +432,7 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-            {row.license_type == "1" ?
+            {/* {row.license_type == "1" ? */}
             <Link>
               <span data-toggle="tooltip" data-placement="top" title="Delete">
                 <Trash2
@@ -444,7 +444,7 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-             : ""} 
+             {/* : ""}  */}
 
           </div>
         </div>

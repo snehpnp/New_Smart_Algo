@@ -19,7 +19,7 @@ const Modal_Component = ({ isOpen, handleClose, Submit_Function, Submit_Function
 
 
                     {hideBtn == true ? "" :
-                        <Button type="submit" className="btn btn-primary " onClick={() => Submit_Function()}>
+                        <Button type="submit" className="btn btn-primary " disabled={disabled_submit} onClick={() => Submit_Function()}>
                             {btn_name}
                         </Button>}
 

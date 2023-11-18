@@ -8,7 +8,7 @@ export const react_domain = `${window.location.origin}`;
 
 
 export const base_url = "http://localhost:7700/";
-export const broker_url = "http://localhost:8000/";
+// export const broker_url = "http://localhost:8000/";
 
 
 

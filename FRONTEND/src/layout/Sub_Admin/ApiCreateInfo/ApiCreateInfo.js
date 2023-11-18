@@ -32,7 +32,7 @@ const ApiCreateInfo = () => {
         data: [],
     });
 
-    console.log("UserDetails", UserDetails)
+    // console.log("UserDetails", UserDetails)
 
 
 

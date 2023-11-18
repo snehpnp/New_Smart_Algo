@@ -138,6 +138,33 @@ class Tradehistory {
         }
     }
 
+
+
+// ADMIN TRADING STATUS GET
+async AdminTradingStatus(req, res) {
+    try {
+        const { broker_name } = req.body
+
+        var Admin_information = await live_price.find({ broker_name: "ALICE_BLUE" });
+
+        if (Admin_information.length == 0) {
+            return res.send({ status: false, msg: 'User Not exists', data: [] });
+        }
+
+        if (Admin_information[0].trading_status == "off") {
+            return res.send({ status: false, msg: 'Already Trading Off', data:false });
+        }
+
+
+        return res.send({ status: true, msg: "Trading status get", data:true });
+
+
+    } catch (error) {
+        console.log("error", error);
+    }
+}
+
+
     // ADMIN TRADING OFF
     async AdminTradingOff(req, res) {
         try {

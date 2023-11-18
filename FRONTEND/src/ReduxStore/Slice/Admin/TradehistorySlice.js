@@ -2,7 +2,7 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_TRADEHISTORY, GET_SEVAN_TRADEHISTORY } from "../../../Service/admin.service";
+import { GET_TRADEHISTORY, GET_SEVAN_TRADEHISTORY,GET_ADMIN_TRADING_STATUS } from "../../../Service/admin.service";
 
 
 
@@ -31,6 +31,21 @@ export const Get_Sevan_Tradehisotry = createAsyncThunk("get/entry/tradhistory", 
 });
 
 
+
+
+export const GET_ADMIN_TRADE_STATUS = createAsyncThunk("admin/trading/status", async (broker_name) => {
+
+    try {
+        const res = await GET_ADMIN_TRADING_STATUS(broker_name);
+
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+
 const TradehistorySlice = createSlice({
     name: "TradehistorySlice",
     initialState: {
@@ -39,6 +54,8 @@ const TradehistorySlice = createSlice({
         status: false,
         tradehisotry: [],
         tradehisotry_sevan: [],
+        trading_status: [],
+
 
 
     },
@@ -49,6 +66,9 @@ const TradehistorySlice = createSlice({
         },
         [Get_Sevan_Tradehisotry.fulfilled]: (state, { payload }) => {
             return { ...state, tradehisotry_sevan: payload, isLoading: false };
+        },
+        [GET_ADMIN_TRADE_STATUS.fulfilled]: (state, { payload }) => {
+            return { ...state, trading_status: payload, isLoading: false };
         },
 
     },

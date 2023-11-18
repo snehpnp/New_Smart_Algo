@@ -23,28 +23,6 @@ class Panel {
         try {
             const { id, db_name, db_url } = req.body
 
-            // console.log("id", id)
-            // console.log("db_name", db_name)
-            // console.log("db_url", db_url)
-
-
-            // if (!id) {
-            //     return res.send({ status: false, msg: "Enter Panel Id", data: [] })
-            // }
-
-            // const objectId = new ObjectId(id);
-
-            // GET PANEL INFO
-            // const getPanelInfo = await panel_model.find({ _id: objectId })
-
-            // IF DATA NOT EXIST
-            // if (getPanelInfo.length == 0) {
-            //     return res.send({ status: false, msg: "Empty data", data: getPanelInfo })
-            // }
-
-
-            // const uri = getPanelInfo[0].db_url;
-
             const uri = db_url;
 
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -56,7 +34,7 @@ class Panel {
 
 
             // Query the view to get the data
-            const result = await db.collection(viewName).find().toArray();
+            const result = await db.collection(viewName).find().limit(100).toArray();
 
             // If you want to send the retrieved data as a response
             return res.send({
@@ -74,74 +52,43 @@ class Panel {
     // Get All APi Infor
     async GetAllClients(req, res) {
         try {
-            const { id, db_name, db_url } = req.body
-
-
-            // if (!id) {
-            //     return res.send({ status: false, msg: "Enter Panel Id", data: [] })
-            // }
-
-            // const objectId = new ObjectId(id);
-
-            // // GET PANEL INFO
-            // const getPanelInfo = await panel_model.find({ _id: objectId })
-
-            // IF DATA NOT EXIST
-            // if (getPanelInfo.length == 0) {
-            //     return res.send({ status: false, msg: "Empty data", data: getPanelInfo })
-            // }
-
-
-
-            // const uri = getPanelInfo[0].db_url;
-
+            const { id, db_name, db_url } = req.body;
+    
             const uri = db_url;
-
-            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
+    
+            // Use a connection pool to reuse connections
+            var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
             await client.connect();
             const db = client.db(db_name);
-
-            const viewName = 'users';
-
-            // Query the view to get the data
-            const result = await db.collection(viewName).find({ Role: "USER" }).toArray();
-
+    
+            const collectionName = 'users';
+    
+            // Create an index for the 'Role' field if it's frequently used in queries
+            await db.collection(collectionName).createIndex({ Role: 1 });
+    
+            // Use projection to fetch only the necessary fields
+            const result = await db.collection(collectionName).find({ Role: "USER" }, { projection: { /* Specify your projected fields here */ } }).toArray();
+    
             // If you want to send the retrieved data as a response
             return res.send({
                 status: true,
                 msg: "Get All Users",
                 data: result
             });
-
-
+    
         } catch (error) {
             console.log("Get all User error-", error);
+        } finally {
+            // Close the connection after use to release resources
+            await client.close();
         }
     }
+    
 
     // GET ALL SUBADMINS
     async GetAllSubadmins(req, res) {
         try {
-            // const { id } = req.body
             const { id, db_name, db_url } = req.body
-
-            // if (!id) {
-            //     return res.send({ status: false, msg: "Enter Panel Id", data: [] })
-            // }
-
-            // const objectId = new ObjectId(id);
-
-            // // GET PANEL INFO
-            // const getPanelInfo = await panel_model.find({ _id: objectId })
-
-            // // IF DATA NOT EXIST
-            // if (getPanelInfo.length == 0) {
-            //     return res.send({ status: false, msg: "Empty data", data: getPanelInfo })
-            // }
-
-
-            // const uri = getPanelInfo[0].db_url;
             const uri = db_url;
 
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -198,7 +145,7 @@ class Panel {
             const findResult = await db.collection(viewName).find().project({ licenses: 1 }).toArray();
 
             const newLicensesValue = Number(findResult[0].licenses) + Number(license);
-            console.log(newLicensesValue);
+        
             const updateOperation = {
                 $set: {
                     licenses: newLicensesValue
@@ -349,7 +296,7 @@ class Panel {
             }else{
                 domain1 = domain
             }
-            console.log(domain1);
+            // console.log(domain1);
 
             const Panle_information = await panel_model.find({ domain:domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan')
 

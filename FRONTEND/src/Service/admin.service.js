@@ -824,3 +824,20 @@ export async function FIND_BROKER_RESPONSE(data) {
     }
 
 }
+
+
+// ADMIN TRADING STATUS GET
+export async function GET_ADMIN_TRADING_STATUS(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}admin/trading/status`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

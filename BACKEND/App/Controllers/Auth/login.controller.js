@@ -78,7 +78,7 @@ class Login {
             if (EmailCheck.Role == "SUBADMIN") {
 
                 var SubadminPermision = await Subadmin_Permission.find({ user_id: EmailCheck._id })
-                console.log("SubadminPermision", SubadminPermision);
+                // console.log("SubadminPermision", SubadminPermision);
                 var msg = {
                     'Email': EmailCheck.Email,
                     'user_id': EmailCheck._id,
@@ -300,8 +300,16 @@ class Login {
 
 
             var userid = Buffer.from(JSON.stringify(EmailCheck._id)).toString('base64');
-            var redirectUrl = 'http://localhost:3000/#/update/' + userid
+            // var redirectUrl = 'http://localhost:3000/#/update/' + userid
+            var redirectUrl = 'http://trade.pandpinfotech.com/#/update/' + userid
+
             // res.send({ status: false, msg: redirectUrl, data: [] });
+
+
+            var toEmail = Email;
+            var subjectEmail = "Forget Password";
+            var htmlEmail = "URL - " +redirectUrl;
+            CommonEmail(toEmail, subjectEmail, htmlEmail)
 
 
         } catch (error) {
@@ -509,7 +517,7 @@ class Login {
             if (EmailCheck.Role == "SUBADMIN") {
 
                 var SubadminPermision = await Subadmin_Permission.find({ user_id: EmailCheck._id })
-                console.log("SubadminPermision", SubadminPermision);
+                // console.log("SubadminPermision", SubadminPermision);
                 var msg = {
                     'Email': EmailCheck.Email,
                     'user_id': EmailCheck._id,

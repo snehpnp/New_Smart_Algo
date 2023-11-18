@@ -4,11 +4,13 @@ const { Schema, model } = require('mongoose');
 const strategy_clientSchema =  Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "USER"
+        ref: "USER",
+        index: true
     },
     strategy_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "strategy"
+        ref: "strategy",
+        index: true
     },
   
     createdAt: {
