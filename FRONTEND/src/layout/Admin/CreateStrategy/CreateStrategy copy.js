@@ -394,51 +394,19 @@ const Signals = () => {
  
 
   const [selectedSource, setSelectedSource] = useState('');
-  const [selectConditionItem, setSelectConditionItem] = useState('');
-  const [selectedElementFirsSecond, setSelectedElementFirsSecond] = useState('');
-  const [offSetValue, setOffSetValue] = useState(0);
-  const [selectedIndexConditionArr, setSelectedIndexConditionArr] = useState('');
-  const [selectAndOrOperater, setSelectAndOrOperater] = useState('or');
-  
-  
   const [showModalOffset, setShowModalOffset] = useState(false);
-  
-  // And or Operator
-  const [showModalAndOrOperator, setShowModalAndOrOperator] = useState(false);
 
-  console.log("selectedSource -",selectedSource);
-  console.log("selectConditionItem -",selectConditionItem);
-  console.log("selectedElementFirsSecond -",selectedElementFirsSecond);
-
-  const selectSource = (e , condition_item , element_first_second,index) => {
-    console.log("e -",e.target.value)
-    console.log("condition_item -",condition_item);
-    console.log("element_first_second -",element_first_second);
-
+  const selectSource = (e) => {
+    console.log("e -",e)
     if(e.target.value != ""){
        //alert(e.target.value)
        setSelectedSource(e.target.value);
-       setSelectConditionItem(condition_item);
-       setSelectedElementFirsSecond(element_first_second);
-       setSelectedIndexConditionArr(index);
        openModalOffset();
    }
   }
 
-  const selectComparators = (e , condition_item,index) => {
+  const selectComparators = (e) => {
     console.log(" comparators - ",e.target.value)
-  
-    const foundObject = coditionRequestArr.find((item,i) => i === index);
-    //console.log("foundObject --",foundObject)
-    if (foundObject) {
-      // Update the source field of the found object
-      foundObject.comparators = e.target.value;
-      // Create a new array to trigger a state update
-      setCoditionRequestArr([...coditionRequestArr]);
-    }
-
-
-
   }
 
 
@@ -450,63 +418,39 @@ const Signals = () => {
     setShowModalOffset(false);
   };
 
-  
-  const closeModalAndOrOperator = () => {
-    setShowModalAndOrOperator(false);
+  const handleModalConfirm = () => {
+    // Do something with the selected value
+    console.log('Selected Value:', selectedSource);
+
+    // Close the modal
+    closeModalOffset();
   };
-
-  
-  const openModalAndOrOperator = () => {
-    setShowModalAndOrOperator(true);
-  };
-
-  
-  const conditionRemove = (index) => {
-   alert(index)
-   setCoditionRequestArr(oldValues => {
-    return oldValues.filter((item , i) => i !== index)
-  })
-
-  }
 
 
   //Condition Array
   //const [coditionRequestArr, setCoditionRequestArr] = useState([])
   
   const [coditionRequestArr, setCoditionRequestArr] = useState([
-    // {
-      
-    //   first_element : {
-    //   source : "",
-    //   offset : "1"
-    //  },
-    //   comparators : "==",
-    //  second_element : {
-    //   source : "",
-    //   offset : "2"
-    //  },
-    //  and_or_operator:"AND"
-    // },
-
-    // {
+    {
      
-    //   first_element : {
-    //   source : "low",
-    //   offset : "3"
-    //  },
-    //  comparators : "==",
-    //  second_element : {
-    //   source : "high",
-    //   offset : "4"
-    //  },
-    //  and_or_operator:"OR"
-    // },
+      first_element : {
+      source : "close",
+      offset : "0"
+     },
+     comparators : "==",
+     second_element : {
+      source : "close",
+      offset : "0"
+     }
+    },
 
+
+    
   ])
 
     
   
-  //console.log("coditionRequestArr",coditionRequestArr.length)
+  console.log("coditionRequestArr",coditionRequestArr.length)
 
 
   // setCoditionRequestArr(oldValues => {
@@ -516,89 +460,12 @@ const Signals = () => {
   // setCoditionRequestArr((oldArray) => [pre_tag, ...oldArray]);
 
   const conditionAdd = (e) => {
-     //alert("okk")
-     openModalAndOrOperator();
-  }
-
-  const ModalConfirmAndOrOperator = () => {
-
-    ///alert(selectAndOrOperater)
-    let pre_tag =  {
-      
-      first_element : {
-      source : "",
-      offset : "1"
-     },
-      comparators : "==",
-     second_element : {
-      source : "",
-      offset : "2"
-     },
-     and_or_operator:selectAndOrOperater
-    }
- 
-
-    //  setCoditionRequestArr(oldValues => {
-    //  return oldValues.filter(item => item.key !== key)
-    //  })
-
-     setCoditionRequestArr((oldArray) => [...oldArray,pre_tag]);
-     closeModalAndOrOperator()
-  }
-
-
-  const ChangeOffset = (e) => {
-   setOffSetValue(e.target.value)
-  }
-
-
-
-  const ModalConfirmOffset = (selectConditionItem,selectedElementFirsSecond,index,source) => {
-   // console.log("selectConditionItem",selectConditionItem)
+    alert("okk")
     
-   // alert(selectedElementFirsSecond)
-   // alert(index)
-   // alert(offSetValue)
-    //alert(source)
 
-  
-    const foundObject = coditionRequestArr.find((item,i) => i === index);
-    //console.log("foundObject --",foundObject)
-    if (foundObject) {
-      // Update the source field of the found object
-      if(selectedElementFirsSecond == "first"){
-
-        foundObject.first_element.source = source;
-        foundObject.first_element.offset = offSetValue;
-
-      }else if (selectedElementFirsSecond == "second"){
-        foundObject.second_element.source = source;
-        foundObject.second_element.offset = offSetValue;
-      }
-      // Create a new array to trigger a state update
-      setCoditionRequestArr([...coditionRequestArr]);
-    }
-
-    // Close the modal
-    closeModalOffset();
-  };
-
-  
-  const selectAndOrOperaterChange = (e ,condition_item ,index) => {
-    // alert(e.target.value)
-    const foundObject = coditionRequestArr.find((item,i) => i === index);
-    //console.log("foundObject --",foundObject)
-    if (foundObject) {
-      // Update the source field of the found object
-      foundObject.and_or_operator = e.target.value;
-      // Create a new array to trigger a state update
-      setCoditionRequestArr([...coditionRequestArr]);
-    }
-    
   }
 
 
-  console.log("coditionRequestArr final --",coditionRequestArr)
 
   return (
     <>
@@ -725,7 +592,30 @@ const Signals = () => {
 
 
 
-                
+                  {/* <div className="col-md-3">
+                    <div class="columns">
+                      <label>Position I would take</label>
+                      <div class="column is-12">
+                        <div class="up-in-toggle">
+                          <input
+                            type="radio"
+                            id="switch_left"
+                            name="switch_2"
+                            value="yes"
+                          />
+                          <label for="switch_left">Buy</label>
+                          <input
+                            type="radio"
+                            id="switch_right"
+                            name="switch_2"
+                            value="no"
+                            checked
+                          />
+                          <label for="switch_right">Sell</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div> */}
 
 
 
@@ -767,10 +657,57 @@ const Signals = () => {
                           </li> */}
 
                         </ul>
-                    
+                        {/* <div className="tab-content">
+                          <div id="navpills2-1" className="tab-pane">
+                            <div className="row">
+                              <div className="col-md-12">
+
+                                Raw denim you probably haven't heard of them jean shorts Austin.
+                                Nesciunt tofu stumptown aliqua, retro synth master cleanse.
+                                Mustache cliche tempor, williamsburg carles vegan helvetica.
+                                <p>
+                                  <br /> Reprehenderit butcher retro keffiyeh dreamcatcher synth.
+                                  Cosby sweater eu banh mi, qui irure terry richardson ex squid.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="navpills2-2" className="tab-pane">
+                            <div className="row">
+                              <div className="col-md-12">
+
+                                Raw denim you probably haven't heard of them jean shorts Austin.
+                                Nesciunt tofu stumptown aliqua, retro synth master cleanse.
+                                <p>
+                                  <br /> Reprehenderit butcher retro keffiyeh dreamcatcher synth.
+                                  Cosby sweater eu banh mi, qui irure terry richardson ex squid.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div id="navpills2-3" className="tab-pane active">
+                            <div className="row">
+                              <div className="col-md-12">
+
+
+                                <p>
+                                  <br /> Reprehenderit butcher retro keffiyeh dreamcatcher synth.
+                                  Cosby sweater eu banh mi, qui irure terry richardson ex squid.
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>
+
+                  {/* <div className="col-md-3">
+                    <div className="form-group">
+                      <label>Quantity ( in lots )</label>
+                      <input type="number" className="form-control"></input>
+                    </div>
+                  </div> */}
 
                 </div>
               </li>
@@ -794,6 +731,11 @@ const Signals = () => {
                 </Form.Select> */}
 
                     
+                 
+                    <button onClick={() => conditionAdd("e")}>
+                      Click Me
+                    </button>
+
 
                 <Tabs
                   // defaultActiveKey="profile"
@@ -801,37 +743,16 @@ const Signals = () => {
                   className="mb-3"
                 >
                   <Tab eventKey="home" title="Price">
-                    {coditionRequestArr.length > 0 ? 
-                    <>
-                  <Row>
-                  <Col md={2}>
-                  <label><b>First Element</b></label>
-                  </Col>
-                  <Col md={2}>
-                  <label><b>Comparators</b></label>
-                  </Col>
-                  <Col md={2}>
-                  <label><b>Second Element</b></label>
-                  </Col>
-                  <Col md={2}>
-                  <label><b>AND / OR</b></label>
-                  </Col>
-                  </Row>
-                    </>
-                    :""}
-                 
-                  
-                  {coditionRequestArr && coditionRequestArr.map((condition_item,index) => (
-                      <>
-                      <Row>
-                      <Col md={2}>
-                        {/* <label>First Element</label> */}
-                        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index); }}>
+
+                    <Row>
+                      <Col md={3}>
+                        <label>First Element</label>
+                        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e); }}>
                               {/* <option value="">Select Expiry Date</option> */}
                               <option value="" >--Select source--</option>
                               {
                                 getSources.data.map((sm, i) =>
-                                  <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                                  <option value={sm.value}>{sm.name}</option>)
                               }
                       </select>
                       </Col>
@@ -840,24 +761,24 @@ const Signals = () => {
                         <Form.Control type="number" id="text2" />
                       </Col> */}
                       <Col md={2}>
-                        {/* <label>Comparators</label> */}
-                        <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index); }}>
+                        <label>Comparators</label>
+                        <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e); }}>
                               {/* <option value="">Select Expiry Date</option> */}
                               <option value="" >--Select comparators--</option>
                               {
                                 getComparators.data.map((sm, i) =>
-                                  <option selected={condition_item.comparators == sm.value} value={sm.value}>{sm.name}</option>)
+                                  <option value={sm.value}>{sm.name}</option>)
                               }
                       </select>
                       </Col>
-                      <Col md={2}>
-                        {/* <label>Second Element</label> */}
-                        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index); }}>
+                      <Col md={3}>
+                        <label>Second Element</label>
+                        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e); }}>
                               {/* <option value="">Select Expiry Date</option> */}
                               <option value="" >--Select source--</option>
                               {
                                 getSources.data.map((sm, i) =>
-                                  <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                                  <option value={sm.value}>{sm.name}</option>)
                               }
                       </select>
                       </Col>
@@ -865,39 +786,10 @@ const Signals = () => {
                         <label>Offset</label>
                         <Form.Control type="number" id="text3" />
                       </Col> */}
-                     
-                       <Col md={2}>
-                       
-                        <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index); }}>
-                              {/* <option value="">Select Expiry Date</option> */}
-                              <option selected={condition_item.and_or_operator == "and"} value="and">AND</option>
-                              <option selected={condition_item.and_or_operator == "or"} value="or">OR</option>
-                              
-                      </select>
-                      </Col>
-                      <Col md={2}>
-                      <button onClick={() => conditionRemove(index)}>
-                      Remove
-                     </button>
-                     </Col>
-                      
                     </Row>
-                      
-                      </>
-                  ))}
 
-
-                   <button onClick={() => conditionAdd("e")}>
-                      + Add
-                  </button>
-                
+                    
                   </Tab>
-
-                  
-
-
-
-
                   <Tab eventKey="profile" title="Time">
 
                     {/* Entry Time */}
@@ -1082,54 +974,17 @@ const Signals = () => {
         <Modal show={showModalOffset} onHide={closeModalOffset}>
         <Modal.Body>
           <p><b>{selectedSource}</b></p>
-           
-          <label>Offset</label>
 
           <Col md={2}>
-           {
-            selectedElementFirsSecond=="first"?<><input type="number" defaultValue={selectConditionItem.first_element.offset} onChange={(e) => { ChangeOffset(e) }} min="0" className="form-control" /></>
-            :
-           selectedElementFirsSecond=="second"? <><input type="number" defaultValue={selectConditionItem.second_element.offset} onChange={(e) => { ChangeOffset(e) }} min="0" className="form-control" /> </>
-            :
-            ""
-           }
-          
+          <label>Offset</label>
+          <Form.Control type="number" id="text2" />
           </Col>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={closeModalOffset}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => ModalConfirmOffset(selectConditionItem,selectedElementFirsSecond,selectedIndexConditionArr,selectedSource)}>
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-
-      <Modal show={showModalAndOrOperator} onHide={closeModalAndOrOperator}>
-        <Modal.Body>
-          <p><b>{selectedSource}</b></p>
-           
-          <label>Offset</label>
-
-          <Col md={2}>
-           
-           <div className="radio">
-                  <label for="or"><input id="or" value="or" type="radio" checked={selectAndOrOperater === 'or'} name="at_check" onChange={(e) => { setSelectAndOrOperater(e.target.value) }} />OR</label>
-            </div>
-
-            <div className="radio">
-                  <label for="and"><input id="and" value="and" type="radio" checked={selectAndOrOperater === 'and'} name="at_check" onChange={(e) => { setSelectAndOrOperater(e.target.value) }} />AND</label>
-            </div>
-          
-          </Col>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModalAndOrOperator}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={() => ModalConfirmAndOrOperator()}>
+          <Button variant="primary" onClick={handleModalConfirm}>
             Confirm
           </Button>
         </Modal.Footer>

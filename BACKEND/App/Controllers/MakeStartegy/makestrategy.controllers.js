@@ -37,7 +37,7 @@ class MakeStartegy {
             ]
             const result =  await source.aggregate(pipeline)
 
-             console.log("get_sources - ",result)
+           //  console.log("get_sources - ",result)
             if (result .length > 0) {
                 res.send({ status: true, msg: "Get All Source", data: result   });
             } else {
@@ -58,7 +58,7 @@ class MakeStartegy {
             ]
             const result =  await comparators.aggregate(pipeline)
 
-             console.log("get_comparators - ",result)
+          //   console.log("get_comparators - ",result)
             if (result .length > 0) {
                 res.send({ status: true, msg: "Get All Source", data: result   });
             } else {
