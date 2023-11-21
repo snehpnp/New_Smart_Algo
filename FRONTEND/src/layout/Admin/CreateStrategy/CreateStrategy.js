@@ -462,7 +462,7 @@ const Signals = () => {
 
   
   const conditionRemove = (index) => {
-   alert(index)
+   //alert(index)
    setCoditionRequestArr(oldValues => {
     return oldValues.filter((item , i) => i !== index)
   })
@@ -517,31 +517,66 @@ const Signals = () => {
 
   const conditionAdd = (e) => {
      //alert("okk")
-     openModalAndOrOperator();
+
+     if(coditionRequestArr.length == 0){
+
+      let pre_tag =  {
+        start_bracket : [],
+        first_element : {
+        source : "",
+        offset : "0"
+       },
+  
+        comparators : "==",
+  
+       second_element : {
+        source : "",
+        offset : "0"
+       },
+       and_or_operator:"",
+       end_bracket : [],
+      }
+   
+       setCoditionRequestArr((oldArray) => [...oldArray,pre_tag]);
+     
+     }else{
+       openModalAndOrOperator();
+     }
+
+
   }
 
   const ModalConfirmAndOrOperator = () => {
+    
+    const lastIndex = coditionRequestArr.length - 1;
+    const foundObject = coditionRequestArr.find((item,i) => i === lastIndex);
+  
+    if (foundObject) {
+      // Update the source field of the found object
+      foundObject.and_or_operator = selectAndOrOperater;
+      // Create a new array to trigger a state update
+      setCoditionRequestArr([...coditionRequestArr]);
+    }
 
-    ///alert(selectAndOrOperater)
+
     let pre_tag =  {
-      
+      start_bracket : [],
       first_element : {
       source : "",
-      offset : "1"
+      offset : "0"
      },
+
       comparators : "==",
+
      second_element : {
       source : "",
-      offset : "2"
+      offset : "0"
      },
-     and_or_operator:selectAndOrOperater
+     and_or_operator:"",
+     end_bracket : [],
+     //and_or_operator:selectAndOrOperater,
     }
  
-
-    //  setCoditionRequestArr(oldValues => {
-    //  return oldValues.filter(item => item.key !== key)
-    //  })
-
      setCoditionRequestArr((oldArray) => [...oldArray,pre_tag]);
      closeModalAndOrOperator()
   }
@@ -563,7 +598,10 @@ const Signals = () => {
 
   
     const foundObject = coditionRequestArr.find((item,i) => i === index);
-    //console.log("foundObject --",foundObject)
+    console.log("foundObject --",foundObject)
+
+   
+
     if (foundObject) {
       // Update the source field of the found object
       if(selectedElementFirsSecond == "first"){
@@ -578,6 +616,8 @@ const Signals = () => {
       // Create a new array to trigger a state update
       setCoditionRequestArr([...coditionRequestArr]);
     }
+
+    setOffSetValue(0)
 
     // Close the modal
     closeModalOffset();
@@ -597,9 +637,93 @@ const Signals = () => {
     
   }
 
-
+  
   console.log("coditionRequestArr final --",coditionRequestArr)
+  
+  let condition_string = "";
+  let shouldBreak = false;
 
+ 
+
+  
+  for (let index = 0; index < coditionRequestArr.length; index++) {
+    const val = coditionRequestArr[index];
+    
+    console.log(`Element at index ${index}: ${val.and_or_operator}`);
+  
+    if (val.first_element.source !== "" && val.second_element.source !== "") {
+      let and_or= ""
+      if(val.and_or_operator == "or"){
+        and_or = "OR"
+      }else if(val.and_or_operator == "and"){
+        and_or = "AND"
+      }
+
+      if(coditionRequestArr.length ==1){
+        and_or=""
+      }
+
+      let start_bracket = ""
+      if(val.start_bracket.length > 0){
+        start_bracket = val.start_bracket.join('');
+      }
+      
+      let end_bracket = "";
+      if(val.end_bracket.length > 0){
+        end_bracket = val.end_bracket.join('');
+      }
+ 
+      condition_string += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
+    } 
+     else {
+      shouldBreak = true;
+      break; // Break out of the loop
+    }
+  }
+  
+  // Check if we should break
+  if (shouldBreak) {
+    // Do something or return here
+    console.log("Breaking out of the loop");
+  }
+  
+  // Continue with the rest of your code
+  console.log("rr - ",condition_string);
+
+  const AddBracket = (index,start_and) => {
+   if(start_and == "start"){
+
+    const foundObject = coditionRequestArr.find((item,i) => i === index);
+    //console.log("foundObject --",foundObject)
+    if (foundObject) {
+      // Update the source field of the found object
+      foundObject.start_bracket.push("(");
+      // Create a new array to trigger a state update
+      setCoditionRequestArr([...coditionRequestArr]);
+    }
+
+   }else if(start_and == "end"){
+    const foundObject = coditionRequestArr.find((item,i) => i === index);
+    //console.log("foundObject --",foundObject)
+    if (foundObject) {
+      // Update the source field of the found object
+      foundObject.end_bracket.push(")");
+      // Create a new array to trigger a state update
+      setCoditionRequestArr([...coditionRequestArr]);
+    }
+
+   }
+  }
+
+  
+  const RemoveBracket = (index,start_and) => {
+    if(start_and == "start"){
+
+    }else if(start_and == "end"){
+ 
+    }
+  }
+  
   return (
     <>
       <>
@@ -792,15 +916,18 @@ const Signals = () => {
                   <option value="time">Time</option>
                   <option value="indicator">Indicator</option>
                 </Form.Select> */}
-
-                    
-
                 <Tabs
                   // defaultActiveKey="profile"
                   id="uncontrolled-tab-example"
                   className="mb-3"
                 >
+ 
+      
                   <Tab eventKey="home" title="Price">
+
+                    <h4>{condition_string}</h4>
+
+
                     {coditionRequestArr.length > 0 ? 
                     <>
                   <Row>
@@ -813,17 +940,36 @@ const Signals = () => {
                   <Col md={2}>
                   <label><b>Second Element</b></label>
                   </Col>
-                  <Col md={2}>
-                  <label><b>AND / OR</b></label>
-                  </Col>
+                  
+                  {
+                    coditionRequestArr.length==2? <Col md={2}>
+                    <label><b>AND / OR</b></label>
+                    </Col>:""
+                  }
+                  
+
                   </Row>
                     </>
                     :""}
+
+
+                  
                  
                   
                   {coditionRequestArr && coditionRequestArr.map((condition_item,index) => (
                       <>
                       <Row>
+                      <Col md={2}>
+                      <button onClick={() => AddBracket(index,"start")}>
+                      + Add Bracket
+                     </button>
+
+                      <button onClick={() => RemoveBracket(index,"start")}>
+                      + Remove Bracket
+                     </button>
+
+                     </Col>
+
                       <Col md={2}>
                         {/* <label>First Element</label> */}
                         <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index); }}>
@@ -831,7 +977,7 @@ const Signals = () => {
                               <option value="" >--Select source--</option>
                               {
                                 getSources.data.map((sm, i) =>
-                                  <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                                  <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{condition_item.first_element.source == sm.value ? sm.name+" ( "+condition_item.first_element.offset+" ) " : sm.name}</option>)
                               }
                       </select>
                       </Col>
@@ -857,7 +1003,7 @@ const Signals = () => {
                               <option value="" >--Select source--</option>
                               {
                                 getSources.data.map((sm, i) =>
-                                  <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                                  <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{condition_item.second_element.source == sm.value ? sm.name+" ( "+condition_item.second_element.offset+" ) " : sm.name}</option>)
                               }
                       </select>
                       </Col>
@@ -865,21 +1011,59 @@ const Signals = () => {
                         <label>Offset</label>
                         <Form.Control type="number" id="text3" />
                       </Col> */}
-                     
+
+
+                     <Col md={2}>
+                      <button onClick={() => AddBracket(index,"end")}>
+                      + Add Bracket
+                     </button>
+
+                      <button onClick={() => RemoveBracket(index,"end")}>
+                      + Remove Bracket
+                     </button>
+
+                     </Col>
+
+
+
+
+
+
                        <Col md={2}>
-                       
-                        <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index); }}>
+                        {
+                          coditionRequestArr.length==2?
+                          condition_item.and_or_operator == ""?"":
+                          <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index); }}>
                               {/* <option value="">Select Expiry Date</option> */}
                               <option selected={condition_item.and_or_operator == "and"} value="and">AND</option>
                               <option selected={condition_item.and_or_operator == "or"} value="or">OR</option>
                               
-                      </select>
+                         </select>
+                          :
+                          ""
+                        }
+            
                       </Col>
-                      <Col md={2}>
+                     
+                     {
+                     index==0? 
+                     coditionRequestArr.length == 1? 
+                     <Col md={2}>
+                     <button onClick={() => conditionRemove(index)}>
+                     Remove
+                    </button>
+                    </Col>
+                     : ""
+                     :
+                     <Col md={2}>
                       <button onClick={() => conditionRemove(index)}>
                       Remove
                      </button>
                      </Col>
+                      
+                     }
+                      
+                      
                       
                     </Row>
                       
