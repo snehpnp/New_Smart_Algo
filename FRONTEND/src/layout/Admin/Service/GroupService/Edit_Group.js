@@ -177,7 +177,16 @@ const AddStrategy = () => {
 
         const numericValue = event.target.value.replace(/[^0-9]/g, '');
 
-        if (numericValue) {
+
+        if (parseInt(event.target.value) < 0) {
+            alert("no negetive allow")
+            event.target.value = 0
+            return
+        } else {
+
+
+            // if (parseInt(event.target.value) < 0) {
+
             const updatedQty = event.target.value === "" ? qty : numericValue;
 
             // Check if the selected service already exists in selectedServices
@@ -194,13 +203,16 @@ const AddStrategy = () => {
                 // Add the new service to selectedServices
                 setSelectedServices((prevServices) => [
                     ...prevServices,
-                    { service_id: id, name: servicename, segment: segement, group_qty: parseInt(updatedQty) },
+                    { service_id: id, name: servicename, segment: segement, group_qty: parseInt(updatedQty), test: event.target.value },
                 ]);
             }
 
+
         }
+
+        // }
         // else {
-        //     // alert("Negetive/Decimal/Character/Empty Field Not Allow")
+        //     alert("Negetive/Decimal/Character/Empty Field Not Allow")
         //     // event.target.value = ''
         //     return
         //     // }
@@ -285,6 +297,8 @@ const AddStrategy = () => {
             let checkValid = true
 
             selectedServices && selectedServices.map((item) => {
+                // console.log("parseInt(item.lotsize)", parseInt(item.lotsize))
+                console.log("item", item)
                 if (item.lotsize !== 1) {
                     if ((item.group_qty) % (item.lotsize) !== 0) {
                         alert(`Please Enter Valid Lot Size Inside ${item.name}`)
@@ -292,13 +306,14 @@ const AddStrategy = () => {
                         return
                     }
                     return
-                 }
+                }
+               
                 return
             })
 
 
-            
 
+            // return
             if (checkValid) {
                 await dispatch(Update_Service_By_Group_Id({
                     groupdetails: { name: values.groupname, id: id },

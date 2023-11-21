@@ -197,7 +197,7 @@ const Sidebar = ({ ShowSidebar }) => {
 
                                         {/* {(item.route === "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0) ? */}
 
-                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                        <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
                                             {item.Data.length > 0 ? <>
                                                 <a
                                                     className="has-arrow"
@@ -213,7 +213,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                                     {item.Data.length > 0 ?
                                                         item.Data.map((nested_item) => {
                                                             return <>
-                                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                                <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""} ? 'mm-active' : ""}`}>
                                                                     <Link to={nested_item.route}>{nested_item.name}</Link>
                                                                 </li>
                                                             </>

@@ -663,6 +663,9 @@ const TradeHistory = () => {
   }
   useEffect(() => {
     getservice()
+
+
+    
   }, [])
 
 

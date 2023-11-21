@@ -6,19 +6,17 @@ import Content from "../../../../Components/Dashboard/Content/Content"
 import Loader from '../../../../Utils/Loader'
 import { Link, useNavigate } from "react-router-dom";
 import { GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
-
-
 import { Pencil, Trash2, GanttChartSquare } from 'lucide-react';
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable"
-
 import { GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
 import { GET_ALL_SERVICES_NAMES, DELETE_GROUP_SERVICE, Get_client_By_strategy_Id, GET_ALL_SERVICES_USER_NAMES } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 import toast, { Toaster } from 'react-hot-toast';
-
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
+
+
 const ServicesList = () => {
 
     const dispatch = useDispatch()
@@ -33,8 +31,6 @@ const ServicesList = () => {
     const [searchInput, setSearchInput] = useState("");
     const [originalData, setOriginalData] = useState([]);
 
-
-
     const [test, settest] = useState(false)
 
 
@@ -48,9 +44,6 @@ const ServicesList = () => {
         loading: true,
         data: []
     });
-
-
-console.log("=>",getServicesName && getServicesName);
 
 
 
@@ -122,12 +115,6 @@ console.log("=>",getServicesName && getServicesName);
             ),
         },
     ];
-
-
-
-
-
-
 
 
     // GET ALL GROUP SERVICES NAME
@@ -310,8 +297,6 @@ console.log("=>",getServicesName && getServicesName);
                             </div>
 
                             <FullDataTable TableColumns={columns} tableData={AllGroupServices.data} />
-
-
 
                             {
                                 showModal ?

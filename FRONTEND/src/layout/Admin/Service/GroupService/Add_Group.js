@@ -387,7 +387,7 @@ return (
                                                 placeholder="Enter Qty"
                                                 value={item.group_qty}
                                                 onChange={(e) => InputGroupQty(e, item.service_id, item.name, item.segment, item.lotsize)}
-                                            // min={0}
+                                            min={0}
 
                                             />
                                         </td>
