@@ -515,8 +515,14 @@ const Signals = () => {
 
   // setCoditionRequestArr((oldArray) => [pre_tag, ...oldArray]);
 
-  const conditionAdd = (e) => {
+  const conditionAdd = (ArrCondition) => {
      //alert("okk")
+     
+
+
+
+
+
 
      if(coditionRequestArr.length == 0){
 
@@ -540,7 +546,23 @@ const Signals = () => {
        setCoditionRequestArr((oldArray) => [...oldArray,pre_tag]);
      
      }else{
-       openModalAndOrOperator();
+       
+       const lastIndex = ArrCondition.length - 1;
+
+      console.log(lastIndex); // Output: 4
+     const foundObject = coditionRequestArr.find((item,i) => i === lastIndex);
+     if (foundObject) {
+       // Update the source field of the found object
+       console.log(" condition Add SSSS ",foundObject)
+       if(foundObject.first_element.source == "" && foundObject.second_element.source == ""){
+       alert("please select first and second element")
+       }else{
+         openModalAndOrOperator();
+       }
+     }
+
+
+        
      }
 
 
@@ -716,12 +738,37 @@ const Signals = () => {
   }
 
   
-  const RemoveBracket = (index,start_and) => {
+  const RemoveBracket = (index,start_and,last_index) => {
+   //alert(last_index)  
+    if(last_index > -1){
+
     if(start_and == "start"){
 
+      const foundObject = coditionRequestArr.find((item,i) => i === index);
+      //console.log("foundObject --",foundObject)
+      if (foundObject) {
+        // Update the source field of the found object
+        foundObject.start_bracket.pop();
+        // Create a new array to trigger a state update
+        setCoditionRequestArr([...coditionRequestArr]);
+      }
+
+
     }else if(start_and == "end"){
+
+      const foundObject = coditionRequestArr.find((item,i) => i === index);
+      //console.log("foundObject --",foundObject)
+      if (foundObject) {
+        // Update the source field of the found object
+        foundObject.end_bracket.pop();
+        // Create a new array to trigger a state update
+        setCoditionRequestArr([...coditionRequestArr]);
+      }
  
     }
+
+  }
+
   }
   
   return (
@@ -932,6 +979,9 @@ const Signals = () => {
                     <>
                   <Row>
                   <Col md={2}>
+                  
+                  </Col>
+                  <Col md={2}>
                   <label><b>First Element</b></label>
                   </Col>
                   <Col md={2}>
@@ -939,6 +989,9 @@ const Signals = () => {
                   </Col>
                   <Col md={2}>
                   <label><b>Second Element</b></label>
+                  </Col>
+                  <Col md={2}>
+                  
                   </Col>
                   
                   {
@@ -958,19 +1011,23 @@ const Signals = () => {
                   
                   {coditionRequestArr && coditionRequestArr.map((condition_item,index) => (
                       <>
-                      <Row>
-                      <Col md={2}>
-                      <button onClick={() => AddBracket(index,"start")}>
-                      + Add Bracket
+                      <Row className="mb-3">
+                      <Col md={2} className="d-flex px-0 justify-content-center">
+                      <button className="btn " onClick={() => AddBracket(index,"start")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}>
+                      +Bracket
                      </button>
 
-                      <button onClick={() => RemoveBracket(index,"start")}>
-                      + Remove Bracket
+                        {
+                        condition_item.start_bracket.join('')                        
+                        }
+                       
+                      <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1)}>
+                   <i className="fa-solid fa-xmark"></i>
                      </button>
 
                      </Col>
 
-                      <Col md={2}>
+                      <Col md={4} className="d-flex px-0">
                         {/* <label>First Element</label> */}
                         <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index); }}>
                               {/* <option value="">Select Expiry Date</option> */}
@@ -980,12 +1037,12 @@ const Signals = () => {
                                   <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{condition_item.first_element.source == sm.value ? sm.name+" ( "+condition_item.first_element.offset+" ) " : sm.name}</option>)
                               }
                       </select>
-                      </Col>
+                    
                       {/* <Col md={2}>
                         <label>Offset</label>
                         <Form.Control type="number" id="text2" />
                       </Col> */}
-                      <Col md={2}>
+                     
                         {/* <label>Comparators</label> */}
                         <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index); }}>
                               {/* <option value="">Select Expiry Date</option> */}
@@ -995,8 +1052,7 @@ const Signals = () => {
                                   <option selected={condition_item.comparators == sm.value} value={sm.value}>{sm.name}</option>)
                               }
                       </select>
-                      </Col>
-                      <Col md={2}>
+                    
                         {/* <label>Second Element</label> */}
                         <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index); }}>
                               {/* <option value="">Select Expiry Date</option> */}
@@ -1012,15 +1068,22 @@ const Signals = () => {
                         <Form.Control type="number" id="text3" />
                       </Col> */}
 
+                     <Col md={2} className="d-flex px-0 justify-content-center">
 
-                     <Col md={2}>
-                      <button onClick={() => AddBracket(index,"end")}>
-                      + Add Bracket
+                       {
+                        condition_item.end_bracket.join('')                        
+                        }
+
+                      <button className="border-0 px-2"  onClick={() => RemoveBracket(index,"end",condition_item.end_bracket.length - 1)}>
+                      <i className="fa-solid fa-xmark"></i>
                      </button>
 
-                      <button onClick={() => RemoveBracket(index,"end")}>
-                      + Remove Bracket
+                      <button className=" btn " onClick={() => AddBracket(index,"end")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}> 
+                      + Bracket
                      </button>
+
+
+                     
 
                      </Col>
 
@@ -1044,25 +1107,25 @@ const Signals = () => {
                         }
             
                       </Col>
-                     
+                      <Col md={2}>
                      {
                      index==0? 
                      coditionRequestArr.length == 1? 
-                     <Col md={2}>
-                     <button onClick={() => conditionRemove(index)}>
+                   
+                     <button className="btn btn-danger " onClick={() => conditionRemove(index)} style={{fontSize:'10px',padding:'5px 10px'}}>
                      Remove
                     </button>
-                    </Col>
+                    
                      : ""
                      :
-                     <Col md={2}>
-                      <button onClick={() => conditionRemove(index)}>
+                   
+                      <button className="btn btn-danger  " style={{fontSize:'10px',padding:'5px 10px'}} onClick={() => conditionRemove(index)} >
                       Remove
                      </button>
-                     </Col>
+                    
                       
                      }
-                      
+                       </Col>
                       
                       
                     </Row>
@@ -1071,7 +1134,7 @@ const Signals = () => {
                   ))}
 
 
-                   <button onClick={() => conditionAdd("e")}>
+                   <button style={{border:'1px dashed orange'}} className="btn p-2" onClick={() => conditionAdd(coditionRequestArr)}>
                       + Add
                   </button>
                 
@@ -1266,9 +1329,7 @@ const Signals = () => {
         <Modal show={showModalOffset} onHide={closeModalOffset}>
         <Modal.Body>
           <p><b>{selectedSource}</b></p>
-           
-          <label>Offset</label>
-
+           {selectedSource=="number"?"":<label>Offset</label>}
           <Col md={2}>
            {
             selectedElementFirsSecond=="first"?<><input type="number" defaultValue={selectConditionItem.first_element.offset} onChange={(e) => { ChangeOffset(e) }} min="0" className="form-control" /></>
