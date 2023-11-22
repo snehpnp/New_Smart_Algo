@@ -133,11 +133,11 @@ class OptionChain {
                 price = "19500"
                 price_symbol = "Nifty Financial Services";
             } else if (symbol == "BANKNIFTY") {
-                price = "44500"
+                price = "43400"
                 price_symbol = "Nifty Bank";
             } else if (symbol == "NIFTY") {
                 price_symbol = "NIFTY 50";
-                price = "19500"
+                price = "19800"
             } else if (symbol == "MIDCPNIFTY") {
                 price_symbol = "NIFTY Midcap 100";
             }

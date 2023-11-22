@@ -779,7 +779,7 @@ const TradeHistory = () => {
                                     },
                                     {
                                         dataField: "qty_persent",
-                                        text: "Exit Qty",
+                                        text: "Exit Qty (%)",
                                         formatter: (cell, row, rowIndex) => (
                                             <div>
                                                 <input
@@ -788,7 +788,7 @@ const TradeHistory = () => {
                                                     name="quantity"
                                                     className=""
                                                     id="quantity"
-                                                    placeholder="Enter Qty"
+                                                    placeholder="Enter Qty (%)"
 
                                                     onChange={
                                                         (e) =>

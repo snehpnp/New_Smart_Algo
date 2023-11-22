@@ -72,7 +72,7 @@ const ApiCreateInfo = () => {
             <div class="row">
                 <section class="card__container">
 
-                    {UserDetails.data && UserDetails.data.slice(0 ,1).map((item) => {
+                    {UserDetails.data && UserDetails.data.map((item) => {
                         return <>
                             <div class="card__bx card__1">
                                 <div class="card__data">
@@ -91,9 +91,9 @@ const ApiCreateInfo = () => {
                                         }}  onClick={() => ShowData(item)} >
                                             <Eye className='mx-2'/>
                                             </Link>
-                                        <Link to="/admin/apicreateinfo/edit" state={item}>
+                                        {/* <Link to="/admin/apicreateinfo/edit" state={item}>
                                             <Pencil className='mx-2' onClick={() => ShowData(item)} />
-                                        </Link>
+                                        </Link> */}
                                     </div>
                                 </div>
                             </div>

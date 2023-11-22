@@ -827,7 +827,7 @@ const HelpCenter = () => {
                                                 },
                                                 {
                                                     dataField: "",
-                                                    text: "Entry Qty",
+                                                    text: "Enter Qty (%)",
                                                     formatter: (cell, row, rowIndex) => (
                                                         <div>
                                                             <input
@@ -836,7 +836,7 @@ const HelpCenter = () => {
                                                                 name="quantity"
                                                                 className=""
                                                                 id="quantity"
-                                                                placeholder="Enter Qty"
+                                                                placeholder="Enter Qty (%)"
 
                                                                 onChange={
                                                                     (e) =>
