@@ -78,9 +78,31 @@ export async function UPDATE_API_INFORMATION(data , token) {
 }
 
 // GET_API_INFORMATION
-export async function GET_API_INFORMATION(token) {
+export async function GET_API_INFORMATION(data ,token) {
+    console.log("data", data);
+    console.log("token", token);
+    
     try {
-        const res = await axios.get(`${Config.base_url}getall/apicreateinfo`, {
+        const res = await axios.get(`${Config.base_url}getall/apicreateinfo`, data ,{
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        console.log("error", err);
+        // custom error
+    }
+
+}
+// GET_API_INFORMATION
+export async function GET_API_INFORMATION_SUPERADMIN(data ,token) {
+    console.log("data", data);
+    console.log("token", token);
+    
+    try {
+        const res = await axios.post(`${Config.base_url}getall/apicreateinfo_super`, data ,{
             headers: header(token),
             data: {},
         })

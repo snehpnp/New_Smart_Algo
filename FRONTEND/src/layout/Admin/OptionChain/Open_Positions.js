@@ -48,9 +48,9 @@ const TradeHistory = () => {
 
     const handleClickDisabled = () => {
         setDisabled(true);
-      }
+    }
     // --------------- FOR GET OPTIONS SYMBOLS -----------------------
-console.log("inputValue",inputValue);
+    console.log("inputValue", inputValue);
 
     // --------------- FOR GET PANEL KEY-----------------------
 
@@ -58,12 +58,12 @@ console.log("inputValue",inputValue);
     const getPanelDetails = async () => {
         await dispatch(GET_COMPANY_INFOS())
 
-          .unwrap()
-          .then((response) => {
-            let res = response.data[0]
-           setBrokerUrl(res.broker_url)
-          });
-      };
+            .unwrap()
+            .then((response) => {
+                let res = response.data[0]
+                setBrokerUrl(res.broker_url)
+            });
+    };
 
 
     const getPanelKey = async (e) => {
@@ -341,26 +341,37 @@ console.log("inputValue",inputValue);
     // }
 
 
-    const Set_Entry_Exit_Qty = (row, event, qty_persent) => {
+    const Set_Entry_Exit_Qty = (row, event, qty_persent, symbol) => {
         let a = No_Negetive_Input_regex(event)
 
         console.log(event);
         // if (a) {
 
-            if (parseInt(event) > parseInt(qty_persent)) {
-                alert('Error: Value cannot be greater than ' + qty_persent);
-                setInputValue('');
-            } else {
-                setInputValue(event);
+        if (parseInt(event) > parseInt(qty_persent)) {
+            alert('Error: Value cannot be greater than ' + qty_persent);
+            setInputValue('');
+        } else {
+            setInputValue(event);
 
-                setCreateSignalRequest((prev) => {
-                    return prev.map((item) => {
-                        return { ...item, new_qty_persent: event ? event : item.old_qty_persent };
-                    });
+            setCreateSignalRequest((prev) => {
+                return prev.map((item) => {
+                    // console.log("item.Symbol", item);
 
+                    if (item.trade_symbol === symbol) { // Assuming 'symbol' is the unique identifier
+                        return {
+                            ...item,
+                            new_qty_persent: event ? event : item.old_qty_persent
+                        };
+                    }
+                    return item;
+
+
+                    // return { ...item, new_qty_persent: event ? event : item.old_qty_persent };
                 });
 
-            }
+            });
+
+        }
         // } else {
         //     alert('text not allow');
 
@@ -371,9 +382,12 @@ console.log("inputValue",inputValue);
     const Done_For_Trade = () => {
 
         handleClickDisabled();
-        
+
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
+        console.log("CreateSignalRequest", CreateSignalRequest)
+
+        // return
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
             let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${pre_tag.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
 
@@ -761,7 +775,7 @@ console.log("inputValue",inputValue);
                                     },
                                     {
                                         dataField: "old_qty_persent",
-                                        text: "Remaining Qty",
+                                        text: "Remaining Qty Persent",
                                     },
                                     {
                                         dataField: "qty_persent",
@@ -781,7 +795,8 @@ console.log("inputValue",inputValue);
                                                             Set_Entry_Exit_Qty(
                                                                 row,
                                                                 e.target.value,
-                                                                row.old_qty_persent
+                                                                row.old_qty_persent,
+                                                                row.trade_symbol
                                                             )
                                                     }
                                                     value={inputValue ? inputValue : inputValue}

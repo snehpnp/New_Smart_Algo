@@ -227,7 +227,9 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
                                         {item.Data.length === 0 ? <>
-                                            {item.route === "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0 ? "" :
+                                            {
+                                            item.route === "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 ||
+                                             item.route === "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0 ? "" :
                                                 <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                     <Link to={item.route} className="" aria-expanded="false">
                                                         <IconComponent key={item.id} icon={item.Icon} />

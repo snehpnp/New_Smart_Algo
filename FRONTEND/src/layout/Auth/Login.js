@@ -39,6 +39,10 @@ const Login = () => {
   const [showModal1, setshowModal1] = useState(false);
   const [showModal2, setshowModal2] = useState(false);
 
+  const [desclaimerModal, setDesclaimerModal] = useState(false);
+  const [CheckDesclaimer, setCheckDesclaimer] = useState(false);
+
+
   const [getOtpStatus, setgetOtpStatus] = useState(false);
 
   const [getOtp, setgetOtp] = useState("");
@@ -84,7 +88,7 @@ const Login = () => {
       await dispatch(SignIn(req))
         .unwrap()
         .then((response) => {
-          // console.log("response=>", response);
+          console.log("response=>", response);
 
           if (response.status) {
             if (response.data.Role !== "SUPERADMIN") {
@@ -142,52 +146,59 @@ const Login = () => {
 
     await dispatch(Verify_User_Device(req))
       .then((res) => {
-        if (res.payload.status) {
-          const roles = ["ADMIN", "USER", "SUBADMIN", "SUPERADMIN"];
-          const userData = UserData;
-          const role = userData && userData.Role;
-          const mobileNo = getLastFourDigits(
-            userData && userData.mobile,
-            typeOtp
-          );
+        console.log("res", res)
+        if (res.payload.firstlogin === "0") {
+          setDesclaimerModal(true)
+        } else {
+          if (res.payload.status) {
+            const roles = ["ADMIN", "USER", "SUBADMIN", "SUPERADMIN"];
+            const userData = UserData;
 
-          if (roles.includes(role) && mobileNo === true) {
-            settest(userData);
-            localStorage.setItem("user_details", JSON.stringify(userData));
-            localStorage.setItem("user_role", JSON.stringify(role));
-            toast.success(res.payload.msg);
-            let redirectPath = `/${role === "USER"
-              ? "client/dashboard"
-              : role === "SUBADMIN"
-                ? "subadmin/signals"
-                : role === "ADMIN"
-                  ? "admin/dashboard"
-                  : role === "SUPERADMIN"
-                    ? "/super/dashboard"
-                    : ""
-              }
+            const role = userData && userData.Role;
+            const mobileNo = getLastFourDigits(
+              userData && userData.mobile,
+              typeOtp
+            );
+
+            if (roles.includes(role) && mobileNo === true) {
+              settest(userData);
+              localStorage.setItem("user_details", JSON.stringify(userData));
+              localStorage.setItem("user_role", JSON.stringify(role));
+              toast.success(res.payload.msg);
+              let redirectPath = `/${role === "USER"
+                ? "client/dashboard"
+                : role === "SUBADMIN"
+                  ? "subadmin/signals"
+                  : role === "ADMIN"
+                    ? "admin/dashboard"
+                    : role === "SUPERADMIN"
+                      ? "/super/dashboard"
+                      : ""
+                }
            `;
 
-            setTimeout(() => {
+              setTimeout(() => {
+                setshowModal(false);
+                navigate(redirectPath);
+                window.location.reload();
+              }, 1000);
+            } else {
+              toast.error(mobileNo);
+            }
+          } else {
+            if (res.payload.msg === "You are already logged in on the Web.") {
+              toast.error(res.payload.msg);
               setshowModal(false);
-              navigate(redirectPath);
-              window.location.reload();
-            }, 1000);
-          } else {
-            toast.error(mobileNo);
-          }
-        } else {
-          if (res.payload.msg === "You are already logged in on the Web.") {
-            toast.error(res.payload.msg);
-            setshowModal(false);
-            setshowModal1(true);
-          } else {
-            toast.error(res.payload.msg);
-            setTimeout(() => {
-              // setshowModal(false);
-            }, 1000);
+              setshowModal1(true);
+            } else {
+              toast.error(res.payload.msg);
+              setTimeout(() => {
+                // setshowModal(false);
+              }, 1000);
+            }
           }
         }
+
       })
       .catch((error) => console.log("error on Otp Verify", error));
   };
@@ -232,6 +243,7 @@ const Login = () => {
             const roles = ["ADMIN", "USER", "SUBADMIN"];
 
             const userData = UserData;
+
             const role = userData && userData.Role;
 
             if (roles.includes(role)) {
@@ -311,6 +323,7 @@ const Login = () => {
         localStorage.setItem("theme", JSON.stringify(res));
       });
   };
+
 
   useEffect(() => {
     getPanelDetails();
@@ -412,17 +425,14 @@ const Login = () => {
 
 
   //  FOR SET COMPANY LOGO
-
-
-
-
   const CompanyName = async () => {
     await dispatch(Get_Company_Logo()).unwrap()
       .then((response) => {
         if (response.status) {
 
           $(".logo-abbr").attr('src', response.data && response.data[0].logo);
-
+          console.log("response.data && response.data", response.data && response.data)
+          $(".Company_logo").html(response.data && response.data[0].panel_name);
 
 
           $(".set_Favicon")
@@ -438,6 +448,48 @@ const Login = () => {
 
 
 
+
+  // FOR DESCILMER
+
+  const SubmitDesclimer = () => {
+    console.log("CheckDesclaimer", CheckDesclaimer)
+    if (!CheckDesclaimer) {
+      alert("Agree & I accept Term And Condition")
+    } else {
+      setshowModal(false);
+
+      const roles = ["ADMIN", "USER", "SUBADMIN", "SUPERADMIN"];
+      const userData = UserData;
+
+      const role = userData && userData.Role;
+      const mobileNo = getLastFourDigits(
+        userData && userData.mobile,
+        typeOtp
+      );
+
+      if (roles.includes(role) && mobileNo === true) {
+
+        localStorage.setItem("user_details", JSON.stringify(userData));
+        localStorage.setItem("user_role", JSON.stringify(role));
+        let redirectPath = `/${role === "USER"
+          ? "client/dashboard"
+          : role === "SUBADMIN"
+            ? "subadmin/signals"
+            : role === "ADMIN"
+              ? "admin/dashboard"
+              : role === "SUPERADMIN"
+                ? "/super/dashboard"
+                : ""
+          }
+     `;
+
+        setTimeout(() => {
+          navigate(redirectPath);
+          // window.location.reload();
+        }, 1000);
+      }
+    }
+  }
 
 
 
@@ -582,6 +634,86 @@ const Login = () => {
             ) : (
               ""
             )}
+          </Modal>
+        </>
+      ) : (
+        ""
+      )}
+
+
+
+      {/*  for Desclaimer    */}
+      {desclaimerModal ? (
+        <>
+          <Modal
+            isOpen={desclaimerModal}
+            // handleClose={!showModal2}
+            handleClose={() => setDesclaimerModal(false)}
+            backdrop="static"
+            size="lg"
+            title="Login or Close the Page"
+            btn_name="Submit"
+            Submit_Function={SubmitDesclimer}
+
+          >
+
+            <h6>
+              All subscription fees paid to
+              {/* {Config.panel_name.toUpperCase()} */}
+              is Non refundable. We
+              do not provide trading tips nor we are investment adviser. Our
+              service is solely restricted to automated trading application
+              development, deployment and maintenance. All algorithms are
+              based on backtested data but we do not provide any guarantee for
+              their performance in future. The algorithm running in an
+              automated system is agreed with the user prior deployment and we
+              do not take any liability for any loss generated by the same.
+              Past performance of advise/strategy/model does not indicate the
+              future performance of any current or future strategy/model or
+              advise by
+              {/* {Config.panel_name.toUpperCase()} */}
+              Trades and actual returns may differ
+              significantly from that depicted herein due to various factors
+              including but not limited to impact costs, expense charged,
+              timing of entry/exit, timing of additional flows/redemptions,
+              individual client mandates, specific portfolio construction
+              characteristics etc. There is no assurance or guarantee that the
+              objectives of any strategy/model or advice provided by
+              {/* {Config.panel_name.toUpperCase()} */}
+              Trades will be achieved.
+              {/* {Config.panel_name.toUpperCase()}  */}
+              Trades or any of its
+              partner/s or principal officer/employees do not assure/give
+              guarantee for any return on the investment in
+              strategies/models/advice given to the Investor. The value of
+              investment can go up/down depending on factors & forces
+              affecting securities markets.
+              {/* {Config.panel_name.toUpperCase()} */}
+              Trades or its
+              associates are not liable or responsible for any loss or
+              shortfall arising from operations and affected by the market
+              condition.
+              <br />
+
+            </h6>
+            <div className="d-flex">
+
+              <input
+                type="checkbox"
+                // checked={termCheck}
+                id="term_check"
+                className="mx-2"
+                onChange={(e) => {
+                  setCheckDesclaimer(e.target.checked);
+                }}
+              />
+              <label for="term_check" className="mt-2 h6 text-info">
+                Agree & I accept Term And Condition
+              </label>
+            </div>
+
+            <br />
+
           </Modal>
         </>
       ) : (

@@ -189,6 +189,7 @@ class Login {
 
             }
 
+            addData["Is_First_login"] = 1;
             // Update Successfully
             const result = await User.updateOne(
                 { Email: Email },
@@ -206,12 +207,13 @@ class Login {
                 login_status: "Panel On",
                 role: EmailCheck.Role,
                 device: Device,
+
                 system_ip: getIPAddress()
             })
             await user_login.save();
 
             logger.info('Very Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Login Successfully", data: [] })
+            res.send({ status: true, msg: "Login Successfully", data: [], firstlogin: EmailCheck.Is_First_login })
 
 
         } catch (error) {
@@ -308,7 +310,7 @@ class Login {
 
             var toEmail = Email;
             var subjectEmail = "Forget Password";
-            var htmlEmail = "URL - " +redirectUrl;
+            var htmlEmail = "URL - " + redirectUrl;
             CommonEmail(toEmail, subjectEmail, htmlEmail)
 
 

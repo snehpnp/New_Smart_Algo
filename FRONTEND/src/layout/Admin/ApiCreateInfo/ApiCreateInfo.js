@@ -110,8 +110,8 @@ const ApiCreateInfo = () => {
 
                 {modalData.steptwourl || modalData.imageone ? <>
                     <h4 className="text-decoration-underline">Step 1:  Click below link and Login</h4>
-                    {/* <a href={modalData.steponeurl} target="_blank" className="my-3" >{modalData.steponeurl} </a><br /> */}
-                    <a
+                    <a href={modalData.steponeurl} target="_blank" className="my-3" >{modalData.steponeurl} </a><br />
+                    {/* <a
                         href={
                             "https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB"
                         }
@@ -119,7 +119,8 @@ const ApiCreateInfo = () => {
                         className="my-3"
                     >
                         https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB
-                    </a><br />
+                    </a> */}
+                    <br />
                     {modalData.imageone ? <img src={modalData.imageone} alt="" class="w-100 my-3 border border-dark" /> : ""}
 
                 </> : ""}
@@ -129,10 +130,10 @@ const ApiCreateInfo = () => {
                     <h4 className="text-decoration-underline my-3">Step 2:  Enter your Details and the Redirect URL which is given below.</h4>
                     {/* <a href={modalData.steptwourl} target="_blank"  >{modalData.steptwourl} </a> */}
                     <a
-                        href={`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
+                        href={`${Config.base_url + modalData.steptwourl}`}
                         target="_blank"
                     >
-                        {`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
+                        {`${Config.base_url + modalData.steptwourl}`}
                     </a>
                     <br />
                     {modalData.imagetwo ? <img src={modalData.imagetwo} alt="" class="w-100 border border-dark" /> : ""}
