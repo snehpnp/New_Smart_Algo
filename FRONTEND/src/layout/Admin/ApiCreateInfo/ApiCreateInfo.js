@@ -96,6 +96,10 @@ const ApiCreateInfo = () => {
             <Modal isOpen={showModal} size="lg" title={`${modalData.title}  API Create Information.`} hideBtn={true}
                 handleClose={() => setshowModal(false)}
             >
+                {modalData.title === "Alice Blue" ?
+                    <h4 className='text-danger mb-1 text-center fw-bold'>ONLY FOR ADMIN</h4>
+                    : ""}
+
                 <h4>API Process of {modalData.title}: -</h4>
                 {modalData.description ?
                     <ul>
