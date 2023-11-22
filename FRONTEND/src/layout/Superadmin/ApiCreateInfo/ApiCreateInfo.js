@@ -5,10 +5,10 @@
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import { useDispatch } from "react-redux";
-import { All_Api_Info_List } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+import { All_Api_Info_List_superadmin } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import Modal from '../../../Components/ExtraComponents/Modal';
 import { Eye, CandlestickChart, Pencil } from 'lucide-react';
-import {  Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as Config from "../../../Utils/Config";
 
 
@@ -33,7 +33,7 @@ const ApiCreateInfo = () => {
 
     const data = async () => {
 
-        await dispatch(All_Api_Info_List(token)).unwrap()
+        await dispatch(All_Api_Info_List_superadmin({ token: token, url: Config.react_domain })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setUserDetails({
@@ -63,8 +63,8 @@ const ApiCreateInfo = () => {
                 <section class="card__container">
 
                     {/* {UserDetails.data && UserDetails.data.slice(0, 1).map((item) => { */}
-                     {UserDetails.data && UserDetails.data.map((item) => {
-                                                return <>
+                    {UserDetails.data && UserDetails.data.map((item) => {
+                        return <>
                             <div class="card__bx card__1">
                                 <div class="card__data">
                                     <div class="card__icon">
@@ -79,9 +79,9 @@ const ApiCreateInfo = () => {
                                             marginRight: '20px',
                                             marginBottom: '20px',
                                             marginTop: '20px',
-                                        }}  onClick={() => ShowData(item)} >
-                                            <Eye className='mx-2'/>
-                                            </Link>
+                                        }} onClick={() => ShowData(item)} >
+                                            <Eye className='mx-2' />
+                                        </Link>
                                         <Link to="/super/apicreateinfo/edit" state={item}>
                                             <Pencil className='mx-2' onClick={() => ShowData(item)} />
                                         </Link>
@@ -110,16 +110,17 @@ const ApiCreateInfo = () => {
 
                 {modalData.steptwourl || modalData.imageone ? <>
                     <h4 className="text-decoration-underline">Step 1:  Click below link and Login</h4>
-                    {/* <a href={modalData.steponeurl} target="_blank" className="my-3" >{modalData.steponeurl} </a><br /> */}
-                    <a
-                    href={
-                      "https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB"
-                    }
-                    target="_blank"
-                    className="my-3"
-                  >
-                    https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB
-                  </a><br />
+                    <a href={modalData.steponeurl} target="_blank" className="my-3" >{modalData.steponeurl} </a><br />
+                    {/* <a
+                        href={
+                            "https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB"
+                        }
+                        target="_blank"
+                        className="my-3"
+                    >
+                        https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB
+                    </a> */}
+                    <br />
                     {modalData.imageone ? <img src={modalData.imageone} alt="" class="w-100 my-3 border border-dark" /> : ""}
 
                 </> : ""}
@@ -127,20 +128,35 @@ const ApiCreateInfo = () => {
                 {modalData.steptwourl || modalData.imagetwo ? <>
 
                     <h4 className="text-decoration-underline my-3">Step 2:  Enter your Details and the Redirect URL which is given below.</h4>
-                    {/* <a href={modalData.steptwourl} target="_blank"  >{modalData.steptwourl} </a> */}
                     <a
-                    href={`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
-                    target="_blank"
-                  >
-                    {`${Config.base_url}aliceblue/access_token?email=YOUR_PANEL_EMAIL`}
-                  </a>
+                        href={`${Config.base_url + modalData.steptwourl}`}
+                        target="_blank"
+                    >
+                        {`${Config.base_url + modalData.steptwourl}`}
+                    </a>
                     <br />
                     {modalData.imagetwo ? <img src={modalData.imagetwo} alt="" class="w-100 border border-dark" /> : ""}
                 </> : ""}
 
                 {modalData.imagethree || modalData.imagethree ? <>
                     <h4 className="text-decoration-underline my-3">Step 3:  Create API</h4>
-                    <a href={modalData.stepthreeurl} target="_blank"  >{modalData.stepthree} </a><br />
+
+
+                    {modalData.stepthree.includes("http") ? <>
+                        <a href={modalData.stepthreeurl} target="_blank"  >{modalData.stepthree} </a>
+                    </> :
+
+                        <ul>
+                            {modalData.stepthree && modalData.stepthree.split("\n").map((line, index) => (
+                                <>
+                                    <li className="text-alert mt-2" key={index}>{line}</li>
+                                </>
+                            ))}
+                        </ul>
+                    }
+
+                    <br />
+                    <br />
                     {modalData.imagethree ? <img src={modalData.imagethree} alt="" class="w-100 border border-dark" /> : ""}
                 </> : ""}
 

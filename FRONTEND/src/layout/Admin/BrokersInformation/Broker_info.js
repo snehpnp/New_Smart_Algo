@@ -200,6 +200,12 @@ const Broker_info = () => {
 
 
     const fields = [
+        // {
+        //     name: 'demat_userid',
+        //     label: formik.values.broker === '2' ? 'Demat User Id' : '', type: 'text',
+        //     showWhen: values => values.broker === '2',
+        //     label_size: 12, col_size: 6, disable: false
+        // },
 
         {
             name: 'app_id',
@@ -227,7 +233,7 @@ const Broker_info = () => {
         formik.setFieldValue('api_key', getBrokerInfo.data && getBrokerInfo.data.api_key);
         formik.setFieldValue('api_secret', getBrokerInfo.data && getBrokerInfo.data.apiSecret);
         // formik.setFieldValue('app_key', getBrokerInfo.data && getBrokerInfo.data);
-        // formik.setFieldValue('demat_userid', getBrokerInfo.data && getBrokerInfo.data);
+        formik.setFieldValue('demat_userid', getBrokerInfo.data && getBrokerInfo.data.demat_userid);
 
     }, [getBrokerInfo]);
 

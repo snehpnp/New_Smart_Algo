@@ -730,115 +730,149 @@
 
 
 
-import React from 'react'
+// import React from 'react'
 
-const test = () => {
+// const test = () => {
 
 
-  return (
-    <div>
-      <div class="container-fluid">
-        <div class="row mb-5">
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="card card-purple-blue text-white mb-3 mb-md-0">
-              <div class="d-flex justify-content-between " >
-                <div>
-                  <p class="new-un">Undefined</p>
-                </div>
-                <div>
-                  <p class="new-de">Undefined</p>
-                </div>
-              </div>
-              <h4 class="card-new-heading">Test</h4>
-              <div class="card-body d-flex justify-between align-items-end">
-                <div class="card-number">
-                  <div class="h3">Recommended</div><small><strong>Capital : undefined PER LOT</strong></small>
-                </div>
-                <div class="card-description text-right">
-                  <small class="new-sma">Info</small>
-                </div>
-                <div class="card-description text-right ml-3">
-                  <small class="new-sma">Join</small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="card card-salmon-pink text-white">
-              <div class="d-flex justify-content-space-between" >
-                <div>
-                  <p class="new-un">Undefined</p>
-                </div>
-                <div>
-                  <p class="new-de">Undefined</p>
-                </div>
-              </div>
-              <h4 class="card-new-heading">Test1</h4>
-              <div class="card-body d-flex justify-content-between align-items-end">
-                <div class="card-number">
-                  <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
-                </div>
-                <div class="card-description text-right">
-                  <small class="new-sma">Info</small>
-                </div>
-                <div class="card-description text-right ml-3">
-                  <small class="new-sma">Join</small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="card card-blue-green text-white">
-              <div class="d-flex justify-content-space-between" >
-                <div>
-                  <p class="new-un">Undefined</p>
-                </div>
-                <div>
-                  <p class="new-de">Undefined</p>
-                </div>
-              </div>
-              <h4 class="card-new-heading">Test2</h4>
-              <div class="card-body d-flex justify-content-between align-items-end">
-                <div class="card-number">
-                  <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
-                </div>
-                <div class="card-description text-right">
-                  <small class="new-sma">Info</small>
-                </div>
-                <div class="card-description text-right ml-3">
-                  <small class="new-sma">Join</small>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-12 col-sm-6 col-md-3">
-            <div class="card card-purple-pink text-white">
-              <div class="d-flex justify-content-space-between" >
-                <div>
-                  <p class="new-un">Undefined</p>
-                </div>
-                <div>
-                  <p class="new-de">Undefined</p>
-                </div>
-              </div>
-              <h4 class="card-new-heading">Test3</h4>
-              <div class="card-body d-flex justify-content-between align-items-end">
-                <div class="card-number">
-                  <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
-                </div>
-                <div class="card-description text-right">
-                  <small class="new-sma">Info</small>
-                </div>
-                <div class="card-description text-right ml-3">
-                  <small class="new-sma">Join</small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
+//   return (
+//     <div>
+//       <div class="container-fluid">
+//         <div class="row mb-5">
+//           <div class="col-12 col-sm-6 col-md-3">
+//             <div class="card card-purple-blue text-white mb-3 mb-md-0">
+//               <div class="d-flex justify-content-between " >
+//                 <div>
+//                   <p class="new-un">Undefined</p>
+//                 </div>
+//                 <div>
+//                   <p class="new-de">Undefined</p>
+//                 </div>
+//               </div>
+//               <h4 class="card-new-heading">Test</h4>
+//               <div class="card-body d-flex justify-between align-items-end">
+//                 <div class="card-number">
+//                   <div class="h3">Recommended</div><small><strong>Capital : undefined PER LOT</strong></small>
+//                 </div>
+//                 <div class="card-description text-right">
+//                   <small class="new-sma">Info</small>
+//                 </div>
+//                 <div class="card-description text-right ml-3">
+//                   <small class="new-sma">Join</small>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//           <div class="col-12 col-sm-6 col-md-3">
+//             <div class="card card-salmon-pink text-white">
+//               <div class="d-flex justify-content-space-between" >
+//                 <div>
+//                   <p class="new-un">Undefined</p>
+//                 </div>
+//                 <div>
+//                   <p class="new-de">Undefined</p>
+//                 </div>
+//               </div>
+//               <h4 class="card-new-heading">Test1</h4>
+//               <div class="card-body d-flex justify-content-between align-items-end">
+//                 <div class="card-number">
+//                   <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
+//                 </div>
+//                 <div class="card-description text-right">
+//                   <small class="new-sma">Info</small>
+//                 </div>
+//                 <div class="card-description text-right ml-3">
+//                   <small class="new-sma">Join</small>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//           <div class="col-12 col-sm-6 col-md-3">
+//             <div class="card card-blue-green text-white">
+//               <div class="d-flex justify-content-space-between" >
+//                 <div>
+//                   <p class="new-un">Undefined</p>
+//                 </div>
+//                 <div>
+//                   <p class="new-de">Undefined</p>
+//                 </div>
+//               </div>
+//               <h4 class="card-new-heading">Test2</h4>
+//               <div class="card-body d-flex justify-content-between align-items-end">
+//                 <div class="card-number">
+//                   <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
+//                 </div>
+//                 <div class="card-description text-right">
+//                   <small class="new-sma">Info</small>
+//                 </div>
+//                 <div class="card-description text-right ml-3">
+//                   <small class="new-sma">Join</small>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//           <div class="col-12 col-sm-6 col-md-3">
+//             <div class="card card-purple-pink text-white">
+//               <div class="d-flex justify-content-space-between" >
+//                 <div>
+//                   <p class="new-un">Undefined</p>
+//                 </div>
+//                 <div>
+//                   <p class="new-de">Undefined</p>
+//                 </div>
+//               </div>
+//               <h4 class="card-new-heading">Test3</h4>
+//               <div class="card-body d-flex justify-content-between align-items-end">
+//                 <div class="card-number">
+//                   <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
+//                 </div>
+//                 <div class="card-description text-right">
+//                   <small class="new-sma">Info</small>
+//                 </div>
+//                 <div class="card-description text-right ml-3">
+//                   <small class="new-sma">Join</small>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
 
-export default test
+// export default test
+
+
+
+
+import { useEffect } from 'react';
+import axios from 'axios';
+
+const SPREADSHEET_ID = '1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU';
+const RANGE = 'MARKET_DATA!A1:B189'; // Update with your sheet name and range
+
+const fetchDataFromGoogleSheet = async () => {
+  try {
+
+    const response = await axios.get(
+      // `https://sheets.googleapis.com/v4/spreadsheets/${1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU}/values/${RANGE}`
+      `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE}`
+
+    );
+
+    console.log('Data from Google Sheet:', response.data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+const App = () => {
+  useEffect(() => {
+    fetchDataFromGoogleSheet();
+  }, []);
+
+  return <div>Your React App</div>;
+};
+
+export default App;

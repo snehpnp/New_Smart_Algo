@@ -12,6 +12,7 @@ const cors = require('cors');
 const bodyparser = require('body-parser')
 
 
+
 const corsOpts = {
   origin: '*',
   methods: [
@@ -43,7 +44,7 @@ const { createViewAngel } = require('./View/Angel')
 const { createViewFivepaisa } = require('./View/fivepaisa')
 const { createViewZerodha } = require('./View/zerodha')
 
-const {  dropExistingView, TradeHistroy } = require('./View/TradeHistory')
+const { dropExistingView, TradeHistroy } = require('./View/TradeHistory')
 
 const { TokenSymbolUpdate, TruncateTable, tokenFind } = require('./App/Cron/cron')
 
@@ -137,11 +138,13 @@ app.get('/tokenFind', async (req, res) => {
         },
       },
     ]);
-    
 
 
-res.send({ data: data,
-  channellist: data[0].channellist.join('#')})
+
+    res.send({
+      data: data,
+      channellist: data[0].channellist.join('#')
+    })
     // return findData
 
 
@@ -168,10 +171,17 @@ app.get('/tradesymbol1', async (req, res) => {
   res.send({ msg: "Done!!!" })
 })
 
+// app.get('/test_ganpat', async (req, res) => {
+
+
+// })
+
+
+
 
 // TEST API
 app.get('/get', async (req, res) => {
-   createViewZerodha()
+  createViewZerodha()
   // createViewFivepaisa()
   // createViewAngel()
   //createView()

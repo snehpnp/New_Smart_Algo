@@ -52,7 +52,7 @@ class Company {
     async GetCompany_logo(req, res) {
         try {
 
-            var compantInfo = await company_information.find().select('logo favicon')
+            var compantInfo = await company_information.find().select('logo favicon panel_name')
             if (!compantInfo) {
                 return res.send({ status: false, msg: 'Server issue Not find Company information.', data: [] });
             }

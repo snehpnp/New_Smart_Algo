@@ -28,7 +28,6 @@ class Dashboard {
             // Query the view to get the data
             const result = await db1.collection(viewName).find().toArray();
 
-            // console.log("result", result)
             if (result) {
                 res.send({
                     status: true,

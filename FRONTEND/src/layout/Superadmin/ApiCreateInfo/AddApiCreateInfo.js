@@ -51,9 +51,9 @@ const Create_Api_Info = () => {
                 errors.description = valid_err.EMPTY_API_CREATE_DESCRIPTION_ERROR;
             }
 
-            if (!isValidYouTubeUrl(values.youtubeurl)) {
-                errors.youtubeurl = valid_err.INVALID_YOUTUBE_URL_ERROR;
-            }
+            // if (!isValidYouTubeUrl(values.youtubeurl)) {
+            //     errors.youtubeurl = valid_err.INVALID_YOUTUBE_URL_ERROR;
+            // }
    
 
             return errors;
@@ -84,7 +84,7 @@ const Create_Api_Info = () => {
                 else if (response.status) {
                     toast.success(response.msg);
                     setTimeout(() => {
-                        navigate("/admin/apicreateinfo")
+                        navigate("/super/apicreateinfo")
                     }, 1000);
                 }
                 else if (!response.status) {

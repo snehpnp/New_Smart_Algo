@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_API_INFORMATION, UPDATE_API_INFORMATION, CREATE_API_INFORMATION } from "../../../Service/superadmin.service";
+import { GET_API_INFORMATION, UPDATE_API_INFORMATION, CREATE_API_INFORMATION, GET_API_INFORMATION_SUPERADMIN } from "../../../Service/superadmin.service";
 
 
 export const All_Api_Info_List = createAsyncThunk("getall/apiInfo", async (data) => {
@@ -11,6 +11,20 @@ export const All_Api_Info_List = createAsyncThunk("getall/apiInfo", async (data)
         return err;
     }
 });
+
+
+
+export const All_Api_Info_List_superadmin = createAsyncThunk("getall/apiInfo", async (data) => {
+    const { token, url } = data
+    console.log("data", data)
+    try {
+        const res = await GET_API_INFORMATION_SUPERADMIN({ url: url }, token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
 export const Update_Api_Info_Theme = createAsyncThunk("update/apiInfo", async (data) => {
     const { req, token } = data
     try {
@@ -44,6 +58,7 @@ const ApiCreateInfoSlice = createSlice({
         update_panel_theme: [],
         Create_Api_Information: [],
         get_all_Api_Information: [],
+        get_all_Api_Informationsuper: [],
         update_Api_Information: [],
     },
 
@@ -60,6 +75,10 @@ const ApiCreateInfoSlice = createSlice({
         [All_Api_Info_List.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, get_all_Api_Information: payload, isLoading: false };
+        },
+        [All_Api_Info_List_superadmin.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, get_all_Api_Informationsuper: payload, isLoading: false };
         },
         [Update_Api_Info_Theme.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
