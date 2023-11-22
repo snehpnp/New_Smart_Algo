@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 const { CommonEmail } = require('../../Helper/CommonEmail')
+const { firstOptPass, disclaimer } = require("../../Helper/Email_formate/first_login");
 
 const db = require('../../Models');
 const company_information = db.company_information;
@@ -188,6 +189,17 @@ class Login {
                 return res.send({ status: false, msg: 'Server Issue', data: error });
 
             }
+
+
+            if (EmailCheck.Is_First_login == "0") {
+                var disclaimerData = await disclaimer();
+
+                var toEmail = EmailCheck.Email;
+                var subjectEmail = "disclaimer";
+                CommonEmail(toEmail, subjectEmail, disclaimerData);
+            }
+
+
 
             addData["Is_First_login"] = 1;
             // Update Successfully
