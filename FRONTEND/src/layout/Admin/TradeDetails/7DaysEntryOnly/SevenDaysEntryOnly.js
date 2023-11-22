@@ -53,6 +53,10 @@ const SevenDaysEntry = () => {
             dataField: 'strategy',
             text: 'Strategy',
         },
+        {
+            dataField: 'entry_qty_percent',
+            text: 'Entery Qty %',
+        },
         // {
         //     dataField: 'strategy',
         //     text: 'Squre Off',

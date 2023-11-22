@@ -28,7 +28,7 @@ class Panel {
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
             await client.connect();
-            const db = client.db(db_name);
+            const db = client.db('test');
 
             const viewName = 'dashboard_data';
 
@@ -59,7 +59,7 @@ class Panel {
             // Use a connection pool to reuse connections
             var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
             await client.connect();
-            const db = client.db(db_name);
+            const db = client.db('test');
     
             const collectionName = 'users';
     
@@ -120,15 +120,15 @@ class Panel {
             // const { id, license } = req.body
             const { id, db_name, db_url, license, key } = req.body
 
-            console.log(typeof license);
-            console.log(license);
+            // console.log(typeof license);
+            // console.log(license);
 
             const uri = db_url;
 
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
             await client.connect();
-            const db = client.db(db_name);
+            const db = client.db('test');
             // const db = db_name;
 
             const companies_collection = db.collection('companies');
@@ -143,8 +143,8 @@ class Panel {
 
             // Query the view to get the data
             const findResult = await db.collection(viewName).find().project({ licenses: 1 }).toArray();
-
             const newLicensesValue = Number(findResult[0].licenses) + Number(license);
+            console.log(newLicensesValue);
         
             const updateOperation = {
                 $set: {
@@ -280,7 +280,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Add License error-", error);
+            console.log("Add License error-", error);path
         }
     }
 

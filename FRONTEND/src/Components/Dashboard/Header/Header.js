@@ -260,6 +260,7 @@ if(Role == "USER"){
           if (res.payload.status) {
             localStorage.removeItem("user_role");
             localStorage.removeItem("user_details");
+            localStorage.clear();
             setTimeout(() => {
               navigate("/");
             }, 1000);

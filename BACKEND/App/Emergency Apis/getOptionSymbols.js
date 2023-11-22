@@ -54,49 +54,95 @@ module.exports = function (app) {
     })
 
     // set liveprice all Stock
-    
-app.get("/getLivePrice", async (req,res)=>{
 
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Add 1 to the month since it's zero-based
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    
-    const daynext = String(currentDate.getDate() + 1).padStart(2, '0');
-    
-    const currentformattedDate = `${year}-${month}-${day}`;
-    
-    const nextdayformattedDate = `${year}-${month}-${daynext}`;
-    
-    console.log("currentformattedDate",currentformattedDate);
-    console.log("nextdayformattedDate",nextdayformattedDate);
-           
-    // Nifty 50: '^NSEI'
-    // Bank Nifty: '^NSEBANK'
-    // Nifty Financial Services: '^NIFTYFIN'
+    app.get("/getLivePrice", async (req, res) => {
 
-  
-    
-    var yahooFinance = require('yahoo-finance');
-    console.log("1")
-    yahooFinance.historical({
-    
-    symbol: '^NSEBANK', // Use the symbol for Infosys or another Indian company listed on U.S. exchanges
-    
-    from: currentformattedDate,
-    to: nextdayformattedDate,
-    
-    // period: 'd' // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
-    
-    }, function (err, quotes) {
-    if (err) {
-    console.error(err);
-    } else {
-    console.log("price",quotes[0].close);
-    }
-    
+        const currentDate = new Date();
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Add 1 to the month since it's zero-based
+        const day = String(currentDate.getDate()).padStart(2, '0');
+
+        const daynext = String(currentDate.getDate() + 1).padStart(2, '0');
+
+        const currentformattedDate = `${year}-${month}-${day}`;
+
+        const nextdayformattedDate = `${year}-${month}-${daynext}`;
+
+        console.log("currentformattedDate", currentformattedDate);
+        console.log("nextdayformattedDate", nextdayformattedDate);
+
+        // Nifty 50: '^NSEI'
+        // Bank Nifty: '^NSEBANK'
+        // Nifty Financial Services: '^NIFTYFIN'
+
+
+
+        var yahooFinance = require('yahoo-finance');
+        console.log("1")
+        yahooFinance.historical({
+
+            symbol: '^NSEBANK', // Use the symbol for Infosys or another Indian company listed on U.S. exchanges
+
+            from: currentformattedDate,
+            to: nextdayformattedDate,
+
+            // period: 'd' // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
+
+        }, function (err, quotes) {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("price", quotes[0].close);
+            }
+
+        });
+
+        res.send("ok");
     });
-    
-    res.send("ok");
-    });
+
+
+    app.get("/sig/view", async (req, res) => {
+
+
+        const { MongoClient } = require('mongodb');
+
+        async function createView() {
+            console.log(process.env.MONGO_URI);
+            const uri = 'mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net/';
+            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+            try {
+                await client.connect();
+
+                const sourceDatabaseName = 'test';
+                const targetDatabaseName = 'Signals_db';
+                const collectionName = 'signals';
+
+                const sourceDB = client.db(sourceDatabaseName);
+                const targetDB = client.db(targetDatabaseName);
+
+                const pipeline = [ ];
+
+                // Create a view in the target database
+                await targetDB.createCollection('signals_view', { viewOn: `${sourceDatabaseName}.${collectionName}`, pipeline });
+
+                console.log('View created successfully');
+            } catch (error) {
+                console.log("error",error);
+            }
+
+        }
+
+        // Call the function to create the view
+        createView();
+
+
+
+
+
+
+
+    })
+
+
 }

@@ -327,12 +327,7 @@ app.post('/broker-signals', async (req, res) => {
               tradesymbol1 = token[0].tradesymbol
             }
           }
-          console.log("tradesymbol1", tradesymbol1);
-
-
-
-
-
+         
 
           fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS_TOKEN ' + instrument_token + '\n', function (err) {
             if (err) {
