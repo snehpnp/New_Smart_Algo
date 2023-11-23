@@ -17,6 +17,7 @@ import { check_Device } from "../../../Utils/find_device";
 import { GET_HELPS } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice";
+import { Get_Company_Logo } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 
 
 import * as Config from "../../../Utils/Config";
@@ -51,6 +52,7 @@ const Header = ({ ChatBox }) => {
   const user_role = JSON.parse(localStorage.getItem("user_role"));
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const page = localStorage.getItem("page")
+  const Role = JSON.parse(localStorage.getItem("user_details")).Role
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
 
@@ -169,6 +171,7 @@ const Header = ({ ChatBox }) => {
   //  BROKER LOGIN
   const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
     if (check) {
+   
       loginWithApi(brokerid, UserDetails);
     } else {
       dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
@@ -197,14 +200,17 @@ const Header = ({ ChatBox }) => {
   // GET MESSGAE BRODCAST DATA 
   //  GET_USER_DETAILS
   const message_brod = async () => {
-    await dispatch(GET_MESSAGE_BRODS({ id: user_id }))
-      .unwrap()
-      .then((response) => {
-        // console.log("response", response);
-        if (response.status) {
-          // setUserDetails(response.data);
-        }
-      });
+    if (Role == "USER") {
+      await dispatch(GET_MESSAGE_BRODS({ id: user_id }))
+        .unwrap()
+        .then((response) => {
+          // console.log("response", response);
+          if (response.status) {
+            // setUserDetails(response.data);
+          }
+        });
+    }
+
   };
 
   useEffect(() => {
@@ -240,6 +246,7 @@ const Header = ({ ChatBox }) => {
   }, []);
 
   //  Clear Session  After 24 Hours
+
   const ClearSession = async () => {
     var decoded = jwt_decode(token);
     // console.log("decoded", decoded.exp)
@@ -256,6 +263,7 @@ const Header = ({ ChatBox }) => {
           if (res.payload.status) {
             localStorage.removeItem("user_role");
             localStorage.removeItem("user_details");
+            localStorage.clear();
             setTimeout(() => {
               navigate("/");
             }, 1000);
@@ -270,6 +278,28 @@ const Header = ({ ChatBox }) => {
   useEffect(() => {
     ClearSession();
   }, []);
+
+
+
+
+
+
+  const CompanyName = async () => {
+    await dispatch(Get_Company_Logo()).unwrap()
+      .then((response) => {
+        if (response.status) {
+          $(".Company_logo").html(response.data && response.data[0].panel_name);
+
+          $(".set_Favicon")
+        }
+      })
+  }
+
+
+
+
+
+
 
 
 
@@ -315,6 +345,7 @@ const Header = ({ ChatBox }) => {
 
   useEffect(() => {
     test()
+    CompanyName()
   }, []);
 
   return (
@@ -384,7 +415,7 @@ const Header = ({ ChatBox }) => {
                           className=" btn btn-primary"
                           onClick={() => setshowModal(true)}
                         >
-                         Set API Key
+                          Set API Key
                         </button>
                       </li>
                     </>

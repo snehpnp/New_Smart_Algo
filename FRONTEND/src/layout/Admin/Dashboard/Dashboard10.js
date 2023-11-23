@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 
 const Dashboard1 = ({ data }) => {
+  
   let arr = [
     {
       index: 1,
@@ -12,7 +13,7 @@ const Dashboard1 = ({ data }) => {
       value: data && data.total_client,
       icon: 'la la-users',
       route: "/admin/allclients",
-      visible: true
+      visible: false
     },
     {
       index: 2,

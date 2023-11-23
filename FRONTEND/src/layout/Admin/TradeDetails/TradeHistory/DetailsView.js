@@ -107,7 +107,7 @@ const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
         },
         {
             dataField: 'qty_percent',
-            text: 'QTY',
+            text: 'Qty Percentage',
             formatter: (cell, row, rowIndex) =>
                 <span className='text'>
                     {cell !== "" ? parseFloat(cell).toFixed(2) : "-"}

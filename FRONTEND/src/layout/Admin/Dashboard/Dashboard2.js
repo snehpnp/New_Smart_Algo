@@ -13,7 +13,7 @@ const Dashboard1 = ({ data }) => {
       value: data && data.total_client,
       icon: 'la la-users',
       route: "/admin/allclients",
-      visible: true
+      visible: false
     },
     {
       index: 2,

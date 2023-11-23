@@ -107,11 +107,11 @@ class Panel {
         try {
             const { domain } = req.body
 
-            var domain1= "http://localhost:3000"
+            var domain1 = "http://localhost:3000"
 
-            if( domain == "sneh.com" || domain== "https://trade.pandpinfotech.com") {
+            if (domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
                 domain1 = "http://localhost:3000"
-            }else{
+            } else {
                 domain1 = domain
             }
             // console.log(domain1);
@@ -250,7 +250,7 @@ class Panel {
 
             // Find documents with matching ids
             const getAllpanel = await ApiCreateInfo.find({ broker_id: { $in: objectIds } })
-    
+
             // console.log(getAllpanel);
 
 
@@ -276,6 +276,46 @@ class Panel {
         }
     }
 
+
+    // Get All APi Infor
+    async GetAllAPiInfo_Super(req, res) {
+        try {
+
+
+            const panel_data = await panel_model.find({ domain: req.body.url }).select('broker_id')
+            if (!panel_data) {
+                return res.status(409).json({ status: false, msg: 'Panel Not exists', data: [] });
+            }
+
+            // const objectIds = panel_data[0].broker_id.map((data) => data.id);
+
+            // // Find documents with matching ids
+            // const getAllpanel = await ApiCreateInfo.find({ broker_id: { $in: objectIds } })
+
+            // console.log(getAllpanel);
+
+
+            // THEME LIST DATA
+            const getAllpanel = await ApiCreateInfo
+                .find({})
+
+            // IF DATA NOT EXIST
+            if (getAllpanel.length == 0) {
+                res.send({ status: false, msg: "Empty data", data: getAllpanel })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All Api Info",
+                data: getAllpanel,
+            })
+
+
+        } catch (error) {
+            console.log("Get all Info error-", error);
+        }
+    }
 
 
     // Update APi Info
@@ -317,16 +357,16 @@ class Panel {
             const { domain } = req.body
 
             // FIND PANEL NAME DUPLICATE
-            var domain1= "http://localhost:3000"
+            var domain1 = "http://localhost:3000"
 
-            if( domain == "sneh.com" || domain== "https://trade.pandpinfotech.com") {
+            if (domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
                 domain1 = "http://localhost:3000"
-            }else{
+            } else {
                 domain1 = domain
             }
             console.log(domain1);
 
-            const Panel_information = await panel_model.findOne({ domain:domain1 }, 'broker_id');
+            const Panel_information = await panel_model.findOne({ domain: domain1 }, 'broker_id');
 
             // CHECK IF PANEL EXIST OR NOT
             if (!Panel_information) {

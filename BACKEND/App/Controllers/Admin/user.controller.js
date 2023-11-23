@@ -359,6 +359,7 @@ class Employee {
               FullName: FullName,
               Email: Email,
               Password: rand_password,
+              user_type:license_type == 2 ? "Live Account" : license_type == 0 ? "2 Days Account" : "Demo Account" 
             };
             console.log("Done final", new Date());
 

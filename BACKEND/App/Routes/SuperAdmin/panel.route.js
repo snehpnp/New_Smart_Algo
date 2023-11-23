@@ -5,7 +5,7 @@ const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
 
-const { AddPanel, EditPanel, UserProfile, GetPanleinformation, GetAllPanel, CreateAPiInfo, GetAllAPiInfo  , UpdateAPiInfo,GetPanlebroker} = require('../../Controllers/Superadmin/panel.controller')
+const { AddPanel, EditPanel, UserProfile, GetPanleinformation, GetAllPanel, CreateAPiInfo, GetAllAPiInfo, GetAllAPiInfo_Super, UpdateAPiInfo, GetPanlebroker } = require('../../Controllers/Superadmin/panel.controller')
 const { UpdatePanelTheme } = require('../../Controllers/Superadmin/theme_list.controller')
 
 
@@ -20,15 +20,9 @@ router.post('/edit/panel', EditPanel)
 router.post('/update/panel_theme', verifyToken, UpdatePanelTheme)
 
 router.post('/add/apicreateinfo', CreateAPiInfo)
-router.get('/getall/apicreateinfo', verifyToken, GetAllAPiInfo)
+router.get('/getall/apicreateinfo',  GetAllAPiInfo)
+router.post('/getall/apicreateinfo_super', verifyToken, GetAllAPiInfo_Super)
 router.post('/update/apicreateinfo', verifyToken, UpdateAPiInfo)
-
-
-
-
-
-
-// router.post('/getall/theme', GetAllTheme)
 
 
 

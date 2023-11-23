@@ -12,6 +12,7 @@ const ThemeSelection = () => {
     const [toggleSelection, setToggleSelection] = useState(false)
     const [ThemeData, setThemeData] = useState([])
 
+    const Role = JSON.parse(localStorage.getItem("user_details")).Role
 
     const AddClassName = (id) => {
         localStorage.setItem("theme_id", id)
@@ -113,11 +114,14 @@ const ThemeSelection = () => {
 
 
     const GetAllThemes = () => {
-        axios.get(`${Config.base_url}getall/theme`).then((res) => {
-            setThemeData(res.data.data)
-        }).catch((err) => {
-            console.log("error", err);
-        })
+        if (Role === "SUPERADMIN") {
+
+            axios.get(`https://trade.pandpinfotech.com/backend/getall/theme`).then((res) => {
+                setThemeData(res.data.data)
+            }).catch((err) => {
+                console.log("error", err);
+            })
+        }
     }
 
     useEffect(() => {

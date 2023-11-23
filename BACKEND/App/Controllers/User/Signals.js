@@ -74,6 +74,11 @@ class Signals {
                                     },
                                 },
                             },
+                            {
+                                $sort: {
+                                    createdAt: -1 // 1 for ascending order, -1 for descending
+                                }
+                            },
                         ],
                         as: 'signals',
                     },
@@ -93,12 +98,16 @@ class Signals {
             ];
 
             const GetAllClientServices = await client_services.aggregate(pipeline);
-     
+
 
 
             if (GetAllClientServices[0].allSignals.flat().length > 0) {
 
-                return res.send({ status: true, data: GetAllClientServices[0].allSignals.flat(), msg: "Get Signals" })
+                const sortedAndFilteredArray = GetAllClientServices[0].allSignals.flat()
+                .sort((a, b) => b.createdAt - a.createdAt);
+
+
+                return res.send({ status: true, data: sortedAndFilteredArray, msg: "Get Signals" })
             } else {
                 res.send({ status: false, data: [], msg: "Data Empty" })
             }

@@ -10,11 +10,12 @@ import { Pencil, Trash2 } from "lucide-react";
 import Formikform from "../../../Components/ExtraComponents/Form/Formik_form"
 import { useFormik } from 'formik';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { GET_BROKER_INFORMATIONS,FIND_BROKER_RESPONSES } from '../../../ReduxStore/Slice/Admin/DashboardSlice'
+import { GET_BROKER_INFORMATIONS, UPDATE_BROKER_INFORMATIONS, FIND_BROKER_RESPONSES } from '../../../ReduxStore/Slice/Admin/DashboardSlice'
 import { useDispatch, useSelector } from "react-redux";
 import { fa_time } from "../../../Utils/Date_formet";
 import Modal from '../../../Components/ExtraComponents/Modal';
-
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+import toast from 'react-hot-toast';
 
 
 const Broker_info = () => {
@@ -33,7 +34,7 @@ const Broker_info = () => {
 
     const [getBrokerInfo, setBrokerInfo] = useState({
         loading: true,
-        data: []
+        data: {}
     });
     const [GetBrokerInfo, setGetBrokerInfo] = useState({
         loading: true,
@@ -41,7 +42,7 @@ const Broker_info = () => {
     });
 
     const Find_broker_info = async (id) => {
-        await dispatch(FIND_BROKER_RESPONSES({id:id})).unwrap()
+        await dispatch(FIND_BROKER_RESPONSES({ id: id })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setBrokerInfo({
@@ -60,8 +61,6 @@ const Broker_info = () => {
             })
     }
 
-
-    console.log("===?",getBrokerInfo);
 
     const data = async () => {
         await dispatch(GET_BROKER_INFORMATIONS()).unwrap()
@@ -137,9 +136,6 @@ const Broker_info = () => {
 
     // GET ALL GROUP SERVICES NAME
     const GetBrokerInformation = async (row) => {
-// console.log("row",row);
-
-
         Find_broker_info(row._id)
         setGetBrokerId(row.broker_id)
         setshowModal(true)
@@ -161,49 +157,55 @@ const Broker_info = () => {
 
         validate: (values) => {
             const errors = {};
-           
+
 
             return errors;
         },
         onSubmit: async (values) => {
+            // console.log("values", values);
 
             const req = {
-                "id": user_id,
-                data: {
-                    "api_secret": values.api_secret,
-                    // "demat_userid": values.demat_userid,
-                    // "client_code": values.client_code,
-                    "app_id": values.app_id,
-                    // "app_key": values.app_key,
-                    // "api_key": values.api_key,/
-                    // "api_type": values.api_type,
+                "id": getBrokerInfo.data && getBrokerInfo.data._id,
+                broker_data: {
+                    "apiSecret": values.api_secret,
+                    "demat_userid": values.demat_userid,
+                    "client_code": values.client_code,
+                    "app_code": values.app_id,
+                    "app_key": values.app_key,
+                    "api_key": values.api_key,
+                    "api_type": values.api_type,
                 }
             }
-            console.log("test", req);
 
-            // await dispatch(Update_Broker_Keys({ req: req, token: AdminToken })).unwrap().then((response) => {
+            await dispatch(UPDATE_BROKER_INFORMATIONS({ req: req, token: AdminToken })).unwrap().then((response) => {
 
-            //     if (response.status === 409) {
-            //         toast.error(response.data.msg);
-            //     }
-            //     else if (response.status) {
-            //         toast.success(response.msg);
-            //         setTimeout(() => {
-            //             closeModal(false)
-            //             setRefresh(!Refresh)
-            //         }, 1000);
-            //     }
-            //     else if (!response.status) {
-            //         toast.error(response.msg);
-            //     }
+                if (response.status === 409) {
+                    toast.error(response.data.msg);
+                }
+                else if (response.status) {
+                    toast.success(response.msg);
+                    setTimeout(() => {
+                        setshowModal(!showModal)
+                        setRefresh(!Refresh)
+                    }, 1000);
+                }
+                else if (!response.status) {
+                    toast.error(response.msg);
+                }
 
-            // })
+            })
 
         }
     });
 
 
     const fields = [
+        // {
+        //     name: 'demat_userid',
+        //     label: formik.values.broker === '2' ? 'Demat User Id' : '', type: 'text',
+        //     showWhen: values => values.broker === '2',
+        //     label_size: 12, col_size: 6, disable: false
+        // },
 
         {
             name: 'app_id',
@@ -221,21 +223,19 @@ const Broker_info = () => {
 
     ];
 
-  
-    useEffect(() => {
 
+
+    useEffect(() => {
         formik.setFieldValue('broker', getBrokerId && getBrokerId);
         formik.setFieldValue('app_id', getBrokerInfo.data && getBrokerInfo.data.app_code);
-        formik.setFieldValue('api_type', getBrokerInfo.data && getBrokerInfo.data);
-        formik.setFieldValue('client_code', getBrokerInfo.data && getBrokerInfo.data);
-        formik.setFieldValue('api_key', getBrokerInfo.data && getBrokerInfo.data);
+        // formik.setFieldValue('api_type', getBrokerInfo.data && getBrokerInfo.data);
+        formik.setFieldValue('client_code', getBrokerInfo.data && getBrokerInfo.data.client_code);
+        formik.setFieldValue('api_key', getBrokerInfo.data && getBrokerInfo.data.api_key);
         formik.setFieldValue('api_secret', getBrokerInfo.data && getBrokerInfo.data.apiSecret);
-        formik.setFieldValue('app_key', getBrokerInfo.data && getBrokerInfo.data);
-        formik.setFieldValue('demat_userid', getBrokerInfo.data && getBrokerInfo.data);
+        // formik.setFieldValue('app_key', getBrokerInfo.data && getBrokerInfo.data);
+        formik.setFieldValue('demat_userid', getBrokerInfo.data && getBrokerInfo.data.demat_userid);
 
-
-
-    }, [getBrokerId]);
+    }, [getBrokerInfo]);
 
 
     return (
@@ -260,6 +260,8 @@ const Broker_info = () => {
                                     </>
                                     : ""
                             }
+                            <ToastButton />
+
                         </Content>
                     </>
             }

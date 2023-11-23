@@ -4,19 +4,23 @@
 // 13 =Fyers , 14 = 5-Paisa , 15 Zerodha ,
 import * as Config from "../../../Utils/Config";
 //import * as Config from "../Utils/Config";
+import { GET_BROKER_INFORMATION } from "../../../Service/admin.service";
 
 
-export const loginWithApi = (broker_id, UserDetails) => {
+export const loginWithApi = async (broker_id, UserDetails) => {
 
     if (broker_id === "1" || broker_id === 1) {
         alert("broker-1")
     }
-   else if (broker_id === "2" || broker_id === 2) {
-        var App_Code = "RjFPYeubvHpGtaS"
-        window.location.href = `https://ant.aliceblueonline.com/?appcode=${App_Code}`;
+    else if (broker_id === "2" || broker_id === 2) {
+        // var App_Code = "RjFPYeubvHpGtaS"
+        const res = await GET_BROKER_INFORMATION();
+        // console.log("res", res.data[0].app_code)
+        // return
+
+        window.location.href = `https://ant.aliceblueonline.com/?appcode=${res.data[0].app_code}`;
         console.log("Alice Blue");
-        // console.log("UserDetails", UserDetails);
-  }
+    }
     else if (broker_id === "3" || broker_id === 3) {
         alert("broker-3")
     }
@@ -48,7 +52,7 @@ export const loginWithApi = (broker_id, UserDetails) => {
     else if (broker_id === "12" || broker_id === 12) {
         // console.log("UserDetails",UserDetails.api_key)
         // alert("broker-12")
-        window.location.href ="https://smartapi.angelbroking.com/publisher-login?api_key=" +UserDetails.api_key;
+        window.location.href = "https://smartapi.angelbroking.com/publisher-login?api_key=" + UserDetails.api_key;
         // alert(UserDetails.api_key)
     }
 
@@ -58,17 +62,17 @@ export const loginWithApi = (broker_id, UserDetails) => {
 
     // FIVE PAISA
     else if (broker_id === "14" || broker_id === 14) {
-        
-       window.location.href = `https://dev-openapi.5paisa.com/WebVendorLogin/VLogin/Index?VendorKey=${UserDetails.api_key}&ResponseURL=${Config.base_url}fivepaisa&State=${UserDetails.client_key}`;
-         
 
-       //alert(`https://dev-openapi.5paisa.com/WebVendorLogin/VLogin/Index?VendorKey=${UserDetails.api_key}&ResponseURL=${Config.base_url}fivepaisa&State=${UserDetails.client_key}`)
+        window.location.href = `https://dev-openapi.5paisa.com/WebVendorLogin/VLogin/Index?VendorKey=${UserDetails.api_key}&ResponseURL=${Config.base_url}fivepaisa&State=${UserDetails.client_key}`;
+
+
+        //alert(`https://dev-openapi.5paisa.com/WebVendorLogin/VLogin/Index?VendorKey=${UserDetails.api_key}&ResponseURL=${Config.base_url}fivepaisa&State=${UserDetails.client_key}`)
 
 
     }
     else if (broker_id === "15" || broker_id === 15) {
-        window.location.href ="https://kite.zerodha.com/connect/login?v=3&api_key="+UserDetails.api_key;
-       // alert("broker-15")
+        window.location.href = "https://kite.zerodha.com/connect/login?v=3&api_key=" + UserDetails.api_key;
+        // alert("broker-15")
     }
     else if (broker_id === "16" || broker_id === 16) {
         alert("broker-16")

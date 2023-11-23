@@ -55,10 +55,8 @@ class Tradehistory {
                         strategy: stg1,
                         trade_symbol: ser1,
                         client_persnal_key: client_persnal_key1
-
                     }
                 },
-
                 {
                     $lookup: {
                         from: "signals",
@@ -80,25 +78,20 @@ class Tradehistory {
                         _id: -1 // Sort in ascending order. Use -1 for descending.
                     }
                 }
-
             ]);
+
 
             if (filteredSignals.length > 0) {
 
-                filteredSignals.forEach(function (item) {
+                filteredSignals.filter(function (item) {
 
-                    item.result.forEach(function (signal) {
-
-                        // signal.qty_percent = Number(signal.lot_size) * (Math.ceil(Number(signal.qty_percent) / 100) * 100) * 0.01
-
-                    });
-
-                    item.entry_qty_percent = Number(item.lot_size) * (Math.ceil(Number(item.entry_qty_percent) / 100)),
-                        item.exit_qty_percent = Number(item.lot_size) * (Math.ceil(Number(item.exit_qty_percent) / 100))
+                    item.entry_qty_percent = Number(item.result1[0].lotsize) * (Math.ceil(Number(item.entry_qty_percent) / 100)),
+                        item.exit_qty_percent = Number(item.result1[0].lotsize) * (Math.ceil(Number(item.exit_qty_percent) / 100))
 
                 });
 
             }
+
 
             if (filteredSignals.length === 0) {
                 return res.send({ status: false, msg: 'No signals founddate range.', data: [] });
@@ -123,8 +116,21 @@ class Tradehistory {
                     $gte: sevenDaysAgo, // Aaj se pichle 7 din se greater than or equal
                     $lte: today, // Aaj se less than or equal
                 },
-                exit_price: ""
             }).sort({ createdAt: -1 })
+
+
+
+            filteredSignals.forEach((data) => {
+                var entry_qty_percent1 = data.entry_qty_percent ? Number(data.entry_qty_percent ) :0
+                var exit_qty_percent1 = data.exit_qty_percent ? Number(data.exit_qty_percent ) :0
+
+                
+                if (entry_qty_percent1 > exit_qty_percent1) {
+                    data.entry_qty_percent = entry_qty_percent1-exit_qty_percent1
+
+                }
+
+            })
 
             if (filteredSignals.length == 0) {
                 res.send({ status: false, data: filteredSignals, msg: "Empty Data" })
@@ -140,29 +146,29 @@ class Tradehistory {
 
 
 
-// ADMIN TRADING STATUS GET
-async AdminTradingStatus(req, res) {
-    try {
-        const { broker_name } = req.body
+    // ADMIN TRADING STATUS GET
+    async AdminTradingStatus(req, res) {
+        try {
+            const { broker_name } = req.body
 
-        var Admin_information = await live_price.find({ broker_name: "ALICE_BLUE" });
+            var Admin_information = await live_price.find({ broker_name: "ALICE_BLUE" });
 
-        if (Admin_information.length == 0) {
-            return res.send({ status: false, msg: 'User Not exists', data: [] });
+            if (Admin_information.length == 0) {
+                return res.send({ status: false, msg: 'User Not exists', data: [] });
+            }
+
+            if (Admin_information[0].trading_status == "off") {
+                return res.send({ status: false, msg: 'Already Trading Off', data: false });
+            }
+
+
+            return res.send({ status: true, msg: "Trading status get", data: true });
+
+
+        } catch (error) {
+            console.log("error", error);
         }
-
-        if (Admin_information[0].trading_status == "off") {
-            return res.send({ status: false, msg: 'Already Trading Off', data:false });
-        }
-
-
-        return res.send({ status: true, msg: "Trading status get", data:true });
-
-
-    } catch (error) {
-        console.log("error", error);
     }
-}
 
 
     // ADMIN TRADING OFF

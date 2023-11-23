@@ -2,12 +2,13 @@
 "use strict"
 
 const router = require("express").Router()
-const {verifyToken}= require('../../Middleware/authjwt')
+const { verifyToken } = require('../../Middleware/authjwt')
 
-const { GetAdminSignals } = require('../../Controllers/Admin/signals.controller')
+const { GetAdminSignals, GetStrickPriceFromSheet } = require('../../Controllers/Admin/signals.controller')
 
 
 router.post('/get/allsignals', GetAdminSignals)
+router.get('/get/price', GetStrickPriceFromSheet)
 
 
 

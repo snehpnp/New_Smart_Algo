@@ -142,7 +142,7 @@ export async function SET_THEME_DETAILS(data, token) {
 // GET_PANEL_INFORMATION
 export async function GET_PANEL_INFORMATION(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}get/panelinformation`, data, {
+        const res = await axios.post(`https://trade.pandpinfotech.com/backend/get/panelinformation`, data, {
             // headers: header(token),
             data: {},
         })
