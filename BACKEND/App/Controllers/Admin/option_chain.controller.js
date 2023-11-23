@@ -124,81 +124,17 @@ class OptionChain {
         // let price = "19300"
         // let symbol = "NIFTY"
         // let expiry = "26102023"
-
         let limit_set = 20
-        if (symbol == "FINNIFTY" || symbol == "BANKNIFTY" || symbol == "NIFTY" || symbol == "MIDCPNIFTY") {
-            let price = ""
-            let price_symbol = ""
-            if (symbol == "FINNIFTY") {
-                price = "19500"
-                price_symbol = "Nifty Financial Services";
-            } else if (symbol == "BANKNIFTY") {
-                price = "43400"
-                price_symbol = "Nifty Bank";
-            } else if (symbol == "NIFTY") {
-                price_symbol = "NIFTY 50";
-                price = "19800"
-            } else if (symbol == "MIDCPNIFTY") {
-                price_symbol = "NIFTY Midcap 100";
-            }
+         let price = 19000
 
-
-            console.log("symbol", symbol)
-            console.log("expiry", expiry)
-            console.log("price", price)
-
-
-
-            // const pipeline2 = [
-            //     {
-            //         $match: {
-            //             $or: [
-            //                 {
-            //                     $and: [
-            //                         { strike: { $lt: price } },
-            //                         { segment: "O" },
-            //                         { symbol: symbol },
-            //                         { expiry: expiry }
-            //                     ]
-            //                 },
-            //                 {
-            //                     $and: [
-            //                         { strike: price },
-            //                         { symbol: symbol },
-            //                         { expiry: expiry }
-            //                     ]
-            //                 },
-            //                 {
-            //                     $and: [
-            //                         { strike: { $gt: price } },
-            //                         { symbol: symbol },
-            //                         { expiry: expiry }
-            //                     ]
-            //                 }
-            //             ]
-            //         }
-            //     },
-            //     {
-            //         $sort: {
-            //             strike: 1
-            //         }
-            //     },
-            //     {
-            //         $limit: limit_set
-            //     },
-            //     {
-            //         $project: {
-            //             _id: 0,
-            //             strike: 1,
-            //             option_type: 1,
-            //             exch_seg: 1,
-            //             instrument_token: 1,
-            //             symbol: 1,
-            //             segment: 1,
-            //             // option_type: 1
-            //         }
-            //     }
-            // ]
+        const get_symbol_price = await Get_Option_Chain_modal.findOne({symbol:symbol})
+         
+        console.log("get_symbol_price",get_symbol_price)
+        if(get_symbol_price != undefined){
+            price = parseInt(get_symbol_price.price); 
+        }
+        console.log("price",price)
+            
             const pipeline2 = [
                 {
                     $match: {
@@ -208,63 +144,6 @@ class OptionChain {
                     }
                 }
             ]
-
-
-
-            // const pipeline3 = [
-            //     {
-            //         $match: {
-            //             $or: [
-            //                 {
-            //                     strike: { $lt: price },
-            //                     segment: "O",
-            //                     symbol: symbol,
-            //                     expiry: expiry,
-            //                 },
-            //                 {
-            //                     strike: price,
-            //                     segment: "O",
-            //                     symbol: symbol,
-            //                     expiry: expiry,
-            //                 },
-            //                 {
-            //                     strike: { $gt: price },
-            //                     segment: "O",
-            //                     symbol: symbol,
-            //                     expiry: expiry,
-            //                 },
-            //             ],
-            //         },
-            //     },
-            //     {
-            //         $sort: {
-            //             strike: 1
-            //         }
-            //     },
-            //     {
-            //         $limit: limit_set
-            //     },
-            //     {
-            //         $group: {
-            //             _id: "$strike",
-            //             symbol: { $first: "$symbol" },
-            //             expiry: { $first: "$expiry" },
-            //             instrument_token: { $first: "$instrument_token" },
-            //             option_type: { $first: "$option_type" }
-            //         }
-            //     },
-            //     {
-            //         $sort: {
-            //             _id: 1
-            //         }
-            //     },
-            //     {
-            //         $project: {
-            //             _id: 0,
-            //             strike: "$_id",
-            //         }
-            //     }
-            // ]
 
             const pipeline3 = [
                 {
@@ -311,8 +190,6 @@ class OptionChain {
             const resultStrike = await Alice_token.aggregate(pipeline3);
 
 
-
-
             const final_data = [];
             var channelstr = ""
             if (result.length > 0) {
@@ -324,19 +201,19 @@ class OptionChain {
                     let segment = ""
                     result.forEach(element1 => {
                         if (element.document.strike == element1.strike) {
-                            console.log("strike price", element.document.strike)
+                          //  console.log("strike price", element.document.strike)
                             // console.log("segment", element1.strike)
 
 
                             if (element1.option_type == "CE") {
-                                console.log("CALL", element1.option_type)
-                                console.log("STRIKE", element1.strike)
+                             //   console.log("CALL", element1.option_type)
+                              //  console.log("STRIKE", element1.strike)
                                 symbol = element1.symbol
                                 segment = element1.segment
                                 call_token = element1.instrument_token;
                             } else if (element1.option_type == "PE") {
-                                console.log("PUT", element1.option_type)
-                                console.log("STRIKE", element1.strike)
+                              //  console.log("PUT", element1.option_type)
+                               // console.log("STRIKE", element1.strike)
                                 symbol = element1.symbol
                                 segment = element1.segment
                                 put_token = element1.instrument_token;
@@ -364,7 +241,7 @@ class OptionChain {
             else {
                 res.send({ status: false, data: [], channellist: "" })
             }
-        }
+      
     }
 
     // GET All ROUND TOKEN

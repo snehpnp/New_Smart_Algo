@@ -3257,70 +3257,61 @@ const abc = (data, conditionString) => {
 
 
   app.get("/stockPriceupdate",async(req,res)=>{
-    var yahooFinance = require('yahoo-finance');
+    var axios = require('axios');
+    const Papa = require('papaparse')
+            const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
+            const { data } = await axios.get(csvFilePath);
 
-     const pipeline = [
-      {$sort:{
-        _id:-1
-      }},
-      {
-        $project:{
-          symbol:1,
-          price:1
-        }
-      }
-     ]
-    
-    const result = await option_chain_symbols.aggregate(pipeline);
+                Papa.parse(data, {
+                    complete: async (result) => {
+                        let sheet_Data = result.data;
+                        sheet_Data.forEach(async(element) => {
 
-    res.send(result);
-    return
+                          console.log(" element ",element)
+                          let symbol = element.SYMBOL;
+                          // const get_symbol_row = await option_chain_symbols.findOne({symbol:element.SYMBOL})
 
+                 
+                if (symbol == "NIFTY_BANK") {
+                    symbol = "BANKNIFTY";
+                 }
+                 else if (symbol == "NIFTY_50") {
+                    symbol = "NIFTY";
+                } 
+                else if (symbol == "NIFTY_FIN_SERVICE") {
+                    symbol = "FINNIFTY";  
+                }
 
-    const date = new Date('2023-11-03');
-   const currentDAy = date.toISOString().split('T')[0]; // 'yyyy-MM-dd' format
+                        
 
-   const date1 = new Date();
-   date1.setDate(date1.getDate() + 1);
-   const nextDay = date1.toISOString().split('T')[0];
-   
-  
-     
-    await result.forEach(async(element) => {
-     
+                 const filter = {symbol:symbol};
+                 const update = { $set: {price:element.CPrice} };
 
-      if(element.symbol == "NIFTY" || element.symbol == "BANKNIFTY" || element.symbol == "FINNIFTY"){
-        console.log("symbol INDEX- ",element.symbol)
-      }else{
+                 await option_chain_symbols.updateOne(filter, update);
+                          
+                        });
+                    },
+                    header: true,
+                });
+            
+             
+      
+              // const pipeline = [
+              //   {$sort:{
+              //     _id:-1
+              //   }},
+              //   {
+              //     $project:{
+              //       symbol:1,
+              //       price:1
+              //     }
+              //   }
+              // ]
+              
+              // const result = await option_chain_symbols.aggregate(pipeline);
 
+              res.send("okk");
 
-
-        console.log("symbol - ",element.symbol)
-
-       await yahooFinance.historical({
-          symbol: element.symbol+'.NS', // Use the symbol for Infosys or another Indian company listed on U.S. exchanges
-          from: currentDAy,
-          to: nextDay,
-          // period: 'd' // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
-          }, async function (err, quotes) {
-          if (err) {
-          console.error(err);
-          } else {
-          console.log(quotes[0].close);
-          }
-        });
-
-
-
-
-
-      }
-
-    });
-    
-    res.send(result);
-
-    
   })
 
 
@@ -3383,6 +3374,139 @@ const abc = (data, conditionString) => {
 
     
   // })
+
+//   async Get_Option_All_Round_Token(req, res) {
+
+
+//     const symbol = req.body.symbol;
+//     const expiry = req.body.expiry;
+
+//     // let price = "19300"
+//     // let symbol = "NIFTY"
+//     // let expiry = "26102023"
+
+//     let limit_set = 20
+
+//      let price = 3000
+
+//     const get_symbol_price = await Get_Option_Chain_modal.findOne({symbol:symbol})
+     
+//     console.log("get_symbol_price",get_symbol_price)
+//     if(get_symbol_price != undefined){
+//         price = parseInt(get_symbol_price.price); 
+//     }
+//     console.log("price",price)
+        
+//         const pipeline2 = [
+//             {
+//                 $match: {
+//                     symbol: symbol,
+//                     segment: 'O',
+//                     expiry: expiry
+//                 }
+//             }
+//         ]
+
+//         const pipeline3 = [
+//             {
+//                 $match: {
+//                     symbol: symbol,
+//                     segment: 'O',
+//                     expiry: expiry
+//                 }
+//             },
+
+//             {
+//                 $addFields: {
+//                     absoluteDifference: {
+//                         $abs: {
+//                             $subtract: [{ $toInt: "$strike" }, price]
+//                         }
+//                     }
+//                 }
+//             },
+
+//             {
+//                 $group: {
+//                     _id: "$strike", // Group by unique values of A
+//                     minDifference: { $min: "$absoluteDifference" }, // Find the minimum absolute difference for each group
+//                     document: { $first: "$$ROOT" } // Keep the first document in each group
+//                 }
+//             },
+//             {
+//                 $sort: {
+//                     minDifference: 1 // Sort by the minimum absolute difference in ascending order
+//                 }
+//             },
+//             {
+//                 $limit: limit_set
+//             },
+//             {
+//                 $sort: {
+//                     _id: 1 // Sort by the minimum absolute difference in ascending order
+//                 }
+//             }
+//         ]
+
+//         const result = await Alice_token.aggregate(pipeline2);
+//         const resultStrike = await Alice_token.aggregate(pipeline3);
+
+
+
+
+//         const final_data = [];
+//         var channelstr = ""
+//         if (result.length > 0) {
+//             resultStrike.forEach(element => {
+
+//                 let call_token = "";
+//                 let put_token = "";
+//                 let symbol = ""
+//                 let segment = ""
+//                 result.forEach(element1 => {
+//                     if (element.document.strike == element1.strike) {
+//                         console.log("strike price", element.document.strike)
+//                         // console.log("segment", element1.strike)
+
+
+//                         if (element1.option_type == "CE") {
+//                             console.log("CALL", element1.option_type)
+//                             console.log("STRIKE", element1.strike)
+//                             symbol = element1.symbol
+//                             segment = element1.segment
+//                             call_token = element1.instrument_token;
+//                         } else if (element1.option_type == "PE") {
+//                             console.log("PUT", element1.option_type)
+//                             console.log("STRIKE", element1.strike)
+//                             symbol = element1.symbol
+//                             segment = element1.segment
+//                             put_token = element1.instrument_token;
+//                         }
+//                         channelstr += element1.exch_seg + "|" + element1.instrument_token + "#"
+//                     }
+//                 });
+
+//                 const push_object = {
+//                     symbol: symbol,
+//                     segment: segment,
+//                     strike_price: element.document.strike,
+//                     call_token: call_token,
+//                     put_token: put_token,
+//                     expiry: element.document.expiry
+//                 }
+//                 final_data.push(push_object)
+//             });
+
+
+//             var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+//             //  console.log("alltokenchannellist",alltokenchannellist)
+//             res.send({ status: true, data: final_data, channellist: alltokenchannellist })
+//         }
+//         else {
+//             res.send({ status: false, data: [], channellist: "" })
+//         }
+  
+// }
 
 
 
