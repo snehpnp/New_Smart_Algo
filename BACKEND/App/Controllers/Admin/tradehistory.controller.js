@@ -111,32 +111,80 @@ class Tradehistory {
             const sevenDaysAgo = new Date(today); // Aaj ki date se 7 din pehle ki date
             sevenDaysAgo.setDate(today.getDate() - 7);
 
-            const filteredSignals = await MainSignals_modal.find({
-                createdAt: {
-                    $gte: sevenDaysAgo, // Aaj se pichle 7 din se greater than or equal
-                    $lte: today, // Aaj se less than or equal
+            // const filteredSignals = await MainSignals_modal.find({
+            //     createdAt: {
+            //         $gte: sevenDaysAgo, // Aaj se pichle 7 din se greater than or equal
+            //         $lte: today, // Aaj se less than or equal
+            //     },
+            // }).sort({ createdAt: -1 })
+
+            const filteredSignals = await MainSignals_modal.aggregate([
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: sevenDaysAgo, // Aaj se pichle 7 din se greater than or equal
+                            $lte: today, // Aaj se less than or equal
+                        },
+
+                    }
                 },
-            }).sort({ createdAt: -1 })
+                {
+                    $lookup: {
+                        from: "signals",
+                        localField: "signals_id",
+                        foreignField: "_id",
+                        as: "result",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "services",
+                        localField: "symbol",
+                        foreignField: "name",
+                        as: "result1",
+                    },
+                },
+                {
+                    $sort: {
+                        _id: -1 // Sort in ascending order. Use -1 for descending.
+                    }
+                }
+            ]);
 
 
 
+            if (filteredSignals.length > 0) {
+
+                filteredSignals.filter(function (item) {
+
+                    item.entry_qty_percent = Number(item.result1[0].lotsize) * (Math.ceil(Number(item.entry_qty_percent) / 100)),
+                        item.exit_qty_percent = Number(item.result1[0].lotsize) * (Math.ceil(Number(item.exit_qty_percent) / 100))
+
+                });
+
+            }
+
+
+            var tradeArr = []
             filteredSignals.forEach((data) => {
-                var entry_qty_percent1 = data.entry_qty_percent ? Number(data.entry_qty_percent ) :0
-                var exit_qty_percent1 = data.exit_qty_percent ? Number(data.exit_qty_percent ) :0
+                var entry_qty_percent1 = data.entry_qty_percent ? Number(data.entry_qty_percent) : 0
+                var exit_qty_percent1 = data.exit_qty_percent ? Number(data.exit_qty_percent) : 0
 
-                
+                console.log( entry_qty_percent1 ,"-", exit_qty_percent1);
+
                 if (entry_qty_percent1 > exit_qty_percent1) {
-                    data.entry_qty_percent = entry_qty_percent1-exit_qty_percent1
-
+                    data.entry_qty_percent = entry_qty_percent1 - exit_qty_percent1
+                    tradeArr.push(data)
                 }
 
             })
 
-            if (filteredSignals.length == 0) {
-                res.send({ status: false, data: filteredSignals, msg: "Empty Data" })
+
+            if (tradeArr.length == 0) {
+                res.send({ status: false, data: tradeArr, msg: "Empty Data" })
             }
 
-            res.send({ status: true, data: filteredSignals, msg: "Get All Data" })
+            res.send({ status: true, data: tradeArr, msg: "Get All Data" })
 
 
         } catch (error) {

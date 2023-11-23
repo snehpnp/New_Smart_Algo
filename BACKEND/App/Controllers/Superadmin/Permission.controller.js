@@ -132,6 +132,8 @@ class Panel {
             // const db = db_name;
 
             const companies_collection = db.collection('companies');
+            const countLicense_collection = db.collection('count_licenses');
+
             const viewName = 'companies';
 
 
@@ -144,10 +146,8 @@ class Panel {
             // Query the view to get the data
             const findResult = await db.collection(viewName).find().project({ licenses: 1 }).toArray();
             const newLicensesValue = Number(findResult[0].licenses) + Number(license);
-            console.log(id, db_name, db_url, license, key);
+       
 
-
-            return
         
             const updateOperation = {
                 $set: {
@@ -159,9 +159,20 @@ class Panel {
 
             // Update documents that match the query condition
             const updateResult = await companies_collection.updateMany(queryCondition, updateOperation);
-            const newCompany = new count_licenses({ admin_license: Number(license), user_id: objectId });
-            newCompany.save()
+            
+            // const newCompany = new countLicense_collection({ admin_license: Number(license), user_id: objectId });
+            // newCompany.save()
 
+            const newCompany =   await countLicense_collection.insertOne({ admin_license: Number(license), user_id: objectId,  createdAt: new Date(),
+                updatedAt: new Date() });
+           
+            // const newCompany = await countLicense_collection.create({
+            //     admin_license: Number(license),
+            //     user_id: objectId
+            //   });
+            
+            
+            console.log(newCompany);
             // If you want to send the retrieved data as a response
             return res.send({
                 status: true,
