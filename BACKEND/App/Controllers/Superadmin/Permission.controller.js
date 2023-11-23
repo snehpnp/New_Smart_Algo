@@ -144,7 +144,10 @@ class Panel {
             // Query the view to get the data
             const findResult = await db.collection(viewName).find().project({ licenses: 1 }).toArray();
             const newLicensesValue = Number(findResult[0].licenses) + Number(license);
-            console.log(newLicensesValue);
+            console.log(id, db_name, db_url, license, key);
+
+
+            return
         
             const updateOperation = {
                 $set: {

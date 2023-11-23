@@ -176,7 +176,7 @@ db.createView("dashboard_data", "users", [
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "0"] },
-                                { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
                                 { $eq: ["$Is_Active", "1"] }
 
                             ]
