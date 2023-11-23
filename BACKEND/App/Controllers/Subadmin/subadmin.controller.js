@@ -73,7 +73,8 @@ class Subadmin {
                 Role: Role.toUpperCase(),
                 client_key: client_key,
                 parent_role: parent_role,
-                parent_id: parent_id
+                parent_id: parent_id,
+                Is_First_login:"1"
 
             });
 

@@ -103,7 +103,7 @@ const TradeHistory = () => {
     let endDate = getActualDateFormate(toDate);
 
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter, token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: "ADMIN", token: token })
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -687,10 +687,11 @@ const TradeHistory = () => {
         show_csv_button={true} csv_data={ForGetCSV} csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-          <div className="col-lg-12 flex-column">
+          {/* <div className="col-lg-12 flex-column">
             <div className="headaer-title">
               <h5 className="font-w400 mb-0">Live Price</h5>
-            </div> <div className="Api Login m-2">
+            </div>
+             <div className="Api Login m-2">
               <label class="switch">
                 <input
                   type="checkbox"
@@ -707,7 +708,8 @@ const TradeHistory = () => {
                 />
                 <span class="slider round"></span>
               </label>
-            </div></div>
+            </div>
+            </div> */}
           <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12" htmlFor="fromdate">

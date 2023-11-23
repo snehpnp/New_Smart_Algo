@@ -130,14 +130,14 @@ class OptionChain {
             let price = ""
             let price_symbol = ""
             if (symbol == "FINNIFTY") {
-                price = 19500
+                price = "19500"
                 price_symbol = "Nifty Financial Services";
             } else if (symbol == "BANKNIFTY") {
-                price = 44500
+                price = "43400"
                 price_symbol = "Nifty Bank";
             } else if (symbol == "NIFTY") {
                 price_symbol = "NIFTY 50";
-                price = 19500
+                price = "19800"
             } else if (symbol == "MIDCPNIFTY") {
                 price_symbol = "NIFTY Midcap 100";
             }
@@ -199,17 +199,17 @@ class OptionChain {
             //         }
             //     }
             // ]
-            const pipeline2 =   [
+            const pipeline2 = [
                 {
-                  $match: {
-                    symbol:symbol,
-                    segment: 'O',
-                    expiry:expiry
+                    $match: {
+                        symbol: symbol,
+                        segment: 'O',
+                        expiry: expiry
+                    }
                 }
-                }                
-              ]
-              
-              
+            ]
+
+
 
             // const pipeline3 = [
             //     {
@@ -266,51 +266,51 @@ class OptionChain {
             //     }
             // ]
 
-            const pipeline3 =   [
+            const pipeline3 = [
                 {
-                  $match: {
-                    symbol:symbol,
-                    segment: 'O',
-                    expiry:expiry
-                }
-                },
-              
-                {
-                  $addFields: {
-                    absoluteDifference: {
-                      $abs: {
-                        $subtract: [{ $toInt: "$strike" }, price]
-                      }
+                    $match: {
+                        symbol: symbol,
+                        segment: 'O',
+                        expiry: expiry
                     }
-                  }
                 },
 
                 {
-                  $group: {
-                    _id: "$strike", // Group by unique values of A
-                    minDifference: { $min: "$absoluteDifference" }, // Find the minimum absolute difference for each group
-                    document: { $first: "$$ROOT" } // Keep the first document in each group
-                  }
+                    $addFields: {
+                        absoluteDifference: {
+                            $abs: {
+                                $subtract: [{ $toInt: "$strike" }, price]
+                            }
+                        }
+                    }
+                },
+
+                {
+                    $group: {
+                        _id: "$strike", // Group by unique values of A
+                        minDifference: { $min: "$absoluteDifference" }, // Find the minimum absolute difference for each group
+                        document: { $first: "$$ROOT" } // Keep the first document in each group
+                    }
                 },
                 {
-                  $sort: {
-                    minDifference: 1 // Sort by the minimum absolute difference in ascending order
-                  }
+                    $sort: {
+                        minDifference: 1 // Sort by the minimum absolute difference in ascending order
+                    }
                 },
                 {
-                  $limit: limit_set
+                    $limit: limit_set
                 },
                 {
-                $sort: {
-                    _id: 1 // Sort by the minimum absolute difference in ascending order
-                  }
-                }  
-              ]
+                    $sort: {
+                        _id: 1 // Sort by the minimum absolute difference in ascending order
+                    }
+                }
+            ]
 
             const result = await Alice_token.aggregate(pipeline2);
             const resultStrike = await Alice_token.aggregate(pipeline3);
 
-        
+
 
 
             const final_data = [];
@@ -326,8 +326,8 @@ class OptionChain {
                         if (element.document.strike == element1.strike) {
                             console.log("strike price", element.document.strike)
                             // console.log("segment", element1.strike)
-                            
-                            
+
+
                             if (element1.option_type == "CE") {
                                 console.log("CALL", element1.option_type)
                                 console.log("STRIKE", element1.strike)
@@ -356,9 +356,9 @@ class OptionChain {
                     final_data.push(push_object)
                 });
 
-                
+
                 var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
-              //  console.log("alltokenchannellist",alltokenchannellist)
+                //  console.log("alltokenchannellist",alltokenchannellist)
                 res.send({ status: true, data: final_data, channellist: alltokenchannellist })
             }
             else {
