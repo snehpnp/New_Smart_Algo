@@ -64,7 +64,7 @@ const Wraper = () => {
 
 
   const GetAllThemes = () => {
-    axios.get(`https://trade.pandpinfotech.com/backend/getall/theme`).then((res) => {
+    axios.get(`${Config.smartAlogUrl}/getall/theme`).then((res) => {
       setSetTheme(res.data.data[0])
     }).catch((err) => {
         console.log("error", err);
