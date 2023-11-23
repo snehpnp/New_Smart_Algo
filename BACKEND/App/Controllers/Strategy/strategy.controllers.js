@@ -94,24 +94,7 @@ class Strategy {
         }
     }
 
-    async get_sources(req, res) {
-        try {
-
-            const db = client.db(process.env.DB_NAME);
-
-            const collection = db.collection('sources');
-            const get_sources = await collection.aggregate([]).toArray();
-
-            if (get_sources .length > 0) {
-                res.send({ status: true, msg: "Get Permission Successfully", data: get_sources   });
-            } else {
-                res.send({ status: false, msg: "Empty data", data: [] });
-            }
-        } catch (error) {
-            console.log("get_sources-", error);
-            res.status(500).send({ status: false, msg: "Internal server error" });
-        }
-    }
+    
 
 
 }

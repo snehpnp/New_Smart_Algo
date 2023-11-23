@@ -287,9 +287,6 @@ module.exports = function (app) {
   });
 
 
-
-
-
   async function connectToDB(collectionName, response) {
     try {
 
@@ -448,6 +445,7 @@ module.exports = function (app) {
 
 
   }
+
   async function createViewM3(collectionName) {
     try {
       const db = client.db('TradeTools');
@@ -621,6 +619,7 @@ module.exports = function (app) {
 
 
   }
+
   async function createViewM10(collectionName) {
     try {
       const db = client.db('TradeTools');
@@ -707,6 +706,7 @@ module.exports = function (app) {
 
 
   }
+
   async function createViewM15(collectionName) {
     try {
       const db = client.db('TradeTools');
@@ -793,6 +793,7 @@ module.exports = function (app) {
 
 
   }
+
   async function createViewM30(collectionName) {
     try {
       const db = client.db('TradeTools');
@@ -879,6 +880,7 @@ module.exports = function (app) {
 
 
   }
+
   async function createViewM60(collectionName) {
     try {
       const db = client.db('TradeTools');
@@ -965,6 +967,7 @@ module.exports = function (app) {
 
 
   }
+
   async function createViewM1DAY(collectionName) {
     try {
       const db = client.db('TradeTools');
@@ -1047,13 +1050,6 @@ module.exports = function (app) {
 
 
   }
-
-
-
-
-
-
-
 
 
   app.get("/testing_socket", function (req, res) {
@@ -1396,7 +1392,6 @@ module.exports = function (app) {
 
   }
 
-
   function evaluateSingleCondition(condition, data) {
     console.log("condition", condition);
     const [variable, operator, value] = condition.split(/\s*(>|<|>=|<=|=)\s*/);
@@ -1589,8 +1584,6 @@ module.exports = function (app) {
 
     res.send(result);
   });
-
-
 
 
   async function dropAllCollections() {
@@ -3069,7 +3062,6 @@ const abc = (data, conditionString) => {
 
 
 
-
   app.get("/getip", (req, res) => {
     const os = require('os');
 
@@ -3264,126 +3256,133 @@ const abc = (data, conditionString) => {
 
 
 
-  // app.get("/stockPriceupdate",async(req,res)=>{
-  //   var yahooFinance = require('yahoo-finance');
+  app.get("/stockPriceupdate",async(req,res)=>{
+    var yahooFinance = require('yahoo-finance');
 
-  //    const pipeline = [
-  //     {$sort:{
-  //       _id:-1
-  //     }},
-  //     {
-  //       $project:{
-  //         symbol:1,
-  //         price:1
-  //       }
-  //     }
-  //    ]
+     const pipeline = [
+      {$sort:{
+        _id:-1
+      }},
+      {
+        $project:{
+          symbol:1,
+          price:1
+        }
+      }
+     ]
     
-  //   const result = await option_chain_symbols.aggregate(pipeline);
+    const result = await option_chain_symbols.aggregate(pipeline);
 
-  //   const date = new Date('2023-11-03');
-  //  const currentDAy = date.toISOString().split('T')[0]; // 'yyyy-MM-dd' format
+    res.send(result);
+    return
 
-  //  const date1 = new Date();
-  //  date1.setDate(date1.getDate() + 1);
-  //  const nextDay = date1.toISOString().split('T')[0];
+
+    const date = new Date('2023-11-03');
+   const currentDAy = date.toISOString().split('T')[0]; // 'yyyy-MM-dd' format
+
+   const date1 = new Date();
+   date1.setDate(date1.getDate() + 1);
+   const nextDay = date1.toISOString().split('T')[0];
    
   
      
-  //   await result.forEach(async(element) => {
+    await result.forEach(async(element) => {
      
 
-  //     if(element.symbol == "NIFTY" || element.symbol == "BANKNIFTY" || element.symbol == "FINNIFTY"){
-  //       console.log("symbol INDEX- ",element.symbol)
-  //     }else{
+      if(element.symbol == "NIFTY" || element.symbol == "BANKNIFTY" || element.symbol == "FINNIFTY"){
+        console.log("symbol INDEX- ",element.symbol)
+      }else{
 
 
 
-  //       console.log("symbol - ",element.symbol)
+        console.log("symbol - ",element.symbol)
 
-  //      await yahooFinance.historical({
-  //         symbol: element.symbol+'.NS', // Use the symbol for Infosys or another Indian company listed on U.S. exchanges
-  //         from: currentDAy,
-  //         to: nextDay,
-  //         // period: 'd' // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
-  //         }, async function (err, quotes) {
-  //         if (err) {
-  //         console.error(err);
-  //         } else {
-  //         console.log(quotes[0].close);
-  //         }
-  //       });
-
-
-
-
-
-  //     }
-
-  //   });
-    
-  //   res.send(result);
-
-    
-  // })
-
-  app.get("/stockPriceupdate",async(req,res)=>{
-    const yahooFinance = require('yahoo-finance');
-    const pipeline = [
-      { $sort: { _id: -1 } },
-      { $project: { symbol: 1, price: 1 } },
-    ];
-    
-    const result = await option_chain_symbols.aggregate(pipeline);
-    
-    const date = new Date('2023-11-03');
-    const currentDay = date.toISOString().split('T')[0]; // 'yyyy-MM-dd' format
-    
-    const date1 = new Date();
-    date1.setDate(date1.getDate() + 1);
-    const nextDay = date1.toISOString().split('T')[0];
-    
-    const promises = result.map(async (element) => {
-      if (element.symbol === 'NIFTY' || element.symbol === 'BANKNIFTY' || element.symbol === 'FINNIFTY') {
-        console.log('symbol INDEX- ', element.symbol);
-        return null; // You can return a promise that resolves to null
-      } else {
-        console.log('symbol - ', element.symbol);
-        return new Promise((resolve, reject) => {
-          yahooFinance.historical(
-            {
-              symbol: element.symbol + '.NS',
-              from: currentDay,
-              to: nextDay,
-            },
-            (err, quotes) => {
-              if (err) {
-                console.error(err);
-                reject(err);
-              } else {
-               // console.log(quotes);
-                
-                  resolve(quotes);
-               
-              }
-            }
-          );
+       await yahooFinance.historical({
+          symbol: element.symbol+'.NS', // Use the symbol for Infosys or another Indian company listed on U.S. exchanges
+          from: currentDAy,
+          to: nextDay,
+          // period: 'd' // 'd' (daily), 'w' (weekly), 'm' (monthly), 'v' (dividends only)
+          }, async function (err, quotes) {
+          if (err) {
+          console.error(err);
+          } else {
+          console.log(quotes[0].close);
+          }
         });
+
+
+
+
+
       }
+
     });
     
-    try {
-      const results = await Promise.all(promises);
-      console.log("results",results)
-      res.send(result);
-    } catch (error) {
-      // Handle errors here
-      res.status(500).send('Error fetching stock data');
-    }
-    
+    res.send(result);
 
     
   })
+
+
+
+
+  // app.get("/stockPriceupdate",async(req,res)=>{
+  //   const yahooFinance = require('yahoo-finance');
+  //   const pipeline = [
+  //     { $sort: { _id: -1 } },
+  //     { $project: { symbol: 1, price: 1 } },
+  //   ];
+    
+  //   const result = await option_chain_symbols.aggregate(pipeline);
+    
+  //   const date = new Date('2023-11-03');
+  //   const currentDay = date.toISOString().split('T')[0]; // 'yyyy-MM-dd' format
+    
+  //   const date1 = new Date();
+  //   date1.setDate(date1.getDate() + 1);
+  //   const nextDay = date1.toISOString().split('T')[0];
+    
+  //   const promises = result.map(async (element) => {
+  //     if (element.symbol === 'NIFTY' || element.symbol === 'BANKNIFTY' || element.symbol === 'FINNIFTY') {
+  //       console.log('symbol INDEX- ', element.symbol);
+  //       return null; // You can return a promise that resolves to null
+  //     } else {
+  //       console.log('symbol - ', element.symbol);
+  //       return new Promise((resolve, reject) => {
+  //         yahooFinance.historical(
+  //           {
+  //             symbol: element.symbol + '.NS',
+  //             from: currentDay,
+  //             to: nextDay,
+  //           },
+  //           (err, quotes) => {
+  //             if (err) {
+  //               console.error(err);
+  //               reject(err);
+  //             } else {
+  //              // console.log(quotes);
+                
+  //                 resolve(quotes);
+               
+  //             }
+  //           }
+  //         );
+  //       });
+  //     }
+  //   });
+    
+  //   try {
+  //     const results = await Promise.all(promises);
+  //     console.log("results",results)
+  //     res.send(result);
+  //   } catch (error) {
+  //     // Handle errors here
+  //     res.status(500).send('Error fetching stock data');
+  //   }
+    
+
+    
+  // })
 
 
 

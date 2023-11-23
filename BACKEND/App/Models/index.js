@@ -37,5 +37,7 @@ module.exports = {
     option_chain_symbols: require('./Get_Option_Chain_Symboll.model'),
     timeFrame: require('./timeFrame.model'),
     Superadmin_History: require('./superadmin_history.model'),
+    source : require('./source.model'),
+    comparators : require('./comparators.model'),
 
 };

@@ -183,6 +183,7 @@ export const admin_sidebar = [
         ]
 
     },
+
     {
         'id': 9,
         "name": 'Create Strategy',

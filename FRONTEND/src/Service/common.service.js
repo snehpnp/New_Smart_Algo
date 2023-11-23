@@ -166,3 +166,37 @@ export async function GET_TIMEFRAME(data, token) {
         
     }
 }
+
+// Get All  Source
+export async function GET_SOURCE(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}get_sources`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}
+
+// Get All  Source
+export async function GET_COMPARATORS(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}get_comparators`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}

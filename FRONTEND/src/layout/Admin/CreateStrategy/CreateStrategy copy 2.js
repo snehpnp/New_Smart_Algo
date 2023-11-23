@@ -391,7 +391,88 @@ const Signals = () => {
 
 
   }
+ 
 
+  const [selectedSource, setSelectedSource] = useState('');
+  const [selectConditionItem, setSelectConditionItem] = useState('');
+  const [selectedElementFirsSecond, setSelectedElementFirsSecond] = useState('');
+  const [offSetValue, setOffSetValue] = useState(0);
+  const [selectedIndexConditionArr, setSelectedIndexConditionArr] = useState('');
+  const [selectAndOrOperater, setSelectAndOrOperater] = useState('or');
+  
+  
+  const [showModalOffset, setShowModalOffset] = useState(false);
+  
+  // And or Operator
+  const [showModalAndOrOperator, setShowModalAndOrOperator] = useState(false);
+
+  console.log("selectedSource -",selectedSource);
+  console.log("selectConditionItem -",selectConditionItem);
+  console.log("selectedElementFirsSecond -",selectedElementFirsSecond);
+
+  const selectSource = (e , condition_item , element_first_second,index) => {
+    console.log("e -",e.target.value)
+    console.log("condition_item -",condition_item);
+    console.log("element_first_second -",element_first_second);
+
+    if(e.target.value != ""){
+       //alert(e.target.value)
+       setSelectedSource(e.target.value);
+       setSelectConditionItem(condition_item);
+       setSelectedElementFirsSecond(element_first_second);
+       setSelectedIndexConditionArr(index);
+       openModalOffset();
+   }
+  }
+
+  const selectComparators = (e , condition_item,index) => {
+    console.log(" comparators - ",e.target.value)
+  
+    const foundObject = coditionRequestArr.find((item,i) => i === index);
+    //console.log("foundObject --",foundObject)
+    if (foundObject) {
+      // Update the source field of the found object
+      foundObject.comparators = e.target.value;
+      // Create a new array to trigger a state update
+      setCoditionRequestArr([...coditionRequestArr]);
+    }
+
+
+
+  }
+
+
+  const openModalOffset = () => {
+    setShowModalOffset(true);
+  };
+
+  const closeModalOffset = () => {
+    setShowModalOffset(false);
+  };
+
+  
+  const closeModalAndOrOperator = () => {
+    setShowModalAndOrOperator(false);
+  };
+
+  
+  const openModalAndOrOperator = () => {
+    setShowModalAndOrOperator(true);
+  };
+
+  
+  const conditionRemove = (index) => {
+   //alert(index)
+   setCoditionRequestArr(oldValues => {
+    return oldValues.filter((item , i) => i !== index)
+  })
+
+  }
+
+
+  //Condition Array
+  //const [coditionRequestArr, setCoditionRequestArr] = useState([])
+  
   const [coditionRequestArr, setCoditionRequestArr] = useState([
     // {
       
@@ -423,355 +504,126 @@ const Signals = () => {
 
   ])
 
-  const [coditionRequestArrSell, setCoditionRequestArrSell] = useState([
-    // {
-      
-    //   first_element : {
-    //   source : "",
-    //   offset : "1"
-    //  },
-    //   comparators : "==",
-    //  second_element : {
-    //   source : "",
-    //   offset : "2"
-    //  },
-    //  and_or_operator:"AND"
-    // },
+    
+  
+  //console.log("coditionRequestArr",coditionRequestArr.length)
 
-    // {
+
+  // setCoditionRequestArr(oldValues => {
+  //   return oldValues.filter(item => item.key !== key)
+  // })
+
+  // setCoditionRequestArr((oldArray) => [pre_tag, ...oldArray]);
+
+  const conditionAdd = (ArrCondition) => {
+     //alert("okk")
      
+
+
+
+
+
+
+     if(coditionRequestArr.length == 0){
+
+      let pre_tag =  {
+        start_bracket : [],
+        first_element : {
+        source : "",
+        offset : "0"
+       },
   
-  ])
-
-
- 
-
-  const [selectedSource, setSelectedSource] = useState('');
-  const [selectConditionItem, setSelectConditionItem] = useState('');
-  const [selectedElementFirsSecond, setSelectedElementFirsSecond] = useState('');
-  const [offSetValue, setOffSetValue] = useState(0);
-  const [selectedIndexConditionArr, setSelectedIndexConditionArr] = useState('');
-  const [selectAndOrOperater, setSelectAndOrOperater] = useState('or');
+        comparators : "==",
   
-  
-  const [showModalOffset, setShowModalOffset] = useState(false);
-  
-  // And or Operator
-
-  const [showModalAndOrOperator, setShowModalAndOrOperator] = useState(false);
-
-  const selectSource = (e , condition_item , element_first_second,index,buy_sell) => {
-   // console.log("e -",e.target.value)
-   // console.log("condition_item -",condition_item);
-   // console.log("element_first_second -",element_first_second);
-
-  //   if(e.target.value != ""){
-  //      //alert(e.target.value)
-  //      setSelectedSource(e.target.value);
-  //      setSelectConditionItem(condition_item);
-  //      setSelectedElementFirsSecond(element_first_second);
-  //      setSelectedIndexConditionArr(index);
-  //      openModalOffset();
-  //  }
-  
-  if(e.target.value != ""){
-
-    if(buy_sell == "buy"){
-    const foundObject = coditionRequestArr.find((item,i) => i === index);
-    if (foundObject) {
-    // Update the source field of the found object
-    if(element_first_second == "first"){
-      foundObject.first_element.source = e.target.value;
-    }else if (element_first_second == "second"){
-      foundObject.second_element.source = e.target.value;
-    }
-    // Create a new array to trigger a state update
-    setCoditionRequestArr([...coditionRequestArr]);
-    }
-    }
-    else if(buy_sell == "sell"){
-      const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-    if (foundObject) {
-    // Update the source field of the found object
-    if(element_first_second == "first"){
-      foundObject.first_element.source = e.target.value;
-    }else if (element_first_second == "second"){
-      foundObject.second_element.source = e.target.value;
-    }
-    // Create a new array to trigger a state update
-    setCoditionRequestArrSell([...coditionRequestArrSell]);
-    }
-    }
-
-   }
-  
-  }
-
-  const ChangeOffsetval = (e , condition_item , element_first_second,index,buy_sell) => {
-    if(e.target.value != ""){
-      if(buy_sell == "buy"){
-        const foundObject = coditionRequestArr.find((item,i) => i === index);
-      //console.log("foundObject --",foundObject)
-      if (foundObject) {
-        if(element_first_second == "first"){
-          foundObject.first_element.offset = e.target.value;
-        }else if (element_first_second == "second"){
-          foundObject.second_element.offset = e.target.value;
-        }
-        // Create a new array to trigger a state update
-        setCoditionRequestArr([...coditionRequestArr]);
+       second_element : {
+        source : "",
+        offset : "0"
+       },
+       and_or_operator:"",
+       end_bracket : [],
       }
-      }else if(buy_sell == "sell"){
-        const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
-        if (foundObject) {
-          if(element_first_second == "first"){
-            foundObject.first_element.offset = e.target.value;
-          }else if (element_first_second == "second"){
-            foundObject.second_element.offset = e.target.value;
-          }
-          // Create a new array to trigger a state update
-          setCoditionRequestArrSell([...coditionRequestArrSell]);
-        }
-       }
-
-     }
-  }
-
-  const selectComparators = (e , condition_item,index,buy_sell) => {
    
-    if(buy_sell == "buy"){
-      const foundObject = coditionRequestArr.find((item,i) => i === index);
-      if (foundObject) {
-        foundObject.comparators = e.target.value;
-        setCoditionRequestArr([...coditionRequestArr]);
-      }
-    }else if(buy_sell == "sell"){
-      const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-      if (foundObject) {
-        foundObject.comparators = e.target.value;
-        setCoditionRequestArrSell([...coditionRequestArr]);
-      }
-    }
-
-  }
-
-  const openModalOffset = () => {
-    setShowModalOffset(true);
-  };
-
-  const closeModalOffset = () => {
-    setShowModalOffset(false);
-  };
-
-  
-  const closeModalAndOrOperator = () => {
-    setShowModalAndOrOperator(false);
-  };
-
-  
-  const openModalAndOrOperator = () => {
-    setShowModalAndOrOperator(true);
-  };
-
-  
-  const conditionRemove = (index,buy_sell) => {
-    if(buy_sell == "buy"){
-      setCoditionRequestArr(oldValues => {
-        return oldValues.filter((item , i) => i !== index)
-      })
-    }else if(buy_sell == "sell"){
-      setCoditionRequestArrSell(oldValues => {
-        return oldValues.filter((item , i) => i !== index)
-      })
-    }
-
-  }
-
-
-  
-  const [checkBuySellAndOr, setCheckBuySellAndOr] = useState("");
-  const conditionAdd = (ArrCondition,buy_sell) => {
-     
-    if(buy_sell == "buy"){
-      if(coditionRequestArr.length == 0){
-
-        let pre_tag =  {
-          start_bracket : [],
-          first_element : {
-          source : "",
-          offset : "0"
-         },
-    
-          comparators : "==",
-    
-         second_element : {
-          source : "",
-          offset : "0"
-         },
-         and_or_operator:"",
-         end_bracket : [],
-        }
-     
-         setCoditionRequestArr((oldArray) => [...oldArray,pre_tag]);
-       
-       }else{
-         
-         const lastIndex = ArrCondition.length - 1;
-  
-       // console.log(lastIndex); // Output: 4
-       const foundObject = coditionRequestArr.find((item,i) => i === lastIndex);
-       if (foundObject) {
-         // Update the source field of the found object
-       //  console.log(" condition Add SSSS ",foundObject)
-         if(foundObject.first_element.source == "" && foundObject.second_element.source == ""){
-         alert("please select first and second element")
-         }else{
-           setCheckBuySellAndOr("buy")
-           openModalAndOrOperator();
-         }
-       }
-  
-          
-       }
-
-    }else if(buy_sell == "sell"){
-
-      if(coditionRequestArrSell.length == 0){
-
-        let pre_tag =  {
-          start_bracket : [],
-          first_element : {
-          source : "",
-          offset : "0"
-         },
-    
-          comparators : "==",
-    
-         second_element : {
-          source : "",
-          offset : "0"
-         },
-         and_or_operator:"",
-         end_bracket : [],
-        }
-     
-        setCoditionRequestArrSell((oldArray) => [...oldArray,pre_tag]);
-       
-       }else{
-         
-         const lastIndex = ArrCondition.length - 1;
-  
-       // console.log(lastIndex); // Output: 4
-       const foundObject = coditionRequestArrSell.find((item,i) => i === lastIndex);
-       if (foundObject) {
-         // Update the source field of the found object
-       //  console.log(" condition Add SSSS ",foundObject)
-         if(foundObject.first_element.source == "" && foundObject.second_element.source == ""){
-         alert("please select first and second element")
-         }else{
-          setCheckBuySellAndOr("sell")
-           openModalAndOrOperator();
-         }
-       }
-  
-            
-       }
-      
-    }
-      
-  }
-
-  const ModalConfirmAndOrOperator = (buy_sell) => {
-    if(buy_sell == "buy"){
-      const lastIndex = coditionRequestArr.length - 1;
-      const foundObject = coditionRequestArr.find((item,i) => i === lastIndex);
-      if (foundObject) {
-        // Update the source field of the found object
-        foundObject.and_or_operator = selectAndOrOperater;
-        // Create a new array to trigger a state update
-        setCoditionRequestArr([...coditionRequestArr]);
-      }
-  
-      let pre_tag =  {
-        start_bracket : [],
-        first_element : {
-        source : "",
-        offset : "0"
-       },
-  
-        comparators : "==",
-  
-       second_element : {
-        source : "",
-        offset : "0"
-       },
-       and_or_operator:"",
-       end_bracket : [],
-       //and_or_operator:selectAndOrOperater,
-      }
        setCoditionRequestArr((oldArray) => [...oldArray,pre_tag]);
-       closeModalAndOrOperator();
-    }else if(buy_sell == "sell"){
-      const lastIndex = coditionRequestArrSell.length - 1;
-      const foundObject = coditionRequestArrSell.find((item,i) => i === lastIndex);
-      if (foundObject) {
-        // Update the source field of the found object
-        foundObject.and_or_operator = selectAndOrOperater;
-        // Create a new array to trigger a state update
-        setCoditionRequestArrSell([...coditionRequestArrSell]);
-      }
-  
-      let pre_tag =  {
-        start_bracket : [],
-        first_element : {
-        source : "",
-        offset : "0"
-       },
-  
-        comparators : "==",
-  
-       second_element : {
-        source : "",
-        offset : "0"
-       },
-       and_or_operator:"",
-       end_bracket : [],
-       //and_or_operator:selectAndOrOperater,
-      }
-      setCoditionRequestArrSell((oldArray) => [...oldArray,pre_tag]);
-       closeModalAndOrOperator();
-    }
-    
+     
+     }else{
+       
+       const lastIndex = ArrCondition.length - 1;
+
+      console.log(lastIndex); // Output: 4
+     const foundObject = coditionRequestArr.find((item,i) => i === lastIndex);
+     if (foundObject) {
+       // Update the source field of the found object
+       console.log(" condition Add SSSS ",foundObject)
+       if(foundObject.first_element.source == "" && foundObject.second_element.source == ""){
+       alert("please select first and second element")
+       }else{
+         openModalAndOrOperator();
+       }
+     }
+
+
+        
+     }
+
+
   }
+
+  const ModalConfirmAndOrOperator = () => {
+    
+    const lastIndex = coditionRequestArr.length - 1;
+    const foundObject = coditionRequestArr.find((item,i) => i === lastIndex);
+  
+    if (foundObject) {
+      // Update the source field of the found object
+      foundObject.and_or_operator = selectAndOrOperater;
+      // Create a new array to trigger a state update
+      setCoditionRequestArr([...coditionRequestArr]);
+    }
+
+
+    let pre_tag =  {
+      start_bracket : [],
+      first_element : {
+      source : "",
+      offset : "0"
+     },
+
+      comparators : "==",
+
+     second_element : {
+      source : "",
+      offset : "0"
+     },
+     and_or_operator:"",
+     end_bracket : [],
+     //and_or_operator:selectAndOrOperater,
+    }
+ 
+     setCoditionRequestArr((oldArray) => [...oldArray,pre_tag]);
+     closeModalAndOrOperator()
+  }
+
 
   const ChangeOffset = (e) => {
    setOffSetValue(e.target.value)
   }
 
-  const ModalConfirmOffset = (selectConditionItem,selectedElementFirsSecond,index,source,buy_sell) => {
 
 
-    if(buy_sell == "buy"){
-      const foundObject = coditionRequestArr.find((item,i) => i === index);
-      if (foundObject) {
-        // Update the source field of the found object
-        if(selectedElementFirsSecond == "first"){
+  const ModalConfirmOffset = (selectConditionItem,selectedElementFirsSecond,index,source) => {
+   // console.log("selectConditionItem",selectConditionItem)
+    
+   // alert(selectedElementFirsSecond)
+   // alert(index)
+   // alert(offSetValue)
+    //alert(source)
+
   
-          foundObject.first_element.source = source;
-          foundObject.first_element.offset = offSetValue;
-  
-        }else if (selectedElementFirsSecond == "second"){
-          foundObject.second_element.source = source;
-          foundObject.second_element.offset = offSetValue;
-        }
-        // Create a new array to trigger a state update
-        setCoditionRequestArr([...coditionRequestArr]);
-      }
-      setOffSetValue(0)
-      closeModalOffset();
-    }else if(buy_sell == "sell"){
-      const foundObject = coditionRequestArrSell.find((item,i) => i === index);
+    const foundObject = coditionRequestArr.find((item,i) => i === index);
+    console.log("foundObject --",foundObject)
+
+   
+
     if (foundObject) {
       // Update the source field of the found object
       if(selectedElementFirsSecond == "first"){
@@ -784,49 +636,42 @@ const Signals = () => {
         foundObject.second_element.offset = offSetValue;
       }
       // Create a new array to trigger a state update
-      setCoditionRequestArrSell([...coditionRequestArrSell]);
+      setCoditionRequestArr([...coditionRequestArr]);
     }
+
     setOffSetValue(0)
+
+    // Close the modal
     closeModalOffset();
-    }
-   
-    
-
-
   };
 
-  const selectAndOrOperaterChange = (e ,condition_item ,index,buy_sell) => {
-    
-    if(buy_sell == "buy"){
-      const foundObject = coditionRequestArr.find((item,i) => i === index);
-      if (foundObject) {
-        foundObject.and_or_operator = e.target.value;
-        setCoditionRequestArr([...coditionRequestArr]);
-      }
-    }else if(buy_sell == "sell"){
-      const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-      if (foundObject) {
-        foundObject.and_or_operator = e.target.value;
-        setCoditionRequestArrSell([...coditionRequestArrSell]);
-      }
-    }
-
   
+  const selectAndOrOperaterChange = (e ,condition_item ,index) => {
+    // alert(e.target.value)
+    const foundObject = coditionRequestArr.find((item,i) => i === index);
+    //console.log("foundObject --",foundObject)
+    if (foundObject) {
+      // Update the source field of the found object
+      foundObject.and_or_operator = e.target.value;
+      // Create a new array to trigger a state update
+      setCoditionRequestArr([...coditionRequestArr]);
+    }
     
   }
-  
-  console.log("coditionRequestArr final --",coditionRequestArr)
-  console.log("coditionRequestArr Sell final --",coditionRequestArrSell)
-  
-  
 
   
+  console.log("coditionRequestArr final --",coditionRequestArr)
   
   let condition_string = "";
+  let shouldBreak = false;
+
+ 
+
+  
   for (let index = 0; index < coditionRequestArr.length; index++) {
     const val = coditionRequestArr[index];
     
-  //  console.log(`Element at index ${index}: ${val.and_or_operator}`);
+    console.log(`Element at index ${index}: ${val.and_or_operator}`);
   
     if (val.first_element.source !== "" && val.second_element.source !== "") {
       let and_or= ""
@@ -853,170 +698,78 @@ const Signals = () => {
       condition_string += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
     } 
      else {
+      shouldBreak = true;
       break; // Break out of the loop
     }
   }
+  
+  // Check if we should break
+  if (shouldBreak) {
+    // Do something or return here
+    console.log("Breaking out of the loop");
+  }
+  
   // Continue with the rest of your code
   console.log("rr - ",condition_string);
 
+  const AddBracket = (index,start_and) => {
+   if(start_and == "start"){
 
+    const foundObject = coditionRequestArr.find((item,i) => i === index);
+    //console.log("foundObject --",foundObject)
+    if (foundObject) {
+      // Update the source field of the found object
+      foundObject.start_bracket.push("(");
+      // Create a new array to trigger a state update
+      setCoditionRequestArr([...coditionRequestArr]);
+    }
 
-  let condition_string_sell  = "";
-  for (let index = 0; index < coditionRequestArrSell.length; index++) {
-    const val = coditionRequestArrSell[index];
-    
-  //  console.log(`Element at index ${index}: ${val.and_or_operator}`);
+   }else if(start_and == "end"){
+    const foundObject = coditionRequestArr.find((item,i) => i === index);
+    //console.log("foundObject --",foundObject)
+    if (foundObject) {
+      // Update the source field of the found object
+      foundObject.end_bracket.push(")");
+      // Create a new array to trigger a state update
+      setCoditionRequestArr([...coditionRequestArr]);
+    }
+
+   }
+  }
+
   
-    if (val.first_element.source !== "" && val.second_element.source !== "") {
-      let and_or= ""
-      if(val.and_or_operator == "or"){
-        and_or = "OR"
-      }else if(val.and_or_operator == "and"){
-        and_or = "AND"
+  const RemoveBracket = (index,start_and,last_index) => {
+   //alert(last_index)  
+    if(last_index > -1){
+
+    if(start_and == "start"){
+
+      const foundObject = coditionRequestArr.find((item,i) => i === index);
+      //console.log("foundObject --",foundObject)
+      if (foundObject) {
+        // Update the source field of the found object
+        foundObject.start_bracket.pop();
+        // Create a new array to trigger a state update
+        setCoditionRequestArr([...coditionRequestArr]);
       }
 
-      if(coditionRequestArrSell.length ==1){
-        and_or=""
-      }
 
-      let start_bracket = ""
-      if(val.start_bracket.length > 0){
-        start_bracket = val.start_bracket.join('');
-      }
-      
-      let end_bracket = "";
-      if(val.end_bracket.length > 0){
-        end_bracket = val.end_bracket.join('');
+    }else if(start_and == "end"){
+
+      const foundObject = coditionRequestArr.find((item,i) => i === index);
+      //console.log("foundObject --",foundObject)
+      if (foundObject) {
+        // Update the source field of the found object
+        foundObject.end_bracket.pop();
+        // Create a new array to trigger a state update
+        setCoditionRequestArr([...coditionRequestArr]);
       }
  
-      condition_string_sell += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
-    } 
-     else {
-      break; // Break out of the loop
-    }
-  }
-  // Continue with the rest of your code
-  console.log("rr sell - ",condition_string_sell);
-
-  const AddBracket = (index,start_and,buy_sell) => {
-  
-    if(buy_sell == "buy"){
-      if(start_and == "start"){
-
-        const foundObject = coditionRequestArr.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
-        if (foundObject) {
-          // Update the source field of the found object
-          foundObject.start_bracket.push("(");
-          // Create a new array to trigger a state update
-          setCoditionRequestArr([...coditionRequestArr]);
-        }
-    
-       }else if(start_and == "end"){
-        const foundObject = coditionRequestArr.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
-        if (foundObject) {
-          // Update the source field of the found object
-          foundObject.end_bracket.push(")");
-          // Create a new array to trigger a state update
-          setCoditionRequestArr([...coditionRequestArr]);
-        }
-    
-       }
-    }else if(buy_sell == "sell"){
-      if(start_and == "start"){
-
-        const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
-        if (foundObject) {
-          // Update the source field of the found object
-          foundObject.start_bracket.push("(");
-          // Create a new array to trigger a state update
-          setCoditionRequestArrSell([...coditionRequestArrSell]);
-        }
-    
-       }else if(start_and == "end"){
-        const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
-        if (foundObject) {
-          // Update the source field of the found object
-          foundObject.end_bracket.push(")");
-          // Create a new array to trigger a state update
-          setCoditionRequestArrSell([...coditionRequestArrSell]);
-        }
-    
-       }
     }
 
   }
 
-  
-  const RemoveBracket = (index,start_and,last_index,buy_sell) => {
-   
-    if(buy_sell == "buy"){
-      if(last_index > -1){
-        if(start_and == "start"){
-    
-          const foundObject = coditionRequestArr.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
-          if (foundObject) {
-            // Update the source field of the found object
-            foundObject.start_bracket.pop();
-            // Create a new array to trigger a state update
-            setCoditionRequestArr([...coditionRequestArr]);
-          }
-    
-    
-        }else if(start_and == "end"){
-    
-          const foundObject = coditionRequestArr.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
-          if (foundObject) {
-            // Update the source field of the found object
-            foundObject.end_bracket.pop();
-            // Create a new array to trigger a state update
-            setCoditionRequestArr([...coditionRequestArr]);
-          }
-     
-        }
-    
-        }
-
-    }else if(buy_sell == "sell"){
-
-      if(last_index > -1){
-        if(start_and == "start"){
-    
-          const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
-          if (foundObject) {
-            // Update the source field of the found object
-            foundObject.start_bracket.pop();
-            // Create a new array to trigger a state update
-            setCoditionRequestArrSell([...coditionRequestArrSell]);
-          }
-    
-    
-        }else if(start_and == "end"){
-    
-          const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
-          if (foundObject) {
-            // Update the source field of the found object
-            foundObject.end_bracket.pop();
-            // Create a new array to trigger a state update
-            setCoditionRequestArrSell([...coditionRequestArrSell]);
-          }
-     
-        }
-    
-        }
-      
-    }
-
   }
-
-
   
   return (
     <>
@@ -1210,9 +963,7 @@ const Signals = () => {
                   <option value="time">Time</option>
                   <option value="indicator">Indicator</option>
                 </Form.Select> */}
-                 {
-                  buyCheck == true ? 
-                  <Tabs
+                <Tabs
                   // defaultActiveKey="profile"
                   id="uncontrolled-tab-example"
                   className="mb-3"
@@ -1255,9 +1006,9 @@ const Signals = () => {
                   
                   {coditionRequestArr && coditionRequestArr.map((condition_item,index) => (
                       <>
-                      <Row className="mb-2">
+                      <Row className="mb-3">
                       <Col md={2} className="d-flex px-0 justify-content-center">
-                      <button className="btn " onClick={() => AddBracket(index,"start","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}>
+                      <button className="btn " onClick={() => AddBracket(index,"start")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}>
                       + Bracket
                      </button>
 
@@ -1267,7 +1018,7 @@ const Signals = () => {
                        </p> 
                        
                        {condition_item.start_bracket.length > 0 ? 
-                       <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1,"buy")}>
+                       <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1)}>
                        <i className="fa-solid fa-xmark"></i>
                        </button>
                        :""}
@@ -1277,16 +1028,14 @@ const Signals = () => {
 
                       <Col md={4} className="d-flex px-0">
                         {/* <label>First Element</label> */}
-                        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index,"buy"); }}>
+                        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index); }}>
                               {/* <option value="">Select Expiry Date</option> */}
                               <option value="" >--Select source--</option>
                               {
                                 getSources.data.map((sm, i) =>
-                                  <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                                  <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{condition_item.first_element.source == sm.value ? sm.name+" ( "+condition_item.first_element.offset+" ) " : sm.name}</option>)
                               }
                       </select>
-
-                      <input type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"buy") }} min="0" className="form-control" />
                     
                       {/* <Col md={2}>
                         <label>Offset</label>
@@ -1294,7 +1043,7 @@ const Signals = () => {
                       </Col> */}
                      
                         {/* <label>Comparators</label> */}
-                        <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index,"buy"); }}>
+                        <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index); }}>
                               {/* <option value="">Select Expiry Date</option> */}
                               <option value="" >--Select comparators--</option>
                               {
@@ -1304,15 +1053,14 @@ const Signals = () => {
                       </select>
                     
                         {/* <label>Second Element</label> */}
-                        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"buy"); }}>
+                        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index); }}>
                               {/* <option value="">Select Expiry Date</option> */}
                               <option value="" >--Select source--</option>
                               {
                                 getSources.data.map((sm, i) =>
-                                  <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                                  <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{condition_item.second_element.source == sm.value ? sm.name+" ( "+condition_item.second_element.offset+" ) " : sm.name}</option>)
                               }
                       </select>
-                      <input type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"buy") }} min="0" className="form-control" />
                       </Col>
                       {/* <Col md={2}>
                         <label>Offset</label>
@@ -1329,13 +1077,13 @@ const Signals = () => {
 
                         {
                          condition_item.end_bracket.length > 0 ?
-                       <button className="border-0 px-2"  onClick={() => RemoveBracket(index,"end",condition_item.end_bracket.length - 1,"buy")}>
+                       <button className="border-0 px-2"  onClick={() => RemoveBracket(index,"end",condition_item.end_bracket.length - 1)}>
                       <i className="fa-solid fa-xmark"></i>
                      </button>
                          :"" 
                         }
                      
-                      <button className=" btn " onClick={() => AddBracket(index,"end","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}> 
+                      <button className=" btn " onClick={() => AddBracket(index,"end")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}> 
                       + Bracket
                      </button>
 
@@ -1345,7 +1093,7 @@ const Signals = () => {
                         {
                           coditionRequestArr.length==2?
                           condition_item.and_or_operator == ""?"":
-                          <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index,"buy"); }}>
+                          <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index); }}>
                               {/* <option value="">Select Expiry Date</option> */}
                               <option selected={condition_item.and_or_operator == "and"} value="and">AND</option>
                               <option selected={condition_item.and_or_operator == "or"} value="or">OR</option>
@@ -1361,14 +1109,14 @@ const Signals = () => {
                      index==0? 
                      coditionRequestArr.length == 1? 
                    
-                     <button className="btn btn-danger " onClick={() => conditionRemove(index,"buy")} style={{fontSize:'10px',padding:'5px 10px'}}>
+                     <button className="btn btn-danger " onClick={() => conditionRemove(index)} style={{fontSize:'10px',padding:'5px 10px'}}>
                      Remove
                     </button>
                     
                      : ""
                      :
                    
-                      <button className="btn btn-danger  " style={{fontSize:'10px',padding:'5px 10px'}} onClick={() => conditionRemove(index,"buy")} >
+                      <button className="btn btn-danger  " style={{fontSize:'10px',padding:'5px 10px'}} onClick={() => conditionRemove(index)} >
                       Remove
                      </button>
                     
@@ -1383,13 +1131,15 @@ const Signals = () => {
                   ))}
 
 
-                   <button style={{border:'1px dashed orange'}} className="btn p-2" onClick={() => conditionAdd(coditionRequestArr,"buy")}>
+                   <button style={{border:'1px dashed orange'}} className="btn p-2" onClick={() => conditionAdd(coditionRequestArr)}>
                       + Add
                   </button>
                 
                   </Tab>
 
                   
+
+
 
 
                   <Tab eventKey="profile" title="Time">
@@ -1440,10 +1190,6 @@ const Signals = () => {
                     Tab content for Indicator
                   </Tab>
                 </Tabs>
-                  :""
-                 }
-
-                 
 
               </li>
 
@@ -1456,238 +1202,12 @@ const Signals = () => {
 
                 <strong>Sell Entry Condition</strong>
 
-                {
-  sellCheck == true ? 
-  <Tabs
-  // defaultActiveKey="profile"
-  id="uncontrolled-tab-example"
-  className="mb-3"
->
-
-
-  <Tab eventKey="home" title="Price">
-
-    <h4>{condition_string_sell}</h4>
-
-
-    {coditionRequestArrSell.length > 0 ? 
-    <>
-  <Row>
-  <Col md={2}>
-  
-  </Col>
-  <Col md={4}>
-  <label style={{ marginRight: '82px'}}><b>First</b></label>
-  
-  <label style={{ marginRight: '32px'}}><b>Comparators</b></label>
-  
-  <label><b>Second</b></label>
-  </Col>
-  <Col md={2}>
-  </Col>
-  {
-    coditionRequestArrSell.length==2? <Col md={2}>
-    <label><b>AND / OR</b></label>
-    </Col>:""
-  }
-  
-  </Row>
-    </>
-    :""}
-
-
-  
- 
-  
-  {coditionRequestArrSell && coditionRequestArrSell.map((condition_item,index) => (
-      <>
-      <Row className="mb-2">
-      <Col md={2} className="d-flex px-0 justify-content-center">
-      <button className="btn " onClick={() => AddBracket(index,"start","sell")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}>
-      + Bracket
-     </button>
-
-       
-        <p  style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
-        {condition_item.start_bracket.join('')}
-       </p> 
-       
-       {condition_item.start_bracket.length > 0 ? 
-       <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1,"sell")}>
-       <i className="fa-solid fa-xmark"></i>
-       </button>
-       :""}
-      
-
-     </Col>
-
-      <Col md={4} className="d-flex px-0">
-        {/* <label>First Element</label> */}
-        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index,"sell"); }}>
-              {/* <option value="">Select Expiry Date</option> */}
-              <option value="" >--Select source--</option>
-              {
-                getSources.data.map((sm, i) =>
-                  <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
-              }
-      </select>
-
-      <input type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"sell") }} min="0" className="form-control" />
-    
-      {/* <Col md={2}>
-        <label>Offset</label>
-        <Form.Control type="number" id="text2" />
-      </Col> */}
-     
-        {/* <label>Comparators</label> */}
-        <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index,"sell"); }}>
-              {/* <option value="">Select Expiry Date</option> */}
-              <option value="" >--Select comparators--</option>
-              {
-                getComparators.data.map((sm, i) =>
-                  <option selected={condition_item.comparators == sm.value} value={sm.value}>{sm.name}</option>)
-              }
-      </select>
-    
-        {/* <label>Second Element</label> */}
-        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"sell"); }}>
-              {/* <option value="">Select Expiry Date</option> */}
-              <option value="" >--Select source--</option>
-              {
-                getSources.data.map((sm, i) =>
-                  <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
-              }
-      </select>
-      <input type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"sell") }} min="0" className="form-control" />
-      </Col>
-      {/* <Col md={2}>
-        <label>Offset</label>
-        <Form.Control type="number" id="text3" />
-      </Col> */}
-
-     <Col md={2} className="d-flex px-0 justify-content-center">
-
-        
-        <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
-        {condition_item.end_bracket.join('')}
-       </p>                     
-        
-
-        {
-         condition_item.end_bracket.length > 0 ?
-       <button className="border-0 px-2"  onClick={() => RemoveBracket(index,"end",condition_item.end_bracket.length - 1,"sell")}>
-      <i className="fa-solid fa-xmark"></i>
-     </button>
-         :"" 
-        }
-     
-      <button className=" btn " onClick={() => AddBracket(index,"end","sell")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}> 
-      + Bracket
-     </button>
-
-
-     </Col>
-       <Col md={2}>
-        {
-          coditionRequestArrSell.length==2?
-          condition_item.and_or_operator == ""?"":
-          <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index,"sell"); }}>
-              {/* <option value="">Select Expiry Date</option> */}
-              <option selected={condition_item.and_or_operator == "and"} value="and">AND</option>
-              <option selected={condition_item.and_or_operator == "or"} value="or">OR</option>
-              
-         </select>
-          :
-          ""
-        }
-
-      </Col>
-      <Col md={2}>
-     {
-     index==0? 
-     coditionRequestArrSell.length == 1? 
-   
-     <button className="btn btn-danger " onClick={() => conditionRemove(index,"sell")} style={{fontSize:'10px',padding:'5px 10px'}}>
-     Remove
-    </button>
-    
-     : ""
-     :
-   
-      <button className="btn btn-danger  " style={{fontSize:'10px',padding:'5px 10px'}} onClick={() => conditionRemove(index,"sell")} >
-      Remove
-     </button>
-    
-      
-     }
-       </Col>
-      
-      
-    </Row>
-      
-      </>
-  ))}
-
-
-   <button style={{border:'1px dashed orange'}} className="btn p-2" onClick={() => conditionAdd(coditionRequestArrSell,"sell")}>
-      + Add
-  </button>
-
-  </Tab>
-
-  
-
-
-  <Tab eventKey="profile" title="Time">
-
-    {/* Entry Time */}
-    <Row>
-      <Col md={3}>
-        <h5 className="mt-4">Entry Time</h5>
-      </Col>
-      <Col md={2}>
-        <label>Operator</label>
-        <Form.Select aria-label="Default select example">
-          <option>Select</option>
-          <option value="open"> Greater Than </option>
-          <option value="hign">Less Than</option>
-        </Form.Select>
-      </Col>
-      <Col md={2}>
-        <label>Time</label>
-        <Form.Control type="time" id="text3" />
-      </Col>
-    </Row>
-
-    <br />
-
-    {/* Exit Time */}
-
-    <Row>
-      <Col md={3}>
-        <h5 className="mt-4">Exit Time</h5>
-      </Col>
-      <Col md={2}>
-        <label>Operator</label>
-        <Form.Select aria-label="Default select example">
-          <option>Select</option>
-          <option value="open"> Greater Than </option>
-          <option value="hign">Less Than</option>
-        </Form.Select>
-      </Col>
-      <Col md={2}>
-        <label>Time</label>
-        <Form.Control type="time" id="text3" />
-      </Col>
-    </Row>
-
-  </Tab>
-  <Tab eventKey="contact" title="Indicator">
-    Tab content for Indicator
-  </Tab>
-</Tabs>
-  :""
- }
+                <Form.Select aria-label="Default select example">
+                  <option>Select</option>
+                  <option value="price">Price</option>
+                  <option value="time">Time</option>
+                  <option value="indicator">Indicator</option>
+                </Form.Select>
 
               </li>
 
@@ -1851,7 +1371,7 @@ const Signals = () => {
           <Button variant="secondary" onClick={closeModalAndOrOperator}>
             Close
           </Button>
-          <Button variant="primary" onClick={() => ModalConfirmAndOrOperator(checkBuySellAndOr)}>
+          <Button variant="primary" onClick={() => ModalConfirmAndOrOperator()}>
             Confirm
           </Button>
         </Modal.Footer>

@@ -85,6 +85,7 @@ class AliceBlue {
                                 console.log("redirect_uri 1", redirect_uri);
 
                                 return res.redirect(redirect_uri);
+                                
 
 
                             } else {
