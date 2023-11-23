@@ -11,6 +11,7 @@ import Modal from '../../../Components/ExtraComponents/Modal';
 import { Eye, CandlestickChart, Pencil } from 'lucide-react';
 import { useNavigate, Link } from "react-router-dom";
 
+import * as Config from "../../../Utils/Config";
 
 const ApiCreateInfo = () => {
     const dispatch = useDispatch()
@@ -102,65 +103,171 @@ const ApiCreateInfo = () => {
                 </section>
             </div>
 
-            <Modal isOpen={showModal} size="lg" title={`${modalData.title}  API Create Information.`} hideBtn={true}
-                handleClose={() => setshowModal(false)}
+            <Modal
+              isOpen={showModal}
+              size="lg"
+              title={`${modalData.title}  API Create Information.`}
+              hideBtn={true}
+              handleClose={() => setshowModal(false)}
             >
-                <h4>API Process of {modalData.title}: -</h4>
-                {modalData.description ?
-                    <ul>
-                        {modalData.description && modalData.description.split("\n").map((line, index) => (
+              {
+                modalData.broker_id === "2" ? <>
+                  <h4>Update Your DEMAT USER ID  </h4>
+                </>
+                  : <>
+
+
+                    {/* {console.log("modalData", modalData.broker_id)} */}
+                    <h4>API Process of {modalData.title}: -</h4>
+                    {modalData.description ? (
+                      <ul>
+                        {modalData.description &&
+                          modalData.description.split("\n").map((line, index) => (
                             <>
-                                <li key={index}>{line}</li><br />
+                              <li key={index}>{line}</li>
+                              <br />
                             </>
-                        ))}
-                    </ul>
-                    : ""
-                }
+                          ))}
+                      </ul>
+                    ) : (
+                      ""
+                    )}
 
-                {modalData.steptwourl || modalData.imageone ? <>
-                    <h4 className="text-decoration-underline">Step 1:  Click below link and Login</h4>
-                    <a href={modalData.steponeurl} target="_blank" className="my-3" >{modalData.steponeurl} </a><br />
-                    {modalData.imageone ? <img src={modalData.imageone} alt="" class="w-100 my-3 border border-dark" /> : ""}
+                    {modalData.steptwourl || modalData.imageone ? (
+                      <>
+                        <h4 className="text-decoration-underline">
+                          Step 1: Click below link and Login
+                        </h4>
+                        {/* <a href={modalData.steponeurl} target="_blank" className="my-3" >{modalData.steponeurl} </a><br /> */}
 
-                </> : ""}
-
-                {modalData.steptwourl || modalData.imagetwo ? <>
-
-                    <h4 className="text-decoration-underline my-3">Step 2:  Enter your Details and the Redirect URL which is given below.</h4>
-                    <a href={modalData.steptwourl} target="_blank"  >{modalData.steptwourl} </a>
-                    <br />
-                    {modalData.imagetwo ? <img src={modalData.imagetwo} alt="" class="w-100 border border-dark" /> : ""}
-                </> : ""}
-
-                {modalData.imagethree || modalData.imagethree ? <>
-                    <h4 className="text-decoration-underline my-3">Step 3:  Create API</h4>
-                    <a href={modalData.stepthreeurl} target="_blank"  >{modalData.stepthree} </a><br />
-                    {modalData.imagethree ? <img src={modalData.imagethree} alt="" class="w-100 border border-dark" /> : ""}
-                </> : ""}
+                        {modalData.steponeurl.includes("http") ? <>
+                          <a
+                            href={
+                              modalData.steponeurl
+                            }
+                            target="_blank"
+                            className="my-3"
+                          >
+                            {modalData.steponeurl}
+                          </a>
+                        </> :
 
 
-                {modalData.note ?
-                    <ul>
-                        {modalData.note && modalData.note.split("\n").map((line, index) => (
+                          modalData.steponeurl.split(",").join("\n").map((item) => {
+                            return <p>{item}   </p>
+                          })
+                        }
+
+                        <br />
+                        {
+                          modalData.imageone ? (
+                            <img
+                              src={modalData.imageone}
+                              alt=""
+                              class="w-100 my-3 border border-dark"
+                            />
+                          ) : (
+                            ""
+                          )
+                        }
+                      </>
+                    ) : (
+                      ""
+                    )}
+
+                    {modalData.steptwourl || modalData.imagetwo ? (
+                      <>
+                        <h4 className="text-decoration-underline my-3">
+                          Step 2: Enter your Details and the Redirect URL which is
+                          given below.
+                        </h4>
+                        {/* <a href={modalData.steptwourl} target="_blank"  >{modalData.steptwourl} </a> */}
+                        <a
+                          href={`${Config.base_url + modalData.steptwourl}`}
+                          target="_blank"
+                        >
+                          {`${Config.base_url + modalData.steptwourl}`}
+                        </a>
+                        <br />
+                        {/* {modalData.imagetwo ? (
+                    <img
+                      src={modalData.imagetwo}
+                      alt=""
+                      class="w-100 border border-dark"
+                    />
+                  ) : (
+                    ""
+                  )} */}
+                      </>
+                    ) : (
+                      ""
+                    )}
+
+                    {modalData.imagethree || modalData.imagethree ? (
+                      <>
+                        <h4 className="text-decoration-underline my-3">
+                          Step 3: Create API
+                        </h4>
+                        <a href={modalData.stepthreeurl} target="_blank">
+                          {modalData.stepthree}{" "}
+                        </a>
+                        <br />
+                        {modalData.imagethree ? (
+                          <img
+                            src={modalData.imagethree}
+                            alt=""
+                            class="w-100 border border-dark"
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </>
+                    ) : (
+                      ""
+                    )}
+
+                    {modalData.note ? (
+                      <ul>
+                        {modalData.note &&
+                          modalData.note.split("\n").map((line, index) => (
                             <>
-                                <li className=" h3 text-alert mt-3 text-info" key={index}>{line}</li><br />
+                              <li
+                                className=" h3 text-alert mt-3 text-info"
+                                key={index}
+                              >
+                                {line}
+                              </li>
+                              <br />
                             </>
-                        ))}
-                    </ul>
-                    : ""
-                }
-                {/* {modalData.note ?
-                    <h3 className="text-alert my-3 text-info">NOTE- {modalData.note}</h3>
-                    : ""} */}
+                          ))}
+                      </ul>
+                    ) : (
+                      ""
+                    )}
+                    {/* {modalData.note ?
+<h3 className="text-alert my-3 text-info">NOTE- {modalData.note}</h3>
+: ""} */}
 
-                {modalData.youtubeurl ?
-                    <>
-                        <h4 className="text-decoration-underline mt-3">For your convenience, we have made these videos available for you to watch.</h4>
-                        <a href={modalData.youtubeurl} target="_blank" className="btn btn-primary mx-3" >Youtube</a>
-                    </>
-                    : ""}
+                    {modalData.youtubeurl ? (
+                      <>
+                        <h4 className="text-decoration-underline mt-3">
+                          For your convenience, we have made these videos available
+                          for you to watch.
+                        </h4>
+                        <a
+                          href={modalData.youtubeurl}
+                          target="_blank"
+                          className="btn btn-primary mx-3"
+                        >
+                          Youtube
+                        </a>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </>
 
-
+              }
 
             </Modal>
 

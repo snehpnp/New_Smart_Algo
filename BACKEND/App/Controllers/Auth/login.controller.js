@@ -403,14 +403,13 @@ class Login {
                     { new: true }
                 );
 
-
-                res.send({ status: true, message: "Password Update Successfully" });
-
             }
             // If Not Update User
             if (!result) {
                 return res.send({ status: false, msg: 'Server Side issue.', data: [] });
             }
+
+            res.send({ status: true, message: "Password Update Successfully" });
 
             logger.info('Password Update Successfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
             // res.send({ status: true, message: "Password Update Successfully" });
