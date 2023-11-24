@@ -24,6 +24,13 @@ const MainSignalsSchema = Schema({
     exit_qty_percent: {
         type: String,
     },
+    entry_qty: {
+        type: String,
+    },
+
+    exit_qty: {
+        type: String,
+    },
     entry_dt_date: {
         type: String,
     },

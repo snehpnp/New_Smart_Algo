@@ -328,7 +328,7 @@ app.post('/broker-signals', async (req, res) => {
               tradesymbol1 = token[0].tradesymbol
             }
           }
-         
+
 
           fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS_TOKEN ' + instrument_token + '\n', function (err) {
             if (err) {
@@ -368,7 +368,7 @@ app.post('/broker-signals', async (req, res) => {
             //Process Angel admin client
             try {
               const angelCollection = db1.collection('angelView');
-             // console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+              // console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
               const angelBluedocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + angelBluedocuments.length + '\n', function (err) {
@@ -607,6 +607,7 @@ app.post('/broker-signals', async (req, res) => {
 
             var findMainSignals = await MainSignals.find(findSignal)
 
+
             // MainSignals FIND IN COLLECTION
             if (findMainSignals.length == 0) {
 
@@ -617,6 +618,8 @@ app.post('/broker-signals', async (req, res) => {
                 entry_price: parseFloat(price),
                 exit_price: "",
                 entry_qty_percent: parseFloat(qty_percent),
+                entry_qty: Number(find_lot_size) * (Math.ceil(Number(qty_percent) / 100)),
+                exit_qty: 0,
                 exit_qty_percent: "",
                 entry_dt_date: current_date,
                 exit_dt_date: "",
@@ -640,9 +643,20 @@ app.post('/broker-signals', async (req, res) => {
               await Entry_MainSignals.save();
 
             } else {
+
+              const entry_qty = Number(findMainSignals[0].entry_qty) || 0; // Use 0 if entry_qty is undefined or null
+              const lot_size = Number(findMainSignals[0].lot_size) || 0; // Use 0 if lot_size is undefined or null
+              const qty_percent1 = Number(qty_percent) || 0; // Use 0 if qty_percent is not a valid number
+              const result = entry_qty + (lot_size * Math.ceil(qty_percent1 / 100));
+
+
               var updatedData = {
                 entry_price: (((parseFloat(price) * parseFloat(qty_percent)) + (parseFloat(findMainSignals[0].entry_price) * parseFloat(findMainSignals[0].entry_qty_percent))) / (parseFloat(findMainSignals[0].entry_qty_percent) + parseFloat(qty_percent))),
+
                 entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
+
+                entry_qty: result,
+
                 entry_dt_date: current_date
               }
               // console.log("updatedData", updatedData);
@@ -661,15 +675,22 @@ app.post('/broker-signals', async (req, res) => {
             // // ExitMainSignals  FIND IN COLLECTION
             if (ExitMainSignals.length != 0) {
 
+              const entry_qty = Number(ExitMainSignals[0].exit_qty) || 0; // Use 0 if entry_qty is undefined or null
+              const lot_size = Number(ExitMainSignals[0].lot_size) || 0; // Use 0 if lot_size is undefined or null
+              const qty_percent1 = Number(qty_percent) || 0; // Use 0 if qty_percent is not a valid number
+              const result = entry_qty + (lot_size * Math.ceil(qty_percent1 / 100));
+
+              console.log(result);
+
               if ((ExitMainSignals[0].exit_price == "" && ExitMainSignals[0].exit_qty_percent == "") || isNaN(ExitMainSignals[0].exit_price)) {
-                // console.log("ExitMainSignals 1", ExitMainSignals);
+
 
                 // IF EXIST ENTRY OF THIS EXIT TRADE
                 var updatedData = {
                   exit_type: type,
                   exit_price: parseFloat(price) + (isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)),
                   exit_qty_percent: parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)),
-
+                  exit_qty: result,
                   exit_dt_date: current_date
                 }
                 updatedData.$addToSet = { signals_id: SignalSave._id };
@@ -678,19 +699,25 @@ app.post('/broker-signals', async (req, res) => {
                 const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
 
               } else {
-                if (ExitMainSignals[0].entry_qty_percent >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
+
+                if (Number(ExitMainSignals[0].entry_qty) >  result) {
+
+
                   var updatedData = {
                     exit_type: type,
                     exit_price: (((parseFloat(price) * parseFloat(qty_percent)) + ((isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)) * (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) / ((isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)) + parseFloat(qty_percent))),
 
                     exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
-
+                    exit_qty: result,
                     exit_dt_date: current_date
                   }
                   updatedData.$addToSet = { signals_id: SignalSave._id };
 
                   // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
                   const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
+                } else {
+                  console.log("---------------------EXTRA SIGNAL GET")
+
                 }
 
 

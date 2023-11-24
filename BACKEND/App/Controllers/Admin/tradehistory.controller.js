@@ -47,38 +47,59 @@ class Tradehistory {
 
             const filteredSignals = await MainSignals_modal.aggregate([
                 {
-                    $match: {
-                        dt_date: {
-                            $gte: startDate,
-                            $lte: endDate
-                        },
-                        strategy: stg1,
-                        trade_symbol: ser1,
-                        client_persnal_key: client_persnal_key1
-                    }
-                },
-                {
-                    $lookup: {
-                        from: "signals",
-                        localField: "signals_id",
-                        foreignField: "_id",
-                        as: "result",
+                  $match: {
+                    dt_date: {
+                      $gte: startDate,
+                      $lte: endDate,
                     },
+                    strategy: stg1,
+                    trade_symbol: ser1,
+                    client_persnal_key: client_persnal_key1,
+                  },
                 },
                 {
-                    $lookup: {
-                        from: "services",
-                        localField: "symbol",
-                        foreignField: "name",
-                        as: "result1",
+                  $lookup: {
+                    from: "signals",
+                    localField: "signals_id",
+                    foreignField: "_id",
+                    as: "result",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "services",
+                    localField: "symbol",
+                    foreignField: "name",
+                    as: "result1",
+                  },
+                },
+                {
+                  $sort: {
+                    _id: -1,
+                  },
+                },
+                {
+                  $match: {
+                    $expr: {
+                      $gt: [
+                        { $size: "$result" },
+                        0
+                      ],
                     },
+                  },
                 },
                 {
-                    $sort: {
-                        _id: -1 // Sort in ascending order. Use -1 for descending.
-                    }
-                }
-            ]);
+                  $match: {
+                    $expr: {
+                      $gt: [
+                        { $size: "$result1" },
+                        0
+                      ],
+                    },
+                  },
+                },
+              ]);
+              
 
 
             if (filteredSignals.length > 0) {
@@ -148,7 +169,27 @@ class Tradehistory {
                     $sort: {
                         _id: -1 // Sort in ascending order. Use -1 for descending.
                     }
-                }
+                },
+                {
+                    $match: {
+                      $expr: {
+                        $gt: [
+                          { $size: "$result" },
+                          0
+                        ],
+                      },
+                    },
+                  },
+                  {
+                    $match: {
+                      $expr: {
+                        $gt: [
+                          { $size: "$result1" },
+                          0
+                        ],
+                      },
+                    },
+                  }
             ]);
 
 
