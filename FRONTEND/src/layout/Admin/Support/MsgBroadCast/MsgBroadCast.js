@@ -94,15 +94,17 @@ const MsgBroadCast = () => {
         }
     });
 
-   
+
 
     const fields = [
         {
             name: 'Broker',
             label: 'Broker',
             type: 'select',
-            options:  [{ label: "Demo", value: "0" },
-            ...AllBrokers && AllBrokers.map((item) => ({ label: item.name, value: item.id }))],
+            options: [
+                { label: "All Users", value: "-1" },
+                { label: "Demo", value: "0" },
+                ...AllBrokers && AllBrokers.map((item) => ({ label: item.name, value: item.id }))],
             label_size: 12, col_size: 3, disable: false
         },
         { name: 'message', label: 'Entery Your Message', type: 'msgbox', label_size: 12, row_size: 3, col_size: 12, disable: true },

@@ -12,7 +12,7 @@ import { useFormik } from 'formik';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_BROKER_INFORMATIONS, UPDATE_BROKER_INFORMATIONS, FIND_BROKER_RESPONSES } from '../../../ReduxStore/Slice/Admin/DashboardSlice'
 import { useDispatch, useSelector } from "react-redux";
-import { fa_time } from "../../../Utils/Date_formet";
+import { fDate } from "../../../Utils/Date_formet";
 import Modal from '../../../Components/ExtraComponents/Modal';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import toast from 'react-hot-toast';
@@ -101,9 +101,9 @@ const Broker_info = () => {
             text: 'App Code'
         },
         {
-            dataField: 'createdAt',
+            dataField: 'updatedAt',
             text: 'Create Date',
-            formatter: (cell, row) => fa_time(cell)
+            formatter: (cell, row) => fDate(cell)
 
         },
         {
@@ -237,15 +237,13 @@ const Broker_info = () => {
 
     }, [getBrokerInfo]);
 
-
+       
     return (
         <>
             {
                 GetBrokerInfo.loading ? <Loader /> :
                     <>
                         <Content Page_title="Set Broker Information" button_status={false}  >
-
-
                             <FullDataTable TableColumns={columns} tableData={GetBrokerInfo.data} />
 
                             {

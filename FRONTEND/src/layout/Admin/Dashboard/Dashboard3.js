@@ -19,7 +19,7 @@ const Dashboard1 = ({ data }) => {
       name: "Total Active Client",
       value: data && data.total_active_client,
       icon: 'la la-users',
-      route: '/admin/allclients?filter=2',
+      route: '/admin/allclients?filter=111',
       visible: true
 
     },
@@ -28,7 +28,7 @@ const Dashboard1 = ({ data }) => {
       name: "Total Expired Client",
       value: data && data.total_expired_client,
       icon: 'la la-users',
-      route: "/admin/allclients?filter=21",
+      route: "/admin/expiredclients?filter=000",
       visible: true
     },
     {

@@ -9,7 +9,7 @@ import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 
 
-const FullDataTable = ({ tableData, TableColumns, tableoptions, selectRow, keyField, pagination1 }) => {
+const FullDataTable = ({ tableData, TableColumns, tableoptions, selectRow, keyField, pagination1, rowStyle }) => {
 
     //  No Data Image
     const NoDataIndication = () => (
@@ -30,7 +30,6 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions, selectRow, keyFi
 
 
 
-    // console.log("pagination1" ,pagination1)
 
     return <>
         <div className=''>
@@ -44,7 +43,10 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions, selectRow, keyFi
 
                 noDataIndication={() => <NoDataIndication />}
                 headerClasses="bg-primary text-primary text-center header-class"
-                rowClasses='text-center'
+                rowClasses={`text-center`}
+                // rowStyle={rowStyle}
+
+
             />
 
         </div>

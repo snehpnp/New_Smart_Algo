@@ -241,23 +241,23 @@ class Panel {
         try {
 
 
-            const panel_data = await panel_model.find({ domain: "http://localhost:3000" }).select('broker_id')
+            const panel_data = await panel_model.find({ domain: req.body.url }).select('broker_id')
             if (!panel_data) {
                 return res.status(409).json({ status: false, msg: 'Panel Not exists', data: [] });
             }
 
-            const objectIds = panel_data[0].broker_id.map((data) => data.id);
+            var objectIds = panel_data[0].broker_id.map((data) => data.id);
 
+            var tt
+            if (req.body.brokerId == -1) {
+                tt = { $in: objectIds }
+            } else {
+                tt = req.body.brokerId
+            }
             // Find documents with matching ids
-            const getAllpanel = await ApiCreateInfo.find({ broker_id: { $in: objectIds } })
+            const getAllpanel = await ApiCreateInfo.find({ broker_id: tt })
 
-            // console.log(getAllpanel);
-
-
-            // THEME LIST DATA
-            // const getAllpanel = await ApiCreateInfo
-            //     .find({})
-
+            
             // IF DATA NOT EXIST
             if (getAllpanel.length == 0) {
                 res.send({ status: false, msg: "Empty data", data: getAllpanel })

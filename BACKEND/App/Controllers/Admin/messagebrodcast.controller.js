@@ -93,23 +93,26 @@ class Message {
                 return res.send({ status: false, msg: 'Client Not Exist', data: [] });
             }
 
+
+            var objectIds = ["-1"]
+
             if (result1[0].license_type == '0') {
-                broker_id1 = '0'
+                objectIds.push('0')
             } else {
-                broker_id1 = result1[0].broker
+                objectIds.push(result1[0].broker)
             }
 
 
-            var Strategy_sms = []
-
             const result = await Message_brodcast.find({
-                broker_id: broker_id1,
+                broker_id: { $in: objectIds },
                 createdAt: {
                     $gte: today,
                     $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
                 },
             })
 
+
+            console.log("result", result)
             if (result.length == 0) {
                 return res.send({ status: false, msg: 'message Empty', data: result });
 

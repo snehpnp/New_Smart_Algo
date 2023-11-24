@@ -34,7 +34,7 @@ const ApiCreateInfo = () => {
 
     const data = async () => {
 
-        await dispatch(All_Api_Info_List(token.token)).unwrap()
+        await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
             .then((response) => {
                 if (response.status) {
                     setUserDetails({

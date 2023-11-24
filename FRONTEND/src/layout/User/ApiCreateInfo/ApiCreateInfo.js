@@ -36,21 +36,27 @@ const ApiCreateInfo = () => {
   const [UserInfo, setUserInfo] = useState({});
 
 
+
   const data = async () => {
-    await dispatch(All_Api_Info_List(userInfo.token))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setUserDetails({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
+
     await dispatch(User_Api_Create_Info({ user_id: gotodashboard ? GoToDahboard_id.user_id : userInfo.user_id, token: userInfo.token }))
       .unwrap()
-      .then((response) => {
+      .then(async (response) => {
         if (response.status) {
+
+          await dispatch(All_Api_Info_List({ token: userInfo.token, url: Config.react_domain, brokerId: response.data[0].broker }))
+            .unwrap()
+            .then((response) => {
+              if (response.status) {
+                setUserDetails({
+                  loading: false,
+                  data: response.data,
+                });
+              }
+            });
+
+
+
           setUserInfo(
             response.data[0],
           );
@@ -60,27 +66,30 @@ const ApiCreateInfo = () => {
           );
         }
       });
+
+
+
   };
 
-  const data1 = async () => {
+  // const data1 = async () => {
 
-    await dispatch(User_Api_Create_Info({ user_id: userInfo.user_id, token: userInfo.token }))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setUserInfo(
-            response.data[0],
-          );
-        } else {
-          setUserInfo(
-            response.data,
-          );
-        }
-      });
-  };
+  //   await dispatch(User_Api_Create_Info({ user_id: userInfo.user_id, token: userInfo.token }))
+  //     .unwrap()
+  //     .then((response) => {
+  //       if (response.status) {
+  //         setUserInfo(
+  //           response.data[0],
+  //         );
+  //       } else {
+  //         setUserInfo(
+  //           response.data,
+  //         );
+  //       }
+  //     });
+  // };
+
   useEffect(() => {
     data();
-    data1();
   }, []);
 
   const ShowData = (item) => {
@@ -89,7 +98,6 @@ const ApiCreateInfo = () => {
     setModalData(item);
   };
 
-  console.log("UserInfo", UserInfo && UserInfo.broker)
 
   return (
     <>
@@ -104,39 +112,39 @@ const ApiCreateInfo = () => {
               <section class="card__container">
                 {UserDetails.data &&
                   UserDetails.data.map((item) => {
-                    if (item.broker_id == UserInfo.broker) {
-                      return (
-                        <>
-                          <div class="card__bx card__1">
-                            <div class="card__data">
-                              <div class="card__icon">
-                                <div class="card__icon-bx">
-                                  <CandlestickChart />
-                                </div>
-                              </div>
-
-                              <div class="card__content">
-                                <h3 className="text-center">{item.title}</h3>
-                                <Link
-                                  style={{
-                                    marginRight: "20px",
-                                    marginBottom: "20px",
-                                    marginTop: "20px",
-                                  }}
-                                  onClick={() => ShowData(item)}
-                                >
-                                  <Eye className="mx-2" />
-                                </Link>
-                                {/* <Link to="/admin/apicreateinfo/edit" state={item}>
-                        <Pencil className='mx-2' onClick={() => ShowData(item)} />
-                    </Link> */}
+                    // if (item.broker_id == UserInfo.broker) {
+                    return (
+                      <>
+                        <div class="card__bx card__1">
+                          <div class="card__data">
+                            <div class="card__icon">
+                              <div class="card__icon-bx">
+                                <CandlestickChart />
                               </div>
                             </div>
-                          </div>
-                        </>
-                      );
 
-                    }
+                            <div class="card__content">
+                              <h3 className="text-center">{item.title}</h3>
+                              <Link
+                                style={{
+                                  marginRight: "20px",
+                                  marginBottom: "20px",
+                                  marginTop: "20px",
+                                }}
+                                onClick={() => ShowData(item)}
+                              >
+                                <Eye className="mx-2" />
+                              </Link>
+                              {/* <Link to="/admin/apicreateinfo/edit" state={item}>
+                        <Pencil className='mx-2' onClick={() => ShowData(item)} />
+                    </Link> */}
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    );
+
+                    // }
 
                   })}
               </section>

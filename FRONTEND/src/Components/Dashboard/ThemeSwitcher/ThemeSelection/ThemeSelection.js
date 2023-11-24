@@ -116,7 +116,7 @@ const ThemeSelection = () => {
     const GetAllThemes = () => {
         if (Role === "SUPERADMIN") {
 
-            axios.get(`${Config.smartAlogUrl}/getall/theme`).then((res) => {
+            axios.get(`${Config.smartAlogUrl}getall/theme`).then((res) => {
                 setThemeData(res.data.data)
             }).catch((err) => {
                 console.log("error", err);
