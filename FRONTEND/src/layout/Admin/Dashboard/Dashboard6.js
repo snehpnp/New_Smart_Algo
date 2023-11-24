@@ -30,7 +30,7 @@ const Dashboard1 = ({ data }) => {
       name: "Total Expired Client",
       value: data && data.total_expired_client,
       icon: 'la la-users',
-      route: "/admin/allclients?filter=000",
+      route: "/admin/expiredclients?filter=000",
       visible: true
     },
     {
