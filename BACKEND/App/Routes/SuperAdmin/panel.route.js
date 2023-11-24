@@ -20,7 +20,7 @@ router.post('/edit/panel', EditPanel)
 router.post('/update/panel_theme', verifyToken, UpdatePanelTheme)
 
 router.post('/add/apicreateinfo', CreateAPiInfo)
-router.get('/getall/apicreateinfo',  GetAllAPiInfo)
+router.post('/getall/apicreateinfo',  GetAllAPiInfo)
 router.post('/getall/apicreateinfo_super', verifyToken, GetAllAPiInfo_Super)
 router.post('/update/apicreateinfo', verifyToken, UpdateAPiInfo)
 

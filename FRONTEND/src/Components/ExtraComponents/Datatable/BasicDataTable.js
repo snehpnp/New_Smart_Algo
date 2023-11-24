@@ -6,41 +6,42 @@ import paginationFactory from 'react-bootstrap-table2-paginator';
 
 
 
-const BasicDataTable = ({ tableData, TableColumns, tableoptions }) => {
+const BasicDataTable = ({ tableData, TableColumns, tableoptions, rowStyle }) => {
 
 
 
-  //  No Data Image
-  const NoDataIndication = () => (
-      <>
-          <img src='../../../../assets/images/norecordfound.png' alt="sss"
-              className='mx-auto d-flex'
-          />
-      </>
-  );
+    //  No Data Image
+    const NoDataIndication = () => (
+        <>
+            <img src='../../../../assets/images/norecordfound.png' alt="sss"
+                className='mx-auto d-flex'
+            />
+        </>
+    );
 
 
-  const options = {
-      sizePerPage: 10,
-      hidePageListOnlyOnePage: false,
-      ...tableoptions
-  };
+    const options = {
+        sizePerPage: 10,
+        hidePageListOnlyOnePage: false,
+        ...tableoptions
+    };
 
+    console.log("rowStyle", rowStyle)
+    return <>
+        <div className='table-responsive'>
+            <BootstrapTable
+                keyField="id"
+                data={tableData}
+                columns={TableColumns}
+                // pagination={paginationFactory(options)}
+                noDataIndication={() => <NoDataIndication />}
+                headerClasses="bg-primary text-primary text-center header-class"
+                rowClasses={`text-center ${rowStyle}`}
 
-  return <>
-  <div className='table-responsive'>
-      <BootstrapTable
-          keyField="id"
-          data={tableData}
-          columns={TableColumns}
-          // pagination={paginationFactory(options)}
-          noDataIndication={() => <NoDataIndication />}
-          headerClasses="bg-primary text-primary text-center header-class"
-          rowClasses='text-center'
-          />
+            />
 
-          </div>
-  </>
+        </div>
+    </>
 }
 
 export default BasicDataTable

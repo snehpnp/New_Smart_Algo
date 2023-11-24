@@ -72,7 +72,9 @@ const HelpCenter = () => {
 
     const [getBrokerUrl, setBrokerUrl] = useState('')
 
+    const [symbolStrike, setSymbolStrike] = useState('')
     const [symbol, setSymbol] = useState('')
+
     const [expiry, setExpiry] = useState('')
     const [strategy, setStrategy] = useState('')
     const [ButtonDisabled, setButtonDisabled] = useState(false)
@@ -82,27 +84,30 @@ const HelpCenter = () => {
 
     const handleClickDisabled = () => {
         setDisabled(true);
-      }
+    }
 
 
 
     const getPanelDetails = async () => {
         await dispatch(GET_COMPANY_INFOS())
 
-          .unwrap()
-          .then((response) => {
-            let res = response.data[0]
-           setBrokerUrl(res.broker_url)
-          });
-      };
-
+            .unwrap()
+            .then((response) => {
+                let res = response.data[0]
+                setBrokerUrl(res.broker_url)
+            });
+    };
 
     const columns = [
         {
             dataField: 'CALL',
             text: 'BUY/SELL',
+            style: (cell, row) => parseInt(row.strike_price) < parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: 'beige' } :
+                parseInt(row.strike_price) === parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: '#a3eba36b' } : { backgroundColor: '' },
             formatter: (cell, row, rowIndex) => (
-                <div key={rowIndex}>
+                <div key={rowIndex}
+
+                >
                     <button
                         value="LE"
                         className={`button_BUY  button_call_buy_${row.call_token}`}
@@ -110,10 +115,9 @@ const HelpCenter = () => {
                             CreateRequest('CALL', row, 'LE', rowIndex, e);
                         }}
                         onDoubleClick={(e) => { RemoveClases('CALL', row, 'LE', rowIndex, e) }}
-
                     >
                         B
-                    </button>
+                    </button >
                     <button
                         value="SE"
                         className={`button_sell button_call_sell_${row.call_token}`}
@@ -131,8 +135,10 @@ const HelpCenter = () => {
         {
             dataField: 'CALL/LP',
             text: 'CALL/LP',
+            style: (cell, row) => parseInt(row.strike_price) < parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: 'beige' } :
+                parseInt(row.strike_price) === parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: '#a3eba36b' } : { backgroundColor: '' },
             formatter: (cell, row, rowIndex) => (
-                <div>
+                <div >
                     <span className={`Call_Price_${row.call_token} `}></span>
                     <span className={`SP1_Call_Price_${row.call_token} d-none`}></span>
                 </div>
@@ -141,8 +147,10 @@ const HelpCenter = () => {
         {
             dataField: 'strike_price',
             text: 'STRIKE PRICE',
+            style: (cell, row) => parseInt(row.strike_price) == parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: '#a3eba36b' } : { backgroundColor: '' },
             formatter: (cell, row, rowIndex) => (
-                <div>
+
+                <div >
                     <span className={`fw-bold`}>{cell}</span>
                 </div>
             ),
@@ -150,8 +158,13 @@ const HelpCenter = () => {
         {
             dataField: 'PUT/LP',
             text: 'PUT/LP',
+            style: (cell, row) => parseInt(row.strike_price) > parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: 'beige' } :
+                parseInt(row.strike_price) === parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: '#a3eba36b' } : { backgroundColor: '' },
+
             formatter: (cell, row, rowIndex) => (
-                <div>
+                <div
+
+                >
                     <span className={`Put_Price_${row.put_token} `}></span>
                     <span className={`BP1_Put_Price_${row.put_token} d-none`}></span>
                 </div>
@@ -160,8 +173,13 @@ const HelpCenter = () => {
         {
             dataField: 'PUT',
             text: 'BUY/SELL',
+            style: (cell, row) => parseInt(row.strike_price) > parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: 'beige' } :
+                parseInt(row.strike_price) === parseInt(OptionChainData.data[11].strike_price) ? { backgroundColor: '#a3eba36b' } :
+                    { backgroundColor: '' },
             formatter: (cell, row, rowIndex) => (
-                <div key={rowIndex}>
+                <div key={rowIndex}
+
+                >
                     <button
                         value="LE"
                         className={`button_BUY  button_put_buy_${row.put_token}`}
@@ -183,6 +201,10 @@ const HelpCenter = () => {
             ),
         },
     ];
+
+
+
+
 
 
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
@@ -569,7 +591,6 @@ const HelpCenter = () => {
     const getAllRoundToken = async () => {
 
         if (expiry) {
-
             const data = {
                 // expiry: "02112023",
                 // symbol: "NIFTY"
@@ -613,22 +634,11 @@ const HelpCenter = () => {
             if (res.data.stat) {
                 const handleResponse = async (response) => {
 
-                    // console.log("response", response)
-                    // UPL_
-
-                    // $(".Call_Price_" + response.tk).html(response.lp);
-                    // $(".Put_Price_" + response.tk).html(response.lp);
-
                     const old_val_call = $('.Call_Price_' + response.tk).html();
                     const old_val_put = $('.Put_Price_' + response.tk).html();
 
                     $('.SP1_Call_Price_' + response.tk).html(response.sp1);
                     $('.BP1_Put_Price_' + response.tk).html(response.bp1);
-
-
-
-
-
 
                     if (response.tk) {
                         if (response.lp !== undefined) {
@@ -697,7 +707,6 @@ const HelpCenter = () => {
         }
     }
 
-
     return (
         <>
             {
@@ -718,13 +727,18 @@ const HelpCenter = () => {
                                         className="default-select wide form-control spacing"
                                         onChange={(e) => {
                                             setSymbol(e.target.value)
+                                            setSymbolStrike(e.target.options[e.target.selectedIndex].getAttribute("name"))
                                             setStrategy("")
                                             setExpiry("")
+                                            setOptionChainData({
+                                                loading: false,
+                                                data: [],
+                                            });
                                         }}
                                     >
                                         <option value="" >Select Stock Name</option>
                                         {All_Symbols.data && All_Symbols.data.map((item) => {
-                                            return <option value={item.symbol}>{item.symbol}</option>
+                                            return <option value={item.symbol} name={item.price}>{item.symbol}</option>
                                         })}
                                     </select>
                                 </div>
@@ -784,9 +798,9 @@ const HelpCenter = () => {
                                 <div className="col-md-4 d-flex justify-content-end align-items-center text-secondary ">
                                     <button
                                         className="btn btn-primary me-2"
-                                        onClick={(e) =>ExcuteTradeButton() }
-                                       disabled={CreateSignalRequest.length === 0}
-                                     
+                                        onClick={(e) => ExcuteTradeButton()}
+                                        disabled={CreateSignalRequest.length === 0}
+
                                     >
                                         Execute Trade
                                     </button>
@@ -795,6 +809,7 @@ const HelpCenter = () => {
 
 
                             <div className='option-chain mt-2'>
+
                                 <FullDataTable TableColumns={columns} tableData={OptionChainData.data} pagination1={true}></FullDataTable>
                             </div>
 
@@ -894,6 +909,7 @@ const HelpCenter = () => {
                                                 },
                                             ]}
                                             tableData={ExecuteTradeData.data && ExecuteTradeData.data}
+
                                         />
                                     </Modal>
                                 </>

@@ -104,10 +104,10 @@ const ServicesList = () => {
             formatter: (cell, row) => (
                 <div>
 
-                    <Link to={`/admin/groupservices/edit/${row._id}`} data-toggle="tooltip" data-placement="top" title="Delete">
+                    <Link to={`/admin/groupservices/edit/${row._id}`} data-toggle="tooltip" data-placement="top" title="Edit">
                         < Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
+                    <span data-toggle="tooltip" data-placement="top" title=" Delete">
                         <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={(e) => DeleteGroup(row)} />
                     </span>
 
@@ -350,7 +350,7 @@ const ServicesList = () => {
                                                     text: 'Go To Dashboard',
                                                     formatter: (cell, row, rowIndex) =>
                                                         <>
-                                                        {console.log("==>",row.user)}
+                                                            {console.log("==>", row.user)}
                                                             <button
                                                                 className={`btn  ${row.user.AppLoginStatus == '1' || row.user.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
 

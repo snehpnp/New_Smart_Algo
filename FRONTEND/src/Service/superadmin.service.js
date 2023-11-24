@@ -79,11 +79,9 @@ export async function UPDATE_API_INFORMATION(data , token) {
 
 // GET_API_INFORMATION
 export async function GET_API_INFORMATION(data ,token) {
-    console.log("data", data);
-    console.log("token", token);
-    
+    console.log("data" ,data)
     try {
-        const res = await axios.get(`${Config.base_url}getall/apicreateinfo`, data ,{
+        const res = await axios.post(`${Config.smartAlogUrl}getall/apicreateinfo`, data ,{
             headers: header(token),
             data: {},
         })
@@ -96,10 +94,9 @@ export async function GET_API_INFORMATION(data ,token) {
     }
 
 }
-// GET_API_INFORMATION
+// GET_API_INFORMATION 
 export async function GET_API_INFORMATION_SUPERADMIN(data ,token) {
-    console.log("data", data);
-    console.log("token", token);
+
     
     try {
         const res = await axios.post(`${Config.base_url}getall/apicreateinfo_super`, data ,{
