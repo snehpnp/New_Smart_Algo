@@ -209,14 +209,14 @@ const TradeHistory = () => {
       text: "Symbol",
     },
     {
-      dataField: "entry_qty_percent",
+      dataField: "entry_qty",
       text: "Entry Qty",
       formatter: (cell, row, rowIndex) => (
         <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
       ),
     },
     {
-      dataField: "exit_qty_percent",
+      dataField: "exit_qty",
       text: "Exit Qty",
       formatter: (cell, row, rowIndex) => (
         <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
