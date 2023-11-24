@@ -200,3 +200,20 @@ export async function GET_COMPARATORS(data, token) {
         
     }
 }
+
+// Add Make strategy
+export async function ADD_MAKE_STRATEGY(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}AddMakeStartegy`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}

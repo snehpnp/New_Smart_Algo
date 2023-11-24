@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_TIMEFRAME , GET_SOURCE ,GET_COMPARATORS } from "../../../Service/common.service";
+import { GET_TIMEFRAME , GET_SOURCE ,GET_COMPARATORS ,ADD_MAKE_STRATEGY } from "../../../Service/common.service";
 
 
 export const get_time_frame = createAsyncThunk("get/getAlltimeframe", async (data) => {
@@ -36,6 +36,18 @@ export const get_comparators = createAsyncThunk("get_comparators", async (data) 
     }
 });
 
+// Make strategy
+export const Add_Make_Strategy = createAsyncThunk("AddMakeStartegy", async (data) => {
+    try {
+        console.log("data -",data)
+        const {req,token}=data
+        const res = await ADD_MAKE_STRATEGY(req,token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
 
 
 const MakeStrategy = createSlice({
@@ -55,6 +67,9 @@ const MakeStrategy = createSlice({
             return { ...state, timeframe: payload, isLoading: false };
         },
         [get_comparators.fulfilled]: (state, { payload }) => {
+            return { ...state, timeframe: payload, isLoading: false };
+        },
+        [Add_Make_Strategy.fulfilled]: (state, { payload }) => {
             return { ...state, timeframe: payload, isLoading: false };
         },
     }

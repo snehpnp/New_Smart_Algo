@@ -17,7 +17,10 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
-import { get_time_frame , get_source , get_comparators } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
+import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
+
+import toast, { Toaster } from 'react-hot-toast';
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 
 const Signals = () => {
@@ -155,14 +158,6 @@ const Signals = () => {
     const updatedItems = selectAddIndicators.filter((item) => item !== itemToRemove);
     setSelectAddIndicators(updatedItems);
   };
-
-  const getSourcesss = [
-    { value: 'option1', label: 'Option 1' },
-    { value: 'option2', label: 'Option 2' },
-    { value: 'option3', label: 'Option 3' },
-  ];
-
-  const conditionText = "((close(2) < MA(2)) && (close(1) > MA(11))";
 
 
   useEffect(() => {
@@ -749,19 +744,13 @@ const Signals = () => {
     
   }
   
-  console.log("coditionRequestArr final --",coditionRequestArr)
-  console.log("coditionRequestArr Sell final --",coditionRequestArrSell)
-  
-  
-
+  //console.log("coditionRequestArr final --",coditionRequestArr)
+  //console.log("coditionRequestArr Sell final --",coditionRequestArrSell)
   
   
   let condition_string = "";
   let condition_string_pass = "";
  
-
-
-
   for (let index = 0; index < coditionRequestArr.length; index++) {
     const val = coditionRequestArr[index];
     
@@ -796,9 +785,8 @@ const Signals = () => {
  
       condition_string += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
 
-
        
-      condition_string_pass += `${start_bracket}(data.${val.first_element.source}[${val.first_element.offset}] ${val.comparators}data.${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or_pass}  `;
+      condition_string_pass += `${start_bracket}(data.${val.first_element.source}[${val.first_element.offset}]${val.comparators}data.${val.second_element.source}[${val.second_element.offset}])${end_bracket}${and_or_pass}`;
     } 
      else {
       break; // Break out of the loop
@@ -853,7 +841,7 @@ const Signals = () => {
       condition_string_sell += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
 
 
-      condition_string_sell_pass += `${start_bracket}(data.${val.first_element.source}[${val.first_element.offset}] ${val.comparators}data.${val.second_element.source}[${val.second_element.offset}])${end_bracket}${and_or_pass}  `;
+      condition_string_sell_pass += `${start_bracket}(data.${val.first_element.source}[${val.first_element.offset}]${val.comparators}data.${val.second_element.source}[${val.second_element.offset}])${end_bracket}${and_or_pass}`;
 
     } 
      else {
@@ -983,13 +971,13 @@ const Signals = () => {
 
 
 
-  console.log("timeFrameVal - ", timeFrameVal)
+ // console.log("timeFrameVal - ", timeFrameVal)
 
-  console.log("buyCheck - ", buyCheck)
+ // console.log("buyCheck - ", buyCheck)
 
 
-  const [exitConditionBuyOrSell, setExitConditionBuyOrSell] = useState([
-    {
+  const [exitConditionBuyOrSell, setExitConditionBuyOrSell] = useState(
+    [{
       buy : {
       stoploss : "0",
       target : "0",
@@ -1000,32 +988,62 @@ const Signals = () => {
       target : "0",
       tsl : "0",
      },
-    },
-
-  ]);
+    }]
+  );
 
   const StoplossChange = (e,buy_sell) => {
-    
-   if(buy_sell == "buy"){
-    
-   }else if(buy_sell == "sell"){
-    
-   }
+     console.log("e", e.target.value)
+   if(parseInt(e.target.value) > 0 ){
+    if(buy_sell == "buy"){
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.buy.stoploss = e.target.value
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      }
+    }else if(buy_sell == "sell"){
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.sell.stoploss = e.target.value
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      }
+     
+    }
+  }  
   }
+
+  //console.log("exitConditionBuyOrSell",exitConditionBuyOrSell[0].buy)
+  //console.log("exitConditionBuyOrSell sell",exitConditionBuyOrSell[0].sell)
 
   const TargetChange = (e,buy_sell) => {
     if(buy_sell == "buy"){
-
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.buy.target = e.target.value
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      }
     }else if(buy_sell == "sell"){
-     
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.sell.target = e.target.value
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      }
     }
   }
 
   const TSLChange = (e,buy_sell) => {
     if(buy_sell == "buy"){
-
-    }else if(buy_sell == "sell"){
      
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.buy.tsl = e.target.value
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      }
+    }else if(buy_sell == "sell"){
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.sell.tsl = e.target.value
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      }
     }
   }
 
@@ -1045,24 +1063,24 @@ const Signals = () => {
     }
 
 
-  const saveStrategy = (e) => {
+const saveStrategy = async (e) => {
    // alert(condition_string)
 
 
-    // if (selectStrategy == "") {
-    //   alert("Please select a strategy");
-    //   return;
-    // }
+    if (selectStrategy == "") {
+      alert("Please select a strategy");
+      return;
+    }
 
-    // if(selectedItems.length == 0){
-    //   alert("Please select a Instruments");
-    //   return;
-    // }
+    if(selectedItems.length == 0){
+      alert("Please select a Instruments");
+      return;
+    }
 
-    // if(!buyCheck && !sellCheck){
-    //   alert("Please select a Buy or Sell");
-    //   return;
-    // }
+    if(!buyCheck && !sellCheck){
+      alert("Please select a Buy or Sell");
+      return;
+    }
 
     if(condition_string =="" && condition_string_sell == ""){
       alert("Please select a add condition");
@@ -1141,10 +1159,12 @@ const Signals = () => {
 
     // Send Request Buy ------
     if (buyCheck && buy_cond) {
-    
+     // alert("buy")
+      
       let data = {
+
         "scriptArray": selectedItems,
-        "user_id": "6512c8f2eb5673dd61bb931a",
+        "user_id": user_Id,
         // "tokensymbol": "3045",
         // "symbol_name": "SBIN",
         // "segment": "C",
@@ -1163,21 +1183,35 @@ const Signals = () => {
        // "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
         "condition_source": condition_string_source,
         "buffer_value": "2",
-        "offset": "0"
+        "offset": "0",
+        "target_stoploss": exitConditionBuyOrSell[0].buy
        }
+       
+       console.log("data request buy",data)
 
-    
+       await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
+        if (response.status === 409) {
+          toast.error(response.data.msg);
+        }
+        else if (response.status) {
+          toast.success(response.msg);
+          // setTimeout(() => {
+          //   navigate("/admin/allclients")
+          // }, 1000);
+        }
+        else if (!response.status) {
+          toast.error(response.msg);
+        }
+       })
+       
     }
-
-
-
 
     // Send Request Sell ------
     if (sellCheck && sell_cond) {
-    
+    //  alert("sell")
       let data = {
         "scriptArray": selectedItems,
-        "user_id": "6512c8f2eb5673dd61bb931a",
+        "user_id": user_Id,
         // "tokensymbol": "3045",
         // "symbol_name": "SBIN",
         // "segment": "C",
@@ -1196,10 +1230,28 @@ const Signals = () => {
        // "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
         "condition_source": condition_string_sell_source,
         "buffer_value": "2",
-        "offset": "0"
+        "offset": "0",
+        "target_stoploss": exitConditionBuyOrSell[0].sell
       }
-    
-  }
+      console.log("data request sell",data)
+
+      await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
+        if (response.status === 409) {
+          toast.error(response.data.msg);
+        }
+        else if (response.status) {
+          toast.success(response.msg);
+          // setTimeout(() => {
+          //   navigate("/admin/allclients")
+          // }, 1000);
+        }
+        else if (!response.status) {
+          toast.error(response.msg);
+        }
+      })
+ 
+ 
+    }
 
 
 
@@ -1572,35 +1624,32 @@ const Signals = () => {
                   </button>
 
 
+                    {condition_string != "" ? 
+                    <li class="StepProgress-item">
+                    <strong>Buy Exit Condition</strong>
+                    <div className="row mt-3">
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label className="text-danger">Stop loss %</label>
+                          <input type="number" onChange={(e)=>{StoplossChange(e,"buy")}}  className="form-control"></input>
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label className="text-success">Target Profit %</label>
+                          <input type="number" onChange={(e)=>{TargetChange(e,"buy")}} className="form-control"></input>
+                        </div>
+                      </div>
+                      <div className="col-md-4">
+                        <div className="form-group">
+                          <label className="">Trailing SL % (optional)</label>
+                          <input type="number" onChange={(e)=>{TSLChange(e,"buy")}} className="form-control"></input>
+                        </div>
+                      </div>
+                    </div>
+                    </li>
+                    :""}
 
-
-     <li class="StepProgress-item">
-<strong>Buy Exit Condition</strong>
-<div className="row mt-3">
-  <div className="col-md-4">
-    <div className="form-group">
-      <label className="text-danger">Stop loss %</label>
-      <input type="number" onChange={(e)=>{StoplossChange(e,"buy")}}  className="form-control"></input>
-    </div>
-  </div>
-  <div className="col-md-4">
-    <div className="form-group">
-      <label className="text-success">Target Profit %</label>
-      <input type="number" onChange={(e)=>{TargetChange(e,"buy")}} className="form-control"></input>
-    </div>
-  </div>
-  <div className="col-md-4">
-    <div className="form-group">
-      <label className="">Trailing SL % (optional)</label>
-      <input type="number" onChange={(e)=>{TSLChange(e,"buy")}} className="form-control"></input>
-    </div>
-  </div>
-</div>
-</li>
-
-
-
-                
                   </Tab>
 
                   
@@ -1662,14 +1711,13 @@ const Signals = () => {
 
               </li>
 
-              <li class="StepProgress-item current is-done">
+              <li class="StepProgress-item current is-done" style={{marginTop:"40px"}}>
 
                 <div className="form-check form-check-inline">
                   <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" />
                   <label className="form-check-label" for="inlineCheckbox2">Sell</label>
                 </div>
-
-                <strong>Sell Entry Condition</strong>
+                <strong >Sell Entry Condition</strong>
 
                 {
   sellCheck == true ? 
@@ -1850,33 +1898,33 @@ const Signals = () => {
   </button>
 
 
+          {condition_string_sell!=""?
+           <li class="StepProgress-item">
+           <strong>Sell Exit Condition</strong>
+           <div className="row mt-3">
+             <div className="col-md-4">
+               <div className="form-group">
+                 <label className="text-danger">Stop loss %</label>
+                 <input type="number" onChange={(e)=>{StoplossChange(e,"sell")}}  className="form-control"></input>
+               </div>
+             </div>
+             <div className="col-md-4">
+               <div className="form-group">
+                 <label className="text-success">Target Profit %</label>
+                 <input type="number" onChange={(e)=>{TargetChange(e,"sell")}} className="form-control"></input>
+               </div>
+             </div>
+             <div className="col-md-4">
+               <div className="form-group">
+                 <label className="">Trailing SL % (optional)</label>
+                 <input type="number" onChange={(e)=>{TSLChange(e,"sell")}} className="form-control"></input>
+               </div>
+             </div>
+           </div>
+           </li>
+          :""}
 
-
-  <li class="StepProgress-item">
-<strong>Sell Exit Condition</strong>
-<div className="row mt-3">
-  <div className="col-md-4">
-    <div className="form-group">
-      <label className="text-danger">Stop loss %</label>
-      <input type="text" className="form-control"></input>
-    </div>
-  </div>
-  <div className="col-md-4">
-    <div className="form-group">
-      <label className="text-success">Target Profit %</label>
-      <input type="text" className="form-control"></input>
-    </div>
-  </div>
-  <div className="col-md-4">
-    <div className="form-group">
-      <label className="">Trailing SL % (optional)</label>
-      <input type="text" className="form-control"></input>
-    </div>
-  </div>
-</div>
-</li>
-
-  </Tab>
+     </Tab>
 
   
 
@@ -2018,7 +2066,8 @@ const Signals = () => {
           </div>
 
 
-
+          <ToastButton />
+       
         </Content>
 
         <Modal show={showModalOffset} onHide={closeModalOffset}>
