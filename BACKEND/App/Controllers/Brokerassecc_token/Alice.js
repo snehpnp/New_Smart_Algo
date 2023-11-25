@@ -19,6 +19,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 // const { formattedDateTime } = require('../../Helper/time.helper')
+const { Alice_Socket } = require("../../Helper/Alice_Socket");
 
 class AliceBlue {
 
@@ -30,7 +31,7 @@ class AliceBlue {
 
             var broker_infor = await Broker_information.find({ broker_name: "Alice Blue" })
             var apiSecret = broker_infor[0].apiSecret
-            // console.log("broker_infor", apiSecret);
+            console.log("broker_infor", apiSecret);
 
             var hosts = req.headers.host;
 
@@ -63,7 +64,7 @@ class AliceBlue {
 
                 axios(config)
                     .then(async function (response) {
-                        console.log("okk",response.data)
+                        console.log("ganpat", response.data)
 
                         if (response.data.userSession) {
 
@@ -84,11 +85,23 @@ class AliceBlue {
                                 const result = await live_price.updateOne(filter, updateOperation);
                                 console.log("redirect_uri 1", redirect_uri);
 
+                        
+//  For Update Live Token List
+                                Alice_Socket();
+
+
+
+
+
+
                                 return res.redirect(redirect_uri);
-                                
+
 
 
                             } else {
+
+                                //  For Client Only
+
                                 let result = await User.findByIdAndUpdate(
                                     Get_User[0]._id,
                                     {
@@ -109,7 +122,6 @@ class AliceBlue {
                                     // console.log("user_login", user_login);
                                     if (user_login) {
                                         console.log("redirect_uri", redirect_uri);
-
                                         return res.redirect(redirect_uri);
 
                                     }
@@ -312,7 +324,7 @@ class AliceBlue {
                     if (response.data) {
                         if (response.data.stat == "Ok") {
 
-                            GetAllBrokerResponse(user_id,res)
+                            GetAllBrokerResponse(user_id, res)
                             return res.send({ status: true, msg: "Order Cancel Successfully", data: response.data });
 
                         } else {
@@ -341,7 +353,7 @@ class AliceBlue {
 
     // UPDATE ALL CLIENT BROKER RESPONSE
     async GetOrderFullInformationAll(req, res) {
-       
+
         try {
             const { user_id } = req.body
 
@@ -349,7 +361,7 @@ class AliceBlue {
                 return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
             }
 
-            GetAllBrokerResponse(user_id,res)
+            GetAllBrokerResponse(user_id, res)
 
 
         } catch (error) {
@@ -367,21 +379,21 @@ class AliceBlue {
 
 }
 
-const GetAllBrokerResponse = async (user_id,res) => {
+const GetAllBrokerResponse = async (user_id, res) => {
 
     try {
         const objectId = new ObjectId(user_id);
         var FindUserAccessToken = await User.find({ _id: objectId })
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId })
-    // 
+        // 
         if (FindUserBrokerResponse.length > 0) {
-    
+
             FindUserBrokerResponse.forEach((data1) => {
-    
+
                 let data = JSON.stringify({
                     "nestOrderNumber": data1.order_id
                 });
-    
+
                 let config = {
                     method: 'post',
                     maxBodyLength: Infinity,
@@ -396,9 +408,9 @@ const GetAllBrokerResponse = async (user_id,res) => {
                     .then(async (response) => {
                         // console.log(response.data[0]);
                         if (response.data[0]) {
-    
+
                             const message = (JSON.stringify(response.data[0]));
-    
+
                             let result = await BrokerResponse.findByIdAndUpdate(
                                 { _id: data1._id },
                                 {
@@ -406,34 +418,34 @@ const GetAllBrokerResponse = async (user_id,res) => {
                                     order_view_status: '1',
                                     order_view_response: response.data[0].Status,
                                     reject_reason: response.data[0].rejectionreason
-    
+
                                 },
                                 { new: true }
                             )
-    
-    
+
+
                         } else {
                             // console.log("NO DATA FOUND");
                         }
                     })
                     .catch(async (error) => {
-    
+
                     });
-    
-    
-    
+
+
+
             })
-           res.send({status:true,msg:"broker response updated successfully"})
-    
+            res.send({ status: true, msg: "broker response updated successfully" })
+
         } else {
-            res.send({status:false,msg:"no user found"})
-         }
+            res.send({ status: false, msg: "no user found" })
+        }
 
     } catch (error) {
         console.log("Error in broker response in order Id".error);
     }
-    
- 
+
+
 }
 module.exports = new AliceBlue();
 

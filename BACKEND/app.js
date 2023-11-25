@@ -12,7 +12,6 @@ const cors = require('cors');
 const bodyparser = require('body-parser')
 
 
-
 const corsOpts = {
   origin: '*',
   methods: [
@@ -56,6 +55,8 @@ require("./request")(app)
 
 
 
+
+
 //  ----------------------------   for help center ------------------
 const io = socketIo(server, {
   cors: {
@@ -77,11 +78,6 @@ io.on("connection", (socket) => {
 
 
 })
-
-
-
-
-//  ----------------------------   for help center ------------------
 
 
 

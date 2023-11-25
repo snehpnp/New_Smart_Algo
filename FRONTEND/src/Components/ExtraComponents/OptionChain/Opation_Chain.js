@@ -637,8 +637,8 @@ const HelpCenter = () => {
                     const old_val_call = $('.Call_Price_' + response.tk).html();
                     const old_val_put = $('.Put_Price_' + response.tk).html();
 
-                    $('.SP1_Call_Price_' + response.tk).html(response.sp1);
-                    $('.BP1_Put_Price_' + response.tk).html(response.bp1);
+                    $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
+                    $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
 
                     if (response.tk) {
                         if (response.lp !== undefined) {
