@@ -10,7 +10,7 @@ import { check_Device } from "../../../Utils/find_device";
 import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../Service/Alice_Socket";
 import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../Utils/ShowTradeColor";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Get_Open_Position } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice'
+import { Get_Open_Position, Update_Signals } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice'
 import $ from "jquery";
 import BootstrapTable from 'react-bootstrap-table-next';
 import * as Config from "../../../Utils/Config";
@@ -94,6 +94,8 @@ const TradeHistory = () => {
             Get_Open_Position({ token: token })
         ).unwrap()
             .then((response) => {
+
+                setCreateSignalRequest1(response.data)
                 if (response.status) {
                     setTradeHistoryData({
                         loading: false,
@@ -113,17 +115,6 @@ const TradeHistory = () => {
     }, [refresh, SocketState]);
 
     const columns = [
-        // {
-        //     dataField: "index",
-        //     text: "S.No.",
-        //     // hidden: true,
-        //     isKey: true,
-        //     formatter: (original) => {
-        //         return <input type="checkbox"></input>;
-        //     }
-        // },
-        // formatter: (cell, row, rowIndex) => rowIndex + 1,
-
         // {
         //     dataField: "squreoff",
         //     text: "Square OFF",
@@ -224,7 +215,45 @@ const TradeHistory = () => {
                 <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
             ),
         },
+        {
+            dataField: "exit_time",
+            text: "Exit Time",
+            formatter: (cell, row, rowIndex) => (
+                <div className="col-12"><input type="time"
+                    // placeholder="Enter Price"
+                    name="exit_time"
 
+                    min="0"
+                    onChange={(e) => SetStopLostPrice(e, e.target.name, row, row.new_qty_persent, row.trade_symbol)}
+
+                    className="w-100" /></div>
+            ),
+        },
+        {
+            dataField: "stop_loss",
+            text: "Stop Loss Price ",
+            formatter: (cell, row, rowIndex) => (
+                <div className="col-12"><input type="number"
+                    // placeholder="Enter Price"
+                    min="0"
+                    name="stop_loss"
+                    defaultValue={cell}
+                    onChange={(e) => SetStopLostPrice(e, e.target.name, row, row.new_qty_persent, row.trade_symbol)}
+                    className="w-75" /></div>
+            ),
+        }, {
+            dataField: "target",
+            text: "Target Price ",
+            formatter: (cell, row, rowIndex) => (
+                <div><input type="number" className="w-75"
+                    // placeholder="Enter Price"
+                    name="target"
+                    min="0"
+                    defaultValue={cell}
+                    onChange={(e) => SetStopLostPrice(e, e.target.name, row, row.new_qty_persent, row.trade_symbol)}
+                /></div>
+            ),
+        },
         {
             dataField: "Action",
             text: "Realised",
@@ -296,10 +325,53 @@ const TradeHistory = () => {
 
     ];
 
-
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
+    const [CreateSignalRequest1, setCreateSignalRequest1] = useState();
 
-    // console.log("CreateSignalRequest", CreateSignalRequest)
+
+    const SetStopLostPrice = (event, name, row, qty_persent, symbol) => {
+
+        setCreateSignalRequest1((prev) => {
+            return prev.map((item) => {
+                if (item.trade_symbol === symbol) {
+                    return {
+                        ...item,
+                        [name]: event.target.value ? event.target.value : "testtt",
+                    };
+                }
+                return item;
+            });
+        });
+
+
+    }
+
+
+    const UpdateStopLoss = async () => {
+        console.log("CreateSignalRequest1", CreateSignalRequest1)
+
+        await dispatch(
+            Update_Signals({
+                data: CreateSignalRequest1,
+                token: token,
+            })
+        )
+            .unwrap()
+            .then((response) => {
+                if (response.status) {
+                    setPanelKey(response.data)
+                }
+
+            });
+
+
+    }
+
+
+
+
+
+
     // ----------------------------- SQUARE OFF ----------------------------
 
 
@@ -525,8 +597,9 @@ const TradeHistory = () => {
             else {
                 if (res.data.stat) {
                     const handleResponse = async (response) => {
-                        $('.SP1_Call_Price_' + response.tk).html(response.sp1);
-                        $('.BP1_Put_Price_' + response.tk).html(response.bp1);
+                        // console.log("response", response)
+                        $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
+                        $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
 
                         // UPL_
                         $(".LivePrice_" + response.tk).html(response.lp);
@@ -665,11 +738,9 @@ const TradeHistory = () => {
 
 
 
-    var a = 2
     //  GET_USER_DETAILS
     const data = async () => {
-        if (a < 2) {
-        }
+
         const response = await GetAccessToken({ broker_name: "aliceblue" });
         if (response.status) {
             setUserDetails(response.data && response.data[0]);
@@ -678,7 +749,7 @@ const TradeHistory = () => {
     };
     useEffect(() => {
         data();
-    }, [a]);
+    }, []);
 
 
     const [selected, setSelected] = useState([]);
@@ -719,6 +790,9 @@ const TradeHistory = () => {
         <>
             <Content Page_title="Open Position" button_status={false}
             >
+                <button className="btn btn-primary mb-4 mx-2 ms-auto"
+                    onClick={(e) => UpdateStopLoss()}
+                >Update Price</button>
                 <button className="btn btn-primary mb-4 ms-auto" onClick={(e) => SquareOfAll()}>Square Off</button>
 
                 <FullDataTable
@@ -762,7 +836,7 @@ const TradeHistory = () => {
                                         formatter: (cell, row, rowIndex) => (
                                             <div>
                                                 {row.type === "BUY" ?
-                                                    <span className={`BP1_Put_Price_${row.token} `}></span>
+                                                    <span className={`BP1_Put_Price_${row.token}`}></span>
                                                     : <span className={`SP1_Call_Price_${row.token}`}></span>
                                                 }
                                             </div>

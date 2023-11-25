@@ -132,6 +132,23 @@ export async function GET_OPEN_POSITION(data, token) {
 }
 
 
+// UPDATE OPTIONS SIGNALS
+export async function UPDATE_SIGNALS(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/signal`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+
 // FIND BROKER RESPONSE BY ID
 export async function GET_MESSAGE_BROD(id) {
     try {

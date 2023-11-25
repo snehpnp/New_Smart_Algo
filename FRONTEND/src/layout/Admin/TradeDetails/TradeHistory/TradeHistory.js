@@ -382,7 +382,6 @@ const TradeHistory = () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
 
-    // const res = await CreateSocketSession(type);
 
     if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
 

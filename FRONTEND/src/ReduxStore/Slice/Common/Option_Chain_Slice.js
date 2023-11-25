@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_OPTION_SYMBOLS_EXPIRY, GET_OPTION_ALL_ROUND_TOKEN, GET_OPEN_POSITION, GET_PANEL_KEY, GET_OPTION_SYMBOLS } from "../../../Service/common.service";
+import { GET_OPTION_SYMBOLS_EXPIRY, GET_OPTION_ALL_ROUND_TOKEN, UPDATE_SIGNALS, GET_OPEN_POSITION, GET_PANEL_KEY, GET_OPTION_SYMBOLS } from "../../../Service/common.service";
 
 
 export const Get_Option_Symbols = createAsyncThunk("get/option_symbols", async (data) => {
@@ -51,6 +51,16 @@ export const Get_Open_Position = createAsyncThunk("/get/oper_position", async (a
     }
 });
 
+export const Update_Signals = createAsyncThunk("/update/signals", async (apireq) => {
+    const { data, token } = apireq
+    try {
+        const res = await UPDATE_SIGNALS({ data: data }, token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
 const OptionChainSlice = createSlice({
     name: "OptionChainSlice",
     initialState: {
@@ -61,6 +71,7 @@ const OptionChainSlice = createSlice({
         Option_Token: [],
         panel_key: [],
         open_position: [],
+        update_signals: [],
     },
 
     recuders: {},
@@ -79,6 +90,9 @@ const OptionChainSlice = createSlice({
         },
         [Get_Open_Position.fulfilled]: (state, { payload }) => {
             return { ...state, open_position: payload, isLoading: false };
+        },
+        [Update_Signals.fulfilled]: (state, { payload }) => {
+            return { ...state, update_signals: payload, isLoading: false };
         },
     }
 })

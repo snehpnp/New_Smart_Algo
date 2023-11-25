@@ -11,6 +11,8 @@ const socketIo = require("socket.io");
 const cors = require('cors');
 const bodyparser = require('body-parser')
 
+const { Alice_Socket } = require("./App/Helper/Alice_Socket");
+
 
 
 const corsOpts = {
@@ -171,10 +173,12 @@ app.get('/tradesymbol1', async (req, res) => {
   res.send({ msg: "Done!!!" })
 })
 
-// app.get('/test_ganpat', async (req, res) => {
 
+app.get('/emergency_token_update', async (req, res) => {
+  let test = Alice_Socket()
+  res.send({ msg: test })
 
-// })
+})
 
 
 
