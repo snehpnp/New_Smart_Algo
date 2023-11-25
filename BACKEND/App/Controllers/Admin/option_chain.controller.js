@@ -2,9 +2,9 @@
 const db = require('../../Models');
 const Get_Option_Chain_modal = db.option_chain_symbols;
 const MainSignals_modal = db.MainSignals
-
-
 const Alice_token = db.Alice_token;
+const live_price = db.live_price;
+
 
 
 
@@ -252,6 +252,241 @@ class OptionChain {
             console.log("Theme error-", error);
         }
     }
+
+
+
+
+
+
+    async Get_Option_All_Token_Chain(req, res) {
+
+        try {
+            // const symbol = "NIFTY";
+            const symbols = ["NIFTY", "BANKNIFTY", "FINNIFTY"];
+
+            const expiry = "30112023";
+            let limit_set = 20
+            let price = 19000
+
+            var alltokenchannellist
+
+            const date = new Date(); // Month is 0-based, so 10 represents November
+            const currentDate = new Date();
+            const previousDate = new Date(currentDate);
+            previousDate.setDate(currentDate.getDate() - 1);
+            const formattedDate = previousDate.toISOString();
+            const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const formattedLastDayOfMonth = lastDayOfMonth.toISOString();
+
+
+            const final_data = [];
+
+            // symbols.forEach(async (symbol) => {
+            for (const symbol of symbols) {
+                const pipeline = [
+                    {
+                        $match: { symbol: symbol }
+                    },
+                    {
+                        $group: {
+                            _id: "$symbol",
+                            uniqueExpiryValues: { $addToSet: "$expiry" }
+                        }
+                    },
+                    {
+                        $unwind: "$uniqueExpiryValues"
+                    },
+                    {
+                        $addFields: {
+                            expiryDate: {
+                                $dateFromString: {
+                                    dateString: "$uniqueExpiryValues",
+                                    format: "%d%m%Y"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        $match: {
+                            expiryDate: { $gte: new Date(formattedDate) }
+                        }
+                    },
+                    {
+                        $addFields: {
+                            formattedExpiryDate: {
+                                $dateToString: {
+                                    date: "$expiryDate",
+                                    format: "%d%m%Y"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        $sort: { expiryDate: 1 }
+                    },
+                    {
+                        $limit: 5
+                    }
+
+
+                ]
+
+                var data = await Alice_token.aggregate(pipeline);
+
+                const result11 = data.filter(item => {
+                    const itemDate = new Date(item.expiryDate);
+                    return itemDate.getTime() === lastDayOfMonth.getTime() || data.indexOf(item) < 2;
+                });
+                const expiryDatesArray = result11.map(item => item.uniqueExpiryValues);
+
+                // console.log(expiryDatesArray);
+
+                const get_symbol_price = await Get_Option_Chain_modal.findOne({ symbol: symbol })
+
+                if (get_symbol_price != undefined) {
+                    price = parseInt(get_symbol_price.price);
+                }
+
+                const pipeline2 = [
+                    {
+                        $match: {
+                            symbol: symbol,
+                            segment: 'O',
+                            expiry: { $in: expiryDatesArray }
+                        }
+                    }
+                ]
+
+                const pipeline3 = [
+                    {
+                        $match: {
+                            symbol: symbol,
+                            segment: 'O',
+                            expiry: { $in: expiryDatesArray }
+                        }
+                    },
+                    {
+                        $addFields: {
+                            absoluteDifference: {
+                                $abs: {
+                                    $subtract: [{ $toInt: "$strike" }, price]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        $group: {
+                            _id: "$strike", // Group by unique values of A
+                            minDifference: { $min: "$absoluteDifference" }, // Find the minimum absolute difference for each group
+                            document: { $first: "$$ROOT" } // Keep the first document in each group
+                        }
+                    },
+                    {
+                        $sort: {
+                            minDifference: 1 // Sort by the minimum absolute difference in ascending order
+                        }
+                    },
+                    {
+                        $limit: limit_set
+                    },
+                    {
+                        $sort: {
+                            _id: 1 // Sort by the minimum absolute difference in ascending order
+                        }
+                    }
+                ]
+
+                const result = await Alice_token.aggregate(pipeline2);
+                const resultStrike = await Alice_token.aggregate(pipeline3);
+
+
+                var channelstr = ""
+                if (result.length > 0) {
+                    resultStrike.forEach(element => {
+                        let call_token = "";
+                        let put_token = "";
+                        let symbol = ""
+                        let segment = ""
+                        result.forEach(element1 => {
+                            if (element.document.strike == element1.strike) {
+                                if (element1.option_type == "CE") {
+                                    symbol = element1.symbol
+                                    segment = element1.segment
+                                    call_token = element1.instrument_token;
+                                } else if (element1.option_type == "PE") {
+                                    symbol = element1.symbol
+                                    segment = element1.segment
+                                    put_token = element1.instrument_token;
+                                }
+                                channelstr += element1.exch_seg + "|" + element1.instrument_token + "#"
+                            }
+                        });
+
+
+                    });
+
+
+                    alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+                    final_data.push(alltokenchannellist)
+
+                    // console.log(alltokenchannellist);
+                    // res.send({ status: true, channellist: alltokenchannellist })
+                }
+
+
+            }
+            var concatenatedArray = ""
+            console.log(final_data);
+
+            final_data.forEach((data) => {
+                concatenatedArray += data + "#"
+            })
+
+            var concatenatedArray1 = concatenatedArray.substring(0, concatenatedArray.length - 1)
+            const filter = { broker_name: "ALICE_BLUE" };
+            const updateOperation = { $set: { Stock_chain: concatenatedArray1 } };
+            const Update_Stock_chain = await live_price.updateOne(filter, updateOperation);
+
+            res.send({ status: true, msg: "Done" })
+
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+
+
+    async update_stop_loss(req, res) {
+        try {
+
+            const { data } = req.body;
+
+            for( signal of data){
+
+            }
+
+
+            // if (!GetTrade) {
+            //     return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
+            // }
+
+            // return res.send({ status: true, msg: 'Done', data: GetTrade });
+
+        } catch (error) {
+            console.log("Theme error-", error);
+            return res.send({ status: false, msg: 'error ', data: error });
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
 }
 

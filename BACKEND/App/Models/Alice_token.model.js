@@ -34,6 +34,8 @@ const AliceTokenSchema = new mongoose.Schema({
     },
     instrument_token: {
         type: String,
+        unique: true
+        
     },
     lotsize: {
         type: String,

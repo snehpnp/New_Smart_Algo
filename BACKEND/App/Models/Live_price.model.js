@@ -26,6 +26,11 @@ const LivePriceSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+     Stock_chain: {
+        type: String,
+        default: null
+
     }
 },
     {

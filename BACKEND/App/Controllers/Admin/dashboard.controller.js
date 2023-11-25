@@ -13,17 +13,15 @@ const Broker_information = db.Broker_information
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
+client.connect();
+
+const db1 = client.db(process.env.DB_NAME);
+const viewName = 'dashboard_data';
+
 class Dashboard {
-
-
 
     async AdminDashboard(req, res) {
         try {
-
-            await client.connect();
-
-            const db1 = client.db(process.env.DB_NAME);
-            const viewName = 'dashboard_data';
 
             // Query the view to get the data
             const result = await db1.collection(viewName).find().toArray();

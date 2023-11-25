@@ -79,6 +79,30 @@ const MainSignalsSchema = Schema({
     lot_size: {
         type: String,
     },
+    target: {
+        type: String,
+        default:0
+    },
+    stop_loss: {
+        type: String,
+        default:0
+
+    },
+    exit_time: {
+        type: String,
+        default:0
+    },
+    sl_status: {
+        type: String,
+        enum: ['0', '1'], // 1 = Admin panel status , 2 = Tradinview status
+        default: '0'
+    },
+    complete_trade: {
+        type: String,
+        enum: ['0', '1'], // 1 = Admin panel status , 2 = Tradinview status
+        default: '0'
+    },
+
     signals_id: [
         {
             type: mongoose.Schema.Types.ObjectId,

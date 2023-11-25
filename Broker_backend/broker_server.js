@@ -636,7 +636,12 @@ app.post('/broker-signals', async (req, res) => {
                 TradeType: TradeType,
                 signals_id: SignalSave._id,
                 token: instrument_token,
-                lot_size: find_lot_size
+                lot_size: find_lot_size,
+                target:0,
+                stop_loss:0,
+                exit_time:0,
+                complete_trade:0,
+                sl_status:0
 
               }
               const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
@@ -733,7 +738,6 @@ app.post('/broker-signals', async (req, res) => {
             }
           }
 
-          // return res.send({ msg: FIRST3_KEY })
 
         } else {
           return res.send('Incorrect Signal Key');
