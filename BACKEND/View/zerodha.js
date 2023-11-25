@@ -9,7 +9,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 async function createViewZerodha() {
 
-  
+
   // All Client Trading on view
   try {
     await client.connect();
@@ -102,216 +102,220 @@ async function createViewZerodha() {
         }
       },
       {
-        $addFields: { postdata:
+        $addFields: {
+          postdata:
           {
-          
-        
-           // tradingsymbol condition here
-           tradingsymbol: {
-            $cond: {
-              if: { 
-                $and:
-                 [
-                  { $eq: ['$category.segment', 'C'] },  
-                ]
-              }, 
-              then: "$service.instrument_token",
-              else: ""
-       
-            }
-           },
 
-          
 
-           // exchange condition here
-           exchange: {
-            $cond: {
-              if: { $eq: ['$category.segment', 'C'] }, // Your condition here
-              then: 'NSE',
-              else: {
-                $cond: {
-                  if: { 
-                    $or: [
-                      { $eq: ['$category.segment', 'F'] }, 
-                      { $eq: ['$category.segment', 'O'] },  
-                      { $eq: ['$category.segment', 'FO'] }  
-                    ] 
-                  }, 
-                  then: 'NFO',
-                  else: {
+            // tradingsymbol condition here
+            tradingsymbol: {
+              $cond: {
+                if: {
+                  $and:
+                    [
+                      { $eq: ['$category.segment', 'C'] },
+                    ]
+                },
+                then: "$service.instrument_token",
+                else: ""
 
-                    $cond: {
-                      if: { 
+              }
+            },
+
+
+
+            // exchange condition here
+            exchange: {
+              $cond: {
+                if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+                then: 'NSE',
+                else: {
+                  $cond: {
+                    if: {
+                      $or: [
+                        { $eq: ['$category.segment', 'F'] },
+                        { $eq: ['$category.segment', 'O'] },
+                        { $eq: ['$category.segment', 'FO'] }
+                      ]
+                    },
+                    then: 'NFO',
+                    else: {
+
+                      $cond: {
+                        if: {
+                          $or: [
+                            { $eq: ['$category.segment', 'MF'] },
+                            { $eq: ['$category.segment', 'MO'] }
+                          ]
+                        },
+                        then: 'MCX',
+                        else: {
+
+                          $cond: {
+                            if: {
+                              $or: [
+                                { $eq: ['$category.segment', 'CF'] },
+                                { $eq: ['$category.segment', 'CO'] }
+                              ]
+                            },
+                            then: 'CDS',
+
+                            // all not exist condition 
+                            else: "NFO"
+
+                          }
+
+                        }
+
+                      }
+
+
+                    }
+
+                  }
+
+                }
+
+              }
+            },
+
+
+            // transaction Type
+            transaction_type: 'BUY',
+
+            // quantity
+            quantity: "$client_services.quantity",
+
+
+            // order_type code condition here
+            order_type: {
+              $cond: {
+                if: {
+                  $and:
+                    [
+                      { $eq: ['$client_services.order_type', '1'] },
+                    ]
+                },
+                then: 'MARKET',
+                else: {
+                  $cond: {
+                    if: {
+                      $and:
+                        [
+                          { $eq: ['$client_services.order_type', '2'] },
+                        ]
+                    },
+                    then: 'LIMIT',
+                    else: {
+                      $cond: {
+                        if: {
+                          $and:
+                            [
+                              { $eq: ['$client_services.order_type', '3'] },
+                            ]
+                        },
+                        then: 'SL',
+                        else: {
+                          $cond: {
+                            if: {
+                              $and:
+                                [
+                                  { $eq: ['$client_services.order_type', '4'] },
+                                ]
+                            },
+                            then: 'SL-M',
+
+                            //All condition exist
+                            else: "MARKET"
+
+                          }
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+                }
+
+              }
+
+            },
+
+            // product code condition here
+            product: {
+              $cond: {
+                if: {
+                  $and:
+                    [
+                      { $eq: ['$client_services.product_type', '1'] },
+                      {
                         $or: [
-                          { $eq: ['$category.segment', 'MF'] }, 
-                          { $eq: ['$category.segment', 'MO'] }  
-                        ] 
-                      }, 
-                      then: 'MCX',
-                      else: {
-
-                        $cond: {
-                          if: { 
-                            $or: [
-                              { $eq: ['$category.segment', 'CF'] }, 
-                              { $eq: ['$category.segment', 'CO'] }  
-                            ] 
-                          }, 
-                          then: 'CDS',
-                          
-                          // all not exist condition 
-                          else: "NFO"
-                   
-                        }
-    
-                      }
-               
-                    }
-
-
-                  }
-           
-                }
-
-              }
-                
-            }
-          },
-
-
-           // transaction Type
-           transaction_type:'BUY',
-
-           // quantity
-           quantity: "$client_services.quantity",
-
-
-          // order_type code condition here
-          order_type: {
-            $cond: {
-              if: { 
-                $and:
-                 [
-                  { $eq: ['$client_services.order_type', '1'] },  
-                ]
-              }, 
-              then: 'MARKET',
-              else: {
-                $cond: {
-                  if: { 
-                    $and:
-                     [
-                      { $eq: ['$client_services.order_type', '2'] },  
-                    ]
-                  }, 
-                  then: 'LIMIT',
-                  else: {
-                    $cond: {
-                      if: { 
-                        $and:
-                         [
-                          { $eq: ['$client_services.order_type', '3'] },  
+                          { $eq: ['$category.segment', 'F'] },
+                          { $eq: ['$category.segment', 'O'] },
+                          { $eq: ['$category.segment', 'FO'] }
                         ]
-                      }, 
-                      then: 'SL',
-                      else: {
-                        $cond: {
-                          if: { 
-                            $and:
-                             [
-                              { $eq: ['$client_services.order_type', '4'] },  
-                            ]
-                          }, 
-                          then: 'SL-M',
-
-                          //All condition exist
-                          else:"MARKET"
-                   
-                        }
-                       
-                      }
-               
-                    }
-      
-                  }
-           
-                }
-              }
-       
-            }
-
-           },
-
-          // product code condition here
-           product: {
-            $cond: {
-              if: { 
-                $and:
-                [
-                 { $eq: ['$client_services.product_type', '1'] },  
-                 { $or: [
-                   { $eq: ['$category.segment', 'F'] }, 
-                   { $eq: ['$category.segment', 'O'] },  
-                   { $eq: ['$category.segment', 'FO'] }  
-                 ] },  
-               ]
-              }, 
-              then: 'NRML',
-              else: {
-                $cond: {
-                  if: { 
-                    $and:
-                     [
-                      { $eq: ['$client_services.product_type', '2'] },  
+                      },
                     ]
-                  }, 
-                  then: 'MIS',
-                  else: {
-                    $cond: {
-                      if: { 
-                        $and:
-                         [
-                          { $eq: ['$client_services.product_type', '3'] },  
+                },
+                then: 'NRML',
+                else: {
+                  $cond: {
+                    if: {
+                      $and:
+                        [
+                          { $eq: ['$client_services.product_type', '2'] },
                         ]
-                      }, 
-                      then: 'MIS',
-                      else: {
-                        $cond: {
-                          if: { 
-                            $and:
-                             [
-                              { $eq: ['$client_services.product_type', '4'] },  
+                    },
+                    then: 'MIS',
+                    else: {
+                      $cond: {
+                        if: {
+                          $and:
+                            [
+                              { $eq: ['$client_services.product_type', '3'] },
                             ]
-                          }, 
-                          then: 'MIS',
-                          else: "CNC"
-                   
+                        },
+                        then: 'MIS',
+                        else: {
+                          $cond: {
+                            if: {
+                              $and:
+                                [
+                                  { $eq: ['$client_services.product_type', '4'] },
+                                ]
+                            },
+                            then: 'MIS',
+                            else: "CNC"
+
+                          }
+
                         }
-                       
+
                       }
-               
+
                     }
-      
+
                   }
-           
                 }
+
               }
-       
-            }
 
-           
-           },
 
-           //price
-           price : 0,
-          
-          // trigger_price
-           trigger_price : 0,
-          
-           // validity
-           validity : "DAY"
-        
-         } }
+            },
+
+            //price
+            price: 0,
+
+            // trigger_price
+            trigger_price: 0,
+
+            // validity
+            validity: "DAY"
+
+          }
+        }
       }
     ];
 

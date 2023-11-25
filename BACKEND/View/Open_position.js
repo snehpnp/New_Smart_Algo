@@ -11,8 +11,8 @@ async function dropExistingView1() {
     try {
         await client.connect();
         const db = client.db(process.env.DB_NAME); // Replace with your actual database name
-        await db.collection('open_position').drop();
-console.log("Dobne");
+        await db.collection('open_position_excute').drop();
+        console.log("Dobne");
     } catch (error) {
         // Handle any errors if the view doesn't exist
         console.error('Error:', error);
@@ -20,79 +20,97 @@ console.log("Dobne");
 }
 
 
+// async function Open_Position1(req, res) {
+
+//     try {
+//         // Connect to the MongoDB server
+//         await client.connect();
+
+//         // Database and view names
+//         const dbName = process.env.DB_NAME;
+//         const sourceViewName = 'open_position';
+//         const destinationViewName = 'open_position_excute';
+
+
+//         const pipeline = [];
+//         const options = { cursor: { batchSize: 1 } };
+
+//         const result = await client
+//             .db(dbName)
+//             .collection(sourceViewName)
+//             .aggregate(pipeline, options)
+//             .toArray();
+
+//         // Check if the aggregation was successful
+//         if (result.length > 0) {
+//             // Create the destination view with the result's cursor
+//             await client.db(dbName).createCollection(destinationViewName, {
+//                 viewOn: sourceViewName,
+//                 pipeline: pipeline,
+//             });
+
+//             console.log('Destination view created successfully');
+//         } else {
+//             console.error('Error in aggregation:', result);
+//         }
+//     } catch (error) {
+//         console.error('Error:', error);
+//     } finally {
+//         // Ensure the client is closed even if an error occurs
+//         await client.close();
+//     }
+// }
+
+
 async function Open_Position1(req, res) {
+
     try {
-
-
+        // Connect to the MongoDB server
         await client.connect();
+
         const db = client.db(process.env.DB_NAME);
-
-       console.log("run");
-
-       const today = new Date();
-       today.setHours(0, 0, 0, 0);
-
+   
+   
+   
         const pipeline = [
             {
-              $match: {
-                createdAt: {
-                    $gte: today,
-                    $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+                $addFields: {
+                    entry_price: { $toDouble: '$entry_price' },
+                    target: {
+                        $add: [
+                            { $ifNull: [{ $toDouble: '$target' }, 0] },
+                            { $toDouble: '$entry_price' },
+                        ],
+                    },
                 },
-                sl_status: '1',
-              
-              }
             },
-         
-      
-            // {
-            //   $lookup: {
-            //     from: "strategies",
-            //     localField: "client_services.strategy_id",
-            //     foreignField: "_id",
-            //     as: "strategys",
-            //   },
-            // },
-            // {
-            //   $unwind: '$strategys',
-            // },
-            // {
-            //   $project: {
-              
-            //     _id: 1,
-            //     FullName: 1,
-            //     UserName: 1,
-            //     Email: 1,
-            //     EndDate: 1,
-            //     ActiveStatus: 1,
-            //     TradingStatus: 1,
-            //     access_token: 1,
-            //     api_secret: 1,
-            //     app_id: 1,
-            //     client_code: 1,
-            //     api_key: 1,
-            //     app_key: 1,
-            //     api_type: 1,
-            //     demat_userid: 1,
-            //     client_key: 1,
-            //     web_url: 1
-            //   }
-            // }
-           
-          ];
+            {
+                $addFields: {
+                    target_1: {
+                        $cond: {
+                            if: { $eq: ['$target', null] },
+                            then: 0, // Default value if 'target' is not present
+                            else: '$target',
+                        },
+                    },
+                },
+            },
+            // Other pipeline stages as needed
+        ];
+        
+        // Perform the aggregation and store the result in a new collection
+        const result = await db.collection('mainsignals').aggregate(pipeline).toArray();
+        await db.createCollection('open_position', { viewOn: 'mainsignals' });
+        
+        
 
 
-
-
-
-        // Create the view
-        await db.createCollection('open_position', { viewOn: 'mainsignals', pipeline });
-
-        console.log('View created successfully.');
+        console.log("Done");
     } catch (error) {
         console.error('Error:', error);
     } finally {
-        client.close();
+        // Ensure the client is closed even if an error occurs
+        await client.close();
     }
 }
 

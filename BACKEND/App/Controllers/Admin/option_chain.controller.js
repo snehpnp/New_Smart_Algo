@@ -460,16 +460,15 @@ class OptionChain {
 
             const { data } = req.body;
 
-            for( signal of data){
+            data.forEach(async (signal) => {
 
-            }
+                const filter = { _id: signal._id };
+                const updateOperation = { $set: signal };
+                const result = await MainSignals_modal.updateOne(filter, updateOperation);
 
+            })
 
-            // if (!GetTrade) {
-            //     return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
-            // }
-
-            // return res.send({ status: true, msg: 'Done', data: GetTrade });
+            return res.send({ status: true, msg: 'Done', data: [] });
 
         } catch (error) {
             console.log("Theme error-", error);
