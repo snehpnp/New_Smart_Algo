@@ -59,43 +59,26 @@ const Alice_Socket = async () => {
                     var response = JSON.parse(msg.data)
 
                     if (response.tk) {
-                        const db = client.db('Signals_db'); // Replace 'mydb' with your desired database name
+                        const db = client.db('test'); // Replace 'mydb' with your desired database name
 
-                        const collections = await db.listCollections().toArray();
+                        const stock_live_price = db.collection('stock_live_price');
 
-                        // Check if the desired collection exists
-                        const collectionExists = collections.some(coll => coll.name === response.tk);
-                        if (collectionExists) {
-                            if (response.lp) {
-                                const collection = db.collection(response.tk);
-                                let filter = { token: response.tk }; // Assuming 'lp' is a unique identifier for your document
-                                let update = {
-                                    $set: {
-                                        lp: response.lp,
-                                        exc: response.e,
-                                        token: response.tk,
-                                        sp1: response.sp1,
-                                        bp1: response.bp1,
-                                    }
-                                };
+                        const filter = { _id: response.tk }; // Define the filter based on the token
 
-                                const insertResult = await collection.updateOne(filter, update);
-                            }
-
-                        } else {
-                            if (response.lp) {
-                                await db.createCollection(response.tk);
-                                const collection = db.collection(response.tk);
-                                let data = {
-                                    lp: response.tk,
-                                    exc: response.e,
-                                    token: response.tk,
-                                    sp1: response.sp1,
-                                    bp1: response.bp1,
-                                }
-                                const insertResult = await collection.insertOne(data);
-                            }
-                        }
+                        const update = {
+                            $set: {
+                                lp: response.tk,
+                                exc: response.e,
+                                sp1: response.sp1,
+                                bp1: response.bp1,
+                            },
+                        };
+                        
+                        const options = { upsert: true }; // Set the upsert option to true
+                        
+                        const result = await stock_live_price.updateOne(filter, update, options);
+                        console.log("newCompany", result);
+                 
                     } else {
                         // console.log("else", response)
                     }

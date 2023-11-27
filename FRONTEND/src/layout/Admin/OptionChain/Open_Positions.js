@@ -44,13 +44,14 @@ const TradeHistory = () => {
     const [SocketState, setSocketState] = useState("null");
     const [getBrokerUrl, setBrokerUrl] = useState('')
 
+    console.log("UserDetails", UserDetails && UserDetails.trading_status)
+
     const [disabled, setDisabled] = useState(false);
 
     const handleClickDisabled = () => {
         setDisabled(true);
     }
     // --------------- FOR GET OPTIONS SYMBOLS -----------------------
-    console.log("inputValue", inputValue);
 
     // --------------- FOR GET PANEL KEY-----------------------
 
@@ -94,8 +95,6 @@ const TradeHistory = () => {
             Get_Open_Position({ token: token })
         ).unwrap()
             .then((response) => {
-
-                setCreateSignalRequest1(response.data)
                 if (response.status) {
                     setTradeHistoryData({
                         loading: false,
@@ -223,7 +222,7 @@ const TradeHistory = () => {
                     // placeholder="Enter Price"
                     name="exit_time"
 
-                    min="0"
+                    defaultValue={cell}
                     onChange={(e) => SetStopLostPrice(e, e.target.name, row, row.new_qty_persent, row.trade_symbol)}
 
                     className="w-100" /></div>
@@ -326,16 +325,16 @@ const TradeHistory = () => {
     ];
 
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
-    const [CreateSignalRequest1, setCreateSignalRequest1] = useState();
 
 
     const SetStopLostPrice = (event, name, row, qty_persent, symbol) => {
 
-        setCreateSignalRequest1((prev) => {
+        setSelected1((prev) => {
             return prev.map((item) => {
                 if (item.trade_symbol === symbol) {
                     return {
                         ...item,
+                        sl_status: "1",
                         [name]: event.target.value ? event.target.value : "testtt",
                     };
                 }
@@ -348,22 +347,29 @@ const TradeHistory = () => {
 
 
     const UpdateStopLoss = async () => {
-        console.log("CreateSignalRequest1", CreateSignalRequest1)
 
-        await dispatch(
-            Update_Signals({
-                data: CreateSignalRequest1,
-                token: token,
-            })
-        )
-            .unwrap()
-            .then((response) => {
-                if (response.status) {
-                    setPanelKey(response.data)
-                }
+        if (UserDetails && UserDetails.trading_status == "off") {
+            alert("Please Trading On First")
+        } else {
+            if (selected1.length === 0) {
+                alert("Please Select Atleast One Symbol")
+            }
+            else {
+                await dispatch(
+                    Update_Signals({
+                        data: selected1,
+                        token: token,
+                    })
+                ).unwrap()
+                    .then((response) => {
+                        if (response.status) {
+                            setPanelKey(response.data)
+                        }
 
-            });
+                    });
+            }
 
+        }
 
     }
 
@@ -453,6 +459,7 @@ const TradeHistory = () => {
 
     const Done_For_Trade = () => {
 
+        
         handleClickDisabled();
 
         const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -508,6 +515,9 @@ const TradeHistory = () => {
     // ----------------------------- SQUARE OFF All  ----------------------------
     const SquareOfAll = () => {
 
+        if (UserDetails && UserDetails.trading_status == "off") {
+            alert("Please Trading On First")
+        } else {
         if (selected1.length > 0) {
             setshowModal(true)
 
@@ -553,8 +563,8 @@ const TradeHistory = () => {
             alert("Emplty Data")
         }
 
+    } 
 
-        console.log("selected1", selected1)
 
     }
 
@@ -756,13 +766,16 @@ const TradeHistory = () => {
     const [selected1, setSelected1] = useState([]);
 
     const handleOnSelect = (row, isSelect) => {
+        // console.log("isSelect", selected)
+        // console.log("row", row)
         if (isSelect) {
             setSelected([...selected, row._id]);
             setSelected1([...selected1, row]);
         } else {
             setSelected(selected.filter(x => x !== row._id));
-            setSelected1(selected1.filter(x => x.key !== row._id));
+            setSelected1(selected1.filter(x => x._id !== row._id));
         }
+
     }
 
     const handleOnSelectAll = (isSelect, rows) => {

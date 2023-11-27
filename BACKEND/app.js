@@ -56,6 +56,15 @@ require("./request")(app)
 
 
 
+const { Alice_Socket } = require('./App/Helper/Alice_Socket')
+
+
+app.get('/token/dd', async (req, res) => {
+  Alice_Socket()
+  res.send({ msg: "Done!!!" })
+})
+
+
 
 //  ----------------------------   for help center ------------------
 const io = socketIo(server, {
