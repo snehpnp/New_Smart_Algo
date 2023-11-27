@@ -2081,9 +2081,7 @@ app.get("/work_startegy",async(req,res)=>{
     //console.log("condition_source",val.condition_source.split(','))
     
     let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
-
     const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-
     if (ExistView.length > 0) {
 
      // console.log("exist collection if ",collectionName)

@@ -21,9 +21,11 @@ import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy } from
 
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+import { useNavigate } from "react-router-dom";
 
 
 const Signals = () => {
+  const navigate = useNavigate()
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
   ///console.log("AdminToken",AdminToken)
@@ -783,10 +785,34 @@ const Signals = () => {
         end_bracket = val.end_bracket.join('');
       }
  
-      condition_string += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
+      // condition_string += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
 
-       
-      condition_string_pass += `${start_bracket}(data.${val.first_element.source}[${val.first_element.offset}]${val.comparators}data.${val.second_element.source}[${val.second_element.offset}])${end_bracket}${and_or_pass}`;
+      let first_element = `${val.first_element.source}[${val.first_element.offset}]`;
+      if(val.first_element.source == "number"){
+        first_element = val.first_element.offset
+      }
+
+      let second_element = `${val.second_element.source}[${val.second_element.offset}]`;
+      if(val.second_element.source == "number"){
+        second_element = val.second_element.offset
+      }
+
+
+      condition_string += `${start_bracket}(${first_element} ${val.comparators} ${second_element})${end_bracket}  ${and_or}  `;
+
+        
+
+      let first_element_pass = `data.${val.first_element.source}[${val.first_element.offset}]`;
+      if(val.first_element.source == "number"){
+        first_element_pass = val.first_element.offset
+      }
+
+    let second_element_pass = `data.${val.second_element.source}[${val.second_element.offset}]`;
+      if(val.second_element.source == "number"){
+        second_element_pass = val.second_element.offset
+      }
+      
+      condition_string_pass += `${start_bracket}(${first_element_pass}${val.comparators}${second_element_pass})${end_bracket}${and_or_pass}`;
     } 
      else {
       break; // Break out of the loop
@@ -806,12 +832,6 @@ const Signals = () => {
   //  console.log(`Element at index ${index}: ${val.and_or_operator}`);
   
     if (val.first_element.source !== "" && val.second_element.source !== "") {
-
-     
-       
-
-
-
 
 
       let and_or= ""
@@ -838,10 +858,37 @@ const Signals = () => {
         end_bracket = val.end_bracket.join('');
       }
  
-      condition_string_sell += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
+      // condition_string_sell += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
 
 
-      condition_string_sell_pass += `${start_bracket}(data.${val.first_element.source}[${val.first_element.offset}]${val.comparators}data.${val.second_element.source}[${val.second_element.offset}])${end_bracket}${and_or_pass}`;
+      // condition_string_sell_pass += `${start_bracket}(data.${val.first_element.source}[${val.first_element.offset}]${val.comparators}data.${val.second_element.source}[${val.second_element.offset}])${end_bracket}${and_or_pass}`;
+
+      let first_element = `${val.first_element.source}[${val.first_element.offset}]`;
+      if(val.first_element.source == "number"){
+        first_element = val.first_element.offset
+      }
+
+      let second_element = `${val.second_element.source}[${val.second_element.offset}]`;
+      if(val.second_element.source == "number"){
+        second_element = val.second_element.offset
+      }
+
+
+      condition_string_sell += `${start_bracket}(${first_element} ${val.comparators} ${second_element})${end_bracket}  ${and_or}  `;
+
+        
+
+      let first_element_pass = `data.${val.first_element.source}[${val.first_element.offset}]`;
+      if(val.first_element.source == "number"){
+        first_element_pass = val.first_element.offset
+      }
+
+    let second_element_pass = `data.${val.second_element.source}[${val.second_element.offset}]`;
+      if(val.second_element.source == "number"){
+        second_element_pass = val.second_element.offset
+      }
+      
+      condition_string_sell_pass += `${start_bracket}(${first_element_pass}${val.comparators}${second_element_pass})${end_bracket}${and_or_pass}`;
 
     } 
      else {
@@ -1121,14 +1168,20 @@ const saveStrategy = async (e) => {
       for (let index = 0; index < coditionRequestArr.length; index++) {
         const val = coditionRequestArr[index];
       //  console.log(`Element at index ${index}: ${val.and_or_operator}`)
-       if (val.first_element.source !== "" && val.second_element.source !== "") {
-
-       if (!condition_string_source.includes(`${val.first_element.source}(${val.first_element.offset})`)) {
+      
+        if (val.first_element.source !== "" && val.second_element.source !== "") {
+        if(val.first_element.source != "number"){
+        if (!condition_string_source.includes(`${val.first_element.source}(${val.first_element.offset})`)) {
             condition_string_source.push(`${val.first_element.source}(${val.first_element.offset})`);
          }  
+        }
+        
+        if(val.second_element.source != "number"){
          if (!condition_string_source.includes(`${val.second_element.source}(${val.second_element.offset})`)) {
           condition_string_source.push(`${val.second_element.source}(${val.second_element.offset})`);
+        } 
        } 
+
         } 
          else {
           break; // Break out of the loop
@@ -1142,13 +1195,20 @@ const saveStrategy = async (e) => {
       let condition_string_sell_source = [];
       for (let index = 0; index < coditionRequestArrSell.length; index++) {
         const val = coditionRequestArrSell[index];
-       if (val.first_element.source !== "" && val.second_element.source !== "") {
-       if (!condition_string_sell_source.includes(`${val.first_element.source}(${val.first_element.offset})`)) {
+        if (val.first_element.source !== "" && val.second_element.source !== "") {
+
+          if(val.first_element.source != "number"){ 
+        if (!condition_string_sell_source.includes(`${val.first_element.source}(${val.first_element.offset})`)) {
             condition_string_sell_source.push(`${val.first_element.source}(${val.first_element.offset})`);
          }  
+        }
+         
+        if(val.second_element.source != "number"){
          if (!condition_string_sell_source.includes(`${val.second_element.source}(${val.second_element.offset})`)) {
           condition_string_sell_source.push(`${val.second_element.source}(${val.second_element.offset})`);
-       } 
+        } 
+      }
+
         } 
          else {
           break; // Break out of the loop
@@ -1194,10 +1254,15 @@ const saveStrategy = async (e) => {
           toast.error(response.data.msg);
         }
         else if (response.status) {
-          toast.success(response.msg);
-          // setTimeout(() => {
-          //   navigate("/admin/allclients")
-          // }, 1000);
+          if(!sellCheck && !sell_cond){
+           toast.success(response.msg);
+           window.location.reload();
+          //  setTimeout(() => {
+          //   navigate("/admin/createstrategy")
+          //  }, 1000); 
+          }else{
+            
+          }
         }
         else if (!response.status) {
           toast.error(response.msg);
@@ -1240,9 +1305,11 @@ const saveStrategy = async (e) => {
           toast.error(response.data.msg);
         }
         else if (response.status) {
-          toast.success(response.msg);
+
+         toast.success(response.msg);
+         window.location.reload();
           // setTimeout(() => {
-          //   navigate("/admin/allclients")
+          //   navigate("/admin/createstrategy")
           // }, 1000);
         }
         else if (!response.status) {
