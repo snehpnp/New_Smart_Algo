@@ -73,6 +73,18 @@ const userMakeStrategySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    target : {
+        type: String,
+        required: true,
+    },
+    stoploss : {
+        type: String,
+        required: true,
+    },
+    tsl : {
+        type: String,
+        required: true,
+    },
     status: {
         type: String,
         required: true,

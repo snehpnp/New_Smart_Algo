@@ -17,15 +17,10 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
-import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
-
-import toast, { Toaster } from 'react-hot-toast';
-import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-import { useNavigate } from "react-router-dom";
+import { get_time_frame , get_source , get_comparators } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
 
 
 const Signals = () => {
-  const navigate = useNavigate()
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
   ///console.log("AdminToken",AdminToken)
@@ -160,6 +155,14 @@ const Signals = () => {
     const updatedItems = selectAddIndicators.filter((item) => item !== itemToRemove);
     setSelectAddIndicators(updatedItems);
   };
+
+  const getSourcesss = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' },
+  ];
+
+  const conditionText = "((close(2) < MA(2)) && (close(1) > MA(11))";
 
 
   useEffect(() => {
@@ -321,7 +324,73 @@ const Signals = () => {
 
 
 
-  
+  console.log("timeFrameVal - ", timeFrameVal)
+
+  console.log("buyCheck - ", buyCheck)
+
+  const saveStrategy = () => {
+    if (selectStrategy == "") {
+      alert("Please select a strategy");
+      return;
+    }
+
+
+    // Send Request Buy ------
+    if (buyCheck) {
+      let data = {
+        "scriptArray": selectedItems,
+        "user_id": "6512c8f2eb5673dd61bb931a",
+        // "tokensymbol": "3045",
+        // "symbol_name": "SBIN",
+        // "segment": "C",
+        "strategy_name": selectStrategy,
+        // "strike_price":"19300",
+        // "option_type":"CE",
+        //  "expiry":"26102023",
+        "timeframe": timeFrameVal,
+        "type": "BUY",
+        "indicator": "MA",
+        "price_source": "open",
+        "period": "1",
+        "inside_indicator": "EMA",
+        "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
+        "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
+        "buffer_value": "2",
+        "offset": "0"
+      }
+    }
+
+
+
+
+    // Send Request Sell ------
+    if (sellCheck) {
+      let data = {
+        "scriptArray": selectedItems,
+        "user_id": "6512c8f2eb5673dd61bb931a",
+        // "tokensymbol": "3045",
+        // "symbol_name": "SBIN",
+        // "segment": "C",
+        "strategy_name": selectStrategy,
+        // "strike_price":"19300",
+        // "option_type":"CE",
+        //  "expiry":"26102023",
+        "timeframe": timeFrameVal,
+        "type": "SELL",
+        "indicator": "MA",
+        "price_source": "open",
+        "period": "1",
+        "inside_indicator": "EMA",
+        "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
+        "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
+        "buffer_value": "2",
+        "offset": "0"
+      }
+    }
+
+
+
+  }
 
   const [coditionRequestArr, setCoditionRequestArr] = useState([
     // {
@@ -746,29 +815,25 @@ const Signals = () => {
     
   }
   
-  //console.log("coditionRequestArr final --",coditionRequestArr)
-  //console.log("coditionRequestArr Sell final --",coditionRequestArrSell)
+  console.log("coditionRequestArr final --",coditionRequestArr)
+  console.log("coditionRequestArr Sell final --",coditionRequestArrSell)
+  
+  
+
   
   
   let condition_string = "";
-  let condition_string_pass = "";
- 
   for (let index = 0; index < coditionRequestArr.length; index++) {
     const val = coditionRequestArr[index];
     
   //  console.log(`Element at index ${index}: ${val.and_or_operator}`);
   
     if (val.first_element.source !== "" && val.second_element.source !== "") {
-
-
       let and_or= ""
-      let and_or_pass= ""
       if(val.and_or_operator == "or"){
         and_or = "OR"
-        and_or_pass = "||"
       }else if(val.and_or_operator == "and"){
         and_or = "AND"
-        and_or_pass = "&&"
       }
 
       if(coditionRequestArr.length ==1){
@@ -785,34 +850,7 @@ const Signals = () => {
         end_bracket = val.end_bracket.join('');
       }
  
-      // condition_string += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
-
-      let first_element = `${val.first_element.source}[${val.first_element.offset}]`;
-      if(val.first_element.source == "number"){
-        first_element = val.first_element.offset
-      }
-
-      let second_element = `${val.second_element.source}[${val.second_element.offset}]`;
-      if(val.second_element.source == "number"){
-        second_element = val.second_element.offset
-      }
-
-
-      condition_string += `${start_bracket}(${first_element} ${val.comparators} ${second_element})${end_bracket}  ${and_or}  `;
-
-        
-
-      let first_element_pass = `data.${val.first_element.source}[${val.first_element.offset}]`;
-      if(val.first_element.source == "number"){
-        first_element_pass = val.first_element.offset
-      }
-
-    let second_element_pass = `data.${val.second_element.source}[${val.second_element.offset}]`;
-      if(val.second_element.source == "number"){
-        second_element_pass = val.second_element.offset
-      }
-      
-      condition_string_pass += `${start_bracket}(${first_element_pass}${val.comparators}${second_element_pass})${end_bracket}${and_or_pass}`;
+      condition_string += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
     } 
      else {
       break; // Break out of the loop
@@ -824,24 +862,17 @@ const Signals = () => {
 
 
   let condition_string_sell  = "";
-  let condition_string_sell_pass  = "";
-
   for (let index = 0; index < coditionRequestArrSell.length; index++) {
     const val = coditionRequestArrSell[index];
     
   //  console.log(`Element at index ${index}: ${val.and_or_operator}`);
   
     if (val.first_element.source !== "" && val.second_element.source !== "") {
-
-
       let and_or= ""
-      let and_or_pass= ""
       if(val.and_or_operator == "or"){
         and_or = "OR"
-        and_or_pass= "||"
       }else if(val.and_or_operator == "and"){
         and_or = "AND"
-       and_or_pass= "&&"
       }
 
       if(coditionRequestArrSell.length ==1){
@@ -858,38 +889,7 @@ const Signals = () => {
         end_bracket = val.end_bracket.join('');
       }
  
-      // condition_string_sell += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
-
-
-      // condition_string_sell_pass += `${start_bracket}(data.${val.first_element.source}[${val.first_element.offset}]${val.comparators}data.${val.second_element.source}[${val.second_element.offset}])${end_bracket}${and_or_pass}`;
-
-      let first_element = `${val.first_element.source}[${val.first_element.offset}]`;
-      if(val.first_element.source == "number"){
-        first_element = val.first_element.offset
-      }
-
-      let second_element = `${val.second_element.source}[${val.second_element.offset}]`;
-      if(val.second_element.source == "number"){
-        second_element = val.second_element.offset
-      }
-
-
-      condition_string_sell += `${start_bracket}(${first_element} ${val.comparators} ${second_element})${end_bracket}  ${and_or}  `;
-
-        
-
-      let first_element_pass = `data.${val.first_element.source}[${val.first_element.offset}]`;
-      if(val.first_element.source == "number"){
-        first_element_pass = val.first_element.offset
-      }
-
-    let second_element_pass = `data.${val.second_element.source}[${val.second_element.offset}]`;
-      if(val.second_element.source == "number"){
-        second_element_pass = val.second_element.offset
-      }
-      
-      condition_string_sell_pass += `${start_bracket}(${first_element_pass}${val.comparators}${second_element_pass})${end_bracket}${and_or_pass}`;
-
+      condition_string_sell += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
     } 
      else {
       break; // Break out of the loop
@@ -1017,314 +1017,6 @@ const Signals = () => {
   }
 
 
-
- // console.log("timeFrameVal - ", timeFrameVal)
-
- // console.log("buyCheck - ", buyCheck)
-
-
-  const [exitConditionBuyOrSell, setExitConditionBuyOrSell] = useState(
-    [{
-      buy : {
-      stoploss : "0",
-      target : "0",
-      tsl : "0",
-     },
-     sell : {
-      stoploss : "0",
-      target : "0",
-      tsl : "0",
-     },
-    }]
-  );
-
-  const StoplossChange = (e,buy_sell) => {
-     console.log("e", e.target.value)
-   if(parseInt(e.target.value) > 0 ){
-    if(buy_sell == "buy"){
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
-      if (foundObjectexit) {
-        foundObjectexit.buy.stoploss = e.target.value
-        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
-      }
-    }else if(buy_sell == "sell"){
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
-      if (foundObjectexit) {
-        foundObjectexit.sell.stoploss = e.target.value
-        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
-      }
-     
-    }
-  }  
-  }
-
-  //console.log("exitConditionBuyOrSell",exitConditionBuyOrSell[0].buy)
-  //console.log("exitConditionBuyOrSell sell",exitConditionBuyOrSell[0].sell)
-
-  const TargetChange = (e,buy_sell) => {
-    if(buy_sell == "buy"){
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
-      if (foundObjectexit) {
-        foundObjectexit.buy.target = e.target.value
-        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
-      }
-    }else if(buy_sell == "sell"){
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
-      if (foundObjectexit) {
-        foundObjectexit.sell.target = e.target.value
-        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
-      }
-    }
-  }
-
-  const TSLChange = (e,buy_sell) => {
-    if(buy_sell == "buy"){
-     
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
-      if (foundObjectexit) {
-        foundObjectexit.buy.tsl = e.target.value
-        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
-      }
-    }else if(buy_sell == "sell"){
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
-      if (foundObjectexit) {
-        foundObjectexit.sell.tsl = e.target.value
-        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
-      }
-    }
-  }
-
-
-  function areParenthesesBalanced(expression) {
-    const stack = [];
-    for (let char of expression) {
-    if (char === '(') {
-    stack.push(char);
-    } else if (char === ')') {
-    if (stack.length === 0 || stack.pop() !== '(') {
-        return false; // Unbalanced parentheses
-       }
-      }
-    }
-    return stack.length === 0; // True if parentheses are balanced
-    }
-
-
-const saveStrategy = async (e) => {
-   // alert(condition_string)
-
-
-    if (selectStrategy == "") {
-      alert("Please select a strategy");
-      return;
-    }
-
-    if(selectedItems.length == 0){
-      alert("Please select a Instruments");
-      return;
-    }
-
-    if(!buyCheck && !sellCheck){
-      alert("Please select a Buy or Sell");
-      return;
-    }
-
-    if(condition_string =="" && condition_string_sell == ""){
-      alert("Please select a add condition");
-      return;
-    }
-
-  
-      
-      // Example usage:
-      // const expression = "(((close[0] == high[0]) OR (open[0] == open[0])) AND (open[0] == low[0]))";
-      
-      
-      //alert(condition_string)
-      //alert(condition_string_pass)
-    
-
-      
-      let buy_cond = false
-      if(condition_string != ""){
-       buy_cond =  areParenthesesBalanced(condition_string);
-      if(!buy_cond){
-         alert("Please correct Buy condition");
-         return;
-       }
-      }
-       
-      let sell_cond =false
-      if(condition_string_sell != ""){
-        sell_cond =  areParenthesesBalanced(condition_string_sell);
-        if(!sell_cond){
-           alert("Please correct Sell condition");
-           return;
-         }
-      }
-
-   
-      let condition_string_source = [];
-      for (let index = 0; index < coditionRequestArr.length; index++) {
-        const val = coditionRequestArr[index];
-      //  console.log(`Element at index ${index}: ${val.and_or_operator}`)
-      
-        if (val.first_element.source !== "" && val.second_element.source !== "") {
-        if(val.first_element.source != "number"){
-        if (!condition_string_source.includes(`${val.first_element.source}(${val.first_element.offset})`)) {
-            condition_string_source.push(`${val.first_element.source}(${val.first_element.offset})`);
-         }  
-        }
-        
-        if(val.second_element.source != "number"){
-         if (!condition_string_source.includes(`${val.second_element.source}(${val.second_element.offset})`)) {
-          condition_string_source.push(`${val.second_element.source}(${val.second_element.offset})`);
-        } 
-       } 
-
-        } 
-         else {
-          break; // Break out of the loop
-        }
-      }
-     // console.log("condition_string_source",condition_string_source)
-
-
-
-
-      let condition_string_sell_source = [];
-      for (let index = 0; index < coditionRequestArrSell.length; index++) {
-        const val = coditionRequestArrSell[index];
-        if (val.first_element.source !== "" && val.second_element.source !== "") {
-
-          if(val.first_element.source != "number"){ 
-        if (!condition_string_sell_source.includes(`${val.first_element.source}(${val.first_element.offset})`)) {
-            condition_string_sell_source.push(`${val.first_element.source}(${val.first_element.offset})`);
-         }  
-        }
-         
-        if(val.second_element.source != "number"){
-         if (!condition_string_sell_source.includes(`${val.second_element.source}(${val.second_element.offset})`)) {
-          condition_string_sell_source.push(`${val.second_element.source}(${val.second_element.offset})`);
-        } 
-      }
-
-        } 
-         else {
-          break; // Break out of the loop
-        }
-      }
-     // console.log("condition_string_sell_source",condition_string_sell_source)
-
-
-    // Send Request Buy ------
-    if (buyCheck && buy_cond) {
-     // alert("buy")
-      
-      let data = {
-
-        "scriptArray": selectedItems,
-        "user_id": user_Id,
-        // "tokensymbol": "3045",
-        // "symbol_name": "SBIN",
-        // "segment": "C",
-        "strategy_name": selectStrategy,
-        // "strike_price":"19300",
-        // "option_type":"CE",
-        //  "expiry":"26102023",
-        "timeframe": timeFrameVal,
-        "type": "BUY",
-        "indicator": "MA",
-        "price_source": "open",
-        "period": "1",
-        "inside_indicator": "EMA",
-       // "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
-        "condition": condition_string_pass,
-       // "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
-        "condition_source": condition_string_source,
-        "buffer_value": "2",
-        "offset": "0",
-        "target_stoploss": exitConditionBuyOrSell[0].buy
-       }
-       
-       console.log("data request buy",data)
-
-       await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
-        if (response.status === 409) {
-          toast.error(response.data.msg);
-        }
-        else if (response.status) {
-          if(!sellCheck && !sell_cond){
-           toast.success(response.msg);
-           window.location.reload();
-          //  setTimeout(() => {
-          //   navigate("/admin/createstrategy")
-          //  }, 1000); 
-          }else{
-            
-          }
-        }
-        else if (!response.status) {
-          toast.error(response.msg);
-        }
-       })
-       
-    }
-
-    // Send Request Sell ------
-    if (sellCheck && sell_cond) {
-    //  alert("sell")
-      let data = {
-        "scriptArray": selectedItems,
-        "user_id": user_Id,
-        // "tokensymbol": "3045",
-        // "symbol_name": "SBIN",
-        // "segment": "C",
-        "strategy_name": selectStrategy,
-        // "strike_price":"19300",
-        // "option_type":"CE",
-        //  "expiry":"26102023",
-        "timeframe": timeFrameVal,
-        "type": "SELL",
-        "indicator": "MA",
-        "price_source": "open",
-        "period": "1",
-        "inside_indicator": "EMA",
-        //"condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
-        "condition": condition_string_sell_pass,
-       // "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
-        "condition_source": condition_string_sell_source,
-        "buffer_value": "2",
-        "offset": "0",
-        "target_stoploss": exitConditionBuyOrSell[0].sell
-      }
-      console.log("data request sell",data)
-
-      await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
-        if (response.status === 409) {
-          toast.error(response.data.msg);
-        }
-        else if (response.status) {
-
-         toast.success(response.msg);
-         window.location.reload();
-          // setTimeout(() => {
-          //   navigate("/admin/createstrategy")
-          // }, 1000);
-        }
-        else if (!response.status) {
-          toast.error(response.msg);
-        }
-      })
- 
- 
-    }
-
-
-
-  }
-
-
   
   return (
     <>
@@ -1448,6 +1140,13 @@ const saveStrategy = async (e) => {
               </li>
               <li class="StepProgress-item is-done">
                 <div className="row">
+
+
+
+                
+
+
+
                   <div className="col-xl-6">
                     <div className="card">
                       <div className="">
@@ -1556,33 +1255,29 @@ const saveStrategy = async (e) => {
                   
                   {coditionRequestArr && coditionRequestArr.map((condition_item,index) => (
                       <>
-                     <Row className="mb-2">
-                    <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px'}}>
-
-                     
-                      <button className="btn " onClick={() => AddBracket(index,"start","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}>
+                      <Row className="mb-2" style={{display:'grid',gridTemplateColumns:'11% 49% 11% 11% 8%'}}>
+                      <div className="d-flex px-0 justify-content-center">
+                      <button className="btn " onClick={() => AddBracket(index,"start","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px',height:'30px'}}>
                       + Bracket
                      </button>
-
-
-                      {condition_item.start_bracket.length > 0 ? 
-                       <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1,"buy")}>
-                       <i className="fa-solid fa-xmark"></i>
-                       </button>
-                       :""}
 
                        
                         <p  style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
                         {condition_item.start_bracket.join('')}
                        </p> 
                        
-                    
+                       {condition_item.start_bracket.length > 0 ? 
+                       <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1,"buy")}>
+                       <i className="fa-solid fa-xmark"></i>
+                       </button>
+                       :""}
+                      
 
-                     </Col>
+                     </div>
 
-                      <Col md={4} className="d-flex px-0" style={{ height: '25px'}}>
+                      <div className="d-flex px-0">
                         {/* <label>First Element</label> */}
-                     <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index,"buy"); }}>
+                        <select style={{height:'30px', width:'80px',marginRight:'5px'}} className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index,"buy"); }}>
                               {/* <option value="">Select Expiry Date</option> */}
                               <option value="" >--Select source--</option>
                               {
@@ -1591,7 +1286,7 @@ const saveStrategy = async (e) => {
                               }
                       </select>
 
-                      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"buy") }} min="0" className="form-control" />
+                      <input style={{height:'30px',marginRight:'5px', width:'80px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"buy") }} min="0" className="form-control" />
                     
                       {/* <Col md={2}>
                         <label>Offset</label>
@@ -1599,7 +1294,7 @@ const saveStrategy = async (e) => {
                       </Col> */}
                      
                         {/* <label>Comparators</label> */}
-                        <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index,"buy"); }}>
+                        <select style={{height:'30px',width:'80px',marginRight:'5px'}} className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index,"buy"); }}>
                               {/* <option value="">Select Expiry Date</option> */}
                               <option value="" >--Select comparators--</option>
                               {
@@ -1609,7 +1304,7 @@ const saveStrategy = async (e) => {
                       </select>
                     
                         {/* <label>Second Element</label> */}
-                        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"buy"); }}>
+                        <select style={{height:'30px',width:'80px',marginRight:'5px'}} className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"buy"); }}>
                               {/* <option value="">Select Expiry Date</option> */}
                               <option value="" >--Select source--</option>
                               {
@@ -1617,20 +1312,22 @@ const saveStrategy = async (e) => {
                                   <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
                               }
                       </select>
-                      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"buy") }} min="0" className="form-control" />
-                      </Col>
+                      <input  style={{height:'30px',marginRight:'5px', width:'80px'}} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"buy") }} min="0" className="form-control" />
+                      </div>
                       {/* <Col md={2}>
                         <label>Offset</label>
                         <Form.Control type="number" id="text3" />
                       </Col> */}
 
-                     <Col md={2} className="d-flex px-0 justify-content-center"  style={{ height: '25px'}}>
+                     <div className="d-flex px-0 justify-content-end">
 
-                      <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
+                        
+                        <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
                         {condition_item.end_bracket.join('')}
-                       </p> 
+                       </p>                     
+                        
 
-                       {
+                        {
                          condition_item.end_bracket.length > 0 ?
                        <button className="border-0 px-2"  onClick={() => RemoveBracket(index,"end",condition_item.end_bracket.length - 1,"buy")}>
                       <i className="fa-solid fa-xmark"></i>
@@ -1638,15 +1335,15 @@ const saveStrategy = async (e) => {
                          :"" 
                         }
                      
-                      <button className=" btn " onClick={() => AddBracket(index,"end","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}> 
+                      <button className=" btn " onClick={() => AddBracket(index,"end","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px',height:'30px'}}> 
                       + Bracket
                      </button>
 
 
-                     </Col>
-                       <Col md={2} style={{ height: '25px'}}>
+                     </div>
+                       <div className="px-0">
                         {
-                          coditionRequestArr.length >= 2?
+                          coditionRequestArr.length==2?
                           condition_item.and_or_operator == ""?"":
                           <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index,"buy"); }}>
                               {/* <option value="">Select Expiry Date</option> */}
@@ -1658,8 +1355,8 @@ const saveStrategy = async (e) => {
                           ""
                         }
             
-                       </Col> 
-                      <Col md={2} style={{ height: '25px'}}> 
+                      </div>
+                      <div  className="px-0">
                      {
                      index==0? 
                      coditionRequestArr.length == 1? 
@@ -1677,7 +1374,7 @@ const saveStrategy = async (e) => {
                     
                       
                      }
-                       </Col>
+                       </div>
                       
                       
                     </Row>
@@ -1689,34 +1386,7 @@ const saveStrategy = async (e) => {
                    <button style={{border:'1px dashed orange'}} className="btn p-2" onClick={() => conditionAdd(coditionRequestArr,"buy")}>
                       + Add
                   </button>
-
-
-                    {condition_string != "" ? 
-                    <li class="StepProgress-item">
-                    <strong>Buy Exit Condition</strong>
-                    <div className="row mt-3">
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-danger">Stop loss %</label>
-                          <input type="number" onChange={(e)=>{StoplossChange(e,"buy")}}  className="form-control"></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-success">Target Profit %</label>
-                          <input type="number" onChange={(e)=>{TargetChange(e,"buy")}} className="form-control"></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="">Trailing SL % (optional)</label>
-                          <input type="number" onChange={(e)=>{TSLChange(e,"buy")}} className="form-control"></input>
-                        </div>
-                      </div>
-                    </div>
-                    </li>
-                    :""}
-
+                
                   </Tab>
 
                   
@@ -1769,8 +1439,7 @@ const saveStrategy = async (e) => {
                   <Tab eventKey="contact" title="Indicator">
                     Tab content for Indicator
                   </Tab>
-                 </Tabs>
-
+                </Tabs>
                   :""
                  }
 
@@ -1778,13 +1447,14 @@ const saveStrategy = async (e) => {
 
               </li>
 
-              <li class="StepProgress-item current is-done" style={{marginTop:"40px"}}>
+              <li class="StepProgress-item current is-done">
 
                 <div className="form-check form-check-inline">
                   <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" />
                   <label className="form-check-label" for="inlineCheckbox2">Sell</label>
                 </div>
-                <strong >Sell Entry Condition</strong>
+
+                <strong>Sell Entry Condition</strong>
 
                 {
   sellCheck == true ? 
@@ -1832,27 +1502,26 @@ const saveStrategy = async (e) => {
   {coditionRequestArrSell && coditionRequestArrSell.map((condition_item,index) => (
       <>
       <Row className="mb-2">
-      <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px'}}>
+      <Col md={2} className="d-flex px-0 justify-content-center">
       <button className="btn " onClick={() => AddBracket(index,"start","sell")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}>
       + Bracket
      </button>
-     
-     {condition_item.start_bracket.length > 0 ? 
-       <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1,"sell")}>
-       <i className="fa-solid fa-xmark"></i>
-       </button>
-       :""}
+
        
         <p  style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
         {condition_item.start_bracket.join('')}
        </p> 
        
-      
+       {condition_item.start_bracket.length > 0 ? 
+       <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1,"sell")}>
+       <i className="fa-solid fa-xmark"></i>
+       </button>
+       :""}
       
 
      </Col>
 
-      <Col md={4} className="d-flex px-0" style={{ height: '25px'}}>
+      <Col md={4} className="d-flex px-0">
         {/* <label>First Element</label> */}
         <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index,"sell"); }}>
               {/* <option value="">Select Expiry Date</option> */}
@@ -1863,7 +1532,7 @@ const saveStrategy = async (e) => {
               }
       </select>
 
-      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"sell") }} min="0" className="form-control" />
+      <input type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"sell") }} min="0" className="form-control" />
     
       {/* <Col md={2}>
         <label>Offset</label>
@@ -1889,14 +1558,14 @@ const saveStrategy = async (e) => {
                   <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
               }
       </select>
-      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"sell") }} min="0" className="form-control" />
+      <input type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"sell") }} min="0" className="form-control" />
       </Col>
       {/* <Col md={2}>
         <label>Offset</label>
         <Form.Control type="number" id="text3" />
       </Col> */}
 
-     <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px'}}>
+     <Col md={2} className="d-flex px-0 justify-content-center">
 
         
         <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
@@ -1918,9 +1587,9 @@ const saveStrategy = async (e) => {
 
 
      </Col>
-       <Col md={2} style={{ height: '25px'}}>
+       <Col md={2}>
         {
-          coditionRequestArrSell.length>=2?
+          coditionRequestArrSell.length==2?
           condition_item.and_or_operator == ""?"":
           <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index,"sell"); }}>
               {/* <option value="">Select Expiry Date</option> */}
@@ -1933,7 +1602,7 @@ const saveStrategy = async (e) => {
         }
 
       </Col>
-      <Col md={2} style={{ height: '25px'}}>
+      <Col md={2}>
      {
      index==0? 
      coditionRequestArrSell.length == 1? 
@@ -1964,34 +1633,7 @@ const saveStrategy = async (e) => {
       + Add
   </button>
 
-
-          {condition_string_sell!=""?
-           <li class="StepProgress-item">
-           <strong>Sell Exit Condition</strong>
-           <div className="row mt-3">
-             <div className="col-md-4">
-               <div className="form-group">
-                 <label className="text-danger">Stop loss %</label>
-                 <input type="number" onChange={(e)=>{StoplossChange(e,"sell")}}  className="form-control"></input>
-               </div>
-             </div>
-             <div className="col-md-4">
-               <div className="form-group">
-                 <label className="text-success">Target Profit %</label>
-                 <input type="number" onChange={(e)=>{TargetChange(e,"sell")}} className="form-control"></input>
-               </div>
-             </div>
-             <div className="col-md-4">
-               <div className="form-group">
-                 <label className="">Trailing SL % (optional)</label>
-                 <input type="number" onChange={(e)=>{TSLChange(e,"sell")}} className="form-control"></input>
-               </div>
-             </div>
-           </div>
-           </li>
-          :""}
-
-     </Tab>
+  </Tab>
 
   
 
@@ -2049,6 +1691,31 @@ const saveStrategy = async (e) => {
 
               </li>
 
+
+
+              <li class="StepProgress-item">
+                <strong>Exit Condition</strong>
+                <div className="row mt-3">
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <label className="text-danger">Stop loss %</label>
+                      <input type="text" className="form-control"></input>
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <label className="text-success">Target Profit %</label>
+                      <input type="text" className="form-control"></input>
+                    </div>
+                  </div>
+                  <div className="col-md-4">
+                    <div className="form-group">
+                      <label className="">Trailing SL % (optional)</label>
+                      <input type="text" className="form-control"></input>
+                    </div>
+                  </div>
+                </div>
+              </li>
             </ul>
 
 
@@ -2129,12 +1796,11 @@ const saveStrategy = async (e) => {
           </div>
 
           <div className="col-md-4">
-            <button className='btn btn-info float-end m-0' onClick={()=>saveStrategy("e")}>save</button>
+            <button className='btn btn-info float-end m-0' onClick={saveStrategy}>save</button>
           </div>
 
 
-          <ToastButton />
-       
+
         </Content>
 
         <Modal show={showModalOffset} onHide={closeModalOffset}>
