@@ -8,6 +8,10 @@ const timeFrame = db.timeFrame
 const source = db.source
 const comparators = db.comparators
 const UserMakeStrategy = db.UserMakeStrategy;
+const live_price = db.live_price;
+
+const {Alice_Socket , getSocket}  = require('../../Helper/Alice_Socket');
+const {Socket_data}  = require('../../Helper/Socket_data');
 
 
 const uri = process.env.MONGO_URI
@@ -76,11 +80,18 @@ class MakeStartegy {
 
      /// Make Startegy
      async AddMakeStartegy(req, res) {
-        try {
+      
+      
+       
+       
+      let channelList ="";
+  
+       try {
            // console.log("req",req.body) 
 
-      for (const element of req.body.scriptArray) {
+        for (const element of req.body.scriptArray) {
          //console.log(element.instrument_token);
+         channelList+=element.exch_seg+'|'+element.instrument_token+"#";
  
          // res.send({ status: true, msg: "successfully Add!" });
          let user_id = req.body.user_id;
@@ -145,6 +156,11 @@ class MakeStartegy {
 
         
         }
+        
+        var alltokenchannellist = channelList.substring(0, channelList.length - 1);
+      //  console.log("alltokenchannellist ",alltokenchannellist)
+        const suscribe_token =await Socket_data(alltokenchannellist);
+
         res.send({ status: true, msg: "successfully Add!", data: [] });
       
         } catch (error) {
@@ -155,8 +171,14 @@ class MakeStartegy {
 }
 
 setInterval(async () => {
-  return
+  
+
+
+  
     console.log("yyyyy");
+    const suscribe_token =await Alice_Socket();
+   
+    return
     const pipeline = [
         {
         $match : {
@@ -274,7 +296,7 @@ setInterval(async () => {
     }
 
 
-},10000);
+},300000);
 
 
 
