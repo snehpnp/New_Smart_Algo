@@ -33,7 +33,29 @@ async function Open_Position1(req, res) {
         const destinationViewName = 'open_position_excute';
 
 
-        const pipeline = [];
+        const pipeline = [
+            {
+                $lookup: {
+                    from: 'stock_live_price',
+                    localField: 'token',
+                    foreignField: '_id',
+                    as: 'stockInfo',
+                },
+            },
+            {
+                $addFields: {
+                    stockInfo: { $arrayElemAt: ['$stockInfo', 0] }, // Extract the first element from the array
+                    stockInfo_lp_int: { $toInt: '$stockInfo.lp' }, // Convert stockInfo.lp to integer
+                },
+            },
+            {
+                $match: {
+                    stockInfo_lp_int: { $gt: '$target' },
+                },
+            },
+        ];
+
+
         const options = { cursor: { batchSize: 1 } };
 
         const result = await client
@@ -54,6 +76,8 @@ async function Open_Position1(req, res) {
         } else {
             console.error('Error in aggregation:', result);
         }
+
+
     } catch (error) {
         console.error('Error:', error);
     } finally {
@@ -94,31 +118,31 @@ module.exports = { dropExistingView1, Open_Position1 }
 //     {
 //       $project: {
 //         _id: 1, // Include the _id field if needed
-//         symbol:1,
-//         entry_type:1,
-//         entry_price:1,
-//         entry_qty_percent:1,
-//         exit_qty_percent:1,
-//         exchange:1,
-//         strategy:1,
-//         segment:1,
-//         trade_symbol:1,
-//         client_persnal_key:1,
-//         TradeType:1,
-//         token:1,
-//         lot_size:1,
-//         complete_trade:1,
-//         option_type:1,
-//         dt_date:1,
-//         strike:1,
-//         expiry:1,
-//         target: 1,
-//         stop_loss: 1,
-//         exit_time: 1,
+// symbol:1,
+// entry_type:1,
+// entry_price:1,
+// entry_qty_percent:1,
+// exit_qty_percent:1,
+// exchange:1,
+// strategy:1,
+// segment:1,
+// trade_symbol:1,
+// client_persnal_key:1,
+// TradeType:1,
+// token:1,
+// lot_size:1,
+// complete_trade:1,
+// option_type:1,
+// dt_date:1,
+// strike:1,
+// expiry:1,
+// target: 1,
+// stop_loss: 1,
+// exit_time: 1,
 //         // Include other fields you want to keep in the view
 //       },
 //     },
 //     // Additional pipeline stages if needed
 //   ]);
-  
-  
+
+
