@@ -108,18 +108,92 @@ const providedTimeUTC = new Date('2023-11-27T10:00:02.596+00:00').getTimezoneOff
 
 
 
+// db.createView('open_position', 'mainsignals', [
+//     {
+//         $set: {
+//             current_date: {
+//                 $dateToString: {
+//                     format: '%Y-%m-%d',
+//                     date: new Date(),
+//                     timezone: 'Asia/Kolkata'
+//                 }
+//             }
+//         }
+//     },
+//     {
+//         $addFields: {
+//             target: {
+//                 $add: [
+//                     { $toDouble: '$entry_price' },
+//                     { $ifNull: [{ $toDouble: '$target' }, 0] },
+//                 ],
+//             },
+//             stop_loss: {
+//                 $subtract: [
+//                     { $toDouble: '$entry_price' },
+//                     { $ifNull: [{ $toDouble: '$stop_loss' }, 0] },
+//                 ],
+//             },
+        
+//             exit_time: {
+//                 $toDate: {
+//                     $concat: ['$current_date', 'T', '$exit_time', ':00'],
+//                 }
+//             },
+//         },
+//     },
+//     {
+//         $project: {
+//             _id: 1, 
+//             symbol: 1,
+//             entry_type: 1,
+//             entry_price: 1,
+//             entry_qty_percent: 1,
+//             exit_qty_percent: 1,
+//             exchange: 1,
+//             strategy: 1,
+//             segment: 1,
+//             trade_symbol: 1,
+//             client_persnal_key: 1,
+//             TradeType: 1,
+//             token: 1,
+//             lot_size: 1,
+//             complete_trade: 1,
+//             option_type: 1,
+//             dt_date: 1,
+//             strike: 1,
+//             expiry: 1,
+//             target: 1,
+//             stop_loss: 1,
+//             exit_time: 1,
+           
+//             exit_time_test: {
+//                 $dateFromString: {
+//                   dateString: {
+//                     $dateToString: {
+//                       format: '%Y-%m-%dT%H:%M:%S.%LZ',
+//                       date: {
+//                         $subtract: [
+//                           '$exit_time',
+//                           19800000  // 5 hours and 30 minutes in milliseconds
+//                         ]
+//                       },
+//                       timezone: 'UTC',
+//                     },
+//                   },
+//                   format: '%Y-%m-%dT%H:%M:%S.%LZ',
+//                   timezone: 'UTC',
+//                 },
+//               }
+              
+         
+//         },
+//     },
+// ]);
+
+
 db.createView('open_position', 'mainsignals', [
-    {
-        $set: {
-            current_date: {
-                $dateToString: {
-                    format: '%Y-%m-%d',
-                    date: new Date(),
-                    timezone: 'Asia/Kolkata'
-                }
-            }
-        }
-    },
+   
     {
         $addFields: {
             target: {
@@ -134,17 +208,28 @@ db.createView('open_position', 'mainsignals', [
                     { $ifNull: [{ $toDouble: '$stop_loss' }, 0] },
                 ],
             },
-        
-            exit_time: {
-                $toDate: {
-                    $concat: ['$current_date', 'T', '$exit_time', ':00'],
-                }
-            },
+          
+        },
+    },
+    {
+        $lookup: {
+            from: 'stock_live_price',
+            localField: 'token',
+            foreignField: '_id',
+            as: 'stockInfo',
+        },
+    },
+    {
+        $addFields: {
+            stockInfo: { $arrayElemAt: ['$stockInfo', 0] },
+            stockInfo_lp: { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
+            stockInfo_curtime: { $arrayElemAt: ['$stockInfo.curtime', 0] },
+          
         },
     },
     {
         $project: {
-            _id: 1, 
+            _id: 1,
             symbol: 1,
             entry_type: 1,
             entry_price: 1,
@@ -166,22 +251,14 @@ db.createView('open_position', 'mainsignals', [
             target: 1,
             stop_loss: 1,
             exit_time: 1,
-           
-            exit_time_test: {
-                $dateToString: {
-                    format: '%Y-%m-%dT%H:%M:%S.%LZ',
-                    date: {
-                        $subtract: [
-                            '$exit_time',
-                            19800000  // 5 hours and 30 minutes in milliseconds
-                        ]
-                    },
-                    timezone: 'UTC',
-                },
+            exit_time_test: 1,
+            stockInfo_curtime:1,
+            isLpInRange: {
+
+                         $cmp: [{ $toInt: '$stockInfo.curtime' }, { $toInt: '$exit_time' }] ,
+                   
             },
-         
+            
         },
     },
 ]);
-
-

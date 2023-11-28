@@ -165,119 +165,119 @@ class MakeStartegy {
     }
 }
 
-setInterval(async () => {
+// setInterval(async () => {
 
-    console.log("yyyyy");
-   // const suscribe_token =await Alice_Socket();
+//     console.log("yyyyy");
+//    // const suscribe_token =await Alice_Socket();
    
     
-    const pipeline = [
-        {
-        $match : {
-          //tokensymbol:"67308",
-          status:"0"
-         }
-        }
-      ];
-    const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
+//     const pipeline = [
+//         {
+//         $match : {
+//           //tokensymbol:"67308",
+//           status:"0"
+//          }
+//         }
+//       ];
+//     const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
     
-    let array =[2,5,6,4] 
-    if(allStrategyResult.length > 0){
-      const promises = allStrategyResult.map(val => {
-        return new Promise(resolve => {
-        setTimeout(async() => {
-        const currentDate = new Date();
-        const milliseconds = currentDate.getTime();
-      //  console.log(`Running Time -- ${new Date()} function with element: ${val}`);
-       //  code start runing strategy
-       let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
-       // console.log("collectionName -",collectionName)
-    const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-    if (ExistView.length > 0) {
+//     let array =[2,5,6,4] 
+//     if(allStrategyResult.length > 0){
+//       const promises = allStrategyResult.map(val => {
+//         return new Promise(resolve => {
+//         setTimeout(async() => {
+//         const currentDate = new Date();
+//         const milliseconds = currentDate.getTime();
+//       //  console.log(`Running Time -- ${new Date()} function with element: ${val}`);
+//        //  code start runing strategy
+//        let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
+//        // console.log("collectionName -",collectionName)
+//     const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+//     if (ExistView.length > 0) {
 
-     // console.log("exist collection if ",collectionName)
-      const collection = dbTradeTools.collection(collectionName);
-      const get_view_data = await collection.aggregate([{$sort :{_id:1}}]).toArray();
+//      // console.log("exist collection if ",collectionName)
+//       const collection = dbTradeTools.collection(collectionName);
+//       const get_view_data = await collection.aggregate([{$sort :{_id:1}}]).toArray();
   
-   // console.log("get_view_data",get_view_data)
+//    // console.log("get_view_data",get_view_data)
 
-   let checkData = {}
-    if(val.condition_source != null){
-    let condition_source = val.condition_source.split(',');
-    //console.log("condition_source val ",val.condition_source)
-  //  console.log("condition_source",condition_source)
-    // if(condition_source.length > 0){
-    //     for (const source of condition_source) {
-    //           console.log("condition source ",source)
-    //     }}
+//    let checkData = {}
+//     if(val.condition_source != null){
+//     let condition_source = val.condition_source.split(',');
+//     //console.log("condition_source val ",val.condition_source)
+//   //  console.log("condition_source",condition_source)
+//     // if(condition_source.length > 0){
+//     //     for (const source of condition_source) {
+//     //           console.log("condition source ",source)
+//     //     }}
      
-    if(condition_source.length > 0){
-      for (const source of condition_source) {
+//     if(condition_source.length > 0){
+//       for (const source of condition_source) {
     
-       // console.log("condition_source",source)
+//        // console.log("condition_source",source)
 
-        const matches = source.match(/(\w+)\((\d+)\)/);
+//         const matches = source.match(/(\w+)\((\d+)\)/);
 
-        if (matches) {
+//         if (matches) {
          
-          const OFFSET_KEY = matches[2]; //
+//           const OFFSET_KEY = matches[2]; //
           
-        //  console.log("OFFSET_KEY",OFFSET_KEY)
-        //  console.log("OFFSET_KEY",parseInt(OFFSET_KEY)+1)
+//         //  console.log("OFFSET_KEY",OFFSET_KEY)
+//         //  console.log("OFFSET_KEY",parseInt(OFFSET_KEY)+1)
             
-          const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY)+1)];
+//           const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY)+1)];
 
-         // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
-         // console.log("matches[1]",matches[1]); // This will output: 'close(1)'
+//          // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
+//          // console.log("matches[1]",matches[1]); // This will output: 'close(1)'
          
            
-          let sourceVal
-          if(matches[1] == "close"){
-            sourceVal = get_view_data.map(item => item.close);
-          }else if(matches[1] == "open"){
-            sourceVal = get_view_data.map(item => item.open);
-          }else if(matches[1] == "low"){
-            sourceVal =  get_view_data.map(item => item.low);
-          }else if(matches[1] == "high"){
-            sourceVal = get_view_data.map(item => item.high);
-          }
+//           let sourceVal
+//           if(matches[1] == "close"){
+//             sourceVal = get_view_data.map(item => item.close);
+//           }else if(matches[1] == "open"){
+//             sourceVal = get_view_data.map(item => item.open);
+//           }else if(matches[1] == "low"){
+//             sourceVal =  get_view_data.map(item => item.low);
+//           }else if(matches[1] == "high"){
+//             sourceVal = get_view_data.map(item => item.high);
+//           }
 
-           checkData[matches[1]] = sourceVal;
-        } else {
-          console.log("No match found");
-        }
+//            checkData[matches[1]] = sourceVal;
+//         } else {
+//           console.log("No match found");
+//         }
 
   
-      }
-      }
+//       }
+//       }
 
-    }
+//     }
   
   
-   //console.log("checkData - ",checkData)
-   //console.log("val.condition - ",val.condition)
+//    //console.log("checkData - ",checkData)
+//    //console.log("val.condition - ",val.condition)
 
     
-    const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
+//     const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
 
-    const conditiostring1 ="(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
-
-
-     console.log("symbol_name",val.symbol_name)
-    abc(checkData, val.condition,val);
-      }
-
-      // code end strategy...
-        resolve();
-        }, 0);
-        });
-
-        });
-        await Promise.all(promises);
-    }
+//     const conditiostring1 ="(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
 
 
-},5000);
+//      console.log("symbol_name",val.symbol_name)
+//     abc(checkData, val.condition,val);
+//       }
+
+//       // code end strategy...
+//         resolve();
+//         }, 0);
+//         });
+
+//         });
+//         await Promise.all(promises);
+//     }
+
+
+// },5000);
 
 
 

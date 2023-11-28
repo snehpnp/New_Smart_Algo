@@ -24,35 +24,13 @@ async function dropExistingView1() {
 async function Open_Position1(req, res) {
 
     try {
-        // Connect to the MongoDB server
-        await client.connect();
-
-        // Database and view names
-        const dbName = process.env.DB_NAME;
+      
+        var dbName = process.env.DB_NAME;
         const sourceViewName = 'open_position';
-        const destinationViewName = 'open_position_excute1';
+        const destinationViewName = 'open_position_excute5';
 
         const pipeline = [
-            {
-                $lookup: {
-                    from: 'stock_live_price',
-                    localField: 'token',
-                    foreignField: '_id',
-                    as: 'stockInfo',
-                },
-            },
-            {
-                $unwind: '$stockInfo'
-            },
-             {
-        $match: {
-            $or: [
-                { "exit_time": { $gte: "$stockInfo.curtime.$date" } },
-            ]
-        }
-    }
-             
-        
+            
         ];
         
         
@@ -95,6 +73,121 @@ async function Open_Position1(req, res) {
 module.exports = { dropExistingView1, Open_Position1 }
 
 
+
+// async function Open_Position1(req, res) {
+
+//     try {
+      
+//         var dbName = process.env.DB_NAME;
+//         const sourceViewName = 'open_position';
+//         const destinationViewName = 'open_position_excute';
+
+//         const pipeline = [
+//             {
+//                 $lookup: {
+//                     from: 'stock_live_price',
+//                     localField: 'token',
+//                     foreignField: '_id',
+//                     as: 'stockInfo',
+//                 },
+//             },
+//             {
+//                 $addFields: {
+//                     stockInfo: { $arrayElemAt: ['$stockInfo', 0] },
+//                     stockInfo_lp: { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
+//                     stockInfo_curtime: { $arrayElemAt: ['$stockInfo.curtime', 0] } , // Change $toInt to $toDouble
+
+//                     isLpInRange: {
+//                         $or: [
+//                             {
+//                                 $gte: [
+//                                     { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
+//                                     '$target',
+//                                 ],
+//                             },
+//                             {
+//                                 $lte: [
+//                                     { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
+//                                     '$stop_loss',
+//                                 ],
+//                             },
+//                             {
+//                                 $gte: [
+//                                     '$stockInfo_curtime',
+//                                     '$exit_time_test' 
+//                                 ]
+//                             }
+//                         ],
+//                     },
+//                 },
+//             },
+            
+//             {
+//                 $project: {
+                    // _id: 1,
+                    // symbol: 1,
+                    // entry_type: 1,
+                    // entry_price: 1,
+                    // entry_qty_percent: 1,
+                    // exit_qty_percent: 1,
+                    // exchange: 1,
+                    // strategy: 1,
+                    // segment: 1,
+                    // trade_symbol: 1,
+                    // client_persnal_key: 1,
+                    // TradeType: 1,
+                    // token: 1,
+                    // lot_size: 1,
+                    // complete_trade: 1,
+                    // option_type: 1,
+                    // dt_date: 1,
+                    // strike: 1,
+                    // expiry: 1,
+                    // target: 1,
+                    // stop_loss: 1,
+                    // exit_time: 1,
+                    // exit_time_test:1,
+                    // stockInfo_lp: '$stockInfo.lp',
+                    // isLpInRange: 1,
+                    // exit_time1: 1,
+                    // stockInfo_curtime:1,
+                    // // stockInfo_curtime:1
+//                 },
+//             },
+//         ];
+        
+        
+
+//         const options = { cursor: { batchSize: 1 } };
+
+//         const result = await client
+//             .db(dbName)
+//             .collection(sourceViewName)
+//             .aggregate(pipeline, options)
+//             .toArray();
+
+
+//         // Check if the aggregation was successful
+//         if (result.length > 0) {
+//             // Create the destination view with the result's cursor
+//             await client.db(dbName).createCollection(destinationViewName, {
+//                 viewOn: sourceViewName,
+//                 pipeline: pipeline,
+//             });
+
+//             console.log('Destination view created successfully');
+//         } else {
+//             console.error('Error in aggregation:', result);
+//         }
+
+
+//     } catch (error) {
+//         console.error('Error:', error);
+//     } finally {
+//         // Ensure the client is closed even if an error occurs
+//         await client.close();
+//     }
+// }
 // {
 //     $project: {
 //         _id: 1,
@@ -138,9 +231,9 @@ module.exports = { dropExistingView1, Open_Position1 }
                         //             '$stop_loss',
                         //         ],
                         //     },
-                        //     // {
-                        //     //     $gte: ['$stockInfo.curtime', '$exit_time'],
-                        //     // },
+                            // {
+                            //     $gte: ['$stockInfo.curtime', '$exit_time'],
+                            // },
                         // ],
                     // },
 
@@ -216,31 +309,31 @@ module.exports = { dropExistingView1, Open_Position1 }
 //                     as: 'stockInfo',
 //                 },
 //             },
-//             {
-//                 $addFields: {
-//                     stockInfo: { $arrayElemAt: ['$stockInfo', 0] },
-//                     stockInfo_lp: { $arrayElemAt: ['$stockInfo.lp', 0] },
-//                     isLpInRange: {
-//                         $or: [
-//                             {
-//                                 $gte: [
-//                                     { $toInt: { $arrayElemAt: ['$stockInfo.lp', 0] } },
-//                                     '$target',
-//                                 ],
-//                             },
-//                             {
-//                                 $lte: [
-//                                     { $toInt: { $arrayElemAt: ['$stockInfo.lp', 0] } },
-//                                     '$stop_loss',
-//                                 ],
-//                             },
-//                             {
-//                                 $gte: ['$exit_time1','$exit_time'],
-//                               },
-//                         ],
-//                     },
-//                 },
-//             },
+            // {
+            //     $addFields: {
+            //         stockInfo: { $arrayElemAt: ['$stockInfo', 0] },
+            //         stockInfo_lp: { $arrayElemAt: ['$stockInfo.lp', 0] },
+            //         isLpInRange: {
+            //             $or: [
+            //                 {
+            //                     $gte: [
+            //                         { $toInt: { $arrayElemAt: ['$stockInfo.lp', 0] } },
+            //                         '$target',
+            //                     ],
+            //                 },
+            //                 {
+            //                     $lte: [
+            //                         { $toInt: { $arrayElemAt: ['$stockInfo.lp', 0] } },
+            //                         '$stop_loss',
+            //                     ],
+            //                 },
+            //                 {
+            //                     $gte: ['$exit_time1','$exit_time'],
+            //                   },
+            //             ],
+            //         },
+            //     },
+            // },
 //             {
 //                 $addFields: {
 //                     // Convert current date and time to IST format

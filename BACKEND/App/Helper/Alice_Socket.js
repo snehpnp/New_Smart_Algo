@@ -80,9 +80,15 @@ const Alice_Socket = async () => {
                         if (response.tk) {
                             
                             // --- Start Conver data view function  ----//
-                           ALice_View_data(response.tk, response)
+                        //    ALice_View_data(response.tk, response)
                            // --- End Conver data view function  ----//
-                    
+                            
+                           const currentDate = new Date();
+
+                            // Extract hours and minutes from the time string
+                            const hours = currentDate.getHours().toString().padStart(2, '0');
+                            const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+
                             const stock_live_price = db_main.collection('stock_live_price');
     
                             const filter = { _id: response.tk }; // Define the filter based on the token
@@ -93,7 +99,7 @@ const Alice_Socket = async () => {
                                     exc: response.e,
                                     sp1: response.sp1,
                                     bp1: response.bp1,
-                                    curtime:new Date()
+                                    curtime:`${hours}:${minutes}`
                                 },
                             };
                             
