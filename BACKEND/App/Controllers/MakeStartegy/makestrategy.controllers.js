@@ -77,15 +77,10 @@ class MakeStartegy {
         }
     }
 
-
      /// Make Startegy
      async AddMakeStartegy(req, res) {
-      
-      
-       
-       
+     //let  suscribe =await Alice_Socket();
       let channelList ="";
-  
        try {
            // console.log("req",req.body) 
 
@@ -171,14 +166,11 @@ class MakeStartegy {
 }
 
 setInterval(async () => {
-  
 
-
-  
     console.log("yyyyy");
-    const suscribe_token =await Alice_Socket();
+   // const suscribe_token =await Alice_Socket();
    
-    return
+    
     const pipeline = [
         {
         $match : {
@@ -272,21 +264,10 @@ setInterval(async () => {
 
 
      console.log("symbol_name",val.symbol_name)
-    abc(checkData, val.condition);
-    }
-
-
-
-
-
-
-
-
-
+    abc(checkData, val.condition,val);
+      }
 
       // code end strategy...
-
-
         resolve();
         }, 0);
         });
@@ -296,7 +277,7 @@ setInterval(async () => {
     }
 
 
-},300000);
+},5000);
 
 
 
@@ -413,21 +394,24 @@ setInterval(async () => {
 //     res.send("okk")
 //   })
   
-  const abc = (data, conditionString) => {
-    console.log("data - ",data)
+  const abc = (data, conditionString,val) => {
+    //console.log("data - ",data)
     console.log("conditionString - ",conditionString)
     // (data.close[0]==246.5)||(data.low[1]==data.high[4])
     try {
       // Use eval to dynamically evaluate the condition string
       const condition = eval(conditionString);
-  
       // Check if the condition is true or false based on the data
       if (condition) {
         // Your code for when the condition is true
-        console.log("Condition is true");
+        console.log("Condition is true ",val._id);
+       
+
+
       } else {
         // Your code for when the condition is false
-        console.log("Condition is false");
+        console.log("Condition is false ",val._id);
+        
       }
     } catch (error) {
       console.error("Error in evaluating the condition:", error);
