@@ -1096,73 +1096,6 @@ const Signals = () => {
   }
 
 
-  const [timeTradeConddition, setTimeTradeConddition] = useState(
-    [
-
-     {
-      entry : {
-      time : "",
-      },
-      exit : {
-
-        time : "",
-        },
-      notrade : {
-
-        time : "",
-        }
-     }
-    ]
-  );
-
- 
-
-  const selectTime = (e,type) => {
-  //  alert(e.target.value)
-    if(e.target.value != ""){
-  
-     if(type == "entry"){
-     
-      const foundObjectTime = timeTradeConddition.find((item,i) => i === 0);
-      if (foundObjectTime) {
-
-          foundObjectTime.entry.time = e.target.value
-          setTimeTradeConddition([...timeTradeConddition]);
-        
-      }
-  
-     }else if(type == "exit"){
-  
-      const foundObjectTime = timeTradeConddition.find((item,i) => i === 0);
-      if (foundObjectTime) {
-
-        
-          foundObjectTime.exit.time = e.target.value
-          setTimeTradeConddition([...timeTradeConddition]);
-         
-        
-      }
-  
-     }
-     else if(type == "notrade"){
-  
-      const foundObjectTime = timeTradeConddition.find((item,i) => i === 0);
-      if (foundObjectTime) {
-
-       
-          foundObjectTime.notrade.time = e.target.value
-          setTimeTradeConddition([...timeTradeConddition]);
-         
-        
-      }
-  
-     }
-  
-    }
-
-    }
-
-
   function areParenthesesBalanced(expression) {
     const stack = [];
     for (let char of expression) {
@@ -1312,8 +1245,7 @@ const saveStrategy = async (e) => {
         "condition_source": condition_string_source,
         "buffer_value": "2",
         "offset": "0",
-        "target_stoploss": exitConditionBuyOrSell[0].buy,
-        "timeTradeConddition":timeTradeConddition
+        "target_stoploss": exitConditionBuyOrSell[0].buy
        }
        
        console.log("data request buy",data)
@@ -1365,8 +1297,7 @@ const saveStrategy = async (e) => {
         "condition_source": condition_string_sell_source,
         "buffer_value": "2",
         "offset": "0",
-        "target_stoploss": exitConditionBuyOrSell[0].sell,
-        "timeTradeConddition":timeTradeConddition
+        "target_stoploss": exitConditionBuyOrSell[0].sell
       }
       console.log("data request sell",data)
 
@@ -1390,11 +1321,9 @@ const saveStrategy = async (e) => {
  
     }
 
+
+
   }
-
-
-
-  console.log("timeTradeConddition - ",timeTradeConddition)
 
 
   
@@ -1518,7 +1447,7 @@ const saveStrategy = async (e) => {
 
                 </div>
               </li>
-               <li class="StepProgress-item is-done">
+              <li class="StepProgress-item is-done">
                 <div className="row">
                   <div className="col-xl-6">
                     <div className="card">
@@ -1565,40 +1494,9 @@ const saveStrategy = async (e) => {
 
                 </div>
               </li>
-             
-               <Row>
-                <Col md={2}>
-                  <h5 className="mt-4">Entry Time</h5>
-                </Col>
-                <Col md={2}>
-                  <label>Time</label>
-                  <Form.Control type="time" id="text3" value={timeTradeConddition[0].entry.time}  onChange={(e) => { selectTime(e,"entry") }}/>
-                </Col>
-              </Row>
 
-              <Row>
-                <Col md={2}>
-                  <h5 className="mt-4">Exit Time</h5>
-                </Col>
-               
-                <Col md={2}>
-                  <label>Time</label>
-                  <Form.Control type="time" id="text3" value={timeTradeConddition[0].exit.time} onChange={(e) => { selectTime(e,"exit") }}/>
-                </Col>
-              </Row>
 
-              <Row>
-                <Col md={2}>
-                  <h5 className="mt-4">No Trade Time</h5>
-                </Col>
-                
-                <Col md={2}>
-                  <label>Time</label>
-                  <Form.Control type="time" id="text3" value={timeTradeConddition[0].notrade.time} onChange={(e) => { selectTime(e,"notrade") }}/>
-                </Col>
-              </Row>
-
-              <li class="StepProgress-item current is-done" style={{marginTop:"50px"}}>
+              <li class="StepProgress-item current is-done">
 
                 <div className="form-check form-check-inline">
                   <input className="form-check-input" onChange={(e) => setBuyCheck(e.target.checked)} type="checkbox" id="inlineCheckbox1" value="option1" />
@@ -1822,7 +1720,56 @@ const saveStrategy = async (e) => {
 
                   </Tab>
 
-            
+                  
+
+
+                  {/* <Tab eventKey="profile" title="Time">
+
+                   
+                    <Row>
+                      <Col md={3}>
+                        <h5 className="mt-4">Entry Time</h5>
+                      </Col>
+                      <Col md={2}>
+                        <label>Operator</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open"> Greater Than </option>
+                          <option value="hign">Less Than</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <label>Time</label>
+                        <Form.Control type="time" id="text3" />
+                      </Col>
+                    </Row>
+
+                    <br />
+
+                   
+
+                    <Row>
+                      <Col md={3}>
+                        <h5 className="mt-4">Exit Time</h5>
+                      </Col>
+                      <Col md={2}>
+                        <label>Operator</label>
+                        <Form.Select aria-label="Default select example">
+                          <option>Select</option>
+                          <option value="open"> Greater Than </option>
+                          <option value="hign">Less Than</option>
+                        </Form.Select>
+                      </Col>
+                      <Col md={2}>
+                        <label>Time</label>
+                        <Form.Control type="time" id="text3" />
+                      </Col>
+                    </Row>
+
+                  </Tab>
+                  <Tab eventKey="contact" title="Indicator">
+                    Tab content for Indicator
+                  </Tab> */}
                  </Tabs>
 
                   :""
@@ -1832,7 +1779,7 @@ const saveStrategy = async (e) => {
 
               </li>
 
-              <li class="StepProgress-item current is-done" style={{marginTop:"50px"}}>
+              <li class="StepProgress-item current is-done" style={{marginTop:"40px"}}>
 
                 <div className="form-check form-check-inline">
                   <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" />
@@ -2048,6 +1995,51 @@ const saveStrategy = async (e) => {
      </Tab>
 
   
+
+
+  {/* <Tab eventKey="profile" title="Time">
+
+    <Row>
+      <Col md={3}>
+        <h5 className="mt-4">Entry Time</h5>
+      </Col>
+      <Col md={2}>
+        <label>Operator</label>
+        <Form.Select aria-label="Default select example">
+          <option>Select</option>
+          <option value="open"> Greater Than </option>
+          <option value="hign">Less Than</option>
+        </Form.Select>
+      </Col>
+      <Col md={2}>
+        <label>Time</label>
+        <Form.Control type="time" id="text3" />
+      </Col>
+    </Row>
+
+    <br />
+    <Row>
+      <Col md={3}>
+        <h5 className="mt-4">Exit Time</h5>
+      </Col>
+      <Col md={2}>
+        <label>Operator</label>
+        <Form.Select aria-label="Default select example">
+          <option>Select</option>
+          <option value="open"> Greater Than </option>
+          <option value="hign">Less Than</option>
+        </Form.Select>
+      </Col>
+      <Col md={2}>
+        <label>Time</label>
+        <Form.Control type="time" id="text3" />
+      </Col>
+    </Row>
+
+  </Tab>
+  <Tab eventKey="contact" title="Indicator">
+    Tab content for Indicator
+  </Tab> */}
 </Tabs>
   :""
  }

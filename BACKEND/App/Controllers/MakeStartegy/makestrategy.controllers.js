@@ -9,6 +9,10 @@ const source = db.source
 const comparators = db.comparators
 const UserMakeStrategy = db.UserMakeStrategy;
 const live_price = db.live_price;
+const company_information = db.company_information;
+const user = db.user;
+
+
 
 const {Alice_Socket , getSocket}  = require('../../Helper/Alice_Socket');
 const {Socket_data}  = require('../../Helper/Socket_data');
@@ -80,9 +84,18 @@ class MakeStartegy {
      /// Make Startegy
      async AddMakeStartegy(req, res) {
      //let  suscribe =await Alice_Socket();
+     let user_panel_key =  await user.findOne().select('client_key').lean();
+    // console.log("user_panel_key",user_panel_key)
+     //   return
       let channelList ="";
        try {
-           // console.log("req",req.body) 
+       // console.log("req",req.body) 
+        console.log("req time",req.body.timeTradeConddition[0].entry.time) 
+        
+        
+
+           
+          
 
         for (const element of req.body.scriptArray) {
          //console.log(element.instrument_token);
@@ -94,7 +107,7 @@ class MakeStartegy {
          let symbol_name = element.symbol;
          let strategy_name = req.body.strategy_name;
          let segment = element.segment;
-         let strike_price = req.body.strike_price;
+         let strike_price = element.strike;
          let option_type = element.option_type;
          let expiry = element.expiry;
          let timeframe = req.body.timeframe;
@@ -110,6 +123,10 @@ class MakeStartegy {
          let target = req.body.target_stoploss.target;
          let stoploss = req.body.target_stoploss.stoploss;
          let tsl = req.body.target_stoploss.tsl;
+         let panelKey = user_panel_key.client_key;
+         let entryTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].entry.time}:00.000Z`);
+         let exitTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].exit.time}:00.000Z`);
+         let notradeTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].notrade.time}:00.000Z`);
 
        
            console.log("condition_source",condition_source)
@@ -136,7 +153,11 @@ class MakeStartegy {
             condition_source: condition_source,
             target:target,
             stoploss:stoploss,
-            tsl:tsl
+            tsl:tsl,
+            panelKey:panelKey,
+            entryTime:entryTime,
+            exitTime:exitTime,
+            notradeTime:notradeTime
            })
             .then(async (createUserMakeStrategy) => {
               console.log("3")
@@ -184,6 +205,44 @@ setInterval(async () => {
     let array =[2,5,6,4] 
     if(allStrategyResult.length > 0){
       const promises = allStrategyResult.map(val => {
+          
+        console.log("val ",val.entryTime)
+        console.log("new date ",new Date())
+
+        const currentDate = new Date();
+
+        const options = {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false, // Set to true for 12-hour format
+          timeZone: 'Asia/Kolkata', // Adjust the time zone as needed
+        };
+
+        const currentTime = currentDate.toLocaleString('en-IN', options);
+         
+        const options1 = {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false, // Set to true for 12-hour format
+          timeZone: 'UTC', // Adjust the time zone as needed
+        };
+        
+        
+        const entryTime = val.entryTime.toLocaleTimeString('en-US', options1);
+        
+        console.log('currentTime:', currentTime);
+        console.log('entryTime:', entryTime);
+
+        if( currentTime > entryTime){
+        console.log('if:', entryTime);
+         
+        }else{
+          console.log('else:', entryTime);
+        
+        }
+
         return new Promise(resolve => {
         setTimeout(async() => {
         const currentDate = new Date();
@@ -192,8 +251,8 @@ setInterval(async () => {
        //  code start runing strategy
        let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
        // console.log("collectionName -",collectionName)
-    const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-    if (ExistView.length > 0) {
+      const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+      if (ExistView.length > 0) {
 
      // console.log("exist collection if ",collectionName)
       const collection = dbTradeTools.collection(collectionName);
@@ -205,7 +264,7 @@ setInterval(async () => {
     if(val.condition_source != null){
     let condition_source = val.condition_source.split(',');
     //console.log("condition_source val ",val.condition_source)
-  //  console.log("condition_source",condition_source)
+    //  console.log("condition_source",condition_source)
     // if(condition_source.length > 0){
     //     for (const source of condition_source) {
     //           console.log("condition source ",source)
@@ -272,131 +331,22 @@ setInterval(async () => {
         }, 0);
         });
 
+
+
         });
         await Promise.all(promises);
     }
 
 
-},5000);
+},10000);
 
 
 
 
-
-
-
-// app.get("/work_startegy",async(req,res)=>{
-//     const pipeline = [
-//       {
-//       $match : {
-//         //tokensymbol:"67308",
-//         status:"0"
-//        }
-//       }
-//     ];
-  
-  
-//     const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
-//    if(allStrategyResult.length > 0){
-//     for (const val of allStrategyResult) {
-//       //console.log("startegy",val.condition)
-//       //console.log("timeframe",val.timeframe)
-//      // console.log("tokensymbol",val.tokensymbol)
-  
-//       //console.log("condition_source",val.condition_source.split(','))
-      
-//       let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
-  
-//       const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-  
-//       if (ExistView.length > 0) {
-  
-//        // console.log("exist collection if ",collectionName)
-//         const collection = dbTradeTools.collection(collectionName);
-//         const get_view_data = await collection.aggregate([{$sort :{_id:1}}]).toArray();
-  
-  
-//      // console.log("get_view_data",get_view_data)
-  
-    
-  
-//      let checkData = {}
-//       if(val.condition_source != null){
-//       let condition_source = val.condition_source.split(',');
-//      // console.log("condition_source",condition_source)
-//       if(condition_source.length > 0){
-//         for (const source of condition_source) {
-      
-//          // console.log("condition_source",source)
-  
-//           const matches = source.match(/(\w+)\((\d+)\)/);
-  
-        
-          
-          
-//           if (matches) {
-           
-//             const OFFSET_KEY = matches[2]; //
-            
-//           //  console.log("OFFSET_KEY",OFFSET_KEY)
-//           //  console.log("OFFSET_KEY",parseInt(OFFSET_KEY)+1)
-              
-//             const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY)+1)];
-  
-//            // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
-//            // console.log("matches[1]",matches[1]); // This will output: 'close(1)'
-           
-             
-//             let sourceVal
-//             if(matches[1] == "close"){
-//               sourceVal = get_view_data.map(item => item.close);
-//             }else if(matches[1] == "open"){
-//               sourceVal = get_view_data.map(item => item.open);
-//             }else if(matches[1] == "low"){
-//               sourceVal =  get_view_data.map(item => item.low);
-//             }else if(matches[1] == "high"){
-//               sourceVal = get_view_data.map(item => item.high);
-//             }
-  
-        
-            
-//              checkData[matches[1]] = sourceVal;
-         
-  
-//           } else {
-//             console.log("No match found");
-//           }
-  
-     
-  
-//         }
-//         }
-  
-//       }
-    
-    
-//      //console.log("checkData - ",checkData)
-//      //console.log("val.condition - ",val.condition)
-  
-      
-//       const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
-  
-//       const conditiostring1 ="(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
-  
-  
-//        console.log("symbol_name",val.symbol_name)
-//       abc(checkData, val.condition);
-//       }
-  
-  
-//      }
-//     }
-//     res.send("okk")
-//   })
   
   const abc = (data, conditionString,val) => {
     //console.log("data - ",data)
-    console.log("conditionString - ",conditionString)
+   // console.log("conditionString - ",conditionString)
     // (data.close[0]==246.5)||(data.low[1]==data.high[4])
     try {
       // Use eval to dynamically evaluate the condition string
@@ -405,7 +355,8 @@ setInterval(async () => {
       if (condition) {
         // Your code for when the condition is true
         console.log("Condition is true ",val._id);
-       
+        
+        tradeExcuted(val);
 
 
       } else {
@@ -420,7 +371,66 @@ setInterval(async () => {
 
 
 
+const tradeExcuted = async (val) => {
+  //console.log("broker url -",process.env.BROKER_URL)
+ // console.log("val -",val)
+   return
+  // let company_info =  await company_information.findOne().select('broker_url').lean();
+  //  console.log("broker url -",company_info.broker_url , "id -",val._id)
 
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+
+
+  // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
+
+
+
+  let type = "LE";
+  if(val.type.toUpperCase() == "SEll"){
+    type = "SE" 
+  }
+
+  let price = 0;
+
+  let strike = val.strike;
+  if(val.strike == "NaN"){
+    strike = "100"
+  }
+
+
+  let option_type = "CALL"
+  if(val.option_type.toUpperCase()){
+    option_type = "PUT"
+  }
+ 
+  let Quntity = "100"
+
+ 
+  let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Demo:demo`
+
+  return
+
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+    url: `${process.env.BROKER_URL}`,
+    headers: {
+        'Content-Type': 'text/plain'
+    },
+    data: req
+};
+
+axios.request(config)
+    .then((response) => {
+       
+      console.log("response Trade Excuted - ",response)
+
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
 
 
 
