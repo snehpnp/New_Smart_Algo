@@ -166,14 +166,8 @@ db.createView('open_position', 'mainsignals', [
             target: 1,
             stop_loss: 1,
             exit_time: 1,
-            // exit_time11: {
-            //     $dateToString: {
-            //         format: '%Y-%m-%dT%H:%M:%S.%LZ',
-            //         date: new Date(),
-            //         timezone: 'UTC',
-            //     },
-            // },
-            exit_time: {
+           
+            exit_time_test: {
                 $dateToString: {
                     format: '%Y-%m-%dT%H:%M:%S.%LZ',
                     date: {
