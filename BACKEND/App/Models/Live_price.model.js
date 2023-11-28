@@ -31,7 +31,13 @@ const LivePriceSchema = new mongoose.Schema({
         type: String,
         default: null
 
+    },
+    setSocket: {
+        type: Object,
+        default: null
+
     }
+
 },
     {
         timestamps: true,

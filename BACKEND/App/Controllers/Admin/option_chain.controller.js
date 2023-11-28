@@ -440,7 +440,8 @@ class OptionChain {
 
             final_data.forEach((data) => {
                 concatenatedArray += data + "#"
-            })
+            });
+            
 
             var concatenatedArray1 = concatenatedArray.substring(0, concatenatedArray.length - 1)
             const filter = { broker_name: "ALICE_BLUE" };

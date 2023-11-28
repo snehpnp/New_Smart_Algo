@@ -90,10 +90,6 @@ class AliceBlue {
                                 Alice_Socket();
 
 
-
-
-
-
                                 return res.redirect(redirect_uri);
 
 
