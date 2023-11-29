@@ -85,7 +85,20 @@ const userMakeStrategySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    status: {
+    panelKey : {
+        type: String,
+        required: true,
+    },
+    entryTime: {
+        type: Date,
+    },
+    exitTime: {
+        type: Date,
+    },
+    notradeTime: {
+        type: Date,
+    },
+     status: {
         type: String,
         required: true,
         trim: true,
