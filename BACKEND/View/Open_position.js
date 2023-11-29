@@ -31,19 +31,15 @@ async function Open_Position1(req, res) {
 
         const pipeline = [
             {
-                $match: {
-                    $or: [
-                        {
-                            isLpInRange1: true
-                        },
-                        {
-                            isLpInRange: 1
-                        }
-                    ]
-                }
-            },
-        ];
-        
+              $match: {
+                $or: [
+                  { isLpInRange1: true },
+                  { isLpInRange: 1 }
+                ]
+              }
+            }
+          ];
+          
         
         
 
