@@ -230,8 +230,8 @@ if (!holidays.isHoliday(currentDate) && isMarketOpen && !isMarketClosed) {
   console.log('The stock market is open!');
 setInterval(async () => {
 
-  console.log("yyyyy");
-  console.log("Today Market On");
+  // console.log("yyyyy");
+  // console.log("Today Market On");
   
    // const suscribe_token =await Alice_Socket();
     const pipeline = [
@@ -249,8 +249,8 @@ setInterval(async () => {
     
       const promises = allStrategyResult.map(val => {
           
-        console.log("val ",val.entryTime)
-        console.log("new date ",new Date())
+        // console.log("val ",val.entryTime)
+        // console.log("new date ",new Date())
 
         const currentDate = new Date();
 
@@ -277,14 +277,14 @@ setInterval(async () => {
         const exitTime = val.exitTime.toLocaleTimeString('en-US', options1);
         const notradeTime = val.notradeTime.toLocaleTimeString('en-US', options1);
         
-        console.log('currentTime:', currentTime);
-       console.log('entryTime:', entryTime);
-       console.log('exitTime:', exitTime);
-       console.log('notradeTime:', notradeTime);
+      //   console.log('currentTime:', currentTime);
+      //  console.log('entryTime:', entryTime);
+      //  console.log('exitTime:', exitTime);
+      //  console.log('notradeTime:', notradeTime);
       //  console.log('entryTime:', entryTime);
         // Entry Time less than No trade time OR Exit time
         if( currentTime > entryTime  && entryTime < exitTime && entryTime < notradeTime){
-        console.log('if:', entryTime)
+        // console.log('if:', entryTime)        
 
         return new Promise(resolve => {
         setTimeout(async() => {
@@ -365,7 +365,7 @@ setInterval(async () => {
     const conditiostring1 ="(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
 
 
-     console.log("symbol_name",val.symbol_name)
+    //  console.log("symbol_name",val.symbol_name)
     abc(checkData, val.condition,val);
       }
 
@@ -403,7 +403,7 @@ setInterval(async () => {
       // Check if the condition is true or false based on the data
       if (condition) {
         // Your code for when the condition is true
-        console.log("Condition is true ",val._id);
+        // console.log("Condition is true ",val._id);
         
         tradeExcuted(val);
 
@@ -461,7 +461,7 @@ const tradeExcuted = async (val) => {
  
   let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|Demo:demo`
 
-  console.log("req -- ",req)
+  // console.log("req -- ",req)
 
   return
 

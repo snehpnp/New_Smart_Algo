@@ -192,7 +192,7 @@ const providedTimeUTC = new Date('2023-11-27T10:00:02.596+00:00').getTimezoneOff
 // ]);
 
 
-db.createView('open_position', 'mainsignals', [
+db.createView('open_position1', 'mainsignals', [
 
     {
         $addFields: {
@@ -221,30 +221,83 @@ db.createView('open_position', 'mainsignals', [
     },
     {
         $addFields: {
-            stockInfo: { $arrayElemAt: ['$stockInfo', 0] },
-            stockInfo_lp: { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
-            stockInfo_bp1: { $toDouble: { $arrayElemAt: ['$stockInfo.bp1', 0] } },
-            stockInfo_sp1: { $toDouble: { $arrayElemAt: ['$stockInfo.sp1', 0] } },
-            stockInfo_curtime: { $arrayElemAt: ['$stockInfo.curtime', 0] },
-            isLpInRange1: {
-                $or: [
-                    {
-                        $gte: [
-                            { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
-                            '$target',
-                        ],
-                    },
-                    {
-                        $lte: [
-                            { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
-                            '$stop_loss',
-                        ],
-                    },
-                   
-                ],
+            stockInfo: {
+                $ifNull: [
+                    { $arrayElemAt: ['$stockInfo', 0] },
+                    { curtime: 0, lp: 0, bp1: 0, sp1: 0 }
+                ]
             },
+            stockInfo_lp: {
+                $ifNull: [
+                    { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
+                    0
+                ]
+            },
+            stockInfo_bp1: {
+                $ifNull: [
+                    { $toDouble: { $arrayElemAt: ['$stockInfo.bp1', 0] } },
+                    0
+                ]
+            },
+            stockInfo_sp1: {
+                $ifNull: [
+                    { $toDouble: { $arrayElemAt: ['$stockInfo.sp1', 0] } },
+                    0
+                ]
+            },
+            stockInfo_curtime: {
+                $ifNull: [
+                    { $arrayElemAt: ['$stockInfo.curtime', 0] },
+                    0
+                ]
+            },
+            isLpInRange1: {
+                $cond: {
+                    if: {
+                        $or: [
+                            {
+                                $eq: [
+                                    {
+                                        $ifNull: [
+                                            { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
+                                            0
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            {
+                                $gte: [
+                                    {
+                                        $ifNull: [
+                                            { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
+                                            0
+                                        ]
+                                    },
+                                    '$target',
+                                ],
+                            },
+                            {
+                                $lte: [
+                                    {
+                                        $ifNull: [
+                                            { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
+                                            0
+                                        ]
+                                    },
+                                    '$stop_loss',
+                                ],
+                            },
+                        ],
+                    },
+                    then: false,
+                    else: true,
+                },
+            },
+            
         },
     },
+    
     {
         $addFields: {
           exit_time_test: {
@@ -262,7 +315,6 @@ db.createView('open_position', 'mainsignals', [
             entry_type: 1,
             entry_price: 1,
             entry_qty_percent: 1,
-            exit_qty_percent: 1,
             exchange: 1,
             strategy: 1,
             segment: 1,

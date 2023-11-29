@@ -5,13 +5,13 @@ module.exports = function (app) {
 
   const db = require('./App/Models');
 
-  
+
   const services = db.services;
   const categorie = db.categorie;
   const UserMakeStrategy = db.UserMakeStrategy;
   const Alice_token = db.Alice_token;
   const option_chain_symbols = db.option_chain_symbols;
-  
+
 
   const { MongoClient } = require('mongodb');
 
@@ -23,50 +23,51 @@ module.exports = function (app) {
 
 
   const dbTradeTools = client.db('TradeTools');
- 
 
-  app.get("/pro",async (req , res)=>{
+
+  app.get("/pro", async (req, res) => {
 
     console.log("1")
     const axios = require('axios');
 
-  
 
-    let postdata = { complexty: 'regular',
-    discqty: '0',
-    exch: 'NFO',
-    pCode: 'NRML',
-    prctyp: 'MKT',
-    price: '248.15',
-    qty: 40,
-    ret: 'DAY',
-    symbol_id: '67308',
-    trading_symbol: 'NIFTY23102619700CE',
-    transtype: 'SELL',
-    trigPrice: '',
-    orderTag: 'order1',
+
+    let postdata = {
+      complexty: 'regular',
+      discqty: '0',
+      exch: 'NFO',
+      pCode: 'NRML',
+      prctyp: 'MKT',
+      price: '248.15',
+      qty: 40,
+      ret: 'DAY',
+      symbol_id: '67308',
+      trading_symbol: 'NIFTY23102619700CE',
+      transtype: 'SELL',
+      trigPrice: '',
+      orderTag: 'order1',
     }
 
     let post_demat_userid = "438760"
-    
+
     let post_access_token = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc2OTk5MTcsImlhdCI6MTY5NzYyNzU1OSwianRpIjoiMzQ0NjIyZWItNjMxOS00ZjgyLTkyOWEtNTNjZmMyN2JiZTkzIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjRkNDJiMTA3LThjY2ItNDIyZC04YzRhLWNmMzc5NDE0MmVkYSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiNGQ0MmIxMDctOGNjYi00MjJkLThjNGEtY2YzNzk0MTQyZWRhIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.jYnVofPZIWZ9n9H6MvtOa-CpGAgt0BIG3hwbKI0iLiOgdmkVGILCykxL1r54WDK09K4c44eCGk-SrWWH_MHY6-vrfegbGdzpW6cVrOEEz7SpkDyd2nsYUX3SNCL1_1lUrDqjBGso5SgGE_lLLEccjfe5Nj6Qt2NOi6r-pzxuqJPFpLx_sbFcOUM3A1BZM8yFdeaex3UZ3pUzHwhDrHOg-x1VLAW8XCiW4qAzGxsBb2znErgiZTOfff2F-MoUuNbNASh8SMJsjcFpYUuMdS6OLvIIK1rGIy7zOBqP9VbEFHVzbDbQUSCh7DIUZfRdj53TbOJbKcMKz0WEF7ohM9ITM";
 
 
     let post_access_token1 = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc3NzU3OTgsImlhdCI6MTY5NzY4OTU3OSwianRpIjoiMmQxMGRiMWEtMTA1NS00ZDkyLTllNjctYzc3OGI1ZTRkYzYzIiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjE2MjU5NTYxLWQ2MmMtNDA1Ni04MWQ2LWQ0NjM0MDAwNGQ2YyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMTYyNTk1NjEtZDYyYy00MDU2LTgxZDYtZDQ2MzQwMDA0ZDZjIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.K2gg4-8VIg73tk16DJ17Nzc1RTewJvlDbfr9dmcp2w4OOBBG2sczlBkaeSAMDDXIecALVX67DDuaVFyI05UTvG3izZ11jEbygpmhV8V3Rt6jywFE4A0OVab-1O-P3d7vEDPoUqP4EuyTj0E0J5y10oIEyES3BKJRAldOSDuHUW9LLJFoVfqUD3FtQUehe6TN8oQ_gp1RxldStKO9mDjxdZOyomNRmXz2fUBbQkqcOsOEH47UerF6_PUObaGy5RF9EMJjl01H8PiIQBKbm9t7EpsHrRUS_cVXyrQCuRjXwitCcHBKwLoyeAk6LR1triCU9RVLIrzXRtFKauHV2ajFDw";
-    
+
     // An array of request data
     const requestData = [
       {
-        data : postdata,
-        demat_userid : post_demat_userid,
-        access_token : post_access_token1,
-        name:"shk1"
+        data: postdata,
+        demat_userid: post_demat_userid,
+        access_token: post_access_token1,
+        name: "shk1"
       },
       {
-        data : postdata,
-        demat_userid : post_demat_userid,
-        access_token : post_access_token,
-        name:"shk2"
+        data: postdata,
+        demat_userid: post_demat_userid,
+        access_token: post_access_token,
+        name: "shk2"
       }
       // Add more request data objects as needed
     ];
@@ -74,7 +75,7 @@ module.exports = function (app) {
 
 
 
-    const requestPromises = requestData.map(async(item) => {
+    const requestPromises = requestData.map(async (item) => {
 
 
       let config = {
@@ -82,38 +83,38 @@ module.exports = function (app) {
         maxBodyLength: Infinity,
         url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
         headers: {
-            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
-            'Content-Type': 'application/json'
+          'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+          'Content-Type': 'application/json'
         },
         data: JSON.stringify([item.data])
-    
-    };
-    
+
+      };
+
       axios(config)
         .then(async (response) => {
-            console.log("respose",response.data)
+          console.log("respose", response.data)
         })
         .catch(async (error) => {
-          console.log("Alice Blue Error",error.response)
-          console.log("name- ",item.name)
+          console.log("Alice Blue Error", error.response)
+          console.log("name- ", item.name)
         });
-     
+
     });
-    
+
     // Send all requests concurrently using Promise.all
     Promise.all(requestPromises)
       .then(responses => {
-      // console.log("Response:", responses.data);
-       
+        // console.log("Response:", responses.data);
+
       })
       .catch(errors => {
-      console.log("errors:", errors);
-      
+        console.log("errors:", errors);
+
       });
- 
 
 
-    
+
+
     // Create an array of promises for sending requests
     // const requestPromises = requestData.map(async(data) => {
     //   const config = {
@@ -128,11 +129,11 @@ module.exports = function (app) {
     //   };
     //   const trade = await axios(config)
     //   const return_data = {res:trade ,name:data.name}
-    
+
     //   return return_data
     //  // return axios(config);
     // });
-    
+
     // // Send all requests concurrently using Promise.all
     // Promise.all(requestPromises)
     //   .then(responses => {
@@ -150,100 +151,100 @@ module.exports = function (app) {
     //     //   console.log("Error:", error);
     //     // });
     //   });
-    
 
-  res.send("doneeeee")
+
+    res.send("doneeeee")
 
 
     return
 
     const requests = [
-        
-        { demat_userid: "438760" ,access_token:"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc1MzA5NjQsImlhdCI6MTY5NzQ0NDg4MSwianRpIjoiODNhZThkMTgtMjlmZC00NWIwLWFkNzAtY2MwNjhkOTVkZGU4IiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjFmOGYxNjVlLWVlNDQtNGU3OC1hNGM0LTYwYWJlNGJhMjUzMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMWY4ZjE2NWUtZWU0NC00ZTc4LWE0YzQtNjBhYmU0YmEyNTMzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.bBVOW8AbcfthpbePNPpPf0DAR-Llk08OaXpyIqLjlOUl16Vz3LYtJqiduQKnKq8GPf3lG_Tj_gQvyD5TBeslk0gHeNFuIQ8YfQk7jJVbmT5SzPqTpIVZuAFHJQvHL8WyO0JKUWFnLOsQSDI5nPY24YV--CFLq8TjF6qcgfrTCUqvUIR7xWt6A-g0cLrTqzBcWRWd24CxMb6_7QtZ1TNJg-p7noVgwr8fWZn1Uni_eUJ5Z8chPxCaHcx9oykdeF_waDpNakgPL2AmEXB7wv-LXUeWwzx0hr86F63QFS5VSpC7TqwGk6-hhsNQo61wKs2A5gyGHnpO96d1SWio8dcdqg"},
-    
-       
-        { demat_userid: "438760" ,access_token:"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc1MzA5NjQsImlhdCI6MTY5NzQ0NDg4MSwianRpIjoiODNhZThkMTgtMjlmZC00NWIwLWFkNzAtY2MwNjhkOTVkZGU4IiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjFmOGYxNjVlLWVlNDQtNGU3OC1hNGM0LTYwYWJlNGJhMjUzMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMWY4ZjE2NWUtZWU0NC00ZTc4LWE0YzQtNjBhYmU0YmEyNTMzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.bBVOW8AbcfthpbePNPpPf0DAR-Llk08OaXpyIqLjlOUl16Vz3LYtJqiduQKnKq8GPf3lG_Tj_gQvyD5TBeslk0gHeNFuIQ8YfQk7jJVbmT5SzPqTpIVZuAFHJQvHL8WyO0JKUWFnLOsQSDI5nPY24YV--CFLq8TjF6qcgfrTCUqvUIR7xWt6A-g0cLrTqzBcWRWd24CxMb6_7QtZ1TNJg-p7noVgwr8fWZn1Uni_eUJ5Z8chPxCaHcx9oykdeF_waDpNakgPL2AmEXB7wv-LXUeWwzx0hr86F63QFS5VSpC7TqwGk6-hhsNQo61wKs2A5gyGHnpO96d1SWio8dcdqg"},
+
+      { demat_userid: "438760", access_token: "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc1MzA5NjQsImlhdCI6MTY5NzQ0NDg4MSwianRpIjoiODNhZThkMTgtMjlmZC00NWIwLWFkNzAtY2MwNjhkOTVkZGU4IiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjFmOGYxNjVlLWVlNDQtNGU3OC1hNGM0LTYwYWJlNGJhMjUzMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMWY4ZjE2NWUtZWU0NC00ZTc4LWE0YzQtNjBhYmU0YmEyNTMzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.bBVOW8AbcfthpbePNPpPf0DAR-Llk08OaXpyIqLjlOUl16Vz3LYtJqiduQKnKq8GPf3lG_Tj_gQvyD5TBeslk0gHeNFuIQ8YfQk7jJVbmT5SzPqTpIVZuAFHJQvHL8WyO0JKUWFnLOsQSDI5nPY24YV--CFLq8TjF6qcgfrTCUqvUIR7xWt6A-g0cLrTqzBcWRWd24CxMb6_7QtZ1TNJg-p7noVgwr8fWZn1Uni_eUJ5Z8chPxCaHcx9oykdeF_waDpNakgPL2AmEXB7wv-LXUeWwzx0hr86F63QFS5VSpC7TqwGk6-hhsNQo61wKs2A5gyGHnpO96d1SWio8dcdqg" },
 
 
-        { demat_userid: "438760" ,access_token:"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc1MzA5NjQsImlhdCI6MTY5NzQ0NDg4MSwianRpIjoiODNhZThkMTgtMjlmZC00NWIwLWFkNzAtY2MwNjhkOTVkZGU4IiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjFmOGYxNjVlLWVlNDQtNGU3OC1hNGM0LTYwYWJlNGJhMjUzMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMWY4ZjE2NWUtZWU0NC00ZTc4LWE0YzQtNjBhYmU0YmEyNTMzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.bBVOW8AbcfthpbePNPpPf0DAR-Llk08OaXpyIqLjlOUl16Vz3LYtJqiduQKnKq8GPf3lG_Tj_gQvyD5TBeslk0gHeNFuIQ8YfQk7jJVbmT5SzPqTpIVZuAFHJQvHL8WyO0JKUWFnLOsQSDI5nPY24YV--CFLq8TjF6qcgfrTCUqvUIR7xWt6A-g0cLrTqzBcWRWd24CxMb6_7QtZ1TNJg-p7noVgwr8fWZn1Uni_eUJ5Z8chPxCaHcx9oykdeF_waDpNakgPL2AmEXB7wv-LXUeWwzx0hr86F63QFS5VSpC7TqwGk6-hhsNQo61wKs2A5gyGHnpO96d1SWio8dcdqg"},
-    
-       
-        { demat_userid: "438760" ,access_token:"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc1MzA5NjQsImlhdCI6MTY5NzQ0NDg4MSwianRpIjoiODNhZThkMTgtMjlmZC00NWIwLWFkNzAtY2MwNjhkOTVkZGU4IiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjFmOGYxNjVlLWVlNDQtNGU3OC1hNGM0LTYwYWJlNGJhMjUzMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMWY4ZjE2NWUtZWU0NC00ZTc4LWE0YzQtNjBhYmU0YmEyNTMzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.bBVOW8AbcfthpbePNPpPf0DAR-Llk08OaXpyIqLjlOUl16Vz3LYtJqiduQKnKq8GPf3lG_Tj_gQvyD5TBeslk0gHeNFuIQ8YfQk7jJVbmT5SzPqTpIVZuAFHJQvHL8WyO0JKUWFnLOsQSDI5nPY24YV--CFLq8TjF6qcgfrTCUqvUIR7xWt6A-g0cLrTqzBcWRWd24CxMb6_7QtZ1TNJg-p7noVgwr8fWZn1Uni_eUJ5Z8chPxCaHcx9oykdeF_waDpNakgPL2AmEXB7wv-LXUeWwzx0hr86F63QFS5VSpC7TqwGk6-hhsNQo61wKs2A5gyGHnpO96d1SWio8dcdqg"},
+      { demat_userid: "438760", access_token: "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc1MzA5NjQsImlhdCI6MTY5NzQ0NDg4MSwianRpIjoiODNhZThkMTgtMjlmZC00NWIwLWFkNzAtY2MwNjhkOTVkZGU4IiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjFmOGYxNjVlLWVlNDQtNGU3OC1hNGM0LTYwYWJlNGJhMjUzMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMWY4ZjE2NWUtZWU0NC00ZTc4LWE0YzQtNjBhYmU0YmEyNTMzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.bBVOW8AbcfthpbePNPpPf0DAR-Llk08OaXpyIqLjlOUl16Vz3LYtJqiduQKnKq8GPf3lG_Tj_gQvyD5TBeslk0gHeNFuIQ8YfQk7jJVbmT5SzPqTpIVZuAFHJQvHL8WyO0JKUWFnLOsQSDI5nPY24YV--CFLq8TjF6qcgfrTCUqvUIR7xWt6A-g0cLrTqzBcWRWd24CxMb6_7QtZ1TNJg-p7noVgwr8fWZn1Uni_eUJ5Z8chPxCaHcx9oykdeF_waDpNakgPL2AmEXB7wv-LXUeWwzx0hr86F63QFS5VSpC7TqwGk6-hhsNQo61wKs2A5gyGHnpO96d1SWio8dcdqg" },
 
 
-        
-    
-        // Add more requests as needed
+      { demat_userid: "438760", access_token: "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc1MzA5NjQsImlhdCI6MTY5NzQ0NDg4MSwianRpIjoiODNhZThkMTgtMjlmZC00NWIwLWFkNzAtY2MwNjhkOTVkZGU4IiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjFmOGYxNjVlLWVlNDQtNGU3OC1hNGM0LTYwYWJlNGJhMjUzMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMWY4ZjE2NWUtZWU0NC00ZTc4LWE0YzQtNjBhYmU0YmEyNTMzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.bBVOW8AbcfthpbePNPpPf0DAR-Llk08OaXpyIqLjlOUl16Vz3LYtJqiduQKnKq8GPf3lG_Tj_gQvyD5TBeslk0gHeNFuIQ8YfQk7jJVbmT5SzPqTpIVZuAFHJQvHL8WyO0JKUWFnLOsQSDI5nPY24YV--CFLq8TjF6qcgfrTCUqvUIR7xWt6A-g0cLrTqzBcWRWd24CxMb6_7QtZ1TNJg-p7noVgwr8fWZn1Uni_eUJ5Z8chPxCaHcx9oykdeF_waDpNakgPL2AmEXB7wv-LXUeWwzx0hr86F63QFS5VSpC7TqwGk6-hhsNQo61wKs2A5gyGHnpO96d1SWio8dcdqg" },
+
+
+      { demat_userid: "438760", access_token: "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyam9lOFVScGxZU3FTcDB3RDNVemVBQkgxYkpmOE4wSDRDMGVVSWhXUVAwIn0.eyJleHAiOjE2OTc1MzA5NjQsImlhdCI6MTY5NzQ0NDg4MSwianRpIjoiODNhZThkMTgtMjlmZC00NWIwLWFkNzAtY2MwNjhkOTVkZGU4IiwiaXNzIjoiaHR0cHM6Ly9hYjEuYW1vZ2EudGVjaC9hbXNzby9yZWFsbXMvQWxpY2VCbHVlIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImM5NzMzYTdlLTZjMTMtNDk2YS1iZThkLTliMjc4MGRhMTY5OSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImFsaWNlLWtiIiwic2Vzc2lvbl9zdGF0ZSI6IjFmOGYxNjVlLWVlNDQtNGU3OC1hNGM0LTYwYWJlNGJhMjUzMyIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiaHR0cDovL2xvY2FsaG9zdDozMDAyIiwiaHR0cDovL2xvY2FsaG9zdDo1MDUwIiwiaHR0cDovL2xvY2FsaG9zdDo5OTQzIiwiaHR0cDovL2xvY2FsaG9zdDo5MDAwIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtYWxpY2VibHVla2IiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFsaWNlLWtiIjp7InJvbGVzIjpbIkdVRVNUX1VTRVIiLCJBQ1RJVkVfVVNFUiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiMWY4ZjE2NWUtZWU0NC00ZTc4LWE0YzQtNjBhYmU0YmEyNTMzIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVjYyI6IjQzODc2MCIsImNsaWVudFJvbGUiOlsiR1VFU1RfVVNFUiIsIkFDVElWRV9VU0VSIl0sIm5hbWUiOiJTSEFLSVIgSFVTU0FJTiIsIm1vYmlsZSI6Ijc5OTkyOTcyNzUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiI0Mzg3NjAiLCJnaXZlbl9uYW1lIjoiU0hBS0lSIiwiZmFtaWx5X25hbWUiOiJIVVNTQUlOIiwiZW1haWwiOiJzaGFraXJraGFuMTIzODJAZ21haWwuY29tIn0.bBVOW8AbcfthpbePNPpPf0DAR-Llk08OaXpyIqLjlOUl16Vz3LYtJqiduQKnKq8GPf3lG_Tj_gQvyD5TBeslk0gHeNFuIQ8YfQk7jJVbmT5SzPqTpIVZuAFHJQvHL8WyO0JKUWFnLOsQSDI5nPY24YV--CFLq8TjF6qcgfrTCUqvUIR7xWt6A-g0cLrTqzBcWRWd24CxMb6_7QtZ1TNJg-p7noVgwr8fWZn1Uni_eUJ5Z8chPxCaHcx9oykdeF_waDpNakgPL2AmEXB7wv-LXUeWwzx0hr86F63QFS5VSpC7TqwGk6-hhsNQo61wKs2A5gyGHnpO96d1SWio8dcdqg" },
+
+
+
+
+      // Add more requests as needed
     ];
-    
+
     // Function to make an Axios request for a single item
     function makeRequest(item) {
       console.log("2")
-      
-        // return axios.get(`https://www.nseindia.com/api/holiday-master?type=${item.key}`) // Replace with your API URL
-        //     .then(response => {
-        //         return `Request for ${item.key} completed: ${response.data}`;
-        //     })
-        //     .catch(error => {
-        //         return `Request for ${item.key} failed: ${error.message}`;
-        //     });
 
-      let  data = {
-          complexty: 'regular',
-          discqty: '0',
-          exch: 'NFO',
-          pCode: 'NRML',
-          prctyp: 'MKT',
-          price: '248.15',
-          qty: 4,
-          ret: 'DAY',
-          symbol_id: '67308',
-          trading_symbol: 'NIFTY23102619700CE',
-          transtype: 'SELL',
-          trigPrice: '',
-          orderTag: 'order1'
-        }
+      // return axios.get(`https://www.nseindia.com/api/holiday-master?type=${item.key}`) // Replace with your API URL
+      //     .then(response => {
+      //         return `Request for ${item.key} completed: ${response.data}`;
+      //     })
+      //     .catch(error => {
+      //         return `Request for ${item.key} failed: ${error.message}`;
+      //     });
 
-        const axios = require('axios');
+      let data = {
+        complexty: 'regular',
+        discqty: '0',
+        exch: 'NFO',
+        pCode: 'NRML',
+        prctyp: 'MKT',
+        price: '248.15',
+        qty: 4,
+        ret: 'DAY',
+        symbol_id: '67308',
+        trading_symbol: 'NIFTY23102619700CE',
+        transtype: 'SELL',
+        trigPrice: '',
+        orderTag: 'order1'
+      }
 
-        let config = {
-          method: 'post',
-          maxBodyLength: Infinity,
-          url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-          headers: {
-              'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
-              'Content-Type': 'application/json'
-          },
-          data: JSON.stringify([data])
+      const axios = require('axios');
+
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
+        headers: {
+          'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify([data])
 
       };
 
-        axios(config)
-          .then(async (response) => {
+      axios(config)
+        .then(async (response) => {
           //  console.log("response",response)
 
-          })
-          .catch(async (error) => {
-            console.log("error",error)
-          });
-        
+        })
+        .catch(async (error) => {
+          console.log("error", error)
+        });
+
 
     }
-    
+
     // Execute all requests concurrently using Promise.all
     Promise.all(requests.map(item => makeRequest(item)))
-        .then(results => {
-            // All requests have completed
-            console.log('All requests completed', results);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    
+      .then(results => {
+        // All requests have completed
+        console.log('All requests completed', results);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
 
 
 
-  res.send("okk");
+
+    res.send("okk");
   });
 
 
@@ -333,7 +334,7 @@ module.exports = function (app) {
 
           // Define a function to evaluate changes
           function evaluateFunction(change) {
-        
+
             console.log('Evaluating changes:', change);
           }
 
@@ -344,12 +345,12 @@ module.exports = function (app) {
 
         createView(collectionName);
         createViewM3(collectionName);
-      //  createViewM5(collectionName);
-       // createViewM10(collectionName)
-       // createViewM15(collectionName)
-       // createViewM30(collectionName)
-       // createViewM60(collectionName)
-       // createViewM1DAY(collectionName)
+        //  createViewM5(collectionName);
+        // createViewM10(collectionName)
+        // createViewM15(collectionName)
+        // createViewM30(collectionName)
+        // createViewM60(collectionName)
+        // createViewM1DAY(collectionName)
 
       } else {
         // console.log(`Collection '${collectionName}' does not exist.`);
@@ -1127,7 +1128,7 @@ module.exports = function (app) {
           updatedAt: 1,
           'userResult.UserName': 1,
           'userResult.client_key': 1,
-          
+
 
         }
       }
@@ -1365,16 +1366,16 @@ module.exports = function (app) {
 
         const pipelineGetPrice = [
           { $sort: { _id: -1 } },
-          { $project: { lp: 1,} },
+          { $project: { lp: 1, } },
           { $limit: 1 }
 
         ];
-  
+
         const getPriceData = await getPricecollection.aggregate(pipelineGetPrice).toArray();
 
-        console.log("getPriceData - ",getPriceData[0].lp)
+        console.log("getPriceData - ", getPriceData[0].lp)
 
-        sendSignanl(lastElementTimeFrameViewData, element,getPriceData[0].lp)
+        sendSignanl(lastElementTimeFrameViewData, element, getPriceData[0].lp)
 
 
       }
@@ -1395,7 +1396,7 @@ module.exports = function (app) {
   function evaluateSingleCondition(condition, data) {
     console.log("condition", condition);
     const [variable, operator, value] = condition.split(/\s*(>|<|>=|<=|=)\s*/);
-    console.log("value", data[value]);
+    // console.log("value", data[value]);
     //const numericValue = parseFloat(value);
     const numericValue = parseFloat(data[value]);
     console.log("data[variable", data[variable]);
@@ -1418,41 +1419,41 @@ module.exports = function (app) {
 
 
 
-  function sendSignanl(lastElementTimeFrameViewData, element , price) {
-    console.log("signal sendd element",element)
+  function sendSignanl(lastElementTimeFrameViewData, element, price) {
+    console.log("signal sendd element", element)
     console.log("signal sendd")
     const dt_date = new Date().getTime();
 
     let type = "LE";
-    if(element.type = "SELL"){
+    if (element.type = "SELL") {
       type = "SE"
     }
 
     let tr_price = "0";
-    
+
 
 
     let sq_value = "0";
     let sl_value = "0";
     let tsl = "0";
-   
+
     let strike = "0";
-    if(element.strike_price != ""){
+    if (element.strike_price != "") {
       strike = element.strike_price
     }
 
     let option_type = "CALL";
-    if(element.option_type.toUpperCase() == "PE"){
+    if (element.option_type.toUpperCase() == "PE") {
       option_type = "PUT"
     }
 
     let qty_percent = "100"
-   
+
     let client_key = "SNE132023";
-    if(element.userResult.client_key != undefined){
+    if (element.userResult.client_key != undefined) {
       client_key = element.userResult.client_key;
     }
-  
+
 
     //   1679060373|IDEA#|LX|0|11|0|0|0|C|20050|CALL|28092023|sneh|10|SNE132023|demo
 
@@ -1473,15 +1474,15 @@ module.exports = function (app) {
     // 15 client_key
     // 16 demo
 
-    let request = dt_date+'|'+element.symbol_name+'|'+type+'|'+tr_price+'|'+price.toString()+'|'+sq_value+'|'+sl_value+'|'+tsl+'|'+element.segment+'|'+strike+'|'+option_type+'|'+element.expiry+'|'+element.strategy_name+'|'+qty_percent+'|'+client_key+'|demo'
+    let request = dt_date + '|' + element.symbol_name + '|' + type + '|' + tr_price + '|' + price.toString() + '|' + sq_value + '|' + sl_value + '|' + tsl + '|' + element.segment + '|' + strike + '|' + option_type + '|' + element.expiry + '|' + element.strategy_name + '|' + qty_percent + '|' + client_key + '|demo'
     console.log("request", request)
-   
+
 
     var axios = require("axios").default;
 
     var options = {
       method: 'POST',
-     // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+      // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
       url: 'http://localhost:8000/broker-signals',
       headers: {
         Accept: '*/*',
@@ -1816,381 +1817,381 @@ module.exports = function (app) {
   });
 
 
-app.get("/testing_condition",async(req,res)=>{
-  const math = require('mathjs');
+  app.get("/testing_condition", async (req, res) => {
+    const math = require('mathjs');
 
 
-  // const abc = (data, conditionString) => {
-  //   try {
-  //     // Use eval to dynamically evaluate the condition string
-  //     const condition = eval(conditionString);
-  
-  //     // Check if the condition is true or false based on the data
-  //     if (condition) {
-  //       // Your code for when the condition is true
-  //       console.log("Condition is true");
-  //     } else {
-  //       // Your code for when the condition is false
-  //       console.log("Condition is false");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error in evaluating the condition:", error);
-  //   }
-  // };
-  
-  // // Example usage:
-  // const data1 = {
-  //   close: [/* data for close(0) */],
-  //   low: [/* data for low(1) */],
-  //   high: [/* data for high(2) */],
-  // };
-  
-  // const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
-  
-  // abc(data1, conditionString);
+    // const abc = (data, conditionString) => {
+    //   try {
+    //     // Use eval to dynamically evaluate the condition string
+    //     const condition = eval(conditionString);
 
-  // res.send("okk")
-  //return
+    //     // Check if the condition is true or false based on the data
+    //     if (condition) {
+    //       // Your code for when the condition is true
+    //       console.log("Condition is true");
+    //     } else {
+    //       // Your code for when the condition is false
+    //       console.log("Condition is false");
+    //     }
+    //   } catch (error) {
+    //     console.error("Error in evaluating the condition:", error);
+    //   }
+    // };
 
+    // // Example usage:
+    // const data1 = {
+    //   close: [/* data for close(0) */],
+    //   low: [/* data for low(1) */],
+    //   high: [/* data for high(2) */],
+    // };
 
-  // let data = {
-  //   a: 8,
-  //   b: 7,
-  //   c: 9,
-  // };
+    // const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
 
-  // // Define the condition as a function
-  // const condition = (data) => ((data.a >= data.b || data.c < data.b) && data.b > data.a)||data.b < data.a;
-  
-  
-  // let result = condition(data);
+    // abc(data1, conditionString);
 
-  // let data = {
-  //   close(0): 480.5,
-  //   low(1): 480.5,
-  //   low(2): 480.5,
-  //   close(1): 480.5,
-  //   high(2): 480.5
-  // };
+    // res.send("okk")
+    //return
 
-
-
- // return
-
-
-
-  
-
-  const pipeline = [
-    {
-    $match : {
-      tokensymbol:"3045"
-     }
-    }
-  ];
-
-
-  const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
- if(allStrategyResult.length > 0){
-  for (const val of allStrategyResult) {
-    console.log("startegy",val.condition)
-    console.log("timeframe",val.timeframe)
-    console.log("tokensymbol",val.tokensymbol)
-
-    //console.log("condition_source",val.condition_source.split(','))
-    
-    let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
-
-    const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-
-    if (ExistView.length > 0) {
-
-     // console.log("exist collection if ",collectionName)
-      const collection = dbTradeTools.collection(collectionName);
-      const get_view_data = await collection.aggregate([{$sort :{_id:1}}]).toArray();
-
-
-    console.log("get_view_data",get_view_data)
-
-  
-
-   let checkData = {}
-    if(val.condition_source != null){
-    let condition_source = val.condition_source.split(',');
-    console.log("condition_source",condition_source)
-    if(condition_source.length > 0){
-      for (const source of condition_source) {
-    
-        console.log("condition_source",source)
-
-        const matches = source.match(/(\w+)\((\d+)\)/);
-
-      
-        
-        
-        if (matches) {
-         
-          const OFFSET_KEY = matches[2]; //
-          
-          console.log("OFFSET_KEY",OFFSET_KEY)
-          console.log("OFFSET_KEY",parseInt(OFFSET_KEY)+1)
-            
-          const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY)+1)];
-
-         // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
-         // console.log("matches[1]",matches[1]); // This will output: 'close(1)'
-         
-           
-          let sourceVal
-          if(matches[1] == "close"){
-            sourceVal = get_view_data.map(item => item.close);
-          }else if(matches[1] == "open"){
-            sourceVal = get_view_data.map(item => item.open);
-          }else if(matches[1] == "low"){
-            sourceVal =  get_view_data.map(item => item.low);
-          }else if(matches[1] == "high"){
-            sourceVal = get_view_data.map(item => item.high);
-          }
-
-          const openValues = get_view_data.map(item => item.open);
-       
-          // console.log("source" ,matches[1])
-        //   console.log("source value" ,sourceVal)
-           checkData[matches[1]] = sourceVal;
-       
-
-        } else {
-          console.log("No match found");
-        }
-
-     //  const key = sourceVal.replace(/[^a-zA-Z0-9]/g, ''); // Extract the key from the string
-
-      }
-      }
-
-    }
-   // console.log("checkData - ",checkData)
-   // console.log("val.condition - ",val.condition)
-
-
-   
 
     // let data = {
     //   a: 8,
     //   b: 7,
     //   c: 9,
     // };
-  
-    // Define the condition as a function
+
+    // // Define the condition as a function
+    // const condition = (data) => ((data.a >= data.b || data.c < data.b) && data.b > data.a)||data.b < data.a;
 
 
-    const abc = (data, conditionString) => {
-      console.log("data - ",data)
-      console.log("conditionString - ",conditionString)
-      try {
-        // Use eval to dynamically evaluate the condition string
-        const condition = eval(conditionString);
-    
-        // Check if the condition is true or false based on the data
-        if (condition) {
-          // Your code for when the condition is true
-          console.log("Condition is true");
-        } else {
-          // Your code for when the condition is false
-          console.log("Condition is false");
+    // let result = condition(data);
+
+    // let data = {
+    //   close(0): 480.5,
+    //   low(1): 480.5,
+    //   low(2): 480.5,
+    //   close(1): 480.5,
+    //   high(2): 480.5
+    // };
+
+
+
+    // return
+
+
+
+
+
+    const pipeline = [
+      {
+        $match: {
+          tokensymbol: "3045"
         }
-      } catch (error) {
-        console.error("Error in evaluating the condition:", error);
       }
-    };
-    
-    // Example usage:
-    const data1 = {
-      close: [/* data for close(0) */],
-      low: [/* data for low(1) */],
-      high: [/* data for high(2) */],
-      open: [/* data for high(2) */],
-    };
-    
-    const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
-
-    const conditiostring1 ="(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
+    ];
 
 
-    
-    abc(checkData, conditiostring1);
-  
-  
+    const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
+    if (allStrategyResult.length > 0) {
+      for (const val of allStrategyResult) {
+        console.log("startegy", val.condition)
+        console.log("timeframe", val.timeframe)
+        console.log("tokensymbol", val.tokensymbol)
+
+        //console.log("condition_source",val.condition_source.split(','))
+
+        let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
+
+        const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+
+        if (ExistView.length > 0) {
+
+          // console.log("exist collection if ",collectionName)
+          const collection = dbTradeTools.collection(collectionName);
+          const get_view_data = await collection.aggregate([{ $sort: { _id: 1 } }]).toArray();
+
+
+          console.log("get_view_data", get_view_data)
+
+
+
+          let checkData = {}
+          if (val.condition_source != null) {
+            let condition_source = val.condition_source.split(',');
+            console.log("condition_source", condition_source)
+            if (condition_source.length > 0) {
+              for (const source of condition_source) {
+
+                console.log("condition_source", source)
+
+                const matches = source.match(/(\w+)\((\d+)\)/);
+
+
+
+
+                if (matches) {
+
+                  const OFFSET_KEY = matches[2]; //
+
+                  console.log("OFFSET_KEY", OFFSET_KEY)
+                  console.log("OFFSET_KEY", parseInt(OFFSET_KEY) + 1)
+
+                  const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY) + 1)];
+
+                  // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
+                  // console.log("matches[1]",matches[1]); // This will output: 'close(1)'
+
+
+                  let sourceVal
+                  if (matches[1] == "close") {
+                    sourceVal = get_view_data.map(item => item.close);
+                  } else if (matches[1] == "open") {
+                    sourceVal = get_view_data.map(item => item.open);
+                  } else if (matches[1] == "low") {
+                    sourceVal = get_view_data.map(item => item.low);
+                  } else if (matches[1] == "high") {
+                    sourceVal = get_view_data.map(item => item.high);
+                  }
+
+                  const openValues = get_view_data.map(item => item.open);
+
+                  // console.log("source" ,matches[1])
+                  //   console.log("source value" ,sourceVal)
+                  checkData[matches[1]] = sourceVal;
+
+
+                } else {
+                  console.log("No match found");
+                }
+
+                //  const key = sourceVal.replace(/[^a-zA-Z0-9]/g, ''); // Extract the key from the string
+
+              }
+            }
+
+          }
+          // console.log("checkData - ",checkData)
+          // console.log("val.condition - ",val.condition)
+
+
+
+
+          // let data = {
+          //   a: 8,
+          //   b: 7,
+          //   c: 9,
+          // };
+
+          // Define the condition as a function
+
+
+          const abc = (data, conditionString) => {
+            console.log("data - ", data)
+            console.log("conditionString - ", conditionString)
+            try {
+              // Use eval to dynamically evaluate the condition string
+              const condition = eval(conditionString);
+
+              // Check if the condition is true or false based on the data
+              if (condition) {
+                // Your code for when the condition is true
+                // console.log("Condition is true");
+              } else {
+                // Your code for when the condition is false
+                console.log("Condition is false");
+              }
+            } catch (error) {
+              console.error("Error in evaluating the condition:", error);
+            }
+          };
+
+          // Example usage:
+          const data1 = {
+            close: [/* data for close(0) */],
+            low: [/* data for low(1) */],
+            high: [/* data for high(2) */],
+            open: [/* data for high(2) */],
+          };
+
+          const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
+
+          const conditiostring1 = "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
+
+
+
+          abc(checkData, conditiostring1);
+
+
+          res.send("okk")
+          return
+          const condition = (checkData) => val.condition;
+
+          // Evaluate the condition with the data
+          let resultCondition = condition(checkData);
+          console.log("get_view_data", resultCondition)
+
+        }
+
+        res.send("okk done")
+        return
+        // Assuming you have some data to use for the condition evaluation
+        const data = {
+          // close: [480],
+          // low: [485],
+          // high: [685],
+        };
+
+        // let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
+
+        // const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+
+        // if (ExistView.length > 0) {
+
+        //  // console.log("exist collection if ",collectionName)
+        //   const collection = dbTradeTools.collection(collectionName);
+        //   const get_view_data = await collection.aggregate([]).toArray();
+
+        // }
+
+
+      }
+    }
     res.send("okk")
-    return
-    const condition = (checkData) => val.condition;
-    
-    // Evaluate the condition with the data
-    let resultCondition = condition(checkData);
-     console.log("get_view_data",resultCondition)
-     
-    }
 
-   res.send("okk done")
-    return
-    // Assuming you have some data to use for the condition evaluation
-    const data = {
-      // close: [480],
-      // low: [485],
-      // high: [685],
-    }; 
-    
-    // let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
-
-    // const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-
-    // if (ExistView.length > 0) {
-
-    //  // console.log("exist collection if ",collectionName)
-    //   const collection = dbTradeTools.collection(collectionName);
-    //   const get_view_data = await collection.aggregate([]).toArray();
-     
-    // }
+  });
 
 
-   }
-  }
-  res.send("okk")
-
-});
-
-
-app.get("/work_startegy",async(req,res)=>{
-  const pipeline = [
-    {
-    $match : {
-      //tokensymbol:"67308",
-      status:"0"
-     }
-    }
-  ];
+  app.get("/work_startegy", async (req, res) => {
+    const pipeline = [
+      {
+        $match: {
+          //tokensymbol:"67308",
+          status: "0"
+        }
+      }
+    ];
 
 
-  const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
- if(allStrategyResult.length > 0){
-  for (const val of allStrategyResult) {
-    //console.log("startegy",val.condition)
-    //console.log("timeframe",val.timeframe)
-   // console.log("tokensymbol",val.tokensymbol)
+    const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
+    if (allStrategyResult.length > 0) {
+      for (const val of allStrategyResult) {
+        //console.log("startegy",val.condition)
+        //console.log("timeframe",val.timeframe)
+        // console.log("tokensymbol",val.tokensymbol)
 
-    //console.log("condition_source",val.condition_source.split(','))
-    
-    let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
-    const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-    if (ExistView.length > 0) {
+        //console.log("condition_source",val.condition_source.split(','))
 
-     // console.log("exist collection if ",collectionName)
-      const collection = dbTradeTools.collection(collectionName);
-      const get_view_data = await collection.aggregate([{$sort :{_id:1}}]).toArray();
+        let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
+        const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+        if (ExistView.length > 0) {
+
+          // console.log("exist collection if ",collectionName)
+          const collection = dbTradeTools.collection(collectionName);
+          const get_view_data = await collection.aggregate([{ $sort: { _id: 1 } }]).toArray();
 
 
-   // console.log("get_view_data",get_view_data)
+          // console.log("get_view_data",get_view_data)
 
-  
 
-   let checkData = {}
-    if(val.condition_source != null){
-    let condition_source = val.condition_source.split(',');
-   // console.log("condition_source",condition_source)
-    if(condition_source.length > 0){
-      for (const source of condition_source) {
-    
-       // console.log("condition_source",source)
 
-        const matches = source.match(/(\w+)\((\d+)\)/);
+          let checkData = {}
+          if (val.condition_source != null) {
+            let condition_source = val.condition_source.split(',');
+            // console.log("condition_source",condition_source)
+            if (condition_source.length > 0) {
+              for (const source of condition_source) {
 
-      
-        
-        
-        if (matches) {
-         
-          const OFFSET_KEY = matches[2]; //
-          
-        //  console.log("OFFSET_KEY",OFFSET_KEY)
-        //  console.log("OFFSET_KEY",parseInt(OFFSET_KEY)+1)
-            
-          const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY)+1)];
+                // console.log("condition_source",source)
 
-         // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
-         // console.log("matches[1]",matches[1]); // This will output: 'close(1)'
-         
-           
-          let sourceVal
-          if(matches[1] == "close"){
-            sourceVal = get_view_data.map(item => item.close);
-          }else if(matches[1] == "open"){
-            sourceVal = get_view_data.map(item => item.open);
-          }else if(matches[1] == "low"){
-            sourceVal =  get_view_data.map(item => item.low);
-          }else if(matches[1] == "high"){
-            sourceVal = get_view_data.map(item => item.high);
+                const matches = source.match(/(\w+)\((\d+)\)/);
+
+
+
+
+                if (matches) {
+
+                  const OFFSET_KEY = matches[2]; //
+
+                  //  console.log("OFFSET_KEY",OFFSET_KEY)
+                  //  console.log("OFFSET_KEY",parseInt(OFFSET_KEY)+1)
+
+                  const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY) + 1)];
+
+                  // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
+                  // console.log("matches[1]",matches[1]); // This will output: 'close(1)'
+
+
+                  let sourceVal
+                  if (matches[1] == "close") {
+                    sourceVal = get_view_data.map(item => item.close);
+                  } else if (matches[1] == "open") {
+                    sourceVal = get_view_data.map(item => item.open);
+                  } else if (matches[1] == "low") {
+                    sourceVal = get_view_data.map(item => item.low);
+                  } else if (matches[1] == "high") {
+                    sourceVal = get_view_data.map(item => item.high);
+                  }
+
+
+
+                  checkData[matches[1]] = sourceVal;
+
+
+                } else {
+                  console.log("No match found");
+                }
+
+
+
+              }
+            }
+
           }
 
-      
-          
-           checkData[matches[1]] = sourceVal;
-       
 
-        } else {
-          console.log("No match found");
+          //console.log("checkData - ",checkData)
+          //console.log("val.condition - ",val.condition)
+
+
+          const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
+
+          const conditiostring1 = "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
+
+
+          //  console.log("symbol_name",val.symbol_name)
+          abc(checkData, val.condition);
         }
 
-   
 
       }
+    }
+    res.send("okk")
+  })
+
+  const abc = (data, conditionString) => {
+    console.log("data - ", data)
+    console.log("conditionString - ", conditionString)
+    try {
+      // Use eval to dynamically evaluate the condition string
+      const condition = eval(conditionString);
+
+      // Check if the condition is true or false based on the data
+      if (condition) {
+        // Your code for when the condition is true
+        // console.log("Condition is true");
+      } else {
+        // Your code for when the condition is false
+        console.log("Condition is false");
       }
-
+    } catch (error) {
+      console.error("Error in evaluating the condition:", error);
     }
-  
-  
-   //console.log("checkData - ",checkData)
-   //console.log("val.condition - ",val.condition)
-
-    
-    const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
-
-    const conditiostring1 ="(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
-
-
-     console.log("symbol_name",val.symbol_name)
-    abc(checkData, val.condition);
-    }
-
-
-   }
-  }
-  res.send("okk")
-})
-
-const abc = (data, conditionString) => {
-  console.log("data - ",data)
-  console.log("conditionString - ",conditionString)
-  try {
-    // Use eval to dynamically evaluate the condition string
-    const condition = eval(conditionString);
-
-    // Check if the condition is true or false based on the data
-    if (condition) {
-      // Your code for when the condition is true
-      console.log("Condition is true");
-    } else {
-      // Your code for when the condition is false
-      console.log("Condition is false");
-    }
-  } catch (error) {
-    console.error("Error in evaluating the condition:", error);
-  }
-};
+  };
 
   app.post("/make_startegy", async function (req, res) {
-     
-     return
-     
+
+    return
+
     let user_id = req.body.user_id;
     let tokensymbol = req.body.tokensymbol;
     let symbol_name = req.body.symbol_name;
@@ -2234,7 +2235,7 @@ const abc = (data, conditionString) => {
         type: type,
         offset: offset,
         condition_source: condition_source,
-       })
+      })
         .then(async (createUserMakeStrategy) => {
           console.log("3")
           res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
@@ -2300,12 +2301,12 @@ const abc = (data, conditionString) => {
         }).catch((err) => {
           console.log("4")
           console.error('Error creating and saving user:', err);
-          res.send({ status: false, msg: err.message})
+          res.send({ status: false, msg: err.message })
 
         });
 
     } catch (error) {
-      console.log("5",error)
+      console.log("5", error)
     }
 
     return
@@ -2453,7 +2454,7 @@ const abc = (data, conditionString) => {
 
   //Add stoch Api.....
   app.get('/addstock', async function (req, res) {
-   
+
     const pipeline = [
 
       {
@@ -2465,7 +2466,7 @@ const abc = (data, conditionString) => {
     ];
     const categoryResult = await categorie.aggregate(pipeline);
     //const matchingElements = categoryResult.filter(item => item.segment === "FO");
-    
+
     // console.log('Matching elements:', matchingElements[0]._id);
     // res.send("done");
     // return
@@ -2478,326 +2479,326 @@ const abc = (data, conditionString) => {
     axios(config)
       .then(function (response) {
 
-          // res.send(response.data);
-          // console.log(response.data);
-          // Using a loop to extract 'name' and 'instrumenttype'
-
-
-          var unique_key = []
-          let count = 0
-          response.data.forEach((item) => {
+        // res.send(response.data);
+        // console.log(response.data);
+        // Using a loop to extract 'name' and 'instrumenttype'
+
+
+        var unique_key = []
+        let count = 0
+        response.data.forEach((item) => {
 
-            //   function findRepeatedElements(array) {
-            //     const frequencyMap = {};
-            //     const repeatedElements = [];
+          //   function findRepeatedElements(array) {
+          //     const frequencyMap = {};
+          //     const repeatedElements = [];
 
-            //     array.forEach(element => {
-            //       if (frequencyMap[element.instrumenttype]) {
-            //         frequencyMap[element.instrumenttype]++;
-            //         if (frequencyMap[element.instrumenttype] === 2) {
-            //           repeatedElements.push(element.instrumenttype);
-            //         }
-            //       } else {
-            //         frequencyMap[element.instrumenttype] = 1;
-            //       }
-            //     });
+          //     array.forEach(element => {
+          //       if (frequencyMap[element.instrumenttype]) {
+          //         frequencyMap[element.instrumenttype]++;
+          //         if (frequencyMap[element.instrumenttype] === 2) {
+          //           repeatedElements.push(element.instrumenttype);
+          //         }
+          //       } else {
+          //         frequencyMap[element.instrumenttype] = 1;
+          //       }
+          //     });
 
-            //     return repeatedElements;
-            //   }
+          //     return repeatedElements;
+          //   }
 
-            //   const inputArray = response.data;
-            //   const repeatedElements = findRepeatedElements(inputArray);
+          //   const inputArray = response.data;
+          //   const repeatedElements = findRepeatedElements(inputArray);
 
-            //   console.log('Repeated elements:', repeatedElements);
-            //   res.send(repeatedElements)
-            // return
+          //   console.log('Repeated elements:', repeatedElements);
+          //   res.send(repeatedElements)
+          // return
 
 
-            //  if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
+          //  if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
 
-
-            //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
-            //     count++
-            //     console.log('item - CO ' + count + ' ', item)
-            //     const matchingElements = categoryResult.filter(item => item.segment === "CO");
-            //     const category_id = matchingElements[0]._id
-
+
+          //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+          //     count++
+          //     console.log('item - CO ' + count + ' ', item)
+          //     const matchingElements = categoryResult.filter(item => item.segment === "CO");
+          //     const category_id = matchingElements[0]._id
+
 
-            //     services.create({
-            //       name: item.name,
-            //       instrument_token: item.token,
-            //       zebu_token: item.symbol,
-            //       kotak_token: "",
-            //       instrumenttype: item.instrumenttype,
-            //       exch_seg: item.exch_seg,
-            //       lotsize: item.lotsize,
-            //       categorie_id: category_id,
-            //       unique_column: item.name + '_' + category_id
-            //     })
-            //       .then((createdServices) => {
-            //         console.log('User created and saved:', createdServices._id)
-            //       })
-            //       .catch((err) => {
-            //         try {
-            //           console.error('Error creating and saving user:', err);
-            //         } catch (e) {
-            //           console.log("duplicate key")
-            //         }
+          //     services.create({
+          //       name: item.name,
+          //       instrument_token: item.token,
+          //       zebu_token: item.symbol,
+          //       kotak_token: "",
+          //       instrumenttype: item.instrumenttype,
+          //       exch_seg: item.exch_seg,
+          //       lotsize: item.lotsize,
+          //       categorie_id: category_id,
+          //       unique_column: item.name + '_' + category_id
+          //     })
+          //       .then((createdServices) => {
+          //         console.log('User created and saved:', createdServices._id)
+          //       })
+          //       .catch((err) => {
+          //         try {
+          //           console.error('Error creating and saving user:', err);
+          //         } catch (e) {
+          //           console.log("duplicate key")
+          //         }
 
-            //       });
+          //       });
 
 
-            //   }
+          //   }
 
 
 
-         //   if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
-            //  unique_key.push(`${item.name}-${item.instrumenttype}`);
-
-
-              // if (item.symbol.slice(-3) == '-EQ') {
-              //   count++
-
-              //   const matchingElements = categoryResult.filter(item => item.segment === "C");
-              //   const category_id = matchingElements[0]._id
+          //   if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+          //  unique_key.push(`${item.name}-${item.instrumenttype}`);
+
+
+          // if (item.symbol.slice(-3) == '-EQ') {
+          //   count++
+
+          //   const matchingElements = categoryResult.filter(item => item.segment === "C");
+          //   const category_id = matchingElements[0]._id
 
 
-              //   services.create({
-              //     name: item.name + '#',
-              //     instrument_token: item.token,
-              //     zebu_token: item.symbol,
-              //     kotak_token: "",
-              //     instrumenttype: item.instrumenttype,
-              //     exch_seg: item.exch_seg,
-              //     lotsize: item.lotsize,
-              //     categorie_id: category_id,
-              //     unique_column: item.name + '#_' + category_id
-              //   })
-              //     .then((createdServices) => {
-              //       console.log('User created and saved:', createdServices._id)
-              //     })
-              //     .catch((err) => {
-              //       try {
-              //         console.error('Error creating and saving user:', err);
-              //       } catch (e) {
-              //         console.log("duplicate key")
-              //       }
+          //   services.create({
+          //     name: item.name + '#',
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '#_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
 
-              //     });
+          //     });
 
 
-              // }
-
-
-
-
-              // if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
-              //   count++
-              //   console.log('item - F ' + count + ' ', item)
-              //   const matchingElements = categoryResult.filter(item => item.segment === "F");
-              //   const category_id = matchingElements[0]._id
+          // }
+
+
+
+
+          // if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
+          //   count++
+          //   console.log('item - F ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "F");
+          //   const category_id = matchingElements[0]._id
 
 
 
-              //   services.create({
-              //     name: item.name,
-              //     instrument_token: item.token,
-              //     zebu_token: item.symbol,
-              //     kotak_token: "",
-              //     instrumenttype: item.instrumenttype,
-              //     exch_seg: item.exch_seg,
-              //     lotsize: item.lotsize,
-              //     categorie_id: category_id,
-              //     unique_column: item.name + '_' + category_id
-              //   })
-              //     .then((createdServices) => {
-              //       console.log('User created and saved:', createdServices._id)
-              //     })
-              //     .catch((err) => {
-              //       try {
-              //         console.error('Error creating and saving user:', err);
-              //       } catch (e) {
-              //         console.log("duplicate key")
-              //       }
-
-              //     });
-
-
-
-
-              // }
-
-
-
-              // if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
-              //   count++
-              //   console.log('item - O ' + count + ' ', item)
-              //   const matchingElements = categoryResult.filter(item => item.segment === "O");
-              //   const category_id = matchingElements[0]._id
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
+
+          //     });
+
+
+
+
+          // }
+
+
+
+          // if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
+          //   count++
+          //   console.log('item - O ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "O");
+          //   const category_id = matchingElements[0]._id
 
-              //   services.create({
-              //     name: item.name,
-              //     instrument_token: item.token,
-              //     zebu_token: item.symbol,
-              //     kotak_token: "",
-              //     instrumenttype: item.instrumenttype,
-              //     exch_seg: item.exch_seg,
-              //     lotsize: item.lotsize,
-              //     categorie_id: category_id,
-              //     unique_column: item.name + '_' + category_id
-              //   })
-              //     .then((createdServices) => {
-              //       console.log('User created and saved:', createdServices._id)
-              //     })
-              //     .catch((err) => {
-              //       try {
-              //         console.error('Error creating and saving user:', err);
-              //       } catch (e) {
-              //         console.log("duplicate key")
-              //       }
-
-              //     });
-
-
-
-
-              // }
-
-
-              // if (item.instrumenttype == 'OPTFUT') {
-              //   count++
-              //   console.log('item - MO ' + count + ' ', item)
-              //   const matchingElements = categoryResult.filter(item => item.segment === "MO");
-              //   const category_id = matchingElements[0]._id
-
-              //   services.create({
-              //     name: item.name,
-              //     instrument_token: item.token,
-              //     zebu_token: item.symbol,
-              //     kotak_token: "",
-              //     instrumenttype: item.instrumenttype,
-              //     exch_seg: item.exch_seg,
-              //     lotsize: item.lotsize,
-              //     categorie_id: category_id,
-              //     unique_column: item.name + '_' + category_id
-              //   })
-              //     .then((createdServices) => {
-              //       console.log('User created and saved:', createdServices._id)
-              //     })
-              //     .catch((err) => {
-              //       try {
-              //         console.error('Error creating and saving user:', err);
-              //       } catch (e) {
-              //         console.log("duplicate key")
-              //       }
-
-              //     });
-
-
-
-
-              // }
-
-
-              // if (item.instrumenttype == 'FUTCOM') {
-              //   count++
-              //   console.log('item - MF ' + count + ' ', item)
-              //   const matchingElements = categoryResult.filter(item => item.segment === "MF");
-              //   const category_id = matchingElements[0]._id
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
+
+          //     });
+
+
+
+
+          // }
+
+
+          // if (item.instrumenttype == 'OPTFUT') {
+          //   count++
+          //   console.log('item - MO ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "MO");
+          //   const category_id = matchingElements[0]._id
+
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
+
+          //     });
+
+
+
+
+          // }
+
+
+          // if (item.instrumenttype == 'FUTCOM') {
+          //   count++
+          //   console.log('item - MF ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "MF");
+          //   const category_id = matchingElements[0]._id
 
-              //   services.create({
-              //     name: item.name,
-              //     instrument_token: item.token,
-              //     zebu_token: item.symbol,
-              //     kotak_token: "",
-              //     instrumenttype: item.instrumenttype,
-              //     exch_seg: item.exch_seg,
-              //     lotsize: item.lotsize,
-              //     categorie_id: category_id,
-              //     unique_column: item.name + '_' + category_id
-              //   })
-              //     .then((createdServices) => {
-              //       console.log('User created and saved:', createdServices._id)
-              //     })
-              //     .catch((err) => {
-              //       try {
-              //         console.error('Error creating and saving user:', err);
-              //       } catch (e) {
-              //         console.log("duplicate key")
-              //       }
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
 
-              //     });
-
-
-
-              // }
-
-              // if (item.instrumenttype == 'FUTCUR') {
-              //   count++
-              //   console.log('item - CF ' + count + ' ', item)
-              //   const matchingElements = categoryResult.filter(item => item.segment === "CF");
-              //   const category_id = matchingElements[0]._id
+          //     });
+
+
+
+          // }
+
+          // if (item.instrumenttype == 'FUTCUR') {
+          //   count++
+          //   console.log('item - CF ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "CF");
+          //   const category_id = matchingElements[0]._id
 
 
-              //   services.create({
-              //     name: item.name,
-              //     instrument_token: item.token,
-              //     zebu_token: item.symbol,
-              //     kotak_token: "",
-              //     instrumenttype: item.instrumenttype,
-              //     exch_seg: item.exch_seg,
-              //     lotsize: item.lotsize,
-              //     categorie_id: category_id,
-              //     unique_column: item.name + '_' + category_id
-              //   })
-              //     .then((createdServices) => {
-              //       console.log('User created and saved:', createdServices._id)
-              //     })
-              //     .catch((err) => {
-              //       try {
-              //         console.error('Error creating and saving user:', err);
-              //       } catch (e) {
-              //         console.log("duplicate key")
-              //       }
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
 
-              //     });
+          //     });
 
 
-              // }
+          // }
 
 
-              //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
-              //   count++
-              //   console.log('item - CO ' + count + ' ', item)
-              //   const matchingElements = categoryResult.filter(item => item.segment === "CO");
-              //   const category_id = matchingElements[0]._id
+          //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+          //   count++
+          //   console.log('item - CO ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "CO");
+          //   const category_id = matchingElements[0]._id
 
 
-              //   services.create({
-              //     name: item.name,
-              //     instrument_token: item.token,
-              //     zebu_token: item.symbol,
-              //     kotak_token: "",
-              //     instrumenttype: item.instrumenttype,
-              //     exch_seg: item.exch_seg,
-              //     lotsize: item.lotsize,
-              //     categorie_id: category_id,
-              //     unique_column: item.name + '_' + category_id
-              //   })
-              //     .then((createdServices) => {
-              //       console.log('User created and saved:', createdServices._id)
-              //     })
-              //     .catch((err) => {
-              //       try {
-              //         console.error('Error creating and saving user:', err);
-              //       } catch (e) {
-              //         console.log("duplicate key")
-              //       }
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
 
-              //     });
+          //     });
 
 
-              // }
+          // }
 
 
 
@@ -2808,46 +2809,46 @@ const abc = (data, conditionString) => {
 
 
 
-              // if(item.instrumenttype == 'AMXIDX'|| item.instrumenttype == 'OPTIRC' || item.instrumenttype == 'UNDIRC' || item.instrumenttype == 'FUTIRC' || item.instrumenttype == 'UNDCUR' || item.instrumenttype == 'INDEX' || item.instrumenttype == 'COMDTY' || item.instrumenttype == 'AUCSO'){
-              //       count++
-              //       console.log('item - OTHER CONTENT '+count+' ',item)
-              //       // const matchingElements = categoryResult.filter(item => item.segment === "C");
-              //       // const category_id = matchingElements[0]._id
-              //       services.create({
-              //         name:item.name,
-              //         instrument_token:item.token,
-              //         zebu_token:item.symbol,
-              //         kotak_token:"",
-              //         instrumenttype:item.instrumenttype,
-              //         exch_seg:item.exch_seg,
-              //         lotsize:item.lotsize,
-              //         categorie_id : "",
-              //         unique_column : item.name +'_'+'c9dbdc14a9fefd971c979'
-              //       })
-              //       .then((createdServices) => {
-              //         console.log('User created and saved:', createdServices._id)
-              //       })
-              //       .catch((err) => {
-              //         try{
-              //         console.error('Error creating and saving user:', err);
-              //         }catch(e){
-              //          console.log("duplicate key")
-              //         }
+          // if(item.instrumenttype == 'AMXIDX'|| item.instrumenttype == 'OPTIRC' || item.instrumenttype == 'UNDIRC' || item.instrumenttype == 'FUTIRC' || item.instrumenttype == 'UNDCUR' || item.instrumenttype == 'INDEX' || item.instrumenttype == 'COMDTY' || item.instrumenttype == 'AUCSO'){
+          //       count++
+          //       console.log('item - OTHER CONTENT '+count+' ',item)
+          //       // const matchingElements = categoryResult.filter(item => item.segment === "C");
+          //       // const category_id = matchingElements[0]._id
+          //       services.create({
+          //         name:item.name,
+          //         instrument_token:item.token,
+          //         zebu_token:item.symbol,
+          //         kotak_token:"",
+          //         instrumenttype:item.instrumenttype,
+          //         exch_seg:item.exch_seg,
+          //         lotsize:item.lotsize,
+          //         categorie_id : "",
+          //         unique_column : item.name +'_'+'c9dbdc14a9fefd971c979'
+          //       })
+          //       .then((createdServices) => {
+          //         console.log('User created and saved:', createdServices._id)
+          //       })
+          //       .catch((err) => {
+          //         try{
+          //         console.error('Error creating and saving user:', err);
+          //         }catch(e){
+          //          console.log("duplicate key")
+          //         }
 
-              //       });
+          //       });
 
 
-              //       }
+          //       }
 
-           // }
-            //   }
+          // }
+          //   }
 
-          });
+        });
 
 
-  
 
-        
+
+
 
       });
 
@@ -3086,38 +3087,38 @@ const abc = (data, conditionString) => {
 
 
 
-  app.get("/tt",async(req,res)=>{
-    
+  app.get("/tt", async (req, res) => {
+
     let price = "19300"
     let symbol = "NIFTY"
     let expiry = "26102023"
     let limit_set = 40
-   
-    
+
+
     const pipeline2 = [
       {
         $match: {
           $or: [
             {
               $and: [
-                { strike: { $lt: price} },
+                { strike: { $lt: price } },
                 { segment: "O" },
-                { symbol: symbol},
-                { expiry: expiry}
+                { symbol: symbol },
+                { expiry: expiry }
               ]
             },
             {
               $and: [
-                { strike: price},
-                { symbol: symbol},
-                { expiry: expiry}
+                { strike: price },
+                { symbol: symbol },
+                { expiry: expiry }
               ]
             },
             {
               $and: [
-                { strike: { $gt: price} },
-                { symbol: symbol},
-                { expiry: expiry}
+                { strike: { $gt: price } },
+                { symbol: symbol },
+                { expiry: expiry }
               ]
             }
           ]
@@ -3138,7 +3139,7 @@ const abc = (data, conditionString) => {
           option_type: 1,
           exch_seg: 1,
           instrument_token: 1,
-         // option_type: 1
+          // option_type: 1
         }
       }
     ]
@@ -3198,54 +3199,54 @@ const abc = (data, conditionString) => {
         $project: {
           _id: 0,
           strike: "$_id",
-        
+
         }
       }
     ]
 
 
     const result = await Alice_token.aggregate(pipeline2);
-    
+
     const resultStrike = await Alice_token.aggregate(pipeline3);
 
     const final_data = [];
-          var channelstr = ""
-          if(result.length > 0){
-          resultStrike.forEach(element => {
-              let call_token = "";
-              let put_token = "";
-              result.forEach(element1 => {
+    var channelstr = ""
+    if (result.length > 0) {
+      resultStrike.forEach(element => {
+        let call_token = "";
+        let put_token = "";
+        result.forEach(element1 => {
 
-                  if (element.strike == element1.strike) {
-                      if (element1.option_type == "CE") {
-                          call_token = element1.instrument_token;
-                      } else if (element1.option_type == "PE") {
-                          put_token = element1.instrument_token;
-                      }
+          if (element.strike == element1.strike) {
+            if (element1.option_type == "CE") {
+              call_token = element1.instrument_token;
+            } else if (element1.option_type == "PE") {
+              put_token = element1.instrument_token;
+            }
 
-                      channelstr += element1.exch_seg+"|" + element1.instrument_token + "#"
-                  }
+            channelstr += element1.exch_seg + "|" + element1.instrument_token + "#"
+          }
 
-              });
+        });
 
 
-              const push_object = {
-                  symbol: element.symbol,
-                  strike_price: element.strike,
-                  call_token: call_token,
-                  put_token: put_token,
-                  expiry: element.expiry
-              }
+        const push_object = {
+          symbol: element.symbol,
+          strike_price: element.strike,
+          call_token: call_token,
+          put_token: put_token,
+          expiry: element.expiry
+        }
 
-              final_data.push(push_object)
+        final_data.push(push_object)
 
-          });
-          var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
-          res.send({status:true, data: final_data, channellist: alltokenchannellist} )
-          }  
-       else{
-          res.send({status:false, data: [], channellist: ""} )
-     }
+      });
+      var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+      res.send({ status: true, data: final_data, channellist: alltokenchannellist })
+    }
+    else {
+      res.send({ status: false, data: [], channellist: "" })
+    }
   })
 
 
@@ -3254,61 +3255,61 @@ const abc = (data, conditionString) => {
 
 
 
-  app.get("/stockPriceupdate",async(req,res)=>{
+  app.get("/stockPriceupdate", async (req, res) => {
     var axios = require('axios');
     const Papa = require('papaparse')
-            const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
-            const { data } = await axios.get(csvFilePath);
+    const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
+    const { data } = await axios.get(csvFilePath);
 
-                Papa.parse(data, {
-                    complete: async (result) => {
-                        let sheet_Data = result.data;
-                        sheet_Data.forEach(async(element) => {
+    Papa.parse(data, {
+      complete: async (result) => {
+        let sheet_Data = result.data;
+        sheet_Data.forEach(async (element) => {
 
-                          console.log(" element ",element)
-                          let symbol = element.SYMBOL;
-                          // const get_symbol_row = await option_chain_symbols.findOne({symbol:element.SYMBOL})
+          console.log(" element ", element)
+          let symbol = element.SYMBOL;
+          // const get_symbol_row = await option_chain_symbols.findOne({symbol:element.SYMBOL})
 
-                 
-                if (symbol == "NIFTY_BANK") {
-                    symbol = "BANKNIFTY";
-                 }
-                 else if (symbol == "NIFTY_50") {
-                    symbol = "NIFTY";
-                } 
-                else if (symbol == "NIFTY_FIN_SERVICE") {
-                    symbol = "FINNIFTY";  
-                }
 
-                        
+          if (symbol == "NIFTY_BANK") {
+            symbol = "BANKNIFTY";
+          }
+          else if (symbol == "NIFTY_50") {
+            symbol = "NIFTY";
+          }
+          else if (symbol == "NIFTY_FIN_SERVICE") {
+            symbol = "FINNIFTY";
+          }
 
-                 const filter = {symbol:symbol};
-                 const update = { $set: {price:element.CPrice} };
 
-                 await option_chain_symbols.updateOne(filter, update);
-                          
-                        });
-                    },
-                    header: true,
-                });
-            
-             
-      
-              // const pipeline = [
-              //   {$sort:{
-              //     _id:-1
-              //   }},
-              //   {
-              //     $project:{
-              //       symbol:1,
-              //       price:1
-              //     }
-              //   }
-              // ]
-              
-              // const result = await option_chain_symbols.aggregate(pipeline);
 
-              res.send("okk");
+          const filter = { symbol: symbol };
+          const update = { $set: { price: element.CPrice } };
+
+          await option_chain_symbols.updateOne(filter, update);
+
+        });
+      },
+      header: true,
+    });
+
+
+
+    // const pipeline = [
+    //   {$sort:{
+    //     _id:-1
+    //   }},
+    //   {
+    //     $project:{
+    //       symbol:1,
+    //       price:1
+    //     }
+    //   }
+    // ]
+
+    // const result = await option_chain_symbols.aggregate(pipeline);
+
+    res.send("okk");
 
   })
 
@@ -3321,16 +3322,16 @@ const abc = (data, conditionString) => {
   //     { $sort: { _id: -1 } },
   //     { $project: { symbol: 1, price: 1 } },
   //   ];
-    
+
   //   const result = await option_chain_symbols.aggregate(pipeline);
-    
+
   //   const date = new Date('2023-11-03');
   //   const currentDay = date.toISOString().split('T')[0]; // 'yyyy-MM-dd' format
-    
+
   //   const date1 = new Date();
   //   date1.setDate(date1.getDate() + 1);
   //   const nextDay = date1.toISOString().split('T')[0];
-    
+
   //   const promises = result.map(async (element) => {
   //     if (element.symbol === 'NIFTY' || element.symbol === 'BANKNIFTY' || element.symbol === 'FINNIFTY') {
   //       console.log('symbol INDEX- ', element.symbol);
@@ -3350,16 +3351,16 @@ const abc = (data, conditionString) => {
   //               reject(err);
   //             } else {
   //              // console.log(quotes);
-                
+
   //                 resolve(quotes);
-               
+
   //             }
   //           }
   //         );
   //       });
   //     }
   //   });
-    
+
   //   try {
   //     const results = await Promise.all(promises);
   //     console.log("results",results)
@@ -3368,143 +3369,143 @@ const abc = (data, conditionString) => {
   //     // Handle errors here
   //     res.status(500).send('Error fetching stock data');
   //   }
-    
 
-    
+
+
   // })
 
-//   async Get_Option_All_Round_Token(req, res) {
+  //   async Get_Option_All_Round_Token(req, res) {
 
 
-//     const symbol = req.body.symbol;
-//     const expiry = req.body.expiry;
+  //     const symbol = req.body.symbol;
+  //     const expiry = req.body.expiry;
 
-//     // let price = "19300"
-//     // let symbol = "NIFTY"
-//     // let expiry = "26102023"
+  //     // let price = "19300"
+  //     // let symbol = "NIFTY"
+  //     // let expiry = "26102023"
 
-//     let limit_set = 20
+  //     let limit_set = 20
 
-//      let price = 3000
+  //      let price = 3000
 
-//     const get_symbol_price = await Get_Option_Chain_modal.findOne({symbol:symbol})
-     
-//     console.log("get_symbol_price",get_symbol_price)
-//     if(get_symbol_price != undefined){
-//         price = parseInt(get_symbol_price.price); 
-//     }
-//     console.log("price",price)
-        
-//         const pipeline2 = [
-//             {
-//                 $match: {
-//                     symbol: symbol,
-//                     segment: 'O',
-//                     expiry: expiry
-//                 }
-//             }
-//         ]
+  //     const get_symbol_price = await Get_Option_Chain_modal.findOne({symbol:symbol})
 
-//         const pipeline3 = [
-//             {
-//                 $match: {
-//                     symbol: symbol,
-//                     segment: 'O',
-//                     expiry: expiry
-//                 }
-//             },
+  //     console.log("get_symbol_price",get_symbol_price)
+  //     if(get_symbol_price != undefined){
+  //         price = parseInt(get_symbol_price.price); 
+  //     }
+  //     console.log("price",price)
 
-//             {
-//                 $addFields: {
-//                     absoluteDifference: {
-//                         $abs: {
-//                             $subtract: [{ $toInt: "$strike" }, price]
-//                         }
-//                     }
-//                 }
-//             },
+  //         const pipeline2 = [
+  //             {
+  //                 $match: {
+  //                     symbol: symbol,
+  //                     segment: 'O',
+  //                     expiry: expiry
+  //                 }
+  //             }
+  //         ]
 
-//             {
-//                 $group: {
-//                     _id: "$strike", // Group by unique values of A
-//                     minDifference: { $min: "$absoluteDifference" }, // Find the minimum absolute difference for each group
-//                     document: { $first: "$$ROOT" } // Keep the first document in each group
-//                 }
-//             },
-//             {
-//                 $sort: {
-//                     minDifference: 1 // Sort by the minimum absolute difference in ascending order
-//                 }
-//             },
-//             {
-//                 $limit: limit_set
-//             },
-//             {
-//                 $sort: {
-//                     _id: 1 // Sort by the minimum absolute difference in ascending order
-//                 }
-//             }
-//         ]
+  //         const pipeline3 = [
+  //             {
+  //                 $match: {
+  //                     symbol: symbol,
+  //                     segment: 'O',
+  //                     expiry: expiry
+  //                 }
+  //             },
 
-//         const result = await Alice_token.aggregate(pipeline2);
-//         const resultStrike = await Alice_token.aggregate(pipeline3);
+  //             {
+  //                 $addFields: {
+  //                     absoluteDifference: {
+  //                         $abs: {
+  //                             $subtract: [{ $toInt: "$strike" }, price]
+  //                         }
+  //                     }
+  //                 }
+  //             },
 
+  //             {
+  //                 $group: {
+  //                     _id: "$strike", // Group by unique values of A
+  //                     minDifference: { $min: "$absoluteDifference" }, // Find the minimum absolute difference for each group
+  //                     document: { $first: "$$ROOT" } // Keep the first document in each group
+  //                 }
+  //             },
+  //             {
+  //                 $sort: {
+  //                     minDifference: 1 // Sort by the minimum absolute difference in ascending order
+  //                 }
+  //             },
+  //             {
+  //                 $limit: limit_set
+  //             },
+  //             {
+  //                 $sort: {
+  //                     _id: 1 // Sort by the minimum absolute difference in ascending order
+  //                 }
+  //             }
+  //         ]
 
+  //         const result = await Alice_token.aggregate(pipeline2);
+  //         const resultStrike = await Alice_token.aggregate(pipeline3);
 
 
-//         const final_data = [];
-//         var channelstr = ""
-//         if (result.length > 0) {
-//             resultStrike.forEach(element => {
-
-//                 let call_token = "";
-//                 let put_token = "";
-//                 let symbol = ""
-//                 let segment = ""
-//                 result.forEach(element1 => {
-//                     if (element.document.strike == element1.strike) {
-//                         console.log("strike price", element.document.strike)
-//                         // console.log("segment", element1.strike)
 
 
-//                         if (element1.option_type == "CE") {
-//                             console.log("CALL", element1.option_type)
-//                             console.log("STRIKE", element1.strike)
-//                             symbol = element1.symbol
-//                             segment = element1.segment
-//                             call_token = element1.instrument_token;
-//                         } else if (element1.option_type == "PE") {
-//                             console.log("PUT", element1.option_type)
-//                             console.log("STRIKE", element1.strike)
-//                             symbol = element1.symbol
-//                             segment = element1.segment
-//                             put_token = element1.instrument_token;
-//                         }
-//                         channelstr += element1.exch_seg + "|" + element1.instrument_token + "#"
-//                     }
-//                 });
+  //         const final_data = [];
+  //         var channelstr = ""
+  //         if (result.length > 0) {
+  //             resultStrike.forEach(element => {
 
-//                 const push_object = {
-//                     symbol: symbol,
-//                     segment: segment,
-//                     strike_price: element.document.strike,
-//                     call_token: call_token,
-//                     put_token: put_token,
-//                     expiry: element.document.expiry
-//                 }
-//                 final_data.push(push_object)
-//             });
+  //                 let call_token = "";
+  //                 let put_token = "";
+  //                 let symbol = ""
+  //                 let segment = ""
+  //                 result.forEach(element1 => {
+  //                     if (element.document.strike == element1.strike) {
+  //                         console.log("strike price", element.document.strike)
+  //                         // console.log("segment", element1.strike)
 
 
-//             var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
-//             //  console.log("alltokenchannellist",alltokenchannellist)
-//             res.send({ status: true, data: final_data, channellist: alltokenchannellist })
-//         }
-//         else {
-//             res.send({ status: false, data: [], channellist: "" })
-//         }
-  
-// }
+  //                         if (element1.option_type == "CE") {
+  //                             console.log("CALL", element1.option_type)
+  //                             console.log("STRIKE", element1.strike)
+  //                             symbol = element1.symbol
+  //                             segment = element1.segment
+  //                             call_token = element1.instrument_token;
+  //                         } else if (element1.option_type == "PE") {
+  //                             console.log("PUT", element1.option_type)
+  //                             console.log("STRIKE", element1.strike)
+  //                             symbol = element1.symbol
+  //                             segment = element1.segment
+  //                             put_token = element1.instrument_token;
+  //                         }
+  //                         channelstr += element1.exch_seg + "|" + element1.instrument_token + "#"
+  //                     }
+  //                 });
+
+  //                 const push_object = {
+  //                     symbol: symbol,
+  //                     segment: segment,
+  //                     strike_price: element.document.strike,
+  //                     call_token: call_token,
+  //                     put_token: put_token,
+  //                     expiry: element.document.expiry
+  //                 }
+  //                 final_data.push(push_object)
+  //             });
+
+
+  //             var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+  //             //  console.log("alltokenchannellist",alltokenchannellist)
+  //             res.send({ status: true, data: final_data, channellist: alltokenchannellist })
+  //         }
+  //         else {
+  //             res.send({ status: false, data: [], channellist: "" })
+  //         }
+
+  // }
 
 
 
