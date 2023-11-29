@@ -186,9 +186,27 @@ app.post('/broker-signals', async (req, res) => {
       var qty_percent = signals.Quntity;
       var client_key = signals.Key;
       var TradeType = signals.TradeType;
+      var Target = 0;
+       if(signals.Target != undefined){
+       Target = signals.Target;
+       }
+       
+       var StopLoss= 0;
+       if(signals.StopLoss != undefined){
+          StopLoss = signals.StopLoss;
+       }
+      
+       var ExitTime = 0;
+       if(signals.ExitTime != undefined){
+          ExitTime = signals.ExitTime.replace(/-/g, ':');
+       }
+      
+      console.log("Target",Target)
+      console.log("StopLoss",StopLoss)     
+      console.log("ExitTime",ExitTime)
 
       var demo = signals.Demo;
-
+      
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
 
@@ -637,9 +655,9 @@ app.post('/broker-signals', async (req, res) => {
                 signals_id: SignalSave._id,
                 token: instrument_token,
                 lot_size: find_lot_size,
-                target:0,
-                stop_loss:0,
-                exit_time:0,
+                target:Target,
+                stop_loss:StopLoss,
+                exit_time:ExitTime,
                 exit_time1:0,
                 complete_trade:0,
                 sl_status:0

@@ -35,7 +35,7 @@ const Alice_Socket = async () => {
     var userid = broker_infor.user_id
     var userSession1 = broker_infor.access_token
    //var channelList = broker_infor.Stock_chain
-    var channelList = "NSE|14366"
+    var channelList = "NSE|940"
     console.log("channelList",channelList)
     console.log("userid",userid)
     console.log("userSession1",userSession1)
@@ -80,7 +80,7 @@ const Alice_Socket = async () => {
                         if (response.tk) {
                             
                             // --- Start Conver data view function  ----//
-                        //    ALice_View_data(response.tk, response)
+                             ALice_View_data(response.tk, response,dbTradeTools)
                            // --- End Conver data view function  ----//
                             
                            const currentDate = new Date();
