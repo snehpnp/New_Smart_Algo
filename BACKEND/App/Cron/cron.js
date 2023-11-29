@@ -48,6 +48,13 @@ cron.schedule('2 2 * * *', () => {
 });
 
 
+// // Market Holidays Shedule
+// cron.schedule('* * * * *', () => {
+//     console.log('running a task market_holiday_redis');
+//     market_holiday_redis()
+// });
+
+
 // 1. LOGOUT AND TRADING OFF ALL USER 
 const LogoutAllUsers = async () => {
 
@@ -501,6 +508,95 @@ const tokenFind = async () => {
         console.log(error);
     }
 }
+
+//market holidays cron
+const market_holiday_redis =async () => {
+    console.log("okkk run code ");
+
+    const axios = require('axios');
+
+    let config1 = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://www.nseindia.com/api/holiday-master?type=trading',
+      headers: { 
+        
+      }
+    };
+    
+  await  axios.request(config1)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
+  
+
+
+
+return
+
+
+
+
+
+   var config = {
+     method: 'get',
+     url: 'https://www.nseindia.com/api/holiday-master?type=trading',
+   };
+   
+   axios(config)
+   .then(async function (response) {
+   //  console.log("rr-----",JSON.stringify(response.data));
+    var holiday_date = [];
+     response.data.CM.forEach(element => {
+       
+    //   console.log("check date --",element.tradingDate);
+
+       const originalDateString = element.tradingDate;
+       const dateParts = originalDateString.split('-');
+       
+       // Create a new Date object with the year, month, and day
+       const dateObj = new Date(`${dateParts[1]} ${dateParts[0]}, ${dateParts[2]}`);
+       
+       // Use the Date object's methods to format the date as "YYYY-MM-DD"
+       const year = dateObj.getFullYear();
+       const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+       const day = String(dateObj.getDate()).padStart(2, '0');
+       const formattedDateString = `${year}-${month}-${day}`;
+       
+     //  console.log("convert data -",formattedDateString);
+
+       holiday_date.push(formattedDateString)
+        
+       
+     });
+
+     console.log("all -result",holiday_date);
+//      const market_holiday_redis = await client_redis.get('market_holiday_redis');
+//      console.log("market_holiday_redis",market_holiday_redis);
+    
+//      if(market_holiday_redis == null){
+//        await client_redis.set('market_holiday_redis', JSON.stringify(holiday_date));
+       
+//        console.log("market_holiday_redis-",market_holiday_redis); 
+       
+//    }else{
+//        console.log("market_holiday_redis",market_holiday_redis);
+//        await client_redis.set('market_holiday_redis', JSON.stringify(holiday_date));
+//      }
+
+
+   })
+   .catch(function (error) {
+     console.log(error);
+   });
+
+
+
+  }
 
 
 module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind }

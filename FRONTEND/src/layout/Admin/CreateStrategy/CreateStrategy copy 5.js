@@ -2195,7 +2195,6 @@ const saveStrategy = async (e) => {
 export default Signals;
 
 
-
 {/* <button value="math_function" className="btn btn-info btn-sm">Math Function</button>
 <button value="indicators" className="btn btn-info btn-sm">Indicators</button>
 <button value="bracket" className="btn btn-info btn-sm">Bracket</button>

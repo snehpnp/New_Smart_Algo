@@ -1800,19 +1800,19 @@ const saveStrategy = async (e) => {
                     <div className="row mt-3">
                       <div className="col-md-4">
                         <div className="form-group">
-                          <label className="text-danger">Stop loss %</label>
+                          <label className="text-danger">Stop loss (point)</label>
                           <input type="number" onChange={(e)=>{StoplossChange(e,"buy")}}  className="form-control"></input>
                         </div>
                       </div>
                       <div className="col-md-4">
                         <div className="form-group">
-                          <label className="text-success">Target Profit %</label>
+                          <label className="text-success">Target Profit (point)</label>
                           <input type="number" onChange={(e)=>{TargetChange(e,"buy")}} className="form-control"></input>
                         </div>
                       </div>
                       <div className="col-md-4">
                         <div className="form-group">
-                          <label className="">Trailing SL % (optional)</label>
+                          <label className="">Trailing SL (point) (optional)</label>
                           <input type="number" onChange={(e)=>{TSLChange(e,"buy")}} className="form-control"></input>
                         </div>
                       </div>
@@ -2025,19 +2025,19 @@ const saveStrategy = async (e) => {
            <div className="row mt-3">
              <div className="col-md-4">
                <div className="form-group">
-                 <label className="text-danger">Stop loss %</label>
+                 <label className="text-danger">Stop loss (point)</label>
                  <input type="number" onChange={(e)=>{StoplossChange(e,"sell")}}  className="form-control"></input>
                </div>
              </div>
              <div className="col-md-4">
                <div className="form-group">
-                 <label className="text-success">Target Profit %</label>
+                 <label className="text-success">Target Profit (point)</label>
                  <input type="number" onChange={(e)=>{TargetChange(e,"sell")}} className="form-control"></input>
                </div>
              </div>
              <div className="col-md-4">
                <div className="form-group">
-                 <label className="">Trailing SL % (optional)</label>
+                 <label className="">Trailing SL (point) (optional)</label>
                  <input type="number" onChange={(e)=>{TSLChange(e,"sell")}} className="form-control"></input>
                </div>
              </div>

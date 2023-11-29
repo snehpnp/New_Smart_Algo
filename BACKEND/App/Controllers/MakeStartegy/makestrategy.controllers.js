@@ -186,12 +186,54 @@ class MakeStartegy {
     }
 }
 
+
+
+//-------------------Strategy Run Code ---------------------------------------------//
+
+const currentDateNow = new Date();
+const options = {
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: false, // Set to true for 12-hour format
+  timeZone: 'Asia/Kolkata', // Adjust the time zone as needed
+};
+
+const currentTimeNow = currentDateNow.toLocaleString('en-IN', options);
+
+const [hours, minutes] = currentTimeNow.split(':').map(Number);
+
+const marketStartTime = { hour: 9, minute: 15 };
+const marketEndTime = { hour: 15, minute: 30 };
+
+const isMarketOpen =
+  hours > marketStartTime.hour ||
+  (hours === marketStartTime.hour && minutes >= marketStartTime.minute);
+
+const isMarketClosed =
+  hours > marketEndTime.hour ||
+  (hours === marketEndTime.hour && minutes > marketEndTime.minute);
+
+// if (isMarketOpen && !isMarketClosed) {
+//   console.log('The stock market is open!');
+// } else {
+//   console.log('The stock market is closed.');
+// }
+
+
+const Holidays = require('date-holidays');
+// Example: Check if a date is a public holiday
+const holidays = new Holidays();
+const currentDate = new Date();
+
+if (!holidays.isHoliday(currentDate) && isMarketOpen && !isMarketClosed) {
+  console.log('The stock market is open!');
 setInterval(async () => {
 
-    console.log("yyyyy");
+  console.log("yyyyy");
+  console.log("Today Market On");
+  
    // const suscribe_token =await Alice_Socket();
-   
-    
     const pipeline = [
         {
         $match : {
@@ -204,6 +246,7 @@ setInterval(async () => {
     
     let array =[2,5,6,4] 
     if(allStrategyResult.length > 0){
+    
       const promises = allStrategyResult.map(val => {
           
         console.log("val ",val.entryTime)
@@ -231,17 +274,17 @@ setInterval(async () => {
         
         
         const entryTime = val.entryTime.toLocaleTimeString('en-US', options1);
+        const exitTime = val.exitTime.toLocaleTimeString('en-US', options1);
+        const notradeTime = val.notradeTime.toLocaleTimeString('en-US', options1);
         
         console.log('currentTime:', currentTime);
-        console.log('entryTime:', entryTime);
-
-        if( currentTime > entryTime){
-        console.log('if:', entryTime);
-         
-        }else{
-          console.log('else:', entryTime);
-        
-        }
+       console.log('entryTime:', entryTime);
+       console.log('exitTime:', exitTime);
+       console.log('notradeTime:', notradeTime);
+      //  console.log('entryTime:', entryTime);
+        // Entry Time less than No trade time OR Exit time
+        if( currentTime > entryTime  && entryTime < exitTime && entryTime < notradeTime){
+        console.log('if:', entryTime)
 
         return new Promise(resolve => {
         setTimeout(async() => {
@@ -330,8 +373,13 @@ setInterval(async () => {
         resolve();
         }, 0);
         });
+        
+        }else{
+        console.log('else:', entryTime);
+      
+        }
 
-
+         
 
         });
         await Promise.all(promises);
@@ -340,6 +388,7 @@ setInterval(async () => {
 
 },10000);
 
+}
 
 
 
@@ -373,17 +422,12 @@ setInterval(async () => {
 
 const tradeExcuted = async (val) => {
   //console.log("broker url -",process.env.BROKER_URL)
- // console.log("val -",val)
-   return
+   
   // let company_info =  await company_information.findOne().select('broker_url').lean();
   //  console.log("broker url -",company_info.broker_url , "id -",val._id)
 
   const currentTimestamp = Math.floor(Date.now() / 1000);
-
-
   // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
-
-
 
   let type = "LE";
   if(val.type.toUpperCase() == "SEll"){
@@ -392,8 +436,8 @@ const tradeExcuted = async (val) => {
 
   let price = 0;
 
-  let strike = val.strike;
-  if(val.strike == "NaN"){
+  let strike = val.strike_price;
+  if(val.strike_price == "NaN"){
     strike = "100"
   }
 
@@ -405,8 +449,19 @@ const tradeExcuted = async (val) => {
  
   let Quntity = "100"
 
+  // console.log("target -",val.target)
+  // console.log("stoploss -",val.stoploss)
+  // console.log("exitTime -",val.exitTime)
+
+  const dateObject = new Date(val.exitTime);
+  const hours = ('0' + dateObject.getUTCHours()).slice(-2);
+  const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
+  const ExitTime = `${hours}:${minutes}`;
+
  
-  let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Demo:demo`
+  let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|Demo:demo`
+
+  console.log("req -- ",req)
 
   return
 
