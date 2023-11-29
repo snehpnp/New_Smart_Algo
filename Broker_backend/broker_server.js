@@ -640,6 +640,7 @@ app.post('/broker-signals', async (req, res) => {
                 target:0,
                 stop_loss:0,
                 exit_time:0,
+                exit_time1:0,
                 complete_trade:0,
                 sl_status:0
 

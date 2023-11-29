@@ -30,8 +30,20 @@ async function Open_Position1(req, res) {
         const destinationViewName = 'open_position_excute5';
 
         const pipeline = [
-            
+            {
+                $match: {
+                    $or: [
+                        {
+                            isLpInRange1: true
+                        },
+                        {
+                            isLpInRange: 1
+                        }
+                    ]
+                }
+            },
         ];
+        
         
         
 
@@ -97,28 +109,28 @@ module.exports = { dropExistingView1, Open_Position1 }
 //                     stockInfo_lp: { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
 //                     stockInfo_curtime: { $arrayElemAt: ['$stockInfo.curtime', 0] } , // Change $toInt to $toDouble
 
-//                     isLpInRange: {
-//                         $or: [
-//                             {
-//                                 $gte: [
-//                                     { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
-//                                     '$target',
-//                                 ],
-//                             },
-//                             {
-//                                 $lte: [
-//                                     { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
-//                                     '$stop_loss',
-//                                 ],
-//                             },
-//                             {
-//                                 $gte: [
-//                                     '$stockInfo_curtime',
-//                                     '$exit_time_test' 
-//                                 ]
-//                             }
-//                         ],
-//                     },
+                    // isLpInRange: {
+                    //     $or: [
+                    //         {
+                    //             $gte: [
+                    //                 { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
+                    //                 '$target',
+                    //             ],
+                    //         },
+                    //         {
+                    //             $lte: [
+                    //                 { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
+                    //                 '$stop_loss',
+                    //             ],
+                    //         },
+                    //         {
+                    //             $gte: [
+                    //                 '$stockInfo_curtime',
+                    //                 '$exit_time_test' 
+                    //             ]
+                    //         }
+                    //     ],
+                    // },
 //                 },
 //             },
             

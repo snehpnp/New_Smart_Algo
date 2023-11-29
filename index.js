@@ -54,7 +54,7 @@ const providedTimeUTC = new Date('2023-11-27T10:00:02.596+00:00').getTimezoneOff
 //                     { $ifNull: [{ $toDouble: '$stop_loss' }, 0] },
 //                 ],
 //             },
-         
+
 //             exit_time: {
 //                $concat: ['$current_date', 'T', '$exit_time',':00'],
 //             },
@@ -134,7 +134,7 @@ const providedTimeUTC = new Date('2023-11-27T10:00:02.596+00:00').getTimezoneOff
 //                     { $ifNull: [{ $toDouble: '$stop_loss' }, 0] },
 //                 ],
 //             },
-        
+
 //             exit_time: {
 //                 $toDate: {
 //                     $concat: ['$current_date', 'T', '$exit_time', ':00'],
@@ -166,7 +166,7 @@ const providedTimeUTC = new Date('2023-11-27T10:00:02.596+00:00').getTimezoneOff
 //             target: 1,
 //             stop_loss: 1,
 //             exit_time: 1,
-           
+
 //             exit_time_test: {
 //                 $dateFromString: {
 //                   dateString: {
@@ -185,15 +185,15 @@ const providedTimeUTC = new Date('2023-11-27T10:00:02.596+00:00').getTimezoneOff
 //                   timezone: 'UTC',
 //                 },
 //               }
-              
-         
+
+
 //         },
 //     },
 // ]);
 
 
 db.createView('open_position', 'mainsignals', [
-   
+
     {
         $addFields: {
             target: {
@@ -208,7 +208,7 @@ db.createView('open_position', 'mainsignals', [
                     { $ifNull: [{ $toDouble: '$stop_loss' }, 0] },
                 ],
             },
-          
+
         },
     },
     {
@@ -223,11 +223,39 @@ db.createView('open_position', 'mainsignals', [
         $addFields: {
             stockInfo: { $arrayElemAt: ['$stockInfo', 0] },
             stockInfo_lp: { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
+            stockInfo_bp1: { $toDouble: { $arrayElemAt: ['$stockInfo.bp1', 0] } },
+            stockInfo_sp1: { $toDouble: { $arrayElemAt: ['$stockInfo.sp1', 0] } },
             stockInfo_curtime: { $arrayElemAt: ['$stockInfo.curtime', 0] },
-          
+            isLpInRange1: {
+                $or: [
+                    {
+                        $gte: [
+                            { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
+                            '$target',
+                        ],
+                    },
+                    {
+                        $lte: [
+                            { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } }, // Change $toInt to $toDouble
+                            '$stop_loss',
+                        ],
+                    },
+                   
+                ],
+            },
         },
     },
     {
+        $addFields: {
+          exit_time_test: {
+            $concat: [
+              { $substr: ["$exit_time", 0, 2] },
+              { $substr: ["$exit_time", 3, 2] }
+            ]
+          }
+        }
+      },
+     {
         $project: {
             _id: 1,
             symbol: 1,
@@ -252,13 +280,17 @@ db.createView('open_position', 'mainsignals', [
             stop_loss: 1,
             exit_time: 1,
             exit_time_test: 1,
-            stockInfo_curtime:1,
+            stockInfo_curtime: 1,
+            stockInfo_lp:1,
+            stockInfo_sp1:1,
+            stockInfo_bp1:1,
+            isLpInRange1:1,
             isLpInRange: {
 
-                         $cmp: [{ $toInt: '$stockInfo.curtime' }, { $toInt: '$exit_time' }] ,
-                   
+                $cmp: [{ $toInt: '$stockInfo.curtime' }, { $toInt: '$exit_time_test' }],
+
             },
-            
+
         },
     },
 ]);
