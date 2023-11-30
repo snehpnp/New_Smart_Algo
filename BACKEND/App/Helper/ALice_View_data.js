@@ -75,7 +75,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
       }
 
     } catch (err) {
-      console.error('Error connecting to MongoDB:', err);
+      //console.error('Error connecting to MongoDB:', err);
     }
   }
 

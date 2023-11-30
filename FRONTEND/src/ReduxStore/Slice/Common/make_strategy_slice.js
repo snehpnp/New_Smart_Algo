@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_TIMEFRAME , GET_SOURCE ,GET_COMPARATORS ,ADD_MAKE_STRATEGY } from "../../../Service/common.service";
+import { GET_TIMEFRAME , GET_SOURCE ,GET_COMPARATORS ,ADD_MAKE_STRATEGY ,GET_ALL_MAKE_STRATEGY,DELETE_MAKE_STRATEGY,EDIT_MAKE_STRATEGY} from "../../../Service/common.service";
 
 
 export const get_time_frame = createAsyncThunk("get/getAlltimeframe", async (data) => {
@@ -49,6 +49,41 @@ export const Add_Make_Strategy = createAsyncThunk("AddMakeStartegy", async (data
 });
 
 
+export const get_all_make_strategy = createAsyncThunk("GetAllMakeStartegy", async (data) => {
+    try {
+        const {req,token}=data
+        const res = await GET_ALL_MAKE_STRATEGY(req,token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+export const delete_make_strategy = createAsyncThunk("DeleteMakeStartegy", async (data) => {
+    try {
+        const {req,token}=data
+        const res = await DELETE_MAKE_STRATEGY(req,token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+export const Edit_Make_Strategy = createAsyncThunk("EditeMakeStartegy", async (data) => {
+    try {
+        const {req,token}=data
+        const res = await EDIT_MAKE_STRATEGY(req,token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+
+
+
+
 
 const MakeStrategy = createSlice({
     name: "MakeStrategy",
@@ -56,6 +91,12 @@ const MakeStrategy = createSlice({
         isLoading: false,
         isError: false,
         timeframe: [],
+        source: [],
+        comparators: [],
+        addmakeStrategy: [],
+        getmakeStrategy: [],
+        deletemakestrategy:[],
+        editemakestrategy:[],
     },
 
     recuders: {},
@@ -64,14 +105,24 @@ const MakeStrategy = createSlice({
             return { ...state, timeframe: payload, isLoading: false };
         },
         [get_source.fulfilled]: (state, { payload }) => {
-            return { ...state, timeframe: payload, isLoading: false };
+            return { ...state, source: payload, isLoading: false };
         },
         [get_comparators.fulfilled]: (state, { payload }) => {
-            return { ...state, timeframe: payload, isLoading: false };
+            return { ...state, comparators: payload, isLoading: false };
         },
         [Add_Make_Strategy.fulfilled]: (state, { payload }) => {
-            return { ...state, timeframe: payload, isLoading: false };
+            return { ...state, addmakeStrategy: payload, isLoading: false };
         },
+        [get_all_make_strategy.fulfilled]: (state, { payload }) => {
+            return { ...state, getmakeStrategy: payload, isLoading: false };
+        },
+        [delete_make_strategy.fulfilled]: (state, { payload }) => {
+            return { ...state, deletemakestrategy: payload, isLoading: false };
+        },
+        [Edit_Make_Strategy.fulfilled]: (state, { payload }) => {
+            return { ...state, editemakestrategy: payload, isLoading: false };
+        },
+        
     }
 })
 

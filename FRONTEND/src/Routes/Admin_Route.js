@@ -80,6 +80,9 @@ import Open_Positions from '../layout/Admin/OptionChain/Open_Positions';
 
 // CREATE STRATEGY
 import CreateStrategy from '../layout/Admin/CreateStrategy/CreateStrategy';
+import AllMakeStrategy from '../layout/Admin/CreateStrategy/AllMakeStrategy';
+import EditMakeStrategy from '../layout/Admin/CreateStrategy/EditMakeStrategy';
+
 
 
 
@@ -135,6 +138,8 @@ const Admin = () => {
                 <Route exact path="/apicreateinfo/edit" element={<EditApiCreateInfo />} />
                 <Route exact path="/updates" element={<ReleaseUpdate />} />
                 <Route exact path="/createstrategy" element={<CreateStrategy />} />
+                <Route exact path="/AllMakeStrategy" element={<AllMakeStrategy />} />
+                <Route exact path="/MakeStrategy/edit/:id" element={<EditMakeStrategy />} />
                 <Route exact path="/brokerinfo" element={<BrokerInfor />} />
                 <Route exact path="/optionchain" element={<Opation_Chain />} />
                 <Route exact path="/openposition" element={<Open_Positions />} />

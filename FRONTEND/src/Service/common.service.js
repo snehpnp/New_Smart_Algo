@@ -234,3 +234,58 @@ export async function ADD_MAKE_STRATEGY(data, token) {
         
     }
 }
+
+
+export async function GET_ALL_MAKE_STRATEGY(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}GetAllMakeStartegy`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}
+
+export async function DELETE_MAKE_STRATEGY(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}DeleteMakeStartegy`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}
+
+export async function EDIT_MAKE_STRATEGY(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}EditeMakeStartegy`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}
+
+
+
+
+
+

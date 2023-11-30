@@ -5,6 +5,10 @@ const userMakeStrategySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "USER"
       },
+      name: {
+        type: String,
+        required: true,  
+      },
       tokensymbol: {
         type: String,
         required: true,  
@@ -97,6 +101,10 @@ const userMakeStrategySchema = new mongoose.Schema({
     },
     notradeTime: {
         type: Date,
+    },
+    condition_array: {
+        type: Object,
+        required: true,
     },
      status: {
         type: String,

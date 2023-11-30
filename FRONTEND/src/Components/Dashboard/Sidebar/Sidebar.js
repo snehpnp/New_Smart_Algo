@@ -227,7 +227,7 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
                                         {item.Data.length === 0 ? <>
-                                            {
+                                       {
                                             item.route === "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 ||
                                              item.route === "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0 ? "" :
                                                 <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
@@ -376,8 +376,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                             </>
                                         })
                                             : ""
-                        }
-
+                            }
 
 
                     </ul>
@@ -437,7 +436,7 @@ const IconComponent = ({ icon }) => {
                 return <Paintbrush className='me-3' />;
             case 'Vote':
                 return <Vote className='me-3' />;
-            case 'Boxes ':
+            case 'Boxes':
                 return <Boxes className='me-3' />;
             case 'Info':
                 return <Info className='me-3' />;

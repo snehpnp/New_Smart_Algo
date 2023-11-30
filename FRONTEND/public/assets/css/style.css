@@ -46293,3 +46293,12 @@ body {
 .loader__coin {
   animation: flip 0.5s ease-in-out infinite alternate-reverse both;
 }
+
+.new-field:hover, .new-field:focus {
+    transform: scale(1.5);
+    width: 100px;
+}
+
+.new-field {
+    padding: 5px 0 5px 5px;
+}

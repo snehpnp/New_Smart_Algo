@@ -81,9 +81,73 @@ class MakeStartegy {
         }
     }
 
+      /// get Make startegy
+      async GetAllMakeStartegy(req, res) {
+
+        try {
+
+            const pipeline =[
+                { $sort: { _id: 1 } }
+            ]
+            const result =  await UserMakeStrategy.aggregate(pipeline)
+
+            //console.log("GetAllMakeStartegy - ",result)
+            if (result .length > 0) {
+                res.send({ status: true, msg: "Get All make strategy", data: result   });
+            } else {
+                res.send({ status: false, msg: "Empty data", data: [] });
+            }
+        } catch (error) {
+            console.log("error-", error);
+            res.status(500).send({ status: false, msg: "Internal server error" });
+        }
+    }
+
+    //Delete make strateg
+    async DeleteMakeStartegy(req, res) {
+      try {
+        const objectId = new ObjectId(req.body.id);
+        const result = await UserMakeStrategy.deleteOne({ _id: objectId });
+        if (result.acknowledged == true) {
+          return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
+        } 
+      } catch (error) {
+          console.log("error-", error);
+          res.status(500).send({ status: false, msg: "Internal server error" });
+      }
+  }
+  
+   //EditeMakeStartegy  make strateg
+   async EditeMakeStartegy(req, res) {
+    try {
+     
+      const objectId = new ObjectId(req.body.id);
+      const result = await UserMakeStrategy.findOne({ _id: objectId });
+
+      console.log("result edit data -",result)
+      
+      if (result != undefined) {
+         res.send({ status: true, msg: 'Delete successfully ', data: result });
+      } else{
+        res.send({ status: false, msg: 'No Data Found', data: {} });
+      }
+
+    } catch (error) {
+        console.log("error-", error);
+        res.status(500).send({ status: false, msg: "Internal server error" });
+    }
+}
+
+
+
+
+
+
      /// Make Startegy
      async AddMakeStartegy(req, res) {
-     //let  suscribe =await Alice_Socket();
+      
+     let  suscribe =await Alice_Socket();
+     
      let user_panel_key =  await user.findOne().select('client_key').lean();
     // console.log("user_panel_key",user_panel_key)
      //   return
@@ -103,6 +167,7 @@ class MakeStartegy {
  
          // res.send({ status: true, msg: "successfully Add!" });
          let user_id = req.body.user_id;
+         let name = req.body.name;
          let tokensymbol = element.instrument_token;
          let symbol_name = element.symbol;
          let strategy_name = req.body.strategy_name;
@@ -124,15 +189,17 @@ class MakeStartegy {
          let stoploss = req.body.target_stoploss.stoploss;
          let tsl = req.body.target_stoploss.tsl;
          let panelKey = user_panel_key.client_key;
-         let entryTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].entry.time ==""?"00:00" : req.body.timeTradeConddition[0].entry.time}:00.000Z`);
-         let exitTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].exit.time == ""?"00:00":req.body.timeTradeConddition[0].exit.time}:00.000Z`);
-         let notradeTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].notrade.time==""?"00:00":req.body.timeTradeConddition[0].notrade.time}:00.000Z`);
+         let entryTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].entry.time ==""?"01:01" : req.body.timeTradeConddition[0].entry.time}:00.000Z`);
+         let exitTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].exit.time == ""?"01:01":req.body.timeTradeConddition[0].exit.time}:00.000Z`);
+         let notradeTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].notrade.time==""?"01:01":req.body.timeTradeConddition[0].notrade.time}:00.000Z`);
+         let condition_array = req.body.condition_array
 
        
            console.log("condition_source",condition_source)
           
        
          await UserMakeStrategy.create({
+            name:name,
             user_id: user_id,
             tokensymbol: tokensymbol,
             symbol_name: symbol_name,
@@ -157,7 +224,8 @@ class MakeStartegy {
             panelKey:panelKey,
             entryTime:entryTime,
             exitTime:exitTime,
-            notradeTime:notradeTime
+            notradeTime:notradeTime,
+            condition_array:condition_array
            })
             .then(async (createUserMakeStrategy) => {
               console.log("3")
@@ -226,16 +294,15 @@ const Holidays = require('date-holidays');
 const holidays = new Holidays();
 const currentDate = new Date();
 
-if (!holidays.isHoliday(currentDate) && isMarketOpen && !isMarketClosed) {
+if (!holidays.isHoliday(currentDate)) {
   console.log('The stock market is open!');
 setInterval(async () => {
-
-  console.log("yyyyy");
-  console.log("Today Market On");
-   
-
+  
+  //console.log("yyyyy");
+  //console.log("Today Market On");
+  
   // STARTEGY CODEE
-   const suscribe_token =await Alice_Socket();
+   //const suscribe_token =await Alice_Socket();
     const pipeline = [
         {
         $match : {
@@ -392,19 +459,15 @@ setInterval(async () => {
 
      //--------SNEH CODE------//
 
-    
+     
 
-       //--------END SNEH CODE------//
+     //--------END SNEH CODE------//
    
 
 
-},10000);
-
-
-
+},10000000);
 
 }
-
 
   
   const abc = async (data, conditionString,val) => {
@@ -418,6 +481,7 @@ setInterval(async () => {
       if (condition) {
         // Your code for when the condition is true
         console.log("Condition is true ",val._id);
+        return
         const update = {
           $set: {
             status: "1",    
@@ -439,7 +503,8 @@ setInterval(async () => {
     }
   };
 
-const tradeExcuted = async (val) => {
+ const tradeExcuted = async (val) => {
+  
   //console.log("broker url -",process.env.BROKER_URL)
    
   // let company_info =  await company_information.findOne().select('broker_url').lean();
@@ -504,14 +569,7 @@ axios.request(config)
     .catch((error) => {
         console.log(error);
     });
-}
-
-
-
-
-
-
-
+ }
 
 
 module.exports = new MakeStartegy();

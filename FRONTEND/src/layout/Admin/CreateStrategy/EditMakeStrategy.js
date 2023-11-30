@@ -17,14 +17,16 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
-import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
+import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy ,Edit_Make_Strategy } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
 
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 
 
-const CreateStrategy = () => {
+const EditMakeStrategy = () => {
+    const { id } = useParams()
+    //alert(id)
   const navigate = useNavigate()
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
@@ -89,6 +91,47 @@ const CreateStrategy = () => {
     }
     getIndicatorApi()
   }, [filterServices]);
+
+
+  const [singleMakeStrategyData, setSingleMakeStrategyData] = useState([])
+  
+  
+//   const myObject = {
+//     name: "ss",
+//     age: "56"
+//   };
+//   // Update the "name" field
+//   myObject.name = "NewName";
+  
+ // console.log(myObject);
+  
+
+  console.log("singleMakeStrategyData",singleMakeStrategyData.name)
+
+
+  useEffect(() => {
+    get_row_data();
+}, [id]);
+
+const get_row_data = async () => {
+        await dispatch(
+        Edit_Make_Strategy(
+          {
+            req: {
+              id: id,
+            },
+            token: AdminToken,
+          }
+        )
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            setSingleMakeStrategyData(response.data);
+    
+          }
+        });    
+}
 
 
 
@@ -1330,8 +1373,7 @@ const saveStrategy = async (e) => {
         "buffer_value": "2",
         "offset": "0",
         "target_stoploss": exitConditionBuyOrSell[0].buy,
-        "timeTradeConddition":timeTradeConddition,
-        "condition_array":coditionRequestArr,
+        "timeTradeConddition":timeTradeConddition
        }
        
        console.log("data request buy",data)
@@ -1385,8 +1427,7 @@ const saveStrategy = async (e) => {
         "buffer_value": "2",
         "offset": "0",
         "target_stoploss": exitConditionBuyOrSell[0].sell,
-        "timeTradeConddition":timeTradeConddition,
-        "condition_array":coditionRequestArrSell,
+        "timeTradeConddition":timeTradeConddition
       }
       console.log("data request sell",data)
 
@@ -1427,7 +1468,7 @@ const saveStrategy = async (e) => {
 
            <div className="col-md-2 ">
               <label className="">Strategy Name</label>
-             <input type="text" onChange={(e)=>{onChange(e)}} className="form-control"></input>
+             <input type="text" defaultValue={singleMakeStrategyData.name} onChange={(e)=>{onChange(e)}} className="form-control"></input>
             </div>
 
             <div className="col-md-2 ">
@@ -2227,7 +2268,7 @@ const saveStrategy = async (e) => {
   );
 };
 
-export default CreateStrategy;
+export default EditMakeStrategy;
 
 
 
