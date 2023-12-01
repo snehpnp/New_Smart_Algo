@@ -27,7 +27,7 @@ async function Open_Position1(req, res) {
       
         var dbName = process.env.DB_NAME;
         const sourceViewName = 'open_position';
-        const destinationViewName = 'open_position_excute5';
+        const destinationViewName = 'open_position_excute';
 
         const pipeline = [
             {

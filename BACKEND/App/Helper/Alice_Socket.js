@@ -34,11 +34,11 @@ const Alice_Socket = async () => {
     var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
     var userid = broker_infor.user_id
     var userSession1 = broker_infor.access_token
-    //var channelList = broker_infor.Stock_chain
-    var channelList = "NSE|14366"
-    console.log("channelList", channelList)
-    console.log("userid", userid)
-    console.log("userSession1", userSession1)
+    var channelList = broker_infor.Stock_chain
+    // var channelList = "NSE|14366"
+    // console.log("channelList", channelList)
+    // console.log("userid", userid)
+    // console.log("userSession1", userSession1)
     var type = { "loginType": "API" }
 
     //  Step -1
@@ -105,7 +105,7 @@ const Alice_Socket = async () => {
 
                             const options = { upsert: true }; // Set the upsert option to true
 
-                            const result = await stock_live_price.updateOne(filter, update, options);
+                            const result = await stock_live_price.updateOne(filter, update,  { upsert: true });
                             // console.log("newCompany", result);
 
                         } else {

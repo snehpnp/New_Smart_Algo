@@ -12,6 +12,7 @@ const user_logs = db.user_logs;
 const live_price = db.live_price;
 
 
+const {Get_Option_All_Token_Chain} = require('../../App/Controllers/Admin/option_chain.controller')
 
 
 
@@ -26,7 +27,10 @@ cron.schedule('5 5 * * *', () => {
     console.log('Run Second Time');
     LogoutAllUsers()
 });
-
+cron.schedule('0 8 * * *', () => {
+    console.log('Run Second Time');
+    Get_Option_All_Token_Chain()
+});
 
 // // 1.1 LOGOUT AND TRADING OFF ALL USER 
 // cron.schedule('* * * * *', () => {

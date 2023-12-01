@@ -192,25 +192,77 @@ const providedTimeUTC = new Date('2023-11-27T10:00:02.596+00:00').getTimezoneOff
 // ]);
 
 
-db.createView('open_position1', 'mainsignals', [
+db.createView('open_position', 'mainsignals', [
 
     {
         $addFields: {
             target: {
                 $add: [
                     { $toDouble: '$entry_price' },
-                    { $ifNull: [{ $toDouble: '$target' }, 0] },
+                    {
+                        $cond: {
+                            if: {
+                                $or: [
+                                    { $eq: ['$target', 0] },
+                                    { $eq: ['$target', "0"] },
+                                    { $eq: ['$target', '0'] }, // Check if target is the string "0"
+                                ],
+                            },
+                            then: 0,
+                            else: { $ifNull: [{ $toDouble: '$target' }, 0] },
+                        },
+                    },
                 ],
             },
             stop_loss: {
                 $subtract: [
                     { $toDouble: '$entry_price' },
-                    { $ifNull: [{ $toDouble: '$stop_loss' }, 0] },
+                    {
+                        $cond: {
+                            if: {
+                                $or: [
+                                    { $eq: ['$stop_loss', 0] },
+                                    { $eq: ['$stop_loss', "0"] },
+                                    { $eq: ['$stop_loss', '0'] }, // Check if stop_loss is the string "0"
+                                ],
+                            },
+                            then: 0,
+                            else: { $ifNull: [{ $toDouble: '$stop_loss' }, 0] },
+                        },
+                    },
                 ],
             },
+            entry_qty_percent: {
+                $subtract: [
+                    { $toDouble: '$entry_qty_percent' },
+                    {
+                        $cond: {
+                            if: {
+                                $or: [
+                                    { $eq: ['$exit_qty_percent', 0] },
+                                    { $eq: ['$exit_qty_percent', "0"] },
+                                    { $eq: ['$exit_qty_percent', '0'] }, // Check if stop_loss is the string "0"
+                                    { $eq: ['$exit_qty_percent', ''] }, // Check if stop_loss is the string "0"
 
+                                ],
+                            },
+                            then: 0,
+                            else: { $ifNull: [{ $toDouble: '$exit_qty_percent' }, 0] },
+                        },
+                    },
+                ],
+            },
         },
     },
+    
+    {
+        $match: {
+            $expr: {
+                $ne: ['$entry_qty_percent', 0]
+            }
+        },
+    },
+    
     {
         $lookup: {
             from: 'stock_live_price',
@@ -252,49 +304,31 @@ db.createView('open_position1', 'mainsignals', [
                 ]
             },
             isLpInRange1: {
-                $cond: {
-                    if: {
-                        $or: [
+                $or: [
+                    {
+                        $gte: [
                             {
-                                $eq: [
-                                    {
-                                        $ifNull: [
-                                            { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
-                                            0
-                                        ]
-                                    },
+                                $ifNull: [
+                                    { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
                                     0
                                 ]
                             },
-                            {
-                                $gte: [
-                                    {
-                                        $ifNull: [
-                                            { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
-                                            0
-                                        ]
-                                    },
-                                    '$target',
-                                ],
-                            },
-                            {
-                                $lte: [
-                                    {
-                                        $ifNull: [
-                                            { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
-                                            0
-                                        ]
-                                    },
-                                    '$stop_loss',
-                                ],
-                            },
+                            '$target',
                         ],
                     },
-                    then: false,
-                    else: true,
-                },
+                    {
+                        $lte: [
+                            {
+                                $ifNull: [
+                                    { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
+                                    0
+                                ]
+                            },
+                            '$stop_loss',
+                        ],
+                    },
+                ],
             },
-            
         },
     },
     
@@ -338,11 +372,29 @@ db.createView('open_position1', 'mainsignals', [
             stockInfo_bp1:1,
             isLpInRange1:1,
             isLpInRange: {
-
-                $cmp: [{ $toInt: '$stockInfo.curtime' }, { $toInt: '$exit_time_test' }],
-
+                $cond: {
+                    if: {
+                        $or: [
+                            { $eq: ['$exit_time_test', "0"] },
+                            { $eq: ['$exit_time_test', '0'] },
+                            { $eq: ['$exit_time_test', 0] },
+                        ],
+                    },
+                    then: -1,
+                    else: {
+                        $cmp: [
+                            { $toInt: '$stockInfo.curtime' },
+                            { $toInt: '$exit_time_test' },
+                        ],
+                    },
+                },
             },
+            
 
         },
     },
 ]);
+
+
+
+db.createView('channel_list', 'token_chain', [])
