@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_TIMEFRAME , GET_SOURCE ,GET_COMPARATORS ,ADD_MAKE_STRATEGY ,GET_ALL_MAKE_STRATEGY,DELETE_MAKE_STRATEGY,EDIT_MAKE_STRATEGY} from "../../../Service/common.service";
+import { GET_TIMEFRAME , GET_SOURCE ,GET_COMPARATORS ,ADD_MAKE_STRATEGY ,GET_ALL_MAKE_STRATEGY,DELETE_MAKE_STRATEGY,EDIT_MAKE_STRATEGY,UPDATE_MAKE_STRATEGY} from "../../../Service/common.service";
 
 
 export const get_time_frame = createAsyncThunk("get/getAlltimeframe", async (data) => {
@@ -79,6 +79,18 @@ export const Edit_Make_Strategy = createAsyncThunk("EditeMakeStartegy", async (d
     }
 });
 
+export const Update_Make_Strategy = createAsyncThunk("UpdateMakeStartegy", async (data) => {
+    try {
+        const {req,token}=data
+        const res = await UPDATE_MAKE_STRATEGY(req,token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+
 
 
 
@@ -97,6 +109,7 @@ const MakeStrategy = createSlice({
         getmakeStrategy: [],
         deletemakestrategy:[],
         editemakestrategy:[],
+        updatemakestrategy:[],
     },
 
     recuders: {},
@@ -122,6 +135,10 @@ const MakeStrategy = createSlice({
         [Edit_Make_Strategy.fulfilled]: (state, { payload }) => {
             return { ...state, editemakestrategy: payload, isLoading: false };
         },
+        [Update_Make_Strategy.fulfilled]: (state, { payload }) => {
+            return { ...state, updatemakestrategy: payload, isLoading: false };
+        },
+        
         
     }
 })

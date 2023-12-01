@@ -17,7 +17,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
-import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy ,Edit_Make_Strategy } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
+import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy ,Edit_Make_Strategy ,Update_Make_Strategy } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
 
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
@@ -68,6 +68,50 @@ const EditMakeStrategy = () => {
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(0);
 
+  const [strategyName, setStrategyName] = useState("");
+
+  const [selectStrategy, setSelectStrategy] = useState("");
+  
+  const [timeFrameVal, setTimeFrameVal] = useState("1");
+
+  const [buyCheck, setBuyCheck] = useState(false);
+
+  const [sellCheck, setSellCheck] = useState(false);
+
+  const [exitConditionBuyOrSell, setExitConditionBuyOrSell] = useState(
+    [{
+      buy : {
+      stoploss : "0",
+      target : "0",
+      tsl : "0",
+     },
+     sell : {
+      stoploss : "0",
+      target : "0",
+      tsl : "0",
+     },
+    }]
+  );
+
+  const [timeTradeConddition, setTimeTradeConddition] = useState(
+    [
+
+     {
+      entry : {
+      time : "",
+      },
+      exit : {
+
+        time : "",
+        },
+      notrade : {
+
+        time : "",
+        }
+     }
+    ]
+  );
+
   const handlePriceActionChange = (event) => {
     setPriceAction(event.target.value);
   };
@@ -93,26 +137,20 @@ const EditMakeStrategy = () => {
   }, [filterServices]);
 
 
-  const [singleMakeStrategyData, setSingleMakeStrategyData] = useState([])
+  const [singleMakeStrategyData, setSingleMakeStrategyData] = useState({})
   
-  
-//   const myObject = {
-//     name: "ss",
-//     age: "56"
-//   };
-//   // Update the "name" field
-//   myObject.name = "NewName";
-  
- // console.log(myObject);
   
 
-  console.log("singleMakeStrategyData",singleMakeStrategyData.name)
+  
+  
 
-
+  
+  
   useEffect(() => {
     get_row_data();
 }, [id]);
 
+  
 const get_row_data = async () => {
         await dispatch(
         Edit_Make_Strategy(
@@ -127,14 +165,49 @@ const get_row_data = async () => {
         .unwrap()
         .then((response) => {
           if (response.status) {
+
+             console.log("shakkkkkkkkk --- ",response.data)
             setSingleMakeStrategyData(response.data);
-    
+            setTimeFrameVal(response.data.timeframe)
+           
+            setStrategyName(response.data.name)
+            setSelectStrategy(response.data.strategy_name)
+           
+            // set time Trade Condition
+            setTimeTradeConddition([])
+            let jsonStringtimeTradeConddition_array = JSON.stringify(response.data.timeTradeConddition_array);
+            let objectData_timeTradeConddition_array = JSON.parse(jsonStringtimeTradeConddition_array);
+            setTimeTradeConddition(objectData_timeTradeConddition_array)
+          
+            // set setExitConditionBuyOrSell
+            setExitConditionBuyOrSell([])
+            let jsonString_target_stoloss_array = JSON.stringify(response.data.target_stoloss_array);
+            let objectData_target_stoloss_array = JSON.parse(jsonString_target_stoloss_array);
+            setExitConditionBuyOrSell(objectData_target_stoloss_array)
+            
+
+            if(response.data.type == "BUY"){
+              setBuyCheck(true)
+              //set Condition Buy
+              let jsonString_condition_array = JSON.stringify(response.data.condition_array);
+              let objectData_condition_array = JSON.parse(jsonString_condition_array);
+              setCoditionRequestArr(objectData_condition_array);
+
+            }else if(response.data.type == "SELL"){
+              setSellCheck(true)
+              //set Condition Sell
+              let jsonString_condition_array = JSON.stringify(response.data.condition_array);
+              let objectData_condition_array = JSON.parse(jsonString_condition_array);
+              setCoditionRequestArrSell(objectData_condition_array);
+
+            }
+
           }
         });    
 }
 
 
-
+console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
 
   const handleShow = () => {
     setShow(true);
@@ -214,7 +287,7 @@ const get_row_data = async () => {
 
   //const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState([]);
   const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState({ loading: true, data: [] });
-  const [selectStrategy, setSelectStrategy] = useState("");
+  
 
   // get data time frame 
   const [timeFrameData, setTimeFrameData] = useState({ loading: true, data: [] });
@@ -350,13 +423,7 @@ const get_row_data = async () => {
   };
 
 
-  const [strategyName, setStrategyName] = useState("");
-  
-  const [timeFrameVal, setTimeFrameVal] = useState("1");
-
-  const [buyCheck, setBuyCheck] = useState(false);
-
-  const [sellCheck, setSellCheck] = useState(false);
+ 
 
 
   const selectTimeFrame = (item) => {
@@ -419,9 +486,6 @@ const get_row_data = async () => {
   
   ])
 
-
- 
-
   const [selectedSource, setSelectedSource] = useState('');
   const [selectConditionItem, setSelectConditionItem] = useState('');
   const [selectedElementFirsSecond, setSelectedElementFirsSecond] = useState('');
@@ -439,12 +503,19 @@ const get_row_data = async () => {
   const onChange = (e) => {
     if(e.target.value != ""){
      setStrategyName(e.target.value)
+
+    let jsonString = JSON.stringify(singleMakeStrategyData);
+    let objectData = JSON.parse(jsonString);
+     
+    objectData.name = e.target.value
+
+    setSingleMakeStrategyData(objectData)
+
+
    }else{
      setStrategyName("")
     }
    }
-
-
 
   const selectSource = (e , condition_item , element_first_second,index,buy_sell) => {
    // console.log("e -",e.target.value)
@@ -574,8 +645,6 @@ const get_row_data = async () => {
 
   }
 
-
-  
   const [checkBuySellAndOr, setCheckBuySellAndOr] = useState("");
   const conditionAdd = (ArrCondition,buy_sell) => {
      
@@ -804,7 +873,6 @@ const get_row_data = async () => {
   //console.log("coditionRequestArr final --",coditionRequestArr)
   //console.log("coditionRequestArr Sell final --",coditionRequestArrSell)
   
-  
   let condition_string = "";
   let condition_string_pass = "";
  
@@ -875,8 +943,6 @@ const get_row_data = async () => {
   }
   // Continue with the rest of your code
   console.log("rr - ",condition_string);
-
-
 
   let condition_string_sell  = "";
   let condition_string_sell_pass  = "";
@@ -950,7 +1016,7 @@ const get_row_data = async () => {
       break; // Break out of the loop
     }
   }
-  
+
   // Continue with the rest of your code
   console.log("rr sell - ",condition_string_sell);
 
@@ -1072,31 +1138,17 @@ const get_row_data = async () => {
 
   }
 
-
-
  // console.log("timeFrameVal - ", timeFrameVal)
 
  // console.log("buyCheck - ", buyCheck)
 
 
-  const [exitConditionBuyOrSell, setExitConditionBuyOrSell] = useState(
-    [{
-      buy : {
-      stoploss : "0",
-      target : "0",
-      tsl : "0",
-     },
-     sell : {
-      stoploss : "0",
-      target : "0",
-      tsl : "0",
-     },
-    }]
-  );
+  
 
   const StoplossChange = (e,buy_sell) => {
      console.log("e", e.target.value)
    if(parseInt(e.target.value) > 0 ){
+   
     if(buy_sell == "buy"){
       const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
       if (foundObjectexit) {
@@ -1108,16 +1160,33 @@ const get_row_data = async () => {
       if (foundObjectexit) {
         foundObjectexit.sell.stoploss = e.target.value
         setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
-      }
-     
+      } 
     }
+
+  }else{
+
+    if(buy_sell == "buy"){
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.buy.stoploss = "0"
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      }
+    }else if(buy_sell == "sell"){
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.sell.stoploss = "0"
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      } 
+    }
+
   }  
   }
-
   //console.log("exitConditionBuyOrSell",exitConditionBuyOrSell[0].buy)
   //console.log("exitConditionBuyOrSell sell",exitConditionBuyOrSell[0].sell)
 
   const TargetChange = (e,buy_sell) => {
+
+    if(parseInt(e.target.value) > 0 ){
     if(buy_sell == "buy"){
       const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
       if (foundObjectexit) {
@@ -1131,11 +1200,31 @@ const get_row_data = async () => {
         setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
       }
     }
+
+  }else{
+     
+    if(buy_sell == "buy"){
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.buy.target = "0"
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      }
+    }else if(buy_sell == "sell"){
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.sell.target = "0"
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      }
+    }
+
+  }
   }
 
   const TSLChange = (e,buy_sell) => {
+    
+    if(parseInt(e.target.value) > 0 ){
+
     if(buy_sell == "buy"){
-     
       const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
       if (foundObjectexit) {
         foundObjectexit.buy.tsl = e.target.value
@@ -1148,29 +1237,27 @@ const get_row_data = async () => {
         setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
       }
     }
+
+  }else{
+   
+    if(buy_sell == "buy"){
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.buy.tsl = "0"
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      }
+    }else if(buy_sell == "sell"){
+      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+      if (foundObjectexit) {
+        foundObjectexit.sell.tsl = "0"
+        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+      }
+    }
+
   }
 
+  }
 
-  const [timeTradeConddition, setTimeTradeConddition] = useState(
-    [
-
-     {
-      entry : {
-      time : "",
-      },
-      exit : {
-
-        time : "",
-        },
-      notrade : {
-
-        time : "",
-        }
-     }
-    ]
-  );
-
- 
 
   const selectTime = (e,type) => {
   //  alert(e.target.value)
@@ -1233,9 +1320,9 @@ const get_row_data = async () => {
     }
 
 
-const saveStrategy = async (e) => {
-   // alert(condition_string)
-   
+const updateStrategy = async (e) => {
+    //alert(id)
+ 
    if (strategyName == "") {
     alert("Please select a strategy name");
     return;
@@ -1246,10 +1333,10 @@ const saveStrategy = async (e) => {
       return;
     }
 
-    if(selectedItems.length == 0){
-      alert("Please select a Instruments");
-      return;
-    }
+    // if(selectedItems.length == 0){
+    //   alert("Please select a Instruments");
+    //   return;
+    // }
 
     if(!buyCheck && !sellCheck){
       alert("Please select a Buy or Sell");
@@ -1349,10 +1436,10 @@ const saveStrategy = async (e) => {
      // alert("buy")
       
       let data = {
-
-        "scriptArray": selectedItems,
+        "update_id":id,
+       // "scriptArray": selectedItems,
         "name":strategyName,
-        "user_id": user_Id,
+        //"user_id": user_Id,
         // "tokensymbol": "3045",
         // "symbol_name": "SBIN",
         // "segment": "C",
@@ -1373,22 +1460,24 @@ const saveStrategy = async (e) => {
         "buffer_value": "2",
         "offset": "0",
         "target_stoploss": exitConditionBuyOrSell[0].buy,
-        "timeTradeConddition":timeTradeConddition
+        "timeTradeConddition":timeTradeConddition,
+        "condition_array":coditionRequestArr,
+        "target_stoloss_array":exitConditionBuyOrSell,
        }
        
        console.log("data request buy",data)
 
-       await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
+       await dispatch(Update_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
         if (response.status === 409) {
           toast.error(response.data.msg);
         }
         else if (response.status) {
           if(!sellCheck && !sell_cond){
            toast.success(response.msg);
-           window.location.reload();
-          //  setTimeout(() => {
-          //   navigate("/admin/createstrategy")
-          //  }, 1000); 
+          // window.location.reload();
+           setTimeout(() => {
+            navigate("/admin/AllMakeStrategy")
+           }, 1000); 
           }else{
             
           }
@@ -1404,9 +1493,10 @@ const saveStrategy = async (e) => {
     if (sellCheck && sell_cond) {
     //  alert("sell")
       let data = {
-        "scriptArray": selectedItems,
+        "update_id":id,
+       // "scriptArray": selectedItems,
         "name":strategyName,
-        "user_id": user_Id,
+        //"user_id": user_Id,
         // "tokensymbol": "3045",
         // "symbol_name": "SBIN",
         // "segment": "C",
@@ -1427,21 +1517,23 @@ const saveStrategy = async (e) => {
         "buffer_value": "2",
         "offset": "0",
         "target_stoploss": exitConditionBuyOrSell[0].sell,
-        "timeTradeConddition":timeTradeConddition
+        "timeTradeConddition": timeTradeConddition,
+        "condition_array": coditionRequestArrSell,
+        "target_stoloss_array": exitConditionBuyOrSell,
       }
       console.log("data request sell",data)
 
-      await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
+      await dispatch(Update_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
         if (response.status === 409) {
           toast.error(response.data.msg);
         }
         else if (response.status) {
 
          toast.success(response.msg);
-         window.location.reload();
-          // setTimeout(() => {
-          //   navigate("/admin/createstrategy")
-          // }, 1000);
+        // window.location.reload();
+          setTimeout(() => {
+            navigate("/admin/AllMakeStrategy")
+          }, 1000);
         }
         else if (!response.status) {
           toast.error(response.msg);
@@ -1455,7 +1547,18 @@ const saveStrategy = async (e) => {
 
 
 
-  console.log("timeTradeConddition - ",timeTradeConddition)
+  console.log("timeTradeConddition - ",timeTradeConddition);
+  console.log("update oject - ",singleMakeStrategyData);
+  console.log("update oject selectStrategy- ",selectStrategy);
+  
+  const SelectStrategyTag = (e) => {
+    //alert("okk ssss")
+    if(e.target.value != ""){
+      setSelectStrategy(e.target.value)
+    }else{
+      setSelectStrategy("")
+    }
+  }
   
  
 
@@ -1463,20 +1566,26 @@ const saveStrategy = async (e) => {
   return (
     <>
       <>
-        <Content Page_title="Create Strategy" button_status={false}>
+        <Content Page_title="Create Strategy" button_title=" Back" route="/admin/AllMakeStrategy">
           <div>
 
            <div className="col-md-2 ">
-              <label className="">Strategy Name</label>
-             <input type="text" defaultValue={singleMakeStrategyData.name} onChange={(e)=>{onChange(e)}} className="form-control"></input>
+              <label  className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Strategy Name</label>
+             <input type="text" defaultValue={singleMakeStrategyData.name} onChange={(e)=>{onChange(e)}} className="form-control stratergy-box"></input>
             </div>
 
-            <div className="col-md-2 ">
-              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '20px' }}>Strategy</label>
-              <select className="form-select stratergy-box" onChange={(e) => setSelectStrategy(e.target.value)} name="strategyname">
-                <option value="">-- Select Strategy Tag--</option>
+            <div className="col-md-2 " >
+              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Strategy Tag</label>
+              <select className="form-select stratergy-box" onChange={(e) => {setSelectStrategy(e.target.value);SelectStrategyTag(e)}} name="strategyname"
+               defaultValue={singleMakeStrategyData.strategy_name}
+              >
+              <option value="">-- Select Strategy Tag--</option>
                 {strategyDataAllAdmin.data && strategyDataAllAdmin.data.map((sm, i) =>
-                  <option value={sm.strategy_name}>{sm.strategy_name}</option>)}
+                  <option 
+                  key={i}
+                  value={sm.strategy_name} 
+                  selected={sm.strategy_name === singleMakeStrategyData.strategy_name}
+                  >{sm.strategy_name}</option>)}
               </select>
             </div>
 
@@ -1546,7 +1655,27 @@ const saveStrategy = async (e) => {
 
 
                 <strong>Instruments</strong>
-                <div className="row">
+                    
+                <div className="col-md-2">
+                      <div className="card card-strategy">
+                        <div className="card-body">
+                          <h4>
+                            <span>
+                              <img src="https://seeklogo.com/images/I/indraprastha-gas-logo-8CD9114819-seeklogo.com.png"></img>
+                            </span>
+                            {singleMakeStrategyData.symbol_name}
+                          </h4>
+                          <p className="text-muted my-0">{singleMakeStrategyData.exch_seg}</p>
+
+                          <div className="d-flex justify-content-between my-1">
+                        
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                 
+                 {/* <div className="row">
+
                   <div className="col-md-2">
                     <button
                       className="btn btn-strategy"
@@ -1583,7 +1712,9 @@ const saveStrategy = async (e) => {
                     </div>
                   ))}
 
-                </div>
+                </div> */}
+
+
               </li>
                <li class="StepProgress-item is-done">
                 <div className="row">
@@ -1635,7 +1766,7 @@ const saveStrategy = async (e) => {
              
                <Row className="mt-4">
                 <Col md={2}>
-                  <h5 >Entry Time</h5>
+                  <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Entry Time</h5>
                 </Col>
                 <Col md={2}>
                   {/* <label>Time</label> */}
@@ -1645,7 +1776,7 @@ const saveStrategy = async (e) => {
 
               <Row className="mt-4">
                 <Col md={2}>
-                  <h5 >Exit Time</h5>
+                  <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Exit Time</h5>
                 </Col>
                
                 <Col md={2}>
@@ -1656,253 +1787,263 @@ const saveStrategy = async (e) => {
 
               <Row  className="mt-4">
                 <Col md={2}>
-                  <h5>No Trade Time</h5>
+                  <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>No Trade Time</h5>
                 </Col>
                 
-                <Col md={2}>
+               <Col md={2}>
                   {/* <label>Time</label> */}
                   <Form.Control  style={{ height: 'auto' }} type="time" id="text3" value={timeTradeConddition[0].notrade.time} onChange={(e) => { selectTime(e,"notrade") }}/>
                 </Col>
               </Row>
+              
+              {singleMakeStrategyData.type == "BUY" ? 
 
               <li class="StepProgress-item current is-done" style={{marginTop:"50px"}}>
 
-                <div className="form-check form-check-inline">
-                  <input className="form-check-input" onChange={(e) => setBuyCheck(e.target.checked)} type="checkbox" id="inlineCheckbox1" value="option1" />
-                  <label className="form-check-label" for="inlineCheckbox1">Buy</label>
-                </div>
+              <div className="form-check form-check-inline">
+                <input className="form-check-input" onChange={(e) => setBuyCheck(e.target.checked)} type="checkbox" id="inlineCheckbox1" value="option1" 
+                checked={buyCheck}
+                />
+                <label className="form-check-label" for="inlineCheckbox1">Buy</label>
+              </div>
 
 
-                <strong>Buy Entry Condition</strong>
+              <strong>Buy Entry Condition</strong>
 
-                {/* <Form.Select aria-label="Default select example">
-                  <option>Select</option>
-                  <option value="price">Price</option>
-                  <option value="time">Time</option>
-                  <option value="indicator">Indicator</option>
-                </Form.Select> */}
-                 {
-                  buyCheck == true ? 
-                  <Tabs
-                  // defaultActiveKey="profile"
-                  id="uncontrolled-tab-example"
-                  className="mb-3"
-                >
- 
-      
-                  <Tab eventKey="home" title="Price">
+              {/* <Form.Select aria-label="Default select example">
+                <option>Select</option>
+                <option value="price">Price</option>
+                <option value="time">Time</option>
+                <option value="indicator">Indicator</option>
+              </Form.Select> */}
+               {
+                buyCheck == true ? 
+                <Tabs
+                // defaultActiveKey="profile"
+                id="uncontrolled-tab-example"
+                className="mb-3"
+              >
 
-                    <h4>{condition_string}</h4>
+    
+                <Tab eventKey="home" title="Price">
+
+                  <h4>{condition_string}</h4>
 
 
-                    {coditionRequestArr.length > 0 ? 
+                  {coditionRequestArr.length > 0 ? 
+                  <>
+                <Row>
+                <Col md={2}>
+                
+                </Col>
+                <Col md={4}>
+                <label style={{ marginRight: '82px'}}><b>First</b></label>
+                
+                <label style={{ marginRight: '32px'}}><b>Comparators</b></label>
+                
+                <label><b>Second</b></label>
+                </Col>
+                <Col md={2}>
+                </Col>
+                {
+                  coditionRequestArr.length==2? <Col md={2}>
+                  <label><b>AND / OR</b></label>
+                  </Col>:""
+                }
+                
+                </Row>
+                  </>
+                  :""}
+
+
+                
+               
+                
+                {coditionRequestArr && coditionRequestArr.map((condition_item,index) => (
                     <>
-                  <Row>
-                  <Col md={2}>
-                  
-                  </Col>
-                  <Col md={4}>
-                  <label style={{ marginRight: '82px'}}><b>First</b></label>
-                  
-                  <label style={{ marginRight: '32px'}}><b>Comparators</b></label>
-                  
-                  <label><b>Second</b></label>
-                  </Col>
-                  <Col md={2}>
-                  </Col>
-                  {
-                    coditionRequestArr.length==2? <Col md={2}>
-                    <label><b>AND / OR</b></label>
-                    </Col>:""
-                  }
-                  
-                  </Row>
-                    </>
-                    :""}
+                   <Row className="mb-2">
+                  <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px'}}>
+
+                   
+                    <button className="btn " onClick={() => AddBracket(index,"start","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}>
+                    + Bracket
+                   </button>
 
 
-                  
-                 
-                  
-                  {coditionRequestArr && coditionRequestArr.map((condition_item,index) => (
-                      <>
-                     <Row className="mb-2">
-                    <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px'}}>
+                    {condition_item.start_bracket.length > 0 ? 
+                     <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1,"buy")}>
+                     <i className="fa-solid fa-xmark"></i>
+                     </button>
+                     :""}
 
                      
-                      <button className="btn " onClick={() => AddBracket(index,"start","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}>
-                      + Bracket
-                     </button>
-
-
-                      {condition_item.start_bracket.length > 0 ? 
-                       <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1,"buy")}>
-                       <i className="fa-solid fa-xmark"></i>
-                       </button>
-                       :""}
-
-                       
-                        <p  style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
-                        {condition_item.start_bracket.join('')}
-                       </p> 
-                       
-                    
-
-                     </Col>
-
-                      <Col md={4} className="d-flex px-0" style={{ height: '25px'}}>
-                        {/* <label>First Element</label> */}
-                     <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index,"buy"); }}>
-                              {/* <option value="">Select Expiry Date</option> */}
-                              <option value="" >---</option>
-                              {
-                                getSources.data.map((sm, i) =>
-                                  <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
-                              }
-                      </select>
-
-                      <input style={{ height: '25px', margin:'0 20px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"buy") }} min="0" className="form-control new-field" />
-                    
-                      {/* <Col md={2}>
-                        <label>Offset</label>
-                        <Form.Control type="number" id="text2" />
-                      </Col> */}
+                      <p  style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
+                      {condition_item.start_bracket.join('')}
+                     </p> 
                      
-                        {/* <label>Comparators</label> */}
-                        <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index,"buy"); }}>
-                              {/* <option value="">Select Expiry Date</option> */}
-                              {/* <option value="" >---</option> */}
-                              {
-                                getComparators.data.map((sm, i) =>
-                                  <option selected={condition_item.comparators == sm.value} value={sm.value}>{sm.name}</option>)
-                              }
-                      </select>
-                    
-                        {/* <label>Second Element</label> */}
-                        <select style={{ margin:'0 20px'}} className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"buy"); }}>
-                              {/* <option value="">Select Expiry Date</option> */}
-                              <option value="" >---</option>
-                              {
-                                getSources.data.map((sm, i) =>
-                                  <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
-                              }
-                      </select>
-                      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"buy") }} min="0" className="form-control new-field" />
-                      </Col>
-                      {/* <Col md={2}>
-                        <label>Offset</label>
-                        <Form.Control type="number" id="text3" />
-                      </Col> */}
+                  
 
-                     <Col md={2} className="d-flex px-0 justify-content-center"  style={{ height: '25px'}}>
+                   </Col>
 
-                      <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
-                        {condition_item.end_bracket.join('')}
-                       </p> 
+                    <Col md={4} className="d-flex px-0" style={{ height: '25px'}}>
+                      {/* <label>First Element</label> */}
+                   <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index,"buy"); }}>
+                            {/* <option value="">Select Expiry Date</option> */}
+                            <option value="" >---</option>
+                            {
+                              getSources.data.map((sm, i) =>
+                                <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                            }
+                    </select>
 
-                       {
-                         condition_item.end_bracket.length > 0 ?
-                       <button className="border-0 px-2"  onClick={() => RemoveBracket(index,"end",condition_item.end_bracket.length - 1,"buy")}>
-                      <i className="fa-solid fa-xmark"></i>
-                     </button>
-                         :"" 
-                        }
-                     
-                      <button className=" btn " onClick={() => AddBracket(index,"end","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}> 
-                      + Bracket
-                     </button>
+                    <input style={{ height: '25px', margin:'0 20px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"buy") }} min="0" className="form-control new-field" />
+                  
+                    {/* <Col md={2}>
+                      <label>Offset</label>
+                      <Form.Control type="number" id="text2" />
+                    </Col> */}
+                   
+                      {/* <label>Comparators</label> */}
+                      <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index,"buy"); }}>
+                            {/* <option value="">Select Expiry Date</option> */}
+                            {/* <option value="" >---</option> */}
+                            {
+                              getComparators.data.map((sm, i) =>
+                                <option selected={condition_item.comparators == sm.value} value={sm.value}>{sm.name}</option>)
+                            }
+                    </select>
+                  
+                      {/* <label>Second Element</label> */}
+                      <select style={{ margin:'0 20px'}} className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"buy"); }}>
+                            {/* <option value="">Select Expiry Date</option> */}
+                            <option value="" >---</option>
+                            {
+                              getSources.data.map((sm, i) =>
+                                <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                            }
+                    </select>
+                    <input style={{ height: '25px'}} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"buy") }} min="0" className="form-control new-field" />
+                    </Col>
+                    {/* <Col md={2}>
+                      <label>Offset</label>
+                      <Form.Control type="number" id="text3" />
+                    </Col> */}
 
+                   <Col md={2} className="d-flex px-0 justify-content-center"  style={{ height: '25px'}}>
 
-                     </Col>
-                       <Col md={2}>
-                        {
-                          coditionRequestArr.length >= 2?
-                          condition_item.and_or_operator == ""?"":
-                          <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index,"buy"); }}>
-                              {/* <option value="">Select Expiry Date</option> */}
-                              <option selected={condition_item.and_or_operator == "and"} value="and">AND</option>
-                              <option selected={condition_item.and_or_operator == "or"} value="or">OR</option>
-                              
-                         </select>
-                          :
-                          ""
-                        }
-            
-                       </Col> 
-                      <Col md={2} style={{ height: '25px'}}> 
+                    <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
+                      {condition_item.end_bracket.join('')}
+                     </p> 
+
                      {
-                     index==0? 
-                     coditionRequestArr.length == 1? 
+                       condition_item.end_bracket.length > 0 ?
+                     <button className="border-0 px-2"  onClick={() => RemoveBracket(index,"end",condition_item.end_bracket.length - 1,"buy")}>
+                    <i className="fa-solid fa-xmark"></i>
+                   </button>
+                       :"" 
+                      }
                    
-                     <button className="btn btn-danger " onClick={() => conditionRemove(index,"buy")} style={{fontSize:'10px',padding:'5px 10px'}}>
-                     Remove
-                    </button>
-                    
-                     : ""
-                     :
-                   
-                      <button className="btn btn-danger  " style={{fontSize:'10px',padding:'5px 10px'}} onClick={() => conditionRemove(index,"buy")} >
-                      Remove
-                     </button>
-                    
-                      
-                     }
-                       </Col>
-                      
-                      
-                    </Row>
-                      
-                      </>
-                  ))}
+                    <button className=" btn " onClick={() => AddBracket(index,"end","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}> 
+                    + Bracket
+                   </button>
 
 
-                   <button style={{border:'1px dashed orange'}} className="btn p-2" onClick={() => conditionAdd(coditionRequestArr,"buy")}>
-                      + Add
+                   </Col>
+                     <Col md={2}>
+                      {
+                        coditionRequestArr.length >= 2?
+                        condition_item.and_or_operator == ""?"":
+                        <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index,"buy"); }}>
+                            {/* <option value="">Select Expiry Date</option> */}
+                            <option selected={condition_item.and_or_operator == "and"} value="and">AND</option>
+                            <option selected={condition_item.and_or_operator == "or"} value="or">OR</option>
+                            
+                       </select>
+                        :
+                        ""
+                      }
+          
+                     </Col> 
+                    <Col md={2} style={{ height: '25px'}}> 
+                   {
+                   index==0? 
+                   coditionRequestArr.length == 1? 
+                 
+                   <button className="btn btn-danger " onClick={() => conditionRemove(index,"buy")} style={{fontSize:'10px',padding:'5px 10px'}}>
+                   Remove
                   </button>
+                  
+                   : ""
+                   :
+                 
+                    <button className="btn btn-danger  " style={{fontSize:'10px',padding:'5px 10px'}} onClick={() => conditionRemove(index,"buy")} >
+                    Remove
+                   </button>
+                  
+                    
+                   }
+                     </Col>
+                    
+                    
+                  </Row>
+                    
+                    </>
+                ))}
 
 
-                    {condition_string != "" ? 
-                    <li class="StepProgress-item">
-                    <strong>Buy Exit Condition</strong>
-                    <div className="row mt-3">
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-danger">Stop loss (point)</label>
-                          <input type="number" onChange={(e)=>{StoplossChange(e,"buy")}}  className="form-control"></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-success">Target Profit (point)</label>
-                          <input type="number" onChange={(e)=>{TargetChange(e,"buy")}} className="form-control"></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="">Trailing SL (point) (optional)</label>
-                          <input type="number" onChange={(e)=>{TSLChange(e,"buy")}} className="form-control"></input>
-                        </div>
+                 <button style={{border:'1px dashed orange'}} className="btn p-2" onClick={() => conditionAdd(coditionRequestArr,"buy")}>
+                    + Add
+                </button>
+
+
+                  {condition_string != "" ? 
+                  <li class="StepProgress-item">
+                  <strong>Buy Exit Condition</strong>
+                  <div className="row mt-3">
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="text-danger">Stop loss (point)</label>
+                        <input type="number" defaultValue={exitConditionBuyOrSell[0].buy.stoploss} onChange={(e)=>{StoplossChange(e,"buy")}}  className="form-control"></input>
                       </div>
                     </div>
-                    </li>
-                    :""}
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="text-success">Target Profit (point)</label>
+                        <input type="number" defaultValue={exitConditionBuyOrSell[0].buy.target} onChange={(e)=>{TargetChange(e,"buy")}} className="form-control"></input>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="form-group">
+                        <label className="">Trailing SL (point) (optional)</label>
+                        <input type="number" defaultValue={exitConditionBuyOrSell[0].buy.tsl} onChange={(e)=>{TSLChange(e,"buy")}} className="form-control"></input>
+                      </div>
+                    </div>
+                  </div>
+                  </li>
+                  :""}
 
-                  </Tab>
+                </Tab>
 
-            
-                 </Tabs>
+          
+               </Tabs>
 
-                  :""
-                 }
+                :""
+               }
 
-                 
+               
 
-              </li>
-
-              <li class="StepProgress-item current is-done" style={{marginTop:"50px"}}>
+            </li>
+              :
+              ""}
+              
+              {singleMakeStrategyData.type == "SELL"?
+               
+               <li class="StepProgress-item current is-done" style={{marginTop:"50px"}}>
 
                 <div className="form-check form-check-inline">
-                  <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" />
+                  <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" 
+                  checked={sellCheck}
+                  />
                   <label className="form-check-label" for="inlineCheckbox2">Sell</label>
                 </div>
                 <strong >Sell Entry Condition</strong>
@@ -2094,19 +2235,19 @@ const saveStrategy = async (e) => {
              <div className="col-md-4">
                <div className="form-group">
                  <label className="text-danger">Stop loss (point)</label>
-                 <input type="number" onChange={(e)=>{StoplossChange(e,"sell")}}  className="form-control"></input>
+                 <input type="number" defaultValue={exitConditionBuyOrSell[0].sell.stoploss}  onChange={(e)=>{StoplossChange(e,"sell")}}  className="form-control"></input>
                </div>
              </div>
              <div className="col-md-4">
                <div className="form-group">
                  <label className="text-success">Target Profit (point)</label>
-                 <input type="number" onChange={(e)=>{TargetChange(e,"sell")}} className="form-control"></input>
+                 <input type="number" defaultValue={exitConditionBuyOrSell[0].sell.target}  onChange={(e)=>{TargetChange(e,"sell")}} className="form-control"></input>
                </div>
              </div>
              <div className="col-md-4">
                <div className="form-group">
                  <label className="">Trailing SL (point) (optional)</label>
-                 <input type="number" onChange={(e)=>{TSLChange(e,"sell")}} className="form-control"></input>
+                 <input type="number" defaultValue={exitConditionBuyOrSell[0].sell.tsl}  onChange={(e)=>{TSLChange(e,"sell")}} className="form-control"></input>
                </div>
              </div>
            </div>
@@ -2121,6 +2262,9 @@ const saveStrategy = async (e) => {
  }
 
               </li>
+              :
+              ""}
+              
 
             </ul>
 
@@ -2202,7 +2346,7 @@ const saveStrategy = async (e) => {
           </div>
 
           <div className="mt-5">
-            <button className='btn btn-info float-start m-0' onClick={()=>saveStrategy("e")}>save</button>
+            <button className='btn btn-info float-start m-0' onClick={()=>updateStrategy("e")}>update</button>
           </div>
 
 

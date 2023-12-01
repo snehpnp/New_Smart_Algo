@@ -284,6 +284,25 @@ export async function EDIT_MAKE_STRATEGY(data, token) {
     }
 }
 
+// Update strategy
+export async function UPDATE_MAKE_STRATEGY(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}UpdateMakeStartegy`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}
+
+
+
 
 
 

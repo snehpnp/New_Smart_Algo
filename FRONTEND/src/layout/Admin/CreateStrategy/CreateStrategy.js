@@ -1332,6 +1332,7 @@ const saveStrategy = async (e) => {
         "target_stoploss": exitConditionBuyOrSell[0].buy,
         "timeTradeConddition":timeTradeConddition,
         "condition_array":coditionRequestArr,
+        "target_stoloss_array":exitConditionBuyOrSell,
        }
        
        console.log("data request buy",data)
@@ -1343,10 +1344,10 @@ const saveStrategy = async (e) => {
         else if (response.status) {
           if(!sellCheck && !sell_cond){
            toast.success(response.msg);
-           window.location.reload();
-          //  setTimeout(() => {
-          //   navigate("/admin/createstrategy")
-          //  }, 1000); 
+           //window.location.reload();
+           setTimeout(() => {
+            navigate("/admin/AllMakeStrategy")
+           }, 1000); 
           }else{
             
           }
@@ -1387,6 +1388,7 @@ const saveStrategy = async (e) => {
         "target_stoploss": exitConditionBuyOrSell[0].sell,
         "timeTradeConddition":timeTradeConddition,
         "condition_array":coditionRequestArrSell,
+        "target_stoloss_array":exitConditionBuyOrSell,
       }
       console.log("data request sell",data)
 
@@ -1397,10 +1399,10 @@ const saveStrategy = async (e) => {
         else if (response.status) {
 
          toast.success(response.msg);
-         window.location.reload();
-          // setTimeout(() => {
-          //   navigate("/admin/createstrategy")
-          // }, 1000);
+         //window.location.reload();
+         setTimeout(() => {
+          navigate("/admin/AllMakeStrategy")
+         }, 1000); 
         }
         else if (!response.status) {
           toast.error(response.msg);
@@ -1422,16 +1424,16 @@ const saveStrategy = async (e) => {
   return (
     <>
       <>
-        <Content Page_title="Create Strategy" button_status={false}>
+        <Content Page_title="Create Strategy" button_title=" Back" route="/admin/AllMakeStrategy">
           <div>
 
            <div className="col-md-2 ">
-              <label className="">Strategy Name</label>
-             <input type="text" onChange={(e)=>{onChange(e)}} className="form-control"></input>
+              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Strategy Name</label>
+             <input type="text" onChange={(e)=>{onChange(e)}} className="form-control stratergy-box"></input>
             </div>
 
             <div className="col-md-2 ">
-              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '20px' }}>Strategy</label>
+              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Strategy Tag</label>
               <select className="form-select stratergy-box" onChange={(e) => setSelectStrategy(e.target.value)} name="strategyname">
                 <option value="">-- Select Strategy Tag--</option>
                 {strategyDataAllAdmin.data && strategyDataAllAdmin.data.map((sm, i) =>
@@ -1542,6 +1544,7 @@ const saveStrategy = async (e) => {
                     </div>
                   ))}
 
+                
                 </div>
               </li>
                <li class="StepProgress-item is-done">
@@ -1594,7 +1597,7 @@ const saveStrategy = async (e) => {
              
                <Row className="mt-4">
                 <Col md={2}>
-                  <h5 >Entry Time</h5>
+                  <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Entry Time</h5>
                 </Col>
                 <Col md={2}>
                   {/* <label>Time</label> */}
@@ -1604,7 +1607,7 @@ const saveStrategy = async (e) => {
 
               <Row className="mt-4">
                 <Col md={2}>
-                  <h5 >Exit Time</h5>
+                  <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Exit Time</h5>
                 </Col>
                
                 <Col md={2}>
@@ -1615,7 +1618,7 @@ const saveStrategy = async (e) => {
 
               <Row  className="mt-4">
                 <Col md={2}>
-                  <h5>No Trade Time</h5>
+                  <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>No Trade Time</h5>
                 </Col>
                 
                 <Col md={2}>

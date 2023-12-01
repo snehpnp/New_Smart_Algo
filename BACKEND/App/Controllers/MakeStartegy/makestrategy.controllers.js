@@ -138,10 +138,109 @@ class MakeStartegy {
     }
 }
 
+  //Update Strategy..
+
+  
+  async UpdateMakeStartegy(req, res) {
+    console.log("req time",req.body)   
+    
+    let user_panel_key =  await user.findOne().select('client_key').lean();
+   // console.log("user_panel_key",user_panel_key)
+    //   return
+     let channelList ="";
+      try {
+      // console.log("req",req.body) 
+       console.log("req time",req.body.timeTradeConddition[0].entry.time) 
+       
+       
+      // for (const element of req.body.scriptArray) {
+        //console.log(element.instrument_token);
+       // channelList+=element.exch_seg+'|'+element.instrument_token+"#";
+
+        // res.send({ status: true, msg: "successfully Add!" });
+       // let user_id = req.body.user_id;
+        let name = req.body.name;
+        //let tokensymbol = element.instrument_token;
+       // let symbol_name = element.symbol;
+        let strategy_name = req.body.strategy_name;
+       // let segment = element.segment;
+       // let strike_price = element.strike;
+       // let option_type = element.option_type;
+      //  let expiry = element.expiry;
+       // let exch_seg = element.exch_seg;
+        let timeframe = req.body.timeframe;
+        let indicator = req.body.indicator;
+        let price_source = req.body.price_source;
+        let period = req.body.period;
+        let inside_indicator = req.body.inside_indicator;
+        let condition = req.body.condition;
+        let buffer_value = req.body.buffer_value;
+        let type = req.body.type;
+        let offset = req.body.offset;
+        let condition_source = req.body.condition_source.toString();
+        let target = req.body.target_stoploss.target;
+        let stoploss = req.body.target_stoploss.stoploss;
+        let tsl = req.body.target_stoploss.tsl;
+        let panelKey = user_panel_key.client_key;
+        let entryTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].entry.time ==""?"01:01" : req.body.timeTradeConddition[0].entry.time}:00.000Z`);
+        let exitTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].exit.time == ""?"01:01":req.body.timeTradeConddition[0].exit.time}:00.000Z`);
+        let notradeTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].notrade.time==""?"01:01":req.body.timeTradeConddition[0].notrade.time}:00.000Z`);
+        let condition_array = req.body.condition_array
+        let timeTradeConddition_array = req.body.timeTradeConddition;
+        let target_stoloss_array = req.body.target_stoloss_array
 
 
 
+          const objectId_update = new ObjectId(req.body.update_id);
+          const filter = { _id: objectId_update };
+            const update_make_strategy = {
+                $set:{
+                  name:name,
+                 // user_id: user_id,
+                 // tokensymbol: tokensymbol,
+                 // symbol_name: symbol_name,
+                  strategy_name: strategy_name,
+                  //segment: segment,
+                 // strike_price: strike_price,
+                 // option_type: option_type,
+                 // expiry: expiry,
+                  timeframe: timeframe,
+                  indicator: indicator,
+                  price_source: price_source,
+                  period: period,
+                  inside_indicator: inside_indicator,
+                  condition: condition,
+                  buffer_value: buffer_value,
+                  type: type,
+                  offset: offset,
+                  condition_source: condition_source,
+                  target:target,
+                  stoploss:stoploss,
+                  tsl:tsl,
+                  panelKey:panelKey,
+                  entryTime:entryTime,
+                  exitTime:exitTime,
+                  notradeTime:notradeTime,
+                  condition_array:condition_array,
+                  //exch_seg:exch_seg,
+                  timeTradeConddition_array:timeTradeConddition_array,
+                  target_stoloss_array:target_stoloss_array
+                 }
+            };
 
+            // UPDATE STRATEGY INFORMATION
+          const result = await UserMakeStrategy.updateOne(filter, update_make_strategy);
+       
+      // }
+       
+  
+       res.send({ status: true, msg: "Update successfully!", data: [] });
+     
+       } catch (error) {
+           console.log("error-", error);
+           res.status(500).send({ status: false, msg: "Internal server error" });
+       }
+   }
 
      /// Make Startegy
      async AddMakeStartegy(req, res) {
@@ -157,12 +256,13 @@ class MakeStartegy {
         console.log("req time",req.body.timeTradeConddition[0].entry.time) 
         
         
-
-           
-          
-
         for (const element of req.body.scriptArray) {
-         //console.log(element.instrument_token);
+          
+          let Strike = element.strike;
+          if(element.strike == "NaN"){
+            Strike = "100"
+          }
+
          channelList+=element.exch_seg+'|'+element.instrument_token+"#";
  
          // res.send({ status: true, msg: "successfully Add!" });
@@ -172,9 +272,10 @@ class MakeStartegy {
          let symbol_name = element.symbol;
          let strategy_name = req.body.strategy_name;
          let segment = element.segment;
-         let strike_price = element.strike;
+         let strike_price = Strike;
          let option_type = element.option_type;
          let expiry = element.expiry;
+         let exch_seg = element.exch_seg;
          let timeframe = req.body.timeframe;
          let indicator = req.body.indicator;
          let price_source = req.body.price_source;
@@ -193,6 +294,9 @@ class MakeStartegy {
          let exitTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].exit.time == ""?"01:01":req.body.timeTradeConddition[0].exit.time}:00.000Z`);
          let notradeTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].notrade.time==""?"01:01":req.body.timeTradeConddition[0].notrade.time}:00.000Z`);
          let condition_array = req.body.condition_array
+         let timeTradeConddition_array = req.body.timeTradeConddition;
+         let target_stoloss_array = req.body.target_stoloss_array
+
 
        
            console.log("condition_source",condition_source)
@@ -225,7 +329,10 @@ class MakeStartegy {
             entryTime:entryTime,
             exitTime:exitTime,
             notradeTime:notradeTime,
-            condition_array:condition_array
+            condition_array:condition_array,
+            exch_seg:exch_seg,
+            timeTradeConddition_array:timeTradeConddition_array,
+            target_stoloss_array:target_stoloss_array
            })
             .then(async (createUserMakeStrategy) => {
               console.log("3")
@@ -252,6 +359,8 @@ class MakeStartegy {
             res.status(500).send({ status: false, msg: "Internal server error" });
         }
     }
+
+
 }
 
 

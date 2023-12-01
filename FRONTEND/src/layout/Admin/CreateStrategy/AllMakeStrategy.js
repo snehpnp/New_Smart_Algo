@@ -84,6 +84,12 @@ const AllMakeStrategy = () => {
             sort: true,
            
         },
+        {
+            dataField: 'type',
+            text: 'Transaction Type',
+            sort: true,
+           
+        },
          {
             dataField: 'actions',
             text: 'Actions',
