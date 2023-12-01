@@ -2,7 +2,7 @@
 const db = require('../../Models');
 const mongoose = require('mongoose');
 const MongoClient = require('mongodb').MongoClient;
-
+const axios = require('axios');
 const ObjectId = mongoose.Types.ObjectId;
 const timeFrame = db.timeFrame
 const source = db.source
@@ -124,9 +124,9 @@ class MakeStartegy {
          let stoploss = req.body.target_stoploss.stoploss;
          let tsl = req.body.target_stoploss.tsl;
          let panelKey = user_panel_key.client_key;
-         let entryTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].entry.time}:00.000Z`);
-         let exitTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].exit.time}:00.000Z`);
-         let notradeTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].notrade.time}:00.000Z`);
+         let entryTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].entry.time ==""?"00:00" : req.body.timeTradeConddition[0].entry.time}:00.000Z`);
+         let exitTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].exit.time == ""?"00:00":req.body.timeTradeConddition[0].exit.time}:00.000Z`);
+         let notradeTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].notrade.time==""?"00:00":req.body.timeTradeConddition[0].notrade.time}:00.000Z`);
 
        
            console.log("condition_source",condition_source)
@@ -204,7 +204,7 @@ const currentTimeNow = currentDateNow.toLocaleString('en-IN', options);
 const [hours, minutes] = currentTimeNow.split(':').map(Number);
 
 const marketStartTime = { hour: 9, minute: 15 };
-const marketEndTime = { hour: 15, minute: 30 };
+const marketEndTime = { hour: 17, minute: 30 };
 
 const isMarketOpen =
   hours > marketStartTime.hour ||
@@ -384,16 +384,28 @@ setInterval(async () => {
         });
         await Promise.all(promises);
     }
+     // STARTEGY CODEE END
+
+    
+
+     //--------SNEH CODE------//
+
+    
+
+       //--------END SNEH CODE------//
+   
 
 
 },10000);
 
+
+
+
 }
 
 
-
   
-  const abc = (data, conditionString,val) => {
+  const abc = async (data, conditionString,val) => {
     //console.log("data - ",data)
    // console.log("conditionString - ",conditionString)
     // (data.close[0]==246.5)||(data.low[1]==data.high[4])
@@ -417,8 +429,6 @@ setInterval(async () => {
       console.error("Error in evaluating the condition:", error);
     }
   };
-
-
 
 const tradeExcuted = async (val) => {
   //console.log("broker url -",process.env.BROKER_URL)
@@ -456,15 +466,15 @@ const tradeExcuted = async (val) => {
   const dateObject = new Date(val.exitTime);
   const hours = ('0' + dateObject.getUTCHours()).slice(-2);
   const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
-  const ExitTime = `${hours}:${minutes}`;
+  const ExitTime = `${hours}-${minutes}`;
 
  
   let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|Demo:demo`
 
   // console.log("req -- ",req)
 
-  return
-
+  
+ 
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
@@ -486,6 +496,12 @@ axios.request(config)
         console.log(error);
     });
 }
+
+
+
+
+
+
 
 
 
