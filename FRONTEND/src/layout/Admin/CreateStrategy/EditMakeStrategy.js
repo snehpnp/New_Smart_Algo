@@ -870,7 +870,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
     
   }
   
-  //console.log("coditionRequestArr final --",coditionRequestArr)
+  console.log("coditionRequestArr final --",coditionRequestArr)
   //console.log("coditionRequestArr Sell final --",coditionRequestArrSell)
   
   let condition_string = "";
@@ -1376,7 +1376,10 @@ const updateStrategy = async (e) => {
            return;
          }
       }
+     
+      //alert(condition_string_pass)
 
+       
    
       let condition_string_source = [];
       for (let index = 0; index < coditionRequestArr.length; index++) {
@@ -1454,7 +1457,7 @@ const updateStrategy = async (e) => {
         "period": "1",
         "inside_indicator": "EMA",
        // "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
-        "condition": condition_string_pass,
+        "condition": condition_string_pass.replace(/(\|\||&&)$/, ''),
        // "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
         "condition_source": condition_string_source,
         "buffer_value": "2",
@@ -1511,7 +1514,7 @@ const updateStrategy = async (e) => {
         "period": "1",
         "inside_indicator": "EMA",
         //"condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
-        "condition": condition_string_sell_pass,
+        "condition": condition_string_sell_pass.replace(/(\|\||&&)$/, ''),
        // "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
         "condition_source": condition_string_sell_source,
         "buffer_value": "2",

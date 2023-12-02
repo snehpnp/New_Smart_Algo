@@ -22,6 +22,7 @@ const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const dbTradeTools = client.db('TradeTools');
+const db_GET_VIEW = client.db('test');
 
 class MakeStartegy {
 
@@ -397,13 +398,17 @@ const isMarketClosed =
 //   console.log('The stock market is closed.');
 // }
 
+    
+    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const weekday = weekdays[currentDateNow.getDay()];
+
 
 const Holidays = require('date-holidays');
-// Example: Check if a date is a public holiday
 const holidays = new Holidays();
 const currentDate = new Date();
-
-if (!holidays.isHoliday(currentDate)) {
+let rr= 1
+//if (rr) {
+ if (!holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
   console.log('The stock market is open!');
 setInterval(async () => {
   
@@ -425,10 +430,10 @@ setInterval(async () => {
     let array =[2,5,6,4] 
     if(allStrategyResult.length > 0){
     
-      const promises = allStrategyResult.map(val => {
+      const promises = allStrategyResult.map(async(val) => {
           
-        console.log("val ",val.entryTime)
-        console.log("new date ",new Date())
+      
+        //console.log("new date ",new Date())
 
         const currentDate = new Date();
 
@@ -455,15 +460,16 @@ setInterval(async () => {
         const exitTime = val.exitTime.toLocaleTimeString('en-US', options1);
         const notradeTime = val.notradeTime.toLocaleTimeString('en-US', options1);
         
-        console.log('currentTime:', currentTime);
-       console.log('entryTime:', entryTime);
-       console.log('exitTime:', exitTime);
-       console.log('notradeTime:', notradeTime);
+      //  console.log('currentTime:', currentTime);
+     //  console.log('entryTime:', entryTime);
+      // console.log('exitTime:', exitTime);
+     //  console.log('notradeTime:', notradeTime);
       //  console.log('entryTime:', entryTime);
         // Entry Time less than No trade time OR Exit time
         if( currentTime > entryTime  && entryTime < exitTime && entryTime < notradeTime){
         console.log('if:', entryTime)
-
+        console.log("symbol_name ",val.symbol_name , " type  ", val.type)
+         
         return new Promise(resolve => {
         setTimeout(async() => {
         const currentDate = new Date();
@@ -471,11 +477,11 @@ setInterval(async () => {
       //  console.log(`Running Time -- ${new Date()} function with element: ${val}`);
        //  code start runing strategy
        let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
-       // console.log("collectionName -",collectionName)
+        console.log("collectionName -",collectionName)
       const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
       if (ExistView.length > 0) {
 
-     // console.log("exist collection if ",collectionName)
+      console.log("exist collection if ",collectionName)
       const collection = dbTradeTools.collection(collectionName);
       const get_view_data = await collection.aggregate([{$sort :{_id:1}}]).toArray();
   
@@ -484,33 +490,15 @@ setInterval(async () => {
    let checkData = {}
     if(val.condition_source != null){
     let condition_source = val.condition_source.split(',');
-    //console.log("condition_source val ",val.condition_source)
-    //  console.log("condition_source",condition_source)
-    // if(condition_source.length > 0){
-    //     for (const source of condition_source) {
-    //           console.log("condition source ",source)
-    //     }}
-     
+   
     if(condition_source.length > 0){
       for (const source of condition_source) {
     
        // console.log("condition_source",source)
-
         const matches = source.match(/(\w+)\((\d+)\)/);
-
         if (matches) {
-         
           const OFFSET_KEY = matches[2]; //
           
-        //  console.log("OFFSET_KEY",OFFSET_KEY)
-        //  console.log("OFFSET_KEY",parseInt(OFFSET_KEY)+1)
-            
-          const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY)+1)];
-
-         // console.log("viewSourceValue",viewSourceValue); // This will output: 'close(1)'
-         // console.log("matches[1]",matches[1]); // This will output: 'close(1)'
-         
-           
           let sourceVal
           if(matches[1] == "close"){
             sourceVal = get_view_data.map(item => item.close);
@@ -533,18 +521,9 @@ setInterval(async () => {
 
     }
   
-  
-   //console.log("checkData - ",checkData)
-   //console.log("val.condition - ",val.condition)
-
-    
-    const conditionString = "(data.close[0] >= data.low[1] || data.high[0] < data.low[2]) && data.close[1] < data.high[2]";
-
-    const conditiostring1 ="(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
-
-
-     console.log("symbol_name",val.symbol_name)
-    abc(checkData, val.condition,val);
+ 
+      console.log("symbol_name",val.symbol_name)
+      abc(checkData, val.condition,val);
       }
 
       // code end strategy...
@@ -553,9 +532,8 @@ setInterval(async () => {
         });
         
         }else{
-        console.log('else:', entryTime);
-      
-        }
+       //console.log('else:', entryTime);
+       }
 
          
 
@@ -574,23 +552,80 @@ setInterval(async () => {
    
 
 
-},10000000);
+},10000);
 
+}else{
+  console.log('The stock market is Closed!');
 }
 
   
   const abc = async (data, conditionString,val) => {
-    //console.log("data - ",data)
-   // console.log("conditionString - ",conditionString)
+    
+    console.log("data - ",data)
+    console.log("conditionString - ",conditionString)
     // (data.close[0]==246.5)||(data.low[1]==data.high[4])
     try {
       // Use eval to dynamically evaluate the condition string
-      const condition = eval(conditionString);
+      const condition = eval(conditionString.replace(/(\|\||&&)$/, ''));
       // Check if the condition is true or false based on the data
       if (condition) {
+
+        let entry_type = "LE";
+        if(val.type == "BUY"){
+         entry_type = "SE"
+        }
+
+        let condition_check_previous_trade = {
+          strategy:val.strategy_name, 
+          symbol:val.symbol_name, 
+          entry_type:entry_type , 
+          segment:val.segment,
+          TradeType:"MAKE_STRATEGY", 
+       }
+
+       if(val.segment.toUpperCase() == "O" || val.segment.toUpperCase() == "FO" || val.segment.toUpperCase() == "MO" || val.segment.toUpperCase() == "CO"){
+         
+         let option_type = "CALL";
+         if(val.option_type == "PE"){
+           option_type = "PUT"
+         }
+         
+         condition_check_previous_trade = {
+           strategy:val.strategy_name,
+           symbol:val.symbol_name, 
+           entry_type:entry_type, 
+           segment:val.segment, 
+           strike:val.strike_price, 
+           option_type:option_type, 
+           expiry:val.expiry, 
+           TradeType:"MAKE_STRATEGY",
+        }
+
+       }
+
+       if(val.segment.toUpperCase() == "F" || val.segment.toUpperCase() == "MF" || val.segment.toUpperCase() == "CF"){
+       
+         condition_check_previous_trade = {
+           strategy:val.strategy_name,
+           symbol:val.symbol_name, 
+           entry_type:entry_type, 
+           segment:val.segment,  
+           expiry:val.expiry, 
+           TradeType:"MAKE_STRATEGY",
+        }
+
+       }
+
+       console.log("condition_check_previous_trade ",condition_check_previous_trade)
+      const get_open_position_view = db_GET_VIEW.collection('open_position');
+        var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade)
+        if(checkPreviousTrade!=null){
+       // console.log("checkPreviousTrade ",val.symbol_name );
+        PreviousTradeExcuted(checkPreviousTrade,val.panelKey);
+        }
         // Your code for when the condition is true
-        console.log("Condition is true ",val._id);
-        return
+        console.log("Condition is true ",val._id ,val.symbol_name);
+        
         const update = {
           $set: {
             status: "1",    
@@ -623,7 +658,7 @@ setInterval(async () => {
   // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
 
   let type = "LE";
-  if(val.type.toUpperCase() == "SEll"){
+  if(val.type.toUpperCase() == "SELL"){
     type = "SE" 
   }
 
@@ -636,7 +671,7 @@ setInterval(async () => {
 
 
   let option_type = "CALL"
-  if(val.option_type.toUpperCase()){
+  if(val.option_type.toUpperCase()=="PE"){
     option_type = "PUT"
   }
  
@@ -658,6 +693,68 @@ setInterval(async () => {
 
   
  
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+    url: `${process.env.BROKER_URL}`,
+    headers: {
+        'Content-Type': 'text/plain'
+    },
+    data: req
+};
+
+axios.request(config)
+    .then((response) => {
+       
+      console.log("response Trade Excuted - ",response)
+
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+ }
+
+
+ const PreviousTradeExcuted = async (val,panelKey) => {
+  
+  console.log("val - ",val)
+  const currentTimestamp = Math.floor(Date.now() / 1000);
+  // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
+
+  let type = "LX";
+  let price = val.stockInfo_bp1;
+  if(val.entry_type.toUpperCase() == "SE"){
+    type = "SX";
+    price = val.stockInfo_sp1; 
+  }
+
+
+  let strike = val.strike;
+  if(val.strike_price == "NaN"){
+    strike = "100"
+  }
+
+
+  let option_type = "CALL"
+  if(val.option_type.toUpperCase() == "PUT"){
+     option_type = "PUT"
+  }
+
+ 
+  let Quntity = val.entry_qty_percent;
+
+
+
+
+
+ 
+  let req = `DTime:${currentTimestamp}|Symbol:${val.symbol}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy}|Quntity:${Quntity}|Key:${panelKey}|TradeType:${val.TradeType}|Demo:demo`
+
+  console.log("req Exit -- ",req)
+
+  
+   
   let config = {
     method: 'post',
     maxBodyLength: Infinity,

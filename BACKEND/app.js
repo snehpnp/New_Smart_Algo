@@ -36,9 +36,31 @@ app.use(express.json());
 
 const db = require('../BACKEND/App/Models')
 const Alice_token = db.Alice_token;
+const UserMakeStrategy = db.UserMakeStrategy;
+
 
 // REQUIRE File
 require('./App/Cron/cron')
+
+const { createView, dashboard_view } = require('./View/Alice_blue')
+const { createViewAngel } = require('./View/Angel')
+const { createViewFivepaisa } = require('./View/fivepaisa')
+const { createViewZerodha } = require('./View/zerodha')
+
+// TEST API
+app.get('/get', async (req, res) => {
+ // createViewZerodha()
+  // createViewFivepaisa()
+  // createViewAngel()
+  //createView()
+  res.send({ msg: "Done!!!" })
+});
+
+app.get('/ok',async (req,res)=>{
+
+  res.send("okk")
+})
+
 
 
 //Testing Api #Shakir
