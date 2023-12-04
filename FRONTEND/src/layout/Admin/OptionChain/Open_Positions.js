@@ -44,7 +44,8 @@ const TradeHistory = () => {
     const [SocketState, setSocketState] = useState("null");
     const [getBrokerUrl, setBrokerUrl] = useState('')
 
-    console.log("UserDetails", UserDetails && UserDetails.trading_status)
+    
+    // console.log("UserDetails", UserDetails && UserDetails.trading_status)
 
     const [disabled, setDisabled] = useState(false);
 
@@ -109,9 +110,7 @@ const TradeHistory = () => {
             });
     };
 
-    useEffect(() => {
-        Get_TradHistory();
-    }, [refresh, SocketState]);
+  
 
     const columns = [
         // {
@@ -374,10 +373,6 @@ const TradeHistory = () => {
     }
 
 
-
-
-
-
     // ----------------------------- SQUARE OFF ----------------------------
 
 
@@ -484,9 +479,10 @@ const TradeHistory = () => {
             axios.request(config)
                 .then((response) => {
                     setButtonDisabled(!ButtonDisabled)
-                    setrefresh(!refresh)
                     toast.success("Order Place Sucessfully");
                     setshowModal(false)
+                    setrefresh(!refresh)
+                    window.location.reload()
                 })
                 .catch((error) => {
                     console.log(error);
@@ -505,10 +501,6 @@ const TradeHistory = () => {
         setshowModal(false)
         setCreateSignalRequest([])
     }
-
-
-
-
 
 
     // ----------------------------- SQUARE OFF ----------------------------
@@ -766,8 +758,7 @@ const TradeHistory = () => {
     const [selected1, setSelected1] = useState([]);
 
     const handleOnSelect = (row, isSelect) => {
-        // console.log("isSelect", selected)
-        // console.log("row", row)
+      
         if (isSelect) {
             setSelected([...selected, row._id]);
             setSelected1([...selected1, row]);

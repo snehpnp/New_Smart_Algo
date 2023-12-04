@@ -187,26 +187,26 @@ app.post('/broker-signals', async (req, res) => {
       var client_key = signals.Key;
       var TradeType = signals.TradeType;
       var Target = 0;
-       if(signals.Target != undefined){
-       Target = signals.Target;
-       }
-       
-       var StopLoss= 0;
-       if(signals.StopLoss != undefined){
-          StopLoss = signals.StopLoss;
-       }
-      
-       var ExitTime = 0;
-       if(signals.ExitTime != undefined){
-          ExitTime = signals.ExitTime.replace(/-/g, ':');
-       }
-      
-      console.log("Target",Target)
-      console.log("StopLoss",StopLoss)     
-      console.log("ExitTime",ExitTime)
+      if (signals.Target != undefined) {
+        Target = signals.Target;
+      }
+
+      var StopLoss = 0;
+      if (signals.StopLoss != undefined) {
+        StopLoss = signals.StopLoss;
+      }
+
+      var ExitTime = 0;
+      if (signals.ExitTime != undefined) {
+        ExitTime = signals.ExitTime.replace(/-/g, ':');
+      }
+
+      console.log("Target", Target)
+      console.log("StopLoss", StopLoss)
+      console.log("ExitTime", ExitTime)
 
       var demo = signals.Demo;
-      
+
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
 
@@ -655,12 +655,12 @@ app.post('/broker-signals', async (req, res) => {
                 signals_id: SignalSave._id,
                 token: instrument_token,
                 lot_size: find_lot_size,
-                target:Target,
-                stop_loss:StopLoss,
-                exit_time:ExitTime,
-                exit_time1:0,
-                complete_trade:0,
-                sl_status:0
+                target: Target,
+                stop_loss: StopLoss,
+                exit_time: ExitTime,
+                exit_time1: 0,
+                complete_trade: 0,
+                sl_status: 0
 
               }
               const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
@@ -704,16 +704,24 @@ app.post('/broker-signals', async (req, res) => {
               const qty_percent1 = Number(qty_percent) || 0; // Use 0 if qty_percent is not a valid number
               const result = entry_qty + (lot_size * Math.ceil(qty_percent1 / 100));
 
-              console.log(result);
 
               if ((ExitMainSignals[0].exit_price == "" && ExitMainSignals[0].exit_qty_percent == "") || isNaN(ExitMainSignals[0].exit_price)) {
+
+
+
+                var exit_qty_percent1 = 0
+                if (parseFloat(ExitMainSignals[0].entry_qty_percent) > parseFloat(qty_percent)) {
+                  exit_qty_percent1 = parseFloat(qty_percent)
+                } else {
+                  exit_qty_percent1 = parseFloat(ExitMainSignals[0].entry_qty_percent)
+                }
 
 
                 // IF EXIST ENTRY OF THIS EXIT TRADE
                 var updatedData = {
                   exit_type: type,
                   exit_price: parseFloat(price) + (isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)),
-                  exit_qty_percent: parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)),
+                  exit_qty_percent: exit_qty_percent1,
                   exit_qty: result,
                   exit_dt_date: current_date
                 }
@@ -724,7 +732,7 @@ app.post('/broker-signals', async (req, res) => {
 
               } else {
 
-                if (Number(ExitMainSignals[0].entry_qty) >  result) {
+                if (parseFloat(ExitMainSignals[0].entry_qty_percent) > (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
 
 
                   var updatedData = {

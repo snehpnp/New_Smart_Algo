@@ -5,8 +5,14 @@ const MainSignals_modal = db.MainSignals
 const Alice_token = db.Alice_token;
 const live_price = db.live_price;
 
+const mongoose = require('mongoose');
+const MongoClient = require('mongodb').MongoClient;
 
+const uri = process.env.MONGO_URI
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const db_main = client.db('test');
 
+client.connect();
 
 class OptionChain {
 
@@ -235,13 +241,20 @@ class OptionChain {
 
             var GetTrade = await MainSignals_modal.aggregate([
                 {
+                    $addFields: {
+                        // ... your other field additions
+                        entry_qty_percent_int: { $toInt: "$entry_qty_percent" },
+                        exit_qty_percent_int: { $toInt: "$exit_qty_percent" }
+                    }
+                },
+                {
                     $match: {
                         "TradeType": "OPTION_CHAIN",
-                        $expr: { $gt: ["$entry_qty_percent", "$exit_qty_percent"] }
+                        $expr: { $gt: ["$entry_qty_percent_int", "$exit_qty_percent_int"] }
                     }
                 }
-            ]);
 
+            ]);
             if (!GetTrade) {
                 return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
             }
@@ -407,7 +420,7 @@ class OptionChain {
                         let put_token = "";
                         let symbol = ""
                         let segment = ""
-                        result.forEach(element1 => {
+                        result.forEach(async (element1) => {
                             if (element.document.strike == element1.strike) {
                                 if (element1.option_type == "CE") {
                                     symbol = element1.symbol
@@ -418,7 +431,21 @@ class OptionChain {
                                     segment = element1.segment
                                     put_token = element1.instrument_token;
                                 }
+
+
+                                const stock_live_price = db_main.collection('token_chain');
+
+                                const filter = { _id: element1.instrument_token };
+                                const update = {
+                                    $set: { _id: element1.instrument_token, exch: element1.exch_seg },
+                                };
+
                                 channelstr += element1.exch_seg + "|" + element1.instrument_token + "#"
+
+                                const update_token = await stock_live_price.updateOne(filter, update, { upsert: true });
+
+
+
                             }
                         });
 
@@ -429,8 +456,6 @@ class OptionChain {
                     alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
                     final_data.push(alltokenchannellist)
 
-                    // console.log(alltokenchannellist);
-                    // res.send({ status: true, channellist: alltokenchannellist })
                 }
 
 
@@ -441,7 +466,7 @@ class OptionChain {
             final_data.forEach((data) => {
                 concatenatedArray += data + "#"
             });
-            
+
 
             var concatenatedArray1 = concatenatedArray.substring(0, concatenatedArray.length - 1)
             const filter = { broker_name: "ALICE_BLUE" };
@@ -483,10 +508,54 @@ class OptionChain {
 
 
 
+    async Stock_chain(req, res) {
+        try {
+
+
+            const stock_live_price = db_main.collection('token_chain');
+            const updateToken = await stock_live_price.find({}).toArray();
+
+            var channelstr = ""
+            if (updateToken.length > 0) {
+                updateToken.forEach((data) => {
+                    channelstr += data.exch + "|" + data._id + "#"
+                })
+                // console.log(channelstr);
+            }
+            // Display fetched documents
+
+            var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+
+            res.send({ status: true, channellist: alltokenchannellist })
+        } catch (error) {
+            console.log("Theme error-", error);
+            return res.send({ status: false, msg: 'error ', data: error });
+
+        }
+    }
 
 
 
+ async subscribr_token(req, res) {
+        try {
+            const {instrument_token,exch_seg} = req.body
 
+            const stock_live_price = db_main.collection('token_chain');
+
+            const filter = { _id: instrument_token };
+            const update = {
+                $set: { _id: instrument_token, exch: exch_seg },
+            };
+            const update_token = await stock_live_price.updateOne(filter, update, { upsert: true });
+            res.send({ status: true, msg: "Done" })
+
+
+        } catch (error) {
+            console.log("Theme error-", error);
+            return res.send({ status: false, msg: 'error ', data: error });
+
+        }
+    }
 
 }
 

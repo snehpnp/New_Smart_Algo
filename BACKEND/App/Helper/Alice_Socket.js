@@ -4,7 +4,7 @@ var CryptoJS = require("crypto-js");
 
 const db = require('../Models');
 
-const {ALice_View_data} = require('./ALice_View_data');
+const { ALice_View_data } = require('./ALice_View_data');
 
 const live_price = db.live_price;
 const mongoose = require('mongoose');
@@ -26,7 +26,7 @@ const Alice_Socket = async () => {
 
     var rr = 0;
     const url = "wss://ws1.aliceblueonline.com/NorenWS/"
-    var socket=null
+    var socket = null
     var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
 
 
@@ -34,32 +34,32 @@ const Alice_Socket = async () => {
     var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
     var userid = broker_infor.user_id
     var userSession1 = broker_infor.access_token
-   //var channelList = broker_infor.Stock_chain
-    var channelList = "NSE|940"
-    console.log("channelList",channelList)
-    console.log("userid",userid)
-    console.log("userSession1",userSession1)
+    var channelList = broker_infor.Stock_chain
+    // var channelList = "NSE|14366"
+    // console.log("channelList", channelList)
+    // console.log("userid", userid)
+    // console.log("userSession1", userSession1)
     var type = { "loginType": "API" }
 
     //  Step -1
-    try{
+    try {
 
         await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
             headers: {
                 'Authorization': `Bearer ${userid} ${userSession1}`,
                 'Content-Type': 'application/json'
             },
-    
+
         }).then(res => {
-    
+
             // const url = "wss://ws1.aliceblueonline.com/NorenWS/"
             // var socket;
-    
+
             if (res.data.stat == "Ok") {
-    
+
                 try {
                     socket = new WebSocket(url)
-    
+
                     socket.onopen = function () {
                         var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession1).toString()).toString();
                         var initCon = {
@@ -69,49 +69,49 @@ const Alice_Socket = async () => {
                             uid: userid + "_" + "API",
                             source: "API"
                         }
-                    socket.send(JSON.stringify(initCon))
+                        socket.send(JSON.stringify(initCon))
                     }
                     socket.onmessage = async function (msg) {
-    
+
                         var response = JSON.parse(msg.data)
-    
-                         console.log("okk response",response)
-    
+
+                        // console.log("okk response", response)
+
                         if (response.tk) {
-                            
+
                             // --- Start Conver data view function  ----//
-                             ALice_View_data(response.tk, response,dbTradeTools)
-                           // --- End Conver data view function  ----//
-                            
-                           const currentDate = new Date();
+                            //    ALice_View_data(response.tk, response)
+                            // --- End Conver data view function  ----//
+
+                            const currentDate = new Date();
 
                             // Extract hours and minutes from the time string
                             const hours = currentDate.getHours().toString().padStart(2, '0');
                             const minutes = currentDate.getMinutes().toString().padStart(2, '0');
 
                             const stock_live_price = db_main.collection('stock_live_price');
-    
+
                             const filter = { _id: response.tk }; // Define the filter based on the token
-    
+
                             const update = {
                                 $set: {
                                     lp: response.lp,
                                     exc: response.e,
                                     sp1: response.sp1,
                                     bp1: response.bp1,
-                                    curtime:`${hours}:${minutes}`
+                                    curtime: `${hours}${minutes}`
                                 },
                             };
-                            
+
                             const options = { upsert: true }; // Set the upsert option to true
-                            
-                            const result = await stock_live_price.updateOne(filter, update, options);
-                           // console.log("newCompany", result);
-                     
+
+                            const result = await stock_live_price.updateOne(filter, update,  { upsert: true });
+                            // console.log("newCompany", result);
+
                         } else {
                             // console.log("else", response)
                         }
-    
+
                         if (response.s === 'OK') {
                             // var channel = await channelList;
                             let json = {
@@ -119,35 +119,35 @@ const Alice_Socket = async () => {
                                 t: 't'
                             };
                             await socket.send(JSON.stringify(json))
-                          
-                           socketObject = socket
-                         
+
+                            socketObject = socket
+
                         }
                     }
-    
+
                 } catch (error) {
                     console.log("Shocket", error);
-                    
+
                 }
             }
         })
-       .catch(error => {
-        return error.response
-    })
+            .catch(error => {
+                return error.response
+            })
 
 
     } catch (error) {
         console.log("createSocketSess", error);
     }
 
-   
+
 
 
 }
 
 const getSocket = () => {
     return socketObject;
-  };
+};
 
 
 
@@ -155,4 +155,4 @@ const getSocket = () => {
 
 
 
-module.exports = { Alice_Socket , getSocket }
+module.exports = { Alice_Socket, getSocket }
