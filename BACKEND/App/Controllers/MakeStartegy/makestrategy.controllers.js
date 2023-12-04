@@ -82,8 +82,8 @@ class MakeStartegy {
     }
   }
 
-      /// get Make startegy
-      async GetAllMakeStartegy(req, res) {
+   /// get Make startegy
+  async GetAllMakeStartegy(req, res) {
 
         try {
 
@@ -102,7 +102,7 @@ class MakeStartegy {
             console.log("error-", error);
             res.status(500).send({ status: false, msg: "Internal server error" });
         }
-    }
+   }
 
     //Delete make strateg
     async DeleteMakeStartegy(req, res) {
@@ -244,7 +244,7 @@ class MakeStartegy {
    }
 
      /// Make Startegy
-     async AddMakeStartegy(req, res) {
+  async AddMakeStartegy(req, res) {
       
      let  suscribe =await Alice_Socket();
      
@@ -345,110 +345,15 @@ class MakeStartegy {
               return res.send({ status: false, msg: err.message ,data: []})
             
             });
+            }
+          }catch(e){
 
-  /// Make Startegy
-  async AddMakeStartegy(req, res) {
-    //let  suscribe =await Alice_Socket();
-    let user_panel_key = await user.findOne().select('client_key').lean();
-    // console.log("user_panel_key",user_panel_key)
-    //   return
-    let channelList = "";
-    try {
-      // console.log("req",req.body) 
-      console.log("req time", req.body.timeTradeConddition[0].entry.time)
+          }
+     }
 
-      for (const element of req.body.scriptArray) {
-        //console.log(element.instrument_token);
-        channelList += element.exch_seg + '|' + element.instrument_token + "#";
-
-        // res.send({ status: true, msg: "successfully Add!" });
-        let user_id = req.body.user_id;
-        let tokensymbol = element.instrument_token;
-        let symbol_name = element.symbol;
-        let strategy_name = req.body.strategy_name;
-        let segment = element.segment;
-        let strike_price = element.strike;
-        let option_type = element.option_type;
-        let expiry = element.expiry;
-        let timeframe = req.body.timeframe;
-        let indicator = req.body.indicator;
-        let price_source = req.body.price_source;
-        let period = req.body.period;
-        let inside_indicator = req.body.inside_indicator;
-        let condition = req.body.condition;
-        let buffer_value = req.body.buffer_value;
-        let type = req.body.type;
-        let offset = req.body.offset;
-        let condition_source = req.body.condition_source.toString();
-        let target = req.body.target_stoploss.target;
-        let stoploss = req.body.target_stoploss.stoploss;
-        let tsl = req.body.target_stoploss.tsl;
-        let panelKey = user_panel_key.client_key;
-        let entryTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].entry.time == "" ? "00:00" : req.body.timeTradeConddition[0].entry.time}:00.000Z`);
-        let exitTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].exit.time == "" ? "00:00" : req.body.timeTradeConddition[0].exit.time}:00.000Z`);
-        let notradeTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].notrade.time == "" ? "00:00" : req.body.timeTradeConddition[0].notrade.time}:00.000Z`);
-
-
-        console.log("condition_source", condition_source)
-
-
-        await UserMakeStrategy.create({
-          user_id: user_id,
-          tokensymbol: tokensymbol,
-          symbol_name: symbol_name,
-          strategy_name: strategy_name,
-          segment: segment,
-          strike_price: strike_price,
-          option_type: option_type,
-          expiry: expiry,
-          timeframe: timeframe,
-          indicator: indicator,
-          price_source: price_source,
-          period: period,
-          inside_indicator: inside_indicator,
-          condition: condition,
-          buffer_value: buffer_value,
-          type: type,
-          offset: offset,
-          condition_source: condition_source,
-          target: target,
-          stoploss: stoploss,
-          tsl: tsl,
-          panelKey: panelKey,
-          entryTime: entryTime,
-          exitTime: exitTime,
-          notradeTime: notradeTime
-        })
-          .then(async (createUserMakeStrategy) => {
-            console.log("3")
-            //res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
-
-          }).catch((err) => {
-            console.log("4")
-            console.error('Error creating and saving user:', err);
-            return res.send({ status: false, msg: err.message, data: [] })
-
-          });
-
-
-      }
-
-      var alltokenchannellist = channelList.substring(0, channelList.length - 1);
-      //  console.log("alltokenchannellist ",alltokenchannellist)
-      const suscribe_token = await Socket_data(alltokenchannellist);
-
-      res.send({ status: true, msg: "successfully Add!", data: [] });
-
-    } catch (error) {
-      console.log("error-", error);
-      res.status(500).send({ status: false, msg: "Internal server error" });
-    }
-
-  }
-
-}
-
-
+ 
+ 
+   }
 
 //-------------------Strategy Run Code ---------------------------------------------//
 
@@ -510,15 +415,6 @@ let rr= 1
       }
     ];
     const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
-    
-    let array =[2,5,6,4] 
-    if(allStrategyResult.length > 0){
-    
-      const promises = allStrategyResult.map(async(val) => {
-          
-      
-        //console.log("new date ",new Date())
-
 
     let array = [2, 5, 6, 4]
 
@@ -528,6 +424,7 @@ let rr= 1
 
         // console.log("val ",val.entryTime)
         // console.log("new date ",new Date())
+
         const currentDate = new Date();
 
         const options = {
@@ -552,58 +449,6 @@ let rr= 1
         const entryTime = val.entryTime.toLocaleTimeString('en-US', options1);
         const exitTime = val.exitTime.toLocaleTimeString('en-US', options1);
         const notradeTime = val.notradeTime.toLocaleTimeString('en-US', options1);
-
-        
-      //  console.log('currentTime:', currentTime);
-     //  console.log('entryTime:', entryTime);
-      // console.log('exitTime:', exitTime);
-     //  console.log('notradeTime:', notradeTime);
-      //  console.log('entryTime:', entryTime);
-        // Entry Time less than No trade time OR Exit time
-        if( currentTime > entryTime  && entryTime < exitTime && entryTime < notradeTime){
-        console.log('if:', entryTime)
-        console.log("symbol_name ",val.symbol_name , " type  ", val.type)
-         
-        return new Promise(resolve => {
-        setTimeout(async() => {
-        const currentDate = new Date();
-        const milliseconds = currentDate.getTime();
-      //  console.log(`Running Time -- ${new Date()} function with element: ${val}`);
-       //  code start runing strategy
-       let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
-        console.log("collectionName -",collectionName)
-      const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-      if (ExistView.length > 0) {
-
-      console.log("exist collection if ",collectionName)
-      const collection = dbTradeTools.collection(collectionName);
-      const get_view_data = await collection.aggregate([{$sort :{_id:1}}]).toArray();
-  
-   // console.log("get_view_data",get_view_data)
-
-   let checkData = {}
-    if(val.condition_source != null){
-    let condition_source = val.condition_source.split(',');
-   
-    if(condition_source.length > 0){
-      for (const source of condition_source) {
-    
-       // console.log("condition_source",source)
-        const matches = source.match(/(\w+)\((\d+)\)/);
-        if (matches) {
-          const OFFSET_KEY = matches[2]; //
-          
-          let sourceVal
-          if(matches[1] == "close"){
-            sourceVal = get_view_data.map(item => item.close);
-          }else if(matches[1] == "open"){
-            sourceVal = get_view_data.map(item => item.open);
-          }else if(matches[1] == "low"){
-            sourceVal =  get_view_data.map(item => item.low);
-          }else if(matches[1] == "high"){
-            sourceVal = get_view_data.map(item => item.high);
-          }
-
 
         //   console.log('currentTime:', currentTime);
         //  console.log('entryTime:', entryTime);
@@ -702,7 +547,6 @@ let rr= 1
             }, 0);
           });
 
-
         } else {
           // console.log('else:', entryTime);
 
@@ -713,21 +557,6 @@ let rr= 1
       });
       await Promise.all(promises);
     }
-  
- 
-      console.log("symbol_name",val.symbol_name)
-      abc(checkData, val.condition,val);
-      }
-
-      // code end strategy...
-        resolve();
-        }, 0);
-        });
-        
-        }else{
-       //console.log('else:', entryTime);
-       }
-
     // STARTEGY CODEE END
 
 
@@ -771,29 +600,12 @@ let rr= 1
           });
 
 
-
       })
 
     }
 
-     // STARTEGY CODEE END
-
-    
-
-     //--------SNEH CODE------//
-
-     
-
-     //--------END SNEH CODE------//
-   
-
-
 
     // console.log("runn");
-
-
-
-
 
     //--------END SNEH CODE------//
 
@@ -918,8 +730,7 @@ let rr= 1
 
 
   let option_type = "CALL"
-  if(val.option_type.toUpperCase()=="PE"){
-
+ 
   if (val.option_type.toUpperCase()) {
     option_type = "PUT"
   }
@@ -1026,7 +837,7 @@ axios.request(config)
     });
  }
 
-}
+
 
 
 module.exports = new MakeStartegy();
