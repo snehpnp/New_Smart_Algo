@@ -23,6 +23,8 @@ module.exports = function (app) {
 
 
   const dbTradeTools = client.db('TradeTools');
+  
+  const dbTest = client.db('test');
 
 
   app.get("/pro", async (req, res) => {
@@ -1638,12 +1640,32 @@ module.exports = function (app) {
   }
 
 
+  app.get("/d-s",async (req, res)=>{
+
+    
+   let array = ['usermakestrategies','signals','mainsignals'];
+
+    let col1 = "usermakestrategies"
+    await dbTest.collection(col1).drop();
+
+    let col2 = "signals"
+    await dbTest.collection(col2).drop();
+
+    let col3 = "mainsignals"
+    await dbTest.collection(col3).drop();
+   
+
+
+  res.send("okkkk")
+  });
+
+
 
   app.get('/socket-api', async (req, res) => {
-    //  const collection = "shakir2";
-    // dropAllCollections();
-    // res.send("okkkk"); 
-    // return
+     const collection = "shakir2";
+    dropAllCollections();
+    res.send("okkkk"); 
+    return
     //connectToDB(collection);
 
 

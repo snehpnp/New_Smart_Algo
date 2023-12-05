@@ -186,10 +186,23 @@ export const admin_sidebar = [
 
     {
         'id': 9,
-        "name": 'Create Strategy',
-        "Icon": "Boxes ",
-        "route": "/admin/createstrategy",
-        "Data": []
+        "name": 'Make Strategy',
+        "Icon": "Boxes",
+        "Data": [
+
+            {
+                'id': 1,
+                "name": 'Create Strategy',
+                "route": "/admin/createstrategy",
+
+            },
+            {
+                'id': 2,
+                "name": 'All Strategies',
+                "route": "/admin/AllMakeStrategy",
+
+            },
+        ]
     },
     {
         'id': 10,

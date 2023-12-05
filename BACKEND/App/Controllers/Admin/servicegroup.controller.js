@@ -528,6 +528,7 @@ class GroupService {
       const result = await serviceGroupName.deleteOne({ _id: objectId });
       const result1 = await serviceGroup_services_id.deleteMany({ Servicegroup_id: objectId });
 
+      
       // console.log("result", result.acknowledged);
 
 

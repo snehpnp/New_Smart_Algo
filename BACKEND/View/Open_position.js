@@ -40,18 +40,12 @@ async function Open_Position1(req, res) {
             }
           ];
           
-        
-        
-
         const options = { cursor: { batchSize: 1 } };
-
         const result = await client
             .db(dbName)
             .collection(sourceViewName)
             .aggregate(pipeline, options)
             .toArray();
-
-
         // Check if the aggregation was successful
         if (result.length > 0) {
             // Create the destination view with the result's cursor
@@ -74,13 +68,7 @@ async function Open_Position1(req, res) {
     }
 }
 
-
-
-
-
 module.exports = { dropExistingView1, Open_Position1 }
-
-
 
 // async function Open_Position1(req, res) {
 

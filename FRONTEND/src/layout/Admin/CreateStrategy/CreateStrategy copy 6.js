@@ -24,7 +24,7 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { useNavigate } from "react-router-dom";
 
 
-const CreateStrategy = () => {
+const Signals = () => {
   const navigate = useNavigate()
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
@@ -307,8 +307,6 @@ const CreateStrategy = () => {
   };
 
 
-  const [strategyName, setStrategyName] = useState("");
-  
   const [timeFrameVal, setTimeFrameVal] = useState("1");
 
   const [buyCheck, setBuyCheck] = useState(false);
@@ -392,16 +390,6 @@ const CreateStrategy = () => {
   // And or Operator
 
   const [showModalAndOrOperator, setShowModalAndOrOperator] = useState(false);
-
-  const onChange = (e) => {
-    if(e.target.value != ""){
-     setStrategyName(e.target.value)
-   }else{
-     setStrategyName("")
-    }
-   }
-
-
 
   const selectSource = (e , condition_item , element_first_second,index,buy_sell) => {
    // console.log("e -",e.target.value)
@@ -493,7 +481,7 @@ const CreateStrategy = () => {
       const foundObject = coditionRequestArrSell.find((item,i) => i === index);
       if (foundObject) {
         foundObject.comparators = e.target.value;
-        setCoditionRequestArrSell([...coditionRequestArrSell]);
+        setCoditionRequestArrSell([...coditionRequestArr]);
       }
     }
 
@@ -1192,14 +1180,10 @@ const CreateStrategy = () => {
 
 const saveStrategy = async (e) => {
    // alert(condition_string)
-   
-   if (strategyName == "") {
-    alert("Please select a strategy name");
-    return;
-  }
+
 
     if (selectStrategy == "") {
-      alert("Please select a strategy tag");
+      alert("Please select a strategy");
       return;
     }
 
@@ -1308,7 +1292,6 @@ const saveStrategy = async (e) => {
       let data = {
 
         "scriptArray": selectedItems,
-        "name":strategyName,
         "user_id": user_Id,
         // "tokensymbol": "3045",
         // "symbol_name": "SBIN",
@@ -1324,15 +1307,13 @@ const saveStrategy = async (e) => {
         "period": "1",
         "inside_indicator": "EMA",
        // "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
-        "condition": condition_string_pass.replace(/(\|\||&&)$/, ''),
+        "condition": condition_string_pass,
        // "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
         "condition_source": condition_string_source,
         "buffer_value": "2",
         "offset": "0",
         "target_stoploss": exitConditionBuyOrSell[0].buy,
-        "timeTradeConddition":timeTradeConddition,
-        "condition_array":coditionRequestArr,
-        "target_stoloss_array":exitConditionBuyOrSell,
+        "timeTradeConddition":timeTradeConddition
        }
        
        console.log("data request buy",data)
@@ -1344,10 +1325,10 @@ const saveStrategy = async (e) => {
         else if (response.status) {
           if(!sellCheck && !sell_cond){
            toast.success(response.msg);
-           //window.location.reload();
-           setTimeout(() => {
-            navigate("/admin/AllMakeStrategy")
-           }, 1000); 
+           window.location.reload();
+          //  setTimeout(() => {
+          //   navigate("/admin/createstrategy")
+          //  }, 1000); 
           }else{
             
           }
@@ -1364,7 +1345,6 @@ const saveStrategy = async (e) => {
     //  alert("sell")
       let data = {
         "scriptArray": selectedItems,
-        "name":strategyName,
         "user_id": user_Id,
         // "tokensymbol": "3045",
         // "symbol_name": "SBIN",
@@ -1380,15 +1360,13 @@ const saveStrategy = async (e) => {
         "period": "1",
         "inside_indicator": "EMA",
         //"condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
-        "condition": condition_string_sell_pass.replace(/(\|\||&&)$/, ''),
+        "condition": condition_string_sell_pass,
        // "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
         "condition_source": condition_string_sell_source,
         "buffer_value": "2",
         "offset": "0",
         "target_stoploss": exitConditionBuyOrSell[0].sell,
-        "timeTradeConddition":timeTradeConddition,
-        "condition_array":coditionRequestArrSell,
-        "target_stoloss_array":exitConditionBuyOrSell,
+        "timeTradeConddition":timeTradeConddition
       }
       console.log("data request sell",data)
 
@@ -1399,10 +1377,10 @@ const saveStrategy = async (e) => {
         else if (response.status) {
 
          toast.success(response.msg);
-         //window.location.reload();
-         setTimeout(() => {
-          navigate("/admin/AllMakeStrategy")
-         }, 1000); 
+         window.location.reload();
+          // setTimeout(() => {
+          //   navigate("/admin/createstrategy")
+          // }, 1000);
         }
         else if (!response.status) {
           toast.error(response.msg);
@@ -1417,25 +1395,19 @@ const saveStrategy = async (e) => {
 
 
   console.log("timeTradeConddition - ",timeTradeConddition)
-  
- 
+
 
   
   return (
     <>
       <>
-        <Content Page_title="Create Strategy" button_title=" Back" route="/admin/AllMakeStrategy">
+        <Content Page_title="All Services" button_status={false}>
           <div>
 
-           <div className="col-md-2 ">
-              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Strategy Name</label>
-             <input type="text" onChange={(e)=>{onChange(e)}} className="form-control stratergy-box"></input>
-            </div>
-
             <div className="col-md-2 ">
-              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Strategy Tag</label>
+              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '20px' }}>Strategy</label>
               <select className="form-select stratergy-box" onChange={(e) => setSelectStrategy(e.target.value)} name="strategyname">
-                <option value="">-- Select Strategy Tag--</option>
+                <option value="">-- Select Strategy --</option>
                 {strategyDataAllAdmin.data && strategyDataAllAdmin.data.map((sm, i) =>
                   <option value={sm.strategy_name}>{sm.strategy_name}</option>)}
               </select>
@@ -1544,7 +1516,6 @@ const saveStrategy = async (e) => {
                     </div>
                   ))}
 
-                
                 </div>
               </li>
                <li class="StepProgress-item is-done">
@@ -1595,35 +1566,35 @@ const saveStrategy = async (e) => {
                 </div>
               </li>
              
-               <Row className="mt-4">
+               <Row>
                 <Col md={2}>
-                  <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Entry Time</h5>
+                  <h5 className="mt-4">Entry Time</h5>
                 </Col>
                 <Col md={2}>
-                  {/* <label>Time</label> */}
-                  <Form.Control style={{ height: 'auto' }} type="time" id="text3" value={timeTradeConddition[0].entry.time}  onChange={(e) => { selectTime(e,"entry") }}/>
+                  <label>Time</label>
+                  <Form.Control type="time" id="text3" value={timeTradeConddition[0].entry.time}  onChange={(e) => { selectTime(e,"entry") }}/>
                 </Col>
               </Row>
 
-              <Row className="mt-4">
+              <Row>
                 <Col md={2}>
-                  <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Exit Time</h5>
+                  <h5 className="mt-4">Exit Time</h5>
                 </Col>
                
                 <Col md={2}>
-                  {/* <label>Time</label> */}
-                  <Form.Control  style={{ height: 'auto' }} type="time" id="text3" value={timeTradeConddition[0].exit.time} onChange={(e) => { selectTime(e,"exit") }}/>
+                  <label>Time</label>
+                  <Form.Control type="time" id="text3" value={timeTradeConddition[0].exit.time} onChange={(e) => { selectTime(e,"exit") }}/>
                 </Col>
               </Row>
 
-              <Row  className="mt-4">
+              <Row>
                 <Col md={2}>
-                  <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>No Trade Time</h5>
+                  <h5 className="mt-4">No Trade Time</h5>
                 </Col>
                 
                 <Col md={2}>
-                  {/* <label>Time</label> */}
-                  <Form.Control  style={{ height: 'auto' }} type="time" id="text3" value={timeTradeConddition[0].notrade.time} onChange={(e) => { selectTime(e,"notrade") }}/>
+                  <label>Time</label>
+                  <Form.Control type="time" id="text3" value={timeTradeConddition[0].notrade.time} onChange={(e) => { selectTime(e,"notrade") }}/>
                 </Col>
               </Row>
 
@@ -1716,14 +1687,14 @@ const saveStrategy = async (e) => {
                         {/* <label>First Element</label> */}
                      <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index,"buy"); }}>
                               {/* <option value="">Select Expiry Date</option> */}
-                              <option value="" >---</option>
+                              <option value="" >--Select source--</option>
                               {
                                 getSources.data.map((sm, i) =>
                                   <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
                               }
                       </select>
 
-                      <input style={{ height: '25px', margin:'0 20px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"buy") }} min="0" className="form-control new-field" />
+                      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"buy") }} min="0" className="form-control" />
                     
                       {/* <Col md={2}>
                         <label>Offset</label>
@@ -1733,7 +1704,7 @@ const saveStrategy = async (e) => {
                         {/* <label>Comparators</label> */}
                         <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index,"buy"); }}>
                               {/* <option value="">Select Expiry Date</option> */}
-                              {/* <option value="" >---</option> */}
+                              <option value="" >--Select comparators--</option>
                               {
                                 getComparators.data.map((sm, i) =>
                                   <option selected={condition_item.comparators == sm.value} value={sm.value}>{sm.name}</option>)
@@ -1741,15 +1712,15 @@ const saveStrategy = async (e) => {
                       </select>
                     
                         {/* <label>Second Element</label> */}
-                        <select style={{ margin:'0 20px'}} className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"buy"); }}>
+                        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"buy"); }}>
                               {/* <option value="">Select Expiry Date</option> */}
-                              <option value="" >---</option>
+                              <option value="" >--Select source--</option>
                               {
                                 getSources.data.map((sm, i) =>
                                   <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
                               }
                       </select>
-                      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"buy") }} min="0" className="form-control new-field" />
+                      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"buy") }} min="0" className="form-control" />
                       </Col>
                       {/* <Col md={2}>
                         <label>Offset</label>
@@ -1776,7 +1747,7 @@ const saveStrategy = async (e) => {
 
 
                      </Col>
-                       <Col md={2}>
+                       <Col md={2} style={{ height: '25px'}}>
                         {
                           coditionRequestArr.length >= 2?
                           condition_item.and_or_operator == ""?"":
@@ -1939,15 +1910,14 @@ const saveStrategy = async (e) => {
         {/* <label>First Element</label> */}
         <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index,"sell"); }}>
               {/* <option value="">Select Expiry Date</option> */}
-              <option value="" >---</option>
+              <option value="" >--Select source--</option>
               {
                 getSources.data.map((sm, i) =>
                   <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
               }
-       </select>
-      
+      </select>
 
-      <input style={{ height: '25px', margin: '0 20px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"sell") }} min="0" className="form-control new-field" />
+      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"sell") }} min="0" className="form-control" />
     
       {/* <Col md={2}>
         <label>Offset</label>
@@ -1957,7 +1927,7 @@ const saveStrategy = async (e) => {
         {/* <label>Comparators</label> */}
         <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index,"sell"); }}>
               {/* <option value="">Select Expiry Date</option> */}
-              {/* <option value="" >---</option> */}
+              <option value="" >--Select comparators--</option>
               {
                 getComparators.data.map((sm, i) =>
                   <option selected={condition_item.comparators == sm.value} value={sm.value}>{sm.name}</option>)
@@ -1965,15 +1935,15 @@ const saveStrategy = async (e) => {
       </select>
     
         {/* <label>Second Element</label> */}
-        <select style={{ margin: '0 20px'}} className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"sell"); }}>
+        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"sell"); }}>
               {/* <option value="">Select Expiry Date</option> */}
-              <option value="" >---</option>
+              <option value="" >--Select source--</option>
               {
                 getSources.data.map((sm, i) =>
                   <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
               }
       </select>
-      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"sell") }} min="0" className="form-control new-field" />
+      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"sell") }} min="0" className="form-control" />
       </Col>
       {/* <Col md={2}>
         <label>Offset</label>
@@ -2002,7 +1972,7 @@ const saveStrategy = async (e) => {
 
 
      </Col>
-       <Col md={2} >
+       <Col md={2} style={{ height: '25px'}}>
         {
           coditionRequestArrSell.length>=2?
           condition_item.and_or_operator == ""?"":
@@ -2035,7 +2005,7 @@ const saveStrategy = async (e) => {
     
       
      }
-      </Col>
+       </Col>
       
       
     </Row>
@@ -2163,8 +2133,8 @@ const saveStrategy = async (e) => {
 
           </div>
 
-          <div className="mt-5">
-            <button className='btn btn-info float-start m-0' onClick={()=>saveStrategy("e")}>save</button>
+          <div className="col-md-4">
+            <button className='btn btn-info float-end m-0' onClick={()=>saveStrategy("e")}>save</button>
           </div>
 
 
@@ -2230,7 +2200,7 @@ const saveStrategy = async (e) => {
   );
 };
 
-export default CreateStrategy;
+export default Signals;
 
 
 
