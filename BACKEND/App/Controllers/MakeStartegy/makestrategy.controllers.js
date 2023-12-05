@@ -445,10 +445,6 @@ if (!holidays.isHoliday(currentDate) && isMarketOpen && !isMarketClosed) {
 
 
   }, 1000000);
-
-
-
-
 }
 
 
