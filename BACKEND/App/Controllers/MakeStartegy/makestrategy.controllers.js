@@ -411,10 +411,10 @@ async function run() {
 
     // Define the function to be executed
     const executeFunction = async () => {
-         console.log("okkkkkkkk shakirrr ")
+       //  console.log("okkkkkkkk shakirrr ")
           
          if (!holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
-          console.log('The stock market is open!');
+        //  console.log('The stock market is open!');
     
           const pipeline = [
             {
