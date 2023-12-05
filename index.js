@@ -203,7 +203,7 @@ db.createView('open_position', 'mainsignals', [
                         $cond: {
                             if: {
                                 $or: [
-                                    { $eq: ['$target', 0] },
+                                 
                                     { $eq: ['$target', "0"] },
                                     { $eq: ['$target', '0'] }, // Check if target is the string "0"
                                 ],

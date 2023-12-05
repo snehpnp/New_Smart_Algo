@@ -242,10 +242,20 @@ class OptionChain {
             var GetTrade = await MainSignals_modal.aggregate([
                 {
                     $addFields: {
-                        // ... your other field additions
                         entry_qty_percent_int: { $toInt: "$entry_qty_percent" },
-                        exit_qty_percent_int: { $toInt: "$exit_qty_percent" }
-                    }
+                        exit_qty_percent_int: {
+                            $cond: {
+                                if: {
+                                    $or: [
+                                        { $eq: ["$exit_qty_percent", ""] },
+                                        { $eq: ["$exit_qty_percent", null] },
+                                    ],
+                                },
+                                then: 0,
+                                else: { $toInt: "$exit_qty_percent" },
+                            },
+                        },
+                    },
                 },
                 {
                     $match: {

@@ -110,7 +110,9 @@ const TradeHistory = () => {
             });
     };
 
-  
+    useEffect(() => {
+        Get_TradHistory();
+    }, []);
 
     const columns = [
         // {

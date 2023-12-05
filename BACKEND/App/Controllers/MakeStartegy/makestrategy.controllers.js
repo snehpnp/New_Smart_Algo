@@ -392,49 +392,50 @@ if (!holidays.isHoliday(currentDate) && isMarketOpen && !isMarketClosed) {
 
     //--------SNEH CODE------//
 
-    const viewName = 'open_position_excute5';
+    const viewName = 'open_position_excute';
 
     var openPosition = await db1.collection(viewName).find().toArray();
 
-    if (openPosition.length > 0) {
-      let panelKey = "SNE132023";
+    // if (openPosition.length > 0) {
+    //   let panelKey = "SNE132023";
 
-      openPosition && openPosition.map((item) => { 
+    //   openPosition && openPosition.map((item) => { 
 
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" :"LX" }|Tr_Price:131|Price:${item.stockInfo_bp1}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${ item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${panelKey}|TradeType:${item.TradeType}|Demo:demo`
+    //     const currentTimestamp = Math.floor(Date.now() / 1000);
+    //     let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" :"LX" }|Tr_Price:131|Price:${item.stockInfo_bp1}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${ item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${panelKey}|TradeType:${item.TradeType}|Demo:demo`
 
-        console.log(req);
+    //     console.log(req);
 
 
-        let config = {
-          method: 'post',
-          maxBodyLength: Infinity,
-          url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-          // url: `${process.env.BROKER_URL}`,
-          headers: {
-            'Content-Type': 'text/plain'
-          },
-          data: req
-        };
+    //     let config = {
+    //       method: 'post',
+    //       maxBodyLength: Infinity,
+    //       url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+    //       // url: `${process.env.BROKER_URL}`,
+    //       headers: {
+    //         'Content-Type': 'text/plain'
+    //       },
+    //       data: req
+    //     };
       
-        axios.request(config)
-          .then((response) => {
+    //     axios.request(config)
+    //       .then((response) => {
       
-            console.log("response Trade Excuted - ", response)
+    //         console.log("response Trade Excuted - ", response.data)
       
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+    //       })
+    //       .catch((error) => {
+    //         console.log(error.response.data);
+    //       });
 
 
-      })
+    //   })
 
-    }
+    // }else{
+    //   console.log("Empty Position");
+    // }
 
 
-    // console.log("runn");
 
 
 
@@ -444,7 +445,7 @@ if (!holidays.isHoliday(currentDate) && isMarketOpen && !isMarketClosed) {
 
 
 
-  }, 1000000);
+  }, 10000);
 }
 
 
