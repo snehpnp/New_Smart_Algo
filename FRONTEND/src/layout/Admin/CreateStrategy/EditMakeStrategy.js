@@ -607,7 +607,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
       const foundObject = coditionRequestArrSell.find((item,i) => i === index);
       if (foundObject) {
         foundObject.comparators = e.target.value;
-        setCoditionRequestArrSell([...coditionRequestArr]);
+        setCoditionRequestArrSell([...coditionRequestArrSell]);
       }
     }
 
