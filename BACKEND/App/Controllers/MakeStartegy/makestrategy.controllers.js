@@ -57,7 +57,7 @@ class MakeStartegy {
         res.send({ status: false, msg: "Empty data", data: [] });
       }
     } catch (error) {
-      console.log("error-", error);
+      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -126,7 +126,7 @@ class MakeStartegy {
       const objectId = new ObjectId(req.body.id);
       const result = await UserMakeStrategy.findOne({ _id: objectId });
 
-      console.log("result edit data -", result)
+      // console.log("result edit data -", result)
 
       if (result != undefined) {
         res.send({ status: true, msg: 'Delete successfully ', data: result });
@@ -144,7 +144,7 @@ class MakeStartegy {
 
 
   async UpdateMakeStartegy(req, res) {
-    console.log("req time", req.body)
+    // console.log("req time", req.body)
 
     let user_panel_key = await user.findOne().select('client_key').lean();
     // console.log("user_panel_key",user_panel_key)
@@ -152,7 +152,7 @@ class MakeStartegy {
     let channelList = "";
     try {
       // console.log("req",req.body) 
-      console.log("req time", req.body.timeTradeConddition[0].entry.time)
+      // console.log("req time", req.body.timeTradeConddition[0].entry.time)
 
 
       // for (const element of req.body.scriptArray) {
@@ -255,7 +255,7 @@ class MakeStartegy {
     let channelList = "";
     try {
       // console.log("req",req.body) 
-      console.log("req time", req.body.timeTradeConddition[0].entry.time)
+      // console.log("req time", req.body.timeTradeConddition[0].entry.time)
 
 
       for (const element of req.body.scriptArray) {
@@ -301,7 +301,7 @@ class MakeStartegy {
 
 
 
-        console.log("condition_source", condition_source)
+        // console.log("condition_source", condition_source)
 
 
         await UserMakeStrategy.create({
@@ -337,11 +337,11 @@ class MakeStartegy {
           target_stoloss_array: target_stoloss_array
         })
           .then(async (createUserMakeStrategy) => {
-            console.log("3")
+            // console.log("3")
             //res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
 
           }).catch((err) => {
-            console.log("4")
+            // console.log("4")
             console.error('Error creating and saving user:', err);
             return res.send({ status: false, msg: err.message, data: [] })
 
@@ -405,294 +405,209 @@ const currentDate = new Date();
 let rr = 1
 //if (rr) {
 async function run() {
- 
+
   try {
-    
+
 
     // Define the function to be executed
     const executeFunction = async () => {
-       //  console.log("okkkkkkkk shakirrr ")
-          
-         if (!holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
+      //  console.log("okkkkkkkk shakirrr ")
+
+      if (!holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
         //  console.log('The stock market is open!');
-    
-          const pipeline = [
-            {
-              $match: {
-                //tokensymbol:"67308",
-                status: "0"
-              }
+
+        const pipeline = [
+          {
+            $match: {
+              //tokensymbol:"67308",
+              status: "0"
             }
-          ];
-          const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
-          if (allStrategyResult.length > 0) {
-            for (let index = 0; index < allStrategyResult.length; index++) {
-              const val = allStrategyResult[index];
+          }
+        ];
+        const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
+        if (allStrategyResult.length > 0) {
+          for (let index = 0; index < allStrategyResult.length; index++) {
+            const val = allStrategyResult[index];
+            const currentDate = new Date();
+
+            const options = {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false, // Set to true for 12-hour format
+              timeZone: 'Asia/Kolkata', // Adjust the time zone as needed
+            };
+            const currentTime = currentDate.toLocaleString('en-IN', options);
+
+            const options1 = {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false, // Set to true for 12-hour format
+              timeZone: 'UTC', // Adjust the time zone as needed
+            };
+
+            const entryTime = val.entryTime.toLocaleTimeString('en-US', options1);
+            const exitTime = val.exitTime.toLocaleTimeString('en-US', options1);
+            const notradeTime = val.notradeTime.toLocaleTimeString('en-US', options1);
+
+            // console.log('currentTime:', currentTime);
+            //  console.log('entryTime:', entryTime);
+            //  console.log('exitTime:', exitTime);
+            // console.log('notradeTime:', notradeTime);
+            //  console.log('entryTime:', entryTime);
+            // Entry Time less than No trade time OR Exit time
+            if (currentTime > entryTime && entryTime < exitTime && entryTime < notradeTime) {
+              // console.log('if:', entryTime, " id ", val._id, val.type)
+
               const currentDate = new Date();
-    
-              const options = {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false, // Set to true for 12-hour format
-                timeZone: 'Asia/Kolkata', // Adjust the time zone as needed
-              };
-              const currentTime = currentDate.toLocaleString('en-IN', options);
-    
-              const options1 = {
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false, // Set to true for 12-hour format
-                timeZone: 'UTC', // Adjust the time zone as needed
-              };
-    
-              const entryTime = val.entryTime.toLocaleTimeString('en-US', options1);
-              const exitTime = val.exitTime.toLocaleTimeString('en-US', options1);
-              const notradeTime = val.notradeTime.toLocaleTimeString('en-US', options1);
-    
-              // console.log('currentTime:', currentTime);
-              //  console.log('entryTime:', entryTime);
-              //  console.log('exitTime:', exitTime);
-              // console.log('notradeTime:', notradeTime);
-              //  console.log('entryTime:', entryTime);
-              // Entry Time less than No trade time OR Exit time
-              if (currentTime > entryTime && entryTime < exitTime && entryTime < notradeTime) {
-               // console.log('if:', entryTime, " id ", val._id, val.type)
-    
-                const currentDate = new Date();
-                const milliseconds = currentDate.getTime();
-    
-                let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
-                const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-                if (ExistView.length > 0) {
-    
-                  const collection = dbTradeTools.collection(collectionName);
-                  const get_view_data = await collection.aggregate([{ $sort: { _id: -1 } }]).toArray();
-                  
-                 console.log("get_view_data ",get_view_data)
-                  let data = {}
-                  if (val.condition_source != null) {
-                    let condition_source = val.condition_source.split(',');
-                    if (condition_source.length > 0) {
-                      for (const source of condition_source) {
-                        // console.log("condition_source",source)
-                        const matches = source.match(/(\w+)\((\d+)\)/);
-                        if (matches) {
-                          const OFFSET_KEY = matches[2];
-                          const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY) + 1)];
-    
-                          let sourceVal
-                          if (matches[1] == "close") {
-                            sourceVal = get_view_data.map(item => item.close);
-                          } else if (matches[1] == "open") {
-                            sourceVal = get_view_data.map(item => item.open);
-                          } else if (matches[1] == "low") {
-                            sourceVal = get_view_data.map(item => item.low);
-                          } else if (matches[1] == "high") {
-                            sourceVal = get_view_data.map(item => item.high);
-                          }
-    
-                          data[matches[1]] = sourceVal;
-                        } else {
-                          console.log("No match found");
+              const milliseconds = currentDate.getTime();
+
+              let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
+              const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+              if (ExistView.length > 0) {
+
+                const collection = dbTradeTools.collection(collectionName);
+                const get_view_data = await collection.aggregate([{ $sort: { _id: -1 } }]).toArray();
+
+                // console.log("get_view_data ", get_view_data)
+                let data = {}
+                if (val.condition_source != null) {
+                  let condition_source = val.condition_source.split(',');
+                  if (condition_source.length > 0) {
+                    for (const source of condition_source) {
+                      // console.log("condition_source",source)
+                      const matches = source.match(/(\w+)\((\d+)\)/);
+                      if (matches) {
+                        const OFFSET_KEY = matches[2];
+                        const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY) + 1)];
+
+                        let sourceVal
+                        if (matches[1] == "close") {
+                          sourceVal = get_view_data.map(item => item.close);
+                        } else if (matches[1] == "open") {
+                          sourceVal = get_view_data.map(item => item.open);
+                        } else if (matches[1] == "low") {
+                          sourceVal = get_view_data.map(item => item.low);
+                        } else if (matches[1] == "high") {
+                          sourceVal = get_view_data.map(item => item.high);
                         }
-    
-    
+
+                        data[matches[1]] = sourceVal;
+                      } else {
+                        // console.log("No match found");
                       }
+
+
                     }
-    
                   }
-    
-                  const conditiostring1 = "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
-    
-                  // await abc(data, val.condition, val);
-    
-                  try {
-                    // Use eval to dynamically evaluate the condition string
-                    console.log("data -",data , "condition String - ",val.condition)
-                    const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
-                    console.log(" id ", val._id, " Type - ", val.type , "condition ",condition)
-                    // Check if the condition is true or false based on the data
-                    if (condition) {
-    
-                      let entry_type = "LE";
-                      if (val.type == "BUY") {
-                        entry_type = "SE"
+
+                }
+
+                const conditiostring1 = "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
+
+                // await abc(data, val.condition, val);
+
+                try {
+                  // Use eval to dynamically evaluate the condition string
+                  // console.log("data -", data, "condition String - ", val.condition)
+                  const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
+                  // console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
+                  // Check if the condition is true or false based on the data
+                  if (condition) {
+
+                    let entry_type = "LE";
+                    if (val.type == "BUY") {
+                      entry_type = "SE"
+                    }
+
+                    let condition_check_previous_trade = {
+                      strategy: val.strategy_name,
+                      symbol: val.symbol_name,
+                      entry_type: entry_type,
+                      segment: val.segment,
+                      TradeType: "MAKE_STRATEGY",
+                    }
+
+                    if (val.segment.toUpperCase() == "O" || val.segment.toUpperCase() == "FO" || val.segment.toUpperCase() == "MO" || val.segment.toUpperCase() == "CO") {
+
+                      let option_type = "CALL";
+                      if (val.option_type == "PE") {
+                        option_type = "PUT"
                       }
-    
-                      let condition_check_previous_trade = {
+
+                      condition_check_previous_trade = {
                         strategy: val.strategy_name,
                         symbol: val.symbol_name,
                         entry_type: entry_type,
                         segment: val.segment,
+                        strike: val.strike_price,
+                        option_type: option_type,
+                        expiry: val.expiry,
                         TradeType: "MAKE_STRATEGY",
                       }
-    
-                      if (val.segment.toUpperCase() == "O" || val.segment.toUpperCase() == "FO" || val.segment.toUpperCase() == "MO" || val.segment.toUpperCase() == "CO") {
-    
-                        let option_type = "CALL";
-                        if (val.option_type == "PE") {
-                          option_type = "PUT"
-                        }
-    
-                        condition_check_previous_trade = {
-                          strategy: val.strategy_name,
-                          symbol: val.symbol_name,
-                          entry_type: entry_type,
-                          segment: val.segment,
-                          strike: val.strike_price,
-                          option_type: option_type,
-                          expiry: val.expiry,
-                          TradeType: "MAKE_STRATEGY",
-                        }
-    
+
+                    }
+
+                    if (val.segment.toUpperCase() == "F" || val.segment.toUpperCase() == "MF" || val.segment.toUpperCase() == "CF") {
+
+                      condition_check_previous_trade = {
+                        strategy: val.strategy_name,
+                        symbol: val.symbol_name,
+                        entry_type: entry_type,
+                        segment: val.segment,
+                        expiry: val.expiry,
+                        TradeType: "MAKE_STRATEGY",
                       }
-    
-                      if (val.segment.toUpperCase() == "F" || val.segment.toUpperCase() == "MF" || val.segment.toUpperCase() == "CF") {
-    
-                        condition_check_previous_trade = {
-                          strategy: val.strategy_name,
-                          symbol: val.symbol_name,
-                          entry_type: entry_type,
-                          segment: val.segment,
-                          expiry: val.expiry,
-                          TradeType: "MAKE_STRATEGY",
-                        }
-    
-                      }
-    
-                      console.log("condition_check_previous_trade ", condition_check_previous_trade)
-    
-                      var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade)
-    
-                      console.log("checkPreviousTrade", checkPreviousTrade)
-                      if (checkPreviousTrade != null) {
-                        console.log("checkPreviousTrade ", val.symbol_name);
-                        // await PreviousTradeExcuted(checkPreviousTrade,val.panelKey);
-    
-                        console.log("EXITTTTTTTTT - ", checkPreviousTrade.entry_type)
-                        const currentTimestamp = Math.floor(Date.now() / 1000);
-                        // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
-    
-                        let type = "LX";
-                        let price = checkPreviousTrade.stockInfo_bp1;
-                        if (checkPreviousTrade.entry_type.toUpperCase() == "SE") {
-                          type = "SX";
-                          price = checkPreviousTrade.stockInfo_sp1;
-                        }
-    
-    
-                        let strike = checkPreviousTrade.strike;
-                        if (checkPreviousTrade.strike_price == "NaN") {
-                          strike = "100"
-                        }
-    
-    
-                        let option_type = "CALL"
-                        if (checkPreviousTrade.option_type.toUpperCase() == "PUT") {
-                          option_type = "PUT"
-                        }
-    
-    
-                        let Quntity = checkPreviousTrade.entry_qty_percent;
-    
-    
-    
-    
-    
-    
-                        let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|Demo:demo`
-    
-                        console.log("req Exit -- ", req)
-    
-    
-    
-                        let config = {
-                          method: 'post',
-                          maxBodyLength: Infinity,
-                          // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                          url: `${process.env.BROKER_URL}`,
-                          headers: {
-                            'Content-Type': 'text/plain'
-                          },
-                          data: req
-                        };
-    
-                        await axios.request(config)
-                          .then((response) => {
-    
-                            // console.log("response Trade Excuted - ",response)
-    
-                          })
-                          .catch((error) => {
-                            console.log(error);
-                          });
-    
-    
-    
-    
-                      }
-                      // Your code for when the condition is true
-                      console.log("Condition is true ", val._id, val.symbol_name);
-    
-                      const update = {
-                        $set: {
-                          status: "1",
-                        },
-                      };
-    
-                      const options = { upsert: true }; // Set the upsert option to true
-                      const filter = { _id: val._id };
-                      let Res = await UserMakeStrategy.updateOne(filter, update, options);
-                      console.log("Res ", Res)
-    
-                      //await tradeExcuted(val);
-                      console.log(" ENTRYYYYYYY ", val.type)
-                      //console.log("broker url -",process.env.BROKER_URL)
-    
-                      // let company_info =  await company_information.findOne().select('broker_url').lean();
-                      //  console.log("broker url -",company_info.broker_url , "id -",val._id)
-    
+
+                    }
+
+                    // console.log("condition_check_previous_trade ", condition_check_previous_trade)
+
+                    var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade)
+
+                    // console.log("checkPreviousTrade", checkPreviousTrade)
+                    if (checkPreviousTrade != null) {
+                      // console.log("checkPreviousTrade ", val.symbol_name);
+                      // await PreviousTradeExcuted(checkPreviousTrade,val.panelKey);
+
+                      // console.log("EXITTTTTTTTT - ", checkPreviousTrade.entry_type)
                       const currentTimestamp = Math.floor(Date.now() / 1000);
                       // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
-    
-                      let type = "LE";
-                      if (val.type.toUpperCase() == "SELL") {
-                        type = "SE"
+
+                      let type = "LX";
+                      let price = checkPreviousTrade.stockInfo_bp1;
+                      if (checkPreviousTrade.entry_type.toUpperCase() == "SE") {
+                        type = "SX";
+                        price = checkPreviousTrade.stockInfo_sp1;
                       }
-    
-                      let price = 0;
-    
-                      let strike = val.strike_price;
-                      if (val.strike_price == "NaN") {
+
+
+                      let strike = checkPreviousTrade.strike;
+                      if (checkPreviousTrade.strike_price == "NaN") {
                         strike = "100"
                       }
-    
-    
+
+
                       let option_type = "CALL"
-                      if (val.option_type.toUpperCase() == "PE") {
+                      if (checkPreviousTrade.option_type.toUpperCase() == "PUT") {
                         option_type = "PUT"
                       }
-    
-                      let Quntity = "100"
-    
-                      // console.log("target -",val.target)
-                      // console.log("stoploss -",val.stoploss)
-                      // console.log("exitTime -",val.exitTime)
-    
-                      const dateObject = new Date(val.exitTime);
-                      const hours = ('0' + dateObject.getUTCHours()).slice(-2);
-                      const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
-                      const ExitTime = `${hours}-${minutes}`;
-    
-    
-                      let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|Demo:demo`
-    
-                      // console.log("req -- ",req)
-    
-    
-    
+
+
+                      let Quntity = checkPreviousTrade.entry_qty_percent;
+
+
+
+
+
+
+                      let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|Demo:demo`
+
+                      // console.log("req Exit -- ", req)
+
+
+
                       let config = {
                         method: 'post',
                         maxBodyLength: Infinity,
@@ -703,46 +618,131 @@ async function run() {
                         },
                         data: req
                       };
-    
+
                       await axios.request(config)
                         .then((response) => {
-    
-                          // console.log("response Trade Excuted - ", response)
-    
+
+                          // console.log("response Trade Excuted - ",response)
+
                         })
                         .catch((error) => {
                           console.log(error);
                         });
-    
-    
-                    } else {
-                      // Your code for when the condition is false
-                    //  console.log("Condition is false ", val._id);
-    
+
+
+
+
                     }
-                  } catch (error) {
-                    console.error("Error in evaluating the condition:", error);
+                    // Your code for when the condition is true
+                    // console.log("Condition is true ", val._id, val.symbol_name);
+
+                    const update = {
+                      $set: {
+                        status: "1",
+                      },
+                    };
+
+                    const options = { upsert: true }; // Set the upsert option to true
+                    const filter = { _id: val._id };
+                    let Res = await UserMakeStrategy.updateOne(filter, update, options);
+                    // console.log("Res ", Res)
+
+                    //await tradeExcuted(val);
+                    // console.log(" ENTRYYYYYYY ", val.type)
+                    //console.log("broker url -",process.env.BROKER_URL)
+
+                    // let company_info =  await company_information.findOne().select('broker_url').lean();
+                    //  console.log("broker url -",company_info.broker_url , "id -",val._id)
+
+                    const currentTimestamp = Math.floor(Date.now() / 1000);
+                    // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
+
+                    let type = "LE";
+                    if (val.type.toUpperCase() == "SELL") {
+                      type = "SE"
+                    }
+
+                    let price = 0;
+
+                    let strike = val.strike_price;
+                    if (val.strike_price == "NaN") {
+                      strike = "100"
+                    }
+
+
+                    let option_type = "CALL"
+                    if (val.option_type.toUpperCase() == "PE") {
+                      option_type = "PUT"
+                    }
+
+                    let Quntity = "100"
+
+                    // console.log("target -",val.target)
+                    // console.log("stoploss -",val.stoploss)
+                    // console.log("exitTime -",val.exitTime)
+
+                    const dateObject = new Date(val.exitTime);
+                    const hours = ('0' + dateObject.getUTCHours()).slice(-2);
+                    const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
+                    const ExitTime = `${hours}-${minutes}`;
+
+
+                    let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|Demo:demo`
+
+                    // console.log("req -- ",req)
+
+
+
+                    let config = {
+                      method: 'post',
+                      maxBodyLength: Infinity,
+                      // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+                      url: `${process.env.BROKER_URL}`,
+                      headers: {
+                        'Content-Type': 'text/plain'
+                      },
+                      data: req
+                    };
+
+                    await axios.request(config)
+                      .then((response) => {
+
+                        // console.log("response Trade Excuted - ", response)
+
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                      });
+
+
+                  } else {
+                    // Your code for when the condition is false
+                    //  console.log("Condition is false ", val._id);
+
                   }
-    
-    
-    
-    
-    
+                } catch (error) {
+                  console.error("Error in evaluating the condition:", error);
                 }
-    
-    
-    
-              } else {
-                // console.log('else:', entryTime);
-    
+
+
+
+
+
               }
-    
+
+
+
+            } else {
+              // console.log('else:', entryTime);
+
             }
+
           }
-    
-        } else {
-          console.log('The stock market is Closed!');
         }
+
+      } else {
+        console.log('The stock market is Closed!');
+      }
 
 
 
@@ -755,14 +755,14 @@ async function run() {
 
     // Use a while loop with setTimeout for a delay
     while (true) {
-        // Delay for 1000 milliseconds (1 second)
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await executeFunction();
-     }
-} finally {
+      // Delay for 1000 milliseconds (1 second)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await executeFunction();
+    }
+  } finally {
     // Close the client when you're done
-   
-}
+
+  }
 
 }
 
@@ -829,17 +829,17 @@ const abc = async (data, conditionString, val) => {
 
       }
 
-      console.log("condition_check_previous_trade ", condition_check_previous_trade)
+      // console.log("condition_check_previous_trade ", condition_check_previous_trade)
 
       var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade)
 
-      console.log("checkPreviousTrade", checkPreviousTrade)
+      // console.log("checkPreviousTrade", checkPreviousTrade)
       if (checkPreviousTrade != null) {
         console.log("checkPreviousTrade ", val.symbol_name);
         await PreviousTradeExcuted(checkPreviousTrade, val.panelKey);
       }
       // Your code for when the condition is true
-      console.log("Condition is true ", val._id, val.symbol_name);
+      // console.log("Condition is true ", val._id, val.symbol_name);
 
       const update = {
         $set: {
@@ -850,11 +850,11 @@ const abc = async (data, conditionString, val) => {
       const options = { upsert: true }; // Set the upsert option to true
       const filter = { _id: val._id };
       let Res = await UserMakeStrategy.updateOne(filter, update, options);
-      console.log("Res ", Res)
+      // console.log("Res ", Res)
       await tradeExcuted(val);
     } else {
       // Your code for when the condition is false
-      console.log("Condition is false ", val._id);
+      // console.log("Condition is false ", val._id);
 
     }
   } catch (error) {
@@ -866,7 +866,7 @@ const abc = async (data, conditionString, val) => {
 const tradeExcuted = async (val) => {
 
 
-  console.log(" ENTRYYYYYYY ", val.type)
+  // console.log(" ENTRYYYYYYY ", val.type)
   //console.log("broker url -",process.env.BROKER_URL)
 
   // let company_info =  await company_information.findOne().select('broker_url').lean();
@@ -938,7 +938,7 @@ const tradeExcuted = async (val) => {
 
 const PreviousTradeExcuted = async (val, panelKey) => {
 
-  console.log("EXITTTTTTTTT - ", val.entry_type)
+  // console.log("EXITTTTTTTTT - ", val.entry_type)
   const currentTimestamp = Math.floor(Date.now() / 1000);
   // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
 
@@ -971,7 +971,7 @@ const PreviousTradeExcuted = async (val, panelKey) => {
 
   let req = `DTime:${currentTimestamp}|Symbol:${val.symbol}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy}|Quntity:${Quntity}|Key:${panelKey}|TradeType:${val.TradeType}|Demo:demo`
 
-  console.log("req Exit -- ", req)
+  // console.log("req Exit -- ", req)
 
 
 
@@ -999,5 +999,64 @@ const PreviousTradeExcuted = async (val, panelKey) => {
 
 
 run().catch(console.error);
+
+
+
+
+
+const exitOpentrade = async () => {
+
+  const viewName = 'open_position_excute';
+
+  var openPosition = await db1.collection(viewName).find().toArray();
+
+  if (openPosition.length > 0) {
+    let panelKey = "SNE132023";
+
+    openPosition && openPosition.map((item) => {
+
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_bp1}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${panelKey}|TradeType:${item.TradeType}|Demo:demo`
+
+      console.log(req);
+
+
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+        // url: `${process.env.BROKER_URL}`,
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        data: req
+      };
+
+      axios.request(config)
+        .then((response) => {
+
+          // console.log("response Trade Excuted - ", response.data)
+
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
+
+
+    })
+
+  } else {
+    console.log("Empty Position");
+  }
+
+
+}
+
+
+
+// setInterval(() => {
+//   exitOpentrade()
+// }, 100);
+
 
 module.exports = new MakeStartegy();

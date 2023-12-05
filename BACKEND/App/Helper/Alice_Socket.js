@@ -29,16 +29,27 @@ const Alice_Socket = async () => {
     var socket = null
     var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
 
+    const stock_live_price = db_main.collection('token_chain');
+    const updateToken = await stock_live_price.find({}).toArray();
 
+    var channelstr = ""
+    if (updateToken.length > 0) {
+        updateToken.forEach((data) => {
+            if (data.exch != null && data._id != null) {
 
+                channelstr += data.exch + "|" + data._id + "#"
+            }
+        })
+    }
+    // Display fetched documents
+
+    var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
+
+    // console.log(alltokenchannellist);
     var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
     var userid = broker_infor.user_id
     var userSession1 = broker_infor.access_token
-    //var channelList = broker_infor.Stock_chain
-    var channelList = "NSE|14366"
-    // console.log("channelList", channelList)
-    // console.log("userid", userid)
-    // console.log("userSession1", userSession1)
+    var channelList = alltokenchannellist
     var type = { "loginType": "API" }
 
     //  Step -1
@@ -75,12 +86,12 @@ const Alice_Socket = async () => {
 
                         var response = JSON.parse(msg.data)
 
-                       //  console.log("okk response", response)
+                        //  console.log("okk response", response)
 
                         if (response.tk) {
-                            
+
                             // --- Start Conver data view function  ----//
-                            ALice_View_data(response.tk, response,dbTradeTools)
+                            ALice_View_data(response.tk, response, dbTradeTools)
                             // --- End Conver data view function  ----//
 
                             const currentDate = new Date();
@@ -105,7 +116,7 @@ const Alice_Socket = async () => {
 
                             const options = { upsert: true }; // Set the upsert option to true
 
-                            const result = await stock_live_price.updateOne(filter, update,  { upsert: true });
+                            const result = await stock_live_price.updateOne(filter, update, { upsert: true });
                             // console.log("newCompany", result);
 
                         } else {

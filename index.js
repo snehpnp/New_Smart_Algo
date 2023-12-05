@@ -197,40 +197,37 @@ db.createView('open_position', 'mainsignals', [
     {
         $addFields: {
             target: {
-                $add: [
-                    { $toDouble: '$entry_price' },
-                    {
-                        $cond: {
-                            if: {
-                                $or: [
-                                 
-                                    { $eq: ['$target', "0"] },
-                                    { $eq: ['$target', '0'] }, // Check if target is the string "0"
-                                ],
-                            },
-                            then: 0,
-                            else: { $ifNull: [{ $toDouble: '$target' }, 0] },
-                        },
+                $cond: {
+                    if: {
+                        $or: [
+
+                            { $eq: ['$target', 0] },
+                            { $eq: ['$target', '0'] },
+                        ],
                     },
-                ],
+                    then: 0,
+                    else: {
+                        $add: [{ $toDouble: '$target' }, { $toDouble: '$entry_price' }]
+
+                    },
+                },
             },
             stop_loss: {
-                $subtract: [
-                    { $toDouble: '$entry_price' },
-                    {
-                        $cond: {
-                            if: {
-                                $or: [
-                                    { $eq: ['$stop_loss', 0] },
-                                    { $eq: ['$stop_loss', "0"] },
-                                    { $eq: ['$stop_loss', '0'] }, // Check if stop_loss is the string "0"
-                                ],
-                            },
-                            then: 0,
-                            else: { $ifNull: [{ $toDouble: '$stop_loss' }, 0] },
-                        },
+                $cond: {
+                    if: {
+                        $or: [
+                            { $eq: ['$stop_loss', 0] },
+                            { $eq: ['$stop_loss', "0"] },
+                            { $eq: ['$stop_loss', '0'] }, // Check if stop_loss is the string "0"
+                        ],
                     },
-                ],
+                    then: 0,
+                    else: {
+                        $subtract: [{ $toDouble: '$entry_price' }, { $toDouble: '$stop_loss' }]
+
+                    },
+
+                },
             },
             entry_qty_percent: {
                 $subtract: [
@@ -254,7 +251,7 @@ db.createView('open_position', 'mainsignals', [
             },
         },
     },
-    
+
     {
         $match: {
             $expr: {
@@ -262,7 +259,7 @@ db.createView('open_position', 'mainsignals', [
             }
         },
     },
-    
+
     {
         $lookup: {
             from: 'stock_live_price',
@@ -331,18 +328,18 @@ db.createView('open_position', 'mainsignals', [
             },
         },
     },
-    
+
     {
         $addFields: {
-          exit_time_test: {
-            $concat: [
-              { $substr: ["$exit_time", 0, 2] },
-              { $substr: ["$exit_time", 3, 2] }
-            ]
-          }
+            exit_time_test: {
+                $concat: [
+                    { $substr: ["$exit_time", 0, 2] },
+                    { $substr: ["$exit_time", 3, 2] }
+                ]
+            }
         }
-      },
-     {
+    },
+    {
         $project: {
             _id: 1,
             symbol: 1,
@@ -367,10 +364,10 @@ db.createView('open_position', 'mainsignals', [
             exit_time: 1,
             exit_time_test: 1,
             stockInfo_curtime: 1,
-            stockInfo_lp:1,
-            stockInfo_sp1:1,
-            stockInfo_bp1:1,
-            isLpInRange1:1,
+            stockInfo_lp: 1,
+            stockInfo_sp1: 1,
+            stockInfo_bp1: 1,
+            isLpInRange1: 1,
             isLpInRange: {
                 $cond: {
                     if: {
@@ -389,7 +386,7 @@ db.createView('open_position', 'mainsignals', [
                     },
                 },
             },
-            
+
 
         },
     },
@@ -398,3 +395,12 @@ db.createView('open_position', 'mainsignals', [
 
 
 db.createView('channel_list', 'token_chain', [])
+if (updateToken.length > 0) {
+    updateToken.forEach((data) => {
+        if (data.exch != null && data._id != null) {
+
+            channelstr += data.exch + "|" + data._id + "#"
+        }
+    })
+    // console.log(channelstr);
+}

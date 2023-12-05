@@ -38,6 +38,9 @@ const Signals = db.Signals;
 const MainSignals = db.MainSignals;
 const AliceViewModel = db.AliceViewModel;
 const BrokerResponse = db.BrokerResponse;
+const live_price = db.live_price;
+
+
 
 
 
@@ -48,7 +51,7 @@ const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 client.connect();
-console.log("Connected to MongoDB BrokerServer successfully!.....");
+// console.log("Connected to MongoDB BrokerServer successfully!.....");
 const db1 = client.db(process.env.DB_NAME);
 // console.log("Connected to MongoDB " + process.env.DB_NAME);
 
@@ -86,9 +89,125 @@ require('./Helper/cron')(app);
 
 
 
+const server = http.createServer(app);
+const io = socketIo(server);
 
 
 
+
+
+
+// io.on('connection', (socket) => {
+//   console.log('Client connected to Socket Server 1');
+
+//   // Handle socket events as needed
+
+//   socket.on('responseTask', (data) => {
+//     // Handle the response from Socket Server 2
+//     console.log('Received response from Socket Server 2:', data);
+//   });
+
+//   socket.on('disconnect', () => {
+//     console.log('Client disconnected from Socket Server 1');
+//   });
+// });
+
+
+
+
+
+
+
+let socketObject = null;
+
+const ConnectSocket = async () => {
+
+  var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
+
+  var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
+  var userid = broker_infor.user_id
+  var userSession1 = broker_infor.access_token
+  var type = { "loginType": "API" }
+  const url = "wss://ws1.aliceblueonline.com/NorenWS/"
+  var socket = null
+  var channelList = "NSE|14366"
+
+  console.log("run-------");
+
+  await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
+    headers: {
+      'Authorization': `Bearer ${userid} ${userSession1}`,
+      'Content-Type': 'application/json'
+    },
+
+  }).then((res) => {
+    if (res.data.stat == "Ok") {
+
+      try {
+        socket = new WebSocket(url)
+
+        socket.onopen = function () {
+          var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession1).toString()).toString();
+          var initCon = {
+            susertoken: encrcptToken,
+            t: "c",
+            actid: userid + "_" + "API",
+            uid: userid + "_" + "API",
+            source: "API"
+          }
+          socket.send(JSON.stringify(initCon))
+        }
+
+
+        socket.onmessage = async function (msg) {
+
+          var response = JSON.parse(msg.data)
+
+
+          if (response.tk) {
+
+            console.log("ok", response)
+
+
+
+          } else {
+            console.log("else", response)
+          }
+
+          if (response.s === 'OK') {
+            // var channel = await channelList;
+            let json = {
+              k: channelList,
+              t: 't'
+            };
+            await socket.send(JSON.stringify(json))
+
+            socketObject = socket
+
+          }
+
+        }
+      } catch (error) {
+
+      }
+    }
+
+  }).catch((error) => {
+    
+  console.log("Erro-",error.responses);
+    return error.response
+  })
+
+}
+
+ConnectSocket()
+
+app.get('/r', (req, res) => {
+  // Request on Socket Server 1
+  ConnectSocket()
+
+  res.send('Request sent to Socket Server 2');
+});
 
 
 
@@ -201,9 +320,9 @@ app.post('/broker-signals', async (req, res) => {
         ExitTime = signals.ExitTime.replace(/-/g, ':');
       }
 
-      console.log("Target", Target)
-      console.log("StopLoss", StopLoss)
-      console.log("ExitTime", ExitTime)
+      // console.log("Target", Target)
+      // console.log("StopLoss", StopLoss)
+      // console.log("ExitTime", ExitTime)
 
       var demo = signals.Demo;
 
@@ -353,6 +472,10 @@ app.post('/broker-signals', async (req, res) => {
               return console.log(err);
             }
           });
+
+
+
+          io.emit('requestTask', { message: instrument_token });
 
 
           // HIT TRADE IN BROKER SERVER
