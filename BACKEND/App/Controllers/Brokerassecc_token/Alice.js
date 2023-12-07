@@ -40,7 +40,7 @@ class AliceBlue {
             if (redirect == "localhost") {
                 redirect_uri = "http://localhost:3000"
             } else {
-                redirect_uri = `https://${redirect}/`
+                redirect_uri = `https://${redirect}/#/admin/tradehistory?type=admin`
             }
 
             const Get_User = await User.find({ demat_userid: userId })

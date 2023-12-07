@@ -316,10 +316,10 @@ class Login {
 
 
             var userid = Buffer.from(JSON.stringify(EmailCheck._id)).toString('base64');
-            // var redirectUrl = 'http://localhost:3000/#/update/' + userid
-            var redirectUrl = 'http://trade.pandpinfotech.com/#/update/' + userid
+            // var redirectUrl = 'http://trade.pandpinfotech.com/#/update/' + userid
+            var redirectUrl = 'http://trade.codingpandit.com/#/update/' + userid
 
-            // res.send({ status: false, msg: redirectUrl, data: [] });
+
 
 
             var toEmail = Email;
