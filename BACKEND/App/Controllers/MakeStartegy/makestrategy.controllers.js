@@ -998,7 +998,7 @@ const PreviousTradeExcuted = async (val, panelKey) => {
 }
 
 
-run().catch(console.error);
+// run().catch(console.error);
 
 
 

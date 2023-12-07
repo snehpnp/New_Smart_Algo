@@ -86,13 +86,9 @@ const Alice_Socket = async () => {
 
                         var response = JSON.parse(msg.data)
 
-                        //  console.log("okk response", response)
 
                         if (response.tk) {
 
-                            // --- Start Conver data view function  ----//
-                            ALice_View_data(response.tk, response, dbTradeTools)
-                            // --- End Conver data view function  ----//
 
                             const currentDate = new Date();
 

@@ -307,6 +307,8 @@ class Login {
 
             // // IF Login Time Email CHECK
             var EmailCheck = await User.findOne({ Email: Email })
+            var EmailCheck = await company_information.findOne()
+
 
             if (!EmailCheck) {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });

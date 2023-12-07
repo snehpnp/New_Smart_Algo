@@ -30,6 +30,10 @@ const http = require("http");
 const https = require('https');
 const socketIo = require("socket.io");
 const bodyparser = require('body-parser')
+const WebSocket = require('ws');
+var CryptoJS = require("crypto-js");
+
+
 
 const db = require('../BACKEND/App/Models');
 const services = db.services;
@@ -84,123 +88,114 @@ app.use(cors(corsOpts));
 
 require('./Helper/cron')(app);
 
-
-
-
-
-
 const server = http.createServer(app);
 const io = socketIo(server);
 
 
 
-
-
-
-// io.on('connection', (socket) => {
-//   console.log('Client connected to Socket Server 1');
-
-//   // Handle socket events as needed
-
-//   socket.on('responseTask', (data) => {
-//     // Handle the response from Socket Server 2
-//     console.log('Received response from Socket Server 2:', data);
-//   });
-
-//   socket.on('disconnect', () => {
-//     console.log('Client disconnected from Socket Server 1');
-//   });
-// });
-
-
-
-
-
-
-
 let socketObject = null;
-
-const ConnectSocket = async () => {
-
-  var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
-
-  var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
-  var userid = broker_infor.user_id
-  var userSession1 = broker_infor.access_token
-  var type = { "loginType": "API" }
-  const url = "wss://ws1.aliceblueonline.com/NorenWS/"
-  var socket = null
-  var channelList = "NSE|14366"
-
-  console.log("run-------");
-
-  await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
-    headers: {
-      'Authorization': `Bearer ${userid} ${userSession1}`,
-      'Content-Type': 'application/json'
-    },
-
-  }).then((res) => {
-    if (res.data.stat == "Ok") {
-
-      try {
-        socket = new WebSocket(url)
-
-        socket.onopen = function () {
-          var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession1).toString()).toString();
-          var initCon = {
-            susertoken: encrcptToken,
-            t: "c",
-            actid: userid + "_" + "API",
-            uid: userid + "_" + "API",
-            source: "API"
-          }
-          socket.send(JSON.stringify(initCon))
-        }
+let response111 = null;
 
 
-        socket.onmessage = async function (msg) {
+const ConnectSocket = async (channel_List) => {
 
-          var response = JSON.parse(msg.data)
+  console.log(channel_List);
+  var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE", trading_status: "on" });
 
-
-          if (response.tk) {
-
-            console.log("ok", response)
+  if (broker_infor) {
 
 
+    var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
+    var userid = broker_infor.user_id
+    var userSession1 = broker_infor.access_token
+    var type = { "loginType": "API" }
+    const url = "wss://ws1.aliceblueonline.com/NorenWS/"
+    var socket = null
+    var channelList = ""
 
-          } else {
-            console.log("else", response)
-          }
+    if (channel_List) {
+      channelList = channel_List
+    } else {
 
-          if (response.s === 'OK') {
-            // var channel = await channelList;
-            let json = {
-              k: channelList,
-              t: 't'
-            };
-            await socket.send(JSON.stringify(json))
-
-            socketObject = socket
-
-          }
-
-        }
-      } catch (error) {
-
-      }
     }
 
-  }).catch((error) => {
-    
-  console.log("Erro-",error.responses);
-    return error.response
-  })
+
+
+    await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
+      headers: {
+        'Authorization': `Bearer ${userid} ${userSession1}`,
+        'Content-Type': 'application/json'
+      },
+
+    }).then((res) => {
+
+
+      if (res.data.stat == "Ok") {
+
+        try {
+          socket = new WebSocket(url)
+
+          socket.onopen = function () {
+            var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession1).toString()).toString();
+            var initCon = {
+              susertoken: encrcptToken,
+              t: "c",
+              actid: userid + "_" + "API",
+              uid: userid + "_" + "API",
+              source: "API"
+            }
+            socket.send(JSON.stringify(initCon))
+          }
+
+          socket.onmessage = async function (msg) {
+            var response = JSON.parse(msg.data);
+
+            if (response.tk) {
+              handleResponse(response); // Call a function to handle the response
+            } else {
+              console.log("else", response);
+            }
+
+            if (response.s === 'OK') {
+              let json = {
+                k: channelList,
+                t: 't'
+              };
+              await socket.send(JSON.stringify(json));
+
+              socketObject = socket;
+            }
+          }
+
+        } catch (error) {
+          console.log("Error-", error.response);
+
+        }
+      }
+
+
+    }).catch((error) => {
+      console.log("Erro-", error.response);
+      return error.response
+    })
+
+
+  }
 
 }
+var live = ""
+function handleResponse(response) {
+  live = response
+  console.log("Handling response outside:", response);
+}
 
-ConnectSocket()
+
+
+
+
+
+
+
 
 app.get('/r', (req, res) => {
   // Request on Socket Server 1
@@ -447,6 +442,13 @@ app.post('/broker-signals', async (req, res) => {
             instrument_token = token[0].instrument_token
           }
 
+          // CREATE CHANEL LIST
+
+          var stock_List = `${EXCHANGE}|${instrument_token}`
+
+        await ConnectSocket(stock_List)
+
+console.log("=",live);
           var find_lot_size = 1
           if (token.length == 0) {
             find_lot_size = 0

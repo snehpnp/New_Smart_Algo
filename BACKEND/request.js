@@ -144,10 +144,10 @@ module.exports = function (app) {
 
   // TEST API
   app.get('/get', async (req, res) => {
-    createViewZerodha()
+    // createViewZerodha()
     // createViewFivepaisa()
     // createViewAngel()
-    //createView()
+    createView()
     res.send({ msg: "Done!!!" })
   })
 
