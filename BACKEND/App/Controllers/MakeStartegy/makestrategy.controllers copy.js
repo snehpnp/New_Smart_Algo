@@ -21,10 +21,9 @@ const { Socket_data } = require('../../Helper/Socket_data');
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-const dbTradeTools = client.db('TradeTools');
-const db_GET_VIEW = client.db('test');
-const db1 = client.db(process.env.DB_NAME);
-const get_open_position_view =  db_GET_VIEW.collection('open_position');
+const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
+const db_GET_VIEW = client.db(process.env.DB_NAME);
+const get_open_position_view = db_GET_VIEW.collection('open_position');
 class MakeStartegy {
 
   async gettimeFrame(req, res) {

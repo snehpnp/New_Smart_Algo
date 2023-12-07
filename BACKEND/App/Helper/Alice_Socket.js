@@ -7,14 +7,15 @@ const db = require('../Models');
 const { ALice_View_data } = require('./ALice_View_data');
 
 const live_price = db.live_price;
+const UserMakeStrategy = db.UserMakeStrategy;
 const mongoose = require('mongoose');
 const MongoClient = require('mongodb').MongoClient;
 
 
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-const db_main = client.db('test');
-const dbTradeTools = client.db('TradeTools');
+const db_main = client.db(process.env.DB_NAME);
+const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
 
 client.connect();
 
@@ -34,8 +35,8 @@ const Alice_Socket = async () => {
     var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
     var userid = broker_infor.user_id
     var userSession1 = broker_infor.access_token
-    //var channelList = broker_infor.Stock_chain
-    var channelList = "NSE|14366"
+    var channelList = broker_infor.Stock_chain
+   // var channelList = "NSE|14366#NFO|43227"
     // console.log("channelList", channelList)
     // console.log("userid", userid)
     // console.log("userSession1", userSession1)
@@ -78,9 +79,12 @@ const Alice_Socket = async () => {
                        //  console.log("okk response", response)
 
                         if (response.tk) {
-                            
+
+                            const Make_startegy_token = await UserMakeStrategy.findOne({tokensymbol:response.tk},{_id:1});
                             // --- Start Conver data view function  ----//
-                            ALice_View_data(response.tk, response,dbTradeTools)
+                            if(Make_startegy_token){
+                            ALice_View_data(response.tk, response,dbTradeTools);
+                            }
                             // --- End Conver data view function  ----//
 
                             const currentDate = new Date();

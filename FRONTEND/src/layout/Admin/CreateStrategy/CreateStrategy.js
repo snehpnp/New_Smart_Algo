@@ -309,7 +309,7 @@ const CreateStrategy = () => {
 
   const [strategyName, setStrategyName] = useState("");
   
-  const [timeFrameVal, setTimeFrameVal] = useState("1");
+  const [timeFrameVal, setTimeFrameVal] = useState("");
 
   const [buyCheck, setBuyCheck] = useState(false);
 

@@ -12,6 +12,7 @@ const cors = require('cors');
 const bodyparser = require('body-parser')
 
 
+
 const corsOpts = {
   origin: '*',
   methods: [
@@ -98,7 +99,11 @@ const io = socketIo(server, {
 );
 
 
+
+
+
 io.on("connection", (socket) => {
+  console.log(`a user connected with id ${socket.id}`);
   socket.on("help_from_client", (data) => {
     socket.broadcast.emit("test_msg_Response", data);
   });

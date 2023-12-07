@@ -28,7 +28,7 @@ class Panel {
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
             await client.connect();
-            const db = client.db('test');
+            const db = client.db(process.env.DB_NAME);
 
             const viewName = 'dashboard_data';
 
@@ -59,7 +59,7 @@ class Panel {
             // Use a connection pool to reuse connections
             var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
             await client.connect();
-            const db = client.db('test');
+            const db = client.db(process.env.DB_NAME);
     
             const collectionName = 'users';
     
@@ -128,7 +128,7 @@ class Panel {
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
             await client.connect();
-            const db = client.db('test');
+            const db = client.db(process.env.DB_NAME);
             // const db = db_name;
 
             const companies_collection = db.collection('companies');
