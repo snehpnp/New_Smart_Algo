@@ -97,13 +97,13 @@ let socketObject = null;
 let response111 = null;
 
 
+
+
 const ConnectSocket = async (channel_List) => {
 
-  console.log(channel_List);
   var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE", trading_status: "on" });
 
   if (broker_infor) {
-
 
     var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
     var userid = broker_infor.user_id
@@ -115,11 +115,7 @@ const ConnectSocket = async (channel_List) => {
 
     if (channel_List) {
       channelList = channel_List
-    } else {
-
     }
-
-
 
     await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
       headers: {
@@ -147,12 +143,39 @@ const ConnectSocket = async (channel_List) => {
             socket.send(JSON.stringify(initCon))
           }
 
+          console.log("Connect Socket");
           socket.onmessage = async function (msg) {
             var response = JSON.parse(msg.data);
 
             if (response.tk) {
-              handleResponse(response); // Call a function to handle the response
-            } else {
+
+
+              const currentDate = new Date();
+
+              // Extract hours and minutes from the time string
+              const hours = currentDate.getHours().toString().padStart(2, '0');
+              const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+
+              const stock_live_price = db1.collection('stock_live_price');
+
+              const filter = { _id: response.tk }; // Define the filter based on the token
+
+              const update = {
+                  $set: {
+                      lp: response.lp,
+                      exc: response.e,
+                      sp1: response.sp1,
+                      bp1: response.bp1,
+                      curtime: `${hours}${minutes}`
+                  },
+              };
+
+              const options = { upsert: true }; // Set the upsert option to true
+
+              const result = await stock_live_price.updateOne(filter, update, { upsert: true });
+              // console.log("newCompany", result);
+
+          }else {
               console.log("else", response);
             }
 
@@ -183,11 +206,9 @@ const ConnectSocket = async (channel_List) => {
   }
 
 }
-var live = ""
-function handleResponse(response) {
-  live = response
-  console.log("Handling response outside:", response);
-}
+
+ConnectSocket()
+
 
 
 
@@ -208,7 +229,6 @@ app.get('/r', (req, res) => {
 
 // ==================================================================================================
 // MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
-
 
 
 // BROKER REQUIRES
@@ -315,9 +335,6 @@ app.post('/broker-signals', async (req, res) => {
         ExitTime = signals.ExitTime.replace(/-/g, ':');
       }
 
-      // console.log("Target", Target)
-      // console.log("StopLoss", StopLoss)
-      // console.log("ExitTime", ExitTime)
 
       var demo = signals.Demo;
 
@@ -446,9 +463,22 @@ app.post('/broker-signals', async (req, res) => {
 
           var stock_List = `${EXCHANGE}|${instrument_token}`
 
-        await ConnectSocket(stock_List)
 
-console.log("=",live);
+          const token_chain1 = db1.collection('token_chain');
+          const stock_live_price1 = db1.collection('stock_live_price');
+          const price_live = await stock_live_price1.find({ _id: instrument_token }).toArray();
+
+          // console.log("price_live", price_live);
+          if (price_live.length > 0) {
+
+          } else {
+
+            await ConnectSocket(stock_List)
+            const result = await token_chain1.updateOne({ _id: instrument_token }, { $set: { _id: instrument_token, exch: EXCHANGE } }, { upsert: true });
+
+          }
+
+
           var find_lot_size = 1
           if (token.length == 0) {
             find_lot_size = 0
@@ -468,6 +498,8 @@ console.log("=",live);
             }
           }
 
+          const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
+          console.log("price_live_second",price_live_second);
 
           fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS_TOKEN ' + instrument_token + '\n', function (err) {
             if (err) {
