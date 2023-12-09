@@ -470,7 +470,7 @@ app.post('/broker-signals', async (req, res) => {
 
           // console.log("price_live", price_live);
           if (price_live.length > 0) {
-
+            price = price_live[0].lp
           } else {
 
             await ConnectSocket(stock_List)
@@ -499,7 +499,10 @@ app.post('/broker-signals', async (req, res) => {
           }
 
           const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
-          console.log("price_live_second",price_live_second);
+          if(price_live_second.length > 0){
+            price = price_live_second[0].lp
+          }
+          console.log("price_live_second",price);
 
           fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS_TOKEN ' + instrument_token + '\n', function (err) {
             if (err) {
@@ -509,7 +512,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-          io.emit('requestTask', { message: instrument_token });
+          // io.emit('requestTask', { message: instrument_token });
 
 
           // HIT TRADE IN BROKER SERVER
