@@ -309,7 +309,7 @@ const CreateStrategy = () => {
 
   const [strategyName, setStrategyName] = useState("");
   
-  const [timeFrameVal, setTimeFrameVal] = useState("1");
+  const [timeFrameVal, setTimeFrameVal] = useState("");
 
   const [buyCheck, setBuyCheck] = useState(false);
 
@@ -1237,14 +1237,29 @@ const saveStrategy = async (e) => {
          return;
        }
       }
-       
+      
+
       let sell_cond =false
-      if(condition_string_sell != ""){
+      if(condition_string_sell != ""){ 
         sell_cond =  areParenthesesBalanced(condition_string_sell);
         if(!sell_cond){
            alert("Please correct Sell condition");
            return;
          }
+      }
+
+      if(sellCheck){
+        if(!sell_cond){
+          alert("Please add Sell condition");
+          return;
+        }
+      }
+
+      if(buyCheck){
+        if(!buy_cond){
+          alert("Please add Buy condition");
+          return;
+        }
       }
 
    

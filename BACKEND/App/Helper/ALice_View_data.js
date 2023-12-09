@@ -43,12 +43,12 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
         createView(collectionName,dbTradeTools);
         createViewM3(collectionName,dbTradeTools);
-      //  createViewM5(collectionName,dbTradeTools);
-       // createViewM10(collectionName,dbTradeTools)
-       // createViewM15(collectionName,dbTradeTools)
-       // createViewM30(collectionName,dbTradeTools)
-       // createViewM60(collectionName,dbTradeTools)
-       // createViewM1DAY(collectionName,dbTradeTools)
+        createViewM5(collectionName,dbTradeTools);
+        createViewM10(collectionName,dbTradeTools)
+       createViewM15(collectionName,dbTradeTools)
+        createViewM30(collectionName,dbTradeTools)
+        createViewM60(collectionName,dbTradeTools)
+      createViewM1DAY(collectionName,dbTradeTools)
 
       } else {
         // console.log(`Collection '${collectionName}' does not exist.`);

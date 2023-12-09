@@ -22,9 +22,9 @@ module.exports = function (app) {
   // console.log("Connected to MongoDB successfully!.....");
 
 
-  const dbTradeTools = client.db('TradeTools');
+  const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
   
-  const dbTest = client.db('test');
+  const dbTest = client.db(process.env.DB_NAME);
 
 
   app.get("/pro", async (req, res) => {

@@ -7,9 +7,16 @@ const userMakeStrategySchema = new mongoose.Schema({
       },
       name: {
         type: String,
-        required: true,  
+        required: true,
+        trim: true,
+        unique: true,
+        default: null
       },
       tokensymbol: {
+        type: String,
+        required: true,  
+     },
+     show_strategy: {
         type: String,
         required: true,  
      },
@@ -40,8 +47,7 @@ const userMakeStrategySchema = new mongoose.Schema({
         required: true,      
     },
     timeframe: {
-        type: String,
-        required: true,     
+        type: String,  
     },
     price_source: {
         type: String,
@@ -120,9 +126,8 @@ const userMakeStrategySchema = new mongoose.Schema({
     
      status: {
         type: String,
-        required: true,
-        trim: true,
-        default: '0'
+        enum: ['1', '2'],
+        default: '1'
     }
 
 },{
