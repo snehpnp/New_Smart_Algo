@@ -9,6 +9,8 @@ const userMakeStrategySchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
+        unique: true,
+        default: null
       },
       tokensymbol: {
         type: String,

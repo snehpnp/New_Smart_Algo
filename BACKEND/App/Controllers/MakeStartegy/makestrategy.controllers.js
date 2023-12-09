@@ -24,6 +24,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
 const db_GET_VIEW = client.db(process.env.DB_NAME);
 const get_open_position_view = db_GET_VIEW.collection('open_position');
+const token_chain = db_GET_VIEW.collection('token_chain');
 class MakeStartegy {
 
   async gettimeFrame(req, res) {
@@ -247,14 +248,16 @@ class MakeStartegy {
 
   /// Make Startegy
   async AddMakeStartegy(req, res) {
-
+    
+   
     // let Random_key = Math.round(new Date());
     // let  suscribe =await Alice_Socket();
     
     let user_panel_key = await user.findOne().select('client_key').lean();
     let channelList = "";
     try {
-      // console.log("req",req.body) 
+       console.log("req",req.body)
+       
       console.log("req time", req.body.timeTradeConddition[0].entry.time)
 
 
@@ -304,6 +307,18 @@ class MakeStartegy {
 
         console.log("condition_source", condition_source)
 
+        // Add Token token chain
+      var get_token_chain = await token_chain.findOne({_id:tokensymbol})
+      console.log("get_token_chain",get_token_chain)
+      if(get_token_chain == null){
+        console.log("token_chain 11 ")
+      // const token_chain = await token_chain.insertOne({_id:tokensymbol,exch:exch_seg})
+      const filter = { _id:tokensymbol  };
+      const update = { $set: { _id:tokensymbol,exch:exch_seg } };
+       await token_chain.updateOne(filter, update, { upsert: true });
+        console.log("token_chain",token_chain)
+      }
+
 
         await UserMakeStrategy.create({
           name: req.body.name + req.body.user_id + req.body.type,
@@ -351,7 +366,7 @@ class MakeStartegy {
       }
 
       var alltokenchannellist = channelList.substring(0, channelList.length - 1);
-
+      
       // console.log("alltokenchannellist ",alltokenchannellist)
       const suscribe_token = await Socket_data(alltokenchannellist);
       res.send({ status: true, msg: "successfully Add!", data: [] });
@@ -467,7 +482,7 @@ async function run() {
                 const collection = dbTradeTools.collection(collectionName);
                 const get_view_data = await collection.aggregate([{ $sort: { _id: -1 } }]).toArray();
 
-                console.log("get_view_data ", get_view_data)
+               // console.log("get_view_data ", get_view_data)
                 let data = {}
                 if (val.condition_source != null) {
                   let condition_source = val.condition_source.split(',');
@@ -507,9 +522,9 @@ async function run() {
 
                 try {
                   // Use eval to dynamically evaluate the condition string
-                  console.log("data -", data, "condition String - ", val.condition)
+                 // console.log("data -", data, "condition String - ", val.condition)
                   const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
-                  console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
+               //   console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
                   // Check if the condition is true or false based on the data
                   if (condition) {
 
@@ -561,7 +576,7 @@ async function run() {
 
                     }
 
-                    console.log("condition_check_previous_trade ", condition_check_previous_trade)
+                   // console.log("condition_check_previous_trade ", condition_check_previous_trade)
 
                     var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade)
 
@@ -570,7 +585,7 @@ async function run() {
                     console.log("last_price",last_price[0].lp)
                     let price_lp = last_price[0].lp
 
-                    console.log("checkPreviousTrade", checkPreviousTrade)
+                  //  console.log("checkPreviousTrade", checkPreviousTrade)
                     if (checkPreviousTrade != null) {
                       console.log("checkPreviousTrade ", val.symbol_name);
                       // await PreviousTradeExcuted(checkPreviousTrade,val.panelKey);
@@ -635,7 +650,7 @@ async function run() {
 
 
                     // Your code for when the condition is true
-                    console.log("Condition is true ", val._id, val.symbol_name);
+                  //  console.log("Condition is true ", val._id, val.symbol_name);
                     const update = {
                       $set: {
                         status: "2",
@@ -655,10 +670,10 @@ async function run() {
                     }
 
                     const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
-                    console.log("Check_same_trade_data", Check_same_trade_data)
+                  //  console.log("Check_same_trade_data", Check_same_trade_data)
                     if (Check_same_trade_data) {
 
-                      console.log("Check_same_trade_data._id", Check_same_trade_data._id)
+                    //  console.log("Check_same_trade_data._id", Check_same_trade_data._id)
                       // const update1 = {
                       //   $set: {
                       //     status: "0",
@@ -673,7 +688,7 @@ async function run() {
                       });
 
 
-                      console.log("Trueeeeee", Res)
+                     // console.log("Trueeeeee", Res)
                     }
                     //End code same trade status update
 
@@ -681,7 +696,7 @@ async function run() {
 
 
                     //await tradeExcuted(val);
-                    console.log(" ENTRYYYYYYY ", val.type)
+                   // console.log(" ENTRYYYYYYY ", val.type)
                     //console.log("broker url -",process.env.BROKER_URL)
 
                     // let company_info =  await company_information.findOne().select('broker_url').lean();
