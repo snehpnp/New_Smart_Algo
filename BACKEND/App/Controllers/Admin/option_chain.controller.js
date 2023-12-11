@@ -242,10 +242,20 @@ class OptionChain {
             var GetTrade = await MainSignals_modal.aggregate([
                 {
                     $addFields: {
-                        // ... your other field additions
                         entry_qty_percent_int: { $toInt: "$entry_qty_percent" },
-                        exit_qty_percent_int: { $toInt: "$exit_qty_percent" }
-                    }
+                        exit_qty_percent_int: {
+                            $cond: {
+                                if: {
+                                    $or: [
+                                        { $eq: ["$exit_qty_percent", ""] },
+                                        { $eq: ["$exit_qty_percent", null] },
+                                    ],
+                                },
+                                then: 0,
+                                else: { $toInt: "$exit_qty_percent" },
+                            },
+                        },
+                    },
                 },
                 {
                     $match: {
@@ -518,7 +528,10 @@ class OptionChain {
             var channelstr = ""
             if (updateToken.length > 0) {
                 updateToken.forEach((data) => {
-                    channelstr += data.exch + "|" + data._id + "#"
+                    if (data.exch != null && data._id != null) {
+
+                        channelstr += data.exch + "|" + data._id + "#"
+                    }
                 })
                 // console.log(channelstr);
             }
@@ -536,9 +549,9 @@ class OptionChain {
 
 
 
- async subscribr_token(req, res) {
+    async subscribr_token(req, res) {
         try {
-            const {instrument_token,exch_seg} = req.body
+            const { instrument_token, exch_seg } = req.body
 
             const stock_live_price = db_main.collection('token_chain');
 

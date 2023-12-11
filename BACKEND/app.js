@@ -120,6 +120,8 @@ io.on("connection", (socket) => {
 
 
 // Server start
-server.listen(process.env.PORT, () =>
+server.listen(process.env.PORT, () =>{
+
   console.log(`Server is running on http://0.0.0.0:${process.env.PORT}`)
-);
+  Alice_Socket()
+});

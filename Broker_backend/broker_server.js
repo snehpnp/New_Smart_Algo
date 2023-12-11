@@ -30,6 +30,10 @@ const http = require("http");
 const https = require('https');
 const socketIo = require("socket.io");
 const bodyparser = require('body-parser')
+const WebSocket = require('ws');
+var CryptoJS = require("crypto-js");
+
+
 
 const db = require('../BACKEND/App/Models');
 const services = db.services;
@@ -38,6 +42,9 @@ const Signals = db.Signals;
 const MainSignals = db.MainSignals;
 const AliceViewModel = db.AliceViewModel;
 const BrokerResponse = db.BrokerResponse;
+const live_price = db.live_price;
+
+
 
 
 
@@ -48,7 +55,7 @@ const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 client.connect();
-console.log("Connected to MongoDB BrokerServer successfully!.....");
+// console.log("Connected to MongoDB BrokerServer successfully!.....");
 const db1 = client.db(process.env.DB_NAME);
 // console.log("Connected to MongoDB " + process.env.DB_NAME);
 
@@ -81,6 +88,126 @@ app.use(cors(corsOpts));
 
 require('./Helper/cron')(app);
 
+const server = http.createServer(app);
+const io = socketIo(server);
+
+
+
+let socketObject = null;
+let response111 = null;
+
+
+
+
+const ConnectSocket = async (channel_List) => {
+
+  var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE", trading_status: "on" });
+
+  if (broker_infor) {
+
+    var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
+    var userid = broker_infor.user_id
+    var userSession1 = broker_infor.access_token
+    var type = { "loginType": "API" }
+    const url = "wss://ws1.aliceblueonline.com/NorenWS/"
+    var socket = null
+    var channelList = ""
+
+    if (channel_List) {
+      channelList = channel_List
+    }
+
+    await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
+      headers: {
+        'Authorization': `Bearer ${userid} ${userSession1}`,
+        'Content-Type': 'application/json'
+      },
+
+    }).then((res) => {
+
+
+      if (res.data.stat == "Ok") {
+
+        try {
+          socket = new WebSocket(url)
+
+          socket.onopen = function () {
+            var encrcptToken = CryptoJS.SHA256(CryptoJS.SHA256(userSession1).toString()).toString();
+            var initCon = {
+              susertoken: encrcptToken,
+              t: "c",
+              actid: userid + "_" + "API",
+              uid: userid + "_" + "API",
+              source: "API"
+            }
+            socket.send(JSON.stringify(initCon))
+          }
+
+          console.log("Connect Socket");
+          socket.onmessage = async function (msg) {
+            var response = JSON.parse(msg.data);
+
+            if (response.tk) {
+
+
+              const currentDate = new Date();
+
+              // Extract hours and minutes from the time string
+              const hours = currentDate.getHours().toString().padStart(2, '0');
+              const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+
+              const stock_live_price = db1.collection('stock_live_price');
+
+              const filter = { _id: response.tk }; // Define the filter based on the token
+
+              const update = {
+                  $set: {
+                      lp: response.lp,
+                      exc: response.e,
+                      sp1: response.sp1,
+                      bp1: response.bp1,
+                      curtime: `${hours}${minutes}`
+                  },
+              };
+
+              const options = { upsert: true }; // Set the upsert option to true
+
+              const result = await stock_live_price.updateOne(filter, update, { upsert: true });
+              // console.log("newCompany", result);
+
+          }else {
+              console.log("else", response);
+            }
+
+            if (response.s === 'OK') {
+              let json = {
+                k: channelList,
+                t: 't'
+              };
+              await socket.send(JSON.stringify(json));
+
+              socketObject = socket;
+            }
+          }
+
+        } catch (error) {
+          console.log("Error-", error.response);
+
+        }
+      }
+
+
+    }).catch((error) => {
+      console.log("Erro-", error.response);
+      return error.response
+    })
+
+
+  }
+
+}
+
+ConnectSocket()
 
 
 
@@ -89,12 +216,19 @@ require('./Helper/cron')(app);
 
 
 
+
+
+app.get('/r', (req, res) => {
+  // Request on Socket Server 1
+  ConnectSocket()
+
+  res.send('Request sent to Socket Server 2');
+});
 
 
 
 // ==================================================================================================
 // MT_4 , OPTION_CHAIN , MAKE_STG, SQUARE_OFF
-
 
 
 // BROKER REQUIRES
@@ -201,9 +335,6 @@ app.post('/broker-signals', async (req, res) => {
         ExitTime = signals.ExitTime.replace(/-/g, ':');
       }
 
-      console.log("Target", Target)
-      console.log("StopLoss", StopLoss)
-      console.log("ExitTime", ExitTime)
 
       var demo = signals.Demo;
 
@@ -328,6 +459,26 @@ app.post('/broker-signals', async (req, res) => {
             instrument_token = token[0].instrument_token
           }
 
+          // CREATE CHANEL LIST
+
+          var stock_List = `${EXCHANGE}|${instrument_token}`
+
+
+          const token_chain1 = db1.collection('token_chain');
+          const stock_live_price1 = db1.collection('stock_live_price');
+          const price_live = await stock_live_price1.find({ _id: instrument_token }).toArray();
+
+          // console.log("price_live", price_live);
+          if (price_live.length > 0) {
+            price = price_live[0].lp
+          } else {
+
+            await ConnectSocket(stock_List)
+            const result = await token_chain1.updateOne({ _id: instrument_token }, { $set: { _id: instrument_token, exch: EXCHANGE } }, { upsert: true });
+
+          }
+
+
           var find_lot_size = 1
           if (token.length == 0) {
             find_lot_size = 0
@@ -347,12 +498,21 @@ app.post('/broker-signals', async (req, res) => {
             }
           }
 
+          const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
+          if(price_live_second.length > 0){
+            price = price_live_second[0].lp
+          }
+          console.log("price_live_second",price);
 
           fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS_TOKEN ' + instrument_token + '\n', function (err) {
             if (err) {
               return console.log(err);
             }
           });
+
+
+
+          // io.emit('requestTask', { message: instrument_token });
 
 
           // HIT TRADE IN BROKER SERVER

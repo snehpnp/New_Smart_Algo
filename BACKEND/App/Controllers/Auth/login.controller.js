@@ -307,6 +307,8 @@ class Login {
 
             // // IF Login Time Email CHECK
             var EmailCheck = await User.findOne({ Email: Email })
+            var EmailCheck = await company_information.findOne()
+
 
             if (!EmailCheck) {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
@@ -314,10 +316,10 @@ class Login {
 
 
             var userid = Buffer.from(JSON.stringify(EmailCheck._id)).toString('base64');
-            // var redirectUrl = 'http://localhost:3000/#/update/' + userid
-            var redirectUrl = 'http://trade.pandpinfotech.com/#/update/' + userid
+            // var redirectUrl = 'http://trade.pandpinfotech.com/#/update/' + userid
+            var redirectUrl = 'http://trade.codingpandit.com/#/update/' + userid
 
-            // res.send({ status: false, msg: redirectUrl, data: [] });
+
 
 
             var toEmail = Email;
