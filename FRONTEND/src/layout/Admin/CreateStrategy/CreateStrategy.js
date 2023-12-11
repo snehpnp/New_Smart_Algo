@@ -1439,7 +1439,7 @@ const saveStrategy = async (e) => {
   return (
     <>
       <>
-        <Content Page_title="Create Strategy" button_title=" Back" route="/admin/AllMakeStrategy">
+        <Content Page_title="Create Strategy" button_title="Back" route="/admin/AllMakeStrategy">
           <div>
 
            <div className="col-md-2 ">
@@ -1559,7 +1559,6 @@ const saveStrategy = async (e) => {
                     </div>
                   ))}
 
-                
                 </div>
               </li>
                <li class="StepProgress-item is-done">
