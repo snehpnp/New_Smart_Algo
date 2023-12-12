@@ -17,7 +17,7 @@ import { Pencil, Trash2 ,GanttChartSquare} from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
-import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy ,get_all_make_strategy ,delete_make_strategy} from "../../../ReduxStore/Slice/Common/make_strategy_slice";
+import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy ,get_all_make_strategy ,delete_make_strategy,delete_make_strategy_selected} from "../../../ReduxStore/Slice/Common/make_strategy_slice";
 
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
@@ -119,7 +119,7 @@ const AllMakeStrategy = () => {
     // DELETE GROUP
     const DeleteGroup = async (row) => {
       // alert("okk")
-        if (window.confirm("Do You Really Want To Delete ??")) {
+        if (window.confirm("Do You Really Want To Delete ?")) {
          
             await dispatch(delete_make_strategy(
                 {
@@ -199,9 +199,79 @@ const AllMakeStrategy = () => {
         e.preventDefault();
         setSearchInput("");
     };
+  
+
+      
+
+    const [selected, setSelected] = useState([]);
+    const [selected1, setSelected1] = useState([]);
+
+    const handleOnSelect = (row, isSelect) => {
+        console.log("isSelect ",isSelect)
+        console.log("isSelect id ",row._id)
+        if (isSelect) {
+            setSelected([...selected, row._id]);
+            setSelected1([...selected1, row]);
+        } else {
+            setSelected(selected.filter(x => x !== row._id));
+            setSelected1(selected1.filter(x => x._id !== row._id));
+        }
+
+    }
 
 
+    const handleOnSelectAll = (isSelect, rows) => {
+        const ids = rows.map(r => r._id);
+        if (isSelect) {
+            setSelected(ids);
+            setSelected1(rows);
+        } else {
+            setSelected([]);
+            setSelected1([]);
+        }
+    }
 
+    const selectRow = {
+        mode: 'checkbox',
+        clickToSelect: true,
+        selected: selected,
+        onSelect: handleOnSelect,
+        onSelectAll: handleOnSelectAll
+    };
+
+   
+  
+
+    const SelectedAllDelete = async (e) => {
+    //console.log("selected",selected)
+    if(selected.length > 0){
+        // alert("okk");
+        if (window.confirm("Do You Really Want To Delete Selected Row ?")) {
+         
+            await dispatch(delete_make_strategy_selected(
+                {
+                    req: {
+                        ids_array: selected
+                      },
+                      token: AdminToken,
+                }
+            )).unwrap()
+                .then((response) => {
+                    // console.log("response", response)
+                    if (response.status) {
+                        toast.success(response.msg)
+                        setrefresh(!refresh)
+                        // window.location.reload()
+                    } else {
+
+                        toast.error(response.msg)
+                    }
+                })
+        }
+     }
+    
+    }
+ 
 
     return (
         <>
@@ -227,17 +297,34 @@ const AllMakeStrategy = () => {
                                     </div>
                                 </div>
 
-                                <div className="col-lg-2 mt-3">
-                                    {/* <button
+                                {/* <div className="col-lg-2 mt-3">
+                                    <button
                                         className="btn btn-primary mt-2"
                                         onClick={(e) => ResetDate(e)}
                                     >
                                         Reset
-                                    </button> */}
+                                    </button>
+                                </div> */}
+                            
+                            {
+                                AllMakeStrategy.data.length > 0 ? 
+                                <div className="col-lg-2 mt-3">
+                                <button className='btn btn-primary mt-2' disabled={selected == "" ? true : false} onClick={SelectedAllDelete}>Deleted</button>
                                 </div>
+                                :""
+                            }
+                            
+
                             </div>
 
-                            <FullDataTable TableColumns={columns} tableData={AllMakeStrategy.data} />
+                            <FullDataTable 
+                            keyField="_id"
+                            TableColumns={columns} 
+                            tableData={AllMakeStrategy.data}
+                            pagination1={true} 
+                            selectRow={selectRow}
+                            
+                            />
 
                             {
                                 showModal ?

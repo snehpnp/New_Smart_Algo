@@ -119,6 +119,22 @@ class MakeStartegy {
     }
   }
 
+   //Delete make strateg Selected
+  async DeleteMakeStartegySelected(req, res) {
+    try {
+
+      //const objectI = new ObjectId(req.body.ids_array);
+      console.log("ids_array - ",req.body.ids_array)
+      const result = await UserMakeStrategy.deleteMany({ _id: { $in: req.body.ids_array } });
+      if (result.acknowledged == true) {
+        return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
+      }
+    } catch (error) {
+      console.log("error-", error);
+      res.status(500).send({ status: false, msg: "Internal server error" });
+    }
+  }
+
   //EditeMakeStartegy  make strateg
   async EditeMakeStartegy(req, res) {
     try {
@@ -1052,20 +1068,13 @@ run().catch(console.error);
 const exitOpentrade = async () => {
 try {
   const viewName = 'open_position_excute';
-
-  var openPosition = await db1.collection(viewName).find().toArray();
-
+  var openPosition = await db_GET_VIEW.collection(viewName).find().toArray();
   if (openPosition.length > 0) {
     let panelKey = "SNE132023";
-
     openPosition && openPosition.map((item) => {
-
       const currentTimestamp = Math.floor(Date.now() / 1000);
       let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_bp1}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${panelKey}|TradeType:${item.TradeType}|Demo:demo`
-
       console.log(req);
-
-
       let config = {
         method: 'post',
         maxBodyLength: Infinity,

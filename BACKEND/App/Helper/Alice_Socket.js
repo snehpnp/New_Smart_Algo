@@ -95,7 +95,7 @@ const Alice_Socket = async () => {
                             const Make_startegy_token = await UserMakeStrategy.findOne({tokensymbol:response.tk},{_id:1});
                             // --- Start Conver data view function  ----//
                             if(Make_startegy_token){
-                                console.log("okk response inside view", response)
+                               // console.log("okk response inside view", response)
                             ALice_View_data(response.tk, response,dbTradeTools);
                             }
                             // --- End Conver data view function  ----//
