@@ -252,6 +252,7 @@ export async function GET_ALL_MAKE_STRATEGY(data, token) {
     }
 }
 
+// Delete make Startegy
 export async function DELETE_MAKE_STRATEGY(data, token) {
 
     try {
@@ -268,6 +269,7 @@ export async function DELETE_MAKE_STRATEGY(data, token) {
     }
 }
 
+// Edit make Startegy
 export async function EDIT_MAKE_STRATEGY(data, token) {
 
     try {
@@ -300,6 +302,24 @@ export async function UPDATE_MAKE_STRATEGY(data, token) {
         
     }
 }
+
+// Delete make Startegy delete selected
+export async function DELETE_MAKE_STRATEGY_SELECTED(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}DeleteMakeStartegySelected`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}
+
 
 
 

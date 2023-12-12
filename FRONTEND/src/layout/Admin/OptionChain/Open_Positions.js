@@ -791,7 +791,7 @@ const TradeHistory = () => {
         onSelectAll: handleOnSelectAll
     };
 
-
+    console.log("selected open posssition",selected)
 
     return (
         <>
