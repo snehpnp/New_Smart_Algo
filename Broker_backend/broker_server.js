@@ -88,15 +88,14 @@ app.use(cors(corsOpts));
 
 require('./Helper/cron')(app);
 
+
+// =======================SOCKET CONNECT AND ADD PRICE =====================
+
 const server = http.createServer(app);
 const io = socketIo(server);
 
-
-
 let socketObject = null;
 let response111 = null;
-
-
 
 
 const ConnectSocket = async (channel_List) => {
@@ -212,16 +211,9 @@ ConnectSocket()
 
 
 
-
-
-
-
-
-
 app.get('/r', (req, res) => {
   // Request on Socket Server 1
   ConnectSocket()
-
   res.send('Request sent to Socket Server 2');
 });
 

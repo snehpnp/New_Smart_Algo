@@ -1053,7 +1053,7 @@ const exitOpentrade = async () => {
 try {
   const viewName = 'open_position_excute';
 
-  var openPosition = await db1.collection(viewName).find().toArray();
+  var openPosition = await db_GET_VIEW.collection(viewName).find().toArray();
 
   if (openPosition.length > 0) {
     let panelKey = "SNE132023";
@@ -1101,9 +1101,9 @@ try {
 
 
 
-setInterval(() => {
-  exitOpentrade()
-}, 10000);
+// setInterval(() => {
+//   exitOpentrade()
+// }, 10000);
 
 
 module.exports = new MakeStartegy();
