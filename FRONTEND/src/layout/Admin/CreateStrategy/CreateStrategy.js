@@ -181,6 +181,10 @@ const CreateStrategy = () => {
 
    // get data comparators 
    const [getComparators, setGetComparators] = useState({ loading: true, data: [] });
+   
+   //disableSaveButtun
+   const [disableSaveButtun, setDisableSaveButtun] = useState(false);
+
  
    console.log("getSources - ",getSources)
     
@@ -1262,6 +1266,8 @@ const saveStrategy = async (e) => {
         }
       }
 
+      setDisableSaveButtun(true)
+
    
       let condition_string_source = [];
       for (let index = 0; index < coditionRequestArr.length; index++) {
@@ -2178,7 +2184,9 @@ const saveStrategy = async (e) => {
           </div>
 
           <div className="mt-5">
-            <button className='btn btn-info float-start m-0' onClick={()=>saveStrategy("e")}>save</button>
+            <button className='btn btn-info float-start m-0'
+            disabled={disableSaveButtun == true ? true : false}
+            onClick={()=>saveStrategy("e")}>save</button>
           </div>
 
 
