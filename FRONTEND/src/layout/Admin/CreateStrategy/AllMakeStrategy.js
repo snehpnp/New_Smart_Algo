@@ -306,7 +306,7 @@ const AllMakeStrategy = () => {
                                     </button>
                                 </div> */}
                             
-                            {
+                            { 
                                 AllMakeStrategy.data.length > 0 ? 
                                 <div className="col-lg-2 mt-3">
                                 <button className='btn btn-primary mt-2' disabled={selected == "" ? true : false} onClick={SelectedAllDelete}>Deleted</button>
