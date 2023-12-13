@@ -17,11 +17,12 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
-import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
+import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy ,get_instrument } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
 
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { useNavigate } from "react-router-dom";
+import * as Config from "../../../Utils/Config";
 
 
 const CreateStrategy = () => {
@@ -93,12 +94,15 @@ const CreateStrategy = () => {
 
 
 
-  const handleShow = () => {
+  const handleShow = async () => {
     setShow(true);
+
+
 
     const config = {
       method: 'post',
-      url: 'http://localhost:7700/add/getservicename',
+     // url: 'http://localhost:7700/add/getservicename',
+      url:`${Config.base_url}add/getservicename`,
       data: {
         searchQuery: filterServices
       }
@@ -112,7 +116,34 @@ const CreateStrategy = () => {
       .catch(function (error) {
         console.log(error);
       });
+
+
+      // await dispatch(
+      //   get_instrument({
+      //     req: {
+      //       page: "1",
+      //       limit: "100",
+      //       searchQuery: filterServices
+      //     },
+      //     token: AdminToken,
+      //   })
+      // )
+      //   .unwrap()
+      //   .then((response) => {
+      //     console.log("ss -",response.data)
+      //     setStoreServiceData(response.data.data);
+      //   });
+
   };
+
+
+
+
+
+
+
+
+
 
   const handleAddItem = (item) => {
     const isItemAlreadySelected = selectedItems.some(

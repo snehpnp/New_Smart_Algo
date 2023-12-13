@@ -1,6 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_TIMEFRAME , GET_SOURCE ,GET_COMPARATORS ,ADD_MAKE_STRATEGY ,GET_ALL_MAKE_STRATEGY,DELETE_MAKE_STRATEGY,EDIT_MAKE_STRATEGY,UPDATE_MAKE_STRATEGY,DELETE_MAKE_STRATEGY_SELECTED} from "../../../Service/common.service";
+import { GET_TIMEFRAME , GET_INSTRUMENT ,GET_SOURCE ,GET_COMPARATORS ,ADD_MAKE_STRATEGY ,GET_ALL_MAKE_STRATEGY,DELETE_MAKE_STRATEGY,EDIT_MAKE_STRATEGY,UPDATE_MAKE_STRATEGY,DELETE_MAKE_STRATEGY_SELECTED} from "../../../Service/common.service";
+
+
+
+export const get_instrument = createAsyncThunk("add/getservicename", async (data) => {
+    try {
+        console.log("data -",data)
+        const {req,token}=data
+        const res = await GET_INSTRUMENT(req,token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
 
 
 export const get_time_frame = createAsyncThunk("get/getAlltimeframe", async (data) => {
@@ -119,6 +133,7 @@ const MakeStrategy = createSlice({
         editemakestrategy:[],
         updatemakestrategy:[],
         deletemakestrategySelected:[],
+        getinstrument:[],
     },
 
     recuders: {},
@@ -149,6 +164,9 @@ const MakeStrategy = createSlice({
         },
         [delete_make_strategy_selected.fulfilled]: (state, { payload }) => {
             return { ...state, deletemakestrategySelected: payload, isLoading: false };
+        },
+        [get_instrument.fulfilled]: (state, { payload }) => {
+            return { ...state, getinstrument: payload, isLoading: false };
         },
         
         

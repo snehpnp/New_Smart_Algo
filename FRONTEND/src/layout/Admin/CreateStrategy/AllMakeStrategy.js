@@ -40,11 +40,7 @@ const AllMakeStrategy = () => {
 
     //  For Mnage Multipfiter
     const [searchInput, setSearchInput] = useState("");
-  
-
     const [test, settest] = useState(false)
-
-
     const [refresh, setrefresh] = useState(false)
     const [getServicesName, setServicesName] = useState({
         loading: true,
@@ -66,7 +62,7 @@ const AllMakeStrategy = () => {
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: 'name',
+            dataField: 'show_strategy',
             text: 'Strategy Name',
             sort: true,
 
@@ -77,7 +73,6 @@ const AllMakeStrategy = () => {
             sort: true,
 
         },
-        
         {
             dataField: 'symbol_name',
             text: 'Script Name',
@@ -90,7 +85,7 @@ const AllMakeStrategy = () => {
             sort: true,
            
         },
-         {
+        {
             dataField: 'actions',
             text: 'Actions',
             sort: true,
@@ -174,16 +169,14 @@ const AllMakeStrategy = () => {
             })
     }
 
-
     useEffect(() => {
-        data()
+        data();
     }, [refresh])
 
 
 
     //  MANAGE MULTIFILTER
     // useEffect(() => {
-
     //     const filteredData = originalData.filter((item) => {
     //         return (
     //             item.name.toLowerCase().includes(searchInput.toLowerCase())
@@ -194,6 +187,8 @@ const AllMakeStrategy = () => {
     //         data: searchInput ? filteredData : originalData,
     //     });
     // }, [searchInput, originalData]);
+
+
 
     const ResetDate = (e) => {
         e.preventDefault();

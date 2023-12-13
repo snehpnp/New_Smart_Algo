@@ -167,6 +167,24 @@ export async function GET_MESSAGE_BROD(id) {
 
 //----------------------------Make Strategy--------------------------------------------//
 
+
+// Get Time Frame
+export async function GET_INSTRUMENT(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}add/getservicename`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}
+
 // Get Time Frame
 export async function GET_TIMEFRAME(data, token) {
 

@@ -25,6 +25,9 @@ class Strategy {
 
     // GET SUBADMIN PERMISSION
     async get_servicename(req, res) {
+        console.log("req.body.searchQuery ",req.body.searchQuery)
+
+
         try {
             const searchQuery = req.body.searchQuery || "";
             const page = 1;
@@ -60,7 +63,7 @@ class Strategy {
 
             }
 
-            console.log("pipeline", pipeline)
+          //  console.log("pipeline", pipeline)
 
             const get_user = await Alice_token.aggregate(pipeline);
 
