@@ -442,8 +442,8 @@ app.post('/broker-signals', async (req, res) => {
 
             token = await Alice_token.find(instrument_query).maxTimeMS(20000).exec();
           }
-
-          // console.log("token",token[0]);
+          console.log(instrument_query);
+          console.log("token",token[0]);
           var instrument_token = 0
           if (token.length == 0) {
             instrument_token = 0
@@ -563,7 +563,7 @@ app.post('/broker-signals', async (req, res) => {
             //Process fivepaisa admin client
             try {
               const fivepaisaCollection = db1.collection('fivepaisaView');
-              console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+              // console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
               const fivepaisaBluedocuments = await fivepaisaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + fivepaisaBluedocuments.length + '\n', function (err) {
@@ -589,7 +589,7 @@ app.post('/broker-signals', async (req, res) => {
             //Process zerodha admin client
             try {
               const zerodhaCollection = db1.collection('zerodhaView');
-              console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
+              // console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
               const zerodhaBluedocuments = await zerodhaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + zerodhaBluedocuments.length + '\n', function (err) {
