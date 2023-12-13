@@ -9,15 +9,16 @@ const MongoClient = require('mongodb').MongoClient;
 
 
 
-// const uri = process.env.MONGO_URI
-// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-// client.connect();
-// const dbTradeTools = client.db('TradeTools');
-const ALice_View_data = async (token,response,dbTradeTools) => {
-  connectToDB(token,response,dbTradeTools);
+const uri = process.env.MONGO_URI
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const db_main = client.db(process.env.DB_NAME);
+const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
+
+const ALice_View_data = async (token,response) => {
+  connectToDB(token,response);
 }
 
-async function connectToDB(collectionName, response,dbTradeTools) {
+async function connectToDB(collectionName, response) {
     try {
 
      
@@ -41,14 +42,14 @@ async function connectToDB(collectionName, response,dbTradeTools) {
           // console.log('Inserted document:', insertResult.insertedId);
         }
 
-        createView(collectionName,dbTradeTools);
-        createViewM3(collectionName,dbTradeTools);
-        createViewM5(collectionName,dbTradeTools);
-        createViewM10(collectionName,dbTradeTools)
-       createViewM15(collectionName,dbTradeTools)
-        createViewM30(collectionName,dbTradeTools)
-        createViewM60(collectionName,dbTradeTools)
-      createViewM1DAY(collectionName,dbTradeTools)
+        createView(collectionName);
+        createViewM3(collectionName);
+        createViewM5(collectionName);
+        createViewM10(collectionName)
+       createViewM15(collectionName)
+        createViewM30(collectionName)
+        createViewM60(collectionName)
+      createViewM1DAY(collectionName)
 
       } else {
         // console.log(`Collection '${collectionName}' does not exist.`);
@@ -79,7 +80,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
     }
   }
 
-  async function createView(collectionName,dbTradeTools) {
+  async function createView(collectionName) {
     try {
       
 
@@ -142,7 +143,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
   }
 
-  async function createViewM3(collectionName,dbTradeTools) {
+  async function createViewM3(collectionName) {
     try {
       
 
@@ -229,7 +230,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
   }
 
-  async function createViewM5(collectionName,dbTradeTools) {
+  async function createViewM5(collectionName) {
     try {
       
 
@@ -316,7 +317,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
   }
 
-  async function createViewM10(collectionName,dbTradeTools) {
+  async function createViewM10(collectionName) {
     try {
       
 
@@ -403,7 +404,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
   }
 
-  async function createViewM15(collectionName,dbTradeTools) {
+  async function createViewM15(collectionName) {
     try {
       
 
@@ -490,7 +491,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
   }
 
-  async function createViewM30(collectionName,dbTradeTools) {
+  async function createViewM30(collectionName) {
     try {
       
 
@@ -577,7 +578,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
   }
 
-  async function createViewM60(collectionName,dbTradeTools) {
+  async function createViewM60(collectionName) {
     try {
       
 
@@ -664,7 +665,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
   }
 
-  async function createViewM1DAY(collectionName,dbTradeTools) {
+  async function createViewM1DAY(collectionName) {
     try {
       
 
