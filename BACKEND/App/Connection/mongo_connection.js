@@ -1,8 +1,5 @@
 // "use strict";
 
-
-
-
 const mongoose = require("mongoose");
 
 const db_connect = process.env.MONGO_URI;

@@ -444,8 +444,8 @@ const HelpCenter = () => {
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                url: `${getBrokerUrl && getBrokerUrl}`,
+                url: 'http://localhost:8000/broker-signals',
+                // url: `${getBrokerUrl && getBrokerUrl}`,
                 headers: {
                     'Content-Type': 'text/plain'
                 },
