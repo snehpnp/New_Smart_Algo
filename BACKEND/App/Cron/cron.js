@@ -30,7 +30,6 @@ cron.schedule('0 8 * * *', () => {
 });
 
 
-
 // Token Symbol Update
 cron.schedule('1 1 * * *', () => {
     console.log('running a task every minute');
@@ -41,7 +40,6 @@ cron.schedule('10 1 * * *', () => {
     console.log('running a task every minute');
     TokenSymbolUpdate()
 });
-
 
 
 
@@ -119,7 +117,6 @@ const LogoutAllUsers = async () => {
 }
 
 //================================Option Chain Stock Price Set=======================//
-
 
 
 // SERVICES TOKEN CREATE
