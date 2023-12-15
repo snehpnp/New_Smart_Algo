@@ -8,9 +8,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 class BrokerReponse {
 
-
     // GET ADMIN SIGNALS
-
     async GetUserBrokerResponse(req, res) {
         try {
             const { _id } = req.body;
@@ -44,8 +42,6 @@ class BrokerReponse {
             console.log("Theme error-", error);
         }
     }
-
-
 
 }
 

@@ -118,9 +118,7 @@ class OptionChain {
 
     }
 
-
     // GET All ROUND TOKEN
-
     async Get_Option_All_Round_Token(req, res) {
 
         const symbol = req.body.symbol;
@@ -233,11 +231,8 @@ class OptionChain {
         }
     }
 
-
-
     // GET All ROUND TOKEN
     async Open_Position(req, res) {
-        // console.log(" req ",req.body)
         try {
             var GetTrade = await MainSignals_modal.aggregate([
                 {
@@ -259,7 +254,6 @@ class OptionChain {
                 },
                 {
                     $match: {
-                        // "TradeType": "OPTION_CHAIN",
                         $expr: { $gt: ["$entry_qty_percent_int", "$exit_qty_percent_int"] }
                     }
                 }
@@ -276,15 +270,9 @@ class OptionChain {
         }
     }
 
-
-
-
-
-
     async Get_Option_All_Token_Chain(req, res) {
 
         try {
-            // const symbol = "NIFTY";
             const symbols = ["NIFTY", "BANKNIFTY", "FINNIFTY"];
 
             const expiry = "30112023";
@@ -301,10 +289,8 @@ class OptionChain {
             const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
             const formattedLastDayOfMonth = lastDayOfMonth.toISOString();
 
-
             const final_data = [];
 
-            // symbols.forEach(async (symbol) => {
             for (const symbol of symbols) {
                 const pipeline = [
                     {
@@ -361,8 +347,6 @@ class OptionChain {
                     return itemDate.getTime() === lastDayOfMonth.getTime() || data.indexOf(item) < 2;
                 });
                 const expiryDatesArray = result11.map(item => item.uniqueExpiryValues);
-
-                // console.log(expiryDatesArray);
 
                 const get_symbol_price = await Get_Option_Chain_modal.findOne({ symbol: symbol })
 
@@ -422,7 +406,6 @@ class OptionChain {
                 const result = await Alice_token.aggregate(pipeline2);
                 const resultStrike = await Alice_token.aggregate(pipeline3);
 
-
                 var channelstr = ""
                 if (result.length > 0) {
                     resultStrike.forEach(element => {
@@ -468,10 +451,8 @@ class OptionChain {
 
                 }
 
-
             }
             var concatenatedArray = ""
-            console.log(final_data);
 
             final_data.forEach((data) => {
                 concatenatedArray += data + "#"
@@ -489,7 +470,6 @@ class OptionChain {
             console.log("error", error);
         }
     }
-
 
     async update_stop_loss(req, res) {
         try {
@@ -512,11 +492,6 @@ class OptionChain {
 
         }
     }
-
-
-
-
-
 
     async Stock_chain(req, res) {
         try {
@@ -546,8 +521,6 @@ class OptionChain {
 
         }
     }
-
-
 
     async subscribr_token(req, res) {
         try {

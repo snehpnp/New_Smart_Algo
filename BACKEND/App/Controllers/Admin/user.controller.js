@@ -24,9 +24,8 @@ const { logger, logger1, getIPAddress } = require("../../Helper/logger.helper");
 var dateTime = require("node-datetime");
 var dt = dateTime.create();
 
-// OK
-// Product CLASS
 class Employee {
+
   // USER ADD
   async AddEmployee(req, res) {
     try {
@@ -913,8 +912,6 @@ class Employee {
     }
   }
 
-
-
   // GET ALL EXPIRED USERS
   async GetAllExpiredClients(req, res) {
    
@@ -967,7 +964,6 @@ class Employee {
 
   }
 
-
   // GET ALL GetAllClients
   async GetAllClients(req, res) {
     try {
@@ -1016,6 +1012,7 @@ class Employee {
       console.log("loginClients Error-", error);
     }
   }
+
   // GET ALL LOGIN CLIENTS
   async loginClients(req, res) {
     try {
@@ -1294,10 +1291,6 @@ class Employee {
     }
   }
 
-
-
-
-
   // UPDATE BROKER KEY
   async Update_Broker_Keys(req, res) {
     try {
@@ -1326,8 +1319,6 @@ class Employee {
     }
   }
 
-
-
   // GET ONLY CLIENT KEY
   async GetclientKey(req, res) {
     try {
@@ -1347,19 +1338,7 @@ class Employee {
     }
   }
 
-
-
 }
-
-
-
-
-
-
-
-
-
-
 
 module.exports = new Employee();
 

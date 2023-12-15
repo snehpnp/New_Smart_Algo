@@ -10,12 +10,10 @@ const strategy_client = db.strategy_client;
 const services = db.services;
 const strategy = db.strategy;
 const serviceGroup_services_id = db.serviceGroup_services_id;
-
-
 const user_activity_logs = db.user_activity_logs;
-
-
 const Subadmin_Permission = db.Subadmin_Permission;
+
+
 var dateTime = require('node-datetime');
 var dt = dateTime.create();
 
@@ -24,8 +22,6 @@ const ObjectId = mongoose.Types.ObjectId;
 const { logger, logger1, getIPAddress } = require('../../Helper/logger.helper')
 
 
-// OK
-// Product CLASS
 class Dashboard {
 
     // ONE USER GET ALL TRADING STATUS
@@ -310,8 +306,6 @@ class Dashboard {
         }
     }
 
-
-
     // Trading OFF 
     async TradingOff(req, res) {
         try {
@@ -347,7 +341,6 @@ class Dashboard {
             console.log("error", error);
         }
     }
-
 
     // Update User Modifyed
     async ModifyUpdates(req, res) {
@@ -420,7 +413,6 @@ class Dashboard {
         }
     }
 
-
     async GetUserApiCreate(req, res) {
 
         try {
@@ -442,10 +434,9 @@ class Dashboard {
 
     }
 
-
-
-
 }
+
+
 
 const update_qty = async (user_id) => {
     var UserId = new ObjectId(user_id);

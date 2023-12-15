@@ -5,9 +5,9 @@ const user_model = db.user;
 const count_licenses = db.count_licenses;
 const company_information = db.company_information;
 
-const { formattedDateTime } = require("../../Helper/time.helper");
 
 class License {
+
   // GET Expired Clients
   async GetExpiredclients(req, res) {
     try {
@@ -38,37 +38,34 @@ class License {
   async GetTransctionLicense(req, res) {
     try {
       const Transection_license = await count_licenses.aggregate([
-        // {
-        //   // $match: { admin_license: null }
-        // },
+
         {
           $sort: { createdAt: -1 },
         },
         {
           $lookup: {
-            from: "users", // Name of the user collection
-            localField: "user_id", // Field in the count_licenses collection that links to users
-            foreignField: "_id", // Field in the users collection that links to count_licenses
-            as: "user", // Alias for the joined user information
+            from: "users",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user",
           },
         },
         {
-          $unwind: "$user", // Unwind the "user" array created by the $lookup stage
+          $unwind: "$user",
         },
         {
           $match: {
             "user.Role": { $in: ["USER", "ADMIN"] },
-          }, // Filter by the user's role
+          },
         },
         {
           $project: {
-            // _id: 0,
-            // count_license: "$$ROOT", // Include the entire count_license document
+
             license: 1,
             admin_license: 1,
             createdAt: 1,
-            "user.FullName": 1, // Extract only the "FullName" field from the "user" subdocument
-            "user.UserName": 1, // Extract only the "FullName" field from the "user" subdocument
+            "user.FullName": 1,
+            "user.UserName": 1,
           },
         },
       ]);
@@ -118,6 +115,7 @@ class License {
       console.log("License  error-", error);
     }
   }
+
 }
 
 module.exports = new License();

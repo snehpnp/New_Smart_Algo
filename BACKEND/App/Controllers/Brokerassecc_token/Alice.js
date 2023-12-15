@@ -18,7 +18,6 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
-// const { formattedDateTime } = require('../../Helper/time.helper')
 const { Alice_Socket } = require("../../Helper/Alice_Socket");
 
 class AliceBlue {
@@ -369,10 +368,6 @@ class AliceBlue {
 
     }
 
-
-
-
-
 }
 
 const GetAllBrokerResponse = async (user_id, res) => {
@@ -443,6 +438,8 @@ const GetAllBrokerResponse = async (user_id, res) => {
 
 
 }
+
+
 module.exports = new AliceBlue();
 
 
