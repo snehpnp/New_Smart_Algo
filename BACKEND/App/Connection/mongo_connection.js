@@ -28,13 +28,6 @@ connection.once("open", () => {
 
 
 
-
-
-
-
-
-
-
 // const { connect, connection } = require("mongoose");
 // const Role = require('../Models/role.model')
 // const company = require('../Models/company_information.model')
