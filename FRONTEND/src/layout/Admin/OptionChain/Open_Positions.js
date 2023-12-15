@@ -32,8 +32,6 @@ const TradeHistory = () => {
     const token = JSON.parse(localStorage.getItem("user_details")).token;
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
 
-
-
     const [showModal, setshowModal] = useState(false);
     const [refresh, setrefresh] = useState(false);
     const [ButtonDisabled, setButtonDisabled] = useState(false);
@@ -47,6 +45,7 @@ const TradeHistory = () => {
     const [selected, setSelected] = useState([]);
     const [selected1, setSelected1] = useState([]);
 
+    console.log("PanelKey", PanelKey)
     const [disabled, setDisabled] = useState(false);
 
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
@@ -93,7 +92,7 @@ const TradeHistory = () => {
     }, [refresh]);
     // --------------- FOR GET PANEL KEY-----------------------
 
-    const Get_TradHistory = async (e) => {
+    const Get_Position = async (e) => {
         await dispatch(
             Get_Open_Position({ token: token })
         ).unwrap()
@@ -113,42 +112,11 @@ const TradeHistory = () => {
     };
 
     useEffect(() => {
-        Get_TradHistory();
+        Get_Position();
     }, [refresh]);
 
+
     const columns = [
-        // {
-        //     dataField: "squreoff",
-        //     text: "Square OFF",
-        //     formatter: (cell, row, rowIndex) => {
-        //         if (
-        //             row.exit_qty_percent &&
-        //             row.entry_qty_percent &&
-        //             parseInt(row.entry_qty_percent) > parseInt(row.exit_qty_percent)
-        //         ) {
-        //             return (
-
-        //                 <button className="btn-primary"
-        //                     onClick={() => SquareOff(row, rowIndex, `.SP1_Call_Price_${row.token}`)}
-
-        //                 >
-        //                     Square Off
-        //                 </button>
-        //             );
-        //         } else if (!row.exit_qty_percent &&
-        //             row.entry_qty_percent) {
-        //             return (
-        //                 <button className="btn-primary"
-        //                     onClick={() => SquareOff(row, rowIndex, `.SP1_Call_Price_${row.token}`)}
-        //                 >
-        //                     Square Off
-        //                 </button>
-        //             );
-        //         } else {
-        //             return null
-        //         }
-        //     },
-        // },
         {
             dataField: "TradeType",
             text: "Trade Type",
@@ -224,10 +192,8 @@ const TradeHistory = () => {
                 <div className="col-12"><input type="time"
                     // placeholder="Enter Price"
                     name="exit_time"
-
                     defaultValue={cell}
                     onChange={(e) => SetStopLostPrice(e, e.target.name, row, row.new_qty_persent, row.trade_symbol)}
-
                     className="w-100" /></div>
             ),
         },
@@ -329,7 +295,6 @@ const TradeHistory = () => {
 
 
     const SetStopLostPrice = (event, name, row, qty_persent, symbol) => {
-
         setSelected1((prev) => {
             return prev.map((item) => {
                 if (item.trade_symbol === symbol) {
@@ -378,46 +343,6 @@ const TradeHistory = () => {
     }
 
 
-    // ----------------------------- SQUARE OFF ----------------------------
-
-
-    // const SquareOff = (rowdata, rowIndex, tt) => {
-    //     const buy = $('.BP1_Put_Price_' + rowdata.token).html();
-    //     const sell = $('.SP1_Call_Price_' + rowdata.token).html();
-
-    //     const show_expiry = convert_string_to_month(rowdata.expiry)
-    //     var pre_tag = {
-    //         option_type: rowdata.option_type,
-    //         type: rowdata.entry_type === "LE" ? "LX" : rowdata.entry_type === "SE" ? 'SX' : "",
-    //         trade_symbol: `${rowdata.symbol}${show_expiry}${rowdata.strike}${rowdata.option_type === "CALL" ? "CE" : rowdata.option_type === "PUT" ? "PE" : ""}`,
-    //         showexpiry: rowdata.expiry,
-    //         token: rowdata.token,
-    //         indexcallput: rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`,
-    //         indexing: rowIndex,
-    //         segment: rowdata.segment,
-    //         strike: rowdata.strike,
-    //         price: rowdata.entry_type === "LE" ? buy : rowdata.entry_type === "SE" ? sell : "",
-    //         symbol: rowdata.symbol,
-    //         expiry: rowdata.expiry,
-    //         strategy: rowdata.strategy,
-    //         old_qty_persent: rowdata.entry_qty_percent && rowdata.exit_qty_percent ? (parseInt(rowdata.entry_qty_percent) - parseInt(rowdata.exit_qty_percent)) : rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent,
-    //         new_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent
-    //     };
-    //     if (rowdata.entry_type === "") {
-    //         setCreateSignalRequest(oldValues => {
-    //             return oldValues.filter(item => item.token !== rowdata.token)
-    //         })
-    //     }
-    //     else {
-    //         setCreateSignalRequest(oldValues => {
-    //             return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`))
-    //         })
-
-    //         setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
-    //     }
-    //     setshowModal(true)
-    // }
-
 
     const Set_Entry_Exit_Qty = (row, event, qty_persent, symbol) => {
         let a = No_Negetive_Input_regex(event)
@@ -433,7 +358,6 @@ const TradeHistory = () => {
 
             setCreateSignalRequest((prev) => {
                 return prev.map((item) => {
-                    // console.log("item.Symbol", item);
 
                     if (item.trade_symbol === symbol) { // Assuming 'symbol' is the unique identifier
                         return {
@@ -443,12 +367,9 @@ const TradeHistory = () => {
                     }
                     return item;
 
-
                     // return { ...item, new_qty_persent: event ? event : item.old_qty_persent };
                 });
-
             });
-
         }
         // } else {
         //     alert('text not allow');
@@ -458,17 +379,12 @@ const TradeHistory = () => {
 
 
     const Done_For_Trade = () => {
-
-
         handleClickDisabled();
 
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
-        console.log("CreateSignalRequest", CreateSignalRequest)
-
-        // return
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
-            let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${pre_tag.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${PanelKey && PanelKey.client_key}|TradeType:OPTION_CHAIN|Demo:demo`
+            let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${pre_tag.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${pre_tag.client_persnal_key}|TradeType::${pre_tag.TradeType}|Demo:demo`
 
             let config = {
                 method: 'post',
@@ -493,12 +409,6 @@ const TradeHistory = () => {
                     console.log(error);
                 });
         })
-
-
-
-
-
-
     }
 
 
@@ -520,12 +430,13 @@ const TradeHistory = () => {
 
                 selected1.map((rowdata) => {
 
-
                     const buy = $('.BP1_Put_Price_' + rowdata.token).html();
                     const sell = $('.SP1_Call_Price_' + rowdata.token).html();
 
                     const show_expiry = convert_string_to_month(rowdata.expiry)
                     var pre_tag = {
+                        client_persnal_key: rowdata.client_persnal_key ? rowdata.client_persnal_key : PanelKey && PanelKey.client_key,
+                        TradeType: rowdata.TradeType,
                         option_type: rowdata.option_type,
                         type: rowdata.entry_type === "LE" ? "LX" : rowdata.entry_type === "SE" ? 'SX' : "",
                         trade_symbol: `${rowdata.symbol}${show_expiry}${rowdata.strike}${rowdata.option_type === "CALL" ? "CE" : rowdata.option_type === "PUT" ? "PE" : ""}`,
@@ -550,19 +461,13 @@ const TradeHistory = () => {
                         setCreateSignalRequest(oldValues => {
                             return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`))
                         })
-
                         setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
                     }
                 })
-
-
             } else {
                 alert("Emplty Data")
             }
-
         }
-
-
     }
 
     // ----------------------------- SQUARE OFF All ----------------------------
@@ -583,10 +488,11 @@ const TradeHistory = () => {
         let type = { loginType: "API" };
         let channelList = CreatechannelList;
 
+        //  console.log("tradeHistoryData" ,tradeHistoryData)
+
         // const res = await CreateSocketSession(type);
 
         if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
-
 
             const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
@@ -696,10 +602,6 @@ const TradeHistory = () => {
             }
         }
 
-
-
-
-
     };
 
 
@@ -791,7 +693,6 @@ const TradeHistory = () => {
         onSelectAll: handleOnSelectAll
     };
 
-    console.log("selected open posssition",selected)
 
     return (
         <>

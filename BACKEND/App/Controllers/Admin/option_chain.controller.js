@@ -289,7 +289,7 @@ class OptionChain {
 
             const expiry = "30112023";
             let limit_set = 20
-            let price = 19000
+            let price = 21000
 
             var alltokenchannellist
 
