@@ -17,15 +17,17 @@ const { MongoClient } = require('mongodb');
 const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri, { useUnifiedTopology: true });
 client.connect();
+
+const db1 = client.db(process.env.DB_NAME);
 console.log("Connected to MongoDB successfully!");
 
-// OK
+
+
 // Product CLASS
 class Strategy {
 
     // GET SUBADMIN PERMISSION
     async get_servicename(req, res) {
-        console.log("req.body.searchQuery ",req.body.searchQuery)
 
 
         try {
@@ -63,7 +65,7 @@ class Strategy {
 
             }
 
-          //  console.log("pipeline", pipeline)
+            //  console.log("pipeline", pipeline)
 
             const get_user = await Alice_token.aggregate(pipeline);
 
@@ -81,9 +83,8 @@ class Strategy {
     async get_indicators(req, res) {
         try {
 
-            const db = client.db(process.env.DB_NAME);
 
-            const collection = db.collection('indicators');
+            const collection = db1.collection('indicators');
             const get_indicator = await collection.aggregate([]).toArray();
 
             if (get_indicator.length > 0) {
@@ -97,7 +98,7 @@ class Strategy {
         }
     }
 
-    
+
 
 
 }

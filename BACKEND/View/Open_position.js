@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect();
+var dbName = process.env.DB_NAME;
 
 
 
@@ -25,7 +26,7 @@ async function Open_Position1(req, res) {
 
     try {
       
-        var dbName = process.env.DB_NAME;
+     
         const sourceViewName = 'open_position';
         const destinationViewName = 'open_position_excute';
 

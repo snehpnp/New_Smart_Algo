@@ -11,58 +11,36 @@ const User = db.user;
 const user_logs = db.user_logs;
 const live_price = db.live_price;
 
-
-const {Get_Option_All_Token_Chain} = require('../../App/Controllers/Admin/option_chain.controller')
-
+const { Get_Option_All_Token_Chain } = require('../../App/Controllers/Admin/option_chain.controller')
 
 
-// 1. LOGOUT AND TRADING OFF ALL USER 
 cron.schedule('5 2 * * *', () => {
     console.log('Run First Time');
     LogoutAllUsers()
 });
 
-// 1.1 LOGOUT AND TRADING OFF ALL USER 
 cron.schedule('5 5 * * *', () => {
     console.log('Run Second Time');
     LogoutAllUsers()
 });
+
 cron.schedule('0 8 * * *', () => {
     console.log('Run Second Time');
     Get_Option_All_Token_Chain()
 });
 
-// // 1.1 LOGOUT AND TRADING OFF ALL USER 
-// cron.schedule('* * * * *', () => {
-//     console.log('Run Second Time');
-//     LogoutAllUsers()
-// });
 
-// 2. SERVICES TOKEN CREATE
-cron.schedule('42 12 * * *', () => {
-    console.log('running a task every minute service_token_update');
-    service_token_update()
+// Token Symbol Update
+cron.schedule('1 1 * * *', () => {
+    console.log('running a task every minute');
+    TruncateTable()
 });
 
-cron.schedule('36 18 * * *', () => {
-    console.log('running a task every minute TokenSymbolUpdate');
+cron.schedule('10 1 * * *', () => {
+    console.log('running a task every minute');
     TokenSymbolUpdate()
 });
 
-
-
-// Token Symbol Update
-cron.schedule('2 2 * * *', () => {
-    console.log('running a task every minute');
-    tradesymbol()
-});
-
-
-// // Market Holidays Shedule
-// cron.schedule('* * * * *', () => {
-//     console.log('running a task market_holiday_redis');
-//     market_holiday_redis()
-// });
 
 
 // 1. LOGOUT AND TRADING OFF ALL USER 
@@ -114,7 +92,7 @@ const LogoutAllUsers = async () => {
     const TradingOffUser = await User.find({ TradingStatus: 'on' });
     if (TradingOffUser.length > 0) {
         TradingOffUser.map(async (user) => {
-            const updateValues = { TradingStatus: 'off',access_token:"" };
+            const updateValues = { TradingStatus: 'off', access_token: "" };
             const updatedDocument = await User.findByIdAndUpdate(user._id, updateValues, {
                 new: true, // To return the updated document
             });
@@ -131,7 +109,7 @@ const LogoutAllUsers = async () => {
 
 
     // ADMIN TRADING OFF
-    const updateOperation1 = { $set: { trading_status: 'off',access_token:"" } };
+    const updateOperation1 = { $set: { trading_status: 'off', access_token: "" } };
     const result1 = await live_price.updateMany({}, updateOperation1);
 
 
@@ -139,11 +117,6 @@ const LogoutAllUsers = async () => {
 }
 
 //================================Option Chain Stock Price Set=======================//
-  
-
-//===================================================================================//
-
-// =============================<< HELLO SNEH >>====================================//
 
 
 // SERVICES TOKEN CREATE
@@ -175,8 +148,8 @@ const service_token_update = () => {
 }
 
 const TruncateTable = async () => {
-    const drop = await Alice_token.tru
-    //    console.log(drop);
+    const drop = await Alice_token.deleteMany({});
+
 }
 
 // TOKEN SYMBOL CREATE
@@ -490,7 +463,7 @@ const TokenSymbolUpdate = () => {
 }
 
 
-
+// ====================================================
 const tokenFind = async () => {
     try {
 
@@ -520,93 +493,93 @@ const tokenFind = async () => {
 }
 
 //market holidays cron
-const market_holiday_redis =async () => {
+const market_holiday_redis = async () => {
     console.log("okkk run code ");
 
     const axios = require('axios');
 
     let config1 = {
-      method: 'get',
-      maxBodyLength: Infinity,
-      url: 'https://www.nseindia.com/api/holiday-master?type=trading',
-      headers: { 
-        
-      }
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: 'https://www.nseindia.com/api/holiday-master?type=trading',
+        headers: {
+
+        }
     };
-    
-  await  axios.request(config1)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-    
-  
 
-
-
-return
+    await axios.request(config1)
+        .then((response) => {
+            console.log(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 
 
 
 
 
-   var config = {
-     method: 'get',
-     url: 'https://www.nseindia.com/api/holiday-master?type=trading',
-   };
-   
-   axios(config)
-   .then(async function (response) {
-   //  console.log("rr-----",JSON.stringify(response.data));
-    var holiday_date = [];
-     response.data.CM.forEach(element => {
-       
-    //   console.log("check date --",element.tradingDate);
-
-       const originalDateString = element.tradingDate;
-       const dateParts = originalDateString.split('-');
-       
-       // Create a new Date object with the year, month, and day
-       const dateObj = new Date(`${dateParts[1]} ${dateParts[0]}, ${dateParts[2]}`);
-       
-       // Use the Date object's methods to format the date as "YYYY-MM-DD"
-       const year = dateObj.getFullYear();
-       const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-       const day = String(dateObj.getDate()).padStart(2, '0');
-       const formattedDateString = `${year}-${month}-${day}`;
-       
-     //  console.log("convert data -",formattedDateString);
-
-       holiday_date.push(formattedDateString)
-        
-       
-     });
-
-     console.log("all -result",holiday_date);
-//      const market_holiday_redis = await client_redis.get('market_holiday_redis');
-//      console.log("market_holiday_redis",market_holiday_redis);
-    
-//      if(market_holiday_redis == null){
-//        await client_redis.set('market_holiday_redis', JSON.stringify(holiday_date));
-       
-//        console.log("market_holiday_redis-",market_holiday_redis); 
-       
-//    }else{
-//        console.log("market_holiday_redis",market_holiday_redis);
-//        await client_redis.set('market_holiday_redis', JSON.stringify(holiday_date));
-//      }
-
-
-   })
-   .catch(function (error) {
-     console.log(error);
-   });
+    return
 
 
 
-  }
+
+
+    var config = {
+        method: 'get',
+        url: 'https://www.nseindia.com/api/holiday-master?type=trading',
+    };
+
+    axios(config)
+        .then(async function (response) {
+            //  console.log("rr-----",JSON.stringify(response.data));
+            var holiday_date = [];
+            response.data.CM.forEach(element => {
+
+                //   console.log("check date --",element.tradingDate);
+
+                const originalDateString = element.tradingDate;
+                const dateParts = originalDateString.split('-');
+
+                // Create a new Date object with the year, month, and day
+                const dateObj = new Date(`${dateParts[1]} ${dateParts[0]}, ${dateParts[2]}`);
+
+                // Use the Date object's methods to format the date as "YYYY-MM-DD"
+                const year = dateObj.getFullYear();
+                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+                const day = String(dateObj.getDate()).padStart(2, '0');
+                const formattedDateString = `${year}-${month}-${day}`;
+
+                //  console.log("convert data -",formattedDateString);
+
+                holiday_date.push(formattedDateString)
+
+
+            });
+
+            console.log("all -result", holiday_date);
+            //      const market_holiday_redis = await client_redis.get('market_holiday_redis');
+            //      console.log("market_holiday_redis",market_holiday_redis);
+
+            //      if(market_holiday_redis == null){
+            //        await client_redis.set('market_holiday_redis', JSON.stringify(holiday_date));
+
+            //        console.log("market_holiday_redis-",market_holiday_redis); 
+
+            //    }else{
+            //        console.log("market_holiday_redis",market_holiday_redis);
+            //        await client_redis.set('market_holiday_redis', JSON.stringify(holiday_date));
+            //      }
+
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+
+
+}
 
 
 module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind }

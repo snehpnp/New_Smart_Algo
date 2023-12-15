@@ -19,15 +19,17 @@ const panelSchema = new mongoose.Schema({
     },
     key: {
         type: String,
-    
+
     },
     db_url: {
         type: String,
        
     },
+    db_url: {
+        type: String
+    },
     db_name: {
         type: String,
-        // unique: true
     },
     ip_address: {
         type: String,

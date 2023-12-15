@@ -65,7 +65,7 @@ app.get('/ok',async (req,res)=>{
 
 
 //Testing Api #Shakir
-require("./shakirTeting")(app)
+// require("./shakirTeting")(app)
 
 // Routes all
 require("./App/Routes")(app)

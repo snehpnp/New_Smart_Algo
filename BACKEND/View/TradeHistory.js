@@ -6,12 +6,14 @@ const mongoose = require('mongoose');
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
+client.connect();
+const db = client.db(process.env.DB_NAME);
+
 async function dropExistingView() {
 
 
     try {
-        await client.connect();
-        const db = client.db(process.env.DB_NAME); // Replace with your actual database name
+        // Replace with your actual database name
         await db.collection('trade_history').drop();
 
     } catch (error) {
@@ -25,10 +27,6 @@ async function TradeHistroy(req, res) {
 
 
     try {
-
-
-        await client.connect();
-        const db = client.db(process.env.DB_NAME);
 
         // Define the pipeline to create the view
         // const pipeline = [

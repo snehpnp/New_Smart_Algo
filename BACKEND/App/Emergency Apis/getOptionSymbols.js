@@ -101,48 +101,48 @@ module.exports = function (app) {
     });
 
 
-    app.get("/sig/view", async (req, res) => {
+    // app.get("/sig/view", async (req, res) => {
 
 
-        const { MongoClient } = require('mongodb');
+    //     const { MongoClient } = require('mongodb');
 
-        async function createView() {
-            console.log(process.env.MONGO_URI);
-            const uri = 'mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net/';
-            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    //     async function createView() {
+    //         console.log(process.env.MONGO_URI);
+    //         const uri = 'mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net/';
+    //         const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-            try {
-                await client.connect();
+    //         try {
+    //             await client.connect();
 
-                const sourceDatabaseName = 'test';
-                const targetDatabaseName = 'Signals_db';
-                const collectionName = 'signals';
+    //             const sourceDatabaseName = 'test';
+    //             const targetDatabaseName = 'Signals_db';
+    //             const collectionName = 'signals';
 
-                const sourceDB = client.db(sourceDatabaseName);
-                const targetDB = client.db(targetDatabaseName);
+    //             const sourceDB = client.db(sourceDatabaseName);
+    //             const targetDB = client.db(targetDatabaseName);
 
-                const pipeline = [ ];
+    //             const pipeline = [ ];
 
-                // Create a view in the target database
-                await targetDB.createCollection('signals_view', { viewOn: `${sourceDatabaseName}.${collectionName}`, pipeline });
+    //             // Create a view in the target database
+    //             await targetDB.createCollection('signals_view', { viewOn: `${sourceDatabaseName}.${collectionName}`, pipeline });
 
-                console.log('View created successfully');
-            } catch (error) {
-                console.log("error",error);
-            }
+    //             console.log('View created successfully');
+    //         } catch (error) {
+    //             console.log("error",error);
+    //         }
 
-        }
+    //     }
 
-        // Call the function to create the view
-        createView();
-
-
-
+    //     // Call the function to create the view
+    //     createView();
 
 
 
 
-    })
+
+
+
+    // })
 
 
 }

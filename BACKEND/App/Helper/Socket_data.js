@@ -11,10 +11,6 @@ const MongoClient = require('mongodb').MongoClient;
 
 
 
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-client.connect();
 const Socket_data = async (channelList) => {
     console.log("requestttttt")
     const socket = await getSocket();

@@ -4,64 +4,64 @@ const userMakeStrategySchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "USER"
-      },
-      name: {
+    },
+    name: {
         type: String,
         required: true,
         trim: true,
         unique: true,
         default: null
-      },
-      tokensymbol: {
+    },
+    tokensymbol: {
         type: String,
-        required: true,  
-     },
-     show_strategy: {
+        required: true,
+    },
+    show_strategy: {
         type: String,
-        required: true,  
-     },
-     symbol_name: {
+        required: true,
+    },
+    symbol_name: {
         type: String,
-        required: true,  
-     },
-     strategy_name: {
+        required: true,
+    },
+    strategy_name: {
         type: String,
-        required: true,  
-     },
-     segment: {
+        required: true,
+    },
+    segment: {
         type: String,
-        required: true,  
-     },
-     strike_price: {
-        type: String,  
-     },
-     option_type: {
-        type: String, 
-     },
-     expiry: {
-        type: String, 
-     },
-     
-     indicator: {
+        required: true,
+    },
+    strike_price: {
         type: String,
-        required: true,      
+    },
+    option_type: {
+        type: String,
+    },
+    expiry: {
+        type: String,
+    },
+
+    indicator: {
+        type: String,
+        required: true,
     },
     timeframe: {
-        type: String,  
+        type: String,
     },
     price_source: {
         type: String,
-        required: true,     
+        required: true,
     },
     period: {
         type: String,
         required: true,
-       
+
     },
     inside_indicator: {
         type: String,
         required: true,
-       
+
     },
     condition: {
         type: String,
@@ -71,33 +71,33 @@ const userMakeStrategySchema = new mongoose.Schema({
         type: String,
     },
     condition_source: {
-        type: String,   
+        type: String,
     },
     buffer_value: {
         type: String,
         required: true,
     },
-    type : {
+    type: {
         type: String,
         required: true,
     },
-    offset : {
+    offset: {
         type: String,
         required: true,
     },
-    target : {
+    target: {
         type: String,
         required: true,
     },
-    stoploss : {
+    stoploss: {
         type: String,
         required: true,
     },
-    tsl : {
+    tsl: {
         type: String,
         required: true,
     },
-    panelKey : {
+    panelKey: {
         type: String,
         required: true,
     },
@@ -122,21 +122,21 @@ const userMakeStrategySchema = new mongoose.Schema({
         type: Object,
         required: true,
     },
-    
-    
-     status: {
+
+
+    status: {
         type: String,
         enum: ['1', '2'],
         default: '1'
     }
 
-},{
+}, {
     // This enables Mongoose to handle the _id field automatically
     strictPopulate: false,
 
     timestamps: true,
     _id: true,
-  });
+});
 
 const userMakeStrategy = mongoose.model('usermakestrategy', userMakeStrategySchema);
 module.exports = userMakeStrategy;

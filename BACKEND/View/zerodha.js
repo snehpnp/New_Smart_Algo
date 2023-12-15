@@ -5,16 +5,16 @@ const mongoose = require('mongoose');
 
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+client.connect();
 
+const db = client.db(process.env.DB_NAME);
 
 async function createViewZerodha() {
 
 
   // All Client Trading on view
   try {
-    await client.connect();
-
-    const db = client.db(process.env.DB_NAME); // Replace with your actual database name
+    // Replace with your actual database name
     const currentDate = new Date(); // Get the current date and time
 
     // Define the pipeline to create the view
