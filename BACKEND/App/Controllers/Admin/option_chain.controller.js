@@ -237,8 +237,8 @@ class OptionChain {
 
     // GET All ROUND TOKEN
     async Open_Position(req, res) {
+        // console.log(" req ",req.body)
         try {
-
             var GetTrade = await MainSignals_modal.aggregate([
                 {
                     $addFields: {
@@ -259,7 +259,7 @@ class OptionChain {
                 },
                 {
                     $match: {
-                        "TradeType": "OPTION_CHAIN",
+                        // "TradeType": "OPTION_CHAIN",
                         $expr: { $gt: ["$entry_qty_percent_int", "$exit_qty_percent_int"] }
                     }
                 }

@@ -96,7 +96,7 @@ const Alice_Socket = async () => {
                             // --- Start Conver data view function  ----//
                             if(Make_startegy_token){
                                // console.log("okk response inside view", response)
-                            ALice_View_data(response.tk, response,dbTradeTools);
+                            ALice_View_data(response.tk, response);
                             }
                             // --- End Conver data view function  ----//
 

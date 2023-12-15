@@ -30,11 +30,6 @@ cron.schedule('0 8 * * *', () => {
 });
 
 
-cron.schedule('* * * * *', () => {
-    console.log('Run Second Time');
-    LogoutAllUsers()
-});
-
 
 // Token Symbol Update
 cron.schedule('1 1 * * *', () => {
@@ -47,10 +42,6 @@ cron.schedule('10 1 * * *', () => {
     TokenSymbolUpdate()
 });
 
-cron.schedule('0 16 * * *', () => {
-    console.log('running a task every minute');
-    TruncateTable()
-});
 
 
 
@@ -475,10 +466,7 @@ const TokenSymbolUpdate = () => {
 }
 
 
-
-
 // ====================================================
-
 const tokenFind = async () => {
     try {
 

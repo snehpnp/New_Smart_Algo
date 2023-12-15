@@ -540,7 +540,7 @@ async function run() {
                   // Use eval to dynamically evaluate the condition string
                  // console.log("data -", data, "condition String - ", val.condition)
                   const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
-               //   console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
+                  console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
                   // Check if the condition is true or false based on the data
                   if (condition) {
 
@@ -599,7 +599,9 @@ async function run() {
                     const collection_last_price = dbTradeTools.collection(val.tokensymbol);
                     const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
                     console.log("last_price",last_price[0].lp)
+                  
                     let price_lp = last_price[0].lp
+                    
 
                   //  console.log("checkPreviousTrade", checkPreviousTrade)
                     if (checkPreviousTrade != null) {
