@@ -52,7 +52,7 @@ const Alice_Socket = async () => {
     var userid = broker_infor.user_id
     var userSession1 = broker_infor.access_token
     var channelList = alltokenchannellist
-   // var channelList = "NSE|14366#NFO|43227"
+    // var channelList = "NSE|14366#NFO|43227"
     var type = { "loginType": "API" }
 
     //  Step -1
@@ -89,42 +89,51 @@ const Alice_Socket = async () => {
 
                         var response = JSON.parse(msg.data)
 
-                     //console.log("okk response", response)
 
                         if (response.tk) {
 
-                            const Make_startegy_token = await UserMakeStrategy.findOne({tokensymbol:response.tk},{_id:1});
-                            // --- Start Conver data view function  ----//
-                            if(Make_startegy_token){
-                               // console.log("okk response inside view", response)
-                            ALice_View_data(response.tk, response);
+                            const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk }, { _id: 1 });
+                          
+                            if (Make_startegy_token) {
+                                ALice_View_data(response.tk, response);
                             }
-                            // --- End Conver data view function  ----//
 
                             const currentDate = new Date();
-
-                            // Extract hours and minutes from the time string
                             const hours = currentDate.getHours().toString().padStart(2, '0');
                             const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-
                             const stock_live_price = db_main.collection('stock_live_price');
+                            const filter = { _id: response.tk }; 
 
-                            const filter = { _id: response.tk }; // Define the filter based on the token
 
-                            const update = {
-                                $set: {
-                                    lp: response.lp,
-                                    exc: response.e,
-                                    sp1: response.sp1,
-                                    bp1: response.bp1,
-                                    curtime: `${hours}${minutes}`
-                                },
-                            };
+                            if (response.lp != undefined) {
+                                let bp1 = response.lp
+                                let sp1 = response.lp
 
-                            const options = { upsert: true }; // Set the upsert option to true
+                                if (response.bp1 != undefined) {
+                                    bp1 = response.bp1;
+                                }
 
-                            const result = await stock_live_price.updateOne(filter, update, { upsert: true });
-                            // console.log("newCompany", result);
+                                if (response.sp1 != undefined) {
+                                    sp1 = response.sp1;
+                                }
+
+                                const update = {
+                                    $set: {
+                                        lp: response.lp,
+                                        exc: response.e,
+                                        sp1: sp1,
+                                        bp1: bp1,
+                                        curtime: `${hours}${minutes}`
+                                    },
+                                };
+                                const result = await stock_live_price.updateOne(filter, update, { upsert: true });
+                            }
+
+
+
+
+
+
 
                         } else {
                             // console.log("else", response)
