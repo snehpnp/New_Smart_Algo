@@ -1,7 +1,7 @@
 
 "use strict";
 require('dotenv').config();
-const connectToDatabase = require('../BACKEND/App/Connection/mongo_connection')
+require('../BACKEND/App/Connection/mongo_connection')
 const express = require("express");
 const app = express();
 const path = require('path');
@@ -157,7 +157,7 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
             socket.send(JSON.stringify(initCon))
           }
 
-          console.log("Connect Socket");
+          // console.log("Connect Socket");
           socket.onmessage = async function (msg) {
             var response = JSON.parse(msg.data);
 
@@ -199,7 +199,7 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
 
 
             } else {
-              console.log("else", response);
+              // console.log("else", response);
             }
 
             if (response.s === 'OK') {
@@ -417,6 +417,7 @@ app.post('/broker-signals', async (req, res) => {
             client_persnal_key = client_key
           }
 
+          console.log("TradeType==",TradeType);
           // MT_4 , OPTION_CHAIN , MAKE_STG, SQUAR_OFF
 
           var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: "", TradeType: "MT_4" }
@@ -455,7 +456,7 @@ app.post('/broker-signals', async (req, res) => {
             EXCHANGE = "CDS";
           }
 
-          console.log(instrument_query);
+          // console.log(instrument_query);
 
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
@@ -465,7 +466,7 @@ app.post('/broker-signals', async (req, res) => {
             token = await Alice_token.find(instrument_query).maxTimeMS(20000).exec();
           }
 
-          console.log("token", token);
+          // console.log("token", token);
           var instrument_token = 0
           if (token.length == 0) {
             instrument_token = 0
@@ -481,7 +482,7 @@ app.post('/broker-signals', async (req, res) => {
           const result = await token_chain1.updateOne({ _id: instrument_token }, { $set: { _id: instrument_token, exch: EXCHANGE } }, { upsert: true });
 
 
-      
+
 
           var find_lot_size = 1
           if (token.length == 0) {
@@ -879,6 +880,8 @@ app.post('/broker-signals', async (req, res) => {
 
           }
           else if (type == "LX" || type == "lx" || type == "SX" || type == "Sx") {
+
+            console.log(findSignal);
             var ExitMainSignals = await MainSignals.find(findSignal)
 
             // // ExitMainSignals  FIND IN COLLECTION
@@ -911,6 +914,7 @@ app.post('/broker-signals', async (req, res) => {
                   exit_dt_date: current_date
                 }
                 updatedData.$addToSet = { signals_id: SignalSave._id };
+                console.log("1",updatedData);
 
                 // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
                 const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
@@ -929,6 +933,7 @@ app.post('/broker-signals', async (req, res) => {
                     exit_dt_date: current_date
                   }
                   updatedData.$addToSet = { signals_id: SignalSave._id };
+                  console.log("2",updatedData);
 
                   // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
                   const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
