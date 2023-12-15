@@ -48,7 +48,7 @@ async function connectToDB(collectionName, response) {
         createViewM10(collectionName)
        createViewM15(collectionName)
         createViewM30(collectionName)
-        createViewM60(collectionName)
+       createViewM60(collectionName)
       createViewM1DAY(collectionName)
 
       } else {

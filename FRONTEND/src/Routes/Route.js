@@ -56,14 +56,18 @@ const Routing = () => {
     if (roles != null) {
       if (roles === "ADMIN" && location.pathname === "/") {
         navigate("/admin/dashboard");
+        window.location.reload()
       } else if (roles === "USER" && location.pathname === "/") {
         navigate("/client/dashboard");
+        window.location.reload()
       }
       else if (roles === "SUBADMIN" && location.pathname === "/") {
         navigate("/subadmin/dashboard");
+        window.location.reload()
       }
       else if (roles === "SUPERADMIN" && location.pathname === "/") {
         navigate("/super/dashboard");
+        window.location.reload()
       }
       // else {
       //   navigate("/login");
@@ -103,9 +107,6 @@ const Routing = () => {
       <Route path="/notfound" element={<Deactivate_Company />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/*" element={<NotFound />} />
-
-
-
 
     </Routes>
 

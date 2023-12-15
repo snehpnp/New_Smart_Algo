@@ -40,9 +40,15 @@ cron.schedule('0 8 * * *', () => {
 
 // 2. SERVICES TOKEN CREATE
 cron.schedule('42 12 * * *', () => {
-    console.log('running a task every minute');
+    console.log('running a task every minute service_token_update');
     service_token_update()
 });
+
+cron.schedule('36 18 * * *', () => {
+    console.log('running a task every minute TokenSymbolUpdate');
+    TokenSymbolUpdate()
+});
+
 
 
 // Token Symbol Update
