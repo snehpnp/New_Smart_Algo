@@ -4,7 +4,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useEffect, useState ,useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { Get_Tradehisotry } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
@@ -46,7 +46,7 @@ const TradeHistory = () => {
   const [toDate, setToDate] = useState("");
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [refresh, setrefresh] = useState(false);
-  
+
 
 
   const handleFromDateChange = (e) => {
@@ -79,7 +79,7 @@ const TradeHistory = () => {
   const [SocketState, setSocketState] = useState("null");
 
   const [ForGetCSV, setForGetCSV] = useState([])
- 
+
   const [adminTradingStatus, setAdminTradingStatus] = useState(false);
 
 
@@ -89,7 +89,6 @@ const TradeHistory = () => {
     GetAdminTradingStatus()
   }, []);
 
-  console.log("Shk", adminTradingStatus);
 
 
   const Get_TradHistory = async (e) => {
@@ -664,17 +663,18 @@ const TradeHistory = () => {
     getservice()
 
 
-    
+
   }, [])
 
 
   const GetAdminTradingStatus = async (e) => {
+    
     await dispatch(GET_ADMIN_TRADE_STATUS({ broker_name: "ALICE_BLUE" })).unwrap()
       .then((response) => {
         if (response.status) {
           //setAdminTradingStatus(response.data)
           checkStatusReff.current = true
-        } 
+        }
       });
   };
 

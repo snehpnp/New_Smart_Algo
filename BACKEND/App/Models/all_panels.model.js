@@ -23,7 +23,6 @@ const panelSchema = new mongoose.Schema({
     },
     db_url: {
         type: String,
-        unique: true
     },
     db_name: {
         type: String,
@@ -62,7 +61,7 @@ const panelSchema = new mongoose.Schema({
         enum: [0, 1],
         default: 0
     },
-    
+
     Strategy_plan: {
         type: Number,
         enum: [0, 1],

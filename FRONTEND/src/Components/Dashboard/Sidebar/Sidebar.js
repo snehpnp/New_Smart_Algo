@@ -75,10 +75,8 @@ const Sidebar = ({ ShowSidebar }) => {
     }
     useEffect(() => {
         data2()
+
     }, [])
-
-
-
 
 
 
@@ -111,8 +109,6 @@ const Sidebar = ({ ShowSidebar }) => {
 
             <div className="deznav pt-3" >
                 <div className="deznav-scroll">
-
-
                     <ul className="metismenu" id="menu">
                         <div className='sidebar-logo'>
                             <Logo />
@@ -201,7 +197,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                             {item.Data.length > 0 ? <>
                                                 <a
                                                     className="has-arrow"
-                                                    aria-expanded={location.pathname === item.route && item.route ? true : false}
+                                                // aria-expanded={location.pathname === item.route && item.route ? true : false}
                                                 // className={`has-arrow `}
                                                 >
                                                     <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
@@ -213,7 +209,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                                     {item.Data.length > 0 ?
                                                         item.Data.map((nested_item) => {
                                                             return <>
-                                                                <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""} ? 'mm-active' : ""}`}>
+                                                                <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
                                                                     <Link to={nested_item.route}>{nested_item.name}</Link>
                                                                 </li>
                                                             </>
@@ -227,15 +223,15 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
                                         {item.Data.length === 0 ? <>
-                                       {
-                                            item.route === "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 ||
-                                             item.route === "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0 ? "" :
-                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                    <Link to={item.route} className="" aria-expanded="false">
-                                                        <IconComponent key={item.id} icon={item.Icon} />
-                                                        <span className="nav-text">{item.name}</span>
-                                                    </Link>
-                                                </li>
+                                            {
+                                                item.route === "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 ||
+                                                    item.route === "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0 ? "" :
+                                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                        <Link to={item.route} className="" aria-expanded="false">
+                                                            <IconComponent key={item.id} icon={item.Icon} />
+                                                            <span className="nav-text">{item.name}</span>
+                                                        </Link>
+                                                    </li>
                                             }
                                         </> : ""}
 
@@ -376,7 +372,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                             </>
                                         })
                                             : ""
-                            }
+                        }
 
 
                     </ul>

@@ -238,7 +238,6 @@ class OptionChain {
     // GET All ROUND TOKEN
     async Open_Position(req, res) {
         try {
-
             var GetTrade = await MainSignals_modal.aggregate([
                 {
                     $addFields: {
@@ -259,7 +258,7 @@ class OptionChain {
                 },
                 {
                     $match: {
-                        "TradeType": "OPTION_CHAIN",
+                        // "TradeType": "OPTION_CHAIN",
                         $expr: { $gt: ["$entry_qty_percent_int", "$exit_qty_percent_int"] }
                     }
                 }
@@ -289,7 +288,7 @@ class OptionChain {
 
             const expiry = "30112023";
             let limit_set = 20
-            let price = 19000
+            let price = 21000
 
             var alltokenchannellist
 

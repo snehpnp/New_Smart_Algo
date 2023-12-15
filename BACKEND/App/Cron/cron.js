@@ -30,10 +30,10 @@ cron.schedule('0 8 * * *', () => {
 });
 
 
-cron.schedule('* * * * *', () => {
-    console.log('Run Second Time');
-    LogoutAllUsers()
-});
+// cron.schedule('* * * * *', () => {
+//     console.log('Run Second Time');
+//     LogoutAllUsers()
+// });
 
 
 // Token Symbol Update
