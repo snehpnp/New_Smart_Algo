@@ -822,7 +822,7 @@ const HelpCenter = () => {
                                         title="Request Confirmation"
                                         cancel_btn={true}
                                         // hideBtn={false}
-                                        disabled_submit={disabled}
+                                        // disabled_submit={disabled}
                                         hideCloseButton={true}
                                         btn_name="Confirm"
                                         Submit_Function={Done_For_Trade}
