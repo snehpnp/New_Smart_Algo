@@ -911,7 +911,18 @@ app.post('/broker-signals', async (req, res) => {
 
               } else {
 
-                if (parseFloat(ExitMainSignals[0].entry_qty_percent) > (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
+
+                console.log(parseFloat(ExitMainSignals[0].entry_qty_percent));
+                console.log(parseFloat(qty_percent) )
+                console.log( isNaN(ExitMainSignals[0].exit_qty_percent))
+
+                console.log(ExitMainSignals[0].exit_qty_percent);
+                console.log( parseFloat(ExitMainSignals[0].exit_qty_percent));
+
+
+
+
+                if (parseFloat(ExitMainSignals[0].entry_qty_percent) >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
 
 
                   var updatedData = {
