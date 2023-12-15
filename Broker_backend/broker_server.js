@@ -35,6 +35,7 @@ var CryptoJS = require("crypto-js");
 
 
 
+// const db = require('./Models');
 const db = require('../BACKEND/App/Models');
 const services = db.services;
 const Alice_token = db.Alice_token;
@@ -98,7 +99,10 @@ let socketObject = null;
 let response111 = null;
 
 
-const ConnectSocket = async (channel_List) => {
+const ConnectSocket = async (EXCHANGE, instrument_token) => {
+
+
+  var channel_List = `${EXCHANGE}|${instrument_token}`
 
   var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE", trading_status: "on" });
 
@@ -115,6 +119,17 @@ const ConnectSocket = async (channel_List) => {
     if (channel_List) {
       channelList = channel_List
     }
+
+
+
+    const token_chain_list = db1.collection('token_chain');
+    const updateToken = await token_chain_list.updateOne({ _id: instrument_token }, {
+      $set: {
+        _id: instrument_token,
+        exch: EXCHANGE
+      },
+    }, { upsert: true });
+
 
     await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
       headers: {
@@ -147,34 +162,43 @@ const ConnectSocket = async (channel_List) => {
             var response = JSON.parse(msg.data);
 
             if (response.tk) {
-
+              // token_chain
 
               const currentDate = new Date();
-
-              // Extract hours and minutes from the time string
               const hours = currentDate.getHours().toString().padStart(2, '0');
               const minutes = currentDate.getMinutes().toString().padStart(2, '0');
 
               const stock_live_price = db1.collection('stock_live_price');
 
               const filter = { _id: response.tk }; // Define the filter based on the token
+              if (response.lp != undefined) {
+                let bp1 = response.lp
+                let sp1 = response.lp
 
-              const update = {
+                if (response.bp1 != undefined) {
+                  bp1 = response.bp1;
+                }
+
+                if (response.sp1 != undefined) {
+                  sp1 = response.sp1;
+                }
+
+                const update = {
                   $set: {
-                      lp: response.lp,
-                      exc: response.e,
-                      sp1: response.sp1,
-                      bp1: response.bp1,
-                      curtime: `${hours}${minutes}`
+                    lp: response.lp,
+                    exc: response.e,
+                    sp1: sp1,
+                    bp1: bp1,
+                    curtime: `${hours}${minutes}`
                   },
-              };
+                };
+                const result = await stock_live_price.updateOne(filter, update, { upsert: true });
+              }
 
-              const options = { upsert: true }; // Set the upsert option to true
 
-              const result = await stock_live_price.updateOne(filter, update, { upsert: true });
-              // console.log("newCompany", result);
 
-          }else {
+
+            } else {
               console.log("else", response);
             }
 
@@ -265,7 +289,6 @@ app.post('/broker-signals', async (req, res) => {
 
     // IF SIGNEL NOT RECIVED
     if (req.rawBody) {
-      // console.log("req.rawBody",req.rawBody)
       const splitArray = req.rawBody.split('|');
 
       const signals = {};
@@ -276,7 +299,6 @@ app.post('/broker-signals', async (req, res) => {
         signals[key] = value;
       });
 
-      // console.log("final result get signal", signals);
 
       fs.appendFile(filePath, '\nNEW TRADE TIME ' + new Date() + '\nRECEIVED_SIGNALS ' + splitArray + '\n', function (err) {
         if (err) {
@@ -292,7 +314,7 @@ app.post('/broker-signals', async (req, res) => {
       const date = new Date(epochTimestamp * 1000); // Convert to milliseconds by multiplying by 1000
       const formattedDate1 = date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
       const parts = formattedDate1.split('/');
-      console.log(dt_date);
+
 
 
       var dt = signals.DTime;
@@ -433,7 +455,7 @@ app.post('/broker-signals', async (req, res) => {
             EXCHANGE = "CDS";
           }
 
-
+          console.log(instrument_query);
 
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
@@ -442,8 +464,8 @@ app.post('/broker-signals', async (req, res) => {
 
             token = await Alice_token.find(instrument_query).maxTimeMS(20000).exec();
           }
-          console.log(instrument_query);
-          console.log("token",token[0]);
+
+          console.log("token", token);
           var instrument_token = 0
           if (token.length == 0) {
             instrument_token = 0
@@ -451,25 +473,15 @@ app.post('/broker-signals', async (req, res) => {
             instrument_token = token[0].instrument_token
           }
 
-          // CREATE CHANEL LIST
-
-          var stock_List = `${EXCHANGE}|${instrument_token}`
-
 
           const token_chain1 = db1.collection('token_chain');
           const stock_live_price1 = db1.collection('stock_live_price');
-          const price_live = await stock_live_price1.find({ _id: instrument_token }).toArray();
 
-          // console.log("price_live", price_live);
-          if (price_live.length > 0) {
-            price = price_live[0].lp
-          } else {
+          await ConnectSocket(EXCHANGE, instrument_token)
+          const result = await token_chain1.updateOne({ _id: instrument_token }, { $set: { _id: instrument_token, exch: EXCHANGE } }, { upsert: true });
 
-            await ConnectSocket(stock_List)
-            const result = await token_chain1.updateOne({ _id: instrument_token }, { $set: { _id: instrument_token, exch: EXCHANGE } }, { upsert: true });
 
-          }
-
+      
 
           var find_lot_size = 1
           if (token.length == 0) {
@@ -490,11 +502,19 @@ app.post('/broker-signals', async (req, res) => {
             }
           }
 
-          const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
-          if(price_live_second.length > 0){
-            price = price_live_second[0].lp
-          }
-          console.log("price_live_second",price);
+
+
+          // const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
+          // if (signals.TradeType != "OPTION_CHAIN") {
+          //   if (price_live_second.length > 0) {
+          //     price = price_live_second[0].lp
+          //   } else {
+          //     price = signals.Price
+
+          //   }
+          // }
+
+
 
           fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS_TOKEN ' + instrument_token + '\n', function (err) {
             if (err) {
@@ -504,11 +524,24 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-          // io.emit('requestTask', { message: instrument_token });
+
+
+          // LIVE PRICE GET
+          const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
+          if (signals.TradeType != "OPTION_CHAIN") {
+            if (price_live_second.length > 0) {
+              price = price_live_second[0].lp
+            } else {
+              price = signals.Price
+
+            }
+          }
+
+          console.log("price_live_second", price);
+
 
 
           // HIT TRADE IN BROKER SERVER
-
           if (process.env.PANEL_KEY == client_key) {
             //Process Alice Blue admin client
             try {
@@ -911,7 +944,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
             } else {
-              console.log(findSignal);
+              // console.log(findSignal);
               console.log("PRIVIOUS SIGNAL UPDATE")
 
             }

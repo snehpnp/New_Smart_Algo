@@ -1073,7 +1073,6 @@ try {
 
 
   var openPosition = await db_GET_VIEW.collection(viewName).find().toArray();
-  var openPosition = await db_GET_VIEW.collection(viewName).find().toArray();
 
 
   if (openPosition.length > 0) {

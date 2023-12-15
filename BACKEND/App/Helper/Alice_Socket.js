@@ -13,11 +13,12 @@ const MongoClient = require('mongodb').MongoClient;
 
 
 const uri = process.env.MONGO_URI
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(uri);
+client.connect();
+
 const db_main = client.db(process.env.DB_NAME);
 const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
 
-client.connect();
 
 let socketObject = null;
 
@@ -165,10 +166,6 @@ const Alice_Socket = async () => {
 const getSocket = () => {
     return socketObject;
 };
-
-
-
-
 
 
 

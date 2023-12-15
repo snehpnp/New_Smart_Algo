@@ -6,15 +6,15 @@ const mongoose = require('mongoose');
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
+client.connect();
+const db = client.db(process.env.DB_NAME);
 
 async function createViewFivepaisa() {
 
-  
+
   // All Client Trading on view
   try {
-    await client.connect();
 
-    const db = client.db(process.env.DB_NAME); // Replace with your actual database name
     const currentDate = new Date(); // Get the current date and time
 
     // Define the pipeline to create the view
@@ -102,165 +102,167 @@ async function createViewFivepaisa() {
         }
       },
       {
-        $addFields: { postdata:
+        $addFields: {
+          postdata:
           {
 
-            head :{
-                key : "$api_key",
+            head: {
+              key: "$api_key",
             },
-            body:{
-                ClientCode: "$client_code",
+            body: {
+              ClientCode: "$client_code",
 
-                Exchange: {
+              Exchange: {
+                $cond: {
+                  if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+                  then: 'N',
+                  else: {
                     $cond: {
-                      if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+                      if: {
+                        $or: [
+                          { $eq: ['$category.segment', 'F'] },
+                          { $eq: ['$category.segment', 'O'] },
+                          { $eq: ['$category.segment', 'FO'] }
+                        ]
+                      },
                       then: 'N',
                       else: {
+
                         $cond: {
-                          if: { 
+                          if: {
                             $or: [
-                              { $eq: ['$category.segment', 'F'] }, 
-                              { $eq: ['$category.segment', 'O'] },  
-                              { $eq: ['$category.segment', 'FO'] }  
-                            ] 
-                          }, 
-                          then: 'N',
+                              { $eq: ['$category.segment', 'MF'] },
+                              { $eq: ['$category.segment', 'MO'] }
+                            ]
+                          },
+                          then: 'M',
                           else: {
-        
+
                             $cond: {
-                              if: { 
+                              if: {
                                 $or: [
-                                  { $eq: ['$category.segment', 'MF'] }, 
-                                  { $eq: ['$category.segment', 'MO'] }  
-                                ] 
-                              }, 
-                              then: 'M',
-                              else: {
-        
-                                $cond: {
-                                  if: { 
-                                    $or: [
-                                      { $eq: ['$category.segment', 'CF'] }, 
-                                      { $eq: ['$category.segment', 'CO'] }  
-                                    ] 
-                                  }, 
-                                  then: 'N',
-                                  
-                                  // all not exist condition 
-                                  else: "N"
-                           
-                                }
-            
-                              }
-                       
+                                  { $eq: ['$category.segment', 'CF'] },
+                                  { $eq: ['$category.segment', 'CO'] }
+                                ]
+                              },
+                              then: 'N',
+
+                              // all not exist condition 
+                              else: "N"
+
                             }
-        
-        
+
                           }
-                   
+
                         }
-        
+
+
                       }
-                        
+
                     }
-                  },
+
+                  }
+
+                }
+              },
 
 
-                ExchangeType: {
+              ExchangeType: {
+                $cond: {
+                  if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+                  then: 'C',
+                  else: {
                     $cond: {
-                      if: { $eq: ['$category.segment', 'C'] }, // Your condition here
-                      then: 'C',
+                      if: {
+                        $or: [
+                          { $eq: ['$category.segment', 'F'] },
+                          { $eq: ['$category.segment', 'O'] },
+                          { $eq: ['$category.segment', 'FO'] }
+                        ]
+                      },
+                      then: 'D',
                       else: {
+
                         $cond: {
-                          if: { 
+                          if: {
                             $or: [
-                              { $eq: ['$category.segment', 'F'] }, 
-                              { $eq: ['$category.segment', 'O'] },  
-                              { $eq: ['$category.segment', 'FO'] }  
-                            ] 
-                          }, 
+                              { $eq: ['$category.segment', 'MF'] },
+                              { $eq: ['$category.segment', 'MO'] }
+                            ]
+                          },
                           then: 'D',
                           else: {
-        
+
                             $cond: {
-                              if: { 
+                              if: {
                                 $or: [
-                                  { $eq: ['$category.segment', 'MF'] }, 
-                                  { $eq: ['$category.segment', 'MO'] }  
-                                ] 
-                              }, 
-                              then: 'D',
-                              else: {
-        
-                                $cond: {
-                                  if: { 
-                                    $or: [
-                                      { $eq: ['$category.segment', 'CF'] }, 
-                                      { $eq: ['$category.segment', 'CO'] }  
-                                    ] 
-                                  }, 
-                                  then: 'U',
-                                  
-                                  // all not exist condition 
-                                  else: "D"
-                           
-                                }
-            
-                              }
-                       
+                                  { $eq: ['$category.segment', 'CF'] },
+                                  { $eq: ['$category.segment', 'CO'] }
+                                ]
+                              },
+                              then: 'U',
+
+                              // all not exist condition 
+                              else: "D"
+
                             }
-        
-        
+
                           }
-                   
+
                         }
-        
+
+
                       }
-                        
+
                     }
+
+                  }
+
+                }
+              },
+
+
+
+              Qty: "$client_services.quantity",
+              Price: "0",
+              OrderType: "Buy",
+
+              ScripCode: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$category.segment', 'C'] },
+                      ]
                   },
+                  then: "$service.instrument_token",
+                  else: ""
+
+                }
+              },
 
 
+              IsIntraday: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$client_services.product_type', '2'] },
+                      ]
+                  },
+                  then: true,
+                  else: false,
 
-                Qty: "$client_services.quantity",
-                Price: "0",
-                OrderType: "Buy",
-                
-                ScripCode: {
-                    $cond: {
-                      if: { 
-                        $and:
-                          [
-                          { $eq: ['$category.segment', 'C'] },  
-                        ]
-                      }, 
-                      then: "$service.instrument_token",
-                      else: ""
-                
-                    }
-                },
+                }
+              },
 
-
-                IsIntraday:  {
-                    $cond: {
-                      if: { 
-                        $and:
-                          [
-                          { $eq: ['$client_services.product_type', '2'] },  
-                          ]
-                      }, 
-                      then: true,
-                      else: false,
-                
-                    }
-                },
-
-                DisQty: 0,
-                StopLossPrice: 0,
-                IsStopLossOrder: false
+              DisQty: 0,
+              StopLossPrice: 0,
+              IsStopLossOrder: false
             }
-        
-         } }
+
+          }
+        }
       }
     ];
 
