@@ -133,7 +133,6 @@ const EditMakeStrategy = () => {
     if (filterServices) {
       handleShow();
     }
-    getIndicatorApi()
   }, [filterServices]);
 
 
@@ -244,24 +243,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
     setSelectedItems(updatedItems);
   };
 
-  const getIndicatorApi = () => {
 
-    const config = {
-      method: 'get',
-      url: 'http://localhost:7700/get_indicators',
-    };
-
-    axios(config)
-      .then(function (response) {
-        // console.log(response.data);
-        setGetIndicators(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
- 
 
   const indicatorAddItem = (item) => {
     const isItemAlreadySelected = selectAddIndicators.some(
