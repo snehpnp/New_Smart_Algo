@@ -556,6 +556,7 @@ async function run() {
                       symbol: val.symbol_name,
                       entry_type: entry_type,
                       segment: val.segment,
+                      client_persnal_key:val.panelKey,
                       TradeType: "MAKE_STRATEGY",
                     }
 
@@ -574,6 +575,7 @@ async function run() {
                         strike: val.strike_price,
                         option_type: option_type,
                         expiry: val.expiry,
+                        client_persnal_key:val.panelKey,
                         TradeType: "MAKE_STRATEGY",
                       }
 
@@ -587,6 +589,7 @@ async function run() {
                         entry_type: entry_type,
                         segment: val.segment,
                         expiry: val.expiry,
+                        client_persnal_key:val.panelKey,
                         TradeType: "MAKE_STRATEGY",
                       }
 
