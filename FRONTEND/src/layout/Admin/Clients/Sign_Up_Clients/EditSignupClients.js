@@ -25,20 +25,6 @@ const EditSignupClient = () => {
     });
 
 
-    // const data = async () => {
-    //     await dispatch(Get_All_SUBADMIN()).unwrap()
-    //         .then((response) => {
-    //             if (response.status) {
-    //                 setAddsubadmin({
-    //                     loading: false,
-    //                     data: response.data
-    //                 });
-    //             }
-    //         })
-    // }
-    // useEffect(() => {
-    //     data()
-    // }, [])
 
     const fields = [
         { name: 'username', label: 'Username', type: 'text' },

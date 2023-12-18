@@ -510,7 +510,6 @@ const AddClient = () => {
       formik.setFieldValue('demat_userid', 'null');
     }
 
-
     if (formik.values.licence === '2' || formik.values.licence === 2) {
       formik.setFieldValue('fromDate', null);
       formik.setFieldValue('todate', null);

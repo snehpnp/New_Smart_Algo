@@ -20,7 +20,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
     const newPreviews = [...previews]; // Create a copy of the previews array
 
     newPreviews[index] = URL.createObjectURL(file); // Set the preview for the specific index
-    console.log("newPreviews[index]", newPreviews[index]);
     setPreviews(newPreviews); // Update the previews array
 
 
@@ -286,7 +285,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
 
                                   </div>
 
-                                  {/* {console.log("{ ...formik.getFieldProps(field.name) }", { ...formik.getFieldProps(field.name) })} */}
                                   <img src={formik.getFieldProps(field.name).value} name={field.name} id={field.name} alt={`Preview ${index}`} className="mb-3"
 
                                   />

@@ -214,8 +214,7 @@ const HelpCenter = () => {
 
         ExecuteTradeData && ExecuteTradeData.data.filter((item) => {
             const element1 = $('.button_call_sell_' + item.call_token._id);
-            console.log("element1", element1)
-            element1.removeClass('active');
+                  element1.removeClass('active');
             const element2 = $('.button_call_buy_' + item.call_token);
             element2.removeClass('active');
             const element4 = $('.button_put_sell_' + item.put_token);
@@ -434,8 +433,7 @@ const HelpCenter = () => {
 
     const Done_For_Trade = (id) => {
         handleClickDisabled();
-        // console.log("ExecuteTradeData", ExecuteTradeData)
-        // return
+
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
         ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {

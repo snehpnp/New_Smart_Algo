@@ -26,7 +26,6 @@ const BasicDataTable = ({ tableData, TableColumns, tableoptions, rowStyle }) => 
         ...tableoptions
     };
 
-    console.log("rowStyle", rowStyle)
     return <>
         <div className='table-responsive'>
             <BootstrapTable
