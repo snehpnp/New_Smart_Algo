@@ -99,11 +99,8 @@ const CreateStrategy = () => {
 
 
 
-    
-
     const config = {
       method: 'post',
-     // url: 'http://localhost:7700/add/getservicename',
       url:`${Config.base_url}add/getservicename`,
       data: {
         searchQuery: filterServices
