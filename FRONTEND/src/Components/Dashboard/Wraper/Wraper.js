@@ -77,26 +77,6 @@ useEffect(() => {
 
 
 
-
-//   const getColors = () => {
-
-//     axios.get("https://api.smartalgo.in:3001/smartalgo/get/theme").then((res) => {
-// console.log("dddddddddd" ,res.data.data[0]);
-
-
-//       setSetTheme(res.data.data[0])
-//     }).catch((err) => {
-//       console.log("error", err);
-//     })
-
-//   }
-//   useEffect(() => {
-//     getColors()
-//   }, []);
-
-
-
-
   const themesToHide = [
     '.theme-1',
     '.theme-2',
@@ -116,7 +96,6 @@ useEffect(() => {
 
     if (elements[0] !== undefined) {
 
-      // console.log("`${elements}-dashboard`" , elements[0].classList[0]);
       $('body').attr('data-Dashboard', `${elements[0].classList[0]}-dashboard`);
 
     }
@@ -127,9 +106,6 @@ useEffect(() => {
     // });
   });
 
-
-
-  // console.log("$('body')." , $(`body.theme-7`));
 
 
   // $('body').attr('data-Dashboard', "theme-2-dashboard");
@@ -149,15 +125,7 @@ useEffect(() => {
   //change the header position controller
   $('body').attr('data-header-position', SetTheme && SetTheme.header_position);
 
-  // //change the theme direction (rtl, ltr) controller
 
-  // $('html').attr('dir', this.value);
-  // $('html').attr('class', '');
-  // $('html').addClass(this.value);
-  // $('body').attr('direction', this.value);
-
-
-  //change the theme layout controller
 
   if ($('body').attr('data-sidebar-style') === 'overlay') {
     $('body').attr('data-sidebar-style', 'full');

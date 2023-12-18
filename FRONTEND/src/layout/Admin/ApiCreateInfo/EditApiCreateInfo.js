@@ -76,7 +76,6 @@ const Edit_Create_Api_Info = () => {
 
             await dispatch(Update_Api_Info_Theme({ req: req, token: token })).unwrap().then((response) => {
 
-                // console.log("response", response)
                 if (response.status === 409) {
                     toast.error(response.data.msg);
                 }

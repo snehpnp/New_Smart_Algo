@@ -180,7 +180,7 @@ const CreateTheme = ({ SelectTheme1 }) => {
 
     // for  Typography Selection
 
-    //  console.log("$('body')", decodeURIComponent(document.cookie));
+
 
     const PreviewTypeGraphy = (e) => {
         $('body').attr('data-typography', e.target.value);

@@ -76,7 +76,7 @@ const Update_Broker_Key = ({ closeModal }) => {
         },
         onSubmit: async (values) => {
 
-            console.log("values", values);
+
 
             const req = {
                 "id": user_id,
@@ -91,7 +91,7 @@ const Update_Broker_Key = ({ closeModal }) => {
                 }
             }
 
-            console.log("test", req);
+     
 
 
 

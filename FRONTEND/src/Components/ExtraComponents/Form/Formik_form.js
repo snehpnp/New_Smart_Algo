@@ -7,7 +7,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
 
 
 
-  // console.log("fieldtype", fieldtype)
   const location = useLocation()
 
   const [passwordVisible, setPasswordVisible] = useState({});
@@ -16,7 +15,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
   const [previews, setPreviews] = useState([]);
 
 
-  // console.log("PreviewImage", PreviewImage);
   const handleFileChange = (event, index, name) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -33,9 +31,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
 
     reader.readAsDataURL(file);
   }
-
-
-  // console.log("initialValues" , formik.initialValues)
 
   const sneh = (index, name) => {
     // formik.setFieldValue(name, 'null');

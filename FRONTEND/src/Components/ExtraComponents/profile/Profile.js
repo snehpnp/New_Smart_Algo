@@ -18,7 +18,6 @@ const UserProfile = () => {
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const user_role = JSON.parse(localStorage.getItem("user_role"));
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
-  // console.log("user_role_goTo",user_role_goTo);
 
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
@@ -96,7 +95,6 @@ const UserProfile = () => {
       await dispatch(Reset_Password(req))
         .unwrap()
         .then((response) => {
-          console.log("test", response);
           if (response.status) {
             toast.success(response.message);
           }

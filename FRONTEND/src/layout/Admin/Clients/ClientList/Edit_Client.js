@@ -197,9 +197,6 @@ const AddClient = () => {
       return errors;
     },
     onSubmit: async (values) => {
-      // console.log("values", values);
-      // console.log("=>  subadmin", values.parent_id);
-      // console.log("admin", user_id);
 
       const req = {
         "FullName": values.fullName,

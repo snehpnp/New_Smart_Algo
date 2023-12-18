@@ -50,7 +50,6 @@ const Modify = ({ UserDetails }) => {
         await dispatch(Modify_Details({ user_id: user_id, AdminToken: AdminToken, req: selectedOptions }))
             .unwrap()
             .then((response) => {
-                // console.log("response", response);
                 if (response.status) {
                     toast.success(response.msg);
                 } else {
@@ -59,7 +58,6 @@ const Modify = ({ UserDetails }) => {
             });
 
         // Perform the final step with selected options
-        console.log("Selected Options:", selectedOptions);
         // You can implement your logic here
     };
 
@@ -84,7 +82,6 @@ const Modify = ({ UserDetails }) => {
 
 
 
-    // console.log("UserDetails", selectedOptions)
 
 
     return (

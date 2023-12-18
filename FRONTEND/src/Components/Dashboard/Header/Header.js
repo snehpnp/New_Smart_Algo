@@ -204,7 +204,6 @@ const Header = ({ ChatBox }) => {
       await dispatch(GET_MESSAGE_BRODS({ id: user_id }))
         .unwrap()
         .then((response) => {
-          // console.log("response", response);
           if (response.status) {
             // setUserDetails(response.data);
           }
@@ -249,8 +248,7 @@ const Header = ({ ChatBox }) => {
 
   const ClearSession = async () => {
     var decoded = jwt_decode(token);
-    // console.log("decoded", decoded.exp)
-    // console.log(" new Date().getTime()", new Date().getTime())
+ 
 
     if (decoded.exp * 1000 < new Date().getTime()) {
       const request = {

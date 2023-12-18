@@ -45,7 +45,6 @@ const TradeHistory = () => {
     const [selected, setSelected] = useState([]);
     const [selected1, setSelected1] = useState([]);
 
-    console.log("PanelKey", PanelKey)
     const [disabled, setDisabled] = useState(false);
 
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
@@ -345,6 +344,8 @@ const TradeHistory = () => {
 
 
     const Set_Entry_Exit_Qty = (row, event, qty_persent, symbol) => {
+
+
         let a = No_Negetive_Input_regex(event)
 
         console.log(event);
@@ -385,8 +386,17 @@ const TradeHistory = () => {
 
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
 
+            console.log("pre_tag", pre_tag)
+
+            if (pre_tag.new_qty_persent > pre_tag.old_qty_persent) {
+                alert('Error: Value cannot be greater than ' + pre_tag.old_qty_persent);
+                return
+            }
+
+
             let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${pre_tag.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${pre_tag.client_persnal_key}|TradeType:${pre_tag.TradeType}|Demo:demo`
 
+   
 
             let config = {
                 method: 'post',
@@ -421,7 +431,6 @@ const TradeHistory = () => {
 
 
     // ----------------------------- SQUARE OFF ----------------------------
-    // ----------------------------- SQUARE OFF All  ----------------------------
     const SquareOfAll = () => {
 
         if (UserDetails && UserDetails.trading_status == "off") {
@@ -472,10 +481,6 @@ const TradeHistory = () => {
         }
     }
 
-    // ----------------------------- SQUARE OFF All ----------------------------
-
-
-
 
 
     var CreatechannelList = "";
@@ -489,10 +494,6 @@ const TradeHistory = () => {
     const ShowLivePrice = async () => {
         let type = { loginType: "API" };
         let channelList = CreatechannelList;
-
-        //  console.log("tradeHistoryData" ,tradeHistoryData)
-
-        // const res = await CreateSocketSession(type);
 
         if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
 
@@ -547,7 +548,6 @@ const TradeHistory = () => {
                                         let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                                         let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
 
-
                                         if ((isNaN(finalyupl) || isNaN(rpl))) {
                                             return "-";
                                         } else {
@@ -585,8 +585,6 @@ const TradeHistory = () => {
                             ) {
                             } else {
                             }
-
-
                         });
 
 
@@ -723,7 +721,7 @@ const TradeHistory = () => {
                             cancel_btn={true}
                             // hideBtn={false}
                             btn_name="Confirm"
-                            disabled_submit={disabled}
+                            // disabled_submit={disabled}
                             // disabled_submit={ButtonDisabled}
                             Submit_Function={Done_For_Trade}
                             Submit_Cancel_Function={Cancel_Request}
@@ -783,7 +781,7 @@ const TradeHistory = () => {
                                                                 row.trade_symbol
                                                             )
                                                     }
-                                                    value={inputValue ? inputValue : inputValue}
+                                                    defaultValue={inputValue ? inputValue : row.old_qty_persent}
                                                     max={row.old_qty_persent}
                                                 // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
 
