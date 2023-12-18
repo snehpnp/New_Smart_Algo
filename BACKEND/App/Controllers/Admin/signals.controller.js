@@ -2,6 +2,8 @@
 const db = require('../../Models');
 const Signals_modal = db.Signals
 const Alice_token = db.Alice_token;
+const Get_Option_Chain_modal = db.option_chain_symbols;
+
 
 const { formattedDateTime } = require('../../Helper/time.helper')
 
@@ -48,7 +50,7 @@ class Signals {
 
 
 
-    async GetStrickPriceFromSheet(req, res) {
+    async GetStrickPriceFromSheet() {
         try {
             const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
 
@@ -65,63 +67,40 @@ class Signals {
                             index === self.findIndex(t => t.SYMBOL === item.SYMBOL)
                         );
 
-
-                        const pipeline1 = [
-                            {
-                                $match: {
-                                    symbol: { $in: sheet_Data.map(item => item.SYMBOL) },
-                                    segment: "O"
-                                }
-                            },
-                            {
-                                $addFields: {
-                                    CPrice: {
-                                        $cond: {
-                                            if: {
-                                                $in: ["$symbol", sheet_Data.map(item => item.SYMBOL)]
-                                            },
-                                            then: {
-                                                $arrayElemAt: [
-                                                    sheet_Data.map(item => ({ symbol: item.SYMBOL, CPrice: item.CPrice })),
-                                                    {
-                                                        $indexOfArray: [sheet_Data.map(item => item.SYMBOL), "$symbol"]
-                                                    }
-                                                ]
-                                            },
-                                            else: null  // Replace null with the default value if CPrice is not found
-                                        }
-                                    },
-                                    // Add other fields from sheet_Data if needed
-                                }
-                            },
-                            {
-                                $project: {
-                                    _id: 0,
-                                    symbol: 1,
-                                    CPrice: 1
-                                    // Add other fields you want to retrieve
-                                }
+                        // Map and update specific SYMBOL values
+                        sheet_Data.forEach(data => {
+                            switch (data.SYMBOL) {
+                                case "NIFTY_BANK":
+                                    data.SYMBOL = "BANKNIFTY";
+                                    break;
+                                case "NIFTY_50":
+                                    data.SYMBOL = "NIFTY";
+                                    break;
+                                case "NIFTY_FIN_SERVICE":
+                                    data.SYMBOL = "FINNIFTY";
+                                    break;
+                                // Add more cases if needed
                             }
-                        ];
+                        });
 
+                        // Sort the array based on SYMBOL
+                        sheet_Data.sort((a, b) => a.SYMBOL.localeCompare(b.SYMBOL));
 
+                        // Use Promise.all to wait for all updates to complete
+                        await Promise.all(sheet_Data.map(async (data) => {
+                            const result = await Get_Option_Chain_modal.updateOne(
+                                { symbol: data.SYMBOL },
+                                { $set: { price: data.CPrice } }
+                            );
+                        }));
 
-                        // Execute the pipeline
-
-                        const getdata = await Alice_token.aggregate(pipeline1);
-                        console.log(getdata);
-
-                        if (getdata.length === 0) {
-                            return res.json({ status: false, msg: 'Symbol not found.', data: [] });
-                        }
-
-                        return res.json({ status: true, msg: 'Data found', data: getdata });
+                        // return res.json({ status: true, msg: 'Data found', data: sheet_Data });
                     },
                     header: true,
                 });
             } catch (error) {
                 console.error('Error fetching or parsing CSV:', error.message);
-                res.status(500).json({ error: 'Internal Server Error' });
+                // res.status(500).json({ error: 'Internal Server Error' });
             }
         } catch (error) {
             console.log("Theme error-", error);

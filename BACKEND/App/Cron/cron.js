@@ -12,6 +12,7 @@ const user_logs = db.user_logs;
 const live_price = db.live_price;
 
 const { Get_Option_All_Token_Chain } = require('../../App/Controllers/Admin/option_chain.controller')
+const {  GetStrickPriceFromSheet } = require('../Controllers/Admin/signals.controller')
 
 
 cron.schedule('5 2 * * *', () => {
@@ -39,6 +40,13 @@ cron.schedule('1 1 * * *', () => {
 cron.schedule('10 1 * * *', () => {
     console.log('running a task every minute');
     TokenSymbolUpdate()
+});
+
+
+// EVERY 30 MINUT RUN CRON 
+cron.schedule('*/30 * * * *', () => {
+    console.log('Run Every 30 Minutes');
+    GetStrickPriceFromSheet();
 });
 
 
@@ -115,9 +123,6 @@ const LogoutAllUsers = async () => {
 
 
 }
-
-//================================Option Chain Stock Price Set=======================//
-
 
 // SERVICES TOKEN CREATE
 const service_token_update = () => {
