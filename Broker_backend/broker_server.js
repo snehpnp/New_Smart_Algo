@@ -515,20 +515,27 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+       // LIVE PRICE GET
+       const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
 
-          // LIVE PRICE GET
-          const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
-          // if (signals.TradeType != "OPTION_CHAIN") {
-          if (signals.TradeType == "MT_4") {
-            if (price_live_second.length > 0) {
-              price = price_live_second[0].lp
-            } else {
-              price = signals.Price
+       try {
+         if (signals.TradeType == "MT_4") {
 
-            }
-          }
+           if (price_live_second.length > 0) {
+             price = price_live_second[0].lp
+           } else {
+             price = signals.Price
+           }
+         }
+       } catch (error) {
+         console.log("error IN price Update", error);
+       }
 
-          console.log("price_live_second", price);
+       if (price == null) {
+         price = signals.Price
+
+       }
+       console.log("price_live_second", price);
 
 
 
