@@ -1430,3 +1430,293 @@ TIME Mon Dec 18 2023 12:59:54 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIE
 TIME Mon Dec 18 2023 12:59:54 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
 TIME Mon Dec 18 2023 12:59:54 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
 TIME Mon Dec 18 2023 12:59:54 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 16:10:46 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:USDINR,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:CO,Strike:83,OType:CALL,Expiry:22122023,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 16:10:46 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Mon Dec 18 2023 16:10:46 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:10:46 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:10:46 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:10:46 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 16:11:31 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:USDINR,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:CF,Strike:83,OType:CALL,Expiry:22122023,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 16:11:31 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Mon Dec 18 2023 16:11:31 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:11:31 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:11:31 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:11:31 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 16:14:11 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:USDINR,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:MO,Strike:83,OType:CALL,Expiry:22122023,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 16:14:11 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Mon Dec 18 2023 16:14:11 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:14:11 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:14:11 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:14:11 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 16:17:26 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:USDINR,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:CO,Strike:8750000,OType:CALL,Expiry:22122023,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 16:17:27 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Mon Dec 18 2023 16:17:27 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:17:27 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:17:27 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:17:27 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 16:20:14 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:GOLD,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:MO,Strike:65300,OType:CALL,Expiry:24012024,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 16:20:15 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 255143
+TIME Mon Dec 18 2023 16:20:15 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:20:15 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:20:15 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:20:15 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 16:20:46 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:GOLD,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:MO,Strike:65300,OType:CALL,Expiry:24012024,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 16:20:46 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 255143
+TIME Mon Dec 18 2023 16:20:46 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:20:46 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:20:46 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:20:46 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 16:21:15 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:GOLD,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:MO,Strike:65300,OType:CALL,Expiry:24012024,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 16:21:15 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 255143
+TIME Mon Dec 18 2023 16:21:15 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:21:15 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:21:15 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:21:15 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 16:21:17 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:GOLD,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:MO,Strike:65300,OType:CALL,Expiry:24012024,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 16:21:17 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 255143
+TIME Mon Dec 18 2023 16:21:17 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:21:17 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:21:17 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:21:17 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 16:24:14 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:SILVER,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:MO,Strike:88750,OType:CALL,Expiry:23022024,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 16:24:14 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 256143
+TIME Mon Dec 18 2023 16:24:14 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:24:14 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:24:14 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 16:24:14 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 17:00:34 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899034,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:458.60,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:20950,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+
+NEW TRADE TIME Mon Dec 18 2023 17:00:34 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899034,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:507.35,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:20900,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Mon Dec 18 2023 17:00:34 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41659
+TIME Mon Dec 18 2023 17:00:34 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41665
+TIME Mon Dec 18 2023 17:00:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:00:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:00:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:00:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:00:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:00:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:00:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:00:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 17:01:37 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899097,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:363.95,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21050,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Mon Dec 18 2023 17:01:38 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41681
+TIME Mon Dec 18 2023 17:01:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:01:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:01:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:01:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899199,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:363.95,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21050,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+
+NEW TRADE TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899199,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:410.10,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21000,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41672
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41681
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41681","trading_symbol":"NIFTY21DEC23C21050","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41672","trading_symbol":"NIFTY21DEC23C21000","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297894"}]
+TIME Mon Dec 18 2023 17:03:19 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297895"}]
+
+NEW TRADE TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899224,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:23.35,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21150,OType:PUT,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+
+NEW TRADE TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899224,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:17.70,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21100,OType:PUT,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41684
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41686
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41684","trading_symbol":"NIFTY21DEC23P21100","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41686","trading_symbol":"NIFTY21DEC23P21150","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297916"}]
+TIME Mon Dec 18 2023 17:03:44 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297917"}]
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:34 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:54.45,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21500,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:72.00,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21450,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:95.65,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21400,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:123.55,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21350,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:156.00,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21300,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:192.10,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21250,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 43499
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41689
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 43506
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41693
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41708
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"43499","trading_symbol":"NIFTY21DEC23C21450","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"43506","trading_symbol":"NIFTY21DEC23C21500","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41689","trading_symbol":"NIFTY21DEC23C21250","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41691
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297952"}]
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297954"}]
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41693","trading_symbol":"NIFTY21DEC23C21350","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297955"}]
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41708","trading_symbol":"NIFTY21DEC23C21400","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297956"}]
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:230.85,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21200,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:35 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297957"}]
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:273.25,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21150,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:318.05,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21100,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:363.95,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21050,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:410.10,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21000,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41691","trading_symbol":"NIFTY21DEC23C21300","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297958"}]
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:458.60,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:20950,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41685
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41687
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41683
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41672
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41681
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41687","trading_symbol":"NIFTY21DEC23C21200","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41685","trading_symbol":"NIFTY21DEC23C21150","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41665
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:36 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297961"}]
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297962"}]
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41683","trading_symbol":"NIFTY21DEC23C21100","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41672","trading_symbol":"NIFTY21DEC23C21000","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41681","trading_symbol":"NIFTY21DEC23C21050","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297963"}]
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297964"}]
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297965"}]
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1702899274,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:507.35,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:20900,OType:CALL,Expiry:21122023,Strategy:Eagle Trading System,Quntity:100,Key:SNE132023,TradeType:OPTION_CHAIN,Demo:demo
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41665","trading_symbol":"NIFTY21DEC23C20950","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297966"}]
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41659
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- sneh REQUEST -{"exch":"NFO","pCode":"MIS","prctyp":"MKT","price":"0","qty":"50","symbol_id":"41659","trading_symbol":"NIFTY21DEC23C20900","trigPrice":"","complexty":"REGULAR","discqty":"0","ret":"DAY","transtype":"BUY","orderTag":"order1"}
+TIME Mon Dec 18 2023 17:04:37 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - sneh RESPONSE -[{"stat":"Ok","NOrdNo":"23121800297967"}]
+
+NEW TRADE TIME Mon Dec 18 2023 17:13:11 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:SILVER,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:MO,Strike:88750,OType:CALL,Expiry:23022024,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 17:13:11 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 256143
+TIME Mon Dec 18 2023 17:13:11 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:13:11 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:13:11 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:13:11 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 17:13:12 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:SILVER,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:MO,Strike:88750,OType:CALL,Expiry:23022024,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 17:13:12 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 256143
+TIME Mon Dec 18 2023 17:13:12 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:13:12 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:13:12 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:13:12 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0
+
+NEW TRADE TIME Mon Dec 18 2023 17:13:17 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:SILVER,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:MO,Strike:88650,OType:CALL,Expiry:23022024,Strategy:TEST_1,Quntity:100,Key:SNE142023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Mon Dec 18 2023 17:13:17 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 0
+TIME Mon Dec 18 2023 17:13:17 GMT+0530 (India Standard Time) ALICE BLUE TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:13:17 GMT+0530 (India Standard Time) ANGEL TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:13:17 GMT+0530 (India Standard Time) fivepaisa TRADING VIEW CLIENT LENGTH 0
+TIME Mon Dec 18 2023 17:13:17 GMT+0530 (India Standard Time) zerodha TRADING VIEW CLIENT LENGTH 0

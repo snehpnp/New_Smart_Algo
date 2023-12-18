@@ -111,7 +111,6 @@ class Message {
 
             const get_user = await Message_brodcast.find({ _id: objectId });
 
-            console.log("get_user", get_user)
             if (get_user.length == 0) {
                 return res.send({ status: false, msg: "Empty data", data: [] });
             }

@@ -79,7 +79,6 @@ class Login {
             if (EmailCheck.Role == "SUBADMIN") {
 
                 var SubadminPermision = await Subadmin_Permission.find({ user_id: EmailCheck._id })
-                // console.log("SubadminPermision", SubadminPermision);
                 var msg = {
                     'Email': EmailCheck.Email,
                     'user_id': EmailCheck._id,
@@ -185,7 +184,6 @@ class Login {
 
 
             } catch (error) {
-                console.log("Verfiy error", error);
                 return res.send({ status: false, msg: 'Server Issue', data: error });
 
             }
@@ -451,7 +449,6 @@ class Login {
             }
         }
         catch (error) {
-            console.log(error);
             res.send({ status: false, msg: "Server Side error", data: error })
         }
 
@@ -491,7 +488,6 @@ class Login {
 
         }
         catch (error) {
-            console.log(error);
             res.send({ status: false, msg: "Server Side error", data: error })
         }
 

@@ -35,9 +35,6 @@ class OptionChain {
     // GET SYMBOLL EXPIRY
     async Get_Option_Symbol_Expiry(req, res) {
 
-        console.log(" req.body.symbol ", req.body.symbol);
-
-
         try {
             const symbol = req.body.symbol;
 
@@ -534,7 +531,7 @@ class OptionChain {
                 $set: { _id: instrument_token, exch: exch_seg },
             };
             const update_token = await stock_live_price.updateOne(filter, update, { upsert: true });
-            res.send({ status: true, msg: "Done" })
+            return res.send({ status: true, msg: "Done" })
 
 
         } catch (error) {

@@ -142,15 +142,15 @@ class Employee {
         var StartDate = new Date(start_date);
         var GetDay = StartDate.getDay();
         if (GetDay == 4) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay == 5) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay == 6) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay == 0) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay > 0 && GetDay < 4) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 2);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 7);
         }
 
         var end_date_2days = dateTime.create(UpdateDate);
@@ -402,10 +402,6 @@ class Employee {
       var PID = new ObjectId(req.parent_id);
 
 
-      // FIND PARENT ROLE
-      // const parentRole = await User_model.findOne({
-      //   _id: PID,
-      // }).select('Role')
 
       console.log("sTART", new Date());
 
@@ -513,15 +509,15 @@ class Employee {
             var StartDate = new Date(start_date);
             var GetDay = StartDate.getDay();
             if (GetDay == 4) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay == 5) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay == 6) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay == 0) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay > 0 && GetDay < 4) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 2);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 7);
             }
 
             var end_date_2days = dateTime.create(UpdateDate);
