@@ -157,3 +157,18 @@ export async function ConnctSocket(onResponse, channelList, userId1, userSession
 
 }
 
+
+export async function BackendRunSocket(data) {
+    try {
+        const res = await axios.get(`${Config.base_url}backendRunSocket`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err;
+
+    }
+}
+

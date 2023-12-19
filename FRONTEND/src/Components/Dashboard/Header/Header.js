@@ -302,6 +302,16 @@ const Header = ({ ChatBox }) => {
 
 
   const test = async () => {
+    // const socket = socketIOClient(`${Config.base_url}`);
+
+    // socket.on("logout_user_from_other_device_res", async (data) => {
+    //   console.log("logout_user_from_other_device_res", data);
+    // });
+
+
+
+
+    
 
     // if (user_role === "USER") {
     //   const socket = socketIOClient(`${Config.base_url}`);

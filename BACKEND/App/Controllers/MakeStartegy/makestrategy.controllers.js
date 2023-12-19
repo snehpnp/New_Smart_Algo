@@ -408,17 +408,30 @@ const currentTimeNow = currentDateNow.toLocaleString('en-IN', options);
 const [hours, minutes] = currentTimeNow.split(':').map(Number);
 
 const marketStartTime = { hour: 9, minute: 15 };
-const marketEndTime = { hour: 23, minute: 30 };
 
-const isMarketOpen =
+const marketEndTimeEquity = { hour: 15, minute: 30 };
+
+const marketEndTimeCurrency = { hour: 4, minute: 59 };
+
+const marketEndTimeMCX = { hour: 11, minute: 29 };
+
+  const isMarketOpen =
   hours > marketStartTime.hour ||
   (hours === marketStartTime.hour && minutes >= marketStartTime.minute);
 
-const isMarketClosed =
-  hours > marketEndTime.hour ||
-  (hours === marketEndTime.hour && minutes > marketEndTime.minute);
+  const isMarketClosedEquity =
+  hours > marketEndTimeEquity.hour ||
+  (hours === marketEndTimeEquity.hour && minutes > marketEndTimeEquity.minute);
 
-// if (isMarketOpen && !isMarketClosed) {
+  const isMarketClosedCurrency =
+  hours > marketEndTimeCurrency.hour ||
+  (hours === marketEndTimeCurrency.hour && minutes > marketEndTimeCurrency.minute);
+
+  const isMarketClosedMCX =
+  hours > marketEndTimeMCX.hour ||
+  (hours === marketEndTimeMCX.hour && minutes > marketEndTimeMCX.minute);
+
+//   if (isMarketOpen && isMarketClosedEquity) {
 //   console.log('The stock market is open!');
 // } else {
 //   console.log('The stock market is closed.');
@@ -433,15 +446,16 @@ const Holidays = require('date-holidays');
 const holidays = new Holidays();
 const currentDate = new Date();
 let rr = 1
-//if (rr) {
-async function run() {
 
+async function run() {
+ console.log("iiiiiiii")
   try {
 
     // Define the function to be executed
     const executeFunction = async () => {
       //  console.log("okkkkkkkk shakirrr ")
-      if (!holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
+      if (rr) {
+     // if (!holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
         //  console.log('The stock market is open!');
 
         const pipeline = [
@@ -455,7 +469,12 @@ async function run() {
         const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
         if (allStrategyResult.length > 0) {
           for (let index = 0; index < allStrategyResult.length; index++) {
+         
             const val = allStrategyResult[index];
+
+         // console.log(" val startegy",val.segment.toUpperCase())
+
+
             const currentDate = new Date();
 
             const options = {
@@ -485,7 +504,29 @@ async function run() {
             // console.log('notradeTime:', notradeTime);
             //  console.log('entryTime:', entryTime);
             // Entry Time less than No trade time OR Exit time
-            if (currentTime > entryTime && entryTime < exitTime && entryTime < notradeTime) {
+
+
+            
+
+
+        
+
+           //console.log("val.segment.toUpperCase()",val.segment.toUpperCase())
+            if((val.segment.toUpperCase()=="O"||val.segment.toUpperCase()=="F"||val.segment.toUpperCase()=="C") && (isMarketOpen && isMarketClosedEquity)){
+            //  console.log(" Equity Market closed")
+             return
+            }else if((val.segment.toUpperCase()=="CO"||val.segment.toUpperCase()=="CO") && (isMarketOpen && isMarketClosedCurrency)){
+             // console.log(" Currrency Market closed")
+             return
+            }else if((val.segment.toUpperCase()=="MO"||val.segment.toUpperCase()=="MF") && (isMarketOpen && isMarketClosedMCX)){
+            //  console.log(" MCX Market closed")
+             return
+            }else{
+              //console.log("RUN CODEEEE")
+
+             // EXCUTED RUN CODE INSIDE TIME
+
+             if (currentTime > entryTime && entryTime < exitTime && entryTime < notradeTime) {
               // console.log('if:', entryTime, " id ", val._id, val.type)
 
               const currentDate = new Date();
@@ -803,8 +844,13 @@ async function run() {
 
             } else {
               // console.log('else:', entryTime);
-
             }
+
+            // END EXCUTED RUN CODE INSIDE TIME
+            }
+
+          
+
 
           }
         }
@@ -812,9 +858,6 @@ async function run() {
       } else {
         console.log('The stock market is Closed!');
       }
-
-
-
 
 
     };

@@ -14,7 +14,7 @@ import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
 import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
-import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Service/Alice_Socket";
+import { CreateSocketSession, ConnctSocket, GetAccessToken, BackendRunSocket} from "../../../Service/Alice_Socket";
 import $ from "jquery";
 import axios from "axios"
 import * as Config from "../../../Utils/Config";
@@ -630,6 +630,15 @@ const HelpCenter = () => {
             const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
             if (res.data.stat) {
+
+              // BACKEND SOCKET RUN API
+              
+            //alert("okk")
+    
+             await BackendRunSocket("");
+
+              //
+
                 const handleResponse = async (response) => {
 
                     const old_val_call = $('.Call_Price_' + response.tk).html();
