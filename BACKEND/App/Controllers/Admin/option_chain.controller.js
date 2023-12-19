@@ -34,6 +34,8 @@ class OptionChain {
 
     // GET SYMBOLL EXPIRY
     async Get_Option_Symbol_Expiry(req, res) {
+            
+      console.log("EXPIRY   GETTT")
 
         try {
             const symbol = req.body.symbol;
@@ -77,7 +79,7 @@ class OptionChain {
                 },
                 {
                     $match: {
-                        expiryDate: { $gte: new Date(formattedDate) }
+                        expiryDate: { $gte: new Date() }
                     }
                 },
                 {
