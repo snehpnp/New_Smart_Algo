@@ -369,6 +369,13 @@ class AliceBlue {
 
     }
 
+    async backendRunSocket(req, res) {
+      
+       console.log("backend run code");
+       Alice_Socket();
+       return res.send({ status: true, msg: 'backend run socket'});
+    }
+
 
 
 
@@ -443,6 +450,8 @@ const GetAllBrokerResponse = async (user_id, res) => {
 
 
 }
+
+
 module.exports = new AliceBlue();
 
 
