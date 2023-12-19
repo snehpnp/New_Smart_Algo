@@ -118,6 +118,7 @@ const AllClients = () => {
 
     // GO TO DASHBOARD
     const goToDashboard = async (asyncid, email) => {
+        console.log("email",email);
         let req = {
             Email: email,
 
@@ -288,17 +289,17 @@ const AllClients = () => {
         {
             dataField: 'ActiveStatus',
             text: 'Got To Dashboard',
-            hidden: (getPermissions && getPermissions.go_To_Dashboard === 1 ? false : true),
+            hidden: (getPermissions && getPermissions.go_To_Dashboard == 1 ? false : true),
             formatter: (cell, row) => (
                 <>
                     <span
                         className=" btn "
                         style={
-                            row.AppLoginStatus === '0' && row.WebLoginStatus === '0'
+                            row.AppLoginStatus == '0' && row.WebLoginStatus == '0'
                                 ? { color: "#FF0000" }
                                 : { color: "#008000" }
                         }
-                        onClick={() => goToDashboard(row, row._id, row.Email)}
+                        onClick={() => goToDashboard(row._id, row.Email)}
                         disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
                     >
                         Dashboard
