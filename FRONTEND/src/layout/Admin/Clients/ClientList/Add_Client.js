@@ -34,7 +34,7 @@ const AddClient = () => {
   const user_token = JSON.parse(localStorage.getItem("user_details")).token
   const Role = JSON.parse(localStorage.getItem("user_details")).Role
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
-
+  // console.log(user_id);
 
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [ShowAllStratagy, setShowAllStratagy] = useState(false)
@@ -181,8 +181,8 @@ const AddClient = () => {
         "todate": values.todate,
         "service_given_month": values.service_given_month,
         "broker": values.broker,
-        "parent_id": values.parent_id != null ? values.parent_id : user_id,
-        "parent_role": values.parent_id != null ? "SUBADMIN" : "ADMIN",
+        "parent_id": values.parent_id == null || values.parent_id === "" ? user_id : values.parent_id,
+        "parent_role": values.parent_id == null || values.parent_id === "" ?  "ADMIN" : "SUBADMIN",
         "api_secret": values.api_secret,
         "app_id": values.app_id,
         "client_code": values.client_code,
@@ -255,10 +255,10 @@ const AddClient = () => {
     // { label: 'Choice', value: '9' },
     // { label: 'Anand Rathi', value: '10' },
     // { label: 'B2C', value: '11' },
-     { label: 'Angel', value: '12' },
+    { label: 'Angel', value: '12' },
     // { label: 'Fyers', value: '13' },
-     { label: '5 Paisa', value: '14' },
-     { label: 'Zerodha', value: '15' }
+    { label: '5 Paisa', value: '14' },
+    { label: 'Zerodha', value: '15' }
     // { label: 'Arihant', value: '16' }
     // { label: 'Arihant', value: '17' }
     // { label: 'Laxmi', value: '18' }
@@ -610,7 +610,7 @@ const AddClient = () => {
                 </div>
               ))}
               <label class="toggle mt-3">
-                <input class="toggle-checkbox bg-primary"  type="checkbox" onChange={(e) => {
+                <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
                   setShowAllStratagy(e.target.checked)
                 }} />
                 <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
@@ -622,7 +622,7 @@ const AddClient = () => {
 
               {/* </> : ""} */}
 
-                <h6>All Strategy</h6>
+              <h6>All Strategy</h6>
               {/*  For Show All Strategy */}
               {ShowAllStratagy ? <>
                 {AllStrategy.data.map((strategy) => (

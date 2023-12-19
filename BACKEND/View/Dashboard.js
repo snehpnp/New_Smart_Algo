@@ -8,7 +8,7 @@ db.createView("dashboard_data", "users", [
                     $cond: [
                         {
                             $and: [
-                               
+
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$Is_Active", "1"] }
 
@@ -76,9 +76,23 @@ db.createView("dashboard_data", "users", [
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "2"] },
-                                { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                {
+                                    $gte: [
+                                        {
+                                            $dateToString: {
+                                                format: "%Y-%m-%d",
+                                                date: "$EndDate"
+                                            }
+                                        },
+                                        {
+                                            $dateToString: {
+                                                format: "%Y-%m-%d",
+                                                date: new Date()
+                                            }
+                                        }
+                                    ]
+                                },
                                 { $eq: ["$Is_Active", "1"] }
-
                             ]
                         },
                         1,
@@ -126,15 +140,29 @@ db.createView("dashboard_data", "users", [
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "1"] },
-                                { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                {
+                                    $gte: [
+                                        {
+                                            $dateToString: {
+                                                format: "%Y-%m-%d",
+                                                date: "$EndDate"
+                                            }
+                                        },
+                                        {
+                                            $dateToString: {
+                                                format: "%Y-%m-%d",
+                                                date: new Date()
+                                            }
+                                        }
+                                    ]
+                                },
                                 { $eq: ["$Is_Active", "1"] }
-
                             ]
                         },
                         1,
                         0
                     ]
-                }
+                }  
             },
             total_expired_demo: {
                 $sum: {
@@ -176,9 +204,23 @@ db.createView("dashboard_data", "users", [
                             $and: [
                                 { $eq: ["$Role", "USER"] },
                                 { $eq: ["$license_type", "0"] },
-                                { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                {
+                                    $gte: [
+                                        {
+                                            $dateToString: {
+                                                format: "%Y-%m-%d",
+                                                date: "$EndDate"
+                                            }
+                                        },
+                                        {
+                                            $dateToString: {
+                                                format: "%Y-%m-%d",
+                                                date: new Date()
+                                            }
+                                        }
+                                    ]
+                                },
                                 { $eq: ["$Is_Active", "1"] }
-
                             ]
                         },
                         1,
@@ -186,6 +228,7 @@ db.createView("dashboard_data", "users", [
                     ]
                 }
             },
+
             total_expired_two_days: {
                 $sum: {
                     $cond: [
@@ -203,7 +246,7 @@ db.createView("dashboard_data", "users", [
                     ]
                 }
             },
-        
+
             used_licence: {
                 $sum: {
                     $cond: {
