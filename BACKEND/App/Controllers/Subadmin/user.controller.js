@@ -780,7 +780,7 @@ class Employee {
   async UpdateActiveStatus(req, res) {
     try {
       const { id, user_active_status } = req.body;
-     
+
       const get_user = await User_model.find({ _id: id });
 
       if (get_user.length == 0) {
@@ -831,7 +831,7 @@ class Employee {
       });
 
       count_licenses_add.save();
-      
+
       if (result) {
         // STATUS UPDATE SUCCESSFULLY
         var status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
@@ -894,7 +894,7 @@ class Employee {
     try {
       const { id } = req.body;
       // UPDATE ACTTIVE STATUS CLIENT
-
+      
       if (!id) {
         return res.send({
           status: false,

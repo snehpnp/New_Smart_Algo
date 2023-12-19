@@ -42,7 +42,7 @@ const Sidebar = ({ ShowSidebar }) => {
     //  GET SUBADMIN PERMISSION
     const data2 = async () => {
         if (roles === 'SUBADMIN') {
-            await dispatch(Get_Sub_Admin_Permissions({ id: user_ID && user_ID.user_id })).unwrap()
+            await dispatch(Get_Sub_Admin_Permissions({ id: user_ID && user_ID })).unwrap()
                 .then((response) => {
                     if (response.status) {
                         setGetPermissions(response.data[0])
@@ -102,7 +102,7 @@ const Sidebar = ({ ShowSidebar }) => {
     }, [])
 
 
-
+console.log("getPermissions",getPermissions);
 
     return (
         <div>
@@ -280,7 +280,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                 }) :
                                     roles === 'SUBADMIN' ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
                                         return <>
-                                            {(item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old === 1) ? <>
+                                            {(item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 1) ? <>
 
                                                 <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                     {item.Data.length > 0 ? <>
@@ -313,7 +313,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                             </> : ""}
 
                                             {item.Data.length === 0 ? <>
-                                                {item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old === 0 ? '' :
+                                                {item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 0 ? '' :
                                                     <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                         <Link to={item.route} className="" aria-expanded="false">
                                                             <IconComponent key={item.id} icon={item.Icon} />

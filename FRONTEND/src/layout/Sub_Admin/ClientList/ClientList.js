@@ -245,7 +245,7 @@ const AllClients = () => {
             text: 'Email',
             formatter: (cell, row, rowIndex) => <>
                 <span>
-                    {getPermissions && getPermissions.detailsinfo === 1 ? cell : maskEmail(cell)}
+                    {getPermissions && getPermissions.detailsinfo == 1 ? cell : maskEmail(cell)}
                 </span>
             </>
         },
@@ -254,7 +254,7 @@ const AllClients = () => {
             text: 'Phone Number',
             formatter: (cell, row, rowIndex) => <>
                 <span>
-                    {getPermissions && getPermissions.detailsinfo === 1 ? cell : maskNumber(cell)}
+                    {getPermissions && getPermissions.detailsinfo == 1 ? cell : maskNumber(cell)}
                 </span>
             </>
         },
@@ -268,7 +268,7 @@ const AllClients = () => {
             text: 'Status',
             hidden: (isgotodashboard ? true : false),
 
-            formatter: (cell, row) => (  row.Is_Active === "1" ? 
+            formatter: (cell, row) => (row.Is_Active === "1" ?
                 <>
 
                     <label class="toggle mt-3">
@@ -281,7 +281,7 @@ const AllClients = () => {
                         <div class={`toggle-switch ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
                     </label>
 
-                </> :""
+                </> : ""
             ),
         },
 
@@ -298,12 +298,14 @@ const AllClients = () => {
                                 ? { color: "#FF0000" }
                                 : { color: "#008000" }
                         }
-                        onClick={() => goToDashboard(row._id, row.Email)}
-                        disabled={row.AppLoginStatus === '0' && row.WebLoginStatus === '0'}
+                        onClick={() => goToDashboard(row, row._id, row.Email)}
+                        disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
                     >
                         Dashboard
                     </span>
                 </>
+
+
             ),
         },
         {
@@ -318,7 +320,7 @@ const AllClients = () => {
         {
             dataField: 'StartDate',
             text: 'Start Date',
-            formatter: (cell, row) =>row.StartDate == null ? "----" : fDateTimeSuffix(row.StartDate)
+            formatter: (cell, row) => row.StartDate == null ? "----" : fDateTimeSuffix(row.StartDate)
         },
         {
             dataField: 'EndDate',
@@ -334,7 +336,7 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
                     <div>
-                        {getPermissions && getPermissions.client_edit === 1 &&  row.Is_Active === "1"  ? <>
+                        {getPermissions && getPermissions.client_edit === 1 && row.Is_Active === "1" ? <>
                             <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
                                 <span data-toggle="tooltip" data-placement="top" title="Edit">
                                     <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
@@ -361,7 +363,7 @@ const AllClients = () => {
             {
                 getAllClients.loading ? <Loader /> :
                     <>
-                        <Content Page_title="All Clients" button_title="Add Client" route='/subadmin/client/add' button_status={getPermissions && getPermissions.client_add === 1 ? true : false} >
+                        <Content Page_title="All Clients" button_title="Add Client" route='/subadmin/client/add' button_status={getPermissions && getPermissions.client_add == 1 ? true : false} >
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ?
                                     <>

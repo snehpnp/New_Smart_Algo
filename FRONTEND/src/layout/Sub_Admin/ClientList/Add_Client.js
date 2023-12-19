@@ -621,8 +621,8 @@ const AddClient = () => {
           toDate={formik.values.todate}
           additional_field={
             <>
-              {/*  For Show All Services */}
 
+              {/*  For Show All Services */}
               {GetServices && GetServices.data.map((strategy) => (
                 <div className={`col-lg-2 `} key={strategy._id}>
                   <div className="col-lg-12 ">
