@@ -1556,12 +1556,14 @@ const updateStrategy = async (e) => {
 
            <div className="col-md-2 ">
               <label  className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Strategy Name</label>
-             <input type="text" defaultValue={singleMakeStrategyData.name} onChange={(e)=>{onChange(e)}} className="form-control stratergy-box"></input>
+             <input type="text" disabled defaultValue={singleMakeStrategyData.show_strategy} onChange={(e)=>{onChange(e)}} className="form-control stratergy-box"></input>
             </div>
 
             <div className="col-md-2 " >
               <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Strategy Tag</label>
-              <select className="form-select stratergy-box" onChange={(e) => {setSelectStrategy(e.target.value);SelectStrategyTag(e)}} name="strategyname"
+              <select className="form-select stratergy-box" 
+              disabled={true}
+              onChange={(e) => {setSelectStrategy(e.target.value);SelectStrategyTag(e)}} name="strategyname"
                defaultValue={singleMakeStrategyData.strategy_name}
               >
               <option value="">-- Select Strategy Tag--</option>
