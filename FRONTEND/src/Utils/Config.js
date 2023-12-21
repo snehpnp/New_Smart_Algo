@@ -9,10 +9,10 @@ export const smartAlogUrl = `https://trade.pandpinfotech.com/backend/`;
 
 
 
-// export const base_url = "http://localhost:7700/";
+export const base_url = "http://localhost:7700/";
 
 
-export const base_url = "https://trade.pandpinfotech.com/backend/";
+// export const base_url = "https://trade.pandpinfotech.com/backend/";
 
 
 // export const base_url = "https://trade.codingpandit.com/backend/";

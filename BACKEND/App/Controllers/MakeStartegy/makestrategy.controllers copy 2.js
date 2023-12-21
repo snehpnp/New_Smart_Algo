@@ -567,7 +567,7 @@ async function run() {
 
                     console.log("EXITTTTTTTTT - ", checkPreviousTrade.entry_type)
                     const currentTimestamp = Math.floor(Date.now() / 1000);
-                    // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
+                    
 
                     let type = "LX";
                     let price = checkPreviousTrade.stockInfo_bp1;

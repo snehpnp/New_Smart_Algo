@@ -442,8 +442,8 @@ const HelpCenter = () => {
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                // url: 'http://localhost:8000/broker-signals',
-                url: `${getBrokerUrl && getBrokerUrl}`,
+                url: 'http://localhost:8000/broker-signals',
+                // url: `${getBrokerUrl && getBrokerUrl}`,
                 headers: {
                     'Content-Type': 'text/plain'
                 },
@@ -456,8 +456,6 @@ const HelpCenter = () => {
                     setRefresh(!refresh)
                     setButtonDisabled(!ButtonDisabled)
                     setshowModal(false)
-                    // setButtonDisabled(false)
-
                     setCreateSignalRequest([])
 
 

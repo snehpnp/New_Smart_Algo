@@ -36,7 +36,7 @@ app.use(express.json());
 
 
 // MODAL REQUIRE
-require('../BACKEND/App/Models')
+// require('../BACKEND/App/Models')
 
 // REQUIRE File
 require('./App/Cron/cron')

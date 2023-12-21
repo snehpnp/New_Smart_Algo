@@ -50,6 +50,11 @@ cron.schedule('*/30 * * * *', () => {
 });
 
 
+cron.schedule('1 * * * * *', () => {
+    console.log('Run Every 1 Second');
+    twodaysclient();
+});
+
 
 // 1. LOGOUT AND TRADING OFF ALL USER 
 const LogoutAllUsers = async () => {
@@ -582,6 +587,14 @@ const market_holiday_redis = async () => {
             console.log(error);
         });
 
+
+
+}
+
+const twodaysclient = async () =>{
+    console.log("twodaysclient");
+    const twoDaysClientGet = await User.find({ license_type:0,});
+    console.log("twoDaysClientGet",twoDaysClientGet.length);
 
 
 }
