@@ -20,12 +20,57 @@ const { Socket_data } = require('../../Helper/Socket_data');
 
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
 const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
 const db_GET_VIEW = client.db(process.env.DB_NAME);
 const get_open_position_view = db_GET_VIEW.collection('open_position');
 const token_chain = db_GET_VIEW.collection('token_chain');
+
 class MakeStartegy {
+
+  async getcandledata(req, res) {
+
+  //  console.log("req - ",req.body)
+    let timeFrame = req.body.timeframe;
+    let tokensymbol = req.body.tokensymbol;
+     let collectionName = 'M'+timeFrame+'_'+tokensymbol;
+
+   console.log(collectionName);
+    
+     try{
+
+      const collections = await dbTradeTools.listCollections().toArray();
+      const collectionExists = collections.some(coll => coll.name === collectionName);
+
+      if (collectionExists) {
+        const collection = dbTradeTools.collection(collectionName);
+            
+      const  result = await collection.find({}).sort({ _id: -1 }).limit(30).toArray();
+
+      const transformedData = result.map(item => ({
+        x: new Date(new Date(item._id).getTime() / 1000),
+        y: [item.open, item.high, item.low, item.close],
+      }));
+      
+      console.log("convert data",transformedData);
+      //console.log("result - ",result)
+        if (result.length > 0) {
+          res.send({ status: true, msg: "Get All time frame", data: transformedData })
+        } else {
+          res.send({ status: false, msg: "Empty data", data: [] })
+        }
+
+        
+      }else{
+        res.send({ status: false, msg: "Empty data", data: [] })
+      }
+
+     }catch(e){
+
+     }
+
+   
+  }
+
 
   async gettimeFrame(req, res) {
     const pipeline = [

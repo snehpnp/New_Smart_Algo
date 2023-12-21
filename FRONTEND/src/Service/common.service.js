@@ -185,6 +185,24 @@ export async function GET_INSTRUMENT(data, token) {
     }
 }
 
+//GET_CANDLE_DATA
+// Get Time Frame
+export async function GET_CANDLE_DATA(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}get/candledata`, data, {
+
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}
+
 // Get Time Frame
 export async function GET_TIMEFRAME(data, token) {
 
