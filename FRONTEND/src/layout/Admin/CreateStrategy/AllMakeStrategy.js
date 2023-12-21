@@ -13,16 +13,16 @@ import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicD
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import Loader from "../../../Utils/Loader";
 import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
-import { Pencil, Trash2 ,GanttChartSquare} from "lucide-react";
+import { Pencil, Trash2, GanttChartSquare } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
-import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy ,get_all_make_strategy ,delete_make_strategy,delete_make_strategy_selected} from "../../../ReduxStore/Slice/Common/make_strategy_slice";
-
+import { get_time_frame, get_source, get_comparators, Add_Make_Strategy, get_all_make_strategy, delete_make_strategy, delete_make_strategy_selected } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
+import { CandlestickChart } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-import { Link,useNavigate } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import Chart from "./Chart"
 
 
 
@@ -47,6 +47,12 @@ const AllMakeStrategy = () => {
         data: []
     })
     const [getServicesuserName, setServicesuserName] = useState([])
+    const [showChartModal, setshowChartModal] = useState(false)
+    const [showChart1, setshowChart1] = useState(false)
+
+    const [SelectedRowData, setSelectedRowData] = useState("")
+
+
     const [AllMakeStrategy, setAllMakeStrategy] = useState({
         loading: false,
         data: []
@@ -77,13 +83,29 @@ const AllMakeStrategy = () => {
             dataField: 'symbol_name',
             text: 'Script Name',
             sort: true,
-           
+
         },
         {
             dataField: 'type',
             text: 'Transaction Type',
             sort: true,
-           
+
+
+        },
+        {
+            dataField: 'type',
+            text: 'Candle Chart',
+            sort: true,
+            formatter: (cell, row) => (
+                <div><CandlestickChart
+                    onClick={() => {
+                        setshowChartModal(true)
+
+                        setSelectedRowData(row)
+                    }
+                    } />
+                </div>
+            ),
         },
         {
             dataField: 'actions',
@@ -91,8 +113,8 @@ const AllMakeStrategy = () => {
             sort: true,
 
             formatter: (cell, row) => (
-                  <div>
-                  
+                <div>
+
                     <Link to={`/admin/MakeStrategy/edit/${row._id}`} data-toggle="tooltip" data-placement="top" title="Edit">
                         < Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
@@ -106,24 +128,24 @@ const AllMakeStrategy = () => {
     ];
 
 
-   
 
 
-    
+
+
 
     // DELETE GROUP
     const DeleteGroup = async (row) => {
-      // alert("okk")
+        // alert("okk")
         if (window.confirm("Do You Really Want To Delete ?")) {
-         
+
             await dispatch(delete_make_strategy(
                 {
                     req: {
                         page: "1",
                         limit: "100",
                         id: row._id
-                      },
-                      token: AdminToken,
+                    },
+                    token: AdminToken,
                 }
             )).unwrap()
                 .then((response) => {
@@ -142,23 +164,23 @@ const AllMakeStrategy = () => {
 
     // GET ALL GROUP SERVICES NAME
     const data = async () => {
-    
-           await dispatch(get_all_make_strategy(
+
+        await dispatch(get_all_make_strategy(
             {
                 req: {
                     page: "1",
                     limit: "100",
-                  },
-                  token: AdminToken,
+                },
+                token: AdminToken,
             }
-           )).unwrap()
+        )).unwrap()
             .then((response) => {
                 if (response.status) {
                     setAllMakeStrategy({
                         loading: false,
                         data: response.data
                     });
-                   
+
 
                 } else {
                     setAllMakeStrategy({
@@ -194,16 +216,16 @@ const AllMakeStrategy = () => {
         e.preventDefault();
         setSearchInput("");
     };
-  
 
-      
+
+
 
     const [selected, setSelected] = useState([]);
     const [selected1, setSelected1] = useState([]);
 
     const handleOnSelect = (row, isSelect) => {
-        console.log("isSelect ",isSelect)
-        console.log("isSelect id ",row._id)
+        console.log("isSelect ", isSelect)
+        console.log("isSelect id ", row._id)
         if (isSelect) {
             setSelected([...selected, row._id]);
             setSelected1([...selected1, row]);
@@ -234,39 +256,38 @@ const AllMakeStrategy = () => {
         onSelectAll: handleOnSelectAll
     };
 
-   
-  
+
+
 
     const SelectedAllDelete = async (e) => {
-    //console.log("selected",selected)
-    if(selected.length > 0){
-        // alert("okk");
-        if (window.confirm("Do You Really Want To Delete Selected Row ?")) {
-         
-            await dispatch(delete_make_strategy_selected(
-                {
-                    req: {
-                        ids_array: selected
-                      },
-                      token: AdminToken,
-                }
-            )).unwrap()
-                .then((response) => {
-                    // console.log("response", response)
-                    if (response.status) {
-                        toast.success(response.msg)
-                        setrefresh(!refresh)
-                        // window.location.reload()
-                    } else {
-
-                        toast.error(response.msg)
+        //console.log("selected",selected)
+        if (selected.length > 0) {
+            // alert("okk");
+            if (window.confirm("Do You Really Want To Delete Selected Row ?")) {
+                await dispatch(delete_make_strategy_selected(
+                    {
+                        req: {
+                            ids_array: selected
+                        },
+                        token: AdminToken,
                     }
-                })
+                )).unwrap()
+                    .then((response) => {
+                        // console.log("response", response)
+                        if (response.status) {
+                            toast.success(response.msg)
+                            setrefresh(!refresh)
+                            // window.location.reload()
+                        } else {
+
+                            toast.error(response.msg)
+                        }
+                    })
+            }
         }
-     }
-    
+
     }
- 
+
 
     return (
         <>
@@ -300,25 +321,25 @@ const AllMakeStrategy = () => {
                                         Reset
                                     </button>
                                 </div> */}
-                            
-                            { 
-                                AllMakeStrategy.data.length > 0 ? 
-                                <div className="col-lg-2 mt-3">
-                                <button className='btn btn-primary mt-2' disabled={selected == "" ? true : false} onClick={SelectedAllDelete}>Deleted</button>
-                                </div>
-                                :""
-                            }
-                            
+
+                                {
+                                    AllMakeStrategy.data.length > 0 ?
+                                        <div className="col-lg-2 mt-3">
+                                            <button className='btn btn-primary mt-2' disabled={selected == "" ? true : false} onClick={SelectedAllDelete}>Deleted</button>
+                                        </div>
+                                        : ""
+                                }
+
 
                             </div>
 
-                            <FullDataTable 
-                            keyField="_id"
-                            TableColumns={columns} 
-                            tableData={AllMakeStrategy.data}
-                            pagination1={true} 
-                            selectRow={selectRow}
-                            
+                            <FullDataTable
+                                keyField="_id"
+                                TableColumns={columns}
+                                tableData={AllMakeStrategy.data}
+                                pagination1={true}
+                                selectRow={selectRow}
+
                             />
 
                             {
@@ -377,7 +398,7 @@ const AllMakeStrategy = () => {
                                                             <button
                                                                 className={`btn  ${row.user.AppLoginStatus == '1' || row.user.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
 
-                                                               
+
                                                                 disabled={row.user.AppLoginStatus === '0' && row.user.WebLoginStatus === '0'}
 
                                                             > click</button>
@@ -393,6 +414,10 @@ const AllMakeStrategy = () => {
                                     </>
                                     : ""
                             }
+
+                            <Chart List={SelectedRowData} data1111={() => setSelected([])
+                            } showModal={showChartModal} setshowModal={() => setshowChartModal(false)} />
+
 
                         </Content>
 

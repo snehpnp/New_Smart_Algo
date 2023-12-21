@@ -20,12 +20,57 @@ const { Socket_data } = require('../../Helper/Socket_data');
 
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
 const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
 const db_GET_VIEW = client.db(process.env.DB_NAME);
 const get_open_position_view = db_GET_VIEW.collection('open_position');
 const token_chain = db_GET_VIEW.collection('token_chain');
+
 class MakeStartegy {
+
+  async getcandledata(req, res) {
+
+  //  console.log("req - ",req.body)
+    let timeFrame = req.body.timeframe;
+    let tokensymbol = req.body.tokensymbol;
+     let collectionName = 'M'+timeFrame+'_'+tokensymbol;
+
+   console.log(collectionName);
+    
+     try{
+
+      const collections = await dbTradeTools.listCollections().toArray();
+      const collectionExists = collections.some(coll => coll.name === collectionName);
+
+      if (collectionExists) {
+        const collection = dbTradeTools.collection(collectionName);
+            
+      const  result = await collection.find({}).sort({ _id: -1 }).limit(30).toArray();
+
+      const transformedData = result.map(item => ({
+        x: new Date(new Date(item._id).getTime() / 1000),
+        y: [item.open, item.high, item.low, item.close],
+      }));
+      
+      console.log("convert data",transformedData);
+      //console.log("result - ",result)
+        if (result.length > 0) {
+          res.send({ status: true, msg: "Get All time frame", data: transformedData })
+        } else {
+          res.send({ status: false, msg: "Empty data", data: [] })
+        }
+
+        
+      }else{
+        res.send({ status: false, msg: "Empty data", data: [] })
+      }
+
+     }catch(e){
+
+     }
+
+   
+  }
+
 
   async gettimeFrame(req, res) {
     const pipeline = [
@@ -160,13 +205,10 @@ class MakeStartegy {
 
 
   async UpdateMakeStartegy(req, res) {
-    // console.log("req time", req.body)
+   // console.log("req time", req.body)
 
-
-
-    let user_panel_key = await user.findOne().select('client_key').lean();
     // console.log("user_panel_key",user_panel_key)
-    //   return
+     
     let channelList = "";
     try {
       // console.log("req",req.body) 
@@ -179,7 +221,7 @@ class MakeStartegy {
 
       // res.send({ status: true, msg: "successfully Add!" });
       // let user_id = req.body.user_id;
-      let name = req.body.name;
+     // let name = req.body.name;
       //let tokensymbol = element.instrument_token;
       // let symbol_name = element.symbol;
       let strategy_name = req.body.strategy_name;
@@ -201,7 +243,6 @@ class MakeStartegy {
       let target = req.body.target_stoploss.target;
       let stoploss = req.body.target_stoploss.stoploss;
       let tsl = req.body.target_stoploss.tsl;
-      let panelKey = user_panel_key.client_key;
       let entryTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].entry.time == "" ? "01:01" : req.body.timeTradeConddition[0].entry.time}:00.000Z`);
       let exitTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].exit.time == "" ? "01:01" : req.body.timeTradeConddition[0].exit.time}:00.000Z`);
       let notradeTime = new Date(`1970-01-01T${req.body.timeTradeConddition[0].notrade.time == "" ? "01:01" : req.body.timeTradeConddition[0].notrade.time}:00.000Z`);
@@ -215,7 +256,7 @@ class MakeStartegy {
       const filter = { _id: objectId_update };
       const update_make_strategy = {
         $set: {
-          name: name,
+          // name: name,
           // user_id: user_id,
           // tokensymbol: tokensymbol,
           // symbol_name: symbol_name,
@@ -237,7 +278,6 @@ class MakeStartegy {
           target: target,
           stoploss: stoploss,
           tsl: tsl,
-          panelKey: panelKey,
           entryTime: entryTime,
           exitTime: exitTime,
           notradeTime: notradeTime,
@@ -269,7 +309,10 @@ class MakeStartegy {
     // let Random_key = Math.round(new Date());
     // let  suscribe =await Alice_Socket();
 
-    let user_panel_key = await user.findOne().select('client_key').lean();
+
+    var _id = new ObjectId(req.body.user_id);
+
+    let user_panel_key = await user.findOne({_id:_id}).select('client_key').lean();
     let channelList = "";
     try {
       //  console.log("req",req.body)
@@ -359,7 +402,7 @@ class MakeStartegy {
           target: target,
           stoploss: stoploss,
           tsl: tsl,
-          panelKey: panelKey,
+          panelKey: user_panel_key.client_key,
           entryTime: entryTime,
           exitTime: exitTime,
           notradeTime: notradeTime,

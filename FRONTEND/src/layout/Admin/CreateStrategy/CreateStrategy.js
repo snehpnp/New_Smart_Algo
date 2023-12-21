@@ -208,7 +208,7 @@ const CreateStrategy = () => {
 
 
   const getAllTimeFrameApi = async () => {
-    await dispatch(
+      await dispatch(
       get_time_frame({
         req: {
           page: "1",
@@ -216,7 +216,7 @@ const CreateStrategy = () => {
         },
         token: AdminToken,
       })
-    )
+      )
       .unwrap()
       .then((response) => {
         //console.log("response get_time_frame - ",response)
