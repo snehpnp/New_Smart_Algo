@@ -185,6 +185,7 @@ const AllClients = () => {
         setOriginalData(response.data);
       });
   };
+  
   useEffect(() => {
     data();
   }, [refresh]);

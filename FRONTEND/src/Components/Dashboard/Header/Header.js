@@ -6,7 +6,7 @@ import Logo from "./Logo";
 import DropDown from "./DropDown";
 import Notification from "../../ExtraComponents/Notification";
 import { useDispatch, useSelector } from "react-redux";
-
+import Holidays from "date-holidays"
 import $ from "jquery";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../../Components/ExtraComponents/Modal";
@@ -18,10 +18,7 @@ import { GET_HELPS } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 import { Get_Company_Logo } from '../../../ReduxStore/Slice/Admin/AdminSlice'
-
-
-import * as Config from "../../../Utils/Config";
-import socketIOClient from "socket.io-client";
+import { isForeignUserAllowedToLogin } from "../../../Utils/Date_formet";
 
 import jwt_decode from "jwt-decode";
 
@@ -170,8 +167,43 @@ const Header = ({ ChatBox }) => {
 
   //  BROKER LOGIN
   const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
+    const currentDate = new Date();
+    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const weekday = weekdays[currentDate.getDay()];
+    const holidays = new Holidays();
+
+    const userCountry = 'US' || "UK";
+    const userLocalTime = currentDate
+
+    let isAllowed = isForeignUserAllowedToLogin(userCountry, userLocalTime)
+
+    if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday') {
+      if (check) {
+        if (isAllowed) {
+          loginWithApi(brokerid, UserDetails);
+        } else {
+          alert('Market Time Is Close');
+        }
+      } else {
+        dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
+          .unwrap()
+          .then((response) => {
+            if (response.status) {
+              // setUserDetails(response.data);
+              setrefresh(!refresh)
+            }
+          });
+
+      }
+    }
+    else {
+      alert('Market Is Closed Today');
+    }
+
+
+
+    return
     if (check) {
-   
       loginWithApi(brokerid, UserDetails);
     } else {
       dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
@@ -248,7 +280,7 @@ const Header = ({ ChatBox }) => {
 
   const ClearSession = async () => {
     var decoded = jwt_decode(token);
- 
+
 
     if (decoded.exp * 1000 < new Date().getTime()) {
       const request = {

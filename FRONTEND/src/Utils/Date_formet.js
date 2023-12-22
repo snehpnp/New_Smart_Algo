@@ -27,6 +27,10 @@ export function get_thre_digit_month(date) {
   return format(new Date(date), 'yyyy-MMM-dd');
 }
 
+export function get_year_and_month_only(date) {
+  return format(new Date(date), 'yyyy-MM');
+}
+
 
 export function fToNow(date) {
   return formatDistanceToNow(new Date(date), {
@@ -108,6 +112,32 @@ export const convert_string_to_month = (expiry) => {
   return `${day_expiry}${month_string}${year_expiry}`
 
 }
+
+
+export const isForeignUserAllowedToLogin = (userCountry, userLocalTime) => {
+
+  const isForeignUser = userCountry !== 'IN';
+
+  // Convert the user's local time to Indian Standard Time (IST)
+  const convertedISTTime = new Date(userLocalTime.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+
+  // Get the hours in IST
+  const hoursInIST = convertedISTTime.getHours();
+
+  // Check if the user is trying to log in between 8 AM and 11 PM IST
+  const isLoginTimeValid = hoursInIST >= 8 && hoursInIST < 23;
+
+  // Return true if it's a foreign user and the login time is valid, otherwise return false
+  return isForeignUser && isLoginTimeValid;
+}
+
+
+
+
+
+
+
+
 export const dateFormate = (date) => {
   const dt = dateTime.create(date);
   const ccdate = dt.format('Y-m-d');

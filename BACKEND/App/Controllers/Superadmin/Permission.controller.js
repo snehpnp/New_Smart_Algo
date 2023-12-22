@@ -53,29 +53,29 @@ class Panel {
     async GetAllClients(req, res) {
         try {
             const { id, db_name, db_url } = req.body;
-    
+
             const uri = db_url;
-    
+
             // Use a connection pool to reuse connections
             var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
             await client.connect();
             const db = client.db(process.env.DB_NAME);
-    
+
             const collectionName = 'users';
-    
+
             // Create an index for the 'Role' field if it's frequently used in queries
             await db.collection(collectionName).createIndex({ Role: 1 });
-    
+
             // Use projection to fetch only the necessary fields
             const result = await db.collection(collectionName).find({ Role: "USER" }, { projection: { /* Specify your projected fields here */ } }).toArray();
-    
+
             // If you want to send the retrieved data as a response
             return res.send({
                 status: true,
                 msg: "Get All Users",
                 data: result
             });
-    
+
         } catch (error) {
             console.log("Get all User error-", error);
         } finally {
@@ -83,7 +83,7 @@ class Panel {
             await client.close();
         }
     }
-    
+
 
     // GET ALL SUBADMINS
     async GetAllSubadmins(req, res) {
@@ -146,9 +146,9 @@ class Panel {
             // Query the view to get the data
             const findResult = await db.collection(viewName).find().project({ licenses: 1 }).toArray();
             const newLicensesValue = Number(findResult[0].licenses) + Number(license);
-       
 
-        
+
+
             const updateOperation = {
                 $set: {
                     licenses: newLicensesValue
@@ -159,19 +159,21 @@ class Panel {
 
             // Update documents that match the query condition
             const updateResult = await companies_collection.updateMany(queryCondition, updateOperation);
-            
+
             // const newCompany = new countLicense_collection({ admin_license: Number(license), user_id: objectId });
             // newCompany.save()
 
-            const newCompany =   await countLicense_collection.insertOne({ admin_license: Number(license), user_id: objectId,  createdAt: new Date(),
-                updatedAt: new Date() });
-           
+            const newCompany = await countLicense_collection.insertOne({
+                admin_license: Number(license), user_id: objectId, createdAt: new Date(),
+                updatedAt: new Date()
+            });
+
             // const newCompany = await countLicense_collection.create({
             //     admin_license: Number(license),
             //     user_id: objectId
             //   });
-            
-            
+
+
             console.log(newCompany);
             // If you want to send the retrieved data as a response
             return res.send({
@@ -253,7 +255,7 @@ class Panel {
 
             const uri = db_url;
 
-            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
             await client.connect();
             const db = client.db(db_name);
@@ -294,7 +296,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Add License error-", error);path
+            console.log("Add License error-", error);
         }
     }
 
@@ -303,16 +305,16 @@ class Panel {
         try {
             const { domain } = req.body
 
-            var domain1= "http://localhost:3000"
+            var domain1 = "http://localhost:3000"
 
-            if( domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
+            if (domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
                 domain1 = "http://localhost:3000"
-            }else{
+            } else {
                 domain1 = domain
             }
             // console.log(domain1);
 
-            const Panle_information = await panel_model.find({ domain:domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan')
+            const Panle_information = await panel_model.find({ domain: domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan , is_active')
 
 
 
@@ -327,6 +329,46 @@ class Panel {
             // console.log("Theme error-", error);
         }
     }
+
+    // Panel Close
+    async CloseThePanel(req, res) {
+
+        try {
+            const { domain, status } = req.body
+
+            var domain1 = "http://localhost:3000"
+
+            if (domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
+                domain1 = "http://localhost:3000"
+            } else {
+                domain1 = domain
+            }
+            // console.log(domain1);
+
+            // const Panle_information = await panel_model.find({ domain: domain1 }).select('is_active')
+
+            const filter = { domain: domain1 };
+
+            const update = {
+                $set: { is_active: status },
+            };
+
+            const update_token = await panel_model.updateOne(filter, update, { upsert: true });
+
+
+
+            // CHECK IF PANEL EXIST OR NOT
+            if (!update_token) {
+                return res.status(409).json({ status: false, msg: 'Panle Not exist Not exists', data: [] });
+            }
+            res.send({ status: true, msg: "Close Panel SuccessFully", data: update_token })
+
+        } catch (error) {
+            // console.log("Theme error-", error);
+        }
+    }
+
+    
 }
 
 

@@ -9,17 +9,14 @@ import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicD
 import { check_Device } from "../../../Utils/find_device";
 import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../Service/Alice_Socket";
 import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../Utils/ShowTradeColor";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Get_Open_Position, Update_Signals } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice'
 import $ from "jquery";
-import BootstrapTable from 'react-bootstrap-table-next';
-import * as Config from "../../../Utils/Config";
 import axios from "axios"
 import Modal from "../../../Components/ExtraComponents/Modal";
 import { convert_string_to_month } from "../../../Utils/Date_formet";
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
 import toast, { Toaster } from 'react-hot-toast';
-
+import Holidays from "date-holidays"
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
@@ -44,6 +41,9 @@ const TradeHistory = () => {
 
     const [selected, setSelected] = useState([]);
     const [selected1, setSelected1] = useState([]);
+
+
+    // console.log("selected1", selected1)
 
     const [disabled, setDisabled] = useState(false);
 
@@ -96,6 +96,7 @@ const TradeHistory = () => {
             Get_Open_Position({ token: token })
         ).unwrap()
             .then((response) => {
+                console.log("response", response.data)
                 if (response.status) {
                     setTradeHistoryData({
                         loading: false,
@@ -321,6 +322,7 @@ const TradeHistory = () => {
             }
             else {
                 console.log(selected1);
+                // return
                 await dispatch(
                     Update_Signals({
                         data: selected1,
@@ -332,6 +334,7 @@ const TradeHistory = () => {
                         if (response.status) {
                             setPanelKey(response.data)
                         }
+                        toast.success(response.msg);
                         setrefresh(!refresh)
                         // window.location.reload()
                     });
@@ -396,7 +399,7 @@ const TradeHistory = () => {
 
             let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${pre_tag.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${pre_tag.client_persnal_key}|TradeType:${pre_tag.TradeType}|Demo:demo`
 
-   
+
 
             let config = {
                 method: 'post',
@@ -663,7 +666,6 @@ const TradeHistory = () => {
 
 
     const handleOnSelect = (row, isSelect) => {
-
         if (isSelect) {
             setSelected([...selected, row._id]);
             setSelected1([...selected1, row]);
@@ -685,12 +687,59 @@ const TradeHistory = () => {
         }
     }
 
+    const forMCXandCurrencyMarketTrade = () => {
+
+        const currentDate = new Date();
+        const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const weekday = weekdays[currentDate.getDay()];
+        const holidays = new Holidays();
+        const currentDateIST = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+
+        if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday') {
+            const EQcutoffTimeIST = new Date();
+            EQcutoffTimeIST.setHours(15, 30, 0, 0);
+            const forEquity = new Date(currentDateIST).getTime() > EQcutoffTimeIST.getTime();
+
+            const CUcutoffTimeIST = new Date();
+            CUcutoffTimeIST.setHours(17, 0, 0, 0);
+            const forCurrency = new Date(currentDateIST).getTime() > CUcutoffTimeIST.getTime();
+
+            const MCXcutoffTimeIST = new Date();
+            MCXcutoffTimeIST.setHours(23, 30, 0, 0);
+            const forMCX = new Date(currentDateIST).getTime() > MCXcutoffTimeIST.getTime();
+
+            if (forEquity) {
+                // alert("EQUTY Market Is Off ")
+                return tradeHistoryData.data
+                    .filter(row => ((row.segment === "C") || (row.segment === "O") || (row.segment === "FO") || (row.segment === "F")))
+                    .map(row => row._id)
+
+            }
+            else if (forCurrency) {
+                //  alert("CURRENCY Market Is Off ")
+                return tradeHistoryData.data
+                    .filter(row => ((row.segment === "CF") || (row.segment === "CO")))
+                    .map(row => row._id)
+            }
+            else if (forMCX) {
+                //  alert("MCX Market Is Off ")
+                tradeHistoryData.data
+                    .filter(row => ((row.segment === "MO") || (row.segment === "MF")))
+                    .map(row => row._id)
+            }
+        }
+    }
+
+
     const selectRow = {
         mode: 'checkbox',
         clickToSelect: true,
-        selected: selected,
+        // selected: selected,
+        nonSelectable: forMCXandCurrencyMarketTrade(),
+        nonSelectableStyle: { backgroundColor: 'aliceblue' },
         onSelect: handleOnSelect,
         onSelectAll: handleOnSelectAll
+
     };
 
 
@@ -722,7 +771,7 @@ const TradeHistory = () => {
                             // hideBtn={false}
                             btn_name="Confirm"
                             // disabled_submit={disabled}
-                            // disabled_submit={ButtonDisabled}
+                            // disabled_submit={ButtonDisabled} 
                             Submit_Function={Done_For_Trade}
                             Submit_Cancel_Function={Cancel_Request}
                             handleClose={() => setshowModal(false)}

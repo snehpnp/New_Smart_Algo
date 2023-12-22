@@ -57,7 +57,7 @@ class MakeStartegy {
         res.send({ status: false, msg: "Empty data", data: [] });
       }
     } catch (error) {
-      console.log("error-", error);
+      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -78,7 +78,7 @@ class MakeStartegy {
         res.send({ status: false, msg: "Empty data", data: [] });
       }
     } catch (error) {
-      console.log("error-", error);
+      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -100,7 +100,7 @@ class MakeStartegy {
         res.send({ status: false, msg: "Empty data", data: [] });
       }
     } catch (error) {
-      console.log("error-", error);
+      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -114,7 +114,7 @@ class MakeStartegy {
         return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
       }
     } catch (error) {
-      console.log("error-", error);
+      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -124,13 +124,13 @@ class MakeStartegy {
     try {
 
       //const objectI = new ObjectId(req.body.ids_array);
-      console.log("ids_array - ",req.body.ids_array)
+      // console.log("ids_array - ",req.body.ids_array)
       const result = await UserMakeStrategy.deleteMany({ _id: { $in: req.body.ids_array } });
       if (result.acknowledged == true) {
         return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
       }
     } catch (error) {
-      console.log("error-", error);
+      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -142,7 +142,7 @@ class MakeStartegy {
       const objectId = new ObjectId(req.body.id);
       const result = await UserMakeStrategy.findOne({ _id: objectId });
 
-      console.log("result edit data -", result)
+      // console.log("result edit data -", result)
 
       if (result != undefined) {
         res.send({ status: true, msg: 'Delete successfully ', data: result });
@@ -151,7 +151,7 @@ class MakeStartegy {
       }
 
     } catch (error) {
-      console.log("error-", error);
+      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -160,7 +160,7 @@ class MakeStartegy {
 
 
   async UpdateMakeStartegy(req, res) {
-    console.log("req time", req.body)
+    // console.log("req time", req.body)
 
 
 
@@ -170,7 +170,7 @@ class MakeStartegy {
     let channelList = "";
     try {
       // console.log("req",req.body) 
-      console.log("req time", req.body.timeTradeConddition[0].entry.time)
+      // console.log("req time", req.body.timeTradeConddition[0].entry.time)
 
 
       // for (const element of req.body.scriptArray) {
@@ -257,7 +257,7 @@ class MakeStartegy {
       res.send({ status: true, msg: "Update successfully!", data: [] });
 
     } catch (error) {
-      console.log("error-", error);
+      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -272,9 +272,9 @@ class MakeStartegy {
     let user_panel_key = await user.findOne().select('client_key').lean();
     let channelList = "";
     try {
-       console.log("req",req.body)
+      //  console.log("req",req.body)
        
-      console.log("req time", req.body.timeTradeConddition[0].entry.time)
+      // console.log("req time", req.body.timeTradeConddition[0].entry.time)
 
 
       for (const element of req.body.scriptArray) {
@@ -321,18 +321,18 @@ class MakeStartegy {
 
 
 
-        console.log("condition_source", condition_source)
+        // console.log("condition_source", condition_source)
 
         // Add Token token chain
       var get_token_chain = await token_chain.findOne({_id:tokensymbol})
-      console.log("get_token_chain",get_token_chain)
+      // console.log("get_token_chain",get_token_chain)
       if(get_token_chain == null){
-        console.log("token_chain 11 ")
+        // console.log("token_chain 11 ")
       // const token_chain = await token_chain.insertOne({_id:tokensymbol,exch:exch_seg})
       const filter = { _id:tokensymbol  };
       const update = { $set: { _id:tokensymbol,exch:exch_seg } };
        await token_chain.updateOne(filter, update, { upsert: true });
-        console.log("token_chain",token_chain)
+        // console.log("token_chain",token_chain)
       }
 
 
@@ -370,11 +370,11 @@ class MakeStartegy {
           show_strategy: show_strategy
         })
           .then(async (createUserMakeStrategy) => {
-            console.log("3")
+            // console.log("3")
             //res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
 
           }).catch((err) => {
-            console.log("4")
+            // console.log("4")
             console.error('Error creating and saving user:', err);
             return res.send({ status: false, msg: 'Strategy Name Already Exist', data: [] })
 
@@ -540,7 +540,7 @@ async function run() {
                   // Use eval to dynamically evaluate the condition string
                  // console.log("data -", data, "condition String - ", val.condition)
                   const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
-                  console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
+                  // console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
                   // Check if the condition is true or false based on the data
                   if (condition) {
 
@@ -598,17 +598,17 @@ async function run() {
 
                     const collection_last_price = dbTradeTools.collection(val.tokensymbol);
                     const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
-                    console.log("last_price",last_price[0].lp)
+                    // console.log("last_price",last_price[0].lp)
                   
                     let price_lp = last_price[0].lp
                     
 
                   //  console.log("checkPreviousTrade", checkPreviousTrade)
                     if (checkPreviousTrade != null) {
-                      console.log("checkPreviousTrade ", val.symbol_name);
+                      // console.log("checkPreviousTrade ", val.symbol_name);
                       // await PreviousTradeExcuted(checkPreviousTrade,val.panelKey);
 
-                      console.log("EXITTTTTTTTT - ", checkPreviousTrade.entry_type)
+                      // console.log("EXITTTTTTTTT - ", checkPreviousTrade.entry_type)
                       const currentTimestamp = Math.floor(Date.now() / 1000);
                       // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
 
@@ -639,7 +639,7 @@ async function run() {
 
                       let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|Demo:demo`
 
-                      console.log("req Exit -- ", req)
+                      // console.log("req Exit -- ", req)
 
 
 
@@ -677,7 +677,7 @@ async function run() {
 
                     const filter = { _id: val._id };
                     let Res = await UserMakeStrategy.updateOne(filter, update);
-                    console.log("Res ", Res)
+                    // console.log("Res ", Res)
 
 
 
@@ -890,17 +890,17 @@ const abc = async (data, conditionString, val) => {
 
       }
 
-      console.log("condition_check_previous_trade ", condition_check_previous_trade)
+      // console.log("condition_check_previous_trade ", condition_check_previous_trade)
 
       var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade)
 
-      console.log("checkPreviousTrade", checkPreviousTrade)
+      // console.log("checkPreviousTrade", checkPreviousTrade)
       if (checkPreviousTrade != null) {
-        console.log("checkPreviousTrade ", val.symbol_name);
+        // console.log("checkPreviousTrade ", val.symbol_name);
         await PreviousTradeExcuted(checkPreviousTrade, val.panelKey);
       }
       // Your code for when the condition is true
-      console.log("Condition is true ", val._id, val.symbol_name);
+      // console.log("Condition is true ", val._id, val.symbol_name);
 
       const update = {
         $set: {
@@ -911,11 +911,11 @@ const abc = async (data, conditionString, val) => {
       const options = { upsert: true }; // Set the upsert option to true
       const filter = { _id: val._id };
       let Res = await UserMakeStrategy.updateOne(filter, update, options);
-      console.log("Res ", Res)
+      // console.log("Res ", Res)
       await tradeExcuted(val);
     } else {
       // Your code for when the condition is false
-      console.log("Condition is false ", val._id);
+      // console.log("Condition is false ", val._id);
 
     }
   } catch (error) {
@@ -927,7 +927,7 @@ const abc = async (data, conditionString, val) => {
 const tradeExcuted = async (val) => {
 
 
-  console.log(" ENTRYYYYYYY ", val.type)
+  // console.log(" ENTRYYYYYYY ", val.type)
   //console.log("broker url -",process.env.BROKER_URL)
 
   // let company_info =  await company_information.findOne().select('broker_url').lean();
@@ -999,7 +999,7 @@ const tradeExcuted = async (val) => {
 
 const PreviousTradeExcuted = async (val, panelKey) => {
 
-  console.log("EXITTTTTTTTT - ", val.entry_type)
+  // console.log("EXITTTTTTTTT - ", val.entry_type)
   const currentTimestamp = Math.floor(Date.now() / 1000);
   // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
 
@@ -1032,7 +1032,7 @@ const PreviousTradeExcuted = async (val, panelKey) => {
 
   let req = `DTime:${currentTimestamp}|Symbol:${val.symbol}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy}|Quntity:${Quntity}|Key:${panelKey}|TradeType:${val.TradeType}|Demo:demo`
 
-  console.log("req Exit -- ", req)
+  // console.log("req Exit -- ", req)
 
 
 
@@ -1054,7 +1054,7 @@ const PreviousTradeExcuted = async (val, panelKey) => {
 
     })
     .catch((error) => {
-      console.log(error);
+      // console.log(error);
     });
 }
 
@@ -1080,7 +1080,7 @@ try {
     openPosition && openPosition.map((item) => {
       const currentTimestamp = Math.floor(Date.now() / 1000);
       let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_bp1}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${panelKey}|TradeType:${item.TradeType}|Demo:demo`
-      console.log(req);
+      // console.log(req);
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -1099,7 +1099,7 @@ try {
 
         })
         .catch((error) => {
-          console.log(error.response.data);
+          // console.log(error.response.data);
         });
 
 

@@ -1,48 +1,48 @@
-// import React, { useState } from 'react';
-// import TradingViewWidget from 'react-tradingview-widget';
+import React, { useState } from 'react';
+import TradingViewWidget from 'react-tradingview-widget';
 
-// const CandlestickChart = () => {
-//   const [selectedData, setSelectedData] = useState(null);
+const CandlestickChart = () => {
+  const [selectedData, setSelectedData] = useState(null);
 
-//   const handleChartReady = (widget) => {
-//     // Attach an event listener to handle user interactions
-//     widget.onSymbolChanged().subscribe(null, ({ symbol }) => {
-//       console.log(`Selected symbol: ${symbol}`);
-//     });
+  const handleChartReady = (widget) => {
+    // Attach an event listener to handle user interactions
+    widget.onSymbolChanged().subscribe(null, ({ symbol }) => {
+      console.log(`Selected symbol: ${symbol}`);
+    });
 
-//     // Attach an event listener to capture the selected data
-//     widget.onIntervalChanged().subscribe(null, ({ interval }) => {
-//       console.log(`Selected interval: ${interval}`);
-//     });
+    // Attach an event listener to capture the selected data
+    widget.onIntervalChanged().subscribe(null, ({ interval }) => {
+      console.log(`Selected interval: ${interval}`);
+    });
 
-//     // Attach an event listener to capture user-selected data points
-//     widget.onDataReady().subscribe(null, ({ data }) => {
-//       setSelectedData(data);
-//     });
-//   };
+    // Attach an event listener to capture user-selected data points
+    widget.onDataReady().subscribe(null, ({ data }) => {
+      setSelectedData(data);
+    });
+  };
 
 
-// console.log("selectedData" ,selectedData)
+console.log("selectedData" ,selectedData)
 
-//   return (
-//     <div  style={{ height: '50vh' }}s>
-//       <TradingViewWidget
-//         symbol="SERVOTECH"
-//         interval="D"
-//         theme="light"
-//         locale="en"
-//         autosize
-//         onReady={handleChartReady}
-//       />
-//       <div>
-//         <h2>Selected Data:</h2>
-//         <pre>{JSON.stringify(selectedData, null, 2)}</pre>
-//       </div>
-//     </div>
-//   );
-// };
+  return (
+    <div  style={{ height: '50vh' }}s>
+      <TradingViewWidget
+        symbol="bhel"
+        interval="M5"
+        theme="light"
+        locale="en"
+        autosize
+        onReady={handleChartReady}
+      />
+      <div>
+        <h2>Selected Data:</h2>
+        <pre>{JSON.stringify(selectedData, null, 2)}</pre>
+      </div>
+    </div>
+  );
+};
 
-// export default CandlestickChart;
+export default CandlestickChart;
 
 
 
@@ -419,11 +419,10 @@
 
 
 
-// import React from "react";
+// import React, { useState } from 'react';
 // import Chart from "react-apexcharts";
+
 // const data = {
-
-
 
 //   series: [
 //     {
@@ -699,12 +698,13 @@
 
 //         console.log('Selected Data:', selectedPoint);
 
-//         setSelectedData(selectedPoint);
+//         // setSelectedData(selectedPoint);
 //       },
 //     },
 //   },
 
-// };
+
+// }
 
 // function ApexCandleStick() {
 
@@ -846,33 +846,33 @@
 
 
 
-import { useEffect } from 'react';
-import axios from 'axios';
+// import { useEffect } from 'react';
+// import axios from 'axios';
 
-const SPREADSHEET_ID = '1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU';
-const RANGE = 'MARKET_DATA!A1:B189'; // Update with your sheet name and range
+// const SPREADSHEET_ID = '1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU';
+// const RANGE = 'MARKET_DATA!A1:B189'; // Update with your sheet name and range
 
-const fetchDataFromGoogleSheet = async () => {
-  try {
+// const fetchDataFromGoogleSheet = async () => {
+//   try {
 
-    const response = await axios.get(
-      // `https://sheets.googleapis.com/v4/spreadsheets/${1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU}/values/${RANGE}`
-      `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE}`
+//     const response = await axios.get(
+//       // `https://sheets.googleapis.com/v4/spreadsheets/${1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU}/values/${RANGE}`
+//       `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${RANGE}`
 
-    );
+//     );
 
-    console.log('Data from Google Sheet:', response.data);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-};
+//     console.log('Data from Google Sheet:', response.data);
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+//   }
+// };
 
-const App = () => {
-  useEffect(() => {
-    fetchDataFromGoogleSheet();
-  }, []);
+// const App = () => {
+//   useEffect(() => {
+//     fetchDataFromGoogleSheet();
+//   }, []);
 
-  return <div>Your React App</div>;
-};
+//   return <div>Your React App</div>;
+// };
 
-export default App;
+// export default App;

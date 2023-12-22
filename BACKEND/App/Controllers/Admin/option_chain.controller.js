@@ -506,7 +506,7 @@ console.log("get_symbol_price" ,get_symbol_price)
 
             })
 
-            return res.send({ status: true, msg: 'Done', data: [] });
+            return res.send({ status: true, msg: 'Update SuccessFully', data: [] });
 
         } catch (error) {
             console.log("Theme error-", error);
