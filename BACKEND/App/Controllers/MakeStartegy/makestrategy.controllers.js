@@ -205,7 +205,7 @@ class MakeStartegy {
 
 
   async UpdateMakeStartegy(req, res) {
-   // console.log("req time", req.body)
+    console.log("req time", req.body)
 
     // console.log("user_panel_key",user_panel_key)
      
@@ -315,9 +315,9 @@ class MakeStartegy {
     let user_panel_key = await user.findOne({_id:_id}).select('client_key').lean();
     let channelList = "";
     try {
-      //  console.log("req",req.body)
-
-      // console.log("req time", req.body.timeTradeConddition[0].entry.time)
+       console.log("req",req.body)
+       
+      console.log("req time", req.body.timeTradeConddition[0].entry.time)
 
 
       for (const element of req.body.scriptArray) {
@@ -367,16 +367,16 @@ class MakeStartegy {
         // console.log("condition_source", condition_source)
 
         // Add Token token chain
-        var get_token_chain = await token_chain.findOne({ _id: tokensymbol })
-        // console.log("get_token_chain",get_token_chain)
-        if (get_token_chain == null) {
-          // console.log("token_chain 11 ")
-          // const token_chain = await token_chain.insertOne({_id:tokensymbol,exch:exch_seg})
-          const filter = { _id: tokensymbol };
-          const update = { $set: { _id: tokensymbol, exch: exch_seg } };
-          await token_chain.updateOne(filter, update, { upsert: true });
-          // console.log("token_chain",token_chain)
-        }
+      var get_token_chain = await token_chain.findOne({_id:tokensymbol})
+      console.log("get_token_chain",get_token_chain)
+      if(get_token_chain == null){
+        console.log("token_chain 11 ")
+      // const token_chain = await token_chain.insertOne({_id:tokensymbol,exch:exch_seg})
+      const filter = { _id:tokensymbol  };
+      const update = { $set: { _id:tokensymbol,exch:exch_seg } };
+       await token_chain.updateOne(filter, update, { upsert: true });
+        console.log("token_chain",token_chain)
+      }
 
 
         await UserMakeStrategy.create({
@@ -620,13 +620,13 @@ async function run() {
 
                   // await abc(data, val.condition, val);
 
-                  try {
-                    // Use eval to dynamically evaluate the condition string
-                    // console.log("data -", data, "condition String - ", val.condition)
-                    const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
-                    // console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
-                    // Check if the condition is true or false based on the data
-                    if (condition) {
+                try {
+                  // Use eval to dynamically evaluate the condition string
+                 // console.log("data -", data, "condition String - ", val.condition)
+                  const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
+                  console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
+                  // Check if the condition is true or false based on the data
+                  if (condition) {
 
 
 
@@ -683,21 +683,21 @@ async function run() {
 
                       var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade)
 
-                      const collection_last_price = dbTradeTools.collection(val.tokensymbol);
-                      const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
-                      // console.log("last_price",last_price[0].lp)
+                    const collection_last_price = dbTradeTools.collection(val.tokensymbol);
+                    const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
+                    console.log("last_price",last_price[0].lp)
+                  
+                    let price_lp = last_price[0].lp
+                    
 
-                      let price_lp = last_price[0].lp
+                  //  console.log("checkPreviousTrade", checkPreviousTrade)
+                    if (checkPreviousTrade != null) {
+                      console.log("checkPreviousTrade ", val.symbol_name);
+                      // await PreviousTradeExcuted(checkPreviousTrade,val.panelKey);
 
-
-                      //  console.log("checkPreviousTrade", checkPreviousTrade)
-                      if (checkPreviousTrade != null) {
-                        // console.log("checkPreviousTrade ", val.symbol_name);
-                        // await PreviousTradeExcuted(checkPreviousTrade,val.panelKey);
-
-                        // console.log("EXITTTTTTTTT - ", checkPreviousTrade.entry_type)
-                        const currentTimestamp = Math.floor(Date.now() / 1000);
-                        // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
+                      console.log("EXITTTTTTTTT - ", checkPreviousTrade.entry_type)
+                      const currentTimestamp = Math.floor(Date.now() / 1000);
+                      // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
 
                         let type = "LX";
                         let price = checkPreviousTrade.stockInfo_bp1;
@@ -726,7 +726,7 @@ async function run() {
 
                         let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|Demo:demo`
 
-                        // console.log("req Exit -- ", req)
+                      console.log("req Exit -- ", req)
 
 
 
@@ -762,9 +762,9 @@ async function run() {
                         },
                       };
 
-                      const filter = { _id: val._id };
-                      let Res = await UserMakeStrategy.updateOne(filter, update);
-                      // console.log("Res ", Res)
+                    const filter = { _id: val._id };
+                    let Res = await UserMakeStrategy.updateOne(filter, update);
+                    console.log("Res ", Res)
 
 
 
@@ -1164,31 +1164,32 @@ const exitOpentrade = async () => {
     var openPosition = await db_GET_VIEW.collection(viewName).find().toArray();
    
 
-    if (openPosition.length > 0) {
-      openPosition && openPosition.map((item) => {
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-        let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_bp1}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${item.client_persnal_key}|TradeType:${item.TradeType}|Demo:demo`
-        // console.log(req);
-        let config = {
-          method: 'post',
-          maxBodyLength: Infinity,
-          url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-          // url: `${process.env.BROKER_URL}`,
-          headers: {
-            'Content-Type': 'text/plain'
-          },
-          data: req
-        };
+  if (openPosition.length > 0) {
+    let panelKey = "SNE132023";
+    openPosition && openPosition.map((item) => {
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_bp1}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${panelKey}|TradeType:${item.TradeType}|Demo:demo`
+      console.log(req);
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+        // url: `${process.env.BROKER_URL}`,
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        data: req
+      };
 
         axios.request(config)
           .then((response) => {
 
             // console.log("response Trade Excuted - ", response.data)
 
-          })
-          .catch((error) => {
-            // console.log(error.response.data);
-          });
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
 
 
       })

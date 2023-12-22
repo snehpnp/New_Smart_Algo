@@ -39,11 +39,9 @@ const AllLicence = () => {
   const [usedLicence, setUsedLicence] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [originalData, setOriginalData] = useState([]);
-  const [SelectUserFIlter, setSelectUserFIlter] = useState("");
 
-  const [ForPanelStartDate, setForPanelStartDate] = useState("");
-
-
+// console.log("getAllClients" ,getAllClients)
+// console.log("getAllClients1" ,getAllClients1)
 
 
 
@@ -51,12 +49,7 @@ const AllLicence = () => {
     await dispatch(Transcation_Licence({ token: token }))
       .unwrap()
       .then((response) => {
-        // console.log("response" ,response)
         if (response.status) {
-          setOriginalData(response.data);
-
-          setForPanelStartDate(fDateTimeSuffix(response.data[response.data.length - 1].createdAt))
-
           if (dashboard_filter !== undefined) {
             let filteredData
             filteredData = response.data.filter(item => {
@@ -74,19 +67,17 @@ const AllLicence = () => {
             });
             return;
           }
-          setAllClients({
-            loading: false,
-            data: response,
-          });
 
           if (CountLicence) {
             const filteredData =
               response.data &&
               response.data.filter((item) => {
-
+                console.log("item" ,item)
                 let getMonthAndYear = get_year_and_month_only(item.createdAt)
                 return getMonthAndYear === CountLicence
               });
+
+              console.log("filteredData" ,filteredData)
 
             setAllClients({
               loading: false,
@@ -97,7 +88,17 @@ const AllLicence = () => {
             });
             return;
           }
-          // setOriginalData(response.data);
+          setOriginalData(response.data);
+
+          // setAllClients({
+          //   loading: false,
+          //   data: response,
+          // });
+          // setAllClients1({
+          //   loading: false,
+          //   data: response,
+          // });
+        } else {
           setAllClients({
             loading: false,
             data: response,
@@ -175,7 +176,7 @@ const AllLicence = () => {
     },
   ];
 
-  const UsedLicence = () => {
+  const UsedLicence = (alllicence) => {
     if (getAllClients.data.data.length !== 0) {
       const filteredData = getAllClients.data.data.filter(
         (item) => !item.admin_license
@@ -188,7 +189,7 @@ const AllLicence = () => {
     }
   };
 
-  const ThisMonthUsedLicence = () => {
+  const ThisMonthUsedLicence = (alllicence) => {
     if (dashboard_filter === undefined) {
       if (getAllClients.data.data !== undefined) {
         const filteredData = getAllClients.data.data.filter((item) => {
@@ -211,8 +212,6 @@ const AllLicence = () => {
     e.preventDefault();
     setCountLicence(get_year_and_month_only(new Date()))
     setUsedLicence("");
-    setSearchInput("")
-    setSelectUserFIlter("")
     if (dashboard_filter === undefined) {
       setAllClients({
         loading: false,
@@ -222,49 +221,23 @@ const AllLicence = () => {
   };
 
 
+
+  //  MANAGE MULTIFILTER
   useEffect(() => {
+
     const filteredData = originalData && originalData.filter((item) => {
-      const userNameMatch = item.user.UserName.toLowerCase().includes(searchInput && searchInput.toLowerCase());
-      let getMonthAndYear = get_year_and_month_only(item.createdAt)
-
-      // switch (SelectUserFIlter) {
-      //   case "0":
-      //     return userNameMatch;
-      //   case "1":
-      //     return item.admin_license && userNameMatch;
-      //   case "2":
-      //     return item.license && userNameMatch;
-      //   default:
-      //     return true; // Return true if SelectUserFIlter is not "0", "1", or "2"
-      // }
-
-      if (SelectUserFIlter === "") {
-        return getMonthAndYear === CountLicence
-      } else if (SelectUserFIlter === "0") {
-        return userNameMatch && getMonthAndYear === CountLicence;
-      } else if (SelectUserFIlter === "1") {
-        return item.admin_license && userNameMatch && getMonthAndYear === CountLicence;
-      } else if (SelectUserFIlter === "2") {
-        return item.license && userNameMatch && getMonthAndYear === CountLicence
-      } else {
-        return true;
-      }
-
-
+      return (
+        item.user.FullName.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.user.UserName.toLowerCase().includes(searchInput.toLowerCase())
+      )
 
     });
-
-    console.log("filteredData", filteredData);
-
     setAllClients({
       loading: false,
-      data: {
-        data: filteredData,
-        // total_licence: response.total_licence,
-      },
+      data: { data: searchInput ? filteredData : originalData },
     });
-
-  }, [searchInput, SelectUserFIlter, CountLicence, originalData]);
+    // }
+  }, [searchInput, originalData]);
 
 
 
@@ -281,9 +254,9 @@ const AllLicence = () => {
             Filter_tab={true}
             button_status={false}
           >
-            <div className="row flex">
+            <div className=" row flex">
 
-              <div className="col-lg-3">
+              <div className="col-lg-4">
                 <div class="mb-3">
                   <label for="exampleFormControlInput1" class="form-label">
                     Search Something Here
@@ -298,29 +271,11 @@ const AllLicence = () => {
                   />
                 </div>
               </div>
-              <div className="col-lg-3 ">
-                <label class="form-label"
-                >Licence Type</label>
-                <select
-                  name="symbols_filter"
-                  className="default-select wide form-control spacing"
-                  onChange={(e) => {
-                    setSelectUserFIlter(e.target.value)
-                  }}
-                  value={SelectUserFIlter}
-                >
-                  <option value="" selected>Select Licence Type</option>
-                  <option value="0" >All</option>
-                  <option value="1" >Admin</option>
-                  <option value="2" >Users</option>
-
-                </select>
-              </div>
-
-              <div className="col-lg-3 mb-4 ">
+              <div className="col-lg-5 mb-4 ">
                 <div className="mb-3 row  d-flex flex-column">
                   <label
-                    for="validationCustom05" class="form-label"
+                    htmlFor="validationCustom05"
+                    className="col-lg-5 col-form-label"
                   >
                     Please Select Month
                   </label>
@@ -350,7 +305,7 @@ const AllLicence = () => {
                 <div className="row mb-5">
                   <div className="col-2 mx-auto border border-dark text-center rounded-3">
                     <h6 >Start Date</h6>
-                    <span >{ForPanelStartDate && ForPanelStartDate}</span>
+                    <span >2023-09-24 21:57:30</span>
                   </div>
                   <div className="col-2 mx-auto border border-dark text-center rounded-3">
                     <h6 >Total Licence</h6>

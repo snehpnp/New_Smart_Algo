@@ -668,7 +668,7 @@ const TradeHistory = () => {
 
 
   const GetAdminTradingStatus = async (e) => {
-    
+
     await dispatch(GET_ADMIN_TRADE_STATUS({ broker_name: "ALICE_BLUE" })).unwrap()
       .then((response) => {
         if (response.status) {
@@ -682,31 +682,34 @@ const TradeHistory = () => {
 
   return (
     <>
-      <Content Page_title="Trade History" button_status={false}
+      <Content Page_title={dashboard_filter === "client" ? "Trading View" : "Trade History"} button_status={false}
         show_csv_button={true} csv_data={ForGetCSV} csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-          <div className="col-lg-12 flex-column">
-            <div className="headaer-title">
-              <h5 className="font-w400 mb-0">Live Price</h5>
-            </div> <div className="Api Login m-2">
-              <label class="switch">
-                <input
-                  type="checkbox"
-                  className="bg-primary"
-                  checked={checkStatusReff.current}
-                  onChange={(e) =>
-                    LogIn_WIth_Api(
-                      e.target.checked,
-                      UserDetails.broker_id,
-                      UserDetails.trading_status,
-                      UserDetails
-                    )
-                  }
-                />
-                <span class="slider round"></span>
-              </label>
-            </div></div>
+          {dashboard_filter === "client" ? "" :
+            < div className="col-lg-12 flex-column">
+              <div className="headaer-title">
+                <h5 className="font-w400 mb-0">Live Price</h5>
+              </div> <div className="Api Login m-2">
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    className="bg-primary"
+                    checked={checkStatusReff.current}
+                    onChange={(e) =>
+                      LogIn_WIth_Api(
+                        e.target.checked,
+                        UserDetails.broker_id,
+                        UserDetails.trading_status,
+                        UserDetails
+                      )
+                    }
+                  />
+                  <span class="slider round"></span>
+                </label>
+              </div></div>
+          }
+
           <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12" htmlFor="fromdate">
@@ -839,7 +842,7 @@ const TradeHistory = () => {
           setshowModal={() => setshowModal(false)}
           tradeHistoryData={rowData}
         />
-      </Content>
+      </Content >
     </>
   );
 };

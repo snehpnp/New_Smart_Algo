@@ -484,7 +484,7 @@ class OptionChain {
 
             })
 
-            return res.send({ status: true, msg: 'Done', data: [] });
+            return res.send({ status: true, msg: 'Update SuccessFully', data: [] });
 
         } catch (error) {
             console.log("Theme error-", error);

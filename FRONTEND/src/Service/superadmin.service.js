@@ -25,9 +25,9 @@ export async function GET_ALL_PANELS_LIST(data, token) {
 
 
 // UPDATE_PANEL_THEME
-export async function UPDATE_PANEL_THEME(data , token) {
+export async function UPDATE_PANEL_THEME(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}update/panel_theme`, data ,{
+        const res = await axios.post(`${Config.base_url}update/panel_theme`, data, {
             headers: header(token),
             data: {},
         })
@@ -42,9 +42,9 @@ export async function UPDATE_PANEL_THEME(data , token) {
 
 
 // CREATE_API_INFORMATION
-export async function CREATE_API_INFORMATION(data , token) {
+export async function CREATE_API_INFORMATION(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}add/apicreateinfo`, data ,{
+        const res = await axios.post(`${Config.base_url}add/apicreateinfo`, data, {
             headers: header(token),
             data: {},
         })
@@ -60,9 +60,9 @@ export async function CREATE_API_INFORMATION(data , token) {
 }
 
 // UPDATE_API_INFORMATION
-export async function UPDATE_API_INFORMATION(data , token) {
+export async function UPDATE_API_INFORMATION(data, token) {
     try {
-        const res = await axios.post(`${Config.base_url}update/apicreateinfo`, data ,{
+        const res = await axios.post(`${Config.base_url}update/apicreateinfo`, data, {
             headers: header(token),
             data: {},
         })
@@ -78,10 +78,10 @@ export async function UPDATE_API_INFORMATION(data , token) {
 }
 
 // GET_API_INFORMATION
-export async function GET_API_INFORMATION(data ,token) {
-    console.log("data" ,data)
+export async function GET_API_INFORMATION(data, token) {
+    console.log("data", data)
     try {
-        const res = await axios.post(`${Config.smartAlogUrl}getall/apicreateinfo`, data ,{
+        const res = await axios.post(`${Config.smartAlogUrl}getall/apicreateinfo`, data, {
             headers: header(token),
             data: {},
         })
@@ -95,11 +95,11 @@ export async function GET_API_INFORMATION(data ,token) {
 
 }
 // GET_API_INFORMATION 
-export async function GET_API_INFORMATION_SUPERADMIN(data ,token) {
+export async function GET_API_INFORMATION_SUPERADMIN(data, token) {
 
-    
+
     try {
-        const res = await axios.post(`${Config.base_url}getall/apicreateinfo_super`, data ,{
+        const res = await axios.post(`${Config.base_url}getall/apicreateinfo_super`, data, {
             headers: header(token),
             data: {},
         })
@@ -114,10 +114,10 @@ export async function GET_API_INFORMATION_SUPERADMIN(data ,token) {
 }
 
 // GET PANEL INFORMATION TO DOMAIN FIND
-export async function GET_PANEL_INFORMATION(id,token) {
+export async function GET_PANEL_INFORMATION(id, token) {
     try {
 
-        const res = await axios.post(`${Config.base_url}get/panel/info`, id,{
+        const res = await axios.post(`${Config.base_url}get/panel/info`, id, {
             headers: header(token),
             data: {},
         })
@@ -131,10 +131,10 @@ export async function GET_PANEL_INFORMATION(id,token) {
 }
 
 // FIND ALL PANEL DATA
-export async function GET_ALL_ADMIN_CLIENT(id,token) {
+export async function GET_ALL_ADMIN_CLIENT(id, token) {
     try {
 
-        const res = await axios.post(`${Config.base_url}getall/panel/clients`, id,{
+        const res = await axios.post(`${Config.base_url}getall/panel/clients`, id, {
             headers: header(token),
             data: {},
         })
@@ -148,10 +148,10 @@ export async function GET_ALL_ADMIN_CLIENT(id,token) {
 }
 
 // GET ALL SUBADMIN TO ADMIN PANEL
-export async function GET_ALL_SUBADMIN_CLIENT(id,token) {
+export async function GET_ALL_SUBADMIN_CLIENT(id, token) {
     try {
 
-        const res = await axios.post(`${Config.base_url}getall/panel/subadmins`, id,{
+        const res = await axios.post(`${Config.base_url}getall/panel/subadmins`, id, {
             headers: header(token),
             data: {},
         })
@@ -165,10 +165,10 @@ export async function GET_ALL_SUBADMIN_CLIENT(id,token) {
 }
 
 // ADD LICENSE TO SUPERADMIN
-export async function ADD_LICENCE_TO_COMPANY(id,token) {
+export async function ADD_LICENCE_TO_COMPANY(id, token) {
     try {
 
-        const res = await axios.post(`${Config.base_url}add/license`, id,{
+        const res = await axios.post(`${Config.base_url}add/license`, id, {
             headers: header(token),
             data: {},
         })
@@ -182,10 +182,10 @@ export async function ADD_LICENCE_TO_COMPANY(id,token) {
 }
 
 // GET 
-export async function GET_ADMIN_HELPS(id,token) {
+export async function GET_ADMIN_HELPS(id, token) {
     try {
 
-        const res = await axios.post(`${Config.base_url}getall/panel/helps`, id,{
+        const res = await axios.post(`${Config.base_url}getall/panel/helps`, id, {
             headers: header(token),
             data: {},
         })
@@ -199,10 +199,10 @@ export async function GET_ADMIN_HELPS(id,token) {
 }
 
 
-export async function UPDATE_ADMIN_PERMISSION(id,token) {
+export async function UPDATE_ADMIN_PERMISSION(id, token) {
     try {
 
-        const res = await axios.post(`${Config.base_url}update/permission`, id,{
+        const res = await axios.post(`${Config.base_url}update/permission`, id, {
             headers: header(token),
             data: {},
         })
@@ -220,7 +220,7 @@ export async function UPDATE_ADMIN_PERMISSION(id,token) {
 export async function GET_PANEL_BROKER(domain) {
     try {
 
-        const res = await axios.post(`${Config.base_url}get/panel/broker`, domain,{
+        const res = await axios.post(`${Config.base_url}get/panel/broker`, domain, {
             // headers: header(token),
             data: {},
         })
@@ -232,4 +232,25 @@ export async function GET_PANEL_BROKER(domain) {
     }
 
 }
+
+
+
+// CLOSE COMAPNY
+
+export async function CLOSE_ADMIN_PANEL(domain, token) {
+    try {
+
+        const res = await axios.post(`${Config.base_url}get/panel/panelclose`, domain, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        // custom error
+    }
+
+}
+
 

@@ -13,7 +13,7 @@ const Deactivate_Company = () => {
                                 <i class="fa fa-exclamation-triangle text-warning"></i> Oooops !!!
                             </h4>
                             <h5>
-                                Service In'active Contact To Your Admin
+                                Service In'active, Please Contact To Your Service Provider
                             </h5>
                         </div>
                     </div>

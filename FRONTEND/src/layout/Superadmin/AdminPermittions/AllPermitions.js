@@ -7,10 +7,13 @@ import { Link } from "react-router-dom";
 import Loader from '../../../Utils/Loader'
 import { FolderLock, Plus, FileClock, HelpingHand, Users2, ScrollText } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { All_Panel_List, Update_Panel_Theme, GET_PANEL_INFORMATIONS } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel, GET_PANEL_INFORMATIONS } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
+import * as Config from "../../../Utils/Config";
+
 import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+import toast, { Toaster } from 'react-hot-toast';
 
 import SidebarPermission from './Sidebar_permission';
 import PanelDetails from './PanelDetails';
@@ -65,9 +68,11 @@ const AllPermitions = () => {
 
     const [Panelid, setPanelid] = useState('')
     const [themeList, setThemeList] = useState();
+    const [refresh, setRefresh] = useState(false)
 
 
-    const [themeData, setThemeData] = useState({
+
+    const [panelData, setPanelData] = useState({
         loading: true,
         data: []
     });
@@ -89,7 +94,7 @@ const AllPermitions = () => {
     const data = async () => {
         await dispatch(All_Panel_List()).unwrap()
             .then((response) => {
-                setThemeData({
+                setPanelData({
                     loading: false,
                     data: response.data
                 });
@@ -107,7 +112,7 @@ const AllPermitions = () => {
     useEffect(() => {
         data()
         GetAllThemes()
-    }, [])
+    }, [refresh])
 
 
 
@@ -116,6 +121,27 @@ const AllPermitions = () => {
         setPanelid(panel_id)
         setshowModal(true)
     }
+
+
+    const CloseCompany = async (status) => {
+
+        const req = {
+            "domain": Config.react_domain,
+            "status": status ? 1 : 0
+        }
+
+
+        await dispatch(Close_Admin_Panel(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    toast.success(response.msg);
+                    setRefresh(!refresh)
+                } else {
+                    toast.error(response.msg);
+                }
+            })
+    }
+
 
 
     const columns = [
@@ -140,6 +166,7 @@ const AllPermitions = () => {
 
                 <label class="toggle mt-3">
                     <input class="toggle-checkbox bg-primary" type="checkbox"
+                    // defaultChecked={true}
                     // onChange={(e) => {
                     //   setShowAllStratagy(e.target.checked)
                     // }}
@@ -154,9 +181,10 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <label class="toggle mt-3">
                     <input class="toggle-checkbox bg-primary" type="checkbox"
-                    // onChange={(e) => {
-                    //   setShowAllStratagy(e.target.checked)
-                    // }}
+                        defaultChecked={row.is_active === 1}
+                        onChange={(e) => {
+                            CloseCompany(e.target.checked)
+                        }}
                     />
                     <div class={`toggle-switch bg-primary`}></div>
                 </label>
@@ -266,11 +294,11 @@ const AllPermitions = () => {
     return (
         <>
             {
-                themeData.loading ? <Loader /> :
+                panelData.loading ? <Loader /> :
                     <>
                         <Content Page_title="Admin Permission" button_status={false}>
                             {
-                                themeData.data && themeData.data.length === 0 ? (
+                                panelData.data && panelData.data.length === 0 ? (
                                     'No data found') :
                                     <>
                                         <SidebarPermission showPanelName={showPanelName} showModal={showModal} setshowModal={() => setshowModal(false)} />
@@ -280,7 +308,7 @@ const AllPermitions = () => {
                                         <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
                                         <LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
-                                        <FullDataTable TableColumns={columns} tableData={themeData.data} />
+                                        <FullDataTable TableColumns={columns} tableData={panelData.data} />
                                         <ToastButton />
                                     </>
                             }

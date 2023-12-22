@@ -10,14 +10,13 @@ import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicD
 import Modal from "../../../Components/ExtraComponents/Modal";
 import { Trash2 } from 'lucide-react';
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
-
+import Holidays from "date-holidays"
 import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
 import { CreateSocketSession, ConnctSocket, GetAccessToken, BackendRunSocket} from "../../../Service/Alice_Socket";
 import $ from "jquery";
 import axios from "axios"
-import * as Config from "../../../Utils/Config";
 import toast, { Toaster } from 'react-hot-toast';
 
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
@@ -214,7 +213,7 @@ const HelpCenter = () => {
 
         ExecuteTradeData && ExecuteTradeData.data.filter((item) => {
             const element1 = $('.button_call_sell_' + item.call_token._id);
-                  element1.removeClass('active');
+            element1.removeClass('active');
             const element2 = $('.button_call_buy_' + item.call_token);
             element2.removeClass('active');
             const element4 = $('.button_put_sell_' + item.put_token);
@@ -301,45 +300,66 @@ const HelpCenter = () => {
 
     // ------------------------------------ CREATE-CHAIN-FOR-EXECUTE-TRADE ------------------------------------
 
+
+
+
+
+
     const ExcuteTradeButton = () => {
-        if (UserDetails != undefined && UserDetails.trading_status === "on") {
-            let Arr = []
 
-            const expiry_i = convert_string_to_month(expiry && expiry)
+        const currentDate = new Date();
+        const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const weekday = weekdays[currentDate.getDay()];
+        const holidays = new Holidays();
+        const currentDateIST = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+        const cutoffTimeIST = new Date();
+        cutoffTimeIST.setHours(15, 30, 0, 0);
+        // Check if the current time is after 3:30 PM in IST timezone
+        const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
 
-            CreateSignalRequest && CreateSignalRequest.map((item) => {
-                // const expiry_i = get_thre_digit_month()
-                const buy = $('.BP1_Put_Price_' + item.token).html();
-                const sell = $('.SP1_Call_Price_' + item.token).html();
 
-                const Symbol = `${symbol && symbol}${expiry_i}${item.strike}${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`
-
-                Arr.push({
-                    "entry_qty": item.entry_qty,
-                    "price": buy ? buy : sell,
-                    "Symbol": Symbol,
-                    'option_type': `${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`,
-                    "type": item.type === "SE" ? "SELL" : item.type === "LE" ? "BUY" : "",
-                    "token": item.token,
-                    "strategy": strategy && strategy,
-                    "call_type": item.option_type,
-                    "trading_type": item.type,
-                    "segment": item.segment,
-                    "strike": item.strike,
-                })
-            })
-
-            setExecuteTradeData({
-                loading: false,
-                data: Arr
-            })
-            setshowModal(true)
+        if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday' && isAfterCutoffTime) {
+            alert("Market Time Is Off")
         } else {
-            alert("Please Login With Broker Account")
+            if (UserDetails !== undefined && UserDetails.trading_status === "on") {
+                let Arr = []
+
+                const expiry_i = convert_string_to_month(expiry && expiry)
+
+                CreateSignalRequest && CreateSignalRequest.map((item) => {
+                    // const expiry_i = get_thre_digit_month()
+                    const buy = $('.BP1_Put_Price_' + item.token).html();
+                    const sell = $('.SP1_Call_Price_' + item.token).html();
+
+                    const Symbol = `${symbol && symbol}${expiry_i}${item.strike}${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`
+
+                    Arr.push({
+                        "entry_qty": item.entry_qty,
+                        "price": buy ? buy : sell,
+                        "Symbol": Symbol,
+                        'option_type': `${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`,
+                        "type": item.type === "SE" ? "SELL" : item.type === "LE" ? "BUY" : "",
+                        "token": item.token,
+                        "strategy": strategy && strategy,
+                        "call_type": item.option_type,
+                        "trading_type": item.type,
+                        "segment": item.segment,
+                        "strike": item.strike,
+                    })
+                })
+
+                setExecuteTradeData({
+                    loading: false,
+                    data: Arr
+                })
+                setshowModal(true)
+            } else {
+                alert("Please Login With Broker Account")
+            }
+
+
         }
-
     }
-
 
     // ------------------------------------ CREATE-CHAIN-FOR-EXECUTE-TRADE ------------------------------------
 
@@ -501,11 +521,29 @@ const HelpCenter = () => {
                 }
             })
     }
+    
     useEffect(() => {
         getPanelDetails()
         symbols()
         getPanelKey()
         GetAllStrategyName();
+
+
+        const currentDateIST = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+
+        // Set the cutoff time to 3:30 PM in IST timezone
+        const cutoffTimeIST = new Date();
+        cutoffTimeIST.setHours(15, 30, 0, 0);
+
+        // Check if the current time is after 3:30 PM in IST timezone
+        const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
+
+       // console.log("isAfterCutoffTime", isAfterCutoffTime)
+
+
+
+
+
     }, [])
 
 
