@@ -349,6 +349,11 @@ app.post('/broker-signals', async (req, res) => {
         ExitTime = signals.ExitTime.replace(/-/g, ':');
       }
 
+      var MakeStartegyName = ""
+      if(signals.MakeStartegyName != undefined){
+        MakeStartegyName = signals.MakeStartegyName 
+      }
+
 
       var demo = signals.Demo;
 
@@ -791,7 +796,8 @@ app.post('/broker-signals', async (req, res) => {
               client_persnal_key: client_persnal_key,
               TradeType: TradeType,
               token: instrument_token,
-              lot_size: find_lot_size
+              lot_size: find_lot_size,
+              MakeStartegyName:MakeStartegyName
             }
 
             let Signal_req1 = new Signals(Signal_req)
@@ -843,7 +849,8 @@ app.post('/broker-signals', async (req, res) => {
                 exit_time: ExitTime,
                 exit_time1: 0,
                 complete_trade: 0,
-                sl_status: 0
+                sl_status: 0,
+                MakeStartegyName:MakeStartegyName
 
               }
               const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)

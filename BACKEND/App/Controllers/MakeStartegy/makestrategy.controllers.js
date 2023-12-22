@@ -495,8 +495,8 @@ async function run() {
     // Define the function to be executed
     const executeFunction = async () => {
       //  console.log("okkkkkkkk shakirrr ")
-      if (rr) {
-     // if (!holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
+    //  if (rr) {
+      if (!holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
         //  console.log('The stock market is open!');
 
         const pipeline = [
@@ -514,8 +514,6 @@ async function run() {
             const val = allStrategyResult[index];
 
          // console.log(" val startegy",val.segment.toUpperCase())
-
-
             const currentDate = new Date();
 
             const options = {
@@ -545,12 +543,6 @@ async function run() {
             // console.log('notradeTime:', notradeTime);
             //  console.log('entryTime:', entryTime);
             // Entry Time less than No trade time OR Exit time
-
-
-            
-
-
-        
 
            //console.log("val.segment.toUpperCase()",val.segment.toUpperCase())
             if((val.segment.toUpperCase()=="O"||val.segment.toUpperCase()=="F"||val.segment.toUpperCase()=="C") && (isMarketOpen && isMarketClosedEquity)){
@@ -614,10 +606,7 @@ async function run() {
 
                 }
 
-                const conditiostring1 = "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]<data.high[2]"
-
-                // await abc(data, val.condition, val);
-
+                
                 try {
                   // Use eval to dynamically evaluate the condition string
                  // console.log("data -", data, "condition String - ", val.condition)
@@ -625,8 +614,6 @@ async function run() {
                   // console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
                   // Check if the condition is true or false based on the data
                   if (condition) {
-
-
 
                     let entry_type = "LE";
                     if (val.type == "BUY") {
@@ -639,6 +626,7 @@ async function run() {
                       entry_type: entry_type,
                       segment: val.segment,
                       client_persnal_key:val.panelKey,
+                      MakeStartegyName:val.show_strategy,
                       TradeType: "MAKE_STRATEGY",
                     }
 
@@ -658,6 +646,7 @@ async function run() {
                         option_type: option_type,
                         expiry: val.expiry,
                         client_persnal_key:val.panelKey,
+                        MakeStartegyName:val.show_strategy,
                         TradeType: "MAKE_STRATEGY",
                       }
 
@@ -672,6 +661,7 @@ async function run() {
                         segment: val.segment,
                         expiry: val.expiry,
                         client_persnal_key:val.panelKey,
+                        MakeStartegyName:val.show_strategy,
                         TradeType: "MAKE_STRATEGY",
                       }
 
@@ -686,17 +676,11 @@ async function run() {
                     // console.log("last_price",last_price[0].lp)
                   
                     let price_lp = last_price[0].lp
-                    
 
                   //  console.log("checkPreviousTrade", checkPreviousTrade)
                     if (checkPreviousTrade != null) {
-                      // console.log("checkPreviousTrade ", val.symbol_name);
-                      // await PreviousTradeExcuted(checkPreviousTrade,val.panelKey);
-
                       // console.log("EXITTTTTTTTT - ", checkPreviousTrade.entry_type)
                       const currentTimestamp = Math.floor(Date.now() / 1000);
-                      // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
-
                       let type = "LX";
                       let price = checkPreviousTrade.stockInfo_bp1;
                       if (checkPreviousTrade.entry_type.toUpperCase() == "SE") {
@@ -718,16 +702,10 @@ async function run() {
 
 
                       let Quntity = checkPreviousTrade.entry_qty_percent;
-
-
-                    
-
-                      let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|Demo:demo`
+   
+                      let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`
 
                       // console.log("req Exit -- ", req)
-
-
-
                       let config = {
                         method: 'post',
                         maxBodyLength: Infinity,
@@ -751,7 +729,6 @@ async function run() {
 
                     }
 
-
                     // Your code for when the condition is true
                   //  console.log("Condition is true ", val._id, val.symbol_name);
                     const update = {
@@ -763,9 +740,6 @@ async function run() {
                     const filter = { _id: val._id };
                     let Res = await UserMakeStrategy.updateOne(filter, update);
                     // console.log("Res ", Res)
-
-
-
                     // code same trade status update
                     let Check_same_trade_type = "BUY"
                     if (val.type == "BUY") {
@@ -775,15 +749,8 @@ async function run() {
                     const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
                   //  console.log("Check_same_trade_data", Check_same_trade_data)
                     if (Check_same_trade_data) {
-
                     //  console.log("Check_same_trade_data._id", Check_same_trade_data._id)
-                      // const update1 = {
-                      //   $set: {
-                      //     status: "0",
-                      //   },
-                      // };
-                      // const filter = { name: Check_same_trade_data.name};
-
+                      
                       let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
                         $set: {
                           status: "1",
@@ -794,20 +761,10 @@ async function run() {
                      // console.log("Trueeeeee", Res)
                     }
                     //End code same trade status update
-
-
-
-
-                    //await tradeExcuted(val);
-                   // console.log(" ENTRYYYYYYY ", val.type)
-                    //console.log("broker url -",process.env.BROKER_URL)
-
-                    // let company_info =  await company_information.findOne().select('broker_url').lean();
-                    //  console.log("broker url -",company_info.broker_url , "id -",val._id)
+                    
 
                     const currentTimestamp = Math.floor(Date.now() / 1000);
-                    // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
-
+                   
                     let type = "LE";
                     if (val.type.toUpperCase() == "SELL") {
                       type = "SE"
@@ -831,19 +788,15 @@ async function run() {
                     // console.log("target -",val.target)
                     // console.log("stoploss -",val.stoploss)
                     // console.log("exitTime -",val.exitTime)
-
                     const dateObject = new Date(val.exitTime);
                     const hours = ('0' + dateObject.getUTCHours()).slice(-2);
                     const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
                     const ExitTime = `${hours}-${minutes}`;
 
 
-                    let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|Demo:demo`
+                    let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`
 
                     // console.log("req -- ",req)
-
-
-
                     let config = {
                       method: 'post',
                       maxBodyLength: Infinity,
@@ -857,7 +810,6 @@ async function run() {
 
                     await axios.request(config)
                       .then((response) => {
-
                         // console.log("response Trade Excuted - ", response)
 
                       })
@@ -869,19 +821,12 @@ async function run() {
                   } else {
                     // Your code for when the condition is false
                     //  console.log("Condition is false ", val._id);
-
                   }
                 } catch (error) {
                   console.error("Error in evaluating the condition:", error);
                 }
 
-
-
-
-
               }
-
-
 
             } else {
               // console.log('else:', entryTime);
@@ -889,9 +834,6 @@ async function run() {
 
             // END EXCUTED RUN CODE INSIDE TIME
             }
-
-          
-
 
           }
         }
@@ -920,292 +862,7 @@ async function run() {
 }
 
 
-const abc = async (data, conditionString, val) => {
-
-  // console.log("data - ",data)
-  //  console.log("conditionString - ",conditionString)
-  // (data.close[0]==246.5)||(data.low[1]==data.high[4])
-  try {
-    // Use eval to dynamically evaluate the condition string
-    const condition = eval(conditionString.replace(/(\|\||&&)$/, ''));
-    // Check if the condition is true or false based on the data
-    if (condition) {
-
-      let entry_type = "LE";
-      if (val.type == "BUY") {
-        entry_type = "SE"
-      }
-
-      let condition_check_previous_trade = {
-        strategy: val.strategy_name,
-        symbol: val.symbol_name,
-        entry_type: entry_type,
-        segment: val.segment,
-        TradeType: "MAKE_STRATEGY",
-      }
-
-      if (val.segment.toUpperCase() == "O" || val.segment.toUpperCase() == "FO" || val.segment.toUpperCase() == "MO" || val.segment.toUpperCase() == "CO") {
-
-        let option_type = "CALL";
-        if (val.option_type == "PE") {
-          option_type = "PUT"
-        }
-
-        condition_check_previous_trade = {
-          strategy: val.strategy_name,
-          symbol: val.symbol_name,
-          entry_type: entry_type,
-          segment: val.segment,
-          strike: val.strike_price,
-          option_type: option_type,
-          expiry: val.expiry,
-          TradeType: "MAKE_STRATEGY",
-        }
-
-      }
-
-      if (val.segment.toUpperCase() == "F" || val.segment.toUpperCase() == "MF" || val.segment.toUpperCase() == "CF") {
-
-        condition_check_previous_trade = {
-          strategy: val.strategy_name,
-          symbol: val.symbol_name,
-          entry_type: entry_type,
-          segment: val.segment,
-          expiry: val.expiry,
-          TradeType: "MAKE_STRATEGY",
-        }
-
-      }
-
-      // console.log("condition_check_previous_trade ", condition_check_previous_trade)
-
-      var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade)
-
-      // console.log("checkPreviousTrade", checkPreviousTrade)
-      if (checkPreviousTrade != null) {
-        // console.log("checkPreviousTrade ", val.symbol_name);
-        await PreviousTradeExcuted(checkPreviousTrade, val.panelKey);
-      }
-      // Your code for when the condition is true
-      // console.log("Condition is true ", val._id, val.symbol_name);
-
-      const update = {
-        $set: {
-          status: "1",
-        },
-      };
-
-      const options = { upsert: true }; // Set the upsert option to true
-      const filter = { _id: val._id };
-      let Res = await UserMakeStrategy.updateOne(filter, update, options);
-      // console.log("Res ", Res)
-      await tradeExcuted(val);
-    } else {
-      // Your code for when the condition is false
-      // console.log("Condition is false ", val._id);
-
-    }
-  } catch (error) {
-    console.error("Error in evaluating the condition:", error);
-  }
-};
-
-
-const tradeExcuted = async (val) => {
-
-
-  // console.log(" ENTRYYYYYYY ", val.type)
-  //console.log("broker url -",process.env.BROKER_URL)
-
-  // let company_info =  await company_information.findOne().select('broker_url').lean();
-  //  console.log("broker url -",company_info.broker_url , "id -",val._id)
-
-  const currentTimestamp = Math.floor(Date.now() / 1000);
-  // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
-
-  let type = "LE";
-  if (val.type.toUpperCase() == "SELL") {
-    type = "SE"
-  }
-
-  let price = 0;
-
-  let strike = val.strike_price;
-  if (val.strike_price == "NaN") {
-    strike = "100"
-  }
-
-
-  let option_type = "CALL"
-  if (val.option_type.toUpperCase() == "PE") {
-    option_type = "PUT"
-  }
-
-  let Quntity = "100"
-
-  // console.log("target -",val.target)
-  // console.log("stoploss -",val.stoploss)
-  // console.log("exitTime -",val.exitTime)
-
-  const dateObject = new Date(val.exitTime);
-  const hours = ('0' + dateObject.getUTCHours()).slice(-2);
-  const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
-  const ExitTime = `${hours}-${minutes}`;
-
-
-  let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|Demo:demo`
-
-  // console.log("req -- ",req)
-
-
-
-  let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-    url: `${process.env.BROKER_URL}`,
-    headers: {
-      'Content-Type': 'text/plain'
-    },
-    data: req
-  };
-
-  await axios.request(config)
-    .then((response) => {
-
-      // console.log("response Trade Excuted - ", response)
-
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
-
-}
-
-
-const PreviousTradeExcuted = async (val, panelKey) => {
-
-  // console.log("EXITTTTTTTTT - ", val.entry_type)
-  const currentTimestamp = Math.floor(Date.now() / 1000);
-  // DTime:1698647568|Symbol:NIFTY|TType:LE|Tr_Price:131|Price:50|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:o|Strike:19500|OType:CALL|Expiry:16112023|Strategy:TEST_1|Quntity:100|Key:SNE132023|TradeType:MT_4|Demo:demo
-
-  let type = "LX";
-  let price = val.stockInfo_bp1;
-  if (val.entry_type.toUpperCase() == "SE") {
-    type = "SX";
-    price = val.stockInfo_sp1;
-  }
-
-
-  let strike = val.strike;
-  if (val.strike_price == "NaN") {
-    strike = "100"
-  }
-
-
-  let option_type = "CALL"
-  if (val.option_type.toUpperCase() == "PUT") {
-    option_type = "PUT"
-  }
-
-
-  let Quntity = val.entry_qty_percent;
-
-
-
-
-
-
-  let req = `DTime:${currentTimestamp}|Symbol:${val.symbol}|TType:${type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy}|Quntity:${Quntity}|Key:${panelKey}|TradeType:${val.TradeType}|Demo:demo`
-
-  // console.log("req Exit -- ", req)
-
-
-
-  let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-    url: `${process.env.BROKER_URL}`,
-    headers: {
-      'Content-Type': 'text/plain'
-    },
-    data: req
-  };
-
-  await axios.request(config)
-    .then((response) => {
-
-      // console.log("response Trade Excuted - ",response)
-
-    })
-    .catch((error) => {
-      // console.log(error);
-    });
-}
-
-
 run().catch(console.error);
-
-
-
-
-// =================OPEN POSITION ==============================
-
-
-const exitOpentrade = async () => {
-try {
-  const viewName = 'open_position_excute';
-
-
-  var openPosition = await db_GET_VIEW.collection(viewName).find().toArray();
-
-
-  if (openPosition.length > 0) {
-    let panelKey = "SNE132023";
-    openPosition && openPosition.map((item) => {
-      const currentTimestamp = Math.floor(Date.now() / 1000);
-      let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_bp1}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${panelKey}|TradeType:${item.TradeType}|Demo:demo`
-      // console.log(req);
-      let config = {
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-        // url: `${process.env.BROKER_URL}`,
-        headers: {
-          'Content-Type': 'text/plain'
-        },
-        data: req
-      };
-
-      axios.request(config)
-        .then((response) => {
-
-          // console.log("response Trade Excuted - ", response.data)
-
-        })
-        .catch((error) => {
-          // console.log(error.response.data);
-        });
-
-
-    })
-
-  } 
-} catch (error) {
-  console.log("Error in Open Position",error);
-}
- 
-
-
-}
-
-
-
-// setInterval(() => {
-//   exitOpentrade()
-// }, 10000);
 
 
 module.exports = new MakeStartegy();
