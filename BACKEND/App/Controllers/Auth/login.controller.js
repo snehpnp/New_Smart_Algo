@@ -305,7 +305,7 @@ class Login {
 
             // // IF Login Time Email CHECK
             var EmailCheck = await User.findOne({ Email: Email })
-            var EmailCheck = await company_information.findOne()
+            var CompanyInformation = await company_information.findOne()
 
 
             if (!EmailCheck) {
@@ -315,10 +315,7 @@ class Login {
 
             var userid = Buffer.from(JSON.stringify(EmailCheck._id)).toString('base64');
             // var redirectUrl = 'http://trade.pandpinfotech.com/#/update/' + userid
-            var redirectUrl = 'http://trade.codingpandit.com/#/update/' + userid
-
-
-
+            var redirectUrl = `https://${trade.codingpandit.com}/#/update/${userid}`
 
             var toEmail = Email;
             var subjectEmail = "Forget Password";
