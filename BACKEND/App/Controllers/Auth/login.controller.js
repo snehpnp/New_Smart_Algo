@@ -404,10 +404,7 @@ class Login {
                 );
 
             }
-            // If Not Update User
-            if (!result) {
-                return res.send({ status: false, msg: 'Server Side issue.', data: [] });
-            }
+         
 
             res.send({ status: true, message: "Password Update Successfully" });
 
