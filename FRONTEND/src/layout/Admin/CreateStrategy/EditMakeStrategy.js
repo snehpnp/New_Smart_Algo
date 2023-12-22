@@ -13,6 +13,7 @@ import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicD
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import Loader from "../../../Utils/Loader";
 import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
+import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
 import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -69,6 +70,8 @@ const EditMakeStrategy = () => {
   const [maxValue, setMaxValue] = useState(0);
 
   const [strategyName, setStrategyName] = useState("");
+  
+  const [numberOfTrade, setNumberOfTrade] = useState("");
 
   const [selectStrategy, setSelectStrategy] = useState("");
   
@@ -483,6 +486,8 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
   const [showModalAndOrOperator, setShowModalAndOrOperator] = useState(false);
 
   const onChange = (e) => {
+
+    if(e.target.name == "strategy_name"){
     if(e.target.value != ""){
      setStrategyName(e.target.value)
 
@@ -497,6 +502,37 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
    }else{
      setStrategyName("")
     }
+   
+  }
+  else if(e.target.name == "no_of_trade"){
+   
+    const type = No_Negetive_Input_regex(e.target.value)
+     if(type){
+      if(e.target.value != ""){
+        setNumberOfTrade(e.target.value)
+        let jsonString = JSON.stringify(singleMakeStrategyData);
+        let objectData = JSON.parse(jsonString);
+        objectData.numberOfTrade = e.target.value
+        setSingleMakeStrategyData(objectData)
+        }else{
+        setNumberOfTrade("")
+        }
+     }else{
+        if(e.target.value == ""){
+        setNumberOfTrade("")
+        }else{
+        setNumberOfTrade("1") 
+        let jsonString = JSON.stringify(singleMakeStrategyData);
+        let objectData = JSON.parse(jsonString);
+        objectData.numberOfTrade = e.target.value
+        setSingleMakeStrategyData(objectData)
+        }
+     }
+
+
+  }
+
+
    }
 
   const selectSource = (e , condition_item , element_first_second,index,buy_sell) => {
@@ -1448,6 +1484,8 @@ const updateStrategy = async (e) => {
         "timeTradeConddition":timeTradeConddition,
         "condition_array":coditionRequestArr,
         "target_stoloss_array":exitConditionBuyOrSell,
+        "numberOfTrade":numberOfTrade,
+        "show_strategy":singleMakeStrategyData.show_strategy
        }
        
        console.log("data request buy",data)
@@ -1505,6 +1543,8 @@ const updateStrategy = async (e) => {
         "timeTradeConddition": timeTradeConddition,
         "condition_array": coditionRequestArrSell,
         "target_stoloss_array": exitConditionBuyOrSell,
+        "numberOfTrade":numberOfTrade,
+        "show_strategy":singleMakeStrategyData.show_strategy
       }
       console.log("data request sell",data)
 
@@ -1554,9 +1594,9 @@ const updateStrategy = async (e) => {
         <Content Page_title="Create Strategy" button_title="Back" route="/admin/AllMakeStrategy">
           <div>
 
-           <div className="col-md-2 ">
+            <div className="col-md-2 ">
               <label  className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Strategy Name</label>
-             <input type="text" disabled defaultValue={singleMakeStrategyData.show_strategy} onChange={(e)=>{onChange(e)}} className="form-control stratergy-box"></input>
+             <input type="text" disabled defaultValue={singleMakeStrategyData.show_strategy} onChange={(e)=>{onChange(e)}} name="strategy_name" className="form-control stratergy-box"></input>
             </div>
 
             <div className="col-md-2 " >
@@ -1574,6 +1614,11 @@ const updateStrategy = async (e) => {
                   selected={sm.strategy_name === singleMakeStrategyData.strategy_name}
                   >{sm.strategy_name}</option>)}
               </select>
+            </div>
+
+            <div className="col-md-2 ">
+              <label  className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>No of Trade</label>
+             <input min={1} type="text"  defaultValue={singleMakeStrategyData.numberOfTrade} onChange={(e)=>{onChange(e)}}  name="no_of_trade" className="form-control stratergy-box"></input>
             </div>
 
 

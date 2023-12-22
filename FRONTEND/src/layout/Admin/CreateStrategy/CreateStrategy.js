@@ -13,6 +13,7 @@ import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicD
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import Loader from "../../../Utils/Loader";
 import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
+import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
 import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -326,6 +327,8 @@ const CreateStrategy = () => {
 
   const [strategyName, setStrategyName] = useState("");
   
+  const [numberOfTrade, setNumberOfTrade] = useState("");
+  
   const [timeFrameVal, setTimeFrameVal] = useState("");
 
   const [buyCheck, setBuyCheck] = useState(false);
@@ -411,11 +414,35 @@ const CreateStrategy = () => {
   const [showModalAndOrOperator, setShowModalAndOrOperator] = useState(false);
 
   const onChange = (e) => {
+
+   
+   if(e.target.name == "strategy_name"){
     if(e.target.value != ""){
      setStrategyName(e.target.value)
-   }else{
+    }else{
      setStrategyName("")
     }
+  }
+
+    else if(e.target.name == "no_of_trade"){
+    const type = No_Negetive_Input_regex(e.target.value)
+     if(type){
+      if(e.target.value != ""){
+        setNumberOfTrade(e.target.value)
+        }else{
+        setNumberOfTrade("")
+        }
+     }else{
+        if(e.target.value == ""){
+        setNumberOfTrade("")
+        }else{
+        setNumberOfTrade("1") 
+        }
+     }
+
+    }
+
+
    }
 
 
@@ -1046,8 +1073,6 @@ const CreateStrategy = () => {
 
   }
 
-
-
  // console.log("timeFrameVal - ", timeFrameVal)
 
  // console.log("buyCheck - ", buyCheck)
@@ -1367,6 +1392,7 @@ const saveStrategy = async (e) => {
         "timeTradeConddition":timeTradeConddition,
         "condition_array":coditionRequestArr,
         "target_stoloss_array":exitConditionBuyOrSell,
+        "numberOfTrade":numberOfTrade
        }
        
        console.log("data request buy",data)
@@ -1423,6 +1449,7 @@ const saveStrategy = async (e) => {
         "timeTradeConddition":timeTradeConddition,
         "condition_array":coditionRequestArrSell,
         "target_stoloss_array":exitConditionBuyOrSell,
+        "numberOfTrade":numberOfTrade
       }
       console.log("data request sell",data)
 
@@ -1463,7 +1490,7 @@ const saveStrategy = async (e) => {
 
            <div className="col-md-2 ">
               <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Strategy Name</label>
-             <input type="text" onChange={(e)=>{onChange(e)}} className="form-control stratergy-box"></input>
+             <input type="text" onChange={(e)=>{onChange(e)}} name="strategy_name" className="form-control stratergy-box"></input>
             </div>
 
             <div className="col-md-2 ">
@@ -1475,7 +1502,12 @@ const saveStrategy = async (e) => {
               </select>
             </div>
 
+            <div className="col-md-2 ">
+              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >No of Trade</label>
+             <input min={1} type="text" onChange={(e)=>{onChange(e)}}  name="no_of_trade" className="form-control stratergy-box" value={numberOfTrade}></input>
+            </div>
 
+            
             <Modal show={show} onHide={handleClose} className="right">
               <Modal.Header>
                 <input
@@ -1627,6 +1659,8 @@ const saveStrategy = async (e) => {
 
                 </div>
               </li>
+
+              
              
                <Row className="mt-4">
                 <Col md={2}>

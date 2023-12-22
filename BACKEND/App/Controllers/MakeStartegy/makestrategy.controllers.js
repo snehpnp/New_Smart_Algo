@@ -205,8 +205,7 @@ class MakeStartegy {
 
 
   async UpdateMakeStartegy(req, res) {
-   // console.log("req time", req.body)
-
+  
     // console.log("user_panel_key",user_panel_key)
      
     let channelList = "";
@@ -249,11 +248,25 @@ class MakeStartegy {
       let condition_array = req.body.condition_array
       let timeTradeConddition_array = req.body.timeTradeConddition;
       let target_stoloss_array = req.body.target_stoloss_array
+    
+
+
+      // Update Number Of Trade
+      const filter_number_of_trade = { show_strategy : req.body.show_strategy };
+      const update_make_strategy_number_of_trade = {
+        $set: {
+          numberOfTrade:req.body.numberOfTrade
+        }
+      };
+      const result_number_of_trade = await UserMakeStrategy.updateMany(filter_number_of_trade, update_make_strategy_number_of_trade);
+      //////////////-------------/////////////////////////////////////
 
 
 
       const objectId_update = new ObjectId(req.body.update_id);
       const filter = { _id: objectId_update };
+
+
       const update_make_strategy = {
         $set: {
           // name: name,
@@ -284,10 +297,10 @@ class MakeStartegy {
           condition_array: condition_array,
           //exch_seg:exch_seg,
           timeTradeConddition_array: timeTradeConddition_array,
-          target_stoloss_array: target_stoloss_array
+          target_stoloss_array: target_stoloss_array,
+         
         }
       };
-
       // UPDATE STRATEGY INFORMATION
       const result = await UserMakeStrategy.updateOne(filter, update_make_strategy);
 
@@ -359,6 +372,8 @@ class MakeStartegy {
         let timeTradeConddition_array = req.body.timeTradeConddition;
         let target_stoloss_array = req.body.target_stoloss_array
         let show_strategy = req.body.name;
+        let numberOfTrade = req.body.numberOfTrade;
+        
 
 
 
@@ -378,7 +393,8 @@ class MakeStartegy {
 
 
         await UserMakeStrategy.create({
-          name: req.body.name + req.body.user_id + req.body.type,
+          name: req.body.name + req.body.user_id + req.body.type+tokensymbol+req.body.strategy_name,
+          
           user_id: user_id,
           tokensymbol: tokensymbol,
           symbol_name: symbol_name,
@@ -408,7 +424,8 @@ class MakeStartegy {
           exch_seg: exch_seg,
           timeTradeConddition_array: timeTradeConddition_array,
           target_stoloss_array: target_stoloss_array,
-          show_strategy: show_strategy
+          show_strategy: show_strategy,
+          numberOfTrade:numberOfTrade
         })
           .then(async (createUserMakeStrategy) => {
             // console.log("3")
@@ -543,7 +560,6 @@ async function run() {
             // console.log('notradeTime:', notradeTime);
             //  console.log('entryTime:', entryTime);
             // Entry Time less than No trade time OR Exit time
-
            //console.log("val.segment.toUpperCase()",val.segment.toUpperCase())
             if((val.segment.toUpperCase()=="O"||val.segment.toUpperCase()=="F"||val.segment.toUpperCase()=="C") && (isMarketOpen && isMarketClosedEquity)){
             //  console.log(" Equity Market closed")
@@ -734,6 +750,9 @@ async function run() {
                     const update = {
                       $set: {
                         status: "2",
+                      },
+                      $inc: {
+                        numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
                       },
                     };
 
