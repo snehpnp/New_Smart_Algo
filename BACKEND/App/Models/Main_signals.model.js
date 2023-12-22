@@ -79,6 +79,9 @@ const MainSignalsSchema = Schema({
     lot_size: {
         type: String,
     },
+    MakeStartegyName: {
+        type: String,
+    },
     target: {
         type: String,
         default:0

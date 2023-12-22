@@ -75,6 +75,9 @@ const SignalsSchema = Schema({
     lot_size: {
         type: String,
     },
+    MakeStartegyName: {
+        type: String,
+    },
 
     createdAt: {
         type: Date,

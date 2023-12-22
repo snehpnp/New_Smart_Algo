@@ -43,6 +43,7 @@ async function connectToDB(collectionName, response) {
         }
 
         createView(collectionName);
+        createView1(collectionName);
         createViewM3(collectionName);
         createViewM5(collectionName);
         createViewM10(collectionName)
@@ -125,6 +126,69 @@ async function connectToDB(collectionName, response) {
       } else {
         // Create the view with a name (e.g., "myview")
         const viewName = 'M_' + collectionName;
+        await dbTradeTools.createCollection(viewName, {
+          viewOn: collectionName,
+          pipeline: pipeline,
+        });
+
+        console.log(`View "${viewName}" created successfully.`);
+
+      }
+
+
+
+    } catch (err) {
+      //console.error('Error View Create:', err);
+    }
+
+
+  }
+
+  async function createView1(collectionName) {
+    try {
+      
+
+      const pipeline = [
+        {
+          $project: {
+            _id: {
+              $toDate: '$_id',
+            },
+            lp: 1,
+            v: 1,
+          },
+        },
+        { $sort: { _id: 1 } },
+        {
+          $group: {
+            _id: {
+              $dateToString: {
+                format: '%Y-%m-%d %H:%M',
+                date: '$_id',
+              },
+            },
+            open: { $first: '$lp' },
+            high: { $max: '$lp' },
+            low: { $min: '$lp' },
+            close: { $last: '$lp' },
+            MaxVol: { $max: '$v' },
+            MinVol: { $min: '$v' },
+          },
+        },
+      ];
+
+
+      const collections = await dbTradeTools.listCollections().toArray();
+      // Check if the desired collection exists
+      const collectionExists = collections.some(coll => coll.name === 'M1_' + collectionName);
+      //console.log("collectionExists view 1 minute", collectionExists)
+      // console.log("pipeline",pipeline)
+
+      if (collectionExists) {
+
+      } else {
+        // Create the view with a name (e.g., "myview")
+        const viewName = 'M1_' + collectionName;
         await dbTradeTools.createCollection(viewName, {
           viewOn: collectionName,
           pipeline: pipeline,
