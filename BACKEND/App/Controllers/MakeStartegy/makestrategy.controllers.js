@@ -29,12 +29,10 @@ class MakeStartegy {
 
   async getcandledata(req, res) {
 
-  //  console.log("req - ",req.body)
     let timeFrame = req.body.timeframe;
     let tokensymbol = req.body.tokensymbol;
      let collectionName = 'M'+timeFrame+'_'+tokensymbol;
 
-   console.log(collectionName);
     
      try{
 
@@ -51,8 +49,7 @@ class MakeStartegy {
         y: [item.open, item.high, item.low, item.close],
       }));
       
-      console.log("convert data",transformedData);
-      //console.log("result - ",result)
+
         if (result.length > 0) {
           res.send({ status: true, msg: "Get All time frame", data: transformedData })
         } else {
@@ -95,14 +92,12 @@ class MakeStartegy {
       ]
       const result = await source.aggregate(pipeline)
 
-      //  console.log("get_sources - ",result)
       if (result.length > 0) {
         res.send({ status: true, msg: "Get All Source", data: result });
       } else {
         res.send({ status: false, msg: "Empty data", data: [] });
       }
     } catch (error) {
-      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -116,14 +111,12 @@ class MakeStartegy {
       ]
       const result = await comparators.aggregate(pipeline)
 
-      //   console.log("get_comparators - ",result)
       if (result.length > 0) {
         res.send({ status: true, msg: "Get All Source", data: result });
       } else {
         res.send({ status: false, msg: "Empty data", data: [] });
       }
     } catch (error) {
-      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -138,14 +131,12 @@ class MakeStartegy {
       ]
       const result = await UserMakeStrategy.aggregate(pipeline)
 
-      //console.log("GetAllMakeStartegy - ",result)
       if (result.length > 0) {
         res.send({ status: true, msg: "Get All make strategy", data: result });
       } else {
         res.send({ status: false, msg: "Empty data", data: [] });
       }
     } catch (error) {
-      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -159,7 +150,6 @@ class MakeStartegy {
         return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
       }
     } catch (error) {
-      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -167,15 +157,11 @@ class MakeStartegy {
   //Delete make strateg Selected
   async DeleteMakeStartegySelected(req, res) {
     try {
-
-      //const objectI = new ObjectId(req.body.ids_array);
-      // console.log("ids_array - ",req.body.ids_array)
       const result = await UserMakeStrategy.deleteMany({ _id: { $in: req.body.ids_array } });
       if (result.acknowledged == true) {
         return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
       }
     } catch (error) {
-      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -187,7 +173,6 @@ class MakeStartegy {
       const objectId = new ObjectId(req.body.id);
       const result = await UserMakeStrategy.findOne({ _id: objectId });
 
-      // console.log("result edit data -", result)
 
       if (result != undefined) {
         res.send({ status: true, msg: 'Delete successfully ', data: result });
@@ -196,7 +181,6 @@ class MakeStartegy {
       }
 
     } catch (error) {
-      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -205,31 +189,13 @@ class MakeStartegy {
 
 
   async UpdateMakeStartegy(req, res) {
-    console.log("req time", req.body)
 
-    // console.log("user_panel_key",user_panel_key)
      
     let channelList = "";
     try {
-      // console.log("req",req.body) 
-      // console.log("req time", req.body.timeTradeConddition[0].entry.time)
 
 
-      // for (const element of req.body.scriptArray) {
-      //console.log(element.instrument_token);
-      // channelList+=element.exch_seg+'|'+element.instrument_token+"#";
-
-      // res.send({ status: true, msg: "successfully Add!" });
-      // let user_id = req.body.user_id;
-     // let name = req.body.name;
-      //let tokensymbol = element.instrument_token;
-      // let symbol_name = element.symbol;
       let strategy_name = req.body.strategy_name;
-      // let segment = element.segment;
-      // let strike_price = element.strike;
-      // let option_type = element.option_type;
-      //  let expiry = element.expiry;
-      // let exch_seg = element.exch_seg;
       let timeframe = req.body.timeframe;
       let indicator = req.body.indicator;
       let price_source = req.body.price_source;
@@ -256,15 +222,7 @@ class MakeStartegy {
       const filter = { _id: objectId_update };
       const update_make_strategy = {
         $set: {
-          // name: name,
-          // user_id: user_id,
-          // tokensymbol: tokensymbol,
-          // symbol_name: symbol_name,
           strategy_name: strategy_name,
-          //segment: segment,
-          // strike_price: strike_price,
-          // option_type: option_type,
-          // expiry: expiry,
           timeframe: timeframe,
           indicator: indicator,
           price_source: price_source,
@@ -297,7 +255,6 @@ class MakeStartegy {
       res.send({ status: true, msg: "Update successfully!", data: [] });
 
     } catch (error) {
-      // console.log("error-", error);
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -315,9 +272,7 @@ class MakeStartegy {
     let user_panel_key = await user.findOne({_id:_id}).select('client_key').lean();
     let channelList = "";
     try {
-       console.log("req",req.body)
-       
-      console.log("req time", req.body.timeTradeConddition[0].entry.time)
+
 
 
       for (const element of req.body.scriptArray) {
@@ -364,18 +319,16 @@ class MakeStartegy {
 
 
 
-        // console.log("condition_source", condition_source)
 
         // Add Token token chain
       var get_token_chain = await token_chain.findOne({_id:tokensymbol})
-      console.log("get_token_chain",get_token_chain)
+   
       if(get_token_chain == null){
-        console.log("token_chain 11 ")
       // const token_chain = await token_chain.insertOne({_id:tokensymbol,exch:exch_seg})
       const filter = { _id:tokensymbol  };
       const update = { $set: { _id:tokensymbol,exch:exch_seg } };
        await token_chain.updateOne(filter, update, { upsert: true });
-        console.log("token_chain",token_chain)
+    
       }
 
 
@@ -491,7 +444,7 @@ const currentDate = new Date();
 let rr = 1
 
 async function run() {
-  console.log("RUN MAKE STRATEGYS")
+  // console.log("RUN MAKE STRATEGYS")
   try {
 
     // Define the function to be executed
@@ -624,7 +577,7 @@ async function run() {
                   // Use eval to dynamically evaluate the condition string
                  // console.log("data -", data, "condition String - ", val.condition)
                   const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
-                  console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
+                  // console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
                   // Check if the condition is true or false based on the data
                   if (condition) {
 
@@ -683,7 +636,7 @@ async function run() {
 
                     const collection_last_price = dbTradeTools.collection(val.tokensymbol);
                     const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
-                    console.log("last_price",last_price[0].lp)
+                    // console.log("last_price",last_price[0].lp)
                   
                     let price_lp = last_price[0].lp
 
@@ -936,16 +889,16 @@ try {
 
 
   if (openPosition.length > 0) {
-    let panelKey = "SNE132023";
+
     openPosition && openPosition.map((item) => {
       const currentTimestamp = Math.floor(Date.now() / 1000);
-      let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_bp1}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${panelKey}|TradeType:${item.TradeType}|Demo:demo`
-      // console.log(req);
+      let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_bp1}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${item.client_persnal_key}|TradeType:${item.TradeType}|Demo:demo`
+    
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-        // url: `${process.env.BROKER_URL}`,
+        // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+        url: `${process.env.BROKER_URL}`,
         headers: {
           'Content-Type': 'text/plain'
         },

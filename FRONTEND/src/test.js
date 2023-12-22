@@ -22,7 +22,7 @@ const CandlestickChart = () => {
   };
 
 
-console.log("selectedData" ,selectedData)
+// console.log("selectedData" ,selectedData)
 
   return (
     <div  style={{ height: '50vh' }}s>
@@ -419,11 +419,10 @@ export default CandlestickChart;
 
 
 
-// import React from "react";
+// import React, { useState } from 'react';
 // import Chart from "react-apexcharts";
+
 // const data = {
-
-
 
 //   series: [
 //     {
@@ -673,56 +672,57 @@ export default CandlestickChart;
 //   ],
 
 
-  options: {
-    chart: {
-      type: "candlestick",
-      height: 350,
-    },
-    title: {
-      text: "CandleStick Chart",
-      align: "left",
-    },
-    xaxis: {
-      type: "datetime",
-    },
-    yaxis: {
-      tooltip: {
-        enabled: true,
-      },
-    },
-    events: {
-      markerClick: (event, chartContext, { seriesIndex, dataPointIndex }) => {
-        // Handle marker click event
-        const series = chartContext.w.config.series[seriesIndex];
-        const selectedPoint = series.data[dataPointIndex];
+//   options: {
+//     chart: {
+//       type: "candlestick",
+//       height: 350,
+//     },
+//     title: {
+//       text: "CandleStick Chart",
+//       align: "left",
+//     },
+//     xaxis: {
+//       type: "datetime",
+//     },
+//     yaxis: {
+//       tooltip: {
+//         enabled: true,
+//       },
+//     },
+//     events: {
+//       markerClick: (event, chartContext, { seriesIndex, dataPointIndex }) => {
+//         // Handle marker click event
+//         const series = chartContext.w.config.series[seriesIndex];
+//         const selectedPoint = series.data[dataPointIndex];
 
 
-        console.log('Selected Data:', selectedPoint);
+//         console.log('Selected Data:', selectedPoint);
 
-//         setSelectedData(selectedPoint);
+//         // setSelectedData(selectedPoint);
 //       },
 //     },
 //   },
 
-// };
+
+// }
 
 // function ApexCandleStick() {
 
-  const [selectedData, setSelectedData] = useState(null);
+//   const [selectedData, setSelectedData] = useState(null);
 
 
-  return (
-    <div>
-      <Chart
-        type="candlestick"
-        height={400}
-        options={data.options}
-        series={data.series}
-      />
-    </div>
-  );
-}
-export default ApexCandleStick;
+//   return (
+//     <div>
+//       <Chart
+//         type="candlestick"
+//         height={400}
+//         options={data.options}
+//         series={data.series}
+//       />
+//     </div>
+//   );
+// }
+// export default ApexCandleStick;
 
 
 
