@@ -290,6 +290,7 @@ module.exports = { dropExistingView1, Open_Position1 }
 //             exit_time_test: 1,
 //             stockInfo_curtime: 1,
 //             stockInfo_lp: 1,
+//             MakeStartegyName:1,
             
 //             isLpInRange1: 1,
 //             isLpInRange: {
