@@ -11,7 +11,13 @@ const User = db.user;
 const user_logs = db.user_logs;
 const live_price = db.live_price;
 
+
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
+
+
 const { Get_Option_All_Token_Chain } = require('../../App/Controllers/Admin/option_chain.controller')
+const { GetStrickPriceFromSheet } = require('../Controllers/Admin/signals.controller')
 
 
 cron.schedule('5 2 * * *', () => {
@@ -41,6 +47,18 @@ cron.schedule('10 1 * * *', () => {
     TokenSymbolUpdate()
 });
 
+
+// EVERY 30 MINUT RUN CRON 
+cron.schedule('*/30 * * * *', () => {
+    console.log('Run Every 30 Minutes');
+    GetStrickPriceFromSheet();
+});
+
+
+cron.schedule('5 23 * * *', () => {
+    console.log('Run Every 1 Second');
+    twodaysclient();
+});
 
 
 // 1. LOGOUT AND TRADING OFF ALL USER 
@@ -115,9 +133,6 @@ const LogoutAllUsers = async () => {
 
 
 }
-
-//================================Option Chain Stock Price Set=======================//
-
 
 // SERVICES TOKEN CREATE
 const service_token_update = () => {
@@ -581,5 +596,129 @@ const market_holiday_redis = async () => {
 
 }
 
+const twodaysclient = async () => {
+    console.log("twodaysclient");
+    const twoDaysClientGet = await User.aggregate(
+        [
+            {
+                $match: {
+                    license_type: "0",
+                    Is_Active: "1",
+                    Role: "USER",
+                    $expr: {
+                        $gte: [
+                            {
+                                $dateToString: {
+                                    format: "%Y-%m-%d",
+                                    date: "$EndDate"
+                                }
+                            },
+                            {
+                                $dateToString: {
+                                    format: "%Y-%m-%d",
+                                    date: new Date()
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                $lookup: {
+                    from: "broker_responses",
+                    localField: "_id",
+                    foreignField: "user_id",
+                    as: "responses"
+                }
+            },
+            {
+                $match: {
+                    "responses.order_id": { $ne: "" } // Filter out responses where order_id is not empty
+                }
+            },
+            {
+                $group: {
+                    _id: 1, // Use a constant value as the _id
+                    users: { $push: { _id: "$_id", responses: "$responses" } } // Include _id and responses in the 'users' array
+                }
+            },
+            {
+                $project: {
+                    _id: 0, // Exclude the _id field
+                    users: {
+                        $map: {
+                            input: "$users",
+                            as: "user",
+                            in: {
+                                _id: "$$user._id",
+                                responses: {
+                                    $map: {
+                                        input: "$$user.responses",
+                                        as: "response",
+                                        in: {
+                                            createdAt: {
+                                                $dateToString: {
+                                                    format: "%Y-%m-%d",
+                                                    date: "$$response.createdAt"
+                                                }
+                                            },
+                                            // Include other fields from the response if needed
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        ])
 
-module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind }
+    var UniqueDataArr = []
+
+    if (twoDaysClientGet.length > 0) {
+
+
+        var UserData = twoDaysClientGet[0].users.filter((data) => data.responses.length > 0);
+
+        if (UserData.length > 0) {
+
+            UserData.forEach((data) => {
+                const uniqueCreatedAtValues = [...new Set(data.responses.map(item => item.createdAt))];
+                UniqueDataArr.push({ user_id: data._id, createdAt: uniqueCreatedAtValues })
+            })
+        }
+
+
+    }
+
+
+
+    if (UniqueDataArr.length > 0) {
+
+        UniqueDataArr.forEach(async (data) => {
+            if (data.createdAt.length >= 2) {
+
+                const filter = { _id: new ObjectId(data.user_id) };
+                // Get the current date and time
+                const currentDate = new Date();
+
+                // Format the date to 'YYYY-MM-DD'
+                const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+
+                const result = await User.updateOne(
+                    filter,
+                    { $set: { EndDate: formattedDate } }
+                );
+
+            }
+        })
+
+    }
+
+
+
+    return UniqueDataArr
+}
+
+
+module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind, twodaysclient }

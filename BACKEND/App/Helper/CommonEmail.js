@@ -13,7 +13,7 @@ const CommonEmail = async(toEmail, subjectEmail, htmlEmail, textEmail, res) => {
 
         if(Companydata){
 
-            const transport = nodemailer.createTransport({
+            var transport = nodemailer.createTransport({
                 type: "smtp",
                 host: Companydata[0].smtphost,
                 port: Companydata[0].smtpport,
@@ -39,6 +39,8 @@ const CommonEmail = async(toEmail, subjectEmail, htmlEmail, textEmail, res) => {
     
             };
     
+
+            
             transport.verify(function (error, success) {
                 if (error) {
                     console.log(error);
@@ -60,7 +62,6 @@ const CommonEmail = async(toEmail, subjectEmail, htmlEmail, textEmail, res) => {
 
 
     } catch (error) {
-
         console.log("Error In Email File :", error);
     }
 

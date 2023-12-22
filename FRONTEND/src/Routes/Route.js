@@ -33,9 +33,6 @@ const Routing = () => {
   const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
 
 
-// console.log("location.pathname-"+location.pathname+"-");
-// console.log(location.pathname != '/forget');
-
 
   useEffect(() => {
     if (location.pathname === "/forget") {
@@ -62,7 +59,7 @@ const Routing = () => {
         window.location.reload()
       }
       else if (roles === "SUBADMIN" && location.pathname === "/") {
-        navigate("/subadmin/dashboard");
+        navigate("/subadmin/clients");
         window.location.reload()
       }
       else if (roles === "SUPERADMIN" && location.pathname === "/") {
@@ -79,7 +76,7 @@ const Routing = () => {
       if (user_role_goTo === "USER" && location.pathname === "/") {
         navigate("/client/dashboard");
       } else if (roles === "SUBADMIN" && location.pathname === "/") {
-        navigate("/subadmin/signals");
+        navigate("/subadmin/clients");
       }
     }
 

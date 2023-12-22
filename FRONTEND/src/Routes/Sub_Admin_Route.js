@@ -14,7 +14,7 @@ import TradeHistory from '../layout/Sub_Admin/TradeHistory/TradeHistory';
 import TradingStatus from '../layout/Sub_Admin/Tradingstatus/Tradingstatus';
 import ApiCreateInfo from '../layout/Sub_Admin/ApiCreateInfo/ApiCreateInfo';
 import HelpCenter from '../layout/Sub_Admin/HelpCenter/HelpCenter';
-
+import ApiCreateInfo1 from '../layout/Admin/ApiCreateInfo/ApiCreateInfo';
 
 
 const Admin = () => {
@@ -38,7 +38,7 @@ const Admin = () => {
                 <Route exact path="/signals" element={<Signals />} />
                 <Route exact path="/tradehistory" element={<TradeHistory />} />
                 <Route exact path="/tradingstatus" element={<TradingStatus />} />
-                <Route exact path="/apicreateinfo" element={<ApiCreateInfo />} />
+                <Route exact path="/apicreateinfo" element={<ApiCreateInfo1 />} />
                 <Route exact path="/helpcenter" element={<HelpCenter />} />
             </Routes>
 

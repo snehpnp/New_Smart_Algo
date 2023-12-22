@@ -9,7 +9,6 @@ const ObjectId = mongoose.Types.ObjectId;
 
 class TradeHistory {
 
-
     // GET ADMIN SIGNALS
     async GetUserTradeHistory(req, res) {
         try {
@@ -157,8 +156,6 @@ class TradeHistory {
             console.log("get user trading Status error -", error);
         }
     }
-
-
 
 }
 

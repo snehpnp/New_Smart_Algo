@@ -9,9 +9,6 @@ const ObjectId = mongoose.Types.ObjectId;
 
 class HelpCenter {
 
-
-    // GET ADD HELP
-
     async AddHelp(req, res) {
         try {
 
@@ -48,8 +45,6 @@ class HelpCenter {
             console.log("Help- Center error-", error);
         }
     }
-
-
 
 }
 

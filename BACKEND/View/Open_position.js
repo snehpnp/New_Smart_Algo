@@ -243,6 +243,15 @@ module.exports = { dropExistingView1, Open_Position1 }
 //             }
 //         }
 //     },
+
+//     {
+//         $lookup: {
+//             from: 'companies', 
+//             let: {}, 
+//             pipeline: [],
+//             as: 'companyData' 
+//         }
+//     },
 //     {
 //         $project: {
 //             _id: 1,
@@ -254,7 +263,19 @@ module.exports = { dropExistingView1, Open_Position1 }
 //             strategy: 1,
 //             segment: 1,
 //             trade_symbol: 1,
-//             client_persnal_key: 1,
+//             client_persnal_key: {
+//                 $cond: {
+//                     if: {
+//                         $or: [
+//                             { $eq: ["$client_persnal_key", ""] },
+//                             { $eq: ["$client_persnal_key", null] },
+//                         ],
+//                     },
+//                     then: { $arrayElemAt: ['$companyData.panel_key', 0] },
+//                     else: '$client_persnal_key' // Keep the existing value if not empty or null
+//                 }
+//             },
+            
 //             TradeType: 1,
 //             token: 1,
 //             lot_size: 1,
@@ -269,6 +290,7 @@ module.exports = { dropExistingView1, Open_Position1 }
 //             exit_time_test: 1,
 //             stockInfo_curtime: 1,
 //             stockInfo_lp: 1,
+//             MakeStartegyName:1,
             
 //             isLpInRange1: 1,
 //             isLpInRange: {
@@ -289,8 +311,8 @@ module.exports = { dropExistingView1, Open_Position1 }
 //                     },
 //                 },
 //             },
-
-
 //         },
-//     },
+//     }
+    
+    
 // ]);

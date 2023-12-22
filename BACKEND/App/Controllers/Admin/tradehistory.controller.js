@@ -233,8 +233,6 @@ class Tradehistory {
         }
     }
 
-
-
     // ADMIN TRADING STATUS GET
     async AdminTradingStatus(req, res) {
         try {

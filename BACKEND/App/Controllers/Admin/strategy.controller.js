@@ -14,7 +14,6 @@ class strategy {
         try {
             const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester, per_lot, strategy_image, strategy_amount_month, strategy_amount_quarterly, strategy_amount_half_early, strategy_amount_early, plans } = req.body;
 
-
             const exist_strategy = await strategy_model.findOne({ strategy_name: strategy_name });
             if (exist_strategy) {
                 return res.send({ status: false, msg: 'Strategy already exists', data: [] });
@@ -50,9 +49,6 @@ class strategy {
                 })
 
 
-
-
-
         } catch (error) {
             console.log("Strategy add error -", error.keyValue);
         }
@@ -67,7 +63,6 @@ class strategy {
             if (!strategy_check) {
                 return res.send({ status: false, msg: 'Strategy Not exist', data: [] });
             }
-
 
             try {
                 // CHECK IF SAME STRATEGY AONOTHER STRATEG NAME TO SIMLER MATCH
@@ -150,16 +145,9 @@ class strategy {
             const { page, limit } = req.body;
             const skip = (page - 1) * limit;
 
-            // const totalCount = await strategy_model.countDocuments();
-
-
-            // THEME LIST DATA
             // var getAllTheme = await strategy_model.find()
             const getAllstrategy = await strategy_model.find({})
-            // .skip(skip)
-            // .limit(Number(limit))
-
-
+           
             // IF DATA NOT EXIST
             if (getAllstrategy.length == 0) {
                 res.send({ status: false, msg: "Empty data", data: getAllstrategy })
@@ -171,10 +159,7 @@ class strategy {
                 status: true,
                 msg: "Get All Startegy",
                 data: getAllstrategy,
-                // page: Number(page),
-                // limit: Number(limit),
-                // totalCount: totalCount,
-                // totalPages: Math.ceil(totalCount / Number(limit)),
+
             })
 
 
@@ -215,6 +200,7 @@ class strategy {
             console.log("Get All Strategy Error-", error);
         }
     }
+
     // DELETE STRATEGY IN A COLLECTION
     async DeleteStragegy(req, res) {
         try {
@@ -245,8 +231,6 @@ class strategy {
             return res.status(500).json({ status: false, msg: 'An error occurred', data: [] });
         }
     }
-
-
 
     // GET ALL STRATEGYS FOR CLIENT
     async ClientsAccordingToStrategy(req, res) {
@@ -304,7 +288,6 @@ class strategy {
             console.log("Get All Strategy Error-", error);
         }
     }
-
 
 
 }

@@ -11,10 +11,6 @@ router.post('/get/allsignals', GetAdminSignals)
 router.get('/get/price', GetStrickPriceFromSheet)
 
 
-
-
-
-
 module.exports = router;
 
 

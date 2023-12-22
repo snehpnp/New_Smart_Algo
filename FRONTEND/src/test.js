@@ -22,7 +22,7 @@ const CandlestickChart = () => {
   };
 
 
-console.log("selectedData" ,selectedData)
+// console.log("selectedData" ,selectedData)
 
   return (
     <div  style={{ height: '50vh' }}s>

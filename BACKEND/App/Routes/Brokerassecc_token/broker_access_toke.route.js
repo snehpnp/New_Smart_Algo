@@ -11,7 +11,7 @@ const ObjectId = mongoose.Types.ObjectId;
 //const { GetAccessToken ,GetOrderFullInformation,GetLivePrice,Cancel_order,GetOrderFullInformationAll} = require('../../Controllers/Brokerassecc_token/Alice')
 
 // ALICE BLUE CONTROLLER FILE
-const { GetAccessToken ,GetLivePrice,Cancel_order,GetOrderFullInformationAll} = require('../../Controllers/Brokerassecc_token/Alice')
+const { GetAccessToken ,GetLivePrice,Cancel_order,GetOrderFullInformationAll,backendRunSocket} = require('../../Controllers/Brokerassecc_token/Alice')
 
 // ANGEL CONTROLLER FILE
 const { GetAccessTokenAngel,GetOrderFullInformationAngel} = require('../../Controllers/Brokerassecc_token/Angel')
@@ -77,7 +77,13 @@ router.get('/AliceBlue', GetAccessToken);
 
 
 //router.post('/aliceblue/get/orderinfo', GetOrderFullInformation);
- router.post('/get/token', GetLivePrice);
+router.post('/get/token', GetLivePrice);
+
+
+router.get('/backendRunSocket', backendRunSocket);
+
+
+
  router.post('/order/cancel', Cancel_order);
 
  

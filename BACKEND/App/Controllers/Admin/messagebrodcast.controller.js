@@ -1,4 +1,6 @@
 "use strict";
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 const db = require('../../Models');
 const Message_brodcast = db.Messagebrodcast_data
 const strategy = db.strategy
@@ -6,27 +8,13 @@ const strategy_client = db.strategy_client
 const user = db.user
 
 
-
-// const { formattedDateTime } = require('../../Helper/time.helper')
-const mongoose = require('mongoose');
-const ObjectId = mongoose.Types.ObjectId;
-
-
 class Message {
 
     // ADD MESSAGE BRODCAST
     async AddMessageBrodcast(req, res) {
         try {
-
             const { Broker, message } = req.body
-            // var Find_strategy = await strategy.find({ _id: starteg_id })
-
-            // if (Find_strategy.length == 0) {
-            //     return res.send({ status: false, msg: 'Strategy not exist', data: [] });
-            // }
-
             var data = {
-                // strategy_id: Find_strategy[0]._id,
                 broker_id: Broker,
                 Message: message
             }
@@ -43,19 +31,13 @@ class Message {
         }
     }
 
-
     // GET ADD HELP
     async GetAllMessageBrodcast(req, res) {
         try {
-
-
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-
-
             try {
                 const result = await Message_brodcast.find({
-                    // admin_id: objectId,
                     createdAt: {
                         $gte: today,
                         $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
@@ -78,7 +60,6 @@ class Message {
 
     async GetMessageBrodcast(req, res) {
         try {
-
             const { id } = req.body;
             const objectId = new ObjectId(id);
             var broker_id1
@@ -93,7 +74,6 @@ class Message {
                 return res.send({ status: false, msg: 'Client Not Exist', data: [] });
             }
 
-
             var objectIds = ["-1"]
 
             if (result1[0].license_type == '0') {
@@ -101,7 +81,6 @@ class Message {
             } else {
                 objectIds.push(result1[0].broker)
             }
-
 
             const result = await Message_brodcast.find({
                 broker_id: { $in: objectIds },
@@ -111,8 +90,6 @@ class Message {
                 },
             })
 
-
-            console.log("result", result)
             if (result.length == 0) {
                 return res.send({ status: false, msg: 'message Empty', data: result });
 
@@ -120,11 +97,11 @@ class Message {
             return res.send({ status: true, msg: 'message get successufully', data: result });
 
 
-
         } catch (error) {
             console.log("Help- Center error-", error);
         }
     }
+
 
     async RemoveBroadCast(req, res) {
         try {
@@ -134,7 +111,6 @@ class Message {
 
             const get_user = await Message_brodcast.find({ _id: objectId });
 
-            console.log("get_user", get_user)
             if (get_user.length == 0) {
                 return res.send({ status: false, msg: "Empty data", data: [] });
             }

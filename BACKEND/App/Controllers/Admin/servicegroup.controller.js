@@ -13,32 +13,24 @@ const client_services = db.client_services;
 const strategy_client = db.strategy_client;
 
 
-
-
-var dt = dateTime.create();
-
-
 class GroupService {
 
   // ADD GROUP SERVICES
   async Addgroupservice(req, res) {
     try {
-
       const groupdetails = req.body.groupdetails;
       const services_id = req.body.services_id;
 
       var groupServices = await serviceGroupName.find({ name: groupdetails.name })
-      // console.log("groupServices", groupServices);
 
       if (groupServices.length > 0) {
         return res.send({ status: false, msg: "Group Name Is already Exist", data: groupServices })
       }
 
-
       if (services_id.length > 50) {
         return res.send({ status: false, msg: "You are Select Only 50 Services", data: groupServices })
-
       }
+
 
       serviceGroupName.create({
         name: groupdetails.name,
@@ -54,10 +46,8 @@ class GroupService {
               Service_id: item.service_id,
               group_qty: item.group_qty,
               unique_column: groupName_id + '_' + item.service_id,
-
             })
               .then((createdGroupServiceId) => {
-                // console.log('User created createdGroupServiceId and saved:', createdGroupServiceId._id)
 
               })
               .catch((err) => {
@@ -72,7 +62,6 @@ class GroupService {
 
         })
         .catch((err) => {
-          //console.error('Error creating and saving user:', err.keyValue.name);
           return res.send({ status: false, msg: "Duplicate Value", data: err.keyValue.name })
 
         });
@@ -86,7 +75,6 @@ class GroupService {
   // EDIT GROUP SERVICES
   async Editgroupservice(req, res) {
     try {
-
       const groupdetails = req.body.groupdetails;
       const services_id = req.body.services_id;
 
@@ -98,20 +86,14 @@ class GroupService {
         return res.send({ status: false, msg: "Name is already Exist", data: groupServices })
       }
 
-
-
       if (services_id.length > 50) {
         return res.send({ status: false, msg: "You are Select Only 50 Services", data: groupServices })
-
       }
-
-
 
       let result = await serviceGroupName.findByIdAndUpdate(
         GroupServices_Id,
         {
           name: groupdetails.name,
-          // description: groupdetails.description
         },
         { new: true }
       )
@@ -124,13 +106,11 @@ class GroupService {
         db_exist_group_services.push(item.Service_id.toString());
       });
 
-
       // NEW INSERT STRATEGY TO CONVERT IN STRING AND ID
       var insert_Group_services = [];
       services_id.forEach(function (item, index) {
         insert_Group_services.push(item.service_id);
       });
-
 
       // ADD STRATEGY ARRAY
       var add_Group_services = [];
@@ -139,8 +119,6 @@ class GroupService {
           add_Group_services.push(item);
         }
       });
-      // console.log("add_Group_services", add_Group_services);
-
 
       // DELETE STRATEGY ARRAY
       var delete_GroupServices = [];
@@ -149,11 +127,6 @@ class GroupService {
           delete_GroupServices.push(item);
         }
       });
-
-      // console.log("delete_GroupServices", delete_GroupServices);
-
-
-
 
       var mergedArray = GroupServicesIds.reduce((result, obj1) => {
         const matchingObj = services_id.find((obj2) => {
@@ -249,7 +222,7 @@ class GroupService {
                 service_id: stgId,
                 strategy_id: deleteStrategy[0].strategy_id,
                 uniqueUserService: user.user_id + "_" + data,
-                quantity:Qty_find[0].lotsize,
+                quantity: Qty_find[0].lotsize,
                 lot_size: 1
 
               })
@@ -284,7 +257,6 @@ class GroupService {
 
   // SErvices Work
   async GetAllServices(req, res) {
-
     const pipeline = [
 
       {
@@ -295,8 +267,6 @@ class GroupService {
           as: 'categoryResult'
         }
       },
-
-
       {
         $unwind: '$categoryResult', // Unwind the 'categoryResult' array
       },
@@ -389,9 +359,6 @@ class GroupService {
   }
 
   async getServiceByCatagory(req, res) {
-
-
-
     let pipeline;
 
     if (req.body.segment === 'all') {
@@ -528,7 +495,7 @@ class GroupService {
       const result = await serviceGroupName.deleteOne({ _id: objectId });
       const result1 = await serviceGroup_services_id.deleteMany({ Servicegroup_id: objectId });
 
-      
+
       // console.log("result", result.acknowledged);
 
 
@@ -577,7 +544,6 @@ class GroupService {
     try {
 
       const { _id } = req.body
-      // console.log(_id);
       if (_id != "yyyyyyyYYYYYY") {
         const objectId = new ObjectId(_id);
 
@@ -635,8 +601,6 @@ class GroupService {
       console.log("GET SERVICES NAME -", error);
     }
   }
-
-  // GET SERVICES BY GROUP ID - for integrate other 
 
   async GetServicesByGroupId1(req, res) {
 
@@ -791,7 +755,6 @@ class GroupService {
   }
 
 }
-
 
 
 module.exports = new GroupService();

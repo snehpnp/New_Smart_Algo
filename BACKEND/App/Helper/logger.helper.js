@@ -17,7 +17,7 @@ const logger = createLogger({
         })
     ),
     transports: [
-        new transports.Console(), // Log to the console (you can remove this if not needed)
+        // new transports.Console(), // Log to the console (you can remove this if not needed)
         new transports.File({ filename: logFilePath }), // Log to the specified file
     ],
 });

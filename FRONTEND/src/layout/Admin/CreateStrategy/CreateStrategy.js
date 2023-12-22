@@ -88,7 +88,6 @@ const CreateStrategy = () => {
     if (filterServices) {
       handleShow();
     }
-    getIndicatorApi()
   }, [filterServices]);
 
 
@@ -99,11 +98,8 @@ const CreateStrategy = () => {
 
 
 
-    
-
     const config = {
       method: 'post',
-     // url: 'http://localhost:7700/add/getservicename',
       url:`${Config.base_url}add/getservicename`,
       data: {
         searchQuery: filterServices
@@ -161,23 +157,7 @@ const CreateStrategy = () => {
     setSelectedItems(updatedItems);
   };
 
-  const getIndicatorApi = () => {
-
-    const config = {
-      method: 'get',
-      url: 'http://localhost:7700/get_indicators',
-    };
-
-    axios(config)
-      .then(function (response) {
-        // console.log(response.data);
-        setGetIndicators(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
+ 
  
 
   const indicatorAddItem = (item) => {
@@ -228,7 +208,7 @@ const CreateStrategy = () => {
 
 
   const getAllTimeFrameApi = async () => {
-    await dispatch(
+      await dispatch(
       get_time_frame({
         req: {
           page: "1",
@@ -236,7 +216,7 @@ const CreateStrategy = () => {
         },
         token: AdminToken,
       })
-    )
+      )
       .unwrap()
       .then((response) => {
         //console.log("response get_time_frame - ",response)

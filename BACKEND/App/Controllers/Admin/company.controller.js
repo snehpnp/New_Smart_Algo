@@ -2,7 +2,9 @@
 const db = require('../../Models');
 const company_information = db.company_information
 const { formattedDateTime } = require('../../Helper/time.helper')
+
 class Company {
+
     // EDIT COMPANY INFORMATION
     async EditCompany(req, res) {
         try {
@@ -92,6 +94,7 @@ class Company {
             console.log("Theme error-", error);
         }
     }
+
 }
 
 

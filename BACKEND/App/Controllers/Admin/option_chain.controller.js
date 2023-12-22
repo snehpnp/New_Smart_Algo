@@ -34,9 +34,8 @@ class OptionChain {
 
     // GET SYMBOLL EXPIRY
     async Get_Option_Symbol_Expiry(req, res) {
-
-        console.log(" req.body.symbol ", req.body.symbol);
-
+            
+      console.log("EXPIRY   GETTT")
 
         try {
             const symbol = req.body.symbol;
@@ -80,7 +79,7 @@ class OptionChain {
                 },
                 {
                     $match: {
-                        expiryDate: { $gte: new Date(formattedDate) }
+                        expiryDate: { $gte: new Date() }
                     }
                 },
                 {
@@ -118,9 +117,7 @@ class OptionChain {
 
     }
 
-
     // GET All ROUND TOKEN
-
     async Get_Option_All_Round_Token(req, res) {
 
         const symbol = req.body.symbol;
@@ -132,11 +129,10 @@ class OptionChain {
 
         const get_symbol_price = await Get_Option_Chain_modal.findOne({ symbol: symbol })
 
-console.log("get_symbol_price" ,get_symbol_price)
-
         if (get_symbol_price != undefined) {
             price = parseInt(get_symbol_price.price);
         }
+
 
         const pipeline2 = [
             {
@@ -235,11 +231,8 @@ console.log("get_symbol_price" ,get_symbol_price)
         }
     }
 
-
-
     // GET All ROUND TOKEN
     async Open_Position(req, res) {
-        // console.log(" req ",req.body)
         try {
             var GetTrade = await MainSignals_modal.aggregate([
                 {
@@ -261,7 +254,6 @@ console.log("get_symbol_price" ,get_symbol_price)
                 },
                 {
                     $match: {
-                        // "TradeType": "OPTION_CHAIN",
                         $expr: { $gt: ["$entry_qty_percent_int", "$exit_qty_percent_int"] }
                     }
                 }
@@ -278,15 +270,9 @@ console.log("get_symbol_price" ,get_symbol_price)
         }
     }
 
-
-
-
-
-
     async Get_Option_All_Token_Chain(req, res) {
 
         try {
-            // const symbol = "NIFTY";
             const symbols = ["NIFTY", "BANKNIFTY", "FINNIFTY"];
 
             const expiry = "30112023";
@@ -303,10 +289,8 @@ console.log("get_symbol_price" ,get_symbol_price)
             const lastDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
             const formattedLastDayOfMonth = lastDayOfMonth.toISOString();
 
-
             const final_data = [];
 
-            // symbols.forEach(async (symbol) => {
             for (const symbol of symbols) {
                 const pipeline = [
                     {
@@ -363,8 +347,6 @@ console.log("get_symbol_price" ,get_symbol_price)
                     return itemDate.getTime() === lastDayOfMonth.getTime() || data.indexOf(item) < 2;
                 });
                 const expiryDatesArray = result11.map(item => item.uniqueExpiryValues);
-
-                // console.log(expiryDatesArray);
 
                 const get_symbol_price = await Get_Option_Chain_modal.findOne({ symbol: symbol })
 
@@ -424,7 +406,6 @@ console.log("get_symbol_price" ,get_symbol_price)
                 const result = await Alice_token.aggregate(pipeline2);
                 const resultStrike = await Alice_token.aggregate(pipeline3);
 
-
                 var channelstr = ""
                 if (result.length > 0) {
                     resultStrike.forEach(element => {
@@ -470,10 +451,8 @@ console.log("get_symbol_price" ,get_symbol_price)
 
                 }
 
-
             }
             var concatenatedArray = ""
-            console.log(final_data);
 
             final_data.forEach((data) => {
                 concatenatedArray += data + "#"
@@ -491,7 +470,6 @@ console.log("get_symbol_price" ,get_symbol_price)
             console.log("error", error);
         }
     }
-
 
     async update_stop_loss(req, res) {
         try {
@@ -514,11 +492,6 @@ console.log("get_symbol_price" ,get_symbol_price)
 
         }
     }
-
-
-
-
-
 
     async Stock_chain(req, res) {
         try {
@@ -549,8 +522,6 @@ console.log("get_symbol_price" ,get_symbol_price)
         }
     }
 
-
-
     async subscribr_token(req, res) {
         try {
             const { instrument_token, exch_seg } = req.body
@@ -562,7 +533,7 @@ console.log("get_symbol_price" ,get_symbol_price)
                 $set: { _id: instrument_token, exch: exch_seg },
             };
             const update_token = await stock_live_price.updateOne(filter, update, { upsert: true });
-            res.send({ status: true, msg: "Done" })
+            return res.send({ status: true, msg: "Done" })
 
 
         } catch (error) {

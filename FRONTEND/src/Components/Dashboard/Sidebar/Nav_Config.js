@@ -335,7 +335,7 @@ export const sub_admin_sidebar = [
         "Data": []
     },
     {
-        'id': 7,
+        'id': 8,
         "name": 'Help Center',
         "Icon": "HelpingHand",
         "route": "/subadmin/helpcenter",

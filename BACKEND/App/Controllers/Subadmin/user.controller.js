@@ -126,15 +126,15 @@ class Employee {
         var StartDate = new Date(start_date);
         var GetDay = StartDate.getDay();
         if (GetDay == 4) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay == 5) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay == 6) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay == 0) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay > 0 && GetDay < 4) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 2);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 7);
         }
 
         var end_date_2days = dateTime.create(UpdateDate);
@@ -429,15 +429,15 @@ class Employee {
             var StartDate = new Date(start_date);
             var GetDay = StartDate.getDay();
             if (GetDay == 4) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay == 5) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay == 6) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay == 0) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay > 0 && GetDay < 4) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 2);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 7);
             }
 
             var end_date_2days = dateTime.create(UpdateDate);
@@ -780,7 +780,7 @@ class Employee {
   async UpdateActiveStatus(req, res) {
     try {
       const { id, user_active_status } = req.body;
-     
+
       const get_user = await User_model.find({ _id: id });
 
       if (get_user.length == 0) {
@@ -831,7 +831,7 @@ class Employee {
       });
 
       count_licenses_add.save();
-      
+
       if (result) {
         // STATUS UPDATE SUCCESSFULLY
         var status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
@@ -894,7 +894,7 @@ class Employee {
     try {
       const { id } = req.body;
       // UPDATE ACTTIVE STATUS CLIENT
-
+      
       if (!id) {
         return res.send({
           status: false,

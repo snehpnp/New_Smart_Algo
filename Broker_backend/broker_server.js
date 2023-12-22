@@ -349,6 +349,11 @@ app.post('/broker-signals', async (req, res) => {
         ExitTime = signals.ExitTime.replace(/-/g, ':');
       }
 
+      var MakeStartegyName = ""
+      if(signals.MakeStartegyName != undefined){
+        MakeStartegyName = signals.MakeStartegyName 
+      }
+
 
       var demo = signals.Demo;
 
@@ -505,17 +510,6 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-          // const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
-          // if (signals.TradeType != "OPTION_CHAIN") {
-          //   if (price_live_second.length > 0) {
-          //     price = price_live_second[0].lp
-          //   } else {
-          //     price = signals.Price
-
-          //   }
-          // }
-
-
 
           fs.appendFile(filePath, 'TIME ' + new Date() + ' RECEIVED_SIGNALS_TOKEN ' + instrument_token + '\n', function (err) {
             if (err) {
@@ -526,19 +520,27 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+       // LIVE PRICE GET
+       const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
 
-          // LIVE PRICE GET
-          const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
-          if (signals.TradeType != "OPTION_CHAIN") {
-            if (price_live_second.length > 0) {
-              price = price_live_second[0].lp
-            } else {
-              price = signals.Price
+       try {
+         if (signals.TradeType == "MT_4") {
 
-            }
-          }
+           if (price_live_second.length > 0) {
+             price = price_live_second[0].lp
+           } else {
+             price = signals.Price
+           }
+         }
+       } catch (error) {
+         console.log("error IN price Update", error);
+       }
 
-          console.log("price_live_second", price);
+       if (price == null) {
+         price = signals.Price
+
+       }
+       console.log("price_live_second", price);
 
 
 
@@ -794,7 +796,8 @@ app.post('/broker-signals', async (req, res) => {
               client_persnal_key: client_persnal_key,
               TradeType: TradeType,
               token: instrument_token,
-              lot_size: find_lot_size
+              lot_size: find_lot_size,
+              MakeStartegyName:MakeStartegyName
             }
 
             let Signal_req1 = new Signals(Signal_req)
@@ -846,7 +849,8 @@ app.post('/broker-signals', async (req, res) => {
                 exit_time: ExitTime,
                 exit_time1: 0,
                 complete_trade: 0,
-                sl_status: 0
+                sl_status: 0,
+                MakeStartegyName:MakeStartegyName
 
               }
               const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
@@ -921,7 +925,18 @@ app.post('/broker-signals', async (req, res) => {
 
               } else {
 
-                if (parseFloat(ExitMainSignals[0].entry_qty_percent) > (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
+
+                console.log(parseFloat(ExitMainSignals[0].entry_qty_percent));
+                console.log(parseFloat(qty_percent) )
+                console.log( isNaN(ExitMainSignals[0].exit_qty_percent))
+
+                console.log(ExitMainSignals[0].exit_qty_percent);
+                console.log( parseFloat(ExitMainSignals[0].exit_qty_percent));
+
+
+
+
+                if (parseFloat(ExitMainSignals[0].entry_qty_percent) >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
 
 
                   var updatedData = {

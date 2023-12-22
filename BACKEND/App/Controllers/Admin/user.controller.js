@@ -24,9 +24,8 @@ const { logger, logger1, getIPAddress } = require("../../Helper/logger.helper");
 var dateTime = require("node-datetime");
 var dt = dateTime.create();
 
-// OK
-// Product CLASS
 class Employee {
+
   // USER ADD
   async AddEmployee(req, res) {
     try {
@@ -127,7 +126,7 @@ class Employee {
         });
       }
 
-      console.log("empty check", new Date());
+      // console.log("empty check", new Date());
 
       // USER 2 DAYS LICENSE USE
       if (license_type == "0") {
@@ -143,15 +142,15 @@ class Employee {
         var StartDate = new Date(start_date);
         var GetDay = StartDate.getDay();
         if (GetDay == 4) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay == 5) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay == 6) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay == 0) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
         } else if (GetDay > 0 && GetDay < 4) {
-          UpdateDate = StartDate.setDate(StartDate.getDate() + 2);
+          UpdateDate = StartDate.setDate(StartDate.getDate() + 7);
         }
 
         var end_date_2days = dateTime.create(UpdateDate);
@@ -184,7 +183,7 @@ class Employee {
         // console.log("END DATE", end_date_2days);
         EndDate1 = end_date_2days;
       }
-      console.log("license add ", new Date());
+      // console.log("license add ", new Date());
 
       const min = 1;
       const max = 1000000;
@@ -197,7 +196,7 @@ class Employee {
         rand_password.toString(),
         salt
       );
-      console.log("ganrate pass ", new Date());
+      // console.log("ganrate pass ", new Date());
 
 
       // Panel Prifix key Find
@@ -210,19 +209,19 @@ class Employee {
           data: [],
         });
       }
-      console.log("Compant data  ", new Date());
+      // console.log("Compant data  ", new Date());
 
 
       const mins = 1;
       const maxs = 1000000;
       const rands = mins + Math.random() * (maxs - mins);
       var cli_key = Math.round(rands);
-      console.log("ganrate randome pass ", new Date());
+      // console.log("ganrate randome pass ", new Date());
 
       var ccd = dt.format("ymd");
       var client_key = Panel_key[0].prefix + cli_key + ccd;
 
-      console.log("Employee add 1", new Date());
+      // console.log("Employee add 1", new Date());
 
 
 
@@ -258,7 +257,7 @@ class Employee {
           var User_id = data[0]._id;
 
 
-          console.log("Employee add 2", new Date());
+          // console.log("Employee add 2", new Date());
 
           // GROUP SERVICE ADD
           const User_group_service = new groupService_User({
@@ -281,7 +280,7 @@ class Employee {
           }
 
 
-          console.log("stg and group add", new Date());
+          // console.log("stg and group add", new Date());
 
 
           const GroupServiceId = new ObjectId(group_service);
@@ -341,7 +340,7 @@ class Employee {
               })
 
 
-            console.log("client service add", new Date());
+            // console.log("client service add", new Date());
 
 
             // LICENSE TABLE ADD USE LICENSE OUR CLIENT
@@ -359,12 +358,12 @@ class Employee {
               FullName: FullName,
               Email: Email,
               Password: rand_password,
-              user_type:license_type == 2 ? "Live Account" : license_type == 0 ? "2 Days Free Live Account" : "Free Demo Account"  
+              user_type: license_type == 2 ? "Live Account" : license_type == 0 ? "2 Days Free Live Account" : "Free Demo Account"
             };
-            console.log("Done final", new Date());
+            // console.log("Done final", new Date());
 
             res.send({ status: true, msg: "successfully Add!", data: data[0] });
-            console.log("last add", new Date());
+            // console.log("last add", new Date());
             var EmailData = await firstOptPass(email_data);
             CommonEmail(toEmail, subjectEmail, EmailData);
 
@@ -403,12 +402,8 @@ class Employee {
       var PID = new ObjectId(req.parent_id);
 
 
-      // FIND PARENT ROLE
-      // const parentRole = await User_model.findOne({
-      //   _id: PID,
-      // }).select('Role')
 
-      console.log("sTART", new Date());
+      // console.log("sTART", new Date());
 
       // IF USER ALEARDY EXIST
       const existingUsername = await User_model.findOne({
@@ -452,7 +447,7 @@ class Employee {
       var TotalMonth = "0";
 
       // var Panel_key = await Company_info.find();
-      console.log("COMPANY", new Date());
+      // console.log("COMPANY", new Date());
 
       var Panel_key = await Company_info.find({}, { prefix: 1, licenses: 1, _id: 0 }).limit(1);
 
@@ -492,7 +487,7 @@ class Employee {
         new_licence = req.licence1;
       }
 
-      console.log("cOMPANY 1", new Date());
+      // console.log("cOMPANY 1", new Date());
 
 
       if (
@@ -514,15 +509,15 @@ class Employee {
             var StartDate = new Date(start_date);
             var GetDay = StartDate.getDay();
             if (GetDay == 4) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay == 5) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 4);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay == 6) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay == 0) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 3);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 8);
             } else if (GetDay > 0 && GetDay < 4) {
-              UpdateDate = StartDate.setDate(StartDate.getDate() + 2);
+              UpdateDate = StartDate.setDate(StartDate.getDate() + 7);
             }
 
             var end_date_2days = dateTime.create(UpdateDate);
@@ -618,7 +613,7 @@ class Employee {
           }
         }
 
-        console.log("STG ADD 1", new Date());
+        // console.log("STG ADD 1", new Date());
 
 
         // STARTEGY ADD AND EDIT
@@ -656,7 +651,7 @@ class Employee {
         });
         // console.log("delete_startegy", delete_startegy);
 
-        console.log("STG ADD 2", new Date());
+        // console.log("STG ADD 2", new Date());
 
         // ADD STRATEGY IN STRATEGY CLIENT
         if (add_startegy.length > 0) {
@@ -741,7 +736,7 @@ class Employee {
           });
         }
 
-        console.log("STG ADD 3", new Date());
+        // console.log("STG ADD 3", new Date());
 
 
 
@@ -841,13 +836,13 @@ class Employee {
 
 
           } else {
-            console.log("NO CHANGE IN GROUP SERVICES");
+            // console.log("NO CHANGE IN GROUP SERVICES");
           }
         } catch (error) {
           console.log("Group Services Error-", error);
         }
 
-        console.log("GROP ADD 1", new Date());
+        // console.log("GROP ADD 1", new Date());
 
 
         var User_update = {
@@ -875,7 +870,7 @@ class Employee {
           { $set: User_update }
         );
 
-        console.log("uSER eDIT 1", new Date());
+        // console.log("uSER eDIT 1", new Date());
 
         if (req.license_type == "2" || req.license_type == 2) {
 
@@ -889,9 +884,9 @@ class Employee {
         }
 
 
-        console.log("eND :-", new Date());
+        // console.log("eND :-", new Date());
 
-        
+
         // USER GET ALL TYPE OF DATA
         return res.send({
           status: true,
@@ -913,11 +908,9 @@ class Employee {
     }
   }
 
-
-
   // GET ALL EXPIRED USERS
   async GetAllExpiredClients(req, res) {
-   
+
 
     try {
       const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
@@ -927,7 +920,8 @@ class Employee {
       var AdminMatch;
 
       const date = new Date();
-      const formattedDate = date.toISOString();
+      const formattedDate = date.toISOString().slice(0, 10); // Sirf date part extract karo
+    
 
       if (Find_Role == "ADMIN") {
         AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $lt: new Date(formattedDate) } };
@@ -967,7 +961,6 @@ class Employee {
 
   }
 
-
   // GET ALL GetAllClients
   async GetAllClients(req, res) {
     try {
@@ -978,10 +971,12 @@ class Employee {
       var AdminMatch;
 
       const date = new Date();
-      const formattedDate = date.toISOString();
+      const formattedDate = date.toISOString().slice(0, 10); // Sirf date part extract karo
+
+      
 
       if (Find_Role == "ADMIN") {
-        AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $gt: new Date(formattedDate) } };
+        AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $gte: new Date(formattedDate) } };
       } else if (Find_Role == "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
@@ -1016,6 +1011,7 @@ class Employee {
       console.log("loginClients Error-", error);
     }
   }
+
   // GET ALL LOGIN CLIENTS
   async loginClients(req, res) {
     try {
@@ -1294,10 +1290,6 @@ class Employee {
     }
   }
 
-
-
-
-
   // UPDATE BROKER KEY
   async Update_Broker_Keys(req, res) {
     try {
@@ -1326,8 +1318,6 @@ class Employee {
     }
   }
 
-
-
   // GET ONLY CLIENT KEY
   async GetclientKey(req, res) {
     try {
@@ -1347,19 +1337,7 @@ class Employee {
     }
   }
 
-
-
 }
-
-
-
-
-
-
-
-
-
-
 
 module.exports = new Employee();
 

@@ -10,7 +10,6 @@ const ObjectId = mongoose.Types.ObjectId;
 class Signals {
 
     // GET ADMIN SIGNALS
-
     async GetUserTradeSignals(req, res) {
         try {
             const { user_id } = req.body;
@@ -117,7 +116,6 @@ class Signals {
             console.log("Signals  error -", error);
         }
     }
-
 
 }
 

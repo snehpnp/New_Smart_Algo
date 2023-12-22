@@ -18,7 +18,6 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
-// const { formattedDateTime } = require('../../Helper/time.helper')
 const { Alice_Socket } = require("../../Helper/Alice_Socket");
 
 class AliceBlue {
@@ -370,7 +369,12 @@ class AliceBlue {
     }
 
 
-
+    async backendRunSocket(req, res) {
+      
+       console.log("backend run code");
+       Alice_Socket();
+       return res.send({ status: true, msg: 'backend run socket'});
+    }
 
 
 }
@@ -443,6 +447,8 @@ const GetAllBrokerResponse = async (user_id, res) => {
 
 
 }
+
+
 module.exports = new AliceBlue();
 
 

@@ -11,7 +11,6 @@ const ObjectId = mongoose.Types.ObjectId;
 class StrategyDesc {
 
     // GET ADMIN SIGNALS
-
     async GetUserStrategy(req, res) {
         try {
 

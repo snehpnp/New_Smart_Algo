@@ -19,7 +19,6 @@ class AdminHelpCenter {
             const today = new Date();   
             today.setHours(0, 0, 0, 0);
 
-
             try {
                 const result = await HelpCenter_modal.find({
                     // admin_id: objectId,

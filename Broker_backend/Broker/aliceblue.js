@@ -69,8 +69,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                         const filePath_aliceblue = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
 
-                       const command = `grep ,${pattern}, ${filePath_aliceblue}`;
-                     //   const command = `findstr ,${pattern}, ${filePath_aliceblue}`;
+                    //    const command = `grep ,${pattern}, ${filePath_aliceblue}`;
+                       const command = `findstr ,${pattern}, ${filePath_aliceblue}`;
 
                         // console.log("command ", command)
 

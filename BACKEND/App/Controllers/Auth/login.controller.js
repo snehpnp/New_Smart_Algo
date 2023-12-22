@@ -79,7 +79,6 @@ class Login {
             if (EmailCheck.Role == "SUBADMIN") {
 
                 var SubadminPermision = await Subadmin_Permission.find({ user_id: EmailCheck._id })
-                // console.log("SubadminPermision", SubadminPermision);
                 var msg = {
                     'Email': EmailCheck.Email,
                     'user_id': EmailCheck._id,
@@ -185,7 +184,6 @@ class Login {
 
 
             } catch (error) {
-                console.log("Verfiy error", error);
                 return res.send({ status: false, msg: 'Server Issue', data: error });
 
             }
@@ -307,7 +305,7 @@ class Login {
 
             // // IF Login Time Email CHECK
             var EmailCheck = await User.findOne({ Email: Email })
-            var EmailCheck = await company_information.findOne()
+            var CompanyInformation = await company_information.findOne()
 
 
             if (!EmailCheck) {
@@ -317,10 +315,7 @@ class Login {
 
             var userid = Buffer.from(JSON.stringify(EmailCheck._id)).toString('base64');
             // var redirectUrl = 'http://trade.pandpinfotech.com/#/update/' + userid
-            var redirectUrl = 'http://trade.codingpandit.com/#/update/' + userid
-
-
-
+            var redirectUrl = `https://${trade.codingpandit.com}/#/update/${userid}`
 
             var toEmail = Email;
             var subjectEmail = "Forget Password";
@@ -406,10 +401,7 @@ class Login {
                 );
 
             }
-            // If Not Update User
-            if (!result) {
-                return res.send({ status: false, msg: 'Server Side issue.', data: [] });
-            }
+         
 
             res.send({ status: true, message: "Password Update Successfully" });
 
@@ -451,7 +443,6 @@ class Login {
             }
         }
         catch (error) {
-            console.log(error);
             res.send({ status: false, msg: "Server Side error", data: error })
         }
 
@@ -491,7 +482,6 @@ class Login {
 
         }
         catch (error) {
-            console.log(error);
             res.send({ status: false, msg: "Server Side error", data: error })
         }
 

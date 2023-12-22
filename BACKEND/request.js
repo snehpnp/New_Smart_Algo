@@ -7,8 +7,18 @@ module.exports = function (app) {
   const { createViewZerodha } = require('./View/zerodha')
 
   const { dropExistingView, TradeHistroy } = require('./View/TradeHistory')
-  const { TokenSymbolUpdate, TruncateTable, tokenFind } = require('./App/Cron/cron')
+  const { TokenSymbolUpdate, TruncateTable, tokenFind ,twodaysclient} = require('./App/Cron/cron')
  
+
+
+  app.get('/croncheck',(req,res)=>{
+    var data = twodaysclient()
+    data.then((data1)=>{
+
+      res.send(data1)
+    })
+  })
+
 
   // TEST API
   app.get('/tokenFind', async (req, res) => {

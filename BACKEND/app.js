@@ -12,7 +12,6 @@ const cors = require('cors');
 const bodyparser = require('body-parser')
 
 
-
 const corsOpts = {
   origin: '*',
   methods: [
@@ -35,37 +34,12 @@ app.use(bodyparser.json());
 const server = http.createServer(app);
 app.use(express.json());
 
-const db = require('../BACKEND/App/Models')
-const Alice_token = db.Alice_token;
-const UserMakeStrategy = db.UserMakeStrategy;
 
+// MODAL REQUIRE
+// require('../BACKEND/App/Models')
 
 // REQUIRE File
 require('./App/Cron/cron')
-
-const { createView, dashboard_view } = require('./View/Alice_blue')
-const { createViewAngel } = require('./View/Angel')
-const { createViewFivepaisa } = require('./View/fivepaisa')
-const { createViewZerodha } = require('./View/zerodha')
-
-// TEST API
-app.get('/get', async (req, res) => {
- // createViewZerodha()
-  // createViewFivepaisa()
-  // createViewAngel()
-  //createView()
-  res.send({ msg: "Done!!!" })
-});
-
-app.get('/ok',async (req,res)=>{
-
-  res.send("okk")
-})
-
-
-
-//Testing Api #Shakir
-// require("./shakirTeting")(app)
 
 // Routes all
 require("./App/Routes")(app)
@@ -73,19 +47,11 @@ require("./App/Routes")(app)
 // EMERGANCY
 require("./App/Emergency Apis/service")(app)
 require("./App/Emergency Apis/getOptionSymbols")(app)
-
 require("./request")(app)
+require("./shakirTeting")(app)
 
 
 
-
-const { Alice_Socket } = require('./App/Helper/Alice_Socket')
-
-
-app.get('/token/dd', async (req, res) => {
-  Alice_Socket()
-  res.send({ msg: "Done!!!" })
-})
 
 
 
@@ -98,12 +64,10 @@ const io = socketIo(server, {
 }
 );
 
-
-
-
-
 io.on("connection", (socket) => {
   console.log(`a user connected with id ${socket.id}`);
+
+  
   socket.on("help_from_client", (data) => {
     socket.broadcast.emit("test_msg_Response", data);
   });
@@ -112,11 +76,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("logout_user_from_other_device_res", data111);
   });
 
-
 })
 
 
-
+const { Alice_Socket } = require('./App/Helper/Alice_Socket')
 
 
 // Server start

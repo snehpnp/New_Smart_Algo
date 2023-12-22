@@ -14,12 +14,11 @@ const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect();
 const db1 = client.db(process.env.DB_NAME);
-
-
 const viewName = 'dashboard_data';
 
 class Dashboard {
 
+    // ADMIN DASHBOARD
     async AdminDashboard(req, res) {
         try {
 
@@ -63,10 +62,6 @@ class Dashboard {
         }
     }
 
-
-
-
-
     // ADD BROKER INFORMATION
     async add_broker_information(req, res) {
         try {
@@ -86,6 +81,7 @@ class Dashboard {
         }
     }
 
+    
     // Broker Information Update
     async update_broker_information(req, res) {
         try {
