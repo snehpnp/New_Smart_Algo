@@ -202,6 +202,7 @@ const AllClients = () => {
         .unwrap()
         .then((response) => {
           if (response.status) {
+            localStorage.setItem("route","admin/allclients");
             localStorage.setItem("gotodashboard", JSON.stringify(true));
             localStorage.setItem(
               "user_details_goTo",

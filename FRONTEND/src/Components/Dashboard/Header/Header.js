@@ -154,6 +154,8 @@ const Header = ({ ChatBox }) => {
       localStorage.removeItem("gotodashboard");
       localStorage.removeItem("user_details_goTo");
       localStorage.removeItem("user_role_goTo");
+      localStorage.removeItem("route");
+
 
       setTimeout(() => {
         localStorage.removeItem("user_details_goTo");

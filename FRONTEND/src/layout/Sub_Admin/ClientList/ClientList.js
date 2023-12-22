@@ -118,7 +118,7 @@ const AllClients = () => {
 
     // GO TO DASHBOARD
     const goToDashboard = async (asyncid, email) => {
-        console.log("email",email);
+        console.log("email", email);
         let req = {
             Email: email,
 
@@ -126,6 +126,8 @@ const AllClients = () => {
         await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
             .then((response) => {
                 if (response.status) {
+                    localStorage.setItem("route", "admin/allclients");
+
                     localStorage.setItem("gotodashboard", JSON.stringify(true));
                     localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
                     localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
