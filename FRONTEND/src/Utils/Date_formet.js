@@ -1,5 +1,5 @@
 import { format, formatDistanceToNow } from 'date-fns';
-
+import Holidays from "date-holidays"
 const dateTime = require('node-datetime');
 
 
@@ -131,6 +131,22 @@ export const isForeignUserAllowedToLogin = (userCountry, userLocalTime) => {
   return isForeignUser && isLoginTimeValid;
 }
 
+
+
+
+export const GetMarketOpenDays = (userCountry, userLocalTime) => {
+  const currentDate = new Date();
+  // const currentDate = new Date('Fri Dec 22 2023 14:08:08 GMT+0530 (India Standard Time)');
+
+
+  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const weekday = weekdays[currentDate.getDay()];
+  const holidays = new Holidays();
+  const currentDateIST = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+ // console.log("holidays.isHoliday(currentDate)", holidays.isHoliday(currentDate))
+
+  return !holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday'
+}
 
 
 
