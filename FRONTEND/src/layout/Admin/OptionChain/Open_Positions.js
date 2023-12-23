@@ -2,20 +2,19 @@
 import React, { useEffect, useState } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
-import { useDispatch, useSelector } from "react-redux";
-import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
+import { useDispatch, } from "react-redux";
+import { fDateTimeSuffix } from "../../../Utils/Date_formet";
 import { Get_Panel_key } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
-import { check_Device } from "../../../Utils/find_device";
 import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../Service/Alice_Socket";
-import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../Utils/ShowTradeColor";
+import { ShowColor1 } from "../../../Utils/ShowTradeColor";
 import { Get_Open_Position, Update_Signals } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice'
 import $ from "jquery";
 import axios from "axios"
 import Modal from "../../../Components/ExtraComponents/Modal";
-import { convert_string_to_month } from "../../../Utils/Date_formet";
+import { convert_string_to_month, GetMarketOpenDays } from "../../../Utils/Date_formet";
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import Holidays from "date-holidays"
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
@@ -314,32 +313,40 @@ const TradeHistory = () => {
 
     const UpdateStopLoss = async () => {
 
-        if (UserDetails && UserDetails.trading_status == "off") {
-            alert("Please Trading On First")
-        } else {
-            if (selected1.length === 0) {
-                alert("Please Select Atleast One Symbol")
+        let MarketOpenToday = GetMarketOpenDays();
+
+        if (MarketOpenToday) {
+            if (UserDetails && UserDetails.trading_status == "off") {
+                alert("Please Trading On First")
             }
             else {
-                console.log(selected1);
-                // return
-                await dispatch(
-                    Update_Signals({
-                        data: selected1,
-                        token: token,
-                    })
+                if (selected1.length === 0) {
+                    alert("Please Select Atleast One Symbol")
+                }
+                else {
+                    console.log(selected1);
+                    // return
+                    await dispatch(
+                        Update_Signals({
+                            data: selected1,
+                            token: token,
+                        })
 
-                ).unwrap()
-                    .then((response) => {
-                        if (response.status) {
-                            setPanelKey(response.data)
-                        }
-                        toast.success(response.msg);
-                        setrefresh(!refresh)
-                        // window.location.reload()
-                    });
+                    ).unwrap()
+                        .then((response) => {
+                            if (response.status) {
+                                setPanelKey(response.data)
+                            }
+                            toast.success(response.msg);
+                            setrefresh(!refresh)
+                            // window.location.reload()
+                        });
+                }
+
             }
 
+        } else {
+            alert('Market Is Closed Today');
         }
 
     }
@@ -389,7 +396,7 @@ const TradeHistory = () => {
 
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
 
-    
+
 
             if (pre_tag.new_qty_persent > pre_tag.old_qty_persent) {
                 alert('Error: Value cannot be greater than ' + pre_tag.old_qty_persent);
@@ -435,51 +442,58 @@ const TradeHistory = () => {
     // ----------------------------- SQUARE OFF ----------------------------
     const SquareOfAll = () => {
 
-        if (UserDetails && UserDetails.trading_status == "off") {
-            alert("Please Trading On First")
-        } else {
-            if (selected1.length > 0) {
-                setshowModal(true)
+        let MarketOpenToday = GetMarketOpenDays();
 
-                selected1.map((rowdata) => {
-
-                    const buy = $('.BP1_Put_Price_' + rowdata.token).html();
-                    const sell = $('.SP1_Call_Price_' + rowdata.token).html();
-
-                    const show_expiry = convert_string_to_month(rowdata.expiry)
-                    var pre_tag = {
-                        client_persnal_key: rowdata.client_persnal_key ? rowdata.client_persnal_key : PanelKey && PanelKey.client_key,
-                        TradeType: rowdata.TradeType,
-                        option_type: rowdata.option_type,
-                        type: rowdata.entry_type === "LE" ? "LX" : rowdata.entry_type === "SE" ? 'SX' : "",
-                        trade_symbol: `${rowdata.symbol}${show_expiry}${rowdata.strike}${rowdata.option_type === "CALL" ? "CE" : rowdata.option_type === "PUT" ? "PE" : ""}`,
-                        showexpiry: rowdata.expiry,
-                        token: rowdata.token,
-                        indexcallput: rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`,
-                        segment: rowdata.segment,
-                        strike: rowdata.strike,
-                        price: rowdata.entry_type === "LE" ? buy : rowdata.entry_type === "SE" ? sell : "",
-                        symbol: rowdata.symbol,
-                        expiry: rowdata.expiry,
-                        strategy: rowdata.strategy,
-                        old_qty_persent: rowdata.entry_qty_percent && rowdata.exit_qty_percent ? (parseInt(rowdata.entry_qty_percent) - parseInt(rowdata.exit_qty_percent)) : rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent,
-                        new_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent
-                    };
-                    if (rowdata.entry_type === "") {
-                        setCreateSignalRequest(oldValues => {
-                            return oldValues.filter(item => item.token !== rowdata.token)
-                        })
-                    }
-                    else {
-                        setCreateSignalRequest(oldValues => {
-                            return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`))
-                        })
-                        setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
-                    }
-                })
+        if (MarketOpenToday) {
+            if (UserDetails && UserDetails.trading_status == "off") {
+                alert("Please Trading On First")
             } else {
-                alert("Emplty Data")
+                if (selected1.length > 0) {
+                    setshowModal(true)
+
+                    selected1.map((rowdata) => {
+
+                        const buy = $('.BP1_Put_Price_' + rowdata.token).html();
+                        const sell = $('.SP1_Call_Price_' + rowdata.token).html();
+
+                        const show_expiry = convert_string_to_month(rowdata.expiry)
+                        var pre_tag = {
+                            client_persnal_key: rowdata.client_persnal_key ? rowdata.client_persnal_key : PanelKey && PanelKey.client_key,
+                            TradeType: rowdata.TradeType,
+                            option_type: rowdata.option_type,
+                            type: rowdata.entry_type === "LE" ? "LX" : rowdata.entry_type === "SE" ? 'SX' : "",
+                            trade_symbol: `${rowdata.symbol}${show_expiry}${rowdata.strike}${rowdata.option_type === "CALL" ? "CE" : rowdata.option_type === "PUT" ? "PE" : ""}`,
+                            showexpiry: rowdata.expiry,
+                            token: rowdata.token,
+                            indexcallput: rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`,
+                            segment: rowdata.segment,
+                            strike: rowdata.strike,
+                            price: rowdata.entry_type === "LE" ? buy : rowdata.entry_type === "SE" ? sell : "",
+                            symbol: rowdata.symbol,
+                            expiry: rowdata.expiry,
+                            strategy: rowdata.strategy,
+                            old_qty_persent: rowdata.entry_qty_percent && rowdata.exit_qty_percent ? (parseInt(rowdata.entry_qty_percent) - parseInt(rowdata.exit_qty_percent)) : rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent,
+                            new_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent
+                        };
+                        if (rowdata.entry_type === "") {
+                            setCreateSignalRequest(oldValues => {
+                                return oldValues.filter(item => item.token !== rowdata.token)
+                            })
+                        }
+                        else {
+                            setCreateSignalRequest(oldValues => {
+                                return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`))
+                            })
+                            setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
+                        }
+                    })
+                } else {
+                    alert("Emplty Data")
+                }
             }
+        }
+        else {
+            alert('Market Is Closed Today');
         }
     }
 
@@ -688,14 +702,13 @@ const TradeHistory = () => {
 
     const forMCXandCurrencyMarketTrade = () => {
 
-        const currentDate = new Date();
-        const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const weekday = weekdays[currentDate.getDay()];
-        const holidays = new Holidays();
-        const currentDateIST = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+        let MarketOpenToday = GetMarketOpenDays();
 
-        if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday') {
+        if (MarketOpenToday) {
+            const currentDateIST = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+
             const EQcutoffTimeIST = new Date();
+
             EQcutoffTimeIST.setHours(15, 30, 0, 0);
             const forEquity = new Date(currentDateIST).getTime() > EQcutoffTimeIST.getTime();
 

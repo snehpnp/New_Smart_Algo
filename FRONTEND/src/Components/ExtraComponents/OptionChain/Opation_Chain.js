@@ -12,9 +12,9 @@ import { Trash2 } from 'lucide-react';
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
 import Holidays from "date-holidays"
 import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
-import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
+import { get_thre_digit_month, convert_string_to_month, GetMarketOpenDays } from "../../../Utils/Date_formet";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
-import { CreateSocketSession, ConnctSocket, GetAccessToken, BackendRunSocket} from "../../../Service/Alice_Socket";
+import { CreateSocketSession, ConnctSocket, GetAccessToken, BackendRunSocket } from "../../../Service/Alice_Socket";
 import $ from "jquery";
 import axios from "axios"
 import toast, { Toaster } from 'react-hot-toast';
@@ -307,18 +307,19 @@ const HelpCenter = () => {
 
     const ExcuteTradeButton = () => {
 
-        const currentDate = new Date();
-        const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const weekday = weekdays[currentDate.getDay()];
-        const holidays = new Holidays();
-        const currentDateIST = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+
+        let MarketOpenToday = GetMarketOpenDays();
+
         const cutoffTimeIST = new Date();
+        const currentDateIST = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+
         cutoffTimeIST.setHours(15, 30, 0, 0);
-        // Check if the current time is after 3:30 PM in IST timezone
         const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
 
+        if (!MarketOpenToday) {
+            alert('Market Is Closed Today');
 
-        if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday' && isAfterCutoffTime) {
+        } else if (!MarketOpenToday && isAfterCutoffTime) {
             alert("Market Time Is Off")
         } else {
             if (UserDetails !== undefined && UserDetails.trading_status === "on") {
@@ -521,7 +522,7 @@ const HelpCenter = () => {
                 }
             })
     }
-    
+
     useEffect(() => {
         getPanelDetails()
         symbols()
@@ -538,7 +539,7 @@ const HelpCenter = () => {
         // Check if the current time is after 3:30 PM in IST timezone
         const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
 
-       // console.log("isAfterCutoffTime", isAfterCutoffTime)
+        // console.log("isAfterCutoffTime", isAfterCutoffTime)
 
 
 
@@ -667,13 +668,13 @@ const HelpCenter = () => {
 
             if (res.data.stat) {
 
-              // BACKEND SOCKET RUN API
-              
-            //alert("okk")
-    
-             await BackendRunSocket("");
+                // BACKEND SOCKET RUN API
 
-              //
+                //alert("okk")
+
+                await BackendRunSocket("");
+
+                //
 
                 const handleResponse = async (response) => {
 
@@ -842,7 +843,7 @@ const HelpCenter = () => {
                                     <button
                                         className="btn btn-primary me-2"
                                         onClick={(e) => ExcuteTradeButton()}
-                                        disabled={CreateSignalRequest.length === 0}
+                                    //  disabled={CreateSignalRequest.length === 0}
 
                                     >
                                         Execute Trade
