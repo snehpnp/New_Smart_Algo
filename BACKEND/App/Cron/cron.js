@@ -10,6 +10,7 @@ const Alice_token = db.Alice_token;
 const User = db.user;
 const user_logs = db.user_logs;
 const live_price = db.live_price;
+const UserMakeStrategy = db.UserMakeStrategy;
 
 const { Get_Option_All_Token_Chain } = require('../../App/Controllers/Admin/option_chain.controller')
 const {  GetStrickPriceFromSheet } = require('../Controllers/Admin/signals.controller')
@@ -35,6 +36,7 @@ cron.schedule('0 8 * * *', () => {
 cron.schedule('1 1 * * *', () => {
     console.log('running a task every minute');
     TruncateTable()
+    numberOfTrade_count_trade();
 });
 
 cron.schedule('10 1 * * *', () => {
@@ -586,5 +588,18 @@ const market_holiday_redis = async () => {
 
 }
 
+// Update numberOfTrade_count_trade 0
+const numberOfTrade_count_trade =async ()=>{
+    const update_trade_off = {
+        $set: {
+          numberOfTrade_count_trade: 0,
+        },
+       
+      };
+  
+      const filter_trade_off = {};
+      let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
+}
 
-module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind }
+
+module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind ,numberOfTrade_count_trade }

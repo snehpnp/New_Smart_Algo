@@ -293,8 +293,8 @@ module.exports = function (app) {
   async function connectToDB(collectionName, response) {
     try {
 
-      //const db = client.db('TradeTools'); // Replace 'mydb' with your desired database name
-      const db = client.db('TradeTools'); // Replace 'mydb' with your desired database name
+      //const db = dbTradeTools; // Replace 'mydb' with your desired database name
+      const db = dbTradeTools; // Replace 'mydb' with your desired database name
       // console.log("db",db);
       //  const collectionName = 'shakir'; // Replace with your desired collection name
 
@@ -385,7 +385,7 @@ module.exports = function (app) {
 
   async function createView(collectionName) {
     try {
-      const db = client.db('TradeTools');
+      const db = dbTradeTools;
 
       const pipeline = [
         {
@@ -451,7 +451,7 @@ module.exports = function (app) {
 
   async function createViewM3(collectionName) {
     try {
-      const db = client.db('TradeTools');
+      const db = dbTradeTools;
 
 
       const pipeline = [
@@ -538,7 +538,7 @@ module.exports = function (app) {
 
   async function createViewM5(collectionName) {
     try {
-      const db = client.db('TradeTools');
+      const db = dbTradeTools;
 
 
       const pipeline = [
@@ -625,7 +625,7 @@ module.exports = function (app) {
 
   async function createViewM10(collectionName) {
     try {
-      const db = client.db('TradeTools');
+      const db = dbTradeTools;
 
 
       const pipeline = [
@@ -712,7 +712,7 @@ module.exports = function (app) {
 
   async function createViewM15(collectionName) {
     try {
-      const db = client.db('TradeTools');
+      const db = dbTradeTools;
 
 
       const pipeline = [
@@ -799,7 +799,7 @@ module.exports = function (app) {
 
   async function createViewM30(collectionName) {
     try {
-      const db = client.db('TradeTools');
+      const db = dbTradeTools;
 
 
       const pipeline = [
@@ -886,7 +886,7 @@ module.exports = function (app) {
 
   async function createViewM60(collectionName) {
     try {
-      const db = client.db('TradeTools');
+      const db = dbTradeTools;
 
 
       const pipeline = [
@@ -973,7 +973,7 @@ module.exports = function (app) {
 
   async function createViewM1DAY(collectionName) {
     try {
-      const db = client.db('TradeTools');
+      const db = dbTradeTools;
 
 
       const pipeline = [
@@ -1176,7 +1176,7 @@ module.exports = function (app) {
     // console.log("inside UserName ",UserName)
     // console.log("price_source ",price_source)
 
-    const db = client.db('TradeTools');
+    const db = dbTradeTools;
     let collectionName = 'M' + timeframe + '_' + tokensymbol;
 
     const collections = await db.listCollections({ name: collectionName }).toArray();
@@ -1593,14 +1593,18 @@ module.exports = function (app) {
 
     try {
 
-      const db = client.db('TradeTools');
+      const db = dbTradeTools;
 
-      const collections = await db.listCollections().toArray();
+      const collections = await dbTradeTools.listCollections().toArray();
       // Drop each collection
       for (const collectionInfo of collections) {
         const collectionName = collectionInfo.name;
-        await db.collection(collectionName).drop();
+        
+        if(collectionName != "system.views"){
+        await dbTradeTools.collection(collectionName).drop();
         console.log(`Dropped collection: ${collectionName}`);
+        }
+
       }
 
       console.log('All collections dropped.');
@@ -1617,8 +1621,7 @@ module.exports = function (app) {
   async function TriggerCollection(token) {
 
 
-    const db = client.db('TradeTools');
-    const collection = db.collection(token);
+    const collection = dbTradeTools.collection(token);
 
     const changeStream = collection.watch();
 
@@ -1766,7 +1769,7 @@ module.exports = function (app) {
     console.log("token", token)
     console.log("market_status", market_status)
     console.log("time", time)
-    const db = client.db('TradeTools');
+    const db = dbTradeTools
     let collectionName = 'M_' + token;
     const collection = db.collection(collectionName);
 

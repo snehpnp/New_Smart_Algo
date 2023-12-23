@@ -1617,7 +1617,7 @@ const updateStrategy = async (e) => {
             </div>
 
             <div className="col-md-2 ">
-              <label  className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>No of Trade</label>
+              <label  className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Number of Trade</label>
              <input min={1} type="text"  defaultValue={singleMakeStrategyData.numberOfTrade} onChange={(e)=>{onChange(e)}}  name="no_of_trade" className="form-control stratergy-box"></input>
             </div>
 

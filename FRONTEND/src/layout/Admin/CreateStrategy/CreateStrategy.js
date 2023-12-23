@@ -328,6 +328,10 @@ const CreateStrategy = () => {
   const [strategyName, setStrategyName] = useState("");
   
   const [numberOfTrade, setNumberOfTrade] = useState("");
+ 
+  const [maxProfit, setMaxProfit] = useState("");
+ 
+  const [maxLoss, setMaxLoss] = useState("");
   
   const [timeFrameVal, setTimeFrameVal] = useState("");
 
@@ -441,6 +445,42 @@ const CreateStrategy = () => {
      }
 
     }
+
+    else if(e.target.name == "max_profit"){
+      const type = No_Negetive_Input_regex(e.target.value)
+       if(type){
+        if(e.target.value != ""){
+          setMaxProfit(e.target.value)
+          }else{
+          setMaxProfit("")
+          }
+       }else{
+          if(e.target.value == ""){
+          setMaxProfit("")
+          }else{
+          setMaxProfit("1") 
+          }
+       }
+  
+     }
+
+     else if(e.target.name == "max_loss"){
+      const type = No_Negetive_Input_regex(e.target.value)
+       if(type){
+        if(e.target.value != ""){
+          setMaxLoss(e.target.value)
+          }else{
+          setMaxLoss("")
+          }
+       }else{
+          if(e.target.value == ""){
+          setMaxLoss("")
+          }else{
+          setMaxLoss("1") 
+          }
+       }
+  
+      }
 
 
    }
@@ -1392,7 +1432,9 @@ const saveStrategy = async (e) => {
         "timeTradeConddition":timeTradeConddition,
         "condition_array":coditionRequestArr,
         "target_stoloss_array":exitConditionBuyOrSell,
-        "numberOfTrade":numberOfTrade
+        "numberOfTrade":numberOfTrade,
+        "maxProfit":maxProfit,
+        "maxLoss":maxLoss
        }
        
        console.log("data request buy",data)
@@ -1449,7 +1491,9 @@ const saveStrategy = async (e) => {
         "timeTradeConddition":timeTradeConddition,
         "condition_array":coditionRequestArrSell,
         "target_stoloss_array":exitConditionBuyOrSell,
-        "numberOfTrade":numberOfTrade
+        "numberOfTrade":numberOfTrade,
+        "maxProfit":maxProfit,
+        "maxLoss":maxLoss
       }
       console.log("data request sell",data)
 
@@ -1503,8 +1547,18 @@ const saveStrategy = async (e) => {
             </div>
 
             <div className="col-md-2 ">
-              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >No of Trade</label>
+              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Number of Trade</label>
              <input min={1} type="text" onChange={(e)=>{onChange(e)}}  name="no_of_trade" className="form-control stratergy-box" value={numberOfTrade}></input>
+
+             
+             <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Max Profit</label>
+             <input min={1} type="text" onChange={(e)=>{onChange(e)}}  name="max_profit" className="form-control stratergy-box" value={maxProfit}></input>
+
+
+             <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Max Loss</label>
+             <input min={1} type="text" onChange={(e)=>{onChange(e)}}  name="max_loss" className="form-control stratergy-box" value={maxLoss}></input>
+
+
             </div>
 
             

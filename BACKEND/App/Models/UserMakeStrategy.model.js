@@ -125,6 +125,12 @@ const userMakeStrategySchema = new mongoose.Schema({
     numberOfTrade: {
         type: String,
     },
+    maxProfit: {
+        type: String,
+    },
+    maxLoss: {
+        type: String,
+    },
     numberOfTrade_count_trade: {
         type: Number,
         default: 0

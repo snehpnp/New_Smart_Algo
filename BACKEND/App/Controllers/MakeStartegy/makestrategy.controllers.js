@@ -134,7 +134,7 @@ class MakeStartegy {
     try {
 
       const pipeline = [
-        { $sort: { _id: 1 } }
+        { $sort: { _id: -1 } }
       ]
       const result = await UserMakeStrategy.aggregate(pipeline)
 
@@ -205,7 +205,7 @@ class MakeStartegy {
 
 
   async UpdateMakeStartegy(req, res) {
-  
+
     // console.log("user_panel_key",user_panel_key)
      
     let channelList = "";
@@ -342,7 +342,7 @@ class MakeStartegy {
 
         // res.send({ status: true, msg: "successfully Add!" });
         let user_id = req.body.user_id;
-        let name = req.body.name + req.body.user_id + req.body.type;
+      
         let tokensymbol = element.instrument_token;
         let symbol_name = element.symbol;
         let strategy_name = req.body.strategy_name;
@@ -371,8 +371,9 @@ class MakeStartegy {
         let condition_array = req.body.condition_array
         let timeTradeConddition_array = req.body.timeTradeConddition;
         let target_stoloss_array = req.body.target_stoloss_array
-        let show_strategy = req.body.name;
         let numberOfTrade = req.body.numberOfTrade;
+        let maxProfit = req.body.maxProfit;
+        let maxLoss = req.body.maxLoss;
         
 
 
@@ -393,7 +394,7 @@ class MakeStartegy {
 
 
         await UserMakeStrategy.create({
-          name: req.body.name + req.body.user_id + req.body.type+tokensymbol+req.body.strategy_name,
+          name: req.body.name + req.body.user_id + req.body.type+tokensymbol,
           
           user_id: user_id,
           tokensymbol: tokensymbol,
@@ -424,8 +425,10 @@ class MakeStartegy {
           exch_seg: exch_seg,
           timeTradeConddition_array: timeTradeConddition_array,
           target_stoloss_array: target_stoloss_array,
-          show_strategy: show_strategy,
-          numberOfTrade:numberOfTrade
+          show_strategy: req.body.name+'_'+tokensymbol,
+          numberOfTrade:numberOfTrade,
+          maxProfit:maxProfit,
+          maxLoss:maxLoss
         })
           .then(async (createUserMakeStrategy) => {
             // console.log("3")
@@ -758,6 +761,10 @@ async function run() {
 
                     const filter = { _id: val._id };
                     let Res = await UserMakeStrategy.updateOne(filter, update);
+
+
+
+
                     // console.log("Res ", Res)
                     // code same trade status update
                     let Check_same_trade_type = "BUY"
@@ -766,6 +773,8 @@ async function run() {
                     }
 
                     const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
+
+
                   //  console.log("Check_same_trade_data", Check_same_trade_data)
                     if (Check_same_trade_data) {
                     //  console.log("Check_same_trade_data._id", Check_same_trade_data._id)
@@ -780,6 +789,52 @@ async function run() {
                      // console.log("Trueeeeee", Res)
                     }
                     //End code same trade status update
+
+
+
+                    // START NUMBER OF TRADE CODE UPDATE
+                    const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
+                      {
+                        $match: {
+                          show_strategy: val.show_strategy,
+                          numberOfTrade: { $ne: "" }
+                        }
+                      },
+                      
+                      {
+                        $group: {
+                          _id: null,
+                          totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
+                        
+                        }
+                      },
+                      {
+                        $project: {
+                          _id: 0,
+                          
+                          totalNumberOfTrade_count_trade: 1,
+                          anotherField: '$numberOfTrade',
+                          isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade',parseInt(val.numberOfTrade)] }
+                         
+                        }
+                      }
+                    ])
+                   // console.log("numberOfTrade_count_trade_count -",numberOfTrade_count_trade_count[0].isTotalSmall) 
+                   if(numberOfTrade_count_trade_count.length > 0){
+                    if(numberOfTrade_count_trade_count[0].isTotalSmall == false){
+                    console.log("gggg")
+                    const update_trade_off = {
+                     $set: {
+                       status: "2",
+                     },
+                    
+                   };
+               
+                   const filter_trade_off = { show_strategy: val.show_strategy };
+                   let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
+                    }
+                   }
+                    // END NUMBER OF TRADE CODE UPDATE
                     
 
                     const currentTimestamp = Math.floor(Date.now() / 1000);
@@ -858,7 +913,7 @@ async function run() {
         }
 
       } else {
-        console.log('The stock market is Closed!');
+       // console.log('The stock market is Closed!');
       }
 
 
