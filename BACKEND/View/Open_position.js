@@ -132,14 +132,44 @@ module.exports = { dropExistingView1, Open_Position1 }
 //             },
 //         },
 //     },
-
+//     {
+//         $lookup: {
+//             from: 'live_prices',
+//             let: {},
+//             pipeline: [],
+//             as: 'livePrice',
+//         }
+//     },
+//     {
+//         $unwind: '$livePrice',
+//     },    
 //     {
 //         $match: {
-//             $expr: {
-//                 $ne: ['$entry_qty_percent', 0]
-//             }
+//             $and: [
+//                 {
+//                     $expr: {
+//                         $and: [
+//                             {
+//                                 $eq: [
+//                                     {
+//                                         $dateToString: {
+//                                             format: '%Y/%m/%d',
+//                                             date: new Date(),
+//                                         },
+//                                     },
+//                                     '$dt_date',
+//                                 ],
+//                             },
+//                             { $eq: ['$livePrice.trading_status', 'on'] }
+//                         ]
+//                     }
+//                 }
+//             ]
 //         },
 //     },
+    
+
+
 
 //     {
 //         $lookup: {
@@ -199,7 +229,7 @@ module.exports = { dropExistingView1, Open_Position1 }
 //                                 ],
 //                             },
 //                         ],
-                     
+
 //                     },
 //                     then: false,
 //                     else: {
@@ -246,10 +276,10 @@ module.exports = { dropExistingView1, Open_Position1 }
 
 //     {
 //         $lookup: {
-//             from: 'companies', 
-//             let: {}, 
+//             from: 'companies',
+//             let: {},
 //             pipeline: [],
-//             as: 'companyData' 
+//             as: 'companyData'
 //         }
 //     },
 //     {
@@ -275,7 +305,7 @@ module.exports = { dropExistingView1, Open_Position1 }
 //                     else: '$client_persnal_key' // Keep the existing value if not empty or null
 //                 }
 //             },
-            
+
 //             TradeType: 1,
 //             token: 1,
 //             lot_size: 1,
@@ -290,8 +320,8 @@ module.exports = { dropExistingView1, Open_Position1 }
 //             exit_time_test: 1,
 //             stockInfo_curtime: 1,
 //             stockInfo_lp: 1,
-//             MakeStartegyName:1,
-            
+//             MakeStartegyName: 1,
+
 //             isLpInRange1: 1,
 //             isLpInRange: {
 //                 $cond: {
@@ -313,6 +343,6 @@ module.exports = { dropExistingView1, Open_Position1 }
 //             },
 //         },
 //     }
-    
-    
+
+
 // ]);

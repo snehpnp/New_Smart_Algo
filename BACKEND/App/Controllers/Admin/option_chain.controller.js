@@ -34,8 +34,8 @@ class OptionChain {
 
     // GET SYMBOLL EXPIRY
     async Get_Option_Symbol_Expiry(req, res) {
-            
-      console.log("EXPIRY   GETTT")
+
+        console.log("EXPIRY   GETTT")
 
         try {
             const symbol = req.body.symbol;
@@ -234,6 +234,11 @@ class OptionChain {
     // GET All ROUND TOKEN
     async Open_Position(req, res) {
         try {
+
+            var today = new Date();
+            var formattedDate = today.getFullYear() + '/' + (today.getMonth() + 1).toString().padStart(2, '0') + '/' + today.getDate().toString().padStart(2, '0');
+            
+
             var GetTrade = await MainSignals_modal.aggregate([
                 {
                     $addFields: {
@@ -254,11 +259,17 @@ class OptionChain {
                 },
                 {
                     $match: {
-                        $expr: { $gt: ["$entry_qty_percent_int", "$exit_qty_percent_int"] }
+                        $expr: {
+                            $and: [
+                                { $gt: ["$entry_qty_percent_int", "$exit_qty_percent_int"] },
+                                { $eq: ["$dt_date", formattedDate] }
+                            ]
+                        }
                     }
                 }
 
             ]);
+
             if (!GetTrade) {
                 return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
             }
