@@ -18,6 +18,19 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const { Get_Option_All_Token_Chain } = require('../../App/Controllers/Admin/option_chain.controller')
 const { GetStrickPriceFromSheet } = require('../Controllers/Admin/signals.controller')
+const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
+
+
+cron.schedule('0 1 * * *', () => {
+    console.log('Delte Dashboard Data');
+    deleteDashboard()
+});
+
+
+cron.schedule('0 6 * * *', () => {
+    console.log('Create Dashboard view');
+    DashboardView()
+});
 
 
 cron.schedule('5 2 * * *', () => {
@@ -36,7 +49,6 @@ cron.schedule('0 8 * * *', () => {
 });
 
 
-// Token Symbol Update
 cron.schedule('1 1 * * *', () => {
     console.log('running a task every minute');
     TruncateTable()
@@ -48,16 +60,7 @@ cron.schedule('10 1 * * *', () => {
 });
 
 
-cron.schedule('52 17 * * *', () => {
-    console.log('running a task every minute');
-    TokenSymbolUpdate()
-});
-
-
-
-// EVERY 30 MINUT RUN CRON 
 cron.schedule('*/30 * * * *', () => {
-    // console.log('Run Every 30 Minutes');
     GetStrickPriceFromSheet();
 });
 
@@ -67,6 +70,8 @@ cron.schedule('5 23 * * *', () => {
     twodaysclient();
 });
 
+
+// =========================================================================================================================
 
 // 1. LOGOUT AND TRADING OFF ALL USER 
 const LogoutAllUsers = async () => {
@@ -241,7 +246,7 @@ const TokenSymbolUpdate = () => {
 
 
 
-                    const filter = { tradesymbol_m_w: tradesymbol_m_w };
+                    const filter = { instrument_token: element.token };
                     var updateOperation = { $set: user_data };
                     var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
@@ -269,7 +274,7 @@ const TokenSymbolUpdate = () => {
                     // const Alice_tokens = new Alice_token(user_data)
                     // const userinfo = Alice_tokens.save()
 
-                    const filter = { tradesymbol_m_w: tradesymbol_m_w };
+                    const filter = { instrument_token: element.token };
                     var updateOperation = { $set: user_data };
                     var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
@@ -295,8 +300,7 @@ const TokenSymbolUpdate = () => {
 
                     // const Alice_tokens = new Alice_token(user_data)
                     // const userinfo = Alice_tokens.save()
-
-                    const filter = { tradesymbol_m_w: tradesymbol_m_w };
+                    const filter = { instrument_token: element.token };
                     var updateOperation = { $set: user_data };
                     var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
@@ -327,8 +331,7 @@ const TokenSymbolUpdate = () => {
 
                     // const Alice_tokens = new Alice_token(user_data)
                     // const userinfo = Alice_tokens.save()
-
-                    const filter = { tradesymbol_m_w: tradesymbol_m_w };
+                    const filter = { instrument_token: element.token };
                     var updateOperation = { $set: user_data };
                     var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
@@ -359,8 +362,7 @@ const TokenSymbolUpdate = () => {
                     // const Alice_tokens = new Alice_token(user_data)
                     // const userinfo = Alice_tokens.save()
 
-
-                    const filter = { tradesymbol_m_w: tradesymbol_m_w };
+                    const filter = { instrument_token: element.token };
                     var updateOperation = { $set: user_data };
                     var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
@@ -391,8 +393,7 @@ const TokenSymbolUpdate = () => {
                     // const Alice_tokens = new Alice_token(user_data)
                     // // const userinfo = Alice_tokens.save()
 
-
-                    const filter = { tradesymbol_m_w: tradesymbol_m_w };
+                    const filter = { instrument_token: element.token };
                     var updateOperation = { $set: user_data };
                     var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
@@ -423,8 +424,7 @@ const TokenSymbolUpdate = () => {
 
                     // const Alice_tokens = new Alice_token(user_data)
                     // const userinfo = Alice_tokens.save()
-
-                    const filter = { tradesymbol_m_w: tradesymbol_m_w };
+                    const filter = { instrument_token: element.token };
                     var updateOperation = { $set: user_data };
                     var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
@@ -456,8 +456,7 @@ const TokenSymbolUpdate = () => {
                     // const Alice_tokens = new Alice_token(user_data)
                     // const userinfo = Alice_tokens.save()
 
-
-                    const filter = { tradesymbol_m_w: tradesymbol_m_w };
+                    const filter = { instrument_token: element.token };
                     var updateOperation = { $set: user_data };
                     var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
@@ -484,8 +483,7 @@ const TokenSymbolUpdate = () => {
                     // const Alice_tokens = new Alice_token(user_data)
                     // const userinfo = Alice_tokens.save()
 
-
-                    const filter = { tradesymbol_m_w: tradesymbol_m_w };
+                    const filter = { instrument_token: element.token };
                     var updateOperation = { $set: user_data };
                     var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
@@ -516,8 +514,7 @@ const TokenSymbolUpdate = () => {
                     // const Alice_tokens = new Alice_token(user_data)
                     // const userinfo = Alice_tokens.save()
 
-
-                    const filter = { tradesymbol_m_w: tradesymbol_m_w };
+                    const filter = { instrument_token: element.token };
                     var updateOperation = { $set: user_data };
                     var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
                 }
@@ -532,7 +529,6 @@ const TokenSymbolUpdate = () => {
 }
 
 
-// ====================================================
 const tokenFind = async () => {
     try {
 

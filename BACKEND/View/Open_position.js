@@ -69,6 +69,7 @@ async function Open_Position1(req, res) {
     }
 }
 
+
 module.exports = { dropExistingView1, Open_Position1 }
 
 
