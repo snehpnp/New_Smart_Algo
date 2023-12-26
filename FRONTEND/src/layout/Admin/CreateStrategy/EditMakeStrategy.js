@@ -73,6 +73,10 @@ const EditMakeStrategy = () => {
   
   const [numberOfTrade, setNumberOfTrade] = useState("");
 
+  const [maxProfit, setMaxProfit] = useState("");
+ 
+  const [maxLoss, setMaxLoss] = useState("");
+
   const [selectStrategy, setSelectStrategy] = useState("");
   
   const [timeFrameVal, setTimeFrameVal] = useState("1");
@@ -525,6 +529,62 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
         let jsonString = JSON.stringify(singleMakeStrategyData);
         let objectData = JSON.parse(jsonString);
         objectData.numberOfTrade = e.target.value
+        setSingleMakeStrategyData(objectData)
+        }
+     }
+
+
+  }
+
+  else if(e.target.name == "max_profit"){
+   
+    const type = No_Negetive_Input_regex(e.target.value)
+     if(type){
+      if(e.target.value != ""){
+        setMaxProfit(e.target.value)
+        let jsonString = JSON.stringify(singleMakeStrategyData);
+        let objectData = JSON.parse(jsonString);
+        objectData.maxProfit = e.target.value
+        setSingleMakeStrategyData(objectData)
+        }else{
+        setMaxProfit("")
+        }
+     }else{
+        if(e.target.value == ""){
+        setMaxProfit("")
+        }else{
+        setMaxProfit("1") 
+        let jsonString = JSON.stringify(singleMakeStrategyData);
+        let objectData = JSON.parse(jsonString);
+        objectData.maxProfit = e.target.value
+        setSingleMakeStrategyData(objectData)
+        }
+     }
+
+
+  }
+
+  else if(e.target.name == "max_loss"){
+   
+    const type = No_Negetive_Input_regex(e.target.value)
+     if(type){
+      if(e.target.value != ""){
+        setMaxLoss(e.target.value)
+        let jsonString = JSON.stringify(singleMakeStrategyData);
+        let objectData = JSON.parse(jsonString);
+        objectData.maxLoss = e.target.value
+        setSingleMakeStrategyData(objectData)
+        }else{
+        setMaxLoss("")
+        }
+     }else{
+        if(e.target.value == ""){
+        setMaxLoss("")
+        }else{
+        setMaxLoss("1") 
+        let jsonString = JSON.stringify(singleMakeStrategyData);
+        let objectData = JSON.parse(jsonString);
+        objectData.maxLoss = e.target.value
         setSingleMakeStrategyData(objectData)
         }
      }
@@ -1484,8 +1544,10 @@ const updateStrategy = async (e) => {
         "timeTradeConddition":timeTradeConddition,
         "condition_array":coditionRequestArr,
         "target_stoloss_array":exitConditionBuyOrSell,
-        "numberOfTrade":numberOfTrade,
-        "show_strategy":singleMakeStrategyData.show_strategy
+        "show_strategy":singleMakeStrategyData.show_strategy,
+        "numberOfTrade":singleMakeStrategyData.numberOfTrade,
+        "maxProfit":singleMakeStrategyData.maxProfit,
+        "maxLoss":singleMakeStrategyData.maxLoss
        }
        
        console.log("data request buy",data)
@@ -1543,8 +1605,10 @@ const updateStrategy = async (e) => {
         "timeTradeConddition": timeTradeConddition,
         "condition_array": coditionRequestArrSell,
         "target_stoloss_array": exitConditionBuyOrSell,
-        "numberOfTrade":numberOfTrade,
-        "show_strategy":singleMakeStrategyData.show_strategy
+        "show_strategy":singleMakeStrategyData.show_strategy,
+        "numberOfTrade":singleMakeStrategyData.numberOfTrade,
+        "maxProfit":singleMakeStrategyData.maxProfit,
+        "maxLoss":singleMakeStrategyData.maxLoss
       }
       console.log("data request sell",data)
 
@@ -1603,7 +1667,7 @@ const updateStrategy = async (e) => {
               <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Strategy Tag</label>
               <select className="form-select stratergy-box" 
               disabled={true}
-              onChange={(e) => {setSelectStrategy(e.target.value);SelectStrategyTag(e)}} name="strategyname"
+              onChange={(e) => {setSelectStrategy(e.target.value);SelectStrategyTag(e)}}name="strategyname"
                defaultValue={singleMakeStrategyData.strategy_name}
               >
               <option value="">-- Select Strategy Tag--</option>
@@ -1619,6 +1683,15 @@ const updateStrategy = async (e) => {
             <div className="col-md-2 ">
               <label  className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Number of Trade</label>
              <input min={1} type="text"  defaultValue={singleMakeStrategyData.numberOfTrade} onChange={(e)=>{onChange(e)}}  name="no_of_trade" className="form-control stratergy-box"></input>
+
+
+             <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Max Profit</label>
+             <input min={1} type="text"  defaultValue={singleMakeStrategyData.maxProfit} onChange={(e)=>{onChange(e)}}  name="max_profit" className="form-control stratergy-box"></input>
+
+
+             <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Max Loss</label>
+             <input min={1} type="text"  defaultValue={singleMakeStrategyData.maxLoss} onChange={(e)=>{onChange(e)}}  name="max_loss" className="form-control stratergy-box"></input>
+
             </div>
 
 

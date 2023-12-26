@@ -201,9 +201,10 @@ class MakeStartegy {
     }
   }
 
+
+
+
   //Update Strategy..
-
-
   async UpdateMakeStartegy(req, res) {
 
     // console.log("user_panel_key",user_panel_key)
@@ -248,6 +249,8 @@ class MakeStartegy {
       let condition_array = req.body.condition_array
       let timeTradeConddition_array = req.body.timeTradeConddition;
       let target_stoloss_array = req.body.target_stoloss_array
+      let maxProfit = req.body.maxProfit;
+      let maxLoss = req.body.maxLoss;
     
 
 
@@ -255,7 +258,9 @@ class MakeStartegy {
       const filter_number_of_trade = { show_strategy : req.body.show_strategy };
       const update_make_strategy_number_of_trade = {
         $set: {
-          numberOfTrade:req.body.numberOfTrade
+          numberOfTrade:req.body.numberOfTrade,
+          maxProfit:req.body.maxProfit,
+          maxLoss:req.body.maxLoss
         }
       };
       const result_number_of_trade = await UserMakeStrategy.updateMany(filter_number_of_trade, update_make_strategy_number_of_trade);
@@ -317,8 +322,7 @@ class MakeStartegy {
 
   /// Make Startegy
   async AddMakeStartegy(req, res) {
-    
-   
+
     // let Random_key = Math.round(new Date());
     // let  suscribe =await Alice_Socket();
     var _id = new ObjectId(req.body.user_id);
@@ -514,9 +518,11 @@ async function run() {
 
     // Define the function to be executed
     const executeFunction = async () => {
-      //  console.log("okkkkkkkk shakirrr ")
+   
+    //  console.log("holidays.isHoliday(currentDate) ",holidays.isHoliday(currentDate))
+      
     //  if (rr) {
-      if (!holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
+      if (holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
         //  console.log('The stock market is open!');
 
         const pipeline = [

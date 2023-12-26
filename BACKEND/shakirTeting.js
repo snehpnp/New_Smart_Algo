@@ -3533,5 +3533,46 @@ module.exports = function (app) {
   // }
 
 
+ 
+
+  async function setupChangeStream() {
+   console.log("runnn trigers")
+    return
+    try {
+  
+  
+      const collection = dbTest.collection('mainsignals');
+  
+      // Set up a change stream on the collection
+      const changeStream = collection.watch();
+  
+      // Listen for changes
+      changeStream.on('change', (change) => {
+        console.log("change ",change)
+        // Check the type of change and perform actions accordingly
+        if (change.operationType === 'insert') {
+          const insertedDocument = change.fullDocument;
+          // Perform actions for insert
+          console.log('Document inserted:', insertedDocument);
+        } else if (change.operationType === 'update') {
+          const updatedDocument = change.fullDocument;
+          // Perform actions for update
+          console.log('Document updated:', updatedDocument);
+        }
+        // Add conditions or additional checks as needed
+      });
+  
+    } finally {
+      // Ensure the client is closed when you finish
+      await client.close();
+    }
+  }
+  
+  // Call the setup function
+  setupChangeStream();
+
+
+
 
 }
+
