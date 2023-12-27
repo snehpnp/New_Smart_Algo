@@ -143,8 +143,11 @@ module.exports = function (app) {
   })
 
 
+
+
   // TEST API
   app.get('/get', async (req, res) => {
+   
     // createViewZerodha()
     // createViewFivepaisa()
     // createViewAngel()
