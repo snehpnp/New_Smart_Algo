@@ -14,7 +14,8 @@ import { Get_All_SUBADMIN } from '../../../ReduxStore/Slice/Subadmin/Subadminsli
 import { Get_All_Service_for_Client } from '../../../ReduxStore/Slice/Common/commoSlice'
 import { Get_Service_By_Group_Id } from '../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
-
+import { All_Api_Info_List } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+import * as Config from "../../../Utils/Config";
 import Form from 'react-bootstrap/Form';
 
 
@@ -41,6 +42,7 @@ const AddClient = () => {
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [ShowAllStratagy, setShowAllStratagy] = useState(false)
   const [getPermissions, setGetPermissions] = useState([])
+  const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
 
 
   const [first, setfirst] = useState([])
@@ -74,6 +76,16 @@ const AddClient = () => {
         if (response.status) {
           setGetPermissions(response.data[0])
 
+        }
+      })
+
+
+    await dispatch(All_Api_Info_List({ token: user_token, url: Config.react_domain, brokerId: -1 })).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setGetBrokerInfo(
+            response.data
+          );
         }
       })
   }
@@ -305,7 +317,7 @@ const AddClient = () => {
       name: 'broker',
       label: 'Broker',
       type: 'select',
-      options: brokerOptions && brokerOptions.map((item) => ({ label: item.label, value: item.value })),
+      options: GetBrokerInfo && GetBrokerInfo.map((item) => ({ label: item.title, value: item.broker_id })),
       showWhen: values => values.licence === '2' || values.licence === '0'
       , label_size: 12, col_size: 6, disable: false
     },

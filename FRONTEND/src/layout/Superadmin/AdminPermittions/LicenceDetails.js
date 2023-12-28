@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 const LicenceDetails = ({ showModal, setshowModal, id }) => {
 
     const [showLicenceDetails, setshowLicenceDetails] = useState('')
-console.log("showLicenceDetails",showLicenceDetails);
+
+
     const dispatch = useDispatch()
 
     const data = async () => {

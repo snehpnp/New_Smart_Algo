@@ -3,7 +3,6 @@ import Modal from '../../../Components/ExtraComponents/Modal';
 
 const PanelDetails = ({ showModal, data, setshowModal }) => {
 
-    // console.log("data =>",data && data.data[0].licenses );
     return (
         <div>
             <Modal isOpen={showModal} size="md" title="Panel Details" hideBtn={true}

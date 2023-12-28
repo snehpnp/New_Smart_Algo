@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import Loader from '../../../Utils/Loader'
 import { FolderLock, Plus, FileClock, HelpingHand, Users2, ScrollText } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel, GET_PANEL_INFORMATIONS } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel, GET_PANEL_INFORMATIONS, All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import * as Config from "../../../Utils/Config";
 
@@ -22,6 +22,7 @@ import ShowAllSubadmins from './ShowAllSubadmins';
 import AddLicence from './Add_Licence';
 import LicenceDetails from './LicenceDetails';
 import BrokerPermittion from './Broker_Permittion';
+import html2canvas from 'html2canvas';
 
 
 const AllPermitions = () => {
@@ -56,14 +57,9 @@ const AllPermitions = () => {
     // For Admin Help
     const [getAdminHelps, setGetAdminelp] = useState('')
 
-
-
     //  for Broker Permission
     const [showBrokerModal, setshowBrokerModal] = useState(false)
-    const [showBrokerDetails, setshowBrokerDetails] = useState([])
-
-
-
+    const [showBrokerDetails, setshowBrokerDetails] = useState("")
 
 
     const [Panelid, setPanelid] = useState('')
@@ -71,11 +67,11 @@ const AllPermitions = () => {
     const [refresh, setRefresh] = useState(false)
 
 
-
     const [panelData, setPanelData] = useState({
         loading: true,
         data: []
     });
+
 
 
     const [panelInfo, setpanelInfo] = useState({
@@ -142,6 +138,9 @@ const AllPermitions = () => {
             })
     }
 
+    console.log("panelData.data", panelData.data)
+
+
 
 
     const columns = [
@@ -196,7 +195,7 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Sidebar Permission">
                     <FolderLock size={20} color="#198754" strokeWidth={2} className="mx-1"
-                        onClick={(e) => { setshowBrokerModal(true); setshowBrokerDetails({ id: row._id, db_url: row.db_url, db_name: row.db_name }) }}
+                        onClick={(e) => { setshowBrokerModal(true); setshowBrokerDetails(row) }}
                     />
                 </span>
             )
@@ -207,7 +206,7 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Sidebar Permission">
                     <FolderLock size={20} color="#198754" strokeWidth={2} className="mx-1"
-                        onClick={(e) => { setshowPanelName({ panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowModal(true) }}
+                        onClick={(e) => { setshowPanelName({ rowdata: row, panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowModal(true) }}
                     />
                 </span>
             )
@@ -291,12 +290,45 @@ const AllPermitions = () => {
     ];
 
 
+    const SaveSS = async () => {
+        const element = document.getElementById('main-wrapper');
+
+
+        const options = {
+            width: document.documentElement.scrollWidth, // Set custom width
+            height: document.documentElement.scrollHeight, // Set custom height
+        };
+
+        // Set the window size and scroll position to match the content size
+        // window.resizeTo(width, height);
+        window.scrollTo(0, 0);
+
+        var screenshotUrl
+
+        // setIsModalOpen(false)
+
+        // Capture the screenshot
+        await html2canvas(document.documentElement, options).then(canvas => {
+            // Convert canvas to an image and download it
+            const screenshot = canvas.toDataURL('image/png');
+            screenshotUrl = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = screenshot;
+            link.download = 'screenshot.png';
+            link.click();
+
+        })
+    }
+
+
     return (
         <>
             {
                 panelData.loading ? <Loader /> :
                     <>
                         <Content Page_title="Admin Permission" button_status={false}>
+                            <button onClick={() => SaveSS()}>click</button>
+
                             {
                                 panelData.data && panelData.data.length === 0 ? (
                                     'No data found') :

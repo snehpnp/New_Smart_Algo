@@ -22,9 +22,7 @@ class Company {
                     if (!result) {
                         return res.send({ status: false, msg: 'Company not update', data: [] });
                     }
-
                     return res.send({ status: true, msg: 'Update Successfully.', data: [] });
-
                 })
 
 
@@ -41,10 +39,7 @@ class Company {
             if (!compantInfo) {
                 return res.send({ status: false, msg: 'Server issue Not find Company information.', data: [] });
             }
-
             return res.send({ status: true, msg: 'Done', data: compantInfo });
-
-
         } catch (error) {
             console.log("Comany Get Error -", error);
         }
@@ -69,6 +64,7 @@ class Company {
 
     // EDIT COMPANY Email INFORMATION
     async EditEmailInfo(req, res) {
+
         try {
             var companydata = req.body.data
             var _id = req.body.id;

@@ -79,6 +79,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                       <select
                         className="default-select wide form-control"
                         id={field.name}
+                        style={{ background: field.disable ? '#eeeeee' : "" }}
                         {...formik.getFieldProps(field.name)}
                         disabled={field.disable}
                       >
@@ -221,7 +222,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                 <input type={field.type} name={field.name} className="form-control" id={field.name}
                                   {...formik.getFieldProps(field.name)}
 
-                                  min={field.name === "todate" ? fromDate : getCurrentDate()}
+                                //  min={field.name === "todate" ? fromDate : getCurrentDate()}
                                 />
                               </div>
                               {formik.errors[field.name] &&

@@ -92,7 +92,7 @@ const App = () => {
 
 
   return (
-    <div >
+    <div  id="App">
       {/* <div ref={pageRef} > */}
       {/* {admin_permission && admin_permission.is_active === 1 ? */}
 

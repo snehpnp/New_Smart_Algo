@@ -91,6 +91,7 @@ const AllSubadmin = () => {
       editclient: false,
       addclient: false,
       tradehistory: false,
+      updateapikeys: false,
       groupservice: false,
       select_group_services: [],
       group: false,
@@ -188,12 +189,13 @@ const AllSubadmin = () => {
         parent_role: Role,
         parent_id: user_id,
         Subadmin_permision_data: {
-          client_add: values.addclient ? "1" : values.all ? "1" : "0",
-          client_edit: values.editclient ? "1" : values.all ? "1" : "0",
-          license_permision: values.licence ? "1" : values.all ? "1" : "0",
-          go_To_Dashboard: values.gotodashboard ? "1" : values.all ? "1" : "0",
-          trade_history_old: values.tradehistory ? "1" : values.all ? "1" : "0",
-          detailsinfo: values.detailsinfo ? "1" : values.all ? "1" : "0",
+          client_add: values.addclient ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
+          Update_Api_Key: values.updateapikeys ? "1" : values.all ? "1" : "0",
+          client_edit: values.editclient ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
+          license_permision: values.licence ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
+          go_To_Dashboard: values.gotodashboard ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
+          trade_history_old: values.tradehistory ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
+          detailsinfo: values.detailsinfo ? "1" : values.all ? "1" : values.updateapikeys ? "0" : "0",
           strategy: state1,
           group_services: state,
         },
@@ -334,6 +336,14 @@ const AllSubadmin = () => {
       check_box_true:
         formik.values.all || formik.values.Strategy ? true : false,
     },
+    {
+      name: "updateapikeys",
+      label: "Update Client API Key",
+      type: "checkbox",
+      label_size: 12,
+      col_size: 3,
+      check_box_true: formik.values.updateapikeys ? true : false,
+    },
   ];
 
   const data = async () => {
@@ -379,6 +389,8 @@ const AllSubadmin = () => {
       formik.setFieldValue("groupservice", true);
       formik.setFieldValue("Strategy", true);
       formik.setFieldValue("detailsinfo", true);
+      formik.setFieldValue("tradehistory", true);
+
     } else {
       formik.setFieldValue("addclient", false);
       formik.setFieldValue("editclient", false);
@@ -388,23 +400,48 @@ const AllSubadmin = () => {
       formik.setFieldValue("groupservice", false);
       formik.setFieldValue("Strategy", false);
       formik.setFieldValue("detailsinfo", false);
+      formik.setFieldValue("tradehistory", false);
+      formik.setFieldValue("all", false);
     }
 
   }, [formik.values.all]);
 
+  useEffect(() => {
+
+    if (formik.values.updateapikeys) {
+      formik.setFieldValue("all", false);
+      formik.setFieldValue("addclient", false);
+      formik.setFieldValue("editclient", false);
+      formik.setFieldValue("gotodashboard", false);
+      formik.setFieldValue("licence", false);
+      formik.setFieldValue("group", false);
+      formik.setFieldValue("groupservice", false);
+      formik.setFieldValue("Strategy", false);
+      formik.setFieldValue("tradehistory", false);
+    }
+  }, [formik.values.updateapikeys, formik.values.all]);
+
+
 
 
   useEffect(() => {
+    //  for uncheck update key
+
+    if ((formik.values.addclient) || (formik.values.editclient) || (formik.values.Strategy) || (formik.values.groupservice) || (formik.values.detailsinfo) || (formik.values.tradehistory) || (formik.values.gotodashboard)) {
+      formik.setFieldValue("updateapikeys", false);
+      setstate([])
+      setstate1([])
+      return
+    }
+
 
     if (formik.values.Strategy) {
       formik.setFieldValue("Strategy", true);
       return
     }
-
     if (formik.values.groupservice) {
       formik.setFieldValue("groupservice", true);
       return
-
     }
 
     if ((formik.values.addclient) || (formik.values.editclient)) {
@@ -429,7 +466,8 @@ const AllSubadmin = () => {
       return
 
     }
-  }, [formik.values.editclient, formik.values.addclient, formik.values.Strategy, formik.values.groupservice]);
+  }, [formik.values.editclient, formik.values.addclient, formik.values.detailsinfo, formik.values.tradehistory, formik.values.gotodashboard, formik.values.Strategy, formik.values.groupservice]);
+
 
 
 

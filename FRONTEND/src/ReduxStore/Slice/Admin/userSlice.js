@@ -11,7 +11,6 @@ export const Add_User = createAsyncThunk("admin/user/add", async (apireq) => {
     const { req, token } = apireq
     try {
         const res = await ADD_CLIENT(req, token);
-
         return await res;
     } catch (err) {
         return err;

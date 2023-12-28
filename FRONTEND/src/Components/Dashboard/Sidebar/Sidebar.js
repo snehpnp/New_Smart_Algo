@@ -102,7 +102,43 @@ const Sidebar = ({ ShowSidebar }) => {
     }, [])
 
 
-console.log("getPermissions",getPermissions);
+
+
+    const test = async () => {
+
+        const element = document.getElementById('root');
+
+
+        const options = {
+            width: document.documentElement.scrollWidth, // Set custom width
+            height: document.documentElement.scrollHeight, // Set custom height
+        };
+
+        // Set the window size and scroll position to match the content size
+        // window.resizeTo(width, height);
+        window.scrollTo(0, 0);
+
+        var screenshotUrl
+        // setIsModalOpen(false)
+
+
+        // Capture the screenshot
+        await html2canvas(document.documentElement, options).then(canvas => {
+            // Convert canvas to an image and download it
+            const screenshot = canvas.toDataURL('image/png');
+            screenshotUrl = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = screenshot;
+            link.download = 'screenshot.png';
+            link.click();
+
+
+        })
+
+
+
+    }
+
 
     return (
         <div>
@@ -110,6 +146,9 @@ console.log("getPermissions",getPermissions);
             <div className="deznav pt-3" >
                 <div className="deznav-scroll">
                     <ul className="metismenu" id="menu">
+
+                        {/* <button onClick={test()}>click</button> */}
+
                         <div className='sidebar-logo'>
                             <Logo />
                         </div>

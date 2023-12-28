@@ -13,7 +13,6 @@ const ShowAllClients = ({ showModal, setshowModal, List }) => {
 
 
 
-    console.log("console.log", ShowClients && ShowClients)
 
     const dispatch = useDispatch()
 

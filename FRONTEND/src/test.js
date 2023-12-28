@@ -876,3 +876,46 @@ export default CandlestickChart;
 // };
 
 // export default App;
+
+
+
+// import React, { createRef, useRef , useState } from 'react';
+// import { useScreenshot } from 'use-react-screenshot';
+
+// // ...
+
+
+// const TakeScreenshot = () => {
+
+//   const ref = createRef(null);
+//   const [image, takeScreenshot] = useScreenshot();
+
+//   const handleTakeScreenshot = () => takeScreenshot(ref.current);
+
+//   const styles = {
+//     container: {
+//       flex: 1,
+//       justifyContent: 'center',
+//       alignItems: 'center',
+//     },
+//     viewShot: {
+//       flex: 1,
+//       width: '100%',
+//       height: '100%',
+//     },
+//   }
+
+//   return (
+//     <div>
+//       <div>
+//         <button onClick={()=>handleTakeScreenshot() }>Take Screenshot</button>
+//       </div>
+//       <img width={styles} src={image} alt={'Screenshot'} />
+//       <div ref={ref}>
+//         {/* Your app content goes here */}
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default TakeScreenshot;

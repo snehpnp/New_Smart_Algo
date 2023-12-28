@@ -251,52 +251,49 @@ class Panel {
     async Admin_Permissions(req, res) {
         try {
             // const { id, license } = req.body
-            const { id, db_name, db_url, license, key } = req.body
-
-            const uri = db_url;
-
-             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-            await client.connect();
-            const db = client.db(db_name);
-            // const db = db_name;
-
-            const companies_collection = db.collection('companies');
-            const viewName = 'companies';
+            const { db_name, db_url, key,domain, Create_Strategy, Option_chain, Strategy_plan } = req.body
 
 
-            // Specify the query condition for updating
-            const queryCondition = {
-                // panel_key: getPanelInfo[0].key // Replace with your desired query condition
-                panel_key: key // Replace with your desired query condition
-            };
 
-            // Query the view to get the data
-            const findResult = await db.collection(viewName).find().project({ licenses: 1 }).toArray();
+            var domain1 = "http://localhost:3000"
 
-            const newLicensesValue = findResult[0].licenses + license;
+            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
+                domain1 = "http://localhost:3000"
+            } else {
+                domain1 = domain
+            }
 
-            const updateOperation = {
+            const getAllpanel = await panel_model.find({domain:domain1})
+            
+            if (getAllpanel.length == 0) {
+               return res.send({ status: false, msg: "Empty data", data: getAllpanel })
+            }
+
+            const filter = { domain: domain1 };
+            const update = {
                 $set: {
-                    licenses: newLicensesValue
-                }
+                    Create_Strategy: Create_Strategy,
+                    Option_chain: Option_chain,
+                    Strategy_plan: Strategy_plan
+
+                },
             };
 
-            // Update documents that match the query condition
-            const updateResult = await companies_collection.updateMany(queryCondition, updateOperation);
+            const update_token = await panel_model.updateOne(filter, update);
 
+          
 
 
             // If you want to send the retrieved data as a response
             return res.send({
                 status: true,
-                msg: "Add License",
-                data: updateResult
+                msg: "Update Permission Successfully",
+                data: update_token
             });
 
 
         } catch (error) {
-            console.log("Add License error-", error);
+            console.log("Update Permission error-", error);
         }
     }
 
@@ -368,7 +365,35 @@ class Panel {
         }
     }
 
-    
+    async updateBrokerPermission(req, res) {
+        try {
+            const { domain, data } = req.body
+            var domain1 = "http://localhost:3000"
+            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
+                domain1 = "http://localhost:3000"
+            } else {
+                domain1 = domain
+            }
+
+            const filter = { domain: domain1 };
+            const update = {
+                $set: { broker_id: data },
+            };
+
+            const update_token = await panel_model.updateOne(filter, update);
+
+            // CHECK IF PANEL EXIST OR NOT
+            if (!update_token) {
+                return res.send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
+            }
+            res.send({ status: true, msg: "Broker Update SuccessFully", data: update_token })
+
+        } catch (error) {
+            // console.log("Theme error-", error);
+        }
+    }
+
+
 }
 
 

@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from 'react'
-
 import Modal from '../../../Components/ExtraComponents/Modal';
 import { useFormik } from 'formik';
 import * as  valid_err from "../../../Utils/Common_Messages"
 import Formikform1 from "../../../Components/ExtraComponents/Form/Formik_form1"
-
-import { useNavigate } from "react-router-dom";
-import { Email_regex, Mobile_regex } from "../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
-
 import { Update_smtp_details } from '../../../ReduxStore/Slice/Admin/SystemSlice';
 import toast from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
@@ -19,7 +14,6 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
     const dispatch = useDispatch();
 
     const user_token = JSON.parse(localStorage.getItem('user_details')).token;
-
 
     useEffect(() => {
         formik.setFieldValue('logo', data.length > 0 && data[0].logo);
@@ -52,7 +46,6 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
         },
         onSubmit: async (values) => {
 
-
             const req = {
                 "id": data.length > 0 && data[0]._id,
                 data: {
@@ -63,12 +56,8 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
                 }
             }
 
-            // return
-
-
             await dispatch(Update_smtp_details({ req: req, token: user_token })).unwrap().then((response) => {
 
-                // console.log("response", response);
                 if (response.status === 409) {
                     toast.error(response.data.msg);
                 }
@@ -86,12 +75,6 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
     });
 
 
-
-
-
-    // console.log("formik", formik.values)
-
-
     const fields = [
         { name: 'logo', label: 'Logo', type: 'file', label_size: 12, col_size: 6, disable: false },
         { name: 'favicon', label: 'Favicon', type: 'file', label_size: 12, col_size: 6, disable: false },
@@ -102,13 +85,12 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
 
     return (
         <div>   <Modal isOpen={showModal} size="lg" title="Update Images" hideBtn={true}
-            handleClose={() => setshowModal(false)}
-        >
+            handleClose={() => setshowModal(false)}>
+
             <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
                 showImagePreview={true}
             />
             <ToastButton />
-
 
         </Modal ></div>
     )

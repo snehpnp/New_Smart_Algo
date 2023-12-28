@@ -42,8 +42,6 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
 
 
             await dispatch(Add_Licence_To_Company(req)).unwrap().then((response) => {
-
-                console.log("response", response)
                 if (response.status == false) {
                     toast.error(response.data.msg);
                 }
@@ -73,13 +71,15 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
     ];
 
     return (
-        <div>   <Modal isOpen={showModal} size="md" title="Increase Licence" hideBtn={true}
+        <div>   
+            <Modal isOpen={showModal} size="md" title="Increase Licence" hideBtn={true}
             handleClose={() => setshowModal(false)}
         >
             <h6 className='my-3'>You Are Increasing <b> {showPanelName.panel_name} </b>Licence</h6>
             <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Licence"
             />
-        </Modal ></div>
+        </Modal >
+        </div>
     )
 }
 

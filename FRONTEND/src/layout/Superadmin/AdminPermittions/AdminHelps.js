@@ -19,7 +19,6 @@ const AdminHelps = () => {
     let location = useLocation();
     let admin_details = location.state
 
-    console.log("admin_details", admin_details)
 
 
 

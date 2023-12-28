@@ -226,15 +226,40 @@ const AllSubadmin = () => {
             formik.setFieldValue('detailsinfo', userStrategyIds.detailsinfo === 1 ? true : false);
             formik.setFieldValue('gotodashboard', userStrategyIds.go_To_Dashboard === 1 ? true : false);
             formik.setFieldValue('licence', userStrategyIds.license_permision === 1 ? true : false);
+            formik.setFieldValue('updateapikeys', userStrategyIds.Update_Api_Key === 1 ? true : false);
             formik.setFieldValue('tradehistory', userStrategyIds.trade_history_old === 1 ? true : false);
             formik.setFieldValue('Strategy', userStrategyIds.strategy && userStrategyIds.strategy.length > 0 ? true : false);
             formik.setFieldValue('groupservice', userStrategyIds.group_services && userStrategyIds.group_services.length !== 0 ? true : false);
         }
     }, [UserData.data.data]);
 
+    console.log("UserData.data.data", UserData.data.data)
+
+    useEffect(() => {
+
+        if (formik.values.updateapikeys) {
+            formik.setFieldValue("all", false);
+            formik.setFieldValue("addclient", false);
+            formik.setFieldValue("editclient", false);
+            formik.setFieldValue("gotodashboard", false);
+            formik.setFieldValue("licence", false);
+            formik.setFieldValue("group", false);
+            formik.setFieldValue("groupservice", false);
+            formik.setFieldValue("Strategy", false);
+            formik.setFieldValue("tradehistory", false);
+        }
+    }, [formik.values.updateapikeys]);
 
 
     useEffect(() => {
+
+
+        if ((formik.values.addclient) || (formik.values.editclient) || (formik.values.Strategy) || (formik.values.groupservice) || (formik.values.detailsinfo) || (formik.values.tradehistory) || (formik.values.gotodashboard)) {
+            formik.setFieldValue("updateapikeys", false);
+            setstate([])
+            setstate1([])
+            return
+        }
 
         if (formik.values.Strategy) {
             formik.setFieldValue("Strategy", true);
@@ -269,7 +294,7 @@ const AllSubadmin = () => {
             return
 
         }
-    }, [formik.values.editclient, formik.values.addclient, formik.values.Strategy, formik.values.groupservice]);
+    }, [formik.values.editclient, formik.values.addclient, formik.values.detailsinfo, formik.values.tradehistory, formik.values.gotodashboard, formik.values.Strategy, formik.values.groupservice]);
 
 
 
@@ -286,6 +311,7 @@ const AllSubadmin = () => {
         }
         else {
             formik.setFieldValue('editclient', false);
+            formik.setFieldValue('updateapikeys', false);
             formik.setFieldValue('gotodashboard', false);
             formik.setFieldValue('licence', false);
             formik.setFieldValue('group', false);
@@ -346,6 +372,14 @@ const AllSubadmin = () => {
             check_box_true: formik.values.all || formik.values.Strategy ? true : false,
         },
 
+        {
+            name: "updateapikeys",
+            label: "Update Client API Key",
+            type: "checkbox",
+            label_size: 12,
+            col_size: 3,
+            check_box_true: formik.values.updateapikeys ? true : false,
+        },
 
     ]
 

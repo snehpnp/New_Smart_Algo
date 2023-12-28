@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_ALL_PANELS_LIST, UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER } from "../../../Service/superadmin.service";
+import { GET_ALL_PANELS_LIST,ALL_BROKERS , UPDATE_BROKERS , UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER } from "../../../Service/superadmin.service";
 
 
 export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => {
@@ -95,7 +95,7 @@ export const Update_Admin_Permissions = createAsyncThunk("/update/permission", a
   // const { req, token } = data
 
   try {
-    const res = await UPDATE_ADMIN_PERMISSION(req, token);
+    const res = await UPDATE_ADMIN_PERMISSION(req.req, req.token);
     return await res;
   } catch (err) {
     return err;
@@ -108,6 +108,30 @@ export const Close_Admin_Panel = createAsyncThunk("/update/comapny/status", asyn
 
   try {
     const res = await CLOSE_ADMIN_PANEL(req);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+
+export const All_Brokers = createAsyncThunk("/get/all/brokers", async (req, token) => {
+  // const { req, token } = data
+
+  try {
+    const res = await ALL_BROKERS(req);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+
+export const Update_Comapny_Brokers = createAsyncThunk("/update/comapny/brokers", async (req, token) => {
+  // const { req, token } = data
+
+  try {
+    const res = await UPDATE_BROKERS(req);
     return await res;
   } catch (err) {
     return err;
@@ -130,6 +154,8 @@ const SuperAdminSlice = createSlice({
     admin_permission: [],
     panel_brokers: [],
     close_panel: [],
+    all_brokers: [],
+    Update_Brokers: [],
 
   },
 
@@ -178,6 +204,14 @@ const SuperAdminSlice = createSlice({
     [Close_Admin_Panel.fulfilled]: (state, { payload }) => {
       // state.isLoading = false;
       return { ...state, close_panel: payload, isLoading: false };
+    },
+    [All_Brokers.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, all_brokers: payload, isLoading: false };
+    },
+    [Update_Comapny_Brokers.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, Update_Brokers: payload, isLoading: false };
     },
   },
 
