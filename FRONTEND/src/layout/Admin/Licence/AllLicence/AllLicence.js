@@ -40,8 +40,9 @@ const AllLicence = () => {
   const [searchInput, setSearchInput] = useState("");
   const [originalData, setOriginalData] = useState([]);
   const [SelectUserFIlter, setSelectUserFIlter] = useState("");
-
   const [ForPanelStartDate, setForPanelStartDate] = useState("");
+  const [ForShowTotalLicence, setForShowTotalLicence] = useState("");
+
 
 
 
@@ -51,10 +52,9 @@ const AllLicence = () => {
     await dispatch(Transcation_Licence({ token: token }))
       .unwrap()
       .then((response) => {
-        // console.log("response" ,response)
         if (response.status) {
           setOriginalData(response.data);
-
+          setForShowTotalLicence(response.total_licence)
           setForPanelStartDate(fDateTimeSuffix(response.data[response.data.length - 1].createdAt))
 
           if (dashboard_filter !== undefined) {
@@ -227,21 +227,10 @@ const AllLicence = () => {
       const userNameMatch = item.user.UserName.toLowerCase().includes(searchInput && searchInput.toLowerCase());
       let getMonthAndYear = get_year_and_month_only(item.createdAt)
 
-      // switch (SelectUserFIlter) {
-      //   case "0":
-      //     return userNameMatch;
-      //   case "1":
-      //     return item.admin_license && userNameMatch;
-      //   case "2":
-      //     return item.license && userNameMatch;
-      //   default:
-      //     return true; // Return true if SelectUserFIlter is not "0", "1", or "2"
-      // }
-
       if (SelectUserFIlter === "") {
-        return getMonthAndYear === CountLicence
+        return userNameMatch && (item.admin_license || item.license) && getMonthAndYear === CountLicence;
       } else if (SelectUserFIlter === "0") {
-        return userNameMatch && getMonthAndYear === CountLicence;
+        return userNameMatch;
       } else if (SelectUserFIlter === "1") {
         return item.admin_license && userNameMatch && getMonthAndYear === CountLicence;
       } else if (SelectUserFIlter === "2") {
@@ -249,18 +238,15 @@ const AllLicence = () => {
       } else {
         return true;
       }
-
-
-
     });
 
-    console.log("filteredData", filteredData);
+   // console.log("filteredData", filteredData);
+
 
     setAllClients({
       loading: false,
       data: {
         data: filteredData,
-        // total_licence: response.total_licence,
       },
     });
 
@@ -355,22 +341,22 @@ const AllLicence = () => {
                   <div className="col-2 mx-auto border border-dark text-center rounded-3">
                     <h6 >Total Licence</h6>
                     <h6 >
-                      {getAllClients.data && getAllClients.data.total_licence === undefined ? 0 : getAllClients.data.total_licence}
+                      {ForShowTotalLicence && ForShowTotalLicence}
                     </h6>
                   </div>
                   <div className="col-2 mx-auto border border-dark text-center rounded-3">
-                    <h6 >Used Licence</h6>
+                    <h6 >Total Used Licence</h6>
                     <h6 >{UsedLicence(getAllClients1)}</h6>
                   </div>
                   <div className="col-2 mx-auto  border border-dark text-center rounded-3">
                     <h6 >Remaining Licence</h6>
                     <h6 >
-                      {(getAllClients.data && getAllClients.data.total_licence) === undefined ? 0 : getAllClients.data.total_licence -
+                      {ForShowTotalLicence && ForShowTotalLicence -
                         UsedLicence(getAllClients1)}
                     </h6>
                   </div>
                   <div className="col-2 mx-auto border border-dark text-center rounded-3">
-                    <h6 >This Month Licence</h6>
+                    <h6 >Current Month Licence</h6>
                     <span >
                       {usedLicence ? usedLicence : "Please Select Month"}
                     </span>

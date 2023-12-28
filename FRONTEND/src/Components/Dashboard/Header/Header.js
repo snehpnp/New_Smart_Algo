@@ -174,7 +174,7 @@ const Header = ({ ChatBox }) => {
     const weekday = weekdays[currentDate.getDay()];
     const holidays = new Holidays();
 
-    const userCountry = 'US' || "UK";
+    const userCountry = 'US' || "UK" || "SA";
     const userLocalTime = currentDate
 
     let isAllowed = isForeignUserAllowedToLogin(userCountry, userLocalTime)
@@ -345,7 +345,7 @@ const Header = ({ ChatBox }) => {
 
 
 
-    
+
 
     // if (user_role === "USER") {
     //   const socket = socketIOClient(`${Config.base_url}`);
