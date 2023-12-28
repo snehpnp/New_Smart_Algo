@@ -25,48 +25,35 @@ async function dropExistingView1() {
 async function Open_Position1(req, res) {
 
     try {
-      
-     
         const sourceViewName = 'open_position';
-        const destinationViewName = 'open_position_excute';
-
+        const destinationViewName = 'open_position_excute1';
+    
         const pipeline = [
             {
-              $match: {
-                $or: [
-                  { isLpInRange1: true },
-                  { isLpInRange: 1 }
-                ]
-              }
+                $match: {
+                    $or: [
+                        { isLpInRange1: true },
+                        { isLpInRange: 1 }
+                    ]
+                }
             }
-          ];
-          
-        const options = { cursor: { batchSize: 1 } };
-        const result = await client
-            .db(dbName)
-            .collection(sourceViewName)
-            .aggregate(pipeline, options)
-            .toArray();
-        // Check if the aggregation was successful
-        if (result.length > 0) {
-            // Create the destination view with the result's cursor
-            await client.db(dbName).createCollection(destinationViewName, {
-                viewOn: sourceViewName,
-                pipeline: pipeline,
-            });
-
-            console.log('Destination view created successfully');
-        } else {
-            console.error('Error in aggregation:', result);
-        }
-
-
+        ];
+    
+        // Create the destination view with the specified pipeline
+        await client.db(dbName).createCollection(destinationViewName, {
+            viewOn: sourceViewName,
+            pipeline: pipeline,
+        });
+    
+        console.log('Destination view created successfully');
     } catch (error) {
         console.error('Error:', error);
     } finally {
         // Ensure the client is closed even if an error occurs
         await client.close();
     }
+    
+    
 }
 
 
@@ -143,7 +130,7 @@ module.exports = { dropExistingView1, Open_Position1 }
 //     },
 //     {
 //         $unwind: '$livePrice',
-//     },    
+//     },
 //     {
 //         $match: {
 //             $and: [
@@ -161,16 +148,19 @@ module.exports = { dropExistingView1, Open_Position1 }
 //                                     '$dt_date',
 //                                 ],
 //                             },
-//                             { $eq: ['$livePrice.trading_status', 'on'] }
-//                         ]
-//                     }
-//                 }
-//             ]
+//                             { $eq: ['$livePrice.trading_status', 'on'] },
+//                             {
+//                                 $gt: [
+//                                     { $toDouble: '$entry_qty' }, // Convert entry_qty to number
+//                                     { $toDouble: '$exit_qty' },  // Convert exit_qty to number
+//                                 ]
+//                             }
+//                         ],
+//                     },
+//                 },
+//             ],
 //         },
 //     },
-    
-
-
 
 //     {
 //         $lookup: {
@@ -288,8 +278,13 @@ module.exports = { dropExistingView1, Open_Position1 }
 //             _id: 1,
 //             symbol: 1,
 //             entry_type: 1,
+//             exit_type: 1,
 //             entry_price: 1,
+//             exit_price: 1,
 //             entry_qty_percent: 1,
+//             exit_qty_percent: 1,
+//             entry_qty: 1,
+//             exit_qty: 1,
 //             exchange: 1,
 //             strategy: 1,
 //             segment: 1,

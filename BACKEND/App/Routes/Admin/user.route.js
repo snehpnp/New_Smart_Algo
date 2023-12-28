@@ -3,6 +3,7 @@
 
 const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
+const { upload } = require('../../Helper/imgUpload');
 
 const { AddEmployee, UpdateUser, GetAllClients, GetAllExpiredClients ,loginClients, tradingOnClients, GetclientKey , GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys } = require('../../Controllers/Admin/user.controller')
 const { EditCompany, GetCompanyInfo, GetCompany_logo, EditEmailInfo } = require('../../Controllers/Admin/company.controller')
@@ -28,7 +29,7 @@ router.post('/get/panel_key', GetclientKey);
 
 // COMPANY RELETE ROUTES
 router.post('/edit/company', verifyToken, EditCompany);
-router.post('/edit/emailinfo', verifyToken, EditEmailInfo);
+router.post('/edit/emailinfo', verifyToken,upload.single('image'), EditEmailInfo);
 router.get('/get/company', GetCompanyInfo);
 router.get('/get/company_logo', GetCompany_logo);
 

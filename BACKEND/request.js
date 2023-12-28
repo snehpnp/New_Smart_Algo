@@ -145,6 +145,7 @@ module.exports = function (app) {
 
   app.get('/run/test', async (req, res) => {
     Open_Position1()
+    res.send("done")
   })
 
   app.get('/run/test1', async (req, res) => {
