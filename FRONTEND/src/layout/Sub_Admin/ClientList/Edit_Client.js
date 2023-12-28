@@ -15,7 +15,8 @@ import { Get_All_Service_for_Client } from '../../../ReduxStore/Slice/Common/com
 import { Get_Service_By_Group_Id } from '../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import { check_Device } from "../../../Utils/find_device";
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
-
+import { All_Api_Info_List } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+import * as Config from "../../../Utils/Config";
 
 import { Add_User } from '../../../ReduxStore/Slice/Admin/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
@@ -49,6 +50,8 @@ const AddClient = () => {
 
 
   const [getPermissions, setGetPermissions] = useState([])
+  const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
+
 
 
   const [AllGroupServices, setAllGroupServices] = useState({
@@ -100,6 +103,17 @@ const AddClient = () => {
           });
         }
       })
+
+
+    await dispatch(All_Api_Info_List({ token: user_token, url: Config.react_domain, brokerId: -1 })).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setGetBrokerInfo(
+            response.data
+          );
+        }
+      })
+
   }
 
 
@@ -272,10 +286,8 @@ const AddClient = () => {
   });
 
 
-  // console.log("testt", formik)
 
   useEffect(() => {
-    // console.log("UserData", UserData)
     formik.setFieldValue('username', UserData.data.data !== undefined && UserData.data.data[0].UserName);
     formik.setFieldValue('fullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
     formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
@@ -296,14 +308,7 @@ const AddClient = () => {
     formik.setFieldValue('todate', UserData.data.data !== undefined && f_time(UserData.data.data[0].EndDate));
     formik.setFieldValue('fromDate', UserData.data.data !== undefined && f_time(UserData.data.data[0].StartDate));
 
-  }, [UserData.data]);
-
-
-
-
-
-
-
+  }, [UserData.data, getPermissions]);
 
 
 
@@ -328,21 +333,25 @@ const AddClient = () => {
     // { label: 'Choice', value: '9' },
     // { label: 'Anand Rathi', value: '10' },
     // { label: 'B2C', value: '11' },
-    // { label: 'Angel', value: '12' },
+    { label: 'Angel', value: '12' },
     // { label: 'Fyers', value: '13' },
-    // { label: 'Zerodha', value: '15' }
+    { label: '5 Paisa', value: '14' },
+    { label: 'Zerodha', value: '15' }
+    // { label: 'Arihant', value: '16' }
+    // { label: 'Arihant', value: '17' }
+    // { label: 'Laxmi', value: '18' }
   ];
 
   const fields = [
-    { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },
-    { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },
-    { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, disable: false },
-    { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 6, disable: false },
+    { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false },
+    { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false },
+    { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false },
+    { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false },
     {
       name: 'licence',
       label: 'Licence',
       type: 'select',
-      options: getPermissions && getPermissions.license_permision === 1 ? [
+      options: getPermissions && getPermissions.license_permision === 1 || getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? [
         { label: '2 Days', value: '0' },
         { label: 'Demo', value: '1' },
         { label: 'Live', value: '2' },
@@ -350,7 +359,7 @@ const AddClient = () => {
         { label: '2 Days', value: '0' },
         { label: 'Demo', value: '1' },
       ]
-      , label_size: 12, col_size: 6, disable: false
+      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
     },
     {
       name: 'tomonth',
@@ -358,26 +367,26 @@ const AddClient = () => {
       type: 'select',
       options: first && first.map((item) => ({ label: item.endDate, value: item.month })),
       showWhen: values => values.licence === '2'
-      , label_size: 12, col_size: 6, disable: false, isSelected: true
+      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false, isSelected: true
     },
     {
       name: 'broker',
       label: 'Broker',
       type: 'select',
-      options: brokerOptions && brokerOptions.map((item) => ({ label: item.label, value: item.value })),
+      options: GetBrokerInfo && GetBrokerInfo.map((item) => ({ label: item.title, value: item.broker_id })),
       showWhen: values => values.licence === '2' || values.licence === '0'
-      , label_size: 12, col_size: 6, disable: false
+      , label_size: 12, col_size: 6, disable:  getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
     },
     //  For Demo Only Client
     {
       name: 'fromDate', label: 'From Date', type: 'date',
       showWhen: values => values.licence === '1'
-      , label_size: 12, col_size: 6, disable: false
+      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
     },
     {
       name: 'todate', label: 'To Date', type: 'date',
       showWhen: values => values.licence === '1'
-      , label_size: 12, col_size: 6, disable: false
+      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
     },
     {
       name: 'api_key',
@@ -450,7 +459,7 @@ const AddClient = () => {
       ],
       showWhen: values =>
         values.licence === '2' || values.licence === 2
-      , label_size: 12, col_size: 6, disable: false
+      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
 
     },
 
@@ -462,7 +471,7 @@ const AddClient = () => {
 
       options:
         AllGroupServices.data && AllGroupServices.data.map((item) => ({ label: item.name, value: item._id }))
-      , label_size: 12, col_size: 6, disable: false
+      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
     }
 
   ];
@@ -603,7 +612,7 @@ const AddClient = () => {
       await dispatch(Get_Service_By_Group_Id({ _id: formik.values.groupservice })).unwrap()
         .then((response) => {
           if (response.status) {
-console.log("responseresponseresponseresponse" ,response)
+            console.log("responseresponseresponseresponse", response)
             setGetServices({
               loading: false,
               data: response.data,
@@ -702,9 +711,12 @@ console.log("responseresponseresponseresponse" ,response)
   }, [UserData.data.strategy, AllStrategy.data]);
 
 
+
+
+
   return (
     <>
-      <Content Page_title="Edit  Client" button_title='Back' route="/subadmin/clients"  showEdit={true} show_Stat_End_date={UserData.data.data !== undefined && UserData.data.data[0]}>
+      <Content Page_title="Edit  Client" button_title='Back' route="/subadmin/clients" showEdit={true} show_Stat_End_date={UserData.data.data !== undefined && UserData.data.data[0]}>
         <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
           fromDate={formik.values.fromDate}
           toDate={formik.values.todate}
@@ -731,7 +743,8 @@ console.log("responseresponseresponseresponse" ,response)
 
               {/*  For Show All Strategy */}
               {/* {ShowAllStratagy ? ( */}
-              <>
+
+              {getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 0 ? <>
                 <h5> All Strategy </h5>
                 {selectedStrategies.map((strategy) => (
 
@@ -756,7 +769,8 @@ console.log("responseresponseresponseresponse" ,response)
                     </div>
                   </div>
                 ))}
-              </>
+              </> : ""}
+
 
               {/* ) : ""} */}
             </>

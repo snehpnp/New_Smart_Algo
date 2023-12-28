@@ -86,28 +86,24 @@ const CreateTheme = ({ SelectTheme1 }) => {
     }
 
     // for  primary Color Selection
-
     const PreviewPrimaryColor = (e) => {
         $('body').attr('data-primary', e.target.value);
         setPrimaryColor(e.target.value);
     }
 
     // for  Nav-Header Selection
-
     const PreviewNavHeaderColor = (e) => {
         $('body').attr('data-nav-headerbg', e.target.value);
         setNavHeaderColor(e.target.value);
     }
 
     // for  Header Selection
-
     const PreviewHeaderColor = (e) => {
         $('body').attr('data-headerbg', e.target.value);
         setHeaderColor(e.target.value);
     }
 
     // for  Sidebar Selection
-
     const PreviewSIdebarColor = (e) => {
         $('body').attr('data-sibebarbg', e.target.value);
         setSidebarColor(e.target.value);
@@ -116,7 +112,6 @@ const CreateTheme = ({ SelectTheme1 }) => {
     //-------------------  for Header selection -------------------
 
     // for Preview Layout
-
     const PreviewLayout = (e) => {
         if ($('body').attr('data-sidebar-style') === 'overlay') {
             $('body').attr('data-sidebar-style', 'full');
@@ -129,7 +124,6 @@ const CreateTheme = ({ SelectTheme1 }) => {
 
 
     // for  Sidebar Selection
-
     const PreviewSIdebar = (e) => {
         if ($('body').attr('data-layout') === "horizontal") {
             if (e.target.value === "overlay") {
@@ -163,14 +157,12 @@ const CreateTheme = ({ SelectTheme1 }) => {
     }
 
     // for  Navigation Header  Selection
-
     const PreviewHeaderPosition = (e) => {
         $('body').attr('data-header-position', e.target.value);
         setHeaderPosition(e.target.value);
     }
 
     // for  Sidebar Position  Selection
-
     const PreviewSidebarPosition = (e) => {
         $('body').attr('data-sidebar-position', e.target.value);
         setSidebarPosition(e.target.value);
@@ -179,15 +171,11 @@ const CreateTheme = ({ SelectTheme1 }) => {
     // ------------------ for Container selection ------------------------
 
     // for  Typography Selection
-
-
-
     const PreviewTypeGraphy = (e) => {
         $('body').attr('data-typography', e.target.value);
         setBodyFont(e.target.value);
     }
     // for  Container Selection
-
     const PreviewContainer = (e) => {
         if (e.target.value === "boxed") {
             if ($('body').attr('data-layout') === "vertical" && $('body').attr('data-sidebar-style') === "full") {
@@ -209,8 +197,10 @@ const CreateTheme = ({ SelectTheme1 }) => {
 
         // return
         setToggleSelection(false)
-        setIsModalOpen(!isModalOpen)
+        setIsModalOpen(true)
+
     }
+
     const AddTheme = async (e) => {
         // e.preventDefault();
 
@@ -227,16 +217,20 @@ const CreateTheme = ({ SelectTheme1 }) => {
         window.scrollTo(0, 0);
 
         var screenshotUrl
+        setIsModalOpen(false)
+
 
         // Capture the screenshot
         await html2canvas(document.documentElement, options).then(canvas => {
             // Convert canvas to an image and download it
             const screenshot = canvas.toDataURL('image/png');
             screenshotUrl = canvas.toDataURL('image/png');
-            // const link = document.createElement('a');
-            // link.href = screenshot;
-            // link.download = 'screenshot.png';
-            // link.click();
+            const link = document.createElement('a');
+            link.href = screenshot;
+            link.download = 'screenshot.png';
+            link.click();
+
+
         })
 
 
@@ -306,11 +300,6 @@ const CreateTheme = ({ SelectTheme1 }) => {
             console.log("error", err);
         })
     }
-
-
-
-
-
 
 
 
@@ -646,9 +635,6 @@ const CreateTheme = ({ SelectTheme1 }) => {
                 handleClose={() => setIsModalOpen(!isModalOpen)}
                 title="Theme Name"
                 btn_name="Add Theme"
-
-
-
                 size="sm"
                 Submit_Function={(e) => AddTheme(e)}
                 backdrop='static'

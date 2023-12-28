@@ -9,7 +9,6 @@ import CreateTheme from '../ThemeSwitcher/CreateTheme/CreateTheme'
 import Cookies from 'js-cookie'
 import html2canvas from 'html2canvas';
 import * as Config from "../../../Utils/Config";
-
 import axios from 'axios';
 import $ from "jquery";
 
@@ -67,13 +66,13 @@ const Wraper = () => {
     axios.get(`${Config.smartAlogUrl}getall/theme`).then((res) => {
       setSetTheme(res.data.data[0])
     }).catch((err) => {
-        console.log("error", err);
+      console.log("error", err);
     })
-}
+  }
 
-useEffect(() => {
+  useEffect(() => {
     GetAllThemes()
-}, [])
+  }, [])
 
 
 
@@ -214,27 +213,39 @@ useEffect(() => {
 
 
 
-  const captureScreenshot = () => {
+  // const captureScreenshot = () => {
 
-    // const options = {
-    //   width: document.documentElement.scrollWidth, // Set custom width
-    //   height: document.documentElement.scrollHeight, // Set custom height
-    // };
+  //   // const container = document.getElementById('root')
+  //   const container1 = document.getElementById('App')
+  //   const container2 = document.getElementById('menu');
 
-    // // Set the window size and scroll position to match the content size
-    // // window.resizeTo(width, height);
-    // window.scrollTo(0, 0);
+  //   // Create a new <div> element
+  //   const container = document.createElement('div');
 
-    // // Capture the screenshot
-    // html2canvas(pageRef.current, options).then(canvas => {
-    //   // Convert canvas to an image and download it
-    //   const screenshot = canvas.toDataURL('image/png');
-    //   const link = document.createElement('a');
-    //   link.href = screenshot;
-    //   link.download = 'screenshot.png';
-    //   link.click();
-    // })
-  };
+  //   // Append the root and menu elements to the container
+  //   // container.appendChild(container1);
+  //   // container.appendChild(container2);
+
+  //   console.log("container" ,container)
+
+  //   // Append the container1 and container2 to the document body
+  //   // document.body.appendChild(container1);
+  //   // document.body.appendChild(container2);
+
+  //   const options = {
+  //     width: document.documentElement.scrollWidth, // Set custom width
+  //     height: document.documentElement.scrollHeight, // Set custom height
+  //   };
+
+
+  //   html2canvas(container1, options).then(canvas => {
+  //     const screenshot = canvas.toDataURL('image/png');
+  //     const link = document.createElement('a');
+  //     link.href = screenshot;
+  //     link.download = 'screenshot.png';
+  //     link.click();
+  //   })
+  // };
 
 
 
@@ -244,20 +255,21 @@ useEffect(() => {
     < >
       <div id="main-wrapper" className={`${toggleSidebar ? "show" : ""}`}
       >
-        <div >
-          <Header ChatBox={ShowChatBox} ShowSidebar={ShowSidebar} />
-          <Sidebar ShowSidebar={ShowSidebar} />
-          {/* <Content /> */}
-          {roles === "SUPERADMIN" ? <>
+
+        {/* <button className='d-flex mx-auto' style={{ marginTop: '70px' }} onClick={captureScreenshot}>Capture Screenshot</button> */}
+
+        <Header ChatBox={ShowChatBox} ShowSidebar={ShowSidebar} />
+        <Sidebar ShowSidebar={ShowSidebar} />
+        {/* <Content /> */}
+        {roles === "SUPERADMIN" ? <>
           <ThemeSelection />
           <CreateTheme SelectTheme1={SelectTheme} />
-          </> : ""}
-          <ChatBox toggleChat={toggleChatBox} />
-          <Footer />
+        </> : ""}
+        <ChatBox toggleChat={toggleChatBox} />
+        <Footer />
 
-        </div>
-        {/* <button className='d-flex mx-auto' style={{ marginTop: '70px' }} onClick={captureScreenshot}>Capture Screenshot</button> */}
       </div>
+
 
 
     </>

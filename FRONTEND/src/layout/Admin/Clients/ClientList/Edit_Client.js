@@ -17,6 +17,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 import "../../../../App.css"
 import { f_time } from '../../../../Utils/Date_formet';
+import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+import * as Config from "../../../../Utils/Config";
 
 const AddClient = () => {
   const navigate = useNavigate()
@@ -37,6 +39,8 @@ const AddClient = () => {
 
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [ShowAllStratagy, setShowAllStratagy] = useState(true)
+  const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
+
 
   const [first, setfirst] = useState([])
 
@@ -171,12 +175,12 @@ const AddClient = () => {
         // }
       }
       else if (values.licence === '1' || values.licence === 1) {
-        if (!values.fromDate) {
-          errors.fromDate = valid_err.FROMDATE_ERROR;
-        }
-        if (!values.todate) {
-          errors.todate = valid_err.FROMDATE_ERROR;
-        }
+        // if (!values.fromDate) {
+        //   errors.fromDate = valid_err.FROMDATE_ERROR;
+        // }
+        // if (!values.todate) {
+        //   errors.todate = valid_err.FROMDATE_ERROR;
+        // }
       }
 
 
@@ -211,7 +215,7 @@ const AddClient = () => {
         "service_given_month": values.service_given_month,
         "broker": values.broker,
         "parent_id": values.parent_id == null || values.parent_id === "" ? user_id : values.parent_id,
-        "parent_role": values.parent_id == null || values.parent_id === "" ?  "ADMIN" : "SUBADMIN",
+        "parent_role": values.parent_id == null || values.parent_id === "" ? "ADMIN" : "SUBADMIN",
         "api_secret": values.api_secret,
         "app_id": values.app_id,
         "client_code": values.client_code,
@@ -317,7 +321,7 @@ const AddClient = () => {
     { label: 'Angel', value: '12' },
     // { label: 'Fyers', value: '13' },
     { label: '5 Paisa', value: '14' },
-     { label: 'Zerodha', value: '15' }
+    { label: 'Zerodha', value: '15' }
     // { label: 'Arihant', value: '16' }
     // { label: 'Arihant', value: '17' }
     // { label: 'Laxmi', value: '18' }
@@ -360,7 +364,7 @@ const AddClient = () => {
       name: 'broker',
       label: 'Broker',
       type: 'select',
-      options: brokerOptions && brokerOptions.map((item) => ({ label: item.label, value: item.value })),
+      options: GetBrokerInfo && GetBrokerInfo.map((item) => ({ label: item.title, value: item.broker_id })),
       showWhen: values => values.licence === '2' || values.licence === '0'
       , label_size: 12, col_size: 6, disable: false
     },
@@ -657,6 +661,19 @@ const AddClient = () => {
         });
       }
     })
+
+
+
+
+    await dispatch(All_Api_Info_List({ token: user_token, url: Config.react_domain, brokerId: -1 })).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setGetBrokerInfo(
+            response.data
+          );
+        }
+      })
+
   }
 
 
@@ -722,10 +739,7 @@ const AddClient = () => {
 
               <>
                 <h6>All Strategy</h6>
-
                 {selectedStrategies.map((strategy) => (
-
-
                   <div className={`col-lg-2 mt-2`} key={strategy.id}>
                     <div className="row ">
                       <div className="col-lg-12 ">

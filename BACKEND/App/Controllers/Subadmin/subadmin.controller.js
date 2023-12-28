@@ -74,16 +74,16 @@ class Subadmin {
                 client_key: client_key,
                 parent_role: parent_role,
                 parent_id: parent_id,
-                Is_First_login:"1"
+                Is_First_login: "1"
 
             });
 
             const userinfo = User.save()
                 .then(async (data) => {
-                    // console.log("data", data._id);
 
                     const SubadminPermision = new Subadmin_Permission({
                         client_add: Subadmin_permision_data.client_add,
+                        Update_Api_Key: Subadmin_permision_data.Update_Api_Key,
                         client_edit: Subadmin_permision_data.client_edit,
                         detailsinfo: Subadmin_permision_data.detailsinfo,
                         license_permision: Subadmin_permision_data.license_permision,
@@ -162,6 +162,7 @@ class Subadmin {
             var SubadminPermision = {
                 client_add: Subadmin_permision_data.client_add,
                 detailsinfo: Subadmin_permision_data.detailsinfo,
+                Update_Api_Key: Subadmin_permision_data.Update_Api_Key,
                 client_edit: Subadmin_permision_data.client_edit,
                 license_permision: Subadmin_permision_data.license_permision,
                 go_To_Dashboard: Subadmin_permision_data.go_To_Dashboard,
@@ -279,8 +280,8 @@ class Subadmin {
             // GET LOGIN CLIENTS
             const getAllSubAdmins = await User_model.find({
                 parent_role: "SUBADMIN",
-                license_type:"2",
-                Is_Active : '0'
+                license_type: "2",
+                Is_Active: '0'
 
             });
             const totalCount = getAllSubAdmins.length;

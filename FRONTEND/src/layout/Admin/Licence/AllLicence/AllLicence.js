@@ -227,9 +227,8 @@ const AllLicence = () => {
       const userNameMatch = item.user.UserName.toLowerCase().includes(searchInput && searchInput.toLowerCase());
       let getMonthAndYear = get_year_and_month_only(item.createdAt)
 
-
       if (SelectUserFIlter === "") {
-        return getMonthAndYear === CountLicence
+        return userNameMatch && (item.admin_license || item.license) && getMonthAndYear === CountLicence;
       } else if (SelectUserFIlter === "0") {
         return userNameMatch;
       } else if (SelectUserFIlter === "1") {
@@ -239,18 +238,15 @@ const AllLicence = () => {
       } else {
         return true;
       }
-
-
-
     });
 
-    console.log("filteredData", filteredData);
+   // console.log("filteredData", filteredData);
+
 
     setAllClients({
       loading: false,
       data: {
         data: filteredData,
-        // total_licence: response.total_licence,
       },
     });
 
@@ -321,7 +317,7 @@ const AllLicence = () => {
                       id="validationCustom05"
                       max={get_year_and_month_only(new Date())}
                       onChange={(e) => setCountLicence(e.target.value)}
-                      value={SelectUserFIlter === "0" ? "" : CountLicence}
+                      value={CountLicence}
                     />
                     <button
                       className="btn btn-primary"
@@ -349,7 +345,7 @@ const AllLicence = () => {
                     </h6>
                   </div>
                   <div className="col-2 mx-auto border border-dark text-center rounded-3">
-                    <h6 >Used Licence</h6>
+                    <h6 >Total Used Licence</h6>
                     <h6 >{UsedLicence(getAllClients1)}</h6>
                   </div>
                   <div className="col-2 mx-auto  border border-dark text-center rounded-3">
@@ -360,7 +356,7 @@ const AllLicence = () => {
                     </h6>
                   </div>
                   <div className="col-2 mx-auto border border-dark text-center rounded-3">
-                    <h6 >This Month Licence</h6>
+                    <h6 >Current Month Licence</h6>
                     <span >
                       {usedLicence ? usedLicence : "Please Select Month"}
                     </span>

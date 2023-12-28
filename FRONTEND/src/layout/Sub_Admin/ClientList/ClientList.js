@@ -111,7 +111,7 @@ const AllClients = () => {
     }
     useEffect(() => {
         data2()
-    }, [])
+    }, [getPermissions])
 
 
 
@@ -251,7 +251,7 @@ const AllClients = () => {
             text: 'Email',
             formatter: (cell, row, rowIndex) => <>
                 <span>
-                    {getPermissions && getPermissions.detailsinfo == 1 ? cell : maskEmail(cell)}
+                    {getPermissions && getPermissions.detailsinfo === 1 ? cell : maskEmail(cell)}
                 </span>
             </>
         },
@@ -260,7 +260,7 @@ const AllClients = () => {
             text: 'Phone Number',
             formatter: (cell, row, rowIndex) => <>
                 <span>
-                    {getPermissions && getPermissions.detailsinfo == 1 ? cell : maskNumber(cell)}
+                    {getPermissions && getPermissions.detailsinfo === 1 ? cell : maskNumber(cell)}
                 </span>
             </>
         },
@@ -343,7 +343,7 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
                     <div>
-                        {getPermissions && getPermissions.client_edit === 1 && row.Is_Active === "1" ? <>
+                        {(getPermissions && getPermissions.client_edit === 1) || (getPermissions && getPermissions.Update_Api_Key === 1) && row.Is_Active === "1" ? <>
                             <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
                                 <span data-toggle="tooltip" data-placement="top" title="Edit">
                                     <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
@@ -363,7 +363,7 @@ const AllClients = () => {
         },
     ];
 
-
+// console.log("getPermissions && getPermissions.Update_Api_Key" ,getPermissions && getPermissions.Update_Api_Key)
 
     return (
         <>

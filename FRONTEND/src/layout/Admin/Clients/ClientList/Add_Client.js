@@ -14,6 +14,8 @@ import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadmin
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
 import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import Form from 'react-bootstrap/Form';
+import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+import * as Config from "../../../../Utils/Config";
 
 
 import { Add_User } from '../../../../ReduxStore/Slice/Admin/userSlice';
@@ -37,6 +39,10 @@ const AddClient = () => {
   // console.log(user_id);
 
   const [selectedStrategies, setSelectedStrategies] = useState([]);
+  const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
+
+  console.log("GetBrokerInfo", GetBrokerInfo)
+
   const [ShowAllStratagy, setShowAllStratagy] = useState(false)
 
   const [first, setfirst] = useState([])
@@ -182,7 +188,7 @@ const AddClient = () => {
         "service_given_month": values.service_given_month,
         "broker": values.broker,
         "parent_id": values.parent_id == null || values.parent_id === "" ? user_id : values.parent_id,
-        "parent_role": values.parent_id == null || values.parent_id === "" ?  "ADMIN" : "SUBADMIN",
+        "parent_role": values.parent_id == null || values.parent_id === "" ? "ADMIN" : "SUBADMIN",
         "api_secret": values.api_secret,
         "app_id": values.app_id,
         "client_code": values.client_code,
@@ -267,6 +273,12 @@ const AddClient = () => {
 
   ];
 
+
+
+
+
+
+
   const fields = [
     { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },
     { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },
@@ -295,7 +307,7 @@ const AddClient = () => {
       name: 'broker',
       label: 'Broker',
       type: 'select',
-      options: brokerOptions && brokerOptions.map((item) => ({ label: item.label, value: item.value })),
+      options: GetBrokerInfo && GetBrokerInfo.map((item) => ({ label: item.title, value: item.broker_id })),
       showWhen: values => values.licence === '2' || values.licence === '0'
       , label_size: 12, col_size: 6, disable: false
     },
@@ -584,6 +596,21 @@ const AddClient = () => {
         });
       }
     })
+
+
+
+
+    await dispatch(All_Api_Info_List({ token: user_token, url: Config.react_domain, brokerId: -1 })).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setGetBrokerInfo(
+            response.data
+          );
+        }
+      })
+
+
+
   }
 
 

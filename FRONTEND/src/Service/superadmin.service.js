@@ -253,4 +253,42 @@ export async function CLOSE_ADMIN_PANEL(domain, token) {
 
 }
 
+// GET ALL BROKERS
+export async function ALL_BROKERS(domain, token) {
+    try {
+
+        const res = await axios.post(`${Config.base_url}getall/brokers`, domain, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        // custom error
+    }
+
+}
+
+
+// GET ALL BROKERS
+export async function UPDATE_BROKERS(domain, token) {
+    try {
+
+        const res = await axios.post(`${Config.base_url}update/panel/broker`, domain, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        // custom error
+    }
+
+}
+
+
+
+
 

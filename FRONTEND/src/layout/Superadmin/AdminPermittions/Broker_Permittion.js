@@ -1,74 +1,153 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
 import Modal from '../../../Components/ExtraComponents/Modal';
 import { useFormik } from 'formik';
-import * as  valid_err from "../../../Utils/Common_Messages"
-import Formikform1 from "../../../Components/ExtraComponents/Form/Formik_form1"
-
-import { useNavigate } from "react-router-dom";
-import { Email_regex, Mobile_regex } from "../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
-import { Add_Licence_To_Company } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { Add_Licence_To_Company, All_Brokers, Update_Comapny_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import Formikform from "../../../Components/ExtraComponents/Form/Formik_form"
+import * as Config from "../../../Utils/Config";
+import toast, { Toaster } from 'react-hot-toast';
+import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 
-const Broker_Permittion = ({ showModal, setshowModal, showPanelName }) => {
+const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => {
     const dispatch = useDispatch()
+
+    const [GetAllBrokerName, setGetAllBrokerName] = useState(false)
+    const [SelectedBrokers, setSelectedBrokers] = useState([])
+    const [refresh, setRefresh] = useState(false)
+
 
 
     const formik = useFormik({
         initialValues: {
-            licence: null,
-
-
+            broker: null,
         },
         validate: (values) => {
 
             const errors = {};
-            if (!values.licence) {
-                errors.licence = valid_err.USERNAME_ERROR;
-            }
+            // if (!values.licence) {
+            //     errors.licence = valid_err.USERNAME_ERROR;
+            // }
             return errors;
         },
         onSubmit: async (values) => {
+
             const req = {
-                "license": values.license,
-                "db_url": showPanelName.db_url,
-                "db_name": showPanelName.db_name,
-                "key": showPanelName.key,
+                "data": SelectedBrokers,
+                "domain": Config.react_domain,
+
             }
 
-
-
-            await dispatch(Add_Licence_To_Company(req)).unwrap().then((response) => {
-
-                // console.log("response", response)
-                if (response.status === 409) {
-                    // toast.error(response.data.msg);
+            await dispatch(Update_Comapny_Brokers(req)).unwrap().then((response) => {
+                console.log("response", response)
+                if (response.status) {
+                    toast.success(response.msg);
+                    setshowModal(false)
+                    setRefresh(!refresh)
                 }
-                else if (response.status) {
-                    // toast.success(response.msg);
-                    setTimeout(() => {
-                        // navigate("/admin/allclients")
-                    }, 1000);
+                else {
+                    toast.success(response.msg);
                 }
-                else if (!response.status) {
-                    // toast.error(response.msg);
-                }
+
 
             })
         }
     });
 
 
+    const data1 = async () => {
+        if (showModal) {
+            await dispatch(All_Brokers()).unwrap()
+                .then((response) => {
+                    console.log("setPanelData", response)
+                    setGetAllBrokerName(
+                        response.data
+                    );
+                })
+        }
+    }
 
+    //  
+    useEffect(() => {
+        data1()
+    }, [showModal, refresh])
+
+
+    const DefaultSelectesCheckBox = (strategy) => {
+        let abc = List && List.broker_id.some((selectedBroker) => selectedBroker.id === strategy)
+        return abc
+    }
+
+
+    useEffect(() => {
+        let abc = []
+        // console.log("List && List" ,List && List)
+        List && List.broker_id.map((item) => {
+            abc.push({
+                id: item.id,
+                name: item.name
+            })
+        })
+        setSelectedBrokers(abc)
+    }, [showModal, refresh])
+
+
+
+    const fields = [
+        // {
+        //     name: 'optionchain',
+        //     label: 'Option Chain',
+        //     type: 'checkbox',
+        //     options: GetAllBrokerName && GetAllBrokerName.map((item) => ({ label: item.title, value: item.broker_id })),
+        //     label_size: 12, col_size: 4, disable: false, isSelected: true
+        // },
+    ]
+
+    const handleStrategyChange = (event, strategy_id) => {
+        console.log("strategy_id", strategy_id)
+        const strategyId = event.target.value;
+        const strategyName = event.target.name;
+        if (event.target.checked) {
+            setSelectedBrokers([...SelectedBrokers, { id: strategyName, name: strategyId }]);
+        } else {
+            setSelectedBrokers(SelectedBrokers.filter((strategy) => strategy.id !== strategy_id));
+        }
+    };
 
 
 
     return (
-        <div>   <Modal isOpen={showModal} size="md" title="Broker Permission" hideBtn={true}
+        <div>   <Modal isOpen={showModal} size="lg" title="Broker Permission" hideBtn={true}
             handleClose={() => setshowModal(false)}
         >
+            <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update "
+                fromDate={formik.values.fromDate}
+                toDate={formik.values.todate}
+                additional_field={
+                    <>
+                        <div className='d-flex row'>
+                            {GetAllBrokerName && GetAllBrokerName.map((strategy) => (
+                                <div className={`col-lg-3 my-2`} key={strategy._id}>
+                                    <div className="col-lg-12 ">
+                                        <input type='checkbox' className="form-check-input" name={strategy.broker_id}
+                                            value={strategy.title}
+                                            onChange={(e) => handleStrategyChange(e, strategy.broker_id)}
+                                            defaultChecked={DefaultSelectesCheckBox(strategy.broker_id)}
+                                        />
+                                        <label className="form-check-label" for={strategy._id}>{strategy.title}</label>
+                                    </div>
+                                </div>
+                            ))}
 
-        </Modal ></div>
+                        </div>
+                        <ToastButton />
+
+                    </>} />
+
+        </Modal>
+
+        </div>
     )
 }
 
