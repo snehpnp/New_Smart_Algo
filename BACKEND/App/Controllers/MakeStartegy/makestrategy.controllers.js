@@ -945,4 +945,60 @@ async function run() {
 run().catch(console.error);
 
 
+
+const exitOpentrade = async () => {
+  try {
+    const viewName = 'open_position_excute';
+  
+  
+    var openPosition = await db_GET_VIEW.collection(viewName).find().toArray();
+  
+  
+    if (openPosition.length > 0) {
+  
+      openPosition && openPosition.map((item) => {
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+        let req = `DTime:${currentTimestamp}|Symbol:${item.symbol}|TType:${item.entry_type == "SE" ? "SX" : "LX"}|Tr_Price:131|Price:${item.stockInfo_bp1}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${item.segment}|Strike:${item.strike}|OType:${item.option_type}|Expiry:${item.expiry}|Strategy:${item.strategy}|Quntity:${item.entry_qty_percent}|Key:${item.client_persnal_key}|TradeType:${item.TradeType}|Demo:demo`
+      
+        let config = {
+          method: 'post',
+          maxBodyLength: Infinity,
+          // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+          url: `${process.env.BROKER_URL}`,
+          headers: {
+            'Content-Type': 'text/plain'
+          },
+          data: req
+        };
+  
+        axios.request(config)
+          .then((response) => {
+  
+            // console.log("response Trade Excuted - ", response.data)
+  
+          })
+          .catch((error) => {
+            // console.log(error.response.data);
+          });
+  
+  
+      })
+  
+    } 
+  } catch (error) {
+    console.log("Error in Open Position",error);
+  }
+   
+  
+  
+  }
+  
+  
+  
+  // setInterval(() => {
+  //   exitOpentrade()
+  // }, 10000);
+
+
+
 module.exports = new MakeStartegy();
