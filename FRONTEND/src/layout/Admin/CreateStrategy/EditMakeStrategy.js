@@ -1685,12 +1685,12 @@ const updateStrategy = async (e) => {
              <input min={1} type="text"  defaultValue={singleMakeStrategyData.numberOfTrade} onChange={(e)=>{onChange(e)}}  name="no_of_trade" className="form-control stratergy-box"></input>
 
 
-             <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Max Profit</label>
+             {/* <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Max Profit</label>
              <input min={1} type="text"  defaultValue={singleMakeStrategyData.maxProfit} onChange={(e)=>{onChange(e)}}  name="max_profit" className="form-control stratergy-box"></input>
 
 
              <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Max Loss</label>
-             <input min={1} type="text"  defaultValue={singleMakeStrategyData.maxLoss} onChange={(e)=>{onChange(e)}}  name="max_loss" className="form-control stratergy-box"></input>
+             <input min={1} type="text"  defaultValue={singleMakeStrategyData.maxLoss} onChange={(e)=>{onChange(e)}}  name="max_loss" className="form-control stratergy-box"></input> */}
 
             </div>
 
