@@ -50,6 +50,7 @@ const Header = ({ ChatBox }) => {
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const page = localStorage.getItem("page")
   const Role = JSON.parse(localStorage.getItem("user_details")).Role
+  const routePath = localStorage.getItem("route");
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
 
@@ -143,13 +144,23 @@ const Header = ({ ChatBox }) => {
   }
 
   const redirectToAdmin = () => {
+    console.log("page", page);
+    console.log("user_role_goTo", user_role_goTo);
+    console.log("routePath", routePath);
+
+
+
     if (page != null) {
       navigate("/admin/groupservices")
       localStorage.removeItem("page")
     } else {
-      user_role_goTo === "USER"
-        ? navigate("/admin/allclients")
-        : navigate("/admin/allsubadmins");
+
+      navigate(routePath)
+
+      // return
+      //   user_role_goTo === "USER"
+      //     ? navigate("/admin/allclients")
+      //     : navigate("/admin/allsubadmins");
       window.location.reload();
       localStorage.removeItem("gotodashboard");
       localStorage.removeItem("user_details_goTo");

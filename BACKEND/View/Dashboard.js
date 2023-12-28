@@ -1,4 +1,5 @@
-db.createView("dashboard_data", "users", [
+db.createView("dashboard_data", "users", 
+[
 
     {
         $group: {

@@ -117,8 +117,12 @@ const AllClients = () => {
 
 
     // GO TO DASHBOARD
-    const goToDashboard = async (asyncid, email) => {
-        console.log("email", email);
+    const goToDashboard = async (asyncid, email, row) => {
+
+        if (row.AppLoginStatus == "0" && row.WebLoginStatus == "0") {
+            return
+        }
+
         let req = {
             Email: email,
 
@@ -126,8 +130,7 @@ const AllClients = () => {
         await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
             .then((response) => {
                 if (response.status) {
-                    localStorage.setItem("route", "admin/allclients");
-
+                    localStorage.setItem("route", "/subadmin/clients");
                     localStorage.setItem("gotodashboard", JSON.stringify(true));
                     localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
                     localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
@@ -301,10 +304,11 @@ const AllClients = () => {
                                 ? { color: "#FF0000" }
                                 : { color: "#008000" }
                         }
-                        onClick={() => goToDashboard(row._id, row.Email)}
+                        onClick={() => goToDashboard(row._id, row.Email, row)}
                         disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
                     >
                         Dashboard
+
                     </span>
                 </>
 

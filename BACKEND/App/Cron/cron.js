@@ -18,6 +18,19 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const { Get_Option_All_Token_Chain } = require('../../App/Controllers/Admin/option_chain.controller')
 const { GetStrickPriceFromSheet } = require('../Controllers/Admin/signals.controller')
+const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
+
+
+cron.schedule('0 1 * * *', () => {
+    console.log('Delte Dashboard Data');
+    deleteDashboard()
+});
+
+
+cron.schedule('0 6 * * *', () => {
+    console.log('Create Dashboard view');
+    DashboardView()
+});
 
 
 cron.schedule('5 2 * * *', () => {
@@ -36,7 +49,6 @@ cron.schedule('0 8 * * *', () => {
 });
 
 
-// Token Symbol Update
 cron.schedule('1 1 * * *', () => {
     console.log('running a task every minute');
     TruncateTable()
@@ -48,9 +60,7 @@ cron.schedule('10 1 * * *', () => {
 });
 
 
-// EVERY 30 MINUT RUN CRON 
 cron.schedule('*/30 * * * *', () => {
-    console.log('Run Every 30 Minutes');
     GetStrickPriceFromSheet();
 });
 
@@ -60,6 +70,8 @@ cron.schedule('5 23 * * *', () => {
     twodaysclient();
 });
 
+
+// =========================================================================================================================
 
 // 1. LOGOUT AND TRADING OFF ALL USER 
 const LogoutAllUsers = async () => {
@@ -187,8 +199,7 @@ const TokenSymbolUpdate = () => {
 
     axios(config)
         .then(function (response) {
-            response.data.forEach(function (element) {
-                // console.log("element");
+            response.data.forEach(async (element) => {
 
                 var option_type = element.symbol.slice(-2);
                 var expiry_s = element.expiry
@@ -230,8 +241,15 @@ const TokenSymbolUpdate = () => {
                         exch_seg: element.exch_seg
                     };
 
-                    const Alice_tokens = new Alice_token(user_data)
-                    const userinfo = Alice_tokens.save()
+                    // const Alice_tokens = new Alice_token(user_data)
+                    // const userinfo = Alice_tokens.save()
+
+
+
+                    const filter = { instrument_token: element.token };
+                    var updateOperation = { $set: user_data };
+                    var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
+
 
                 } else if (element.instrumenttype == 'FUTIDX' && element.exch_seg == "NFO") {
 
@@ -253,8 +271,12 @@ const TokenSymbolUpdate = () => {
                         exch_seg: element.exch_seg
                     };
 
-                    const Alice_tokens = new Alice_token(user_data)
-                    const userinfo = Alice_tokens.save()
+                    // const Alice_tokens = new Alice_token(user_data)
+                    // const userinfo = Alice_tokens.save()
+
+                    const filter = { instrument_token: element.token };
+                    var updateOperation = { $set: user_data };
+                    var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
                 } else if (element.instrumenttype == 'FUTCOM') {
 
@@ -276,8 +298,11 @@ const TokenSymbolUpdate = () => {
                         exch_seg: element.exch_seg
                     };
 
-                    const Alice_tokens = new Alice_token(user_data)
-                    const userinfo = Alice_tokens.save()
+                    // const Alice_tokens = new Alice_token(user_data)
+                    // const userinfo = Alice_tokens.save()
+                    const filter = { instrument_token: element.token };
+                    var updateOperation = { $set: user_data };
+                    var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
                 } else if (element.instrumenttype == 'OPTIDX' && element.exch_seg == "NFO") {
 
@@ -304,8 +329,11 @@ const TokenSymbolUpdate = () => {
                         exch_seg: element.exch_seg
                     };
 
-                    const Alice_tokens = new Alice_token(user_data)
-                    const userinfo = Alice_tokens.save()
+                    // const Alice_tokens = new Alice_token(user_data)
+                    // const userinfo = Alice_tokens.save()
+                    const filter = { instrument_token: element.token };
+                    var updateOperation = { $set: user_data };
+                    var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
                 } else if (element.instrumenttype == 'OPTSTK' && element.exch_seg == "NFO") {
 
@@ -331,8 +359,12 @@ const TokenSymbolUpdate = () => {
                         exch_seg: element.exch_seg
                     };
 
-                    const Alice_tokens = new Alice_token(user_data)
-                    const userinfo = Alice_tokens.save()
+                    // const Alice_tokens = new Alice_token(user_data)
+                    // const userinfo = Alice_tokens.save()
+
+                    const filter = { instrument_token: element.token };
+                    var updateOperation = { $set: user_data };
+                    var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
                 } else if (element.instrumenttype == 'OPTFUT') {
 
@@ -358,8 +390,12 @@ const TokenSymbolUpdate = () => {
                         exch_seg: element.exch_seg
                     };
 
-                    const Alice_tokens = new Alice_token(user_data)
-                    const userinfo = Alice_tokens.save()
+                    // const Alice_tokens = new Alice_token(user_data)
+                    // // const userinfo = Alice_tokens.save()
+
+                    const filter = { instrument_token: element.token };
+                    var updateOperation = { $set: user_data };
+                    var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
                 } else if (element.instrumenttype == 'OPTCOM') {
 
@@ -386,8 +422,11 @@ const TokenSymbolUpdate = () => {
 
                     };
 
-                    const Alice_tokens = new Alice_token(user_data)
-                    const userinfo = Alice_tokens.save()
+                    // const Alice_tokens = new Alice_token(user_data)
+                    // const userinfo = Alice_tokens.save()
+                    const filter = { instrument_token: element.token };
+                    var updateOperation = { $set: user_data };
+                    var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
                 } else if (element.instrumenttype == 'OPTCUR') {
 
@@ -414,8 +453,12 @@ const TokenSymbolUpdate = () => {
                         exch_seg: element.exch_seg
                     };
 
-                    const Alice_tokens = new Alice_token(user_data)
-                    const userinfo = Alice_tokens.save()
+                    // const Alice_tokens = new Alice_token(user_data)
+                    // const userinfo = Alice_tokens.save()
+
+                    const filter = { instrument_token: element.token };
+                    var updateOperation = { $set: user_data };
+                    var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
                 } else if (element.instrumenttype == 'FUTCUR') {
 
@@ -437,8 +480,12 @@ const TokenSymbolUpdate = () => {
                         exch_seg: element.exch_seg
                     };
 
-                    const Alice_tokens = new Alice_token(user_data)
-                    const userinfo = Alice_tokens.save()
+                    // const Alice_tokens = new Alice_token(user_data)
+                    // const userinfo = Alice_tokens.save()
+
+                    const filter = { instrument_token: element.token };
+                    var updateOperation = { $set: user_data };
+                    var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
 
                 }
 
@@ -464,8 +511,12 @@ const TokenSymbolUpdate = () => {
 
                     };
 
-                    const Alice_tokens = new Alice_token(user_data)
-                    const userinfo = Alice_tokens.save()
+                    // const Alice_tokens = new Alice_token(user_data)
+                    // const userinfo = Alice_tokens.save()
+
+                    const filter = { instrument_token: element.token };
+                    var updateOperation = { $set: user_data };
+                    var Update_Stock_chain = await Alice_token.updateOne(filter, updateOperation, { upsert: true });
                 }
 
 
@@ -478,7 +529,6 @@ const TokenSymbolUpdate = () => {
 }
 
 
-// ====================================================
 const tokenFind = async () => {
     try {
 

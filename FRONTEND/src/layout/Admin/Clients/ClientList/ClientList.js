@@ -37,7 +37,6 @@ const AllClients = () => {
   const token = JSON.parse(localStorage.getItem("user_details")).token;
 
   // For Filter
-
   const [originalData, setOriginalData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [PanelStatus, setPanelStatus] = useState("2");
@@ -202,7 +201,7 @@ const AllClients = () => {
         .unwrap()
         .then((response) => {
           if (response.status) {
-            localStorage.setItem("route","admin/allclients");
+            localStorage.setItem("route","/admin/allclients");
             localStorage.setItem("gotodashboard", JSON.stringify(true));
             localStorage.setItem(
               "user_details_goTo",
@@ -623,29 +622,6 @@ const AllClients = () => {
                   </select>
                 </div>
               </div>
-              {/* <div className="col-lg-2 ">
-                <div class="mb-3">
-                  <label for="select" class="form-label">
-                    Strategy Clients
-                  </label>
-                  <select
-                    class="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => StrategyClientStatus(e.target.value)}
-                    value={ClientStatus}
-                  >
-                    <option value="null">All</option>
-                    {getAllStrategyName.data &&
-                      getAllStrategyName.data.map((item) => {
-                        return (
-                          <option value={item._id}>{item.strategy_name}</option>
-                        );
-                      })}
-                  </select>
-                </div>
-              </div> */}
-
               <div className="col-lg-2 mt-4">
                 <button
                   className="btn btn-primary mt-2"
