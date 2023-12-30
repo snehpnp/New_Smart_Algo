@@ -115,7 +115,7 @@ class Theme {
     async GetThemeByIdThemeId(req, res) {
         try {
 
-            console.log("req.body._Id", req.body._id)
+            // console.log("req.body._Id", req.body._id)
 
             // GET LOGIN CLIENTS
             const getAllTradingClients = await Theme_list.find({
@@ -185,6 +185,49 @@ class Theme {
             console.log("trading Clients Error-", error);
         }
     }
+
+
+    // UPDATE THEME IMAGE
+
+    async UpdatetThemeImage(req, res) {
+        try {
+
+            // console.log("res ",req.body)
+            var objectId = new ObjectId(req.body.theme_id);
+
+
+            // GET LOGIN CLIENTS
+            const getAllTradingClients = await Theme_list.find({
+                _id: objectId
+            });
+
+            const totalCount = getAllTradingClients.length;
+
+            // IF DATA NOT EXIST
+            if (getAllTradingClients.length == 0) {
+                return res.send({ status: false, msg: "Theme Not Found", data: [], totalCount: totalCount, })
+            }
+
+
+
+
+            const filter = { _id: req.body.theme_id };
+            const updateOperation = { $set: { image: req.body.image } };
+
+            
+            const result = await Theme_list.updateOne(filter, updateOperation);
+
+            if (!result) {
+                return res.send({ status: false, msg: 'Theme not update', data: [] });
+            }
+            return res.send({ status: true, msg: 'Update Successfully.', data: [] });
+
+
+        } catch (error) {
+            console.log("trading Clients Error-", error);
+        }
+    }
+
 
 }
 

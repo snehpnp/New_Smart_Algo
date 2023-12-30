@@ -3,10 +3,13 @@ import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Loader from '../../../Utils/Loader'
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { Get_All_Theme, getthemedata } from '../../../ReduxStore/Slice/ThemeSlice'
+import { Get_All_Theme, getthemedata, Update_Theme_Img } from '../../../ReduxStore/Slice/ThemeSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
 import { Upload } from 'lucide-react';
+import { useFormik } from 'formik';
+import * as  valid_err from "../../../Utils/Common_Messages"
+import Formikform1 from "../../../Components/ExtraComponents/Form/Formik_form1"
 
 const CompanyTheme = () => {
 
@@ -15,6 +18,7 @@ const CompanyTheme = () => {
     const theme_list = useSelector(getthemedata && getthemedata)
 
     const [showModal, setshowModal] = useState(false)
+    const [ThemeId, setThemeId] = useState("")
 
     const [themeData, setThemeData] = useState({
         loading: true,
@@ -56,38 +60,82 @@ const CompanyTheme = () => {
             text: 'Theme Name'
         },
         {
-            dataField: 'price',
-            text: 'Product Name'
+            dataField: 'image',
+            text: 'Theme Image',
+            formatter: (cell, row, rowIndex) =>
+                <img src={cell} alt="img" height="50" width='150'/>
         },
         {
             dataField: 'price',
             text: 'Uplaod Theme Img',
             formatter: (cell, row, rowIndex) => <>
-                <Upload onClick={() => setshowModal(true)} />
+                <Upload onClick={() => { setshowModal(true); setThemeId(row._id) }} />
             </>,
 
         },
-        // {
-        //     dataField: 'price',
-        //     text: 'Product Name'
-        // },
-        // {
-        //     dataField: 'price',
-        //     text: 'Product Name'
-        // },
+
     ];
 
 
     const [file, setFile] = useState();
     function handleChange(e) {
-        console.log(e.target.files);
         setFile(URL.createObjectURL(e.target.files[0]));
     }
+
+    const fields = [
+        { name: 'updateimg', label: 'Update Theme Image', type: 'file', label_size: 12, col_size: 12, disable: false },
+
+    ];
+
+
+
+
+    const formik = useFormik({
+        initialValues: {
+            updateimg: null,
+        },
+        validate: (values) => {
+
+            const errors = {};
+            // if (!values.licence) {
+            //     errors.licence = valid_err.USERNAME_ERROR;
+            // }
+            return errors;
+        },
+        onSubmit: async (values) => {
+            const req = {
+                "theme_id": ThemeId,
+                "image": values.updateimg
+            }
+
+
+
+            await dispatch(Update_Theme_Img(req)).unwrap().then((response) => {
+                console.log("response", response)
+                //     if (response.status == false) {
+                //         toast.error(response.data.msg);
+                //     }
+                //     else if (response.status) {
+                //         toast.success(response.msg);
+                //         setTimeout(() => {
+                //             // navigate("/admin/allclients")
+                //             window.location.reload()
+                //         }, 1000);
+                //     }
+                //     else if (!response.status) {
+                //         // toast.error(response.msg);
+                //     }
+
+            })
+        }
+    });
+
+
 
 
     return (
         <Content Page_title="Company Theme" button_status={false}>
-            <button onClick={() => setshowModal(true)} className='btn btn-primary mb-3'> Upload Theme Img</button>
+            {/* //    <button onClick={() => setshowModal(true)} className='btn btn-primary mb-3'> Upload Theme Img</button> */}
             {
                 themeData.loading ? (
                     <Loader />
@@ -98,12 +146,19 @@ const CompanyTheme = () => {
                 )
             }
 
-            <Modal isOpen={showModal} size="md" title="Upload Theme Image" hideBtn={true}
+            <Modal isOpen={showModal} size="md" title="Upload Theme Image" hideBtn={false}
+                btn_name="Upload"
                 handleClose={() => setshowModal(false)}
+
+
             >
 
+                <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Licence"
+                />
 
                 {/* <div className={`col-lg-12`}>
+
+
                     <div className="row d-flex">
                         <div className="mb-3">
                             <label className={`col-form-12`} htmlFor="uploadtheme">

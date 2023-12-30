@@ -18,7 +18,7 @@ class Company {
                     }
                     const filter = { _id: _id };
                     const updateOperation = { $set: companydata };
-                    const result = await company_information.e(filter, updateOperation);
+                    const result = await company_information.updateOne(filter, updateOperation);
                     if (!result) {
                         return res.send({ status: false, msg: 'Company not update', data: [] });
                     }

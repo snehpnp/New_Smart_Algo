@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ADD_THEME, GET_ALL_THEME } from "../../Service/theme.service";
+import { ADD_THEME, GET_ALL_THEME  } from "../../Service/theme.service";
+import { UPDATE_THEME_IMG } from "../../Service/superadmin.service";
 
 
 export const Add_Theme = createAsyncThunk("theme/add", async (data) => {
@@ -20,6 +21,15 @@ export const Get_All_Theme = createAsyncThunk("theme/getall", async (data) => {
         return err;
     }
 });
+export const Update_Theme_Img = createAsyncThunk("theme/update/img", async (data) => {
+    try {
+        const res = await UPDATE_THEME_IMG(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
 
 const ThemeSlice = createSlice({
     name: "ThemeSlice",
@@ -27,6 +37,7 @@ const ThemeSlice = createSlice({
         isLoading: false,
         isError: false,
         add_theme: [],
+        updateimg: [],
         gettheme: [],
         status: false
     },
@@ -51,6 +62,10 @@ const ThemeSlice = createSlice({
         [Get_All_Theme.fulfilled]: (state, { payload }) => {
             console.log("payload", payload);
             return { ...state, gettheme: payload, status: false };
+        },
+        [Update_Theme_Img.fulfilled]: (state, { payload }) => {
+            console.log("payload", payload);
+            return { ...state, updateimg: payload, status: false };
         },
         [Get_All_Theme.rejected]: (state, action) => {
             return { ...state, gettheme: action, status: false };
