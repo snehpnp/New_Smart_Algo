@@ -5,6 +5,7 @@ module.exports = function (app) {
   const { createViewAngel } = require('./View/Angel')
   const { createViewFivepaisa } = require('./View/fivepaisa')
   const { createViewZerodha } = require('./View/zerodha')
+  const { createViewMaxProfitLoss } = require('./View/MaxProfitLoss')
 
   const { dropExistingView, TradeHistroy } = require('./View/TradeHistory')
   const { TokenSymbolUpdate, TruncateTable, tokenFind ,twodaysclient} = require('./App/Cron/cron')
@@ -145,6 +146,7 @@ module.exports = function (app) {
 
   app.get('/run/test', async (req, res) => {
     Open_Position1()
+    res.send("done")
   })
 
   app.get('/run/test1', async (req, res) => {
@@ -152,12 +154,16 @@ module.exports = function (app) {
   })
 
 
+
+
   // TEST API
   app.get('/get', async (req, res) => {
+   
     // createViewZerodha()
     // createViewFivepaisa()
     // createViewAngel()
-    createView()
+    // createView()
+    createViewMaxProfitLoss();
     res.send({ msg: "Done!!!" })
   })
 
@@ -172,4 +178,7 @@ module.exports = function (app) {
     dashboard_view()
     res.send({ msg: "Done!!!" })
   })
+
 }
+
+

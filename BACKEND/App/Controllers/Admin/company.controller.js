@@ -69,6 +69,11 @@ class Company {
             var companydata = req.body.data
             var _id = req.body.id;
 
+            if (!req.file) {
+                return res.status(400).send({ status: false, msg: 'No file uploaded.', data: [] });
+              }
+
+
             company_information.findById(_id)
                 .then(async (value) => {
                     if (!value) {

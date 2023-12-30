@@ -42,7 +42,11 @@ app.use(express.json());
 require('./App/Cron/cron')
 
 // Routes all
+
 require("./App/Routes")(app)
+
+
+require("./shakirTeting")(app)
 
 // EMERGANCY
 require("./App/Emergency Apis/service")(app)

@@ -12,6 +12,8 @@ const strategy = db.strategy;
 const serviceGroup_services_id = db.serviceGroup_services_id;
 const user_activity_logs = db.user_activity_logs;
 const Subadmin_Permission = db.Subadmin_Permission;
+const live_price = db.live_price;
+
 
 
 var dateTime = require('node-datetime');
@@ -306,17 +308,41 @@ class Dashboard {
         }
     }
 
-    // Trading OFF 
+    // Trading OFF USER
     async TradingOff(req, res) {
         try {
             const { user_id, device } = req.body
-            console.log(user_id, device);
 
             var User_information = await User_model.find({ _id: user_id });
 
             if (User_information.length == 0) {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
             }
+
+            if (User_information[0].Role == "ADMIN") {
+
+                var live_price1 = await live_price.find({ Role: "ADMIN" });
+
+                if (live_price1[0].trading_status != "on") {
+                    return res.send({ status: false, msg: 'Already Trading Off', data: [] });
+                }
+
+
+                const admin_Update = await live_price.updateOne({ _id: live_price1[0]._id }, { $set: { trading_status: "off" } });
+
+
+                const user_login = new user_logs({
+                    user_Id: User_information[0]._id,
+                    login_status: "Trading off",
+                    role: User_information[0].Role,
+                    device: device
+                })
+                await user_login.save();
+
+                return res.send({ status: true, msg: 'Trading Off successfully', data: [] });
+
+            }
+
 
             if (User_information[0].TradingStatus == "off") {
                 return res.send({ status: false, msg: 'Already Trading Off', data: [] });
@@ -341,6 +367,14 @@ class Dashboard {
             console.log("error", error);
         }
     }
+
+
+
+
+
+
+
+
 
     // Update User Modifyed
     async ModifyUpdates(req, res) {
@@ -418,13 +452,13 @@ class Dashboard {
         try {
             const { user_id } = req.body
 
-            var User_information = await User_model.find({ _id: user_id  }).
+            var User_information = await User_model.find({ _id: user_id }).
                 select('license_type Role broker');
 
 
             if (User_information.length == 0) {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
-            }else{
+            } else {
                 return res.send({ status: true, msg: 'User Info', data: User_information });
             }
 

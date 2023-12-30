@@ -258,7 +258,7 @@ class Panel {
             var domain1 = "http://localhost:3000"
 
             if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "http://localhost:3000"
+                domain1 = "https://trade.pandpinfotech.com"
             } else {
                 domain1 = domain
             }
@@ -304,12 +304,11 @@ class Panel {
 
             var domain1 = "http://localhost:3000"
 
-            if (domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "http://localhost:3000"
+            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
+                domain1 = "https://trade.pandpinfotech.com"
             } else {
                 domain1 = domain
             }
-            // console.log(domain1);
 
             const Panle_information = await panel_model.find({ domain: domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan , is_active')
 
@@ -335,14 +334,12 @@ class Panel {
 
             var domain1 = "http://localhost:3000"
 
-            if (domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "http://localhost:3000"
+            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
+                domain1 = "https://trade.pandpinfotech.com"
             } else {
                 domain1 = domain
             }
-            // console.log(domain1);
-
-            // const Panle_information = await panel_model.find({ domain: domain1 }).select('is_active')
+       
 
             const filter = { domain: domain1 };
 
@@ -370,7 +367,7 @@ class Panel {
             const { domain, data } = req.body
             var domain1 = "http://localhost:3000"
             if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "http://localhost:3000"
+                domain1 = "https://trade.pandpinfotech.com"
             } else {
                 domain1 = domain
             }

@@ -48,7 +48,6 @@ const TradeHistory = () => {
   const [refresh, setrefresh] = useState(false);
 
 
-
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
   };
@@ -153,37 +152,7 @@ const TradeHistory = () => {
       // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
-    // {
-    //   dataField: "squreoff",
-    //   text: "Square OFF",
-    //   formatter: (cell, row, rowIndex) => {
-    //     if (
-    //       row.exit_qty_percent &&
-    //       row.entry_qty_percent &&
-    //       parseInt(row.entry_qty_percent) > parseInt(row.exit_qty_percent)
-    //     ) {
-    //       return (
-    //         <button className="btn-primary"
-    //           onClick={() => SquareOff(row, rowIndex)}
-
-    //         >
-    //           Square Off
-    //         </button>
-    //       );
-    //     } else if (!row.exit_qty_percent &&
-    //       row.entry_qty_percent) {
-    //       return (
-    //         <button className="btn-primary"
-    //           onClick={() => SquareOff(row, rowIndex)}
-    //         >
-    //           Square Off
-    //         </button>
-    //       );
-    //     } else {
-    //       return null
-    //     }
-    //   },
-    // },
+   
     {
       dataField: "live",
       text: "Live Price",
@@ -361,9 +330,6 @@ const TradeHistory = () => {
 
   }
 
-  // console.log("CreateSignalRequest", CreateSignalRequest)
-
-  // ----------------------------- SQUARE OFF ----------------------------
 
 
 
@@ -582,11 +548,14 @@ const TradeHistory = () => {
     if (check) {
       loginWithApi(brokerid, UserDetails);
     } else {
+
+      
       dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
         .unwrap()
         .then((response) => {
           if (response.status) {
             setrefresh(!refresh)
+            window.location.reload()
           }
         });
 
