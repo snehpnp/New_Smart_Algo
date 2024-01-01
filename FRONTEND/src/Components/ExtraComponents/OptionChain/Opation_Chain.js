@@ -539,7 +539,6 @@ const HelpCenter = () => {
         // Check if the current time is after 3:30 PM in IST timezone
         const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
 
-        // console.log("isAfterCutoffTime", isAfterCutoffTime)
 
 
 

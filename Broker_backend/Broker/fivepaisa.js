@@ -14,7 +14,6 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
     
-    console.log("FIVEPAISA token - ",token[0].instrument_token)
     
     
 
@@ -44,7 +43,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
             const requestPromises = AllClientData.map(async (item) => {
-                console.log("item postdata - ",item.postdata.body.ScripCode)
                 if (token != 0) {
 
 

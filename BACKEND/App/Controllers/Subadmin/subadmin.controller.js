@@ -20,9 +20,6 @@ class Subadmin {
             const { FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role } = req.body;
 
 
-            // console.log(FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role);
-
-
             // IF ROLE NOT EXIST TO CHECK
             const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
             if (!roleCheck) {
@@ -94,10 +91,8 @@ class Subadmin {
                         user_id: data._id
                     })
 
-                    // console.log("SubadminPermision", SubadminPermision);
                     const SuperadminInfo = SubadminPermision.save()
                         .then(async (data) => {
-                            // console.log("SuperadminInfo", data);
 
                             return res.send({ status: true, msg: "successfully Add!", data: data })
                         })
@@ -110,7 +105,6 @@ class Subadmin {
                         })
                 })
                 .catch((err) => {
-                    // console.log(" Add Time Error-", err);
                     if (err.keyValue) {
                         return res.send({ status: false, msg: 'Key duplicate', data: err.keyValue });
 

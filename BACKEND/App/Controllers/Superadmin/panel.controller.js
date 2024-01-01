@@ -35,10 +35,9 @@ class Panel {
             AddPanel.save()
                 .then(async (data) => {
                     logger.info('Panel Add successfully', { role: "SUPERADMIN", user_id: parent_id });
-                    res.send({ status: true, msg: "successfully Add!", data: data });
+                    return  res.send({ status: true, msg: "successfully Add!", data: data });
                 })
                 .catch((err) => {
-                    // console.log(" Add Time Error-", err);
                     if (err.keyValue) {
                         logger.error('Key duplicate', { role: "SUPERADMIN", user_id: parent_id });
                         return res.status(409).json({ status: false, msg: 'Key duplicate', data: err.keyValue });
@@ -49,7 +48,6 @@ class Panel {
 
 
         } catch (error) {
-            // console.log("Theme error-", error);
             logger.error('Server Error', { role: "SUPERADMIN", user_id: parent_id });
 
         }
@@ -95,10 +93,9 @@ class Panel {
             if (!EmailCheck) {
                 return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
             }
-            res.send({ status: true, msg: "Get User", data: EmailCheck })
+            return  res.send({ status: true, msg: "Get User", data: EmailCheck })
 
         } catch (error) {
-            // console.log("Theme error-", error);
         }
     }
 
@@ -114,8 +111,6 @@ class Panel {
             } else {
                 domain1 = domain
             }
-            // console.log(domain1);
-            // FIND PANEL NAME DUPLICATE
             // const Panle_information = await panel_model.findOne({ _id: id })
             const desiredDomain = 'your_desired_domain_value'; // Replace with the desired domain value
 
@@ -141,7 +136,7 @@ class Panel {
             if (!Panle_information) {
                 return res.status(409).json({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            res.send({ status: true, msg: "Get Panel Information", data: Panle_information })
+            return res.send({ status: true, msg: "Get Panel Information", data: Panle_information })
 
         } catch (error) {
             // console.log("Theme error-", error);
@@ -167,11 +162,11 @@ class Panel {
 
             // IF DATA NOT EXIST
             if (getAllpanel.length == 0) {
-                res.send({ status: false, msg: "Empty data", data: getAllpanel })
+                return  res.send({ status: false, msg: "Empty data", data: getAllpanel })
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return  res.send({
                 status: true,
                 msg: "Get All Panels name",
                 data: getAllpanel,
@@ -211,18 +206,16 @@ class Panel {
             var ass = a.save()
                 .then((data) => {
 
-                    // console.log("data", data)
                     if (data) {
-                        res.status(200).send({ status: true, msg: 'Api Create successfully' });
+                       return res.status(200).send({ status: true, msg: 'Api Create successfully' });
 
                     }
                 })
                 .catch((err) => {
-                    // console.log("wrro", err)
                     if (err.keyValue) {
-                        res.send({ status: false, msg: `name already exists`, error: err.keyValue });
+                        return res.send({ status: false, msg: `name already exists`, error: err.keyValue });
                     } else {
-                        res.send({ status: false, msg: 'Internal server error', error: err });
+                        return res.send({ status: false, msg: 'Internal server error', error: err });
 
                     }
                 })
@@ -230,7 +223,7 @@ class Panel {
 
         } catch (error) {
             // console.error(error.keyValue);
-            res.send({ status: false, msg: 'Internal server error', error: error.keyValue });
+            return res.send({ status: false, msg: 'Internal server error', error: error.keyValue });
         }
     }
 
@@ -287,12 +280,6 @@ class Panel {
                 return res.status(409).json({ status: false, msg: 'Panel Not exists', data: [] });
             }
 
-            // const objectIds = panel_data[0].broker_id.map((data) => data.id);
-
-            // // Find documents with matching ids
-            // const getAllpanel = await ApiCreateInfo.find({ broker_id: { $in: objectIds } })
-
-            // console.log(getAllpanel);
 
 
             // THEME LIST DATA
@@ -359,12 +346,11 @@ class Panel {
             // FIND PANEL NAME DUPLICATE
             var domain1 = "http://localhost:3000"
 
-            if (domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "http://localhost:3000"
+            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
+                domain1 = "https://trade.pandpinfotech.com"
             } else {
                 domain1 = domain
             }
-            console.log(domain1);
 
             const Panel_information = await panel_model.findOne({ domain: domain1 }, 'broker_id');
 

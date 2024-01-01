@@ -36,15 +36,10 @@ const AddClient = () => {
   const user_token = JSON.parse(localStorage.getItem("user_details")).token
   const Role = JSON.parse(localStorage.getItem("user_details")).Role
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
-  // console.log(user_id);
 
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
-
-  console.log("GetBrokerInfo", GetBrokerInfo)
-
   const [ShowAllStratagy, setShowAllStratagy] = useState(false)
-
   const [first, setfirst] = useState([])
 
 

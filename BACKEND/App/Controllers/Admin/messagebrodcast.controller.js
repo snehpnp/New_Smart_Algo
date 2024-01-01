@@ -25,7 +25,7 @@ class Message {
 
 
         } catch (error) {
-            console.log("Error in Message brodast -", error.model);
+            console.log("Error in Message brodast Add -", error.model);
             return res.send({ status: false, msg: 'Strategy not exist', data: [] });
 
         }
@@ -53,7 +53,7 @@ class Message {
                 return res.send({ status: false, msg: 'Error  to Create Generate Help Response.', error: error.message });
             }
         } catch (error) {
-            console.log("Help- Center error-", error);
+            console.log("Get All Message brodcast-", error);
         }
     }
 
@@ -98,7 +98,7 @@ class Message {
 
 
         } catch (error) {
-            console.log("Help- Center error-", error);
+            console.log("Get  Message brodcast", error);
         }
     }
 
@@ -121,7 +121,7 @@ class Message {
             return res.send({ status: true, msg: 'Message Remove successfully', data: [] });
 
         } catch (error) {
-            console.log("Help- Center error-", error);
+            console.log("Remove Brodcast", error);
         }
     }
 

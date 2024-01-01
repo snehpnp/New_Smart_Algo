@@ -23,7 +23,6 @@ module.exports = function (app) {
 
         axios.request(config)
             .then((response) => {
-                // console.log("Run");
                 var bseData = []
 
                 // Create the CSV content from the data
@@ -42,10 +41,7 @@ module.exports = function (app) {
                 fs.writeFile(filename, csvContent1, 'utf8', (err) => {
                     if (err) {
                         console.error('Error while saving CSV file:', err.message);
-                    } else {
-                        // console.log('CSV file created and saved:', filename);
-                        // Now you can print the CSV file using any software that supports .csv files.
-                    }
+                    } 
                 });
 
 

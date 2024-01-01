@@ -141,7 +141,7 @@ class TradeHistory {
             }
 
             if (abc.length > 0) {
-                // console.log("DATA==>", abc.flat());
+              
                 res.send({ status: true, data: abc.flat(), msg: "Get Signals" })
             } else {
                 res.send({ status: false, data: [], msg: "Data Empty" })

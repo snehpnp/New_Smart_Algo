@@ -31,14 +31,11 @@ class Angel {
 
             if(keystr != undefined){
     
-                //console.log("keystr",keystr);
     
                 var key = keystr.split('?auth_token=')[0]; 
            
                 var auth_token = keystr.split('?auth_token=')[1]; 
                 
-                // console.log("key -",key)
-                // console.log("auth_token -",auth_token)
 
 
                 var hosts = req.headers.host;
@@ -72,9 +69,7 @@ class Angel {
                             system_ip: getIPAddress()
                         })
                         await user_login.save();
-                        // console.log("user_login", user_login);
                         if (user_login) {
-                            // console.log("redirect_uri", redirect_uri);
 
                             return res.redirect(redirect_uri);
 
@@ -124,8 +119,6 @@ class Angel {
 }
 
 const GetAllBrokerResponse = async (user_info,res) => {
-    console.log("user_info[0]._id",user_info[0]._id)
-    console.log("user_info roker ",user_info[0].broker)
     try {
         const objectId = new ObjectId(user_info[0]._id);
        // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);

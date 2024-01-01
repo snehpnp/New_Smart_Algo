@@ -51,7 +51,6 @@ const AddStrategy = () => {
 
     const [selectAllFiltered, setSelectAllFiltered] = useState(false);
 
-    console.log("selectedServices", selectedServices && selectedServices)
 
 
 
@@ -349,7 +348,7 @@ useEffect(() => {
     setSelectAllFiltered(false)
 }, [formik.values.segment]);
 
-console.log("state", state)
+
 
 
 

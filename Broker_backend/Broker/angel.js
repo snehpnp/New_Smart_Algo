@@ -14,8 +14,6 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
     
-    console.log("ANGEL token - ",token[0].instrument_token)
-    console.log("ANGEL tradesymbol -",token[0].tradesymbol)
     
 
     try {
@@ -40,11 +38,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
         if (type == 'LE' || type == 'SE') {
-            // console.log("trade entry")
+    
 
 
             const requestPromises = AllClientData.map(async (item) => {
-              //  console.log("item postdata - ",item.postdata)
                 if (token != 0) {
 
 
@@ -62,14 +59,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     item.postdata.transactiontype = 'SELL';
                                 }
 
-                                // console.log("price", price)
-                                //console.log("item.client_services.order_type", item.client_services.order_type)
 
                                 if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                                     item.postdata.price = price
                                 }
-
-                                //  console.log("postData after ", item.postdata);
 
 
                                 EntryPlaceOrder(item, filePath, signals, signal_req)
@@ -79,7 +72,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
 
-                        // console.log("OPTION")
                     } else {
                         // console.log("CASH")
                        
@@ -88,8 +80,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         } else if (type == 'SE' || type == 'LX') {
                             item.postdata.transactiontype = 'SELL';
                         }
-
-                        // console.log("price", price)
 
 
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {

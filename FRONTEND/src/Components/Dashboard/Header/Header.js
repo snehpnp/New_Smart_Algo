@@ -144,9 +144,9 @@ const Header = ({ ChatBox }) => {
   }
 
   const redirectToAdmin = () => {
-    console.log("page", page);
-    console.log("user_role_goTo", user_role_goTo);
-    console.log("routePath", routePath);
+    // console.log("page", page);
+    // console.log("user_role_goTo", user_role_goTo);
+    // console.log("routePath", routePath);
 
 
 

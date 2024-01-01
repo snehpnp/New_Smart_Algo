@@ -19,7 +19,6 @@ const client = new MongoClient(uri, { useUnifiedTopology: true });
 client.connect();
 
 const db1 = client.db(process.env.DB_NAME);
-console.log("Connected to MongoDB successfully!");
 
 
 
@@ -75,7 +74,6 @@ class Strategy {
                 res.send({ status: false, msg: "Empty data", data: [] });
             }
         } catch (error) {
-            console.log("trading status Error-", error);
             res.status(500).send({ status: false, msg: "Internal server error" });
         }
     }
@@ -93,7 +91,6 @@ class Strategy {
                 res.send({ status: false, msg: "Empty data", data: [] });
             }
         } catch (error) {
-            console.log("get_indicator-", error);
             res.status(500).send({ status: false, msg: "Internal server error" });
         }
     }

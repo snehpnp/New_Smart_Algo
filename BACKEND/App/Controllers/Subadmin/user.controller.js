@@ -119,7 +119,6 @@ class Employee {
         start_date_2days = start_date_2days.format("Y-m-d H:M:S");
         var start_date = start_date_2days;
 
-        // console.log("start_date", start_date);
         StartDate1 = start_date;
 
         var UpdateDate = "";
@@ -140,7 +139,6 @@ class Employee {
         var end_date_2days = dateTime.create(UpdateDate);
         var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
 
-        // console.log("END DATE", end_date_2days);
         EndDate1 = end_date_2days;
       } else if (license_type == "1") {
         StartDate1 = fromdate;
@@ -303,7 +301,6 @@ class Employee {
           res.send({ status: true, msg: "successfully Add!", data: data });
         })
         .catch((err) => {
-          console.log(" Add Time Error-", err);
           if (err.keyValue) {
             return res.send({
               status: false,
@@ -443,7 +440,6 @@ class Employee {
             var end_date_2days = dateTime.create(UpdateDate);
             var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
 
-            // console.log("END DATE", end_date_2days);
             EndDate1 = end_date_2days;
           } else if (req.license_type == "1") {
 
@@ -553,7 +549,6 @@ class Employee {
           req.Strategies.forEach(function (item, index) {
             insert_startegy.push(item.id);
           });
-          // console.log('exist - strtegy ', db_exist_startegy);
 
           // ADD STRATEGY ARRAY
           var add_startegy = [];
@@ -570,7 +565,6 @@ class Employee {
               delete_startegy.push(item);
             }
           });
-          // console.log("delete_startegy", delete_startegy);
 
           // ADD STRATEGY IN STRATEGY CLIENT
           if (add_startegy.length > 0) {
@@ -606,7 +600,7 @@ class Employee {
               });
 
               const Strategieclient = await strategy.find({ _id: stgId });
-              // console.log(Strategieclient);
+          
               const user_activity = new user_activity_logs({
                 user_id: existingUsername._id,
                 message: "Strategy Delete",
@@ -646,7 +640,6 @@ class Employee {
             });
           }
         } catch (error) {
-          console.log("startegy error-", error);
         }
 
 
@@ -707,14 +700,12 @@ class Employee {
                 strategy_id: strategFind[0].strategy_id,
                 uniqueUserService: existingUsername._id + "_" + data.Service_id,
               });
-              // console.log(User_client_services);
               User_client_services.save();
             });
           } else {
-            console.log("NO CHANGE IN GROUP SERVICES");
+           
           }
         } catch (error) {
-          console.log("Group Services Error-", error);
         }
 
         var User_update = {
@@ -737,7 +728,6 @@ class Employee {
           Is_Active: is_active,
           ActiveStatus: ActiveStatus
         };
-        // console.log("User_uodate", User_update);
 
         const User_Update = await User_model.updateOne(
           { _id: existingUsername._id },
@@ -1025,7 +1015,7 @@ class Employee {
         TradingStatus: "on",
       });
       const totalCount = getAllTradingClients.length;
-      // console.log("totalCount", totalCount);
+     
       // IF DATA NOT EXIST
       if (getAllTradingClients.length == 0) {
         return res.send({
@@ -1230,7 +1220,6 @@ class Employee {
 
       const GetAllClientServices = await User_model.aggregate(pipeline);
 
-      // console.log("GetAllClientServices", GetAllClientServices);
 
       const userSTG = await strategy_client.find({ user_id: userId });
 

@@ -28,14 +28,12 @@ class OptionChain {
             return res.send({ status: true, msg: 'Done', data: symbols });
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Get Option symbol-", error);
         }
     }
 
     // GET SYMBOLL EXPIRY
     async Get_Option_Symbol_Expiry(req, res) {
-
-        console.log("EXPIRY   GETTT")
 
         try {
             const symbol = req.body.symbol;
@@ -104,7 +102,6 @@ class OptionChain {
 
             const result = await Alice_token.aggregate(pipeline);
 
-            //  console.log(" result -",result)
             if (result.length === 0) {
                 return res.json({ status: false, msg: 'Symbol not found.', data: [] });
             }
@@ -227,7 +224,7 @@ class OptionChain {
             res.send({ status: true, data: final_data, channellist: alltokenchannellist })
         }
         else {
-            res.send({ status: false, data: [], channellist: "" })
+           return res.send({ status: false, data: [], channellist: "" })
         }
     }
 
@@ -277,7 +274,7 @@ class OptionChain {
             return res.send({ status: true, msg: 'Done', data: GetTrade });
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Get Open Position data-", error);
         }
     }
 
@@ -478,7 +475,7 @@ class OptionChain {
             res.send({ status: true, msg: "Done" })
 
         } catch (error) {
-            console.log("error", error);
+            console.log("Get_Option_All_Token_Chain", error);
         }
     }
 
@@ -498,7 +495,7 @@ class OptionChain {
             return res.send({ status: true, msg: 'Update SuccessFully', data: [] });
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("update_stop_loss", error);
             return res.send({ status: false, msg: 'error ', data: error });
 
         }
@@ -519,15 +516,13 @@ class OptionChain {
                         channelstr += data.exch + "|" + data._id + "#"
                     }
                 })
-                // console.log(channelstr);
             }
-            // Display fetched documents
 
             var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
 
-            res.send({ status: true, channellist: alltokenchannellist })
+          return  res.send({ status: true, channellist: alltokenchannellist })
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Stock_chain-", error);
             return res.send({ status: false, msg: 'error ', data: error });
 
         }
@@ -548,7 +543,7 @@ class OptionChain {
 
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("subscribr_token-", error);
             return res.send({ status: false, msg: 'error ', data: error });
 
         }

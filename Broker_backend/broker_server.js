@@ -56,12 +56,7 @@ const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 client.connect();
-// console.log("Connected to MongoDB BrokerServer successfully!.....");
 const db1 = client.db(process.env.DB_NAME);
-// console.log("Connected to MongoDB " + process.env.DB_NAME);
-
-
-
 
 
 var rawBodySaver = function (req, res, buf, encoding) {
@@ -422,7 +417,6 @@ app.post('/broker-signals', async (req, res) => {
             client_persnal_key = client_key
           }
 
-          console.log("TradeType==",TradeType);
           // MT_4 , OPTION_CHAIN , MAKE_STG, SQUAR_OFF
 
           var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: "", TradeType: "MT_4" }
@@ -461,7 +455,6 @@ app.post('/broker-signals', async (req, res) => {
             EXCHANGE = "CDS";
           }
 
-          // console.log(instrument_query);
 
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
@@ -471,7 +464,6 @@ app.post('/broker-signals', async (req, res) => {
             token = await Alice_token.find(instrument_query).maxTimeMS(20000).exec();
           }
 
-          // console.log("token", token);
           var instrument_token = 0
           if (token.length == 0) {
             instrument_token = 0
@@ -540,7 +532,6 @@ app.post('/broker-signals', async (req, res) => {
          price = signals.Price
 
        }
-       console.log("price_live_second", price);
 
 
 
@@ -558,7 +549,6 @@ app.post('/broker-signals', async (req, res) => {
                 }
               });
 
-              console.log("ALICE BLUE ALL CLIENT LENGTH", AliceBluedocuments.length)
 
 
               if (AliceBluedocuments.length > 0) {
@@ -574,8 +564,7 @@ app.post('/broker-signals', async (req, res) => {
             //Process Angel admin client
             try {
               const angelCollection = db1.collection('angelView');
-              // console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
-              const angelBluedocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+             const angelBluedocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + angelBluedocuments.length + '\n', function (err) {
                 if (err) {
@@ -583,7 +572,6 @@ app.post('/broker-signals', async (req, res) => {
                 }
               });
 
-              console.log("ANGEL ALL CLIENT LENGTH", angelBluedocuments.length)
 
 
               if (angelBluedocuments.length > 0) {
@@ -599,7 +587,6 @@ app.post('/broker-signals', async (req, res) => {
             //Process fivepaisa admin client
             try {
               const fivepaisaCollection = db1.collection('fivepaisaView');
-              // console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
               const fivepaisaBluedocuments = await fivepaisaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + fivepaisaBluedocuments.length + '\n', function (err) {
@@ -608,8 +595,7 @@ app.post('/broker-signals', async (req, res) => {
                 }
               });
 
-              console.log("fivepaisa ALL CLIENT LENGTH", fivepaisaBluedocuments.length)
-
+            
 
               if (fivepaisaBluedocuments.length > 0) {
                 fivepaisa.place_order(fivepaisaBluedocuments, signals, token, filePath, signal_req);
@@ -625,7 +611,6 @@ app.post('/broker-signals', async (req, res) => {
             //Process zerodha admin client
             try {
               const zerodhaCollection = db1.collection('zerodhaView');
-              // console.log("Query -", { "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" })
               const zerodhaBluedocuments = await zerodhaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + zerodhaBluedocuments.length + '\n', function (err) {
@@ -634,8 +619,7 @@ app.post('/broker-signals', async (req, res) => {
                 }
               });
 
-              console.log("zerodha ALL CLIENT LENGTH", zerodhaBluedocuments.length)
-
+             
 
               if (zerodhaBluedocuments.length > 0) {
                 zerodha.place_order(zerodhaBluedocuments, signals, token, filePath, signal_req);
@@ -660,8 +644,7 @@ app.post('/broker-signals', async (req, res) => {
                 }
               });
 
-              console.log("AliceBluedocuments trading view length", AliceBluedocuments.length)
-
+             
               if (AliceBluedocuments.length > 0) {
                 aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req);
               }
@@ -683,7 +666,6 @@ app.post('/broker-signals', async (req, res) => {
                 }
               });
 
-              console.log("Angeldocuments trading view length", angeldocuments.length)
 
               if (angeldocuments.length > 0) {
                 angel.place_order(angeldocuments, signals, token, filePath, signal_req);
@@ -707,7 +689,6 @@ app.post('/broker-signals', async (req, res) => {
                 }
               });
 
-              console.log("fivepaisadocuments trading view length", fivepaisadocuments.length)
 
               if (fivepaisadocuments.length > 0) {
                 fivepaisa.place_order(fivepaisadocuments, signals, token, filePath, signal_req);
@@ -730,7 +711,6 @@ app.post('/broker-signals', async (req, res) => {
                 }
               });
 
-              console.log("zerodhadocuments trading view length", zerodhadocuments.length)
 
               if (zerodhadocuments.length > 0) {
                 zerodha.place_order(zerodhadocuments, signals, token, filePath, signal_req);
@@ -803,7 +783,6 @@ app.post('/broker-signals', async (req, res) => {
             let Signal_req1 = new Signals(Signal_req)
             var SignalSave = await Signal_req1.save();
           } catch (error) {
-            console.log("Insert Signal - ", error)
             return res.send("ok")
           }
 
@@ -873,7 +852,6 @@ app.post('/broker-signals', async (req, res) => {
 
                 entry_dt_date: current_date
               }
-              // console.log("updatedData", updatedData);
               updatedData.$addToSet = { signals_id: SignalSave._id };
 
               // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
@@ -885,7 +863,6 @@ app.post('/broker-signals', async (req, res) => {
           }
           else if (type == "LX" || type == "lx" || type == "SX" || type == "Sx") {
 
-            console.log(findSignal);
             var ExitMainSignals = await MainSignals.find(findSignal)
 
             // // ExitMainSignals  FIND IN COLLECTION
@@ -925,17 +902,6 @@ app.post('/broker-signals', async (req, res) => {
 
               } else {
 
-
-                console.log(parseFloat(ExitMainSignals[0].entry_qty_percent));
-                console.log(parseFloat(qty_percent) )
-                console.log( isNaN(ExitMainSignals[0].exit_qty_percent))
-
-                console.log(ExitMainSignals[0].exit_qty_percent);
-                console.log( parseFloat(ExitMainSignals[0].exit_qty_percent));
-
-
-
-
                 if (parseFloat(ExitMainSignals[0].entry_qty_percent) >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
 
 
@@ -948,7 +914,7 @@ app.post('/broker-signals', async (req, res) => {
                     exit_dt_date: current_date
                   }
                   updatedData.$addToSet = { signals_id: SignalSave._id };
-                  console.log("2",updatedData);
+               
 
                   // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
                   const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
@@ -964,7 +930,6 @@ app.post('/broker-signals', async (req, res) => {
 
 
             } else {
-              // console.log(findSignal);
               console.log("PRIVIOUS SIGNAL UPDATE")
 
             }

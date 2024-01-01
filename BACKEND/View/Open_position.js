@@ -14,7 +14,7 @@ async function dropExistingView1() {
         // await client.connect();
         const db = client.db(process.env.DB_NAME); // Replace with your actual database name
         await db.collection('open_position_excute').drop();
-        console.log("Dobne");
+       
     } catch (error) {
         // Handle any errors if the view doesn't exist
         console.error('Error:', error);

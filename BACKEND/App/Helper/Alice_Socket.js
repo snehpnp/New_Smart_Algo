@@ -24,7 +24,6 @@ let socketObject = null;
 
 const Alice_Socket = async () => {
 
-    console.log("ALICE SOCKET");
 
     var rr = 0;
     const url = "wss://ws1.aliceblueonline.com/NorenWS/"
@@ -47,7 +46,6 @@ const Alice_Socket = async () => {
 
     var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
 
-    // console.log(alltokenchannellist);
     var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
     var userid = broker_infor.user_id
     var userSession1 = broker_infor.access_token
@@ -66,8 +64,7 @@ const Alice_Socket = async () => {
 
         }).then(res => {
 
-            // const url = "wss://ws1.aliceblueonline.com/NorenWS/"
-            // var socket;
+
 
             if (res.data.stat == "Ok") {
 

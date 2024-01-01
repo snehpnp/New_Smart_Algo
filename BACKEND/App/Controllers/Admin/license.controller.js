@@ -30,7 +30,7 @@ class License {
       }
       return res.send({ status: true, msg: "Get all Clients", data: get_user });
     } catch (error) {
-      console.log("License  error-", error);
+      console.log("Get Expiry Client-", error);
     }
   }
 
@@ -72,8 +72,6 @@ class License {
 
       const total_licence = await company_information.find({});
 
-      console.log("company_information", total_licence[0].licenses);
-
       if (Transection_license.length == 0) {
         return res.send({
           status: false,
@@ -88,7 +86,7 @@ class License {
         total_licence: total_licence[0].licenses,
       });
     } catch (error) {
-      console.log("License  error-", error);
+      console.log("Get All Transction License -", error);
     }
   }
 

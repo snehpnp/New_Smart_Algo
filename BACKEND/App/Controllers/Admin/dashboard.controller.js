@@ -48,7 +48,7 @@ class Dashboard {
                     }
                 })
             } else {
-                res.send({
+                return res.send({
                     status: false,
                     msg: "Dashboard Data Not found",
                     totalCount: {
@@ -58,7 +58,7 @@ class Dashboard {
             }
 
         } catch (error) {
-            console.log("get user trading Status error -", error);
+            console.log("Get Admin Dashboard data -", error);
         }
     }
 
@@ -81,7 +81,7 @@ class Dashboard {
         }
     }
 
-    
+
     // Broker Information Update
     async update_broker_information(req, res) {
         try {
@@ -95,7 +95,7 @@ class Dashboard {
                     }
                     const filter = { _id: new ObjectId(id) };
                     const updateOperation = { $set: broker_data };
-                    console.log(filter, updateOperation);
+                  
 
                     const result = await Broker_information.updateOne(filter, updateOperation);
                     if (!result) {
@@ -107,7 +107,7 @@ class Dashboard {
                 })
 
         } catch (error) {
-            console.log("Error In Broker Informations", error);
+            console.log("Error In Update Broker Informations", error);
         }
     }
 
@@ -126,7 +126,7 @@ class Dashboard {
 
 
         } catch (error) {
-            console.log("Error In Broker Informations", error);
+            console.log("Error In Get All Broker Informations", error);
         }
     }
 
@@ -145,7 +145,7 @@ class Dashboard {
                 })
 
         } catch (error) {
-            console.log("Error In Broker Informations", error);
+            console.log("Error In one broker Informations Broker Informations", error);
         }
     }
 

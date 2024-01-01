@@ -120,9 +120,6 @@ class Panel {
             // const { id, license } = req.body
             const { id, db_name, db_url, license, key } = req.body
 
-            // console.log(typeof license);
-            // console.log(license);
-
             const uri = db_url;
 
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -160,21 +157,14 @@ class Panel {
             // Update documents that match the query condition
             const updateResult = await companies_collection.updateMany(queryCondition, updateOperation);
 
-            // const newCompany = new countLicense_collection({ admin_license: Number(license), user_id: objectId });
-            // newCompany.save()
 
             const newCompany = await countLicense_collection.insertOne({
                 admin_license: Number(license), user_id: objectId, createdAt: new Date(),
                 updatedAt: new Date()
             });
 
-            // const newCompany = await countLicense_collection.create({
-            //     admin_license: Number(license),
-            //     user_id: objectId
-            //   });
+           
 
-
-            console.log(newCompany);
             // If you want to send the retrieved data as a response
             return res.send({
                 status: true,

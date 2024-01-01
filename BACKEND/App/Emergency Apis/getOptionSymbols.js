@@ -68,8 +68,6 @@ module.exports = function (app) {
 
         const nextdayformattedDate = `${year}-${month}-${daynext}`;
 
-        console.log("currentformattedDate", currentformattedDate);
-        console.log("nextdayformattedDate", nextdayformattedDate);
 
         // Nifty 50: '^NSEI'
         // Bank Nifty: '^NSEBANK'
@@ -78,7 +76,7 @@ module.exports = function (app) {
 
 
         var yahooFinance = require('yahoo-finance');
-        console.log("1")
+       
         yahooFinance.historical({
 
             symbol: '^NSEBANK', // Use the symbol for Infosys or another Indian company listed on U.S. exchanges
@@ -101,48 +99,7 @@ module.exports = function (app) {
     });
 
 
-    // app.get("/sig/view", async (req, res) => {
-
-
-    //     const { MongoClient } = require('mongodb');
-
-    //     async function createView() {
-    //         console.log(process.env.MONGO_URI);
-    //         const uri = 'mongodb+srv://snehpnp:snehpnp@newsmartalgo.n5bxaxz.mongodb.net/';
-    //         const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-    //         try {
-    //             await client.connect();
-
-    //             const sourceDatabaseName = 'test';
-    //             const targetDatabaseName = 'Signals_db';
-    //             const collectionName = 'signals';
-
-    //             const sourceDB = client.db(sourceDatabaseName);
-    //             const targetDB = client.db(targetDatabaseName);
-
-    //             const pipeline = [ ];
-
-    //             // Create a view in the target database
-    //             await targetDB.createCollection('signals_view', { viewOn: `${sourceDatabaseName}.${collectionName}`, pipeline });
-
-    //             console.log('View created successfully');
-    //         } catch (error) {
-    //             console.log("error",error);
-    //         }
-
-    //     }
-
-    //     // Call the function to create the view
-    //     createView();
-
-
-
-
-
-
-
-    // })
+    
 
 
 }

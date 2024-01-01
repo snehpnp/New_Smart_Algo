@@ -297,8 +297,7 @@ const AddStrategy = () => {
             let checkValid = true
 
             selectedServices && selectedServices.map((item) => {
-                // console.log("parseInt(item.lotsize)", parseInt(item.lotsize))
-                console.log("item", item)
+               
                 if (item.lotsize !== 1) {
                     if ((item.group_qty) % (item.lotsize) !== 0) {
                         alert(`Please Enter Valid Lot Size Inside ${item.name}`)

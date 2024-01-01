@@ -17,30 +17,13 @@ async function createViewMaxProfitLoss() {
 
   const collectionName  = 'mainsignals';
   const collection = db.collection(collectionName);
- console.log("okkk createViewMaxProfitLoss")
  
   // All Client Trading on view
   try {
 
     const currentDate = new Date(); // Get the current date and time
    
-    // const Pipeline = [
-     
-    //   {
-    //     $lookup: {
-    //       from: 'usermakestrategies',
-    //       localField: 'MakeStartegyName',
-    //       foreignField: 'show_strategy',
-    //       as: 'joinedData'
-    //     }
-    //   },
-    //   {
-    //       $unwind: '$joinedData',
-    //     },
-    // ];
-    // const result = await collection.aggregate(Pipeline).toArray();
-
-    // console.log(result);
+    
 
     const Pipeline = [
       {
@@ -254,24 +237,14 @@ async function createViewMaxProfitLoss() {
         'StockLivePriceData.sp1':1,
         get_exit_live_price:1
         
-       
-        
 
         }
       },
-
-     
+  
 
     ];
     
     const result = await collection.aggregate(Pipeline).toArray();
-    console.log(result);
-    
-    
-
-    console.log("okkk done")
-      
-    
 
 
   } catch (error) {

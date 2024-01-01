@@ -40,8 +40,6 @@ const AllLicence = () => {
   const [searchInput, setSearchInput] = useState("");
   const [originalData, setOriginalData] = useState([]);
 
-// console.log("getAllClients" ,getAllClients)
-// console.log("getAllClients1" ,getAllClients1)
 
 
 
@@ -72,12 +70,10 @@ const AllLicence = () => {
             const filteredData =
               response.data &&
               response.data.filter((item) => {
-                console.log("item" ,item)
                 let getMonthAndYear = get_year_and_month_only(item.createdAt)
                 return getMonthAndYear === CountLicence
               });
 
-              console.log("filteredData" ,filteredData)
 
             setAllClients({
               loading: false,

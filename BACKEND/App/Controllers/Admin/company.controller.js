@@ -27,7 +27,7 @@ class Company {
 
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Edit Company Api Error-", error);
         }
     }
 
@@ -41,7 +41,7 @@ class Company {
             }
             return res.send({ status: true, msg: 'Done', data: compantInfo });
         } catch (error) {
-            console.log("Comany Get Error -", error);
+            console.log("Company Information Get -", error);
         }
     }
 
@@ -58,7 +58,7 @@ class Company {
 
 
         } catch (error) {
-            console.log("Comany Get Error -", error);
+            console.log("Company Logo Get -", error);
         }
     }
 
@@ -92,7 +92,7 @@ class Company {
 
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Edit Email Information-", error);
         }
     }
 

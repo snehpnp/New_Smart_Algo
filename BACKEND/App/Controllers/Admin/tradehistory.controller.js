@@ -211,7 +211,7 @@ class Tradehistory {
                 var entry_qty_percent1 = data.entry_qty_percent ? Number(data.entry_qty_percent) : 0
                 var exit_qty_percent1 = data.exit_qty_percent ? Number(data.exit_qty_percent) : 0
 
-                console.log( entry_qty_percent1 ,"-", exit_qty_percent1);
+                // console.log( entry_qty_percent1 ,"-", exit_qty_percent1);
 
                 if (entry_qty_percent1 > exit_qty_percent1) {
                     data.entry_qty_percent = entry_qty_percent1 - exit_qty_percent1

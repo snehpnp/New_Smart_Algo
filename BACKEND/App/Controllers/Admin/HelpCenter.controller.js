@@ -37,7 +37,7 @@ class AdminHelpCenter {
                 return res.send({ status: false, msg: 'Error  to Create Generate Help Response.', error: error.message });
             }
         } catch (error) {
-            console.log("Help- Center error-", error);
+            console.log("Help Center error-", error);
         }
     }
 

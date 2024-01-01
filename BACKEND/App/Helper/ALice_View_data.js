@@ -39,7 +39,6 @@ async function connectToDB(collectionName, response) {
 
          
           const insertResult = await collection.insertOne(singleDocument);
-          // console.log('Inserted document:', insertResult.insertedId);
         }
 
         createView(collectionName);
@@ -181,8 +180,7 @@ async function connectToDB(collectionName, response) {
       const collections = await dbTradeTools.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M1_' + collectionName);
-      //console.log("collectionExists view 1 minute", collectionExists)
-      // console.log("pipeline",pipeline)
+      
 
       if (collectionExists) {
 
@@ -267,8 +265,7 @@ async function connectToDB(collectionName, response) {
       const collections = await dbTradeTools.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M3_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -354,8 +351,7 @@ async function connectToDB(collectionName, response) {
       const collections = await dbTradeTools.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M5_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+  
 
       if (collectionExists) {
 
@@ -441,8 +437,7 @@ async function connectToDB(collectionName, response) {
       const collections = await dbTradeTools.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M10_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+      
 
       if (collectionExists) {
 
@@ -528,8 +523,7 @@ async function connectToDB(collectionName, response) {
       const collections = await dbTradeTools.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M15_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+      
 
       if (collectionExists) {
 
@@ -615,8 +609,7 @@ async function connectToDB(collectionName, response) {
       const collections = await dbTradeTools.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M30_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+    
 
       if (collectionExists) {
 
@@ -702,8 +695,6 @@ async function connectToDB(collectionName, response) {
       const collections = await dbTradeTools.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M60_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
 
       if (collectionExists) {
 
@@ -785,8 +776,7 @@ async function connectToDB(collectionName, response) {
       const collections = await dbTradeTools.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M1DAY_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+ 
 
       if (collectionExists) {
 

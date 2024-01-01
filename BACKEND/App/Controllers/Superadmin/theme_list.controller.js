@@ -115,8 +115,6 @@ class Theme {
     async GetThemeByIdThemeId(req, res) {
         try {
 
-            console.log("req.body._Id", req.body._id)
-
             // GET LOGIN CLIENTS
             const getAllTradingClients = await Theme_list.find({
                 _id: req.body._id

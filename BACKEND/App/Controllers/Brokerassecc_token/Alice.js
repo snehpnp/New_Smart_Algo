@@ -30,7 +30,6 @@ class AliceBlue {
 
             var broker_infor = await Broker_information.find({ broker_name: "Alice Blue" })
             var apiSecret = broker_infor[0].apiSecret
-            console.log("broker_infor", apiSecret);
 
             var hosts = req.headers.host;
 
@@ -63,7 +62,6 @@ class AliceBlue {
 
                 axios(config)
                     .then(async function (response) {
-                        console.log("ganpat", response.data)
 
                         if (response.data.userSession) {
 
@@ -79,10 +77,9 @@ class AliceBlue {
 
                                     }
                                 };
-                                // console.log("updateOperation", updateOperation);
 
                                 const result = await live_price.updateOne(filter, updateOperation);
-                                console.log("redirect_uri 1", redirect_uri);
+                            
 
 
                                 //  For Update Live Token List
@@ -114,9 +111,7 @@ class AliceBlue {
                                         system_ip: getIPAddress()
                                     })
                                     await user_login.save();
-                                    // console.log("user_login", user_login);
                                     if (user_login) {
-                                        console.log("redirect_uri", redirect_uri);
                                         return res.redirect(redirect_uri);
 
                                     }
@@ -135,7 +130,6 @@ class AliceBlue {
 
                     })
                     .catch(function (error) {
-                        // console.log('access token error ', error);
                     });
 
             }
@@ -146,7 +140,7 @@ class AliceBlue {
 
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Alice Login error-", error)
         }
     }
 
@@ -154,12 +148,10 @@ class AliceBlue {
     async GetOrderFullInformation(req, res) {
 
         try {
-            // var OrderId = "23091800155929"
             const { OrderId, user_id } = req.body
 
 
             if (!OrderId || !user_id) {
-                // console.log("Please Fill All Feild");
                 return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
 
             }
@@ -186,10 +178,8 @@ class AliceBlue {
                     },
                     data: data
                 };
-                // console.log("config", config);
                 axios(config)
                     .then(async (response) => {
-                        // console.log(response.data[0]);
                         if (response.data[0]) {
 
                             const message = (JSON.stringify(response.data[0]));
@@ -287,7 +277,6 @@ class AliceBlue {
 
 
             if (!OrderId || !user_id) {
-                // console.log("Please Fill All Feild");
                 return res.send({ status: false, msg: 'Please Fill All Feild', data: [] });
 
             }
@@ -315,7 +304,6 @@ class AliceBlue {
 
             axios(config)
                 .then(async (response) => {
-                    // console.log("==>", response.data.stat);
                     if (response.data) {
                         if (response.data.stat == "Ok") {
 
@@ -371,7 +359,6 @@ class AliceBlue {
 
     async backendRunSocket(req, res) {
       
-       console.log("backend run code");
        Alice_Socket();
        return res.send({ status: true, msg: 'backend run socket'});
     }

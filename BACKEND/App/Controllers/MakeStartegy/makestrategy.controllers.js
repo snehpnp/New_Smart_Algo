@@ -29,12 +29,10 @@ class MakeStartegy {
 
   async getcandledata(req, res) {
 
-  //  console.log("req - ",req.body)
     let timeFrame = req.body.timeframe;
     let tokensymbol = req.body.tokensymbol;
      let collectionName = 'M'+timeFrame+'_'+tokensymbol;
 
-   console.log(collectionName);
     
      try{
 
@@ -995,9 +993,9 @@ const exitOpentrade = async () => {
   
   
   
-  // setInterval(() => {
-  //   exitOpentrade()
-  // }, 10000);
+  setInterval(() => {
+    exitOpentrade()
+  }, 10000);
 
 
 

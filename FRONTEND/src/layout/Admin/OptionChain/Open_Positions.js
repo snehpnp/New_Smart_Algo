@@ -42,8 +42,6 @@ const TradeHistory = () => {
     const [selected1, setSelected1] = useState([]);
 
 
-    // console.log("selected1", selected1)
-
     const [disabled, setDisabled] = useState(false);
 
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
@@ -95,7 +93,6 @@ const TradeHistory = () => {
             Get_Open_Position({ token: token })
         ).unwrap()
             .then((response) => {
-                console.log("response", response.data)
                 if (response.status) {
                     setTradeHistoryData({
                         loading: false,
@@ -324,7 +321,6 @@ const TradeHistory = () => {
                     alert("Please Select Atleast One Symbol")
                 }
                 else {
-                    console.log(selected1);
                     // return
                     await dispatch(
                         Update_Signals({
@@ -358,7 +354,6 @@ const TradeHistory = () => {
 
         let a = No_Negetive_Input_regex(event)
 
-        console.log(event);
         // if (a) {
 
         if (parseInt(event) > parseInt(qty_persent)) {
@@ -529,7 +524,6 @@ const TradeHistory = () => {
             else {
                 if (res.data.stat) {
                     const handleResponse = async (response) => {
-                        // console.log("response", response)
                         $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
                         $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
 

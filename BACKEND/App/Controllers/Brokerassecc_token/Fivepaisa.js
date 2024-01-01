@@ -69,7 +69,6 @@ class Fivepaisa {
                     axios(config)
                         .then(async function (response) {
 
-                            // console.log('aceestoken - ',response);
 
                             var access_token = response.data.body.AccessToken;
                             var ClientCode = response.data.body.ClientCode;
@@ -95,9 +94,7 @@ class Fivepaisa {
                                         system_ip: getIPAddress()
                                     })
                                     await user_login.save();
-                                    // console.log("user_login", user_login);
                                     if (user_login) {
-                                        // console.log("redirect_uri", redirect_uri);
                                         return res.redirect(redirect_uri);
                                     }
                                 } else {
@@ -110,7 +107,6 @@ class Fivepaisa {
 
                         })
                         .catch(function (error) {
-                            // console.log(error);
                         });
 
 
@@ -126,70 +122,7 @@ class Fivepaisa {
 
 
 
-            return
-
-            if (keystr != undefined) {
-
-                //console.log("keystr",keystr);
-
-                var key = keystr.split('?auth_token=')[0];
-
-                var auth_token = keystr.split('?auth_token=')[1];
-
-                // console.log("key -",key)
-                // console.log("auth_token -",auth_token)
-
-
-                var hosts = req.headers.host;
-
-                var redirect = hosts.split(':')[0];
-                var redirect_uri = '';
-                if (redirect == "localhost") {
-                    redirect_uri = "http://localhost:3000"
-                } else {
-                    redirect_uri = `https://${redirect}/`
-                }
-
-                const Get_User = await User.find({ client_key: key })
-
-                if (Get_User.length > 0) {
-
-                    let result = await User.findByIdAndUpdate(
-                        Get_User[0]._id,
-                        {
-                            access_token: auth_token,
-                            TradingStatus: "on"
-                        })
-
-                    if (result != "") {
-
-                        const user_login = new user_logs({
-                            user_Id: Get_User[0]._id,
-                            login_status: "Trading On",
-                            role: Get_User[0].Role,
-                            device: "WEB",
-                            system_ip: getIPAddress()
-                        })
-                        await user_login.save();
-                        // console.log("user_login", user_login);
-                        if (user_login) {
-                            // console.log("redirect_uri", redirect_uri);
-
-                            return res.redirect(redirect_uri);
-
-                        }
-                    }
-
-                } else {
-                    return res.send(redirect_uri);
-                }
-
-
-            } else {
-
-                return res.send(redirect_uri);
-
-            }
+          
 
 
 
@@ -224,14 +157,12 @@ class Fivepaisa {
 
 
 const GetAllBrokerResponse = async (user_info, res) => {
-    console.log("user_info[0]._id", user_info[0]._id)
-    console.log("user_info roker ", user_info[0].broker)
+   
     try {
         const objectId = new ObjectId(user_info[0]._id);
 
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId, order_view_status: "0" })
 
-        //console.log("FindUserBrokerResponse - ",FindUserBrokerResponse)
 
         if (FindUserBrokerResponse.length > 0) {
 
@@ -263,7 +194,6 @@ const GetAllBrokerResponse = async (user_info, res) => {
                         if (response) {
                             const result_order = response.data.body.OrderBookDetail.find(item2 => parseInt(item2.BrokerOrderId) === parseInt(data1.order_id));
 
-                            //console.log("result_order - ",result_order)
                             if (result_order != undefined) {
 
                                 const message = (JSON.stringify(result_order));
@@ -299,7 +229,6 @@ const GetAllBrokerResponse = async (user_info, res) => {
 
 
                         } else {
-                            // console.log("NO DATA FOUND");
                         }
 
 

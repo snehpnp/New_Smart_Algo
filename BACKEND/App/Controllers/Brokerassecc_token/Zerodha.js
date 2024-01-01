@@ -30,11 +30,9 @@ class Zerodha {
             var keystr = req.query.key;
             if (keystr != undefined) {
 
-                //console.log("keystr",keystr);
                 const key = keystr.split('?request_token=')[0];
                 const request_token = req.query.request_token;
 
-                // console.log("key -",key)
 
                 var hosts = req.headers.host;
 
@@ -87,9 +85,7 @@ class Zerodha {
                                         system_ip: getIPAddress()
                                     })
                                     await user_login.save();
-                                    //  console.log("user_login", user_login);
                                     if (user_login) {
-                                        //console.log("redirect_uri", redirect_uri);
 
                                         return res.redirect(redirect_uri);
 
@@ -103,7 +99,6 @@ class Zerodha {
 
                         })
                         .catch(function (error) {
-                            //    console.log('access token error ',error);
                         });
 
                 } else {
@@ -149,8 +144,7 @@ class Zerodha {
 }
 
 const GetAllBrokerResponse = async (user_info, res) => {
-    console.log("user_info[0]._id", user_info[0]._id)
-    console.log("user_info roker ", user_info[0].broker)
+  
     try {
         const objectId = new ObjectId(user_info[0]._id);
         // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);

@@ -148,7 +148,6 @@ const ServicesList = () => {
             _id: row._id
         })).unwrap()
             .then((response) => {
-                console.log("123", response);
                 settest(true);
                 if (response.status) {
                     setServicesuserName({

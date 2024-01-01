@@ -590,7 +590,6 @@ class Login {
 
         }
         catch (error) {
-            console.log(error);
 
             return res.send({ status: false, msg: "Server Side error", data: error })
 
