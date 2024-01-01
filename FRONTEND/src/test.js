@@ -7,12 +7,12 @@ const CandlestickChart = () => {
   const handleChartReady = (widget) => {
     // Attach an event listener to handle user interactions
     widget.onSymbolChanged().subscribe(null, ({ symbol }) => {
-      // console.log(`Selected symbol: ${symbol}`);
+      console.log(`Selected symbol: ${symbol}`);
     });
 
     // Attach an event listener to capture the selected data
     widget.onIntervalChanged().subscribe(null, ({ interval }) => {
-      // console.log(`Selected interval: ${interval}`);
+      console.log(`Selected interval: ${interval}`);
     });
 
     // Attach an event listener to capture user-selected data points

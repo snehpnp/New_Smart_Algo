@@ -146,7 +146,7 @@ const ServicesList = () => {
   // GET ALL CLIENTS BY STRATEGY ID
   
   const GetClientsByStrategyID = async (row) => {
-
+    console.log("row", row);
 
     await dispatch(
       Get_client_By_strategy_Id({
@@ -176,6 +176,7 @@ const ServicesList = () => {
 
   //  MANAGE MULTIFILTER
   useEffect(() => {
+    console.log("originalData", originalData);
     const filteredData = originalData.filter((item) => {
       return (
         item.strategy_name.toLowerCase().includes(searchInput.toLowerCase()) ||

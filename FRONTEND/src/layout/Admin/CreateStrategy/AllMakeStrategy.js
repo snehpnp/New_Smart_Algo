@@ -149,6 +149,7 @@ const AllMakeStrategy = () => {
                 }
             )).unwrap()
                 .then((response) => {
+                    // console.log("response", response)
                     if (response.status) {
                         toast.success(response.msg)
                         setrefresh(!refresh)
@@ -223,7 +224,8 @@ const AllMakeStrategy = () => {
     const [selected1, setSelected1] = useState([]);
 
     const handleOnSelect = (row, isSelect) => {
-     
+        console.log("isSelect ", isSelect)
+        console.log("isSelect id ", row._id)
         if (isSelect) {
             setSelected([...selected, row._id]);
             setSelected1([...selected1, row]);
@@ -258,6 +260,7 @@ const AllMakeStrategy = () => {
 
 
     const SelectedAllDelete = async (e) => {
+        //console.log("selected",selected)
         if (selected.length > 0) {
             // alert("okk");
             if (window.confirm("Do You Really Want To Delete Selected Row ?")) {
@@ -270,6 +273,7 @@ const AllMakeStrategy = () => {
                     }
                 )).unwrap()
                     .then((response) => {
+                        // console.log("response", response)
                         if (response.status) {
                             toast.success(response.msg)
                             setrefresh(!refresh)
@@ -390,6 +394,7 @@ const AllMakeStrategy = () => {
                                                     text: 'Go To Dashboard',
                                                     formatter: (cell, row, rowIndex) =>
                                                         <>
+                                                            {console.log("==>", row.user)}
                                                             <button
                                                                 className={`btn  ${row.user.AppLoginStatus == '1' || row.user.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
 

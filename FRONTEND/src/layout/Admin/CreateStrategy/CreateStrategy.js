@@ -30,6 +30,7 @@ const CreateStrategy = () => {
   const navigate = useNavigate()
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
+  ///console.log("AdminToken",AdminToken)
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
 
@@ -40,7 +41,9 @@ const CreateStrategy = () => {
   const [storeServiceData, setStoreServiceData] = useState([])
   const [filterServices, setFilterServices] = useState("")
 
+  //console.log("filterServices - ",filterServices)
   const [selectedItems, setSelectedItems] = useState([]);
+  //console.log("selectedItems",selectedItems)
 
   const [getIndicators, setGetIndicators] = useState([])
   const [selectAddIndicators, setSelectAddIndicators] = useState([])
@@ -106,6 +109,7 @@ const CreateStrategy = () => {
 
     axios(config)
       .then(function (response) {
+        // console.log("get service name",response.data);
         setStoreServiceData(response.data.data);
       })
       .catch(function (error) {
@@ -195,6 +199,14 @@ const CreateStrategy = () => {
    //disableSaveButtun
    const [disableSaveButtun, setDisableSaveButtun] = useState(false);
 
+ 
+   console.log("getSources - ",getSources)
+    
+
+
+  // console.log("timeFrameData",timeFrameData)
+  // console.log("selectStrategy",selectStrategy)
+
 
   const getAllTimeFrameApi = async () => {
       await dispatch(
@@ -208,6 +220,7 @@ const CreateStrategy = () => {
       )
       .unwrap()
       .then((response) => {
+        //console.log("response get_time_frame - ",response)
         if (response) {
           if (response.status) {
             setTimeFrameData({
@@ -236,6 +249,7 @@ const CreateStrategy = () => {
     )
       .unwrap()
       .then((response) => {
+        console.log("response source - ",response)
         if (response) {
           if (response.status) {
             setGetSources({
@@ -264,6 +278,7 @@ const CreateStrategy = () => {
     )
       .unwrap()
       .then((response) => {
+        console.log("response get_comparators - ",response)
         if (response) {
           if (response.status) {
             setGetComparators({
@@ -292,6 +307,7 @@ const CreateStrategy = () => {
     )
       .unwrap()
       .then((response) => {
+        //console.log("response strategy - ",response)
         if (response.status) {
           if (response.status) {
             setStrategyDataAllAdmin({
@@ -325,6 +341,7 @@ const CreateStrategy = () => {
 
 
   const selectTimeFrame = (item) => {
+    console.log("dd -", item.value)
     setTimeFrameVal(item.value);
   }
 
@@ -521,7 +538,7 @@ const CreateStrategy = () => {
     if(e.target.value != ""){
       if(buy_sell == "buy"){
         const foundObject = coditionRequestArr.find((item,i) => i === index);
-    
+      //console.log("foundObject --",foundObject)
       if (foundObject) {
         if(element_first_second == "first"){
           foundObject.first_element.offset = e.target.value;
@@ -533,7 +550,7 @@ const CreateStrategy = () => {
       }
       }else if(buy_sell == "sell"){
         const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-  
+        //console.log("foundObject --",foundObject)
         if (foundObject) {
           if(element_first_second == "first"){
             foundObject.first_element.offset = e.target.value;
@@ -629,9 +646,11 @@ const CreateStrategy = () => {
          
          const lastIndex = ArrCondition.length - 1;
   
+       // console.log(lastIndex); // Output: 4
        const foundObject = coditionRequestArr.find((item,i) => i === lastIndex);
        if (foundObject) {
          // Update the source field of the found object
+       //  console.log(" condition Add SSSS ",foundObject)
          if(foundObject.first_element.source == "" && foundObject.second_element.source == ""){
          alert("please select first and second element")
          }else{
@@ -670,9 +689,11 @@ const CreateStrategy = () => {
          
          const lastIndex = ArrCondition.length - 1;
   
+       // console.log(lastIndex); // Output: 4
        const foundObject = coditionRequestArrSell.find((item,i) => i === lastIndex);
        if (foundObject) {
          // Update the source field of the found object
+       //  console.log(" condition Add SSSS ",foundObject)
          if(foundObject.first_element.source == "" && foundObject.second_element.source == ""){
          alert("please select first and second element")
          }else{
@@ -821,6 +842,9 @@ const CreateStrategy = () => {
     
   }
   
+  //console.log("coditionRequestArr final --",coditionRequestArr)
+  //console.log("coditionRequestArr Sell final --",coditionRequestArrSell)
+  
   
   let condition_string = "";
   let condition_string_pass = "";
@@ -828,6 +852,7 @@ const CreateStrategy = () => {
   for (let index = 0; index < coditionRequestArr.length; index++) {
     const val = coditionRequestArr[index];
     
+  //  console.log(`Element at index ${index}: ${val.and_or_operator}`);
   
     if (val.first_element.source !== "" && val.second_element.source !== "") {
 
@@ -890,6 +915,7 @@ const CreateStrategy = () => {
     }
   }
   // Continue with the rest of your code
+  console.log("rr - ",condition_string);
 
 
 
@@ -899,6 +925,7 @@ const CreateStrategy = () => {
   for (let index = 0; index < coditionRequestArrSell.length; index++) {
     const val = coditionRequestArrSell[index];
     
+  //  console.log(`Element at index ${index}: ${val.and_or_operator}`);
   
     if (val.first_element.source !== "" && val.second_element.source !== "") {
 
@@ -966,6 +993,7 @@ const CreateStrategy = () => {
   }
   
   // Continue with the rest of your code
+  console.log("rr sell - ",condition_string_sell);
 
   const AddBracket = (index,start_and,buy_sell) => {
   
@@ -973,7 +1001,7 @@ const CreateStrategy = () => {
       if(start_and == "start"){
 
         const foundObject = coditionRequestArr.find((item,i) => i === index);
-     
+        //console.log("foundObject --",foundObject)
         if (foundObject) {
           // Update the source field of the found object
           foundObject.start_bracket.push("(");
@@ -983,7 +1011,7 @@ const CreateStrategy = () => {
     
        }else if(start_and == "end"){
         const foundObject = coditionRequestArr.find((item,i) => i === index);
-    
+        //console.log("foundObject --",foundObject)
         if (foundObject) {
           // Update the source field of the found object
           foundObject.end_bracket.push(")");
@@ -996,7 +1024,7 @@ const CreateStrategy = () => {
       if(start_and == "start"){
 
         const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-       
+        //console.log("foundObject --",foundObject)
         if (foundObject) {
           // Update the source field of the found object
           foundObject.start_bracket.push("(");
@@ -1006,7 +1034,7 @@ const CreateStrategy = () => {
     
        }else if(start_and == "end"){
         const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-       
+        //console.log("foundObject --",foundObject)
         if (foundObject) {
           // Update the source field of the found object
           foundObject.end_bracket.push(")");
@@ -1027,7 +1055,7 @@ const CreateStrategy = () => {
         if(start_and == "start"){
     
           const foundObject = coditionRequestArr.find((item,i) => i === index);
-         
+          //console.log("foundObject --",foundObject)
           if (foundObject) {
             // Update the source field of the found object
             foundObject.start_bracket.pop();
@@ -1039,7 +1067,7 @@ const CreateStrategy = () => {
         }else if(start_and == "end"){
     
           const foundObject = coditionRequestArr.find((item,i) => i === index);
-         
+          //console.log("foundObject --",foundObject)
           if (foundObject) {
             // Update the source field of the found object
             foundObject.end_bracket.pop();
@@ -1057,7 +1085,7 @@ const CreateStrategy = () => {
         if(start_and == "start"){
     
           const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-         
+          //console.log("foundObject --",foundObject)
           if (foundObject) {
             // Update the source field of the found object
             foundObject.start_bracket.pop();
@@ -1069,7 +1097,7 @@ const CreateStrategy = () => {
         }else if(start_and == "end"){
     
           const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-         
+          //console.log("foundObject --",foundObject)
           if (foundObject) {
             // Update the source field of the found object
             foundObject.end_bracket.pop();
@@ -1085,7 +1113,9 @@ const CreateStrategy = () => {
 
   }
 
+ // console.log("timeFrameVal - ", timeFrameVal)
 
+ // console.log("buyCheck - ", buyCheck)
 
 
   const [exitConditionBuyOrSell, setExitConditionBuyOrSell] = useState(
@@ -1123,6 +1153,8 @@ const CreateStrategy = () => {
   }  
   }
 
+  //console.log("exitConditionBuyOrSell",exitConditionBuyOrSell[0].buy)
+  //console.log("exitConditionBuyOrSell sell",exitConditionBuyOrSell[0].sell)
 
   const TargetChange = (e,buy_sell) => {
     if(buy_sell == "buy"){
@@ -1318,6 +1350,7 @@ const saveStrategy = async (e) => {
       let condition_string_source = [];
       for (let index = 0; index < coditionRequestArr.length; index++) {
         const val = coditionRequestArr[index];
+      //  console.log(`Element at index ${index}: ${val.and_or_operator}`)
       
         if (val.first_element.source !== "" && val.second_element.source !== "") {
         if(val.first_element.source != "number"){
@@ -1364,6 +1397,7 @@ const saveStrategy = async (e) => {
           break; // Break out of the loop
         }
       }
+     // console.log("condition_string_sell_source",condition_string_sell_source)
 
 
     // Send Request Buy ------
@@ -1461,6 +1495,7 @@ const saveStrategy = async (e) => {
         "maxProfit":maxProfit,
         "maxLoss":maxLoss
       }
+      console.log("data request sell",data)
 
       await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
         if (response.status === 409) {

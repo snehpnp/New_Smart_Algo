@@ -343,25 +343,12 @@ const AllClients = () => {
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
                     <div>
-
-                        {getPermissions && getPermissions.client_edit === 0 && getPermissions && getPermissions.Update_Api_Key === 1 && row.license_type === "2" ?
+                        {(getPermissions && getPermissions.client_edit === 1) || (getPermissions && getPermissions.Update_Api_Key === 1) && row.Is_Active === "1" ? <>
                             <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
                                 <span data-toggle="tooltip" data-placement="top" title="Edit">
                                     <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                                 </span>
                             </Link>
-                            : ""}
-
-
-                        {getPermissions && getPermissions.client_edit === 1 && row.Is_Active === "1" ? <>
-
-                            {/* {(getPermissions && getPermissions.Update_Api_Key === 1 && row.license_type === "1") ? */}
-                            <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
-                                <span data-toggle="tooltip" data-placement="top" title="Edit">
-                                    <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                                </span>
-                            </Link>
-                            {/* : ""} */}
                             {row.license_type === "1" ? <>
                                 <Link>
                                     <span data-toggle="tooltip" data-placement="top" title="Delete">
@@ -369,17 +356,14 @@ const AllClients = () => {
                                     </span>
                                 </Link>
                             </> : ""}
-                        </> :
-                            ""
-
-                        }
+                        </> : ""}
                     </div>
                 </div>
             ),
         },
     ];
 
-    // console.log("getPermissions && getPermissions.Update_Api_Key" ,getPermissions && getPermissions.Update_Api_Key)
+// console.log("getPermissions && getPermissions.Update_Api_Key" ,getPermissions && getPermissions.Update_Api_Key)
 
     return (
         <>

@@ -7,6 +7,7 @@ const ChartComponent = ({ showModal, setshowModal, List, data1111 }) => {
     const dispatch = useDispatch();
     const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
 
+    console.log("List", List.symbol_name)
 
     const [candleData, setCandleData] = useState({ loading: true, data: [] });
 
@@ -337,6 +338,7 @@ const ChartComponent = ({ showModal, setshowModal, List, data1111 }) => {
                     const selectedPoint = series.data[dataPointIndex];
 
 
+                    console.log('Selected Data:', selectedPoint);
 
                     // setSelectedData(selectedPoint);
                 },

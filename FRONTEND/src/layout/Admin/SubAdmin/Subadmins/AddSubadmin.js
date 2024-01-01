@@ -418,8 +418,6 @@ const AllSubadmin = () => {
       formik.setFieldValue("groupservice", false);
       formik.setFieldValue("Strategy", false);
       formik.setFieldValue("tradehistory", false);
-      formik.setFieldValue("detailsinfo", false);
-
     }
   }, [formik.values.updateapikeys, formik.values.all]);
 

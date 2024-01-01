@@ -136,6 +136,7 @@ const AdminsList = () => {
     const formik = useFormik({
         initialValues: {
             theme_update: null,
+
         },
         validate: (values) => {
             const errors = {};
@@ -151,13 +152,16 @@ const AdminsList = () => {
                 userid: Panelid,
                 theme_id: values.theme_update,
                 token: token
+
             }
 
             await dispatch(Update_Panel_Theme(req)).unwrap()
                 .then((response) => {
+                    // console.log("response", response);
                     if (response.status) {
                         toast.success(response.msg)
                         setshowModal(false)
+
                     }
                 })
         }
@@ -193,15 +197,25 @@ const AdminsList = () => {
                                     'No data found') :
                                     <>
                                         <FullDataTable TableColumns={columns} tableData={themeData.data} />
+
+
+
                                         <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
                                             handleClose={() => setshowModal(false)}
                                         >
+
                                             <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update Theme"
                                                 title="update_theme"
                                             />
+
+
                                         </Modal >
+
                                         <ToastButton />
+
                                     </>
+
+
 
                             }
                         </Content>

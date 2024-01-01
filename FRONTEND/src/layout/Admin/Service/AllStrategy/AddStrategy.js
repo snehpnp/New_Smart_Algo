@@ -178,6 +178,7 @@ const AddStrategy = () => {
     }
 
 
+    console.log("SelectPlanArr", SelectPlanArr)
 
 
 

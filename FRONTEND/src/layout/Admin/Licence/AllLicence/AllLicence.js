@@ -240,6 +240,7 @@ const AllLicence = () => {
       }
     });
 
+   // console.log("filteredData", filteredData);
 
 
     setAllClients({

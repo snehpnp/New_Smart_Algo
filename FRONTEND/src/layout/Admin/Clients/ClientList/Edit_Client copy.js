@@ -42,6 +42,7 @@ const EditClient = () => {
   const [ShowAllStratagy, setShowAllStratagy] = useState(false)
   const [UserData, setUserData] = useState([])
 
+  console.log("UserData", UserData.data && UserData.data[0]);
 
   const [first, setfirst] = useState([])
 
@@ -212,6 +213,8 @@ const EditClient = () => {
         "group_service": values.groupservice
       }
 
+
+      console.log("req", req)
       return
 
 

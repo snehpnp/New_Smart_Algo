@@ -1092,7 +1092,9 @@ input:checked+.slider:before {
     display: none;
 }
 
-
+.header-container .brand-logo {
+    display: none;
+}
 
 
 .StepProgress {

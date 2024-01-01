@@ -137,9 +137,22 @@ const ThemeSelection = () => {
                 </span>
             </span>
             <div className="dz-demo-inner">
-               
+                <button
+                    // href="javascript:void(0);"
+                    className="btn btn-primary btn-sm px-2 py-1 mb-3"
+                    onClick="deleteAllCookie()"
+                >
+                    Delete All Cookie
+                </button>
                 <div className="dz-demo-header">
                     <h4>Select A Demo</h4>
+                    <span className="dz-demo-close"
+                    // href="javascript:void(0)"
+                    >
+                        <span>
+                            <i className="las la-times" />
+                        </span>
+                    </span>
                 </div>
                 <div className="dz-demo-content">
                     <div className="dz-wrapper">

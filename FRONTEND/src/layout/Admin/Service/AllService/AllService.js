@@ -113,6 +113,7 @@ const ServicesList = () => {
         let value = e.target.value
         let name = e.target.name
 
+        console.log("index" ,index);
 
         const newData = {
             serviceName: name,
@@ -139,6 +140,7 @@ const ServicesList = () => {
         //         acc.push(curr);
         //     return acc;
         // }, []);
+        console.log("removeDuplicates", QtyValue);
 
     }
 

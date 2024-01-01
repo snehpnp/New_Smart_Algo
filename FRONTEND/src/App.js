@@ -36,7 +36,7 @@ const App = () => {
     // })
   };
 
-  // console.log("admin_permission", admin_permission && admin_permission.is_active)
+  console.log("admin_permission", admin_permission && admin_permission.is_active)
   const data2 = async () => {
 
 
@@ -50,6 +50,7 @@ const App = () => {
       const res = await axios.post(`${Config.smartAlogUrl}get/panel/permission`, data, {
         data: { data },
       })
+     // console.log("res", res)
 
       if (res.data.status) {
         setAdmin_permission(
