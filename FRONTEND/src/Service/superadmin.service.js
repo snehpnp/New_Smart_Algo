@@ -292,3 +292,24 @@ export async function UPDATE_BROKERS(domain, token) {
 
 
 
+// GET ALL BROKERS
+export async function UPDATE_THEME_IMG(domain, token) {
+    try {
+
+        const res = await axios.post(`${Config.base_url}find_one_update/theme_img`, domain, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        // custom error
+    }
+
+}
+
+
+
+
+

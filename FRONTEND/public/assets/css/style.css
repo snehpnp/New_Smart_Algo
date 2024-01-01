@@ -13534,9 +13534,11 @@ label {
 }
 
 .nav-header .logo-abbr {
-  max-width: 2.9375rem;
+  max-width: 9.9375rem;
 }
-
+.menu-toggle .logo-abbr {
+  max-width: 4.5rem !important;
+}
 @media only screen and (max-width: 87.5rem) {
   .nav-header .logo-abbr {
     /* max-width: 2.8125rem; */
