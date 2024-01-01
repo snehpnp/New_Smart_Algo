@@ -39,6 +39,12 @@ cron.schedule('1 1 * * *', () => {
     numberOfTrade_count_trade();
 });
 
+// Accelpix Token Update Symbol Update
+cron.schedule('5 1 * * *', () => {
+    console.log('running a task every minute');
+    AccelpixTokenUpdate();
+});
+
 cron.schedule('10 1 * * *', () => {
     console.log('running a task every minute');
     TokenSymbolUpdate()
@@ -601,5 +607,60 @@ const numberOfTrade_count_trade =async ()=>{
       let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
 }
 
+// Accelpix Token Update
+const AccelpixTokenUpdate = async () =>{
+   
+    let config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'https://apidata5.accelpix.in/api/hsd/Masters/2?fmt=json',
+      headers: { }
+    };
+    
+    axios.request(config)
+    .then(async(response) => {
+     // console.log(JSON.stringify(response.data));
+     const result = await Alice_token.aggregate([
+      {
+      $project : {
+        instrument_token : 1
+      }
+      }
+    
+     ])
+     
+     result.forEach(async(element) => {
 
-module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind ,numberOfTrade_count_trade }
+       const Exist_token = response.data.find(item1 => item1.tk === parseInt(element.instrument_token));
+       
+       console.log("Exist tkr ",Exist_token.tkr , "Exist a3tkr ",Exist_token.a3tkr , "Token ",element.instrument_token)
+       
+      
+     
+       const update = {
+        $set: {
+          tkr: Exist_token.tkr,
+          a3tkr: Exist_token.a3tkr,
+        },
+      };
+
+      const filter = { instrument_token : element.instrument_token };
+
+      const options = {
+        upsert: true, // If no documents match the query, insert a new document
+       };
+
+      let Res = await Alice_token.updateMany(filter, update , options);
+       
+     // console.log("Res ", Res)
+    
+  
+     });
+
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind ,numberOfTrade_count_trade ,AccelpixTokenUpdate }
