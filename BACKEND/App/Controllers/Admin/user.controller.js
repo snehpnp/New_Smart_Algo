@@ -56,6 +56,18 @@ class Employee {
       var Role = "USER";
       var StartDate1 = "";
       var EndDate1 = "";
+      let Strategies_id_array = []; 
+      console.log("Strategies ",Strategies)
+      for (const strategy of Strategies) {
+        Strategies_id_array.push(strategy.id)
+        console.log(`Strategy with ID ${strategy.id} inserted`);
+      }
+
+
+      console.log('Strategies_id_array',Strategies_id_array);
+
+      
+
 
       // IF ROLE NOT EXIST TO CHECK
       // const roleCheck = await Role_model.findOne({ name: Role.toUpperCase() });
@@ -324,7 +336,9 @@ class Employee {
                   user_id: User_id,
                   group_id: group_service,
                   service_id: data.Service_id,
-                  strategy_id: Strategies[0].id,
+                  //strategy_id: Strategies[0].id,
+                  strategy_id: Strategies_id_array,
+                  
                   uniqueUserService: User_id + "_" + data.Service_id,
                   quantity: data.lotsize,
                   lot_size: 1
@@ -403,8 +417,8 @@ class Employee {
 
 
 
-      // console.log("sTART", new Date());
-
+       //console.log("req Strategy", req.Strategies);
+       
       // IF USER ALEARDY EXIST
       const existingUsername = await User_model.findOne({
         UserName: req.UserName,

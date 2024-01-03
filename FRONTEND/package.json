@@ -24,6 +24,7 @@
     "lucide-react": "^0.260.0",
     "node-datetime": "^2.1.2",
     "npm": "^10.0.0",
+    "primereact": "^10.2.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-bootstrap": "^2.8.0",

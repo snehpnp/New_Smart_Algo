@@ -36,6 +36,18 @@ class Dashboard {
                         user_id: objectId
                     }
                 },
+
+                 {
+                    $lookup: {
+                        from: "users",
+                        localField: "user_id",
+                        foreignField: "_id",
+                        as: "userInfo",
+                    },
+                },
+                {
+                    $unwind: '$userInfo',
+                },
                 {
                     $lookup: {
                         from: "services",
@@ -47,17 +59,17 @@ class Dashboard {
                 {
                     $unwind: '$service',
                 },
-                {
-                    $lookup: {
-                        from: "strategies",
-                        localField: "strategy_id",
-                        foreignField: "_id",
-                        as: "strategys",
-                    },
-                },
-                {
-                    $unwind: '$strategys',
-                },
+                // {
+                //     $lookup: {
+                //         from: "strategies",
+                //         localField: "strategy_id",
+                //         foreignField: "_id",
+                //         as: "strategys",
+                //     },
+                // },
+                // {
+                //     $unwind: '$strategys',
+                // },
                 {
                     $lookup: {
                         from: "categories",
@@ -102,9 +114,10 @@ class Dashboard {
                         'service._id': 1,
                         'service.lotsize': 1,
                         'servicegroup_services_ids.group_qty': 1,
-                        'strategys.strategy_name': 1,
-                        'strategys._id': 1,
+                      //  'strategys.strategy_name': 1,
+                      //  'strategys._id': 1,
                         'categories.segment': 1,
+                        'userInfo.multiple_strategy_select':1,
                         _id: 1,
                         user_id: 1,
                         active_status: 1,
@@ -113,6 +126,7 @@ class Dashboard {
                         product_type: 1,
                         order_type: 1,
                         createdAt: 1,
+                        strategy_id:1
                     },
                 },
             ];
@@ -156,6 +170,9 @@ class Dashboard {
                 return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
             }
 
+            console.log("GetAllClientServices",GetAllClientServices)
+            console.log("GetAllClientStrategy",GetAllClientStrategy)
+
             // DATA GET SUCCESSFULLY
             res.send({
                 status: true,
@@ -176,8 +193,9 @@ class Dashboard {
     async updateClientServices(req, res) {
         try {
             const { user_id, servicesData, data } = req.body;
-
-
+               
+           console.log("req.body Updeate client Dashbord Data",req.body)
+           return
 
             const UserData = await User_model.findOne({ _id: user_id });
             if (!UserData) {

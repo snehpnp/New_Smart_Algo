@@ -1,6 +1,7 @@
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
+import { MultiSelect } from 'primereact/multiselect';
 import BasicTable from "../../../Components/ExtraComponents/Tables/BasicTable";
 import { Pencil, Trash2 } from "lucide-react";
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
@@ -36,6 +37,16 @@ const BrokerResponse = () => {
 
   const [refresh, setrefresh] = useState(false);
 
+  const [selectedCities, setSelectedCities] = useState(null);
+  console.log("select", selectedCities)
+  const cities = [
+      { name: 'New York', code: 'NY' },
+      { name: 'Rome', code: 'RM' },
+      { name: 'London', code: 'LDN' },
+      { name: 'Istanbul', code: 'IST' },
+      { name: 'Paris', code: 'PRS' }
+  ];
+
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
@@ -61,14 +72,18 @@ const BrokerResponse = () => {
             loading: false,
             data: response.services,
           });
-          const filteredArray1 = response.strategy.filter((item1) =>
-            response.services.some(
-              (item2) => item1.result._id !== item2.strategys._id
-            )
-          );
+          // const filteredArray1 = response.strategy.filter((item1) =>
+          //   response.services.some(
+          //     (item2) => item1.result._id !== item2.strategys._id
+          //   )
+          // );
+          // setStrategy({
+          //   loading: false,
+          //   data: filteredArray1,
+          // });
           setStrategy({
             loading: false,
-            data: filteredArray1,
+            data: response.strategy,
           });
         }
       });
@@ -82,6 +97,9 @@ const BrokerResponse = () => {
 
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
+
+     alert(e.target.value)
+    
     const numericValue = e.target.value.replace(/[^0-9]/g, '');
 
     if (e.target.name === "lot_size") {
@@ -159,14 +177,6 @@ const BrokerResponse = () => {
   };
 
 
-
-
-
-
-
-
-
-
   return (
     <Content Page_title="Dashboard" button_status={false}>
       <table className="table table-responsive-sm ">
@@ -233,7 +243,60 @@ const BrokerResponse = () => {
                       parseInt(data.lot_size) * parseInt(data.service.lotsize)}</td>
 
                     <td className="color-primary col-md-2">
-                      <select
+                    {data.userInfo.multiple_strategy_select === "1" ?
+                     //"Multiple Startegy Select"
+                  //   <select
+                  //   name="strategy_id"
+
+                  //   class="form-select form-select-lg "
+                  //   aria-label=".form-select-lg example"
+                  //   onChange={(e) =>
+                  //     setgroup_qty_value_test(
+                  //       e,
+                  //       data.service.name,
+                  //       data.service,
+                  //       data
+                  //     )
+                  //   }
+                  //   multiple  
+                  // >
+
+                    
+                  //   {Strategy.data &&
+                  //     Strategy.data.map((item) => {
+                  //       if(data.strategy_id.includes(item.result._id)){
+                  //         return (
+                  //           <option
+                  //             className="text-success h6"
+                  //             value={item.result._id}
+                  //           >
+                  //           {item.result.strategy_name}
+                  //           </option>
+                  //         );
+                  //       }else{
+                  //         return (
+                  //           <option
+                  //             className="text-danger h6"
+                  //             value={item.result._id}
+                  //           >
+                  //           {item.result.strategy_name}
+                  //           </option>
+                  //         );
+                  //       }
+                        
+                  //     })}
+                  //  </select>
+
+                  <div className="card flex justify-content-center">
+            <MultiSelect value={selectedCities} onChange={(e) => setSelectedCities(e.value)} options={cities} optionLabel="name" display="chip" 
+                placeholder="Select Cities" maxSelectedLabels={3} className="w-full md:w-20rem" />
+                 </div>
+
+
+                    :
+
+                  //  "Single Strategy Select"
+                     <select
                         name="strategy_id"
 
                         class="form-select form-select-lg "
@@ -246,27 +309,48 @@ const BrokerResponse = () => {
                             data
                           )
                         }
+                          
                       >
-                        <option
+
+                      
+
+                        {/* <option
                           value="1"
                           className="text-success h6"
                           selected
                           disabled
                         >
                           {data.strategys.strategy_name}
-                        </option>
+                        </option> */}
                         {Strategy.data &&
                           Strategy.data.map((item) => {
-                            return (
-                              <option
-                                className="text-danger h6"
-                                value={item.result._id}
-                              >
+                            if(data.strategy_id.includes(item.result._id)){
+                              return (
+                                <option
+                                  className="text-success h6"
+                                  value={item.result._id}
+                                >
                                 {item.result.strategy_name}
-                              </option>
-                            );
+                                </option>
+                              );
+                            }else{
+                              return (
+                                <option
+                                  className="text-danger h6"
+                                  value={item.result._id}
+                                >
+                                {item.result.strategy_name}
+                                </option>
+                              );
+                            }
+                            
                           })}
                       </select>
+                    }
+
+                     
+
+
                     </td>
 
                     <td className="color-primary">
