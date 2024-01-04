@@ -173,12 +173,31 @@ class Dashboard {
             console.log("GetAllClientServices",GetAllClientServices)
             console.log("GetAllClientStrategy",GetAllClientStrategy)
 
+            console.log("user status",GetAllClientServices[0].userInfo.multiple_strategy_select)
+
+
+            const GetAllClientStrategyMultipleResult = GetAllClientStrategy.map(item => ({
+                _id: item.result._id,
+                strategy_name: item.result.strategy_name
+              }));
+
+
+              const GetServiceStrategy = GetAllClientServices.map(item => ({
+                _id: item._id,
+                strategy_id: item.strategy_id
+              }));
+
+              console.log("GetServiceStrategy",GetServiceStrategy)
+
             // DATA GET SUCCESSFULLY
             res.send({
                 status: true,
                 msg: "Get All Client Services ",
                 services: GetAllClientServices,
                 strategy: GetAllClientStrategy,
+                strategyMulti:GetAllClientStrategyMultipleResult,
+                GetServiceStrategy:GetServiceStrategy,
+                status_startegy:GetAllClientServices[0].userInfo.multiple_strategy_select,
                 // page: Number(page),
                 // limit: Number(limit),
                 totalCount: totalCount

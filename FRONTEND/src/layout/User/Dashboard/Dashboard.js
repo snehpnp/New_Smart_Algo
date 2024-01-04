@@ -33,19 +33,59 @@ const BrokerResponse = () => {
     loading: true,
     data: [],
   });
+  
   const [Strategy, setStrategy] = useState({ loading: true, data: [] });
+  
+  const [StrategyMulti, setStrategyMulti] = useState({ loading: true, data: [] });
+  
+  const [GetServiceStrategy, setGetServiceStrategy] = useState([]);
+  
+  const [statusStartegyUser, setStatusStartegy] = useState("0");
+  
 
   const [refresh, setrefresh] = useState(false);
 
-  const [selectedCities, setSelectedCities] = useState(null);
-  console.log("select", selectedCities)
-  const cities = [
-      { name: 'New York', code: 'NY' },
-      { name: 'Rome', code: 'RM' },
-      { name: 'London', code: 'LDN' },
-      { name: 'Istanbul', code: 'IST' },
-      { name: 'Paris', code: 'PRS' }
-  ];
+  const [selectedCountries, setSelectedCountries] = useState(null);
+  console.log("Strategy", Strategy)
+  
+  console.log("select", selectedCountries)
+  const countries = [
+    { name: 'Australia', code: 'AU' },
+    { name: 'Brazil', code: 'BR' },
+    { name: 'China', code: 'CN' },
+    { name: 'Egypt', code: 'EG' },
+    { name: 'France', code: 'FR' },
+    { name: 'Germany', code: 'DE' },
+    { name: 'India', code: 'IN' },
+    { name: 'Japan', code: 'JP' },
+    { name: 'Spain', code: 'ES' },
+    { name: 'United States', code: 'US' }
+];
+
+
+
+const countryTemplate = (option) => {
+
+  return (
+      <div className="flex align-items-center">
+          <img alt={option.result.strategy_name} src="https://primefaces.org/cdn/primereact/images/flag/flag_placeholder.png" className={`mr-2 flag flag-${option.result._id.toLowerCase()}`} style={{ width: '18px' }} />
+          <div>{option.name}</div>
+      </div>
+  );
+};
+
+
+const panelFooterTemplate = () => {
+  const length = selectedCountries ? selectedCountries.length : 0;
+
+  return (
+      <div className="py-2 px-3">
+          <b>{length}</b> item{length > 1 ? 's' : ''} selected.
+      </div>
+  );
+};
+
+
 
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
@@ -67,6 +107,10 @@ const BrokerResponse = () => {
     )
       .unwrap()
       .then((response) => {
+        
+        console.log("response.strategy ",response.strategyMulti)
+        console.log("response  ",response)
+
         if (response.status) {
           setDashboardData({
             loading: false,
@@ -85,6 +129,15 @@ const BrokerResponse = () => {
             loading: false,
             data: response.strategy,
           });
+          setStrategyMulti({
+            loading: false,
+            data: response.strategyMulti,
+          });
+          setGetServiceStrategy(response.GetServiceStrategy);
+          setStatusStartegy(response.status_startegy);
+
+          
+          
         }
       });
   };
@@ -98,7 +151,51 @@ const BrokerResponse = () => {
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
 
-     alert(e.target.value)
+    // alert(e.target.value)
+    
+    //console.log("GetServiceStrategy",GetServiceStrategy)
+    // console.log("symboll",symboll)
+    // console.log("rowdata",rowdata)
+    console.log("data",data)
+    
+    console.log("statusStartegy",statusStartegyUser)
+
+  
+    
+   // console.log("e.target.value", e.target.value)
+
+     
+     
+
+// Find the object with the matching _id
+const targetObject = GetServiceStrategy.find(item => item._id==data._id);
+console.log(targetObject)
+
+if(targetObject.strategy_id.includes(e.target.value)){
+  console.log("if")
+  const updatedStrategyId = targetObject.strategy_id.filter(id => id !== e.target.value);
+  // Create a new object with the updated strategy_id
+  const updatedObject = { ...targetObject, strategy_id: updatedStrategyId };
+  // Update the state
+  setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
+
+  
+
+}else{
+console.log("else")
+const updatedObject = { ...targetObject, strategy_id: [...targetObject.strategy_id, e.target.value] };
+// Update the state
+setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
+//console.log("final value exat",GetServiceStrategy);
+}
+
+
+
+
+     
+
+
+
     
     const numericValue = e.target.value.replace(/[^0-9]/g, '');
 
@@ -148,6 +245,8 @@ const BrokerResponse = () => {
     }));
   };
 
+  console.log("final value",GetServiceStrategy);
+
   const UpdateDashboard = async (e) => {
 
 
@@ -157,6 +256,8 @@ const BrokerResponse = () => {
       Update_Dashboard_Data({
         data: {
           servicesData: updatedData,
+          statusStartegyUser:statusStartegyUser,
+          GetServiceStrategy:GetServiceStrategy,
           user_id: user_Id,
           data: { Editor_role: Role, device: check_Device() },
         },
@@ -175,6 +276,12 @@ const BrokerResponse = () => {
         }
       });
   };
+
+
+ 
+   
+  console.log("final value",GetServiceStrategy)
+ 
 
 
   return (
@@ -243,8 +350,8 @@ const BrokerResponse = () => {
                       parseInt(data.lot_size) * parseInt(data.service.lotsize)}</td>
 
                     <td className="color-primary col-md-2">
-                    {data.userInfo.multiple_strategy_select === "1" ?
-                     //"Multiple Startegy Select"
+                    {data.userInfo.multiple_strategy_select === "1" ? 
+                    // "Multiple Startegy Select"
                   //   <select
                   //   name="strategy_id"
 
@@ -287,12 +394,47 @@ const BrokerResponse = () => {
                   //     })}
                   //  </select>
 
-                  <div className="card flex justify-content-center">
-            <MultiSelect value={selectedCities} onChange={(e) => setSelectedCities(e.value)} options={cities} optionLabel="name" display="chip" 
-                placeholder="Select Cities" maxSelectedLabels={3} className="w-full md:w-20rem" />
-                 </div>
+                  <div>
+  {Strategy.data &&
+    Strategy.data.map((item) => (
+      <div key={item.result._id} className="form-check form-check-inline">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          id={item.result._id}
+          value={item.result._id}
+          defaultChecked={data.strategy_id.includes(item.result._id)}
+          onChange={(e) =>
+            setgroup_qty_value_test(
+              e,
+              data.service.name,
+              data.service,
+              data
+            )
+          }
+        />
+        <label
+          className={`form-check-label ${
+            data.strategy_id.includes(item.result._id)
+              ? "text-success"
+              : "text-danger"
+          } h6`}
+          htmlFor={item.result._id}
+        >
+          {item.result.strategy_name}
+        </label>
+      </div>
+    ))}
+</div>
 
 
+                
+            //   <div className="card flex justify-content-center">
+            // <MultiSelect value={selectedCountries} options={Strategy.data} onChange={(e) =>    setSelectedCountries(e.value)} optionLabel="result.strategy_name" 
+            //     placeholder="Select Strategy" itemTemplate={countryTemplate} panelFooterTemplate={panelFooterTemplate} className="w-full md:w-20rem" display="chip" />
+            //  </div>
+                
+               
                     :
 
                   //  "Single Strategy Select"
@@ -325,6 +467,7 @@ const BrokerResponse = () => {
                         {Strategy.data &&
                           Strategy.data.map((item) => {
                             if(data.strategy_id.includes(item.result._id)){
+
                               return (
                                 <option
                                   className="text-success h6"
