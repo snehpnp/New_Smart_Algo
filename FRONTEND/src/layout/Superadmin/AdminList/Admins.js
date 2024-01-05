@@ -191,7 +191,7 @@ const AdminsList = () => {
             {
                 themeData.loading ? <Loader /> :
                     <>
-                        <Content Page_title="Company Theme" button_status={false}>
+                        <Content Page_title="Company Theme" button_status={true}>
                             {
                                 themeData.data && themeData.data.length === 0 ? (
                                     'No data found') :
