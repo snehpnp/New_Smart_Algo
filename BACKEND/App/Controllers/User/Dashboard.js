@@ -37,7 +37,7 @@ class Dashboard {
                     }
                 },
 
-                 {
+                {
                     $lookup: {
                         from: "users",
                         localField: "user_id",
@@ -114,10 +114,10 @@ class Dashboard {
                         'service._id': 1,
                         'service.lotsize': 1,
                         'servicegroup_services_ids.group_qty': 1,
-                      //  'strategys.strategy_name': 1,
-                      //  'strategys._id': 1,
+                        //  'strategys.strategy_name': 1,
+                        //  'strategys._id': 1,
                         'categories.segment': 1,
-                        'userInfo.multiple_strategy_select':1,
+                        'userInfo.multiple_strategy_select': 1,
                         _id: 1,
                         user_id: 1,
                         active_status: 1,
@@ -126,7 +126,7 @@ class Dashboard {
                         product_type: 1,
                         order_type: 1,
                         createdAt: 1,
-                        strategy_id:1
+                        strategy_id: 1
                     },
                 },
             ];
@@ -170,24 +170,24 @@ class Dashboard {
                 return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
             }
 
-            console.log("GetAllClientServices",GetAllClientServices)
-            console.log("GetAllClientStrategy",GetAllClientStrategy)
+            console.log("GetAllClientServices", GetAllClientServices)
+            console.log("GetAllClientStrategy", GetAllClientStrategy)
 
-            console.log("user status",GetAllClientServices[0].userInfo.multiple_strategy_select)
+            console.log("user status", GetAllClientServices[0].userInfo.multiple_strategy_select)
 
 
             const GetAllClientStrategyMultipleResult = GetAllClientStrategy.map(item => ({
                 _id: item.result._id,
                 strategy_name: item.result.strategy_name
-              }));
+            }));
 
 
-              const GetServiceStrategy = GetAllClientServices.map(item => ({
-                _id: item._id,
+            const GetServiceStrategy = GetAllClientServices.map(item => ({
+                _id: item.service._id,
                 strategy_id: item.strategy_id
-              }));
+            }));
 
-              console.log("GetServiceStrategy",GetServiceStrategy)
+            console.log("GetServiceStrategy", GetServiceStrategy)
 
             // DATA GET SUCCESSFULLY
             res.send({
@@ -195,9 +195,9 @@ class Dashboard {
                 msg: "Get All Client Services ",
                 services: GetAllClientServices,
                 strategy: GetAllClientStrategy,
-                strategyMulti:GetAllClientStrategyMultipleResult,
-                GetServiceStrategy:GetServiceStrategy,
-                status_startegy:GetAllClientServices[0].userInfo.multiple_strategy_select,
+                strategyMulti: GetAllClientStrategyMultipleResult,
+                GetServiceStrategy: GetServiceStrategy,
+                status_startegy: GetAllClientServices[0].userInfo.multiple_strategy_select,
                 // page: Number(page),
                 // limit: Number(limit),
                 totalCount: totalCount
@@ -212,27 +212,72 @@ class Dashboard {
     async updateClientServices(req, res) {
         try {
             const { user_id, servicesData, data } = req.body;
-               
-           console.log("req.body Updeate client Dashbord Data",req.body)
-           return
+             
+            console.log("req  body ",req.body)
+           
+           // console.log("servicesData ",servicesData)
 
+
+            const isEmpty = Object.keys(servicesData).length === 0;
+
+    
+           //   console.log("results",isEmpty);
+
+              if(isEmpty == false){
+                // Filter objects with empty strategy_id
+                const result = Object.keys(servicesData)
+                .filter((key) => Array.isArray(servicesData[key].strategy_id) && servicesData[key].strategy_id.length === 0)
+                .reduce((obj, key) => {
+                    obj[key] = servicesData[key];
+                    return obj;
+                }, {});
+
+                console.log("dddd",result);
+                const isEmptyStartegyArray = Object.keys(result).length === 0;
+                console.log("isEmptyStartegyArray",isEmptyStartegyArray);
+                if(isEmptyStartegyArray == false){
+                 res.send({ status: false, msg: 'Please Select one Strategy a script',data: [] });
+                }
+
+              }
+
+
+            //  console.log("OPkkkkk");
+            
             const UserData = await User_model.findOne({ _id: user_id });
+
+
             if (!UserData) {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
             }
 
             if (Object.keys(servicesData).length == 0) {
                 // console.log("Object is empty.");
-                return res.send({ status: false, msg: 'Object is empty.', data: [] });
+                return res.send({ status: false, msg: 'No Data For Update', data: [] });
             }
+
+
+
+            
 
             for (const key in servicesData) {
                 if (servicesData[key]) {
                     const matchedObject = servicesData[key];
 
-                    if (matchedObject.strategy_id) {
-                        matchedObject.strategy_id = new ObjectId(matchedObject.strategy_id);
+                   
+                    
+                    if(matchedObject.strategy_id != undefined){
+
+                        matchedObject.strategy_id.forEach((sid)=>{
+                            // console.log("Data",new ObjectId(sid))
+                            matchedObject.strategy_id.push(new ObjectId(sid))
+                        })
+    
+                          matchedObject.strategy_id = matchedObject.strategy_id.filter(item => item instanceof ObjectId);
+
                     }
+
+
 
                     if (matchedObject.active_status) {
                         matchedObject.active_status = matchedObject.active_status == true ? '1' : '0'
@@ -262,20 +307,24 @@ class Dashboard {
                         await user_activity.save()
                     }
 
-                    if (matchedObject.strategy_id) {
+                    if (matchedObject.strategy_id != undefined) {
+                        matchedObject.strategy_id.forEach(async(stg_id)=>{
 
-                        const Strategieclient = await strategy.find({ _id: matchedObject.strategy_id });
-
-                        const user_activity = new user_activity_logs(
-                            {
-                                user_id: UserData._id,
-                                message: Service_name[0].name + " Strategy Update",
-                                Strategy: Strategieclient[0].strategy_name,
-                                role: data.Editor_role,
-                                system_ip: getIPAddress(),
-                                device: data.device
-                            })
-                        await user_activity.save()
+                            const Strategieclient = await strategy.find({ _id:stg_id });
+console.log("Strategieclient",Strategieclient);
+                            const user_activity = new user_activity_logs(
+                                {
+                                    user_id: UserData._id,
+                                    message: Service_name[0].name + " Update Strategy ",
+                                    Strategy: Strategieclient[0].strategy_name,
+                                    role: data.Editor_role,
+                                    system_ip: getIPAddress(),
+                                    device: data.device
+                                })
+                            await user_activity.save()
+                        })
+                 
+                  
                     }
 
                     if (matchedObject.active_status || matchedObject.active_status == false) {
@@ -455,13 +504,13 @@ class Dashboard {
         try {
             const { user_id } = req.body
 
-            var User_information = await User_model.find({ _id: user_id  }).
+            var User_information = await User_model.find({ _id: user_id }).
                 select('license_type Role broker');
 
 
             if (User_information.length == 0) {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
-            }else{
+            } else {
                 return res.send({ status: true, msg: 'User Info', data: User_information });
             }
 

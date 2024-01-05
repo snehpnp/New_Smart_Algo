@@ -151,48 +151,11 @@ const panelFooterTemplate = () => {
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
 
-    // alert(e.target.value)
-    
-    //console.log("GetServiceStrategy",GetServiceStrategy)
-    // console.log("symboll",symboll)
-    // console.log("rowdata",rowdata)
-    console.log("data",data)
-    
-    console.log("statusStartegy",statusStartegyUser)
+    //console.log("data",data)  
 
-  
-    
-   // console.log("e.target.value", e.target.value)
-
-     
-     
-
-// Find the object with the matching _id
-const targetObject = GetServiceStrategy.find(item => item._id==data._id);
-console.log(targetObject)
-
-if(targetObject.strategy_id.includes(e.target.value)){
-  console.log("if")
-  const updatedStrategyId = targetObject.strategy_id.filter(id => id !== e.target.value);
-  // Create a new object with the updated strategy_id
-  const updatedObject = { ...targetObject, strategy_id: updatedStrategyId };
-  // Update the state
-  setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
-
-  
-
-}else{
-console.log("else")
-const updatedObject = { ...targetObject, strategy_id: [...targetObject.strategy_id, e.target.value] };
-// Update the state
-setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
-//console.log("final value exat",GetServiceStrategy);
-}
+ 
 
 
-
-
-     
 
 
 
@@ -217,11 +180,43 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
       }
     }
 
+    else if(e.target.name === "strategy_id"){
+    
+ console.log("statusStartegy",statusStartegyUser)
+// Find the object with the matching _id
+const targetObject = GetServiceStrategy.find(item => item._id==data.service._id);
+console.log("targetObject - ",targetObject)
+if(targetObject.strategy_id.includes(e.target.value)){
+  console.log("if")
+  const updatedStrategyId = targetObject.strategy_id.filter(id => id !== e.target.value);
+  // Create a new object with the updated strategy_id
+  const updatedObject = { ...targetObject, strategy_id: updatedStrategyId };
+  // Update the state
+  setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
+
+}else{
+console.log("else")
+const updatedObject = { ...targetObject, strategy_id: [...targetObject.strategy_id, e.target.value] };
+// Update the state
+setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
+//console.log("final value exat",GetServiceStrategy);
+}
+
+
+
+    }
+
     let name = e.target.name;
     let value = e.target.value;
     let id = rowdata._id;
 
+   
 
+   // alert(name)
+   // alert(value)
+
+
+    
 
 
 
@@ -235,17 +230,39 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
       },
     }));
 
-    return
-    setUpdatedData((prevData) => ({
-      ...prevData,
-      [id]: {
-        ...prevData[id],
-        [name]: name === "active_status" ? e.target.checked : value,
-      },
-    }));
+
+   
+
+  
   };
 
-  console.log("final value",GetServiceStrategy);
+
+  console.log("fina value",GetServiceStrategy);
+  console.log("updatedData  ",updatedData);
+
+  if(updatedData){
+   // console.log("shakirrrr")
+      GetServiceStrategy.forEach((item) => {
+        //console.log("item -",item)
+     //   console.log("updatedData[item._id] ",updatedData[item._id])
+       if(updatedData[item._id] != undefined){
+     //   console.log("OKKKKK ",updatedData[item._id].strategy_id)
+        if(updatedData[item._id].strategy_id != undefined){
+         updatedData[item._id].strategy_id = item.strategy_id;
+        }
+       }
+
+   
+  });
+  
+  console.log("final  update data",updatedData);
+  }
+
+
+ 
+
+
+
 
   const UpdateDashboard = async (e) => {
 
@@ -257,7 +274,7 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
         data: {
           servicesData: updatedData,
           statusStartegyUser:statusStartegyUser,
-          GetServiceStrategy:GetServiceStrategy,
+          //GetServiceStrategy:GetServiceStrategy,
           user_id: user_Id,
           data: { Editor_role: Role, device: check_Device() },
         },
@@ -266,13 +283,13 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
     )
       .unwrap()
       .then((response) => {
-        // console.log("response", response);
+       //console.log("response", response);
         if (response.status) {
           toast.success(response.msg);
           // setrefresh(!refresh)
           window.location.reload();
         } else {
-          toast.error("No Data For Update");
+          toast.error(response.msg);
         }
       });
   };
@@ -399,6 +416,7 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
     Strategy.data.map((item) => (
       <div key={item.result._id} className="form-check form-check-inline">
         <input
+          name="strategy_id"
           className="form-check-input"
           type="checkbox"
           id={item.result._id}
