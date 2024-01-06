@@ -41,7 +41,7 @@ const BrokerResponse = () => {
 
   const handleShowStartegyModal = (data) => {
    //alert("okkk")
-  console.log("data show ",data)
+  //console.log("data show ",data)
    setModalsingleValue(data)
   setShowStartegyModal(true);
   }
@@ -269,6 +269,10 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
 
         }
       }
+
+
+
+    handleCloseStartegyModal()  
 
     
     await dispatch(
@@ -609,8 +613,13 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseStartegyModal}>
-            Done
+            Canccel
           </Button>
+
+          <Button variant="secondary" onClick={(e) => UpdateDashboard(e)}>
+            Update
+          </Button>
+
         </Modal.Footer>
       </Modal>
 
