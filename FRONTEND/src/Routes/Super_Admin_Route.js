@@ -19,6 +19,12 @@ import AddApiCreateInfo from '../layout/Superadmin/ApiCreateInfo/AddApiCreateInf
 import EditApiCreateInfo from '../layout/Superadmin/ApiCreateInfo/EditApiCreateInfo';
 
 
+import AddPanel from '../layout/Superadmin/AdminList/AddPanel';
+import EditPanel from '../layout/Superadmin/AdminList/EditPanel';
+
+
+
+
 
 const Admin = () => {
 
@@ -34,6 +40,10 @@ const Admin = () => {
                 {/* <> */}
                 <Route exact path="/dashboard" element={<Dashboard />} />
                 <Route exact path="/alladmins" element={<Admins />} />
+                <Route exact path="/panel/add" element={<AddPanel />} />
+                <Route exact path="/panel/edit/:id" element={<EditPanel />} />
+
+
                 <Route exact path="/permitions" element={<Permitions />} />
                 <Route exact path="/history" element={<History />} />
                 <Route exact path="/support" element={<Support />} />

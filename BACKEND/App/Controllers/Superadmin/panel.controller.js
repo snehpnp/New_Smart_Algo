@@ -15,12 +15,13 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async AddPanel(req, res) {
         try {
-            const { panel_name, domain, port, key, ip_address, theme_id, parent_id } = req.body
+            const { panel_name, domain, port, key, ip_address, theme_id, parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id } = req.body.req
+
 
             // FIND PANEL NAME DUPLICATE
             const panel_data = await panel_model.findOne({ panel_name: panel_name });
             if (panel_data) {
-                return res.status(409).json({ status: false, msg: 'Panel Name already exists', data: [] });
+                return res.status(409).send({ status: false, msg: 'Panel Name already exists', data: [] });
             }
 
             // THEME CREATE SNEH
@@ -30,17 +31,21 @@ class Panel {
                 port: port,
                 key: key,
                 ip_address: ip_address,
-                theme_id: theme_id
+                theme_id: theme_id,
+                Create_Strategy: Create_Strategy,
+                Option_chain: Option_chain,
+                Strategy_plan: Strategy_plan,
+                broker_id: broker_id
             });
             AddPanel.save()
                 .then(async (data) => {
                     logger.info('Panel Add successfully', { role: "SUPERADMIN", user_id: parent_id });
-                    return  res.send({ status: true, msg: "successfully Add!", data: data });
+                    return res.send({ status: true, msg: "successfully Add!", data: data });
                 })
                 .catch((err) => {
                     if (err.keyValue) {
                         logger.error('Key duplicate', { role: "SUPERADMIN", user_id: parent_id });
-                        return res.status(409).json({ status: false, msg: 'Key duplicate', data: err.keyValue });
+                        return res.status(409).send({ status: false, msg: 'Key duplicate', data: err.keyValue });
 
                     }
 
@@ -61,16 +66,16 @@ class Panel {
             panel_model.findById(_id)
                 .then(async (value) => {
                     if (!value) {
-                        return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
+                        return res.status(409).send({ status: false, msg: 'Id not match', data: [] });
                     }
                     const filter = { _id: _id };
                     const updateOperation = { $set: panle_data };
                     const result = await panel_model.updateOne(filter, updateOperation);
                     if (!result) {
-                        return res.status(409).json({ status: false, msg: 'Company not update', data: [] });
+                        return res.status(409).send({ status: false, msg: 'Company not update', data: [] });
                     }
                     logger.info('Update Successfully', { role: "SUPERADMIN", user_id: parent_id });
-                    return res.status(200).json({ status: true, msg: 'Update Successfully.', data: result });
+                    return res.status(200).send({ status: true, msg: 'Update Successfully.', data: result });
 
                 })
 
@@ -91,9 +96,9 @@ class Panel {
             const EmailCheck = await User.findOne({ _id: id })
 
             if (!EmailCheck) {
-                return res.status(409).json({ status: false, msg: 'User Not exists', data: [] });
+                return res.status(409).send({ status: false, msg: 'User Not exists', data: [] });
             }
-            return  res.send({ status: true, msg: "Get User", data: EmailCheck })
+            return res.send({ status: true, msg: "Get User", data: EmailCheck })
 
         } catch (error) {
         }
@@ -134,7 +139,7 @@ class Panel {
 
             // CHECK IF PANEL EXIST OR NOT
             if (!Panle_information) {
-                return res.status(409).json({ status: false, msg: 'Panle Not exist Not exists', data: [] });
+                return res.status(409).send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
             return res.send({ status: true, msg: "Get Panel Information", data: Panle_information })
 
@@ -162,11 +167,11 @@ class Panel {
 
             // IF DATA NOT EXIST
             if (getAllpanel.length == 0) {
-                return  res.send({ status: false, msg: "Empty data", data: getAllpanel })
+                return res.send({ status: false, msg: "Empty data", data: getAllpanel })
             }
 
             // DATA GET SUCCESSFULLY
-            return  res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Panels name",
                 data: getAllpanel,
@@ -207,7 +212,7 @@ class Panel {
                 .then((data) => {
 
                     if (data) {
-                       return res.status(200).send({ status: true, msg: 'Api Create successfully' });
+                        return res.status(200).send({ status: true, msg: 'Api Create successfully' });
 
                     }
                 })
@@ -236,7 +241,7 @@ class Panel {
 
             const panel_data = await panel_model.find({ domain: req.body.url }).select('broker_id')
             if (!panel_data) {
-                return res.status(409).json({ status: false, msg: 'Panel Not exists', data: [] });
+                return res.status(409).send({ status: false, msg: 'Panel Not exists', data: [] });
             }
 
             var objectIds = panel_data[0].broker_id.map((data) => data.id);
@@ -250,7 +255,7 @@ class Panel {
             // Find documents with matching ids
             const getAllpanel = await ApiCreateInfo.find({ broker_id: tt })
 
-            
+
             // IF DATA NOT EXIST
             if (getAllpanel.length == 0) {
                 res.send({ status: false, msg: "Empty data", data: getAllpanel })
@@ -277,7 +282,7 @@ class Panel {
 
             const panel_data = await panel_model.find({ domain: req.body.url }).select('broker_id')
             if (!panel_data) {
-                return res.status(409).json({ status: false, msg: 'Panel Not exists', data: [] });
+                return res.status(409).send({ status: false, msg: 'Panel Not exists', data: [] });
             }
 
 
@@ -314,7 +319,7 @@ class Panel {
             ApiCreateInfo.findById(req.body._id)
                 .then(async (value) => {
                     if (!value) {
-                        return res.status(409).json({ status: false, msg: 'Id not match', data: [] });
+                        return res.status(409).send({ status: false, msg: 'Id not match', data: [] });
                     }
 
                     const filter = { _id: req.body._id };
@@ -322,10 +327,10 @@ class Panel {
                     const result = await ApiCreateInfo.updateOne(filter, updateOperation);
 
                     if (!result) {
-                        return res.status(409).json({ status: false, msg: 'Company not update', data: [] });
+                        return res.status(409).send({ status: false, msg: 'Company not update', data: [] });
                     }
                     // logger.info('Update Successfully', { role: "SUPERADMIN", user_id: parent_id });
-                    return res.status(200).json({ status: true, msg: 'Update Successfully.', data: result });
+                    return res.status(200).send({ status: true, msg: 'Update Successfully.', data: result });
 
                 })
 
@@ -356,7 +361,7 @@ class Panel {
 
             // CHECK IF PANEL EXIST OR NOT
             if (!Panel_information) {
-                return res.status(409).json({ status: false, msg: 'Panle Not exist Not exists', data: [] });
+                return res.status(409).send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
             res.send({ status: true, msg: "Get Panel Broker", data: Panel_information })
 

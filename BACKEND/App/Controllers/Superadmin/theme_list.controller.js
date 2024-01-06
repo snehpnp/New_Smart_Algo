@@ -111,6 +111,39 @@ class Theme {
         }
     }
 
+
+
+ // GET THEME
+ async GetAllThemeName(req, res) {
+    try {
+
+
+
+        const getAllTheme = await Theme_list
+            .find({}).select('theme_name')
+     
+
+
+        // IF DATA NOT EXIST
+        if (getAllTheme.length == 0) {
+            res.send({ status: false, msg: "Empty data", data: getAllTheme })
+        }
+
+        // DATA GET SUCCESSFULLY
+        res.send({
+            status: true,
+            msg: "Get All Theme name",
+            data: getAllTheme,
+        
+        })
+
+
+    } catch (error) {
+        console.log("Get all theme error-", error);
+    }
+}
+
+
     // GET ALL TRADING ON  CLIENTS
     async GetThemeByIdThemeId(req, res) {
         try {

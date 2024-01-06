@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_ALL_PANELS_LIST,ALL_BROKERS , UPDATE_BROKERS , UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER } from "../../../Service/superadmin.service";
+import { GET_ALL_PANELS_LIST,ALL_BROKERS , UPDATE_BROKERS , UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER,ADD_PANEL } from "../../../Service/superadmin.service";
 
 
 export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => {
@@ -138,6 +138,17 @@ export const Update_Comapny_Brokers = createAsyncThunk("/update/comapny/brokers"
   }
 });
 
+export const Add_Panel_data = createAsyncThunk("add/panel", async (data) => {
+  const { req, token } = data
+
+  try {
+    const res = await ADD_PANEL(data, token);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
 
 const SuperAdminSlice = createSlice({
   name: "SuperAdminSlice",
@@ -156,6 +167,9 @@ const SuperAdminSlice = createSlice({
     close_panel: [],
     all_brokers: [],
     Update_Brokers: [],
+    Add_Panels: [],
+
+
 
   },
 
@@ -188,6 +202,10 @@ const SuperAdminSlice = createSlice({
     [Add_Licence_To_Company.fulfilled]: (state, { payload }) => {
       // state.isLoading = false;
       return { ...state, add_licence: payload, isLoading: false };
+    },
+    [Add_Panel_data.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, Add_Panels: payload, isLoading: false };
     },
     [Get_Admin_Helps.fulfilled]: (state, { payload }) => {
       // state.isLoading = false;

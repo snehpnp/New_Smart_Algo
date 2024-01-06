@@ -21,6 +21,7 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
 
     useEffect(() => {
         formik.setFieldValue('companyname', data.length > 0 && data[0].panel_name);
+        formik.setFieldValue('panel_key', data.length > 0 && data[0].panel_key);
         formik.setFieldValue('shortname', data.length > 0 && data[0].panel_short_name);
         formik.setFieldValue('broker', data.length > 0 && data[0].broker_url);
         formik.setFieldValue('version', data.length > 0 && data[0].version);
@@ -33,12 +34,14 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
     const formik = useFormik({
         initialValues: {
             companyname: "",
+            panel_key: "",
             shortname: "",
             broker: '',
             version: '',
         },
         touched: {
             companyname: false,
+            panel_key: false,
             shortname: false,
             broker: false,
             version: false,
@@ -48,6 +51,9 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
             const errors = {};
             if (!values.companyname && formik.touched.companyname) {
                 errors.companyname = valid_err.EMPTY_COMPANY_NAME_ERR;
+            }
+            if (!values.panel_key && formik.touched.panel_key) {
+                errors.panel_key = valid_err.EMPTY_PANEL_KEY_ERR;
             }
             if (!values.shortname && formik.touched.shortname) {
                 errors.shortname = valid_err.EMPTY_SHORT_NAME_ERR;
@@ -65,6 +71,7 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
                 "id": data.length > 0 && data[0]._id,
                 data: {
                     "panel_name": values.companyname,
+                    "panel_key": values.panel_key,
                     "panel_short_name": values.shortname,
                     "broker_url": values.broker,
                     "version": values.version,
@@ -97,6 +104,7 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
 
     const fields = [
         { name: 'companyname', label: 'Company Name', type: 'text', label_size: 12, col_size: 6, disable: false },
+        { name: 'panel_key', label: 'Panel Key', type: 'text', label_size: 12, col_size: 6, disable: false },
         { name: 'shortname', label: 'Short Name', type: 'text', label_size: 12, col_size: 6, disable: false },
         { name: 'broker', label: 'Broker', type: 'text', label_size: 12, col_size: 6, disable: false },
         { name: 'version', label: 'Version ', type: 'text', label_size: 12, col_size: 6, disable: false },

@@ -41,3 +41,22 @@ export async function GET_ALL_THEME(data, token) {
     }
 
 }
+
+
+// GET ALL THEME
+export async function GET_ALL_THEME_NAME(data, token) {
+    try {
+        const res = await axios.get(`${Config.smartAlogUrl}getall/theme/name`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        return err
+    }
+
+}
+

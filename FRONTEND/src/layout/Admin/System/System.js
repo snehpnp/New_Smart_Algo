@@ -72,6 +72,10 @@ const System = () => {
         },
         {
             dataField: 'panel_short_name',
+            text: 'Panel Key'
+        },
+        {
+            dataField: 'panel_short_name',
             text: 'Company Short Name'
         },
         {

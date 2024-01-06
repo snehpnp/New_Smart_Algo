@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
 import Modal from '../../../Components/ExtraComponents/Modal';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { useFormik } from 'formik';
 import toast from 'react-hot-toast';
@@ -116,15 +117,47 @@ const AdminsList = () => {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
-                <div className='d-flex'>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-                    </span>
+                // <div className='d-flex'>
+                //     <span data-toggle="tooltip" data-placement="top" title="Edit">
+                //         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                //     </span>
+                //     {/* <span data-toggle="tooltip" data-placement="top" title="Delete">
+                //         <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
+                //     </span> */}
 
+                // </div>
+
+
+                <div style={{ width: "120px" }}>
+                <div>
+                  <Link to={`/super/panel/edit/${row._id}`} state={row}>
+                    <span data-toggle="tooltip" data-placement="top" title="Edit">
+                      <Pencil
+                        size={20}
+                        color="#198754"
+                        strokeWidth={2}
+                        className="mx-1"
+                      />
+                    </span>
+                  </Link>
+
+
+                  {0 == "1" ?
+                  <Link>
+                    <span data-toggle="tooltip" data-placement="top" title="Delete">
+                      <Trash2
+                        size={20}
+                        color="#d83131"
+                        strokeWidth={2}
+                        className="mx-1"
+                        // onClick={(e) => Delete_user(row._id)}
+                      />
+                    </span>
+                  </Link>
+                   : ""} 
+      
                 </div>
+              </div>
             ),
         },
     ];
@@ -191,14 +224,14 @@ const AdminsList = () => {
             {
                 themeData.loading ? <Loader /> :
                     <>
-                        <Content Page_title="Company Theme" button_status={true}>
+                        <Content Page_title="Company Names"
+                            button_title="Add Client"
+                            route="/super/panel/add">
                             {
                                 themeData.data && themeData.data.length === 0 ? (
                                     'No data found') :
                                     <>
                                         <FullDataTable TableColumns={columns} tableData={themeData.data} />
-
-
 
                                         <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
                                             handleClose={() => setshowModal(false)}

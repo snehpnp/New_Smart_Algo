@@ -36,7 +36,7 @@ const App = () => {
     // })
   };
 
-  console.log("admin_permission", admin_permission && admin_permission.is_active)
+  // console.log("admin_permission", admin_permission && admin_permission.is_active)
   const data2 = async () => {
 
 

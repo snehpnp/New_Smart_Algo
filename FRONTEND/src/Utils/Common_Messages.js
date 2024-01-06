@@ -65,6 +65,8 @@ export const EMPTY_COMPANY_NAME_ERR = 'Please Enter Company Name';
 export const EMPTY_SHORT_NAME_ERR = 'Please Enter Short  Name';
 export const EMPTY_BROKER_NAME_ERR = 'Please Enter Broker Name';
 export const EMPTY_VERSION_NAME_ERR = 'Please Enter Version  Name';
+export const EMPTY_PANEL_KEY_ERR = 'Please Enter Panel Key  Name';
+
 
 
 
@@ -90,6 +92,17 @@ export const EMPTY_MSG_ERROR = 'Enter Your Message';
 export const EMPTY_API_CREATE_TITLE_ERROR = 'Enter Your Title';
 export const EMPTY_API_CREATE_DESCRIPTION_ERROR = 'Enter Your Description';
 export const INVALID_YOUTUBE_URL_ERROR = 'Enter Valid Youtube Url';
+
+
+// ADD PANEL 
+
+export const PANEL_NAME_ERROR = 'Enter Panel Name';
+export const DOMAIN_ERROR = 'Enter Your Domain Name';
+export const PORT_ERROR = 'Enter Valid Port';
+export const KEY_ERROR = 'Enter Valid Key';
+export const DBURL_ERROR = 'Enter Valid Data Base Url';
+export const DBNAME_ERROR = 'Enter Valid Data Base NAme';
+
 
 
 

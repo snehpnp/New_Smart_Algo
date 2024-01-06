@@ -10,7 +10,7 @@ const { UpdatePanelTheme } = require('../../Controllers/Superadmin/theme_list.co
 
 
 
-router.post('/add/panel', AddPanel)
+router.post('/add/panel',verifyToken, AddPanel)
 router.post('/get/profile', UserProfile)
 router.post('/get/panelinformation', GetPanleinformation)
 router.post('/get/panel/broker', GetPanlebroker)

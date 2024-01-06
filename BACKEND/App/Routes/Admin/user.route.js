@@ -29,7 +29,9 @@ router.post('/get/panel_key', GetclientKey);
 
 // COMPANY RELETE ROUTES
 router.post('/edit/company', verifyToken, EditCompany);
-router.post('/edit/emailinfo', verifyToken,upload.single('image'), EditEmailInfo);
+// router.post('/edit/emailinfo', verifyToken,upload.single('image'), EditEmailInfo);
+router.post('/edit/emailinfo',  EditEmailInfo);
+
 router.get('/get/company', GetCompanyInfo);
 router.get('/get/company_logo', GetCompany_logo);
 
