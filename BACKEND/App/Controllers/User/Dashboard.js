@@ -176,18 +176,16 @@ class Dashboard {
             console.log("user status", GetAllClientServices[0].userInfo.multiple_strategy_select)
 
 
-            const GetAllClientStrategyMultipleResult = GetAllClientStrategy.map(item => ({
-                _id: item.result._id,
-                strategy_name: item.result.strategy_name
-            }));
+         
 
 
             const GetServiceStrategy = GetAllClientServices.map(item => ({
                 _id: item.service._id,
-                strategy_id: item.strategy_id
+                strategy_id: item.strategy_id,
+                service_name : item.service.name +" [ "+item.categories.segment+" ]",
             }));
 
-            console.log("GetServiceStrategy", GetServiceStrategy)
+           // console.log("GetServiceStrategy", GetServiceStrategy)
 
             // DATA GET SUCCESSFULLY
             res.send({
@@ -195,7 +193,6 @@ class Dashboard {
                 msg: "Get All Client Services ",
                 services: GetAllClientServices,
                 strategy: GetAllClientStrategy,
-                strategyMulti: GetAllClientStrategyMultipleResult,
                 GetServiceStrategy: GetServiceStrategy,
                 status_startegy: GetAllClientServices[0].userInfo.multiple_strategy_select,
                 // page: Number(page),
@@ -211,18 +208,17 @@ class Dashboard {
     // UPDATE CLIENT SERVICES
     async updateClientServices(req, res) {
         try {
-            const { user_id, servicesData, data } = req.body;
+            const { user_id, servicesData, data ,statusStartegyUser ,GetServiceStrategy} = req.body;
              
-            console.log("req  body ",req.body)
+           // console.log("req  body ",req.body)
+          
+           // console.log("statusStartegyUser",statusStartegyUser , "Type Of",typeof statusStartegyUser)
            
-           // console.log("servicesData ",servicesData)
+          
 
-
-            const isEmpty = Object.keys(servicesData).length === 0;
-
-    
+              if(statusStartegyUser == "1"){
+              const isEmpty = Object.keys(servicesData).length === 0;
            //   console.log("results",isEmpty);
-
               if(isEmpty == false){
                 // Filter objects with empty strategy_id
                 const result = Object.keys(servicesData)
@@ -232,17 +228,30 @@ class Dashboard {
                     return obj;
                 }, {});
 
-                console.log("dddd",result);
+               // console.log("dddd",result);
+               // console.log("GetServiceStrategy",GetServiceStrategy);
+
+
+                // Extracting the key (id) from the inputObject
+                const inputId = Object.keys(result)[0];
+                // Finding the matching object in dataArray based on _id
+                const matchingObject = GetServiceStrategy.find(obj => obj._id === inputId);
+                // Getting the service_name if a match is found
+                const serviceName = matchingObject ? matchingObject.service_name : null;
+                //console.log("serviceName",serviceName);
+
+
                 const isEmptyStartegyArray = Object.keys(result).length === 0;
                 console.log("isEmptyStartegyArray",isEmptyStartegyArray);
                 if(isEmptyStartegyArray == false){
-                 res.send({ status: false, msg: 'Please Select one Strategy a script',data: [] });
+                    return res.send({ status: false, msg: 'Please Select one Strategy a script '+serviceName,data: [] });
                 }
 
               }
+             }
 
 
-            //  console.log("OPkkkkk");
+        // console.log("OKK");
             
             const UserData = await User_model.findOne({ _id: user_id });
 

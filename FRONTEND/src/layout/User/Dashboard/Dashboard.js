@@ -1,5 +1,7 @@
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect } from "react";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import Content from "../../../Components/Dashboard/Content/Content";
 import { MultiSelect } from 'primereact/multiselect';
 import BasicTable from "../../../Components/ExtraComponents/Tables/BasicTable";
@@ -24,6 +26,33 @@ import {
 
 const BrokerResponse = () => {
   const dispatch = useDispatch();
+
+  
+  // SET MODAL IN STARTEGY
+  const [showStartegyModal, setShowStartegyModal] = useState(false);
+
+ 
+  const [modalsingleValue, setModalsingleValue] = useState({});
+
+  const handleCloseStartegyModal = () => {
+  setShowStartegyModal(false);
+  setModalsingleValue({})
+  }
+
+  const handleShowStartegyModal = (data) => {
+   //alert("okkk")
+  console.log("data show ",data)
+   setModalsingleValue(data)
+  setShowStartegyModal(true);
+  }
+  //
+
+
+
+
+
+
+
   const [enterqty, setEnterQty] = useState("");
 
   const [inputValue, setInputValue] = useState('1');
@@ -36,56 +65,12 @@ const BrokerResponse = () => {
   
   const [Strategy, setStrategy] = useState({ loading: true, data: [] });
   
-  const [StrategyMulti, setStrategyMulti] = useState({ loading: true, data: [] });
-  
   const [GetServiceStrategy, setGetServiceStrategy] = useState([]);
   
   const [statusStartegyUser, setStatusStartegy] = useState("0");
   
 
   const [refresh, setrefresh] = useState(false);
-
-  const [selectedCountries, setSelectedCountries] = useState(null);
-  console.log("Strategy", Strategy)
-  
-  console.log("select", selectedCountries)
-  const countries = [
-    { name: 'Australia', code: 'AU' },
-    { name: 'Brazil', code: 'BR' },
-    { name: 'China', code: 'CN' },
-    { name: 'Egypt', code: 'EG' },
-    { name: 'France', code: 'FR' },
-    { name: 'Germany', code: 'DE' },
-    { name: 'India', code: 'IN' },
-    { name: 'Japan', code: 'JP' },
-    { name: 'Spain', code: 'ES' },
-    { name: 'United States', code: 'US' }
-];
-
-
-
-const countryTemplate = (option) => {
-
-  return (
-      <div className="flex align-items-center">
-          <img alt={option.result.strategy_name} src="https://primefaces.org/cdn/primereact/images/flag/flag_placeholder.png" className={`mr-2 flag flag-${option.result._id.toLowerCase()}`} style={{ width: '18px' }} />
-          <div>{option.name}</div>
-      </div>
-  );
-};
-
-
-const panelFooterTemplate = () => {
-  const length = selectedCountries ? selectedCountries.length : 0;
-
-  return (
-      <div className="py-2 px-3">
-          <b>{length}</b> item{length > 1 ? 's' : ''} selected.
-      </div>
-  );
-};
-
-
 
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
@@ -107,10 +92,7 @@ const panelFooterTemplate = () => {
     )
       .unwrap()
       .then((response) => {
-        
-        console.log("response.strategy ",response.strategyMulti)
-        console.log("response  ",response)
-
+      //  console.log("response  ",response)
         if (response.status) {
           setDashboardData({
             loading: false,
@@ -129,10 +111,7 @@ const panelFooterTemplate = () => {
             loading: false,
             data: response.strategy,
           });
-          setStrategyMulti({
-            loading: false,
-            data: response.strategyMulti,
-          });
+         
           setGetServiceStrategy(response.GetServiceStrategy);
           setStatusStartegy(response.status_startegy);
 
@@ -153,13 +132,7 @@ const panelFooterTemplate = () => {
 
     //console.log("data",data)  
 
- 
 
-
-
-
-
-    
     const numericValue = e.target.value.replace(/[^0-9]/g, '');
 
     if (e.target.name === "lot_size") {
@@ -182,12 +155,12 @@ const panelFooterTemplate = () => {
 
     else if(e.target.name === "strategy_id"){
     
- console.log("statusStartegy",statusStartegyUser)
+// console.log("statusStartegy",statusStartegyUser)
 // Find the object with the matching _id
 const targetObject = GetServiceStrategy.find(item => item._id==data.service._id);
-console.log("targetObject - ",targetObject)
+//console.log("targetObject - ",targetObject)
 if(targetObject.strategy_id.includes(e.target.value)){
-  console.log("if")
+  //console.log("if")
   const updatedStrategyId = targetObject.strategy_id.filter(id => id !== e.target.value);
   // Create a new object with the updated strategy_id
   const updatedObject = { ...targetObject, strategy_id: updatedStrategyId };
@@ -195,7 +168,7 @@ if(targetObject.strategy_id.includes(e.target.value)){
   setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
 
 }else{
-console.log("else")
+//console.log("else")
 const updatedObject = { ...targetObject, strategy_id: [...targetObject.strategy_id, e.target.value] };
 // Update the state
 setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
@@ -210,15 +183,9 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
     let value = e.target.value;
     let id = rowdata._id;
 
-   
 
    // alert(name)
    // alert(value)
-
-
-    
-
-
 
     setUpdatedData((prevData) => ({
       ...prevData,
@@ -237,8 +204,8 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
   };
 
 
-  console.log("fina value",GetServiceStrategy);
-  console.log("updatedData  ",updatedData);
+ // console.log("fina value",GetServiceStrategy);
+ // console.log("updatedData  ",updatedData);
 
   if(updatedData){
    // console.log("shakirrrr")
@@ -255,7 +222,8 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
    
   });
   
-  console.log("final  update data",updatedData);
+  //console.log("final  update data",updatedData);
+
   }
 
 
@@ -265,16 +233,50 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
 
 
   const UpdateDashboard = async (e) => {
+    //console.log("updatedData ",updatedData)
+ 
+    //console.log("GetServiceStrategy ",GetServiceStrategy)
+  
+    
+    if(statusStartegyUser == "1"){
+      const isEmpty = Object.keys(updatedData).length === 0;
+      //console.log("results",isEmpty);
+        if(isEmpty == false){
+          // Filter objects with empty strategy_id
+          const result = Object.keys(updatedData)
+          .filter((key) => Array.isArray(updatedData[key].strategy_id) && updatedData[key].strategy_id.length === 0)
+          .reduce((obj, key) => {
+              obj[key] = updatedData[key];
+              return obj;
+          }, {});
 
+         // console.log("dddd",result);
 
+         // Extracting the key (id) from the inputObject
+         const inputId = Object.keys(result)[0];
+         // Finding the matching object in dataArray based on _id
+         const matchingObject = GetServiceStrategy.find(obj => obj._id === inputId);
+         // Getting the service_name if a match is found
+         const serviceName = matchingObject ? matchingObject.service_name : null;
+         //console.log("serviceName",serviceName);
 
+          const isEmptyStartegyArray = Object.keys(result).length === 0;
+         // console.log("isEmptyStartegyArray",isEmptyStartegyArray);
+          if(isEmptyStartegyArray == false){
+            alert("Please Select one Strategy a script "+serviceName)
+            return 
+          }
 
+        }
+      }
+
+    
     await dispatch(
       Update_Dashboard_Data({
         data: {
           servicesData: updatedData,
           statusStartegyUser:statusStartegyUser,
-          //GetServiceStrategy:GetServiceStrategy,
+          GetServiceStrategy:GetServiceStrategy,
           user_id: user_Id,
           data: { Editor_role: Role, device: check_Device() },
         },
@@ -297,7 +299,7 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
 
  
    
-  console.log("final value",GetServiceStrategy)
+ // console.log("final value",GetServiceStrategy)
  
 
 
@@ -369,90 +371,50 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
                     <td className="color-primary col-md-2">
                     {data.userInfo.multiple_strategy_select === "1" ? 
                     // "Multiple Startegy Select"
-                  //   <select
-                  //   name="strategy_id"
+                  
+                //   <div>
+                //     {console.log("data.strategy_id check -",data.strategy_id,"type of ", typeof data.strategy_id)}
 
-                  //   class="form-select form-select-lg "
-                  //   aria-label=".form-select-lg example"
-                  //   onChange={(e) =>
-                  //     setgroup_qty_value_test(
-                  //       e,
-                  //       data.service.name,
-                  //       data.service,
-                  //       data
-                  //     )
-                  //   }
-                  //   multiple  
-                  // >
+                //     {Strategy.data &&
+                //       Strategy.data.map((item) => (
+                //         <div key={item.result._id}>
+                //           <input
+                //             name="strategy_id"
+                //             className="form-check-input"
+                //             type="checkbox"
+                //             id={item.result._id}
+                //             value={item.result._id}
+                //             defaultChecked={data.strategy_id.includes(item.result._id)}
+                //             onChange={(e) =>
+                //               setgroup_qty_value_test(
+                //                 e,
+                //                 data.service.name,
+                //                 data.service,
+                //                 data
+                //               )
+                //             }
+                //           />
+                //           <label
+                //             className={`form-check-label ${
+                //               data.strategy_id.includes(item.result._id)
+                //                 ? "text-success"
+                //                 : "text-danger"
+                //             } h6`}
+                //             htmlFor={item.result._id}
+                //           >
+                //             {item.result.strategy_name}
+                //           </label>
+                         
+                //         </div>
+                      
+                  
+                //       ))}
+                //  </div>
 
-                    
-                  //   {Strategy.data &&
-                  //     Strategy.data.map((item) => {
-                  //       if(data.strategy_id.includes(item.result._id)){
-                  //         return (
-                  //           <option
-                  //             className="text-success h6"
-                  //             value={item.result._id}
-                  //           >
-                  //           {item.result.strategy_name}
-                  //           </option>
-                  //         );
-                  //       }else{
-                  //         return (
-                  //           <option
-                  //             className="text-danger h6"
-                  //             value={item.result._id}
-                  //           >
-                  //           {item.result.strategy_name}
-                  //           </option>
-                  //         );
-                  //       }
-                        
-                  //     })}
-                  //  </select>
+                <Button variant="primary" onClick={()=>handleShowStartegyModal(data)}>
+                Selected Strategy
+                </Button>
 
-                  <div>
-  {Strategy.data &&
-    Strategy.data.map((item) => (
-      <div key={item.result._id} className="form-check form-check-inline">
-        <input
-          name="strategy_id"
-          className="form-check-input"
-          type="checkbox"
-          id={item.result._id}
-          value={item.result._id}
-          defaultChecked={data.strategy_id.includes(item.result._id)}
-          onChange={(e) =>
-            setgroup_qty_value_test(
-              e,
-              data.service.name,
-              data.service,
-              data
-            )
-          }
-        />
-        <label
-          className={`form-check-label ${
-            data.strategy_id.includes(item.result._id)
-              ? "text-success"
-              : "text-danger"
-          } h6`}
-          htmlFor={item.result._id}
-        >
-          {item.result.strategy_name}
-        </label>
-      </div>
-    ))}
-</div>
-
-
-                
-            //   <div className="card flex justify-content-center">
-            // <MultiSelect value={selectedCountries} options={Strategy.data} onChange={(e) =>    setSelectedCountries(e.value)} optionLabel="result.strategy_name" 
-            //     placeholder="Select Strategy" itemTemplate={countryTemplate} panelFooterTemplate={panelFooterTemplate} className="w-full md:w-20rem" display="chip" />
-            //  </div>
-                
-               
                     :
 
                   //  "Single Strategy Select"
@@ -590,6 +552,73 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
           <ToastButton />
         </tbody>
       </table>
+
+
+
+
+      <Modal show={showStartegyModal} onHide={handleCloseStartegyModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Select Strategy</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+           
+         {/* {
+         
+        console.log("modalsingleValue ",typeof modalsingleValue.strategy_id , "status ",modalsingleValue.strategy_id)
+         } */}
+    
+          <div>
+          {
+          modalsingleValue.strategy_id != undefined ? 
+          Strategy.data &&
+          Strategy.data.map((item) => (
+            <div key={item.result._id}>
+              <input
+                name="strategy_id"
+                className="form-check-input"
+                type="checkbox"
+                id={item.result._id}
+                value={item.result._id}
+              defaultChecked={modalsingleValue.strategy_id.includes(item.result._id)}
+                onChange={(e) =>
+                  setgroup_qty_value_test(
+                    e,
+                    modalsingleValue.service.name,
+                    modalsingleValue.service,
+                    modalsingleValue
+                  )
+                }
+              />
+              <label
+                className={`form-check-label ${
+                  modalsingleValue.strategy_id.includes(item.result._id)
+                    ? "text-success"
+                    : "text-danger"
+                } h6`}
+                htmlFor={item.result._id}
+              >
+                {item.result.strategy_name}
+              </label>
+            
+            </div>
+          ))
+          :"" 
+            }
+          </div>
+ 
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseStartegyModal}>
+            Done
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+
+
+
+
       {gotodashboard ? (
         ""
       ) : (
@@ -603,7 +632,12 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
           </button>
         </>
       )}
+      
     </Content>
+
+  
+
+    
   );
 };
 
