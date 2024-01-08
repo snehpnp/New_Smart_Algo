@@ -158,22 +158,22 @@ const AllPermitions = () => {
         //     text: 'Domain Name'
         // },
 
-        {
-            dataField: 'panel_name',
-            text: 'Company Status',
-            formatter: (cell, row) => (
+        // {
+        //     dataField: 'panel_name',
+        //     text: 'Company Status',
+        //     formatter: (cell, row) => (
 
-                <label class="toggle mt-3">
-                    <input class="toggle-checkbox bg-primary" type="checkbox"
-                    // defaultChecked={true}
-                    // onChange={(e) => {
-                    //   setShowAllStratagy(e.target.checked)
-                    // }}
-                    />
-                    <div class={`toggle-switch bg-primary`}></div>
-                </label>
-            )
-        },
+        //         <label class="toggle mt-3">
+        //             <input class="toggle-checkbox bg-primary" type="checkbox"
+        //             // defaultChecked={true}
+        //             // onChange={(e) => {
+        //             //   setShowAllStratagy(e.target.checked)
+        //             // }}
+        //             />
+        //             <div class={`toggle-switch bg-primary`}></div>
+        //         </label>
+        //     )
+        // },
         {
             dataField: 'panel_name',
             text: 'Close Panel',
@@ -224,16 +224,16 @@ const AllPermitions = () => {
             )
 
         },
-        {
-            dataField: 'panel_name',
-            text: 'Panel Details',
-            formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-                    <FileClock size={20} color="#198754" strokeWidth={2}
-                        className="mx-1" />
-                </span>
-            )
-        },
+        // {
+        //     dataField: 'panel_name',
+        //     text: 'Panel Details',
+        //     formatter: (cell, row) => (
+        //         <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+        //             <FileClock size={20} color="#198754" strokeWidth={2}
+        //                 className="mx-1" />
+        //         </span>
+        //     )
+        // },
         {
             dataField: 'panel_name',
             text: 'Clients',

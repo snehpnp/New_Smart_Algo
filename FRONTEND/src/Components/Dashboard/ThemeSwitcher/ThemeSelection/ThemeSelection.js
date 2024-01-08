@@ -147,7 +147,7 @@ const ThemeSelection = () => {
                 <div className="dz-demo-header">
                     <h4>Select A Demo</h4>
                     <span className="dz-demo-close"
-                    // href="javascript:void(0)"
+                  
                     >
                         <span>
                             <i className="las la-times" />

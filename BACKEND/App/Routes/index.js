@@ -7,6 +7,8 @@ module.exports = function (app) {
     app.use(require("./SuperAdmin/theme_list.route"));
     app.use(require("./SuperAdmin/panel.route"));
     app.use(require("./SuperAdmin/Permission.route"));
+    app.use(require("./SuperAdmin/SuperAdmin"));
+
 
 
     // Admin Route

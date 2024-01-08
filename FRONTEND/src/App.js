@@ -36,7 +36,7 @@ const App = () => {
     // })
   };
 
-  // console.log("admin_permission", admin_permission && admin_permission.is_active)
+  console.log("admin_permission", admin_permission && admin_permission.is_active)
   const data2 = async () => {
 
 
@@ -50,7 +50,7 @@ const App = () => {
       const res = await axios.post(`${Config.smartAlogUrl}get/panel/permission`, data, {
         data: { data },
       })
-     // console.log("res", res)
+      // console.log("res", res)
 
       if (res.data.status) {
         setAdmin_permission(
@@ -67,24 +67,24 @@ const App = () => {
     }
 
 
-    await dispatch(
-      Get_Pmermission({
-        "domain": Config.react_domain,
-        // token: token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setAdmin_permission(
-            response.data[0],
-          );
-        } else {
-          setAdmin_permission(
-            response.data,
-          );
-        }
-      });
+    // await dispatch(
+    //   Get_Pmermission({
+    //     "domain": Config.react_domain,
+    //     // token: token,
+    //   })
+    // )
+    //   .unwrap()
+    //   .then((response) => {
+    //     if (response.status) {
+    //       setAdmin_permission(
+    //         response.data[0],
+    //       );
+    //     } else {
+    //       setAdmin_permission(
+    //         response.data,
+    //       );
+    //     }
+    //   });
   }
   useEffect(() => {
     data2()
@@ -92,14 +92,10 @@ const App = () => {
 
 
   return (
-    <div  id="App">
-      {/* <div ref={pageRef} > */}
-      {/* {admin_permission && admin_permission.is_active === 1 ? */}
-
-      <Main_Router />
-      {/* // : <NotFound />  */}
-      {/* //  }  */}
-      {/* </div> */}
+    <div id="App">
+      <div ref={pageRef} >
+        {admin_permission && admin_permission.is_active == 0 ? <Main_Router /> : <NotFound />}
+      </div>
       {/* <button className='d-flex mx-auto' style={{ marginTop: '70px' }} onClick={captureScreenshot}>123Capture Screenshot</button> */}
 
     </div>

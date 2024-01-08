@@ -99,7 +99,7 @@ const Edit_panel = () => {
             return errors;
         },
         onSubmit: async (values) => {
-  
+            console.log(values);
 
             const req = {
                 panel_name: values.panel_name,
@@ -110,15 +110,13 @@ const Edit_panel = () => {
                 theme_id: values.theme_id,
                 db_url: values.db_url,
                 db_name: values.db_name,
-                broker_id: getBrokerNames,
+                broker_id: state1,
                 Create_Strategy: values.Create_Strategy && values.Create_Strategy ? 1 : 0,
                 Option_chain: values.Option_chain && values.Option_chain ? 1 : 0,
                 Strategy_plan: values.Strategy_plan && values.Strategy_plan ? 1 : 0,
             };
 
 
-            console.log(req);
-return
             await dispatch(Add_Panel_data({ req: req, token: user_token }))
                 .unwrap()
                 .then((response) => {
@@ -139,128 +137,7 @@ return
 
 
  
-    const data = async () => {
 
-        await dispatch(Get_All_Theme_Name()).unwrap()
-            .then((response) => {
-                setAllThemeName(response && response.data);
-            })
-
-        await dispatch(All_Brokers()).unwrap()
-            .then((response) => {
-                setGetAllBrokerName(
-                    response.data
-                );
-            })
-
-
-    };
-
-
-    const getPanelDetails = async () => {
-
-        const req = {
-            domain: location.state.domain
-
-        };
-
-        await dispatch(Get_Panel_Informtion(req))
-            .unwrap()
-            .then((response) => {
-                setUserData({
-                    loading: false,
-                    data: response.data
-                });
-
-            });
-    };
-
-
-
-    useEffect(() => {
-        getPanelDetails()
-        data();
-    }, []);
-
-
-
-
-    const handleSBrokerChange = (event, broker) => {
-        const checkedValue = event.target.checked;
-    
-        setBrokerNames((prevBrokerNames) => {
-            const updatedBrokerNames = prevBrokerNames.map((data) => {
-                if (data.id === broker.id) {
-                    return { ...data, checked: checkedValue }; // Set checked property based on the checkbox value
-                }
-                return data;
-            });
-    
-            return updatedBrokerNames;
-        });
-    };
-    
-
-
-    useEffect(() => {
-
-        if (UserData.data.length > 0) {
-            const initialSelectedBroker = getGetAllBrokerName.map((broker) =>
-                ({
-                    id: broker.broker_id,
-                    name: broker.title,
-                     checked: UserData.data[0].broker_id.some((item) => item.id == broker.broker_id)
-                })
-            );
-    
-
-            setBrokerNames(initialSelectedBroker);
-        }
-    }, [UserData.data, getGetAllBrokerName]);
-
-
-
-    // useEffect(() => {
-    //     if (getBrokerNames.length > 1) {
-    //         formik.setFieldValue("broker_id", "");
-    //     }
-    // }, [getBrokerNames]);
-
-    
-    useEffect(() => {
-        if (UserData.data && UserData.data.length > 0 && UserData.data[0]) {
-            const userPanelData = UserData.data[0];
-    
-            formik.setFieldValue('panel_name', userPanelData.panel_name || '');
-            formik.setFieldValue('domain', userPanelData.domain || '');
-            formik.setFieldValue('port', userPanelData.port || '');
-            formik.setFieldValue('key', userPanelData.key || '');
-            formik.setFieldValue('ip_address', userPanelData.ip_address || '');
-            formik.setFieldValue('theme_id', userPanelData.theme_id || '');
-            formik.setFieldValue('db_url', userPanelData.db_url || '');
-            formik.setFieldValue('db_name', userPanelData.db_name || '');
-            formik.setFieldValue('Create_Strategy', userPanelData.Create_Strategy  == 1 ? true : false );
-            formik.setFieldValue('Option_chain', userPanelData.Option_chain == 1 ? true : false );
-            formik.setFieldValue('Strategy_plan', userPanelData.Strategy_plan == 1 ? true : false );
-        } else {
-            // Set default values if UserData.data is not present or empty
-            formik.setValues({
-                panel_name: '',
-                domain: '',
-                port: '',
-                key: '',
-                ip_address: '',
-                theme_id: '',
-                db_url: '',
-                db_name: '',
-                broker_id: [],
-                Create_Strategy: false,
-                Option_chain: false,
-                Strategy_plan: false
-            });
-        }
-    }, [UserData.data]);
-    
 
     const fields = [
         {
@@ -352,6 +229,115 @@ return
 
     ];
 
+    const data = async () => {
+
+        await dispatch(Get_All_Theme_Name()).unwrap()
+            .then((response) => {
+                setAllThemeName(response && response.data);
+            })
+
+        await dispatch(All_Brokers()).unwrap()
+            .then((response) => {
+                setGetAllBrokerName(
+                    response.data
+                );
+            })
+
+
+    };
+
+
+    const getPanelDetails = async () => {
+
+        const req = {
+            domain: location.state.domain
+
+        };
+
+        await dispatch(Get_Panel_Informtion(req))
+            .unwrap()
+            .then((response) => {
+                setUserData({
+                    loading: false,
+                    data: response.data
+                });
+
+            });
+    };
+
+
+
+    useEffect(() => {
+        getPanelDetails()
+        data();
+    }, []);
+
+
+
+
+    const handleSBrokerChange = (event, broker) => {
+        const checkedValue = event.target.checked;
+    
+        setBrokerNames((prevBrokerNames) => {
+            const updatedBrokerNames = prevBrokerNames.map((data) => {
+                if (data.id === broker.id) {
+                    return { ...data, checked: checkedValue }; // Set checked property based on the checkbox value
+                }
+                return data;
+            });
+    
+            return updatedBrokerNames;
+        });
+    };
+    
+
+
+    useEffect(() => {
+
+        if (UserData.data.length > 0) {
+            const initialSelectedBroker = getGetAllBrokerName.map((broker) =>
+                ({
+                    id: broker.broker_id,
+                    name: broker.title,
+                     checked: UserData.data[0].broker_id.some((item) => item.id == broker.broker_id)
+                })
+            );
+    
+
+            setBrokerNames(initialSelectedBroker);
+        }
+    }, [UserData.data, getGetAllBrokerName]);
+
+
+
+    // useEffect(() => {
+    //     if (getBrokerNames.length > 1) {
+    //         formik.setFieldValue("broker_id", "");
+    //     }
+    // }, [getBrokerNames]);
+
+
+
+    useEffect(() => {
+        formik.setFieldValue('panel_name', UserData.data !== undefined && UserData.data[0].panel_name);
+        formik.setFieldValue('domain', UserData.data !== undefined && UserData.data[0].domain);
+        formik.setFieldValue('port', UserData.data !== undefined && UserData.data[0].port);
+        formik.setFieldValue('key', UserData.data !== undefined && UserData.data[0].key);
+        formik.setFieldValue('ip_address', UserData.data !== undefined && UserData.data[0].ip_address);
+        formik.setFieldValue('theme_id', UserData.data !== undefined && UserData.data[0].theme_id);
+        formik.setFieldValue('db_url', UserData.data !== undefined && UserData.data[0].db_url);
+        formik.setFieldValue('db_name', UserData.data !== undefined && UserData.data[0].db_name);
+        formik.setFieldValue('broker_id', UserData.data !== undefined && UserData.data[0].broker_id);
+        formik.setFieldValue('Create_Strategy', UserData.data !== undefined && UserData.data[0].Create_Strategy);
+        formik.setFieldValue('Option_chain', UserData.data !== undefined && UserData.data[0].Option_chain);
+        formik.setFieldValue('Strategy_plan', UserData.data !== undefined && UserData.data[0].Strategy_plan);
+
+
+    }, [UserData.data]);
+
+
+
+
 
 
     return (
@@ -368,7 +354,7 @@ return
                         <Formikform
                             fieldtype={fields.filter((field) => !field.showWhen)}
                             formik={formik}
-                            btn_name="Edit Panel"
+                            btn_name="Add Panel"
                             additional_field={
                                 <>
                                     <h6>All Brokers</h6>
