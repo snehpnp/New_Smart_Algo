@@ -10,7 +10,7 @@ const { AddLicenseinPanle } = require('../../Controllers/Separate_Superadmin/Sup
 
 
 // router.post('/add/panel',verifyToken, AddPanel)
-router.post('/add/license', AddLicenseinPanle)
+router.post('/license/add', AddLicenseinPanle)
 
 
 

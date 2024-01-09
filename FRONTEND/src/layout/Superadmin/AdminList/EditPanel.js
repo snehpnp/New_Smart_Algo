@@ -7,7 +7,7 @@ import * as valid_err from "../../../Utils/Common_Messages";
 import { Get_Panel_Informtion } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 
 import { useFormik } from "formik";
-import { Add_Panel_data } from "../../..//ReduxStore/Slice/Superadmin/SuperAdminSlice";
+import { Update_Panel } from "../../..//ReduxStore/Slice/Superadmin/SuperAdminSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Theme_Name } from '../../../ReduxStore/Slice/ThemeSlice';
 import { All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
@@ -99,9 +99,9 @@ const Edit_panel = () => {
             return errors;
         },
         onSubmit: async (values) => {
-  
 
             const req = {
+                _id:location.state._id,
                 panel_name: values.panel_name,
                 domain: values.domain,
                 port: values.port,
@@ -117,10 +117,7 @@ const Edit_panel = () => {
             };
 
 
-            console.log(req);
-return
-            await dispatch(Add_Panel_data({ req: req, token: user_token }))
-                .unwrap()
+            await dispatch(Update_Panel(req)).unwrap()
                 .then((response) => {
                     if (response.status === 409) {
                         toast.error(response.data.msg);
@@ -133,12 +130,12 @@ return
                     } else if (!response.status) {
                         toast.error(response.msg);
                     }
-                });
+                })
         },
     });
 
 
- 
+
     const data = async () => {
 
         await dispatch(Get_All_Theme_Name()).unwrap()
@@ -187,7 +184,7 @@ return
 
     const handleSBrokerChange = (event, broker) => {
         const checkedValue = event.target.checked;
-    
+
         setBrokerNames((prevBrokerNames) => {
             const updatedBrokerNames = prevBrokerNames.map((data) => {
                 if (data.id === broker.id) {
@@ -195,24 +192,24 @@ return
                 }
                 return data;
             });
-    
+
             return updatedBrokerNames;
         });
     };
-    
+
 
 
     useEffect(() => {
 
         if (UserData.data.length > 0) {
             const initialSelectedBroker = getGetAllBrokerName.map((broker) =>
-                ({
-                    id: broker.broker_id,
-                    name: broker.title,
-                     checked: UserData.data[0].broker_id.some((item) => item.id == broker.broker_id)
-                })
+            ({
+                id: broker.broker_id,
+                name: broker.title,
+                checked: UserData.data[0].broker_id.some((item) => item.id == broker.broker_id)
+            })
             );
-    
+
 
             setBrokerNames(initialSelectedBroker);
         }
@@ -226,11 +223,11 @@ return
     //     }
     // }, [getBrokerNames]);
 
-    
+
     useEffect(() => {
         if (UserData.data && UserData.data.length > 0 && UserData.data[0]) {
             const userPanelData = UserData.data[0];
-    
+
             formik.setFieldValue('panel_name', userPanelData.panel_name || '');
             formik.setFieldValue('domain', userPanelData.domain || '');
             formik.setFieldValue('port', userPanelData.port || '');
@@ -239,9 +236,9 @@ return
             formik.setFieldValue('theme_id', userPanelData.theme_id || '');
             formik.setFieldValue('db_url', userPanelData.db_url || '');
             formik.setFieldValue('db_name', userPanelData.db_name || '');
-            formik.setFieldValue('Create_Strategy', userPanelData.Create_Strategy  == 1 ? true : false );
-            formik.setFieldValue('Option_chain', userPanelData.Option_chain == 1 ? true : false );
-            formik.setFieldValue('Strategy_plan', userPanelData.Strategy_plan == 1 ? true : false );
+            formik.setFieldValue('Create_Strategy', userPanelData.Create_Strategy == 1 ? true : false);
+            formik.setFieldValue('Option_chain', userPanelData.Option_chain == 1 ? true : false);
+            formik.setFieldValue('Strategy_plan', userPanelData.Strategy_plan == 1 ? true : false);
         } else {
             // Set default values if UserData.data is not present or empty
             formik.setValues({
@@ -260,7 +257,7 @@ return
             });
         }
     }, [UserData.data]);
-    
+
 
     const fields = [
         {
@@ -374,7 +371,7 @@ return
                                     <h6>All Brokers</h6>
                                     {getBrokerNames.map((broker) => (
                                         <div className={`col-lg-2 mt-2`} key={broker.id}>
-                                       
+
                                             <div className="row ">
                                                 <div className="col-lg-12 ">
                                                     <div class="form-check custom-checkbox mb-3">

@@ -307,6 +307,20 @@ export async function ADD_PANEL(data, token) {
 
 }
 
+// UPDATE_PANEL
+export async function UPDATE_PANEL(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}edit/panel`, data, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
 
+}
 
 

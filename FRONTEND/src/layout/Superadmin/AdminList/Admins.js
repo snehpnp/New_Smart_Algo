@@ -79,13 +79,14 @@ const AdminsList = () => {
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
         {
-            dataField: 'domain',
-            text: 'Domain Name'
-        },
-        {
             dataField: 'panel_name',
             text: 'Panel Name'
         },
+        {
+            dataField: 'domain',
+            text: 'Domain Name'
+        },
+        
         {
             dataField: 'port',
             text: 'Port No'

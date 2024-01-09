@@ -3536,7 +3536,7 @@ module.exports = function (app) {
  
 
   async function setupChangeStream() {
-   console.log("runnn trigers")
+  //  console.log("runnn trigers")
     return
     try {
   

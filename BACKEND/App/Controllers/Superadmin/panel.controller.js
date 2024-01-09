@@ -61,23 +61,45 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async EditPanel(req, res) {
         try {
-            const { _id, parent_id, panle_data } = req.body
+            const { _id, panel_name,domain,port,key,ip_address,theme_id,db_url,db_name,broker_id,Create_Strategy,Option_chain,Strategy_plan } = req.body
 
-            panel_model.findById(_id)
-                .then(async (value) => {
-                    if (!value) {
-                        return res.status(409).send({ status: false, msg: 'Id not match', data: [] });
-                    }
-                    const filter = { _id: _id };
-                    const updateOperation = { $set: panle_data };
-                    const result = await panel_model.updateOne(filter, updateOperation);
-                    if (!result) {
-                        return res.status(409).send({ status: false, msg: 'Company not update', data: [] });
-                    }
-                    logger.info('Update Successfully', { role: "SUPERADMIN", user_id: parent_id });
-                    return res.status(200).send({ status: true, msg: 'Update Successfully.', data: result });
+           
+            var panle_data = {
+                panel_name:panel_name,
+                domain:domain,
+                port:port,
+                key:key,
+                ip_address:ip_address,
+                theme_id:theme_id,
+                db_url:db_url,
+                db_name:db_name,
+                broker_id:broker_id.filter((data)=> data.checked == true ),
+                Create_Strategy:Create_Strategy,
+                Option_chain:Option_chain,
+                Strategy_plan:Strategy_plan
+            }
+            console.log(panle_data)
 
-                })
+            var objectId = new ObjectId(_id);
+
+            const panel_data = await panel_model.find({ _id: objectId });
+
+            if (!panel_data) {
+                return res.send({ status: false, msg: 'Panel Not exists', data: [] });
+            }
+
+
+
+        
+            const filter = { _id: _id };
+            const updateOperation = { $set: panle_data };
+            const result = await panel_model.updateOne(filter, updateOperation);
+            if (!result) {
+                return res.status(409).send({ status: false, msg: 'Company not update', data: [] });
+            }
+            // logger.info('Update Successfully', { role: "SUPERADMIN", user_id: parent_id });
+            return res.status(200).send({ status: true, msg: 'Update Successfully.', data: result });
+
 
         } catch (error) {
             // console.log("Theme error-", error);

@@ -13,9 +13,6 @@ const { logger, getIPAddress } = require('../../Helper/logger.helper')
 const { formattedDateTime } = require('../../Helper/time.helper')
 
 
-
-
-
 class Panel {
 
     // Get All APi Infor
@@ -120,6 +117,14 @@ class Panel {
             // const { id, license } = req.body
             const { id, db_name, db_url, license, key } = req.body
 
+
+
+
+            const Find_panelInfo = await panel_model.find({_id:id})
+            console.log(Find_panelInfo);
+
+
+            return
             const uri = db_url;
 
             const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -163,7 +168,7 @@ class Panel {
                 updatedAt: new Date()
             });
 
-           
+
 
             // If you want to send the retrieved data as a response
             return res.send({
@@ -241,7 +246,7 @@ class Panel {
     async Admin_Permissions(req, res) {
         try {
             // const { id, license } = req.body
-            const { db_name, db_url, key,domain, Create_Strategy, Option_chain, Strategy_plan } = req.body
+            const { db_name, db_url, key, domain, Create_Strategy, Option_chain, Strategy_plan } = req.body
 
 
 
@@ -253,10 +258,10 @@ class Panel {
                 domain1 = domain
             }
 
-            const getAllpanel = await panel_model.find({domain:domain1})
-            
+            const getAllpanel = await panel_model.find({ domain: domain1 })
+
             if (getAllpanel.length == 0) {
-               return res.send({ status: false, msg: "Empty data", data: getAllpanel })
+                return res.send({ status: false, msg: "Empty data", data: getAllpanel })
             }
 
             const filter = { domain: domain1 };
@@ -271,7 +276,7 @@ class Panel {
 
             const update_token = await panel_model.updateOne(filter, update);
 
-          
+
 
 
             // If you want to send the retrieved data as a response
@@ -329,7 +334,7 @@ class Panel {
             } else {
                 domain1 = domain
             }
-       
+
 
             const filter = { domain: domain1 };
 

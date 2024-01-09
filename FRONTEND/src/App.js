@@ -94,7 +94,7 @@ const App = () => {
   return (
     <div id="App">
       <div ref={pageRef} >
-        {admin_permission && admin_permission.is_active == 0 ? <Main_Router /> : <NotFound />}
+        {admin_permission && admin_permission.is_active == 1 ?  <NotFound /> : <Main_Router />}
       </div>
       {/* <button className='d-flex mx-auto' style={{ marginTop: '70px' }} onClick={captureScreenshot}>123Capture Screenshot</button> */}
 

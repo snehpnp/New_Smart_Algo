@@ -511,7 +511,7 @@ const currentDate = new Date();
 let rr = 1
 
 async function run() {
- console.log("iiiiiiii")
+//  console.log("iiiiiiii")
   try {
 
     // Define the function to be executed
@@ -826,7 +826,7 @@ async function run() {
                    // console.log("numberOfTrade_count_trade_count -",numberOfTrade_count_trade_count[0].isTotalSmall) 
                    if(numberOfTrade_count_trade_count.length > 0){
                     if(numberOfTrade_count_trade_count[0].isTotalSmall == false){
-                    console.log("gggg")
+                    // console.log("gggg")
                     const update_trade_off = {
                      $set: {
                        status: "2",
