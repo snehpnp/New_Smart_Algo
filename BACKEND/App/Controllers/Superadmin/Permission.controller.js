@@ -12,6 +12,8 @@ const ObjectId = mongoose.Types.ObjectId;
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 const { formattedDateTime } = require('../../Helper/time.helper')
 
+const axios = require('axios');
+
 
 class Panel {
 
@@ -118,10 +120,48 @@ class Panel {
             const { id, db_name, db_url, license, key } = req.body
 
 
+            const Find_panelInfo = await panel_model.find({ _id: id })
+
+            if (!Find_panelInfo) {
+                return res.status(409).send({ status: false, msg: 'Panel Not Exist', data: [] });
+            }
+
+            let data = JSON.stringify({
+                "license": license
+            });
+
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: Find_panelInfo[0].domain + '/license/add',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+            console.log(config);
+
+            axios(config)
+                .then((response) => {
+
+                    console.log("response", response.data);
 
 
-            const Find_panelInfo = await panel_model.find({_id:id})
-            console.log(Find_panelInfo);
+
+
+                })
+                .catch((error) => {
+                    if (error.response.data) {
+                        console.log("Error", error.response.data);
+                    } else {
+                        console.log("Some Error In Request",);
+
+                    }
+                });
+
+
+
+
 
 
             return

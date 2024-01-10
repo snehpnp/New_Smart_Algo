@@ -9,9 +9,7 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const location = useLocation();
 
-  if (location.pathname == "/super/dashboard") {
-    console.log("runn-----", location.pathname);
-  }
+
 
   return <>
     <div className="content-body" >
@@ -1667,8 +1665,6 @@ const Dashboard = () => {
                   </div>
                 </div>
               </div>
-
-
             </div>
           </> :
             <>
