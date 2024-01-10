@@ -236,7 +236,6 @@ export async function GET_PANEL_BROKER(domain) {
 
 
 // CLOSE COMAPNY
-
 export async function CLOSE_ADMIN_PANEL(domain, token) {
     try {
 
@@ -323,4 +322,22 @@ export async function UPDATE_PANEL(data, token) {
 
 }
 
+
+
+// GET PANEL INFORMATION TO DOMAIN FIND
+export async function GET_PANEL_HISTORY( token) {
+    try {
+
+        const res = await axios.get(`${Config.base_url}getall/history`, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return err
+        // custom error
+    }
+
+}
 
