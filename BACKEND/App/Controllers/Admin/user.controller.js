@@ -921,7 +921,7 @@ class Employee {
 
       const date = new Date();
       const formattedDate = date.toISOString().slice(0, 10); // Sirf date part extract karo
-    
+
 
       if (Find_Role == "ADMIN") {
         AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $lt: new Date(formattedDate) } };
@@ -971,16 +971,21 @@ class Employee {
       var AdminMatch;
 
       const date = new Date();
-      const formattedDate = date.toISOString().slice(0, 10); // Sirf date part extract karo
+      var formattedDate = date.toISOString().slice(0, 10); // Sirf date part extract karo
 
-      
+      console.log(formattedDate);
+      if(formattedDate){
+        formattedDate = formattedDate.split("T")[0]
+      }
 
       if (Find_Role == "ADMIN") {
-        AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $gte: new Date(formattedDate) } };
+        AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $gte: formattedDate } };
       } else if (Find_Role == "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
 
+
+      console.log(AdminMatch);
       const getAllClients = await User_model.find(AdminMatch)
         .skip(skip)
         .limit(Number(limit))
@@ -998,7 +1003,7 @@ class Employee {
       }
 
       // DATA GET SUCCESSFULLY
-      res.send({
+      return res.send({
         status: true,
         msg: "Get All Clients",
         totalCount: totalCount,
@@ -1009,6 +1014,12 @@ class Employee {
       });
     } catch (error) {
       console.log("loginClients Error-", error);
+      return res.send({
+        status: false,
+        msg: "Empty data",
+        data: [],
+        // totalCount: totalCount,
+      });
     }
   }
 
