@@ -1,13 +1,61 @@
 import React from 'react'
 import html2canvas from 'html2canvas';
 import Content from "../../../Components/Dashboard/Content/Content"
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { All_Panel_List} from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
+import {useLocation, useParams} from 'react-router-dom'
+   
 
-
-
+        
 
 const Dashboard = () => {
-  const location = useLocation();
+
+  let { id } = useParams();
+console.log(id);
+
+  const location = useLocation()
+  console.log(location);
+          
+  const dispatch = useDispatch();
+  const [themeList, setThemeList] = useState();
+  
+  const [AllData, setAllData] = useState({
+    loading: true,
+    data: []
+});
+
+
+// console.log(AllData.data)
+
+const activeUsersCount = AllData.data.filter(user => user.is_active).length;
+const inActiveUserCount = AllData.data.filter(user=> user.is_expired).length;
+  
+ 
+
+const GetAllThemes = async () => {
+  await dispatch(Get_All_Theme()).unwrap()
+      .then((response) => {
+          setThemeList(response && response.data);
+      })
+}
+
+  const data = async () => {
+    await dispatch(All_Panel_List()).unwrap()
+        .then((response) => {
+          setAllData({
+                loading: false,
+                data: response.data
+            });
+        })
+}
+useEffect(() => {
+    data()
+    GetAllThemes()
+}, [])
+ 
 
 
 
@@ -407,9 +455,6 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-
-
-
         </div>
         {/* --------theme-1-dashboard end---------- */}
 
@@ -1611,7 +1656,7 @@ const Dashboard = () => {
         {/* --------theme-6-dashboard start--------- */}
         <div className='theme-6-dashboard'>
 
-          {location.pathname == "/super/dashboard" ? <>
+          {location.pathname == "/super/dashboard" ? <>     
 
             <div className='row'>
               <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
@@ -1622,9 +1667,9 @@ const Dashboard = () => {
                         <i className="la la-users  text-white" />
                       </span>
                       <div className="media-body ">
-                        <p className="mb-1">Total Students</p>
-                        <h3 className="">3280</h3>
-                        <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
+                        <p className="mb-1">Total Panel</p>
+                        <h3 className="">{AllData.data.length}</h3>
+                        
                         <div className="progress mb-2 bg-primary"></div>
                       </div>
                     </div>
@@ -1639,9 +1684,9 @@ const Dashboard = () => {
                         <i className="la la-users  text-white" />
                       </span>
                       <div className="media-body ">
-                        <p className="mb-1">Total Students</p>
-                        <h3 className="">3280</h3>
-                        <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
+                        <p className="mb-1">Total Active Panel</p>
+                        <h3 className="">{activeUsersCount}</h3>
+                        
                         <div className="progress mb-2 bg-primary"></div>
                       </div>
                     </div>
@@ -1656,9 +1701,8 @@ const Dashboard = () => {
                         <i className="la la-users  text-white" />
                       </span>
                       <div className="media-body ">
-                        <p className="mb-1">Total Students</p>
-                        <h3 className="">3280</h3>
-                        <h6><a href="#" className="mb-2"><i className="fa-regular fa-eye pe-1"></i>View</a></h6>
+                        <p className="mb-1">Total InActive Panel </p>
+                        <h3 className="">{inActiveUserCount}</h3>         
                         <div className="progress mb-2 bg-primary"></div>
                       </div>
                     </div>
@@ -1666,7 +1710,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-          </> :
+          </> : 
             <>
               <div className='row'>
                 <div className="col-xl-4 col-xxl-4 col-lg-4 col-sm-6">
@@ -2718,7 +2762,7 @@ const Dashboard = () => {
         </div>
         {/* --------theme-9-dashboard end--------- */}
 
-        {/* --------theme-10-dashboard start--------- */}
+        {/* --------theme-10-dashboard start--------- */} 
 
         <div className="theme-10-dashboard">
           <div className="row">
