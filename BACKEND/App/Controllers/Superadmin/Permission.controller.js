@@ -5,6 +5,8 @@ const User = db.user;
 const MongoClient = require('mongodb').MongoClient;
 const ApiCreateInfo = db.api_create_info;
 const count_licenses = db.count_licenses;
+const Superadmin_History = db.Superadmin_History;
+
 
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
@@ -117,7 +119,7 @@ class Panel {
     async AddLicensePanle(req, res) {
         try {
             // const { id, license } = req.body
-            const { id, db_name, db_url, license, key } = req.body
+            const { id, db_name, db_url, license, key, Name } = req.body
 
 
             const Find_panelInfo = await panel_model.find({ _id: id })
@@ -126,37 +128,63 @@ class Panel {
                 return res.status(409).send({ status: false, msg: 'Panel Not Exist', data: [] });
             }
 
-            let data = JSON.stringify({
-                "license": license
-            });
+
 
             let config = {
                 method: 'post',
-                maxBodyLength: Infinity,
-                url: Find_panelInfo[0].domain + '/license/add',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                data: data
+                url: Find_panelInfo[0].backend_rul + '/license/add',
+                data: {
+                    "license": license
+                }
             };
-            console.log(config);
 
             axios(config)
-                .then((response) => {
+                .then(async (response) => {
 
-                    console.log("response", response.data);
+                    if (response.data.status) {
+
+                        console.log("response", response.data);
 
 
+                        const filter = { panal_name: "111" };
+                        const update = {
+                            $set: {
+                                superadmin_name: Name,
+                                panal_name: Find_panelInfo[0].panel_name,
+                                client_id: null,
+                                msg: "License Add " + license
+                            }
+                        };
+
+                        const options = { upsert: true };
+
+                        await Superadmin_History.updateOne(filter, update, options);
+                        return res.send({ status: true, msg: 'License Add Successfully', data: [] });
+
+
+
+                    } else {
+
+                        console.log("rddddddd esponse", response.data);
+                        return res.send({ status: false, msg: 'License Not Add', data: response.data });
+
+                    }
 
 
                 })
                 .catch((error) => {
-                    if (error.response.data) {
-                        console.log("Error", error.response.data);
-                    } else {
-                        console.log("Some Error In Request",);
+                    try {
+
+                        console.log("Error", error);
+                        return res.send({ status: false, msg: 'License Not Add', data: error });
+
+
+                    } catch (error) {
+                        console.log("error", error);
+                        return res.send({ status: false, msg: 'License Not Add', data: error });
 
                     }
+
                 });
 
 

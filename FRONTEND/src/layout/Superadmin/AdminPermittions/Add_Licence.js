@@ -15,6 +15,7 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
     const dispatch = useDispatch()
+    const SuperAdmin_Email = JSON.parse(localStorage.getItem("user_details")).Email;
 
 
     const formik = useFormik({
@@ -40,6 +41,7 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
                 "db_name": showPanelName.db_name,
                 "key": showPanelName.key,
                 "id": showPanelName.id,
+                "Name": SuperAdmin_Email.split('@')[0]
 
             }
 
@@ -47,7 +49,7 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
 
             await dispatch(Add_Licence_To_Company(req)).unwrap().then((response) => {
                 if (response.status == false) {
-                    toast.error(response.data.msg);
+                    toast.error(response.msg);
                 }
                 else if (response.status) {
                     toast.success(response.msg);
@@ -57,7 +59,7 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
                     }, 1000);
                 }
                 else if (!response.status) {
-                    // toast.error(response.msg);
+                    toast.error(response.msg);
                 }
 
             })
@@ -75,14 +77,16 @@ const Add_Licence = ({ showModal, setshowModal, showPanelName }) => {
     ];
 
     return (
-        <div>   
+        <div>
             <Modal isOpen={showModal} size="md" title="Increase Licence" hideBtn={true}
-            handleClose={() => setshowModal(false)}
-        >
-            <h6 className='my-3'>You Are Increasing <b> {showPanelName.panel_name} </b>Licence</h6>
-            <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Licence"
-            />
-        </Modal >
+                handleClose={() => setshowModal(false)}
+            >
+                <h6 className='my-3'>You Are Increasing <b> {showPanelName.panel_name} </b>Licence</h6>
+                <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Licence"
+                />
+            </Modal >
+            <ToastButton />
+
         </div>
     )
 }

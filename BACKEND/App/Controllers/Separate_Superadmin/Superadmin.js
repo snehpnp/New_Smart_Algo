@@ -24,7 +24,6 @@ class SuperAdmin {
 
             const newLicensesValue = Number(findResult[0].licenses) + Number(license);
 
-
             const updateOperation = {
                 $set: {
                     licenses: newLicensesValue
@@ -61,6 +60,11 @@ class SuperAdmin {
 
         } catch (error) {
             console.log("Add License error-", error);
+            return res.send({
+                status: false,
+                msg: "Add License",
+                data: error
+            });
         }
     }
 

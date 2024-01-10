@@ -1,5 +1,1 @@
-
-
-var a = 0 == 1 ? 1 == 0 ? 2 : 1 == 3 ? 3 : 1:  "prakash" == "prakash" ? "prakash" : 0
-
-console.log(a);
+// mongodump --uri="mongodb://cpandit:im%3DCtv%7BOu%235V9QT%25@172.105.43.81:27017/" --out C:\backup
