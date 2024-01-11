@@ -3,6 +3,7 @@ const db = require('../../Models');
 const panel_model = db.panel_model;
 const User = db.user;
 const ApiCreateInfo = db.api_create_info;
+const Superadmin_History = db.Superadmin_History;
 
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
@@ -61,22 +62,22 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async EditPanel(req, res) {
         try {
-            const { _id, panel_name,domain,port,key,ip_address,theme_id,db_url,db_name,broker_id,Create_Strategy,Option_chain,Strategy_plan } = req.body
+            const { _id, panel_name, domain, port, key, ip_address, theme_id, db_url, db_name, broker_id, Create_Strategy, Option_chain, Strategy_plan } = req.body
 
-           
+
             var panle_data = {
-                panel_name:panel_name,
-                domain:domain,
-                port:port,
-                key:key,
-                ip_address:ip_address,
-                theme_id:theme_id,
-                db_url:db_url,
-                db_name:db_name,
-                broker_id:broker_id.filter((data)=> data.checked == true ),
-                Create_Strategy:Create_Strategy,
-                Option_chain:Option_chain,
-                Strategy_plan:Strategy_plan
+                panel_name: panel_name,
+                domain: domain,
+                port: port,
+                key: key,
+                ip_address: ip_address,
+                theme_id: theme_id,
+                db_url: db_url,
+                db_name: db_name,
+                broker_id: broker_id.filter((data) => data.checked == true),
+                Create_Strategy: Create_Strategy,
+                Option_chain: Option_chain,
+                Strategy_plan: Strategy_plan
             }
             console.log(panle_data)
 
@@ -90,7 +91,7 @@ class Panel {
 
 
 
-        
+
             const filter = { _id: _id };
             const updateOperation = { $set: panle_data };
             const result = await panel_model.updateOne(filter, updateOperation);
@@ -389,6 +390,46 @@ class Panel {
 
         } catch (error) {
             // console.log("Theme error-", error);
+        }
+    }
+
+
+    // GET SUPER ADMIN HISTORY     
+    async GetHistoryData(req, res) {
+        try {
+
+
+            const { page, limit } = req.body;     //LIMIT & PAGE
+            const skip = (page - 1) * limit;
+
+            const totalCount = await Superadmin_History.countDocuments();
+
+            // THEME LIST DATA
+            const getAllHistory = await Superadmin_History
+                .find({})
+                .skip(skip)
+                .limit(Number(limit))
+
+
+            // IF DATA NOT EXIST
+            if (getAllHistory.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: getAllHistory })
+            }
+
+            // DATA GET SUCCESSFULLY
+            return res.send({
+                status: true,
+                msg: "Get All Panels name",
+                data: getAllHistory,
+                page: Number(page),
+                limit: Number(limit),
+                totalCount: totalCount,
+                totalPages: Math.ceil(totalCount / Number(limit)),
+            })
+
+
+        } catch (error) {
+            console.log("Get all Panels error-", error);
         }
     }
 
