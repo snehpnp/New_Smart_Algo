@@ -4,8 +4,8 @@
 export const react_domain = `${window.location.origin}`;
 
 
-// export const smartAlogUrl = `https://trade.pandpinfotech.com/backend/`;
-export const smartAlogUrl = `http://localhost:7700/`;
+export const smartAlogUrl = `https://trade.pandpinfotech.com/backend/`;
+// export const smartAlogUrl = `http://localhost:7700/`;
 
 
 

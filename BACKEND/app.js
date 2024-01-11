@@ -35,24 +35,22 @@ const server = http.createServer(app);
 app.use(express.json());
 
 
-// MODAL REQUIRE
-// require('../BACKEND/App/Models')
 
 // REQUIRE File
 require('./App/Cron/cron')
 
 // Routes all
-
 require("./App/Routes")(app)
 
-
+// Testing Api #Shakir
 require("./shakirTeting")(app)
+
 
 // EMERGANCY
 require("./App/Emergency Apis/service")(app)
 require("./App/Emergency Apis/getOptionSymbols")(app)
 require("./request")(app)
-require("./shakirTeting")(app)
+
 
 
 
