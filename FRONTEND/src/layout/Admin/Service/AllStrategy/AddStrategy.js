@@ -178,7 +178,7 @@ const AddStrategy = () => {
     }
 
 
-    console.log("SelectPlanArr", SelectPlanArr)
+    // console.log("SelectPlanArr", SelectPlanArr)
 
 
 

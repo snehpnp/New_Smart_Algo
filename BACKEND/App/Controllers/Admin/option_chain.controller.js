@@ -65,12 +65,13 @@ class OptionChain {
                 {
                     $unwind: "$uniqueExpiryValues"
                 },
+               
                 {
                     $addFields: {
                         expiryDate: {
                             $dateFromString: {
                                 dateString: "$uniqueExpiryValues",
-                                format: "%d%m%Y"
+                                format: "%Y%m%d"
                             }
                         }
                     }
