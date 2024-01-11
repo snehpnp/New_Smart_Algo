@@ -22,20 +22,50 @@ class Panel {
     // Get All APi Infor
     async GetPanelDetails(req, res) {
         try {
-            const { id, db_name, db_url } = req.body
-
-            const uri = db_url;
-
-            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-            await client.connect();
-            const db = client.db(process.env.DB_NAME);
-
-            const viewName = 'dashboard_data';
+            const { id, } = req.body
 
 
-            // Query the view to get the data
-            const result = await db.collection(viewName).find().limit(100).toArray();
+            const Find_panelInfo = await panel_model.find({ _id: id })
+
+            if (!Find_panelInfo) {
+                return res.status(409).send({ status: false, msg: 'Panel Not Exist', data: [] });
+            }
+
+
+            let config = {
+                method: 'post',
+                url: Find_panelInfo[0].backend_rul + 'get/dashboard/count',
+                data: {
+                    "user_Id": "64c76f1d32067577d02310df"
+                }
+            };
+
+
+            axios(config)
+                .then(async (response) => {
+
+                    if (response.data.status) {
+                        return res.send({ status: true, msg: 'Get Data', data: response.data });
+                    } else {
+                        return res.send({ status: false, msg: 'User Not Get', data: response.data });
+                    }
+
+
+                })
+                .catch((error) => {
+                    try {
+
+                        console.log("Error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+
+                    } catch (error) {
+                        console.log("error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+                    }
+
+                });
 
             // If you want to send the retrieved data as a response
             return res.send({
@@ -55,33 +85,55 @@ class Panel {
         try {
             const { id, db_name, db_url } = req.body;
 
-            const uri = db_url;
 
-            // Use a connection pool to reuse connections
-            var client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-            await client.connect();
-            const db = client.db(process.env.DB_NAME);
 
-            const collectionName = 'users';
+            const Find_panelInfo = await panel_model.find({ _id: id })
 
-            // Create an index for the 'Role' field if it's frequently used in queries
-            await db.collection(collectionName).createIndex({ Role: 1 });
+            if (!Find_panelInfo) {
+                return res.status(409).send({ status: false, msg: 'Panel Not Exist', data: [] });
+            }
 
-            // Use projection to fetch only the necessary fields
-            const result = await db.collection(collectionName).find({ Role: "USER" }, { projection: { /* Specify your projected fields here */ } }).toArray();
 
-            // If you want to send the retrieved data as a response
-            return res.send({
-                status: true,
-                msg: "Get All Users",
-                data: result
-            });
+            let config = {
+                method: 'post',
+                url: Find_panelInfo[0].backend_rul + 'clients/get',
+                data: {
+                    "Find_Role": "USER"
+                }
+            };
+            console.log(config);
+
+            axios(config)
+                .then(async (response) => {
+
+                    if (response.data.status) {
+
+                        return res.send({ status: true, msg: 'Get Data', data: response.data });
+
+                    } else {
+                        return res.send({ status: false, msg: 'User Not Get', data: response.data });
+                    }
+
+                })
+                .catch((error) => {
+                    try {
+
+                        console.log("Error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+
+                    } catch (error) {
+                        console.log("error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+                    }
+
+                });
+
+
 
         } catch (error) {
             console.log("Get all User error-", error);
-        } finally {
-            // Close the connection after use to release resources
-            await client.close();
         }
     }
 
@@ -89,25 +141,50 @@ class Panel {
     // GET ALL SUBADMINS
     async GetAllSubadmins(req, res) {
         try {
-            const { id, db_name, db_url } = req.body
-            const uri = db_url;
+            const { id } = req.body
+         
 
-            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+            const Find_panelInfo = await panel_model.find({ _id: id })
 
-            await client.connect();
-            const db = client.db(db_name);
+            if (!Find_panelInfo) {
+                return res.status(409).send({ status: false, msg: 'Panel Not Exist', data: [] });
+            }
 
-            const viewName = 'users';
 
-            // Query the view to get the data
-            const result = await db.collection(viewName).find({ Role: "SUBADMIN" }).toArray();
+            let config = {
+                method: 'post',
+                url: Find_panelInfo[0].backend_rul + 'subadmin/get',
+                data: {
+                    "Find_Role": "SUBADMIN"
+                }
+            };
 
-            // If you want to send the retrieved data as a response
-            return res.send({
-                status: true,
-                msg: "Get All Subadmins",
-                data: result
-            });
+            axios(config)
+                .then(async (response) => {
+
+                    if (response.data.status) {
+
+                        return res.send({ status: true, msg: 'Get Data', data: response.data });
+
+                    } else {
+                        return res.send({ status: false, msg: 'User Not Get', data: response.data });
+                    }
+
+                })
+                .catch((error) => {
+                    try {
+
+                        console.log("Error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+
+                    } catch (error) {
+                        console.log("error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+                    }
+
+                });
 
 
         } catch (error) {
@@ -189,95 +266,59 @@ class Panel {
 
 
 
-
-
-
-            return
-            const uri = db_url;
-
-            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-            await client.connect();
-            const db = client.db(process.env.DB_NAME);
-            // const db = db_name;
-
-            const companies_collection = db.collection('companies');
-            const countLicense_collection = db.collection('count_licenses');
-
-            const viewName = 'companies';
-
-
-            // Specify the query condition for updating
-            const queryCondition = {
-                // panel_key: getPanelInfo[0].key // Replace with your desired query condition
-                panel_key: key // Replace with your desired query condition
-            };
-
-            // Query the view to get the data
-            const findResult = await db.collection(viewName).find().project({ licenses: 1 }).toArray();
-            const newLicensesValue = Number(findResult[0].licenses) + Number(license);
-
-
-
-            const updateOperation = {
-                $set: {
-                    licenses: newLicensesValue
-                }
-            };
-
-            const objectId = new ObjectId("64c76f1d32067577d02310df");
-
-            // Update documents that match the query condition
-            const updateResult = await companies_collection.updateMany(queryCondition, updateOperation);
-
-
-            const newCompany = await countLicense_collection.insertOne({
-                admin_license: Number(license), user_id: objectId, createdAt: new Date(),
-                updatedAt: new Date()
-            });
-
-
-
-            // If you want to send the retrieved data as a response
-            return res.send({
-                status: true,
-                msg: "Add License",
-                data: updateResult
-            });
-
-
         } catch (error) {
             console.log("Add License error-", error);
         }
     }
 
+
     // GET ALL Help Center
     async GetAllAdminHelps(req, res) {
         try {
             // const { id } = req.body
-            const { id, db_name, db_url, startdate, enddate } = req.body
+            const { id} = req.body
 
-            const uri = db_url;
+            const Find_panelInfo = await panel_model.find({ _id: id })
 
-            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+            if (!Find_panelInfo) {
+                return res.status(409).send({ status: false, msg: 'Panel Not Exist', data: [] });
+            }
 
-            await client.connect();
-            const db = client.db(db_name);
 
-            const viewName = 'helpcenters';
+            let config = {
+                method: 'post',
+                url: Find_panelInfo[0].backend_rul + 'help/get',
+                data: {
+                    "Find_Role": "SUBADMIN"
+                }
+            };
 
-            const startDate = new Date(startdate);
-            const endDate = new Date(enddate);
+            axios(config)
+                .then(async (response) => {
 
-            // Query the view to get the data
-            const result = await db.collection(viewName).find({}).toArray();
+                    if (response.data.status) {
 
-            // If you want to send the retrieved data as a response
-            return res.send({
-                status: true,
-                msg: "Get All Subadmins",
-                data: result
-            });
+                        return res.send({ status: true, msg: 'Get Data', data: response.data });
+
+                    } else {
+                        return res.send({ status: false, msg: 'User Not Get', data: response.data });
+                    }
+
+                })
+                .catch((error) => {
+                    try {
+
+                        console.log("Error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+
+                    } catch (error) {
+                        console.log("error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+                    }
+
+                });
 
 
         } catch (error) {

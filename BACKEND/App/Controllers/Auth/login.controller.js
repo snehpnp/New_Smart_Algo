@@ -307,7 +307,6 @@ class Login {
             var EmailCheck = await User.findOne({ Email: Email })
             var CompanyInformation = await company_information.findOne()
 
-
             if (!EmailCheck) {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
             }
@@ -315,7 +314,7 @@ class Login {
 
             var userid = Buffer.from(JSON.stringify(EmailCheck._id)).toString('base64');
             // var redirectUrl = 'http://trade.pandpinfotech.com/#/update/' + userid
-            var redirectUrl = `https://${trade.codingpandit.com}/#/update/${userid}`
+            var redirectUrl = `https://${CompanyInformation.domain_url}/#/update/${userid}`
 
             var toEmail = Email;
             var subjectEmail = "Forget Password";

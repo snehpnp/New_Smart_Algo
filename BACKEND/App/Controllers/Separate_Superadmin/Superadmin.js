@@ -3,6 +3,7 @@ const db = require('../../Models');
 const user = db.user;
 const count_licenses = db.count_licenses;
 const company_information = db.company_information;
+const HelpCenter_modal = db.HelpCenter
 
 
 
@@ -13,6 +14,7 @@ const { logger, getIPAddress } = require('../../Helper/logger.helper')
 const { formattedDateTime } = require('../../Helper/time.helper')
 
 class SuperAdmin {
+
     async AddLicenseinPanle(req, res) {
         try {
             // const { id, license } = req.body
@@ -68,6 +70,91 @@ class SuperAdmin {
         }
     }
 
+
+    async GetAllClients(req, res) {
+        try {
+
+            const getAllClients = await user.find({ Role: "USER" }).sort({ createdAt: -1 });
+
+            if (getAllClients.length == 0) {
+                return res.send({
+                    status: false,
+                    msg: "Empty data",
+                    data: [],
+                });
+            }
+
+            // DATA GET SUCCESSFULLY
+            return res.send({
+                status: true,
+                msg: "Get All Clients",
+                data: getAllClients,
+
+            });
+        } catch (error) {
+            return res.send({
+                status: false,
+                msg: "Empty data",
+                data: [],
+            });
+        }
+    }
+
+
+    async getallSubadmin(req, res) {
+        try {
+
+            // GET LOGIN CLIENTS
+            const getAllSubAdmins = await user.find({
+                Role: "SUBADMIN"
+            });
+
+            // IF DATA NOT EXIST
+            if (getAllSubAdmins.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All Subadmins",
+                data: getAllSubAdmins,
+            })
+        } catch (error) {
+            console.log("getallSubadmin error -", error);
+        }
+    }
+
+    async GetAllMsges(req, res) {
+        try {
+
+            const { _id } = req.body;
+            const objectId = new ObjectId(_id);
+
+            const today = new Date();   
+            today.setHours(0, 0, 0, 0);
+
+            try {
+                const result = await HelpCenter_modal.find({
+                    // admin_id: objectId,
+                    createdAt: {
+                        $gte: today,
+                        $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+                    },
+                })
+
+                if (result.length === 0) {
+                    return res.send({ status: false, msg: 'No Msg Found', data: [] });
+                }
+                return res.send({ status: true, msg: 'All Help Msg', data: result });
+            }
+            catch (error) {
+                return res.send({ status: false, msg: 'Error  to Create Generate Help Response.', error: error.message });
+            }
+        } catch (error) {
+            console.log("Help Center error-", error);
+        }
+    }
 
 }
 
