@@ -39,7 +39,7 @@ class OptionChain {
             const symbol = req.body.symbol;
 
             if (!symbol) {
-                return res.status(400).send({ status: false, msg: 'Symbol is required.', data: [] });
+                return res.status(400).json({ status: false, msg: 'Symbol is required.', data: [] });
             }
 
             const date = new Date(); // Month is 0-based, so 10 represents November
@@ -65,13 +65,12 @@ class OptionChain {
                 {
                     $unwind: "$uniqueExpiryValues"
                 },
-               
                 {
                     $addFields: {
                         expiryDate: {
                             $dateFromString: {
                                 dateString: "$uniqueExpiryValues",
-                                format: "%Y%m%d"
+                                format: "%d%m%Y"
                             }
                         }
                     }
