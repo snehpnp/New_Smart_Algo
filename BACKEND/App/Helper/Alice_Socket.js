@@ -150,7 +150,7 @@ const Alice_Socket = async () => {
                     }
 
                 } catch (error) {
-                    console.log("Shocket", error);
+                    console.log("Error Shocket", error);
 
                 }
             }
@@ -161,7 +161,7 @@ const Alice_Socket = async () => {
 
 
     } catch (error) {
-        console.log("createSocketSess", error);
+        console.log("Error createSocketSess", error);
     }
 
 

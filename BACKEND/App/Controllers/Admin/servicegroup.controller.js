@@ -152,7 +152,7 @@ class GroupService {
         }
 
       } catch (error) {
-        console.log("Delete Group Service In -", error);
+        console.log("Error Delete Group Service In -", error);
       }
 
       // ADD SERVICE
@@ -173,7 +173,7 @@ class GroupService {
           })
         }
       } catch (error) {
-        console.log("Add Group Service In -", error);
+        console.log("Error Add Group Service In -", error);
       }
 
 
@@ -232,7 +232,7 @@ class GroupService {
 
             })
           } else {
-            console.log("User Not Available in this group");
+            console.log("Error User Not Available in this group");
           }
 
 
@@ -470,7 +470,7 @@ class GroupService {
       }
 
     } catch (error) {
-      console.log("Get All Group Services Error - ", error);
+      console.log("Error Get All Group Services Error - ", error);
       res.status(500).send({ status: false, data: [], msg: 'An error occurred' });
     }
   }
@@ -534,7 +534,7 @@ class GroupService {
 
 
     } catch (error) {
-      console.log("GET SERVICES NAME -", error);
+      console.log("Error GET SERVICES NAME -", error);
     }
 
   }
@@ -598,7 +598,7 @@ class GroupService {
 
     }
     catch (error) {
-      console.log("GET SERVICES NAME -", error);
+      console.log("Error GET SERVICES NAME -", error);
     }
   }
 
@@ -689,7 +689,7 @@ class GroupService {
 
     }
     catch (error) {
-      console.log("GET SERVICES NAME -", error);
+      console.log("Error GET SERVICES NAME -", error);
     }
 
   }

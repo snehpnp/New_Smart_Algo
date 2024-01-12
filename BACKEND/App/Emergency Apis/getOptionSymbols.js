@@ -47,7 +47,7 @@ module.exports = function (app) {
             });
         }
         catch (err) {
-            console.log("err", err);
+            console.log("Error err", err);
         }
 
 
@@ -90,7 +90,7 @@ module.exports = function (app) {
             if (err) {
                 console.error(err);
             } else {
-                console.log("price", quotes[0].close);
+                // console.log("Error price", quotes[0].close);
             }
 
         });

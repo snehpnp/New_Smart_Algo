@@ -140,7 +140,7 @@ class AliceBlue {
 
 
         } catch (error) {
-            console.log("Alice Login error-", error)
+            console.log("Error Alice Login error-", error)
         }
     }
 
@@ -243,7 +243,7 @@ class AliceBlue {
 
 
         } catch (error) {
-            console.log("Some Error In Order information get -", error);
+            console.log("Error Some Error In Order information get -", error);
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }
@@ -326,7 +326,7 @@ class AliceBlue {
 
 
         } catch (error) {
-            console.log("Some Error In Order information get -", error);
+            console.log("Error Some Error In Order information get -", error);
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }
@@ -348,7 +348,7 @@ class AliceBlue {
 
 
         } catch (error) {
-            console.log("Some Error In Order information get -", error);
+            console.log("Error Some Error In Order information get -", error);
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

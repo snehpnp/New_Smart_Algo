@@ -120,7 +120,7 @@ class Login {
                 logger.info('Login Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
                 res.send({ status: true, msg: "Login Succesfully", data: msg })
             } catch (error) {
-                console.log("Some Error in a login", error);
+                console.log("Error Some Error in a login", error);
             }
         }
         catch (error) {
@@ -263,7 +263,7 @@ class Login {
                 }
 
             } catch (error) {
-                console.log("Verfiy error", error);
+                console.log("Error Verfiy error", error);
             }
 
 
@@ -438,7 +438,7 @@ class Login {
                 logger.info('Go To Dashboard Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
                 res.send({ status: true, msg: "Go To Dashboard Succesfully", data: msg })
             } catch (error) {
-                console.log("Some Error in a login", error);
+                console.log("Error Some Error in a login", error);
             }
         }
         catch (error) {
@@ -581,7 +581,7 @@ class Login {
                 logger.info('Login Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
                 return res.send({ status: true, msg: "Login Succesfully", data: msg })
             } catch (error) {
-                console.log("Some Error in a login", error);
+                console.log("Error Some Error in a login", error);
             }
 
 

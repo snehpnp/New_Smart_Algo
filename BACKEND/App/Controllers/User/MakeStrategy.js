@@ -14,7 +14,7 @@ class MakeStrategy {
          res.send("ok shk")
 
         } catch (error) {
-            console.log(" error-", error);
+            console.log("Error  error-", error);
         }
     }
 

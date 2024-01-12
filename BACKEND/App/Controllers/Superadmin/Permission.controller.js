@@ -60,7 +60,7 @@ class Panel {
 
 
                     } catch (error) {
-                        console.log("error", error);
+                        console.log("Error error", error);
                         return res.send({ status: false, msg: 'User Not Get', data: error });
 
                     }
@@ -76,7 +76,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Get all Info error-", error);
+            console.log("Error Get all Info error-", error);
         }
     }
 
@@ -101,8 +101,6 @@ class Panel {
                     "Find_Role": "USER"
                 }
             };
-            console.log(config);
-
             axios(config)
                 .then(async (response) => {
 
@@ -123,7 +121,7 @@ class Panel {
 
 
                     } catch (error) {
-                        console.log("error", error);
+                        console.log("Error error", error);
                         return res.send({ status: false, msg: 'User Not Get', data: error });
 
                     }
@@ -133,7 +131,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Get all User error-", error);
+            console.log("Error Get all User error-", error);
         }
     }
 
@@ -188,7 +186,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Get all Subadmins error-", error);
+            console.log("Error Get all Subadmins error-", error);
         }
     }
 
@@ -220,9 +218,6 @@ class Panel {
 
                     if (response.data.status) {
 
-                        console.log("response", response.data);
-
-
                         const filter = { panal_name: "111" };
                         const update = {
                             $set: {
@@ -242,7 +237,6 @@ class Panel {
 
                     } else {
 
-                        console.log("rddddddd esponse", response.data);
                         return res.send({ status: false, msg: 'License Not Add', data: response.data });
 
                     }
@@ -257,7 +251,7 @@ class Panel {
 
 
                     } catch (error) {
-                        console.log("error", error);
+                        console.log("Error error", error);
                         return res.send({ status: false, msg: 'License Not Add', data: error });
 
                     }
@@ -267,7 +261,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Add License error-", error);
+            console.log("Error Add License error-", error);
         }
     }
 
@@ -313,7 +307,7 @@ class Panel {
 
 
                     } catch (error) {
-                        console.log("error", error);
+                        console.log("Error error", error);
                         return res.send({ status: false, msg: 'User Not Get', data: error });
 
                     }
@@ -322,7 +316,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Get all Subadmins error-", error);
+            console.log("Error Get all Subadmins error-", error);
         }
     }
 
@@ -347,7 +341,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Get all Info error-", error);
+            console.log("Error Get all Info error-", error);
         }
     }
 

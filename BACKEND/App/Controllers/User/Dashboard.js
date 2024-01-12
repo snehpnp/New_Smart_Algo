@@ -172,11 +172,6 @@ class Dashboard {
                 return res.send({ status: false, msg: "Empty data", data: [], totalCount: totalCount, })
             }
 
-            console.log("GetAllClientServices", GetAllClientServices)
-            console.log("GetAllClientStrategy", GetAllClientStrategy)
-
-            console.log("user status", GetAllClientServices[0].userInfo.multiple_strategy_select)
-
 
 
 
@@ -203,7 +198,7 @@ class Dashboard {
                 // totalPages: Math.ceil(totalCount / Number(limit)),
             })
         } catch (error) {
-            console.log("get user trading Status error -", error);
+            console.log("Error get user trading Status error -", error);
         }
     }
 
@@ -244,7 +239,7 @@ class Dashboard {
 
 
                     const isEmptyStartegyArray = Object.keys(result).length === 0;
-                    console.log("isEmptyStartegyArray", isEmptyStartegyArray);
+                
                     if (isEmptyStartegyArray == false) {
                         return res.send({ status: false, msg: 'Please Select one Strategy a script ' + serviceName, data: [] });
                     }
@@ -320,7 +315,7 @@ class Dashboard {
                         matchedObject.strategy_id.forEach(async (stg_id) => {
 
                             const Strategieclient = await strategy.find({ _id: stg_id });
-                            console.log("Strategieclient", Strategieclient);
+                 
                             const user_activity = new user_activity_logs(
                                 {
                                     user_id: UserData._id,
@@ -395,7 +390,7 @@ class Dashboard {
 
 
         } catch (error) {
-            console.log("ClientServices Update-", error);
+            console.log("Error ClientServices Update-", error);
             return res.send({ status: false, msg: 'User Not exists', data: error });
 
         }
@@ -457,7 +452,7 @@ class Dashboard {
 
 
         } catch (error) {
-            console.log("error", error);
+            console.log("Error error", error);
         }
     }
 
@@ -528,7 +523,7 @@ class Dashboard {
 
 
         } catch (error) {
-            console.log("error", error);
+            console.log("Error error", error);
         }
     }
 

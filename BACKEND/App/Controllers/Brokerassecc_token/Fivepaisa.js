@@ -127,7 +127,7 @@ class Fivepaisa {
 
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Error Theme error-", error);
         }
     }
 
@@ -145,7 +145,7 @@ class Fivepaisa {
 
 
         } catch (error) {
-            console.log("Some Error In Order information get -", error);
+            console.log("Error Some Error In Order information get -", error);
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }

@@ -53,7 +53,7 @@ class Message {
                 return res.send({ status: false, msg: 'Error  to Create Generate Help Response.', error: error.message });
             }
         } catch (error) {
-            console.log("Get All Message brodcast-", error);
+            console.log("Error Get All Message brodcast-", error);
         }
     }
 
@@ -98,7 +98,7 @@ class Message {
 
 
         } catch (error) {
-            console.log("Get  Message brodcast", error);
+            console.log("Error Get  Message brodcast", error);
         }
     }
 
@@ -121,7 +121,7 @@ class Message {
             return res.send({ status: true, msg: 'Message Remove successfully', data: [] });
 
         } catch (error) {
-            console.log("Remove Brodcast", error);
+            console.log("Error Remove Brodcast", error);
         }
     }
 

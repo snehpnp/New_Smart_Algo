@@ -61,7 +61,7 @@ class SuperAdmin {
 
 
         } catch (error) {
-            console.log("Add License error-", error);
+            console.log("Error Add License error-", error);
             return res.send({
                 status: false,
                 msg: "Add License",
@@ -121,7 +121,7 @@ class SuperAdmin {
                 data: getAllSubAdmins,
             })
         } catch (error) {
-            console.log("getallSubadmin error -", error);
+            console.log("Error getallSubadmin error -", error);
         }
     }
 
@@ -152,7 +152,7 @@ class SuperAdmin {
                 return res.send({ status: false, msg: 'Error  to Create Generate Help Response.', error: error.message });
             }
         } catch (error) {
-            console.log("Help Center error-", error);
+            console.log("Error Help Center error-", error);
         }
     }
 

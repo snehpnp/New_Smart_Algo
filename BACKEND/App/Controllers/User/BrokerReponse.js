@@ -39,7 +39,7 @@ class BrokerReponse {
             }
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Error Theme error-", error);
         }
     }
 

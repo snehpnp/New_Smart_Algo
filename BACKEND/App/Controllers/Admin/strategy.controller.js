@@ -41,7 +41,7 @@ class strategy {
 
                 })
                 .catch((err) => {
-                    console.log(" Add Time Error-", err);
+                    console.log(" Error Add Time Error-", err);
                     if (err.keyValue) {
                         return res.send({ status: false, msg: 'Key duplicate', data: err.keyValue });
 
@@ -50,7 +50,7 @@ class strategy {
 
 
         } catch (error) {
-            console.log("Strategy add error -", error.keyValue);
+            console.log("Error Strategy add error -", error.keyValue);
         }
     }
 
@@ -79,7 +79,7 @@ class strategy {
                 }
 
             } catch (error) {
-                console.log("error", error);
+                console.log("Error error", error);
             }
 
 
@@ -116,7 +116,7 @@ class strategy {
 
 
         } catch (error) {
-            console.log("Strategy Edit error -", error.keyValue);
+            console.log("Error Strategy Edit error -", error.keyValue);
         }
     }
 
@@ -134,7 +134,7 @@ class strategy {
 
 
         } catch (error) {
-            console.log("Strategy Get One error -", error.keyValue);
+            console.log("Error Strategy Get One error -", error.keyValue);
         }
     }
 
@@ -164,7 +164,7 @@ class strategy {
 
 
         } catch (error) {
-            console.log("Get All Strategy Error-", error);
+            console.log("Error Get All Strategy Error-", error);
         }
     }
 
@@ -197,7 +197,7 @@ class strategy {
 
 
         } catch (error) {
-            console.log("Get All Strategy Error-", error);
+            console.log("Error Get All Strategy Error-", error);
         }
     }
 
@@ -221,14 +221,14 @@ class strategy {
             // Delete the strategy
             const deleteResult = await strategy_model.deleteOne({ _id: _id });
             if (deleteResult.deletedCount === 1) {
-                return res.status(200).json({ status: true, msg: 'Strategy deleted successfully!', data: [] });
+                return res.status(200).send({ status: true, msg: 'Strategy deleted successfully!', data: [] });
             } else {
-                return res.status(500).json({ status: false, msg: 'Error deleting strategy', data: [] });
+                return res.status(500).send({ status: false, msg: 'Error deleting strategy', data: [] });
             }
 
         } catch (error) {
-            console.log("Delete Strategy Error:", error);
-            return res.status(500).json({ status: false, msg: 'An error occurred', data: [] });
+            console.log("Error Delete Strategy Error:", error);
+            return res.status(500).send({ status: false, msg: 'An error occurred', data: [] });
         }
     }
 
@@ -285,7 +285,7 @@ class strategy {
 
 
         } catch (error) {
-            console.log("Get All Strategy Error-", error);
+            console.log("Error Get All Strategy Error-", error);
         }
     }
 

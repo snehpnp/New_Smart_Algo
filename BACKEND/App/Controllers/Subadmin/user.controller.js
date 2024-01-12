@@ -839,7 +839,7 @@ class Employee {
       }
 
     } catch (error) {
-      console.log("trading status Error-", error);
+      console.log("Error trading status Error-", error);
     }
   }
 
@@ -874,7 +874,7 @@ class Employee {
         data: get_user,
       });
     } catch (error) {
-      console.log("trading status Error-", error);
+      console.log("Error trading status Error-", error);
     }
   }
 
@@ -906,7 +906,7 @@ class Employee {
         data: get_user,
       });
     } catch (error) {
-      console.log("trading status Error-", error);
+      console.log("Error trading status Error-", error);
     }
   }
 
@@ -970,7 +970,7 @@ class Employee {
         totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
-      console.log("loginClients Error-", error);
+      console.log("Error loginClients Error-", error);
     }
   }
 
@@ -1003,7 +1003,7 @@ class Employee {
         // totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
-      console.log("loginClients Error-", error);
+      console.log("Error loginClients Error-", error);
     }
   }
 
@@ -1037,7 +1037,7 @@ class Employee {
         // totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
-      console.log("trading Clients Error-", error);
+      console.log("Error trading Clients Error-", error);
     }
   }
 
@@ -1101,7 +1101,7 @@ class Employee {
         // totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
-      console.log("trading status Error-", error);
+      console.log("Error trading status Error-", error);
     }
   }
 
@@ -1144,7 +1144,7 @@ class Employee {
         data: DeleteUser,
       });
     } catch (error) {
-      console.log("trading status Error-", error);
+      console.log("Error trading status Error-", error);
     }
   }
 
@@ -1230,7 +1230,7 @@ class Employee {
         strategy: userSTG,
       });
     } catch (error) {
-      console.log("trading status Error-", error);
+      console.log("Error trading status Error-", error);
     }
   }
 
@@ -1258,7 +1258,7 @@ class Employee {
         });
       });
     } catch (error) {
-      console.log("Theme error-", error);
+      console.log("Error Theme error-", error);
     }
   }
 

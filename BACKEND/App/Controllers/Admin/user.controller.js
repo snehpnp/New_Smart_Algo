@@ -58,14 +58,10 @@ class Employee {
       var StartDate1 = "";
       var EndDate1 = "";
       let Strategies_id_array = []; 
-      console.log("Strategies ",Strategies)
       for (const strategy of Strategies) {
         Strategies_id_array.push(strategy.id)
-        console.log(`Strategy with ID ${strategy.id} inserted`);
       }
 
-
-      console.log('Strategies_id_array',Strategies_id_array);
 
       
 
@@ -393,7 +389,7 @@ class Employee {
           }
         })
         .catch((err) => {
-          console.log(" Add Time Error-", err);
+          console.log("Error  Add Time Error-", err);
           if (err.keyValue) {
             return res.send({
               status: false,
@@ -855,7 +851,7 @@ class Employee {
             // console.log("NO CHANGE IN GROUP SERVICES");
           }
         } catch (error) {
-          console.log("Group Services Error-", error);
+          console.log("Error Group Services Error-", error);
         }
 
         // console.log("GROP ADD 1", new Date());
@@ -973,7 +969,7 @@ class Employee {
         totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
-      console.log("loginClients Error-", error);
+      console.log("Error loginClients Error-", error);
     }
 
   }
@@ -1026,7 +1022,7 @@ class Employee {
         // totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
-      console.log("loginClients Error-", error);
+      console.log("Error loginClients Error-", error);
       return res.send({
         status: false,
         msg: "Empty data",
@@ -1065,7 +1061,7 @@ class Employee {
         // totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
-      console.log("loginClients Error-", error);
+      console.log("Error loginClients Error-", error);
     }
   }
 
@@ -1099,7 +1095,7 @@ class Employee {
         // totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
-      console.log("trading Clients Error-", error);
+      console.log("Error trading Clients Error-", error);
     }
   }
 
@@ -1140,7 +1136,7 @@ class Employee {
         // totalCount: totalCount,
       });
     } catch (error) {
-      console.log("trading status Error-", error);
+      console.log("Error trading status Error-", error);
     }
   }
 
@@ -1181,7 +1177,7 @@ class Employee {
         });
       }
     } catch (error) {
-      console.log("trading status Error-", error);
+      console.log("Error trading status Error-", error);
     }
   }
 
@@ -1223,7 +1219,7 @@ class Employee {
         data: DeleteUser,
       });
     } catch (error) {
-      console.log("trading status Error-", error);
+      console.log("Error trading status Error-", error);
     }
   }
 
@@ -1311,7 +1307,7 @@ class Employee {
         strategy: userSTG,
       });
     } catch (error) {
-      console.log("trading status Error-", error);
+      console.log("Error trading status Error-", error);
     }
   }
 
@@ -1339,7 +1335,7 @@ class Employee {
         });
       });
     } catch (error) {
-      console.log("Theme error-", error);
+      console.log("Error Theme error-", error);
     }
   }
 

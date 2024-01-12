@@ -153,7 +153,7 @@ class TradeHistory {
 
 
         } catch (error) {
-            console.log("get user trading Status error -", error);
+            console.log("Error get user trading Status error -", error);
         }
     }
 

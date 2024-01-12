@@ -208,7 +208,7 @@ class Subadmin {
                 // totalPages: Math.ceil(totalCount / Number(limit)),
             })
         } catch (error) {
-            console.log("getallSubadmin error -", error);
+            console.log("Error getallSubadmin error -", error);
         }
     }
 
@@ -263,7 +263,7 @@ class Subadmin {
 
             })
         } catch (error) {
-            console.log("get Subadmin error -", error);
+            console.log("Error get Subadmin error -", error);
         }
     }
 
@@ -294,7 +294,7 @@ class Subadmin {
             })
 
         } catch (error) {
-            console.log("getallSubadmin error -", error);
+            console.log("Error getallSubadmin error -", error);
         }
     }
 }

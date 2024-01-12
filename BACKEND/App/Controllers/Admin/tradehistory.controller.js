@@ -121,7 +121,7 @@ class Tradehistory {
 
 
         } catch (error) {
-            console.log("Trade History Error-", error);
+            console.log("Error Trade History Error-", error);
         }
     }
 
@@ -229,7 +229,7 @@ class Tradehistory {
 
 
         } catch (error) {
-            console.log("Get All Trade History Data-", error);
+            console.log("Error Get All Trade History Data-", error);
         }
     }
 
@@ -253,7 +253,7 @@ class Tradehistory {
 
 
         } catch (error) {
-            console.log("error", error);
+            console.log("Error error", error);
         }
     }
 
@@ -289,7 +289,7 @@ class Tradehistory {
 
 
         } catch (error) {
-            console.log("error", error);
+            console.log("Error error", error);
         }
     }
 

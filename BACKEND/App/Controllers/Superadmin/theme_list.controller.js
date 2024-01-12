@@ -67,7 +67,7 @@ class Theme {
 
 
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Error Theme error-", error);
         }
     }
 
@@ -107,7 +107,7 @@ class Theme {
 
 
         } catch (error) {
-            console.log("Get all theme error-", error);
+            console.log("Error Get all theme error-", error);
         }
     }
 
@@ -139,7 +139,7 @@ class Theme {
 
 
     } catch (error) {
-        console.log("Get all theme error-", error);
+        console.log("Error Get all theme error-", error);
     }
 }
 
@@ -167,7 +167,7 @@ class Theme {
 
             })
         } catch (error) {
-            console.log("trading Clients Error-", error);
+            console.log("Error trading Clients Error-", error);
         }
     }
 
@@ -213,7 +213,7 @@ class Theme {
 
             })
         } catch (error) {
-            console.log("trading Clients Error-", error);
+            console.log("Error trading Clients Error-", error);
         }
     }
 
@@ -255,7 +255,7 @@ class Theme {
 
 
         } catch (error) {
-            console.log("trading Clients Error-", error);
+            console.log("Error trading Clients Error-", error);
         }
     }
 

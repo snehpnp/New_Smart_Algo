@@ -216,7 +216,7 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
 
 
     }).catch((error) => {
-      console.log("Erro-", error.response);
+      console.log("Error -", error.response);
       return error.response
     })
 
@@ -525,7 +525,7 @@ app.post('/broker-signals', async (req, res) => {
            }
          }
        } catch (error) {
-         console.log("error IN price Update", error);
+         console.log("Error  IN price Update", error);
        }
 
        if (price == null) {
@@ -895,7 +895,7 @@ app.post('/broker-signals', async (req, res) => {
                   exit_dt_date: current_date
                 }
                 updatedData.$addToSet = { signals_id: SignalSave._id };
-                console.log("1",updatedData);
+     
 
                 // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
                 const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
@@ -942,7 +942,7 @@ app.post('/broker-signals', async (req, res) => {
 
         return res.send({ msg: client_key });
       } else {
-        console.log('No Signal Key Recevie');
+
         return res.send("No Signal Key Recevie");
       }
 

@@ -28,7 +28,7 @@ class OptionChain {
             return res.send({ status: true, msg: 'Done', data: symbols });
 
         } catch (error) {
-            console.log("Get Option symbol-", error);
+            console.log("Error Get Option symbol-", error);
         }
     }
 
@@ -273,7 +273,7 @@ class OptionChain {
             return res.send({ status: true, msg: 'Done', data: GetTrade });
 
         } catch (error) {
-            console.log("Get Open Position data-", error);
+            console.log("Error Get Open Position data-", error);
         }
     }
 
@@ -474,7 +474,7 @@ class OptionChain {
             res.send({ status: true, msg: "Done" })
 
         } catch (error) {
-            console.log("Get_Option_All_Token_Chain", error);
+            console.log("Error Get_Option_All_Token_Chain", error);
         }
     }
 
@@ -494,7 +494,6 @@ class OptionChain {
             return res.send({ status: true, msg: 'Update SuccessFully', data: [] });
 
         } catch (error) {
-            console.log("update_stop_loss", error);
             return res.send({ status: false, msg: 'error ', data: error });
 
         }
@@ -521,7 +520,6 @@ class OptionChain {
 
           return  res.send({ status: true, channellist: alltokenchannellist })
         } catch (error) {
-            console.log("Stock_chain-", error);
             return res.send({ status: false, msg: 'error ', data: error });
 
         }
@@ -542,7 +540,6 @@ class OptionChain {
 
 
         } catch (error) {
-            console.log("subscribr_token-", error);
             return res.send({ status: false, msg: 'error ', data: error });
 
         }

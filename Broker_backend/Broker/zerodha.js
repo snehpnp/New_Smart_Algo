@@ -51,7 +51,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         //  const command = `findstr ,${pattern}, ${filePath1}`;
 
 
-        console.log("command ", command)
 
 
 
@@ -59,13 +58,12 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
             exec(command, (error, stdout, stderr) => {
                 if (error) {
-                    console.error(`exec error: ${error}`);
-                    return;
+                    console.log(`exec error: ${error}`);
+                
                 }
 
         const parts = stdout.split(','); // Extract the content inside double quotes
 
-      console.log("Extracted Part:", parts);
 
         if (segment && segment.toLowerCase() === 'c') {
 
@@ -125,7 +123,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                 })
                 .catch(errors => {
-                    console.log("errors:", errors);
+                    console.log("Error :", errors);
 
                 });
 
@@ -211,7 +209,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                                         } else {
 
-                                            console.log("possition_qty Cash trade", possition_qty);
                                             if (possition_qty > 0 && type == 'LX') {
                                                 ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
                                             } else if (possition_qty < 0 && type == 'SX') {
@@ -368,7 +365,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                 })
                 .catch(errors => {
-                    console.log("errors:", errors);
+                    console.log("Error :", errors);
 
                 });
 
@@ -377,7 +374,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             });
 
         } catch (error) {
-            console.log(error);
+            console.log("Error ",error);
         }
        }else{
 
@@ -413,7 +410,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
     } catch (error) {
 
-        console.log("error", error);
+        console.log("Error ", error);
     }
 
 }
@@ -625,7 +622,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                 }
 
             } catch (e) {
-                console.log("error 1", e);
+                console.log("Error  1", e);
             }
 
         });
@@ -837,7 +834,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                 }
 
             } catch (e) {
-                console.log("error 1", e);
+                console.log("Error  1", e);
             }
 
         });

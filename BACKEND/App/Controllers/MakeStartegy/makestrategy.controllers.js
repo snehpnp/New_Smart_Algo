@@ -49,7 +49,6 @@ class MakeStartegy {
         y: [item.open, item.high, item.low, item.close],
       }));
       
-      console.log("convert data",transformedData);
       //console.log("result - ",result)
         if (result.length > 0) {
           res.send({ status: true, msg: "Get All time frame", data: transformedData })
@@ -747,7 +746,7 @@ async function run() {
 
                         })
                         .catch((error) => {
-                          console.log(error);
+                          console.log("Error ",error);
                         });
 
                     }
@@ -892,7 +891,7 @@ async function run() {
 
                       })
                       .catch((error) => {
-                        console.log(error);
+                        console.log("Error ",error);
                       });
 
 

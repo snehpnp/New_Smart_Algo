@@ -42,7 +42,7 @@ class HelpCenter {
             }
 
         } catch (error) {
-            console.log("Help- Center error-", error);
+            console.log("Error Help- Center error-", error);
         }
     }
 

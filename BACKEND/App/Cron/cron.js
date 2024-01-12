@@ -177,7 +177,7 @@ const service_token_update = () => {
 
         })
         .catch((error) => {
-            console.log(error);
+            console.log("Error ",error);
         });
 
 }
@@ -561,7 +561,7 @@ const tokenFind = async () => {
         return findData
 
     } catch (error) {
-        console.log(error);
+        console.log("Error ",error);
     }
 }
 
@@ -582,10 +582,9 @@ const market_holiday_redis = async () => {
 
     await axios.request(config1)
         .then((response) => {
-            console.log(JSON.stringify(response.data));
         })
         .catch((error) => {
-            console.log(error);
+            console.log("Error ",error);
         });
 
 
@@ -818,7 +817,6 @@ const AccelpixTokenUpdate = async () =>{
 
        const Exist_token = response.data.find(item1 => item1.tk === parseInt(element.instrument_token));
        
-       console.log("Exist tkr ",Exist_token.tkr , "Exist a3tkr ",Exist_token.a3tkr , "Token ",element.instrument_token)
        
       
      

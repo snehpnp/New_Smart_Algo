@@ -79,7 +79,6 @@ class Panel {
                 Option_chain: Option_chain,
                 Strategy_plan: Strategy_plan
             }
-            console.log(panle_data)
 
             var objectId = new ObjectId(_id);
 
@@ -206,7 +205,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Get all Panels error-", error);
+            console.log("Error Get all Panels error-", error);
         }
     }
 
@@ -293,7 +292,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Get all Info error-", error);
+            console.log("Error Get all Info error-", error);
         }
     }
 
@@ -328,7 +327,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Get all Info error-", error);
+            console.log("Error Get all Info error-", error);
         }
     }
 
@@ -358,7 +357,7 @@ class Panel {
                 })
 
         } catch (error) {
-            console.log("APi Info error-", error);
+            console.log("Error APi Info error-", error);
             // logger.error('Server Error', { role: "SUPERADMIN", user_id: parent_id });
 
         }
@@ -429,7 +428,7 @@ class Panel {
 
 
         } catch (error) {
-            console.log("Get all Panels error-", error);
+            console.log("Error Get all Panels error-", error);
         }
     }
 

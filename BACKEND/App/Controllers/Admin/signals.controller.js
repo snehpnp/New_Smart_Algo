@@ -44,7 +44,7 @@ class Signals {
                 return res.status(500).json({ status: false, msg: 'Error fetching filtered signals.', error: error.message });
             }
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Error Theme error-", error);
         }
     }
 
@@ -103,7 +103,7 @@ class Signals {
                 // res.status(500).json({ error: 'Internal Server Error' });
             }
         } catch (error) {
-            console.log("Theme error-", error);
+            console.log("Error Theme error-", error);
         }
     }
 

@@ -113,7 +113,7 @@ class Signals {
 
 
         } catch (error) {
-            console.log("Signals  error -", error);
+            console.log("Error Signals  error -", error);
         }
     }
 

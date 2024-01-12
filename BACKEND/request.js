@@ -42,7 +42,7 @@ module.exports = function (app) {
 
        const Exist_token = response.data.find(item1 => item1.tk === parseInt(element.instrument_token));
        
-       console.log("Exist tkr ",Exist_token.tkr , "Exist a3tkr ",Exist_token.a3tkr , "Token ",element.instrument_token)
+      //  console.log("Exist tkr ",Exist_token.tkr , "Exist a3tkr ",Exist_token.a3tkr , "Token ",element.instrument_token)
        
       
      
@@ -61,14 +61,14 @@ module.exports = function (app) {
 
       let Res = await Alice_token.updateMany(filter, update , options);
        
-      console.log("Res ", Res)
+      // console.log("Res ", Res)
     
   
      });
 
     })
     .catch((error) => {
-      console.log(error);
+      console.log("Error",error);
     });
 
 

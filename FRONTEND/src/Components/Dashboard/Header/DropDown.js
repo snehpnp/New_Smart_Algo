@@ -37,7 +37,7 @@ const DropDown = () => {
                     }, 1500);
                 }
             }).catch((error) => {
-                console.log("logout error", error);
+                console.log("Error logout error", error);
 
             })
     }

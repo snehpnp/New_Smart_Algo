@@ -38,7 +38,7 @@ class User_trading_status {
                 totalCount: totalCount,
             })
         } catch (error) {
-            console.log("get user trading Status error -", error);
+            console.log("Error get user trading Status error -", error);
         }
     }
 
@@ -77,7 +77,7 @@ class User_trading_status {
                 totalCount: totalCount,
             })
         } catch (error) {
-            console.log("get user trading Status error -", error);
+            console.log("Error get user trading Status error -", error);
         }
     }
 
