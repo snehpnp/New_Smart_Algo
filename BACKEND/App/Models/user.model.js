@@ -195,6 +195,12 @@ const userModel = Schema({
         enum: ['1', '2'], // 1 = Admin panel status , 2 = Tradinview status
         default: '1'
     },
+    multiple_strategy_select: {
+        type: String,
+        required: true,
+        trim: true,
+        default: '0'
+    },
 },
     {
         timestamps: true

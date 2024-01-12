@@ -51,6 +51,7 @@ class Employee {
         api_type,
         demat_userid,
         group_service,
+        multiple_strategy_select
       } = req.body;
 
       var Role = "USER";
@@ -262,6 +263,7 @@ class Employee {
           api_type: api_type,
           demat_userid: demat_userid,
           service_given_month: service_given_month,
+          multiple_strategy_select: multiple_strategy_select,
         },
         // Add more documents if needed
       ])
@@ -877,6 +879,7 @@ class Employee {
           api_type: req.api_type,
           demat_userid: req.demat_userid,
           service_given_month: req.service_given_month,
+          multiple_strategy_select: req.multiple_strategy_select,
         };
 
         const User_Update = await User_model.updateOne(
@@ -1290,6 +1293,7 @@ class Employee {
             api_type: 1,
             demat_userid: 1,
             broker: 1,
+            multiple_strategy_select:1
           },
         },
       ];

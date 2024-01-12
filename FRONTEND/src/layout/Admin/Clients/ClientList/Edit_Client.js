@@ -129,7 +129,8 @@ const AddClient = () => {
       demat_userid: 'null',
       parent_role: null,
       Strategy: false,
-      licence1: 'null'
+      licence1: 'null',
+      multiple_strategy_select: false
     },
 
 
@@ -226,7 +227,8 @@ const AddClient = () => {
         "group_service": values.groupservice,
         "licence": values.licence1,
         "Editor_role": Role,
-        "device": check_Device()
+        "device": check_Device(),
+        "multiple_strategy_select": values.multiple_strategy_select === false ? '0' : '1'
       }
 
 
@@ -253,6 +255,7 @@ const AddClient = () => {
 
 
   useEffect(() => {
+    console.log(UserData.data.data)
     formik.setFieldValue('username', UserData.data.data !== undefined && UserData.data.data[0].UserName);
     formik.setFieldValue('fullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
     formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
@@ -272,18 +275,8 @@ const AddClient = () => {
     formik.setFieldValue('demat_userid', UserData.data.data !== undefined && UserData.data.data[0].demat_userid);
     formik.setFieldValue('todate', UserData.data.data !== undefined && f_time(UserData.data.data[0].EndDate));
     formik.setFieldValue('fromDate', UserData.data.data !== undefined && f_time(UserData.data.data[0].StartDate));
-
+    formik.setFieldValue('multiple_strategy_select', UserData.data.data !== undefined && UserData.data.data[0].multiple_strategy_select === '1' ? true : false);
   }, [UserData.data]);
-
-
-
-
-
-
-
-
-
-
 
 
   useEffect(() => {
@@ -470,8 +463,11 @@ const AddClient = () => {
       options:
         AllGroupServices.data && AllGroupServices.data.map((item) => ({ label: item.name, value: item._id }))
       , label_size: 12, col_size: 6, disable: false
-    }
+    },
 
+
+    { name: 'multiple_strategy_select', label: 'Mutiple Selection Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false, check_box_true: formik.values.multiple_strategy_select ? true : false,
+  },
   ];
 
 
@@ -709,7 +705,6 @@ const AddClient = () => {
   }, [UserData.data.strategy, AllStrategy.data]);
 
 
-
   return (
     <>
       <Content Page_title="Edit  Client" button_title='Back' route="/admin/allclients"
@@ -764,6 +759,8 @@ const AddClient = () => {
 
               {/* ) : ""} */}
             </>
+           
+            
           }
         />
         <ToastButton />
