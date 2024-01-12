@@ -50,13 +50,16 @@ const ResetPassword = () => {
             await dispatch(Forget_Password(req))
                 .unwrap()
                 .then((response) => {
+                    console.log(response)
                     if (response.status) {
                         toast.success(response.msg)
                         setTimeout(() => {
                             navigate("/login", { replace: true });
-                        }, 2000);
-                    } else if (response.response.status === 409) {
-                        toast.error(response.response.data.msg)
+                        }, 1000);
+                    } 
+                    else{
+                        toast.error(response.msg)
+
                     }
                 })
                 .catch((error) => {

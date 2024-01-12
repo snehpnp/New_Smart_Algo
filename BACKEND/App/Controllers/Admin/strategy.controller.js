@@ -12,7 +12,7 @@ class strategy {
     // ADD STRATEGY IN A COLLECTION
     async AddStragegy(req, res) {
         try {
-            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester, per_lot, strategy_image, strategy_amount_month, strategy_amount_quarterly, strategy_amount_half_early, strategy_amount_early, plans } = req.body;
+            const { strategy_name, strategy_description, strategy_category, strategy_segment, strategy_indicator, strategy_tester, strategy_amount, strategy_image, strategy_amount_month, strategy_amount_quarterly, strategy_amount_half_early, strategy_amount_early, plans } = req.body;
 
             const exist_strategy = await strategy_model.findOne({ strategy_name: strategy_name });
             if (exist_strategy) {
@@ -26,7 +26,7 @@ class strategy {
                 strategy_segment: strategy_segment,
                 strategy_indicator: strategy_indicator,
                 strategy_tester: strategy_tester,
-                strategy_amount: per_lot,
+                strategy_amount: strategy_amount,
                 strategy_image: strategy_image,
                 strategy_amount_month: strategy_amount_month,
                 strategy_amount_quarterly: strategy_amount_quarterly,
@@ -146,7 +146,7 @@ class strategy {
             const skip = (page - 1) * limit;
 
             // var getAllTheme = await strategy_model.find()
-            const getAllstrategy = await strategy_model.find({})
+            const getAllstrategy = await strategy_model.find({}).sort({createdAt:-1})
            
             // IF DATA NOT EXIST
             if (getAllstrategy.length == 0) {

@@ -6,6 +6,8 @@ import { useDispatch } from 'react-redux';
 // import { Pencil, Trash2 } from 'lucide-react';
 import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
 import { useEffect, useState } from 'react';
+import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
+ 
 
 import { Get_Panel_History} from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
@@ -18,6 +20,7 @@ const History = () => {
         data: []
     });
 
+    console.log(AllData)
      
     const columns = [
         {
@@ -42,6 +45,13 @@ const History = () => {
             dataField: 'msg',
             text: 'Massage'
         }, 
+        {
+            dataField: "createdAt",
+            text: "Date & Time",
+            formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>,
+            sort: true,
+      
+          } 
     ];
 
 

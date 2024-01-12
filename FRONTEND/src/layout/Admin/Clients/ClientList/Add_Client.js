@@ -671,10 +671,6 @@ const AddClient = () => {
 
             </>
           }
-
-
-
-
         />
 
         <ToastButton />
