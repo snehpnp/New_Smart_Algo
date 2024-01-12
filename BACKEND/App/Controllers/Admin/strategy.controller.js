@@ -146,7 +146,7 @@ class strategy {
             const skip = (page - 1) * limit;
 
             // var getAllTheme = await strategy_model.find()
-            const getAllstrategy = await strategy_model.find({})
+            const getAllstrategy = await strategy_model.find({}).sort({createdAt:-1})
            
             // IF DATA NOT EXIST
             if (getAllstrategy.length == 0) {

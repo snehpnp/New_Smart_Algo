@@ -21,6 +21,22 @@ export const No_Negetive_Input_regex = (mobile) => {
     const value = /^(?!0*(\.0*)?$)\d+(\.\d+)?$/
     return value.test(mobile);
 }
+export const Monthly_plan_regex =(month)=>{
+    const value = /^(?!0*(\.0*)?$)\d+(\.\d+)?$/
+    return value.test(month)
+}
+export const Quaterly_plan_regex =(quaterly)=>{
+    const value = /^(?!0*(\.0*)?$)\d+(\.\d+)?$/
+    return value.test(quaterly)
+}
+export const Halfyearly_plan_regex =(halfyearly)=>{
+    const value = /^(?!0*(\.0*)?$)\d+(\.\d+)?$/
+    return value.test(halfyearly)
+}
+export const Yearly_plan_regex =(yearly)=>{
+    const value = /^(?!0*(\.0*)?$)\d+(\.\d+)?$/
+    return value.test(yearly)
+}
 
 
 export const ValidYoutubeUrl = (url) => {

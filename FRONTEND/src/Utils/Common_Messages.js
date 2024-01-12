@@ -53,6 +53,15 @@ export const VALID_STRATEGY_LOT_ERR = 'Accept Number Only and Grater Than Zero';
 export const EMPTY_STRATEGY_CATAGORY_ERR = 'Please Enter Strategy Category ';
 export const EMPTY_STRATEGY_SEGMENT_ERR = 'Please Select Strategy Segment ';
 export const EMPTY_STRATEGY_DESCRIPTION_ERR = 'Please Enter Strategy Description ';
+export const EMPTY_MONTHLY_PLAN_ERR = 'Please Enter Monthly plan ';
+export const EMPTY_QUATERLY_PLAN_ERR = 'Please Enter Quaterly plan ';
+export const EMPTY_HALFYEARLY_PLAN_ERR = 'Please Enter halfyearly plan ';
+export const EMPTY_YEARLY_PLAN_ERR = 'Please Enter yearly plan';
+export const VALID_MONTHLY_PLAN_ERR = 'Accept Number Only and Grater Than Zero ';
+export const VALID_QUATERLY_PLAN_ERR = 'Accept Number Only and Grater Than Zero';
+export const VALID_HALFYEARLY_PLAN_ERR = 'Accept Number Only and Grater Than Zero';
+export const VALID_YEARLY_PLAN_ERR = 'Accept Number Only and Grater Than Zero';
+
 
 
 //  Update Theme
