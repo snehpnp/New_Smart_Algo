@@ -23,11 +23,7 @@ module.exports = {
     BrokerResponse: require('./broker_response.model'),
     count_licenses: require('./count_licens.model'),
     HelpCenter: require('./HelpCenter.model'),
-    strategy: require('./strategy.model'),
-    strategy_client: require('./strategy_client.model'),
-    panel_model: require('./all_panels.model'),
-    Subadmin_Permission: require('./subadmin_permision.model'),
-    groupService_User: require('./group_services_client.model'),
+
     UserMakeStrategy: require('./UserMakeStrategy.model'),
     user_activity_logs: require('./User_activity.model'),
     Broker_information: require('./Broker_information.model'),
