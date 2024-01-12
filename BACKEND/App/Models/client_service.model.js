@@ -14,10 +14,12 @@ const clientServiceSchema = Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Services"
     },
-    strategy_id: {
+    strategy_id:[ 
+        {
         type: mongoose.Schema.Types.ObjectId,
         ref: "strategy"
-    },
+       }
+    ],
     order_type: {
         type: String,
         enum: ['1', '2', '3', '4'],

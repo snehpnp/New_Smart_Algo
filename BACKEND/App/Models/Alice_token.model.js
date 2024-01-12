@@ -49,6 +49,14 @@ const AliceTokenSchema = new mongoose.Schema({
     tradesymbol_m_w: {
         type: String,
     },
+    tkr : {
+        type: String,
+        default: null
+    },
+    a3tkr : {
+        type: String,
+        default: null
+    },
     createdAt: {
         type: Date,
         default: Date.now

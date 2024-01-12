@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@coreui/coreui": "^4.3.2",
+    "@coreui/react": "^4.11.1",
+    "@coreui/react-pro": "^4.15.2",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -25,6 +28,7 @@
     "lucide-react": "^0.260.0",
     "node-datetime": "^2.1.2",
     "npm": "^10.0.0",
+    "primereact": "^10.2.1",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
     "react-bootstrap": "^2.8.0",
