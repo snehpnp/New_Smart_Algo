@@ -178,16 +178,16 @@ class Dashboard {
             console.log("user status", GetAllClientServices[0].userInfo.multiple_strategy_select)
 
 
-         
+
 
 
             const GetServiceStrategy = GetAllClientServices.map(item => ({
                 _id: item.service._id,
                 strategy_id: item.strategy_id,
-                service_name : item.service.name +" [ "+item.categories.segment+" ]",
+                service_name: item.service.name + " [ " + item.categories.segment + " ]",
             }));
 
-           // console.log("GetServiceStrategy", GetServiceStrategy)
+            // console.log("GetServiceStrategy", GetServiceStrategy)
 
             // DATA GET SUCCESSFULLY
             res.send({
@@ -210,51 +210,51 @@ class Dashboard {
     // UPDATE CLIENT SERVICES
     async updateClientServices(req, res) {
         try {
-            const { user_id, servicesData, data ,statusStartegyUser ,GetServiceStrategy} = req.body;
-             
-           // console.log("req  body ",req.body)
-          
-           // console.log("statusStartegyUser",statusStartegyUser , "Type Of",typeof statusStartegyUser)
-           
-          
+            const { user_id, servicesData, data, statusStartegyUser, GetServiceStrategy } = req.body;
 
-              if(statusStartegyUser == "1"){
-              const isEmpty = Object.keys(servicesData).length === 0;
-           //   console.log("results",isEmpty);
-              if(isEmpty == false){
-                // Filter objects with empty strategy_id
-                const result = Object.keys(servicesData)
-                .filter((key) => Array.isArray(servicesData[key].strategy_id) && servicesData[key].strategy_id.length === 0)
-                .reduce((obj, key) => {
-                    obj[key] = servicesData[key];
-                    return obj;
-                }, {});
+            // console.log("req  body ",req.body)
 
-               // console.log("dddd",result);
-               // console.log("GetServiceStrategy",GetServiceStrategy);
+            // console.log("statusStartegyUser",statusStartegyUser , "Type Of",typeof statusStartegyUser)
 
 
-                // Extracting the key (id) from the inputObject
-                const inputId = Object.keys(result)[0];
-                // Finding the matching object in dataArray based on _id
-                const matchingObject = GetServiceStrategy.find(obj => obj._id === inputId);
-                // Getting the service_name if a match is found
-                const serviceName = matchingObject ? matchingObject.service_name : null;
-                //console.log("serviceName",serviceName);
+
+            if (statusStartegyUser == "1") {
+                const isEmpty = Object.keys(servicesData).length === 0;
+                //   console.log("results",isEmpty);
+                if (isEmpty == false) {
+                    // Filter objects with empty strategy_id
+                    const result = Object.keys(servicesData)
+                        .filter((key) => Array.isArray(servicesData[key].strategy_id) && servicesData[key].strategy_id.length === 0)
+                        .reduce((obj, key) => {
+                            obj[key] = servicesData[key];
+                            return obj;
+                        }, {});
+
+                    // console.log("dddd",result);
+                    // console.log("GetServiceStrategy",GetServiceStrategy);
 
 
-                const isEmptyStartegyArray = Object.keys(result).length === 0;
-                console.log("isEmptyStartegyArray",isEmptyStartegyArray);
-                if(isEmptyStartegyArray == false){
-                    return res.send({ status: false, msg: 'Please Select one Strategy a script '+serviceName,data: [] });
+                    // Extracting the key (id) from the inputObject
+                    const inputId = Object.keys(result)[0];
+                    // Finding the matching object in dataArray based on _id
+                    const matchingObject = GetServiceStrategy.find(obj => obj._id === inputId);
+                    // Getting the service_name if a match is found
+                    const serviceName = matchingObject ? matchingObject.service_name : null;
+                    //console.log("serviceName",serviceName);
+
+
+                    const isEmptyStartegyArray = Object.keys(result).length === 0;
+                    console.log("isEmptyStartegyArray", isEmptyStartegyArray);
+                    if (isEmptyStartegyArray == false) {
+                        return res.send({ status: false, msg: 'Please Select one Strategy a script ' + serviceName, data: [] });
+                    }
+
                 }
-
-              }
-             }
+            }
 
 
-        // console.log("OKK");
-            
+            // console.log("OKK");
+
             const UserData = await User_model.findOne({ _id: user_id });
 
 
@@ -269,22 +269,22 @@ class Dashboard {
 
 
 
-            
+
 
             for (const key in servicesData) {
                 if (servicesData[key]) {
                     const matchedObject = servicesData[key];
 
-                   
-                    
-                    if(matchedObject.strategy_id != undefined){
 
-                        matchedObject.strategy_id.forEach((sid)=>{
+
+                    if (matchedObject.strategy_id != undefined) {
+
+                        matchedObject.strategy_id.forEach((sid) => {
                             // console.log("Data",new ObjectId(sid))
                             matchedObject.strategy_id.push(new ObjectId(sid))
                         })
-    
-                          matchedObject.strategy_id = matchedObject.strategy_id.filter(item => item instanceof ObjectId);
+
+                        matchedObject.strategy_id = matchedObject.strategy_id.filter(item => item instanceof ObjectId);
 
                     }
 
@@ -317,10 +317,10 @@ class Dashboard {
                     }
 
                     if (matchedObject.strategy_id != undefined) {
-                        matchedObject.strategy_id.forEach(async(stg_id)=>{
+                        matchedObject.strategy_id.forEach(async (stg_id) => {
 
-                            const Strategieclient = await strategy.find({ _id:stg_id });
-console.log("Strategieclient",Strategieclient);
+                            const Strategieclient = await strategy.find({ _id: stg_id });
+                            console.log("Strategieclient", Strategieclient);
                             const user_activity = new user_activity_logs(
                                 {
                                     user_id: UserData._id,
@@ -332,14 +332,14 @@ console.log("Strategieclient",Strategieclient);
                                 })
                             await user_activity.save()
                         })
-                 
-                  
+
+
                     }
 
                     if (matchedObject.active_status || matchedObject.active_status == false) {
 
                         var msg = matchedObject.active_status == true ? "ON" : "OFF"
-                 
+
                         const user_activity = new user_activity_logs(
                             {
                                 user_id: UserData._id,
@@ -356,7 +356,7 @@ console.log("Strategieclient",Strategieclient);
 
 
                         var msg = matchedObject.order_type == '1' ? "MARKET" : matchedObject.order_type == '2' ? "LIMIT" : matchedObject.order_type == '3' ? "STOPLOSS LIMIT" : "STOPLOSS MARKET"
-                  
+
                         const user_activity = new user_activity_logs(
                             {
                                 user_id: UserData._id,
@@ -373,7 +373,7 @@ console.log("Strategieclient",Strategieclient);
 
 
                         var msg = matchedObject.product_type == '1' ? "CNC" : matchedObject.product_type == '2' ? "MIS" : matchedObject.product_type == '3' ? "BO" : "CO"
-                    
+
                         const user_activity = new user_activity_logs(
                             {
                                 user_id: UserData._id,
