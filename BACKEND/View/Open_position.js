@@ -26,7 +26,7 @@ async function Open_Position1(req, res) {
 
     try {
         const sourceViewName = 'open_position';
-        const destinationViewName = 'open_position_excute1';
+        const destinationViewName = 'open_position_excute';
     
         const pipeline = [
             {
@@ -61,7 +61,7 @@ module.exports = { dropExistingView1, Open_Position1 }
 
 
 
-db.createView('open_position', 'mainsignals', [
+db.createView('open_position1', 'mainsignals', [
 
     {
         $addFields: {

@@ -233,8 +233,7 @@ class OptionChain {
         try {
 
             var today = new Date();
-            var formattedDate = today.getFullYear() + '/' + (today.getMonth() + 1).toString().padStart(2, '0') + '/' + today.getDate().toString().padStart(2, '0');
-            
+            var formattedDate = today.getFullYear() + '/' + (today.getMonth() + 1).toString()+ '/' + today.getDate().toString();
 
             var GetTrade = await MainSignals_modal.aggregate([
                 {
