@@ -221,8 +221,12 @@ const AddStrategy = () => {
     //         } else {
     //             // If the "type" is unique, add a new entry
 
-    //             prev.push({ type: name, price: value });
-    //         }
+    //         return [...prev];
+    //     });
+    // }
+
+
+    // console.log("SelectPlanArr", SelectPlanArr)
 
     //         return [...prev];
     //     });

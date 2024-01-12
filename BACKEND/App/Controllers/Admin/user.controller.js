@@ -965,40 +965,36 @@ class Employee {
   async GetAllClients(req, res) {
     try {
       const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
-      const skip = (page - 1) * limit;
+      // const skip = (page - 1) * limit;
 
       // GET ALL CLIENTS
       var AdminMatch;
 
-      const date = new Date();
-      var formattedDate = date.toISOString().slice(0, 10); // Sirf date part extract karo
+      // const date = new Date();
+      // var formattedDate = date.toISOString().slice(0, 10); // Sirf date part extract karo
 
-      console.log(formattedDate);
-      if(formattedDate){
-        formattedDate = formattedDate.split("T")[0]
-      }
+
 
       if (Find_Role == "ADMIN") {
-        AdminMatch = { Role: "USER", Is_Active: "1", EndDate: { $gte: formattedDate } };
+        AdminMatch = { Role: "USER" };
       } else if (Find_Role == "SUBADMIN") {
         AdminMatch = { Role: "USER", parent_id: user_ID };
       }
 
 
-      console.log(AdminMatch);
       const getAllClients = await User_model.find(AdminMatch)
-        .skip(skip)
-        .limit(Number(limit))
+        // .skip(skip)
+        // .limit(Number(limit))
         .sort({ createdAt: -1 });
 
-      const totalCount = getAllClients.length;
+      // const totalCount = getAllClients.length;
       // IF DATA NOT EXIST
       if (getAllClients.length == 0) {
         return res.send({
           status: false,
           msg: "Empty data",
           data: [],
-          totalCount: totalCount,
+          // totalCount: totalCount,
         });
       }
 
@@ -1006,11 +1002,11 @@ class Employee {
       return res.send({
         status: true,
         msg: "Get All Clients",
-        totalCount: totalCount,
+        // totalCount: totalCount,
         data: getAllClients,
-        page: Number(page),
-        limit: Number(limit),
-        totalPages: Math.ceil(totalCount / Number(limit)),
+        // page: Number(page),
+        // limit: Number(limit),
+        // totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
       console.log("loginClients Error-", error);
@@ -1030,14 +1026,14 @@ class Employee {
       const getAllLoginClients = await User_model.find({
         $or: [{ AppLoginStatus: 1 }, { WebLoginStatus: 1 }],
       });
-      const totalCount = getAllLoginClients.length;
+      // const totalCount = getAllLoginClients.length;
       // IF DATA NOT EXIST
       if (getAllLoginClients.length == 0) {
         return res.send({
           status: false,
           msg: "Empty data",
           data: [],
-          totalCount: totalCount,
+          // totalCount: totalCount,
         });
       }
 
@@ -1045,7 +1041,7 @@ class Employee {
       res.send({
         status: true,
         msg: "Get All Login Clients",
-        totalCount: totalCount,
+        // totalCount: totalCount,
         data: getAllLoginClients,
         // page: Number(page),
         // limit: Number(limit),
@@ -1063,7 +1059,7 @@ class Employee {
       const getAllTradingClients = await User_model.find({
         TradingStatus: "on",
       });
-      const totalCount = getAllTradingClients.length;
+      // const totalCount = getAllTradingClients.length;
       // console.log("totalCount", totalCount);
       // IF DATA NOT EXIST
       if (getAllTradingClients.length == 0) {
@@ -1071,7 +1067,7 @@ class Employee {
           status: false,
           msg: "Empty data",
           data: [],
-          totalCount: totalCount,
+          // totalCount: totalCount,
         });
       }
 
@@ -1082,7 +1078,7 @@ class Employee {
         data: getAllTradingClients,
         // page: Number(page),
         // limit: Number(limit),
-        totalCount: totalCount,
+        // totalCount: totalCount,
         // totalPages: Math.ceil(totalCount / Number(limit)),
       });
     } catch (error) {
@@ -1108,14 +1104,14 @@ class Employee {
 
       }).select('Email FullName EndDate TradingStatus UserName PhoneNo')
 
-      const totalCount = GetAlluser_logs.length;
+      // const totalCount = GetAlluser_logs.length;
       // IF DATA NOT EXIST
       if (GetAlluser_logs.length == 0) {
         return res.send({
           status: false,
           msg: "Empty data",
           data: [],
-          totalCount: totalCount,
+          // totalCount: totalCount,
         });
       }
 
@@ -1124,7 +1120,7 @@ class Employee {
         status: true,
         msg: "Get All user_logs",
         data: GetAlluser_logs,
-        totalCount: totalCount,
+        // totalCount: totalCount,
       });
     } catch (error) {
       console.log("trading status Error-", error);

@@ -1,6 +1,8 @@
-/* eslint-disable no-unused-vars */
-import React from 'react'
+
+import React, { useRef, useEffect, useState } from 'react'
+
 import { BrowserRouter, Route, Routes, NavLink, useLocation, useNavigate } from "react-router-dom";
+import * as Config from "../Utils/Config";
 
 import Wraper from '../Components/Dashboard/Wraper/Wraper';
 import Dashboard from '../layout/Admin/Dashboard/DashbaordMain';
@@ -69,6 +71,8 @@ import System from '../layout/Admin/System/System';
 // Strategy
 import AllStrategy from '../layout/Admin/Service/AllStrategy/AllStrategy';
 import AddStrategy from '../layout/Admin/Service/AllStrategy/AddStrategy';
+import AddStraegyNormal from '../layout/Admin/Service/AllStrategy/AddStraegyNormal';
+
 import EditStrategy from '../layout/Admin/Service/AllStrategy/EditStrategy';
 import { Import } from 'lucide-react';
 
@@ -90,12 +94,58 @@ import EditMakeStrategy from '../layout/Admin/CreateStrategy/EditMakeStrategy';
 import BrokerInfor from '../layout/Admin/BrokersInformation/Broker_info';
 
 
+import { Get_Pmermission } from "../ReduxStore/Slice/Users/DashboardSlice";
+
+import { useDispatch, useSelector } from "react-redux";
+
+
+
 
 const Admin = () => {
 
     const location = useLocation();
     const navigate = useNavigate()
     const role_id = localStorage.getItem("Role")
+    const dispatch = useDispatch()
+    const roles = JSON.parse(localStorage.getItem('user_role'))
+    const token = JSON.parse(localStorage.getItem("user_details")).token
+
+
+    const [admin_permission, setAdmin_permission] = useState([]);
+
+    //  GET SUBADMIN PERMISSION
+    const data2 = async () => {
+
+        if (roles === 'ADMIN') {
+            await dispatch(
+                Get_Pmermission({
+                    "domain": Config.react_domain,
+                    token: token,
+                })
+            )
+                .unwrap()
+                .then((response) => {
+                    if (response.status) {
+                        setAdmin_permission({
+                            loading: false,
+                            data: response.data,
+                        });
+                    } else {
+                        setAdmin_permission({
+                            loading: false,
+                            data: response.data,
+                        });
+                    }
+                });
+        }
+    }
+    useEffect(() => {
+        data2()
+
+    }, [])
+
+    console.log("=>", admin_permission.data && admin_permission.data[0].Strategy_plan);
+
 
     return (
         <>
@@ -116,7 +166,7 @@ const Admin = () => {
                 <Route exact path="/allsubadmins/add" element={<AddSubadmin />} />
                 <Route exact path="/allsubadmins/edit" element={<EditSubadminClient />} />
                 <Route exact path="/strategies" element={<AllStrategy />} />
-                <Route exact path="/strategies/add" element={<AddStrategy />} />
+                <Route exact path="/strategies/add" element={admin_permission.data && admin_permission.data[0].Strategy_plan == 1 ? <AddStrategy /> : <AddStraegyNormal />} />
                 <Route exact path="/strategies/edit/:id" element={<EditStrategy />} />
                 <Route exact path="/sevendaysentry" element={<SevenDaysEntry />} />
                 <Route exact path="/Edit7days" element={<Edit7days />} />
