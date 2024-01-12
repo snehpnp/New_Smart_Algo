@@ -107,7 +107,8 @@ const AddClient = () => {
       app_key: 'null',
       demat_userid: 'null',
       parent_role: null,
-      Strategy: false
+      Strategy: false,
+      multiple_strategy_select: false,
     },
     validate: (values) => {
 
@@ -196,7 +197,8 @@ const AddClient = () => {
         "app_key": values.app_key,
         "api_type": values.api_type,
         "demat_userid": values.demat_userid,
-        "group_service": values.groupservice
+        "group_service": values.groupservice,
+        "multiple_strategy_select" : values.multiple_strategy_select === false ? '0' : '1'
       }
 
       await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((response) => {
@@ -408,7 +410,8 @@ const AddClient = () => {
       options:
         AllGroupServices.data && AllGroupServices.data.map((item) => ({ label: item.name, value: item._id }))
       , label_size: 12, col_size: 6, disable: false
-    }
+    },
+    { name: 'multiple_strategy_select', label: 'Mutiple Selection Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false },
 
   ];
 
