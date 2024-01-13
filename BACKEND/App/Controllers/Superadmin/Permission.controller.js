@@ -67,12 +67,7 @@ class Panel {
 
                 });
 
-            // If you want to send the retrieved data as a response
-            return res.send({
-                status: true,
-                msg: "Get All Api Info",
-                data: result
-            });
+          
 
 
         } catch (error) {
