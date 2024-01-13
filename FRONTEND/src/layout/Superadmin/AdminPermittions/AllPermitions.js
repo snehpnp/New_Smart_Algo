@@ -17,8 +17,8 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import SidebarPermission from './Sidebar_permission';
 import PanelDetails from './PanelDetails';
-import ShowAllClients from './ShowAllClients';
-import ShowAllSubadmins from './ShowAllSubadmins';
+ 
+ 
 import AddLicence from './Add_Licence';
 import LicenceDetails from './LicenceDetails';
 import BrokerPermittion from './Broker_Permittion';
@@ -41,6 +41,8 @@ const AllPermitions = () => {
     //  for Show Clients
     const [ShowClientsModal, setShowClientsModal] = useState(false)
     const [ShowClientsList, setShowClientsList] = useState([])
+
+     
     //  for Subadmins
     const [showSubadminsModal, setshowSubadminsModal] = useState(false)
     const [ShowSubadminList, setShowSubadminList] = useState([])
@@ -234,26 +236,40 @@ const AllPermitions = () => {
         //         </span>
         //     )
         // },
-        {
+        // {
+        //     dataField: 'panel_name',
+        //     text: 'Clients',
+        //     formatter: (cell, row) => (
+        //         <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+        //             <Link to='/super/clientlist' state={row}>
+        //                 <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"
+        //                     onClick={(e) => { setshowSubadminsModal(true); setShowSubadminList({ id: row._id, db_url: row.db_url, db_name: row.db_name }) }}
+        //                 />
+        //             </Link>
+        //         </span >
+        //     )
+        // },
+          {
             dataField: 'panel_name',
             text: 'Clients',
             formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-                    <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"
-                        onClick={(e) => { setShowClientsModal(true); setShowClientsList({ id: row._id, db_url: row.db_url, db_name: row.db_name }) }}
-                    />
-                </span>
+                <span data-toggle="tooltip" data-placement="top" title="Panel Views">   
+                    <Link to={`/super/showclient`} state={row}>
+                        <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"/> 
+                    </Link>
+                </span >
             )
         },
+
         {
             dataField: 'panel_name',
             text: 'Subadmins',
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-                    <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"
-                        onClick={(e) => { setshowSubadminsModal(true); setShowSubadminList({ id: row._id, db_url: row.db_url, db_name: row.db_name }) }}
-                    />
-                </span>
+                <Link to='/super/subadminlist' state={row}>
+                    <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"/>
+                </Link>
+            </span >
             )
         },
         {
@@ -321,6 +337,8 @@ const AllPermitions = () => {
     }
 
 
+
+
     return (
         <>
             {
@@ -335,8 +353,6 @@ const AllPermitions = () => {
                                     <>
                                         <SidebarPermission showPanelName={showPanelName} showModal={showModal} setshowModal={() => setshowModal(false)} />
                                         <BrokerPermittion List={showBrokerDetails} showModal={showBrokerModal} setshowModal={() => setshowBrokerModal(false)} />
-                                        <ShowAllSubadmins List={ShowSubadminList} showModal={showSubadminsModal} setshowModal={() => setshowSubadminsModal(false)} />
-                                        <ShowAllClients List={ShowClientsList} showModal={ShowClientsModal} setshowModal={() => setShowClientsModal(false)} />
                                         <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
                                         <LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />

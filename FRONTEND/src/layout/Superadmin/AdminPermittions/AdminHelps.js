@@ -111,7 +111,6 @@ const AdminHelps = () => {
                         <Content Page_title="Help Center" button_status={true} button_title='Back' route='/super/permitions'>
 
 
-
                             <FullDataTable TableColumns={columns} tableData={getAllClients.data} />
                         </Content>
                     </>
