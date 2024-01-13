@@ -70,9 +70,9 @@ const Sidebar = ({ ShowSidebar }) => {
                 });
         }
     }
+
     useEffect(() => {
         data2()
-
     }, [])
 
 
@@ -138,8 +138,8 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
     return (
-        <div>
 
+        <div>
             <div className="deznav pt-3" >
                 <div className="deznav-scroll">
                     <ul className="metismenu" id="menu">
@@ -227,7 +227,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                 roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
                                     return <>
 
-                                        {/* {(item.route === "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0) ? */}
+                                       {(item.name != "Option Chain" ) ? 
 
                                         <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
                                             {item.Data.length > 0 ? <>
@@ -255,7 +255,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                             </> : ""}
                                         </li>
 
-                                        {/* : ""} */}
+                                     : ""} 
 
 
                                         {item.Data.length === 0 ? <>

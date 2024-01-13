@@ -74,6 +74,8 @@ import AddStrategy from '../layout/Admin/Service/AllStrategy/AddStrategy';
 import AddStraegyNormal from '../layout/Admin/Service/AllStrategy/AddStraegyNormal';
 
 import EditStrategy from '../layout/Admin/Service/AllStrategy/EditStrategy';
+import EditStrategyNormal from '../layout/Admin/Service/AllStrategy/EditStrategyNormal';
+
 import { Import } from 'lucide-react';
 
 // OPTION CHAIN
@@ -167,7 +169,9 @@ const Admin = () => {
                 <Route exact path="/allsubadmins/edit" element={<EditSubadminClient />} />
                 <Route exact path="/strategies" element={<AllStrategy />} />
                 <Route exact path="/strategies/add" element={admin_permission.data && admin_permission.data[0].Strategy_plan == 1 ? <AddStrategy /> : <AddStraegyNormal />} />
-                <Route exact path="/strategies/edit/:id" element={<EditStrategy />} />
+        
+                <Route exact path="/strategies/edit/:id" element={admin_permission.data && admin_permission.data[0].Strategy_plan == 1 ? <EditStrategy /> : <EditStrategyNormal />} />
+
                 <Route exact path="/sevendaysentry" element={<SevenDaysEntry />} />
                 <Route exact path="/Edit7days" element={<Edit7days />} />
                 <Route exact path="/tradeexecution" element={<TradeExecutionReport />} />
