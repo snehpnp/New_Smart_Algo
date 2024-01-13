@@ -33,8 +33,6 @@ const ShowAllSubadmins = ({ showModal, setshowModal, List }) => {
 
     }
 
-
-
     useEffect(() => {
         data()
     }, [List])
@@ -69,6 +67,7 @@ const ShowAllSubadmins = ({ showModal, setshowModal, List }) => {
             >
                 <FullDataTable TableColumns={columns}
                     tableData={ShowClients && ShowClients}
+
                 />
             </Modal>
         </div>

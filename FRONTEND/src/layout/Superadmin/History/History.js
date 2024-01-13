@@ -55,7 +55,7 @@ const History = () => {
     ];
 
 
-console.log("AllData",AllData);
+ 
 
     const data = async () => {
         await dispatch(Get_Panel_History()).unwrap()
