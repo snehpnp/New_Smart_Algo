@@ -11,9 +11,6 @@ const ShowAllClients = ({ showModal, setshowModal, List }) => {
 
     const [ShowClients, setshowClients] = useState([])
 
-
-
-
     const dispatch = useDispatch()
 
     const data = async () => {
@@ -22,6 +19,7 @@ const ShowAllClients = ({ showModal, setshowModal, List }) => {
 
             await dispatch(Get_All_Admin_Client(List)).unwrap()
                 .then((response) => {
+
                     if (response.status) {
                         setshowClients(
                             response.data
@@ -31,12 +29,6 @@ const ShowAllClients = ({ showModal, setshowModal, List }) => {
         }
 
     }
-
-
-
-    useEffect(() => {
-        data()
-    }, [List])
 
 
 
@@ -91,20 +83,18 @@ const ShowAllClients = ({ showModal, setshowModal, List }) => {
     };
 
 
-    
-  const showLicenceName = (value1, licence_type) => {
-    let value = parseInt(value1);
 
-    if (licence_type === "0") {
-      return "2 Days Only";
-    } else if (licence_type === "1") {
-      return "Demo";
-    } else {
-      return "Live";
-    }
-  };
+    const showLicenceName = (value1, licence_type) => {
+        let value = parseInt(value1);
 
-
+        if (licence_type === "0") {
+            return "2 Days Only";
+        } else if (licence_type === "1") {
+            return "Demo";
+        } else {
+            return "Live";
+        }
+    };
 
 
     const columns = [
@@ -141,8 +131,17 @@ const ShowAllClients = ({ showModal, setshowModal, List }) => {
             formatter: (cell, row) => showLicenceName(cell, row.license_type)
 
         },
-
     ];
+
+
+
+
+
+    useEffect(() => {
+        data()
+    }, [List])
+
+
     return (
         <div>
             <Modal isOpen={showModal} backdrop="static" size="xl" title="Show All Clients" hideBtn={true}

@@ -17,331 +17,327 @@ async function DashboardView() {
         const db = await connectToDatabase();
 
         // MongoDB aggregation pipeline
-        const pipeline =  [
-             {
-            $group: {
-                _id: null,
-                total_client: {
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
+        const pipeline = [
+            {
+                $group: {
+                    _id: null,
+                    total_client: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
 
-                                    { $eq: ["$Role", "USER"] },
-                                    { $eq: ["$Is_Active", "1"] }
+                                        { $eq: ["$Role", "USER"] },
+                                        { $eq: ["$Is_Active", "1"] }
 
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                },
-                total_active_client: {
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    // { $eq: ["$license_type", "2"] },
-                                    { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-                                    { $eq: ["$Is_Active", "1"] }
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+                    total_active_client: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        // { $eq: ["$license_type", "2"] },
+                                        { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                        { $eq: ["$Is_Active", "1"] }
 
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                },
-                total_expired_client: {
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-                                    { $eq: ["$Is_Active", "1"] }
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+                    total_expired_client: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                        { $eq: ["$Is_Active", "1"] }
 
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                },
-                total_live_client: {
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    { $eq: ["$license_type", "2"] },
-                                    { $eq: ["$Is_Active", "1"] }
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+                    total_live_client: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        { $eq: ["$license_type", "2"] },
+                                        { $eq: ["$Is_Active", "1"] }
 
 
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                },
-                total_active_live: {
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    { $eq: ["$license_type", "2"] },
-                                    {
-                                        $gte: [
-                                            {
-                                                $dateToString: {
-                                                    format: "%Y-%m-%d",
-                                                    date: "$EndDate"
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+                    total_active_live: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        { $eq: ["$license_type", "2"] },
+                                        {
+                                            $gte: [
+                                                {
+                                                    $dateToString: {
+                                                        format: "%Y-%m-%d",
+                                                        date: "$EndDate"
+                                                    }
+                                                },
+                                                {
+                                                    $dateToString: {
+                                                        format: "%Y-%m-%d",
+                                                        date: new Date()
+                                                    }
                                                 }
-                                            },
-                                            {
-                                                $dateToString: {
-                                                    format: "%Y-%m-%d",
-                                                    date: new Date()
+                                            ]
+                                        },
+                                        { $eq: ["$Is_Active", "1"] }
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+                    total_expired_live: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        { $eq: ["$license_type", "2"] },
+                                        { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                        { $eq: ["$Is_Active", "1"] }
+
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+                    total_demo_client: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        { $eq: ["$license_type", "1"] },
+                                        { $eq: ["$Is_Active", "1"] }
+
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+                    total_active_demo: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        { $eq: ["$license_type", "1"] },
+                                        {
+                                            $gte: [
+                                                {
+                                                    $dateToString: {
+                                                        format: "%Y-%m-%d",
+                                                        date: "$EndDate"
+                                                    }
+                                                },
+                                                {
+                                                    $dateToString: {
+                                                        format: "%Y-%m-%d",
+                                                        date: new Date()
+                                                    }
                                                 }
-                                            }
-                                        ]
-                                    },
-                                    { $eq: ["$Is_Active", "1"] }
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                },
-                total_expired_live: {
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    { $eq: ["$license_type", "2"] },
-                                    { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-                                    { $eq: ["$Is_Active", "1"] }
+                                            ]
+                                        },
+                                        { $eq: ["$Is_Active", "1"] }
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+                    total_expired_demo: {
 
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                },
-                total_demo_client: {
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    { $eq: ["$license_type", "1"] },
-                                    { $eq: ["$Is_Active", "1"] }
-
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                },
-                total_active_demo: {
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    { $eq: ["$license_type", "1"] },
-                                    {
-                                        $gte: [
-                                            {
-                                                $dateToString: {
-                                                    format: "%Y-%m-%d",
-                                                    date: "$EndDate"
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        { $eq: ["$license_type", "1"] },
+                                        {
+                                            $lt: [
+                                                {
+                                                    $dateToString: {
+                                                        format: "%Y-%m-%d",
+                                                        date: "$EndDate"
+                                                    }
+                                                },
+                                                {
+                                                    $dateToString: {
+                                                        format: "%Y-%m-%d",
+                                                        date: new Date()
+                                                    }
                                                 }
-                                            },
-                                            {
-                                                $dateToString: {
-                                                    format: "%Y-%m-%d",
-                                                    date: new Date()
+                                            ]
+                                        },
+                                        { $eq: ["$Is_Active", "1"] }
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+
+                    },
+                    total_two_days: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        { $eq: ["$license_type", "0"] },
+                                        { $eq: ["$Is_Active", "1"] }
+
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    },
+                    total_active_two_days: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        { $eq: ["$license_type", "0"] },
+                                        {
+                                            $gte: [
+                                                {
+                                                    $dateToString: {
+                                                        format: "%Y-%m-%d",
+                                                        date: "$EndDate"
+                                                    }
+                                                },
+                                                {
+                                                    $dateToString: {
+                                                        format: "%Y-%m-%d",
+                                                        date: new Date()
+                                                    }
                                                 }
-                                            }
-                                        ]
-                                    },
-                                    { $eq: ["$Is_Active", "1"] }
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                },
-                total_expired_demo: {
+                                            ]
+                                        },
+                                        { $eq: ["$Is_Active", "1"] }
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    },
 
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    { $eq: ["$license_type", "1"] },
-                                    {
-                                        $lt: [
-                                            {
-                                                $dateToString: {
-                                                    format: "%Y-%m-%d",
-                                                    date: "$EndDate"
-                                                }
-                                            },
-                                            {
-                                                $dateToString: {
-                                                    format: "%Y-%m-%d",
-                                                    date: new Date()
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    { $eq: ["$Is_Active", "1"] }
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
+                    total_expired_two_days: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        { $eq: ["$license_type", "0"] },
+                                        { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
+                                        { $eq: ["$Is_Active", "1"] }
 
-                },
-                total_two_days: {
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    { $eq: ["$license_type", "0"] },
-                                    { $eq: ["$Is_Active", "1"] }
+                                    ]
+                                },
+                                1,
+                                0
+                            ]
+                        }
+                    },
 
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                },
-                total_active_two_days: {
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    { $eq: ["$license_type", "0"] },
-                                    {
-                                        $gte: [
-                                            {
-                                                $dateToString: {
-                                                    format: "%Y-%m-%d",
-                                                    date: "$EndDate"
-                                                }
-                                            },
-                                            {
-                                                $dateToString: {
-                                                    format: "%Y-%m-%d",
-                                                    date: new Date()
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    { $eq: ["$Is_Active", "1"] }
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                },
-
-                total_expired_two_days: {
-                    $sum: {
-                        $cond: [
-                            {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    { $eq: ["$license_type", "0"] },
-                                    { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-                                    { $eq: ["$Is_Active", "1"] }
-
-                                ]
-                            },
-                            1,
-                            0
-                        ]
-                    }
-                },
-
-                used_licence: {
-                    $sum: {
-                        $cond: {
-                            if: {
-                                $and: [
-                                    { $eq: ["$Role", "USER"] },
-                                    { $eq: ["$license_type", "2"] }
-
-                                ]
-                            },
-                            then: { $toInt: "$licence" },
-                            else: 0
+                    used_licence: {
+                        $sum: {
+                            $cond: [
+                                {
+                                    $and: [
+                                        { $eq: ["$Role", "USER"] },
+                                        { $eq: ["$license_type", "2"] }
+                                    ]
+                                },
+                                { $ifNull: ["$licence", 0] }, // Provide a default value if $licence is null
+                                0
+                            ]
                         }
                     }
+
+                }
+            },
+
+            {
+                $lookup: {
+                    from: "companies",
+                    pipeline: [],
+                    as: "company_info"
+                }
+            },
+            {
+                $unwind: "$company_info"
+            },
+            {
+                $project: {
+                    total_client: 1,
+                    total_active_client: 1,
+                    total_expired_client: 1,
+                    total_live_client: 1,
+                    total_active_live: 1,
+                    total_expired_live: 1,
+                    total_demo_client: 1,
+                    total_active_demo: 1,
+                    total_expired_demo: 1,
+                    total_two_days: 1,
+                    total_active_two_days: 1,
+                    total_expired_two_days: 1,
+                    used_licence: 1,
+                    licenses: "$company_info.licenses",
+                    remaining_license: {
+                        $subtract: [
+                            "$company_info.licenses",
+                            "$used_licence"
+                        ]
+                    }
                 }
             }
-        },
-        {
-            $lookup: {
-                from: "companies",
-                pipeline: [],
-                as: "company_info"
-            }
-        },
-        {
-            $unwind: "$company_info"
-        },
-        {
-            $project: {
-                total_client: 1,
-                total_active_client: 1,
-                total_expired_client: 1,
-                total_live_client: 1,
-                total_active_live: 1,
-                total_expired_live: 1,
-                total_demo_client: 1,
-                total_active_demo: 1,
-                total_expired_demo: 1,
-                total_two_days: 1,
-                total_active_two_days: 1,
-                total_expired_two_days: 1,
-                used_licence: 1,
-                licenses: "$company_info.licenses",
-                remaining_license: {
-                    $subtract: [
-                        { $toInt: "$company_info.licenses" }, 
-                        { $toInt: "$used_licence" } 
-                    ]
-                }
 
-            }
-        },
-        {
-            $out: "dashboard_data1" // Save the result as a view named "dashboard_data"
-        }
-
-
-    ];
+        ];
 
         // Create a MongoDB view named "dashboard_data1"
-        await db.createCollection("dashboard_data1", { viewOn: "users", pipeline });
+        await db.createCollection("dashboard_data", { viewOn: "users", pipeline });
 
         console.error('View created successfully.');
 
@@ -370,329 +366,4 @@ async function deleteDashboard() {
 
 
 module.exports = { DashboardView, deleteDashboard }
-
-
-
-// db.createView("dashboard_data", "users",
-//     [
-
-//         {
-//             $group: {
-//                 _id: null,
-//                 total_client: {
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-
-//                                     { $eq: ["$Role", "USER"] },
-//                                     { $eq: ["$Is_Active", "1"] }
-
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-//                 },
-//                 total_active_client: {
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-//                                     { $eq: ["$Role", "USER"] },
-//                                     // { $eq: ["$license_type", "2"] },
-//                                     { $gt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-//                                     { $eq: ["$Is_Active", "1"] }
-
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-//                 },
-//                 total_expired_client: {
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-//                                     { $eq: ["$Role", "USER"] },
-//                                     { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-//                                     { $eq: ["$Is_Active", "1"] }
-
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-//                 },
-//                 total_live_client: {
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-//                                     { $eq: ["$Role", "USER"] },
-//                                     { $eq: ["$license_type", "2"] },
-//                                     { $eq: ["$Is_Active", "1"] }
-
-
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-//                 },
-//                 total_active_live: {
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-//                                     { $eq: ["$Role", "USER"] },
-//                                     { $eq: ["$license_type", "2"] },
-//                                     {
-//                                         $gte: [
-//                                             {
-//                                                 $dateToString: {
-//                                                     format: "%Y-%m-%d",
-//                                                     date: "$EndDate"
-//                                                 }
-//                                             },
-//                                             {
-//                                                 $dateToString: {
-//                                                     format: "%Y-%m-%d",
-//                                                     date: new Date()
-//                                                 }
-//                                             }
-//                                         ]
-//                                     },
-//                                     { $eq: ["$Is_Active", "1"] }
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-//                 },
-//                 total_expired_live: {
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-//                                     { $eq: ["$Role", "USER"] },
-//                                     { $eq: ["$license_type", "2"] },
-//                                     { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-//                                     { $eq: ["$Is_Active", "1"] }
-
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-//                 },
-//                 total_demo_client: {
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-//                                     { $eq: ["$Role", "USER"] },
-//                                     { $eq: ["$license_type", "1"] },
-//                                     { $eq: ["$Is_Active", "1"] }
-
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-//                 },
-//                 total_active_demo: {
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-//                                     { $eq: ["$Role", "USER"] },
-//                                     { $eq: ["$license_type", "1"] },
-//                                     {
-//                                         $gte: [
-//                                             {
-//                                                 $dateToString: {
-//                                                     format: "%Y-%m-%d",
-//                                                     date: "$EndDate"
-//                                                 }
-//                                             },
-//                                             {
-//                                                 $dateToString: {
-//                                                     format: "%Y-%m-%d",
-//                                                     date: new Date()
-//                                                 }
-//                                             }
-//                                         ]
-//                                     },
-//                                     { $eq: ["$Is_Active", "1"] }
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-//                 },
-//                 total_expired_demo: {
-
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-//                                     { $eq: ["$Role", "USER"] },
-//                                     { $eq: ["$license_type", "1"] },
-//                                     {
-//                                         $lt: [
-//                                             {
-//                                                 $dateToString: {
-//                                                     format: "%Y-%m-%d",
-//                                                     date: "$EndDate"
-//                                                 }
-//                                             },
-//                                             {
-//                                                 $dateToString: {
-//                                                     format: "%Y-%m-%d",
-//                                                     date: new Date()
-//                                                 }
-//                                             }
-//                                         ]
-//                                     },
-//                                     { $eq: ["$Is_Active", "1"] }
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-
-//                 },
-//                 total_two_days: {
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-//                                     { $eq: ["$Role", "USER"] },
-//                                     { $eq: ["$license_type", "0"] },
-//                                     { $eq: ["$Is_Active", "1"] }
-
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-//                 },
-//                 total_active_two_days: {
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-//                                     { $eq: ["$Role", "USER"] },
-//                                     { $eq: ["$license_type", "0"] },
-//                                     {
-//                                         $gte: [
-//                                             {
-//                                                 $dateToString: {
-//                                                     format: "%Y-%m-%d",
-//                                                     date: "$EndDate"
-//                                                 }
-//                                             },
-//                                             {
-//                                                 $dateToString: {
-//                                                     format: "%Y-%m-%d",
-//                                                     date: new Date()
-//                                                 }
-//                                             }
-//                                         ]
-//                                     },
-//                                     { $eq: ["$Is_Active", "1"] }
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-//                 },
-
-//                 total_expired_two_days: {
-//                     $sum: {
-//                         $cond: [
-//                             {
-//                                 $and: [
-//                                     { $eq: ["$Role", "USER"] },
-//                                     { $eq: ["$license_type", "0"] },
-//                                     { $lt: [{ $subtract: ["$EndDate", new Date()] }, 0] },
-//                                     { $eq: ["$Is_Active", "1"] }
-
-//                                 ]
-//                             },
-//                             1,
-//                             0
-//                         ]
-//                     }
-//                 },
-
-
-//                 used_licence: {
-//                     $sum: {
-//                       $cond: [
-//                         {
-//                           $and: [
-//                             { $eq: ["$Role", "USER"] },
-//                             { $eq: ["$license_type", "2"] }
-//                           ]
-//                         },
-//                         "$licence", // Removed $toInt
-//                         0
-//                       ]
-//                     }
-//                   }
-                  
-                  
-//             }
-//         },
-//         {
-//             $lookup: {
-//                 from: "companies",
-//                 pipeline: [],
-//                 as: "company_info"
-//             }
-//         },
-//         {
-//             $unwind: "$company_info"
-//         },
-//         {
-//             $project: {
-//                 total_client: 1,
-//                 total_active_client: 1,
-//                 total_expired_client: 1,
-//                 total_live_client: 1,
-//                 total_active_live: 1,
-//                 total_expired_live: 1,
-//                 total_demo_client: 1,
-//                 total_active_demo: 1,
-//                 total_expired_demo: 1,
-//                 total_two_days: 1,
-//                 total_active_two_days: 1,
-//                 total_expired_two_days: 1,
-//                 used_licence: 1,
-//                 licenses: "$company_info.licenses",
-//                 remaining_license: {
-//                     $subtract: [
-//                         { $toInt: "$company_info.licenses" },
-//                         { $toInt: "$used_licence" }
-//                     ]
-//                 }
-
-//             }
-//         }
-
-//     ]);
 

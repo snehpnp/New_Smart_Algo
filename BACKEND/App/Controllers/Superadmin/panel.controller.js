@@ -274,6 +274,8 @@ class Panel {
             } else {
                 tt = req.body.brokerId
             }
+
+                console.log("tt",tt);
             // Find documents with matching ids
             const getAllpanel = await ApiCreateInfo.find({ broker_id: tt })
 
