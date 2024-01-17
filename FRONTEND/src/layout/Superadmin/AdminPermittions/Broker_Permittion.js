@@ -17,7 +17,7 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => 
     const [SelectedBrokers, setSelectedBrokers] = useState([])
     const [refresh, setRefresh] = useState(false)
 
-
+     
 
     const formik = useFormik({
         initialValues: {
@@ -32,10 +32,13 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => 
             return errors;
         },
         onSubmit: async (values) => {
-
+           
+          //  console.log('List',List.domain)
+          //  console.log('SelectedBrokers',SelectedBrokers)
+           
             const req = {
                 "data": SelectedBrokers,
-                "domain": Config.react_domain,
+                "domain": List.domain,
 
             }
 
@@ -45,6 +48,7 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => 
                     toast.success(response.msg);
                     setshowModal(false)
                     setRefresh(!refresh)
+                    window.location.reload()
                 }
                 else {
                     toast.success(response.msg);
@@ -64,21 +68,14 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => 
                     setGetAllBrokerName(
                         response.data
                     );
-                })
-        }
+              })
+         }
     }
 
     //  
     useEffect(() => {
         data1()
     }, [showModal, refresh])
-
-
-    const DefaultSelectesCheckBox = (strategy) => {
-        let abc = List && List.broker_id.some((selectedBroker) => selectedBroker.id === strategy)
-        return abc
-    }
-
 
     useEffect(() => {
         let abc = []
@@ -93,6 +90,15 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => 
     }, [showModal, refresh])
 
 
+    const DefaultSelectesCheckBox = (strategy) => {
+        let abc = List && List.broker_id.some((selectedBroker) => selectedBroker.id === strategy)
+        return abc
+    }
+
+
+  
+
+
 
     const fields = [
         // {
@@ -105,7 +111,7 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => 
     ]
 
     const handleStrategyChange = (event, strategy_id) => {
-        console.log("strategy_id", strategy_id)
+       // console.log("strategy_id", strategy_id)
         const strategyId = event.target.value;
         const strategyName = event.target.name;
         if (event.target.checked) {

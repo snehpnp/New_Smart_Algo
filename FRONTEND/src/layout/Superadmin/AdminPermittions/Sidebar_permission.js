@@ -18,7 +18,9 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
     const [GetOption_chain, setGetOption_chain] = useState("")
     const [getStrategy_plan, setGetStrategy_plan] = useState("")
 
-    console.log("GetCreate_Strategy", GetOption_chain)
+    // console.log("GetCreate_Strategy", GetCreate_Strategy)
+    // console.log("GetOption_chain", GetOption_chain)
+    // console.log("getStrategy_plan", getStrategy_plan)
 
 
 
@@ -40,6 +42,9 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
             return errors;
         },
         onSubmit: async (values) => {
+     
+            //console.log("showPanelName -",showPanelName)
+           
             const req = {
                 "Option_chain": GetOption_chain && GetOption_chain ? 1 : 0,
                 "Create_Strategy": GetCreate_Strategy && GetCreate_Strategy ? 1 : 0,
@@ -48,7 +53,7 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
                 "db_url": showPanelName.db_url,
                 "db_name": showPanelName.db_name,
                 "key": showPanelName.key,
-                "domain": Config.react_domain,
+                "domain": showPanelName.rowdata.domain,
 
             }
 
@@ -75,8 +80,8 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
 
     useEffect(() => {
         setGetCreate_Strategy(showPanelName.rowdata && showPanelName.rowdata.Create_Strategy)
-        setGetStrategy_plan(showPanelName.rowdata && showPanelName.rowdata.Option_chain)
-        setGetOption_chain(showPanelName.rowdata && showPanelName.rowdata.Strategy_plan)
+        setGetStrategy_plan(showPanelName.rowdata && showPanelName.rowdata.Strategy_plan)
+        setGetOption_chain(showPanelName.rowdata && showPanelName.rowdata.Option_chain)
     }, [showPanelName.rowdata])
 
 
