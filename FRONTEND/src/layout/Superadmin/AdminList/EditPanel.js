@@ -58,6 +58,7 @@ const Edit_panel = () => {
             is_expired: 0,
             theme_id: "",
             db_url: "",
+            backend_rul:"",
             db_name: "",
             broker_id: [],
             Create_Strategy: false,
@@ -93,6 +94,10 @@ const Edit_panel = () => {
             if (!values.db_name) {
                 errors.db_name = valid_err.DBNAME_ERROR;
             }
+            
+            if (!values.backend_rul) {
+                errors.backend_rul = valid_err.BACKNEDURL_ERROR;
+            }
 
 
 
@@ -114,6 +119,7 @@ const Edit_panel = () => {
                 Create_Strategy: values.Create_Strategy && values.Create_Strategy ? 1 : 0,
                 Option_chain: values.Option_chain && values.Option_chain ? 1 : 0,
                 Strategy_plan: values.Strategy_plan && values.Strategy_plan ? 1 : 0,
+                backend_rul:values.backend_rul
             };
 
 
@@ -236,6 +242,8 @@ const Edit_panel = () => {
             formik.setFieldValue('theme_id', userPanelData.theme_id || '');
             formik.setFieldValue('db_url', userPanelData.db_url || '');
             formik.setFieldValue('db_name', userPanelData.db_name || '');
+            formik.setFieldValue('backend_rul', userPanelData.backend_rul || '');
+
             formik.setFieldValue('Create_Strategy', userPanelData.Create_Strategy == 1 ? true : false);
             formik.setFieldValue('Option_chain', userPanelData.Option_chain == 1 ? true : false);
             formik.setFieldValue('Strategy_plan', userPanelData.Strategy_plan == 1 ? true : false);
@@ -318,6 +326,13 @@ const Edit_panel = () => {
             label_size: 12,
             col_size: 6,
         },
+        {
+            name: "backend_rul",
+            label: "Backend Url",
+            type: "text",
+            label_size: 12,
+            col_size: 12,
+        },
 
         {
             name: "Create_Strategy",
@@ -346,7 +361,7 @@ const Edit_panel = () => {
             check_box_true:
                 formik.values.Strategy_plan ? true : false,
         },
-
+     
     ];
 
 

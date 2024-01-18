@@ -62,7 +62,7 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async EditPanel(req, res) {
         try {
-            const { _id, panel_name, domain, port, key, ip_address, theme_id, db_url, db_name, broker_id, Create_Strategy, Option_chain, Strategy_plan } = req.body
+            const { _id, panel_name, domain, port, key, ip_address, theme_id, db_url,backend_rul, db_name, broker_id, Create_Strategy, Option_chain, Strategy_plan } = req.body
 
 
             var panle_data = {
@@ -77,7 +77,8 @@ class Panel {
                 broker_id: broker_id.filter((data) => data.checked == true),
                 Create_Strategy: Create_Strategy,
                 Option_chain: Option_chain,
-                Strategy_plan: Strategy_plan
+                Strategy_plan: Strategy_plan,
+                backend_rul:backend_rul
             }
 
             var objectId = new ObjectId(_id);
