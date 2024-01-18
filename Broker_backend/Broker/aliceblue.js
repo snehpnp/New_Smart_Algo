@@ -228,9 +228,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                             });
 
 
-                            if (response.data.length > 0) {
+                            if (Array.isArray(response.data)) {
 
-                                const Exist_entry_order = response.data.body.NetPositionDetail.find(item1 => item1.Token === token[0].instrument_token && item1.Pcode == item.postdata.pCode);
+                                const Exist_entry_order = response.data.find(item1 => item1.Token === token[0].instrument_token && item1.Pcode == item.postdata.pCode);
 
                                 if(Exist_entry_order != undefined){
                                     if (segment.toUpperCase() == 'C') {
@@ -315,11 +315,41 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                                     }
                                 }else{
+                                   
+                                    BrokerResponse.create({
+                                        user_id: item._id,
+                                        receive_signal: signal_req,
+                                        strategy: strategy,
+                                        type: type,
+                                        symbol: input_symbol,
+                                        order_status: "Script not exist",
+                                        order_id: "",
+                                        trading_symbol: "",
+                                        broker_name: "ALICE BLUE",
+                                        send_request: send_rr,
+                                        reject_reason: "This Script position Empty",
+    
+                                    })
+                                    .then((BrokerResponseCreate) => {
+                                            // console.log('User created and saved:', BrokerResponseCreate._id)
+                                    })
+                                    .catch((err) => {
+                                    try {
+                                        console.error('Error creating and saving user:', err);
+                                    } catch (e) {
+                                        console.log("duplicate key")
+                                    }
+    
+                                 });
+
+
 
                                 }
 
                                
                             } else {
+                                
+                                const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
 
                                 BrokerResponse.create({
                                     user_id: item._id,
@@ -327,25 +357,25 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     strategy: strategy,
                                     type: type,
                                     symbol: input_symbol,
-                                    order_status: "Entry Not Exist",
+                                    order_status: "ERROR",
                                     order_id: "",
                                     trading_symbol: "",
                                     broker_name: "ALICE BLUE",
                                     send_request: send_rr,
-                                    reject_reason: "All position Empty",
+                                    reject_reason: message,
 
                                 })
-                                    .then((BrokerResponseCreate) => {
+                                .then((BrokerResponseCreate) => {
                                         // console.log('User created and saved:', BrokerResponseCreate._id)
-                                    })
-                                    .catch((err) => {
-                                        try {
-                                            console.error('Error creating and saving user:', err);
-                                        } catch (e) {
-                                            console.log("duplicate key")
-                                        }
+                                })
+                                .catch((err) => {
+                                try {
+                                    console.error('Error creating and saving user:', err);
+                                } catch (e) {
+                                    console.log("duplicate key")
+                                }
 
-                                    });
+                                 });
 
                             }
 

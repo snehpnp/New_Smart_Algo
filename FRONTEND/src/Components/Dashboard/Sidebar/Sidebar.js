@@ -34,7 +34,13 @@ const Sidebar = ({ ShowSidebar }) => {
     const [admin_permission, setAdmin_permission] = useState([]);
 
 
+    console.log("  admin_permission  ",admin_permission)
+    // if(admin_permission.length > 0 ){
 
+    //     console.log("  admin_permission.data[0].Create_Strategy  ",admin_permission.data[0].Create_Strategy)
+
+    // }
+    
 
     //  GET SUBADMIN PERMISSION
     const data2 = async () => {
@@ -70,9 +76,9 @@ const Sidebar = ({ ShowSidebar }) => {
                 });
         }
     }
-
     useEffect(() => {
         data2()
+
     }, [])
 
 
@@ -138,8 +144,8 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
     return (
-
         <div>
+
             <div className="deznav pt-3" >
                 <div className="deznav-scroll">
                     <ul className="metismenu" id="menu">
@@ -225,16 +231,25 @@ const Sidebar = ({ ShowSidebar }) => {
                                 </>
                             }) : "" :
                                 roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
-                                    return <>
 
-                                       {(item.name != "Option Chain" ) ? 
+                                   // console.log("item.Data.length SS length --",item.Data.length)
+                                    //console.log("item.Data.length SS -- check permission",admin_permission.data && admin_permission.data[0].Create_Strategy === 0)
+                                
+                                    // console.log("location.pathname ",location.pathname)
+                                    // console.log("item  ",item)
+                                    // console.log("item.Data ",item.Data)
+
+                                    if((item.id === 9 || item.name === "Make Strategy")&& admin_permission.data && admin_permission.data[0].Create_Strategy === 0){
+                                  //  console.log("okkkkkkkkkkkkkk")
+                                    }else{
+                                   //  console.log("elseeeeeeeee") 
+                                     return <>
 
                                         <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
-                                            {item.Data.length > 0 ? <>
+                                            {item.Data.length > 0  ? <>
                                                 <a
                                                     className="has-arrow"
-                                                // aria-expanded={location.pathname === item.route && item.route ? true : false}
-                                                // className={`has-arrow `}
+                                                
                                                 >
                                                     <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
                                                     <span className="nav-text">{item.name}</span>
@@ -243,23 +258,43 @@ const Sidebar = ({ ShowSidebar }) => {
                                             {item.Data.length !== 0 ? <>
                                                 <ul aria-expanded='false'>
                                                     {item.Data.length > 0 ?
-                                                        item.Data.map((nested_item) => {
-                                                            return <>
-                                                                <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
-                                                                    <Link to={nested_item.route}>{nested_item.name}</Link>
-                                                                </li>
-                                                            </>
+                                               item.Data.map((nested_item) => {
+
+                                               // console.log("nested_item.route ",nested_item.route)
+                                              //  console.log("admin_permission.data[0].Create_Strategy ",admin_permission.data && admin_permission.data[0].Create_Strategy)
+
+                                        if(nested_item.route == "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 || nested_item.route == "/admin/AllMakeStrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 
+                                        ||nested_item.route == "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0
+                                                 ){
+                                                    
+                                                             
+                                                     }else{
+                                                     // console.log(" NOT OKKKK")
+                                                             
+                                                        return <>
+                                                        <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
+
+                                                            <Link to={nested_item.route}>{nested_item.name}</Link>
+
+                                                        </li>
+                                                         </>
+                                          
+                                                            }
+
+
+                                                         
                                                         })
                                                         : ""}
                                                 </ul>
                                             </> : ""}
                                         </li>
 
-                                     : ""} 
+                                        {/* : ""} */}
 
 
                                         {item.Data.length === 0 ? <>
                                             {
+                                                
                                                 item.route === "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 ||
                                                     item.route === "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0 ? "" :
                                                     <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
@@ -274,6 +309,12 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
                                     </>
+                                    }
+
+                                    
+
+
+
                                 }) : roles === 'SUPERADMIN' ? supper_admin_sidebar && supper_admin_sidebar.map((item) => {
                                     return <>
                                         <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>

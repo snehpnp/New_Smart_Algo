@@ -98,24 +98,6 @@ export const admin_sidebar = [
         ]
     },
     {
-        'id': 8,
-        "name": 'Option Chain',
-        "Icon": "Link2",
-        "Data": [
-            {
-                'id': 1,
-                "name": 'Option Chain',
-                "route": "/admin/optionchain",
-            },
-            {
-                'id': 2,
-                "name": 'Open Position',
-                "route": "/admin/openposition",
-
-            },
-        ]
-    },
-    {
         'id': 6,
         "name": 'License',
         "Icon": "Copyright",
@@ -156,34 +138,26 @@ export const admin_sidebar = [
             },
         ]
     },
+
     {
         'id': 8,
-        "name": 'Support',
-        "Icon": "HelpingHand",
+        "name": 'Open Position',
+        "Icon": "Link2",
         "Data": [
             {
                 'id': 1,
-                "name": 'Help Center',
-                "route": "/admin/helpcenter",
-
+                "name": 'Option Chain',
+                "route": "/admin/optionchain",
             },
             {
                 'id': 2,
-                "name": 'Message Broadcast',
-                "route": "/admin/msgbroadcast",
+                "name": 'Open Position',
+                "route": "/admin/openposition",
 
-            },
-            {
-                'id': 3,
-                "name": 'Api Create Info',
-                "route": "/admin/apicreateinfo",
-                "Icon": "WalletCards",
-                "Data": []
             },
         ]
-
     },
-
+   
     {
         'id': 9,
         "name": 'Make Strategy',
@@ -212,20 +186,35 @@ export const admin_sidebar = [
         "Data": []
     },
 
-    //   {
-    //     'id': 9,
-    //     "name": 'Reports',
-    //     "Icon": "Repeat2",
-    //     "route": "/admin/reports",
-    //     "Data": []
-    // },
-    // {
-    //     'id': 10,
-    //     "name": 'Release Updates',
-    //     "Icon": "Rocket",
-    //     "route": "/admin/updates",
-    //     "Data": []
-    // },
+    {
+        'id': 11,
+        "name": 'Support',
+        "Icon": "HelpingHand",
+        "Data": [
+            {
+                'id': 1,
+                "name": 'Help Center',
+                "route": "/admin/helpcenter",
+
+            },
+            {
+                'id': 2,
+                "name": 'Message Broadcast',
+                "route": "/admin/msgbroadcast",
+
+            },
+            {
+                'id': 3,
+                "name": 'Api Create Info',
+                "route": "/admin/apicreateinfo",
+                "Icon": "WalletCards",
+                "Data": []
+            },
+        ]
+
+    },
+
+   
 
 ]
 

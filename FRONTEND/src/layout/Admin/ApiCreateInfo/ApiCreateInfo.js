@@ -30,6 +30,8 @@ const ApiCreateInfo = () => {
 
 
     const goToDashboard = JSON.parse(localStorage.getItem("user_details_goTo"));
+    
+    console.log("Config.react_domain - ",Config.react_domain)
 
 
     const data = async () => {
@@ -55,7 +57,7 @@ const ApiCreateInfo = () => {
     }
 
 
-
+    console.log("UserDetails Broker api creation- ",UserDetails.data)
     return <>
         <Content Page_title="All Api-Create Info's" button_status={false}>
             <div class="row">
@@ -64,6 +66,8 @@ const ApiCreateInfo = () => {
                     {/* {goToDashboard ? } */}
                     {UserDetails.data && UserDetails.data.map((item) => {
                         // {UserDetails.data && UserDetails.data.map((item) => {
+                        
+                              
                         return <>
                             <div class="card__bx card__1">
                                 <div class="card__data">
@@ -89,6 +93,7 @@ const ApiCreateInfo = () => {
                                 </div>
                             </div>
                         </>
+
                     })}
                 </section>
             </div>

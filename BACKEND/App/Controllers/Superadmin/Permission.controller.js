@@ -343,6 +343,8 @@ class Panel {
     // ADMIN PERMISSIONS
     async Admin_Permissions(req, res) {
         try {
+
+           // console.log("req body check sidebar codition ",req.body)
             // const { id, license } = req.body
             const { db_name, db_url, key, domain, Create_Strategy, Option_chain, Strategy_plan } = req.body
 

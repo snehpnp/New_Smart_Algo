@@ -373,14 +373,14 @@ const Edit_panel = () => {
             ) : (
                 <>
                     <Content
-                        Page_title="Add Panel"
+                        Page_title="Edit Panel"
                         button_title="Back"
                         route="/super/alladmins"
                     >
                         <Formikform
                             fieldtype={fields.filter((field) => !field.showWhen)}
                             formik={formik}
-                            btn_name="Edit Panel"
+                            btn_name="Update Panel"
                             additional_field={
                                 <>
                                     <h6>All Brokers</h6>

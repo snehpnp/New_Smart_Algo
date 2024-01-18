@@ -201,8 +201,8 @@ export async function GET_ADMIN_HELPS(id, token) {
 
 export async function UPDATE_ADMIN_PERMISSION(id, token) {
     try {
-
-        const res = await axios.post(`${Config.base_url}update/permission`, id, {
+      
+        const res = await axios.post(`${Config.smartAlogUrl}update/permission`, id, {
             headers: header(token),
             data: {},
         })
@@ -255,6 +255,8 @@ export async function CLOSE_ADMIN_PANEL(domain, token) {
 // GET ALL BROKERS
 export async function ALL_BROKERS(domain, token) {
     try {
+         
+       // console.log("domain ",domain)
 
         const res = await axios.post(`${Config.base_url}getall/brokers`, domain, {
             headers: header(token),
@@ -274,7 +276,7 @@ export async function ALL_BROKERS(domain, token) {
 export async function UPDATE_BROKERS(domain, token) {
     try {
 
-        const res = await axios.post(`${Config.base_url}update/panel/broker`, domain, {
+        const res = await axios.post(`${Config.smartAlogUrl}update/panel/broker`, domain, {
             headers: header(token),
             data: {},
         })
