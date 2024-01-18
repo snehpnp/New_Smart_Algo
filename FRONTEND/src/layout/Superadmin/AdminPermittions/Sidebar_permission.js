@@ -43,7 +43,9 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
         },
         onSubmit: async (values) => {
      
-            //console.log("showPanelName -",showPanelName)
+            console.log("GetOption_chain -",GetOption_chain && GetOption_chain)
+            console.log("GetCreate_Strategy -",GetCreate_Strategy && GetCreate_Strategy)
+            // console.log("showPanelName -",showPanelName)
            
             const req = {
                 "Option_chain": GetOption_chain && GetOption_chain ? 1 : 0,
@@ -57,7 +59,9 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
 
             }
 
-
+            console.log("req -", req)
+            return
+             
             await dispatch(Update_Admin_Permissions({ req: req, token: token })).unwrap().then((response) => {
                 if (response.status === 409) {
                     toast.error(response.data.msg);

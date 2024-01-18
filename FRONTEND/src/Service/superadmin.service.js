@@ -201,7 +201,7 @@ export async function GET_ADMIN_HELPS(id, token) {
 
 export async function UPDATE_ADMIN_PERMISSION(id, token) {
     try {
-
+      
         const res = await axios.post(`${Config.smartAlogUrl}update/permission`, id, {
             headers: header(token),
             data: {},

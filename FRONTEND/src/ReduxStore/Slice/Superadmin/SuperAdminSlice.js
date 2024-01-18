@@ -92,7 +92,7 @@ export const Get_Admin_Helps = createAsyncThunk("/getall/panel/helps", async (re
 
 
 export const Update_Admin_Permissions = createAsyncThunk("/update/permission", async (req, token) => {
-  // const { req, token } = data
+ // const { req, token } = data
 
   try {
     const res = await UPDATE_ADMIN_PERMISSION(req.req, req.token);
