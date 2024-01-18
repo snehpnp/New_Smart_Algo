@@ -111,7 +111,7 @@ export const PORT_ERROR = 'Enter Valid Port';
 export const KEY_ERROR = 'Enter Valid Key';
 export const DBURL_ERROR = 'Enter Valid Data Base Url';
 export const DBNAME_ERROR = 'Enter Valid Data Base NAme';
-export const BACKNEDURL_ERROR = 'Enter Valid Data Base NAme';
+export const BACKNEDURL_ERROR = 'Enter Valid Backend Url';
 
 
 

@@ -16,7 +16,7 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async AddPanel(req, res) {
         try {
-            const { panel_name, domain, port, key, ip_address, theme_id, parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id } = req.body.req
+            const { panel_name, domain, port, key, ip_address, theme_id, backend_rul,parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id } = req.body.req
 
 
             // FIND PANEL NAME DUPLICATE
@@ -36,7 +36,8 @@ class Panel {
                 Create_Strategy: Create_Strategy,
                 Option_chain: Option_chain,
                 Strategy_plan: Strategy_plan,
-                broker_id: broker_id
+                broker_id: broker_id,
+                backend_rul:backend_rul
             });
             AddPanel.save()
                 .then(async (data) => {

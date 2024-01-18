@@ -53,7 +53,8 @@ const Add_Panel = () => {
             broker_id: [],
             Create_Strategy: false,
             Option_chain: false,
-            Strategy_plan: false
+            Strategy_plan: false,
+            backend_rul:""
 
         },
 
@@ -85,6 +86,9 @@ const Add_Panel = () => {
                 errors.db_name = valid_err.DBNAME_ERROR;
             }
 
+            if (!values.backend_rul) {
+                errors.backend_rul = valid_err.DBNAME_ERROR;
+            }
 
 
             return errors;
@@ -104,6 +108,7 @@ const Add_Panel = () => {
                 Create_Strategy: values.Create_Strategy && values.Create_Strategy ? 1 : 0,
                 Option_chain: values.Option_chain && values.Option_chain ? 1 : 0,
                 Strategy_plan: values.Strategy_plan && values.Strategy_plan ? 1 : 0,
+                backend_rul:values.backend_rul
             };
 
           
@@ -181,6 +186,7 @@ const Add_Panel = () => {
             label_size: 12,
             col_size: 6,
         },
+      
         {
             name: "db_name",
             label: "Database Name",
@@ -189,6 +195,13 @@ const Add_Panel = () => {
             col_size: 6,
         },
 
+        {
+            name: "backend_rul",
+            label: "Backend Url",
+            type: "text",
+            label_size: 12,
+            col_size: 12,
+        },
         {
             name: "Create_Strategy",
             label: "Create Strategy",
