@@ -1,7 +1,6 @@
 var cron = require('node-cron');
 const axios = require('axios');
 const fs = require('fs');
-const filePath = 'file.txt'; // Replace with the actual path to your text file
 const { logger, getIPAddress } = require('../Helper/logger.helper')
 var dateTime = require('node-datetime');
 var moment = require('moment');
@@ -57,7 +56,7 @@ cron.schedule('1 1 * * *', () => {
 });
 
 // Accelpix Token Update Symbol Update
-cron.schedule('5 1 * * *', () => {
+cron.schedule('5 6 * * *', () => {
     console.log('running a task every minute');
     AccelpixTokenUpdate();
 });
@@ -177,14 +176,13 @@ const service_token_update = () => {
 
         })
         .catch((error) => {
-            console.log("Error ",error);
+            console.log("Error ", error);
         });
 
 }
 
 const TruncateTable = async () => {
     const drop = await Alice_token.deleteMany({});
-
 }
 
 // TOKEN SYMBOL CREATE
@@ -561,100 +559,12 @@ const tokenFind = async () => {
         return findData
 
     } catch (error) {
-        console.log("Error ",error);
+        console.log("Error ", error);
     }
 }
 
-//market holidays cron
-const market_holiday_redis = async () => {
-    console.log("okkk run code ");
-
-    const axios = require('axios');
-
-    let config1 = {
-        method: 'get',
-        maxBodyLength: Infinity,
-        url: 'https://www.nseindia.com/api/holiday-master?type=trading',
-        headers: {
-
-        }
-    };
-
-    await axios.request(config1)
-        .then((response) => {
-        })
-        .catch((error) => {
-            console.log("Error ",error);
-        });
-
-
-
-
-
-    return
-
-
-
-
-
-    var config = {
-        method: 'get',
-        url: 'https://www.nseindia.com/api/holiday-master?type=trading',
-    };
-
-    axios(config)
-        .then(async function (response) {
-            //  console.log("rr-----",JSON.stringify(response.data));
-            var holiday_date = [];
-            response.data.CM.forEach(element => {
-
-                //   console.log("check date --",element.tradingDate);
-
-                const originalDateString = element.tradingDate;
-                const dateParts = originalDateString.split('-');
-
-                // Create a new Date object with the year, month, and day
-                const dateObj = new Date(`${dateParts[1]} ${dateParts[0]}, ${dateParts[2]}`);
-
-                // Use the Date object's methods to format the date as "YYYY-MM-DD"
-                const year = dateObj.getFullYear();
-                const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-                const day = String(dateObj.getDate()).padStart(2, '0');
-                const formattedDateString = `${year}-${month}-${day}`;
-
-                //  console.log("convert data -",formattedDateString);
-
-                holiday_date.push(formattedDateString)
-
-
-            });
-
-            console.log("all -result", holiday_date);
-            //      const market_holiday_redis = await client_redis.get('market_holiday_redis');
-            //      console.log("market_holiday_redis",market_holiday_redis);
-
-            //      if(market_holiday_redis == null){
-            //        await client_redis.set('market_holiday_redis', JSON.stringify(holiday_date));
-
-            //        console.log("market_holiday_redis-",market_holiday_redis); 
-
-            //    }else{
-            //        console.log("market_holiday_redis",market_holiday_redis);
-            //        await client_redis.set('market_holiday_redis', JSON.stringify(holiday_date));
-            //      }
-
-
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-
-
-
-}
-
 const twodaysclient = async () => {
-    console.log("twodaysclient");
+
     const twoDaysClientGet = await User.aggregate(
         [
             {
@@ -779,71 +689,71 @@ const twodaysclient = async () => {
 
 
 // Update numberOfTrade_count_trade 0
-const numberOfTrade_count_trade =async ()=>{
+const numberOfTrade_count_trade = async () => {
     const update_trade_off = {
         $set: {
-          numberOfTrade_count_trade: 0,
+            numberOfTrade_count_trade: 0,
         },
-       
-      };
-  
-      const filter_trade_off = {};
-      let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
+
+    };
+
+    const filter_trade_off = {};
+    let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
 }
 
 // Accelpix Token Update
-const AccelpixTokenUpdate = async () =>{
-   
+const AccelpixTokenUpdate = async () => {
+
     let config = {
-      method: 'get',
-      maxBodyLength: Infinity,
-      url: 'https://apidata5.accelpix.in/api/hsd/Masters/2?fmt=json',
-      headers: { }
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: 'https://apidata5.accelpix.in/api/hsd/Masters/2?fmt=json',
+        headers: {}
     };
-    
+
     axios.request(config)
-    .then(async(response) => {
-     // console.log(JSON.stringify(response.data));
-     const result = await Alice_token.aggregate([
-      {
-      $project : {
-        instrument_token : 1
-      }
-      }
-    
-     ])
-     
-     result.forEach(async(element) => {
+        .then(async (response) => {
+            // console.log(JSON.stringify(response.data));
+            const result = await Alice_token.aggregate([
+                {
+                    $project: {
+                        instrument_token: 1
+                    }
+                }
 
-       const Exist_token = response.data.find(item1 => item1.tk === parseInt(element.instrument_token));
-       
-       
-      
-     
-       const update = {
-        $set: {
-          tkr: Exist_token.tkr,
-          a3tkr: Exist_token.a3tkr,
-        },
-      };
+            ])
 
-      const filter = { instrument_token : element.instrument_token };
+            result.forEach(async (element) => {
 
-      const options = {
-        upsert: true, // If no documents match the query, insert a new document
-       };
+                const Exist_token = response.data.find(item1 => item1.tk === parseInt(element.instrument_token));
 
-      let Res = await Alice_token.updateMany(filter, update , options);
-       
-     // console.log("Res ", Res)
-    
-  
-     });
 
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+
+
+                const update = {
+                    $set: {
+                        tkr: Exist_token.tkr,
+                        a3tkr: Exist_token.a3tkr,
+                    },
+                };
+
+                const filter = { instrument_token: element.instrument_token };
+
+                const options = {
+                    upsert: true, // If no documents match the query, insert a new document
+                };
+
+                let Res = await Alice_token.updateMany(filter, update, options);
+
+                // console.log("Res ", Res)
+
+
+            });
+
+        })
+        .catch((error) => {
+            console.log(error);
+        });
 }
 
-module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind ,numberOfTrade_count_trade ,AccelpixTokenUpdate }
+module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind, numberOfTrade_count_trade, AccelpixTokenUpdate }

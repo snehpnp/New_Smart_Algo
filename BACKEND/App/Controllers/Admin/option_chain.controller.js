@@ -75,11 +75,11 @@ class OptionChain {
                         }
                     }
                 },
-                {
-                    $match: {
-                        expiryDate: { $gte: new Date() }
-                    }
-                },
+                // {
+                //     $match: {
+                //         expiryDate: { $gte: new Date() }
+                //     }
+                // },
                 {
                     $addFields: {
                         formattedExpiryDate: {

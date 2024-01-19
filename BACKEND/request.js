@@ -5,8 +5,8 @@ module.exports = function (app) {
 
 
   const { DashboardView } = require('./View/DashboardData')
-  
- 
+
+
 
 
   app.get('/dashboard-view', async (req, res) => {
@@ -17,66 +17,66 @@ module.exports = function (app) {
 
 
   app.get('/AccelpixTokenUpdate', async (req, res) => {
-     
+
     const axios = require('axios');
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
       url: 'https://apidata5.accelpix.in/api/hsd/Masters/2?fmt=json',
-      headers: { }
+      headers: {}
     };
-    
+
     axios.request(config)
-    .then(async(response) => {
-     // console.log(JSON.stringify(response.data));
-     const result = await Alice_token.aggregate([
-      {
-      $project : {
-        instrument_token : 1
-      }
-      }
-    
-     ])
-     
-     result.forEach(async(element) => {
+      .then(async (response) => {
+        // console.log(JSON.stringify(response.data));
+        const result = await Alice_token.aggregate([
+          {
+            $project: {
+              instrument_token: 1
+            }
+          }
 
-       const Exist_token = response.data.find(item1 => item1.tk === parseInt(element.instrument_token));
-       
-      //  console.log("Exist tkr ",Exist_token.tkr , "Exist a3tkr ",Exist_token.a3tkr , "Token ",element.instrument_token)
-       
-      
-     
-       const update = {
-        $set: {
-          tkr: Exist_token.tkr,
-          a3tkr: Exist_token.a3tkr,
-        },
-      };
+        ])
 
-      const filter = { instrument_token : element.instrument_token };
+        result.forEach(async (element) => {
 
-      const options = {
-        upsert: true, // If no documents match the query, insert a new document
-       };
+          const Exist_token = response.data.find(item1 => item1.tk === parseInt(element.instrument_token));
 
-      let Res = await Alice_token.updateMany(filter, update , options);
-       
-      // console.log("Res ", Res)
-    
-  
-     });
-
-    })
-    .catch((error) => {
-      console.log("Error",error);
-    });
+          //  console.log("Exist tkr ",Exist_token.tkr , "Exist a3tkr ",Exist_token.a3tkr , "Token ",element.instrument_token)
 
 
 
-    
+          const update = {
+            $set: {
+              tkr: Exist_token.tkr,
+              a3tkr: Exist_token.a3tkr,
+            },
+          };
+
+          const filter = { instrument_token: element.instrument_token };
+
+          const options = {
+            upsert: true, // If no documents match the query, insert a new document
+          };
+
+          let Res = await Alice_token.updateMany(filter, update, options);
+
+          // console.log("Res ", Res)
 
 
-   res.send({ msg: "okk" })
+        });
+
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+
+
+
+
+
+
+    res.send({ msg: "okk" })
   })
 
 }

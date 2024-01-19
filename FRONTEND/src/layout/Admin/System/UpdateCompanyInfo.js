@@ -25,6 +25,10 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
         formik.setFieldValue('shortname', data.length > 0 && data[0].panel_short_name);
         formik.setFieldValue('broker', data.length > 0 && data[0].broker_url);
         formik.setFieldValue('version', data.length > 0 && data[0].version);
+        formik.setFieldValue('domain_url', data.length > 0 && data[0].domain_url);
+        formik.setFieldValue('domain_url_https', data.length > 0 && data[0].domain_url_https);
+
+
 
     }, [data && data]);
 
@@ -38,6 +42,8 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
             shortname: "",
             broker: '',
             version: '',
+            domain_url:"",
+            domain_url_https:""
         },
         touched: {
             companyname: false,
@@ -45,6 +51,8 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
             shortname: false,
             broker: false,
             version: false,
+            domain_url:false,
+            domain_url_https:false,
         },
         validate: (values) => {
 
@@ -75,6 +83,10 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
                     "panel_short_name": values.shortname,
                     "broker_url": values.broker,
                     "version": values.version,
+                    "prefix": values.shortname,
+                    "domain_url":values.domain_url,
+                    "domain_url_https":values.domain_url_https
+
                 }
             }
             console.log("req", req);
@@ -106,7 +118,9 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
         { name: 'companyname', label: 'Company Name', type: 'text', label_size: 12, col_size: 6, disable: false },
         { name: 'panel_key', label: 'Panel Key', type: 'text', label_size: 12, col_size: 6, disable: false },
         { name: 'shortname', label: 'Short Name', type: 'text', label_size: 12, col_size: 6, disable: false },
-        { name: 'broker', label: 'Broker', type: 'text', label_size: 12, col_size: 6, disable: false },
+        { name: 'broker', label: 'Broker Url', type: 'text', label_size: 12, col_size: 6, disable: false },
+        { name: 'domain_url', label: 'Domain Url', type: 'text', label_size: 12, col_size: 6, disable: false },
+        { name: 'domain_url_https', label: 'Login Url', type: 'text', label_size: 12, col_size: 6, disable: false },
         { name: 'version', label: 'Version ', type: 'text', label_size: 12, col_size: 6, disable: false },
 
     ];
