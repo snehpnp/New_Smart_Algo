@@ -434,7 +434,10 @@ class Login {
                 'Email': EmailCheck.Email,
                 'user_id': EmailCheck._id,
                 'token': token,
-                'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
+                'mobile': EmailCheck.PhoneNo,
+                 Role: EmailCheck.Role,
+                "UserName": EmailCheck.UserName
+
 
             };
 

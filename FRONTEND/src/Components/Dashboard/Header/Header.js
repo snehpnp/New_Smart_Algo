@@ -53,7 +53,11 @@ const Header = ({ ChatBox }) => {
   const routePath = localStorage.getItem("route");
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
-  const UserName_localstg = JSON.parse(localStorage.getItem("user_details")).UserName;
+
+  // const UserName_localstg = JSON.parse(localStorage.getItem("user_details")).UserName;
+
+  // const UserNamego_localstg = JSON.parse(localStorage.getItem("user_details_goTo")).UserName;
+
 
 
   console.log("gotodashboard-", gotodashboard);
@@ -470,9 +474,9 @@ const Header = ({ ChatBox }) => {
                       Set API Key
                     </button>
                   </li>
-                  {gotodashboard == true ?
+                  {gotodashboard == true ||  user_role != "ADMIN" ?
                     <li className="nav-item dropdown header-profile me-2">
-                      <h4>{UserName_localstg}</h4>
+                      {/* <h4>{gotodashboard == true  ? UserNamego_localstg : UserName_localstg}</h4> */}
                     </li>
 
                     : ""}
