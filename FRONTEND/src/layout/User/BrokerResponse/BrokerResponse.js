@@ -131,9 +131,6 @@ const BrokerResponse = () => {
 
     //       </div> : "" : ""}
 
-
-
-
     //     </div>
     // },
 
@@ -157,7 +154,7 @@ const BrokerResponse = () => {
 
 
   const updateBrokerResponse = async (e) => {
-    await dispatch(GET_ALL_BROKER_RESPONSES({ user_id: user_Id })).unwrap()
+    await dispatch(GET_ALL_BROKER_RESPONSES({ user_id: isgotodashboard ? gotodashboard.user_id : user_Id })).unwrap()
       .then((response) => {
         if (response.status) {
 

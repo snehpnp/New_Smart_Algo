@@ -261,20 +261,21 @@ const AllClients = () => {
   const showBrokerName = (value1, licence_type) => {
     let value = parseInt(value1);
 
-    if (licence_type === "0") {
-      return "2 Days Only";
-    } else if (licence_type === "1") {
+    // if (licence_type === "0") {
+    //   return "2 Days Only";
+    // } 
+     if (licence_type === "1") {
       return "Demo";
     } else {
       if (value === 1) {
         return "markethub";
       }
       if (value === 1) {
-        return "markethub";
+        return "Markethub";
       } else if (value === 2) {
-        return "alice blue";
+        return "Alice Blue";
       } else if (value === 3) {
-        return "master trust";
+        return "Master Trust";
       } else if (value === 4) {
         return "Motilal Oswal";
       } else if (value === 5) {
