@@ -85,7 +85,9 @@ class Login {
                     'token': token,
                     'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
                     'Subadmin_permision': SubadminPermision,
-                    "broker": EmailCheck.broker
+                    "broker": EmailCheck.broker,
+                    "UserName": EmailCheck.UserName
+
 
                 };
             } else {
@@ -95,7 +97,9 @@ class Login {
                     'token': token,
                     'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
                     "broker": EmailCheck.broker,
-                    "type": EmailCheck.license_type
+                    "type": EmailCheck.license_type,
+                    "UserName": EmailCheck.UserName
+
 
                 };
             }

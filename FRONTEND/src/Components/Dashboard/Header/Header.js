@@ -53,8 +53,10 @@ const Header = ({ ChatBox }) => {
   const routePath = localStorage.getItem("route");
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
+  const UserName_localstg = JSON.parse(localStorage.getItem("user_details")).UserName;
 
 
+  console.log("gotodashboard-", gotodashboard);
 
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id);
@@ -439,9 +441,6 @@ const Header = ({ ChatBox }) => {
                 ) : (
                   ""
                 )}
-              </div>
-              <ul className="navbar-nav header-right">
-                {/* GO TO DASHBOARD */}
                 {gotodashboard != null ? (
                   <>
                     <li className="nav-item dropdown gotodashboard">
@@ -454,30 +453,34 @@ const Header = ({ ChatBox }) => {
                       </button>
                     </li>
                   </>
-                ) : (
-                  ""
-                )}
+                ) : ("")}
+              </div>
+              <ul className="navbar-nav header-right">
+                {/* GO TO DASHBOARD */}
+
 
                 {/* {(user_role === "USER" && UserDetails.broker === "2" && UserDetails.broker === 2) || */}
-                {(!gotodashboard && (user_role === "USER" || user_role === "ADMIN"))
+                {/* {{(!gotodashboard && (user_role === "USER" || user_role === "ADMIN")) ? (} */}
+                <>
+                  <li className="nav-item dropdown header-profile me-2">
+                    <button
+                      className=" btn btn-primary"
+                      onClick={() => setshowModal(true)}
+                    >
+                      Set API Key
+                    </button>
+                  </li>
+                  {gotodashboard == true ?
+                    <li className="nav-item dropdown header-profile me-2">
+                      <h4>{UserName_localstg}</h4>
+                    </li>
 
-                  ? (
-                    <>
-                      <li className="nav-item dropdown header-profile me-2">
-                        <button
-                          className=" btn btn-primary"
-                          onClick={() => setshowModal(true)}
-                        >
-                          Set API Key
-                        </button>
-                      </li>
-                    </>
-                  ) : (
-                    ""
-                  )}
+                    : ""}
 
+
+                </>
+                {/* ) : ("")} */}
                 {/*  For Show Notification Box */}
-
                 {user_role === "ADMIN" ? (
                   <>
                     <Notification data={getAllClients} />

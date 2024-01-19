@@ -18,6 +18,8 @@ const Update_Broker_Key = ({ closeModal }) => {
 
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
     const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
+    const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
+    const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
 
     const [Refresh, setRefresh] = useState(false)
     const [UserDetails, setUserDetails] = useState({
@@ -29,7 +31,7 @@ const Update_Broker_Key = ({ closeModal }) => {
 
 
     const data = async () => {
-        await dispatch(User_Profile({ id: user_id }))
+        await dispatch(User_Profile({ id: isgotodashboard ? gotodashboard.user_id : user_id }))
             .unwrap()
             .then((response) => {
                 if (response.status) {
@@ -120,7 +122,7 @@ const Update_Broker_Key = ({ closeModal }) => {
 
         {
             name: 'api_key',
-            label: formik.values.broker === 4 ? 'App Key' : formik.values.broker === 7 ? "Consumer Key" : formik.values.broker === 9 ? "Vendor Key" : formik.values.broker === 8 ? 'App Key' : formik.values.broker === 10 ? 'App Key' : "'Api Key", type: 'text',
+            label: formik.values.broker === 4 ? 'App Key' : formik.values.broker === 7 ? "Consumer Key" : formik.values.broker === 9 ? "Vendor Key" : formik.values.broker === 8 ? 'App Key' : formik.values.broker === 10 ? 'App Key' : "Api Key", type: 'text',
             showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6',
             label_size: 12, col_size: 6, disable: false
         },
