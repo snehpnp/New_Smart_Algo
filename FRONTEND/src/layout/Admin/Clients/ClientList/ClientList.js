@@ -330,9 +330,14 @@ const AllClients = () => {
       dataField: "Email",
       text: "Email",
     },
+    
         {
       dataField: "FullName",
       text: "Full Name",
+    },
+    {
+      dataField: "client_key",
+      text: "Client Key",
     },
     {
       dataField: "PhoneNo",

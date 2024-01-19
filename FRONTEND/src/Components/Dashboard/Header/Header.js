@@ -54,13 +54,16 @@ const Header = ({ ChatBox }) => {
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
 
-  // const UserName_localstg = JSON.parse(localStorage.getItem("user_details")).UserName;
+  const UserName_localstg = JSON.parse(localStorage.getItem("user_details"))
 
-  // const UserNamego_localstg = JSON.parse(localStorage.getItem("user_details_goTo")).UserName;
+  const UserNamego_localstg = JSON.parse(localStorage.getItem("user_details_goTo"))
 
 
+  console.log("UserName_localstg", UserName_localstg);
+  console.log("UserNamego_localstg", UserNamego_localstg);
 
-  console.log("gotodashboard-", gotodashboard);
+
+  console.log("gotodashboard-", user_role);
 
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id);
@@ -474,12 +477,13 @@ const Header = ({ ChatBox }) => {
                       Set API Key
                     </button>
                   </li>
-                  {gotodashboard == true ||  user_role != "ADMIN" ?
-                    <li className="nav-item dropdown header-profile me-2">
-                      {/* <h4>{gotodashboard == true  ? UserNamego_localstg : UserName_localstg}</h4> */}
-                    </li>
-
-                    : ""}
+                  <li className="nav-item dropdown header-profile me-2">
+                    {UserNamego_localstg != null ?
+                      <h4>{UserNamego_localstg.UserName}</h4>
+                      :
+                      <h4>{UserName_localstg.UserName}</h4>
+                    }
+                  </li>
 
 
                 </>
