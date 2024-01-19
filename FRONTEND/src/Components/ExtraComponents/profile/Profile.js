@@ -251,6 +251,20 @@ const UserProfile = () => {
                               </span>
                             </div>
                           </div>
+
+                          <div className="row mb-2">
+                            <div className="col-sm-3 col-5">
+                              <h5 className="f-w-500">
+                              PANEL_CLIENT_KEY <span className="pull-end">:</span>
+                              </h5>
+                            </div>
+                            <div className="col-sm-9 col-7">
+                              <span>
+                                {UserDetails && UserDetails.data.client_key}
+                              </span>
+                            </div>
+                          </div>
+
                           {user_role === "USER" ? (
                             <>
                               <div className="row mb-2">
