@@ -37,11 +37,11 @@ const clientServiceSchema = Schema({
     },
     quantity: {
         type: String,
-        default: '0'
+        default: '1'
     },
     lot_size: {
         type: String,
-        default: '0'
+        default: '1'
     },
     uniqueUserService: {
         type: String,

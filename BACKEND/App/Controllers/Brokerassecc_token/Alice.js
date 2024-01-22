@@ -35,16 +35,22 @@ class AliceBlue {
 
             var redirect = hosts.split(':')[0];
             var redirect_uri = '';
-            if (redirect == "localhost") {
-                redirect_uri = "http://localhost:3000"
-            } else {
-                redirect_uri = `https://${redirect}/#/admin/tradehistory?type=admin`
-            }
 
             const Get_User = await User.find({ demat_userid: userId })
 
             if (Get_User.length > 0) {
 
+                if (redirect == "localhost") {
+                    redirect_uri = "http://localhost:3000"
+                } else {
+                    if (Get_User[0].Role == "ADMIN") {
+                        redirect_uri = `https://${redirect}/#/admin/tradehistory?type=admin`
+
+                    } else {
+                        redirect_uri = `https://${redirect}/#/client/dashboard`
+
+                    }
+                }
 
 
                 var Encrypted_data = sha256(userId + authCode + apiSecret);
@@ -79,11 +85,11 @@ class AliceBlue {
                                 };
 
                                 const result = await live_price.updateOne(filter, updateOperation);
-                            
+
 
 
                                 //  For Update Live Token List
-                                 Alice_Socket();
+                                Alice_Socket();
 
 
                                 return res.redirect(redirect_uri);
@@ -358,9 +364,9 @@ class AliceBlue {
 
 
     async backendRunSocket(req, res) {
-      
-       Alice_Socket();
-       return res.send({ status: true, msg: 'backend run socket'});
+
+        Alice_Socket();
+        return res.send({ status: true, msg: 'backend run socket' });
     }
 
 

@@ -283,18 +283,19 @@ async function DashboardView() {
 
                     used_licence: {
                         $sum: {
-                            $cond: [
-                                {
-                                    $and: [
-                                        { $eq: ["$Role", "USER"] },
-                                        { $eq: ["$license_type", "2"] }
-                                    ]
-                                },
-                                { $ifNull: ["$licence", 0] }, // Provide a default value if $licence is null
-                                0
-                            ]
+                          $cond: [
+                            {
+                              $and: [
+                                { $eq: ["$Role", "USER"] },
+                                { $eq: ["$license_type", "2"] }
+                              ]
+                            },
+                            { $toInt: { $ifNull: ["$licence", "0"] } }, // Convert to integer and provide a default value if $licence is null
+                            0
+                          ]
                         }
-                    }
+                      }
+                      
 
                 }
             },
