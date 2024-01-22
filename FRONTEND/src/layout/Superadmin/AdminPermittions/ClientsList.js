@@ -14,7 +14,7 @@ import { useLocation } from 'react-router-dom';
 import { Get_All_Admin_Client } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 
 import toast, { Toaster } from 'react-hot-toast';
-import { DELETE_USER_SERVICES} from "../../../ReduxStore/Slice/Admin/AdminSlice";
+import { DELETE_USER_SERVICES } from "../../../ReduxStore/Slice/Admin/AdminSlice";
 
 
 
@@ -40,25 +40,25 @@ const SubAdminList = () => {
 
     const Delete_user = async (id) => {
         var req1 = {
-          id: id,
+            id: id,
         };
         if (window.confirm("Do you want to delete this User ?")) {
-          await dispatch(DELETE_USER_SERVICES(req1))
-            .unwrap()
-            .then((response) => {
-              if (response.status) {
-                toast.success(response.msg);
-    
-                setrefresh(!refresh);
-              } else {
-                toast.error(response.msg);
-    
-              }
-            });
+            await dispatch(DELETE_USER_SERVICES(req1))
+                .unwrap()
+                .then((response) => {
+                    if (response.status) {
+                        toast.success(response.msg);
+
+                        setrefresh(!refresh);
+                    } else {
+                        toast.error(response.msg);
+
+                    }
+                });
         } else {
-          return
+            return
         }
-      };
+    };
 
     const showBrokerName = (value1, licence_type) => {
         let value = parseInt(value1);
@@ -155,42 +155,42 @@ const SubAdminList = () => {
             formatter: (cell, row) => showLicenceName(cell, row.license_type)
 
         },
-        
+
 
         {
             dataField: "actions",
             text: "Actions",
             formatter: (cell, row) => (
-              <div style={{ width: "120px" }}>
-                <div>
-                  <Link to={`/admin/client/edit/${row._id}`} state={row}>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                      <Pencil
-                        size={20}
-                        color="#198754"
-                        strokeWidth={2}
-                        className="mx-1"
-                      />
-                    </span>
-                  </Link>
-            
-                  <Link>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                      <Trash2
-                        size={20}
-                        color="#d83131"
-                        strokeWidth={2}
-                        className="mx-1"
-                        onClick={(e) => Delete_user(row._id)}
-                      />
-                    </span>
-                  </Link>
-                   {/* : ""}  */}
-      
+                <div style={{ width: "120px" }}>
+                    <div>
+                        <Link to={`/admin/client/edit/${row._id}`} state={row}>
+                            <span data-toggle="tooltip" data-placement="top" title="Edit">
+                                <Pencil
+                                    size={20}
+                                    color="#198754"
+                                    strokeWidth={2}
+                                    className="mx-1"
+                                />
+                            </span>
+                        </Link>
+
+                        <Link>
+                            <span data-toggle="tooltip" data-placement="top" title="Delete">
+                                <Trash2
+                                    size={20}
+                                    color="#d83131"
+                                    strokeWidth={2}
+                                    className="mx-1"
+                                    onClick={(e) => Delete_user(row._id)}
+                                />
+                            </span>
+                        </Link>
+                        {/* : ""}  */}
+
+                    </div>
                 </div>
-              </div>
             ),
-          },
+        },
 
     ];
 
@@ -203,16 +203,19 @@ const SubAdminList = () => {
 
     return (
         <>
-            <Content Page_title="Client List" button_status={true} button_title='Back' route='/super/permitions'>
-                {ShowClients.data ?
-                    <FullDataTable TableColumns={columns} tableData={ShowClients.data} />
-                    : 
-                    <FullDataTable TableColumns={columns} tableData={[]} />
+            {ShowClients.loading ? (
+                <Loader />
+            ) : (
+                <Content Page_title="Client List" button_status={true} button_title='Back' route='/super/permitions'>
+                    {ShowClients.data ?
+                        <FullDataTable TableColumns={columns} tableData={ShowClients.data} />
+                        :
+                        <FullDataTable TableColumns={columns} tableData={[]} />
                     }
-            </Content>
-        </ >
+                </Content>
+            )}
+        </>
     )
-
 }
 
 

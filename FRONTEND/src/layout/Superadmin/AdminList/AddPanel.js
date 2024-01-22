@@ -61,7 +61,7 @@ const Add_Panel = () => {
             const errors = {};
 
 
-            if (!values.panel_name) {
+            if (!values.panel_name && formik.touched.panel_name) {
                 errors.panel_name = valid_err.PANEL_NAME_ERROR;
             }
 

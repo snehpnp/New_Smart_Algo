@@ -23,6 +23,27 @@ export async function SIGN_IN_USER(data, token) {
 
 }
 
+// SIGNUP USER
+
+export async function SIGN_UP_USER(data, token) {
+    
+
+
+    try {
+        const res = await axios.post(`${Config.base_url}signup`, data, {
+            // headers: header(token),
+            data: {},
+        })
+       
+        return await res?.data;
+    }
+    catch (err) {
+        return await err;
+
+    }
+
+}
+
 
 // VARIFY DEVICE OF A USER
 export async function VARIFY_USER_DEVICE(data, token) {

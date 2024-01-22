@@ -14,6 +14,7 @@ import Testing from "../test"
 import Deactivate_Company from '../layout/Auth/Deactivate_Company';
 import NotFound from '../layout/Auth/Not_Found';
 import SignUp from '../layout/Sign_Up_Users/Main';
+import NewSignUp from '../layout/Sign_Up_Users/signUp'
 
 
 
@@ -44,6 +45,11 @@ const Routing = () => {
     if (location.pathname === "/") {
       navigate("/login");
     }
+    if (location.pathname === "/newsignup") {
+      navigate("/newsignup");
+      return 
+    }
+
 
     if (accessToken === null || accessToken === undefined || accessToken === "null"  ) {
       navigate("/login");
@@ -97,6 +103,8 @@ const Routing = () => {
       <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
       <Route path="/client/*" element={gotodashboard != null ? <Client /> : (roles === "USER") ? <Client /> : <Login />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/newsignup" element={<NewSignUp />} />
+
       <Route path="/forget" element={<ForgetPassword />} />
       <Route path="/profile" element={<ForgetPassword />} />
       <Route path="/update/:id" element={<UpdatePassword />} />

@@ -10,7 +10,7 @@ const db = require('../../Models');
 const company_information = db.company_information;
 const User = db.user;
 const Subadmin_Permission = db.Subadmin_Permission;
-
+const user_SignUp = db.UserSignUp;
 
 
 const formattedDateTime = require('../../Helper/time.helper')
@@ -22,9 +22,12 @@ class Login {
 
     // Login User
     async login(req, res) {
+
+
         try {
             const { Email, Password, device } = req.body;
             // IF Login Time Email CHECK
+
             const EmailCheck = await User.findOne({ Email: Email });
             if (!EmailCheck) {
                 return res.json({ status: false, msg: 'User Not exists', data: [] });
@@ -43,12 +46,6 @@ class Login {
                 }
 
             }
-
-
-            // PASSWORD LENGTH CHECK
-            // if (Password.length < 4) {
-            //     return res.send({ status: false, msg: 'please Enter More Than 4 Digits ', data: [] });
-            // }
 
             // Password Check
             const validPassword = await bcrypt.compare(Password, EmailCheck.Password);
@@ -86,7 +83,6 @@ class Login {
                     'mobile': EmailCheck.PhoneNo, Role: EmailCheck.Role,
                     'Subadmin_permision': SubadminPermision,
                     "broker": EmailCheck.broker
-
                 };
             } else {
                 var msg = {
@@ -129,6 +125,86 @@ class Login {
         }
 
     }
+
+    // User SignUp
+    async signup(req, res) {
+        try {
+            const { UserName, FullName, Email, PhoneNo } = req.body;
+
+            const searchQuery = {
+                $or: [
+                    { UserName: UserName },
+                    { Email: Email },
+                    { PhoneNo: PhoneNo }
+                ]
+            };
+
+            const existingUser_DB = await User.findOne(searchQuery);
+            const existingSignupUser_DB = await user_SignUp.findOne(searchQuery);
+
+            if (existingUser_DB) {
+                const errorMsg = [];
+                if (existingUser_DB.UserName === UserName) {
+                    errorMsg.push("Username already exists");
+                }
+                if (existingUser_DB.Email === Email) {
+                    errorMsg.push("Email already exists");
+                }
+                if (existingUser_DB.PhoneNo === PhoneNo) {
+                    errorMsg.push("Phone Number already exists");
+                }
+
+                if (errorMsg.length > 0) {
+                    return res.status(400).json({
+                        status: false,
+                        msg: errorMsg.join(', '), // Combine error messages
+                        data: errorMsg,
+                    });
+                }
+            }
+
+            if (existingSignupUser_DB) {
+                const errorMsg = [];
+                if (existingSignupUser_DB.UserName === UserName) {
+                    errorMsg.push("Username already exists");
+                }
+                if (existingSignupUser_DB.Email === Email) {
+                    errorMsg.push("Email ID already exists");
+                }
+                if (existingSignupUser_DB.PhoneNo === PhoneNo) {
+                    errorMsg.push("Phone Number already exists");
+                }
+
+                if (errorMsg.length > 0) {
+                    return res.status(400).json({
+                        status: false,
+                        msg: errorMsg.join(', '), // Combine error messages
+                        data:  errorMsg,
+                    });
+                }
+            }
+
+
+            // If no existing user found, proceed with user creation
+            const newUser = new user_SignUp({
+                UserName: req.body.UserName,
+                FullName: req.body.FullName,
+                Email: req.body.Email,
+                PhoneNo: req.body.PhoneNo
+            });
+
+
+            await newUser.save();
+            return res.status(201).json({ status: true, msg: 'Sign Up successful!' });
+        } catch (error) {
+            console.error('Error saving user:', error);
+            return res.status(500).json({ status: false, error: 'Internal Server Error' });
+        }
+    }
+
+
+
+
 
     // Verify user
     async verifyUser(req, res) {
@@ -400,7 +476,7 @@ class Login {
                 );
 
             }
-         
+
 
             res.send({ status: true, message: "Password Update Successfully" });
 
@@ -485,8 +561,6 @@ class Login {
         }
 
     }
-
-
 
 
     async logout_other_device(req, res) {
@@ -583,9 +657,6 @@ class Login {
             } catch (error) {
                 console.log("Error Some Error in a login", error);
             }
-
-
-
 
         }
         catch (error) {

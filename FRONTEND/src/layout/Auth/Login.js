@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   SignIn,
   Verify_User_Device,
-  get_theme_details,
   Get_Panel_Informtion,
   OTP_SEND_USEHERES,
   Logout_From_Other_Device,
@@ -18,7 +17,6 @@ import { getLastFourDigits } from "../../Utils/common_Functions";
 import toast, { Toaster } from "react-hot-toast";
 import $ from "jquery";
 import ToastButton from "../../Components/ExtraComponents/Alert_Toast";
-import socketIOClient from "socket.io-client";
 import * as Config from "../../Utils/Config";
 import Formikform from "../../Components/ExtraComponents/Form/Formik_form";
 import { useFormik } from "formik";
@@ -67,6 +65,7 @@ const Login = () => {
     },
     validate: (values) => {
       const errors = {};
+      console.log("values" , values)
       if (!values.password) {
         errors.password = valid_err.PASSWORD_ERROR;
       }
@@ -123,6 +122,7 @@ const Login = () => {
   const fields = [
     { name: "email", label: "Email", type: "email" },
     { name: "password", label: "Password", type: "password" },
+    
   ];
 
   // ------------------ For Otp Varify --------------------------
@@ -525,6 +525,7 @@ const Login = () => {
                         )}
                         formik={formik}
                         btn_name="Sign In"
+                        btn_name_signUp="Sign Up"
                         title="forlogin"
                       />
                       <div class="form-row d-flex justify-content-end mt-4 mb-2">

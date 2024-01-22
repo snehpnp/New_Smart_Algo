@@ -70,27 +70,27 @@ const Edit_panel = () => {
             const errors = {};
 
 
-            if (!values.panel_name) {
+            if (!values.panel_name && formik.touched.panel_name) {
                 errors.panel_name = valid_err.PANEL_NAME_ERROR;
             }
 
-            if (!values.domain) {
+            if (!values.domain && formik.touched.domain) {
                 errors.domain = valid_err.DOMAIN_ERROR;
             }
 
-            if (!values.port) {
+            if (!values.port && formik.touched.port) {
                 errors.port = valid_err.PORT_ERROR;
             }
 
-            if (!values.key) {
+            if (!values.key && formik.touched.key) {
                 errors.key = valid_err.KEY_ERROR;
             }
 
-            if (!values.db_url) {
+            if (!values.db_url && formik.touched.db_url) {
                 errors.db_url = valid_err.DBURL_ERROR;
             }
 
-            if (!values.db_name) {
+            if (!values.db_name && formik.touched.db_name) {
                 errors.db_name = valid_err.DBNAME_ERROR;
             }
 
@@ -274,6 +274,7 @@ const Edit_panel = () => {
             label_size: 12,
             col_size: 6,
         },
+        
         {
             name: "port",
             label: "Port",
@@ -365,7 +366,7 @@ const Edit_panel = () => {
                         <Formikform
                             fieldtype={fields.filter((field) => !field.showWhen)}
                             formik={formik}
-                            btn_name="Edit Panel"
+                            btn_name="Update Panel"
                             additional_field={
                                 <>
                                     <h6>All Brokers</h6>

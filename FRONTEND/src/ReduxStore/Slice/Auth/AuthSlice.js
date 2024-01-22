@@ -1,12 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { SIGN_IN_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_DETAILS, RESET_PASSWORD, UPDATE_PASSWORD, FORGET_PASSWORD, GET_PANEL_INFORMATION, OTP_SEND_USEHERE, LOGOUT_FROM_OTHER_DEVICE } from "../../../Service/auth.service";
+import { SIGN_IN_USER,SIGN_UP_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_DETAILS, RESET_PASSWORD, UPDATE_PASSWORD, FORGET_PASSWORD, GET_PANEL_INFORMATION, OTP_SEND_USEHERE, LOGOUT_FROM_OTHER_DEVICE } from "../../../Service/auth.service";
 
 
 
 export const SignIn = createAsyncThunk("DispatchLogin", async (data) => {
   try {
     const res = await SIGN_IN_USER(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+export const SignUpUser = createAsyncThunk("DispatchSignUp", async (data) => {
+  try {
+    const res = await SIGN_UP_USER(data);
+     
     return await res;
   } catch (err) {
     return err;

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 
-const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fieldtype, formik, btn_name, forlogin, title, additional_field }) => {
+const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_signUp, btn_name_login, fromDate, fieldtype, formik, btn_name, forlogin, title, additional_field }) => {
 
 
 
   const location = useLocation()
+  const navigate = useNavigate()
+
 
   const [passwordVisible, setPasswordVisible] = useState({});
 
@@ -35,6 +37,13 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
   const sneh = (index, name) => {
     // formik.setFieldValue(name, 'null');
 
+  }
+
+  const fun = () => {
+    navigate('/newsignup')
+  }
+  const fun1 = () => {
+    navigate('/login')
   }
 
   return (
@@ -325,10 +334,24 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, fie
         </div >
         {additional_field}
 
-        <div className="form-group mb-0">
-          <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
-            {btn_name}
-          </button>
+        <div className="form-group mb-0 d-flex justify-content-between">
+          {btn_name == 'Sign In' ?
+            <>
+              <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit" onClick={fun}>
+                {btn_name_signUp}
+              </button>
+              <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
+                {btn_name}
+              </button> </> : <>
+
+              <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit" onClick={fun1}>
+                {btn_name_login}
+              </button>
+              <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
+                {btn_name}
+              </button>
+            </>
+          }
         </div>
       </div>
 

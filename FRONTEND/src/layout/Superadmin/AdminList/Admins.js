@@ -202,8 +202,6 @@ const AdminsList = () => {
     });
 
 
-
-
     const fields = [
         {
             name: 'theme_update',
