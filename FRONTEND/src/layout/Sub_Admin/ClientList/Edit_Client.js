@@ -263,8 +263,6 @@ const AddClient = () => {
       }
 
 
-      // console.log("req", req);
-      // return
 
       await dispatch(Update_User({ req: req, token: user_token })).unwrap().then((response) => {
 
@@ -612,7 +610,6 @@ const AddClient = () => {
       await dispatch(Get_Service_By_Group_Id({ _id: formik.values.groupservice })).unwrap()
         .then((response) => {
           if (response.status) {
-            console.log("responseresponseresponseresponse", response)
             setGetServices({
               loading: false,
               data: response.data,
@@ -659,7 +656,7 @@ const AddClient = () => {
 
         if (getPermissions && getPermissions.strategy !== undefined) {
           let abc = response.data && response.data.filter(item => getPermissions.strategy !== undefined && getPermissions.strategy.includes(item._id))
-          console.log("abc", abc)
+        
 
           if (abc.length > 0) {
             setAllStrategy({
@@ -723,7 +720,6 @@ const AddClient = () => {
           additional_field={
             <>
               {/*  For Show All Services */}
-
               <h5 className='mt-5'> All Group Services </h5>
 
               {GetServices && GetServices.data.map((strategy) => (
@@ -744,32 +740,33 @@ const AddClient = () => {
               {/*  For Show All Strategy */}
               {/* {ShowAllStratagy ? ( */}
 
-              {getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 0 ? <>
-                <h5> All Strategy </h5>
-                {selectedStrategies.map((strategy) => (
+              {getPermissions.Update_Api_Key && getPermissions.Update_Api_Key == 1 ? "" : 
+              <>
+              <h5> All Strategy </h5>
+              {selectedStrategies.map((strategy) => (
 
 
-                  <div className={`col-lg-2 mt-2`} key={strategy.id}>
-                    <div className="row ">
-                      <div className="col-lg-12 ">
-                        <div className="form-check custom-checkbox mb-3">
-                          <input
-                            type="checkbox"
-                            className="form-check-input"
-                            name={strategy.id}
-                            value={strategy.id}
-                            onChange={(e) => handleStrategyChange(e)}
-                            checked={strategy.checked}
-                          />
-                          <label className="form-check-label" htmlFor={strategy.name}>
-                            {strategy.name}
-                          </label>
-                        </div>
+                <div className={`col-lg-2 mt-2`} key={strategy.id}>
+                  <div className="row ">
+                    <div className="col-lg-12 ">
+                      <div className="form-check custom-checkbox mb-3">
+                        <input
+                          type="checkbox"
+                          className="form-check-input"
+                          name={strategy.id}
+                          value={strategy.id}
+                          onChange={(e) => handleStrategyChange(e)}
+                          checked={strategy.checked}
+                        />
+                        <label className="form-check-label" htmlFor={strategy.name}>
+                          {strategy.name}
+                        </label>
                       </div>
                     </div>
                   </div>
-                ))}
-              </> : ""}
+                </div>
+              ))}
+            </>}
 
 
               {/* ) : ""} */}

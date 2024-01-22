@@ -57,13 +57,13 @@ class Employee {
       var Role = "USER";
       var StartDate1 = "";
       var EndDate1 = "";
-      let Strategies_id_array = []; 
+      let Strategies_id_array = [];
       for (const strategy of Strategies) {
         Strategies_id_array.push(strategy.id)
       }
 
 
-      
+
 
 
       // IF ROLE NOT EXIST TO CHECK
@@ -336,7 +336,7 @@ class Employee {
                   service_id: data.Service_id,
                   //strategy_id: Strategies[0].id,
                   strategy_id: Strategies_id_array,
-                  
+
                   uniqueUserService: User_id + "_" + data.Service_id,
                   quantity: data.lotsize,
                   lot_size: 1
@@ -415,8 +415,8 @@ class Employee {
 
 
 
-       //console.log("req Strategy", req.Strategies);
-       
+      //console.log("req Strategy", req.Strategies);
+
       // IF USER ALEARDY EXIST
       const existingUsername = await User_model.findOne({
         UserName: req.UserName,
@@ -995,10 +995,10 @@ class Employee {
       }
 
 
-      const getAllClients = await User_model.find(AdminMatch)
+      const getAllClients = await User_model.find(AdminMatch).sort({ CreateDate: 1 });
         // .skip(skip)
         // .limit(Number(limit))
-        .sort({ createdAt: -1 });
+        
 
       // const totalCount = getAllClients.length;
       // IF DATA NOT EXIST
@@ -1010,7 +1010,7 @@ class Employee {
           // totalCount: totalCount,
         });
       }
-
+      
       // DATA GET SUCCESSFULLY
       return res.send({
         status: true,
@@ -1289,7 +1289,7 @@ class Employee {
             api_type: 1,
             demat_userid: 1,
             broker: 1,
-            multiple_strategy_select:1
+            multiple_strategy_select: 1
           },
         },
       ];

@@ -413,6 +413,11 @@ const AllClients = () => {
       ),
     },
     {
+      dataField: "CreateDate",
+      text: "Start Date",
+      formatter: (cell, row) => fa_time(row.CreateDate),
+    },
+    {
       dataField: "StartDate",
       text: "Start Date",
       formatter: (cell, row) => fa_time(row.StartDate),
