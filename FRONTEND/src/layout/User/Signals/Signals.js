@@ -26,6 +26,7 @@ const Signals = () => {
   const getClientsignals = async (e) => {
     await dispatch(Get_Signals({ _id: isgotodashboard ? gotodashboard.user_id : user_Id, token: AdminToken })).unwrap()
       .then((response) => {
+         
         if (response.status) {
           setSignalsData({
             loading: false,
@@ -39,6 +40,8 @@ const Signals = () => {
         }
       })
   }
+
+  console.log("setSignalsData :", SignalsData)
 
 
   useEffect(() => {
@@ -74,6 +77,10 @@ const Signals = () => {
     {
       dataField: 'strategy',
       text: 'Strategy',
+    },
+    {
+      dataField: 'TradeType',
+      text: 'Trade Type',
     },
 
   ];
