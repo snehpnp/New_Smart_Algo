@@ -16,6 +16,12 @@ import SignUpClients from '../layout/Admin/Clients/Sign_Up_Clients/Sign_Up_Clien
 import EditSignupClient from '../layout/Admin/Clients/Sign_Up_Clients/EditSignupClients';
 
 
+
+
+//show client details
+import SignupClient_Details from '../layout/Admin/SignupClients/SignupClient_Details'
+
+
 // Expired Client List
 import ExpiredClients from '../layout/Admin/Clients/ExpiredClients/ExpiredClients'
 
@@ -173,6 +179,8 @@ const Admin = () => {
                 <Route exact path="/strategies/edit/:id" element={admin_permission.data && admin_permission.data[0].Strategy_plan == 1 ? <EditStrategy /> : <EditStrategyNormal />} />
 
                 <Route exact path="/sevendaysentry" element={<SevenDaysEntry />} />
+                <Route exact path="/signupclient" element={<SignupClient_Details/>} />
+
                 <Route exact path="/Edit7days" element={<Edit7days />} />
                 <Route exact path="/tradeexecution" element={<TradeExecutionReport />} />
                 <Route exact path="/tradingstatus" element={<TradingStatus />} />

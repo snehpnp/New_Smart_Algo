@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { USER_PROFILE, GET_ALL_SERVICE_FOR_CLIENTS, GET_MESSAGE_BROD } from "../../../Service/common.service";
+import { USER_PROFILE, GET_ALL_SERVICE_FOR_CLIENTS,GET_ALL_SIGNUP_CLIENTS, GET_MESSAGE_BROD, } from "../../../Service/common.service";
 
 
 export const User_Profile = createAsyncThunk("user/profile", async (data) => {
@@ -23,6 +23,9 @@ export const Get_All_Service_for_Client = createAsyncThunk("user/service1", asyn
     }
 });
 
+
+ 
+ 
 
 
 export const GET_MESSAGE_BRODS = createAsyncThunk("get/messagebrodcast", async (id) => {

@@ -207,7 +207,7 @@ export const admin_sidebar = [
     },
 
     {
-        'id': 11,
+        'id': 12,
         "name": 'Support',
         "Icon": "HelpingHand",
         "Data": [
@@ -233,6 +233,14 @@ export const admin_sidebar = [
         ]
 
     },
+    {
+        'id': 13,
+        "name": 'SignUp Clients',
+        "Icon": "Users",
+        "route": "/admin/signupclient",
+        "Data": []
+    },
+
 
    
 ]
