@@ -7,7 +7,7 @@ import * as  valid_err from "../../../Utils/Common_Messages"
 import Loader from '../../../Utils/Loader'
 import { Pencil, Trash2, Pointer } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { All_Panel_List, Update_Panel_Theme } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { All_Panel_List, Update_Panel_Theme,Close_Admin_Panel } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -86,7 +86,7 @@ const AdminsList = () => {
             dataField: 'domain',
             text: 'Domain Name'
         },
-        
+
         {
             dataField: 'port',
             text: 'Port No'
@@ -95,14 +95,27 @@ const AdminsList = () => {
             dataField: 'key',
             text: 'Key'
         },
+        // {
+        //     dataField: 'is_active',
+        //     text: 'Active'
+        // },
         {
             dataField: 'is_active',
-            text: 'Active'
+            text: 'Close Panel',
+            formatter: (cell, row) => (
+                <label class="toggle mt-3">
+                    <input class="toggle-checkbox bg-primary" type="checkbox"
+                        defaultChecked={row.is_active == 0}
+                        onChange={(e) => CloseCompany(row.domain, e.target.checked)}
+                    />
+                    <div class={`toggle-switch bg-primary`}></div>
+                </label>
+            )
         },
-        {
-            dataField: 'is_expired',
-            text: 'Expired'
-        },
+        // {
+        //     dataField: 'is_expired',
+        //     text: 'Expired'
+        // },
 
         {
             dataField: 'a',
@@ -130,35 +143,35 @@ const AdminsList = () => {
 
 
                 <div style={{ width: "120px" }}>
-                <div>
-                  <Link to={`/super/panel/edit/${row._id}`} state={row}>
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                      <Pencil
-                        size={20}
-                        color="#198754"
-                        strokeWidth={2}
-                        className="mx-1"
-                      />
-                    </span>
-                  </Link>
+                    <div>
+                        <Link to={`/super/panel/edit/${row._id}`} state={row}>
+                            <span data-toggle="tooltip" data-placement="top" title="Edit">
+                                <Pencil
+                                    size={20}
+                                    color="#198754"
+                                    strokeWidth={2}
+                                    className="mx-1"
+                                />
+                            </span>
+                        </Link>
 
 
-                  {0 == "1" ?
-                  <Link>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                      <Trash2
-                        size={20}
-                        color="#d83131"
-                        strokeWidth={2}
-                        className="mx-1"
-                        // onClick={(e) => Delete_user(row._id)}
-                      />
-                    </span>
-                  </Link>
-                   : ""} 
-      
+                        {0 == "1" ?
+                            <Link>
+                                <span data-toggle="tooltip" data-placement="top" title="Delete">
+                                    <Trash2
+                                        size={20}
+                                        color="#d83131"
+                                        strokeWidth={2}
+                                        className="mx-1"
+                                    // onClick={(e) => Delete_user(row._id)}
+                                    />
+                                </span>
+                            </Link>
+                            : ""}
+
+                    </div>
                 </div>
-              </div>
             ),
         },
     ];
@@ -217,6 +230,24 @@ const AdminsList = () => {
 
 
 
+    const CloseCompany = async (domain,status) => {
+
+        const req = {
+            "domain": domain,
+            "status": status ? 0 : 1
+        }
+
+
+        await dispatch(Close_Admin_Panel(req)).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    toast.success(response.msg);
+                    // setRefresh(!refresh)
+                } else {
+                    toast.error(response.msg);
+                }
+            })
+    }
 
     return (
         <>

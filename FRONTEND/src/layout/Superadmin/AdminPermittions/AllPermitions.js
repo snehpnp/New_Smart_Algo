@@ -17,8 +17,8 @@ import toast, { Toaster } from 'react-hot-toast';
 
 import SidebarPermission from './Sidebar_permission';
 import PanelDetails from './PanelDetails';
- 
- 
+
+
 import AddLicence from './Add_Licence';
 import LicenceDetails from './LicenceDetails';
 import BrokerPermittion from './Broker_Permittion';
@@ -42,7 +42,7 @@ const AllPermitions = () => {
     const [ShowClientsModal, setShowClientsModal] = useState(false)
     const [ShowClientsList, setShowClientsList] = useState([])
 
-     
+
     //  for Subadmins
     const [showSubadminsModal, setshowSubadminsModal] = useState(false)
     const [ShowSubadminList, setShowSubadminList] = useState([])
@@ -140,7 +140,6 @@ const AllPermitions = () => {
             })
     }
 
-    console.log("panelData.data", panelData.data)
 
 
 
@@ -155,42 +154,7 @@ const AllPermitions = () => {
             dataField: 'panel_name',
             text: 'Panel Name'
         },
-        // {
-        //     dataField: 'domain',
-        //     text: 'Domain Name'
-        // },
 
-        // {
-        //     dataField: 'panel_name',
-        //     text: 'Company Status',
-        //     formatter: (cell, row) => (
-
-        //         <label class="toggle mt-3">
-        //             <input class="toggle-checkbox bg-primary" type="checkbox"
-        //             // defaultChecked={true}
-        //             // onChange={(e) => {
-        //             //   setShowAllStratagy(e.target.checked)
-        //             // }}
-        //             />
-        //             <div class={`toggle-switch bg-primary`}></div>
-        //         </label>
-        //     )
-        // },
-        {
-            dataField: 'panel_name',
-            text: 'Close Panel',
-            formatter: (cell, row) => (
-                <label class="toggle mt-3">
-                    <input class="toggle-checkbox bg-primary" type="checkbox"
-                        defaultChecked={row.is_active === 1}
-                        onChange={(e) => {
-                            CloseCompany(e.target.checked)
-                        }}
-                    />
-                    <div class={`toggle-switch bg-primary`}></div>
-                </label>
-            )
-        },
         {
             dataField: 'Broker',
             text: 'Broker',
@@ -226,36 +190,24 @@ const AllPermitions = () => {
             )
 
         },
-        // {
-        //     dataField: 'panel_name',
-        //     text: 'Panel Details',
-        //     formatter: (cell, row) => (
-        //         <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-        //             <FileClock size={20} color="#198754" strokeWidth={2}
-        //                 className="mx-1" />
-        //         </span>
-        //     )
-        // },
-        // {
-        //     dataField: 'panel_name',
-        //     text: 'Clients',
-        //     formatter: (cell, row) => (
-        //         <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-        //             <Link to='/super/clientlist' state={row}>
-        //                 <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"
-        //                     onClick={(e) => { setshowSubadminsModal(true); setShowSubadminList({ id: row._id, db_url: row.db_url, db_name: row.db_name }) }}
-        //                 />
-        //             </Link>
-        //         </span >
-        //     )
-        // },
-          {
+        {
+            dataField: 'panel_name',
+            text: 'Panel Details',
+            formatter: (cell, row) => (
+                <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+                    <FileClock size={20} color="#198754" strokeWidth={2}
+                        className="mx-1" />
+                </span>
+            )
+        },
+
+        {
             dataField: 'panel_name',
             text: 'Clients',
             formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="Panel Views">   
+                <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <Link to={`/super/showclient`} state={row}>
-                        <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"/> 
+                        <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
                 </span >
             )
@@ -266,10 +218,10 @@ const AllPermitions = () => {
             text: 'Subadmins',
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-                <Link to='/super/subadminlist' state={row}>
-                    <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1"/>
-                </Link>
-            </span >
+                    <Link to='/super/subadminlist' state={row}>
+                        <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    </Link>
+                </span >
             )
         },
         {
@@ -315,15 +267,10 @@ const AllPermitions = () => {
             height: document.documentElement.scrollHeight, // Set custom height
         };
 
-        // Set the window size and scroll position to match the content size
-        // window.resizeTo(width, height);
+
         window.scrollTo(0, 0);
 
         var screenshotUrl
-
-        // setIsModalOpen(false)
-
-        // Capture the screenshot
         await html2canvas(document.documentElement, options).then(canvas => {
             // Convert canvas to an image and download it
             const screenshot = canvas.toDataURL('image/png');
@@ -356,7 +303,7 @@ const AllPermitions = () => {
                                         <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
                                         <LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
-                                        <FullDataTable TableColumns={columns} tableData={panelData.data} />
+                                        <FullDataTable TableColumns={columns} tableData={panelData.data}  pagination1={true} />
                                         <ToastButton />
                                     </>
                             }

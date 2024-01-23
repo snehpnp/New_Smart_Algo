@@ -59,11 +59,11 @@ const Header = ({ ChatBox }) => {
   const UserNamego_localstg = JSON.parse(localStorage.getItem("user_details_goTo"))
 
 
-  console.log("UserName_localstg", UserName_localstg);
-  console.log("UserNamego_localstg", UserNamego_localstg);
+  // console.log("UserName_localstg", UserName_localstg);
+  // console.log("UserNamego_localstg", UserNamego_localstg);
 
 
-  console.log("gotodashboard-", user_role);
+  // console.log("gotodashboard-", user_role);
 
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id);
@@ -153,9 +153,9 @@ const Header = ({ ChatBox }) => {
   }
 
   const redirectToAdmin = () => {
-    console.log("page", page);
-    console.log("user_role_goTo", user_role_goTo);
-    console.log("routePath", routePath);
+    // console.log("page", page);
+    // console.log("user_role_goTo", user_role_goTo);
+    // console.log("routePath", routePath);
 
 
 
@@ -166,10 +166,6 @@ const Header = ({ ChatBox }) => {
 
       navigate(routePath)
 
-      // return
-      //   user_role_goTo === "USER"
-      //     ? navigate("/admin/allclients")
-      //     : navigate("/admin/allsubadmins");
       window.location.reload();
       localStorage.removeItem("gotodashboard");
       localStorage.removeItem("user_details_goTo");
@@ -238,6 +234,7 @@ const Header = ({ ChatBox }) => {
         });
 
     }
+
   };
 
   //  GET_USER_DETAILS
@@ -251,7 +248,7 @@ const Header = ({ ChatBox }) => {
       });
   };
 
-  // GET MESSGAE BRODCAST DATA 
+  
   //  GET_USER_DETAILS
   const message_brod = async () => {
     if (Role == "USER") {
