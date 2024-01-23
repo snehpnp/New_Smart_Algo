@@ -567,7 +567,7 @@ const AllClients = () => {
 
   return (
     <>
-      {getAllClients.loading ? (
+      { getAllClients.loading ? (
         <Loader />
       ) : (
         <>

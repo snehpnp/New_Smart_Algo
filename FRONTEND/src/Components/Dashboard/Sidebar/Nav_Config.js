@@ -42,6 +42,7 @@ export const admin_sidebar = [
             },
         ]
     },
+
     {
         'id': 4,
         "name": 'Sub Admin',
@@ -99,6 +100,24 @@ export const admin_sidebar = [
     },
     {
         'id': 6,
+        "name": 'Option Chain',
+        "Icon": "Link2",
+        "Data": [
+            {
+                'id': 1,
+                "name": 'Option Chain',
+                "route": "/admin/optionchain",
+            },
+            {
+                'id': 2,
+                "name": 'Open Position',
+                "route": "/admin/openposition",
+
+            },
+        ]
+    },
+    {
+        'id': 7,
         "name": 'License',
         "Icon": "Copyright",
         "Data": [
@@ -116,7 +135,7 @@ export const admin_sidebar = [
     },
 
     {
-        'id': 7,
+        'id': 8,
         "name": 'Script Mgmt',
         "Icon": "Wrench",
         "Data": [
@@ -140,9 +159,10 @@ export const admin_sidebar = [
     },
 
     {
-        'id': 8,
-        "name": 'Open Position',
-        "Icon": "Link2",
+
+        'id': 9,
+        "name": 'Support',
+        "Icon": "HelpingHand",
         "Data": [
             {
                 'id': 1,
@@ -159,7 +179,7 @@ export const admin_sidebar = [
     },
    
     {
-        'id': 9,
+        'id': 10,
         "name": 'Make Strategy',
         "Icon": "Boxes",
         "Data": [
@@ -179,7 +199,7 @@ export const admin_sidebar = [
         ]
     },
     {
-        'id': 10,
+        'id': 11,
         "name": 'Broker Information',
         "Icon": "Info",
         "route": "/admin/brokerinfo",
@@ -215,7 +235,6 @@ export const admin_sidebar = [
     },
 
    
-
 ]
 
 

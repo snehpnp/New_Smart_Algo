@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   SignIn,
   Verify_User_Device,
-  get_theme_details,
   Get_Panel_Informtion,
   OTP_SEND_USEHERES,
   Logout_From_Other_Device,
@@ -18,7 +17,6 @@ import { getLastFourDigits } from "../../Utils/common_Functions";
 import toast, { Toaster } from "react-hot-toast";
 import $ from "jquery";
 import ToastButton from "../../Components/ExtraComponents/Alert_Toast";
-import socketIOClient from "socket.io-client";
 import * as Config from "../../Utils/Config";
 import Formikform from "../../Components/ExtraComponents/Form/Formik_form";
 import { useFormik } from "formik";
@@ -67,6 +65,7 @@ const Login = () => {
     },
     validate: (values) => {
       const errors = {};
+      console.log("values", values)
       if (!values.password) {
         errors.password = valid_err.PASSWORD_ERROR;
       }
@@ -123,6 +122,7 @@ const Login = () => {
   const fields = [
     { name: "email", label: "Email", type: "email" },
     { name: "password", label: "Password", type: "password" },
+
   ];
 
   // ------------------ For Otp Varify --------------------------
@@ -494,53 +494,92 @@ const Login = () => {
   }
 
 
-
-
-
-
-
-
-
   return (
     <div class="vh-100">
-      <div className="authincation h-100">
-        <div className="container h-100">
-          <div className="row justify-content-center h-100 align-items-center">
-            <div className="col-md-6">
-              <div className="authincation-content">
-                <div className="row no-gutters">
-                  <div className="col-xl-12">
-                    <div className="auth-form">
-                      <div className="text-center mb-3">
-                        {/* <a href="#a"> logo </a> */}
-                        <span className="brand-logo">
-                          <img className="logo-abbr w-50" src="assets/icons/logo.png" alt="logo" />
-                        </span>
-                      </div>
-                      <h4 className="text-center mb-4">Sign in your account</h4>
-                      <Formikform
-                        fieldtype={fields.filter(
-                          (field) =>
-                            !field.showWhen || field.showWhen(formik.values)
-                        )}
-                        formik={formik}
-                        btn_name="Sign In"
-                        title="forlogin"
-                      />
-                      <div class="form-row d-flex justify-content-end mt-4 mb-2">
-                        <div class="mb-3 mt-1">
-                          <Link to="/forget">Forgot Password?</Link>
+
+      {1 == 0 ?
+        <div className="authincation h-100">
+          <div className="container h-100">
+            <div className="row justify-content-center h-100 align-items-center">
+              <div className="col-md-6">
+                <div className="authincation-content">
+                  <div className="row no-gutters">
+                    <div className="col-xl-12">
+                      <div className="auth-form">
+                        <div className="text-center mb-3">
+                          {/* <a href="#a"> logo </a> */}
+                          <span className="brand-logo">
+                            <img className="logo-abbr w-50" src="assets/icons/logo.png" alt="logo" />
+                          </span>
+                        </div>
+                        <h4 className="text-center mb-4">Sign in your account</h4>
+                        <Formikform
+                          fieldtype={fields.filter(
+                            (field) =>
+                              !field.showWhen || field.showWhen(formik.values)
+                          )}
+                          formik={formik}
+                          btn_name="Sign In"
+                          btn_name_signUp="Sign Up"
+                          title="forlogin"
+                        />
+                        <div class="form-row d-flex justify-content-end mt-4 mb-2">
+                          <div class="mb-3 mt-1">
+                            <Link to="/forget">Forgot Password?</Link>
+                          </div>
                         </div>
                       </div>
+                      <ToastButton />
                     </div>
-                    <ToastButton />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+        :
+        <div className="authincation h-100">
+          <div className="container h-100">
+            <div className="row justify-content-center h-100 align-items-center">
+              <div className="col-md-6">
+                <div className="authincation-content">
+                  <div className="row no-gutters">
+                    <div className="col-xl-12">
+                      <div className="auth-form">
+                        <div className="text-center mb-3">
+                          {/* <a href="#a"> logo </a> */}
+                          <span className="brand-logo">
+                            <img className="logo-abbr w-50" src="assets/icons/logo.png" alt="logo" />
+                          </span>
+                        </div>
+                        <h4 className="text-center mb-4">Sign in your account</h4>
+                        <Formikform
+                          fieldtype={fields.filter(
+                            (field) =>
+                              !field.showWhen || field.showWhen(formik.values)
+                          )}
+                          formik={formik}
+                          btn_name="Sign In"
+                          //  btn_name_signUp="Sign Up"
+                          title="forlogin1"
+                        />
+                        <div class="form-row mt-4 mb-2">
+                          <div class="mb-3 mt-1  d-flex justify-content-between ">
+                            <div><Link to="/forget">Forgot Password?</Link></div>
+                            <div><Link to="/newsignup">Sign Up</Link></div>
+                          </div>
+                        </div>
+                      </div>
+                      <ToastButton />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
 
       {/* For Varify OTP Modal */}
       {showModal ? (
