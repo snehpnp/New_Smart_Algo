@@ -1,8 +1,4 @@
-/* eslint-disable no-mixed-operators */
-// import React from 'react'
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
@@ -551,18 +547,6 @@ const AllClients = () => {
   useEffect(() => {
     forCSVdata()
   }, [getAllClients.data])
-
-
-
-
-
-
-
-
-
-
-
-
 
 
   return (

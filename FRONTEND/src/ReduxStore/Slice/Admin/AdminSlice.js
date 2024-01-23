@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { ALL_SERVICES, ALL_CATAGORY, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_EXPIRED_CLIENTS, ALL_CLIENTS, GET_COMPANY_LOGO, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_USERAND_ALLSERVICES, FIND_ONE_USER, UPDATE_USER } from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, ALL_SIGNUP_CLIENTS, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_EXPIRED_CLIENTS, ALL_CLIENTS, GET_COMPANY_LOGO, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS,DELETE_ALL_SIGNUP_CLIENT, DELETE_USERAND_ALLSERVICES , FIND_ONE_USER, UPDATE_USER } from "../../../Service/admin.service";
 
 
 
@@ -37,6 +37,19 @@ export const Service_By_Catagory = createAsyncThunk("admin/catogory", async (dat
 export const GET_ALL_CLIENTS = createAsyncThunk("getall/clients", async (data) => {
     try {
         const res = await ALL_CLIENTS(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+//ADMIN GET ALL SIGNUP CLIENT
+
+export const GET_ALL_SIGNUP_CLIENTS = createAsyncThunk("showuserdata", async (data) => {
+    try {
+        const res = await ALL_SIGNUP_CLIENTS(data);
         // console.log("res" ,res);
         return await res;
     } catch (err) {
@@ -159,6 +172,18 @@ export const Update_User = createAsyncThunk("update/useractive/status", async (d
 export const DELETE_USER_SERVICES = createAsyncThunk("delete/user", async (data) => {
     try {
         const res = await DELETE_USERAND_ALLSERVICES(data);
+        // console.log("res" ,res);
+        return await res;
+    } catch (err) {
+        console.log("err", err);
+        return err;
+    }
+});
+
+// DELETE SIGNUP CLIENT
+export const DELETE_ALL_SIGNUP = createAsyncThunk("deletesignupclients", async (data) => {
+    try {
+        const res = await DELETE_ALL_SIGNUP_CLIENT(data);
         // console.log("res" ,res);
         return await res;
     } catch (err) {

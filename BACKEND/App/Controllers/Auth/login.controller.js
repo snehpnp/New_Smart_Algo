@@ -15,6 +15,8 @@ const user_SignUp = db.UserSignUp;
 
 const formattedDateTime = require('../../Helper/time.helper')
 const user_logs = require('../../Models/user_logs.model')
+ 
+
 
 
 // Login CLASS
@@ -152,6 +154,31 @@ class Login {
     }
 
 
+    // DELETE SIGNUP CLIENT DATA
+    async deletesignupclients(req,res){
+            try {
+              const { id } = req.body;
+             
+              const get_user = await user_SignUp.find({ _id: id });
+
+              
+              if (user_SignUp.length == 0) {
+                return res.send({ status: false, msg: "Empty data", data: [] });
+              }
+              var DeleteUser = await user_SignUp.deleteOne({ _id: get_user[0]._id });
+        
+              res.send({
+                status: true,
+                msg: "Delete Successfully",
+                data: DeleteUser,
+              });
+            } catch (error) {
+              console.log("Error trading status Error-", error);
+            }
+          
+
+    }
+
 
     // User SignUp
     async signup(req, res) {
@@ -228,10 +255,6 @@ class Login {
             return res.status(500).json({ status: false, error: 'Internal Server Error' });
         }
     }
-
-
-
-
 
     // Verify user
     async verifyUser(req, res) {

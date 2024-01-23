@@ -4,7 +4,7 @@ import ExportToExcel from "../../../Utils/ExportCsv";
 import { f_time } from '../../../Utils/Date_formet';
 
 
-const Content = ({ Page_title, button_title, button_status, show_csv_button, show_Stat_End_date, showEdit, csv_title, csv_data, route, ...rest }) => {
+const Content = ({ Page_title, button_title, Page_title_showClient, button_status, show_csv_button, show_Stat_End_date, showEdit, csv_title, csv_data, route, ...rest }) => {
 
 
   return (
@@ -19,6 +19,8 @@ const Content = ({ Page_title, button_title, button_status, show_csv_button, sho
               <div className="col-lg-6">
                 <li className="breadcrumb-item">
                   <h4 className="font-w500 mb-0">{Page_title}</h4>
+                  <h4 className="font-w500 mb-0">{Page_title_showClient}</h4>
+
                 </li>
               </div>
 

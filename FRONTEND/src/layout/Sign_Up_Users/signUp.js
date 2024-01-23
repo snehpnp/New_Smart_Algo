@@ -180,7 +180,7 @@ const SignUp = () => {
                         <div class="form-row mt-4 mb-2">
                           <div class="mb-3 mt-1  d-flex justify-content-end ">
 
-                            <div><Link to="/login">Sign Up</Link></div>
+                            <div><Link to="/login">Sign In</Link></div>
                           </div>
                         </div>
                       </div>

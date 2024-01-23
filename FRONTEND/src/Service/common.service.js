@@ -37,10 +37,7 @@ export async function GET_ALL_SERVICE_FOR_CLIENTS(data, token) {
     }
 }
 
-
-
-
-
+ 
 
 
 // -----------------------------------   FOR GET OPTIONS CHAIN -------------------------------

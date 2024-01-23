@@ -26,6 +26,31 @@ export async function ALL_CLIENTS(data, token) {
     }
 
 }
+
+// ALL SIGNUP CLIENTS
+export async function ALL_SIGNUP_CLIENTS(data, token) {
+    try {
+        const res = await axios.get(`${Config.base_url}showuserdata`, data, {
+            headers: header(token),
+            data: {
+
+                "page": "5",
+                "limit": "1"
+
+            },
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+
+
 // ALL CLIENTS
 export async function ALL_EXPIRED_CLIENTS(data, token) {
     try {
@@ -543,6 +568,28 @@ export async function DELETE_USERAND_ALLSERVICES(data, token) {
     }
 
 }
+
+
+// DELETE ALL SIGNUP CLIENT
+export async function DELETE_ALL_SIGNUP_CLIENT(data, token) {
+    console.log(data);
+    try {
+        const res = await axios.post(`${Config.base_url}deletesignupclients`, data, {
+            //  headers: header(token),
+            data: { data },
+        })
+        return await res?.data;
+
+    }
+    catch (err) {
+        console.log("error =", err);
+        return err
+        // custom error
+    }
+
+}
+    
+
 
 
 // GET DASHBOARD COUNT
