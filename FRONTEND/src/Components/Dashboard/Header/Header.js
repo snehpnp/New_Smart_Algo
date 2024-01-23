@@ -248,7 +248,7 @@ const Header = ({ ChatBox }) => {
       });
   };
 
-  
+
   //  GET_USER_DETAILS
   const message_brod = async () => {
     if (Role == "USER") {
@@ -462,29 +462,32 @@ const Header = ({ ChatBox }) => {
               <ul className="navbar-nav header-right">
                 {/* GO TO DASHBOARD */}
 
-
-                {/* {(user_role === "USER" && UserDetails.broker === "2" && UserDetails.broker === 2) || */}
-                {/* {{(!gotodashboard && (user_role === "USER" || user_role === "ADMIN")) ? (} */}
                 <>
-                  <li className="nav-item dropdown header-profile me-2">
-                    <button
-                      className=" btn btn-primary"
-                      onClick={() => setshowModal(true)}
-                    >
-                      Set API Key
-                    </button>
-                  </li>
+                  {user_role === "SUPERADMIN" ? "" :
+
+                    <li className="nav-item dropdown header-profile me-2">
+                      <button
+                        className=" btn btn-primary"
+                        onClick={() => setshowModal(true)}
+                      >
+                        Set API Key
+                      </button>
+                    </li>
+                  }
+
+
+
                   <li className="nav-item dropdown header-profile me-2">
                     {UserNamego_localstg != null ?
-                      <h4>{UserNamego_localstg.UserName}</h4>
+                      <h4 className="text-white border-1 mb-0">{UserNamego_localstg.UserName}</h4>
                       :
-                      <h4>{UserName_localstg.UserName}</h4>
+                      <h4 className="text-white border-1 mb-0">{UserName_localstg.UserName}</h4>
                     }
                   </li>
 
 
                 </>
-                {/* ) : ("")} */}
+
                 {/*  For Show Notification Box */}
                 {user_role === "ADMIN" ? (
                   <>

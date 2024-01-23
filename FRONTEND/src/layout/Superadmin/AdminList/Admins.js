@@ -95,10 +95,7 @@ const AdminsList = () => {
             dataField: 'key',
             text: 'Key'
         },
-        // {
-        //     dataField: 'is_active',
-        //     text: 'Active'
-        // },
+     
         {
             dataField: 'is_active',
             text: 'Close Panel',
@@ -112,10 +109,7 @@ const AdminsList = () => {
                 </label>
             )
         },
-        // {
-        //     dataField: 'is_expired',
-        //     text: 'Expired'
-        // },
+      
 
         {
             dataField: 'a',
@@ -131,15 +125,7 @@ const AdminsList = () => {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
-                // <div className='d-flex'>
-                //     <span data-toggle="tooltip" data-placement="top" title="Edit">
-                //         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                //     </span>
-                //     {/* <span data-toggle="tooltip" data-placement="top" title="Delete">
-                //         <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-                //     </span> */}
-
-                // </div>
+        
 
 
                 <div style={{ width: "120px" }}>
@@ -261,7 +247,7 @@ const AdminsList = () => {
                                 themeData.data && themeData.data.length === 0 ? (
                                     'No data found') :
                                     <>
-                                        <FullDataTable TableColumns={columns} tableData={themeData.data} />
+                                        <FullDataTable TableColumns={columns} tableData={themeData.data} pagination1={true} />
 
                                         <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
                                             handleClose={() => setshowModal(false)}
