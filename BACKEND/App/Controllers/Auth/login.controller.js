@@ -22,8 +22,6 @@ class Login {
 
     // Login User
     async login(req, res) {
-
-
         try {
             const { Email, Password, device } = req.body;
             // IF Login Time Email CHECK
@@ -125,6 +123,16 @@ class Login {
         }
 
     }
+
+    // Show User Data
+    // async showuserdata(req,res){
+    //     try{
+    //         const result = await user_SignUp.find();
+    //         console.log()
+
+
+    //     }
+    // }
 
     // User SignUp
     async signup(req, res) {

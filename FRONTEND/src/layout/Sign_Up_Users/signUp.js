@@ -119,14 +119,14 @@ const SignUp = () => {
         .then((response) => {
           if (response.status) {
             toast.success(response.msg);
-            setTimeout(() => { 
+            setTimeout(() => {
               navigate('/login')
-  
+
             }, 2000)
           }
-           else {
+          else {
             response.response.data.data.map((data, index) => {
-                toast.error(data);
+              toast.error(data);
             })
           }
         })
@@ -174,9 +174,15 @@ const SignUp = () => {
                           )}
                           formik={formik}
                           btn_name="Sign Up"
-                          btn_name_login='Sign In'
-                          title="forlogin"
+                          // btn_name_login='Sign In'
+                          title="forlogin1"
                         />
+                        <div class="form-row mt-4 mb-2">
+                          <div class="mb-3 mt-1  d-flex justify-content-end ">
+
+                            <div><Link to="/login">Sign Up</Link></div>
+                          </div>
+                        </div>
                       </div>
                       <ToastButton />
                     </div>
