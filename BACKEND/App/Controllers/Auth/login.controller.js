@@ -125,14 +125,30 @@ class Login {
     }
 
     // Show User Data
-    // async showuserdata(req,res){
-    //     try{
-    //         const result = await user_SignUp.find();
-    //         console.log()
-
-
-    //     }
-    // }
+    async showuserdata(req,res){ 
+        try {
+            const result = await user_SignUp.find();
+            if(result.length>0){
+                return res.status(200).json({
+                    status: true,
+                    data : result
+                })
+            }
+            else{
+                return res.status(200).json({
+                    status:false,
+                    data: "No user is found"
+                })
+            }
+    
+        }
+        catch (error) {
+            console.error('Error saving user:', error);
+            return res.status(500).json({ status: false, error: 'Internal Server Error' });
+        }
+    }
+ 
+ 
 
     // User SignUp
     async signup(req, res) {

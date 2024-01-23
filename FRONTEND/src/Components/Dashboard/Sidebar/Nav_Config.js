@@ -42,6 +42,7 @@ export const admin_sidebar = [
             },
         ]
     },
+
     {
         'id': 4,
         "name": 'Sub Admin',
@@ -98,7 +99,7 @@ export const admin_sidebar = [
         ]
     },
     {
-        'id': 8,
+        'id': 6,
         "name": 'Option Chain',
         "Icon": "Link2",
         "Data": [
@@ -116,7 +117,7 @@ export const admin_sidebar = [
         ]
     },
     {
-        'id': 6,
+        'id': 7,
         "name": 'License',
         "Icon": "Copyright",
         "Data": [
@@ -134,7 +135,7 @@ export const admin_sidebar = [
     },
 
     {
-        'id': 7,
+        'id': 8,
         "name": 'Script Mgmt',
         "Icon": "Wrench",
         "Data": [
@@ -157,7 +158,7 @@ export const admin_sidebar = [
         ]
     },
     {
-        'id': 8,
+        'id': 9,
         "name": 'Support',
         "Icon": "HelpingHand",
         "Data": [
@@ -185,7 +186,7 @@ export const admin_sidebar = [
     },
 
     {
-        'id': 9,
+        'id': 10,
         "name": 'Make Strategy',
         "Icon": "Boxes",
         "Data": [
@@ -205,27 +206,13 @@ export const admin_sidebar = [
         ]
     },
     {
-        'id': 10,
+        'id': 11,
         "name": 'Broker Information',
         "Icon": "Info",
         "route": "/admin/brokerinfo",
         "Data": []
     },
-
-    //   {
-    //     'id': 9,
-    //     "name": 'Reports',
-    //     "Icon": "Repeat2",
-    //     "route": "/admin/reports",
-    //     "Data": []
-    // },
-    // {
-    //     'id': 10,
-    //     "name": 'Release Updates',
-    //     "Icon": "Rocket",
-    //     "route": "/admin/updates",
-    //     "Data": []
-    // },
+    
 
 ]
 
