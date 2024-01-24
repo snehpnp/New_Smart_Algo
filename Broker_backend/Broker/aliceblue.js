@@ -215,9 +215,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
       else if (type == 'SX' || type == 'LX') {
         console.log("trade exit")
       
-
-
-
         const requestPromises = AllClientData.map(async (item) => {
     
                 // console.log("user id ", item.demat_userid)
