@@ -214,6 +214,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
       else if (type == 'SX' || type == 'LX') {
         console.log("trade exit")
+      
+
+
+
         const requestPromises = AllClientData.map(async (item) => {
     
                 // console.log("user id ", item.demat_userid)
@@ -313,6 +317,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
     
     
                                 } else {
+
+
+                                    item.postdata.trading_symbol = Exist_entry_order.Tsym;
+
                                     const possition_qty = Exist_entry_order.Netqty;
                                     // console.log("possition_qty", possition_qty);
     
@@ -482,7 +490,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             .catch(errors => {
                 console.log("errors:", errors);
     
-            });
+         });
     
       }
 
