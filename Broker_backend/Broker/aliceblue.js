@@ -535,7 +535,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             });
       }
 
-
     } catch (error) {
 
         console.log("error", error);
