@@ -14,6 +14,8 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
     
+    console.log("ANGEL token - ",token[0].instrument_token)
+    console.log("ANGEL tradesymbol -",token[0].tradesymbol)
     
 
     try {
@@ -38,10 +40,11 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
         if (type == 'LE' || type == 'SE') {
-    
+            // console.log("trade entry")
 
 
             const requestPromises = AllClientData.map(async (item) => {
+              //  console.log("item postdata - ",item.postdata)
                 if (token != 0) {
 
 
@@ -59,10 +62,14 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     item.postdata.transactiontype = 'SELL';
                                 }
 
+                                // console.log("price", price)
+                                //console.log("item.client_services.order_type", item.client_services.order_type)
 
                                 if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                                     item.postdata.price = price
                                 }
+
+                                //  console.log("postData after ", item.postdata);
 
 
                                 EntryPlaceOrder(item, filePath, signals, signal_req)
@@ -72,6 +79,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
 
+                        // console.log("OPTION")
                     } else {
                         // console.log("CASH")
                        
@@ -80,6 +88,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         } else if (type == 'SE' || type == 'LX') {
                             item.postdata.transactiontype = 'SELL';
                         }
+
+                        // console.log("price", price)
 
 
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
@@ -130,7 +140,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                 })
                 .catch(errors => {
-                    console.log("Error :", errors);
+                    console.log("errors:", errors);
 
                 });
 
@@ -193,10 +203,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                             //     }
                             // });
 
+                           
+                            if (response.data.data != null) {
 
-                            if (response.data.data !=  null) {
-
-                                const Exist_entry_order = response.data.data.find(item1 => item1.symboltoken === token[0].instrument_token);
+                                const Exist_entry_order = response.data.body.NetPositionDetail.find(item1 => item1.symboltoken === token[0].instrument_token);
 
                                 if(Exist_entry_order != undefined){
 
@@ -234,6 +244,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                                         } else {
 
+                                            console.log("possition_qty Cash trade", possition_qty);
                                             if (possition_qty > 0 && type == 'LX') {
                                                 ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
                                             } else if (possition_qty < 0 && type == 'SX') {
@@ -435,7 +446,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                 })
                 .catch(errors => {
-                    console.log("Error :", errors);
+                    console.log("errors:", errors);
 
                 });
 
@@ -444,7 +455,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
     } catch (error) {
 
-        console.log("Error ", error);
+        console.log("error", error);
     }
 
 }
@@ -510,13 +521,13 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
             'X-MACAddress': 'MAC_ADDRESS',
             'X-PrivateKey': item.api_key
         },
-        data: JSON.stringify(data)
+        data: JSON.stringify(item.postdata)
 
     };
     // console.log(config);
     axios(config)
         .then(async (response) => {
-            // console.log("respose ENTRY", response.data)
+             console.log("respose ENTRY", response.data)
             fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
@@ -657,7 +668,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                 }
 
             } catch (e) {
-                console.log("Error  1", e);
+                console.log("error 1", e);
             }
 
         });
@@ -728,12 +739,12 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
             'X-MACAddress': 'MAC_ADDRESS',
             'X-PrivateKey': item.api_key
         },
-        data: JSON.stringify(data)
+        data: JSON.stringify(item.postdata)
 
     };
     axios(config)
         .then(async (response) => {
-            // console.log("respose Exit", response.data)
+        console.log("respose Exit", response.data)
 
             fs.appendFile(filePath, 'TIME ' + new Date() + ' ANGEL AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
@@ -875,7 +886,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                 }
 
             } catch (e) {
-                console.log("Error  1", e);
+                console.log("error 1", e);
             }
 
         });
