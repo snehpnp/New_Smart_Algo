@@ -70,8 +70,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
         exec(command, (error, stdout, stderr) => {
             if (error) {
-                console.error(`exec error: ${error}`);
-                return;
+                console.log(`exec error: ${error}`);
+               // return;
             }
             const parts = stdout.split(','); // Extract the content inside double quotes
             // console.log("Extracted Part:", parts[9]);
@@ -361,6 +361,32 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
     
                                 }
                             }else{
+
+                                BrokerResponse.create({
+                                    user_id: item._id,
+                                    receive_signal: signal_req,
+                                    strategy: strategy,
+                                    type: type,
+                                    symbol: input_symbol,
+                                    order_status: "Entry Not Exist",
+                                    order_id: "",
+                                    trading_symbol: "",
+                                    broker_name: "ALICE BLUE",
+                                    send_request: send_rr,
+                                    reject_reason: "position Not Exist",
+        
+                                })
+                                    .then((BrokerResponseCreate) => {
+                                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                                    })
+                                    .catch((err) => {
+                                        try {
+                                            console.error('Error creating and saving user:', err);
+                                        } catch (e) {
+                                            console.log("duplicate key")
+                                        }
+        
+                                    });
     
                             }
     
