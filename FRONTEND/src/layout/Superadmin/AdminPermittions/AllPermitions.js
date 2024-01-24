@@ -5,7 +5,7 @@ import Content from "../../../Components/Dashboard/Content/Content"
 import * as  valid_err from "../../../Utils/Common_Messages"
 import { Link } from "react-router-dom";
 import Loader from '../../../Utils/Loader'
-import { FolderLock, Plus, FileClock, HelpingHand, Users2, ScrollText } from 'lucide-react';
+import { FolderLock, Plus, FileClock, HelpingHand, Users2,Link2, ScrollText } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel, GET_PANEL_INFORMATIONS, All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
@@ -64,7 +64,7 @@ const AllPermitions = () => {
     const [showBrokerDetails, setshowBrokerDetails] = useState("")
 
 
-    const [Panelid, setPanelid] = useState('')
+    // const [Panelid, setPanelid] = useState('1')
     const [themeList, setThemeList] = useState();
     const [refresh, setRefresh] = useState(false)
 
@@ -85,6 +85,7 @@ const AllPermitions = () => {
     const GetAllThemes = async () => {
         await dispatch(Get_All_Theme()).unwrap()
             .then((response) => {
+                 
                 setThemeList(response && response.data);
             })
     }
@@ -115,11 +116,18 @@ const AllPermitions = () => {
 
 
 
-    const panelDetails = (panel_id) => {
-        setPanelid(panel_id)
-        setshowModal(true)
-    }
 
+  
+
+
+
+    // const panelDetails = (panel_id) => {
+    //     setPanelid(panel_id)
+    //     setshowModal(true)
+    // }
+
+
+   
 
     const CloseCompany = async (status) => {
 
@@ -152,7 +160,14 @@ const AllPermitions = () => {
         },
         {
             dataField: 'panel_name',
-            text: 'Panel Name'
+            text: 'Panel Name', 
+            formatter: (cell, row) => (
+                <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+                    <Link to={`${row.domain}`}>
+                        {row.panel_name}
+                    </Link>
+                </span>
+            ) 
         },
 
         {

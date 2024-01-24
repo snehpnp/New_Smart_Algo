@@ -17,25 +17,19 @@ const LicenceDetails = ({ showModal, setshowModal, id }) => {
         if (showModal) {
             await dispatch(GET_PANEL_INFORMATIONS(id)).unwrap()
                 .then((response) => {
+
                     if (response.status) {
                         setshowLicenceDetails(
-                            response.data[0]
+                            response.data.totalCount
                         );
                     }
                 })
         }
     }
 
-
-
     useEffect(() => {
         data()
     }, [id])
-
-
-
-
-
 
     return (
         <div>   <Modal isOpen={showModal} size="md" title="Licence Details" hideBtn={true}
@@ -52,10 +46,11 @@ const LicenceDetails = ({ showModal, setshowModal, id }) => {
                     </tr>
                 </thead>
                 <tbody>
+
                     <tr>
                         <th>1</th>
                         <td>Total Licence</td>
-                        <td>{showLicenceDetails && showLicenceDetails.licenses}</td>
+                        <td>{showLicenceDetails && showLicenceDetails.all_licence}</td>
                     </tr>
                     <tr>
                         <th>2</th>
@@ -65,7 +60,7 @@ const LicenceDetails = ({ showModal, setshowModal, id }) => {
                     <tr>
                         <th>3</th>
                         <td>Remaining Licence</td>
-                        <td>{showLicenceDetails && showLicenceDetails.remaining_license}</td>
+                        <td>{showLicenceDetails && showLicenceDetails.remaining_licence}</td>
                     </tr>
                     <tr>
                         <th>4</th>

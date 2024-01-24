@@ -1,4 +1,8 @@
- 
+/* eslint-disable no-mixed-operators */
+// import React from 'react'
+/* eslint-disable react/jsx-pascal-case */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
@@ -14,9 +18,6 @@ import {
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { useDispatch } from "react-redux";
 import { fa_time } from "../../../../Utils/Date_formet";
-
-
-
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
@@ -25,8 +26,6 @@ const AllClients = () => {
   const navigate = useNavigate();
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
-
-
   const dispatch = useDispatch();
   const Role = JSON.parse(localStorage.getItem("user_details")).Role;
   const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id;
@@ -38,7 +37,7 @@ const AllClients = () => {
   const [PanelStatus, setPanelStatus] = useState("2");
   const [ClientStatus, setClientStatus] = useState("null");
   const [SwitchButton, setSwitchButton] = useState(true);
-  const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
+
 
   const [refresh, setrefresh] = useState(false);
 
@@ -180,7 +179,7 @@ const AllClients = () => {
         setOriginalData(response.data);
       });
   };
-  
+
   useEffect(() => {
     data();
   }, [refresh]);
@@ -197,7 +196,7 @@ const AllClients = () => {
         .unwrap()
         .then((response) => {
           if (response.status) {
-            localStorage.setItem("route","/admin/allclients");
+            localStorage.setItem("route", "/admin/allclients");
             localStorage.setItem("gotodashboard", JSON.stringify(true));
             localStorage.setItem(
               "user_details_goTo",
@@ -246,12 +245,7 @@ const AllClients = () => {
 
     }
 
-    // await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
-    //   .unwrap()
-    //   .then((response) => {
-    //     if (response.status) {
-    //     }
-    //   });
+
   };
 
   const showBrokerName = (value1, licence_type) => {
@@ -260,7 +254,7 @@ const AllClients = () => {
     // if (licence_type === "0") {
     //   return "2 Days Only";
     // } 
-     if (licence_type === "1") {
+    if (licence_type === "1") {
       return "Demo";
     } else {
       if (value === 1) {
@@ -326,8 +320,8 @@ const AllClients = () => {
       dataField: "Email",
       text: "Email",
     },
-    
-        {
+
+    {
       dataField: "FullName",
       text: "Full Name",
     },
@@ -452,7 +446,7 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-             {/* : ""}  */}
+            {/* : ""}  */}
 
           </div>
         </div>
@@ -484,27 +478,30 @@ const AllClients = () => {
     GetAllStrategyName();
   }, []);
 
-  //  MANAGE MULTIFILTER
+
+
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
-      return (
-        (ClientStatus === "null" || item.license_type.includes(ClientStatus)) &&
-        // (StrategyClientStatus === "null" || item.license_type.includes(ClientStatus)) &&
-        (PanelStatus === "2" || item.WebLoginStatus.includes(PanelStatus)) &&
-        (searchInput === "" ||
-          item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
-          item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
-          item.PhoneNo.includes(searchInput))
-      );
+
+      const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
+
+      const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
+
+      const searchTermMatch =
+        searchInput === '' ||
+        item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.PhoneNo.includes(searchInput)
+
+      // Return true if all conditions are met
+      return filter1Match && filter2Match && searchTermMatch;
+
     });
 
 
     setAllClients({
       loading: false,
-      data:
-        searchInput || PanelStatus !== "2" || ClientStatus !== "null"
-          ? filteredData
-          : originalData,
+      data: searchInput || PanelStatus !== "2" || ClientStatus !== "null" ? filteredData : originalData,
     });
   }, [searchInput, originalData, PanelStatus, ClientStatus]);
 
@@ -549,9 +546,12 @@ const AllClients = () => {
   }, [getAllClients.data])
 
 
+
+
+
   return (
     <>
-      { getAllClients.loading ? (
+      {getAllClients.loading ? (
         <Loader />
       ) : (
         <>
