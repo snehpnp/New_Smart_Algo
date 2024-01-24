@@ -5,13 +5,24 @@ module.exports = function (app) {
 
 
   const { DashboardView } = require('./View/DashboardData')
+  const { createView ,dropOpenPosition} = require('./View/Open_position')
 
 
+  app.get('/dropOpenPosition', async (req, res) => {
+    dropOpenPosition()
+    res.send({ msg: "Delete Done!!!" })
+  })
+
+  
+  app.get('/createView', async (req, res) => {
+    createView()
+    res.send({ msg: "Create View Done!!!" })
+  })
 
 
   app.get('/dashboard-view', async (req, res) => {
     DashboardView()
-    res.send({ msg: "Done!!!" })
+    res.send({ msg: "Dashboard view create Done!!!" })
   })
 
 

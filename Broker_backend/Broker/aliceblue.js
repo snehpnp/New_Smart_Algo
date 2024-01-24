@@ -75,8 +75,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                             exec(command, (error, stdout, stderr) => {
                                 if (error) {
-                                    console.error(`exec error: ${error}`);
-                                    return;
+                                    console.log(`exec error: ${error}`);
+                                    
                                 }
                                 const parts = stdout.split(','); // Extract the content inside double quotes
                                 // console.log("Extracted Part:", parts[9]);

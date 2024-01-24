@@ -100,7 +100,7 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
   var channel_List = `${EXCHANGE}|${instrument_token}`
 
   var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE", trading_status: "on" });
-
+  console.log(broker_infor);
   if (broker_infor) {
 
     var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
@@ -216,16 +216,17 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
 
 
     }).catch((error) => {
-      console.log("Error -", error.response);
-      return error.response
+      console.log("Error -", error.response.data);
+      return error.response.data
     })
 
 
+  } else {
+console.log("Admin Trading off ")
   }
 
 }
 
-ConnectSocket()
 
 
 
@@ -345,8 +346,8 @@ app.post('/broker-signals', async (req, res) => {
       }
 
       var MakeStartegyName = ""
-      if(signals.MakeStartegyName != undefined){
-        MakeStartegyName = signals.MakeStartegyName 
+      if (signals.MakeStartegyName != undefined) {
+        MakeStartegyName = signals.MakeStartegyName
       }
 
 
@@ -512,31 +513,32 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-       // LIVE PRICE GET
-       const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
+          // LIVE PRICE GET
+          const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
 
-       try {
-         if (signals.TradeType == "MT_4") {
+          try {
+            if (signals.TradeType == "MT_4") {
 
-           if (price_live_second.length > 0) {
-             price = price_live_second[0].lp
-           } else {
-             price = signals.Price
-           }
-         }
-       } catch (error) {
-         console.log("Error  IN price Update", error);
-       }
+              if (price_live_second.length > 0) {
+                price = price_live_second[0].lp
+              } else {
+                price = signals.Price
+              }
+            }
+          } catch (error) {
+            console.log("Error  IN price Update", error);
+          }
 
-       if (price == null) {
-         price = signals.Price
+          if (price == null) {
+            price = signals.Price
 
-       }
+          }
 
 
 
           // HIT TRADE IN BROKER SERVER
           if (process.env.PANEL_KEY == client_key) {
+
             //Process Alice Blue admin client
             try {
               const AliceBlueCollection = db1.collection('aliceblueView');
@@ -564,7 +566,7 @@ app.post('/broker-signals', async (req, res) => {
             //Process Angel admin client
             try {
               const angelCollection = db1.collection('angelView');
-             const angelBluedocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+              const angelBluedocuments = await angelCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
               fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE ALL CLIENT LENGTH ' + angelBluedocuments.length + '\n', function (err) {
                 if (err) {
@@ -595,7 +597,7 @@ app.post('/broker-signals', async (req, res) => {
                 }
               });
 
-            
+
 
               if (fivepaisaBluedocuments.length > 0) {
                 fivepaisa.place_order(fivepaisaBluedocuments, signals, token, filePath, signal_req);
@@ -619,7 +621,7 @@ app.post('/broker-signals', async (req, res) => {
                 }
               });
 
-             
+
 
               if (zerodhaBluedocuments.length > 0) {
                 zerodha.place_order(zerodhaBluedocuments, signals, token, filePath, signal_req);
@@ -644,7 +646,7 @@ app.post('/broker-signals', async (req, res) => {
                 }
               });
 
-             
+
               if (AliceBluedocuments.length > 0) {
                 aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req);
               }
@@ -777,7 +779,7 @@ app.post('/broker-signals', async (req, res) => {
               TradeType: TradeType,
               token: instrument_token,
               lot_size: find_lot_size,
-              MakeStartegyName:MakeStartegyName
+              MakeStartegyName: MakeStartegyName
             }
 
             let Signal_req1 = new Signals(Signal_req)
@@ -829,7 +831,7 @@ app.post('/broker-signals', async (req, res) => {
                 exit_time1: 0,
                 complete_trade: 0,
                 sl_status: 0,
-                MakeStartegyName:MakeStartegyName
+                MakeStartegyName: MakeStartegyName
 
               }
               const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
@@ -895,7 +897,7 @@ app.post('/broker-signals', async (req, res) => {
                   exit_dt_date: current_date
                 }
                 updatedData.$addToSet = { signals_id: SignalSave._id };
-     
+
 
                 // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
                 const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
@@ -914,7 +916,7 @@ app.post('/broker-signals', async (req, res) => {
                     exit_dt_date: current_date
                   }
                   updatedData.$addToSet = { signals_id: SignalSave._id };
-               
+
 
                   // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
                   const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
@@ -958,7 +960,10 @@ app.post('/broker-signals', async (req, res) => {
 
 
 // Server start
-app.listen(process.env.PORT, () =>
+app.listen(process.env.PORT, () => {
+
+  ConnectSocket()
   console.log(`Broker Server is running on http://0.0.0.0:${process.env.PORT}`)
-);
+
+});
 

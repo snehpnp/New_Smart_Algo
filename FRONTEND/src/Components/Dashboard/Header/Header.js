@@ -492,7 +492,6 @@ const Header = ({ ChatBox }) => {
                 {user_role === "ADMIN" ? (
                   <>
                     <Notification data={getAllClients} />
-
                   </>
                 ) : (
                   user_role === "USER" ? (

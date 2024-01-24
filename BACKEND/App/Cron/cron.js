@@ -20,16 +20,20 @@ const { Get_Option_All_Token_Chain } = require('../../App/Controllers/Admin/opti
 const { GetStrickPriceFromSheet } = require('../Controllers/Admin/signals.controller')
 const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
 
+const { createView } = require('../../View/Open_position')
+
 
 cron.schedule('0 1 * * *', () => {
     console.log('Delte Dashboard Data');
     deleteDashboard()
+    dropOpenPosition()
 });
 
 
 cron.schedule('0 6 * * *', () => {
     console.log('Create Dashboard view');
     DashboardView()
+    createView()
 });
 
 
