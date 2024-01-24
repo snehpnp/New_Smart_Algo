@@ -51,6 +51,7 @@ const AdminsList = () => {
     const data = async () => {
         await dispatch(All_Panel_List()).unwrap()
             .then((response) => {
+
                 setThemeData({
                     loading: false,
                     data: response.data

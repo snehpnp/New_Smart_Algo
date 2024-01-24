@@ -33,10 +33,6 @@ const AllSignUpClients = () => {
     const token = JSON.parse(localStorage.getItem("user_details")).token;
 
     // For Filter
-    const [originalData, setOriginalData] = useState([]);
-    const [searchInput, setSearchInput] = useState("");
-    const [PanelStatus, setPanelStatus] = useState("2");
-    const [ClientStatus, setClientStatus] = useState("null");
     const [SwitchButton, setSwitchButton] = useState(true);
 
 

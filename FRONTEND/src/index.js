@@ -15,8 +15,9 @@ root.render(
   <>
     <HashRouter>
       <Provider store={Store}>
-        <App />
+        <App   />
       </Provider>
     </HashRouter>
   </>
 );
+
