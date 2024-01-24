@@ -233,13 +233,13 @@ export const admin_sidebar = [
         ]
 
     },
-    {
-        'id': 13,
-        "name": 'SignUp Clients',
-        "Icon": "Users",
-        "route": "/admin/signupclient",
-        "Data": []
-    },
+    // {
+    //     'id': 13,
+    //     "name": 'SignUp Clients',
+    //     "Icon": "Users",
+    //     "route": "/admin/signupclient",
+    //     "Data": []
+    // },
 
 
    
