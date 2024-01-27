@@ -90,8 +90,41 @@ export async function FIND_ONE_USER(data, token) {
 }
 
 
+// FIND ONE SIGNUP CLIENT BY ID
+export async function FIND_ONE_CLIENT(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}getall/userinfo`, data, {
+            headers: header(token),
+
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
+
 // UPDATE CLIENT BY ID
 export async function UPDATE_USER(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/employee`, data, {
+            headers: header(token),
+
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+export async function FIND_ONE_SIGNUP_CLIENT(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}update/employee`, data, {
             headers: header(token),
@@ -475,6 +508,7 @@ export async function UPDATE_USERACTIVE_STATUS(data, token) {
     }
 
 }
+ 
 
 
 // ADD USER

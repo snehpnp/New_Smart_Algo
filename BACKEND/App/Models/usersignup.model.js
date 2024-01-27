@@ -37,7 +37,7 @@ const userSignUp = Schema({
     },
     ActiveStatus: {
         type: String,
-        enum: ['1', '0'],
+        enum: ['0', '1'],
         default: '0'
     },
 },

@@ -153,9 +153,6 @@ const AddClient = () => {
       } else if (!isValidContact(values.mobile)) {
         errors.mobile = valid_err.INVALID_CONTACT_ERROR;
       }
-
-
-
       if (!values.licence) {
         errors.licence = valid_err.LICENCE_TYPE_ERROR;
       }
@@ -163,29 +160,17 @@ const AddClient = () => {
         if (!values.broker) {
           errors.broker = valid_err.BROKER_ERROR;
         }
-        // if (!values.tomonth) {
-        //   errors.tomonth = valid_err.LICENCE_ERROR;
-        // }
+        
       }
       else if (values.licence === '0' || values.licence === 0) {
         if (!values.broker) {
           errors.broker = valid_err.BROKER_ERROR;
         }
-        // if (!values.tomonth) {
-        //   errors.tomonth = valid_err.LICENCE_ERROR;
-        // }
+        
       }
       else if (values.licence === '1' || values.licence === 1) {
-        // if (!values.fromDate) {
-        //   errors.fromDate = valid_err.FROMDATE_ERROR;
-        // }
-        // if (!values.todate) {
-        //   errors.todate = valid_err.FROMDATE_ERROR;
-        // }
+        
       }
-
-
-
       if (!values.groupservice) {
         errors.groupservice = valid_err.GROUPSELECT_ERROR;
       }
@@ -255,7 +240,7 @@ const AddClient = () => {
 
 
   useEffect(() => {
-    console.log(UserData.data.data)
+    
     formik.setFieldValue('username', UserData.data.data !== undefined && UserData.data.data[0].UserName);
     formik.setFieldValue('fullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
     formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
@@ -300,24 +285,11 @@ const AddClient = () => {
   }, [UserData.data.data]);
 
   const brokerOptions = [
-    // { label: 'Market Hub', value: '1' },
     { label: 'Alice Blue', value: '2' },
-    // { label: 'Master Trust', value: '3' },
-    // { label: 'Motilal Oswal', value: '4' },
-    // { label: 'Zebull', value: '5' },
-    // { label: 'IIFl', value: '6' },
-    // { label: 'Kotak', value: '7' },
-    // { label: 'Mandot', value: '8' },
-    // { label: 'Choice', value: '9' },
-    // { label: 'Anand Rathi', value: '10' },
-    // { label: 'B2C', value: '11' },
     { label: 'Angel', value: '12' },
-    // { label: 'Fyers', value: '13' },
     { label: '5 Paisa', value: '14' },
     { label: 'Zerodha', value: '15' }
-    // { label: 'Arihant', value: '16' }
-    // { label: 'Arihant', value: '17' }
-    // { label: 'Laxmi', value: '18' }
+    
   ];
   const fields = [
     { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },

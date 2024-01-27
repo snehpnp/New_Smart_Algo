@@ -7,7 +7,7 @@ import * as  valid_err from "../../../Utils/Common_Messages"
 import Loader from '../../../Utils/Loader'
 import { Pencil, Trash2, Pointer } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { All_Panel_List, Update_Panel_Theme,Close_Admin_Panel } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -67,7 +67,7 @@ const AdminsList = () => {
 
 
     const panelDetails = (panel_id) => {
-        console.log("setshowModal(true)", panel_id);
+        
         setPanelid(panel_id)
         setshowModal(true)
     }
@@ -96,7 +96,7 @@ const AdminsList = () => {
             dataField: 'key',
             text: 'Key'
         },
-     
+
         {
             dataField: 'is_active',
             text: 'Close Panel',
@@ -110,7 +110,7 @@ const AdminsList = () => {
                 </label>
             )
         },
-      
+
 
         {
             dataField: 'a',
@@ -126,7 +126,7 @@ const AdminsList = () => {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
-        
+
 
 
                 <div style={{ width: "120px" }}>
@@ -180,7 +180,7 @@ const AdminsList = () => {
             return errors;
         },
         onSubmit: async (values) => {
-            console.log("test", values.theme_update);
+            
 
             const req = {
                 userid: Panelid,
@@ -217,7 +217,7 @@ const AdminsList = () => {
 
 
 
-    const CloseCompany = async (domain,status) => {
+    const CloseCompany = async (domain, status) => {
 
         const req = {
             "domain": domain,
@@ -257,23 +257,15 @@ const AdminsList = () => {
                                             <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update Theme"
                                                 title="update_theme"
                                             />
-
-
                                         </Modal >
 
                                         <ToastButton />
 
                                     </>
-
-
-
                             }
                         </Content>
                     </>
             }
-
-
-
         </ >
     );
 }
