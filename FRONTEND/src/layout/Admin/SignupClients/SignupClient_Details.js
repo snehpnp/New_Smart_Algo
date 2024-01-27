@@ -4,45 +4,56 @@ import React, { useEffect, useState } from "react";
 import Content from '../../../Components/Dashboard/Content/Content'
 
 import Loader from "../../../Utils/Loader";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Pencil, Trash2 } from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Trash2 } from "lucide-react";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import {
     GET_ALL_SIGNUP_CLIENTS,
-    UPDATE_USER_ACTIVE_STATUS,
-    DELETE_USER_SERVICES,
+
+
     DELETE_ALL_SIGNUP
 } from "../../../ReduxStore/Slice/Admin/AdminSlice";
 import { useDispatch } from "react-redux";
 import { fa_time } from "../../../Utils/Date_formet";
-
-
-
-import toast, { Toaster } from 'react-hot-toast';
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import toast from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 
 const AllSignUpClients = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [SwitchButton, setSwitchButton] = useState(true);
+
+
 
 
     const dispatch = useDispatch();
     const Role = JSON.parse(localStorage.getItem("user_details")).Role;
     const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id;
     const token = JSON.parse(localStorage.getItem("user_details")).token;
-
-    // For Filter
-    const [SwitchButton, setSwitchButton] = useState(true);
-
-
     const [refresh, setrefresh] = useState(false);
+    const [DateArray, setDateArray] = useState([]);
+    const [first, setfirst] = useState("all");
 
     const [getAllSignUpClients, setAllSignUpClients] = useState({
         loading: true,
         data: [],
     });
 
+
+
+
+    const [getAllClient, setAllClient] = useState({
+        loading: true,
+        data: [],
+    });
+
+    const [userLogs, setUserLogs] = useState({
+        loading: true,
+        data: [],
+    });
 
     // DELETE USET FUNCTION TO DELETE ALL SERVICES
     const Delete_user = async (id) => {
@@ -76,12 +87,16 @@ const AllSignUpClients = () => {
         await dispatch(GET_ALL_SIGNUP_CLIENTS(req1))
             .unwrap()
             .then((response) => {
+
+
+
+
                 if (response.status) {
                     setAllSignUpClients({
                         loading: false,
                         data: response.data,
                     });
-                }else{
+                } else {
                     setAllSignUpClients({
                         loading: false,
                         data: [],
@@ -89,47 +104,15 @@ const AllSignUpClients = () => {
                 }
             })
             .catch()
-            
+
     };
 
     useEffect(() => {
         data();
     }, [refresh]);
 
+
     // ACTIVE USER TO API
-    const activeUser = async (e, data) => {
-
-        if (window.confirm("Do you want To Change Status For This User ?") === true) {
-            let req = {
-                id: data._id,
-                user_active_status: e.target.checked === true ? "1" : "0",
-            };
-            await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
-                .unwrap()
-                .then((response) => {
-                    setrefresh(!refresh)
-                    window.location.reload();
-
-                    if (response.status) {
-
-                        setrefresh(!refresh)
-                        toast.success(response.msg);
-
-                        window.location.reload()
-                        setTimeout(() => {
-                        }, 500);
-                    } else {
-                        toast.error(response.msg);
-                    }
-                });
-        }
-        else {
-            return setrefresh(!refresh)
-
-        }
-
-
-    };
 
     const columns = [
         {
@@ -160,18 +143,30 @@ const AllSignUpClients = () => {
             text: "Status",
             formatter: (cell, row) => (
                 <>
-                    <label class="toggle mt-3">
-                        <input
-                            class="toggle-checkbox bg-primary"
-                            type="checkbox"
-                            checked={row.ActiveStatus === "1" ? true : false}
-                            onChange={(e) => {
-                                activeUser(e, row);
-                                setSwitchButton(e.target.checked)
-                            }}
-                        />
-                        <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
-                    </label>
+
+                    {row.ActiveStatus === '1' ? <span
+                        style={
+                            cell == "off" || cell === null
+                                ? { color: "#FF0000", fontSize: "15px" }
+                                : { color: "#008000", fontSize: "15px" }
+                        }
+                    >
+                       Active
+                    </span> :
+                        <Link to={`/admin/client/add`} state={row}>
+                            <label class="toggle mt-3">
+                                <input
+                                    class="toggle-checkbox bg-primary"
+                                    type="checkbox"
+                                    checked={row.ActiveStatus === "1" ? true : false}
+                                    onChange={(e) => {
+
+                                    }}
+                                />
+                                <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
+                            </label>
+                        </Link>
+                    }
                 </>
             ),
         },
@@ -204,7 +199,7 @@ const AllSignUpClients = () => {
         },
     ];
 
-    console.log("kika", getAllSignUpClients)
+
 
     return (
         <>
@@ -212,17 +207,41 @@ const AllSignUpClients = () => {
                 <Loader />
             ) : (
                 <>
-                    <Content button_status={false}
-                        Page_title_showClient="All SignUp Clients"
-                    >
+                    <Content Page_title="All SignUp Clients" button_status={false}>
+                        <Tabs
+                            defaultActiveKey="home"
+                            id="uncontrolled-tab-example"
+                            className="mb-3"
+                        >
+                            <Tab eventKey="home" title="Active Client">
+                                {
+                                    getAllSignUpClients.data.filter((client) => client.ActiveStatus == 1)
+                                        .length > 0 && (
+                                        <FullDataTable
+                                            TableColumns={columns}
+                                            tableData={getAllSignUpClients.data.filter(
+                                                (client) => client.ActiveStatus == 1
+                                            )}
+                                        />
+                                    )}
+                            </Tab>
+                            <Tab eventKey="profile" title="Inactive Client">
 
-                        <FullDataTable
-                            TableColumns={columns}
-                            tableData={getAllSignUpClients.data}
-                        />
-                        <ToastButton />
-
+                                {
+                                    getAllSignUpClients.data.filter((client) => client.ActiveStatus == 0)
+                                        .length > 0 && (
+                                        <FullDataTable
+                                            TableColumns={columns}
+                                            tableData={getAllSignUpClients.data.filter(
+                                                (client) => client.ActiveStatus == 0
+                                            )}
+                                        />
+                                    )}
+                            </Tab>
+                        </Tabs>
                     </Content>
+                    <ToastButton />
+
                 </>
             )}
         </>

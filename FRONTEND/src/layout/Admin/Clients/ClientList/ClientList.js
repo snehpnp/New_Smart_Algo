@@ -1,8 +1,3 @@
-/* eslint-disable no-mixed-operators */
-// import React from 'react'
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
@@ -14,6 +9,7 @@ import {
   GET_ALL_CLIENTS,
   GO_TO_DASHBOARDS,
   UPDATE_USER_ACTIVE_STATUS,
+ 
   DELETE_USER_SERVICES,
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { useDispatch } from "react-redux";
@@ -45,6 +41,9 @@ const AllClients = () => {
     loading: true,
     data: [],
   });
+
+
+  
 
   const [ForGetCSV, setForGetCSV] = useState([])
 
@@ -191,7 +190,6 @@ const AllClients = () => {
         Email: email,
       };
 
-
       await dispatch(GO_TO_DASHBOARDS(req))
         .unwrap()
         .then((response) => {
@@ -224,6 +222,8 @@ const AllClients = () => {
       await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
         .unwrap()
         .then((response) => {
+
+
           setrefresh(!refresh)
           window.location.reload();
 
@@ -244,9 +244,9 @@ const AllClients = () => {
       return setrefresh(!refresh)
 
     }
-
-
   };
+
+ 
 
   const showBrokerName = (value1, licence_type) => {
     let value = parseInt(value1);

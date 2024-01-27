@@ -5,7 +5,7 @@ import { GET_HELP_REQUEST } from "../../../Service/admin.service";
 
 export const GET_HELPS = createAsyncThunk("user/all/helps", async (data) => {
     const { user_id, token } = data
-    console.log(data);
+    
     try {
         const res = await GET_HELP_REQUEST({ _id: user_id }, token);
         return await res;
