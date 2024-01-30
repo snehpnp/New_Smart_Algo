@@ -53,6 +53,8 @@ const Alice_Socket = async () => {
     // var channelList = "NSE|14366#NFO|43227"
     var type = { "loginType": "API" }
 
+    console.log("broker_infor",broker_infor)
+
     //  Step -1
     try {
 
@@ -155,7 +157,7 @@ const Alice_Socket = async () => {
                 }
             }
         })
-            .catch(error => {
+            .catch((error) => {
                 return error.response
             })
 

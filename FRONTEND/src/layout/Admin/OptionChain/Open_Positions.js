@@ -512,110 +512,113 @@ const TradeHistory = () => {
         let channelList = CreatechannelList;
 
         if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
+            if(UserDetails.trading_status == "on"){ 
 
-            const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
+                const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
-            if (res.status === 200) {
-                setSocketState("Ok");
-            }
-            if (res.status === 401 || res.status === '401') {
-                setSocketState("Unauthorized");
-
-                tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-                    const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
-                    calcultateRPL(row, null, previousRow);
-                });
-            }
-            else {
-                if (res.data.stat) {
-                    const handleResponse = async (response) => {
-                        // console.log("response", response)
-                        $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
-                        $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
-
-                        // UPL_
-                        $(".LivePrice_" + response.tk).html(response.lp);
-                        $(".ClosePrice_" + response.tk).html(response.c);
-
-
-                        var live_price = response.lp === undefined ? "" : response.lp;
-
-                        //  if entry qty and exist qty both exist
-                        tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-                            // $('.SP1_Call_Price_' + row.token + "_" + row._id).html(response.sp1);
-                            // $('.BP1_Put_Price_' + row.token + "_" + row._id).html(response.bp1);
-
-                            let get_ids = '_id_' + response.tk + '_' + row._id
-                            let get_id_token = $('.' + get_ids).html();
-
-                            const get_entry_qty = $(".entry_qty_" + response.tk + '_' + row._id).html();
-                            const get_exit_qty = $(".exit_qty_" + response.tk + '_' + row._id).html();
-                            const get_exit_price = $(".exit_price_" + response.tk + '_' + row._id).html();
-                            const get_entry_price = $(".entry_price_" + response.tk + '_' + row._id).html();
-                            const get_entry_type = $(".entry_type_" + response.tk + '_' + row._id).html();
-                            const get_exit_type = $(".exit_type_" + response.tk + '_' + row._id).html();
-                            const get_Strategy = $(".strategy_" + response.tk + '_' + row._id).html();
-
-                            if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
-                                if (get_entry_qty !== "" && get_exit_qty !== "") {
-
-                                    if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-                                        let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-                                        let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
-                                        let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
-
-                                        if ((isNaN(finalyupl) || isNaN(rpl))) {
-                                            return "-";
-                                        } else {
-                                            $(".show_rpl_" + response.tk + "_" + get_id_token).html(rpl.toFixed(2));
-                                            $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
-                                            $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
-
-                                            ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
-                                            ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
-                                            ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
+                if (res.status === 200) {
+                    setSocketState("Ok");
+                }
+                if (res.status === 401 || res.status === '401') {
+                    setSocketState("Unauthorized");
+    
+                    tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+                        const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
+                        calcultateRPL(row, null, previousRow);
+                    });
+                }
+                else {
+                    if (res.data.stat) {
+                        const handleResponse = async (response) => {
+                            // console.log("response", response)
+                            $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
+                            $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
+    
+                            // UPL_
+                            $(".LivePrice_" + response.tk).html(response.lp);
+                            $(".ClosePrice_" + response.tk).html(response.c);
+    
+    
+                            var live_price = response.lp === undefined ? "" : response.lp;
+    
+                            //  if entry qty and exist qty both exist
+                            tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+                                // $('.SP1_Call_Price_' + row.token + "_" + row._id).html(response.sp1);
+                                // $('.BP1_Put_Price_' + row.token + "_" + row._id).html(response.bp1);
+    
+                                let get_ids = '_id_' + response.tk + '_' + row._id
+                                let get_id_token = $('.' + get_ids).html();
+    
+                                const get_entry_qty = $(".entry_qty_" + response.tk + '_' + row._id).html();
+                                const get_exit_qty = $(".exit_qty_" + response.tk + '_' + row._id).html();
+                                const get_exit_price = $(".exit_price_" + response.tk + '_' + row._id).html();
+                                const get_entry_price = $(".entry_price_" + response.tk + '_' + row._id).html();
+                                const get_entry_type = $(".entry_type_" + response.tk + '_' + row._id).html();
+                                const get_exit_type = $(".exit_type_" + response.tk + '_' + row._id).html();
+                                const get_Strategy = $(".strategy_" + response.tk + '_' + row._id).html();
+    
+                                if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+                                    if (get_entry_qty !== "" && get_exit_qty !== "") {
+    
+                                        if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                                            let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                                            let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
+                                            let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
+    
+                                            if ((isNaN(finalyupl) || isNaN(rpl))) {
+                                                return "-";
+                                            } else {
+                                                $(".show_rpl_" + response.tk + "_" + get_id_token).html(rpl.toFixed(2));
+                                                $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
+                                                $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
+    
+                                                ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
+                                                ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
+                                                ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            //  if Only entry qty Exist
-                            else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
-                                let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
-                                if (isNaN(abc)) {
-                                    return "-";
-                                } else {
-                                    $(".show_rpl_" + response.tk + "_" + get_id_token).html(abc);
-                                    $(".UPL_" + response.tk + "_" + get_id_token).html("-");
-                                    $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
-                                    ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
-                                    ShowColor1(".UPL_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
-                                    ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+                                //  if Only entry qty Exist
+                                else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
+                                    let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
+                                    if (isNaN(abc)) {
+                                        return "-";
+                                    } else {
+                                        $(".show_rpl_" + response.tk + "_" + get_id_token).html(abc);
+                                        $(".UPL_" + response.tk + "_" + get_id_token).html("-");
+                                        $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
+                                        ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+                                        ShowColor1(".UPL_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
+                                        ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+                                    }
+    
                                 }
-
-                            }
-
-                            //  if Only Exist qty Exist
-                            else if (
-                                (get_entry_type === "" && get_exit_type === "LX") ||
-                                (get_entry_type === "" && get_exit_type === "SX")
-                            ) {
-                            } else {
-                            }
-                        });
-
-
-
-
-
-                        // }
-                    };
-                    await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
-                } else {
-                    // $(".UPL_").html("-");
-                    // $(".show_rpl_").html("-");
-                    // $(".TPL_").html("-");
+    
+                                //  if Only Exist qty Exist
+                                else if (
+                                    (get_entry_type === "" && get_exit_type === "LX") ||
+                                    (get_entry_type === "" && get_exit_type === "SX")
+                                ) {
+                                } else {
+                                }
+                            });
+    
+    
+    
+    
+    
+                            // }
+                        };
+                        await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
+                    } else {
+                        // $(".UPL_").html("-");
+                        // $(".show_rpl_").html("-");
+                        // $(".TPL_").html("-");
+                    }
                 }
             }
+         
         }
 
     };
