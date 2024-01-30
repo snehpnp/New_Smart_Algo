@@ -494,7 +494,7 @@ export async function DELETE_GROUP_SERVICES(data, token) {
 
 // UPDATE ACTIVE STATUS
 export async function UPDATE_USERACTIVE_STATUS(data, token) {
-    console.log(data);
+    
     try {
         const res = await axios.post(`${Config.base_url}update/useractive/status`, data, {
             //  headers: header(token),
@@ -513,7 +513,7 @@ export async function UPDATE_USERACTIVE_STATUS(data, token) {
 
 // ADD USER
 export async function ADD_CLIENT(data, token) {
-    console.log(data);
+ 
     try {
         const res = await axios.post(`${Config.base_url}add/employee`, data, {
             headers: header(token),
@@ -532,7 +532,7 @@ export async function ADD_CLIENT(data, token) {
 
 // GET ALL SERVICE
 export async function GET_ALL_SERVICE(data, token) {
-    console.log(data);
+    
     try {
         const res = await axios.post(`${Config.base_url}get/allsignals`, data, {
             headers: header(token),
@@ -568,7 +568,7 @@ export async function GET_TRADEHISTORY(data, token) {
 
 // GET 7 Day TRADEHISTORY
 export async function GET_SEVAN_TRADEHISTORY(data, token) {
-    console.log(data);
+     
     try {
         const res = await axios.post(`${Config.base_url}get/entry/tradhistory`, data, {
             headers: header(token),
@@ -586,7 +586,7 @@ export async function GET_SEVAN_TRADEHISTORY(data, token) {
 
 // DELTE USER
 export async function DELETE_USERAND_ALLSERVICES(data, token) {
-    console.log(data);
+    
     try {
         const res = await axios.post(`${Config.base_url}delete/user`, data, {
             //  headers: header(token),
@@ -606,7 +606,7 @@ export async function DELETE_USERAND_ALLSERVICES(data, token) {
 
 // DELETE ALL SIGNUP CLIENT
 export async function DELETE_ALL_SIGNUP_CLIENT(data, token) {
-    console.log(data);
+ 
     try {
         const res = await axios.post(`${Config.base_url}deletesignupclients`, data, {
             //  headers: header(token),

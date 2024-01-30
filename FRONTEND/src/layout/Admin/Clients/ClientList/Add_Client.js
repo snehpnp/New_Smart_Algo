@@ -1,6 +1,3 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1"
 import { useFormik } from 'formik';
@@ -215,7 +212,7 @@ const AddClient = () => {
   });
 
 
-  console.log("location.state :", location.state)
+  
 
   useEffect(() => {
     formik.setFieldValue('username', location.state !== null && location.state.UserName || "");

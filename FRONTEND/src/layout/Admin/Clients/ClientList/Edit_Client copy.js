@@ -214,8 +214,7 @@ const EditClient = () => {
       }
 
 
-      console.log("req", req)
-      return
+      
 
 
       await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((response) => {

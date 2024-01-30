@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
-import Loader from "../../../../Utils/Loader";
+import Loader from "../../../../Utils/Loader"; 
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
@@ -9,7 +9,7 @@ import {
   GET_ALL_CLIENTS,
   GO_TO_DASHBOARDS,
   UPDATE_USER_ACTIVE_STATUS,
- 
+
   DELETE_USER_SERVICES,
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { useDispatch } from "react-redux";
@@ -43,7 +43,7 @@ const AllClients = () => {
   });
 
 
-  
+
 
   const [ForGetCSV, setForGetCSV] = useState([])
 
@@ -246,7 +246,7 @@ const AllClients = () => {
     }
   };
 
- 
+
 
   const showBrokerName = (value1, licence_type) => {
     let value = parseInt(value1);
@@ -480,6 +480,7 @@ const AllClients = () => {
 
 
 
+  //  MANAGE MULTIFILTER
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
 
