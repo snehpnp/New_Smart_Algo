@@ -7,7 +7,7 @@ const ChartComponent = ({ showModal, setshowModal, List, data1111 }) => {
     const dispatch = useDispatch();
     const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
 
-    console.log("List", List.symbol_name)
+    
 
     const [candleData, setCandleData] = useState({ loading: true, data: [] });
 
@@ -347,12 +347,6 @@ const ChartComponent = ({ showModal, setshowModal, List, data1111 }) => {
 
 
     }
-
-
-
-
-
-
     return (
         <div>
             <Modal isOpen={showModal} size="xl" title="Chart Details" hideBtn={true}

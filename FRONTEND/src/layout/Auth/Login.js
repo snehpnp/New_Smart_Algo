@@ -88,7 +88,7 @@ const Login = () => {
       await dispatch(SignIn(req))
         .unwrap()
         .then((response) => {
-          console.log("response=>", response);
+          
 
           if (response.status) {
             if (response.data.Role !== "SUPERADMIN") {
@@ -109,7 +109,7 @@ const Login = () => {
               }, 1000);
             }
           } else {
-            // console.log("response", response);
+            
             toast.error(response.msg);
           }
         })
@@ -147,7 +147,7 @@ const Login = () => {
 
     await dispatch(Verify_User_Device(req))
       .then((res) => {
-        console.log("res", res)
+  
         if (res.payload.firstlogin === "0") {
           setDesclaimerModal(true)
         } else {
@@ -220,8 +220,7 @@ const Login = () => {
   };
   // CLOSE THE MODAL
   const verifyOTP_login = async () => {
-    // console.log("DONE AND TEST");
-
+     
     if (getOtp && getOtp == typeOtp1) {
       // const socket = socketIOClient(`${Config.base_url}`);
       // socket.emit("logout_user_from_other_device_req", {
@@ -292,8 +291,7 @@ const Login = () => {
     await dispatch(OTP_SEND_USEHERES(req))
       .unwrap()
       .then((response) => {
-        // console.log("response", response.data);
-
+         
         setgetOtp(response.data);
         if (response.status) {
           setshowModal1(false);
@@ -433,7 +431,7 @@ const Login = () => {
           setGetCompanyName(response.data && response.data[0].panel_name)
 
           $(".logo-abbr").attr('src', response.data && response.data[0].logo);
-          console.log("response.data && response.data", response.data && response.data)
+          
           $(".Company_logo").html(response.data && response.data[0].panel_name);
 
 
@@ -446,6 +444,9 @@ const Login = () => {
           $('head').append(favicon);
         }
       })
+      .catch((error) => {
+        console.log("Error", error);
+      });
   }
 
 

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
-import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 import Loader from "../../../../Utils/Loader";
-import { fa_time, fDateTimeSuffix } from "../../../../Utils/Date_formet";
-import { Pencil, Trash2 } from "lucide-react";
+import {  fDateTimeSuffix } from "../../../../Utils/Date_formet";
 import { Get_All_Signals } from "../../../../ReduxStore/Slice/Admin/SignalsSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 
 
@@ -29,6 +27,9 @@ const Signals = () => {
   //  For Strategy Filter
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
   const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
+
+
+
 
 
 
@@ -93,7 +94,7 @@ const Signals = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          // console.log("response", response);
+
 
           response.data.map((data) => {
             return csvarr.push({
@@ -162,7 +163,7 @@ const Signals = () => {
           });
         }
       });
-       
+
   };
 
   useEffect(() => {
@@ -172,27 +173,30 @@ const Signals = () => {
 
 
   // MANAGE MULTIFILTER
+
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
-      return (
-        item.strategy.toString().toLowerCase().includes(StrategyClientStatus.toString().toLowerCase())
+
+      const filter2Match = StrategyClientStatus == null || item.strategy.includes(StrategyClientStatus)
+
+      const searchTermMatch =
+        item.strategy.toLowerCase().includes(searchInput.toLowerCase())
         ||
-        item.symbol.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.trade_symbol.toLowerCase().includes(searchInput.toLowerCase())
-      );
+        item.TradeType.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.trade_symbol.toLowerCase().includes(searchInput.toLowerCase()) ||
+        item.type.toLowerCase().includes(searchInput.toLowerCase())
+
+      return searchTermMatch && filter2Match
     });
 
     // Set the filtered data to the state or variable you want to use
     getSignalsData({
       loading: false,
-      data: searchInput ? filteredData : originalData,
+      data: searchInput || StrategyClientStatus !== "null" ? filteredData : originalData,
     });
 
-    console.log("StrategyClientStatus", StrategyClientStatus);
-    console.log("filteredData", filteredData);
-  }, [searchInput, originalData, StrategyClientStatus]);
 
-
+  }, [searchInput, StrategyClientStatus, originalData]);
 
 
 

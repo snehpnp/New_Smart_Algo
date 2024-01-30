@@ -5,7 +5,7 @@ import { USER_DASHBOARD, GET_PERMISSION, UPDATE_DAHBOARD_DATA, TRADING_OFF } fro
 
 export const User_Dashboard_Data = createAsyncThunk("user/dashboard", async (data) => {
     const { user_Id, AdminToken } = data
-    console.log(data);
+   
     try {
         const res = await USER_DASHBOARD({ user_Id: user_Id }, AdminToken);
         return await res;
@@ -15,7 +15,7 @@ export const User_Dashboard_Data = createAsyncThunk("user/dashboard", async (dat
 });
 export const Update_Dashboard_Data = createAsyncThunk("user/dashboard", async (data1) => {
     const { data, AdminToken } = data1
-    console.log(data);
+     
     try {
         const res = await UPDATE_DAHBOARD_DATA(data, AdminToken);
         return await res;
@@ -26,7 +26,7 @@ export const Update_Dashboard_Data = createAsyncThunk("user/dashboard", async (d
 
 export const TRADING_OFF_USER = createAsyncThunk("trading/logout", async (data1) => {
     const { user_id, token, device } = data1
-    // console.log(data);
+   
     try {
         const res = await TRADING_OFF({ user_id: user_id, device: device }, token);
         return await res;
@@ -37,7 +37,7 @@ export const TRADING_OFF_USER = createAsyncThunk("trading/logout", async (data1)
 
 export const Get_Pmermission = createAsyncThunk("get/permission", async (data1) => {
     const { domain, token, } = data1
-    // console.log(data);
+   
     try {
         const res = await GET_PERMISSION({ domain: domain }, token);
         return await res;
