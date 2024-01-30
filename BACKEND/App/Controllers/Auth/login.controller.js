@@ -148,7 +148,7 @@ class Login {
 
         }
         catch (error) {
-            console.error('Error saving user:', error);
+            console.log('Error saving user:', error);
             return res.status(500).json({ status: false, error: 'Internal Server Error' });
         }
     }
@@ -251,7 +251,7 @@ class Login {
             await newUser.save();
             return res.status(201).json({ status: true, msg: 'Sign Up successful!' });
         } catch (error) {
-            console.error('Error saving user:', error);
+            console.log('Error saving user:', error);
             return res.status(500).json({ status: false, error: 'Internal Server Error' });
         }
     }

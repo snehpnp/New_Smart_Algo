@@ -863,7 +863,7 @@ export default CandlestickChart;
 
 //     console.log('Data from Google Sheet:', response.data);
 //   } catch (error) {
-//     console.error('Error fetching data:', error);
+//     console.log('Error fetching data:', error);
 //   }
 // };
 

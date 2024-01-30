@@ -103,7 +103,7 @@ const UserProfile = () => {
           }
         })
         .catch((error) => {
-          console.error("Error", error);
+          console.log("Error", error);
         });
     },
   });

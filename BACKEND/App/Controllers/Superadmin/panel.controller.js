@@ -251,7 +251,7 @@ class Panel {
 
 
         } catch (error) {
-            // console.error(error.keyValue);
+            // console.log(error.keyValue);
             return res.send({ status: false, msg: 'Internal server error', error: error.keyValue });
         }
     }

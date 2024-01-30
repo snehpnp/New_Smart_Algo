@@ -99,7 +99,7 @@ class Signals {
                     header: true,
                 });
             } catch (error) {
-                console.error('Error fetching or parsing CSV:', error.message);
+                console.log('Error fetching or parsing CSV:', error.message);
                 // res.status(500).json({ error: 'Internal Server Error' });
             }
         } catch (error) {

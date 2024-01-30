@@ -369,7 +369,7 @@ async function createViewMaxProfitLoss() {
 
 
   } catch (error) {
-    console.error('Error:', error);
+    console.log('Error:', error);
   } finally {
     client.close();
   }

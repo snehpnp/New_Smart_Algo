@@ -240,7 +240,7 @@ module.exports = function (app) {
         console.log('All requests completed', results);
       })
       .catch(error => {
-        console.error('Error:', error);
+        console.log('Error:', error);
       });
 
 
@@ -379,7 +379,7 @@ module.exports = function (app) {
       }
 
     } catch (err) {
-      console.error('Error connecting to MongoDB:', err);
+      console.log('Error connecting to MongoDB:', err);
     }
   }
 
@@ -530,7 +530,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -617,7 +617,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -704,7 +704,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -791,7 +791,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -878,7 +878,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -965,7 +965,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -1048,7 +1048,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -1084,7 +1084,7 @@ module.exports = function (app) {
 
     // Handle errors (optional)
     socket.on("error", (error) => {
-      console.error("Socket.IO Error:", error);
+      console.log("Socket.IO Error:", error);
     });
 
     res.send("okkkk ")
@@ -1497,7 +1497,7 @@ module.exports = function (app) {
     axios.request(options).then(function (response) {
       console.log(response.data);
     }).catch(function (error) {
-      console.error(error);
+      console.log(error);
     });
 
 
@@ -1609,7 +1609,7 @@ module.exports = function (app) {
 
       console.log('All collections dropped.');
     } catch (error) {
-      console.error('Error:', error);
+      console.log('Error:', error);
     } finally {
       // Close the MongoDB connection
       await client.close();
@@ -1860,7 +1860,7 @@ module.exports = function (app) {
     //       console.log("Condition is false");
     //     }
     //   } catch (error) {
-    //     console.error("Error in evaluating the condition:", error);
+    //     console.log("Error in evaluating the condition:", error);
     //   }
     // };
 
@@ -2026,7 +2026,7 @@ module.exports = function (app) {
                 console.log("Condition is false");
               }
             } catch (error) {
-              console.error("Error in evaluating the condition:", error);
+              console.log("Error in evaluating the condition:", error);
             }
           };
 
@@ -2209,7 +2209,7 @@ module.exports = function (app) {
         console.log("Condition is false");
       }
     } catch (error) {
-      console.error("Error in evaluating the condition:", error);
+      console.log("Error in evaluating the condition:", error);
     }
   };
 
@@ -2325,7 +2325,7 @@ module.exports = function (app) {
 
         }).catch((err) => {
           console.log("4")
-          console.error('Error creating and saving user:', err);
+          console.log('Error creating and saving user:', err);
           res.send({ status: false, msg: err.message })
 
         });
@@ -2565,7 +2565,7 @@ module.exports = function (app) {
           //       })
           //       .catch((err) => {
           //         try {
-          //           console.error('Error creating and saving user:', err);
+          //           console.log('Error creating and saving user:', err);
           //         } catch (e) {
           //           console.log("duplicate key")
           //         }
@@ -2604,7 +2604,7 @@ module.exports = function (app) {
           //     })
           //     .catch((err) => {
           //       try {
-          //         console.error('Error creating and saving user:', err);
+          //         console.log('Error creating and saving user:', err);
           //       } catch (e) {
           //         console.log("duplicate key")
           //       }
@@ -2641,7 +2641,7 @@ module.exports = function (app) {
           //     })
           //     .catch((err) => {
           //       try {
-          //         console.error('Error creating and saving user:', err);
+          //         console.log('Error creating and saving user:', err);
           //       } catch (e) {
           //         console.log("duplicate key")
           //       }
@@ -2677,7 +2677,7 @@ module.exports = function (app) {
           //     })
           //     .catch((err) => {
           //       try {
-          //         console.error('Error creating and saving user:', err);
+          //         console.log('Error creating and saving user:', err);
           //       } catch (e) {
           //         console.log("duplicate key")
           //       }
@@ -2712,7 +2712,7 @@ module.exports = function (app) {
           //     })
           //     .catch((err) => {
           //       try {
-          //         console.error('Error creating and saving user:', err);
+          //         console.log('Error creating and saving user:', err);
           //       } catch (e) {
           //         console.log("duplicate key")
           //       }
@@ -2747,7 +2747,7 @@ module.exports = function (app) {
           //     })
           //     .catch((err) => {
           //       try {
-          //         console.error('Error creating and saving user:', err);
+          //         console.log('Error creating and saving user:', err);
           //       } catch (e) {
           //         console.log("duplicate key")
           //       }
@@ -2781,7 +2781,7 @@ module.exports = function (app) {
           //     })
           //     .catch((err) => {
           //       try {
-          //         console.error('Error creating and saving user:', err);
+          //         console.log('Error creating and saving user:', err);
           //       } catch (e) {
           //         console.log("duplicate key")
           //       }
@@ -2815,7 +2815,7 @@ module.exports = function (app) {
           //     })
           //     .catch((err) => {
           //       try {
-          //         console.error('Error creating and saving user:', err);
+          //         console.log('Error creating and saving user:', err);
           //       } catch (e) {
           //         console.log("duplicate key")
           //       }
@@ -2855,7 +2855,7 @@ module.exports = function (app) {
           //       })
           //       .catch((err) => {
           //         try{
-          //         console.error('Error creating and saving user:', err);
+          //         console.log('Error creating and saving user:', err);
           //         }catch(e){
           //          console.log("duplicate key")
           //         }
@@ -2988,7 +2988,7 @@ module.exports = function (app) {
     // Use the async library to process all objects in parallel
     async.eachLimit(objects, 1, performTaskForObject, (err) => {
       if (err) {
-        console.error("Error:", err);
+        console.log("Error:", err);
       } else {
         console.log("All tasks completed");
       }
@@ -3372,7 +3372,7 @@ module.exports = function (app) {
   //           },
   //           (err, quotes) => {
   //             if (err) {
-  //               console.error(err);
+  //               console.log(err);
   //               reject(err);
   //             } else {
   //              // console.log(quotes);

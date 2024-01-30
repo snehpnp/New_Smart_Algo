@@ -18,18 +18,18 @@ client.connect();
 
 const db_main = client.db(process.env.DB_NAME);
 const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
-
+//console.log("db_main")
 
 let socketObject = null;
 
 const Alice_Socket = async () => {
 
-
+   //  console.log("okkkk")
     var rr = 0;
     const url = "wss://ws1.aliceblueonline.com/NorenWS/"
     var socket = null
     var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
-
+  //   console.log("broker_infor",broker_infor)
     const stock_live_price = db_main.collection('token_chain');
     const updateToken = await stock_live_price.find({}).toArray();
 
@@ -52,6 +52,8 @@ const Alice_Socket = async () => {
     var channelList = alltokenchannellist
     // var channelList = "NSE|14366#NFO|43227"
     var type = { "loginType": "API" }
+
+    // console.log("broker_infor",broker_infor)
 
     //  Step -1
     try {
@@ -92,7 +94,7 @@ const Alice_Socket = async () => {
                             const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk }, { _id: 1 });
                           
                             if (Make_startegy_token) {
-                                ALice_View_data(response.tk, response);
+                                ALice_View_data(response.tk, response,dbTradeTools);
                             }
 
                             const currentDate = new Date();
@@ -155,7 +157,7 @@ const Alice_Socket = async () => {
                 }
             }
         })
-            .catch(error => {
+            .catch((error) => {
                 return error.response
             })
 

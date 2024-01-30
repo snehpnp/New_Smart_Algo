@@ -13,7 +13,7 @@ var firstOptPass = async (data) => {
 
 
     } catch (error) {
-        console.error("Error fetching company information:", error);
+        console.log("Error fetching company information:", error);
         // Handle the error as needed
         throw error;
     }
@@ -29,7 +29,7 @@ var disclaimer = async () => {
          return a1+a2
 
     } catch (error) {
-        console.error("Error fetching company information:", error);
+        console.log("Error fetching company information:", error);
         // Handle the error as needed
         throw error;
     }

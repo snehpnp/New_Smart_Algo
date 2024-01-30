@@ -58,7 +58,7 @@ module.exports = function (app) {
                     });
                 })
                 .catch(function (error) {
-                    console.error('Error downloading file:', error);
+                    console.log('Error downloading file:', error);
                 });
         })
     
@@ -95,7 +95,7 @@ module.exports = function (app) {
                     });
                 })
                 .catch(function (error) {
-                    console.error('Error downloading file:', error);
+                    console.log('Error downloading file:', error);
                 });
         })
     

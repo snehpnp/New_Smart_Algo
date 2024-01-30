@@ -18,7 +18,7 @@ async function dropExistingView() {
 
     } catch (error) {
         // Handle any errors if the view doesn't exist
-        console.error('Error:', error);
+        console.log('Error:', error);
     }
 }
 
@@ -443,7 +443,7 @@ async function TradeHistroy(req, res) {
 
         console.log('View created successfully.');
     } catch (error) {
-        console.error('Error:', error);
+        console.log('Error:', error);
     } finally {
         client.close();
     }

@@ -9358,7 +9358,7 @@
           this.threeDSeries = [];
 
           if (typeof ser[i].data === 'undefined') {
-            console.error("It is a possibility that you may have not included 'data' property in series.");
+            console.log("It is a possibility that you may have not included 'data' property in series.");
             return;
           }
 
@@ -13561,7 +13561,7 @@
         var val = labels.reduce(function (a, b) {
           // if undefined, maybe user didn't pass the datetime(x) values
           if (typeof a === 'undefined') {
-            console.error('You have possibly supplied invalid Date format. Please supply a valid JavaScript Date');
+            console.log('You have possibly supplied invalid Date format. Please supply a valid JavaScript Date');
             return 0;
           } else {
             return a.length > b.length ? a : b;
