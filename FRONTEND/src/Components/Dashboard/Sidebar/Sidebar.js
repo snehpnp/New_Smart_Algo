@@ -34,7 +34,7 @@ const Sidebar = ({ ShowSidebar }) => {
     const [admin_permission, setAdmin_permission] = useState([]);
 
 
-    console.log("  admin_permission  ",admin_permission)
+   
     // if(admin_permission.length > 0 ){
 
     //     console.log("  admin_permission.data[0].Create_Strategy  ",admin_permission.data[0].Create_Strategy)

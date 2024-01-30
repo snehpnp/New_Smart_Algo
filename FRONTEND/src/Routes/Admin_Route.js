@@ -152,7 +152,7 @@ const Admin = () => {
 
     }, [])
 
-    console.log("=>", admin_permission.data && admin_permission.data[0].Strategy_plan);
+     
 
 
     return (

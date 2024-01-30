@@ -43,13 +43,13 @@ require('./App/Cron/cron')
 require("./App/Routes")(app)
 
 // Testing Api #Shakir
-require("./shakirTeting")(app)
+//require("./shakirTeting")(app)
 
 
 // EMERGANCY
 require("./App/Emergency Apis/service")(app)
 require("./App/Emergency Apis/getOptionSymbols")(app)
-require("./request")(app)
+//require("./request")(app)
 
 
 
@@ -81,12 +81,12 @@ io.on("connection", (socket) => {
 })
 
 
-const { Alice_Socket } = require('./App/Helper/Alice_Socket')
 
 
 // Server start
 server.listen(process.env.PORT, () =>{
-
-  console.log(`Server is running on http://0.0.0.0:${process.env.PORT}`)
+  
+  const { Alice_Socket } = require('./App/Helper/Alice_Socket')
+  console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`)
   Alice_Socket()
 });

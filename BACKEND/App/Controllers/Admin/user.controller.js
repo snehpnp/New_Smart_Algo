@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 const db = require("../../Models");
 const User_model = db.user;
+const user_SignUp = db.UserSignUp;
 const user_logs = db.user_logs;
 const Role_model = db.role;
 const Company_info = db.company_information;
@@ -135,7 +136,7 @@ class Employee {
         });
       }
 
-      // console.log("empty check", new Date());
+ 
 
       // USER 2 DAYS LICENSE USE
       if (license_type == "0") {
@@ -144,7 +145,7 @@ class Employee {
         start_date_2days = start_date_2days.format("Y-m-d H:M:S");
         var start_date = start_date_2days;
 
-        // console.log("start_date", start_date);
+        
         StartDate1 = start_date;
 
         var UpdateDate = "";
@@ -165,7 +166,7 @@ class Employee {
         var end_date_2days = dateTime.create(UpdateDate);
         var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
 
-        // console.log("END DATE", end_date_2days);
+     
         EndDate1 = end_date_2days;
       } else if (license_type == "1") {
         StartDate1 = fromdate;
@@ -176,7 +177,7 @@ class Employee {
         start_date_2days = start_date_2days.format("Y-m-d H:M:S");
         var start_date = start_date_2days;
 
-        // console.log("start_date", start_date);
+       
         StartDate1 = start_date;
 
         var UpdateDate = "";
@@ -189,10 +190,10 @@ class Employee {
         var end_date_2days = dateTime.create(UpdateDate);
         var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
 
-        // console.log("END DATE", end_date_2days);
+     
         EndDate1 = end_date_2days;
       }
-      // console.log("license add ", new Date());
+       
 
       const min = 1;
       const max = 1000000;
@@ -205,7 +206,7 @@ class Employee {
         rand_password.toString(),
         salt
       );
-      // console.log("ganrate pass ", new Date());
+    
 
 
       // Panel Prifix key Find
@@ -218,19 +219,19 @@ class Employee {
           data: [],
         });
       }
-      // console.log("Compant data  ", new Date());
+ 
 
 
       const mins = 1;
       const maxs = 1000000;
       const rands = mins + Math.random() * (maxs - mins);
       var cli_key = Math.round(rands);
-      // console.log("ganrate randome pass ", new Date());
+    
 
       var ccd = dt.format("ymd");
       var client_key = Panel_key[0].prefix + cli_key + ccd;
 
-      // console.log("Employee add 1", new Date());
+    
 
 
 
@@ -267,7 +268,7 @@ class Employee {
           var User_id = data[0]._id;
 
 
-          // console.log("Employee add 2", new Date());
+         
 
           // GROUP SERVICE ADD
           const User_group_service = new groupService_User({
@@ -290,7 +291,7 @@ class Employee {
           }
 
 
-          // console.log("stg and group add", new Date());
+          
 
 
           const GroupServiceId = new ObjectId(group_service);
@@ -352,7 +353,7 @@ class Employee {
               })
 
 
-            // console.log("client service add", new Date());
+             
 
 
             // LICENSE TABLE ADD USE LICENSE OUR CLIENT
@@ -372,10 +373,36 @@ class Employee {
               Password: rand_password,
               user_type: license_type == 2 ? "Live Account" : license_type == 0 ? "2 Days Free Live Account" : "Free Demo Account"
             };
-            // console.log("Done final", new Date());
+
+
+
+
+
+
+
+
+            // UPDATE STATUS OF THE USER_SIGNUP COLLECTION WHEN CLICK ON ADD CLIENT
+
+            const existingUser = await user_SignUp.findOne({
+              $or: [
+                { UserName: UserName },
+                { Email: Email },
+                { PhoneNo: PhoneNo },
+              ],
+            });
+
+          
+      
+      
+            if (existingUser) {
+              existingUser.ActiveStatus = '1';
+              await existingUser.save();
+      
+            }
+
 
             res.send({ status: true, msg: "successfully Add!", data: data[0] });
-            // console.log("last add", new Date());
+         
             var EmailData = await firstOptPass(email_data);
             CommonEmail(toEmail, subjectEmail, EmailData);
 
@@ -412,10 +439,6 @@ class Employee {
       var EndDate1 = "";
 
       var PID = new ObjectId(req.parent_id);
-
-
-
-      //console.log("req Strategy", req.Strategies);
 
       // IF USER ALEARDY EXIST
       const existingUsername = await User_model.findOne({
@@ -459,7 +482,7 @@ class Employee {
       var TotalMonth = "0";
 
       // var Panel_key = await Company_info.find();
-      // console.log("COMPANY", new Date());
+    
 
       var Panel_key = await Company_info.find({}, { prefix: 1, licenses: 1, _id: 0 }).limit(1);
 
@@ -499,7 +522,7 @@ class Employee {
         new_licence = req.licence1;
       }
 
-      // console.log("cOMPANY 1", new Date());
+     
 
 
       if (
@@ -535,7 +558,7 @@ class Employee {
             var end_date_2days = dateTime.create(UpdateDate);
             var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
 
-            // console.log("END DATE", end_date_2days);
+            
             EndDate1 = end_date_2days;
           } else if (req.license_type == "1") {
             StartDate1 = req.fromdate;
@@ -625,7 +648,7 @@ class Employee {
           }
         }
 
-        // console.log("STG ADD 1", new Date());
+         
 
 
         // STARTEGY ADD AND EDIT
@@ -644,7 +667,7 @@ class Employee {
         req.Strategies.forEach(function (item, index) {
           insert_startegy.push(item.id);
         });
-        // console.log('exist - strtegy ', db_exist_startegy);
+         
 
         // ADD STRATEGY ARRAY
         var add_startegy = [];
@@ -661,9 +684,7 @@ class Employee {
             delete_startegy.push(item);
           }
         });
-        // console.log("delete_startegy", delete_startegy);
-
-        // console.log("STG ADD 2", new Date());
+       
 
         // ADD STRATEGY IN STRATEGY CLIENT
         if (add_startegy.length > 0) {
@@ -699,7 +720,7 @@ class Employee {
             });
 
             const Strategieclient = await strategy.find({ _id: stgId });
-            // console.log(Strategieclient);
+          
             const user_activity = new user_activity_logs({
               user_id: existingUsername._id,
               message: "Strategy Delete",
@@ -722,9 +743,7 @@ class Employee {
               strategy_id: { $ne: stgId }
             });
 
-            // console.log("deleteStrategy", stgId);
-            // console.log("exist stg", deleteStrategy);
-            // console.log("add_startegy", add_startegy[0]);
+             
 
 
             if (deleteStrategy.length > 0) {
@@ -748,7 +767,7 @@ class Employee {
           });
         }
 
-        // console.log("STG ADD 3", new Date());
+ 
 
 
 
@@ -762,8 +781,7 @@ class Employee {
             user_id: existingUsername._id,
             groupService_id: GroupServiceId,
           });
-
-          // console.log("=", user_group_service.length);
+ 
           if (user_group_service.length == 0) {
 
             const result = await groupService_User.updateOne(
@@ -848,13 +866,13 @@ class Employee {
 
 
           } else {
-            // console.log("NO CHANGE IN GROUP SERVICES");
+          
           }
         } catch (error) {
           console.log("Error Group Services Error-", error);
         }
 
-        // console.log("GROP ADD 1", new Date());
+    
 
 
         var User_update = {
@@ -883,7 +901,7 @@ class Employee {
           { $set: User_update }
         );
 
-        // console.log("uSER eDIT 1", new Date());
+        
 
         if (req.license_type == "2" || req.license_type == 2) {
 
@@ -897,7 +915,7 @@ class Employee {
         }
 
 
-        // console.log("eND :-", new Date());
+      
 
 
         // USER GET ALL TYPE OF DATA
@@ -920,6 +938,9 @@ class Employee {
       console.log("Error In User Update-", error);
     }
   }
+
+
+  
 
   // GET ALL EXPIRED USERS
   async GetAllExpiredClients(req, res) {
@@ -1073,7 +1094,7 @@ class Employee {
         TradingStatus: "on",
       });
       // const totalCount = getAllTradingClients.length;
-      // console.log("totalCount", totalCount);
+       
       // IF DATA NOT EXIST
       if (getAllTradingClients.length == 0) {
         return res.send({
@@ -1171,7 +1192,7 @@ class Employee {
         });
 
         res.send({
-          status: true,
+          status: true, 
           msg: "Update Successfully",
           data: result,
         });
@@ -1180,6 +1201,10 @@ class Employee {
       console.log("Error trading status Error-", error);
     }
   }
+
+
+  
+   
 
   // DELETE USER AND USER REGARD SERVICES
   async DeleteUser(req, res) {
@@ -1296,7 +1321,7 @@ class Employee {
 
       const GetAllClientServices = await User_model.aggregate(pipeline);
 
-      // console.log("GetAllClientServices", GetAllClientServices);
+       
 
       const userSTG = await strategy_client.find({ user_id: userId });
 
@@ -1310,6 +1335,10 @@ class Employee {
       console.log("Error trading status Error-", error);
     }
   }
+
+
+  
+
 
   // UPDATE BROKER KEY
   async Update_Broker_Keys(req, res) {
@@ -1354,7 +1383,7 @@ class Employee {
       }
       res.send({ status: true, msg: "Get Client key", data: Client_key })
     } catch (error) {
-      // console.log("Theme error-", error);
+       
     }
   }
 

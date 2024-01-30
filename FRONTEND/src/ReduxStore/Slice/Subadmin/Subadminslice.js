@@ -52,7 +52,7 @@ const SubadminSlice = createSlice({
 
         [Get_All_SUBADMIN.pending]: (state, { payload }) => {
             // state.isLoading = false;
-            console.log("pending Get_All_SUBADMIN ");
+             
             // return { ...state, allService: [], isLoading: true };
         },
         [Get_All_SUBADMIN.fulfilled]: (state, { payload }) => {

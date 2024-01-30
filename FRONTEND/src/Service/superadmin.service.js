@@ -79,7 +79,7 @@ export async function UPDATE_API_INFORMATION(data, token) {
 
 // GET_API_INFORMATION
 export async function GET_API_INFORMATION(data, token) {
-    console.log("data", data)
+    
     try {
         const res = await axios.post(`${Config.smartAlogUrl}getall/apicreateinfo`, data, {
             headers: header(token),
