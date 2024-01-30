@@ -19,11 +19,14 @@ import Holidays from "date-holidays"
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
+import { useLocation } from "react-router-dom";
 
 
 
 const TradeHistory = () => {
     const dispatch = useDispatch();
+    const location = useLocation()
+    console.log(location)
 
     const token = JSON.parse(localStorage.getItem("user_details")).token;
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
