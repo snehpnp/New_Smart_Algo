@@ -76,10 +76,10 @@ cron.schedule('1 1 * * *', () => {
 });
 
 // Accelpix Token Update Symbol Update
-cron.schedule('5 6 * * *', () => {
-    console.log('running a task every minute');
-    AccelpixTokenUpdate();
-});
+// cron.schedule('5 6 * * *', () => {
+//     console.log('running a task every minute');
+//     AccelpixTokenUpdate();
+// });
 
 cron.schedule('10 1 * * *', () => {
     console.log('running a task every minute');
@@ -747,9 +747,6 @@ const AccelpixTokenUpdate = async () => {
             result.forEach(async (element) => {
 
                 const Exist_token = response.data.find(item1 => item1.tk === parseInt(element.instrument_token));
-
-
-
 
                 const update = {
                     $set: {
