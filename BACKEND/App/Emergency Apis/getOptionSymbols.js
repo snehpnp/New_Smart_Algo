@@ -88,7 +88,7 @@ module.exports = function (app) {
 
         }, function (err, quotes) {
             if (err) {
-                console.error(err);
+                console.log(err);
             } else {
                 // console.log("Error price", quotes[0].close);
             }

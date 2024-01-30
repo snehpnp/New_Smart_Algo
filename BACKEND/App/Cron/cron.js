@@ -1031,7 +1031,7 @@ const AccelpixTokenUpdate = async () => {
                 header: true,
             });
         } catch (error) {
-            console.error('Error fetching or parsing CSV:', error.message);
+            console.log('Error fetching or parsing CSV:', error.message);
             return
         }
     } catch (error) {

@@ -338,7 +338,7 @@ async function createView() {
 
     console.log('View created successfully.');
   } catch (error) {
-    console.error('Error:', error);
+    console.log('Error:', error);
   } finally {
     client.close();
   }

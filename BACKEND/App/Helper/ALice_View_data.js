@@ -285,7 +285,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -371,7 +371,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -457,7 +457,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -543,7 +543,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -629,7 +629,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -714,7 +714,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 
@@ -796,7 +796,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
 
     } catch (err) {
-      // console.error('Error View Create 5 minute:', err);
+      // console.log('Error View Create 5 minute:', err);
     }
 
 

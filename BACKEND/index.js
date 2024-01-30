@@ -61,7 +61,7 @@ const downloadKotakNeotoken = () => {
                 });
             })
             .catch(function (error) {
-                console.error('Error downloading file:', error);
+                console.log('Error downloading file:', error);
             });
     })
 

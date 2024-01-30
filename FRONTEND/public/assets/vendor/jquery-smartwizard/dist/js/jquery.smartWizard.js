@@ -573,7 +573,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
               _this4._transitStep(idx);
             })["catch"](function (err) {
-              console.error(err);
+              console.log(err);
 
               _this4._setStepContent(idx, err);
 
@@ -935,7 +935,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }, {
       key: "_showError",
       value: function _showError(msg) {
-        console.error(msg);
+        console.log(msg);
       } // PUBLIC FUNCTIONS
 
     }, {

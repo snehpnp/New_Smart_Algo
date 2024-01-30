@@ -340,11 +340,11 @@ async function DashboardView() {
         // Create a MongoDB view named "dashboard_data1"
         await db.createCollection("dashboard_data", { viewOn: "users", pipeline });
 
-        console.error('View created successfully.');
+        console.log('View created successfully.');
 
     } catch (error) {
         // Handle errors
-        console.error('Error:', error);
+        console.log('Error:', error);
     }
 }
 
@@ -361,7 +361,7 @@ async function deleteDashboard() {
         console.log('dashboard_data view deleted successfully');
 
     } catch (error) {
-        console.error('Error:', error);
+        console.log('Error:', error);
     }
 }
 

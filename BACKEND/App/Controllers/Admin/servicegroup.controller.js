@@ -51,7 +51,7 @@ class GroupService {
 
               })
               .catch((err) => {
-                console.error('Error creating double service:', err.keyValue);
+                console.log('Error creating double service:', err.keyValue);
 
               });
 
@@ -505,7 +505,7 @@ class GroupService {
 
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.log("Error:", error);
 
       return res.json({ status: false, msg: 'server error delete group service-', data: error });
     }
@@ -748,7 +748,7 @@ class GroupService {
 
 
     } catch (error) {
-      console.error("GET SERVICES NAME -", error);
+      console.log("GET SERVICES NAME -", error);
       return res.send({ status: false, msg: 'Internal Server Error' });
     }
 

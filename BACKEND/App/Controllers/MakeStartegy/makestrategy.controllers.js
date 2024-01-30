@@ -437,7 +437,7 @@ class MakeStartegy {
 
           }).catch((err) => {
             // console.log("4")
-            console.error('Error creating and saving user:', err);
+            console.log('Error creating and saving user:', err);
             return res.send({ status: false, msg: 'Strategy Name Already Exist', data: [] })
 
           });
@@ -900,7 +900,7 @@ async function run() {
                     //  console.log("Condition is false ", val._id);
                   }
                 } catch (error) {
-                  console.error("Error in evaluating the condition:", error);
+                  console.log("Error in evaluating the condition:", error);
                 }
 
               }

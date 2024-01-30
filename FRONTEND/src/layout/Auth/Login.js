@@ -114,7 +114,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.error("Error", error);
+          console.log("Error", error);
         });
     },
   });
@@ -277,7 +277,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.error("Error", error);
+          console.log("Error", error);
         });
     }, 1000);
   };
@@ -304,7 +304,7 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.error("Error", error);
+        console.log("Error", error);
       });
   };
 

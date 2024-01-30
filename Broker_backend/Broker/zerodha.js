@@ -77,7 +77,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         tradingsymbol = parts[8];
 
                     } else {
-                        console.error('Invalid segment value');
+                        console.log('Invalid segment value');
                         return;
                     }
 
@@ -193,7 +193,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                                     })
                                                     .catch((err) => {
                                                         try {
-                                                            console.error('Error creating and saving user:', err);
+                                                            console.log('Error creating and saving user:', err);
                                                         } catch (e) {
                                                             console.log("duplicate key")
                                                         }
@@ -232,7 +232,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                                 })
                                                 .catch((err) => {
                                                     try {
-                                                        console.error('Error creating and saving user:', err);
+                                                        console.log('Error creating and saving user:', err);
                                                     } catch (e) {
                                                         console.log("duplicate key")
                                                     }
@@ -263,7 +263,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                             })
                                             .catch((err) => {
                                                 try {
-                                                    console.error('Error creating and saving user:', err);
+                                                    console.log('Error creating and saving user:', err);
                                                 } catch (e) {
                                                     console.log("duplicate key")
                                                 }
@@ -305,7 +305,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                             })
                                             .catch((err) => {
                                                 try {
-                                                    console.error('Error creating and saving user:', err);
+                                                    console.log('Error creating and saving user:', err);
                                                 } catch (e) {
                                                     console.log("duplicate key")
                                                 }
@@ -333,7 +333,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                             })
                                             .catch((err) => {
                                                 try {
-                                                    console.error('Error creating and saving user:', err);
+                                                    console.log('Error creating and saving user:', err);
                                                 } catch (e) {
                                                     console.log("duplicate key")
                                                 }
@@ -391,7 +391,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 })
                 .catch((err) => {
                     try {
-                        console.error('Error creating and saving user:', err);
+                        console.log('Error creating and saving user:', err);
                     } catch (e) {
                         console.log("duplicate key")
                     }
@@ -503,7 +503,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     })
                     .catch((err) => {
                         try {
-                            console.error('Error creating and saving user:', err);
+                            console.log('Error creating and saving user:', err);
                         } catch (e) {
                             console.log("duplicate key")
                         }
@@ -533,7 +533,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     })
                     .catch((err) => {
                         try {
-                            console.error('Error creating and saving user:', err);
+                            console.log('Error creating and saving user:', err);
                         } catch (e) {
                             console.log("duplicate key")
                         }
@@ -576,7 +576,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             })
                             .catch((err) => {
                                 try {
-                                    console.error('Error creating and saving user:', err);
+                                    console.log('Error creating and saving user:', err);
                                 } catch (e) {
                                     console.log("duplicate key")
                                 }
@@ -604,7 +604,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             })
                             .catch((err) => {
                                 try {
-                                    console.error('Error creating and saving user:', err);
+                                    console.log('Error creating and saving user:', err);
                                 } catch (e) {
                                     console.log("duplicate key")
                                 }
@@ -716,7 +716,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                     })
                     .catch((err) => {
                         try {
-                            console.error('Error creating and saving user:', err);
+                            console.log('Error creating and saving user:', err);
                         } catch (e) {
                             console.log("duplicate key")
                         }
@@ -746,7 +746,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                     })
                     .catch((err) => {
                         try {
-                            console.error('Error creating and saving user:', err);
+                            console.log('Error creating and saving user:', err);
                         } catch (e) {
                             console.log("duplicate key")
                         }
@@ -788,7 +788,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             })
                             .catch((err) => {
                                 try {
-                                    console.error('Error creating and saving user:', err);
+                                    console.log('Error creating and saving user:', err);
                                 } catch (e) {
                                     console.log("duplicate key")
                                 }
@@ -816,7 +816,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             })
                             .catch((err) => {
                                 try {
-                                    console.error('Error creating and saving user:', err);
+                                    console.log('Error creating and saving user:', err);
                                 } catch (e) {
                                     console.log("duplicate key")
                                 }
