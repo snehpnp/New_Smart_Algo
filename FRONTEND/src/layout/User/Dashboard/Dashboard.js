@@ -407,18 +407,18 @@ const BrokerResponse = () => {
 
 
                           <option
-                          value= {Strategy.data && Strategy.data.map((item) => {if(data.strategy_id.includes(item.result._id)){ return item.result._id}})}
+                            value={Strategy.data && Strategy.data.map((item) => { if (data.strategy_id.includes(item.result._id)) { return item.result._id } })}
 
-                          
-                          className="text-success h6"
-                          selected
-                          disabled
-                        >
-                          {Strategy.data && Strategy.data.map((item) => {if(data.strategy_id.includes(item.result._id)){ return item.result.strategy_name}})}
-                        </option>
+
+                            className="text-success h6"
+                            selected
+                            disabled
+                          >
+                            {Strategy.data && Strategy.data.map((item) => { if (data.strategy_id.includes(item.result._id)) { return item.result.strategy_name } })}
+                          </option>
                           {Strategy.data &&
                             Strategy.data.map((item) => {
-                           
+
                               if (data.strategy_id.includes(item.result._id)) {
                                 // return (
                                 //   <option
