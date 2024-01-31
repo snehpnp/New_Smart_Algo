@@ -12,9 +12,9 @@ import { Trash2 } from 'lucide-react';
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
 import Holidays from "date-holidays"
 import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
-import { get_thre_digit_month, convert_string_to_month, GetMarketOpenDays } from "../../../Utils/Date_formet";
+import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
-import { CreateSocketSession, ConnctSocket, GetAccessToken, BackendRunSocket } from "../../../Service/Alice_Socket";
+import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Service/Alice_Socket";
 import $ from "jquery";
 import axios from "axios"
 import toast, { Toaster } from 'react-hot-toast';
@@ -211,7 +211,9 @@ const HelpCenter = () => {
 
     const RemoveClases = (option_type, row_data, call_type, index,) => {
 
-        ExecuteTradeData && ExecuteTradeData.data.filter((item) => {
+
+    //  alert("okkkkkkkkk")
+        CreateSignalRequest && CreateSignalRequest.filter((item) => {
             const element1 = $('.button_call_sell_' + item.call_token._id);
             element1.removeClass('active');
             const element2 = $('.button_call_buy_' + item.call_token);
@@ -229,16 +231,26 @@ const HelpCenter = () => {
 
 
 
-    const CreateRequest = (option_type, row_data, call_type, index, e) => {
+    const CreateRequest = (option_type, row_data, call_type, index) => {
+
+          
+        
 
 
+        // alert("okkkkk")        
 
+
+       // alert(option_type === "CALL" ? `${option_type}_${row_data.call_token}` : `${option_type}_${row_data.put_token}`)
+    
+    
+       // alert(call_type)
 
         if (strategyRef.current === "") {
             alert("Please Select Strategy First")
         } else {
-
-            //  ------ For Add Class To Button
+         
+         
+            // ------ For Add Class To Button
 
             OptionChainData.data && OptionChainData.data.filter((item) => {
                 if (item.call_token === row_data.call_token && call_type === "LE" && option_type === "CALL") {
@@ -281,11 +293,13 @@ const HelpCenter = () => {
             };
 
             if (call_type === "") {
+
                 setCreateSignalRequest(oldValues => {
                     return oldValues.filter(item => item.token !== (option_type === "CALL" ? row_data.call_token : row_data.put_token))
                 })
             }
             else {
+
                 setCreateSignalRequest(oldValues => {
                     return oldValues.filter(item => item.indexcallput !== (option_type === "CALL" ? `${option_type}_${row_data.call_token}` : `${option_type}_${row_data.put_token}`))
                 })
@@ -301,25 +315,24 @@ const HelpCenter = () => {
     // ------------------------------------ CREATE-CHAIN-FOR-EXECUTE-TRADE ------------------------------------
 
 
-
+ //  console.log("CreateSignalRequest ",CreateSignalRequest)
 
 
 
     const ExcuteTradeButton = () => {
 
-
-        let MarketOpenToday = GetMarketOpenDays();
-
-        const cutoffTimeIST = new Date();
+        const currentDate = new Date();
+        const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const weekday = weekdays[currentDate.getDay()];
+        const holidays = new Holidays();
         const currentDateIST = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
-
+        const cutoffTimeIST = new Date();
         cutoffTimeIST.setHours(15, 30, 0, 0);
+        // Check if the current time is after 3:30 PM in IST timezone
         const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
 
-        if (!MarketOpenToday) {
-            alert('Market Is Closed Today');
 
-        } else if (!MarketOpenToday && isAfterCutoffTime) {
+        if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday' && isAfterCutoffTime) {
             alert("Market Time Is Off")
         } else {
             if (UserDetails !== undefined && UserDetails.trading_status === "on") {
@@ -463,7 +476,7 @@ const HelpCenter = () => {
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                // url: 'http://localhost:8000/broker-signals',
+               // url: 'http://localhost:8000/broker-signals',
                 url: `${getBrokerUrl && getBrokerUrl}`,
                 headers: {
                     'Content-Type': 'text/plain'
@@ -477,6 +490,8 @@ const HelpCenter = () => {
                     setRefresh(!refresh)
                     setButtonDisabled(!ButtonDisabled)
                     setshowModal(false)
+                    // setButtonDisabled(false)
+
                     setCreateSignalRequest([])
 
 
@@ -522,7 +537,7 @@ const HelpCenter = () => {
                 }
             })
     }
-
+    
     useEffect(() => {
         getPanelDetails()
         symbols()
@@ -539,7 +554,7 @@ const HelpCenter = () => {
         // Check if the current time is after 3:30 PM in IST timezone
         const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
 
-        // console.log("isAfterCutoffTime", isAfterCutoffTime)
+       // console.log("isAfterCutoffTime", isAfterCutoffTime)
 
 
 
@@ -661,21 +676,12 @@ const HelpCenter = () => {
         let type = { loginType: "API" };
         let channelList = TokenSymbolChain && TokenSymbolChain;
 
-
-        if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
-
+ if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
+           
+         
             const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
             if (res.data.stat) {
-
-                // BACKEND SOCKET RUN API
-
-                //alert("okk")
-
-                await BackendRunSocket("");
-
-                //
-
                 const handleResponse = async (response) => {
 
                     const old_val_call = $('.Call_Price_' + response.tk).html();
@@ -717,7 +723,9 @@ const HelpCenter = () => {
                 }
                 await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
             }
-        }
+
+            }
+        
 
     };
 
@@ -843,7 +851,7 @@ const HelpCenter = () => {
                                     <button
                                         className="btn btn-primary me-2"
                                         onClick={(e) => ExcuteTradeButton()}
-                                    //  disabled={CreateSignalRequest.length === 0}
+                                        disabled={CreateSignalRequest.length === 0}
 
                                     >
                                         Execute Trade
