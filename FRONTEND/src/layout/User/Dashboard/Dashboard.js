@@ -29,24 +29,24 @@ const BrokerResponse = () => {
   const dispatch = useDispatch();
   const location = useLocation()
 
-  
 
-  
+
+
   // SET MODAL IN STARTEGY
   const [showStartegyModal, setShowStartegyModal] = useState(false);
 
- 
+
   const [modalsingleValue, setModalsingleValue] = useState({});
 
   const handleCloseStartegyModal = () => {
-  setShowStartegyModal(false);
-  setModalsingleValue({})
+    setShowStartegyModal(false);
+    setModalsingleValue({})
   }
 
   const handleShowStartegyModal = (data) => {
- 
-   setModalsingleValue(data)
-  setShowStartegyModal(true);
+
+    setModalsingleValue(data)
+    setShowStartegyModal(true);
   }
   //
 
@@ -65,13 +65,13 @@ const BrokerResponse = () => {
     loading: true,
     data: [],
   });
-  
+
   const [Strategy, setStrategy] = useState({ loading: true, data: [] });
-  
+
   const [GetServiceStrategy, setGetServiceStrategy] = useState([]);
-  
+
   const [statusStartegyUser, setStatusStartegy] = useState("0");
-  
+
 
   const [refresh, setrefresh] = useState(false);
 
@@ -80,7 +80,7 @@ const BrokerResponse = () => {
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
 
- 
+
 
   const [updatedData, setUpdatedData] = useState({});
 
@@ -95,7 +95,7 @@ const BrokerResponse = () => {
     )
       .unwrap()
       .then((response) => {
- 
+
         if (response.status) {
           setDashboardData({
             loading: false,
@@ -114,12 +114,12 @@ const BrokerResponse = () => {
             loading: false,
             data: response.strategy,
           });
-         
+
           setGetServiceStrategy(response.GetServiceStrategy);
           setStatusStartegy(response.status_startegy);
 
-          
-          
+
+
         }
       });
   };
@@ -133,7 +133,7 @@ const BrokerResponse = () => {
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
 
-   
+
 
 
     const numericValue = e.target.value.replace(/[^0-9]/g, '');
@@ -156,27 +156,33 @@ const BrokerResponse = () => {
       }
     }
 
-    else if(e.target.name === "strategy_id"){
-    
- 
-// Find the object with the matching _id
-const targetObject = GetServiceStrategy.find(item => item._id==data.service._id);
- 
-if(targetObject.strategy_id.includes(e.target.value)){
- 
-  const updatedStrategyId = targetObject.strategy_id.filter(id => id !== e.target.value);
-  // Create a new object with the updated strategy_id
-  const updatedObject = { ...targetObject, strategy_id: updatedStrategyId };
-  // Update the state
-  setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
+    else if (e.target.name === "strategy_id") {
 
-}else{
- 
-const updatedObject = { ...targetObject, strategy_id: [...targetObject.strategy_id, e.target.value] };
-// Update the state
-setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
- 
-}
+
+      // Find the object with the matching _id
+      const targetObject = GetServiceStrategy.find(item => item._id == data.service._id);
+
+      if (targetObject.strategy_id.includes(e.target.value)) {
+
+        const updatedStrategyId = targetObject.strategy_id.filter(id => id !== e.target.value);
+        // Create a new object with the updated strategy_id
+        const updatedObject = { ...targetObject, strategy_id: updatedStrategyId };
+        // Update the state
+        setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
+
+      } else {
+
+        if (DashboardData.data[0].userInfo.multiple_strategy_select == 0) {
+          const updatedObject = { ...targetObject, strategy_id: [e.target.value] };
+          setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
+        } else {
+
+          const updatedObject = { ...targetObject, strategy_id: [...targetObject.strategy_id, e.target.value] };
+          setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
+        }
+
+
+      }
 
 
 
@@ -187,8 +193,8 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
     let id = rowdata._id;
 
 
-   // alert(name)
-   // alert(value)
+    // alert(name)
+    // alert(value)
 
     setUpdatedData((prevData) => ({
       ...prevData,
@@ -201,83 +207,84 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
     }));
 
 
-   
 
-  
+
+
   };
 
- 
-  if(updatedData){
-   
-      GetServiceStrategy.forEach((item) => {
-         
-       if(updatedData[item._id] != undefined){
-     
-        if(updatedData[item._id].strategy_id != undefined){
-         updatedData[item._id].strategy_id = item.strategy_id;
-        }
-       }
 
-   
-  });
-  
- 
+  if (updatedData) {
+    GetServiceStrategy.forEach((item) => {
+
+      if (updatedData[item._id] != undefined) {
+
+        if (updatedData[item._id].strategy_id != undefined) {
+          updatedData[item._id].strategy_id = item.strategy_id;
+        }
+      }
+
+
+    });
+
+
 
   }
 
 
- 
+
 
 
 
 
   const UpdateDashboard = async (e) => {
-    
-  
-    
-    if(statusStartegyUser == "1"){
+
+
+
+    if (statusStartegyUser == "1") {
       const isEmpty = Object.keys(updatedData).length === 0;
-     
-        if(isEmpty == false){
-          // Filter objects with empty strategy_id
-          const result = Object.keys(updatedData)
+
+      if (isEmpty == false) {
+        // Filter objects with empty strategy_id
+        const result = Object.keys(updatedData)
           .filter((key) => Array.isArray(updatedData[key].strategy_id) && updatedData[key].strategy_id.length === 0)
           .reduce((obj, key) => {
-              obj[key] = updatedData[key];
-              return obj;
+            obj[key] = updatedData[key];
+            return obj;
           }, {});
 
-          
 
-         // Extracting the key (id) from the inputObject
-         const inputId = Object.keys(result)[0];
-         // Finding the matching object in dataArray based on _id
-         const matchingObject = GetServiceStrategy.find(obj => obj._id === inputId);
-         // Getting the service_name if a match is found
-         const serviceName = matchingObject ? matchingObject.service_name : null;
-         
 
-          const isEmptyStartegyArray = Object.keys(result).length === 0;
-         
-          if(isEmptyStartegyArray == false){
-            alert("Please Select one Strategy a script "+serviceName)
-            return 
-          }
+        // Extracting the key (id) from the inputObject
+        const inputId = Object.keys(result)[0];
+        // Finding the matching object in dataArray based on _id
+        const matchingObject = GetServiceStrategy.find(obj => obj._id === inputId);
+        // Getting the service_name if a match is found
+        const serviceName = matchingObject ? matchingObject.service_name : null;
 
+
+        const isEmptyStartegyArray = Object.keys(result).length === 0;
+
+        if (isEmptyStartegyArray == false) {
+          alert("Please Select one Strategy a script " + serviceName)
+          return
         }
+
       }
+    }
 
 
 
-    handleCloseStartegyModal()  
+    handleCloseStartegyModal()
 
-    
+
+
+
     await dispatch(
       Update_Dashboard_Data({
         data: {
           servicesData: updatedData,
-          statusStartegyUser:statusStartegyUser,
-          GetServiceStrategy:GetServiceStrategy,
+          statusStartegyUser: statusStartegyUser,
+          GetServiceStrategy: GetServiceStrategy,
           user_id: user_Id,
           data: { Editor_role: Role, device: check_Device() },
         },
@@ -286,7 +293,7 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
     )
       .unwrap()
       .then((response) => {
-       
+
         if (response.status) {
           toast.success(response.msg);
           // setrefresh(!refresh)
@@ -298,10 +305,10 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
   };
 
 
- 
-   
-  
- 
+
+
+
+
 
 
   return (
@@ -361,80 +368,82 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
                           // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
                           />
                         </div>
-                      
+
                       </div>
                     </td>
-              
+
                     <td>{inputValue[data.service.name] ? parseInt(inputValue[data.service.name]) * parseInt(data.service.lotsize) :
                       parseInt(data.lot_size) * parseInt(data.service.lotsize)}</td>
 
                     <td className="color-primary col-md-2">
-                    {data.userInfo.multiple_strategy_select === "1" ? 
-                    // "Multiple Startegy Select"
-                  
-                
+                      {data.userInfo.multiple_strategy_select === "1" ?
+                        // "Multiple Startegy Select"
 
-                <Button variant="primary" onClick={()=>handleShowStartegyModal(data)}>
-                Selected Strategy
-                </Button>
 
-                    :
 
-                  //  "Single Strategy Select"
-                     <select
-                        name="strategy_id"
+                        <Button variant="primary" onClick={() => handleShowStartegyModal(data)}>
+                          Selected Strategy
+                        </Button>
 
-                        class="form-select form-select-lg "
-                        aria-label=".form-select-lg example"
-                        onChange={(e) =>
-                          setgroup_qty_value_test(
-                            e,
-                            data.service.name,
-                            data.service,
-                            data
-                          )
-                        }
+                        :
+
+                        //  "Single Strategy Select"
+                        <select
+                          name="strategy_id"
+
+                          class="form-select form-select-lg "
+                          aria-label=".form-select-lg example"
+                          onChange={(e) =>
+                            setgroup_qty_value_test(
+                              e,
+                              data.service.name,
+                              data.service,
+                              data
+                            )
+                          }
+
+                        >
+
+
+
+                          <option
+                          value= {Strategy.data && Strategy.data.map((item) => {if(data.strategy_id.includes(item.result._id)){ return item.result._id}})}
+
                           
-                      >
-
-                      
-
-                        {/* <option
-                          value="1"
                           className="text-success h6"
                           selected
                           disabled
                         >
-                          {data.strategys.strategy_name}
-                        </option> */}
-                        {Strategy.data &&
-                          Strategy.data.map((item) => {
-                            if(data.strategy_id.includes(item.result._id)){
+                          {Strategy.data && Strategy.data.map((item) => {if(data.strategy_id.includes(item.result._id)){ return item.result.strategy_name}})}
+                        </option>
+                          {Strategy.data &&
+                            Strategy.data.map((item) => {
+                           
+                              if (data.strategy_id.includes(item.result._id)) {
+                                // return (
+                                //   <option
+                                //     className="text-success h6"
+                                //     value={item.result._id}
+                                //   >
+                                //     {item.result.strategy_name}
+                                //   </option>
+                                // );
+                              } else {
+                                return (
+                                  <option
+                                    className="text-danger h6"
+                                    value={item.result._id}
+                                  >
+                                    {item.result.strategy_name}
+                                  </option>
+                                );
+                              }
 
-                              return (
-                                <option
-                                  className="text-success h6"
-                                  value={item.result._id}
-                                >
-                                {item.result.strategy_name}
-                                </option>
-                              );
-                            }else{
-                              return (
-                                <option
-                                  className="text-danger h6"
-                                  value={item.result._id}
-                                >
-                                {item.result.strategy_name}
-                                </option>
-                              );
-                            }
-                            
-                          })}
-                      </select>
-                    }
+                            })}
+                        </select>
+                      }
 
-                     
+
 
 
                     </td>
@@ -524,48 +533,47 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
           <Modal.Title>Select Strategy</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-           
-         
-    
+
+
+
           <div>
-          {
-          modalsingleValue.strategy_id != undefined ? 
-          Strategy.data &&
-          Strategy.data.map((item) => (
-            <div key={item.result._id}>
-              <input
-                name="strategy_id"
-                className="form-check-input"
-                type="checkbox"
-                id={item.result._id}
-                value={item.result._id}
-              defaultChecked={modalsingleValue.strategy_id.includes(item.result._id)}
-                onChange={(e) =>
-                  setgroup_qty_value_test(
-                    e,
-                    modalsingleValue.service.name,
-                    modalsingleValue.service,
-                    modalsingleValue
-                  )
-                }
-              />
-              <label
-                className={`form-check-label ${
-                  modalsingleValue.strategy_id.includes(item.result._id)
-                    ? "text-success"
-                    : "text-danger"
-                } h6`}
-                htmlFor={item.result._id}
-              >
-                {item.result.strategy_name}
-              </label>
-            
-            </div>
-          ))
-          :"" 
+            {
+              modalsingleValue.strategy_id != undefined ?
+                Strategy.data &&
+                Strategy.data.map((item) => (
+                  <div key={item.result._id}>
+                    <input
+                      name="strategy_id"
+                      className="form-check-input"
+                      type="checkbox"
+                      id={item.result._id}
+                      value={item.result._id}
+                      defaultChecked={modalsingleValue.strategy_id.includes(item.result._id)}
+                      onChange={(e) =>
+                        setgroup_qty_value_test(
+                          e,
+                          modalsingleValue.service.name,
+                          modalsingleValue.service,
+                          modalsingleValue
+                        )
+                      }
+                    />
+                    <label
+                      className={`form-check-label ${modalsingleValue.strategy_id.includes(item.result._id)
+                        ? "text-success"
+                        : "text-danger"
+                        } h6`}
+                      htmlFor={item.result._id}
+                    >
+                      {item.result.strategy_name}
+                    </label>
+
+                  </div>
+                ))
+                : ""
             }
           </div>
- 
+
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseStartegyModal}>
@@ -597,12 +605,12 @@ setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObj
           </button>
         </>
       )}
-      
+
     </Content>
 
-  
 
-    
+
+
   );
 };
 
