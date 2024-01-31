@@ -89,7 +89,7 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
 
                 }
             }
-            console.log("req", req);
+       
 
             await dispatch(Update_smtp_details({ req: req, token: user_token })).unwrap().then((response) => {
 

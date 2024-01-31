@@ -148,14 +148,14 @@ const AuthSlice = createSlice({
   recuders: {},
   extraReducers: {
     [SignIn.pending]: (state, action) => {
-      console.log("Pending");
+      
     },
     [SignIn.fulfilled]: (state, { payload }) => {
       state.isLoading = false;
       return { ...state, logdatails: payload };
     },
     [SignIn.rejected]: (state, action) => {
-      console.log("Pending");
+    
     },
     [Verify_User_Device.fulfilled]: (state, { payload }) => {
       // state.isLoading = false;
@@ -203,21 +203,7 @@ const AuthSlice = createSlice({
     return { ...state, panel_details: payload, isLoading: false };
   },
 
-  // extraReducers:  (builder) => {
-  //   builder.addCase(Forget_Password.pending, (state) => {
-  //     // Handle pending state
-  //   })
-  //     .addCase(Forget_Password.fulfilled, (state, action) => {
-  //       // Handle fulfilled state
-  //       console.log("action" ,action);
-  //     })
-  //     .addCase(Forget_Password.rejected, (state, action) => {
-  //       state.isError = true;
-  //       console.log("action" ,action);
-
-  //       state.errorMsg = action.error.message; // Store error message in state
-  //     });
-  // }
+   
 });
 
 // export const {ganpat} = HomeScreenSlice.actions

@@ -248,7 +248,7 @@ class Dashboard {
             }
 
 
-            // console.log("OKK");
+      
 
             const UserData = await User_model.findOne({ _id: user_id });
 
@@ -258,7 +258,7 @@ class Dashboard {
             }
 
             if (Object.keys(servicesData).length == 0) {
-                // console.log("Object is empty.");
+            
                 return res.send({ status: false, msg: 'No Data For Update', data: [] });
             }
 
@@ -275,7 +275,7 @@ class Dashboard {
                     if (matchedObject.strategy_id != undefined) {
 
                         matchedObject.strategy_id.forEach((sid) => {
-                            // console.log("Data",new ObjectId(sid))
+                           
                             matchedObject.strategy_id.push(new ObjectId(sid))
                         })
 

@@ -185,12 +185,12 @@ class GroupService {
           const updateOperation = { $set: { group_qty: data.group_qty } };
           var deleteGroupServices = await serviceGroup_services_id.updateOne(filter, updateOperation)
 
-          // console.log("-- ",deleteGroupServices);
+         
 
         })
       }
 
-      // console.log("==>", mergedArray);
+     
 
 
       // Client Services Update
@@ -207,7 +207,7 @@ class GroupService {
         add_Group_services.forEach(async (data) => {
           var stgId = new ObjectId(data)
           var Qty_find = services_id.filter((data1) => data1.service_id == data)
-          // console.log("Qty_find", Qty_find[0].lotsize);
+         
           var find_user_service = await groupServices_client1.find({ groupService_id: GroupServices_Id })
 
 
@@ -226,7 +226,7 @@ class GroupService {
                 lot_size: 1
 
               })
-              // console.log("User_client_services", User_client_services);
+        
 
               User_client_services.save()
 
@@ -607,7 +607,7 @@ class GroupService {
     try {
 
       const { _id } = req.body
-      // console.log(_id);
+    
       if (_id != "yyyyyyyYYYYYY") {
         const objectId = new ObjectId(_id);
 

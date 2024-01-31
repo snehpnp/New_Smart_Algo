@@ -374,13 +374,6 @@ class Employee {
               user_type: license_type == 2 ? "Live Account" : license_type == 0 ? "2 Days Free Live Account" : "Free Demo Account"
             };
 
-
-
-
-
-
-
-
             // UPDATE STATUS OF THE USER_SIGNUP COLLECTION WHEN CLICK ON ADD CLIENT
 
             const existingUser = await user_SignUp.findOne({
@@ -1004,9 +997,7 @@ class Employee {
       // GET ALL CLIENTS
       var AdminMatch;
 
-      // const date = new Date();
-      // var formattedDate = date.toISOString().slice(0, 10); // Sirf date part extract karo
-
+      
 
 
       if (Find_Role == "ADMIN") {
@@ -1016,12 +1007,8 @@ class Employee {
       }
 
 
-      const getAllClients = await User_model.find(AdminMatch).sort({ CreateDate: 1 });
-        // .skip(skip)
-        // .limit(Number(limit))
-        
-
-      // const totalCount = getAllClients.length;
+      const getAllClients = await User_model.find(AdminMatch).sort({ CreateDate: -1 });
+       
       // IF DATA NOT EXIST
       if (getAllClients.length == 0) {
         return res.send({

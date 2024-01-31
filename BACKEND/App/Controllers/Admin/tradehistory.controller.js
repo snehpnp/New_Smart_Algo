@@ -132,12 +132,7 @@ class Tradehistory {
             const sevenDaysAgo = new Date(today); // Aaj ki date se 7 din pehle ki date
             sevenDaysAgo.setDate(today.getDate() - 7);
 
-            // const filteredSignals = await MainSignals_modal.find({
-            //     createdAt: {
-            //         $gte: sevenDaysAgo, // Aaj se pichle 7 din se greater than or equal
-            //         $lte: today, // Aaj se less than or equal
-            //     },
-            // }).sort({ createdAt: -1 })
+         
 
             const filteredSignals = await MainSignals_modal.aggregate([
                 {

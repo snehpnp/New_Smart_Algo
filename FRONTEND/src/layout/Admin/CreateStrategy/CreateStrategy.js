@@ -30,7 +30,7 @@ const CreateStrategy = () => {
   const navigate = useNavigate()
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
-  ///console.log("AdminToken",AdminToken)
+
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
 
@@ -41,9 +41,8 @@ const CreateStrategy = () => {
   const [storeServiceData, setStoreServiceData] = useState([])
   const [filterServices, setFilterServices] = useState("")
 
-  //console.log("filterServices - ",filterServices)
   const [selectedItems, setSelectedItems] = useState([]);
-  //console.log("selectedItems",selectedItems)
+
 
   const [getIndicators, setGetIndicators] = useState([])
   const [selectAddIndicators, setSelectAddIndicators] = useState([])
@@ -109,37 +108,14 @@ const CreateStrategy = () => {
 
     axios(config)
       .then(function (response) {
-        // console.log("get service name",response.data);
+        
         setStoreServiceData(response.data.data);
       })
       .catch(function (error) {
         console.log(error);
       });
 
-
-      // await dispatch(
-      //   get_instrument({
-      //     req: {
-      //       page: "1",
-      //       limit: "100",
-      //       searchQuery: filterServices
-      //     },
-      //     token: AdminToken,
-      //   })
-      // )
-      //   .unwrap()
-      //   .then((response) => {
-      //     console.log("ss -",response.data)
-      //     setStoreServiceData(response.data.data);
-      //   });
-
   };
-
-
-
-
-
-
 
 
 
@@ -199,13 +175,7 @@ const CreateStrategy = () => {
    //disableSaveButtun
    const [disableSaveButtun, setDisableSaveButtun] = useState(false);
 
- 
-   console.log("getSources - ",getSources)
-    
 
-
-  // console.log("timeFrameData",timeFrameData)
-  // console.log("selectStrategy",selectStrategy)
 
 
   const getAllTimeFrameApi = async () => {
@@ -220,7 +190,7 @@ const CreateStrategy = () => {
       )
       .unwrap()
       .then((response) => {
-        //console.log("response get_time_frame - ",response)
+      
         if (response) {
           if (response.status) {
             setTimeFrameData({
@@ -249,7 +219,7 @@ const CreateStrategy = () => {
     )
       .unwrap()
       .then((response) => {
-        console.log("response source - ",response)
+       
         if (response) {
           if (response.status) {
             setGetSources({
@@ -278,7 +248,7 @@ const CreateStrategy = () => {
     )
       .unwrap()
       .then((response) => {
-        console.log("response get_comparators - ",response)
+       
         if (response) {
           if (response.status) {
             setGetComparators({
@@ -307,7 +277,7 @@ const CreateStrategy = () => {
     )
       .unwrap()
       .then((response) => {
-        //console.log("response strategy - ",response)
+        
         if (response.status) {
           if (response.status) {
             setStrategyDataAllAdmin({
@@ -341,7 +311,7 @@ const CreateStrategy = () => {
 
 
   const selectTimeFrame = (item) => {
-    console.log("dd -", item.value)
+   
     setTimeFrameVal(item.value);
   }
 
@@ -350,53 +320,12 @@ const CreateStrategy = () => {
   
 
   const [coditionRequestArr, setCoditionRequestArr] = useState([
-    // {
-      
-    //   first_element : {
-    //   source : "",
-    //   offset : "1"
-    //  },
-    //   comparators : "==",
-    //  second_element : {
-    //   source : "",
-    //   offset : "2"
-    //  },
-    //  and_or_operator:"AND"
-    // },
-
-    // {
-     
-    //   first_element : {
-    //   source : "low",
-    //   offset : "3"
-    //  },
-    //  comparators : "==",
-    //  second_element : {
-    //   source : "high",
-    //   offset : "4"
-    //  },
-    //  and_or_operator:"OR"
-    // },
+    
 
   ])
 
   const [coditionRequestArrSell, setCoditionRequestArrSell] = useState([
-    // {
-      
-    //   first_element : {
-    //   source : "",
-    //   offset : "1"
-    //  },
-    //   comparators : "==",
-    //  second_element : {
-    //   source : "",
-    //   offset : "2"
-    //  },
-    //  and_or_operator:"AND"
-    // },
-
-    // {
-     
+    
   
   ])
 
@@ -488,18 +417,7 @@ const CreateStrategy = () => {
 
 
   const selectSource = (e , condition_item , element_first_second,index,buy_sell) => {
-   // console.log("e -",e.target.value)
-   // console.log("condition_item -",condition_item);
-   // console.log("element_first_second -",element_first_second);
-
-  //   if(e.target.value != ""){
-  //      //alert(e.target.value)
-  //      setSelectedSource(e.target.value);
-  //      setSelectConditionItem(condition_item);
-  //      setSelectedElementFirsSecond(element_first_second);
-  //      setSelectedIndexConditionArr(index);
-  //      openModalOffset();
-  //  }
+   
   
   if(e.target.value != ""){
 
@@ -538,7 +456,7 @@ const CreateStrategy = () => {
     if(e.target.value != ""){
       if(buy_sell == "buy"){
         const foundObject = coditionRequestArr.find((item,i) => i === index);
-      //console.log("foundObject --",foundObject)
+     
       if (foundObject) {
         if(element_first_second == "first"){
           foundObject.first_element.offset = e.target.value;
@@ -550,7 +468,7 @@ const CreateStrategy = () => {
       }
       }else if(buy_sell == "sell"){
         const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
+       
         if (foundObject) {
           if(element_first_second == "first"){
             foundObject.first_element.offset = e.target.value;
@@ -646,11 +564,11 @@ const CreateStrategy = () => {
          
          const lastIndex = ArrCondition.length - 1;
   
-       // console.log(lastIndex); // Output: 4
+  
        const foundObject = coditionRequestArr.find((item,i) => i === lastIndex);
        if (foundObject) {
          // Update the source field of the found object
-       //  console.log(" condition Add SSSS ",foundObject)
+  
          if(foundObject.first_element.source == "" && foundObject.second_element.source == ""){
          alert("please select first and second element")
          }else{
@@ -689,11 +607,11 @@ const CreateStrategy = () => {
          
          const lastIndex = ArrCondition.length - 1;
   
-       // console.log(lastIndex); // Output: 4
+      
        const foundObject = coditionRequestArrSell.find((item,i) => i === lastIndex);
        if (foundObject) {
          // Update the source field of the found object
-       //  console.log(" condition Add SSSS ",foundObject)
+      
          if(foundObject.first_element.source == "" && foundObject.second_element.source == ""){
          alert("please select first and second element")
          }else{
@@ -842,8 +760,7 @@ const CreateStrategy = () => {
     
   }
   
-  //console.log("coditionRequestArr final --",coditionRequestArr)
-  //console.log("coditionRequestArr Sell final --",coditionRequestArrSell)
+
   
   
   let condition_string = "";
@@ -852,7 +769,7 @@ const CreateStrategy = () => {
   for (let index = 0; index < coditionRequestArr.length; index++) {
     const val = coditionRequestArr[index];
     
-  //  console.log(`Element at index ${index}: ${val.and_or_operator}`);
+
   
     if (val.first_element.source !== "" && val.second_element.source !== "") {
 
@@ -914,8 +831,7 @@ const CreateStrategy = () => {
       break; // Break out of the loop
     }
   }
-  // Continue with the rest of your code
-  console.log("rr - ",condition_string);
+  
 
 
 
@@ -925,7 +841,7 @@ const CreateStrategy = () => {
   for (let index = 0; index < coditionRequestArrSell.length; index++) {
     const val = coditionRequestArrSell[index];
     
-  //  console.log(`Element at index ${index}: ${val.and_or_operator}`);
+
   
     if (val.first_element.source !== "" && val.second_element.source !== "") {
 
@@ -993,7 +909,7 @@ const CreateStrategy = () => {
   }
   
   // Continue with the rest of your code
-  console.log("rr sell - ",condition_string_sell);
+
 
   const AddBracket = (index,start_and,buy_sell) => {
   
@@ -1001,7 +917,7 @@ const CreateStrategy = () => {
       if(start_and == "start"){
 
         const foundObject = coditionRequestArr.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
+       
         if (foundObject) {
           // Update the source field of the found object
           foundObject.start_bracket.push("(");
@@ -1011,7 +927,7 @@ const CreateStrategy = () => {
     
        }else if(start_and == "end"){
         const foundObject = coditionRequestArr.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
+    
         if (foundObject) {
           // Update the source field of the found object
           foundObject.end_bracket.push(")");
@@ -1024,7 +940,7 @@ const CreateStrategy = () => {
       if(start_and == "start"){
 
         const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
+      
         if (foundObject) {
           // Update the source field of the found object
           foundObject.start_bracket.push("(");
@@ -1034,7 +950,7 @@ const CreateStrategy = () => {
     
        }else if(start_and == "end"){
         const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
+       
         if (foundObject) {
           // Update the source field of the found object
           foundObject.end_bracket.push(")");
@@ -1055,7 +971,7 @@ const CreateStrategy = () => {
         if(start_and == "start"){
     
           const foundObject = coditionRequestArr.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
+     
           if (foundObject) {
             // Update the source field of the found object
             foundObject.start_bracket.pop();
@@ -1067,7 +983,7 @@ const CreateStrategy = () => {
         }else if(start_and == "end"){
     
           const foundObject = coditionRequestArr.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
+   
           if (foundObject) {
             // Update the source field of the found object
             foundObject.end_bracket.pop();
@@ -1085,7 +1001,7 @@ const CreateStrategy = () => {
         if(start_and == "start"){
     
           const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
+      
           if (foundObject) {
             // Update the source field of the found object
             foundObject.start_bracket.pop();
@@ -1097,7 +1013,7 @@ const CreateStrategy = () => {
         }else if(start_and == "end"){
     
           const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
+         
           if (foundObject) {
             // Update the source field of the found object
             foundObject.end_bracket.pop();
@@ -1113,9 +1029,7 @@ const CreateStrategy = () => {
 
   }
 
- // console.log("timeFrameVal - ", timeFrameVal)
-
- // console.log("buyCheck - ", buyCheck)
+ 
 
 
   const [exitConditionBuyOrSell, setExitConditionBuyOrSell] = useState(
@@ -1134,7 +1048,7 @@ const CreateStrategy = () => {
   );
 
   const StoplossChange = (e,buy_sell) => {
-     console.log("e", e.target.value)
+   
    if(parseInt(e.target.value) > 0 ){
     if(buy_sell == "buy"){
       const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
@@ -1152,9 +1066,7 @@ const CreateStrategy = () => {
     }
   }  
   }
-
-  //console.log("exitConditionBuyOrSell",exitConditionBuyOrSell[0].buy)
-  //console.log("exitConditionBuyOrSell sell",exitConditionBuyOrSell[0].sell)
+ 
 
   const TargetChange = (e,buy_sell) => {
     if(buy_sell == "buy"){
@@ -1300,14 +1212,7 @@ const saveStrategy = async (e) => {
       return;
     }
 
-  
-      
-      // Example usage:
-      // const expression = "(((close[0] == high[0]) OR (open[0] == open[0])) AND (open[0] == low[0]))";
-      
-      
-      //alert(condition_string)
-      //alert(condition_string_pass)
+ 
     
 
       
@@ -1350,7 +1255,7 @@ const saveStrategy = async (e) => {
       let condition_string_source = [];
       for (let index = 0; index < coditionRequestArr.length; index++) {
         const val = coditionRequestArr[index];
-      //  console.log(`Element at index ${index}: ${val.and_or_operator}`)
+ 
       
         if (val.first_element.source !== "" && val.second_element.source !== "") {
         if(val.first_element.source != "number"){
@@ -1370,7 +1275,7 @@ const saveStrategy = async (e) => {
           break; // Break out of the loop
         }
       }
-     // console.log("condition_string_source",condition_string_source)
+     
 
 
 
@@ -1397,7 +1302,7 @@ const saveStrategy = async (e) => {
           break; // Break out of the loop
         }
       }
-     // console.log("condition_string_sell_source",condition_string_sell_source)
+   
 
 
     // Send Request Buy ------
@@ -1409,22 +1314,18 @@ const saveStrategy = async (e) => {
         "scriptArray": selectedItems,
         "name":strategyName,
         "user_id": user_Id,
-        // "tokensymbol": "3045",
-        // "symbol_name": "SBIN",
-        // "segment": "C",
+        
         "strategy_name": selectStrategy,
-        // "strike_price":"19300",
-        // "option_type":"CE",
-        //  "expiry":"26102023",
+        
         "timeframe": timeFrameVal,
         "type": "BUY",
         "indicator": "MA",
         "price_source": "open",
         "period": "1",
         "inside_indicator": "EMA",
-       // "condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
+        
         "condition": condition_string_pass.replace(/(\|\||&&)$/, ''),
-       // "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
+  
         "condition_source": condition_string_source,
         "buffer_value": "2",
         "offset": "0",
@@ -1437,7 +1338,7 @@ const saveStrategy = async (e) => {
         "maxLoss":maxLoss
        }
        
-       console.log("data request buy",data)
+      
 
        await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
         if (response.status === 409) {
@@ -1446,7 +1347,7 @@ const saveStrategy = async (e) => {
         else if (response.status) {
           if(!sellCheck && !sell_cond){
            toast.success(response.msg);
-           //window.location.reload();
+        
            setTimeout(() => {
             navigate("/admin/AllMakeStrategy")
            }, 1000); 
@@ -1468,22 +1369,18 @@ const saveStrategy = async (e) => {
         "scriptArray": selectedItems,
         "name":strategyName,
         "user_id": user_Id,
-        // "tokensymbol": "3045",
-        // "symbol_name": "SBIN",
-        // "segment": "C",
+      
         "strategy_name": selectStrategy,
-        // "strike_price":"19300",
-        // "option_type":"CE",
-        //  "expiry":"26102023",
+     
         "timeframe": timeFrameVal,
         "type": "SELL",
         "indicator": "MA",
         "price_source": "open",
         "period": "1",
         "inside_indicator": "EMA",
-        //"condition": "(data.close[0]>=data.low[1]||data.high[0]<data.low[2])&&data.close[1]>data.high[2]",
+         
         "condition": condition_string_sell_pass.replace(/(\|\||&&)$/, ''),
-       // "condition_source": "['close(0)','low(1)',low(2),close(1),high(2)]",
+     
         "condition_source": condition_string_sell_source,
         "buffer_value": "2",
         "offset": "0",
@@ -1495,7 +1392,7 @@ const saveStrategy = async (e) => {
         "maxProfit":maxProfit,
         "maxLoss":maxLoss
       }
-      console.log("data request sell",data)
+    
 
       await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
         if (response.status === 409) {
@@ -1519,13 +1416,6 @@ const saveStrategy = async (e) => {
 
   }
 
-
-
-  console.log("timeTradeConddition - ",timeTradeConddition)
-  
- 
-
-  
   return (
     <>
       <>
@@ -1549,14 +1439,7 @@ const saveStrategy = async (e) => {
             <div className="col-md-2 ">
               <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Number of Trade</label>
              <input min={1} type="text" onChange={(e)=>{onChange(e)}}  name="no_of_trade" className="form-control stratergy-box" value={numberOfTrade}></input>
-
-{/*              
-             <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Max Profit</label>
-             <input min={1} type="text" onChange={(e)=>{onChange(e)}}  name="max_profit" className="form-control stratergy-box" value={maxProfit}></input>
-
-
-             <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Max Loss</label>
-             <input min={1} type="text" onChange={(e)=>{onChange(e)}}  name="max_loss" className="form-control stratergy-box" value={maxLoss}></input> */}
+ 
 
 
             </div>
@@ -1571,13 +1454,7 @@ const saveStrategy = async (e) => {
                   value={filterServices}
                   onChange={(e) => setFilterServices(e.target.value)}
                 />
-                {/* <Button
-                  variant="primary"
-                  className="ms-2"
-                  onClick={handleClose}
-                >
-                  Done
-                </Button> */}
+                
               </Modal.Header>
               <Modal.Body>
                 <ul className="ps-0">
@@ -1597,14 +1474,7 @@ const saveStrategy = async (e) => {
                             <p className="text-muted my-0">{x.exch_seg}</p>
                           </div>
                           <div className="col-md-3 d-flex list-btn">
-                            {/* <button
-                              className="btn border-0"
-                              data-bs-toggle="tooltip"
-                              data-bs-placement="top"
-                              title="Add Dynamic Contract"
-                            >
-                              <i className="fa-solid fa-pen-to-square"></i>
-                            </button> */}
+                            
                             <button className="btn border-0">
                               <i
                                 className="fa-regular fa-square-plus"
@@ -1692,18 +1562,7 @@ const saveStrategy = async (e) => {
                             ))
                           }
 
-
-
-                          {/* <li className=" nav-item">
-                            <a
-                              href="#navpills2-1"
-                              className="nav-link"
-                              data-bs-toggle="tab"
-                              aria-expanded="false"
-                            >
-                             3 min
-                            </a>
-                          </li> */}
+ 
 
                         </ul>
                     
@@ -1758,12 +1617,7 @@ const saveStrategy = async (e) => {
 
                 <strong>Buy Entry Condition</strong>
 
-                {/* <Form.Select aria-label="Default select example">
-                  <option>Select</option>
-                  <option value="price">Price</option>
-                  <option value="time">Time</option>
-                  <option value="indicator">Indicator</option>
-                </Form.Select> */}
+                
                  {
                   buyCheck == true ? 
                   <Tabs
@@ -1846,10 +1700,7 @@ const saveStrategy = async (e) => {
 
                       <input style={{ height: '25px', margin:'0 20px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"buy") }} min="0" className="form-control new-field" />
                     
-                      {/* <Col md={2}>
-                        <label>Offset</label>
-                        <Form.Control type="number" id="text2" />
-                      </Col> */}
+                      
                      
                         {/* <label>Comparators</label> */}
                         <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index,"buy"); }}>

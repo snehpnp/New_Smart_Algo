@@ -734,7 +734,7 @@ const AccelpixTokenUpdate = async () => {
 
     axios.request(config)
         .then(async (response) => {
-            // console.log(JSON.stringify(response.data));
+           
             const result = await Alice_token.aggregate([
                 {
                     $project: {
@@ -763,7 +763,7 @@ const AccelpixTokenUpdate = async () => {
 
                 let Res = await Alice_token.updateMany(filter, update, options);
 
-                // console.log("Res ", Res)
+                
 
 
             });
@@ -1022,7 +1022,7 @@ const AccelpixTokenUpdate = async () => {
                             { $set: { price: data.CPrice } }
                         );
                     }));
-                   // console.log("DONEEEEEEEE")
+                
                     return
                 },
                 header: true,

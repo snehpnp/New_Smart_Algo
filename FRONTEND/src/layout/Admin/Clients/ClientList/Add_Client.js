@@ -130,7 +130,7 @@ const AddClient = () => {
       } else if (!isValidEmail(values.email) && formik.touched.email) {
         errors.email = valid_err.INVALID_EMAIL_ERROR;
       }
-      if (!values.licence) {
+      if (!values.licence && formik.touched.licence) {
         errors.licence = valid_err.LICENCE_TYPE_ERROR;
       }
       else if (values.licence === '2' || values.licence === 2) {
@@ -156,10 +156,10 @@ const AddClient = () => {
         }
       }
 
-      if (!values.groupservice) {
+      if (!values.groupservice && formik.touched.groupservice) {
         errors.groupservice = valid_err.GROUPSELECT_ERROR;
       }
-      if (selectedStrategies.length === 0) {
+      if (selectedStrategies.length === 0 && formik.touched.selectedStrategies) {
         errors.Strategy = "select strategy";
       }
 

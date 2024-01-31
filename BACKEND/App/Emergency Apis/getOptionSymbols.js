@@ -34,8 +34,7 @@ module.exports = function (app) {
                                 const userinfo = User.save()
 
 
-                                // connection1.query('INSERT INTO option_chain (`symbol`,`created_at`) VALUES ("' + item.name + '","' + dformat + '")', (err, result) => {
-                                //     console.log("err", err)
+                                
 
                             }
                         }
@@ -43,7 +42,7 @@ module.exports = function (app) {
                 }
                 res.send("done")
             }).catch((error) => {
-                // console.log(error);
+               
             });
         }
         catch (err) {

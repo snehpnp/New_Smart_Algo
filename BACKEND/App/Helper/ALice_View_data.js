@@ -52,9 +52,9 @@ async function connectToDB(collectionName, response,dbTradeTools) {
       createViewM1DAY(collectionName,dbTradeTools)
 
       } else {
-        // console.log(`Collection '${collectionName}' does not exist.`);
+         
         await dbTradeTools.createCollection(collectionName);
-        // console.log(`Collection '${collectionName}' created successfully`);
+        
 
         const collection = dbTradeTools.collection(collectionName);
         // const singleDocument = { name: 'John', age: 30 };
@@ -70,13 +70,13 @@ async function connectToDB(collectionName, response,dbTradeTools) {
           }
 
           const insertResult = await collection.insertOne(singleDocument);
-          //console.log('Inserted document:', insertResult.insertedId);
+          
         }
 
       }
 
     } catch (err) {
-      //console.error('Error connecting to MongoDB:', err);
+       
     }
   }
 
@@ -117,8 +117,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
       const collections = await dbTradeTools.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M_' + collectionName);
-      //console.log("collectionExists view 1 minute", collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -130,8 +129,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
           pipeline: pipeline,
         });
 
-        console.log(`View "${viewName}" created successfully.`);
-
+        
       }
 
 
@@ -192,7 +190,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
           pipeline: pipeline,
         });
 
-        console.log(`View "${viewName}" created successfully.`);
+        
 
       }
 
@@ -278,7 +276,7 @@ async function connectToDB(collectionName, response,dbTradeTools) {
           pipeline: pipeline,
         });
 
-        console.log(`View "${viewName}" created successfully.`);
+        
 
       }
 

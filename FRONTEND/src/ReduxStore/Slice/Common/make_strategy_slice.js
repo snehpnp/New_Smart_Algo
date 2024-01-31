@@ -4,7 +4,7 @@ import { GET_TIMEFRAME , GET_INSTRUMENT ,GET_SOURCE ,GET_COMPARATORS ,ADD_MAKE_S
 
 export const get_candle_data = createAsyncThunk("get/candledata", async (data) => {
     try {
-        console.log("data -",data)
+     
         const {req,token}=data
         const res = await GET_CANDLE_DATA(req,token);
         return await res;
@@ -15,7 +15,7 @@ export const get_candle_data = createAsyncThunk("get/candledata", async (data) =
 
 export const get_instrument = createAsyncThunk("add/getservicename", async (data) => {
     try {
-        console.log("data -",data)
+    
         const {req,token}=data
         const res = await GET_INSTRUMENT(req,token);
         return await res;
@@ -28,7 +28,7 @@ export const get_instrument = createAsyncThunk("add/getservicename", async (data
 
 export const get_time_frame = createAsyncThunk("get/getAlltimeframe", async (data) => {
     try {
-        console.log("data -",data)
+      
         const {req,token}=data
         const res = await GET_TIMEFRAME(req,token);
         return await res;
@@ -39,7 +39,7 @@ export const get_time_frame = createAsyncThunk("get/getAlltimeframe", async (dat
 
 export const get_source = createAsyncThunk("get_sources", async (data) => {
     try {
-        console.log("data -",data)
+    
         const {req,token}=data
         const res = await GET_SOURCE(req,token);
         return await res;
@@ -50,7 +50,7 @@ export const get_source = createAsyncThunk("get_sources", async (data) => {
 
 export const get_comparators = createAsyncThunk("get_comparators", async (data) => {
     try {
-        console.log("data -",data)
+      
         const {req,token}=data
         const res = await GET_COMPARATORS(req,token);
         return await res;
@@ -62,7 +62,7 @@ export const get_comparators = createAsyncThunk("get_comparators", async (data) 
 // Make strategy
 export const Add_Make_Strategy = createAsyncThunk("AddMakeStartegy", async (data) => {
     try {
-        console.log("data -",data)
+       
         const {req,token}=data
         const res = await ADD_MAKE_STRATEGY(req,token);
         return await res;

@@ -251,7 +251,7 @@ class Panel {
 
 
         } catch (error) {
-            // console.log(error.keyValue);
+        
             return res.send({ status: false, msg: 'Internal server error', error: error.keyValue });
         }
     }
@@ -277,7 +277,7 @@ class Panel {
                 tt = req.body.brokerId
             }
 
-                console.log("tt",tt);
+                
             // Find documents with matching ids
             const getAllpanel = await ApiCreateInfo.find({ broker_id: tt })
 

@@ -14,10 +14,10 @@ import {useLocation, useParams} from 'react-router-dom'
 const Dashboard = () => {
 
   let { id } = useParams();
-console.log(id);
+ 
 
   const location = useLocation()
-  console.log(location);
+ 
           
   const dispatch = useDispatch();
   const [themeList, setThemeList] = useState();
@@ -28,7 +28,7 @@ console.log(id);
 });
 
 
-// console.log(AllData.data)
+ 
 
 const activeUsersCount = AllData.data.filter(user => user.is_active).length;
 const inActiveUserCount = AllData.data.filter(user=> user.is_expired).length;
