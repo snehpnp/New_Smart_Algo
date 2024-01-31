@@ -664,57 +664,59 @@ const HelpCenter = () => {
 
         if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
 
-            console.log("UserDetails",UserDetails);
-            if(UserDetails.trading_status == "on"){
-                const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
-    
-                if (res.data.stat) {
-    
-               
-    
-                    const handleResponse = async (response) => {
-    
-                        const old_val_call = $('.Call_Price_' + response.tk).html();
-                        const old_val_put = $('.Put_Price_' + response.tk).html();
-    
-                        $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
-                        $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
-    
-                        if (response.tk) {
-                            if (response.lp !== undefined) {
-    
-                                $(".Call_Price_" + response.tk).html(response.lp);
-                                $(".Put_Price_" + response.tk).html(response.lp);
-    
-                                const new_val_call = $('.Call_Price_' + response.tk).html();
-                                const new_val_put = $('.Put_Price_' + response.tk).html();
-    
-                                if (new_val_call > old_val_call || new_val_put > old_val_put) {
-                                    $('.Call_Price_' + response.tk).css({ "color": "green" });
-                                    $('.Put_Price_' + response.tk).css({ "color": "green" });
-                                    $('.Call_Price_' + response.tk).append('&#8593;')
-                                    $('.Put_Price_' + response.tk).append('&#8593;')
-                                    $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
-                                    $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
-                                } else if (new_val_call < old_val_call || new_val_put < old_val_put) {
-                                    $('.Call_Price_' + response.tk).css({ "color": "red" });
-                                    $('.Put_Price_' + response.tk).css({ "color": "red" });
-                                    $('.Call_Price_' + response.tk).append('&#8595;')
-                                    $('.Put_Price_' + response.tk).append('&#8595;')
-                                    $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
-                                    $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
-                                } else if (new_val_call === old_val_call || new_val_put === old_val_put) {
-                                    $('.Call_Price_' + response.tk).css({ "color": "black" });
-                                    $('.Put_Price_' + response.tk).css({ "color": "black" });
-    
-                                }
-                            };
+            const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
+
+            if (res.data.stat) {
+
+                // BACKEND SOCKET RUN API
+
+                //alert("okk")
+
+                await BackendRunSocket("");
+
+                //
+
+                const handleResponse = async (response) => {
+
+                    const old_val_call = $('.Call_Price_' + response.tk).html();
+                    const old_val_put = $('.Put_Price_' + response.tk).html();
+
+                    $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
+                    $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
+
+                    if (response.tk) {
+                        if (response.lp !== undefined) {
+
+                            $(".Call_Price_" + response.tk).html(response.lp);
+                            $(".Put_Price_" + response.tk).html(response.lp);
+
+                            const new_val_call = $('.Call_Price_' + response.tk).html();
+                            const new_val_put = $('.Put_Price_' + response.tk).html();
+
+                            if (new_val_call > old_val_call || new_val_put > old_val_put) {
+                                $('.Call_Price_' + response.tk).css({ "color": "green" });
+                                $('.Put_Price_' + response.tk).css({ "color": "green" });
+                                $('.Call_Price_' + response.tk).append('&#8593;')
+                                $('.Put_Price_' + response.tk).append('&#8593;')
+                                $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
+                                $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
+                            } else if (new_val_call < old_val_call || new_val_put < old_val_put) {
+                                $('.Call_Price_' + response.tk).css({ "color": "red" });
+                                $('.Put_Price_' + response.tk).css({ "color": "red" });
+                                $('.Call_Price_' + response.tk).append('&#8595;')
+                                $('.Put_Price_' + response.tk).append('&#8595;')
+                                $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
+                                $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
+                            } else if (new_val_call === old_val_call || new_val_put === old_val_put) {
+                                $('.Call_Price_' + response.tk).css({ "color": "black" });
+                                $('.Put_Price_' + response.tk).css({ "color": "black" });
+
+                            }
                         };
-                    }
-                    await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
+                    };
                 }
+                await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
             }
-           
         }
 
     };
