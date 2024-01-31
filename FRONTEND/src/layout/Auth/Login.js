@@ -65,7 +65,7 @@ const Login = () => {
     },
     validate: (values) => {
       const errors = {};
-      console.log("values", values)
+     
       if (!values.password) {
         errors.password = valid_err.PASSWORD_ERROR;
       }
@@ -418,7 +418,7 @@ const Login = () => {
       }
     });
 
-    // console.log("typeOtp", typeOtp);
+ 
   }
 
 
@@ -455,7 +455,7 @@ const Login = () => {
   // FOR DESCILMER
 
   const SubmitDesclimer = () => {
-    console.log("CheckDesclaimer", CheckDesclaimer)
+   
     if (!CheckDesclaimer) {
       alert("Agree & I accept Term And Condition")
     } else {

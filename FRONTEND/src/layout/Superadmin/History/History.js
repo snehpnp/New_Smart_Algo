@@ -20,7 +20,7 @@ const History = () => {
         data: []
     });
 
-    console.log(AllData)
+    
      
     const columns = [
         {

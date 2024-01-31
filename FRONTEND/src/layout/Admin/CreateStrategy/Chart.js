@@ -338,7 +338,7 @@ const ChartComponent = ({ showModal, setshowModal, List, data1111 }) => {
                     const selectedPoint = series.data[dataPointIndex];
 
 
-                    console.log('Selected Data:', selectedPoint);
+                  
 
                     // setSelectedData(selectedPoint);
                 },

@@ -64,7 +64,7 @@ class Strategy {
 
             }
 
-            //  console.log("pipeline", pipeline)
+      
 
             const get_user = await Alice_token.aggregate(pipeline);
 

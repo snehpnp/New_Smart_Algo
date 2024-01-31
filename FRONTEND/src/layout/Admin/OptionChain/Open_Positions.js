@@ -25,8 +25,11 @@ import { useLocation } from "react-router-dom";
 
 const TradeHistory = () => {
     const dispatch = useDispatch();
-    const location = useLocation()
-    console.log(location)
+    const location = useLocation();
+
+
+    console.log("hello",location)
+    
 
     const token = JSON.parse(localStorage.getItem("user_details")).token;
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
@@ -98,7 +101,7 @@ const TradeHistory = () => {
             Get_Open_Position({ token: token })
         ).unwrap()
             .then((response) => {
-                console.log("response", response.data)
+                 
                 if (response.status) {
                     setTradeHistoryData({
                         loading: false,
@@ -673,6 +676,7 @@ const TradeHistory = () => {
     const data = async () => {
 
         const response = await GetAccessToken({ broker_name: "aliceblue" });
+        console.log("cp: ",response)
         if (response.status) {
             setUserDetails(response.data && response.data[0]);
         }

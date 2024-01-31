@@ -18,7 +18,7 @@ export const All_Api_Info_List = createAsyncThunk("getall/apiInfo", async (data)
 
 export const All_Api_Info_List_superadmin = createAsyncThunk("getall/apiInfo", async (data) => {
     const { token, url } = data
-    console.log("data", data)
+    
     try {
         const res = await GET_API_INFORMATION_SUPERADMIN({ url: url }, token);
         return await res;
@@ -45,10 +45,6 @@ export const Create_Api_Information = createAsyncThunk("create/apiInfo", async (
         return err;
     }
 });
-
-
-
-
 
 
 const ApiCreateInfoSlice = createSlice({

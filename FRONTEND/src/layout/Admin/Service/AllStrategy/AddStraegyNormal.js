@@ -152,9 +152,7 @@ const AddStraegyNormal = () => {
         });
     }
 
-
-
-    console.log("SNEH JAISWAL");
+ 
 
     return (
         <>

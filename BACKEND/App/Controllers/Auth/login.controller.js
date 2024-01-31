@@ -648,7 +648,7 @@ class Login {
             if (EmailCheck.Role == "SUBADMIN") {
 
                 var SubadminPermision = await Subadmin_Permission.find({ user_id: EmailCheck._id })
-                // console.log("SubadminPermision", SubadminPermision);
+               
                 var msg = {
                     'Email': EmailCheck.Email,
                     'user_id': EmailCheck._id,

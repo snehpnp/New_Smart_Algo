@@ -49,7 +49,7 @@ class MakeStartegy {
         y: [item.open, item.high, item.low, item.close],
       }));
       
-      //console.log("result - ",result)
+    
         if (result.length > 0) {
           res.send({ status: true, msg: "Get All time frame", data: transformedData })
         } else {
@@ -92,14 +92,14 @@ class MakeStartegy {
       ]
       const result = await source.aggregate(pipeline)
 
-      //  console.log("get_sources - ",result)
+   
       if (result.length > 0) {
         res.send({ status: true, msg: "Get All Source", data: result });
       } else {
         res.send({ status: false, msg: "Empty data", data: [] });
       }
     } catch (error) {
-      // console.log("error-", error);
+   
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -113,14 +113,14 @@ class MakeStartegy {
       ]
       const result = await comparators.aggregate(pipeline)
 
-      //   console.log("get_comparators - ",result)
+   
       if (result.length > 0) {
         res.send({ status: true, msg: "Get All Source", data: result });
       } else {
         res.send({ status: false, msg: "Empty data", data: [] });
       }
     } catch (error) {
-      // console.log("error-", error);
+  
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -135,14 +135,14 @@ class MakeStartegy {
       ]
       const result = await UserMakeStrategy.aggregate(pipeline)
 
-      //console.log("GetAllMakeStartegy - ",result)
+ 
       if (result.length > 0) {
         res.send({ status: true, msg: "Get All make strategy", data: result });
       } else {
         res.send({ status: false, msg: "Empty data", data: [] });
       }
     } catch (error) {
-      // console.log("error-", error);
+ 
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -156,7 +156,7 @@ class MakeStartegy {
         return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
       }
     } catch (error) {
-      // console.log("error-", error);
+    
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -165,14 +165,13 @@ class MakeStartegy {
   async DeleteMakeStartegySelected(req, res) {
     try {
 
-      //const objectI = new ObjectId(req.body.ids_array);
-      // console.log("ids_array - ",req.body.ids_array)
+      
       const result = await UserMakeStrategy.deleteMany({ _id: { $in: req.body.ids_array } });
       if (result.acknowledged == true) {
         return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
       }
     } catch (error) {
-      // console.log("error-", error);
+      
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -183,8 +182,7 @@ class MakeStartegy {
 
       const objectId = new ObjectId(req.body.id);
       const result = await UserMakeStrategy.findOne({ _id: objectId });
-
-      // console.log("result edit data -", result)
+ 
 
       if (result != undefined) {
         res.send({ status: true, msg: 'Delete successfully ', data: result });
@@ -193,7 +191,7 @@ class MakeStartegy {
       }
 
     } catch (error) {
-      // console.log("error-", error);
+  
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
@@ -208,25 +206,9 @@ class MakeStartegy {
      
     let channelList = "";
     try {
-      // console.log("req",req.body) 
-      // console.log("req time", req.body.timeTradeConddition[0].entry.time)
-
-
-      // for (const element of req.body.scriptArray) {
-      //console.log(element.instrument_token);
-      // channelList+=element.exch_seg+'|'+element.instrument_token+"#";
-
-      // res.send({ status: true, msg: "successfully Add!" });
-      // let user_id = req.body.user_id;
-     // let name = req.body.name;
-      //let tokensymbol = element.instrument_token;
-      // let symbol_name = element.symbol;
+       
       let strategy_name = req.body.strategy_name;
-      // let segment = element.segment;
-      // let strike_price = element.strike;
-      // let option_type = element.option_type;
-      //  let expiry = element.expiry;
-      // let exch_seg = element.exch_seg;
+       
       let timeframe = req.body.timeframe;
       let indicator = req.body.indicator;
       let price_source = req.body.price_source;
@@ -261,7 +243,7 @@ class MakeStartegy {
         }
       };
       const result_number_of_trade = await UserMakeStrategy.updateMany(filter_number_of_trade, update_make_strategy_number_of_trade);
-      //////////////-------------/////////////////////////////////////
+     
 
 
 
@@ -271,15 +253,9 @@ class MakeStartegy {
 
       const update_make_strategy = {
         $set: {
-          // name: name,
-          // user_id: user_id,
-          // tokensymbol: tokensymbol,
-          // symbol_name: symbol_name,
+           
           strategy_name: strategy_name,
-          //segment: segment,
-          // strike_price: strike_price,
-          // option_type: option_type,
-          // expiry: expiry,
+         
           timeframe: timeframe,
           indicator: indicator,
           price_source: price_source,
@@ -312,25 +288,20 @@ class MakeStartegy {
       res.send({ status: true, msg: "Update successfully!", data: [] });
 
     } catch (error) {
-      // console.log("error-", error);
+     
       res.status(500).send({ status: false, msg: "Internal server error" });
     }
   }
 
   /// Make Startegy
   async AddMakeStartegy(req, res) {
-
-    // let Random_key = Math.round(new Date());
-    // let  suscribe =await Alice_Socket();
+ 
     var _id = new ObjectId(req.body.user_id);
 
     let user_panel_key = await user.findOne({_id:_id}).select('client_key').lean();
     let channelList = "";
     try {
-      //  console.log("req",req.body)
-       
-      // console.log("req time", req.body.timeTradeConddition[0].entry.time)
-
+      
 
       for (const element of req.body.scriptArray) {
 
@@ -379,18 +350,18 @@ class MakeStartegy {
 
 
 
-        // console.log("condition_source", condition_source)
+        
 
         // Add Token token chain
       var get_token_chain = await token_chain.findOne({_id:tokensymbol})
-      // console.log("get_token_chain",get_token_chain)
+     
       if(get_token_chain == null){
-        // console.log("token_chain 11 ")
+     
       // const token_chain = await token_chain.insertOne({_id:tokensymbol,exch:exch_seg})
       const filter = { _id:tokensymbol  };
       const update = { $set: { _id:tokensymbol,exch:exch_seg } };
        await token_chain.updateOne(filter, update, { upsert: true });
-        // console.log("token_chain",token_chain)
+        
       }
 
 
@@ -432,11 +403,11 @@ class MakeStartegy {
           maxLoss:maxLoss
         })
           .then(async (createUserMakeStrategy) => {
-            // console.log("3")
+        
             //res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
 
           }).catch((err) => {
-            // console.log("4")
+      
             console.log('Error creating and saving user:', err);
             return res.send({ status: false, msg: 'Strategy Name Already Exist', data: [] })
 
@@ -445,7 +416,7 @@ class MakeStartegy {
 
       var alltokenchannellist = channelList.substring(0, channelList.length - 1);
       
-      // console.log("alltokenchannellist ",alltokenchannellist)
+   
       const suscribe_token = await Socket_data(alltokenchannellist);
       res.send({ status: true, msg: "successfully Add!", data: [] });
     } catch (e) {
@@ -493,11 +464,7 @@ const marketEndTimeMCX = { hour: 11, minute: 29 };
   hours > marketEndTimeMCX.hour ||
   (hours === marketEndTimeMCX.hour && minutes > marketEndTimeMCX.minute);
 
-//   if (isMarketOpen && isMarketClosedEquity) {
-//   console.log('The stock market is open!');
-// } else {
-//   console.log('The stock market is closed.');
-// }
+ 
 
 
 const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -510,17 +477,16 @@ const currentDate = new Date();
 let rr = 1
 
 async function run() {
-//  console.log("iiiiiiii")
+ 
   try {
 
     // Define the function to be executed
     const executeFunction = async () => {
-   
-    //  console.log("holidays.isHoliday(currentDate) ",holidays.isHoliday(currentDate))
+    
       
     //  if (rr) {
       if (holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
-        //  console.log('The stock market is open!');
+     
 
         const pipeline = [
           {
@@ -536,7 +502,7 @@ async function run() {
          
             const val = allStrategyResult[index];
 
-         // console.log(" val startegy",val.segment.toUpperCase())
+     
             const currentDate = new Date();
 
             const options = {
@@ -560,29 +526,25 @@ async function run() {
             const exitTime = val.exitTime.toLocaleTimeString('en-US', options1);
             const notradeTime = val.notradeTime.toLocaleTimeString('en-US', options1);
 
-            // console.log('currentTime:', currentTime);
-            //  console.log('entryTime:', entryTime);
-            //  console.log('exitTime:', exitTime);
-            // console.log('notradeTime:', notradeTime);
-            //  console.log('entryTime:', entryTime);
+          
             // Entry Time less than No trade time OR Exit time
-           //console.log("val.segment.toUpperCase()",val.segment.toUpperCase())
+        
             if((val.segment.toUpperCase()=="O"||val.segment.toUpperCase()=="F"||val.segment.toUpperCase()=="C") && (isMarketOpen && isMarketClosedEquity)){
-            //  console.log(" Equity Market closed")
+         
              return
             }else if((val.segment.toUpperCase()=="CO"||val.segment.toUpperCase()=="CO") && (isMarketOpen && isMarketClosedCurrency)){
-             // console.log(" Currrency Market closed")
+          
              return
             }else if((val.segment.toUpperCase()=="MO"||val.segment.toUpperCase()=="MF") && (isMarketOpen && isMarketClosedMCX)){
-            //  console.log(" MCX Market closed")
+             
              return
             }else{
-              //console.log("RUN CODEEEE")
+            
 
              // EXCUTED RUN CODE INSIDE TIME
 
              if (currentTime > entryTime && entryTime < exitTime && entryTime < notradeTime) {
-              // console.log('if:', entryTime, " id ", val._id, val.type)
+       
 
               const currentDate = new Date();
               const milliseconds = currentDate.getTime();
@@ -594,13 +556,13 @@ async function run() {
                 const collection = dbTradeTools.collection(collectionName);
                 const get_view_data = await collection.aggregate([{ $sort: { _id: -1 } }]).toArray();
 
-               // console.log("get_view_data ", get_view_data)
+      
                 let data = {}
                 if (val.condition_source != null) {
                   let condition_source = val.condition_source.split(',');
                   if (condition_source.length > 0) {
                     for (const source of condition_source) {
-                      // console.log("condition_source",source)
+                  
                       const matches = source.match(/(\w+)\((\d+)\)/);
                       if (matches) {
                         const OFFSET_KEY = matches[2];
@@ -631,9 +593,9 @@ async function run() {
                 
                 try {
                   // Use eval to dynamically evaluate the condition string
-                 // console.log("data -", data, "condition String - ", val.condition)
+                
                   const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
-                  // console.log(" id ", val._id, " Type - ", val.type, "condition ", condition)
+                   
                   // Check if the condition is true or false based on the data
                   if (condition) {
 
@@ -689,19 +651,18 @@ async function run() {
 
                     }
 
-                   // console.log("condition_check_previous_trade ", condition_check_previous_trade)
+                 
 
                     var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade)
 
                     const collection_last_price = dbTradeTools.collection(val.tokensymbol);
                     const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
-                    // console.log("last_price",last_price[0].lp)
+                  
                   
                     let price_lp = last_price[0].lp
-
-                  //  console.log("checkPreviousTrade", checkPreviousTrade)
+ 
                     if (checkPreviousTrade != null) {
-                      // console.log("EXITTTTTTTTT - ", checkPreviousTrade.entry_type)
+                 
                       const currentTimestamp = Math.floor(Date.now() / 1000);
                       let type = "LX";
                       let price = checkPreviousTrade.stockInfo_bp1;
@@ -727,7 +688,7 @@ async function run() {
    
                       let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`
 
-                      // console.log("req Exit -- ", req)
+                  
                       let config = {
                         method: 'post',
                         maxBodyLength: Infinity,
@@ -752,7 +713,7 @@ async function run() {
                     }
 
                     // Your code for when the condition is true
-                  //  console.log("Condition is true ", val._id, val.symbol_name);
+                  
                     const update = {
                       $set: {
                         status: "2",
@@ -768,7 +729,7 @@ async function run() {
 
 
 
-                    // console.log("Res ", Res)
+                  
                     // code same trade status update
                     let Check_same_trade_type = "BUY"
                     if (val.type == "BUY") {
@@ -778,9 +739,9 @@ async function run() {
                     const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
 
 
-                  //  console.log("Check_same_trade_data", Check_same_trade_data)
+                 
                     if (Check_same_trade_data) {
-                    //  console.log("Check_same_trade_data._id", Check_same_trade_data._id)
+                  
                       
                       let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
                         $set: {
@@ -789,7 +750,7 @@ async function run() {
                       });
 
 
-                     // console.log("Trueeeeee", Res)
+                     
                     }
                     //End code same trade status update
 
@@ -822,10 +783,10 @@ async function run() {
                         }
                       }
                     ])
-                   // console.log("numberOfTrade_count_trade_count -",numberOfTrade_count_trade_count[0].isTotalSmall) 
+                    
                    if(numberOfTrade_count_trade_count.length > 0){
                     if(numberOfTrade_count_trade_count[0].isTotalSmall == false){
-                    // console.log("gggg")
+                     
                     const update_trade_off = {
                      $set: {
                        status: "2",
@@ -862,9 +823,7 @@ async function run() {
 
                     let Quntity = "100"
 
-                    // console.log("target -",val.target)
-                    // console.log("stoploss -",val.stoploss)
-                    // console.log("exitTime -",val.exitTime)
+                     
                     const dateObject = new Date(val.exitTime);
                     const hours = ('0' + dateObject.getUTCHours()).slice(-2);
                     const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
@@ -873,7 +832,7 @@ async function run() {
 
                     let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`
 
-                    // console.log("req -- ",req)
+                   
                     let config = {
                       method: 'post',
                       maxBodyLength: Infinity,

@@ -15,7 +15,7 @@ const UpdateSmptDetails = ({ showModal, setshowModal, data }) => {
 
     const dispatch = useDispatch();
 
-    // console.log("data", data);
+   
     const user_id = JSON.parse(localStorage.getItem('user_details')).user_id;
     const user_token = JSON.parse(localStorage.getItem('user_details')).token;
 
@@ -100,9 +100,9 @@ const UpdateSmptDetails = ({ showModal, setshowModal, data }) => {
                     "smtphost": values.host,
                 }
             }
-            console.log("req", req);
+        
 
-            // return
+         
 
             await dispatch(Update_smtp_details({ req: req, token: user_token })).unwrap().then((response) => {
 

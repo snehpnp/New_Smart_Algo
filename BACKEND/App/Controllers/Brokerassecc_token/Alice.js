@@ -325,7 +325,7 @@ class AliceBlue {
 
                 })
                 .catch(async (error) => {
-                    // console.log("error", error);
+                    
                     return res.send({ status: false, msg: "Order Cancel Error", data: error });
                 })
 
@@ -399,7 +399,7 @@ const GetAllBrokerResponse = async (user_id, res) => {
                 };
                 axios(config)
                     .then(async (response) => {
-                        // console.log(response.data[0]);
+                        
                         if (response.data[0]) {
 
                             const message = (JSON.stringify(response.data[0]));
@@ -418,7 +418,7 @@ const GetAllBrokerResponse = async (user_id, res) => {
 
 
                         } else {
-                            // console.log("NO DATA FOUND");
+                             
                         }
                     })
                     .catch(async (error) => {

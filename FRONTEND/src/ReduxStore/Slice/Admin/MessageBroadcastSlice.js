@@ -5,7 +5,7 @@ import { ADD_MESSAGE_BROADCAST, GET_ALL_MESSAGE_BROADCAST, REMOVE_MESSAGE_BROADC
 
 export const Add_Message_Broadcast = createAsyncThunk("admin/add/broadcastmessage", async (data) => {
     const { req, token } = data
-    console.log(data);
+
     try {
         const res = await ADD_MESSAGE_BROADCAST(req, token);
         return await res;
@@ -15,7 +15,7 @@ export const Add_Message_Broadcast = createAsyncThunk("admin/add/broadcastmessag
 });
 export const Getl_All_Message_Broadcast = createAsyncThunk("admin/all/broadcast_message", async (data) => {
     const { req, token } = data
-    console.log(data);
+  
     try {
         const res = await GET_ALL_MESSAGE_BROADCAST(req, token);
         return await res;

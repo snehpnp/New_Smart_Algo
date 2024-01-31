@@ -5,7 +5,7 @@ import { TRANSACTION_LICENCE, EXPIRED_SOON_USER } from "../../../Service/admin.s
 
 export const Expired_Soon_User = createAsyncThunk("user/all/helps", async (data) => {
     const { token } = data
-    console.log(data);
+    
     try {
         const res = await EXPIRED_SOON_USER({ data: {} }, token);
         return await res;
@@ -15,7 +15,7 @@ export const Expired_Soon_User = createAsyncThunk("user/all/helps", async (data)
 });
 export const Transcation_Licence = createAsyncThunk("user/all/helps", async (data) => {
     const { token } = data
-    console.log(data);
+    
     try {
         const res = await TRANSACTION_LICENCE({ data: {} }, token);
         return await res;

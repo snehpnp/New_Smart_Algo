@@ -69,7 +69,7 @@ const MsgBroadCast = () => {
             return errors;
         },
         onSubmit: async (values) => {
-            console.log(values);
+            
             const req = {
                 "Broker": values.Broker,
                 "message": values.message,
@@ -81,7 +81,7 @@ const MsgBroadCast = () => {
                     toast.error(response.data.msg);
                 }
                 else if (response.status) {
-                    // console.log("response.status", response.status)
+                     
                     setRefresh(!refresh)
                     formik.setFieldValue('message', "")
                     formik.setFieldValue('Strategy', "")
@@ -110,19 +110,7 @@ const MsgBroadCast = () => {
         { name: 'message', label: 'Entery Your Message', type: 'msgbox', label_size: 12, row_size: 3, col_size: 12, disable: true },
     ];
 
-    // const data = async () => {
-    //     await dispatch(Get_All_Service_for_Client({
-    //         req: {
-    //         }, token: user_token
-    //     })).unwrap().then((response) => {
-    //         if (response.status) {
-    //             setAllStrategy({
-    //                 loading: false,
-    //                 data: response.data
-    //             });
-    //         }
-    //     })
-    // }
+     
 
 
 

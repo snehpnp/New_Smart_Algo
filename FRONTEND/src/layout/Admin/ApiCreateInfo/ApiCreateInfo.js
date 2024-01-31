@@ -31,7 +31,7 @@ const ApiCreateInfo = () => {
 
     const goToDashboard = JSON.parse(localStorage.getItem("user_details_goTo"));
     
-    console.log("Config.react_domain - ",Config.react_domain)
+ 
 
 
     const data = async () => {
@@ -57,7 +57,7 @@ const ApiCreateInfo = () => {
     }
 
 
-    console.log("UserDetails Broker api creation- ",UserDetails.data)
+     
     return <>
         <Content Page_title="All Api-Create Info's" button_status={false}>
             <div class="row">

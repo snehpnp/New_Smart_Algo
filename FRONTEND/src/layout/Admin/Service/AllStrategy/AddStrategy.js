@@ -144,17 +144,14 @@ const AddStrategy = () => {
                 "strategy_amount_early": values.yearly_plan,
                 "plans": SelectPlanArr
             }
-            // console.log(req);
-
-            //  console.log('req', req)
-            // return 
+          
 
             await dispatch(Add_Strategy({ req: req, token: AdminToken })).unwrap().then((response) => {
                 if (response.status === 409) {
                     toast.error(response.data.msg);
                 }
                 else if (response.status) {
-                    console.log("response: ", response)
+                   
                     toast.success(response.msg);
                     setTimeout(() => {
                         navigate("/admin/strategies")
@@ -208,29 +205,7 @@ const AddStrategy = () => {
         getservice()
     }, [])
 
-
-
-    // const SelectPlanValues = (name, value) => {
-    //     setSelectPlanArr((prev) => {
-    //         // Check if an entry with the same "type" already exists
-    //         const index = prev.findIndex((obj) => obj.type === name);
-
-    //     if (index !== -1) {
-    //             // Update the existing entry
-    //             prev[index] = { type: name, price: value };
-    //         } else {
-    //             // If the "type" is unique, add a new entry
-
-    //         return [...prev];
-    //     });
-    // }
-
-
-    // console.log("SelectPlanArr", SelectPlanArr)
-
-    //         return [...prev];
-    //     });
-    // }
+ 
 
 
     return (
