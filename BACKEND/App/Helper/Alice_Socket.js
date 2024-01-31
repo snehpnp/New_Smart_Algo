@@ -24,13 +24,11 @@ let socketObject = null;
 
 const Alice_Socket = async () => {
 
- 
-    var rr = 0;
+  var rr = 0;
     const url = "wss://ws1.aliceblueonline.com/NorenWS/"
     var socket = null
     var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
- 
-    const stock_live_price = db_main.collection('token_chain');
+  const stock_live_price = db_main.collection('token_chain');
     const updateToken = await stock_live_price.find({}).toArray();
 
     var channelstr = ""
@@ -49,13 +47,14 @@ const Alice_Socket = async () => {
     var aliceBaseUrl = "https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/"
     var userid = broker_infor.user_id
     var userSession1 = broker_infor.access_token
+    var trading_status = broker_infor.trading_status
     var channelList = alltokenchannellist
     // var channelList = "NSE|14366#NFO|43227"
     var type = { "loginType": "API" }
 
-  
-
     //  Step -1
+
+  if(broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on"){
     try {
 
         await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
@@ -66,7 +65,7 @@ const Alice_Socket = async () => {
 
         }).then(res => {
 
-
+            // console.log("res - ",res)
 
             if (res.data.stat == "Ok") {
 
@@ -158,12 +157,16 @@ const Alice_Socket = async () => {
             }
         })
             .catch((error) => {
-                return error.response
+            
+
+                return "error"
             })
 
 
     } catch (error) {
         console.log("Error createSocketSess", error);
+    }
+
     }
 
 

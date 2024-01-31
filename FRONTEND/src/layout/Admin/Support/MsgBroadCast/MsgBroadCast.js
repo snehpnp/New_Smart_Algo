@@ -47,11 +47,11 @@ const MsgBroadCast = () => {
 
 
     const broker_list = async () => {
-        await dispatch(GET_PANEL_BROKERS({ domain: "sneh.com" })).unwrap().then((response) => {
-            if (response.status) {
-                setBrokers(response.data.broker_id)
-            }
-        })
+        // await dispatch(GET_PANEL_BROKERS({ domain: "sneh.com" })).unwrap().then((response) => {
+        //     if (response.status) {
+        //         setBrokers(response.data.broker_id)
+        //     }
+        // })
     }
 
     const formik = useFormik({

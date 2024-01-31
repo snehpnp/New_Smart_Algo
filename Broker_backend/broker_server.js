@@ -222,7 +222,7 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
 
 
   } else {
-console.log("Admin Trading off ")
+    console.log("Admin Trading off ")
   }
 
 }
@@ -785,7 +785,8 @@ app.post('/broker-signals', async (req, res) => {
             let Signal_req1 = new Signals(Signal_req)
             var SignalSave = await Signal_req1.save();
           } catch (error) {
-            return res.send("ok")
+            return res.send({ status: false, msg: "Insert signal issue" })
+            
           }
 
 
@@ -939,17 +940,18 @@ app.post('/broker-signals', async (req, res) => {
 
 
         } else {
-          return res.send('Incorrect Signal Key');
+          return res.send({ status: false, msg: "Incorrect Signal Key" });
         }
 
-        return res.send({ msg: client_key });
+        return res.send({ status: true, msg: client_key });
       } else {
 
-        return res.send("No Signal Key Recevie");
+        return res.send({ status: false, msg: "No Signal Key Recevie" });
       }
 
     } else {
-      console.log('receive signals -', req.body);
+     // console.log('receive signals -', req.body);
+      return res.send({ status: false, msg: "req is not correct" });
     }
 
   } catch (error) {
