@@ -192,7 +192,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                             if (response) {
 
 
-                                const Exist_entry_order = response.data.body.NetPositionDetail.find(item1 => item1.ScripCode === token[0].instrument_token);
+                                const Exist_entry_order = response.data.body.NetPositionDetail.find(item1 => item1.ScripCode === parseInt(token[0].instrument_token));
                                  
                                 if(Exist_entry_order != undefined){
                                    
@@ -238,7 +238,31 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                                 
                                 }else{
-
+                                    BrokerResponse.create({
+                                        user_id: item._id,
+                                        receive_signal: signal_req,
+                                        strategy: strategy,
+                                        type: type,
+                                        symbol: input_symbol,
+                                        order_status: "Entry Not Exist",
+                                        order_id: "",
+                                        trading_symbol: "",
+                                        broker_name: "FIVEPAISA",
+                                        send_request: send_rr,
+                                        reject_reason: "This Script position Empty",
+    
+                                    })
+                                        .then((BrokerResponseCreate) => {
+                                            // console.log('User created and saved:', BrokerResponseCreate._id)
+                                        })
+                                        .catch((err) => {
+                                            try {
+                                                console.log('Error creating and saving user:', err);
+                                            } catch (e) {
+                                                console.log("duplicate key")
+                                            }
+    
+                                        });
                                 }
                                 
                             
