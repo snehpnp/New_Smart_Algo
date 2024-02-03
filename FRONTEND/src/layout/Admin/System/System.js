@@ -78,10 +78,10 @@ const System = () => {
             dataField: 'panel_short_name',
             text: 'Company Short Name'
         },
-        {
-            dataField: 'broker_url',
-            text: 'Broker Name'
-        },
+        // {
+        //     dataField: 'broker_url',
+        //     text: 'Broker Name'
+        // },
         {
             dataField: 'prefix',
             text: 'Version'
