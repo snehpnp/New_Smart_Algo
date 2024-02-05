@@ -28,7 +28,7 @@ const TradeHistory = () => {
     const location = useLocation();
 
 
-    console.log("hello",location)
+   // console.log("hello",location)
     
 
     const token = JSON.parse(localStorage.getItem("user_details")).token;
@@ -330,7 +330,7 @@ const TradeHistory = () => {
                     alert("Please Select Atleast One Symbol")
                 }
                 else {
-                    console.log(selected1);
+                    console.log("UpdateStopLoss",selected1);
                     // return
                     await dispatch(
                         Update_Signals({
@@ -360,21 +360,46 @@ const TradeHistory = () => {
 
 
     const Set_Entry_Exit_Qty = (row, event, qty_persent, symbol) => {
-
+       
+        //alert(qty_persent)
 
         let a = No_Negetive_Input_regex(event)
 
-        console.log(event);
-        // if (a) {
+      //  console.log("a -",a)
+
+       // console.log(event);
+         if (a) {
 
         if (parseInt(event) > parseInt(qty_persent)) {
             alert('Error: Value cannot be greater than ' + qty_persent);
-            setInputValue('');
-        } else {
-            setInputValue(event);
+            //setInputValue('');
 
+            setInputValue(qty_persent);
+            console.log("inputValue" ,inputValue)
             setCreateSignalRequest((prev) => {
                 return prev.map((item) => {
+  
+                    if (item.trade_symbol === symbol) { // Assuming 'symbol' is the unique identifier
+                        return {
+                            ...item,
+                            new_qty_persent: qty_persent ? event : item.old_qty_persent
+                        };
+                    }
+                    return item;
+
+                    // return { ...item, new_qty_persent: event ? event : item.old_qty_persent };
+                });
+            });
+
+
+
+
+        } else {
+            setInputValue(event);
+            console.log("inputValue" ,inputValue)
+            setCreateSignalRequest((prev) => {
+                return prev.map((item) => {
+                    
 
                     if (item.trade_symbol === symbol) { // Assuming 'symbol' is the unique identifier
                         return {
@@ -388,10 +413,10 @@ const TradeHistory = () => {
                 });
             });
         }
-        // } else {
-        //     alert('text not allow');
+        } else {
+            alert('text not allow');
 
-        // }
+        }
     }
 
 
@@ -402,7 +427,7 @@ const TradeHistory = () => {
 
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
 
-
+             // console.log("pre_tag",pre_tag)
 
             if (pre_tag.new_qty_persent > pre_tag.old_qty_persent) {
                 alert('Error: Value cannot be greater than ' + pre_tag.old_qty_persent);
@@ -411,7 +436,13 @@ const TradeHistory = () => {
 
 
             let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${pre_tag.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${pre_tag.client_persnal_key}|TradeType:${pre_tag.TradeType}|Demo:demo`
+             
+           
+           // console.log("req - ",req)
 
+
+
+            
 
             let config = {
                 method: 'post',
@@ -479,7 +510,8 @@ const TradeHistory = () => {
                             expiry: rowdata.expiry,
                             strategy: rowdata.strategy,
                             old_qty_persent: rowdata.entry_qty_percent && rowdata.exit_qty_percent ? (parseInt(rowdata.entry_qty_percent) - parseInt(rowdata.exit_qty_percent)) : rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent,
-                            new_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent
+                            // new_qty_persent: rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent
+                            new_qty_persent: rowdata.entry_qty_percent && rowdata.exit_qty_percent ? (parseInt(rowdata.entry_qty_percent) - parseInt(rowdata.exit_qty_percent)) : rowdata.entry_qty_percent ? rowdata.entry_qty_percent : rowdata.exit_qty_percent,
                         };
                         if (rowdata.entry_type === "") {
                             setCreateSignalRequest(oldValues => {
@@ -837,7 +869,7 @@ const TradeHistory = () => {
                                             <div>
                                                 <input
                                                     // key={index}
-                                                    type="text"
+                                                    type="number"
                                                     name="quantity"
                                                     className=""
                                                     id="quantity"
@@ -852,6 +884,8 @@ const TradeHistory = () => {
                                                                 row.trade_symbol
                                                             )
                                                     }
+                                                   
+                                                    
                                                     defaultValue={inputValue ? inputValue : row.old_qty_persent}
                                                     max={row.old_qty_persent}
                                                 // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}

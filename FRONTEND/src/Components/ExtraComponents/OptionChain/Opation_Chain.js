@@ -213,7 +213,9 @@ const HelpCenter = () => {
 
     const RemoveClases = (option_type, row_data, call_type, index,) => {
 
-   CreateSignalRequest && CreateSignalRequest.filter((item) => {
+
+        //  alert("okkkkkkkkk")
+        CreateSignalRequest && CreateSignalRequest.filter((item) => {
             const element1 = $('.button_call_sell_' + item.call_token._id);
             element1.removeClass('active');
             const element2 = $('.button_call_buy_' + item.call_token);
@@ -234,17 +236,23 @@ const HelpCenter = () => {
     const CreateRequest = (option_type, row_data, call_type, index) => {
 
 
+
+
+
         // alert("okkkkk")        
 
 
         // alert(option_type === "CALL" ? `${option_type}_${row_data.call_token}` : `${option_type}_${row_data.put_token}`)
 
 
+        // alert(call_type)
+
         if (strategyRef.current === "") {
             alert("Please Select Strategy First")
         } else {
 
-                   // ------ For Add Class To Button
+
+            // ------ For Add Class To Button
 
             OptionChainData.data && OptionChainData.data.filter((item) => {
                 if (item.call_token === row_data.call_token && call_type === "LE" && option_type === "CALL") {
@@ -307,6 +315,11 @@ const HelpCenter = () => {
 
 
     // ------------------------------------ CREATE-CHAIN-FOR-EXECUTE-TRADE ------------------------------------
+
+
+    //  console.log("CreateSignalRequest ",CreateSignalRequest)
+
+
 
     const ExcuteTradeButton = () => {
 
@@ -465,7 +478,7 @@ const HelpCenter = () => {
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-               // url: 'http://localhost:8000/broker-signals',
+                // url: 'http://localhost:8000/broker-signals',
                 url: `${getBrokerUrl && getBrokerUrl}`,
                 headers: {
                     'Content-Type': 'text/plain'
@@ -475,6 +488,10 @@ const HelpCenter = () => {
 
             axios.request(config)
                 .then((response) => {
+
+
+
+                   // console.log("cpppp", response.data.status)
 
                     if (response.data.status) {
 
@@ -536,7 +553,7 @@ const HelpCenter = () => {
                 }
             })
     }
-    
+
     useEffect(() => {
         getPanelDetails()
         symbols()
@@ -553,7 +570,7 @@ const HelpCenter = () => {
         // Check if the current time is after 3:30 PM in IST timezone
         const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
 
-       // console.log("isAfterCutoffTime", isAfterCutoffTime)
+        // console.log("isAfterCutoffTime", isAfterCutoffTime)
 
 
 
@@ -675,7 +692,6 @@ const HelpCenter = () => {
         let type = { loginType: "API" };
         let channelList = TokenSymbolChain && TokenSymbolChain;
 
-
         if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
 
 
@@ -725,9 +741,6 @@ const HelpCenter = () => {
             }
 
         }
-
-            }
-        
 
 
     };
@@ -982,7 +995,7 @@ const HelpCenter = () => {
         </ >
     )
 
-
+}
 
 
 export default HelpCenter

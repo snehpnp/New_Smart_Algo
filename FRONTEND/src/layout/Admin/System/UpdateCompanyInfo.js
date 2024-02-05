@@ -116,12 +116,12 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
 
     const fields = [
         { name: 'companyname', label: 'Company Name', type: 'text', label_size: 12, col_size: 6, disable: false },
-        { name: 'panel_key', label: 'Panel Key', type: 'text', label_size: 12, col_size: 6, disable: false },
+        { name: 'panel_key', label: 'Panel Key', type: 'text', label_size: 12, col_size: 6, disable: true },
         { name: 'shortname', label: 'Short Name', type: 'text', label_size: 12, col_size: 6, disable: false },
-        { name: 'broker', label: 'Broker Url', type: 'text', label_size: 12, col_size: 6, disable: false },
-        { name: 'domain_url', label: 'Domain Url', type: 'text', label_size: 12, col_size: 6, disable: false },
-        { name: 'domain_url_https', label: 'Login Url', type: 'text', label_size: 12, col_size: 6, disable: false },
-        { name: 'version', label: 'Version ', type: 'text', label_size: 12, col_size: 6, disable: false },
+        // { name: 'broker', label: 'Broker Url', type: 'text', label_size: 12, col_size: 6, disable: true },
+        { name: 'domain_url', label: 'Domain Url', type: 'text', label_size: 12, col_size: 6, disable: true },
+        { name: 'domain_url_https', label: 'Login Url', type: 'text', label_size: 12, col_size: 6, disable: true },
+        { name: 'version', label: 'Version ', type: 'text', label_size: 12, col_size: 6, disable: true },
 
     ];
 
