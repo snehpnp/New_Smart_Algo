@@ -325,7 +325,7 @@ const BrokerResponse = () => {
             <th>Quantity</th>
             <th>Strategy</th>
             <th>Order Type</th>
-            <th>Profuct Type</th>
+            <th>Product Type</th>
             <th>Trading </th>
           </tr>
         </thead>
