@@ -231,29 +231,44 @@ class OptionChain {
             var today = new Date();
             var formattedDate = today.getFullYear() + '/' + (today.getMonth() + 1).toString()+ '/' + today.getDate().toString();
 
+            // var GetTrade = await MainSignals_modal.aggregate([
+            //     {
+            //         $addFields: {
+            //             entry_qty_percent_int: { $toInt: "$entry_qty_percent" },
+            //             exit_qty_percent_int: {
+            //                 $cond: {
+            //                     if: {
+            //                         $or: [
+            //                             { $eq: ["$exit_qty_percent", ""] },
+            //                             { $eq: ["$exit_qty_percent", null] },
+            //                         ],
+            //                     },
+            //                     then: 0,
+            //                     else: { $toInt: "$exit_qty_percent" },
+            //                 },
+            //             },
+            //         },
+            //     },
+            //     {
+            //         $match: {
+            //             $expr: {
+            //                 $and: [
+            //                     { $gt: ["$entry_qty_percent_int", "$exit_qty_percent_int"] },
+            //                     { $eq: ["$dt_date", formattedDate] }
+            //                 ]
+            //             }
+            //         }
+            //     }
+
+            // ]);
+
             var GetTrade = await MainSignals_modal.aggregate([
-                {
-                    $addFields: {
-                        entry_qty_percent_int: { $toInt: "$entry_qty_percent" },
-                        exit_qty_percent_int: {
-                            $cond: {
-                                if: {
-                                    $or: [
-                                        { $eq: ["$exit_qty_percent", ""] },
-                                        { $eq: ["$exit_qty_percent", null] },
-                                    ],
-                                },
-                                then: 0,
-                                else: { $toInt: "$exit_qty_percent" },
-                            },
-                        },
-                    },
-                },
+                
                 {
                     $match: {
                         $expr: {
                             $and: [
-                                { $gt: ["$entry_qty_percent_int", "$exit_qty_percent_int"] },
+                                { $gt: [{ $toInt: "$entry_qty" }, { $toInt: "$exit_qty" }] },
                                 { $eq: ["$dt_date", formattedDate] }
                             ]
                         }
@@ -262,11 +277,16 @@ class OptionChain {
 
             ]);
 
-            if (!GetTrade) {
+           // console.log("GetTrade ",GetTrade.length)
+
+        
+
+            if (GetTrade.length  > 0) {
+                return res.send({ status: true, msg: 'Done', data: GetTrade });
+            }else{
+                
                 return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
             }
-
-            return res.send({ status: true, msg: 'Done', data: GetTrade });
 
         } catch (error) {
             console.log("Error Get Open Position data-", error);

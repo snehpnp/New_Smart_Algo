@@ -205,11 +205,16 @@ const HelpCenter = () => {
 
 
 
+
+
+
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
 
 
     const RemoveClases = (option_type, row_data, call_type, index,) => {
 
+
+        //  alert("okkkkkkkkk")
         CreateSignalRequest && CreateSignalRequest.filter((item) => {
             const element1 = $('.button_call_sell_' + item.call_token._id);
             element1.removeClass('active');
@@ -230,9 +235,22 @@ const HelpCenter = () => {
 
     const CreateRequest = (option_type, row_data, call_type, index) => {
 
+
+
+
+
+        // alert("okkkkk")        
+
+
+        // alert(option_type === "CALL" ? `${option_type}_${row_data.call_token}` : `${option_type}_${row_data.put_token}`)
+
+
+        // alert(call_type)
+
         if (strategyRef.current === "") {
             alert("Please Select Strategy First")
         } else {
+
 
             // ------ For Add Class To Button
 
@@ -297,6 +315,11 @@ const HelpCenter = () => {
 
 
     // ------------------------------------ CREATE-CHAIN-FOR-EXECUTE-TRADE ------------------------------------
+
+
+    //  console.log("CreateSignalRequest ",CreateSignalRequest)
+
+
 
     const ExcuteTradeButton = () => {
 
@@ -466,6 +489,10 @@ const HelpCenter = () => {
             axios.request(config)
                 .then((response) => {
 
+
+
+                   // console.log("cpppp", response.data.status)
+
                     if (response.data.status) {
 
                         toast.success("Order Place Sucessfully");
@@ -495,7 +522,7 @@ const HelpCenter = () => {
                         toast.success(response.data.msg);
 
                     }
-
+                    
                 })
                 .catch((error) => {
                     console.log(error);
@@ -542,6 +569,12 @@ const HelpCenter = () => {
 
         // Check if the current time is after 3:30 PM in IST timezone
         const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
+
+        // console.log("isAfterCutoffTime", isAfterCutoffTime)
+
+
+
+
 
     }, [])
 
@@ -659,7 +692,6 @@ const HelpCenter = () => {
         let type = { loginType: "API" };
         let channelList = TokenSymbolChain && TokenSymbolChain;
 
-
         if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
 
 
@@ -710,263 +742,260 @@ const HelpCenter = () => {
 
         }
 
-    }
+
+    };
 
 
 
+    useEffect(() => {
+        ShowLivePrice();
+    }, [UserDetails, TokenSymbolChain, showModal]);
 
 
 
+    //  GET_USER_DETAILS
+    const UserBrokerDetails = async () => {
+        const response = await GetAccessToken({ broker_name: "aliceblue" });
 
-useEffect(() => {
-    ShowLivePrice();
-}, [UserDetails, TokenSymbolChain, showModal]);
-
-
-
-//  GET_USER_DETAILS
-const UserBrokerDetails = async () => {
-    const response = await GetAccessToken({ broker_name: "aliceblue" });
-
-    if (response.status) {
-        setUserDetails(response.data[0]);
-    }
-
-};
-useEffect(() => {
-    UserBrokerDetails();
-}, []);
-
-
-const test = (e) => {
-    if (e.target.value !== "") {
-        strategyRef.current = e.target.value
-    } else {
-        strategyRef.current = ""
-    }
-}
-
-return (
-    <>
-        {
-
-
-
-            All_Symbols.loading ? <Loader /> :
-                <>
-                    <Theme_Content Page_title="Option Chain" button_status={false}>
-
-                        <div className="row d-flex">
-                            <div className="col-md-2 text-secondary">
-                                <label className="text-secondary"
-                                    style={{ fontWeight: "bold", color: "black" }}
-                                >SYMBOLS</label>
-                                <select
-                                    name="symbols_filter"
-                                    className="default-select wide form-control spacing"
-                                    onChange={(e) => {
-                                        setSymbol(e.target.value)
-                                        setSymbolStrike(e.target.options[e.target.selectedIndex].getAttribute("name"))
-                                        setStrategy("")
-                                        setExpiry("")
-                                        setOptionChainData({
-                                            loading: false,
-                                            data: [],
-                                        });
-                                    }}
-                                >
-                                    <option value="" >Select Stock Name</option>
-                                    {All_Symbols.data && All_Symbols.data.map((item) => {
-                                        return <option value={item.symbol} name={item.price}>{item.symbol}</option>
-                                    })}
-                                </select>
-                            </div>
-                            <div className="col-md-2 text-secondary">
-                                <label
-                                    className="text-secondary"
-                                    style={{ fontWeight: "bold", color: "black" }}
-                                >
-                                    EXPIRY DATE
-                                </label>
-                                <select className="default-select wide form-control" name="expiry_date"
-                                    onChange={(e) => {
-                                        setExpiry(e.target.value)
-                                    }}
-                                    value={expiry}
-                                >
-                                    <option value="" >Select Expiry</option>
-                                    {All_Symbols_Expiry.data && All_Symbols_Expiry.data.map((item) => {
-                                        return <option value={item.uniqueExpiryValues}>{get_thre_digit_month(item.expiryDate)}</option>
-                                    })}
-                                </select>
-                            </div>
-                            <div className="col-md-2 ">
-                                <label
-                                    className="text-secondary"
-                                    style={{ fontWeight: "bold", color: "black" }}
-                                >
-                                    STRATEGY
-                                </label>
-                                <select className="default-select wide form-control" name="strategyname" onChange={(e) => {
-                                    setStrategy(e.target.value);
-                                    test(e);
-
-                                }} value={strategy}
-
-                                // disabled={CreateSignalRequest.length === 0}
-                                >
-                                    <option value="">Select Strategy</option>
-                                    {getAllStrategyName.data &&
-                                        getAllStrategyName.data.map((item) => {
-                                            return (
-                                                <option value={item.strategy_name}>
-                                                    {item.strategy_name}
-                                                </option>
-                                            );
-                                        })}
-                                </select>
-                            </div>
-                            <div className="col-md-2 text-secondary ">
-                                <label
-                                    className="text-secondary"
-                                    style={{ fontWeight: "bold", color: "black" }}
-                                > Price
-                                </label>
-                                <input type="number" className="new-input-control form-control" />
-                            </div>
-                            <div className="col-md-4 d-flex justify-content-end align-items-center text-secondary ">
-                                <button
-                                    className="btn btn-primary me-2"
-                                    onClick={(e) => ExcuteTradeButton()}
-                                    disabled={CreateSignalRequest.length === 0}
-
-                                >
-                                    Execute Trade
-                                </button>
-                            </div>
-                        </div>
-
-
-                        <div className='option-chain mt-2'>
-
-                            <FullDataTable TableColumns={columns} tableData={OptionChainData.data} pagination1={true}></FullDataTable>
-                        </div>
-
-
-                        {showModal ? (
-                            <>
-                                <Modal
-                                    isOpen={showModal}
-                                    size="xl"
-                                    title="Request Confirmation"
-                                    cancel_btn={true}
-                                    // hideBtn={false}
-                                    // disabled_submit={disabled}
-                                    hideCloseButton={true}
-                                    btn_name="Confirm"
-                                    Submit_Function={Done_For_Trade}
-                                    Submit_Cancel_Function={Cancel_Request}
-                                    handleClose={() => setshowModal(false)}
-                                >
-                                    <BasicDataTable
-                                        TableColumns={[
-                                            {
-                                                dataField: "index",
-                                                text: "SR. No.",
-                                                formatter: (cell, row, rowIndex) => rowIndex + 1,
-                                            },
-                                            {
-                                                dataField: "Symbol",
-                                                text: "Symbol",
-                                            },
-                                            {
-                                                dataField: "",
-                                                text: "Enter Qty (%)",
-                                                formatter: (cell, row, rowIndex) => (
-                                                    <div>
-                                                        <input
-                                                            // key={index}
-                                                            type="text"
-                                                            name="quantity"
-                                                            className=""
-                                                            id="quantity"
-                                                            placeholder="Enter Qty (%)"
-
-                                                            onChange={
-                                                                (e) =>
-                                                                    Set_Entry_Exit_Qty(
-                                                                        row,
-                                                                        e.target.value,
-                                                                        row.Symbol
-                                                                    )
-
-                                                                //  setEnterQty(e.target.value)
-                                                            }
-                                                        // value={inputValue ? inputValue : row.old_qty_persent}
-                                                        // max={row.old_qty_persent}
-                                                        // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
-
-                                                        />
-                                                    </div>
-                                                ),
-
-
-
-                                            },
-                                            {
-                                                dataField: "price",
-                                                text: "Price",
-                                                formatter: (cell, row, rowIndex) => (
-                                                    <div>
-                                                        {row.type === "BUY" ?
-                                                            <span className={`BP1_Put_Price_${row.token} `}></span>
-                                                            : <span className={`SP1_Call_Price_${row.token}`}></span>
-                                                        }
-                                                    </div>
-                                                ),
-
-                                            },
-                                            {
-                                                dataField: "type",
-                                                text: "Trade Type",
-                                            },
-                                            {
-                                                dataField: "call_type",
-                                                text: "Call Type",
-                                            },
-                                            {
-                                                dataField: "strategy",
-                                                text: "Strategy",
-                                            },
-                                            {
-                                                dataField: "Remove",
-                                                text: "Remove",
-                                                formatter: (cell, row, rowIndex) => <Trash2 className='text-danger' onClick={() => {
-                                                    remoeveService(row.token)
-                                                }} />,
-
-                                            },
-                                        ]}
-                                        tableData={ExecuteTradeData.data && ExecuteTradeData.data}
-
-                                    />
-                                </Modal>
-                            </>
-                        ) : (
-                            ""
-                        )}
-
-
-                    </Theme_Content>
-                </>
+        if (response.status) {
+            setUserDetails(response.data[0]);
         }
 
+    };
+    useEffect(() => {
+        UserBrokerDetails();
+    }, []);
 
-        <ToastButton />
-    </ >
-)
 
-};
+    const test = (e) => {
+        if (e.target.value !== "") {
+            strategyRef.current = e.target.value
+        } else {
+            strategyRef.current = ""
+        }
+    }
+
+    return (
+        <>
+            {
+
+
+
+                All_Symbols.loading ? <Loader /> :
+                    <>
+                        <Theme_Content Page_title="Option Chain" button_status={false}>
+
+                            <div className="row d-flex">
+                                <div className="col-md-2 text-secondary">
+                                    <label className="text-secondary"
+                                        style={{ fontWeight: "bold", color: "black" }}
+                                    >SYMBOLS</label>
+                                    <select
+                                        name="symbols_filter"
+                                        className="default-select wide form-control spacing"
+                                        onChange={(e) => {
+                                            setSymbol(e.target.value)
+                                            setSymbolStrike(e.target.options[e.target.selectedIndex].getAttribute("name"))
+                                            setStrategy("")
+                                            setExpiry("")
+                                            setOptionChainData({
+                                                loading: false,
+                                                data: [],
+                                            });
+                                        }}
+                                    >
+                                        <option value="" >Select Stock Name</option>
+                                        {All_Symbols.data && All_Symbols.data.map((item) => {
+                                            return <option value={item.symbol} name={item.price}>{item.symbol}</option>
+                                        })}
+                                    </select>
+                                </div>
+                                <div className="col-md-2 text-secondary">
+                                    <label
+                                        className="text-secondary"
+                                        style={{ fontWeight: "bold", color: "black" }}
+                                    >
+                                        EXPIRY DATE
+                                    </label>
+                                    <select className="default-select wide form-control" name="expiry_date"
+                                        onChange={(e) => {
+                                            setExpiry(e.target.value)
+                                        }}
+                                        value={expiry}
+                                    >
+                                        <option value="" >Select Expiry</option>
+                                        {All_Symbols_Expiry.data && All_Symbols_Expiry.data.map((item) => {
+                                            return <option value={item.uniqueExpiryValues}>{get_thre_digit_month(item.expiryDate)}</option>
+                                        })}
+                                    </select>
+                                </div>
+                                <div className="col-md-2 ">
+                                    <label
+                                        className="text-secondary"
+                                        style={{ fontWeight: "bold", color: "black" }}
+                                    >
+                                        STRATEGY
+                                    </label>
+                                    <select className="default-select wide form-control" name="strategyname" onChange={(e) => {
+                                        setStrategy(e.target.value);
+                                        test(e);
+
+                                    }} value={strategy}
+
+                                    // disabled={CreateSignalRequest.length === 0}
+                                    >
+                                        <option value="">Select Strategy</option>
+                                        {getAllStrategyName.data &&
+                                            getAllStrategyName.data.map((item) => {
+                                                return (
+                                                    <option value={item.strategy_name}>
+                                                        {item.strategy_name}
+                                                    </option>
+                                                );
+                                            })}
+                                    </select>
+                                </div>
+                                <div className="col-md-2 text-secondary ">
+                                    <label
+                                        className="text-secondary"
+                                        style={{ fontWeight: "bold", color: "black" }}
+                                    > Price
+                                    </label>
+                                    <input type="number" className="new-input-control form-control" />
+                                </div>
+                                <div className="col-md-4 d-flex justify-content-end align-items-center text-secondary ">
+                                    <button
+                                        className="btn btn-primary me-2"
+                                        onClick={(e) => ExcuteTradeButton()}
+                                        disabled={CreateSignalRequest.length === 0}
+
+                                    >
+                                        Execute Trade
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <div className='option-chain mt-2'>
+
+                                <FullDataTable TableColumns={columns} tableData={OptionChainData.data} pagination1={true}></FullDataTable>
+                            </div>
+
+
+                            {showModal ? (
+                                <>
+                                    <Modal
+                                        isOpen={showModal}
+                                        size="xl"
+                                        title="Request Confirmation"
+                                        cancel_btn={true}
+                                        // hideBtn={false}
+                                        // disabled_submit={disabled}
+                                        hideCloseButton={true}
+                                        btn_name="Confirm"
+                                        Submit_Function={Done_For_Trade}
+                                        Submit_Cancel_Function={Cancel_Request}
+                                        handleClose={() => setshowModal(false)}
+                                    >
+                                        <BasicDataTable
+                                            TableColumns={[
+                                                {
+                                                    dataField: "index",
+                                                    text: "SR. No.",
+                                                    formatter: (cell, row, rowIndex) => rowIndex + 1,
+                                                },
+                                                {
+                                                    dataField: "Symbol",
+                                                    text: "Symbol",
+                                                },
+                                                {
+                                                    dataField: "",
+                                                    text: "Enter Qty (%)",
+                                                    formatter: (cell, row, rowIndex) => (
+                                                        <div>
+                                                            <input
+                                                                // key={index}
+                                                                type="text"
+                                                                name="quantity"
+                                                                className=""
+                                                                id="quantity"
+                                                                placeholder="Enter Qty (%)"
+
+                                                                onChange={
+                                                                    (e) =>
+                                                                        Set_Entry_Exit_Qty(
+                                                                            row,
+                                                                            e.target.value,
+                                                                            row.Symbol
+                                                                        )
+
+                                                                    //  setEnterQty(e.target.value)
+                                                                }
+                                                            // value={inputValue ? inputValue : row.old_qty_persent}
+                                                            // max={row.old_qty_persent}
+                                                            // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
+
+                                                            />
+                                                        </div>
+                                                    ),
+
+
+
+                                                },
+                                                {
+                                                    dataField: "price",
+                                                    text: "Price",
+                                                    formatter: (cell, row, rowIndex) => (
+                                                        <div>
+                                                            {row.type === "BUY" ?
+                                                                <span className={`BP1_Put_Price_${row.token} `}></span>
+                                                                : <span className={`SP1_Call_Price_${row.token}`}></span>
+                                                            }
+                                                        </div>
+                                                    ),
+
+                                                },
+                                                {
+                                                    dataField: "type",
+                                                    text: "Trade Type",
+                                                },
+                                                {
+                                                    dataField: "call_type",
+                                                    text: "Call Type",
+                                                },
+                                                {
+                                                    dataField: "strategy",
+                                                    text: "Strategy",
+                                                },
+                                                {
+                                                    dataField: "Remove",
+                                                    text: "Remove",
+                                                    formatter: (cell, row, rowIndex) => <Trash2 className='text-danger' onClick={() => {
+                                                        remoeveService(row.token)
+                                                    }} />,
+
+                                                },
+                                            ]}
+                                            tableData={ExecuteTradeData.data && ExecuteTradeData.data}
+
+                                        />
+                                    </Modal>
+                                </>
+                            ) : (
+                                ""
+                            )}
+
+
+                        </Theme_Content>
+                    </>
+            }
+
+
+            <ToastButton />
+        </ >
+    )
+
+}
 
 
 export default HelpCenter

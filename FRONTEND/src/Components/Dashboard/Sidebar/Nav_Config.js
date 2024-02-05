@@ -159,26 +159,6 @@ export const admin_sidebar = [
     },
 
     {
-
-        'id': 9,
-        "name": 'Support',
-        "Icon": "HelpingHand",
-        "Data": [
-            {
-                'id': 1,
-                "name": 'Option Chain',
-                "route": "/admin/optionchain",
-            },
-            {
-                'id': 2,
-                "name": 'Open Position',
-                "route": "/admin/openposition",
-
-            },
-        ]
-    },
-   
-    {
         'id': 10,
         "name": 'Make Strategy',
         "Icon": "Boxes",
