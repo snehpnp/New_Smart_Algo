@@ -52,7 +52,7 @@ const Login = () => {
 
   const [UserData, setUserData] = useState("");
 
-  useEffect(() => { }, []);
+  
 
   const isValidEmail = (email) => {
     return Email_regex(email);
