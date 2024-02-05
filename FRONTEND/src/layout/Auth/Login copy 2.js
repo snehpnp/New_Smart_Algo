@@ -25,6 +25,7 @@ import { Email_regex, Mobile_regex } from "../../Utils/Common_regex";
 import { Get_Company_Logo } from '../../ReduxStore/Slice/Admin/AdminSlice'
 
 
+
 const Login = () => {
   const navigate = useNavigate();
   const data = useRef();
@@ -54,9 +55,10 @@ const Login = () => {
 
   const [test, settest] = useState([]);
 
+  
 
-
-  let SetTheme = async () => {
+ 
+  const getPanelDetails = async () => {
     let domain = window.location.host
     const req = {
       domain: Config.react_domain
@@ -66,136 +68,10 @@ const Login = () => {
     await dispatch(Get_Panel_Informtion(req))
       .unwrap()
       .then((response) => {
-        let themedata = response.data[0].theme_data[0];
-        localStorage.setItem("theme", JSON.stringify(themedata));
-
-        console.log("res", themedata)
-
-        // let themedata = response.data[0].theme_data[0];
-        // localStorage.setItem("theme", JSON.stringify(themedata));
-
-        if (themedata != undefined) {
-
-
-          console.log("themedata dashboard", themedata.dashboard)
-          console.log("themedata theme_version", themedata.theme_version)
-          console.log("themedata primary_col", themedata.primary_col)
-          console.log("themedata nav_head_col", themedata.nav_head_col)
-          console.log("themedata header_col", themedata.header_col)
-          console.log("themedata sidebar_col", themedata.sidebar_col)
-          console.log("themedata layout", themedata.layout)
-          console.log("themedata sidebar", themedata.sidebar)
-          console.log("themedata header_position", themedata.header_position)
-          console.log("themedata sidebar_position", themedata.sidebar_position)
-          console.log("themedata body_font", themedata.body_font)
-          console.log("themedata container", themedata.container)
-
-
-
-          $("body").removeClass(
-            "theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9 theme-10"
-          );
-          $("body").addClass(themedata.dashboard);
-
-          $("body").attr("data-dashboard", `${themedata.dashboard}-dashboard`);
-          $("body").attr("data-theme-version", themedata.theme_version);
-          $("body").attr("data-primary", themedata.primary_col);
-          $("body").attr("data-nav-headerbg", themedata.nav_head_col);
-          $("body").attr("data-headerbg", themedata.header_col);
-          $("body").attr("data-sibebarbg", themedata.sidebar_col);
-
-          if ($("body").attr("data-sidebar-style") === "overlay") {
-            $("body").attr("data-sidebar-style", "full");
-            $("body").attr("data-layout", themedata.layout);
-            return;
-          }
-          $("body").attr("data-layout", themedata.layout);
-          if ($("body").attr("data-layout") === "horizontal") {
-            if (themedata.sidebar === "overlay") {
-              alert("Sorry! Overlay is not possible in Horizontal layout.");
-              return;
-            }
-          }
-          if ($("body").attr("data-layout") === "vertical") {
-            if (
-              $("body").attr("data-container") === "boxed" &&
-              themedata.sidebar === "full"
-            ) {
-              alert("Sorry! Full menu is not available in Vertical Boxed layout.");
-              return;
-            }
-            if (
-              themedata.sidebar === "modern" &&
-              $("body").attr("data-sidebar-position") === "fixed"
-            ) {
-              alert(
-                "Sorry! Modern sidebar layout is not available in the fixed position. Please change the sidebar position into Static."
-              );
-              return;
-            }
-          }
-          $("body").attr("data-sidebar-style", themedata.sidebar);
-          if ($("body").attr("data-sidebar-style") === "icon-hover") {
-            $(".deznav").on(
-              "hover",
-              function () {
-                $("#main-wrapper").addClass("iconhover-toggle");
-              },
-              function () {
-                $("#main-wrapper").removeClass("iconhover-toggle");
-              }
-            );
-          }
-
-          $("body").attr("data-header-position", themedata.header_position);
-          $("body").attr("data-sidebar-position", themedata.sidebar_position);
-          $("body").attr("data-typography", themedata.body_font);
-          if (themedata.container === "boxed") {
-            if (
-              $("body").attr("data-layout") === "vertical" &&
-              $("body").attr("data-sidebar-style") === "full"
-            ) {
-              $("body").attr("data-sidebar-style", "overlay");
-              $("body").attr("data-container", themedata.container);
-              setTimeout(function () {
-                $(window).trigger("resize");
-              }, 200);
-              return;
-            }
-          }
-          $("body").attr("data-container", themedata.container);
-
-          $(window).on("resize", function () {
-            var windowWidth = $(this).width();
-            if (windowWidth > 1024) {
-              $("body").attr("data-sidebar-style", "full");
-            } else if (windowWidth > 769 && windowWidth <= 1024) {
-              $("body").attr("data-sidebar-style", "mini");
-            } else if (windowWidth <= 767) {
-              $("body").attr("data-sidebar-style", "overlay");
-            }
-          });
-
-
-        }
-
-
+        let res = response.data[0].theme_data[0];
+        localStorage.setItem("theme", JSON.stringify(res));
       });
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  };
 
   //  FOR SET COMPANY LOGO
   const CompanyName = async () => {
@@ -205,7 +81,7 @@ const Login = () => {
           setGetCompanyName(response.data && response.data[0].panel_name)
 
           $(".logo-abbr").attr('src', response.data && response.data[0].logo);
-
+          
           $(".Company_logo").html(response.data && response.data[0].panel_name);
 
 
@@ -223,11 +99,21 @@ const Login = () => {
       });
   }
 
+
+
  
 
   const isValidEmail = (email) => {
     return Email_regex(email);
   };
+
+  
+
+
+
+  
+
+ 
 
   const formik = useFormik({
     initialValues: {
@@ -236,7 +122,7 @@ const Login = () => {
     },
     validate: (values) => {
       const errors = {};
-
+     
       if (!values.password) {
         errors.password = valid_err.PASSWORD_ERROR;
       }
@@ -255,58 +141,50 @@ const Login = () => {
         Password: values.password,
         device: CheckUser,
       };
+       
+      // await dispatch(SignIn(req))
+      //   .unwrap()
+      //   .then((response) => {
+          
 
-      await dispatch(SignIn(req))
-        .unwrap()
-        .then(async(response) => {
-
-
-          if (response.status) {
-            await SetTheme()
+      //     if (response.status) {
+      //       if (response.data.Role !== "SUPERADMIN") {
+      //         setshowModal(true);
+      //         setUserData(response.data);
+      //       } else if (response.data.Role === "SUPERADMIN") {
+      //         toast.success(response.msg);
+      //         localStorage.setItem(
+      //           "user_details",
+      //           JSON.stringify(response.data)
+      //         );
+      //         localStorage.setItem(
+      //           "user_role",
+      //           JSON.stringify(response.data.Role)
+      //         );
+      //         setTimeout(() => {
+      //           navigate("/super/dashboard");
+      //         }, 1000);
+      //       }
+      //     } else {
             
-            if (response.data.Role !== "SUPERADMIN") {
-              setshowModal(true);
-              setUserData(response.data);
-            } else if (response.data.Role === "SUPERADMIN") {
-              toast.success(response.msg);
-              localStorage.setItem(
-                "user_details",
-                JSON.stringify(response.data)
-              );
-              localStorage.setItem(
-                "user_role",
-                JSON.stringify(response.data.Role)
-              );
-              setTimeout(() => {
-                navigate("/super/dashboard");
-              }, 1000);
-            }
-          } else {
-
-            toast.error(response.msg);
-          }
-        })
-        .catch((error) => {
-          console.log("Error", error);
-        });
+      //       toast.error(response.msg);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log("Error", error);
+      //   });
     },
   });
 
   const fields = [
-    { name: "email", label: "Email", type: "email" },
+    { name: "email", label: "Emailsss", type: "email" },
     { name: "password", label: "Password", type: "password" },
 
   ];
 
-
-
-
-
-
-
   // ------------------ For Otp Varify --------------------------
 
-
+  
 
   const verifyOTP = async () => {
     if (typeOtp === "") {
@@ -326,7 +204,7 @@ const Login = () => {
 
     await dispatch(Verify_User_Device(req))
       .then((res) => {
-
+  
         if (res.payload.firstlogin === "0") {
           setDesclaimerModal(true)
         } else {
@@ -399,7 +277,7 @@ const Login = () => {
   };
   // CLOSE THE MODAL
   const verifyOTP_login = async () => {
-
+     
     if (getOtp && getOtp == typeOtp1) {
       // const socket = socketIOClient(`${Config.base_url}`);
       // socket.emit("logout_user_from_other_device_req", {
@@ -470,7 +348,7 @@ const Login = () => {
     await dispatch(OTP_SEND_USEHERES(req))
       .unwrap()
       .then((response) => {
-
+         
         setgetOtp(response.data);
         if (response.status) {
           setshowModal1(false);
@@ -487,11 +365,111 @@ const Login = () => {
 
   //  for set theme
 
+  
+
+
+ 
+
+  // let theme_id = localStorage.getItem("theme");
+
+  // if (theme_id != null) {
+  //   let themedata = JSON.parse(theme_id);
+
+  //   $("body").removeClass(
+  //     "theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9  theme-10"
+  //   );
+  //   $("body").addClass(themedata.dashboard);
+
+  //   $("body").attr("data-dashboard", `${themedata.dashboard}-dashboard`);
+  //   $("body").attr("data-theme-version", themedata.theme_version);
+  //   $("body").attr("data-primary", themedata.primary_col);
+  //   $("body").attr("data-nav-headerbg", themedata.nav_head_col);
+  //   $("body").attr("data-headerbg", themedata.header_col);
+  //   $("body").attr("data-sibebarbg", themedata.sidebar_col);
+
+  //   if ($("body").attr("data-sidebar-style") === "overlay") {
+  //     $("body").attr("data-sidebar-style", "full");
+  //     $("body").attr("data-layout", themedata.layout);
+  //     return;
+  //   }
+  //   $("body").attr("data-layout", themedata.layout);
+  //   if ($("body").attr("data-layout") === "horizontal") {
+  //     if (themedata.sidebar === "overlay") {
+  //       alert("Sorry! Overlay is not possible in Horizontal layout.");
+  //       return;
+  //     }
+  //   }
+  //   if ($("body").attr("data-layout") === "vertical") {
+  //     if (
+  //       $("body").attr("data-container") === "boxed" &&
+  //       themedata.sidebar === "full"
+  //     ) {
+  //       alert("Sorry! Full menu is not available in Vertical Boxed layout.");
+  //       return;
+  //     }
+  //     if (
+  //       themedata.sidebar === "modern" &&
+  //       $("body").attr("data-sidebar-position") === "fixed"
+  //     ) {
+  //       alert(
+  //         "Sorry! Modern sidebar layout is not available in the fixed position. Please change the sidebar position into Static."
+  //       );
+  //       return;
+  //     }
+  //   }
+  //   $("body").attr("data-sidebar-style", themedata.sidebar);
+  //   if ($("body").attr("data-sidebar-style") === "icon-hover") {
+  //     $(".deznav").on(
+  //       "hover",
+  //       function () {
+  //         $("#main-wrapper").addClass("iconhover-toggle");
+  //       },
+  //       function () {
+  //         $("#main-wrapper").removeClass("iconhover-toggle");
+  //       }
+  //     );
+  //   }
+
+  //   $("body").attr("data-header-position", themedata.header_position);
+  //   $("body").attr("data-sidebar-position", themedata.sidebar_position);
+  //   $("body").attr("data-typography", themedata.body_font);
+  //   if (themedata.container === "boxed") {
+  //     if (
+  //       $("body").attr("data-layout") === "vertical" &&
+  //       $("body").attr("data-sidebar-style") === "full"
+  //     ) {
+  //       $("body").attr("data-sidebar-style", "overlay");
+  //       $("body").attr("data-container", themedata.container);
+  //       setTimeout(function () {
+  //         $(window).trigger("resize");
+  //       }, 200);
+  //       return;
+  //     }
+  //   }
+  //   $("body").attr("data-container", themedata.container);
+
+  //   $(window).on("resize", function () {
+  //     var windowWidth = $(this).width();
+  //     if (windowWidth > 1024) {
+  //       $("body").attr("data-sidebar-style", "full");
+  //     } else if (windowWidth > 769 && windowWidth <= 1024) {
+  //       $("body").attr("data-sidebar-style", "mini");
+  //     } else if (windowWidth <= 767) {
+  //       $("body").attr("data-sidebar-style", "overlay");
+  //     }
+  //   });
+
+ 
+  // }
+
+
+
+  
 
   // FOR DESCILMER
 
   const SubmitDesclimer = () => {
-
+   
     if (!CheckDesclaimer) {
       alert("Agree & I accept Term And Condition")
     } else {
@@ -531,64 +509,60 @@ const Login = () => {
   }
 
 
-
-
   useEffect(() => {
-    // getPanelDetails();
-    CompanyName()
-  }, []);
-
-
-
-
-
+   getPanelDetails();
+   CompanyName()
+   }, []);
+  
   return (
     <div class="vh-100">
 
-      <div className="authincation h-100">
-        <div className="container h-100">
-          <div className="row justify-content-center h-100 align-items-center">
-            <div className="col-md-6">
-              <div className="authincation-content">
-                <div className="row no-gutters">
-                  <div className="col-xl-12">
-                    <div className="auth-form">
-                      <div className="text-center mb-3">
-                        {/* <a href="#a"> logo </a> */}
-                        <span className="brand-logo">
-                          <img className="logo-abbr w-50" src="assets/icons/logo.png" alt="logo" />
-                        </span>
-                      </div>
-                      <h4 className="text-center mb-4">Sign in your account</h4>
-                      <Formikform
-                        fieldtype={fields.filter(
-                          (field) =>
-                            !field.showWhen || field.showWhen(formik.values)
-                        )}
-                        formik={formik}
-                        btn_name="Sign In"
-                        //  btn_name_signUp="Sign Up"
-                        title="forlogin1"
-                      />
-                      <div class="form-row mt-4 mb-2">
-                        <div class="mb-3 mt-1  d-flex justify-content-between ">
-                          <div><Link to="/forget">Forgot Password?</Link></div>
-                          <div><Link to="/newsignup">Sign Up</Link></div>
+<div className="authincation h-100">
+          <div className="container h-100">
+            <div className="row justify-content-center h-100 align-items-center">
+              <div className="col-md-6">
+                <div className="authincation-content">
+                  <div className="row no-gutters">
+                    <div className="col-xl-12">
+                      <div className="auth-form">
+                        <div className="text-center mb-3">
+                          {/* <a href="#a"> logo </a> */}
+                          <span className="brand-logo">
+                            <img className="logo-abbr w-50" src="assets/icons/logo.png" alt="logo" />
+                          </span>
+                        </div>
+                        <h4 className="text-center mb-4">Sign in your account</h4>
+                        <Formikform
+                          fieldtype={fields.filter(
+                            (field) =>
+                              !field.showWhen || field.showWhen(formik.values)
+                          )}
+                          formik={formik}
+                          btn_name="Sign In"
+                          //  btn_name_signUp="Sign Up"
+                          title="forlogin1"
+                        />
+                        <div class="form-row mt-4 mb-2">
+                          <div class="mb-3 mt-1  d-flex justify-content-between ">
+                            <div><Link to="/forget">Forgot Password?</Link></div>
+                            <div><Link to="/newsignup">Sign Up</Link></div>
+                          </div>
                         </div>
                       </div>
+                      <ToastButton />
                     </div>
-                    <ToastButton />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
 
       {/* For Varify OTP Modal */}
-      {showModal ? (
+
+
+      {/* {showModal ? (
         <>
           <Modal
             isOpen={showModal}
@@ -614,10 +588,13 @@ const Login = () => {
         </>
       ) : (
         ""
-      )}
+      )} */}
+      
 
       {/*  For Set Allredy Login */}
-      {showModal1 ? (
+
+
+      {/* {showModal1 ? (
         <>
           <Modal
             isOpen={showModal1}
@@ -642,10 +619,14 @@ const Login = () => {
         </>
       ) : (
         ""
-      )}
+      )} */}
+
+
 
       {/*  For Multi Login */}
-      {showModal2 ? (
+
+
+      {/* {showModal2 ? (
         <>
           <Modal
             isOpen={showModal2}
@@ -685,12 +666,14 @@ const Login = () => {
         </>
       ) : (
         ""
-      )}
+      )} */}
 
 
 
       {/*  for Desclaimer    */}
-      {desclaimerModal ? (
+
+
+      {/* {desclaimerModal ? (
         <>
           <Modal
             isOpen={desclaimerModal}
@@ -755,9 +738,8 @@ const Login = () => {
         </>
       ) : (
         ""
-      )}
+      )} */}
     </div>
   );
-};
-
-export default Login;
+}
+export default Login
