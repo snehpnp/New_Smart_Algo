@@ -10,6 +10,11 @@ export const Name_regex = (name) => {
     return emailRegex.test(name);
 }
 
+export const Stg_regex = (name) => {
+    const StgRegex = /^[a-zA-Z ]+$/
+    return StgRegex.test(name);
+}
+
 
 export const Mobile_regex = (mobile) => {
     const MobileRegex = /^[0-9]{10}$/
