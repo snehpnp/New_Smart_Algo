@@ -56,28 +56,27 @@ const Routing = () => {
       return
     }
 
-    if (roles != null) {
-      if (roles === "ADMIN" && location.pathname === "/") {
+    if (roles !== null) {
+      if (roles === "ADMIN" && location.pathname === "/login") {
         navigate("/admin/dashboard");
         window.location.reload()
-      } else if (roles === "USER" && location.pathname === "/") {
+      } else if (roles === "USER" && location.pathname === "/login") {
         navigate("/client/dashboard");
         window.location.reload()
       }
-      else if (roles === "SUBADMIN" && location.pathname === "/") {
+      else if (roles === "SUBADMIN" && location.pathname === "/login") {
         navigate("/subadmin/clients");
         window.location.reload()
       }
-      else if (roles === "SUPERADMIN" && location.pathname === "/") {
+      else if (roles === "SUPERADMIN" && location.pathname === "/login") {
         navigate("/super/dashboard");
         window.location.reload()
       }
       // else {
       //   navigate("/login");
       // }
-    } else if (gotodashboard != null) {
-
-    } else if (gotodashboard != null) {
+    } 
+     else if (gotodashboard != null) {
 
       if (user_role_goTo === "USER" && location.pathname === "/") {
         navigate("/client/dashboard");

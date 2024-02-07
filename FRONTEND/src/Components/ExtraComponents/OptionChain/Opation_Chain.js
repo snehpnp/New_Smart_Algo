@@ -519,7 +519,7 @@ const HelpCenter = () => {
                     }
                     else {
 
-                        toast.success(response.data.msg);
+                        toast.danger(response.data.msg);
 
                     }
                     

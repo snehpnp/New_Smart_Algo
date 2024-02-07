@@ -13,10 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import html2canvas from 'html2canvas';
 import * as Config from "../../../../Utils/Config";
 import { Add_Theme } from '../../../../ReduxStore/Slice/ThemeSlice';
-import toast, { Toaster } from 'react-hot-toast';
-import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
-
-
 
 
 
@@ -47,22 +43,18 @@ const CreateTheme = ({ SelectTheme1 }) => {
     // for Multistep Form
     const [activeTab, setActiveTab] = useState(1);
 
-    const handleNextTab = (prevTab) => {
-
-        setActiveTab((prevTab) => prevTab + 1)
-
+    const handleNextTab = () => {
+        
+        setActiveTab((prevTab) => prevTab + 1);
     };
 
     const handlePreviousTab = () => {
-        setActiveTab(prevTab => (prevTab > 1 ? prevTab - 1 : prevTab));
+        setActiveTab((prevTab) => prevTab - 1);
     };
 
-
-    // const handleTabClick = (tabNumber) => {
-    //     setActiveTab(tabNumber);
-    // };
-
-
+    const handleTabClick = (tabNumber) => {
+        setActiveTab(tabNumber);
+    };
 
 
     // For Show Modal
@@ -82,8 +74,6 @@ const CreateTheme = ({ SelectTheme1 }) => {
         $('body').attr('data-theme-version', e.target.value);
         setThemeVersion(e.target.value);
     }
-
-
 
 
     const PreviewDashboard = (e) => {
@@ -311,34 +301,8 @@ const CreateTheme = ({ SelectTheme1 }) => {
             console.log("error", err);
         })
     }
-    const fun1 = () => {
-        if (activeTab === 1) {
-            if (ThemeVersion === "" || ThemeDashboard === "" || PrimaryColor === "" || NavHeaderColor === "" || HeaderColor === "" || SidebarColor === "")
-                toast.error("pls select the theme")
-            else {
-                handleNextTab()
-            }
-        }
-        else if (activeTab == 2) {
-            if (Layout === '' || HeaderPosition === '' || Sidebar === '' || SidebarPosition === '')
-                toast.error("pls select the Header")
-            else {
-                handleNextTab()
-            }
-        }
-    }
 
-    const submit_Fun = () => {
-        if (activeTab === 3) {
-            if (Container === "" || BodyFont === "")
-                toast.error("pls select the Font")
-            else {
-                setToggleSelection(false)
-                setIsModalOpen(true)
-            }
-        }
 
-    }
 
     return (
         <div  >
@@ -365,18 +329,17 @@ const CreateTheme = ({ SelectTheme1 }) => {
                                     className={`nav-link ${activeTab === 1 ? 'active show' : ''}`}
                                     href="#tab1"
                                     data-bs-toggle="tab"
-                                // onClick={() => handleTabClick(1)}
+                                    onClick={() => handleTabClick(1)}
                                 >
                                     Theme
                                 </a>
                             </li>
-
                             <li className="nav-item">
                                 <a
                                     className={`nav-link ${activeTab === 2 ? 'active show' : ''}`}
                                     href="#tab2"
                                     data-bs-toggle="tab"
-                                // onClick={() => handleTabClick(2)}
+                                    onClick={() => handleTabClick(2)}
                                 >
                                     Header
                                 </a>
@@ -386,7 +349,7 @@ const CreateTheme = ({ SelectTheme1 }) => {
                                     className={`nav-link ${activeTab === 3 ? 'active show' : ''}`}
                                     href="#tab3"
                                     data-bs-toggle="tab"
-                                // onClick={() => handleTabClick(3)}
+                                    onClick={() => handleTabClick(3)}
                                 >
                                     Content
                                 </a>
@@ -395,7 +358,7 @@ const CreateTheme = ({ SelectTheme1 }) => {
                     </div>
 
                     <div className="tab-content tab-content-default tabcontent-border">
-                        <div className={`tab-pane ${activeTab === 1 ? 'active show' : ''}`} >
+                        <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} >
                             <div className="fade tab-pane active show" id="tab1" >
                                 <div className="admin-settings">
                                     <div className="row">
@@ -407,7 +370,6 @@ const CreateTheme = ({ SelectTheme1 }) => {
                                                 name="theme_version"
                                                 onChange={(e) => PreviewVersion(e)}
                                             >
-                                                <option value="" selected disabled>Select mode</option>
                                                 <option value="light">Light</option>
                                                 <option value="dark">Dark</option>
                                             </select>
@@ -542,8 +504,9 @@ const CreateTheme = ({ SelectTheme1 }) => {
 
                             </div>
                         </div>
-                        <div className={`tab-pane ${activeTab === 2 ? 'active show' : ''}`} >
-                            <div className="fade tab-pane active show" id="tab2">
+                        <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`} >
+
+                            <div className="fade tab-pane" id="tab2">
                                 <div className="admin-settings">
                                     <div className="row">
                                         <div className="col-sm-6">
@@ -553,8 +516,9 @@ const CreateTheme = ({ SelectTheme1 }) => {
                                                 id="theme_layout"
                                                 name="theme_layout"
                                                 onChange={(e) => PreviewLayout(e)}
+
+
                                             >
-                                                <option value="" selected disabled>Select Vertical or Horizontal </option>
                                                 <option value="vertical">Vertical</option>
                                                 <option value="horizontal">Horizontal</option>
                                             </select>
@@ -569,7 +533,6 @@ const CreateTheme = ({ SelectTheme1 }) => {
 
 
                                             >
-                                                <option value="" selected disabled>Select Static or Fixed</option>
                                                 <option value="static">Static</option>
                                                 <option value="fixed">Fixed</option>
                                             </select>
@@ -582,7 +545,6 @@ const CreateTheme = ({ SelectTheme1 }) => {
                                                 name="sidebar_style"
                                                 onChange={(e) => PreviewSIdebar(e)}
                                             >
-                                                <option value="" selected disabled>Select Sidebar</option>
                                                 <option value="full">Full</option>
                                                 <option value="mini">Mini</option>
                                                 <option value="compact">Compact</option>
@@ -599,19 +561,19 @@ const CreateTheme = ({ SelectTheme1 }) => {
                                                 name="sidebar_position"
                                                 onChange={(e) => PreviewSidebarPosition(e)}
                                             >
-                                                <option value="" selected disabled>Select Sidebar position</option>
                                                 <option value="static">Static</option>
                                                 <option value="fixed">Fixed</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
 
                         <div className={`tab-pane ${activeTab === 3 ? 'active' : ''}`} >
 
-                            <div className="fade tab-pane active show" id="tab3">
+                            <div className="fade tab-pane" id="tab3">
                                 <div className="admin-settings">
                                     <div className="row">
                                         <div className="col-sm-6">
@@ -621,8 +583,9 @@ const CreateTheme = ({ SelectTheme1 }) => {
                                                 id="container_layout"
                                                 name="container_layout"
                                                 onChange={(e) => PreviewContainer(e)}
+
+
                                             >
-                                                <option value="" selected disabled>Select Body Font</option>
                                                 <option value="wide">Wide</option>
                                                 <option value="boxed">Boxed</option>
                                                 <option value="wide-boxed">Wide Boxed</option>
@@ -636,7 +599,6 @@ const CreateTheme = ({ SelectTheme1 }) => {
                                                 name="typography"
                                                 onChange={(e) => PreviewTypeGraphy(e)}
                                             >
-                                                <option value="" selected disabled>Select Body Font</option>
                                                 <option value="roboto">Roboto</option>
                                                 <option value="poppins">Poppins</option>
                                                 <option value="opensans">Open Sans</option>
@@ -654,11 +616,11 @@ const CreateTheme = ({ SelectTheme1 }) => {
                                 </button>
                             )}
                             {activeTab === 3 && (
-                                <button className='btn btn-primary' onClick={submit_Fun}>Apply Changes</button>
+                                <button className='btn btn-primary' onClick={(e) => ApplyChanges(e)}>Apply Changes</button>
 
                             )}
                             {activeTab !== 3 && (
-                                <button className="btn btn-primary" onClick={fun1}>
+                                <button className="btn btn-primary" onClick={handleNextTab}>
                                     Next
                                 </button>
                             )}
@@ -688,10 +650,7 @@ const CreateTheme = ({ SelectTheme1 }) => {
                     </FloatingLabel>
                 </>
             </Modal_Component>
-            <ToastButton />
         </div>
-
-
     )
 }
 
