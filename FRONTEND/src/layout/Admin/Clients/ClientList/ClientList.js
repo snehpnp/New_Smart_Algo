@@ -506,6 +506,8 @@ const AllClients = () => {
     });
   }, [searchInput, originalData, PanelStatus, ClientStatus]);
 
+
+
   const ResetDate = (e) => {
     e.preventDefault();
 
@@ -516,6 +518,8 @@ const AllClients = () => {
       loading: false,
       data: originalData,
     });
+    console.log("originalData ",originalData)
+    
   };
 
 

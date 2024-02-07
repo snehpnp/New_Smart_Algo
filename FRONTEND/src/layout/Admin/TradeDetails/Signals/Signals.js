@@ -175,20 +175,21 @@ const Signals = () => {
 
 
   // MANAGE MULTIFILTER
-
+ 
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
 
-      const filter2Match = StrategyClientStatus == null || item.strategy.includes(StrategyClientStatus)
-
+      const filter2Match = StrategyClientStatus == "null" || item.strategy.includes(StrategyClientStatus)
+ 
       const searchTermMatch =
+        searchInput === '' ||
         item.strategy.toLowerCase().includes(searchInput.toLowerCase())
         ||
         item.TradeType.toLowerCase().includes(searchInput.toLowerCase()) ||
         item.trade_symbol.toLowerCase().includes(searchInput.toLowerCase()) ||
         item.type.toLowerCase().includes(searchInput.toLowerCase())
 
-      return searchTermMatch && filter2Match
+      return filter2Match && searchTermMatch
     });
 
     // Set the filtered data to the state or variable you want to use
@@ -196,11 +197,7 @@ const Signals = () => {
       loading: false,
       data: searchInput || StrategyClientStatus !== "null" ? filteredData : originalData,
     });
-
-
   }, [searchInput, StrategyClientStatus, originalData]);
-
-
 
   return (
     <>

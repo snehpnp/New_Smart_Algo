@@ -131,17 +131,18 @@ const TradeHistory = () => {
     return formattedDate;
   };
 
-  const ResetDate = (e) => {
+  const ResetAllData = (e) => {
     e.preventDefault();
     setFromDate("");
-    setStrategyClientStatus("");
-    setSelectService("");
+    setStrategyClientStatus("null");
+    setSelectService("null");
     setToDate("");
     setTradeHistoryData({
       loading: false,
       data: tradeHistoryData.data,
     });
   };
+  console.log("tradeHistoryData.data",tradeHistoryData.data)
 
 
 
@@ -712,7 +713,7 @@ const TradeHistory = () => {
           <div className="col-lg-2 px-1">
             <div class="mb-3">
               <label for="select" class="form-label">
-                Service
+              Symbol
               </label>
               <select
                 class="default-select wide form-control"
@@ -757,50 +758,18 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
-
-          {/* <div className="col-lg-2 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
-                Segment
-              </label>
-              <select
-                class="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setSelectSegment(e.target.value)}
-                value={SelectSegment}
-              >
-                <option value="null" disabled>All</option>
-                {CatagoryData.data && CatagoryData.data.map((item) => {
-                  return <>
-                    <option value={item.segment}>{item.name}</option>
-                  </>
-                })}
-              </select>
-            </div>
-          </div> */}
-
           <div className="col-lg-2 px-1 mt-2">
-            {/* <button
-              className="btn btn-primary me-2"
-              onClick={(e) => GetTradhistory(e)}
-            >
-              Search
-            </button> */}
-            <button className="btn btn-primary" onClick={(e) => ResetDate(e)}>
+            <button className="btn btn-primary" onClick={(e) => ResetAllData(e)}>
               Reset
             </button>
           </div>
         </div>
-
-
         <FullDataTable
           TableColumns={columns}
           tableData={tradeHistoryData.data}
           pagination1={true}
 
         />
-
 
         {/*  For Detailed View  */}
         <DetailsView
