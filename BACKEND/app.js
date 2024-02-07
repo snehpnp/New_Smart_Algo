@@ -54,6 +54,15 @@ require("./App/Emergency Apis/getOptionSymbols")(app)
 
 
 
+// Socket Connect get data in live make socket
+
+ require('./App/Helper/Store_live_data')
+
+//  END-------------
+
+
+
+
 
 
 

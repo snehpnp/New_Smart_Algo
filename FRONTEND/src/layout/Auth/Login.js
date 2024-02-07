@@ -370,7 +370,15 @@ const Login = () => {
               toast.error(res.payload.msg);
               setshowModal(false);
               setshowModal1(true);
-            } else {
+            } 
+            else if (res.payload.msg === "You are already logged in on the phone.") {
+              toast.error(res.payload.msg);
+              setshowModal(false);
+              setshowModal1(true);
+            }
+            
+            
+            else {
               toast.error(res.payload.msg);
               setTimeout(() => {
                 // setshowModal(false);
