@@ -210,14 +210,16 @@ const TradeHistory = () => {
       dataField: "entry_qty",
       text: "Entry Qty",
       formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+         <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
+        // <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
       ),
     },
     {
       dataField: "exit_qty",
       text: "Exit Qty",
       formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+        <span className="text">{cell !== "" ? parseInt(row.exit_qty_percent) : "-"}</span>
+       // <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
       ),
     },
     {
@@ -351,7 +353,9 @@ const TradeHistory = () => {
     ShowLivePrice();
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
+  
 
+  console.log("tradeHistoryData.data",tradeHistoryData.data)
 
   return (
     <>

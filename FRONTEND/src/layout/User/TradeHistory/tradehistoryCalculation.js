@@ -130,7 +130,7 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
 
     // const res = await CreateSocketSession(type);
 
-    if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
+    if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined  && UserDetails.trading_status != "off") {
 
 
         const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
