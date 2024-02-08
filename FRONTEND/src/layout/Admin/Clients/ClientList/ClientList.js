@@ -291,6 +291,9 @@ const AllClients = () => {
       } else if (value === 15) {
         return "Zerodha";
       }
+       else if (value === 19) {
+        return "Upstox";
+      }
     }
   };
 
