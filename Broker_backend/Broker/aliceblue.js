@@ -69,10 +69,14 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         console.log("command ", command)
 
         exec(command, (error, stdout, stderr) => {
+
             if (error) {
                 console.log(`exec error: ${error}`);
                // return;
             }
+
+             if(stdout){
+
             const parts = stdout.split(','); // Extract the content inside double quotes
             // console.log("Extracted Part:", parts[9]);
             if (segment && segment.toUpperCase() === 'C') {
@@ -168,6 +172,50 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
               console.log("errors:", errors);
           });
 
+         
+             }else{
+                
+                const requestPromises = AllClientData.map(async (item) => {
+
+                    BrokerResponse.create({
+                        user_id: item._id,
+                        receive_signal: signal_req,
+                        strategy: strategy,
+                        type: type,
+                        symbol: input_symbol,
+                        order_status: 0,
+                        order_id: "",
+                        trading_symbol: "",
+                        broker_name: "ALICE BLUE",
+                        send_request: "",
+                        reject_reason: "Token not Found",
+            
+                    })
+                        .then((BrokerResponseCreate) => {
+                            // console.log('User created and saved:', BrokerResponseCreate._id)
+                        })
+                        .catch((err) => {
+                            try {
+                                console.log('Error creating and saving user:', err);
+                            } catch (e) {
+                                console.log("duplicate key")
+                            }
+            
+                        });
+            
+                      });
+                    // Send all requests concurrently using Promise.all
+                        Promise.all(requestPromises)
+                        .then(responses => {
+                            // console.log("Response:", responses.data);
+            
+                        })
+                        .catch(errors => {
+                            console.log("errors:", errors);
+            
+                        });
+
+             }
 
 
 
@@ -531,7 +579,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             order_status: 0,
             order_id: "",
             trading_symbol: "",
-            broker_name: "",
+            broker_name: "ALICE BLUE",
             send_request: "",
             reject_reason: "Token not received due to wrong trade",
 

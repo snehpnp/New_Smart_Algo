@@ -6,6 +6,7 @@ module.exports = function (app) {
 
   const { DashboardView } = require('./View/DashboardData')
   const { createView ,dropOpenPosition} = require('./View/Open_position')
+  const { createViewUpstox } = require('./View/Upstox')
 
 
   app.get('/dropOpenPosition', async (req, res) => {
@@ -16,7 +17,12 @@ module.exports = function (app) {
   
   app.get('/createView', async (req, res) => {
     createView()
-    res.send({ msg: "Create View Done!!!" })
+    res.send({ msg: "Create View Done!  !!" })
+  })
+
+  app.get('/brokerView', async (req, res) => {
+    createViewUpstox()
+    res.send({ msg: "Create View broker!  !!" })
   })
 
 

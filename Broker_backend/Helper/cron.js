@@ -10,9 +10,10 @@ module.exports = function (app) {
         downloadAlicetoken()
     });
     
-    cron.schedule('* 2 * * *', () => {
+    cron.schedule('10 7 * * *', () => {
         console.log('Run First Time');
         downloadZerodhatoken()
+        downloadAndExtractUpstox()
     });
     
     // ALL Alice Token Genrate
@@ -100,6 +101,55 @@ module.exports = function (app) {
         })
     
     }
+
+    // Upstox Files
+    const  downloadAndExtractUpstox = async ()=> {
+        const fs = require('fs');
+        const zlib = require('zlib');
+        const path = require('path');
+
+        try {
+            const url = 'https://assets.upstox.com/market-quote/instruments/exchange/complete.csv.gz';
+
+            // Download the gzip file
+            const response = await axios.get(url, { responseType: 'arraybuffer' });
+
+            // Create a folder to store the extracted files
+            const outputFolder = path.join(__dirname, '../AllInstrumentToken/upstoxinstrument');
+            if (!fs.existsSync(outputFolder)) {
+                fs.mkdirSync(outputFolder);
+            }
+
+            // Save the gzip file
+            const gzipFilePath = path.join(__dirname, 'complete.csv.gz');
+            fs.writeFileSync(gzipFilePath, Buffer.from(response.data, 'binary'));
+
+            // Extract the gzip file
+            const extractedFilePath = path.join(outputFolder, 'complete.csv');
+            const gunzip = zlib.createGunzip();
+            const input = fs.createReadStream(gzipFilePath);
+            const output = fs.createWriteStream(extractedFilePath);
+
+            input.pipe(gunzip).pipe(output);
+
+            output.on('finish', () => {
+                // Clean up the downloaded gzip file
+                fs.unlinkSync(gzipFilePath);
+                console.log('Download and extraction completed successfully');
+            });
+        } catch (err) {
+            console.error('Error:', err);
+        }
+    }
+
+
+    // app.get('/chek-token', async (req, res) => {
+    //     downloadAndExtractUpstox()
+    //      res.send("okkk")
+    //   })
+
+
+  
     
 }
 
