@@ -24,6 +24,10 @@ const { GetAccessTokenFivepaisa,GetOrderFullInformationFivepaisa} = require('../
 const { GetAccessTokenZerodha,GetOrderFullInformationZerodha} = require('../../Controllers/Brokerassecc_token/Zerodha')
 
 
+// UPSTOX CONTROLLER FILE
+const { GetAccessTokenUpstox,GetOrderFullInformationUpstox} = require('../../Controllers/Brokerassecc_token/Upstox')
+
+
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req,res)=>{
     
@@ -95,12 +99,14 @@ router.post('/getall/order/info', GetOrderFullInformationAll_broker);
 // ANGEL
 router.get('/angel', GetAccessTokenAngel);
 
-
 // 5 PPAISA
 router.get('/fivepaisa', GetAccessTokenFivepaisa);
 
 // ZERODHA
 router.get('/zerodha', GetAccessTokenZerodha);
+
+// Upstox
+router.get('/upstox', GetAccessTokenUpstox);
 
 
 module.exports = router;

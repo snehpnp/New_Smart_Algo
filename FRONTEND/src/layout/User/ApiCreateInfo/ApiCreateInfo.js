@@ -236,15 +236,11 @@ const ApiCreateInfo = () => {
                           {`${Config.base_url + modalData.steptwourl}`}
                         </a>
                         <br />
-                        {/* {modalData.imagetwo ? (
-                    <img
-                      src={modalData.imagetwo}
-                      alt=""
-                      class="w-100 border border-dark"
+                      {modalData.imagetwo ? ( <img src={modalData.imagetwo}  alt="" class="w-100 border border-dark"
                     />
                   ) : (
                     ""
-                  )} */}
+                  )}
                       </>
                     ) : (
                       ""

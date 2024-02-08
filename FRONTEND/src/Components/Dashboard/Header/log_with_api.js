@@ -76,7 +76,11 @@ export const loginWithApi = async (broker_id, UserDetails) => {
         alert("broker-17")
     }
     else if (broker_id === "19" || broker_id === 19) {
-        alert("broker-19")
+        //alert("broker-19")
+
+        window.location.href = `https://api-v2.upstox.com/login/authorization/dialog?response_type=code&client_id=${UserDetails.api_key}&redirect_uri=${Config.base_url}upstox&state=${UserDetails.Email}`
+
+
     }
     else if (broker_id === "20" || broker_id === 20) {
         alert("broker-20")
