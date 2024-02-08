@@ -144,14 +144,14 @@ const BrokerResponse = () => {
         setInputValue((prevPrices) => ({ ...prevPrices, [symboll]: e.target.value }))
         if ((data.servicegroup_services_ids.group_qty !== 0) && ((parseInt(e.target.value) * parseInt(data.service.lotsize)) > parseInt(data.servicegroup_services_ids.group_qty))) {
           toast.error(`cant update more then ${data.servicegroup_services_ids.group_qty} In ${symboll}`);
-          e.target.value = 1
+          e.target.value = ''
           return
         }
       } else {
         // toast.error("no negetive or empty value allow ");
 
         // alert("no negetive or empty value allow ")
-        e.target.value = 1
+        e.target.value = ''
         return
       }
     }
