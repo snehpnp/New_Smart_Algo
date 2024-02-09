@@ -165,39 +165,40 @@ const GetAllBrokerResponse = async (user_info,res) => {
         const objectId = new ObjectId(user_info[0]._id);
        // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
+
+        console.log("GetAllBrokerResponse ",FindUserBrokerResponse)
      
         if (FindUserBrokerResponse.length > 0) {
     
             FindUserBrokerResponse.forEach((data1) => {    
-                var config = {
+              
+                console.log("data1 data1.order_id",data1.order_id)
+                let config = {
                     method: 'get',
-                    url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getOrderBook',
+                    maxBodyLength: Infinity,
+                    url: 'https://api-v2.upstox.com/order/history?order_id=' + data1.order_id,
                     headers: {
+                        'accept': ' application/json',
+                        'Api-Version': ' 2.0',
                         'Authorization': 'Bearer ' + user_info[0].access_token,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-UserType': 'USER',
-                        'X-SourceID': 'WEB',
-                        'X-ClientLocalIP': 'CLIENT_LOCAL_IP',
-                        'X-ClientPublicIP': 'CLIENT_PUBLIC_IP',
-                        'X-MACAddress': 'MAC_ADDRESS',
-                        'X-PrivateKey': user_info[0].api_key
-                    },
+
+                    }
                 };
                 axios(config)
                     .then(async (response) => {
                        
-                        if(response.data.data.length > 0){
+                          console.log("response order details ",response.data)
+
+                          const result_order = response.data.data[response.data.data.length - 1];
+                        
+                          
+
+                       
                             
-                            const result_order = response.data.data.find(item2 => item2.orderid === data1.order_id);
+                            
                             if(result_order != undefined){
 
-                                    var reject_reason;
-                                    if (result_order.text) {
-                                        reject_reason = result_order.text;
-                                    } else {
-                                        reject_reason = '';
-                                    }
+                                   
 
                                 const message = (JSON.stringify(result_order));
     
@@ -207,7 +208,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
                                         order_view_date: message,
                                         order_view_status: '1',
                                         order_view_response: result_order.status,
-                                        reject_reason: reject_reason
+                                        reject_reason: result_order.status_message
         
                                     },
                                     { new: true }
@@ -229,11 +230,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
                                 )
 
                               }
-                          
-                          
-                        }else{
-                            // console.log("NO DATA FOUND");
-                        }
+           
 
                        
                     })

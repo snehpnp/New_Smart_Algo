@@ -46,7 +46,7 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
     ]
    const result = await User.aggregate(pipeline)
    const broker = result[0].broker;
-   
+   console.log("broker",broker)
 
    // ALICE BLUE   -  2
    if(broker == 2){
@@ -67,6 +67,11 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
    else if(broker == 15){
     GetOrderFullInformationZerodha(req,res,result);
    }
+
+  // UPSTOX   -  19
+   else if(broker == 19){
+    GetOrderFullInformationUpstox(req,res,result);
+    }
 
    else{
     res.send({status:false,msg:"broker not found"});

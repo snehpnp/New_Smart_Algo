@@ -249,6 +249,7 @@ const aliceblue = require('./Broker/aliceblue')
 const angel = require('./Broker/angel')
 const fivepaisa = require('./Broker/fivepaisa')
 const zerodha = require('./Broker/zerodha')
+const upstox = require('./Broker/upstox')
 
 
 // BROKER SIGNAL
@@ -633,6 +634,35 @@ app.post('/broker-signals', async (req, res) => {
             //End Process zerodha admin client
 
 
+
+          //Process UPSTOX admin client
+          try {
+            const upstoxCollection = db1.collection('upstoxView');
+            const upstoxdocuments = await upstoxCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' UPSTOX ALL CLIENT LENGTH ' + upstoxdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+
+            if (upstoxdocuments.length > 0) {
+              upstox.place_order(upstoxdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get UPSTOX Client In view", error);
+          }
+          //End Process UPSTOX admin client
+
+
+
+
+
+
           } else {
 
             //Process Tading View Client Alice Blue
@@ -722,6 +752,33 @@ app.post('/broker-signals', async (req, res) => {
               console.log("Error Get zerodha Client In view", error);
             }
             //End Process Tading View Client zerodha 
+
+
+
+           //Process Tading View Client UPSTOX
+           try {
+            const upstoxCollection = db1.collection('upstoxView');
+            const upstoxdocuments = await upstoxCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' UPSTOX TRADING VIEW CLIENT LENGTH ' + upstoxdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+            if (upstoxdocuments.length > 0) {
+              upstox.place_order(upstoxdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get upstox Client In view", error);
+          }
+          //End Process Tading View Client UPSTOX  
+
+
+
+        
 
           }
 
