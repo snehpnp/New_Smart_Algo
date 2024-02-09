@@ -133,20 +133,20 @@ class Panel {
         try {
             const { domain } = req.body
 
-            var domain1 = "http://localhost:3000"
+            // var domain1 = "http://localhost:3000"
 
-            if (domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "http://localhost:3000"
-            } else {
-                domain1 = domain
-            }
+            // if (domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
+            //     domain1 = "http://localhost:3000"
+            // } else {
+            //     domain1 = domain
+            // }
             // const Panle_information = await panel_model.findOne({ _id: id })
             const desiredDomain = 'your_desired_domain_value'; // Replace with the desired domain value
 
             const Panle_information = await panel_model.aggregate([
                 {
                     '$match': {
-                        'domain': domain1
+                        'domain': domain
                     }
                 },
                 {
@@ -375,15 +375,15 @@ class Panel {
             const { domain } = req.body
 
             // FIND PANEL NAME DUPLICATE
-            var domain1 = "http://localhost:3000"
+            // var domain1 = "http://localhost:3000"
 
-            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "https://trade.pandpinfotech.com"
-            } else {
-                domain1 = domain
-            }
+            // if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
+            //     domain1 = "https://trade.pandpinfotech.com"
+            // } else {
+            //     domain1 = domain
+            // }
 
-            const Panel_information = await panel_model.findOne({ domain: domain1 }, 'broker_id');
+            const Panel_information = await panel_model.findOne({ domain: domain }, 'broker_id');
 
             // CHECK IF PANEL EXIST OR NOT
             if (!Panel_information) {
