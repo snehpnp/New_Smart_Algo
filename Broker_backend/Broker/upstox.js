@@ -45,16 +45,15 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         const filePath_token = path.join(__dirname, csvFilePath);
         const pattern = token[0].instrument_token
           
-        console.log("filePath_token", filePath_token)
+       // console.log("filePath_token", filePath_token)
 
-        // const command = `grep "${pattern}" ${filePath1}`;
-        // const command = `grep ',"${pattern}",' ${filePath1}`
+    
 
         const command = `grep '|${pattern}' ${filePath_token}`;
 
       // const command = `findstr ,${pattern}, ${filePath_token}`;
       
-        console.log("commad", command)
+      // console.log("commad", command)
 
        exec(command, (error, stdout, stderr) => {
         if (error) {
@@ -62,13 +61,11 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
            // return;
         }
 
-        console.log("NSE_EQ|INE669E01016")
-        let s=1
-      //  if(s){
+       
       if(stdout){
          
-     const parts = stdout.match(/"([^"]+)"/)[1]; // Extract the content inside double quotes
-      //const parts = 'NSE_EQ|INE669E01016' // Extract the content inside double quotes
+      const parts = stdout.match(/"([^"]+)"/)[1]; // Extract the content inside double quotes
+     
 
         if (type == 'LE' || type == 'SE') {
     
@@ -110,7 +107,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
       else if (type == 'SX' || type == 'LX') {
-        console.log("trade exit")
+       // console.log("trade exit")
       
         const requestPromises = AllClientData.map(async (item) => {
     
@@ -383,7 +380,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 strategy: strategy,
                 type: type,
                 symbol: input_symbol,
-                order_status: 0,
+                order_status: "",
                 order_id: "",
                 trading_symbol: "",
                 broker_name: "UPSTOX",
@@ -435,7 +432,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             strategy: strategy,
             type: type,
             symbol: input_symbol,
-            order_status: 0,
+            order_status: "",
             order_id: "",
             trading_symbol: "",
             broker_name: "UPSTOX",
