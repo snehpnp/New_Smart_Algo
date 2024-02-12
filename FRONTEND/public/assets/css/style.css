@@ -46302,3 +46302,136 @@ body {
 .new-field {
     padding: 5px 0 5px 5px;
 }
+/* ---------------------------------------responsive----------------------------------- */
+@media (max-width: 991px) {
+
+
+.menu-toggle .sidebar-logo .nav-header .logo-abbr {
+  /* max-width: 80% ! important;
+  margin-left: 0px !important; */
+}
+  .header-profile img {
+    width: 1.4375rem;
+    height: 1.4375rem;
+}
+.custom-dropdown .btn {
+  padding: 3px 7px;
+}
+.header .header-content {
+  padding-left: 0 !important;
+  
+}
+.slider:before {
+  height: 18px !important;
+  width: 18px !important;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+.switch {
+
+  width: 45px !important;
+  height: 25px !important;
+}
+}
+ .nav-header .nav-control {
+  right:0 !important;
+}
+.dashboard-table {
+  position: relative;
+  height: 250px;
+}
+.dashboard-table tbody {
+  width: auto;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 575px) {
+  .sidebar-logo .nav-header .logo-abbr {
+    max-width: unset !important;
+    width: auto;
+    height: 70%;
+  object-fit: contain;
+  margin-left: 150px;
+}
+  .headaer-title h3
+  {
+    font-size: 11px;
+  }
+  li.nav-item.dropdown.header-profile.user-name{
+    display: none;
+  }
+  .header-right .notification_dropdown .nav-link svg {
+    width: 0.8rem;
+    height: 0.8rem;
+}
+.menu-toggle .header {
+   padding-left: 0 !important;
+
+}
+.menu-toggle .nav-header {
+  width: 4.5rem !important;
+ 
+}
+.header-right .notification_dropdown .nav-link.nav-action {
+  width: 2rem;
+  height: 2rem;
+  line-height: 2rem;
+}
+.header-right .notification_dropdown .nav-link .badge {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+.header-right .notification_dropdown .nav-link .badge {
+  right: 0.3rem;
+  top: 0.4rem;
+}
+
+  .deznav{
+    left:-249px;
+}
+.menu-toggle .deznav{
+  left:0px;
+}
+ .menu-toggle .deznav .nav-text {
+   display: inline !important; 
+}
+[data-sidebar-style="full"][data-layout="vertical"] .menu-toggle .deznav .metismenu>li>a {
+  padding: 10px 16px;
+   text-align: left; 
+
+  }
+  .content-body {
+    margin-left: 0px !important;
+}
+.menu-toggle .deznav  {
+ width:17rem !important;
+}
+}
+@media (max-width: 375px) {
+  .content-body {
+    margin-top: 80px ;
+}
+.switch {
+  width: 31px !important;
+  height: 16px !important;
+}
+.slider:before {
+  height: 14px !important;
+  width: 14px !important;
+  left: 2px  !important;
+  bottom: 1px  !important;
+  
+}
+ .footer {
+  display: none;
+} 
+/* .content-body {
+  position: relative;
+  top: 109px;
+} */
+}

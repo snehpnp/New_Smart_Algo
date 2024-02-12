@@ -110,7 +110,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         strategy: strategy,
                         type: type,
                         symbol: input_symbol,
-                        order_status: 0,
+                        order_status: "",
                         order_id: "",
                         trading_symbol: "",
                         broker_name: "ANGEL",

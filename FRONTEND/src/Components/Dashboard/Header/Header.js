@@ -409,121 +409,124 @@ const Header = ({ ChatBox }) => {
 
   return (
     <div className="header-container">
-      <Logo />
-      <div className="header">
-        <div className="header-content">
-          <nav className="navbar navbar-expand">
-            <div className="collapse navbar-collapse justify-content-between">
-              <div className="header-left">
-                {user_role === "USER" && UserDetails.license_type != 1 ? (
-                  <>
-                    <div className="headaer-title">
-                      <h3 className="font-w400 mb-0">Api Login </h3>
-                    </div>
+    <Logo />
+    <div className="header">
+      <div className="header-content">
+        <nav className="navbar navbar-expand">
+          <div className="collapse navbar-collapse justify-content-between">
+            <div className="header-left">
+              
+            </div>
+            <ul className="navbar-nav header-right">
+              <li className="nav-item dropdown header-profile ms-2 ">
+              {user_role === "USER" && UserDetails.license_type != 1 ? (
+                <>
+                  <div className="headaer-title">
+                    <h3 className="font-w400 mb-0 pe-1">Api Login </h3>
+                  </div>
 
-                    <div className="Api Login m-2">
-                      <label class="switch">
-                        <input
-                          type="checkbox"
-                          className="bg-primary"
-                          checked={
-                            UserDetails.TradingStatus === "on" ? true : false
-                          }
-                          onClick={(e) =>
-                            LogIn_WIth_Api(
-                              e.target.checked,
-                              UserDetails.broker,
-                              UserDetails.TradingStatus,
-                              UserDetails
-                            )
-                          }
-                        />
-                        <span class="slider round"></span>
-                      </label>
-                    </div>
+                  <div className="Api Login">
+                    <label class="switch mb-0">
+                      <input
+                        type="checkbox"
+                        className="bg-primary"
+                        checked={
+                          UserDetails.TradingStatus === "on" ? true : false
+                        }
+                        onClick={(e) =>
+                          LogIn_WIth_Api(
+                            e.target.checked,
+                            UserDetails.broker,
+                            UserDetails.TradingStatus,
+                            UserDetails
+                          )
+                        }
+                      />
+                      <span class="slider round"></span>
+                    </label>
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
+              {gotodashboard != null ? (
+                <>
+                  <li className="nav-item dropdown gotodashboard">
+                    <button
+                      onClick={redirectToAdmin}
+                      type="button"
+                      className="btn btn-primary text-white"
+                    >
+                      Go to Admin
+                    </button>
+                  </li>
+                </>
+              ) : ("")}
+              </li>
+              {/* GO TO DASHBOARD */}
+
+              <>
+                {user_role === "SUPERADMIN" ? "" :
+
+                  <li className="nav-item dropdown header-profile me-2">
+                    <button
+                      className=" btn btn-primary px-2"
+                      onClick={() => setshowModal(true)}
+                    >
+                      Set API Key
+                    </button>
+                  </li>
+                }
+
+
+
+                <li className="nav-item dropdown header-profile user-name me-2">
+                  {UserNamego_localstg != null ?
+                    <h4 className="text-white border-1 mb-0">{UserNamego_localstg.UserName}</h4>
+                    :
+                    <h4 className="text-white border-1 mb-0">{UserName_localstg.UserName}</h4>
+                  }
+                </li>
+
+
+              </>
+
+              {/*  For Show Notification Box */}
+              {user_role === "ADMIN" ? (
+                <>
+                  <Notification data={getAllClients} />
+                </>
+              ) : (
+                user_role === "USER" ? (
+                  <>
+                    <Notification data={[]} />
+
                   </>
                 ) : (
                   ""
-                )}
-                {gotodashboard != null ? (
-                  <>
-                    <li className="nav-item dropdown gotodashboard">
-                      <button
-                        onClick={redirectToAdmin}
-                        type="button"
-                        className="btn btn-primary text-white"
-                      >
-                        Go to Admin
-                      </button>
-                    </li>
-                  </>
-                ) : ("")}
-              </div>
-              <ul className="navbar-nav header-right">
-                {/* GO TO DASHBOARD */}
+                )
+              )}
 
-                <>
-                  {user_role === "SUPERADMIN" ? "" :
-
-                    <li className="nav-item dropdown header-profile me-2">
-                      <button
-                        className=" btn btn-primary"
-                        onClick={() => setshowModal(true)}
-                      >
-                        Set API Key
-                      </button>
-                    </li>
-                  }
-
-
-
-                  <li className="nav-item dropdown header-profile me-2">
-                    {UserNamego_localstg != null ?
-                      <h4 className="text-white border-1 mb-0">{UserNamego_localstg.UserName}</h4>
-                      :
-                      <h4 className="text-white border-1 mb-0">{UserName_localstg.UserName}</h4>
-                    }
-                  </li>
-
-
-                </>
-
-                {/*  For Show Notification Box */}
-                {user_role === "ADMIN" ? (
-                  <>
-                    <Notification data={getAllClients} />
-                  </>
-                ) : (
-                  user_role === "USER" ? (
-                    <>
-                      <Notification data={[]} />
-
-                    </>
-                  ) : (
-                    ""
-                  )
-                )}
-
-                <li className="nav-item dropdown header-profile">
-                  <DropDown />
-                </li>
-              </ul>
-            </div>
-          </nav>
-        </div>
-
-        <Modal
-          isOpen={showModal}
-          backdrop="static"
-          size="ms-5"
-          title="Update Broker Key"
-          hideBtn={true}
-          handleClose={() => setshowModal(false)}
-        >
-          <UpdateBrokerKey closeModal={() => setshowModal(false)} />
-        </Modal>
+              <li className="nav-item dropdown header-profile ">
+                <DropDown />
+              </li>
+            </ul>
+          </div>
+        </nav>
       </div>
+
+      <Modal
+        isOpen={showModal}
+        backdrop="static"
+        size="ms-5"
+        title="Update Broker Key"
+        hideBtn={true}
+        handleClose={() => setshowModal(false)}
+      >
+        <UpdateBrokerKey closeModal={() => setshowModal(false)} />
+      </Modal>
     </div>
+  </div>
   );
 };
 

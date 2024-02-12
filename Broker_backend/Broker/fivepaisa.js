@@ -97,7 +97,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         strategy: strategy,
                         type: type,
                         symbol: input_symbol,
-                        order_status: 0,
+                        order_status: "",
                         order_id: "",
                         trading_symbol: "",
                         broker_name: "FIVEPAISA",
@@ -132,7 +132,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 });
 
         } else if (type == 'SX' || type == 'LX') {
-            console.log("trade exit")
+            //console.log("trade exit")
 
             const requestPromises = AllClientData.map(async (item) => {
 
@@ -377,7 +377,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         strategy: strategy,
                         type: type,
                         symbol: input_symbol,
-                        order_status: 0,
+                        order_status: "",
                         order_id: "",
                         trading_symbol: "",
                         broker_name: "FIVEPAISA",

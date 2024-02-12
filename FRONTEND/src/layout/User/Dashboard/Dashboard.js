@@ -313,7 +313,8 @@ const BrokerResponse = () => {
 
   return (
     <Content Page_title="Dashboard" button_status={false}>
-      <table className="table table-responsive-sm ">
+     <div className="table-responsive">
+      <table className="table dashboard-table">
         <thead className="bg-primary">
           <tr>
             <th>#</th>
@@ -524,7 +525,7 @@ const BrokerResponse = () => {
           <ToastButton />
         </tbody>
       </table>
-
+      </div>
 
 
 
@@ -598,7 +599,7 @@ const BrokerResponse = () => {
         <>
           <button
             type="button"
-            class="btn btn-outline-primary"
+            class="btn btn-outline-primary btn-lg mt-4"
             onClick={(e) => UpdateDashboard(e)}
           >
             Update
