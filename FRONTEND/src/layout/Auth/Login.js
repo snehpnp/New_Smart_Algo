@@ -223,7 +223,7 @@ const Login = () => {
       });
   }
 
- 
+
 
   const isValidEmail = (email) => {
     return Email_regex(email);
@@ -258,12 +258,12 @@ const Login = () => {
 
       await dispatch(SignIn(req))
         .unwrap()
-        .then(async(response) => {
+        .then(async (response) => {
 
 
           if (response.status) {
             await SetTheme()
-            
+
             if (response.data.Role !== "SUPERADMIN") {
               setshowModal(true);
               setUserData(response.data);
@@ -370,14 +370,14 @@ const Login = () => {
               toast.error(res.payload.msg);
               setshowModal(false);
               setshowModal1(true);
-            } 
+            }
             else if (res.payload.msg === "You are already logged in on the phone.") {
               toast.error(res.payload.msg);
               setshowModal(false);
               setshowModal1(true);
             }
-            
-            
+
+
             else {
               toast.error(res.payload.msg);
               setTimeout(() => {
@@ -608,7 +608,7 @@ const Login = () => {
             btn_name1="Verify1"
             Submit_Function={verifyOTP}
           >
-            <form onSubmit={verifyOTP}>
+            {/* <form onSubmit={verifyOTP}>
               <OtpInput
                 containerStyle="otp-div"
                 value={typeOtp}
@@ -616,6 +616,29 @@ const Login = () => {
                 numInputs={4}
                 renderSeparator={<span></span>}
                 renderInput={(props) => <input {...props} />}
+              />
+            </form> */}
+            <form onSubmit={verifyOTP}>
+
+              <OtpInput
+
+                containerStyle="otp-div"
+                value={typeOtp}
+                onChange={setTypeOtp}
+                numInputs={4}
+                renderSeparator={<span></span>}
+                renderInput={(props, index) => (
+                  <input
+                    {...props}
+                    autoFocus={index === 0}
+                    onKeyPress={(event) => {
+                      if (event.key === 'Enter') {
+                        event.preventDefault(); // Prevent form submission
+                        verifyOTP(); // Call verifyOTP function
+                      }
+                    }}
+                  />
+                )}
               />
             </form>
           </Modal>

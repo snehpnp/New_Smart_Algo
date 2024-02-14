@@ -437,7 +437,7 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-            {/* {row.license_type == "1" ? */}
+             {row.license_type !== "2" ? 
             <Link>
               <span data-toggle="tooltip" data-placement="top" title="Delete">
                 <Trash2
@@ -449,7 +449,7 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-            {/* : ""}  */}
+            : ""}  
 
           </div>
         </div>
@@ -487,6 +487,8 @@ const AllClients = () => {
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
 
+ 
+
       const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
 
       const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
@@ -495,7 +497,8 @@ const AllClients = () => {
         searchInput === '' ||
         item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
         item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.PhoneNo.includes(searchInput)
+        item.PhoneNo.includes(searchInput) 
+       
 
       // Return true if all conditions are met
       return filter1Match && filter2Match && searchTermMatch;
