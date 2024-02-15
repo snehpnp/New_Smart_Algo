@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
-import Loader from "../../../../Utils/Loader"; 
+import Loader from "../../../../Utils/Loader";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
@@ -33,6 +33,7 @@ const AllClients = () => {
   const [PanelStatus, setPanelStatus] = useState("2");
   const [ClientStatus, setClientStatus] = useState("null");
   const [SwitchButton, setSwitchButton] = useState(true);
+  const [selectBroker, setSelectBroker] = useState("null");
 
 
   const [refresh, setrefresh] = useState(false);
@@ -290,8 +291,7 @@ const AllClients = () => {
         return "5-Paisa";
       } else if (value === 15) {
         return "Zerodha";
-      }
-       else if (value === 19) {
+      } else if (value === 19) {
         return "Upstox";
       }
     }
@@ -437,19 +437,19 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-             {row.license_type !== "2" ? 
-            <Link>
-              <span data-toggle="tooltip" data-placement="top" title="Delete">
-                <Trash2
-                  size={20}
-                  color="#d83131"
-                  strokeWidth={2}
-                  className="mx-1"
-                  onClick={(e) => Delete_user(row._id)}
-                />
-              </span>
-            </Link>
-            : ""}  
+            {row.license_type !== "2" ?
+              <Link>
+                <span data-toggle="tooltip" data-placement="top" title="Delete">
+                  <Trash2
+                    size={20}
+                    color="#d83131"
+                    strokeWidth={2}
+                    className="mx-1"
+                    onClick={(e) => Delete_user(row._id)}
+                  />
+                </span>
+              </Link>
+              : ""}
 
           </div>
         </div>
@@ -483,51 +483,46 @@ const AllClients = () => {
 
 
 
-  //  MANAGE MULTIFILTER
+  // MANAGE MULTIFILTER
+
   useEffect(() => {
+
     const filteredData = originalData.filter((item) => {
-
- 
-
+    //  console.log("item", item.broker);
       const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
-
+      const filter3Match = selectBroker === "null" || item.broker === selectBroker;
       const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
-
       const searchTermMatch =
         searchInput === '' ||
         item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
         item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.PhoneNo.includes(searchInput) 
-       
-
+        item.PhoneNo.includes(searchInput)
       // Return true if all conditions are met
-      return filter1Match && filter2Match && searchTermMatch;
-
+      return filter1Match && filter3Match && filter2Match && searchTermMatch;
     });
-
-
     setAllClients({
       loading: false,
-      data: searchInput || PanelStatus !== "2" || ClientStatus !== "null" ? filteredData : originalData,
-    });
-  }, [searchInput, originalData, PanelStatus, ClientStatus]);
+      data: searchInput || PanelStatus !== "2" || ClientStatus !== "null" || selectBroker !== "null" ? filteredData : originalData,
 
+    });
+
+  }, [searchInput, originalData, PanelStatus, ClientStatus, selectBroker]);
 
 
   const ResetDate = (e) => {
     e.preventDefault();
-
     setSearchInput("");
     setClientStatus("null");
+    setSelectBroker("null");
     setPanelStatus("2");
     setAllClients({
       loading: false,
       data: originalData,
     });
-    console.log("originalData ",originalData)
-    
-  };
+    console.log("originalData ", originalData)
 
+
+  };
 
   //  For CSV
   const forCSVdata = () => {
@@ -628,6 +623,46 @@ const AllClients = () => {
                   </select>
                 </div>
               </div>
+
+
+              <div className="col-lg-2">
+
+                <div className="mb-3">
+
+                  <label for="select" className="form-label">
+
+                    Broker Type
+                  </label>
+                  <select
+                    className="default-select wide form-control"
+                    aria-label="Default select example"
+                    id="select"
+                    onChange={(e) => setSelectBroker(e.target.value)}
+                    value={selectBroker}
+                  >
+                    <option value="null">All</option>
+                    <option value="1">markethub</option>
+                    <option value="2">Alice Blue</option>
+                    <option value="3">Master Trust</option>
+                    <option value="4">Motilal Oswal</option>
+                    <option value="5">Zebull</option>
+                    <option value="6">IIFl</option>
+                    <option value="7">Kotak</option>
+                    <option value="8">Mandot</option>
+                    <option value="9">Choice</option>
+                    <option value="10">Anand Rathi</option>
+                    <option value="11">B2C</option>
+                    <option value="12">Angel</option>
+                    <option value="13">Fyers</option>
+                    <option value="14">5-Paisa</option>
+                    <option value="15">Zerodha</option>
+                    <option value="19">Upstox</option>
+                  </select>
+                </div>
+              </div>
+
+
+
               <div className="col-lg-2 mt-4">
                 <button
                   className="btn btn-primary mt-2"
