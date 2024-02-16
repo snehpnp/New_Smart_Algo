@@ -297,6 +297,29 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
 
                             </> :
 
+
+field.type === "number" ? (
+  <div className="col-lg-3">
+    <div className="row d-flex">
+      <div className="col-lg-12 ">
+        <div className="form-group mb-3">
+          <label htmlFor={field.name}>{field.name}</label>
+          <input
+            type="number"
+            name={field.name}
+            className="form-control"
+            id={field.name}
+            {...formik.getFieldProps(field.name)}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+) : 
+
+
+
+
                               field.type === "file" ? <>
                                 <div className="col-lg-6">
                                   <div className="row d-flex">

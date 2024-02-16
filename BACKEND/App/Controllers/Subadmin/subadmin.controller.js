@@ -163,6 +163,7 @@ class Subadmin {
                 trade_history_old: Subadmin_permision_data.trade_history_old,
                 strategy: Subadmin_permision_data.strategy,
                 group_services: Subadmin_permision_data.group_services,
+                Update_Api_Key:Subadmin_permision_data.Update_Api_Key
             }
 
             const filter = { user_id: existingUsername._id };
