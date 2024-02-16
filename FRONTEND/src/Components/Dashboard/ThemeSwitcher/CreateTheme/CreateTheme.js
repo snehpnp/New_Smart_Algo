@@ -395,7 +395,7 @@ const CreateTheme = ({ SelectTheme1 }) => {
                     </div>
 
                     <div className="tab-content tab-content-default tabcontent-border">
-                        <div className={`tab-pane ${activeTab === 1 ? 'active show' : ''}`} >
+                        <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} >
                             <div className="fade tab-pane active show" id="tab1" >
                                 <div className="admin-settings">
                                     <div className="row">
@@ -542,8 +542,9 @@ const CreateTheme = ({ SelectTheme1 }) => {
 
                             </div>
                         </div>
-                        <div className={`tab-pane ${activeTab === 2 ? 'active show' : ''}`} >
-                            <div className="fade tab-pane active show" id="tab2">
+                        <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`} >
+
+                            <div className="fade tab-pane" id="tab2">
                                 <div className="admin-settings">
                                     <div className="row">
                                         <div className="col-sm-6">
@@ -611,7 +612,7 @@ const CreateTheme = ({ SelectTheme1 }) => {
 
                         <div className={`tab-pane ${activeTab === 3 ? 'active' : ''}`} >
 
-                            <div className="fade tab-pane active show" id="tab3">
+                            <div className="fade tab-pane" id="tab3">
                                 <div className="admin-settings">
                                     <div className="row">
                                         <div className="col-sm-6">
@@ -647,6 +648,7 @@ const CreateTheme = ({ SelectTheme1 }) => {
                                 </div>
                             </div>
                         </div>
+
                         <div className="button-group">
                             {activeTab !== 1 && (
                                 <button className="btn btn-primary" onClick={handlePreviousTab}>
@@ -663,6 +665,7 @@ const CreateTheme = ({ SelectTheme1 }) => {
                                 </button>
                             )}
                         </div>
+
                     </div>
                 </div>
 
