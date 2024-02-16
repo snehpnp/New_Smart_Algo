@@ -132,12 +132,13 @@ const TradeHistory = () => {
     )}/${parseInt(dateParts[2], 10)}`;
     return formattedDate;
   };
+  
 
   const ResetDate = (e) => {
     e.preventDefault();
     setFromDate("");
-    setStrategyClientStatus("");
-    setSelectService("");
+    setStrategyClientStatus("null");
+    setSelectService("null");
     setToDate("");
     setTradeHistoryData({
       loading: false,
@@ -154,37 +155,7 @@ const TradeHistory = () => {
       // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
-    // {
-    //   dataField: "squreoff",
-    //   text: "Square OFF",
-    //   formatter: (cell, row, rowIndex) => {
-    //     if (
-    //       row.exit_qty_percent &&
-    //       row.entry_qty_percent &&
-    //       parseInt(row.entry_qty_percent) > parseInt(row.exit_qty_percent)
-    //     ) {
-    //       return (
-    //         <button className="btn-primary"
-    //           onClick={() => SquareOff(row, rowIndex)}
-
-    //         >
-    //           Square Off
-    //         </button>
-    //       );
-    //     } else if (!row.exit_qty_percent &&
-    //       row.entry_qty_percent) {
-    //       return (
-    //         <button className="btn-primary"
-    //           onClick={() => SquareOff(row, rowIndex)}
-    //         >
-    //           Square Off
-    //         </button>
-    //       );
-    //     } else {
-    //       return null
-    //     }
-    //   },
-    // },
+    
     {
       dataField: "live",
       text: "Live Price",
@@ -680,6 +651,7 @@ const TradeHistory = () => {
   };
 
 
+ console.log("ServiceData.data:", ServiceData.data)
 
   return (
     <>
@@ -687,29 +659,7 @@ const TradeHistory = () => {
         show_csv_button={true} csv_data={ForGetCSV} csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-          {/* <div className="col-lg-12 flex-column">
-            <div className="headaer-title">
-              <h5 className="font-w400 mb-0">Live Price</h5>
-            </div>
-             <div className="Api Login m-2">
-              <label class="switch">
-                <input
-                  type="checkbox"
-                  className="bg-primary"
-                  checked={checkStatusReff.current}
-                  onChange={(e) =>
-                    LogIn_WIth_Api(
-                      e.target.checked,
-                      UserDetails.broker_id,
-                      UserDetails.trading_status,
-                      UserDetails
-                    )
-                  }
-                />
-                <span class="slider round"></span>
-              </label>
-            </div>
-            </div> */}
+           
           <div className="col-lg-2 px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
               <label className="col-lg-12" htmlFor="fromdate">
@@ -722,8 +672,7 @@ const TradeHistory = () => {
                 id="fromdate"
                 value={fromDate}
                 onChange={handleFromDateChange}
-              // min={new Date().toISOString().split('T')[0]} // Disable past dates
-              // disabled={disableFromDate}
+              
               />
             </div>
           </div>
@@ -755,7 +704,9 @@ const TradeHistory = () => {
                 onChange={(e) => setSelectService(e.target.value)}
                 value={SelectService}
               >
+                 
                 <option value="null" selected>All</option>
+                
                 {ServiceData.data &&
                   ServiceData.data.map((item) => {
                     return (

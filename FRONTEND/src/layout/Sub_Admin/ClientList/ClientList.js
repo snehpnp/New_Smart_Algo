@@ -25,6 +25,11 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 const AllClients = () => {
     const navigate = useNavigate()
     const location = useLocation()
+    const [originalData, setOriginalData] = useState([]);
+    const [searchInput, setSearchInput] = useState("");
+    const [ClientStatus, setClientStatus] = useState("null");
+    const [PanelStatus, setPanelStatus] = useState("2");
+
 
 
     const dispatch = useDispatch()
@@ -51,6 +56,8 @@ const AllClients = () => {
         loading: true,
         data: []
     });
+
+    console.log("getAllClients :", getAllClients)
 
 
     // DELETE USET FUNCTION TO DELETE ALL SERVICES
@@ -92,11 +99,12 @@ const AllClients = () => {
                         data: response.data
                     });
                 }
+                setOriginalData(response.data);
             })
     }
     useEffect(() => {
         data()
-    }, [refresh])
+    }, [])
 
 
 
@@ -111,7 +119,7 @@ const AllClients = () => {
     }
     useEffect(() => {
         data2()
-    }, [getPermissions])
+    }, [])
 
 
 
@@ -170,6 +178,77 @@ const AllClients = () => {
         }
 
     }
+
+
+    console.log("originalData :", originalData)
+    useEffect(() => {
+        const filteredData = originalData.filter((items) => {
+            const filter1Match = ClientStatus == "null" || items.license_type.includes(ClientStatus);
+            const filter2Match = PanelStatus == 2 || items.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
+            const searchTermMatch =
+                searchInput === '' ||
+                items.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
+                items.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
+                items.PhoneNo.includes(searchInput)
+            return searchTermMatch && filter1Match && filter2Match ;
+        });
+        setAllClients({
+            loading: false,
+            data: searchInput ||  ClientStatus !== "null" || PanelStatus !== "2" ? filteredData : originalData,
+        });
+
+    }, [searchInput, originalData, PanelStatus , ClientStatus])
+      const ResetDate = (e) => {
+        e.preventDefault();
+        setSearchInput("");
+        setClientStatus("null");
+        setPanelStatus("2");
+        setAllClients({
+          loading: false,
+          data: originalData,
+        });
+      };
+
+    // MANAGE MULTIFILTER
+    // useEffect(() => {
+
+    //     const filteredData = originalData.filter((item) => {
+    //     //  console.log("item", item.broker);
+    //       const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
+    //       const filter3Match = selectBroker === "null" || item.broker === selectBroker;
+    //       const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
+    //       const searchTermMatch =
+    //         searchInput === '' ||
+    //         item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
+    //         item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
+    //         item.PhoneNo.includes(searchInput)
+    //       // Return true if all conditions are met
+    //       return filter1Match && filter3Match && filter2Match && searchTermMatch;
+    //     });
+    //     setAllClients({
+    //       loading: false,
+    //       data: searchInput || PanelStatus !== "2" || ClientStatus !== "null" || selectBroker !== "null" ? filteredData : originalData,
+    
+    //     });
+    
+    //   }, [searchInput, originalData, PanelStatus, ClientStatus, selectBroker]);
+    
+    
+    //   const ResetDate = (e) => {
+    //     e.preventDefault();
+    //     setSearchInput("");
+    //     setClientStatus("null");
+    //     setSelectBroker("null");
+    //     setPanelStatus("2");
+    //     setAllClients({
+    //       loading: false,
+    //       data: originalData,
+    //     });
+    //     console.log("originalData ", originalData)
+    
+    
+    //   };
+    
 
 
 
@@ -349,8 +428,9 @@ const AllClients = () => {
                                     <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                                 </span>
                             </Link>
-                            {row.license_type === "1" ? <>
+                            {row.license_type != "2" ? <>
                                 <Link>
+                               
                                     <span data-toggle="tooltip" data-placement="top" title="Delete">
                                         <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={(e) => Delete_user(row._id)} />
                                     </span>
@@ -363,7 +443,7 @@ const AllClients = () => {
         },
     ];
 
-// console.log("getPermissions && getPermissions.Update_Api_Key" ,getPermissions && getPermissions.Update_Api_Key)
+    // console.log("getPermissions && getPermissions.Update_Api_Key" ,getPermissions && getPermissions.Update_Api_Key)
 
     return (
         <>
@@ -371,6 +451,74 @@ const AllClients = () => {
                 getAllClients.loading ? <Loader /> :
                     <>
                         <Content Page_title="All Clients" button_title="Add Client" route='/subadmin/client/add' button_status={getPermissions && getPermissions.client_add == 1 ? true : false} >
+
+                            <div className="row">
+                                <div className="col-lg-3">
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">
+                                            Search Something Here
+                                        </label>
+                                        <input
+                                            type="text"
+                                            placeholder="Search..."
+                                            value={searchInput}
+                                            onChange={(e) => setSearchInput(e.target.value)}
+                                            class="form-control"
+                                            id="exampleFormControlInput1"
+                                        />
+                                    </div>
+                                </div>
+                               <div className="col-lg-2 ">
+                                    <div class="mb-3">
+                                        <label for="select" class="form-label">
+                                            Client Type
+                                        </label>
+
+                                        <select
+                                            class="default-select wide form-control"
+                                            aria-label="Default select example"
+                                            id="select"
+                                            onChange={(e) => setClientStatus(e.target.value)}
+                                            value={ClientStatus}
+                                        >
+                                            <option value="null">All</option>
+                                            <option value="2">Live</option>
+                                            <option value="1">Demo</option>
+                                            <option value="0">2 Days Only</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                 <div className="col-lg-2">
+                                    <div class="mb-3">
+                                        <label for="select" class="form-label">
+                                            Trading Type
+                                        </label>
+
+                                        <select
+                                            class="default-select wide form-control"
+                                            aria-label="Default select example"
+                                            id="select"
+                                            onChange={(e) => setPanelStatus(e.target.value)}
+                                            value={PanelStatus}
+                                        >
+                                            <option value="2">All</option>
+                                            <option value="1">On</option>
+                                            <option value="0">OFf</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="col-lg-2 mt-4">
+                                    <button
+                                        className="btn btn-primary mt-2"
+                                        onClick={(e) => ResetDate(e)}
+                                    >
+                                        Reset
+                                    </button>
+                                </div>
+                            </div>
+
+
+
                             {
                                 getAllClients.data && getAllClients.data.length === 0 ?
                                     <>
