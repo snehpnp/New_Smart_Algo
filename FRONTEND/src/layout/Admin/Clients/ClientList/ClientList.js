@@ -484,6 +484,7 @@ const AllClients = () => {
 
 
   // MANAGE MULTIFILTER
+ 
 
   useEffect(() => {
 
