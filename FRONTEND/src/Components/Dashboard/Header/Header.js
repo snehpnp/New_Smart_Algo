@@ -164,15 +164,15 @@ const Header = ({ ChatBox }) => {
       localStorage.removeItem("page")
     } else {
 
-      navigate(routePath)
+      // return 
+      // navigate(routePath)
+      navigate("/admin/dashboard")
 
-      window.location.reload();
+      // window.location.reload();
       localStorage.removeItem("gotodashboard");
       localStorage.removeItem("user_details_goTo");
       localStorage.removeItem("user_role_goTo");
       localStorage.removeItem("route");
-
-
       setTimeout(() => {
         localStorage.removeItem("user_details_goTo");
         localStorage.removeItem("user_role_goTo");
@@ -352,58 +352,12 @@ const Header = ({ ChatBox }) => {
 
 
 
-  const test = async () => {
-    // const socket = socketIOClient(`${Config.base_url}`);
-
-    // socket.on("logout_user_from_other_device_res", async (data) => {
-    //   console.log("logout_user_from_other_device_res", data);
-    // });
-
-
-
-
-
-
-    // if (user_role === "USER") {
-    //   const socket = socketIOClient(`${Config.base_url}`);
-
-    //   // console.log("Config.base_url", Config.base_url)
-    //   socket.on("logout_user_from_other_device_res", async (data) => {
-    //     console.log("logout_user_from_other_device_res", data);
-
-    //     await dispatch(
-    //       Log_Out_User({
-    //         userId: data.usedata.user_id,
-    //         Device: data.CheckUser,
-    //       })
-    //     )
-    //       .then((res) => {
-    //         if (res.payload.status) {
-    //           // toast.success(res.payload.msg)
-    //           localStorage.removeItem("user_role");
-    //           localStorage.removeItem("user_details");
-    //           setTimeout(() => {
-    //             navigate("/");
-    //           }, 1500);
-    //         }
-    //       })
-    //       .catch((error) => {
-    //         console.log("logout error", error);
-    //       });
-    //   });
-
-    //   return () => {
-    //     socket.disconnect();
-    //   };
-
-    // }
-
-  }
+   
 
 
 
   useEffect(() => {
-    test()
+     
     CompanyName()
   }, []);
 
@@ -446,9 +400,8 @@ const Header = ({ ChatBox }) => {
                     </label>
                   </div>
                 </>
-              ) : (
-                ""
-              )}
+              ) : ( "")}
+
               {gotodashboard != null ? (
                 <>
                   <li className="nav-item dropdown gotodashboard">
