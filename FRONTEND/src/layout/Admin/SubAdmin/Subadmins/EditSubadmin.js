@@ -180,10 +180,11 @@ const AllSubadmin = () => {
                 }
                 else if (response.status) {
                     toast.success(response.msg);
-
+              
                     setTimeout(() => {
                         navigate("/admin/allsubadmins")
                     }, 1000);
+                    
                 }
                 else if (!response.status) {
                     toast.error(response.msg);
