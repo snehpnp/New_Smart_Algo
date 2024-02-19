@@ -57,8 +57,7 @@ const AllClients = () => {
         data: []
     });
 
-    
-
+   
 
     // DELETE USET FUNCTION TO DELETE ALL SERVICES
     const Delete_user = async (id) => {
@@ -178,6 +177,21 @@ const AllClients = () => {
         }
 
     }
+
+if(getAllClients.data.length>0){
+    console.log("getAllClients:", getAllClients.data)
+    
+    // console.log("getAllClients:",   getAllClients.data[0])
+ 
+    console.log("getAllClients:", getAllClients && getAllClients.data[1].license_type)
+    // console.log("getAllClients:", getAllClients && getAllClients.data[2].license_type)
+    // console.log("getAllClients:", getAllClients && getAllClients.data[3].license_type)
+
+}
+    
+
+
+
 
 
     //manage filter
@@ -383,8 +397,9 @@ const AllClients = () => {
 
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
-                    <div>
-                        {(getPermissions && getPermissions.client_edit === 1) || (getPermissions && getPermissions.Update_Api_Key === 1) && row.Is_Active === "1" ? <>
+                    <div> 
+                     
+                        {(getPermissions && getPermissions.client_edit === 1) || (getPermissions && getPermissions.Update_Api_Key === 1 && row.license_type !== "1" && row.Is_Active === "1" ) ? <>
                        
                             <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
                                 <span data-toggle="tooltip" data-placement="top" title="Edit">
@@ -393,7 +408,7 @@ const AllClients = () => {
                                 
                             </Link> 
                
-                            {row.license_type != "2"  && (getPermissions && getPermissions.Update_Api_Key === 0) ? <>
+                            {row.license_type !== "2"  && (getPermissions && getPermissions.Update_Api_Key === 0) ? <>
                                 <Link>
                                
                                     <span data-toggle="tooltip" data-placement="top" title="Delete">
