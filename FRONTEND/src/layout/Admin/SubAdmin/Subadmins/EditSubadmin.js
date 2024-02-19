@@ -149,6 +149,7 @@ const AllSubadmin = () => {
         },
         onSubmit: async (values) => {
 
+            
             const req = {
                 "FullName": values.FullName,
                 "Email": values.email,
@@ -165,12 +166,13 @@ const AllSubadmin = () => {
                     "go_To_Dashboard": values.gotodashboard ? '1' : values.all ? '1' : '0',
                     "trade_history_old": values.tradehistory ? '1' : values.all ? '1' : '0',
                     "detailsinfo": values.detailsinfo ? '1' : values.all ? '1' : '0',
-                    'strategy': selectedStrategyIds,
+                    'strategy': values.updateapikeys===true ? [] :   selectedStrategyIds,
                     'Update_Api_Key': values.updateapikeys ? '1' :  '0',
-                    'group_services': selectedGroupIds,
+                    'group_services': values.updateapikeys===true ? [] : selectedGroupIds,
                 }
-            }
+            }    
 
+ 
 
             await dispatch(Edit_Subadmin({ req: req, token: user_token })).unwrap().then((response) => {
                 if (response.status === 409) {
@@ -194,8 +196,6 @@ const AllSubadmin = () => {
 
     //  SET INTIAL VALUE
 
-
-    // console.log("UserData.data.data :", UserData.data.data)
     useEffect(() => {
         if (UserData.data.data !== undefined) {
             let userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0]
@@ -215,10 +215,7 @@ const AllSubadmin = () => {
         }
     }, [UserData.data.data]);
 
-    console.log("UserData.data.data :", UserData.data.data)
-
-
-
+ 
 
     useEffect(() => {
         if (formik.values.updateapikeys) {
@@ -235,9 +232,6 @@ const AllSubadmin = () => {
         }
     }, [formik.values.updateapikeys]);
    
-
-
-
 
     useEffect(() => {
 
@@ -286,10 +280,8 @@ const AllSubadmin = () => {
             formik.setFieldValue('editclient', true);
             formik.setFieldValue('gotodashboard', true);
             formik.setFieldValue('licence', true);
-          
             formik.setFieldValue('groupservice', true);
             formik.setFieldValue('Strategy', true);
-        
         }
         else {
             formik.setFieldValue('editclient', false);
