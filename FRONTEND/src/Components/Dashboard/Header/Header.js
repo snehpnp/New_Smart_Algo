@@ -168,7 +168,7 @@ const Header = ({ ChatBox }) => {
       // navigate(routePath)
       navigate("/admin/dashboard")
 
-      // window.location.reload();
+      window.location.reload();
       localStorage.removeItem("gotodashboard");
       localStorage.removeItem("user_details_goTo");
       localStorage.removeItem("user_role_goTo");

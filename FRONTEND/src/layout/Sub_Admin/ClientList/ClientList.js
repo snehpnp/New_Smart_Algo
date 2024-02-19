@@ -48,7 +48,7 @@ const AllClients = () => {
     const [refresh, setrefresh] = useState(false)
 
     const [getPermissions, setGetPermissions] = useState([])
-
+ 
 
 
 
@@ -57,7 +57,7 @@ const AllClients = () => {
         data: []
     });
 
-    console.log("getAllClients :", getAllClients)
+    
 
 
     // DELETE USET FUNCTION TO DELETE ALL SERVICES
@@ -77,7 +77,7 @@ const AllClients = () => {
 
 
     }
-
+ 
 
     // GET ALL CLIENTS
 
@@ -180,7 +180,7 @@ const AllClients = () => {
     }
 
 
-    console.log("originalData :", originalData)
+    //manage filter
     useEffect(() => {
         const filteredData = originalData.filter((items) => {
             const filter1Match = ClientStatus == "null" || items.license_type.includes(ClientStatus);
@@ -209,49 +209,11 @@ const AllClients = () => {
         });
       };
 
-    // MANAGE MULTIFILTER
-    // useEffect(() => {
-
-    //     const filteredData = originalData.filter((item) => {
-    //     //  console.log("item", item.broker);
-    //       const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
-    //       const filter3Match = selectBroker === "null" || item.broker === selectBroker;
-    //       const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
-    //       const searchTermMatch =
-    //         searchInput === '' ||
-    //         item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
-    //         item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
-    //         item.PhoneNo.includes(searchInput)
-    //       // Return true if all conditions are met
-    //       return filter1Match && filter3Match && filter2Match && searchTermMatch;
-    //     });
-    //     setAllClients({
-    //       loading: false,
-    //       data: searchInput || PanelStatus !== "2" || ClientStatus !== "null" || selectBroker !== "null" ? filteredData : originalData,
-    
-    //     });
-    
-    //   }, [searchInput, originalData, PanelStatus, ClientStatus, selectBroker]);
-    
-    
-    //   const ResetDate = (e) => {
-    //     e.preventDefault();
-    //     setSearchInput("");
-    //     setClientStatus("null");
-    //     setSelectBroker("null");
-    //     setPanelStatus("2");
-    //     setAllClients({
-    //       loading: false,
-    //       data: originalData,
-    //     });
-    //     console.log("originalData ", originalData)
-    
-    
-    //   };
+     
     
 
 
-
+   
     const showBrokerName = (value1, licence_type) => {
         let value = parseInt(value1)
 
@@ -423,12 +385,15 @@ const AllClients = () => {
                 <div style={{ width: "120px" }}>
                     <div>
                         {(getPermissions && getPermissions.client_edit === 1) || (getPermissions && getPermissions.Update_Api_Key === 1) && row.Is_Active === "1" ? <>
+                       
                             <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
                                 <span data-toggle="tooltip" data-placement="top" title="Edit">
                                     <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                                 </span>
-                            </Link>
-                            {row.license_type != "2" ? <>
+                                
+                            </Link> 
+               
+                            {row.license_type != "2"  && (getPermissions && getPermissions.Update_Api_Key === 0) ? <>
                                 <Link>
                                
                                     <span data-toggle="tooltip" data-placement="top" title="Delete">
@@ -436,7 +401,7 @@ const AllClients = () => {
                                     </span>
                                 </Link>
                             </> : ""}
-                        </> : ""}
+                        </> :  ""}
                     </div>
                 </div>
             ),
