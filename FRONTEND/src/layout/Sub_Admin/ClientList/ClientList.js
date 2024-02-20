@@ -178,16 +178,7 @@ const AllClients = () => {
 
     }
 
-if(getAllClients.data.length>0){
-    console.log("getAllClients:", getAllClients.data)
-    
-    // console.log("getAllClients:",   getAllClients.data[0])
- 
-    console.log("getAllClients:", getAllClients && getAllClients.data[1].license_type)
-    // console.log("getAllClients:", getAllClients && getAllClients.data[2].license_type)
-    // console.log("getAllClients:", getAllClients && getAllClients.data[3].license_type)
 
-}
     
 
 
