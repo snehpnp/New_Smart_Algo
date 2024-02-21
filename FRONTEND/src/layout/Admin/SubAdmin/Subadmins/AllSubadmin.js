@@ -270,7 +270,7 @@ const AllSubadmin = () => {
       .then((response) => {
         if (response.status) {
           // console.log(response);
-
+          localStorage.setItem("route", "/admin/allsubadmins");
           localStorage.setItem("gotodashboard", "true");
           localStorage.setItem(
             "user_details_goTo",

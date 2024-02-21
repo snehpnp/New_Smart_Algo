@@ -153,9 +153,9 @@ const Header = ({ ChatBox }) => {
   }
 
   const redirectToAdmin = () => {
-    // console.log("page", page);
-    // console.log("user_role_goTo", user_role_goTo);
-    // console.log("routePath", routePath);
+    console.log("page", page);
+    console.log("user_role_goTo", user_role_goTo);
+    console.log("routePath", routePath);
 
 
 
@@ -164,9 +164,10 @@ const Header = ({ ChatBox }) => {
       localStorage.removeItem("page")
     } else {
 
+
       // return 
-      // navigate(routePath)
-      navigate("/admin/dashboard")
+      navigate(routePath)
+      // navigate("/admin/dashboard")
 
       window.location.reload();
       localStorage.removeItem("gotodashboard");
