@@ -20,7 +20,19 @@ class OptionChain {
     async Get_Option_Symbol(req, res) {
         try {
 
-            var symbols = await Get_Option_Chain_modal.find().select('symbol token price').sort({ createdAt: 1 });
+            // var symbols = await Get_Option_Chain_modal.find().select('symbol token price').sort({ symbol: 1 });
+
+            var symbols1 = await Get_Option_Chain_modal.find({ symbol: { $in: ["NIFTY", "BANKNIFTY","FINNIFTY"] } })
+            .select('symbol token price')
+            .sort({ symbol: 1 });
+
+            var otherSymbols = await Get_Option_Chain_modal.find({ symbol: { $nin: ["NIFTY", "BANKNIFTY","FINNIFTY"] } })
+           .select('symbol token price');
+
+
+            var symbols = symbols1.concat(otherSymbols);
+
+
             if (!symbols) {
                 return res.send({ status: false, msg: 'Server issue Not find .', data: [] });
             }
