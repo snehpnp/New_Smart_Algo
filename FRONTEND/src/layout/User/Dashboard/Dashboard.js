@@ -251,7 +251,7 @@ const BrokerResponse = () => {
 
   return (
     <Content Page_title="Dashboard" button_status={false}>
-      <div className="table-responsive " style={{ height: '100vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+      <div className="table-responsive " style={{ height: '80vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
         <table className="table dashboard-table ">
           <thead className="bg-primary">
             <tr>
