@@ -7,7 +7,7 @@ import Loader from "../../../../Utils/Loader";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable";
 
-import { Pencil, Trash2, UserPlus, LayoutList } from "lucide-react";
+import { Pencil, Trash2, UserPlus, PlusSquare , LayoutList } from "lucide-react";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 
 import { useDispatch} from "react-redux";
@@ -138,6 +138,14 @@ const ServicesList = () => {
               onClick={() => RemoveStrategy(row._id)}
             />
           </span>
+          <span data-toggle="tooltip" data-placement="top" title="Get Clients">
+            <PlusSquare 
+              size={20}
+              strokeWidth={2}
+              className="mx-1"
+              onClick={(e) => Add_Strategy_To_Client(row)}
+            />
+          </span>
         </div>
       ),
     },
@@ -146,8 +154,6 @@ const ServicesList = () => {
   // GET ALL CLIENTS BY STRATEGY ID
   
   const GetClientsByStrategyID = async (row) => {
-    
-
     await dispatch(
       Get_client_By_strategy_Id({
         _id: row._id,
@@ -156,6 +162,36 @@ const ServicesList = () => {
     )
       .unwrap()
       .then((response) => {
+        console.log("response :", response)
+        setshowModal(true);
+
+        if (response.status) {
+
+           
+          setServicesName({
+            loading: false,
+            data: response.data,
+          });
+        } else {
+          setServicesName({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  };
+
+
+  const Add_Strategy_To_Client = async (row) => {
+    await dispatch(
+      Get_client_By_strategy_Id({
+        _id: row._id,
+        token: user_token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        console.log("response :", response)
         setshowModal(true);
 
         if (response.status) {

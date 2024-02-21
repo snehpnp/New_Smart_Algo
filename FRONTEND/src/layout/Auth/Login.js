@@ -69,28 +69,11 @@ const Login = () => {
         let themedata = response.data[0].theme_data[0];
         localStorage.setItem("theme", JSON.stringify(themedata));
 
-        console.log("res", themedata)
+       
 
-        // let themedata = response.data[0].theme_data[0];
-        // localStorage.setItem("theme", JSON.stringify(themedata));
+     
 
         if (themedata != undefined) {
-
-
-          console.log("themedata dashboard", themedata.dashboard)
-          console.log("themedata theme_version", themedata.theme_version)
-          console.log("themedata primary_col", themedata.primary_col)
-          console.log("themedata nav_head_col", themedata.nav_head_col)
-          console.log("themedata header_col", themedata.header_col)
-          console.log("themedata sidebar_col", themedata.sidebar_col)
-          console.log("themedata layout", themedata.layout)
-          console.log("themedata sidebar", themedata.sidebar)
-          console.log("themedata header_position", themedata.header_position)
-          console.log("themedata sidebar_position", themedata.sidebar_position)
-          console.log("themedata body_font", themedata.body_font)
-          console.log("themedata container", themedata.container)
-
-
 
           $("body").removeClass(
             "theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9 theme-10"
@@ -182,18 +165,6 @@ const Login = () => {
 
       });
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

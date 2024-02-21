@@ -95,6 +95,9 @@ import CreateStrategy from '../layout/Admin/CreateStrategy/CreateStrategy';
 import AllMakeStrategy from '../layout/Admin/CreateStrategy/AllMakeStrategy';
 import EditMakeStrategy from '../layout/Admin/CreateStrategy/EditMakeStrategy';
 
+//Add Strategy to Clients
+import AddStrategyToClients from '../layout/Admin/Service/AllStrategy/AddStrategyToClients';
+
 
 
 
@@ -205,6 +208,9 @@ const Admin = () => {
                 <Route exact path="/brokerinfo" element={<BrokerInfor />} />
                 <Route exact path="/optionchain" element={<Opation_Chain />} />
                 <Route exact path="/openposition" element={<Open_Positions />} />
+                <Route exact path="/addstratgytoclients" element={<AddStrategyToClients/>} />
+
+
 
             </Routes>
         </>

@@ -44,7 +44,7 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions, selectRow, keyFi
                 noDataIndication={() => <NoDataIndication />}
                 headerClasses="bg-primary text-primary text-center header-class"
                 rowClasses={`text-center`}
-                // rowStyle={rowStyle}
+                rowStyle={rowStyle}
             />
         </div>
     </>

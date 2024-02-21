@@ -179,9 +179,6 @@ const AllClients = () => {
     }
 
 
-    
-
-
 
 
 
