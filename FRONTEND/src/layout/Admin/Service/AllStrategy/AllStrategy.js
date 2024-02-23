@@ -7,15 +7,17 @@ import Loader from "../../../../Utils/Loader";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable";
 
-import { Pencil, Trash2, UserPlus, PlusSquare , LayoutList } from "lucide-react";
+import { Pencil, Trash2, UserPlus, PlusSquare, LayoutList } from "lucide-react";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import Modal from "../../../../Components/ExtraComponents/Modal";
 import {
   Get_All_Strategy,
   Remove_Strategy_BY_Id,
   Get_client_By_strategy_Id,
+  Add_And_Remove_Strategy_To_Client,
+  UpDate_strategy_Id
 } from "../../../../ReduxStore/Slice/Admin/StrategySlice";
 
 import toast, { Toaster } from "react-hot-toast";
@@ -24,17 +26,22 @@ import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 const ServicesList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const user_token = JSON.parse(localStorage.getItem("user_details")).token;
-
+  const [getClient, setGetClient] = useState([]);
+  const [startegyClientIds, setStartegyClientIds] = useState([]);
+  const [startegyClientIdsDelete, setStartegyClientIdsDelete] = useState([]);
+  const [startegyIds, setStartegyIds] = useState([]);
   const [showModal, setshowModal] = useState(false);
-
+  const [showModal2, setshowModal2] = useState(false);
   const [refresh, setRefresh] = useState(false);
-
-  //    For Filter
-
   const [searchInput, setSearchInput] = useState("");
   const [originalData, setOriginalData] = useState([]);
+  const [oneStrategyClient, setOneStrategyClient] = useState([]);
+  const [showStrategyName, setShowStrategyName] = useState('');
+
+
+
+
 
   const [AllStrategy, setAllStrategy] = useState({
     loading: true,
@@ -74,8 +81,6 @@ const ServicesList = () => {
     data();
   }, [refresh]);
 
-
-  
 
   const columns = [
     {
@@ -138,8 +143,8 @@ const ServicesList = () => {
               onClick={() => RemoveStrategy(row._id)}
             />
           </span>
-          <span data-toggle="tooltip" data-placement="top" title="Get Clients">
-            <PlusSquare 
+          <span data-toggle="tooltip" data-placement="top" title="Get Client">
+            <PlusSquare
               size={20}
               strokeWidth={2}
               className="mx-1"
@@ -151,8 +156,58 @@ const ServicesList = () => {
     },
   ];
 
+
+  const Add_Strategy_To_Client = async (row) => {
+// console.log("row", row)
+    setShowStrategyName(row.strategy_name)
+    await dispatch(
+      Add_And_Remove_Strategy_To_Client({
+        _id: row._id,
+        token: user_token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+
+        setshowModal2(true);
+
+        if (response.status) {
+
+
+
+          let sclientid = [];
+
+
+          let OneStategyClientArr = [];
+          response.StrategyClient.forEach(element => {
+            sclientid.push(element.users._id)
+            response.duplicateids.forEach(element1 => {
+              if (element1.count == 1 && element.users._id == element1._id) {
+
+                OneStategyClientArr.push(element1._id)
+              }
+
+            });
+
+          });
+
+
+
+
+
+          setStartegyIds(row._id)
+          setOneStrategyClient(OneStategyClientArr)
+          setStartegyClientIds(sclientid)
+          setGetClient(response.AllClients);
+
+        } else {
+
+        }
+      });
+  };
+
   // GET ALL CLIENTS BY STRATEGY ID
-  
+
   const GetClientsByStrategyID = async (row) => {
     await dispatch(
       Get_client_By_strategy_Id({
@@ -162,12 +217,12 @@ const ServicesList = () => {
     )
       .unwrap()
       .then((response) => {
-        console.log("response :", response)
+
         setshowModal(true);
 
         if (response.status) {
 
-           
+
           setServicesName({
             loading: false,
             data: response.data,
@@ -182,37 +237,11 @@ const ServicesList = () => {
   };
 
 
-  const Add_Strategy_To_Client = async (row) => {
-    await dispatch(
-      Get_client_By_strategy_Id({
-        _id: row._id,
-        token: user_token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        console.log("response :", response)
-        setshowModal(true);
 
-        if (response.status) {
-
-           
-          setServicesName({
-            loading: false,
-            data: response.data,
-          });
-        } else {
-          setServicesName({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
-  };
 
   //  MANAGE MULTIFILTER
   useEffect(() => {
-    
+
     const filteredData = originalData.filter((item) => {
       return (
         item.strategy_name.toLowerCase().includes(searchInput.toLowerCase()) ||
@@ -267,10 +296,52 @@ const ServicesList = () => {
 
 
 
+  const handleStrategyChecked = (event) => {
+    const CheckedClientId = event.target.name;
+
+    if (event.target.checked) {
+      // Add the selected strategy to the array
+      setStartegyClientIds([...startegyClientIds, CheckedClientId]);
+      setStartegyClientIdsDelete(startegyClientIdsDelete.filter((item) => item !== CheckedClientId));
+
+    } else {
+      // Remove the deselected strategy from the array
+      setStartegyClientIdsDelete([...startegyClientIdsDelete, CheckedClientId]);
+
+      setStartegyClientIds(startegyClientIds.filter((item) => item !== CheckedClientId));
+    }
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    let filteredArray = startegyClientIds.filter(item => !oneStrategyClient.includes(item));
 
 
 
 
+
+    const req = {
+      "clientId": filteredArray,
+      "strategyId": startegyIds,
+      "clientIdDelete": startegyClientIdsDelete
+    }
+
+    await dispatch(UpDate_strategy_Id({ req: req })).unwrap()
+
+      .then((response) => {
+        if (response.status) {
+          toast.success(response.msg)
+          setTimeout(() => {
+            setshowModal2(false)
+          }, [1000])
+        }
+        else {
+          toast.error(response.msg)
+        }
+      })
+  }
 
   return (
     <>
@@ -325,7 +396,8 @@ const ServicesList = () => {
                   title="Clients"
                   hideBtn={true}
                   // onHide={handleClose}
-                  handleClose={() => setshowModal(false)}
+                  handleClose={() =>
+                    setshowModal(false)}
                 >
                   <BasicDataTable
                     TableColumns={[
@@ -347,8 +419,8 @@ const ServicesList = () => {
                               {cell === "2"
                                 ? "LIVE"
                                 : cell === "1"
-                                ? "DEMO"
-                                : "2 Days"}
+                                  ? "Paper Trading"
+                                  : "Live 2 Days"}
                             </span>
                           </>
                         ),
@@ -361,6 +433,74 @@ const ServicesList = () => {
             ) : (
               ""
             )}
+
+
+            {showModal2 ?
+              (
+                <>
+                  <Modal
+                    isOpen={showModal2}
+                    size="ms-5"
+                    title={showStrategyName}
+                    hideBtn={true}
+                    // onHide={handleClose}
+                    handleClose={() =>
+
+                      setshowModal2(false)
+
+
+
+                    }
+                  >
+                    {/* <input type="text" placeholder="Search Here" className="p-1 rounded my-4"/> */}
+                    <form onSubmit={(e) => handleSubmit(e)}>
+                      <table className="mb-5">
+                        <thead>
+                          <tr>
+                            <th className="h4">Clients List</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          {getClient && getClient.map((client, index) => {
+                            return <tr className="mx-3 h4 font-weight-bold"  >
+                              <td>
+                                <input
+                                  type="checkbox"
+                                  id={client._id}
+                                  name={client._id}
+                                  value="checkboxValue"
+                                  defaultChecked={startegyClientIds.includes(client._id)}
+                                  disabled={oneStrategyClient.includes(client._id) ? true : false}
+                                  onChange={(e) => handleStrategyChecked(e)}
+                                />
+                                <label className="mx-3" for={client._id}>{client.UserName}</label>
+                                {
+                                  oneStrategyClient.includes(client._id) ? 
+                                  <Link to={`/admin/client/edit/${client._id}`} state={client} >
+                                  <span data-toggle="tooltip" data-placement="top" title="Edit">
+                                    <Pencil
+                                      size={20}
+                                      color="#198754"
+                                      strokeWidth={2}
+                                      className="mx-1"
+                                    />
+                                  </span>
+                                </Link> : ""}
+                                
+                              </td>
+                            </tr>
+                          }
+                          )}
+                        </tbody>
+                      </table>
+                      <button className="btn btn-primary" type="submit" >Update</button>
+                    </form>
+
+                  </Modal>
+                </>
+              ) : ""}
+
           </Content>
         </>
       )}

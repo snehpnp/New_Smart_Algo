@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_ALL_STRATEGY, GET_STRATEGY_BY_ID, GET_CLIENTS_BY_STRATEG_ID, ADD_STRATEGY, EDIT_STRATEGY_BY_ID, REMOVE_STRATEGY_BY_ID } from "../../../Service/admin.service";
+import { GET_ALL_STRATEGY, GET_STRATEGY_BY_ID,UpdateStrategyToClient, AddAndRemoveStrategyToClient ,  GET_CLIENTS_BY_STRATEG_ID, ADD_STRATEGY, EDIT_STRATEGY_BY_ID, REMOVE_STRATEGY_BY_ID } from "../../../Service/admin.service";
 
 
 
@@ -83,6 +83,31 @@ export const Add_Strategy = createAsyncThunk("admin/strategy/add", async (apireq
 });
 
 
+export const Add_And_Remove_Strategy_To_Client = createAsyncThunk("get/add_remove_client_strategy", async (apireq) => {
+
+    const { _id, token } = apireq
+    try {
+        const res = await AddAndRemoveStrategyToClient({ _id: _id }, token);
+ 
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+export const UpDate_strategy_Id = createAsyncThunk("get/update_add_remove_client_strategy", async (apireq) => {
+
+    const { req, token } = apireq
+    try {
+        const res = await UpdateStrategyToClient(req, token);
+ 
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
 
 
 const StrategyServiceSlice = createSlice({
@@ -97,6 +122,9 @@ const StrategyServiceSlice = createSlice({
         addstrategy: [],
         editstrategy: [],
         clients: [],
+        addandremovestrategytoclient : [],
+        updatestrategy : []
+         
     },
     reducers: {},
     // extraReducers: (builder) => {
@@ -147,6 +175,13 @@ const StrategyServiceSlice = createSlice({
         [Get_client_By_strategy_Id.fulfilled]: (state, { payload }) => {
             return { ...state, clients: payload, isLoading: false };
         },
+        [Add_And_Remove_Strategy_To_Client.fulfilled]: (state, { payload }) => {
+            return { ...state, addandremovestrategytoclient: payload, isLoading: false };
+        },
+        [UpDate_strategy_Id.fulfilled]: (state, { payload }) => {
+            return { ...state, updatestrategy: payload, isLoading: false };
+        },
+
     }
 }
 );
