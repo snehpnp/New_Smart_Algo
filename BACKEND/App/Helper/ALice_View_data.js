@@ -41,15 +41,15 @@ async function connectToDB(collectionName, response,dbTradeTools) {
           const insertResult = await collection.insertOne(singleDocument);
         }
 
-        createView(collectionName,dbTradeTools);
-        createView1(collectionName,dbTradeTools);
-        createViewM3(collectionName,dbTradeTools);
-        createViewM5(collectionName,dbTradeTools);
-        createViewM10(collectionName,dbTradeTools)
-       createViewM15(collectionName,dbTradeTools)
-        createViewM30(collectionName,dbTradeTools)
-       createViewM60(collectionName,dbTradeTools)
-      createViewM1DAY(collectionName,dbTradeTools)
+      await  createView(collectionName,dbTradeTools);
+      await  createView1(collectionName,dbTradeTools);
+      await  createViewM3(collectionName,dbTradeTools);
+      await  createViewM5(collectionName,dbTradeTools);
+      await  createViewM10(collectionName,dbTradeTools)
+      await  createViewM15(collectionName,dbTradeTools)
+      await  createViewM30(collectionName,dbTradeTools)
+      await  createViewM60(collectionName,dbTradeTools)
+      await  createViewM1DAY(collectionName,dbTradeTools)
 
       } else {
          
@@ -799,4 +799,5 @@ async function connectToDB(collectionName, response,dbTradeTools) {
 
 
   }
+  
 module.exports = { ALice_View_data }
