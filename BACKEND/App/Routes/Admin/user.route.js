@@ -7,7 +7,7 @@ const { upload } = require('../../Helper/imgUpload');
 
 const { AddEmployee, UpdateUser, GetAllClients, GetAllExpiredClients ,loginClients, tradingOnClients, GetclientKey , GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys } = require('../../Controllers/Admin/user.controller')
 const { EditCompany, GetCompanyInfo, GetCompany_logo, EditEmailInfo } = require('../../Controllers/Admin/company.controller')
-const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy } = require('../../Controllers/Admin/strategy.controller')
+const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy ,GetAddRemoveStrategy ,UpdateAddRemoveStrategy } = require('../../Controllers/Admin/strategy.controller')
 
 const { AddMessageBrodcast, GetAllMessageBrodcast, GetMessageBrodcast, RemoveBroadCast } = require('../../Controllers/Admin/messagebrodcast.controller')
 const { Get_Option_Symbol, Get_Option_Symbol_Expiry, Get_Option_All_Round_Token ,Get_Option_All_Token_Chain, Open_Position ,update_stop_loss,Stock_chain,subscribr_token} = require('../../Controllers/Admin/option_chain.controller')
@@ -48,6 +48,11 @@ router.post('/getall/strategy', verifyToken, GetAllStrategy);
 router.get('/getall/strategy_for_add_client', GetAllStrategyForClient);
 router.post('/delete/strategy', verifyToken, DeleteStragegy);
 router.post('/get/strategy/client', ClientsAccordingToStrategy);
+
+// STRATEGY REMOVE AND ADD GET CLIENT
+
+router.post('/get/add_remove_client_strategy', GetAddRemoveStrategy);
+router.post('/get/update_add_remove_client_strategy', UpdateAddRemoveStrategy);
 
 
 // MESSAGE BRODCAST
