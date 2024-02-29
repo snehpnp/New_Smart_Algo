@@ -134,7 +134,7 @@ const Dashboard1 = ({ data }) => {
 
   ]
 
-
+console.log("data :", data)
   return <>
     <div className='theme-6-dashboard'>
       <div className='row'>

@@ -535,10 +535,6 @@ const AddClient = () => {
   useEffect(() => {
 
 
-
-    
-
-
      ////////////////--------------START BROKER SET KEY----------------///////////
 
     
@@ -659,17 +655,7 @@ const AddClient = () => {
 
 
 
-
-
-
-
-
-
   ////////////////--------------END BROKER SET KEY----------------///////////
-
-
-
-
 
 
     if (formik.values.licence === '2' || formik.values.licence === 2) {
