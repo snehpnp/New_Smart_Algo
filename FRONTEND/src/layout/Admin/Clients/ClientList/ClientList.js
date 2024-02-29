@@ -371,7 +371,7 @@ const AllClients = () => {
             <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
           </label>
           
-        },
+        }
          </>
       ),
        
