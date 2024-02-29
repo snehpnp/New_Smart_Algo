@@ -522,11 +522,23 @@ class Employee {
         Number(Panel_key[0].licenses) >=
         Number(TotalLicense) + Number(new_licence)
       ) {
+
+       // console.log("existingUsername.license_type ",existingUsername.license_type)
         // PREVIOS CLIENT IS LIVE
         if (existingUsername.license_type != "2") {
+          console.log("ssss ")
           // USER 2 DAYS LICENSE USE
+
+         
+
+
           if (req.license_type == "0") {
-            var currentDate = new Date();
+
+
+            //console.log("ssss 2")
+
+            if(existingUsername.license_type != "0"){
+              var currentDate = new Date();
             var start_date_2days = dateTime.create(currentDate);
             start_date_2days = start_date_2days.format("Y-m-d H:M:S");
             var start_date = start_date_2days;
@@ -550,9 +562,10 @@ class Employee {
 
             var end_date_2days = dateTime.create(UpdateDate);
             var end_date_2days = end_date_2days.format("Y-m-d H:M:S");
-
-
             EndDate1 = end_date_2days;
+            }
+
+
           } else if (req.license_type == "1") {
             StartDate1 = req.fromdate;
             EndDate1 = req.todate;
@@ -575,7 +588,14 @@ class Employee {
 
             EndDate1 = end_date_2days;
             TotalMonth = new_licence;
+
+
+            
+      
           }
+
+
+
         } else {
           if (req.license_type == "2") {
             var UserEndDate = new Date(existingUsername.EndDate);
@@ -642,7 +662,9 @@ class Employee {
         }
 
 
-
+        // console.log("StartDate1 ",StartDate1)
+        // console.log("EndDate1 ",EndDate1)
+       
 
         // STARTEGY ADD AND EDIT
         const Strategieclient = await strategy_client.find({
@@ -866,6 +888,13 @@ class Employee {
         }
 
 
+      
+
+        // console.log("StartDate1 --",StartDate1)
+        // console.log("EndDate1 -- ",EndDate1)
+       
+    
+        
 
 
         var User_update = {
@@ -873,8 +902,8 @@ class Employee {
           license_type: req.license_type,
           licence: TotalMonth,
           StartDate:
-            StartDate1 == null ? existingUsername.StartDate : StartDate1,
-          EndDate: EndDate1 == null ? existingUsername.EndDate : EndDate1,
+            StartDate1 == null || StartDate1 == "" ? existingUsername.StartDate : StartDate1,
+          EndDate: EndDate1 == null || EndDate1==""? existingUsername.EndDate : EndDate1,
           broker: req.broker,
           parent_id: req.parent_id,
           parent_role: existingUsername.Role,
