@@ -804,12 +804,20 @@ class Employee {
 
       const filter = { _id: id };
 
+
+
+        //   console.log("StartDate1 --",StartDate1)
+        //  console.log("EndDate1 -- ",EndDate1)
+
+          
+
       const updateOperation = {
         $set: {
           Is_Active: 1,
           ActiveStatus: 1,
           StartDate: StartDate1,
-          EndDate: EndDate1, licence: "1"
+          EndDate: EndDate1,
+          licence: "1"
         }
       };
 

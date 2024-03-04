@@ -936,3 +936,39 @@ export async function GET_ADMIN_TRADING_STATUS(data) {
     }
 
 }
+
+// ADD AND REMOVE STRATEGY TO CLIENT
+export async function AddAndRemoveStrategyToClient(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/add_remove_client_strategy`, data, {
+            // headers: header(token),
+            data: {},
+        })
+              
+  
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+//UPDATE STRATEGY TO CLIENT
+export async function UpdateStrategyToClient(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/update_add_remove_client_strategy`, data, {
+            // headers: header(token),
+            data: {},
+        })
+              
+ 
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}

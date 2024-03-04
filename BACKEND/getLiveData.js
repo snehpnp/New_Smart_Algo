@@ -1,36 +1,53 @@
-var axios = require('axios');
-const WebSocket = require('ws');
-var CryptoJS = require("crypto-js");
+module.exports = function (app ,io) {
 
-const db = require('../Models');
+    const db = require('./App/Models');
+    var axios = require('axios');
+    const WebSocket = require('ws');
+     var CryptoJS = require("crypto-js");
 
-const { ALice_View_data } = require('./ALice_View_data');
+    const live_price = db.live_price;
+    const UserMakeStrategy = db.UserMakeStrategy;
 
-const live_price = db.live_price;
-const UserMakeStrategy = db.UserMakeStrategy;
-const mongoose = require('mongoose');
-const MongoClient = require('mongodb').MongoClient;
+    const { ALice_View_data } = require('./App/Helper/ALice_View_data');
 
 
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri);
-client.connect();
+    const mongoose = require('mongoose');
+    const MongoClient = require('mongodb').MongoClient;
 
-const db_main = client.db(process.env.DB_NAME);
-const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
- 
 
-let socketObject = null;
+    const uri = process.env.MONGO_URI
+    const client = new MongoClient(uri);
+    client.connect();
 
-const Alice_Socket = async () => {
+    const db_main = client.db(process.env.DB_NAME);
+    const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
+    
+  
+  
+    app.get("/rr",async(req,res)=>{
+  
+      console.log("ppppp")
+      // io.emit("shk", { status: "ok check" });
 
-  var rr = 0;
+
+      await runSocket(io)
+
+      res.send("okkkkk")
+      
+    
+    });
+
+
+
+    const runSocket = async (io) => {
+       
     const url = "wss://ws1.aliceblueonline.com/NorenWS/"
     var socket = null
     var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
-  const stock_live_price = db_main.collection('token_chain');
+    const stock_live_price = db_main.collection('token_chain');
     const updateToken = await stock_live_price.find({}).toArray();
-
+    console.log("updateToken",updateToken.length)
+     
     var channelstr = ""
     if (updateToken.length > 0) {
         updateToken.forEach((data) => {
@@ -54,7 +71,9 @@ const Alice_Socket = async () => {
 
     //  Step -1
 
-  if(broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on"){
+    //console.log("channelList",channelList)
+
+    if(broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on"){
     try {
 
         await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
@@ -90,11 +109,14 @@ const Alice_Socket = async () => {
 
                         if (response.tk) {
 
-                            // const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk }, { _id: 1 });
+                            console.log("response ",response)
+                            io.emit("LiVE_DATA", { data: response });
+
+                            const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk }, { _id: 1 });
                           
-                            // if (Make_startegy_token) {
-                            //     ALice_View_data(response.tk, response,dbTradeTools);
-                            // }
+                            if (Make_startegy_token) {
+                                //ALice_View_data(response.tk, response,dbTradeTools);
+                            }
 
                             const currentDate = new Date();
                             const hours = currentDate.getHours().toString().padStart(2, '0');
@@ -167,17 +189,19 @@ const Alice_Socket = async () => {
         console.log("Error createSocketSess", error);
     }
 
+    }else{
+        console.log("ELSSSS")
     }
+      
+      
+      
+      
+    }
+  
+  
+  }
+  
 
-
-
-
-}
-
-const getSocket = () => {
-    return socketObject;
-};
-
-
-
-module.exports = { Alice_Socket, getSocket }
+  
+  
+  

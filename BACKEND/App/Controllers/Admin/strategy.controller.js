@@ -1,6 +1,7 @@
 "use strict";
 const db = require('../../Models');
-const strategy_model = db.strategy
+const strategy_model = db.strategy;
+const User = db.user;
 const strategy_client_model = db.strategy_client
 const { formattedDateTime } = require('../../Helper/time.helper')
 const mongoose = require('mongoose');
@@ -288,6 +289,168 @@ class strategy {
             console.log("Error Get All Strategy Error-", error);
         }
     }
+
+    // Get Add Remove Strategy
+    async GetAddRemoveStrategy(req, res) {
+        //console.log("req",req.body)
+        try {
+            const { _id } = req.body;
+            // GET LOGIN CLIENTS
+            const objectId = new ObjectId(_id);
+
+         const pipeline2 = [
+            {
+                $lookup: {
+                    from: "strategy_clients", // Replace "collection2" with the name of the second collection
+                    localField: "_id", // Field in the first collection
+                    foreignField: "user_id", // Field in the second collection
+                    as: "matched_docs"
+                }
+            },
+            {
+                $unwind: "$matched_docs"
+            },
+            {
+                $group: {
+                    _id: "$_id",
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 1, // include or exclude fields as needed
+                    count: 1,
+                    // Add other fields you want to include
+                }
+            }
+        ];
+        
+        const duplicateids = await User.aggregate(pipeline2)
+
+      
+         
+        //console.log("duplicateids ",duplicateids)
+
+
+
+            const pipeline = [
+                {
+                    $match: {
+                        strategy_id: objectId
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: "user_id",
+                        foreignField: "_id",
+                        as: "users",
+                    },
+                },
+                {
+                    $unwind: '$users',
+                },
+              
+
+                {
+                    $project: {
+                         strategy_id:1,
+                        'users._id': 1,
+                        'users.FullName': 1,
+                        'users.UserName': 1,
+                        'users.license_type': 1,
+                        'users.Email': 1,
+                        
+
+                      
+
+                    },
+                },
+            ];
+
+            const GetAllClientStrategy = await strategy_client_model.aggregate(pipeline)
+
+         //   console.log("GetAllClientStrategy",GetAllClientStrategy)
+
+            const pipeline1 = [
+                {
+                    $project: {
+                       
+                        _id: 1,
+                        FullName: 1,
+                        UserName: 1,
+                        license_type: 1,
+                        Email:1
+
+                    },
+                },
+
+            ];
+            
+           const AllClients = await User.aggregate(pipeline1)
+
+           if(AllClients.length > 0){
+            return res.send({status: true, msg: "Get All data", StrategyClient: GetAllClientStrategy , AllClients: AllClients ,duplicateids:duplicateids })
+           }else{
+            
+            return res.send({status: false, msg: "Get All data", data: []})
+           }
+    
+
+        } catch (error) {
+            console.log("Error Get All Strategy Error-", error);
+        }
+    }
+
+
+     // Update Add Remove Strategy
+     async UpdateAddRemoveStrategy(req, res) {
+      //  console.log("req",req.body)
+
+        try {
+
+
+
+            if(req.body.clientId.length > 0){
+
+                req.body.clientId.forEach(async(element) => {
+                   console.log("element add",element); 
+                   
+                   //  ADD  STRATEGY CLIENT
+                  const strategy_client = new strategy_client_model({
+                    strategy_id: req.body.strategyId,
+                    user_id: element,
+                  });
+                  strategy_client.save();
+                    
+                });
+                
+            }
+    
+            if(req.body.clientIdDelete.length > 0){
+            
+                req.body.clientIdDelete.forEach(async(element) => {
+                 
+                
+                 const deleteResult = await strategy_client_model.deleteOne({ strategy_id: req.body.strategyId , user_id : element});
+               // console.log("element delete",element);  
+                    
+                });
+            }
+
+            
+            return res.send({status: true, msg: "Startegy Update Successfully...." })
+
+
+        } catch (error) {
+            console.log("Error Get All Strategy Error-", error);
+            return res.send({status: false, msg: "Catch Error"})
+        }
+    }
+
+    
+
+    
 
 
 }

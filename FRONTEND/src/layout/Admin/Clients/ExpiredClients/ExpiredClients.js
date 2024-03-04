@@ -261,9 +261,9 @@ const AllClients = () => {
     let value = parseInt(value1);
 
     if (licence_type === "0") {
-      return "2 Days Only";
+      return "Live 2 Days Only";
     } else if (licence_type === "1") {
-      return "Demo";
+      return "Paper Trading";
     } else {
       if (value === 1) {
         return "markethub";
@@ -306,9 +306,9 @@ const AllClients = () => {
     let value = parseInt(value1);
 
     if (licence_type === "0") {
-      return "2 Days Only";
+      return "Live 2 Days Only";
     } else if (licence_type === "1") {
-      return "Demo";
+      return "Paper Trading";
     } else {
       return value;
     }
@@ -598,8 +598,8 @@ const AllClients = () => {
                   >
                     <option value="null">All</option>
                     <option value="2">Live</option>
-                    <option value="1">Demo</option>
-                    <option value="0">2 Days Only</option>
+                    <option value="1">Paper Trading</option>
+                    <option value="0">Live 2 Days Only</option>
                   </select>
                 </div>
               </div>

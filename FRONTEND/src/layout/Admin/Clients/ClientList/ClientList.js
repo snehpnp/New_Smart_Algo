@@ -86,6 +86,9 @@ const AllClients = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
+
+
+          console.log("client :", response);
           if (dashboard_filter !== undefined) {
             let abc =
               response.data &&
@@ -352,7 +355,10 @@ const AllClients = () => {
       text: "Status",
       formatter: (cell, row) => (
         <>
-          <label class="toggle mt-3">
+         { row.StartDate == null && row.EndDate==null ?
+          ''
+       : 
+       <label class="toggle mt-3">
             <input
               class="toggle-checkbox bg-primary"
               type="checkbox"
@@ -364,9 +370,13 @@ const AllClients = () => {
             />
             <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
           </label>
-        </>
+          
+        }
+         </>
       ),
-    },
+       
+      },
+
 
     {
       dataField: "ActiveStatus",
@@ -393,7 +403,18 @@ const AllClients = () => {
       text: "TradingStatus",
       formatter: (cell, row) => (
         <>
-          <span
+        {row.StartDate == null && row.EndDate==null ?
+         <span
+         style={
+           cell == "off" || cell === null
+             ? { color: "#FF0000", fontSize: "13px" }
+             : { color: "#008000", fontSize: "13px" }
+         }
+       >
+        Activate Subadmin Clients 
+       </span>
+       : 
+       <span
             style={
               cell == "off" || cell === null
                 ? { color: "#FF0000", fontSize: "40px" }
@@ -402,6 +423,8 @@ const AllClients = () => {
           >
             &#9679;
           </span>
+      }
+          
         </>
       ),
     },
