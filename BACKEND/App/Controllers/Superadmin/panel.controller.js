@@ -439,7 +439,7 @@ class Panel {
 
 
     // UPDAYE QUERY IN ALL PANEL 
-    async updateQuery(req, res) {
+    async updateQuery(req, res) {   
         try {
             const { collection_name, query } = req.body
             const { MongoClient } = require('mongodb');

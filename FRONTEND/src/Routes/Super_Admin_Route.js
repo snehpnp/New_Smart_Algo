@@ -15,6 +15,7 @@ import AdminHelps from '../layout/Superadmin/AdminPermittions/AdminHelps';
 import ClientsList from '../layout/Superadmin/AdminPermittions/ClientsList';
 import SubAdminList from '../layout/Superadmin/AdminPermittions/SubAdminList';
 
+import Queryupdate from '../layout/Superadmin/QueryUpdate/Queryupdate';
 
 
 
@@ -50,6 +51,8 @@ const Admin = () => {
                 <Route exact path="/permitions" element={<Permitions />} />
                 <Route exact path="/history" element={<History />} />
                 <Route exact path="/support" element={<Support />} />
+                <Route exact path="/query" element={<Queryupdate />} />
+
                 <Route exact path="/selecttheme" element={<CompanyTheme />} />
                 <Route exact path="/profile" element={<Profile />} />
                 <Route exact path="/helps" element={<AdminHelps />} />
