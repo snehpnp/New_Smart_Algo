@@ -16,7 +16,7 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async AddPanel(req, res) {
         try {
-            const { panel_name, domain, port, key, ip_address, theme_id, backend_rul,parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id } = req.body.req
+            const { panel_name, domain, port, key, ip_address, theme_id, backend_rul, parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id } = req.body.req
 
 
             // FIND PANEL NAME DUPLICATE
@@ -37,7 +37,7 @@ class Panel {
                 Option_chain: Option_chain,
                 Strategy_plan: Strategy_plan,
                 broker_id: broker_id,
-                backend_rul:backend_rul
+                backend_rul: backend_rul
             });
             AddPanel.save()
                 .then(async (data) => {
@@ -63,7 +63,7 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async EditPanel(req, res) {
         try {
-            const { _id, panel_name, domain, port, key, ip_address, theme_id, db_url,backend_rul, db_name, broker_id, Create_Strategy, Option_chain, Strategy_plan } = req.body
+            const { _id, panel_name, domain, port, key, ip_address, theme_id, db_url, backend_rul, db_name, broker_id, Create_Strategy, Option_chain, Strategy_plan } = req.body
 
 
             var panle_data = {
@@ -79,7 +79,7 @@ class Panel {
                 Create_Strategy: Create_Strategy,
                 Option_chain: Option_chain,
                 Strategy_plan: Strategy_plan,
-                backend_rul:backend_rul
+                backend_rul: backend_rul
             }
 
             var objectId = new ObjectId(_id);
@@ -251,7 +251,7 @@ class Panel {
 
 
         } catch (error) {
-        
+
             return res.send({ status: false, msg: 'Internal server error', error: error.keyValue });
         }
     }
@@ -277,7 +277,7 @@ class Panel {
                 tt = req.body.brokerId
             }
 
-                
+
             // Find documents with matching ids
             const getAllpanel = await ApiCreateInfo.find({ broker_id: tt })
 
@@ -435,6 +435,57 @@ class Panel {
             console.log("Error Get all Panels error-", error);
         }
     }
+
+
+
+    // UPDAYE QUERY IN ALL PANEL 
+    async updateQuery(req, res) {
+        try {
+            const { collection_name, query } = req.body
+            const { MongoClient } = require('mongodb');
+
+            const Panel_information = await panel_model.find().select('db_url')
+
+
+
+            // Your update query
+            const updateQuery = { $set: query };
+
+            // Function to update documents in a given database
+            async function updateDocuments(url) {
+                const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+
+                try {
+                    await client.connect();
+                    const database = client.db();
+                    const result = await database.collection(collection_name).updateMany({}, updateQuery);
+
+                    console.log(`Updated ${result.modifiedCount} documents in ${url}`);
+                } finally {
+                    await client.close();
+                }
+            }
+
+            // Loop through each database URL and update documents
+            Panel_information.forEach((url) => {
+                updateDocuments(url.db_url).catch(error => console.error(`Error updating documents for ${url.db_url}: ${error.message}`));
+            });
+
+
+
+            // CHECK IF PANEL EXIST OR NOT
+            if (!Panel_information) {
+                return res.status(409).send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
+            }
+            res.send({ status: true, msg: "Get Panel Broker", data: Panel_information })
+
+        } catch (error) {
+            // console.log("Theme error-", error);
+        }
+    }
+
+
+
 
 }
 
