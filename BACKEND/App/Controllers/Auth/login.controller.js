@@ -28,6 +28,8 @@ class Login {
             const { Email, Password, device } = req.body;
             // IF Login Time Email CHECK
 
+        
+
             const EmailCheck = await User.findOne({ Email: Email });
             if (!EmailCheck) {
                 return res.json({ status: false, msg: 'User Not exists', data: [] });

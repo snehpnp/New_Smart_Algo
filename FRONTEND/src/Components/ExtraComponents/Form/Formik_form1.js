@@ -16,7 +16,15 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
   const [previews, setPreviews] = useState([]); // Array to store individual previews
 
   const handleFileChange = (event, index, name) => {
-    const file = event.target.files[0];
+   
+ 
+    if(event.target.files[0].size > 420000){
+      alert("Please  Select file less then 420KB")
+      event.target.value=''
+      return 
+    }
+    else{
+      const file = event.target.files[0];
     const newPreviews = [...previews]; // Create a copy of the previews array
 
     newPreviews[index] = URL.createObjectURL(file); // Set the preview for the specific index
@@ -33,6 +41,9 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
 
 
     reader.readAsDataURL(file);
+
+    }
+    
   }
   const getCurrentDate = () => {
     const today = new Date();

@@ -5,6 +5,8 @@ import { SIGN_IN_USER,SIGN_UP_USER, VARIFY_USER_DEVICE, LOG_OUT_USER, SET_THEME_
 
 
 export const SignIn = createAsyncThunk("DispatchLogin", async (data) => {
+
+  console.log("data :", data)
   try {
     const res = await SIGN_IN_USER(data);
     return await res;

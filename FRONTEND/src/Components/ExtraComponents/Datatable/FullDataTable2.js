@@ -44,7 +44,9 @@ const FullDataTable = ({ tableData, TableColumns, tableoptions, selectRow, keyFi
                 headerClasses="bg-primary text-primary text-center header-class"
                 rowClasses={`text-center`}
                 rowStyle={rowStyle}
+               
             />
+            
         </div>
     </>
 }

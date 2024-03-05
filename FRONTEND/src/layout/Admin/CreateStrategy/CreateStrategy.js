@@ -30,6 +30,9 @@ const CreateStrategy = () => {
   const navigate = useNavigate()
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
+  const user_role = JSON.parse(localStorage.getItem("user_role"));
+
+
 
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
@@ -1349,7 +1352,12 @@ const saveStrategy = async (e) => {
            toast.success(response.msg);
         
            setTimeout(() => {
-            navigate("/admin/AllMakeStrategy")
+            if(user_role==='ADMIN'){
+              navigate("/admin/AllMakeStrategy")
+            }
+            else if(user_role==='SUBADMIN'){
+              navigate("/subadmin/AllMakeStrategy")
+            }
            }, 1000); 
           }else{
             
@@ -1403,7 +1411,13 @@ const saveStrategy = async (e) => {
          toast.success(response.msg);
          //window.location.reload();
          setTimeout(() => {
-          navigate("/admin/AllMakeStrategy")
+          if(user_role==='ADMIN'){
+            navigate("/admin/AllMakeStrategy")
+          }
+          else if(user_role==='SUBADMIN'){
+            navigate("/subadmin/AllMakeStrategy")
+          }
+         
          }, 1000); 
         }
         else if (!response.status) {
@@ -1416,10 +1430,11 @@ const saveStrategy = async (e) => {
 
   }
 
+ 
   return (
     <>
       <>
-        <Content Page_title="Create Strategy" button_title="Back" route="/admin/AllMakeStrategy">
+      <Content Page_title="Create Strategy" button_title="Back" route={user_role==="ADMIN" ? "/admin/AllMakeStrategy" : user_role === "SUBADMIN" ? "/subadmin/AllMakeStrategy" : ""}>
           <div>
 
            <div className="col-md-2 ">

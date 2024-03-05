@@ -352,6 +352,7 @@ const AllClients = () => {
     },
     {
       dataField: "ActiveStatus",
+      
       text: "Status",
       formatter: (cell, row) => (
         <>
@@ -371,13 +372,11 @@ const AllClients = () => {
             <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
           </label>
           
-        },
+        }
          </>
       ),
        
       },
-
-
     {
       dataField: "ActiveStatus",
       text: "Go To Dashboard",

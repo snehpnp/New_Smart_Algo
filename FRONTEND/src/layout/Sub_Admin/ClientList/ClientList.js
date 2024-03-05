@@ -311,6 +311,10 @@ const AllClients = () => {
             </>
         },
         {
+            dataField: "client_key",
+            text: "Client Key",
+          },
+        {
             dataField: 'broker',
             text: 'Broker',
             formatter: (cell, row) => showBrokerName(cell, row.license_type)

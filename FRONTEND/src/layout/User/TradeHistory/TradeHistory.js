@@ -45,6 +45,9 @@ const TradeHistory = () => {
 
   const [rowData, setRowData] = useState("");
 
+
+  console.log("rowdata :", rowData);
+
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
   };
@@ -192,15 +195,16 @@ const TradeHistory = () => {
         </div>
       ),
     },
-    {
-      dataField: "closeprice",
-      text: "Close Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`ClosePrice_${row.token}`}></span>
-        </div>
-      ),
-    },
+
+    // {
+    //   dataField: "closeprice",
+    //   text: "Close Price",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`ClosePrice_${row.token}`}></span>
+    //     </div>
+    //   ),
+    // },
 
     {
       dataField: "trade_symbol",

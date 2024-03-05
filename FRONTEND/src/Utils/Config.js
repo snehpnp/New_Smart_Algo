@@ -23,6 +23,3 @@ export const base_url = "https://trade.pandpinfotech.com/backend/";
 
 
 
-
-
-
