@@ -532,12 +532,14 @@ export async function ADD_CLIENT(data, token) {
 
 // GET ALL SERVICE
 export async function GET_ALL_SERVICE(data, token) {
-    
+    console.log( " 11111111   data",data);
     try {
         const res = await axios.post(`${Config.base_url}get/allsignals`, data, {
             headers: header(token),
             data: { data },
         })
+
+        console.log( " 222222   data",res);
         return await res?.data;
     }
     catch (err) {
