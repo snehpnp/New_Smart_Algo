@@ -98,7 +98,7 @@ cron.schedule('5 23 * * *', () => {
     twodaysclient();
 });
 
-cron.schedule('10 7 * * *', () => {
+cron.schedule('40 18 * * *', () => {
     console.log('Run Every 1 Second');
     TruncateTableTokenChain();
 });
@@ -107,6 +107,8 @@ cron.schedule('10 7 * * *', () => {
 const TruncateTableTokenChain = async () => {
   
     const drop = await db_main.collection('token_chain').deleteMany({}); 
+    
+    const drop1 = await db_main.collection('stock_live_price').deleteMany({}); 
 
     Get_Option_All_Token_Chain()
 }
