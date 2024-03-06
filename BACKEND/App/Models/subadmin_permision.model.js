@@ -37,6 +37,17 @@ const Subadmin_Permission_Schema = new mongoose.Schema({
         enum: [0, 1],   // 0 == OLD VIEW ON  , 1 = ONLY TODAY VIEW
         default: 0
     },
+
+    optionchain: {
+        type: Number,
+        enum: [0, 1],   // 0 == OLD VIEW ON  , 1 = ONLY TODAY VIEW
+        default: 0
+    },
+    makestrategy: {
+        type: Number,
+        enum: [0, 1],   // 0 == OLD VIEW ON  , 1 = ONLY TODAY VIEW
+        default: 0
+    },
  
     strategy: [
         {

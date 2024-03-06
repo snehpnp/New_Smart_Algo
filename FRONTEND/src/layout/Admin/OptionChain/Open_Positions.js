@@ -23,6 +23,10 @@ import { useLocation } from "react-router-dom";
 
 
 
+import socketIOClient from 'socket.io-client';
+import io from 'socket.io-client';
+
+
 const TradeHistory = () => {
     const dispatch = useDispatch();
     const location = useLocation();
@@ -38,6 +42,7 @@ const TradeHistory = () => {
     const [refresh, setrefresh] = useState(false);
     const [ButtonDisabled, setButtonDisabled] = useState(false);
     const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
+    const [tradeHistoryAllData, setTradeHistoryAllData] = useState({ loading: true, data: [] });
     const [UserDetails, setUserDetails] = useState([]);
     const [inputValue, setInputValue] = useState('')
     const [PanelKey, setPanelKey] = useState('');
@@ -50,8 +55,37 @@ const TradeHistory = () => {
 
     // console.log("selected1", selected1)
 
-    const [disabled, setDisabled] = useState(false);
 
+    // const [socketUrl, setSocketUrl] = useState("");
+    // let socketGetNotification = io(socketUrl);
+    // useEffect(() => {
+    //     // Connect to the server using Socket.IO
+    
+    //     // Listen for the "TEST_TRUST" event from the server
+    //     if(socketGetNotification != null){
+    //         socketGetNotification.on("EXIT_TRADE_GET_NOTIFICATION", (data) => {
+    //       //console.log("Received data from 'EXIT_TRADE_GET_NOTIFICATION':", data);
+    //        toast.success(data.data);
+    //        setrefresh(!refresh)
+    //       // Do something with the received data here
+    //     });
+    
+    //     // Clean up the socket connection when the component unmounts
+    //     return () => {
+    //       socketGetNotification.disconnect();
+    //     };
+    //    }
+    //   }, [socketGetNotification]);
+
+
+
+
+
+
+
+
+
+    const [disabled, setDisabled] = useState(false);
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
 
     const handleClickDisabled = () => {
@@ -68,6 +102,7 @@ const TradeHistory = () => {
             .unwrap()
             .then((response) => {
                 let res = response.data[0]
+              //  setSocketUrl(res.version)
                 setBrokerUrl(res.broker_url)
             });
     };
@@ -107,11 +142,23 @@ const TradeHistory = () => {
                         loading: false,
                         data: response.data,
                     });
+
+                    setTradeHistoryAllData({
+                        loading: false,
+                        data: response.data,
+                      });
+
+
                 } else {
                     setTradeHistoryData({
                         loading: false,
                         data: response.data,
                     });
+
+                    setTradeHistoryAllData({
+                        loading: false,
+                        data: response.data,
+                      });
                 }
             });
     };
@@ -299,25 +346,64 @@ const TradeHistory = () => {
     ];
 
 
-    const SetStopLostPrice = (event, name, row, qty_persent, symbol) => {
-        setSelected1((prev) => {
-            return prev.map((item) => {
-                if (item.trade_symbol === symbol) {
-                    return {
-                        ...item,
-                        sl_status: "1",
-                        [name]: event.target.value ? event.target.value : "testtt",
-                    };
-                }
-                return item;
-            });
-        });
+    const SetStopLostPrice = async (event, name, row, qty_persent, symbol) => {
 
 
-    }
+        // alert(row._id)
+       // console.log("row._id ",row._id)
+      //  console.log("event.target.value ",event.target.value)
+      //  console.log("name ",name)
+ 
+ 
+ 
+         // setSelected1((prev) => {
+         //      return  prev.map((item) => {
+ 
+         //         // console.log("row._id inside ",item._id)
+         //         // console.log("item.trade_symbol ",item.trade_symbol)
+         //         // console.log("symbol ",symbol)
+         //         // console.log("event.target.value ",event.target.value)
+         //         // console.log("name ",name)
+         //         if (item._id === row._id  ) {
+ 
+         //             console.log("row._id inside 2 ",item._id)
+ 
+         //             return {
+         //                 ...item,
+         //                 sl_status: "1",
+         //                 [name]: event.target.value ? event.target.value : "testtt",
+         //             };
+         //         }
+         //         return item;
+         //     });
+         // });
+ 
+  
+       
+         setTradeHistoryAllData((prev) => {
+             return {
+                 ...prev,
+                 data: prev.data.map((item) => {
+                     if (item._id === row._id) {
+                         console.log("row._id inside 2 ",item._id)
+                         return {
+                             ...item,
+                             sl_status: "1",
+                             [name]: event.target.value ? event.target.value : "testtt",
+                         };
+                     }
+                     return item;
+                 })
+             };
+         });
+ 
+ 
+     }
 
 
     const UpdateStopLoss = async () => {
+
+        const filteredArray2 = tradeHistoryAllData.data.filter(item => selected1.some(obj => obj._id === item._id));
 
         let MarketOpenToday = GetMarketOpenDays();
 
@@ -326,15 +412,15 @@ const TradeHistory = () => {
                 alert("Please Trading On First")
             }
             else {
-                if (selected1.length === 0) {
+                if (filteredArray2.length === 0) {
                     alert("Please Select Atleast One Symbol")
                 }
                 else {
-                    console.log("UpdateStopLoss",selected1);
+                    console.log("UpdateStopLoss",filteredArray2);
                     // return
                     await dispatch(
                         Update_Signals({
-                            data: selected1,
+                            data: filteredArray2,
                             token: token,
                         })
 
@@ -345,7 +431,9 @@ const TradeHistory = () => {
                             }
                             toast.success(response.msg);
                             setrefresh(!refresh)
-                            // window.location.reload()
+                            setSelected1([])
+                            setSelected([])
+                            window.location.reload()
                         });
                 }
 

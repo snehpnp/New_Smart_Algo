@@ -52,6 +52,10 @@ require("./App/Emergency Apis/getOptionSymbols")(app)
 require("./request")(app)
 
 
+// Connect Local backend Socket
+const { setIO ,getIO} = require('./App/Helper/BackendSocketIo');
+
+
 
 
 // Socket Connect get data in live make socket
@@ -88,6 +92,28 @@ io.on("connection", (socket) => {
   });
 
 })
+
+
+
+setIO(io).then(() => {
+  // console.log("io set successfully");
+   
+   // After io is set, you can call getIO
+   getIO().then(ioObject => {
+      // console.log("ioObject from getIO: ", ioObject);
+   }).catch(error => {
+       //console.error("Error getting io:", error);
+   });
+ 
+ }).catch((error) => {
+   console.error("Error setting io:", error);
+ });
+
+
+ app.get("/pp",(req,res)=>{
+  io.emit("EXIT_TRADE_GET_NOTIFICATION", { data: "okkkk" });
+  res.send("DONE")
+ });
 
 
 
