@@ -30,7 +30,7 @@ class Login {
 
             const EmailCheck = await User.findOne({ Email: Email });
             if (!EmailCheck) {
-                return res.json({ status: false, msg: 'User Not exists', data: [] });
+                return res.send({ status: false, msg: 'User Not exists', data: [] });
             }
 
             if (EmailCheck.Role == "USER" || EmailCheck.Role == "SUBADMIN") {

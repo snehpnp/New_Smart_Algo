@@ -439,17 +439,20 @@ class Panel {
 
 
     // UPDAYE QUERY IN ALL PANEL 
-    async updateQuery(req, res) {   
+    async updateQuery(req, res) {
         try {
             const { collection_name, query } = req.body
             const { MongoClient } = require('mongodb');
 
             const Panel_information = await panel_model.find().select('db_url')
 
+            var ErrorArray = []
+            console.log(query)
 
 
             // Your update query
             const updateQuery = { $set: query };
+            console.log(updateQuery)
 
             // Function to update documents in a given database
             async function updateDocuments(url) {
@@ -468,21 +471,90 @@ class Panel {
 
             // Loop through each database URL and update documents
             Panel_information.forEach((url) => {
-                updateDocuments(url.db_url).catch(error => console.error(`Error updating documents for ${url.db_url}: ${error.message}`));
-            });
 
+                if (url.db_url != "") {
+                    updateDocuments(url.db_url).catch(error => ErrorArray.push(`Error updating documents for ${url.db_url}: ${error.message}`));
+                }
+            });
 
 
             // CHECK IF PANEL EXIST OR NOT
             if (!Panel_information) {
                 return res.status(409).send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            res.send({ status: true, msg: "Get Panel Broker", data: Panel_information })
+            res.send({ status: true, msg: "Get Panel Broker", data: Panel_information, Error: ErrorArray })
 
         } catch (error) {
             // console.log("Theme error-", error);
         }
     }
+
+
+
+
+
+    async createView(req, res) {
+        try {
+            const { your_view_name, collection_name, pipeline } = req.body;
+            const { MongoClient } = require('mongodb');
+    
+            const panelInformation = await panel_model.find().select('db_url');
+    
+            const errorArray = [];
+            const successResults = [];
+    
+            await Promise.all(panelInformation.map(async (url) => {
+                const view = {
+                    $unionWith: {
+                        coll: `${collection_name}_${url.db_url}`,
+                        pipeline: pipeline,
+                    },
+                };
+    
+                console.log("view", view);
+    
+                const client = new MongoClient(url.db_url, { useNewUrlParser: true, useUnifiedTopology: true });
+    
+                try {
+                    await client.connect();
+                    const database = client.db();
+    
+                    // Create a new collection or view
+                    const result = await database.command({
+                        create: your_view_name,
+                        viewOn: collection_name,
+                        pipeline: [view], // Ensure pipeline is an array of objects
+                    });
+    
+                    // Check if view creation was successful
+                    if (result.ok === 1) {
+                        successResults.push({ db_url: url.db_url, status: 'success' });
+                    } else {
+                        console.error('Error creating view:', result);
+                        errorArray.push({ db_url: url.db_url, status: 'failed', error: result });
+                    }
+                } catch (error) {
+                    console.error('Error creating view:', error);
+                    errorArray.push({ db_url: url.db_url, status: 'failed', error: error.message });
+                } finally {
+                    await client.close();
+                }
+            }));
+    
+            res.send({
+                status: true,
+                msg: 'View creation completed',
+                successResults: successResults,
+                errorResults: errorArray,
+            });
+    
+        } catch (error) {
+            console.error('View creation error:', error);
+            res.status(500).send({ status: false, msg: 'Internal Server Error' });
+        }
+    }
+    
+
 
 
 

@@ -343,3 +343,20 @@ export async function GET_PANEL_HISTORY( token) {
 
 }
 
+
+
+export async function UPDATE_QUERY(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/query`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+       
+    }
+
+}
+
