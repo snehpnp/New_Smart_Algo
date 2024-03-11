@@ -108,7 +108,9 @@ console.log("111")
           postdata:
           {
 
-            quantity: "$client_services.quantity",
+            //quantity: "$client_services.quantity",
+
+            quantity: { "$toInt": "$client_services.quantity" },
            
             // product code condition here
             product: {
