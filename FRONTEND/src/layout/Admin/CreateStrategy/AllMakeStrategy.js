@@ -26,9 +26,9 @@ import Chart from "./Chart"
 
 
 
-
 const AllMakeStrategy = () => {
     const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
+    const user_role = JSON.parse(localStorage.getItem("user_role"));
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -58,7 +58,6 @@ const AllMakeStrategy = () => {
         loading: false,
         data: []
     });
-
 
 
     const columns = [
@@ -116,7 +115,8 @@ const AllMakeStrategy = () => {
             formatter: (cell, row) => (
                 <div>
 
-                    <Link to={`/admin/MakeStrategy/edit/${row._id}`} data-toggle="tooltip" data-placement="top" title="Edit">
+                    <Link to={ user_role=== 'ADMIN' ? `/admin/MakeStrategy/edit/${row._id}` : user_role==='SUBADMIN' ? `/subadmin/MakeStrategy/edit/${row._id}` : ""} data-toggle="tooltip" 
+                    data-placement="top" title="Edit">
                         < Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
                     <span data-toggle="tooltip" data-placement="top" title=" Delete">
@@ -130,13 +130,9 @@ const AllMakeStrategy = () => {
 
 
 
-
-
-
-
     // DELETE GROUP
     const DeleteGroup = async (row) => {
-        // alert("okk")
+ 
         if (window.confirm("Do You Really Want To Delete ?")) {
 
             await dispatch(delete_make_strategy(
@@ -298,7 +294,7 @@ const AllMakeStrategy = () => {
             {
                 AllMakeStrategy.loading ? <Loader /> :
                     <>
-                        <Content Page_title="All Make strategies" button_title="Create Strategy" route="/admin/createstrategy">
+                         <Content Page_title="All Make strategies" button_title="Create Strategy" route={user_role == "ADMIN" ? "/admin/createstrategy" : user_role == "SUBADMIN" ? "/subadmin/createstrategy" : ""}>
 
                             <div className="row">
                                 <div className="col-lg-4">

@@ -34,13 +34,15 @@ const Sidebar = ({ ShowSidebar }) => {
     const [admin_permission, setAdmin_permission] = useState([]);
 
 
-   
+
+    console.log("sub_admin_sideba :", sub_admin_sidebar);
+
     // if(admin_permission.length > 0 ){
 
     //     console.log("  admin_permission.data[0].Create_Strategy  ",admin_permission.data[0].Create_Strategy)
 
     // }
-    
+
 
     //  GET SUBADMIN PERMISSION
     const data2 = async () => {
@@ -137,9 +139,6 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
         })
-
-
-
     }
 
 
@@ -193,144 +192,23 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
                                 </>
-                            }) : user_role_goTo === "SUBADMIN" ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
-                                return <>
-                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                        {item.Data.length > 0 ? <>
-                                            <Link
-                                                className="has-arrow "
-                                                aria-expanded="false"
-                                            >
-                                                <IconComponent key={item.id} icon={item.Icon} />
-                                                <span className="nav-text mx-2">{item.name}</span>
-                                            </Link>
-                                        </> : ""}
-                                        <ul aria-expanded="false">
-                                            {item.Data.length > 0 ?
-                                                item.Data.map((nested_item) => {
-                                                    return <>
-                                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                            <Link to={nested_item.route}>{nested_item.name}</Link>
-                                                        </li>
-                                                    </>
-                                                })
-                                                : ""}
-                                        </ul>
-                                    </li>
-                                    {item.Data.length === 0 ? <>
-                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                            <Link to={item.route} className="" aria-expanded="false">
-                                                <IconComponent key={item.id} icon={item.Icon} />
+                            }) :
+                                user_role_goTo === "SUBADMIN" ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
 
-                                                <span className="nav-text mx-2">{item.name}</span>
-                                            </Link>
-                                        </li>
-                                    </> : ""}
-
-
-                                </>
-                            }) : "" :
-                                roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
-
-                                   // console.log("item.Data.length SS length --",item.Data.length)
-                                    //console.log("item.Data.length SS -- check permission",admin_permission.data && admin_permission.data[0].Create_Strategy === 0)
-                                
-                                    // console.log("location.pathname ",location.pathname)
-                                    // console.log("item  ",item)
-                                    // console.log("item.Data ",item.Data)
-
-                                    if((item.id === 9 || item.name === "Make Strategy")&& admin_permission.data && admin_permission.data[0].Create_Strategy === 0){
-                                  //  console.log("okkkkkkkkkkkkkk")
-                                    }else{
-                                   //  console.log("elseeeeeeeee") 
-                                     return <>
-
-                                        <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
-                                            {item.Data.length > 0  ? <>
-                                                <a
-                                                    className="has-arrow"
-                                                
-                                                >
-                                                    <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
-                                                    <span className="nav-text">{item.name}</span>
-                                                </a>
-                                            </> : ""}
-                                            {item.Data.length !== 0 ? <>
-                                                <ul aria-expanded='false'>
-                                                    {item.Data.length > 0 ?
-                                               item.Data.map((nested_item) => {
-
-                                               // console.log("nested_item.route ",nested_item.route)
-                                              //  console.log("admin_permission.data[0].Create_Strategy ",admin_permission.data && admin_permission.data[0].Create_Strategy)
-
-                                        if(nested_item.route == "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 || nested_item.route == "/admin/AllMakeStrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 
-                                        ||nested_item.route == "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0
-                                                 ){
-                                                    
-                                                             
-                                                     }else{
-                                                     // console.log(" NOT OKKKK")
-                                                             
-                                                        return <>
-                                                        <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
-
-                                                            <Link to={nested_item.route}>{nested_item.name}</Link>
-
-                                                        </li>
-                                                         </>
-                                          
-                                                            }
-
-
-                                                         
-                                                        })
-                                                        : ""}
-                                                </ul>
-                                            </> : ""}
-                                        </li>
-
-                                        {/* : ""} */}
-
-
-                                        {item.Data.length === 0 ? <>
-                                            {
-                                                
-                                                item.route === "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 ||
-                                                    item.route === "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0 ? "" :
-                                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                        <Link to={item.route} className="" aria-expanded="false">
-                                                            <IconComponent key={item.id} icon={item.Icon} />
-                                                            <span className="nav-text">{item.name}</span>
-                                                        </Link>
-                                                    </li>
-                                            }
-                                        </> : ""}
-
-
-
-                                    </>
-                                    }
-
-                                    
-
-
-
-                                }) : roles === 'SUPERADMIN' ? supper_admin_sidebar && supper_admin_sidebar.map((item) => {
                                     return <>
                                         <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                             {item.Data.length > 0 ? <>
-
                                                 <Link
                                                     className="has-arrow "
-                                                    href="javascript:void()"
                                                     aria-expanded="false"
-                                                    to={item.route}
                                                 >
-                                                    <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
-                                                    <span className="nav-text mx-2 mm-active">{item.name}</span>
+                                                    <IconComponent key={item.id} icon={item.Icon} />
+                                                    <span className="nav-text mx-2">{item.name}</span>
                                                 </Link>
-                                            </> : ""}
-                                            <ul aria-expanded="false" >
+                                            </>
+
+                                                : ""}
+                                            <ul aria-expanded="false">
                                                 {item.Data.length > 0 ?
                                                     item.Data.map((nested_item) => {
                                                         return <>
@@ -351,108 +229,269 @@ const Sidebar = ({ ShowSidebar }) => {
                                                 </Link>
                                             </li>
                                         </> : ""}
-
-
                                     </>
-                                }) :
-                                    roles === 'SUBADMIN' ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
+                                }) : "" :
+                                roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
+
+
+
+                                    if ((item.id === 9 || item.name === "Make Strategy") && admin_permission.data && admin_permission.data[0].Create_Strategy === 0) {
+                                    } else {
                                         return <>
-                                            {(item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 1) ? <>
 
-                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                    {item.Data.length > 0 ? <>
+                                            <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
+                                                {item.Data.length > 0 ? <>
+                                                    <a
+                                                        className="has-arrow"
 
-                                                        <Link
-                                                            className="has-arrow "
-                                                            // href="javascript:void()"
-                                                            aria-expanded="false"
-                                                        >
-                                                            <IconComponent key={item.id} icon={item.Icon} />
+                                                    >
+                                                        <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
+                                                        <span className="nav-text">{item.name}</span>
+                                                    </a>
+                                                </> : ""}
+                                                {item.Data.length !== 0 ? <>
+                                                    <ul aria-expanded='false'>
+                                                        {item.Data.length > 0 ?
+                                                            item.Data.map((nested_item) => {
 
-                                                            <span className="nav-text  mx-2">{item.name}</span>
-                                                        </Link>
-                                                    </> : ""}
-                                                    {
-                                                        item.Data.length === 0 ? "" : <>
-                                                            <ul aria-expanded="false">
-                                                                {item.Data.length > 0 ?
-                                                                    item.Data.map((nested_item) => {
-                                                                        return <>
-                                                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                                                <Link to={nested_item.route}>{nested_item.name}</Link>
-                                                                            </li>
-                                                                        </>
-                                                                    })
-                                                                    : ""}
-                                                            </ul>
-                                                        </>}
-                                                </li>
-                                            </> : ""}
+                                                                if (nested_item.route == "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 || nested_item.route == "/admin/AllMakeStrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0
+                                                                    || nested_item.route == "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0
+                                                                ) {
+
+
+                                                                } else {
+                                                                    // console.log(" NOT OKKKK")
+
+                                                                    return <>
+                                                                        <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
+
+                                                                            <Link to={nested_item.route}>{nested_item.name}</Link>
+
+                                                                        </li>
+                                                                    </>
+
+                                                                }
+
+
+
+                                                            })
+                                                            : ""}
+                                                    </ul>
+                                                </> : ""}
+                                            </li>
+
+                                            {/* : ""} */}
+
 
                                             {item.Data.length === 0 ? <>
-                                                {item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 0 ? '' :
-                                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                        <Link to={item.route} className="" aria-expanded="false">
-                                                            <IconComponent key={item.id} icon={item.Icon} />
-                                                            {/* <i className="flaticon-013-checkmark" /> */}
-                                                            <span className="nav-text mx-2">{item.name}</span>
-                                                        </Link>
-                                                    </li>
+                                                {
+
+                                                    item.route === "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 ||
+                                                        item.route === "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0 ? "" :
+                                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                            <Link to={item.route} className="" aria-expanded="false">
+                                                                <IconComponent key={item.id} icon={item.Icon} />
+                                                                <span className="nav-text">{item.name}</span>
+                                                            </Link>
+                                                        </li>
                                                 }
+                                            </> : ""}
 
-                                            </>
 
 
-                                                : ""}
+                                        </>
+                                    }
+
+
+
+
+
+                                }) :
+                                    roles === 'SUPERADMIN' ? supper_admin_sidebar && supper_admin_sidebar.map((item) => {
+                                        return <>
+                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                {item.Data.length > 0 ? <>
+
+                                                    <Link
+                                                        className="has-arrow "
+                                                        href="javascript:void()"
+                                                        aria-expanded="false"
+                                                        to={item.route}
+                                                    >
+                                                        <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
+                                                        <span className="nav-text mx-2 mm-active">{item.name}</span>
+                                                    </Link>
+                                                </> : ""}
+                                                <ul aria-expanded="false" >
+                                                    {item.Data.length > 0 ?
+                                                        item.Data.map((nested_item) => {
+                                                            return <>
+                                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                                    <Link to={nested_item.route}>{nested_item.name}</Link>
+                                                                </li>
+                                                            </>
+                                                        })
+                                                        : ""}
+                                                </ul>
+                                            </li>
+                                            {item.Data.length === 0 ? <>
+                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                    <Link to={item.route} className="" aria-expanded="false">
+                                                        <IconComponent key={item.id} icon={item.Icon} />
+
+                                                        <span className="nav-text mx-2">{item.name}</span>
+                                                    </Link>
+                                                </li>
+                                            </> : ""}
 
 
                                         </>
                                     }) :
-                                        roles === "USER" ? Client && Client.map((item) => {
-                                            return <>
-                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                    {item.Data.length > 0 ? <>
+                                        roles === 'SUBADMIN' ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
 
-                                                        <Link
-                                                            className="has-arrow "
-                                                            // href="javascript:void()"
-                                                            aria-expanded="false"
-                                                        >
-                                                            <IconComponent key={item.id} icon={item.Icon} />
 
-                                                            <span className="nav-text mx-2">{item.name}</span>
-                                                        </Link>
+
+
+
+                                            if (item.id === 10 || item.id === 9) {
+                                                console.log("location.pathname ", location.pathname)
+                                                if ((item.id == 10 && getPermissions && getPermissions.optionchain === 0) || (item.id == 9 && getPermissions && getPermissions.makestrategy === 0)) {
+
+                                                }
+                                                else {
+                                                    return <>
+                                                        <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
+                                                            {item.Data.length > 0 ? <>
+                                                                <a
+                                                                    className="has-arrow"
+
+                                                                >
+                                                                    <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
+                                                                    <span className="nav-text">{item.name}</span>
+                                                                </a>
+                                                            </> : ""}
+                                                            {item.Data.length !== 0 ? <>
+                                                                <ul aria-expanded='false'>
+                                                                    {item.Data.length > 0 ?
+                                                                        item.Data.map((nested_item) => {
+                                                                            return <>
+                                                                                <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
+
+                                                                                    <Link to={nested_item.route}>{nested_item.name}</Link>
+
+                                                                                </li>
+                                                                            </>
+
+
+
+
+
+
+
+
+
+                                                                        })
+                                                                        : ""}
+                                                                </ul>
+                                                            </> : ""}
+                                                        </li>
+                                                    </>
+                                                }
+
+
+                                            }
+                                            else {
+
+                                                return <>
+                                                    {(item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 1) ? <>
+
+                                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                            {item.Data.length > 0 ? <>
+
+                                                                <Link
+                                                                    className="has-arrow "
+                                                                    // href="javascript:void()"
+                                                                    aria-expanded="false"
+                                                                >
+                                                                    <IconComponent key={item.id} icon={item.Icon} />
+
+                                                                    <span className="nav-text  mx-2">{item.name}</span>
+                                                                </Link>
+                                                            </> : ""}
+                                                            {
+                                                                item.Data.length === 0 ? "" : <>
+                                                                    <ul aria-expanded="false">
+                                                                        {item.Data.length > 0 ?
+                                                                            item.Data.map((nested_item) => {
+                                                                                return <>
+                                                                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                                                        <Link to={nested_item.route}>{nested_item.name}</Link>
+                                                                                    </li>
+                                                                                </>
+                                                                            })
+                                                                            : ""}
+                                                                    </ul>
+                                                                </>}
+                                                        </li>
                                                     </> : ""}
-                                                    <ul aria-expanded="false">
-                                                        {item.Data.length > 0 ?
-                                                            item.Data.map((nested_item) => {
-                                                                return <>
-                                                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                                        <Link to={nested_item.route}>{nested_item.name}</Link>
-                                                                    </li>
-                                                                </>
-                                                            })
-                                                            : ""}
-                                                    </ul>
-                                                </li>
-                                                {item.Data.length === 0 ? <>
+
+                                                    {item.Data.length === 0 ? <>
+                                                        {item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 0 ? '' :
+                                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                                <Link to={item.route} className="" aria-expanded="false">
+                                                                    <IconComponent key={item.id} icon={item.Icon} />
+                                                                    {/* <i className="flaticon-013-checkmark" /> */}
+                                                                    <span className="nav-text mx-2">{item.name}</span>
+                                                                </Link>
+                                                            </li>
+                                                        }
+                                                    </>
+                                                        : ""}
+                                                </>
+                                            }
+                                        }) :
+                                            roles === "USER" ? Client && Client.map((item) => {
+                                                return <>
                                                     <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                        <Link to={item.route} className="" aria-expanded="false">
-                                                            <IconComponent key={item.id} icon={item.Icon} />
+                                                        {item.Data.length > 0 ? <>
 
-                                                            <span className="nav-text mx-2">{item.name}</span>
-                                                        </Link>
+                                                            <Link
+                                                                className="has-arrow "
+                                                                // href="javascript:void()"
+                                                                aria-expanded="false"
+                                                            >
+                                                                <IconComponent key={item.id} icon={item.Icon} />
+
+                                                                <span className="nav-text mx-2">{item.name}</span>
+                                                            </Link>
+                                                        </> : ""}
+                                                        <ul aria-expanded="false">
+                                                            {item.Data.length > 0 ?
+                                                                item.Data.map((nested_item) => {
+                                                                    return <>
+                                                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                                            <Link to={nested_item.route}>{nested_item.name}</Link>
+                                                                        </li>
+                                                                    </>
+                                                                })
+                                                                : ""}
+                                                        </ul>
                                                     </li>
-                                                </> : ""}
+                                                    {item.Data.length === 0 ? <>
+                                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                            <Link to={item.route} className="" aria-expanded="false">
+                                                                <IconComponent key={item.id} icon={item.Icon} />
+
+                                                                <span className="nav-text mx-2">{item.name}</span>
+                                                            </Link>
+                                                        </li>
+                                                    </> : ""}
 
 
-                                            </>
-                                        })
-                                            : ""
+                                                </>
+                                            }) : ""
                         }
-
-
-                    </ul>
+                        </ul>
                 </div>
             </div>
         </div>

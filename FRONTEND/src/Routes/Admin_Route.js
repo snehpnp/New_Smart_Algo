@@ -42,6 +42,7 @@ import TradeExecutionReport from "../layout/Admin/TradeDetails/TradeExecutionRep
 import TradingStatus from "../layout/Admin/TradeDetails/TradingStatus/TradingStatus"
 import TradeHistory from "../layout/Admin/TradeDetails/TradeHistory/TradeHistory"
 
+
 // Licence
 import AllLicence from '../layout/Admin/Licence/AllLicence/AllLicence';
 import ExpiredLicence from "../layout/Admin/Licence/ExpiredLicence/ExpiredLicence"
@@ -209,6 +210,8 @@ const Admin = () => {
                 <Route exact path="/optionchain" element={<Opation_Chain />} />
                 <Route exact path="/openposition" element={<Open_Positions />} />
                 <Route exact path="/addstratgytoclients" element={<AddStrategyToClients/>} />
+
+
 
 
 

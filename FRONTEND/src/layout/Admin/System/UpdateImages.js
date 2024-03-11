@@ -38,6 +38,8 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
             loginimg: '',
         },
         validate: (values) => {
+            console.log("values :", values)
+
             const errors = {};
             // if (!values.licence) {
             //     errors.licence = valid_err.USERNAME_ERROR;
@@ -46,6 +48,7 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
         },
         onSubmit: async (values) => {
 
+           
             const req = {
                 "id": data.length > 0 && data[0]._id,
                 data: {

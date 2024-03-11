@@ -309,11 +309,10 @@ const AllClients = () => {
         },
         {
 
-        dataField: "client_key",
-        
-        text: "Client Key",
-        
-        },
+            dataField: "client_key",
+            text: "Client Key",
+          },
+
         {
             dataField: 'broker',
             text: 'Broker',

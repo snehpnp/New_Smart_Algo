@@ -17,6 +17,18 @@ import HelpCenter from '../layout/Sub_Admin/HelpCenter/HelpCenter';
 import ApiCreateInfo1 from '../layout/Admin/ApiCreateInfo/ApiCreateInfo';
 
 
+
+// OPTION CHAIN
+import Opation_Chain from '../layout/Admin/OptionChain/Opation_Chain';
+import Open_Positions from '../layout/Admin/OptionChain/Open_Positions';
+
+
+
+// CREATE STRATEGY
+import CreateStrategy from '../layout/Admin/CreateStrategy/CreateStrategy';
+import AllMakeStrategy from '../layout/Admin/CreateStrategy/AllMakeStrategy';
+import EditMakeStrategy from '../layout/Admin/CreateStrategy/EditMakeStrategy';
+
 const Admin = () => {
 
     const location = useLocation();
@@ -40,6 +52,12 @@ const Admin = () => {
                 <Route exact path="/tradingstatus" element={<TradingStatus />} />
                 <Route exact path="/apicreateinfo" element={<ApiCreateInfo1 />} />
                 <Route exact path="/helpcenter" element={<HelpCenter />} />
+                <Route exact path="/optionchain" element={<Opation_Chain />} />
+                <Route exact path="/openposition" element={<Open_Positions />} />
+                <Route exact path="/createstrategy" element={<CreateStrategy />} />
+                <Route exact path="/AllMakeStrategy" element={<AllMakeStrategy />} />
+                <Route exact path="/MakeStrategy/edit/:id" element={<EditMakeStrategy />} />
+
             </Routes>
 
 

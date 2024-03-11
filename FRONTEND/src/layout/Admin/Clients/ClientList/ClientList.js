@@ -352,6 +352,7 @@ const AllClients = () => {
     },
     {
       dataField: "ActiveStatus",
+      
       text: "Status",
       formatter: (cell, row) => (
         <>
@@ -376,8 +377,6 @@ const AllClients = () => {
       ),
        
       },
-
-
     {
       dataField: "ActiveStatus",
       text: "Go To Dashboard",

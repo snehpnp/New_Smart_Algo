@@ -204,10 +204,6 @@ const HelpCenter = () => {
     ];
 
 
-
-
-
-
     const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
 
 
@@ -234,28 +230,13 @@ const HelpCenter = () => {
 
 
     const CreateRequest = (option_type, row_data, call_type, index) => {
-
-
-
-
-
-        // alert("okkkkk")        
-
-
-        // alert(option_type === "CALL" ? `${option_type}_${row_data.call_token}` : `${option_type}_${row_data.put_token}`)
-
-
-        // alert(call_type)
+ 
 
         if (strategyRef.current === "") {
             alert("Please Select Strategy First")
         } else {
 
-
-            // ------ For Add Class To Button
-
-            
-            
+ 
             OptionChainData.data && OptionChainData.data.filter((item) => {
                 if (item.call_token === row_data.call_token && call_type === "LE" && option_type === "CALL") {
                     const element = $('.button_call_buy_' + item.call_token);
