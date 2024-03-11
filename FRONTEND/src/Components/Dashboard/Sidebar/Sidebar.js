@@ -491,9 +491,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                                 </>
                                             }) : ""
                         }
-
-
-                    </ul>
+                        </ul>
                 </div>
             </div>
         </div>

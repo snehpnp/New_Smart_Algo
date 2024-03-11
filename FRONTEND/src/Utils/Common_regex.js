@@ -1,6 +1,6 @@
 
 export const Email_regex = (email) => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail|yahoo|hotmail|outlook|aol|icloud|protonmail|example)\.(com|co\.in|in|net|org|edu|gov|uk|us|info|biz|io|...)[a-zA-Z]{0,}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail|yahoo|rediffmail|hotmail|outlook|aol|icloud|protonmail|example)\.(com|co\.in|in|net|org|edu|gov|uk|us|info|biz|io|...)[a-zA-Z]{0,}$/;
     return emailRegex.test(email);
 }
 
