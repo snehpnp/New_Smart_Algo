@@ -217,7 +217,7 @@ const AllSubadmin = () => {
           } else if (response.status) {
             toast.success(response.msg);
             console.log("response :", response)
- return 
+//  return 
             setTimeout(() => {
               navigate("/admin/allsubadmins");
             }, 1000);
@@ -322,24 +322,24 @@ const AllSubadmin = () => {
       check_box_true:
         formik.values.all || formik.values.detailsinfo ? true : false,
     },
-    {
-      name: "optionchain",
-      label: "Option Chain",
-      type: "checkbox",
-      label_size: 12,
-      col_size: 3,
-      check_box_true:
-        formik.values.all || formik.values.optionchain ? true : false,
-    },
-    {
-      name: "makestrategy",
-      label: "Make Strategy",
-      type: "checkbox",
-      label_size: 12,
-      col_size: 3,
-      check_box_true:
-        formik.values.all || formik.values.makestrategy ? true : false,
-    },
+    // {
+    //   name: "optionchain",
+    //   label: "Option Chain",
+    //   type: "checkbox",
+    //   label_size: 12,
+    //   col_size: 3,
+    //   check_box_true:
+    //     formik.values.all || formik.values.optionchain ? true : false,
+    // },
+    // {
+    //   name: "makestrategy",
+    //   label: "Make Strategy",
+    //   type: "checkbox",
+    //   label_size: 12,
+    //   col_size: 3,
+    //   check_box_true:
+    //     formik.values.all || formik.values.makestrategy ? true : false,
+    // },
 
     {
       name: "groupservice",

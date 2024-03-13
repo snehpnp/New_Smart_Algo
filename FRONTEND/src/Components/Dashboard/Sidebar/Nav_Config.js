@@ -338,41 +338,41 @@ export const sub_admin_sidebar = [
         "route": "/subadmin/helpcenter",
         "Data": []
     },
-    {
-        'id': 9,
-        "name": 'Make Strategy',
-        "Icon": "Boxes",
-        "Data": [
-            {
-                'id': 1,
-                "name": 'Create Strategy',
-                "route": "/subadmin/createstrategy",
-            },
-            {
-                'id': 2,
-                "name": 'All Strategies',
-                "route": "/subadmin/AllMakeStrategy",
-            },
-        ]
-    },
-    {
-        'id': 10,
-        "name": 'Option Chain',
-        "Icon": "Link2",
-        "Data": [
-            {
-                'id': 1,
-                "name": 'Option Chain',
-                "route": "/subadmin/optionchain",
-            },
-            {
-                'id': 2,
-                "name": 'Open Position',
-                "route": "/subadmin/openposition",
+    // {
+    //     'id': 9,
+    //     "name": 'Make Strategy',
+    //     "Icon": "Boxes",
+    //     "Data": [
+    //         {
+    //             'id': 1,
+    //             "name": 'Create Strategy',
+    //             "route": "/subadmin/createstrategy",
+    //         },
+    //         {
+    //             'id': 2,
+    //             "name": 'All Strategies',
+    //             "route": "/subadmin/AllMakeStrategy",
+    //         },
+    //     ]
+    // },
+    // {
+    //     'id': 10,
+    //     "name": 'Option Chain',
+    //     "Icon": "Link2",
+    //     "Data": [
+    //         {
+    //             'id': 1,
+    //             "name": 'Option Chain',
+    //             "route": "/subadmin/optionchain",
+    //         },
+    //         {
+    //             'id': 2,
+    //             "name": 'Open Position',
+    //             "route": "/subadmin/openposition",
 
-            },
-        ]
-    },
+    //         },
+    //     ]
+    // },
 ]
 
 

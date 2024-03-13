@@ -15,6 +15,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect();
 const db1 = client.db(process.env.DB_NAME);
 const viewName = 'dashboard_data';
+ 
 
 class Dashboard {
 
@@ -24,8 +25,9 @@ class Dashboard {
 
             // Query the view to get the data
             const result = await db1.collection(viewName).find().toArray();
-
+             
             if (result) {
+                console.log("result :", result)
                 res.send({
                     status: true,
                     msg: "Get Dashboard Data",
@@ -47,6 +49,7 @@ class Dashboard {
                         remaining_licence: result[0].remaining_license,
                     }
                 })
+                
             } else {
                 return res.send({
                     status: false,
