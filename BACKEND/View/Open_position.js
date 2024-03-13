@@ -24,12 +24,15 @@ async function createView() {
                                 $or: [
         
                                     { $eq: ['$target', 0] },
+                                    { $eq: ['$target', "0"] },
                                     { $eq: ['$target', '0'] },
                                 ],
                             },
                             then: 0,
                             else: {
-                                $add: [{ $toDouble: '$target' }, { $toDouble: '$entry_price' }]
+                                
+                                //$add: [{ $toDouble: '$target' }, { $toDouble: '$entry_price' }]
+                                $add: [{ $toDouble: '$target' }]
         
                             },
                         },
@@ -45,7 +48,10 @@ async function createView() {
                             },
                             then: 0,
                             else: {
-                                $subtract: [{ $toDouble: '$entry_price' }, { $toDouble: '$stop_loss' }]
+
+                                // $subtract: [{ $toDouble: '$entry_price' }, { $toDouble: '$stop_loss' }]
+
+                                $add: [{ $toDouble: '$stop_loss' }]
         
                             },
         
@@ -90,17 +96,17 @@ async function createView() {
                         {
                             $expr: {
                                 $and: [
-                                    {
-                                        $eq: [
-                                            {
-                                                $dateToString: {
-                                                    format: '%Y/%m/%d',
-                                                    date: new Date(),
-                                                },
-                                            },
-                                            '$dt_date',
-                                        ],
-                                    },
+                                    // {
+                                    //     $eq: [
+                                    //         {
+                                    //             $dateToString: {
+                                    //                 format: '%Y/%m/%d',
+                                    //                 date: new Date(),
+                                    //             },
+                                    //         },
+                                    //         '$dt_date',
+                                    //     ],
+                                    // },
                                     { $eq: ['$livePrice.trading_status', 'on'] },
                                     {
                                         $gt: [
@@ -155,12 +161,12 @@ async function createView() {
                             0
                         ]
                     },
-                    isLpInRange1: {
+                 
+                    isLpInRangeTarget: {
                         $cond: {
                             if: {
                                 $or: [
                                     { $eq: ['$target', 0] },
-                                    { $eq: ['$stop_loss', 0] },
                                     {
                                         $eq: [
                                             {
@@ -189,6 +195,34 @@ async function createView() {
                                             '$target',
                                         ],
                                     },
+                                  
+                                ],
+                            },
+                        },
+                    },
+
+                    isLpInRangeStoploss: {
+                        $cond: {
+                            if: {
+                                $or: [
+                                    { $eq: ['$stop_loss', 0] },
+                                    {
+                                        $eq: [
+                                            {
+                                                $ifNull: [
+                                                    { $toDouble: { $arrayElemAt: ['$stockInfo.lp', 0] } },
+                                                    0
+                                                ]
+                                            },
+                                            0
+                                        ],
+                                    },
+                                ],
+        
+                            },
+                            then: false,
+                            else: {
+                                $or: [
                                     {
                                         $lte: [
                                             {
@@ -200,6 +234,7 @@ async function createView() {
                                             '$stop_loss',
                                         ],
                                     },
+                                  
                                 ],
                             },
                         },
@@ -271,7 +306,9 @@ async function createView() {
                     stockInfo_lp: 1,
                     MakeStartegyName: 1,
         
-                    isLpInRange1: 1,
+                   // isLpInRange1: 1,
+                    isLpInRangeTarget:1,
+                    isLpInRangeStoploss:1,
                     isLpInRange: {
                         $cond: {
                             if: {
@@ -319,7 +356,7 @@ async function dropOpenPosition() {
        
     } catch (error) {
         // Handle any errors if the view doesn't exist
-        console.log('Error:', error);
+        console.error('Error:', error);
     }
 }
 
@@ -333,12 +370,12 @@ async function dropExistingView1() {
        
     } catch (error) {
         // Handle any errors if the view doesn't exist
-        console.log('Error:', error);
+        console.error('Error:', error);
     }
 }
 
 async function open_position_excute(req, res) {
-
+ 
     try {
         const sourceViewName = 'open_position';
         const destinationViewName = 'open_position_excute';
@@ -347,7 +384,9 @@ async function open_position_excute(req, res) {
             {
                 $match: {
                     $or: [
-                        { isLpInRange1: true },
+                        // { isLpInRange1: true },
+                        { isLpInRangeTarget: true },
+                        { isLpInRangeStoploss: true },
                         { isLpInRange: 1 }
                     ]
                 }
@@ -362,7 +401,7 @@ async function open_position_excute(req, res) {
     
         console.log('Destination view created successfully');
     } catch (error) {
-        console.log('Error:', error);
+        console.error('Error:', error);
     } finally {
         // Ensure the client is closed even if an error occurs
         await client.close();
