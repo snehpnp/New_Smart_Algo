@@ -17,6 +17,9 @@ class Subadmin {
     // ADD SUBAMDIN
     async AddSubadmin(req, res) {
         try {
+
+            console.log("SubadminPermision :")
+            
             const { FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role } = req.body;
 
 
@@ -74,7 +77,7 @@ class Subadmin {
                 Is_First_login: "1"
 
             });
-
+            console.log("SubadminPermision :")
             const userinfo = User.save()
                 .then(async (data) => {
 
@@ -88,8 +91,13 @@ class Subadmin {
                         trade_history_old: Subadmin_permision_data.trade_history_old,
                         strategy: Subadmin_permision_data.strategy,
                         group_services: Subadmin_permision_data.group_services,
+                        optionchain: Subadmin_permision_data.optionchain,
+                        makestrategy: Subadmin_permision_data.makestrategy,
+
                         user_id: data._id
                     })
+
+                    console.log("SubadminPermision :", SubadminPermision)
 
                     const SuperadminInfo = SubadminPermision.save()
                         .then(async (data) => {
@@ -122,6 +130,7 @@ class Subadmin {
 
     // EDIT SUBADMIN
     async EditSubadmin(req, res) {
+        console.log("SubadminPermision :")
         try {
             const { id, FullName, Email, PhoneNo, Role, password, Subadmin_permision_data, parent_id, parent_role } = req.body;
 
@@ -163,8 +172,10 @@ class Subadmin {
                 trade_history_old: Subadmin_permision_data.trade_history_old,
                 strategy: Subadmin_permision_data.strategy,
                 group_services: Subadmin_permision_data.group_services,
-                Update_Api_Key:Subadmin_permision_data.Update_Api_Key
-            }
+                Update_Api_Key:Subadmin_permision_data.Update_Api_Key,
+                optionchain: Subadmin_permision_data.optionchain,
+                makestrategy: Subadmin_permision_data.makestrategy,
+          }
 
             const filter = { user_id: existingUsername._id };
             const updateOperation = { $set: SubadminPermision };

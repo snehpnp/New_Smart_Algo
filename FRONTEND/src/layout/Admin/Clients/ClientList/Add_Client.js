@@ -261,7 +261,6 @@ const AddClient = () => {
 
 
   const fields = location.state!==null ? 
-  
   [
     { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: true },
     { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },

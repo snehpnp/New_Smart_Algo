@@ -12,9 +12,10 @@ export const Add_Subadmin = createAsyncThunk(
   "create/subadmin",
   async (data) => {
     const { req, token } = data;
-    console.log(data);
+    console.log("req : slice", req);
     try {
       const res = await ADD_SUBADMIN(req, token);
+      console.log("res slice",res);
       return await res;
     } catch (err) {
       return err;

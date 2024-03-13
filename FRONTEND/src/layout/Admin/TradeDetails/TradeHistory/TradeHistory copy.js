@@ -23,7 +23,7 @@ import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Sl
 import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { today } from "../../../../Utils/Date_formet";
 
-import $ from "jquery";
+import $ from "jquery";  
 
 const TradeHistory = () => {
   const dispatch = useDispatch();

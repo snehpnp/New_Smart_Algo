@@ -6,7 +6,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
-import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
+import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable2";
 import { Get_Tradehisotry } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fa_time, fDateTimeSuffix } from "../../../../Utils/Date_formet";
@@ -22,6 +22,8 @@ import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../../Utils
 import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { GET_ADMIN_TRADE_STATUS } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
+import Accordion from "react-bootstrap/Accordion";
+
 
 import { today } from "../../../../Utils/Date_formet";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -61,7 +63,7 @@ const TradeHistory = () => {
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
   const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
 
-
+  console.log("tradeHistoryData :", tradeHistoryData)
 
   const [CatagoryData, setCatagoryData] = useState({
     loading: true,
@@ -77,7 +79,9 @@ const TradeHistory = () => {
 
   const [SocketState, setSocketState] = useState("null");
 
-  const [ForGetCSV, setForGetCSV] = useState([])
+  const [ForGetCSV, setForGetCSV] = useState([]);
+
+
 
   const [adminTradingStatus, setAdminTradingStatus] = useState(false);
 
@@ -142,7 +146,6 @@ const TradeHistory = () => {
       data: tradeHistoryData.data,
     });
   };
-  console.log("tradeHistoryData.data",tradeHistoryData.data)
 
 
 
@@ -153,7 +156,7 @@ const TradeHistory = () => {
       // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
-   
+
     {
       dataField: "live",
       text: "Live Price",
@@ -163,7 +166,7 @@ const TradeHistory = () => {
         </div>
       ),
     },
-     
+
 
     {
       dataField: "trade_symbol",
@@ -329,13 +332,23 @@ const TradeHistory = () => {
 
 
   var CreatechannelList = "";
+  let total=0;
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
+      console.log("item" ,item)
+
+       
+
+
+      if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
+      total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty);
+      }
     });
 
 
   //  SHOW lIVE PRICE
+
   const ShowLivePrice = async () => {
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
@@ -343,7 +356,7 @@ const TradeHistory = () => {
 
     if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
 
-      if(UserDetails.trading_status == "on"){ 
+      if (UserDetails.trading_status == "on") {
 
 
         const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
@@ -353,7 +366,7 @@ const TradeHistory = () => {
         }
         if (res.status === 401 || res.status === '401') {
           setSocketState("Unauthorized");
-  
+
           tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
             const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
             calcultateRPL(row, null, previousRow);
@@ -362,23 +375,23 @@ const TradeHistory = () => {
         else {
           if (res.data.stat) {
             const handleResponse = async (response) => {
-  
-  
+
+
               $('.BP1_Put_Price_' + response.tk).html();
               $('.SP1_Call_Price_' + response.tk).html();
-  
+
               // UPL_
               $(".LivePrice_" + response.tk).html(response.lp);
               $(".ClosePrice_" + response.tk).html(response.c);
-  
-  
+
+
               var live_price = response.lp === undefined ? "" : response.lp;
-  
+
               //  if entry qty and exist qty both exist
               tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
                 let get_ids = '_id_' + response.tk + '_' + row._id
                 let get_id_token = $('.' + get_ids).html();
-  
+
                 const get_entry_qty = $(".entry_qty_" + response.tk + '_' + row._id).html();
                 const get_exit_qty = $(".exit_qty_" + response.tk + '_' + row._id).html();
                 const get_exit_price = $(".exit_price_" + response.tk + '_' + row._id).html();
@@ -386,22 +399,26 @@ const TradeHistory = () => {
                 const get_entry_type = $(".entry_type_" + response.tk + '_' + row._id).html();
                 const get_exit_type = $(".exit_type_" + response.tk + '_' + row._id).html();
                 const get_Strategy = $(".strategy_" + response.tk + '_' + row._id).html();
-  
+
                 if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
                   if (get_entry_qty !== "" && get_exit_qty !== "") {
-  
+
                     if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
                       let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
                       let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                       let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
-  
+
+
+                   
+
+
                       if ((isNaN(finalyupl) || isNaN(rpl))) {
                         return "-";
                       } else {
                         $(".show_rpl_" + response.tk + "_" + get_id_token).html(rpl.toFixed(2));
                         $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
                         $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
-  
+
                         ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
                         ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
                         ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
@@ -423,7 +440,7 @@ const TradeHistory = () => {
                     ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
                   }
                 }
-  
+
                 //  if Only Exist qty Exist
                 else if (
                   (get_entry_type === "" && get_exit_type === "LX") ||
@@ -432,8 +449,8 @@ const TradeHistory = () => {
                 } else {
                 }
               });
-  
-  
+
+
               // }
             };
             await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
@@ -445,7 +462,7 @@ const TradeHistory = () => {
         }
       }
 
-  
+
     }
 
 
@@ -547,7 +564,7 @@ const TradeHistory = () => {
       loginWithApi(brokerid, UserDetails);
     } else {
 
-      
+
       dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
         .unwrap()
         .then((response) => {
@@ -645,6 +662,10 @@ const TradeHistory = () => {
       });
   };
 
+ 
+  
+
+
 
 
   return (
@@ -713,7 +734,7 @@ const TradeHistory = () => {
           <div className="col-lg-2 px-1">
             <div class="mb-3">
               <label for="select" class="form-label">
-              Symbol
+                Symbol
               </label>
               <select
                 class="default-select wide form-control"
@@ -764,12 +785,31 @@ const TradeHistory = () => {
             </button>
           </div>
         </div>
-        <FullDataTable
-          TableColumns={columns}
-          tableData={tradeHistoryData.data}
-          pagination1={true}
 
-        />
+
+        <div className="table-responsive">
+
+
+          {tradeHistoryData.data.length>0 ? 
+
+          total >= 0 ? 
+            <h4 >Total Realised P/L : <span style={{color:"green"}}> {total.toFixed(2)}</span> </h4>  : 
+            <h4 >Total Realised P/L : <span style={{  color:"red"}}> {total.toFixed(2)}</span> </h4>  : ""
+          
+        }
+          
+
+    
+    
+          <FullDataTable
+            TableColumns={columns}
+            tableData={tradeHistoryData.data}
+            pagination1={true}
+          />
+    
+
+           
+        </div>
 
         {/*  For Detailed View  */}
         <DetailsView
@@ -783,3 +823,12 @@ const TradeHistory = () => {
 };
 
 export default TradeHistory;
+
+
+
+
+
+
+
+
+

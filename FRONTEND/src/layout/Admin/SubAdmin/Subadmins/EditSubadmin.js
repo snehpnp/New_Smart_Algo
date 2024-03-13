@@ -104,7 +104,10 @@ const AllSubadmin = () => {
             updateapikeys: false,
             select_group_services: [],
             grouper_servcice: "",
-            strateg_servcice: ""
+            strateg_servcice: "",
+            makestrategy:false,
+            optionchain: false,
+
         },
         touched: {
             FullName: false,
@@ -169,8 +172,14 @@ const AllSubadmin = () => {
                     'strategy': values.updateapikeys===true ? [] :   selectedStrategyIds,
                     'Update_Api_Key': values.updateapikeys ? '1' :  '0',
                     'group_services': values.updateapikeys===true ? [] : selectedGroupIds,
+                    "makestrategy": values.makestrategy ? '1' : values.all ? '1' : '0',
+                    "optionchain": values.optionchain ? '1' : values.all ? '1' : '0',
                 }
             }    
+
+
+            console.log("req:", req)
+            // return 
 
  
 
@@ -180,7 +189,7 @@ const AllSubadmin = () => {
                 }
                 else if (response.status) {
                     toast.success(response.msg);
-              
+                    console.log("response:", response)
                     setTimeout(() => {
                         navigate("/admin/allsubadmins")
                     }, 1000);
@@ -196,7 +205,7 @@ const AllSubadmin = () => {
 
 
     //  SET INTIAL VALUE
-
+console.log("UserData :", UserData)
     useEffect(() => {
         if (UserData.data.data !== undefined) {
             let userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0]
@@ -213,6 +222,9 @@ const AllSubadmin = () => {
             formik.setFieldValue('tradehistory', userStrategyIds.trade_history_old === 1 ? true : false);
             formik.setFieldValue('Strategy', userStrategyIds.strategy && userStrategyIds.strategy.length > 0 ? true : false);
             formik.setFieldValue('groupservice', userStrategyIds.group_services && userStrategyIds.group_services.length !== 0 ? true : false);
+            formik.setFieldValue('optionchain', userStrategyIds.optionchain === 1 ? true : false);
+            formik.setFieldValue('makestrategy', userStrategyIds.makestrategy === 1 ? true : false);
+
         }
     }, [UserData.data.data]);
 
@@ -230,13 +242,15 @@ const AllSubadmin = () => {
             formik.setFieldValue("groupservice", false);
             formik.setFieldValue("Strategy", false);
             formik.setFieldValue("tradehistory", false);
+            formik.setFieldValue("optionchain", false);
+            formik.setFieldValue("makestrategy", false);
         }
     }, [formik.values.updateapikeys]);
    
 
     useEffect(() => {
 
-        if ((formik.values.addclient) || (formik.values.editclient) || (formik.values.Strategy) || (formik.values.groupservice) || (formik.values.detailsinfo) || (formik.values.tradehistory) || (formik.values.gotodashboard)) {
+        if ((formik.values.addclient) || (formik.values.editclient) || (formik.values.Strategy) || (formik.values.groupservice) || (formik.values.detailsinfo) || (formik.values.tradehistory) || (formik.values.gotodashboard) || (formik.values.optionchain) || (formik.values.makestrategy)) {
             formik.setFieldValue("updateapikeys", false);
             setstate([])
             setstate1([])
@@ -273,25 +287,33 @@ const AllSubadmin = () => {
             setstate1([])
             return
         }
-    }, [formik.values.editclient, formik.values.addclient, formik.values.detailsinfo, formik.values.tradehistory, formik.values.gotodashboard, formik.values.Strategy, formik.values.groupservice]);
+    }, [formik.values.editclient, formik.values.addclient, formik.values.detailsinfo, formik.values.tradehistory, formik.values.gotodashboard, formik.values.Strategy, formik.values.groupservice,  formik.values.optionchain , formik.values.makestrategy]);
 
 
     useEffect(() => {
         if (formik.values.all) {
             formik.setFieldValue('editclient', true);
+            formik.setFieldValue('addclient', true);
+            formik.setFieldValue('detailsinfo', true);
+            formik.setFieldValue('tradehistory', true);
             formik.setFieldValue('gotodashboard', true);
             formik.setFieldValue('licence', true);
             formik.setFieldValue('groupservice', true);
             formik.setFieldValue('Strategy', true);
+            formik.setFieldValue('optionchain', true);
+            formik.setFieldValue('makestrategy', true);
         }
         else {
             formik.setFieldValue('editclient', false);
-            formik.setFieldValue('updateapikeys', false);
+            formik.setFieldValue('addclient', false);
+            formik.setFieldValue('detailsinfo', false);
+            formik.setFieldValue('tradehistory', false);
             formik.setFieldValue('gotodashboard', false);
             formik.setFieldValue('licence', false);
-     
             formik.setFieldValue('groupservice', false);
             formik.setFieldValue('Strategy', false);
+            formik.setFieldValue('optionchain', false);
+            formik.setFieldValue('makestrategy', false);
         }
     }, [formik.values.all]);
 
@@ -338,6 +360,24 @@ const AllSubadmin = () => {
             name: 'Strategy', label: 'Strategy Permission', type: 'checkbox', label_size: 12, col_size: 3,
             check_box_true: formik.values.all || formik.values.Strategy ? true : false,
         },
+        // {
+        //     name: "optionchain",
+        //     label: "Option Chain",
+        //     type: "checkbox",
+        //     label_size: 12,
+        //     col_size: 3,
+        //     check_box_true:
+        //       formik.values.all || formik.values.optionchain ? true : false,
+        // },
+        // {
+        //     name: "makestrategy",
+        //     label: "Make Strategy",
+        //     type: "checkbox",
+        //     label_size: 12,
+        //     col_size: 3,
+        //     check_box_true:
+        //       formik.values.all || formik.values.makestrategy ? true : false,
+        // },
         {
             name: "updateapikeys",
             label: "Update Client API Key",

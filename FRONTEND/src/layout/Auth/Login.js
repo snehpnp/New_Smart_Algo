@@ -217,9 +217,9 @@ const Login = () => {
       } else if (!isValidEmail(values.email)) {
         errors.email = valid_err.INVALID_EMAIL_ERROR;
       }
-
       return errors;
     },
+
     onSubmit: async (values) => {
       let req = {
         Email: values.email,
@@ -300,7 +300,8 @@ const Login = () => {
 
         if (res.payload.firstlogin === "0") {
           setDesclaimerModal(true)
-        } else {
+        }
+        else {
           if (res.payload.status) {
             const roles = ["ADMIN", "USER", "SUBADMIN", "SUPERADMIN"];
             const userData = UserData;
@@ -579,16 +580,7 @@ const Login = () => {
             btn_name1="Verify1"
             Submit_Function={verifyOTP}
           >
-            {/* <form onSubmit={verifyOTP}>
-              <OtpInput
-                containerStyle="otp-div"
-                value={typeOtp}
-                onChange={setTypeOtp}
-                numInputs={4}
-                renderSeparator={<span></span>}
-                renderInput={(props) => <input {...props} />}
-              />
-            </form> */}
+             
             <form onSubmit={verifyOTP}>
 
               <OtpInput
@@ -604,8 +596,8 @@ const Login = () => {
                     autoFocus={index === 0}
                     onKeyPress={(event) => {
                       if (event.key === 'Enter') {
-                        event.preventDefault(); // Prevent form submission
-                        verifyOTP(); // Call verifyOTP function
+                        event.preventDefault();  
+                        verifyOTP();  
                       }
                     }}
                   />
