@@ -122,6 +122,48 @@ class OptionChain {
 
     }
 
+     // Upadte Stock option status
+     async update_option_symbols_status(req, res) {
+
+         console.log("okkk - ",req.body.symbol)
+        
+
+        try {
+            const symbol = req.body.symbol;
+
+            if (symbol.length == 0) {
+                return res.json({ status: false, msg: 'stock is required.' });
+            }
+
+            const filter1 =  {};
+            const updateOperation1 =  { $set: { token: "null" },
+
+            };
+            const result1 = await Get_Option_Chain_modal.updateMany(filter1, updateOperation1);
+
+
+
+
+            const filter =  { symbol: { $in: symbol } };
+            const updateOperation =  { $set: { token: "1" },
+
+            };
+            const result = await Get_Option_Chain_modal.updateMany(filter, updateOperation);
+           
+                if (result.acknowledged) {
+                    return res.json({ status: true, msg: 'Update successful!', data: result });
+                } else {
+                    return res.json({ status: false, msg: 'Update failed.', data: result });
+                       
+              }
+
+        } catch (error) {
+            console.log("Error:", error);
+            return res.status(500).json({ status: false, msg: 'Server error', data: [] });
+        }
+
+    }
+
     // GET All ROUND TOKEN
     async Get_Option_All_Round_Token(req, res) {
 

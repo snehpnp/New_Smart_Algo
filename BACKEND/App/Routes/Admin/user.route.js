@@ -10,7 +10,7 @@ const { EditCompany, GetCompanyInfo, GetCompany_logo, EditEmailInfo } = require(
 const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy ,GetAddRemoveStrategy ,UpdateAddRemoveStrategy } = require('../../Controllers/Admin/strategy.controller')
 
 const { AddMessageBrodcast, GetAllMessageBrodcast, GetMessageBrodcast, RemoveBroadCast } = require('../../Controllers/Admin/messagebrodcast.controller')
-const { Get_Option_Symbol, Get_Option_Symbol_Expiry, Get_Option_All_Round_Token ,Get_Option_All_Token_Chain, Open_Position ,update_stop_loss,Stock_chain,subscribr_token} = require('../../Controllers/Admin/option_chain.controller')
+const { Get_Option_Symbol, Get_Option_Symbol_Expiry, Get_Option_All_Round_Token ,Get_Option_All_Token_Chain, Open_Position ,update_stop_loss,Stock_chain,subscribr_token ,update_option_symbols_status} = require('../../Controllers/Admin/option_chain.controller')
 
 // USER ADD EDIT
 router.post('/add/employee', verifyToken, AddEmployee);
@@ -67,6 +67,7 @@ router.post('/get/option_symbol_expiry', Get_Option_Symbol_Expiry);
 router.post('/get/all_round_token', Get_Option_All_Round_Token);
 router.post('/get/option/chain', Get_Option_All_Token_Chain);
 router.post('/update/subscribe/token', subscribr_token);
+router.post('/update/option_symbols_status', update_option_symbols_status);
 
 
 router.post('/get/open_position', Open_Position);

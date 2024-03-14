@@ -11,7 +11,7 @@ import Modal from "../../../Components/ExtraComponents/Modal";
 import { Trash2 } from 'lucide-react';
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
 import Holidays from "date-holidays"
-import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
+import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token ,Option_Symbols_Update_status } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
 import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Service/Alice_Socket";
@@ -43,6 +43,8 @@ const HelpCenter = () => {
         data: []
     });
 
+    
+
     const [All_Symbols_Expiry, set_All_Symbols_Expiry] = useState({
         loading: false,
         data: []
@@ -71,6 +73,8 @@ const HelpCenter = () => {
     const [UserDetails, setUserDetails] = useState([]);
     const [showModal, setshowModal] = useState(false);
 
+    const [showModalSelectOptionStock, setshowModalSelectOptionStock] = useState(false);
+
     const [getBrokerUrl, setBrokerUrl] = useState('')
 
     const [symbolStrike, setSymbolStrike] = useState('')
@@ -86,6 +90,12 @@ const HelpCenter = () => {
     const handleClickDisabled = () => {
         setDisabled(true);
     }
+
+    // State For Serach stock
+    const [SerachService, setSerachService] = useState('');
+
+      // For Show All The Filter's Services
+      const [state, setstate] = useState([]);
 
 
 
@@ -411,9 +421,8 @@ const HelpCenter = () => {
 
         setshowModal(false)
 
-
-
     }
+   
 
     // ------------------------------------ REMOVE SELECTED------------------------------------
 
@@ -533,6 +542,11 @@ const HelpCenter = () => {
                         loading: false,
                         data: response.data
                     });
+
+                   
+                    const filteredSelectedData = response.data.filter((item) => item.token === "1").map((item) => item.symbol);
+
+                     setSelectedServices(filteredSelectedData)
                 }
             })
     }
@@ -582,6 +596,8 @@ const HelpCenter = () => {
                 })
         }
     }
+
+
     useEffect(() => {
         GetExpiry()
     }, [symbol])
@@ -758,6 +774,99 @@ const HelpCenter = () => {
         }
     }
 
+
+ //  For Manage Filter Symboll 
+const filterFunction = async () => {
+   // alert("okk")
+    const filteredData = All_Symbols.data.filter((item) => {
+        return item.symbol.toLowerCase().includes(SerachService.toLowerCase())
+    });
+
+    console.log(" filteredData add option chain stock ",filteredData)
+
+    if (SerachService === "") {
+        setstate([])
+    } else {
+        setstate(filteredData)
+    }
+};
+
+useEffect(() => {
+    filterFunction()
+}, [SerachService]);
+
+  
+
+   // State ForShow Selected Service After Filter And Show Into Table
+   const [selectedServices, setSelectedServices] = useState([]);
+
+  //  For Select Services Checkbox
+  function handleServiceChange(event, symbol, item) {
+      const isChecked = event.target.checked;
+      
+      const symbolValue = symbol;
+      setSelectedServices((prevInfo) => {
+        if (isChecked) {
+            
+            if(selectedServices.length >= 5){
+           
+             
+             alert("You can only select up to 5 stocks.");
+             event.target.checked = false;
+             return prevInfo.filter((item) => item !== symbolValue);
+            
+            }else{
+                return [...prevInfo, symbolValue];
+            }
+        } else {
+            return prevInfo.filter((item) => item !== symbolValue);
+        }
+    });
+
+}
+
+
+
+    const SelectOptionStock = () =>{
+        setshowModalSelectOptionStock(true)
+    }
+
+    const Cancel_Request1 = () => {
+        setshowModalSelectOptionStock(false)
+    }
+
+    const DoneSelectOptionTrade = async (value) => {
+        if (selectedServices) {
+            await dispatch(Option_Symbols_Update_status({ req: selectedServices, token: token })).unwrap()
+                .then((response) => {
+
+                    console.log("response.status ",response.status)
+                    if (response.status) {
+                      toast.success(response.msg);
+                      setRefresh(!refresh)
+                      setshowModalSelectOptionStock(false)  
+
+                    }else{
+                       toast.error(response.msg);
+                       setRefresh(!refresh)
+                      // setshowModalSelectOptionStock(false) 
+
+                    }
+                })
+        }
+    }
+
+    const DoneOptionStock = () => {
+
+        DoneSelectOptionTrade()
+        return
+        setshowModalSelectOptionStock(false)  
+    }
+
+
+
+    console.log("selectedServices --- ",selectedServices)
+
     return (
         <>
             {
@@ -846,7 +955,21 @@ const HelpCenter = () => {
                                     </label>
                                     <input type="number" className="new-input-control form-control" />
                                 </div>
-                                <div className="col-md-4 d-flex justify-content-end align-items-center text-secondary ">
+
+                               
+                                <div className="col-md-2">
+                                    <button
+                                        className="btn btn-primary me-2"
+                                        onClick={(e) => SelectOptionStock()}
+                                    >
+                                     Select Option Stock
+                                    </button>
+                                </div>
+                                
+
+
+
+                                 <div className="col-md-2 d-flex justify-content-end align-items-center text-secondary ">
                                     <button
                                         className="btn btn-primary me-2"
                                         onClick={(e) => ExcuteTradeButton()}
@@ -857,6 +980,9 @@ const HelpCenter = () => {
                                     </button>
                                 </div>
                             </div>
+
+
+                            
 
 
                             <div className='option-chain mt-2'>
@@ -962,6 +1088,99 @@ const HelpCenter = () => {
                                             tableData={ExecuteTradeData.data && ExecuteTradeData.data}
 
                                         />
+                                    </Modal>
+                                </>
+                            ) : (
+                                ""
+                            )}
+
+
+
+                       {showModalSelectOptionStock ? (
+                                <>
+                                    <Modal
+                                        isOpen={showModalSelectOptionStock}
+                                        size="xl"
+                                        title="Option Stock"
+                                        cancel_btn={true}
+                                        hideCloseButton={true}
+                                        btn_name="Confirm"
+                                        Submit_Function={DoneOptionStock}
+                                        Submit_Cancel_Function={Cancel_Request1}
+                                        handleClose={() => setshowModalSelectOptionStock(false)}
+                                    >
+                                        <div className='col-md-11 px-2 ms-2 '>
+                                <input
+                                    type="test"
+                                    className="form-control"
+                                    placeholder="Search ..."
+                                    onChange={(e) => { setSerachService(e.target.value) }}
+                                    value={SerachService}
+
+                                />
+                               </div>
+                                             <div className="row ">
+                                        { 
+                                          state.length > 0 ?
+                                          state.map((service) => (
+
+                                            service.symbol == "BANKNIFTY" || service.symbol == "NIFTY" || service.symbol == "FINNIFTY" ? "":
+                                              <div key={service.symbol} className=" col-lg-3 mb-2">
+                                                <div className="col-lg-6">
+                                                        <div className="form-check">
+                                                            <input
+                                                                type="checkbox"
+                                                                className="form-check-input"
+                                                                id={`service-${service.symbol}`}
+                                                                value={service.symbol}
+                                                                defaultChecked={selectedServices.includes(service.symbol)}
+                                                                onChange={(e) => handleServiceChange(e, service.symbol , service)}
+                                                            />
+                                                            <label className="form-check-label" htmlFor={`service-${service.symbol}`}>
+                                                                {service.symbol}
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    
+                                                ))
+                                                
+                                                : 
+                                                
+                                                All_Symbols.data.map((service) => (
+
+                                                    service.symbol == "BANKNIFTY" || service.symbol == "NIFTY" || service.symbol == "FINNIFTY" ? "":
+                                                    <div key={service.symbol} className=" col-lg-3 mb-2">
+
+                                                      <div className="col-lg-6">
+                                                              <div className="form-check">
+                                                               
+                                                                <input
+                                                                      type="checkbox"
+                                                                      className="form-check-input"
+                                                                      id={`service-${service.symbol}`}
+                                                                      value={service.symbol}
+                                                                      defaultChecked={selectedServices.includes(service.symbol)}
+                                                                     onChange={(e) => handleServiceChange(e, service.symbol , service)}
+                                                                  />
+                                                            
+                                                                  
+
+                                                                  <label className="form-check-label" htmlFor={`service-${service.symbol}`}>
+                                                                      {service.symbol}
+                                                                  </label>
+                                                              </div>
+                                                          </div>
+                                                          </div>
+                                                          
+                                                 ))
+                                                
+                                                
+                                                }
+                                                </div>
+
+                                       
+                                        
                                     </Modal>
                                 </>
                             ) : (
