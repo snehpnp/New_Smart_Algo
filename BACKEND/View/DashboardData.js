@@ -290,7 +290,7 @@ async function DashboardView() {
                                 { $eq: ["$license_type", "2"] }
                               ]
                             },
-                            { $toInt: { $ifNull: ["$licence", "0"] } }, // Convert to integer and provide a default value if $licence is null
+                            { $toInt: { $ifNull: ["$licence", "0"] } }, 
                             0
                           ]
                         }
