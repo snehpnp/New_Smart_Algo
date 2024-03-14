@@ -353,6 +353,7 @@ async function dropOpenPosition() {
         // await client.connect();
         const db = client.db(process.env.DB_NAME); // Replace with your actual database name
         await db.collection('open_position').drop();
+        await db.collection('open_position_excute').drop();
        
     } catch (error) {
         // Handle any errors if the view doesn't exist
