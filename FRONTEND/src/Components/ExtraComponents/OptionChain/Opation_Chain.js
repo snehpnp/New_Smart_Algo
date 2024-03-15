@@ -8,7 +8,7 @@ import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDat
 import { useDispatch, useSelector } from "react-redux";
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import Modal from "../../../Components/ExtraComponents/Modal";
-import { Trash2 } from 'lucide-react';
+import { Trash2 ,X } from 'lucide-react';
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
 import Holidays from "date-holidays"
 import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token ,Option_Symbols_Update_status } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
@@ -87,12 +87,16 @@ const HelpCenter = () => {
 
     const [disabled, setDisabled] = useState(false);
 
+    
+
     const handleClickDisabled = () => {
         setDisabled(true);
     }
 
     // State For Serach stock
     const [SerachService, setSerachService] = useState('');
+
+
 
       // For Show All The Filter's Services
       const [state, setstate] = useState([]);
@@ -547,6 +551,7 @@ const HelpCenter = () => {
                     const filteredSelectedData = response.data.filter((item) => item.token === "1").map((item) => item.symbol);
 
                      setSelectedServices(filteredSelectedData)
+                     setTags(filteredSelectedData)
                 }
             })
     }
@@ -800,6 +805,8 @@ useEffect(() => {
    // State ForShow Selected Service After Filter And Show Into Table
    const [selectedServices, setSelectedServices] = useState([]);
 
+   const [tags1, setTags] = useState([]);
+
   //  For Select Services Checkbox
   function handleServiceChange(event, symbol, item) {
       const isChecked = event.target.checked;
@@ -813,12 +820,15 @@ useEffect(() => {
              
              alert("You can only select up to 5 stocks.");
              event.target.checked = false;
+             setTags(tags1.filter((symb) => symb !== symbolValue));
              return prevInfo.filter((item) => item !== symbolValue);
             
             }else{
+                setTags((oldArray) => [...oldArray, symbolValue]);
                 return [...prevInfo, symbolValue];
             }
         } else {
+            setTags(tags1.filter((symb) => symb !== symbolValue));
             return prevInfo.filter((item) => item !== symbolValue);
         }
     });
@@ -865,9 +875,19 @@ useEffect(() => {
         setshowModalSelectOptionStock(false)  
     }
 
+    const handleSymbolClickDelete = (e,symbol) => {
+        $('.delete_stoch_'+symbol).prop('checked', false);
+        setRefresh(!refresh)
+        setTags(tags1.filter((symb) => symb !== symbol));
+        setSelectedServices(selectedServices.filter((symb) => symb !== symbol));
+        
+    }
+
 
 
     console.log("selectedServices --- ",selectedServices)
+    console.log("tags1 --- ",tags1)
+    
 
     return (
         <>
@@ -900,7 +920,7 @@ useEffect(() => {
                                     >
                                         <option value="" >Select Stock Name</option>
                                         {All_Symbols.data && All_Symbols.data.map((item) => {
-                                            return <option value={item.symbol} name={item.price}>{item.symbol}</option>
+                                            return <option  value={item.symbol} name={item.price}>{item.symbol}</option>
                                         })}
                                     </select>
                                 </div>
@@ -1111,7 +1131,27 @@ useEffect(() => {
                                         Submit_Cancel_Function={Cancel_Request1}
                                         handleClose={() => setshowModalSelectOptionStock(false)}
                                     >
-                                        <div className='col-md-11 px-2 ms-2 '>
+
+                            
+                            
+              <div className="card-body d-flex ">
+                {
+                  tags1.length == 0 ? "" :
+                  <>
+                  {tags1.map((symbol, i) => (
+                    <React.Fragment key={i}>
+                      <div className='mx-3 d-flex justify-content-center'>
+                      <h6 >{symbol}</h6><span onClick={(e) => handleSymbolClickDelete(e,symbol)}><X /></span>
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </>
+
+                }
+ 
+                            
+                        </div>           
+                            <div className='col-md-11 px-2 ms-2 '>
                                 <input
                                     type="test"
                                     className="form-control"
@@ -1121,7 +1161,7 @@ useEffect(() => {
 
                                 />
                                </div>
-                                             <div className="row ">
+                                  <div className="row ">
                                         { 
                                           state.length > 0 ?
                                           state.map((service) => (
@@ -1132,7 +1172,7 @@ useEffect(() => {
                                                         <div className="form-check">
                                                             <input
                                                                 type="checkbox"
-                                                                className="form-check-input"
+                                                                className={`form-check-input delete_stoch_${service.symbol}`}          
                                                                 id={`service-${service.symbol}`}
                                                                 value={service.symbol}
                                                                 defaultChecked={selectedServices.includes(service.symbol)}
@@ -1159,7 +1199,7 @@ useEffect(() => {
                                                                
                                                                 <input
                                                                       type="checkbox"
-                                                                      className="form-check-input"
+                                                                      className={`form-check-input delete_stoch_${service.symbol}`} 
                                                                       id={`service-${service.symbol}`}
                                                                       value={service.symbol}
                                                                       defaultChecked={selectedServices.includes(service.symbol)}
