@@ -843,11 +843,13 @@ useEffect(() => {
                     console.log("response.status ",response.status)
                     if (response.status) {
                       toast.success(response.msg);
+                      setSerachService('')
                       setRefresh(!refresh)
                       setshowModalSelectOptionStock(false)  
 
                     }else{
                        toast.error(response.msg);
+                       setSerachService('')
                        setRefresh(!refresh)
                       // setshowModalSelectOptionStock(false) 
 
