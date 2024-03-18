@@ -9,6 +9,9 @@ const Papa = require('papaparse')
 
 
 const { logger, getIPAddress } = require('../Helper/logger.helper')
+
+const { Alice_Socket } = require("../Helper/Alice_Socket");
+
 var dateTime = require('node-datetime');
 var moment = require('moment');
 const db = require('../Models')
@@ -102,6 +105,24 @@ cron.schedule('30 6 * * *', () => {
     console.log('Run Every 1 Second');
     TruncateTableTokenChain();
 });
+
+
+const TruncateTableTokenChainAdd = async () => {
+
+   // console.log("TESTTTTT")
+  
+    const drop = await db_main.collection('token_chain').deleteMany({}); 
+    
+    //const drop1 = await db_main.collection('stock_live_price').deleteMany({}); 
+
+    await Get_Option_All_Token_Chain()
+
+    await Get_Option_All_Token_Chain_stock()
+
+    await Alice_Socket ();
+
+
+} 
 
 
 const TruncateTableTokenChain = async () => {
@@ -1469,4 +1490,4 @@ const AccelpixTokenUpdate = async () => {
 
 
 
-module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind, numberOfTrade_count_trade, AccelpixTokenUpdate  , GetStrickPriceFromSheet }
+module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind, numberOfTrade_count_trade, AccelpixTokenUpdate  , GetStrickPriceFromSheet ,TruncateTableTokenChain ,TruncateTableTokenChainAdd}

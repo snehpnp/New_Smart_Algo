@@ -14,6 +14,10 @@ client.connect();
 const db_main = client.db(process.env.DB_NAME);
 
 
+
+const { TruncateTableTokenChainAdd } = require("../../Cron/cron");
+
+
 class OptionChain {
 
     // Get Token Symboll
@@ -124,10 +128,11 @@ class OptionChain {
 
      // Upadte Stock option status
      async update_option_symbols_status(req, res) {
-
-         console.log("okkk - ",req.body.symbol)
+       
+     
+     // console.log("okkk - ",req.body.symbol)
         
-
+      
         try {
             const symbol = req.body.symbol;
 
@@ -149,9 +154,12 @@ class OptionChain {
 
             };
             const result = await Get_Option_Chain_modal.updateMany(filter, updateOperation);
-           
-                if (result.acknowledged) {
+              
+
+              if (result.acknowledged) {
+                    await TruncateTableTokenChainAdd()
                     return res.json({ status: true, msg: 'Update successful!', data: result });
+                   
                 } else {
                     return res.json({ status: false, msg: 'Update failed.', data: result });
                        

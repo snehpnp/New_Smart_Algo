@@ -56,7 +56,7 @@ const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
 
         mergedArray.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
-        console.log("mergedArray -- ",mergedArray);
+      //  console.log("mergedArray -- ",mergedArray);
 
 
 
