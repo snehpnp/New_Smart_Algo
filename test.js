@@ -1,16 +1,10 @@
-// Your date of birth
-var dob = new Date('1992-02-17');
+// Define your string
+const str = "7";
 
-// Current date
-var today = new Date();
+// Regular expression pattern to match "All" or any number
+const pattern = /^(All|\d+)$/;
 
-// Calculate the difference in milliseconds
-var ageInMillis = today - dob;
+// Test if the string matches the pattern
+const isMatch = pattern.test(str);
 
-// Convert milliseconds to years, months, and days
-var ageInYears = Math.floor(ageInMillis / (365.25 * 24 * 60 * 60 * 1000));
-var ageInMonths = Math.floor((ageInMillis % (365.25 * 24 * 60 * 60 * 1000)) / (30.44 * 24 * 60 * 60 * 1000));
-var ageInDays = Math.floor((ageInMillis % (30.44 * 24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000));
-
-// Output the result
-console.log("Your age is " + ageInYears + " years, " + ageInMonths + " months, and " + ageInDays + " days.");
+console.log(isMatch); // Output will be true if the string contains only "All" or any number, false otherwise
