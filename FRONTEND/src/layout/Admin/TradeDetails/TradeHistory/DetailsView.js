@@ -54,9 +54,9 @@ const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
             }
         }
 
+        mergedArray.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
-
-        console.log(mergedArray);
+        console.log("mergedArray -- ",mergedArray);
 
 
 
@@ -140,7 +140,7 @@ const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
 
 
     return (
-        <div>   <Modal isOpen={showModal} size="xl" title="Licence Details" hideBtn={true}
+        <div>   <Modal isOpen={showModal} size="xl" title="Trade Details" hideBtn={true}
             handleClose={() => setshowModal(false)}
         >
             <BasicDataTable TableColumns={columns1} tableData={mergedArray} />
