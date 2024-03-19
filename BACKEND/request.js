@@ -14,6 +14,7 @@ const Get_Option_Chain_modal = db.option_chain_symbols;
   const { DashboardView } = require('./View/DashboardData')
   const { createView ,dropOpenPosition ,open_position_excute} = require('./View/Open_position')
   const { createViewUpstox } = require('./View/Upstox')
+  const { createViewDhan } = require('./View/dhan')
 
 
   app.get('/dropOpenPosition', async (req, res) => {
@@ -29,7 +30,8 @@ const Get_Option_Chain_modal = db.option_chain_symbols;
   })
 
   app.get('/brokerView', async (req, res) => {
-    createViewUpstox()
+    //createViewUpstox()
+    createViewDhan();
     res.send({ msg: "Create View broker!  !!" })
   })
 

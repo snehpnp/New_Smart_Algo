@@ -255,10 +255,33 @@ class Employee {
             }
           } catch { }
 
-          const group_service_find = await serviceGroup_services_id.find({
-            Servicegroup_id: group_service,
-          });
-
+  
+          const group_service_find = await serviceGroup_services_id.aggregate([
+            {
+              $match: {
+                Servicegroup_id:  new ObjectId(group_service)
+              }
+            },
+            {
+              $lookup: {
+                from: "services",
+                localField: "Service_id",
+                foreignField: "_id",
+                as: "serviceInfo"
+              }
+            },
+            {
+              $unwind: "$serviceInfo"
+            },
+            {
+              $project: {
+                _id: 0, // Exclude the _id field if you don't need it
+                Service_id: "$Service_id",
+                lotsize: "$serviceInfo.lotsize"
+              }
+            }
+          ]);
+       
           // CLIENT SERVICES ADD API
           if (group_service_find.length != 0) {
             group_service_find.forEach((data) => {
@@ -268,6 +291,8 @@ class Employee {
                 service_id: data.Service_id,
                 strategy_id: Strategies[0].id,
                 uniqueUserService: User_id + "_" + data.Service_id,
+                quantity: data.lotsize,
+                lot_size: 1
               });
               User_client_services.save();
             });
@@ -600,7 +625,7 @@ class Employee {
               });
 
               const Strategieclient = await strategy.find({ _id: stgId });
-          
+
               const user_activity = new user_activity_logs({
                 user_id: existingUsername._id,
                 message: "Strategy Delete",
@@ -674,9 +699,31 @@ class Employee {
             await user_activity.save();
 
             // IF GROUP SERVICES NOT EXIST
-            var GroupServices = await serviceGroup_services_id.find({
-              Servicegroup_id: GroupServiceId,
-            });
+            const GroupServices = await serviceGroup_services_id.aggregate([
+              {
+                $match: {
+                  Servicegroup_id: GroupServiceId
+                }
+              },
+              {
+                $lookup: {
+                  from: "services",
+                  localField: "Service_id",
+                  foreignField: "_id",
+                  as: "serviceInfo"
+                }
+              },
+              {
+                $unwind: "$serviceInfo"
+              },
+              {
+                $project: {
+                  _id: 0, // Exclude the _id field if you don't need it
+                  Service_id: "$Service_id",
+                  lotsize: "$serviceInfo.lotsize"
+                }
+              }
+            ]);
             if (GroupServices.length == "0") {
               return res.send({
                 status: false,
@@ -699,11 +746,14 @@ class Employee {
                 service_id: data.Service_id,
                 strategy_id: strategFind[0].strategy_id,
                 uniqueUserService: existingUsername._id + "_" + data.Service_id,
+                quantity: data.lotsize,
+                lot_size: 1
               });
+
               User_client_services.save();
             });
           } else {
-           
+
           }
         } catch (error) {
         }
@@ -806,10 +856,6 @@ class Employee {
 
 
 
-        //   console.log("StartDate1 --",StartDate1)
-        //  console.log("EndDate1 -- ",EndDate1)
-
-          
 
       const updateOperation = {
         $set: {
@@ -892,7 +938,7 @@ class Employee {
     try {
       const { id } = req.body;
       // UPDATE ACTTIVE STATUS CLIENT
-      
+
       if (!id) {
         return res.send({
           status: false,
@@ -1023,7 +1069,7 @@ class Employee {
         TradingStatus: "on",
       });
       const totalCount = getAllTradingClients.length;
-     
+
       // IF DATA NOT EXIST
       if (getAllTradingClients.length == 0) {
         return res.send({

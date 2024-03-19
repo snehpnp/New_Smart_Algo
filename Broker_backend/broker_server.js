@@ -250,11 +250,13 @@ const angel = require('./Broker/angel')
 const fivepaisa = require('./Broker/fivepaisa')
 const zerodha = require('./Broker/zerodha')
 const upstox = require('./Broker/upstox')
+const dhan = require('./Broker/dhan')
 
 
 // BROKER SIGNAL
 app.post('/broker-signals', async (req, res) => {
-
+  
+ 
   var d = new Date();
   var current_date = [d.getFullYear(),
   d.getMonth() + 1,
@@ -353,6 +355,8 @@ app.post('/broker-signals', async (req, res) => {
 
 
       var demo = signals.Demo;
+
+     
 
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
@@ -536,7 +540,8 @@ app.post('/broker-signals', async (req, res) => {
           }
 
 
-
+          console.log("client_key ",client_key)
+          console.log("process.env.PANEL_KEY ",client_key)
           // HIT TRADE IN BROKER SERVER
           if (process.env.PANEL_KEY == client_key) {
 
@@ -661,6 +666,32 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+          //Process dhan admin client
+          try {
+            const dhanCollection = db1.collection('dhanView');
+            const dhandocuments = await dhanCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' dhan ALL CLIENT LENGTH ' + dhandocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+
+            if (dhandocuments.length > 0) {
+              dhan.place_order(dhandocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get dhan Client In view", error);
+          }
+          //End Process dhan admin client
+
+
+
+
 
 
           } else {
@@ -775,6 +806,28 @@ app.post('/broker-signals', async (req, res) => {
             console.log("Error Get upstox Client In view", error);
           }
           //End Process Tading View Client UPSTOX  
+
+
+          //Process Tading View Client DHAN
+          try {
+            const dhanCollection = db1.collection('dhanView');
+            const dhandocuments = await dhanCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' dhan TRADING VIEW CLIENT LENGTH ' + dhandocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+            if (dhandocuments.length > 0) {
+              dhan.place_order(dhandocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get dhan Client In view", error);
+          }
+          //End Process Tading View Client DHAN 
 
 
 
@@ -1021,7 +1074,7 @@ app.post('/broker-signals', async (req, res) => {
 // Server start
 app.listen(process.env.PORT, () => {
 
-  ConnectSocket()
+ // ConnectSocket()
   console.log(`Broker Server is running on http://0.0.0.0:${process.env.PORT}`)
 
 });
