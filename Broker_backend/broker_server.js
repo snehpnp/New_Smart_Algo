@@ -209,14 +209,14 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
           }
 
         } catch (error) {
-          console.log("Error-", error.response);
+          //console.log("Error-", error.response);
 
         }
       }
 
 
     }).catch((error) => {
-      console.log("Error -", error.response.data);
+     // console.log("Error -", error.response.data);
       return error.response.data
     })
 
@@ -481,8 +481,8 @@ app.post('/broker-signals', async (req, res) => {
           const token_chain1 = db1.collection('token_chain');
           const stock_live_price1 = db1.collection('stock_live_price');
 
-          await ConnectSocket(EXCHANGE, instrument_token)
-          const result = await token_chain1.updateOne({ _id: instrument_token }, { $set: { _id: instrument_token, exch: EXCHANGE } }, { upsert: true });
+          // await ConnectSocket(EXCHANGE, instrument_token)
+          // const result = await token_chain1.updateOne({ _id: instrument_token }, { $set: { _id: instrument_token, exch: EXCHANGE } }, { upsert: true });
 
 
 

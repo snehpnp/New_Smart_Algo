@@ -65,7 +65,7 @@ const Alice_Socket = async () => {
 
         }).then(res => {
 
-            // console.log("res - ",res)
+            //console.log("res - ",res)
 
             if (res.data.stat == "Ok") {
 
@@ -86,6 +86,9 @@ const Alice_Socket = async () => {
                     socket.onmessage = async function (msg) {
 
                         var response = JSON.parse(msg.data)
+
+                       // console.log("response - ",response)
+
 
 
                         if (response.tk) {

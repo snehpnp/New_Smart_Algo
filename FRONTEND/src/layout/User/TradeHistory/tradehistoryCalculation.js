@@ -130,7 +130,7 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
 
     // const res = await CreateSocketSession(type);
 
-    if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined  && UserDetails.trading_status != "off") {
+    if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
 
 
         const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
@@ -240,6 +240,85 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
             }
         }
     }
+
+    else{
+    
+
+
+        tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+          
+          console.log(" row._id ",row._id)
+          console.log(" row token ",row.token)
+          console.log(" row ",row)
+          let get_ids = '_id_' + row.token + '_' + row._id
+          let get_id_token = $('.' + get_ids).html();
+  
+          const get_entry_qty = $(".entry_qty_" + row.token + '_' + row._id).html();
+          const get_exit_qty = $(".exit_qty_" + row.token + '_' + row._id).html();
+          const get_exit_price = $(".exit_price_" + row.token + '_' + row._id).html();
+          const get_entry_price = $(".entry_price_" + row.token + '_' + row._id).html();
+          const get_entry_type = $(".entry_type_" + row.token + '_' + row._id).html();
+          const get_exit_type = $(".exit_type_" + row.token + '_' + row._id).html();
+          const get_Strategy = $(".strategy_" + row.token + '_' + row._id).html();
+  
+  
+          if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+            if (get_entry_qty !== "" && get_exit_qty !== "") {
+  
+              if (parseInt(get_entry_qty) == parseInt(get_exit_qty)) {
+  
+              
+                let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+               
+   
+                let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
+                let finalyupl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * upl;
+  
+                if ((isNaN(finalyupl) || isNaN(rpl))) {
+                  return "-";
+                } else {
+                  $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
+                  $(".UPL_" + row.token + "_" + get_id_token).html(finalyupl.toFixed(2));
+                  $(".TPL_" + row.token + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
+  
+                  ShowColor1(".show_rpl_" + row.token + "_" + get_id_token, rpl.toFixed(2), row.token, get_id_token);
+                  ShowColor1(".UPL_" + row.token + "_" + get_id_token, finalyupl.toFixed(2), row.token, get_id_token);
+                  ShowColor1(".TPL_" + row.token + "_" + get_id_token, (finalyupl + rpl).toFixed(2), row.token, get_id_token);
+                }
+              }
+            }
+          }
+          //  if Only entry qty Exist
+          else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
+            let abc = ((parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
+            if (isNaN(abc)) {
+              return "-";
+            } else {
+              $(".show_rpl_" + row.token + "_" + get_id_token).html("-");
+              $(".UPL_" + row.token + "_" + get_id_token).html(abc);
+              $(".TPL_" + row.token + "_" + get_id_token).html(abc);
+              ShowColor1(".show_rpl_" + row.token + "_" + get_id_token, "-", row.token, get_id_token);
+              ShowColor1(".UPL_" + row.token + "_" + get_id_token, abc, row.token, get_id_token);
+              ShowColor1(".TPL_" + row.token + "_" + get_id_token, abc, row.token, get_id_token);
+            }
+          }
+  
+          //  if Only Exist qty Exist
+          else if (
+            (get_entry_type === "" && get_exit_type === "LX") ||
+            (get_entry_type === "" && get_exit_type === "SX")
+          ) {
+          } else {
+          }
+  
+  
+  
+  
+  
+        });
+  
+  
+      }
 
 
 

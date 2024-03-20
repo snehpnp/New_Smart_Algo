@@ -249,10 +249,10 @@ const TradeHistory = () => {
           <div>
             <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
             <span className={`d-none entry_qty_${row.token}_${row._id}`}>
-              {row.entry_qty_percent}
+              {row.entry_qty}
             </span>
             <span className={`d-none exit_qty_${row.token}_${row._id}`}>
-              {row.exit_qty_percent}
+              {row.exit_qty}
             </span>
             <span className={`d-none exit_price_${row.token}_${row._id}`}>
               {row.exit_price}
