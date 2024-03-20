@@ -21,6 +21,7 @@ const user_logs = db.user_logs;
 const live_price = db.live_price;
 const UserMakeStrategy = db.UserMakeStrategy;
 const Get_Option_Chain_modal = db.option_chain_symbols;
+const MainSignals_modal = db.MainSignals
 
 
 const mongoose = require('mongoose');
@@ -34,6 +35,7 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect();
 const db_main = client.db(process.env.DB_NAME);
 
+const token_chain_collection = db_main.collection('token_chain');
 
 
 
@@ -105,6 +107,112 @@ cron.schedule('30 6 * * *', () => {
     console.log('Run Every 1 Second');
     TruncateTableTokenChain();
 });
+
+
+
+
+// ========================================================================================================================= START TOEN CHAIN
+
+
+const MainSignalsRemainToken = async () => {
+
+
+const pipeline =[
+    {
+        $match: {
+            segment: "O",
+            $expr: {
+                $gt: ["$entry_qty", "$exit_qty"]
+            }
+        }
+    },
+    {
+        $addFields: {
+          expiry_date: {
+            $dateFromString: {
+              dateString: "$expiry",
+              format: "%d%m%Y"
+            }
+          },
+          exch_seg: {
+            $cond: {
+              if: {
+                $and : [
+                   { $eq : ["$segment","O"] }
+                ]
+              },
+              then : "NFO",
+              else:"NSE"
+        
+            }
+          }
+        }
+      },
+      {
+        $match: {
+          expiry_date: {
+            $gte: new Date(new Date().setHours(0,0,0,0)) // Get the current date with time set to midnight
+          }
+        }
+      },
+  
+     {
+        $sort: {
+            _id: -1 // Sort in ascending order. Use -1 for descending.
+        }
+     },
+     {
+        $project : {
+            _id:0,
+            exch_seg : 1,
+            token : 1
+        }
+     }
+   
+     
+]
+ 
+
+const result = await MainSignals_modal.aggregate(pipeline)
+
+ result.forEach(async(element) => {
+
+ console.log("element ",element.token , "exch_seg" ,element.exch_seg)   
+
+const filter = { _id: element.token };
+const update = {
+    $set: { _id: element.token, exch: element.exch_seg },
+};
+const update_token = await token_chain_collection.updateOne(filter, update, { upsert: true });
+//console.log("update_token",update_token)
+});
+
+
+
+
+}
+
+cron.schedule('*/5 * * * *',async () => {
+  //  console.log('Run Every 5 Minutes');
+  await  TruncateTableTokenChainAdd_fiveMinute()
+});
+
+const TruncateTableTokenChainAdd_fiveMinute = async () => {
+
+    // console.log("TESTTTTT")
+   
+     const drop = await db_main.collection('token_chain').deleteMany({}); 
+     
+     await Get_Option_All_Token_Chain()
+ 
+     await Get_Option_All_Token_Chain_stock()
+    
+     await MainSignalsRemainToken()
+
+     await Alice_Socket ();
+ 
+ 
+ } 
 
 
 const TruncateTableTokenChainAdd = async () => {
@@ -1490,4 +1598,4 @@ const AccelpixTokenUpdate = async () => {
 
 
 
-module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind, numberOfTrade_count_trade, AccelpixTokenUpdate  , GetStrickPriceFromSheet ,TruncateTableTokenChain ,TruncateTableTokenChainAdd}
+module.exports = { service_token_update, TokenSymbolUpdate, TruncateTable, tokenFind, numberOfTrade_count_trade, AccelpixTokenUpdate  , GetStrickPriceFromSheet ,TruncateTableTokenChain ,TruncateTableTokenChainAdd ,MainSignalsRemainToken}

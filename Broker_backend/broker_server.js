@@ -442,7 +442,7 @@ app.post('/broker-signals', async (req, res) => {
             instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
 
           } else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
@@ -461,7 +461,8 @@ app.post('/broker-signals', async (req, res) => {
             EXCHANGE = "CDS";
           }
 
-
+           
+          console.log("findSignal ",findSignal)
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
             token = await services.find(instrument_query).maxTimeMS(20000).exec();
@@ -908,7 +909,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
             // MainSignals FIND IN COLLECTION
-            if (findMainSignals.length == 0) {
+            // if (findMainSignals.length == 0) {
 
               var Entry_MainSignals_req = {
                 symbol: input_symbol,
@@ -948,35 +949,41 @@ app.post('/broker-signals', async (req, res) => {
               const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
               await Entry_MainSignals.save();
 
-            } else {
+            // } else {
 
-              const entry_qty = Number(findMainSignals[0].entry_qty) || 0; // Use 0 if entry_qty is undefined or null
-              const lot_size = Number(findMainSignals[0].lot_size) || 0; // Use 0 if lot_size is undefined or null
-              const qty_percent1 = Number(qty_percent) || 0; // Use 0 if qty_percent is not a valid number
-              const result = entry_qty + (lot_size * Math.ceil(qty_percent1 / 100));
+            //   const entry_qty = Number(findMainSignals[0].entry_qty) || 0; // Use 0 if entry_qty is undefined or null
+            //   const lot_size = Number(findMainSignals[0].lot_size) || 0; // Use 0 if lot_size is undefined or null
+            //   const qty_percent1 = Number(qty_percent) || 0; // Use 0 if qty_percent is not a valid number
+            //   const result = entry_qty + (lot_size * Math.ceil(qty_percent1 / 100));
 
 
-              var updatedData = {
-                entry_price: (((parseFloat(price) * parseFloat(qty_percent)) + (parseFloat(findMainSignals[0].entry_price) * parseFloat(findMainSignals[0].entry_qty_percent))) / (parseFloat(findMainSignals[0].entry_qty_percent) + parseFloat(qty_percent))),
+            //   var updatedData = {
+            //     entry_price: (((parseFloat(price) * parseFloat(qty_percent)) + (parseFloat(findMainSignals[0].entry_price) * parseFloat(findMainSignals[0].entry_qty_percent))) / (parseFloat(findMainSignals[0].entry_qty_percent) + parseFloat(qty_percent))),
 
-                entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
+            //     entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
 
-                entry_qty: result,
+            //     entry_qty: result,
 
-                entry_dt_date: current_date
-              }
-              updatedData.$addToSet = { signals_id: SignalSave._id };
+            //     entry_dt_date: current_date
+            //   }
+            //   updatedData.$addToSet = { signals_id: SignalSave._id };
 
-              // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
-              const updatedDocument = await MainSignals.findByIdAndUpdate(findMainSignals[0]._id, updatedData)
+            //   // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
+            //   const updatedDocument = await MainSignals.findByIdAndUpdate(findMainSignals[0]._id, updatedData)
 
-            }
+            // }
 
 
           }
           else if (type == "LX" || type == "lx" || type == "SX" || type == "Sx") {
 
-            var ExitMainSignals = await MainSignals.find(findSignal)
+            const updatedFindSignal = {
+              ...findSignal,
+              exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
+            };
+  
+            console.log("updatedFindSignal ",updatedFindSignal)
+            var ExitMainSignals = await MainSignals.find(updatedFindSignal)
 
             // // ExitMainSignals  FIND IN COLLECTION
             if (ExitMainSignals.length != 0) {
@@ -1014,6 +1021,8 @@ app.post('/broker-signals', async (req, res) => {
                 const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
 
               } else {
+
+              console.log("ExitMainSignals",ExitMainSignals)
 
                 if (parseFloat(ExitMainSignals[0].entry_qty_percent) >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
 

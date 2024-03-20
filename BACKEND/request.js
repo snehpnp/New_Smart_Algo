@@ -15,6 +15,13 @@ const Get_Option_Chain_modal = db.option_chain_symbols;
   const { createView ,dropOpenPosition ,open_position_excute} = require('./View/Open_position')
   const { createViewUpstox } = require('./View/Upstox')
   const { createViewDhan } = require('./View/dhan')
+  const { MainSignalsRemainToken } = require('./App/Cron/cron')
+
+ 
+ app.get("/test",(req,res)=>{
+  MainSignalsRemainToken()
+  res.send("DONEE")
+ })
 
 
   app.get('/dropOpenPosition', async (req, res) => {
