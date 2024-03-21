@@ -642,10 +642,10 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
         maxBodyLength: Infinity,
         url: 'https://api.dhan.co/orders',
         headers: {
-            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+            'access-token': item.access_token,
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify([item.postdata])
+        data: item.postdata
 
     };
 
