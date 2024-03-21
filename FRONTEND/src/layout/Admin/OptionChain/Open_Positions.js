@@ -173,19 +173,13 @@ const TradeHistory = () => {
             dataField: "TradeType",
             text: "Trade Type",
         },
-        {
-            dataField: "live",
-            text: "Live Price bp",
-            formatter: (cell, row, rowIndex) => (
-                <div>
-                    <span className={`LivePrice_${row.token}`}></span>
-                    <span className={`SP1_Call_Price_${row.token} d-none`}></span>
-                    {/* <span className={`SP1_Call_Price_${row.token}`}></span> */}
-                    {/* <span className={`BP1_Put_Price_${row.token}_${row._id} d-none`}></span> */}
 
-                </div>
-            ),
+        {
+            dataField: "createdAt",
+            text: "Signals time",
+            formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
         },
+       
         // {
         //     dataField: "closeprice",
         //     text: "Close Price sp",
@@ -209,6 +203,11 @@ const TradeHistory = () => {
             dataField: "trade_symbol",
             text: "Symbol",
         },
+
+        {
+            dataField: "strategy",
+            text: "Strategy",
+        },
         {
             dataField: "entry_qty_percent",
             text: "Entry Qty %",
@@ -223,6 +222,21 @@ const TradeHistory = () => {
                 <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
             ),
         },
+
+        {
+            dataField: "live",
+            text: "Live Price",
+            formatter: (cell, row, rowIndex) => (
+                <div>
+                    <span className={`LivePrice_${row.token}`}></span>
+                    <span className={`SP1_Call_Price_${row.token} d-none`}></span>
+                    {/* <span className={`SP1_Call_Price_${row.token}`}></span> */}
+                    {/* <span className={`BP1_Put_Price_${row.token}_${row._id} d-none`}></span> */}
+
+                </div>
+            ),
+        },
+        
         {
             dataField: "entry_price",
             text: "Entry Price",
@@ -332,15 +346,8 @@ const TradeHistory = () => {
                 </div>
             ),
         },
-        {
-            dataField: "createdAt",
-            text: "Signals time",
-            formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-        },
-        {
-            dataField: "strategy",
-            text: "Strategy",
-        },
+        
+       
 
 
     ];
@@ -513,10 +520,14 @@ const TradeHistory = () => {
 
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
+        //console.log("CreateSignalRequest ",CreateSignalRequest.length)
+
+        let count = 0
+
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
 
+             count++
              // console.log("pre_tag",pre_tag)
-
             if (pre_tag.new_qty_persent > pre_tag.old_qty_persent) {
                 alert('Error: Value cannot be greater than ' + pre_tag.old_qty_persent);
                 return
@@ -529,11 +540,10 @@ const TradeHistory = () => {
              
            
             console.log("req - ",req)
-            
+             
+            console.log("count ",count)
            // console.log("getBrokerUrl - ",getBrokerUrl)
 
-
-           
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
@@ -545,18 +555,22 @@ const TradeHistory = () => {
                 data: req
             };
 
-            axios.request(config)
+               axios.request(config)
                 .then((response) => {
                     setButtonDisabled(!ButtonDisabled)
                     toast.success("Order Place Sucessfully");
                     setshowModal(false)
-                    setrefresh(!refresh)
-                    window.location.reload()
+                  //  setrefresh(!refresh)
+                    if(CreateSignalRequest.length == count){
+                        window.location.reload()
+                    }
                 })
                 .catch((error) => {
                     console.log(error);
                 });
         })
+
+        
     }
 
 
@@ -605,12 +619,12 @@ const TradeHistory = () => {
                         };
                         if (rowdata.entry_type === "") {
                             setCreateSignalRequest(oldValues => {
-                                return oldValues.filter(item => item.token !== rowdata.token)
+                                return oldValues.filter(item => item._id !== rowdata._id)
                             })
                         }
                         else {
                             setCreateSignalRequest(oldValues => {
-                                return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata.token}` : `${rowdata.option_type}_${rowdata.token}`))
+                                return oldValues.filter(item => item.indexcallput !== (rowdata.option_type === "CALL" ? `${rowdata.option_type}_${rowdata._id}` : `${rowdata.option_type}_${rowdata._id}`))
                             })
                             setCreateSignalRequest((oldArray) => [pre_tag, ...oldArray]);
                         }

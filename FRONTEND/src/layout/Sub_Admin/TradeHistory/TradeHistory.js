@@ -157,13 +157,9 @@ const TradeHistory = () => {
     },
     
     {
-      dataField: "live",
-      text: "Live Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`LivePrice_${row.token}`}></span>
-        </div>
-      ),
+      dataField: "createdAt",
+      text: "Signals time",
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
    
     {
@@ -175,17 +171,26 @@ const TradeHistory = () => {
       text: "Strategy",
     },
     {
-      dataField: "entry_qty_percent",
+      dataField: "entry_qty",
       text: "Entry Qty",
       formatter: (cell, row, rowIndex) => (
         <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
       ),
     },
     {
-      dataField: "exit_qty_percent",
+      dataField: "exit_qty",
       text: "Exit Qty",
       formatter: (cell, row, rowIndex) => (
         <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+      ),
+    },
+    {
+      dataField: "live",
+      text: "Live Price",
+      formatter: (cell, row, rowIndex) => (
+        <div>
+          <span className={`LivePrice_${row.token}`}></span>
+        </div>
       ),
     },
     {
@@ -261,11 +266,7 @@ const TradeHistory = () => {
         </div>
       ),
     },
-    {
-      dataField: "createdAt",
-      text: "Signals time",
-      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-    },
+  
     
 
     {
