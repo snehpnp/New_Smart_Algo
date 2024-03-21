@@ -165,19 +165,14 @@ const TradeHistory = () => {
         </div>
       ),
     },
-    {
-      dataField: "closeprice",
-      text: "Previous Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`ClosePrice_${row.token}`}></span>
-        </div>
-      ),
-    },
-
+   
     {
       dataField: "trade_symbol",
       text: "Symbol",
+    },
+    {
+      dataField: "strategy",
+      text: "Strategy",
     },
     {
       dataField: "entry_qty_percent",
@@ -271,10 +266,7 @@ const TradeHistory = () => {
       text: "Signals time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
-    {
-      dataField: "strategy",
-      text: "Strategy",
-    },
+    
 
     {
       dataField: "",

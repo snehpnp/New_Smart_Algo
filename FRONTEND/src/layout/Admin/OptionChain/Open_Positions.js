@@ -186,18 +186,18 @@ const TradeHistory = () => {
                 </div>
             ),
         },
-        {
-            dataField: "closeprice",
-            text: "Close Price sp",
-            formatter: (cell, row, rowIndex) => (
-                <div>
-                    <span className={`ClosePrice_${row.token}`}></span>
-                    <span className={`BP1_Put_Price_${row.token}  d-none`}></span>
-                    {/* <span className={`BP1_Put_Price_${row.token}`}></span> */}
+        // {
+        //     dataField: "closeprice",
+        //     text: "Close Price sp",
+        //     formatter: (cell, row, rowIndex) => (
+        //         <div>
+        //             <span className={`ClosePrice_${row.token}`}></span>
+        //             <span className={`BP1_Put_Price_${row.token}  d-none`}></span>
+        //             {/* <span className={`BP1_Put_Price_${row.token}`}></span> */}
 
-                </div>
-            ),
-        },
+        //         </div>
+        //     ),
+        // },
         {
             dataField: "type",
             text: "Type",
@@ -521,21 +521,23 @@ const TradeHistory = () => {
                 alert('Error: Value cannot be greater than ' + pre_tag.old_qty_persent);
                 return
             }
+           //  let price = pre_tag.price
+            const price = $('.LivePrice_' + pre_tag.token).html();
 
 
-            let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${pre_tag.price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${pre_tag.client_persnal_key}|TradeType:${pre_tag.TradeType}|Demo:demo`
+            let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${pre_tag.client_persnal_key}|TradeType:${pre_tag.TradeType}|Demo:demo`
              
            
-           // console.log("req - ",req)
-
-
-
+            console.log("req - ",req)
             
+           // console.log("getBrokerUrl - ",getBrokerUrl)
 
+
+           
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                // url: 'http://localhost:8000/broker-signals',
+                 //url: 'http://localhost:8000/broker-signals',
                 url: `${getBrokerUrl && getBrokerUrl}`,
                 headers: {
                     'Content-Type': 'text/plain'
@@ -578,8 +580,8 @@ const TradeHistory = () => {
 
                     selected1.map((rowdata) => {
 
-                        const buy = $('.BP1_Put_Price_' + rowdata.token).html();
-                        const sell = $('.SP1_Call_Price_' + rowdata.token).html();
+                        const buy = $('.LivePrice_' + rowdata.token).html();
+                        const sell = $('.LivePrice_' + rowdata.token).html();
 
                         const show_expiry = convert_string_to_month(rowdata.expiry)
                         var pre_tag = {

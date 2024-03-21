@@ -173,6 +173,10 @@ const TradeHistory = () => {
       text: "Symbol",
     },
     {
+      dataField: "strategy",
+      text: "Strategy",
+    },
+    {
       dataField: "entry_qty",
       text: "Entry Qty",
       formatter: (cell, row, rowIndex) => (
@@ -264,10 +268,7 @@ const TradeHistory = () => {
       text: "Signals time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
-    {
-      dataField: "strategy",
-      text: "Strategy",
-    },
+    
 
     {
       dataField: "",
