@@ -10,6 +10,14 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
+
+
+
+
+import { All_Api_Info_List } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+
+import * as Config from "../../../Utils/Config";
+
 import { DELETE_USER_SERVICES } from '../../../ReduxStore/Slice/Subadmin/userSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -36,6 +44,7 @@ const AllClients = () => {
     const Role = JSON.parse(localStorage.getItem("user_details")).Role
     const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
     const Subadmin_permision = JSON.parse(localStorage.getItem('user_details')).Subadmin_permision
+    const token = JSON.parse(localStorage.getItem("user_details")).token;
 
     const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
     const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
@@ -57,7 +66,19 @@ const AllClients = () => {
         data: []
     });
 
-   
+    const [BrokerDetails, setBrokerDetails] = useState([]);
+    //console.log("BrokerDetails ",BrokerDetails)
+
+    const Brokerdata = async () => {
+
+        await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
+            .then((response) => {
+               console.log(" response broker data",response)
+                if (response.status) {
+                  setBrokerDetails(response.data);
+                }
+            })
+      }
 
     // DELETE USET FUNCTION TO DELETE ALL SERVICES
     const Delete_user = async (id) => {
@@ -101,7 +122,8 @@ const AllClients = () => {
                 setOriginalData(response.data);
             })
     }
-    useEffect(() => {
+    useEffect(async() => {
+        await Brokerdata();
         data()
     }, [])
 
@@ -225,45 +247,57 @@ const AllClients = () => {
         if (licence_type === "1") {
           return "Demo";
         } else {
-          if (value === 1) {
-            return "markethub";
-          }
-          if (value === 1) {
-            return "Markethub";
-          } else if (value === 2) {
-            return "Alice Blue";
-          } else if (value === 3) {
-            return "Master Trust";
-          } else if (value === 4) {
-            return "Motilal Oswal";
-          } else if (value === 5) {
-            return "Zebull";
-          } else if (value === 6) {
-            return "IIFl";
-          } else if (value === 7) {
-            return "Kotak";
-          } else if (value === 8) {
-            return "Mandot";
-          } else if (value === 9) {
-            return "Choice";
-          } else if (value === 10) {
-            return "Anand Rathi";
-          } else if (value === 11) {
-            return "B2C";
-          } else if (value === 12) {
-            return "Angel";
-          } else if (value === 13) {
-            return "Fyers";
-          } else if (value === 14) {
-            return "5-Paisa";
-          } else if (value === 15) {
-            return "Zerodha";
-          } else if (value === 19) {
-            return "Upstox";
-          }
-          else if (value === 20) {
-            return "Dhan";
-          }
+           
+        const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
+    // console.log("foundNumber ",foundNumber)
+      if(foundNumber != undefined){
+      return foundNumber.title
+      }else{
+        return ""
+      }
+
+        //   if (value === 1) {
+        //     return "markethub";
+        //   }
+        //   if (value === 1) {
+        //     return "Markethub";
+        //   } else if (value === 2) {
+        //     return "Alice Blue";
+        //   } else if (value === 3) {
+        //     return "Master Trust";
+        //   } else if (value === 4) {
+        //     return "Motilal Oswal";
+        //   } else if (value === 5) {
+        //     return "Zebull";
+        //   } else if (value === 6) {
+        //     return "IIFl";
+        //   } else if (value === 7) {
+        //     return "Kotak";
+        //   } else if (value === 8) {
+        //     return "Mandot";
+        //   } else if (value === 9) {
+        //     return "Choice";
+        //   } else if (value === 10) {
+        //     return "Anand Rathi";
+        //   } else if (value === 11) {
+        //     return "B2C";
+        //   } else if (value === 12) {
+        //     return "Angel";
+        //   } else if (value === 13) {
+        //     return "Fyers";
+        //   } else if (value === 14) {
+        //     return "5-Paisa";
+        //   } else if (value === 15) {
+        //     return "Zerodha";
+        //   } else if (value === 19) {
+        //     return "Upstox";
+        //   }
+        //   else if (value === 20) {
+        //     return "Dhan";
+        //   }
+
+
+
         }
       };
 

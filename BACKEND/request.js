@@ -13,6 +13,7 @@ const Get_Option_Chain_modal = db.option_chain_symbols;
 
   const { DashboardView } = require('./View/DashboardData')
   const { createView ,dropOpenPosition ,open_position_excute} = require('./View/Open_position')
+  const { createViewAlice } = require('./View/Alice_blue')
   const { createViewUpstox } = require('./View/Upstox')
   const { createViewDhan } = require('./View/dhan')
   const { MainSignalsRemainToken } = require('./App/Cron/cron')
@@ -31,8 +32,9 @@ const Get_Option_Chain_modal = db.option_chain_symbols;
 
   
   app.get('/createView', async (req, res) => {
-    createView()
-    open_position_excute()
+    createViewAlice();
+   //createView()
+   // open_position_excute()
     res.send({ msg: "Create View Done!  !!" })
   })
 
