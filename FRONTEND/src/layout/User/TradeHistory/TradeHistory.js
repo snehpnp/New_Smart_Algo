@@ -259,10 +259,10 @@ const TradeHistory = () => {
           <div>
             <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
             <span className={`d-none entry_qty_${row.token}_${row._id}`}>
-              {row.entry_qty}
+              {row.entry_qty_percent}
             </span>
             <span className={`d-none exit_qty_${row.token}_${row._id}`}>
-              {row.exit_qty}
+              {row.exit_qty_percent}
             </span>
             <span className={`d-none exit_price_${row.token}_${row._id}`}>
               {row.exit_price}
@@ -352,10 +352,6 @@ const TradeHistory = () => {
 
 
 
-
-
-
-
   useEffect(() => {
     ShowLivePrice();
   }, [tradeHistoryData.data, SocketState, UserDetails]);
@@ -363,6 +359,20 @@ const TradeHistory = () => {
   
 
   console.log("tradeHistoryData.data",tradeHistoryData.data)
+
+  let total=0;
+  tradeHistoryData.data &&
+    tradeHistoryData.data?.map((item) => {
+      CreatechannelList += `${item.exchange}|${item.token}#`;
+      console.log("item" ,item)
+
+       
+
+
+      if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
+      total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
+      }
+    });
 
   return (
     <>
@@ -433,6 +443,22 @@ const TradeHistory = () => {
           />
         ) : (
           <>
+
+<div className="table-responsive">
+
+
+{tradeHistoryData.data.length>0 ? 
+
+total >= 0 ? 
+  <h4 >Total Realised P/L : <span style={{color:"green"}}> {total.toFixed(2)}</span> </h4>  : 
+  <h4 >Total Realised P/L : <span style={{  color:"red"}}> {total.toFixed(2)}</span> </h4>  : ""
+
+}
+
+ 
+</div>
+
+
             <FullDataTable
               TableColumns={columns}
               tableData={tradeHistoryData.data}

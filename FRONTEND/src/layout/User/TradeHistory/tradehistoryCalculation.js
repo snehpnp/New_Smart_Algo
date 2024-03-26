@@ -177,6 +177,11 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                             if (get_entry_qty !== "" && get_exit_qty !== "") {
 
                                 if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+
+                                    // console.log(" get_entry_qty L",get_entry_qty)
+                                    // console.log(" get_exit_qty L",get_exit_qty)
+
+
                                     let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
                                     let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                                     let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
@@ -242,14 +247,13 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
     }
 
     else{
-    
-
-
-        tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-          
-          console.log(" row._id ",row._id)
-          console.log(" row token ",row.token)
-          console.log(" row ",row)
+         
+       console.log("tradeHistoryData.data ",tradeHistoryData.length)
+        tradeHistoryData && tradeHistoryData.forEach((row, i) => {
+         
+        //   console.log(" row._id ",row._id)
+        //   console.log(" row token ",row.token)
+        //   console.log(" row ",row)
           let get_ids = '_id_' + row.token + '_' + row._id
           let get_id_token = $('.' + get_ids).html();
   
@@ -267,7 +271,9 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
   
               if (parseInt(get_entry_qty) == parseInt(get_exit_qty)) {
   
-              
+                // console.log(" get_entry_qty ",get_entry_qty)
+                // console.log(" get_exit_qty ",get_exit_qty)
+  
                 let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
                
    
