@@ -1,8 +1,0 @@
-﻿# New_Smart_Algo
-
-WORK HARD SNEH JAISWAL
-
-doneS
-
-
-CHECK CODE SHAKIR
