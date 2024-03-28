@@ -20,7 +20,7 @@ import { f_time } from '../../../../Utils/Date_formet';
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import * as Config from "../../../../Utils/Config";
 
-const AddClient = () => {
+const EditClient = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
@@ -85,7 +85,7 @@ const AddClient = () => {
 
 
 
-  // GET USER DETAILS
+ // GET USER DETAILS
   const data_1 = async () => {
     await dispatch(Find_One_User({ 'id': location.state._id })).unwrap()
       .then((response) => {
@@ -772,5 +772,5 @@ const AddClient = () => {
     </>
   )
 }
-export default AddClient
+export default EditClient
 

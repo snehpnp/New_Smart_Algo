@@ -28,7 +28,9 @@ const AddClient = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const location = useLocation()
+ 
 
+  console.log(" locationAdd ",location)
 
   const user_token = JSON.parse(localStorage.getItem("user_details")).token
   const Role = JSON.parse(localStorage.getItem("user_details")).Role

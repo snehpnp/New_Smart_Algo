@@ -122,8 +122,7 @@ const AllClients = () => {
                 setOriginalData(response.data);
             })
     }
-    useEffect(async() => {
-        await Brokerdata();
+    useEffect(() => {
         data()
     }, [])
 
@@ -139,6 +138,7 @@ const AllClients = () => {
             })
     }
     useEffect(() => {
+        Brokerdata()
         data2()
     }, [])
 

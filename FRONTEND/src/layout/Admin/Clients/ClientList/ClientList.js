@@ -24,6 +24,11 @@ import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 
 const AllClients = () => {
+  const [refresh, setrefresh] = useState(false);
+
+  
+
+
   const navigate = useNavigate();
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
@@ -40,8 +45,8 @@ const AllClients = () => {
   const [SwitchButton, setSwitchButton] = useState(true);
   const [selectBroker, setSelectBroker] = useState("null");
 
+  const [BrokerDetails, setBrokerDetails] = useState([]);
 
-  const [refresh, setrefresh] = useState(false);
 
   const [getAllClients, setAllClients] = useState({
     loading: true,
@@ -60,23 +65,45 @@ const AllClients = () => {
   });
 
 
-  const [BrokerDetails, setBrokerDetails] = useState([]);
 
 
-//console.log("BrokerDetails ",BrokerDetails)
-
-
-
-const Brokerdata = async () => {
-
-  await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
-      .then((response) => {
-         console.log(" response broker data",response)
-          if (response.status) {
-            setBrokerDetails(response.data);
-          }
+  //  GET ALL SERVICE NAME
+  const GetAllStrategyName = async (e) => {
+    await dispatch(
+      Get_All_Service_for_Client({
+        req: {},
+        token: token,
       })
-}
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAllStrategyName({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  };
+
+  //console.log("BrokerDetails ",BrokerDetails)
+
+  const Brokerdata = async () => {
+  
+    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
+        .then((response) => {
+           console.log(" response broker data",response)
+            if (response.status) {
+              setBrokerDetails(response.data);
+            }
+        })
+  }
+
+  useEffect(() => {
+    Brokerdata();
+    GetAllStrategyName();
+  }, []);
+
 
   // DELETE USET FUNCTION TO DELETE ALL SERVICES
   const Delete_user = async (id) => {
@@ -207,10 +234,9 @@ const Brokerdata = async () => {
       });
   };
 
-  useEffect(async() => {
-   await Brokerdata();
+  useEffect(() => {
     data();
-  }, [refresh]);
+  }, [refresh ,BrokerDetails]);
 
   // GO TO DASHBOARD
   const goToDashboard = async (row, asyncid, email) => {
@@ -277,62 +303,7 @@ const Brokerdata = async () => {
 
 
 
-  const showBrokerName = (value1, licence_type) => {
-    let value = parseInt(value1);
-
-    // if (licence_type === "0") {
-    //   return "2 Days Only";
-    // } 
-    if (licence_type === "1") {
-      return "Demo";
-    } else {
-      
-      const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
-     // console.log("foundNumber ",foundNumber)
-      if(foundNumber != undefined){
-      return foundNumber.title
-      }else{
-        return ""
-      }
-   
-      // if (value === 1) {
-      //   return "Markethub";
-      // } else if (value === 2) {
-      //   return "Alice Blue";
-      // } else if (value === 3) {
-      //   return "Master Trust";
-      // } else if (value === 4) {
-      //   return "Motilal Oswal";
-      // } else if (value === 5) {
-      //   return "Zebull";
-      // } else if (value === 6) {
-      //   return "IIFl";
-      // } else if (value === 7) {
-      //   return "Kotak";
-      // } else if (value === 8) {
-      //   return "Mandot";
-      // } else if (value === 9) {
-      //   return "Choice";
-      // } else if (value === 10) {
-      //   return "Anand Rathi";
-      // } else if (value === 11) {
-      //   return "B2C";
-      // } else if (value === 12) {
-      //   return "Angel";
-      // } else if (value === 13) {
-      //   return "Fyers";
-      // } else if (value === 14) {
-      //   return "5-Paisa";
-      // } else if (value === 15) {
-      //   return "Zerodha";
-      // } else if (value === 19) {
-      //   return "Upstox";
-      // }
-      // else if (value === 20) {
-      //   return "Dhan";
-      // }
-    }
-  };
+ 
 
   const showLicenceName = (value1, licence_type) => {
     let value = parseInt(value1);
@@ -345,6 +316,7 @@ const Brokerdata = async () => {
       return value;
     }
   };
+  
 
   const columns = [
     {
@@ -513,32 +485,65 @@ const Brokerdata = async () => {
     },
   ];
 
-  //  GET ALL SERVICE NAME
 
-  const GetAllStrategyName = async (e) => {
-    await dispatch(
-      Get_All_Service_for_Client({
-        req: {},
-        token: token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setAllStrategyName({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
+
+  
+  const showBrokerName = (value1, licence_type) => {
+    let value = parseInt(value1);
+
+    // if (licence_type === "0") {
+    //   return "2 Days Only";
+    // } 
+    if (licence_type === "1") {
+      return "Demo";
+    } else {
+
+      console.log("BrokerDetails ",BrokerDetails)
+      
+      // const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
+      // if(foundNumber != undefined){
+      // return foundNumber.title
+      // }else{
+      //   return ""
+      // }
+   
+      if (value === 1) {
+        return "Markethub";
+      } else if (value === 2) {
+        return "Alice Blue";
+      } else if (value === 3) {
+        return "Master Trust";
+      } else if (value === 4) {
+        return "Motilal Oswal";
+      } else if (value === 5) {
+        return "Zebull";
+      } else if (value === 6) {
+        return "IIFl";
+      } else if (value === 7) {
+        return "Kotak";
+      } else if (value === 8) {
+        return "Mandot";
+      } else if (value === 9) {
+        return "Choice";
+      } else if (value === 10) {
+        return "Anand Rathi";
+      } else if (value === 11) {
+        return "B2C";
+      } else if (value === 12) {
+        return "Angel";
+      } else if (value === 13) {
+        return "Fyers";
+      } else if (value === 14) {
+        return "5-Paisa";
+      } else if (value === 15) {
+        return "Zerodha";
+      } else if (value === 19) {
+        return "Upstox";
+      }else if (value === 20) {
+        return "Dhan";
+      }
+    }
   };
-
-  useEffect(() => {
-    GetAllStrategyName();
-    
-  }, []);
-
-
 
   // MANAGE MULTIFILTER
  
