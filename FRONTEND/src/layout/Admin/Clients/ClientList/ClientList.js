@@ -1,44 +1,13 @@
-import React, { useEffect, useState } from "react";
-import Content from "../../../../Components/Dashboard/Content/Content";
-import Loader from "../../../../Utils/Loader";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Pencil, Trash2 } from "lucide-react";
-import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
-import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
-import {
-  GET_ALL_CLIENTS,
-  GO_TO_DASHBOARDS,
-  UPDATE_USER_ACTIVE_STATUS,
-
-  DELETE_USER_SERVICES,
-} from "../../../../ReduxStore/Slice/Admin/AdminSlice";
+import React, { useState, useEffect } from "react";
+import { fetchSubadminCompanyInfo } from "../../../ReduxStore/Slice/Admin/SubAdminCompanyInfo";
 import { useDispatch } from "react-redux";
-import { fa_time } from "../../../../Utils/Date_formet";
-import toast, { Toaster } from 'react-hot-toast';
-import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
+import Content from '../../../Components/Dashboard/Content/Content';
+import FullDataTable from '../../../Components/ExtraComponents/Tables/FullDataTable';
+import Loader from "../../../Utils/Loader";
 
-
-const AllClients = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  var dashboard_filter = location.search.split("=")[1];
+const SubAdminCompanyInfo = () => {
   const dispatch = useDispatch();
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
-  const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const token = JSON.parse(localStorage.getItem("user_details")).token;
-
-  // For Filter
-  const [originalData, setOriginalData] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
-  const [PanelStatus, setPanelStatus] = useState("2");
-  const [ClientStatus, setClientStatus] = useState("null");
-  const [SwitchButton, setSwitchButton] = useState(true);
-  const [selectBroker, setSelectBroker] = useState("null");
-
-
-  const [refresh, setrefresh] = useState(false);
-
-  const [getAllClients, setAllClients] = useState({
+  const [companyData, setCompanyData] = useState({
     loading: true,
     data: [],
   });
@@ -46,667 +15,154 @@ const AllClients = () => {
 
 
 
-  const [ForGetCSV, setForGetCSV] = useState([])
-
-
-  const [getAllStrategyName, setAllStrategyName] = useState({
-    loading: true,
-    data: [],
-  });
-
-  // DELETE USET FUNCTION TO DELETE ALL SERVICES
-  const Delete_user = async (id) => {
-    var req1 = {
-      id: id,
-    };
-    if (window.confirm("Do you want to delete this User ?")) {
-      await dispatch(DELETE_USER_SERVICES(req1))
-        .unwrap()
-        .then((response) => {
-          if (response.status) {
-            toast.success(response.msg);
-
-            setrefresh(!refresh);
-          } else {
-            toast.error(response.msg);
-
-          }
-        });
-    } else {
-      return
-    }
+  const styles = {
+    container: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '80vh',
+    },
+    card: {
+      width: 'auto',
+    },
+    boldHeader: {
+      fontWeight: 'bold',
+    },
+    headerButton: {
+      marginRight: 12,
+    },
   };
 
-  const data = async () => {
-    var req1 = {
-      Find_Role: Role,
-      user_ID: user_ID,
-    };
-    await dispatch(GET_ALL_CLIENTS(req1))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-
-
-          console.log("client :", response);
-          if (dashboard_filter !== undefined) {
-            let abc =
-              response.data &&
-              response.data.filter((item) => {
-                if (dashboard_filter === "000") {
-                  return (item.Role === "USER" && item.Is_Active === '1' && new Date(item.EndDate) <= new Date())
-                }
-                if (dashboard_filter === "111") {
-                  return (item.Role === "USER" && item.Is_Active === '1' && new Date(item.EndDate) >= new Date())
-
-                }
-
-                if (dashboard_filter === "2" || dashboard_filter === 2) {
-                  return (
-                    item.license_type === dashboard_filter ||
-                    item.license_type === dashboard_filter
-                  );
-                }
-                if (dashboard_filter === "21" || dashboard_filter === 21) {
-                  return (
-                    new Date(item.EndDate) > new Date() &&
-                    (item.license_type === "2" || item.license_type === 2)
-                  );
-                }
-                if (dashboard_filter === "20" || dashboard_filter === 20) {
-                  return (
-                    new Date(item.EndDate) < new Date() &&
-                    (item.license_type === "2" || item.license_type === 2)
-                  );
-                }
-                if (dashboard_filter === "1" || dashboard_filter === 1) {
-                  return (
-                    item.license_type === dashboard_filter ||
-                    item.license_type === dashboard_filter
-                  );
-                }
-                if (dashboard_filter === "11" || dashboard_filter === 11) {
-                  return (
-                    new Date(item.EndDate) > new Date() &&
-                    (item.license_type === "1" || item.license_type === 1)
-                  );
-                }
-                if (dashboard_filter === "10" || dashboard_filter === 10) {
-                  return (
-                    new Date(item.EndDate) < new Date() &&
-                    (item.license_type === "1" || item.license_type === 1)
-                  );
-                }
-                if (dashboard_filter === "0" || dashboard_filter === 0) {
-                  return (
-                    item.license_type === dashboard_filter ||
-                    item.license_type === dashboard_filter
-                  );
-                }
-                if (dashboard_filter === "01") {
-                  return (
-                    new Date(item.EndDate) > new Date() &&
-                    (item.license_type === "0" || item.license_type === 0)
-                  );
-                }
-                if (dashboard_filter === "00") {
-                  return (
-                    new Date(item.EndDate) < new Date() &&
-                    (item.license_type === "0" || item.license_type === 0)
-                  );
-                }
-                if (
-                  dashboard_filter === "ADMIN" ||
-                  dashboard_filter === "SUBADMIN"
-                ) {
-                  return item.parent_role === dashboard_filter;
-                }
-              });
-            setAllClients({
-              loading: false,
-              data: abc,
-            });
-            return;
-          }
-          setAllClients({
-            loading: false,
-            data: response.data,
-          });
-        } else {
-          setAllClients({
-            loading: false,
-            data: response.data,
-          });
-        }
-
-        setOriginalData(response.data);
-      });
-  };
-
-  useEffect(() => {
-    data();
-  }, [refresh]);
-
-  // GO TO DASHBOARD
-  const goToDashboard = async (row, asyncid, email) => {
-    if (row.AppLoginStatus == "1" || row.WebLoginStatus == "1") {
-      let req = {
-        Email: email,
-      };
-
-      await dispatch(GO_TO_DASHBOARDS(req))
-        .unwrap()
-        .then((response) => {
-          if (response.status) {
-            localStorage.setItem("route", "/admin/allclients");
-            localStorage.setItem("gotodashboard", JSON.stringify(true));
-            localStorage.setItem(
-              "user_details_goTo",
-              JSON.stringify(response.data)
-            );
-            localStorage.setItem(
-              "user_role_goTo",
-              JSON.stringify(response.data.Role)
-            );
-            navigate("/client/dashboard");
-          }
-        });
-    }
-
-  };
-
-  // ACTIVE USER TO API
-  const activeUser = async (e, data) => {
-
-    if (window.confirm("Do you want To Change Status For This User ?") === true) {
-      let req = {
-        id: data._id,
-        user_active_status: e.target.checked === true ? "1" : "0",
-      };
-      await dispatch(UPDATE_USER_ACTIVE_STATUS(req))
-        .unwrap()
-        .then((response) => {
-
-
-          setrefresh(!refresh)
-          window.location.reload();
-
-          if (response.status) {
-
-            setrefresh(!refresh)
-            toast.success(response.msg);
-
-            window.location.reload()
-            setTimeout(() => {
-            }, 500);
-          } else {
-            toast.error(response.msg);
-          }
-        });
-    }
-    else {
-      return setrefresh(!refresh)
-
-    }
-  };
-
-
-
-  const showBrokerName = (value1, licence_type) => {
-    let value = parseInt(value1);
-
-    // if (licence_type === "0") {
-    //   return "2 Days Only";
-    // } 
-    if (licence_type === "1") {
-      return "Demo";
-    } else {
-      if (value === 1) {
-        return "markethub";
-      }
-      if (value === 1) {
-        return "Markethub";
-      } else if (value === 2) {
-        return "Alice Blue";
-      } else if (value === 3) {
-        return "Master Trust";
-      } else if (value === 4) {
-        return "Motilal Oswal";
-      } else if (value === 5) {
-        return "Zebull";
-      } else if (value === 6) {
-        return "IIFl";
-      } else if (value === 7) {
-        return "Kotak";
-      } else if (value === 8) {
-        return "Mandot";
-      } else if (value === 9) {
-        return "Choice";
-      } else if (value === 10) {
-        return "Anand Rathi";
-      } else if (value === 11) {
-        return "B2C";
-      } else if (value === 12) {
-        return "Angel";
-      } else if (value === 13) {
-        return "Fyers";
-      } else if (value === 14) {
-        return "5-Paisa";
-      } else if (value === 15) {
-        return "Zerodha";
-      } else if (value === 19) {
-        return "Upstox";
-      }
-    }
-  };
-
-  const showLicenceName = (value1, licence_type) => {
-    let value = parseInt(value1);
-
-    if (licence_type === "0") {
-      return "2 Days Only";
-    } else if (licence_type === "1") {
-      return "Demo";
-    } else {
-      return value;
-    }
-  };
+  const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
   const columns = [
+    { field: 'id', headerName: '#', width: 70, headerClassName: styles.boldHeader },
     {
-      dataField: "index",
-      text: "SR. No.",
-      formatter: (cell, row, rowIndex) => rowIndex + 1,
-    },
-    {
-      dataField: "UserName",
-      text: "User Name",
-    },
-    {
-      dataField: "Email",
-      text: "Email",
-    },
-
-    {
-      dataField: "FullName",
-      text: "Full Name",
-    },
-    {
-      dataField: "client_key",
-      text: "Client Key",
-    },
-    {
-      dataField: "PhoneNo",
-      text: "Phone Number",
-    },
-
-    {
-      dataField: "broker",
-      text: "Broker",
-      formatter: (cell, row) => showBrokerName(cell, row.license_type),
-    },
-    {
-      dataField: "licence",
-      text: "Month",
-      formatter: (cell, row) => showLicenceName(cell, row.license_type),
-    },
-    {
-      dataField: "ActiveStatus",
-      
-      text: "Status",
-      formatter: (cell, row) => (
-        <>
-         { row.StartDate == null && row.EndDate==null ?
-          ''
-       : 
-       <label class="toggle mt-3">
-            <input
-              class="toggle-checkbox bg-primary"
-              type="checkbox"
-              checked={row.ActiveStatus === "1" ? true : false}
-              onChange={(e) => {
-                activeUser(e, row);
-                setSwitchButton(e.target.checked)
-              }}
-            />
-            <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
-          </label>
-          
-        }
-         </>
-      ),
-       
-      },
-    {
-      dataField: "ActiveStatus",
-      text: "Go To Dashboard",
-      formatter: (cell, row) => (
-        <>
-          <span
-            className=" btn fw-bold "
-            style={
-              row.AppLoginStatus === "0" && row.WebLoginStatus === "0"
-                ? { color: "#FF0000" }
-                : { color: "#56c080" }
-            }
-            onClick={() => goToDashboard(row, row._id, row.Email)}
-            disabled={row.AppLoginStatus == "0" && row.WebLoginStatus == "0"}
-          >
-            Dashboard
-          </span>
-        </>
-      ),
-    },
-    {
-      dataField: "TradingStatus",
-      text: "TradingStatus",
-      formatter: (cell, row) => (
-        <>
-        {row.StartDate == null && row.EndDate==null ?
-         <span
-         style={
-           cell == "off" || cell === null
-             ? { color: "#FF0000", fontSize: "13px" }
-             : { color: "#008000", fontSize: "13px" }
-         }
-       >
-        Activate Subadmin Clients 
-       </span>
-       : 
-       <span
-            style={
-              cell == "off" || cell === null
-                ? { color: "#FF0000", fontSize: "40px" }
-                : { color: "#008000", fontSize: "40px" }
-            }
-          >
-            &#9679;
-          </span>
-      }
-          
-        </>
-      ),
-    },
-    {
-      dataField: "CreateDate",
-      text: "Create Date",
-      formatter: (cell, row) => fa_time(row.CreateDate),
-    },
-    {
-      dataField: "StartDate",
-      text: "Start Date",
-      formatter: (cell, row) => fa_time(row.StartDate),
-    },
-    {
-      dataField: "EndDate",
-      text: "End Date",
-      formatter: (cell, row) => fa_time(row.EndDate),
-    },
-
-    {
-      dataField: "actions",
-      text: "Actions",
-      formatter: (cell, row) => (
-        <div style={{ width: "120px" }}>
-          <div>
-            <Link to={`/admin/client/edit/${row._id}`} state={row}>
-              <span data-toggle="tooltip" data-placement="top" title="Edit">
-                <Pencil
-                  size={20}
-                  color="#198754"
-                  strokeWidth={2}
-                  className="mx-1"
-                />
-              </span>
-            </Link>
-            {row.license_type !== "2" ?
-              <Link>
-                <span data-toggle="tooltip" data-placement="top" title="Delete">
-                  <Trash2
-                    size={20}
-                    color="#d83131"
-                    strokeWidth={2}
-                    className="mx-1"
-                    onClick={(e) => Delete_user(row._id)}
-                  />
-                </span>
-              </Link>
-              : ""}
-
-          </div>
+      field: 'profile', headerName: 'Profile', width: 120, headerClassName: styles.boldHeader,
+      renderCell: (params) => (
+        <div>
+          <a href="profile.html" className="company-avatar avatar-md me-2 companies company-icon">
+            <img className="avatar-img rounded-circle company" src="assets/img/companies/company-05.svg" alt="Company Image" />
+          </a>
         </div>
-      ),
+      )
     },
+
+    {
+      field: 'makerInfo',
+      headerName: 'Subadmin Name',
+      width: 210,
+      headerClassName: styles.boldHeader,
+      renderCell: (params) => (
+        <div>
+          {params.row.makerInfo.FullName}
+        </div>
+      )
+    },
+
+
+    {
+      field: 'razorpay_key',
+      headerName: 'razorpay_key',
+      width: 250,
+      headerClassName: styles.boldHeader,
+      renderCell: (params) => (
+        <div>
+          {params.value || '-'}
+        </div>
+      )
+    },
+
+    {
+      field: 'email', headerName: 'email', width: 250, headerClassName: styles.boldHeader,
+      renderCell: (params) => (
+        <div>
+          {params.value || '-'}
+        </div>
+      )
+    },
+    {
+      field: 'change', headerName: 'change', width: 150, headerClassName: styles.boldHeader,
+      renderCell: (params) => (
+        <div onClick={handleOpenModal}>
+            <span className="badge bg-purple">Change</span>
+        </div>
+    )
+    },
+    {
+      field: 'Status', headerName: 'Status', width: 120, headerClassName: styles.boldHeader,
+      renderCell: (params) => (
+        <div>
+          <span className={`badge bg-success-light d-inline-flex align-items-center`}>
+            <i className={'fe fe-check me-1'} />Active
+          </span>
+        </div>
+      )
+    },
+    { field: 'createdAt', headerName: 'createdAt', width: 250, headerClassName: styles.boldHeader },
+
   ];
 
-  //  GET ALL SERVICE NAME
 
-  const GetAllStrategyName = async (e) => {
-    await dispatch(
-      Get_All_Service_for_Client({
-        req: {},
-        token: token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
+
+
+
+
+  useEffect(() => {
+    const getCompanyData = async () => {
+      try {
+        const response = await dispatch(fetchSubadminCompanyInfo()).unwrap();
         if (response.status) {
-          setAllStrategyName({
+          const formattedData = response.data.map((row, index) => ({
+            ...row,
+            id: index + 1,
+          }));
+          setCompanyData({
             loading: false,
-            data: response.data,
+            data: formattedData,
           });
         }
-      });
+      } catch (error) {
+        console.log("Error fetching data:", error);
+        setCompanyData({
+          loading: false,
+          data: [],
+        });
+      }
+    };
+
+    getCompanyData();
+  }, [dispatch]);
+
+  const handleEdit = (row) => {
+    console.log('Edit row:', row);
   };
 
-  useEffect(() => {
-    GetAllStrategyName();
-  }, []);
-
-
-
-  // MANAGE MULTIFILTER
- 
-
-  useEffect(() => {
-
-    const filteredData = originalData.filter((item) => {
-    //  console.log("item", item.broker);
-      const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
-      const filter3Match = selectBroker === "null" || item.broker === selectBroker;
-      const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
-      const searchTermMatch =
-        searchInput === '' ||
-        item.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
-        item.PhoneNo.includes(searchInput)
-      // Return true if all conditions are met
-      return filter1Match && filter3Match && filter2Match && searchTermMatch;
-    });
-    setAllClients({
-      loading: false,
-      data: searchInput || PanelStatus !== "2" || ClientStatus !== "null" || selectBroker !== "null" ? filteredData : originalData,
-
-    });
-
-  }, [searchInput, originalData, PanelStatus, ClientStatus, selectBroker]);
-
-
-  const ResetDate = (e) => {
-    e.preventDefault();
-    setSearchInput("");
-    setClientStatus("null");
-    setSelectBroker("null");
-    setPanelStatus("2");
-    setAllClients({
-      loading: false,
-      data: originalData,
-    });
-    console.log("originalData ", originalData)
-
-
+  const handleDelete = (row) => {
+    console.log('Delete row:', row);
   };
-
-  //  For CSV
-  const forCSVdata = () => {
-    let csvArr = []
-    if (getAllClients.data.length > 0) {
-      getAllClients.data.map((item) => {
-        return csvArr.push({
-          "FullName": item.FullName,
-          "UserName": item.UserName,
-          "Email": item.Email,
-          "PhoneNo": item.PhoneNo,
-          "StartDate": fa_time(item.StartDate),
-          "EndDate": fa_time(item.EndDate),
-          "license type": showLicenceName(item.licence, item.license_type),
-          "broker": showBrokerName(item.broker, item.license_type),
-          "TradingStatus": item.TradingStatus,
-        })
-      })
-
-      setForGetCSV(csvArr)
-    }
-
-  }
-
-  useEffect(() => {
-    forCSVdata()
-  }, [getAllClients.data])
-
-
-
-
 
   return (
     <>
-      {getAllClients.loading ? (
+      {companyData.loading ? (
         <Loader />
-      ) : (
-        <>
-          <Content
-            Page_title="All Clients"
-            button_title="Add Client"
-            route="/admin/client/add"
-            show_csv_button={true} csv_data={ForGetCSV} csv_title="Client-List"
-          >
-
-            <div className="row">
-              <div className="col-lg-3">
-                <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">
-                    Search Something Here
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    class="form-control"
-                    id="exampleFormControlInput1"
-                  />
-                </div>
-              </div>
-              <div className="col-lg-2 ">
-                <div class="mb-3">
-                  <label for="select" class="form-label">
-                    Client Type
-                  </label>
-
-                  <select
-                    class="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setClientStatus(e.target.value)}
-                    value={ClientStatus}
-                  >
-                    <option value="null">All</option>
-                    <option value="2">Live</option>
-                    <option value="1">Demo</option>
-                    <option value="0">2 Days Only</option>
-                  </select>
-                </div>
-              </div>
-              <div className="col-lg-2">
-                <div class="mb-3">
-                  <label for="select" class="form-label">
-                    Trading Type
-                  </label>
-
-                  <select
-                    class="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setPanelStatus(e.target.value)}
-                    value={PanelStatus}
-                  >
-                    <option value="2">All</option>
-                    <option value="1">On</option>
-                    <option value="0">OFf</option>
-                  </select>
-                </div>
-              </div>
-
-
-              <div className="col-lg-2">
-
-                <div className="mb-3">
-
-                  <label for="select" className="form-label">
-
-                    Broker Type
-                  </label>
-                  <select
-                    className="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setSelectBroker(e.target.value)}
-                    value={selectBroker}
-                  >
-                    <option value="null">All</option>
-                    <option value="1">markethub</option>
-                    <option value="2">Alice Blue</option>
-                    <option value="3">Master Trust</option>
-                    <option value="4">Motilal Oswal</option>
-                    <option value="5">Zebull</option>
-                    <option value="6">IIFl</option>
-                    <option value="7">Kotak</option>
-                    <option value="8">Mandot</option>
-                    <option value="9">Choice</option>
-                    <option value="10">Anand Rathi</option>
-                    <option value="11">B2C</option>
-                    <option value="12">Angel</option>
-                    <option value="13">Fyers</option>
-                    <option value="14">5-Paisa</option>
-                    <option value="15">Zerodha</option>
-                    <option value="19">Upstox</option>
-                  </select>
-                </div>
-              </div>
-
-
-
-              <div className="col-lg-2 mt-4">
-                <button
-                  className="btn btn-primary mt-2"
-                  onClick={(e) => ResetDate(e)}
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-
+      ) : ( 
+        <Content
+          cardTitle="Payment Details"
+          buttonTitle="Add"
+          cardTitleIcon='fas fa-image pe-2'
+          content={
             <FullDataTable
-              TableColumns={columns}
-              tableData={getAllClients.data}
+              styles={styles}
+              label={label}
+              columns={columns}
+              rows={companyData.data}
             />
-            <ToastButton />
-
-          </Content>
-        </>
+          }
+        />
       )}
     </>
   );
-};
+}
 
-export default AllClients;
+export default SubAdminCompanyInfo;
