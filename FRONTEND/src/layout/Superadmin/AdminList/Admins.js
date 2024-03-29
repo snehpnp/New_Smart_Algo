@@ -8,6 +8,7 @@ import Loader from '../../../Utils/Loader'
 import { Pencil, Trash2, Pointer } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -31,6 +32,7 @@ const AdminsList = () => {
     const [showModal, setshowModal] = useState(false)
     const [Panelid, setPanelid] = useState('')
     const [themeList, setThemeList] = useState();
+   
 
 
     const [themeData, setThemeData] = useState({
@@ -39,18 +41,25 @@ const AdminsList = () => {
     });
 
 
-
+    console.log("themeList ",themeList)
 
     const GetAllThemes = async () => {
+
+      
         await dispatch(Get_All_Theme()).unwrap()
             .then((response) => {
+
+                //console.log("response get all theme" ,response.data)
                 setThemeList(response && response.data);
             })
     }
 
     const data = async () => {
+
         await dispatch(All_Panel_List()).unwrap()
             .then((response) => {
+                
+                //console.log("theme data",response.data)
 
                 setThemeData({
                     loading: false,
@@ -58,12 +67,7 @@ const AdminsList = () => {
                 });
             })
     }
-    useEffect(() => {
-        data()
-        GetAllThemes()
-    }, [])
-
-
+   
 
 
     const panelDetails = (panel_id) => {
@@ -95,6 +99,14 @@ const AdminsList = () => {
         {
             dataField: 'key',
             text: 'Key'
+        },
+
+        {
+            dataField: 'theme_id',
+            text: 'Set theme',
+            formatter: (cell, row) => (
+                <span>{ShowThemeName(row)} </span>
+            )
         },
 
         {
@@ -164,7 +176,40 @@ const AdminsList = () => {
     ];
 
 
+   const ShowThemeName = (row) => {
+   // console.log("themeList ",themeList)
+   
+      const doubledNumbers = themeList.map(item => {
+        if(item._id == row.theme_id){
+            return item.theme_name;
+        }
+      });
+     return doubledNumbers
+      
 
+
+   }
+
+
+
+//    useEffect(() => {
+//     GetAllThemes()
+//     data()
+// }, [])
+
+useEffect(() => {
+    const fetchData = async () => {
+        try {
+            await GetAllThemes();
+            await data();
+        } catch (error) {
+            // Handle errors appropriately
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    fetchData();
+}, []);
 
 
     const formik = useFormik({

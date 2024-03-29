@@ -100,7 +100,7 @@ const AllClients = () => {
   }
 
   useEffect(() => {
-    Brokerdata();
+   // Brokerdata();
     GetAllStrategyName();
   }, []);
 
@@ -234,9 +234,24 @@ const AllClients = () => {
       });
   };
 
+  // useEffect(() => {
+  //   data();
+  // }, [refresh]);
+
+
   useEffect(() => {
-    data();
-  }, [refresh ,BrokerDetails]);
+    const fetchData = async () => {
+        try {
+            await Brokerdata();
+            await data();
+        } catch (error) {
+            // Handle errors appropriately
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    fetchData();
+}, [refresh]);
 
   // GO TO DASHBOARD
   const goToDashboard = async (row, asyncid, email) => {
@@ -498,50 +513,50 @@ const AllClients = () => {
       return "Demo";
     } else {
 
-      console.log("BrokerDetails ",BrokerDetails)
+     // console.log("BrokerDetails ",BrokerDetails)
       
-      // const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
-      // if(foundNumber != undefined){
-      // return foundNumber.title
-      // }else{
-      //   return ""
-      // }
-   
-      if (value === 1) {
-        return "Markethub";
-      } else if (value === 2) {
-        return "Alice Blue";
-      } else if (value === 3) {
-        return "Master Trust";
-      } else if (value === 4) {
-        return "Motilal Oswal";
-      } else if (value === 5) {
-        return "Zebull";
-      } else if (value === 6) {
-        return "IIFl";
-      } else if (value === 7) {
-        return "Kotak";
-      } else if (value === 8) {
-        return "Mandot";
-      } else if (value === 9) {
-        return "Choice";
-      } else if (value === 10) {
-        return "Anand Rathi";
-      } else if (value === 11) {
-        return "B2C";
-      } else if (value === 12) {
-        return "Angel";
-      } else if (value === 13) {
-        return "Fyers";
-      } else if (value === 14) {
-        return "5-Paisa";
-      } else if (value === 15) {
-        return "Zerodha";
-      } else if (value === 19) {
-        return "Upstox";
-      }else if (value === 20) {
-        return "Dhan";
+      const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
+      if(foundNumber != undefined){
+      return foundNumber.title
+      }else{
+        return ""
       }
+   
+      // if (value === 1) {
+      //   return "Markethub";
+      // } else if (value === 2) {
+      //   return "Alice Blue";
+      // } else if (value === 3) {
+      //   return "Master Trust";
+      // } else if (value === 4) {
+      //   return "Motilal Oswal";
+      // } else if (value === 5) {
+      //   return "Zebull";
+      // } else if (value === 6) {
+      //   return "IIFl";
+      // } else if (value === 7) {
+      //   return "Kotak";
+      // } else if (value === 8) {
+      //   return "Mandot";
+      // } else if (value === 9) {
+      //   return "Choice";
+      // } else if (value === 10) {
+      //   return "Anand Rathi";
+      // } else if (value === 11) {
+      //   return "B2C";
+      // } else if (value === 12) {
+      //   return "Angel";
+      // } else if (value === 13) {
+      //   return "Fyers";
+      // } else if (value === 14) {
+      //   return "5-Paisa";
+      // } else if (value === 15) {
+      //   return "Zerodha";
+      // } else if (value === 19) {
+      //   return "Upstox";
+      // }else if (value === 20) {
+      //   return "Dhan";
+      // }
     }
   };
 

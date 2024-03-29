@@ -122,9 +122,26 @@ const AllClients = () => {
                 setOriginalData(response.data);
             })
     }
+
+
+    // useEffect(() => {
+    //     data()
+    // }, [])
+
+
     useEffect(() => {
-        data()
-    }, [])
+        const fetchData = async () => {
+            try {
+                await Brokerdata();
+                await data();
+            } catch (error) {
+                // Handle errors appropriately
+                console.error('Error fetching data:', error);
+            }
+        };
+    
+        fetchData();
+    }, [refresh]);
 
 
 
@@ -138,7 +155,6 @@ const AllClients = () => {
             })
     }
     useEffect(() => {
-        Brokerdata()
         data2()
     }, [])
 

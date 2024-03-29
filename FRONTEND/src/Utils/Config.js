@@ -19,6 +19,8 @@ export const base_url = "http://localhost:7700/";
 // export const base_url = "https://software.oneplanetitsolution.com/backend/";
 // export const base_url = "https://software.algobullstradingsolutions.com/backend/";
 // export const base_url = "https://software.finnshri.com/backend/";
+// export const base_url = "https://software.corebizinfotech.com/backend/";
+
 
 
 
