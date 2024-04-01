@@ -441,7 +441,7 @@ const AllClients = () => {
                                 
                             </Link> 
                
-                            {row.license_type !== "2"  && (getPermissions && getPermissions.Update_Api_Key === 0) ? <>
+                            {row.license_type == "1"  && (getPermissions && getPermissions.Update_Api_Key === 0) ? <>
                                 <Link>
                                
                                     <span data-toggle="tooltip" data-placement="top" title="Delete">
