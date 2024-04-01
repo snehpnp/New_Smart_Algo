@@ -1,21 +1,3 @@
-// import React from 'react'
-
-// const Loader = () => {
-//     return (
-//         <div>  <div id="preloader">
-//             <div className="lds-ripple">
-//                 <div />
-//                 <div />
-//             </div>
-//         </div></div>
-//     )
-// }
-
-// export default Loader
-
-
-
-import { applyMiddleware } from '@reduxjs/toolkit'
 import React from 'react'
 // import "../App.css"
 function Loader() {

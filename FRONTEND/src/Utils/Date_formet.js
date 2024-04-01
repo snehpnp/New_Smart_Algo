@@ -66,12 +66,6 @@ export const convert_string_to_month = (expiry) => {
   const moth_str = expiry.substring(2, 4);
   const year_expiry = expiry.substring(4);
 
-
-  // console.log("moth_str", moth_str)
-  // console.log("year_expiry", year_expiry)
-  // console.log("moth_str", moth_str)
-  // console.log("day_expiry", day_expiry)
-
   let month_string
   if (moth_str === "01") {
     month_string = "JAN";
