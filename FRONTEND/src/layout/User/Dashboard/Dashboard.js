@@ -375,7 +375,8 @@ const BrokerResponse = () => {
                                   );
                                 }
 
-                              })}
+                              })
+                              }
                           </select>
                         }
 

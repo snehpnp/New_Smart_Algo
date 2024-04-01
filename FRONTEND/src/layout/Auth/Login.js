@@ -41,6 +41,7 @@ const Login = () => {
   const [desclaimerModal, setDesclaimerModal] = useState(false);
   const [getCompanyName, setGetCompanyName] = useState("");
 
+  const [backgroundImage, setBackgroundImage] = useState("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQA+wMBIgACEQEDEQH/xAAYAAEBAQEBAAAAAAAAAAAAAAAAAQMCB//EABoQAQEBAAMBAAAAAAAAAAAAAAARATFBUSH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9kiRSgQAAFBBQEigCaKAgoCCgIKAgqAkIoCRcwANRTQQ3Dg5BBUALvoA7SEAFAAAAAAAAAAAAADTAAAAQAAANKEBKGgCKgAAOlS4oAAAAAAAAAqAAAAAAAIAAUABOwXUq6gAIAAAgsB0oAAAAAAoIKgAAAAAGgCAAAAIAFABNMBU00AEAAAd4oAAAAAAAAAAAIAAAAFBN5XE0AE+gKgAAAAAgIBqoA0VAFAAAACgAIAAACboGmABuiAAAAigAAIAAACKgBRLnoNaUhMAVAFqVQAE3QASgpRAKCAqaAAABBAWIAAAAACAAAAkzwoDSmACiUoKJQFIhQAQFuiAAACACiAKgAAAAgKioAAAmqgCKfAaCFBRAFQAAAAABAFQADAAAAAAoFAEUEAAABBekACoDQAAAAAAAEAAAAAAAAAAQAAAAAAAAATQANAB/9k=");
 
   const [getOtpStatus, setgetOtpStatus] = useState(false);
 
@@ -174,6 +175,8 @@ const Login = () => {
       .then((response) => {
         if (response.status) {
           setGetCompanyName(response.data && response.data[0].panel_name)
+
+          setBackgroundImage(response.data && response.data[0].loginimage)
 
           $(".logo-abbr").attr('src', response.data && response.data[0].logo);
 
@@ -523,7 +526,9 @@ const Login = () => {
 
 
   return (
-    <div class="vh-100">
+    <div class="vh-100" style={{ 
+      backgroundImage: `url(${backgroundImage})` ,backgroundSize:'cover'
+    }}>
 
       <div className="authincation h-100">
         <div className="container h-100">

@@ -27,6 +27,9 @@ const { GetAccessTokenZerodha,GetOrderFullInformationZerodha} = require('../../C
 // UPSTOX CONTROLLER FILE
 const { GetAccessTokenUpstox,GetOrderFullInformationUpstox} = require('../../Controllers/Brokerassecc_token/Upstox')
 
+// Dhan CONTROLLER FILE
+const { GetAccessTokenDhan,GetOrderFullInformationDhan} = require('../../Controllers/Brokerassecc_token/Dhan')
+
 
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req,res)=>{
@@ -73,6 +76,11 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
     GetOrderFullInformationUpstox(req,res,result);
     }
 
+    // DHAN   -  20
+   else if(broker == 20){
+    GetOrderFullInformationDhan(req,res,result);
+    }
+
    else{
     res.send({status:false,msg:"broker not found"});
    }
@@ -112,6 +120,9 @@ router.get('/zerodha', GetAccessTokenZerodha);
 
 // Upstox
 router.get('/upstox', GetAccessTokenUpstox);
+
+// Upstox
+router.post('/dhan', GetAccessTokenDhan);
 
 
 module.exports = router;

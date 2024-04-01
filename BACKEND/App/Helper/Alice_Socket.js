@@ -23,7 +23,7 @@ const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
 let socketObject = null;
 
 const Alice_Socket = async () => {
-
+// console.log("ddddddddddddddddddd")
   var rr = 0;
     const url = "wss://ws1.aliceblueonline.com/NorenWS/"
     var socket = null
@@ -65,7 +65,7 @@ const Alice_Socket = async () => {
 
         }).then(res => {
 
-            // console.log("res - ",res)
+            //console.log("res - ",res)
 
             if (res.data.stat == "Ok") {
 
@@ -86,6 +86,9 @@ const Alice_Socket = async () => {
                     socket.onmessage = async function (msg) {
 
                         var response = JSON.parse(msg.data)
+
+                       // console.log("response - ",response)
+
 
 
                         if (response.tk) {
@@ -150,6 +153,29 @@ const Alice_Socket = async () => {
                         }
                     }
 
+                    socket.onclose = async function (event) {
+                        if (event.wasClean) {
+                       // console.log("Socket -- event.wasClean IF")
+                        
+                        await socketRestart()
+                          
+
+
+
+                        } else {
+                        // console.log("Socket -- event.wasClean ELSE")
+                        // await socketRestart()
+                          // connect
+                          // alert('[close] Connection died');
+                        }
+                      };
+                  
+                  
+                      socket.onerror = function (error) {
+                        console.log("Socket -- onerror")
+                       
+                      };
+
                 } catch (error) {
                     console.log("Error Shocket", error);
 
@@ -176,6 +202,12 @@ const Alice_Socket = async () => {
 
 const getSocket = () => {
     return socketObject;
+};
+
+
+const socketRestart = async () => {
+    //console.log("socketRestart")
+   await Alice_Socket()
 };
 
 

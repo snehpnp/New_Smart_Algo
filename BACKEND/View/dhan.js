@@ -11,10 +11,9 @@ client.connect();
 const db = client.db(process.env.DB_NAME); // Replace with your actual database name
 
 
-async function createViewAlice() {
+async function createViewDhan() {
 
-
-
+console.log("111")
   // All Client Trading on view
   try {
 
@@ -24,7 +23,7 @@ async function createViewAlice() {
     const pipeline = [
       {
         $match: {
-          broker: "2",
+          broker: "20",
           TradingStatus: 'on',// Condition from the user collection
           $or: [
             { EndDate: { $gte: currentDate } }, // EndDate is today or in the future
@@ -106,19 +105,19 @@ async function createViewAlice() {
       },
       {
         $addFields: {
-          
-         
-           
           postdata:
           {
-            complexty: 'REGULAR',
-            discqty: '0',
 
-            // exchange condition here
-            exch: {
+           
+            dhanClientId : "$client_code",
+
+            transactionType : "BUY",
+
+           
+            exchangeSegment: {
               $cond: {
                 if: { $eq: ['$category.segment', 'C'] }, // Your condition here
-                then: 'NSE',
+                then: 'NSE_EQ',
                 else: {
                   $cond: {
                     if: {
@@ -128,7 +127,7 @@ async function createViewAlice() {
                         { $eq: ['$category.segment', 'FO'] }
                       ]
                     },
-                    then: 'NFO',
+                    then: 'NSE_FNO',
                     else: {
 
                       $cond: {
@@ -138,7 +137,7 @@ async function createViewAlice() {
                             { $eq: ['$category.segment', 'MO'] }
                           ]
                         },
-                        then: 'MCX',
+                        then: 'MCX_COMM',
                         else: {
 
                           $cond: {
@@ -148,7 +147,7 @@ async function createViewAlice() {
                                 { $eq: ['$category.segment', 'CO'] }
                               ]
                             },
-                            then: 'CDS',
+                            then: 'NSE_CURRENCY',
 
                             // all not exist condition 
                             else: "NFO"
@@ -169,10 +168,8 @@ async function createViewAlice() {
               }
             },
 
-
-
-            // product code condition here
-            pCode: {
+           
+            productType: {
               $cond: {
                 if: {
                   $and:
@@ -187,7 +184,7 @@ async function createViewAlice() {
                       },
                     ]
                 },
-                then: 'NRML',
+                then: 'CNC',
                 else: {
                   $cond: {
                     if: {
@@ -196,7 +193,7 @@ async function createViewAlice() {
                           { $eq: ['$client_services.product_type', '2'] },
                         ]
                     },
-                    then: 'MIS',
+                    then: 'INTRADAY',
                     else: {
                       $cond: {
                         if: {
@@ -235,8 +232,7 @@ async function createViewAlice() {
 
 
 
-            // ordertype code condition here
-            prctyp: {
+            orderType: {
               $cond: {
                 if: {
                   $and:
@@ -244,7 +240,7 @@ async function createViewAlice() {
                       { $eq: ['$client_services.order_type', '1'] },
                     ]
                 },
-                then: 'MKT',
+                then: 'MARKET',
                 else: {
                   $cond: {
                     if: {
@@ -253,7 +249,7 @@ async function createViewAlice() {
                           { $eq: ['$client_services.order_type', '2'] },
                         ]
                     },
-                    then: 'L',
+                    then: 'LIMIT',
                     else: {
                       $cond: {
                         if: {
@@ -262,7 +258,7 @@ async function createViewAlice() {
                               { $eq: ['$client_services.order_type', '3'] },
                             ]
                         },
-                        then: 'SL',
+                        then: 'STOP_LOSS',
                         else: {
                           $cond: {
                             if: {
@@ -271,10 +267,10 @@ async function createViewAlice() {
                                   { $eq: ['$client_services.order_type', '4'] },
                                 ]
                             },
-                            then: 'SL-M',
+                            then: 'STOP_LOSS_MARKET',
 
                             //All condition exist
-                            else: "MKT"
+                            else: "MARKET"
 
                           }
 
@@ -291,29 +287,9 @@ async function createViewAlice() {
 
             },
 
-            price: '0',
-           // qty: "$client_services.quantity",
+            validity : "DAY",
 
-            qty: {  
-              $cond: {
-                if: {
-                  $or: [
-                    { $eq: ['$category.segment', 'MF'] },
-                    { $eq: ['$category.segment', 'MO'] }
-                  ]
-                },
-                then: "$client_services.lot_size",
-                else:  "$client_services.quantity"
-
-              }
-
-            },
-
-
-            ret: 'DAY',
-
-            // symbol id token condition here
-            symbol_id: {
+            securityId: {
               $cond: {
                 if: {
                   $and:
@@ -327,36 +303,36 @@ async function createViewAlice() {
               }
             },
 
+           
 
-            // trading symbol condition here
-            trading_symbol: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$category.segment', 'C'] },
-                    ]
-                },
-                then: "$service.zebu_token",
-                else: ""
+            quantity: { "$toInt": "$client_services.quantity" },
+           
+            // product code condition here
+           
 
-              }
-            },
+          
+            price: 0,
+            
+            triggerPrice :0,
 
+            afterMarketOrder : false ,
 
-            transtype: 'BUY',
-            trigPrice: '',
-            orderTag: 'order1',
+            amoTime : "OPEN" ,
+
+            boProfitValue : 0 ,
+
+            boStopLossValue : 0
 
           }
         }
       }
     ];
-
+   
+    console.log("pipeline",pipeline)
     // Create the view
-    await db.createCollection('aliceblueView', { viewOn: 'users', pipeline });
+    await db.createCollection('dhanView', { viewOn: 'users', pipeline });
 
-    console.log('View created successfully.');
+    console.log('View dhanView created successfully.');
   } catch (error) {
     console.log('Error:', error);
   } finally {
@@ -365,5 +341,5 @@ async function createViewAlice() {
 }
 
 
-module.exports = { createViewAlice }
+module.exports = { createViewDhan }
 

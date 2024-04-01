@@ -12,6 +12,11 @@ import {
 
   DELETE_USER_SERVICES,
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
+ 
+import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+
+import * as Config from "../../../../Utils/Config";
+
 import { useDispatch } from "react-redux";
 import { fa_time } from "../../../../Utils/Date_formet";
 import toast, { Toaster } from 'react-hot-toast';
@@ -19,6 +24,11 @@ import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 
 const AllClients = () => {
+  const [refresh, setrefresh] = useState(false);
+
+  
+
+
   const navigate = useNavigate();
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
@@ -35,8 +45,8 @@ const AllClients = () => {
   const [SwitchButton, setSwitchButton] = useState(true);
   const [selectBroker, setSelectBroker] = useState("null");
 
+  const [BrokerDetails, setBrokerDetails] = useState([]);
 
-  const [refresh, setrefresh] = useState(false);
 
   const [getAllClients, setAllClients] = useState({
     loading: true,
@@ -53,6 +63,47 @@ const AllClients = () => {
     loading: true,
     data: [],
   });
+
+
+
+
+  //  GET ALL SERVICE NAME
+  const GetAllStrategyName = async (e) => {
+    await dispatch(
+      Get_All_Service_for_Client({
+        req: {},
+        token: token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          setAllStrategyName({
+            loading: false,
+            data: response.data,
+          });
+        }
+      });
+  };
+
+  //console.log("BrokerDetails ",BrokerDetails)
+
+  const Brokerdata = async () => {
+  
+    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
+        .then((response) => {
+           console.log(" response broker data",response)
+            if (response.status) {
+              setBrokerDetails(response.data);
+            }
+        })
+  }
+
+  useEffect(() => {
+   // Brokerdata();
+    GetAllStrategyName();
+  }, []);
+
 
   // DELETE USET FUNCTION TO DELETE ALL SERVICES
   const Delete_user = async (id) => {
@@ -183,9 +234,24 @@ const AllClients = () => {
       });
   };
 
+  // useEffect(() => {
+  //   data();
+  // }, [refresh]);
+
+
   useEffect(() => {
-    data();
-  }, [refresh]);
+    const fetchData = async () => {
+        try {
+            await Brokerdata();
+            await data();
+        } catch (error) {
+            // Handle errors appropriately
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    fetchData();
+}, [refresh]);
 
   // GO TO DASHBOARD
   const goToDashboard = async (row, asyncid, email) => {
@@ -252,53 +318,7 @@ const AllClients = () => {
 
 
 
-  const showBrokerName = (value1, licence_type) => {
-    let value = parseInt(value1);
-
-    // if (licence_type === "0") {
-    //   return "2 Days Only";
-    // } 
-    if (licence_type === "1") {
-      return "Demo";
-    } else {
-      if (value === 1) {
-        return "markethub";
-      }
-      if (value === 1) {
-        return "Markethub";
-      } else if (value === 2) {
-        return "Alice Blue";
-      } else if (value === 3) {
-        return "Master Trust";
-      } else if (value === 4) {
-        return "Motilal Oswal";
-      } else if (value === 5) {
-        return "Zebull";
-      } else if (value === 6) {
-        return "IIFl";
-      } else if (value === 7) {
-        return "Kotak";
-      } else if (value === 8) {
-        return "Mandot";
-      } else if (value === 9) {
-        return "Choice";
-      } else if (value === 10) {
-        return "Anand Rathi";
-      } else if (value === 11) {
-        return "B2C";
-      } else if (value === 12) {
-        return "Angel";
-      } else if (value === 13) {
-        return "Fyers";
-      } else if (value === 14) {
-        return "5-Paisa";
-      } else if (value === 15) {
-        return "Zerodha";
-      } else if (value === 19) {
-        return "Upstox";
-      }
-    }
-  };
+ 
 
   const showLicenceName = (value1, licence_type) => {
     let value = parseInt(value1);
@@ -311,6 +331,7 @@ const AllClients = () => {
       return value;
     }
   };
+  
 
   const columns = [
     {
@@ -479,31 +500,65 @@ const AllClients = () => {
     },
   ];
 
-  //  GET ALL SERVICE NAME
 
-  const GetAllStrategyName = async (e) => {
-    await dispatch(
-      Get_All_Service_for_Client({
-        req: {},
-        token: token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setAllStrategyName({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
+
+  
+  const showBrokerName = (value1, licence_type) => {
+    let value = parseInt(value1);
+
+    // if (licence_type === "0") {
+    //   return "2 Days Only";
+    // } 
+    if (licence_type === "1") {
+      return "Demo";
+    } else {
+
+     // console.log("BrokerDetails ",BrokerDetails)
+      
+      const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
+      if(foundNumber != undefined){
+      return foundNumber.title
+      }else{
+        return ""
+      }
+   
+      // if (value === 1) {
+      //   return "Markethub";
+      // } else if (value === 2) {
+      //   return "Alice Blue";
+      // } else if (value === 3) {
+      //   return "Master Trust";
+      // } else if (value === 4) {
+      //   return "Motilal Oswal";
+      // } else if (value === 5) {
+      //   return "Zebull";
+      // } else if (value === 6) {
+      //   return "IIFl";
+      // } else if (value === 7) {
+      //   return "Kotak";
+      // } else if (value === 8) {
+      //   return "Mandot";
+      // } else if (value === 9) {
+      //   return "Choice";
+      // } else if (value === 10) {
+      //   return "Anand Rathi";
+      // } else if (value === 11) {
+      //   return "B2C";
+      // } else if (value === 12) {
+      //   return "Angel";
+      // } else if (value === 13) {
+      //   return "Fyers";
+      // } else if (value === 14) {
+      //   return "5-Paisa";
+      // } else if (value === 15) {
+      //   return "Zerodha";
+      // } else if (value === 19) {
+      //   return "Upstox";
+      // }else if (value === 20) {
+      //   return "Dhan";
+      // }
+    }
   };
-
-  useEffect(() => {
-    GetAllStrategyName();
-  }, []);
-
-
 
   // MANAGE MULTIFILTER
  
@@ -657,13 +712,24 @@ const AllClients = () => {
                     Broker Type
                   </label>
                   <select
-                    className="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setSelectBroker(e.target.value)}
-                    value={selectBroker}
-                  >
-                    <option value="null">All</option>
+                  className="default-select wide form-control"
+                  aria-label="Default select example"
+                  id="select"
+                  onChange={(e) => setSelectBroker(e.target.value)}
+                  value={selectBroker}
+                >
+                  <option value="null">All</option>
+                  
+                 
+                  {BrokerDetails && BrokerDetails.map((element) => (
+                    <option key={element.broker_id} value={element.broker_id}>
+                      {element.title}
+                    </option>
+                  ))}
+
+
+
+                  {/* <option value="null">All</option>
                     <option value="1">markethub</option>
                     <option value="2">Alice Blue</option>
                     <option value="3">Master Trust</option>
@@ -680,7 +746,10 @@ const AllClients = () => {
                     <option value="14">5-Paisa</option>
                     <option value="15">Zerodha</option>
                     <option value="19">Upstox</option>
-                  </select>
+                    <option value="20">Dhan</option> */}
+
+
+                </select>
                 </div>
               </div>
 
