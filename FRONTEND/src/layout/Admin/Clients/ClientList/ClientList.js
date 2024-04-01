@@ -12,21 +12,21 @@ import {
 
   DELETE_USER_SERVICES,
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
-
+ 
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 
 import * as Config from "../../../../Utils/Config";
 
 import { useDispatch } from "react-redux";
-import Content from '../../../Components/Dashboard/Content/Content';
-import FullDataTable from '../../../Components/ExtraComponents/Tables/FullDataTable';
-import Loader from "../../../Utils/Loader";
+import { fa_time } from "../../../../Utils/Date_formet";
+import toast, { Toaster } from 'react-hot-toast';
+import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 
 const AllClients = () => {
   const [refresh, setrefresh] = useState(false);
 
-
+  
 
 
   const navigate = useNavigate();
@@ -89,18 +89,18 @@ const AllClients = () => {
   //console.log("BrokerDetails ",BrokerDetails)
 
   const Brokerdata = async () => {
-
-    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain, brokerId: -1 })).unwrap()
-      .then((response) => {
-        console.log(" response broker data", response)
-        if (response.status) {
-          setBrokerDetails(response.data);
-        }
-      })
+  
+    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
+        .then((response) => {
+           console.log(" response broker data",response)
+            if (response.status) {
+              setBrokerDetails(response.data);
+            }
+        })
   }
 
   useEffect(() => {
-    // Brokerdata();
+   // Brokerdata();
     GetAllStrategyName();
   }, []);
 
@@ -241,17 +241,17 @@ const AllClients = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        await Brokerdata();
-        await data();
-      } catch (error) {
-        // Handle errors appropriately
-        console.error('Error fetching data:', error);
-      }
+        try {
+            await Brokerdata();
+            await data();
+        } catch (error) {
+            // Handle errors appropriately
+            console.error('Error fetching data:', error);
+        }
     };
 
     fetchData();
-  }, [refresh]);
+}, [refresh]);
 
   // GO TO DASHBOARD
   const goToDashboard = async (row, asyncid, email) => {
@@ -318,7 +318,7 @@ const AllClients = () => {
 
 
 
-
+ 
 
   const showLicenceName = (value1, licence_type) => {
     let value = parseInt(value1);
@@ -331,10 +331,9 @@ const AllClients = () => {
       return value;
     }
   };
-
+  
 
   const columns = [
-    { field: 'id', headerName: '#', width: 70, headerClassName: styles.boldHeader },
     {
       dataField: "index",
       text: "SR. No.",
@@ -374,31 +373,31 @@ const AllClients = () => {
     },
     {
       dataField: "ActiveStatus",
-
+      
       text: "Status",
       formatter: (cell, row) => (
         <>
-          {row.StartDate == null && row.EndDate == null ?
-            ''
-            :
-            <label class="toggle mt-3">
-              <input
-                class="toggle-checkbox bg-primary"
-                type="checkbox"
-                checked={row.ActiveStatus === "1" ? true : false}
-                onChange={(e) => {
-                  activeUser(e, row);
-                  setSwitchButton(e.target.checked)
-                }}
-              />
-              <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
-            </label>
-
-          }
-        </>
+         { row.StartDate == null && row.EndDate==null ?
+          ''
+       : 
+       <label class="toggle mt-3">
+            <input
+              class="toggle-checkbox bg-primary"
+              type="checkbox"
+              checked={row.ActiveStatus === "1" ? true : false}
+              onChange={(e) => {
+                activeUser(e, row);
+                setSwitchButton(e.target.checked)
+              }}
+            />
+            <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
+          </label>
+          
+        }
+         </>
       ),
-
-    },
+       
+      },
     {
       dataField: "ActiveStatus",
       text: "Go To Dashboard",
@@ -424,28 +423,28 @@ const AllClients = () => {
       text: "TradingStatus",
       formatter: (cell, row) => (
         <>
-          {row.StartDate == null && row.EndDate == null ?
-            <span
-              style={
-                cell == "off" || cell === null
-                  ? { color: "#FF0000", fontSize: "13px" }
-                  : { color: "#008000", fontSize: "13px" }
-              }
-            >
-              Activate Subadmin Clients
-            </span>
-            :
-            <span
-              style={
-                cell == "off" || cell === null
-                  ? { color: "#FF0000", fontSize: "40px" }
-                  : { color: "#008000", fontSize: "40px" }
-              }
-            >
-              &#9679;
-            </span>
-          }
-
+        {row.StartDate == null && row.EndDate==null ?
+         <span
+         style={
+           cell == "off" || cell === null
+             ? { color: "#FF0000", fontSize: "13px" }
+             : { color: "#008000", fontSize: "13px" }
+         }
+       >
+        Activate Subadmin Clients 
+       </span>
+       : 
+       <span
+            style={
+              cell == "off" || cell === null
+                ? { color: "#FF0000", fontSize: "40px" }
+                : { color: "#008000", fontSize: "40px" }
+            }
+          >
+            &#9679;
+          </span>
+      }
+          
         </>
       ),
     },
@@ -481,7 +480,7 @@ const AllClients = () => {
                 />
               </span>
             </Link>
-            {row.license_type == "1" ?
+            {row.license_type == "1"  ?
               <Link>
                 <span data-toggle="tooltip" data-placement="top" title="Delete">
                   <Trash2
@@ -497,67 +496,13 @@ const AllClients = () => {
 
           </div>
         </div>
-      )
+      ),
     },
-
-    {
-      field: 'makerInfo',
-      headerName: 'Subadmin Name',
-      width: 210,
-      headerClassName: styles.boldHeader,
-      renderCell: (params) => (
-        <div>
-          {params.row.makerInfo.FullName}
-        </div>
-      )
-    },
-
-
-    {
-      field: 'razorpay_key',
-      headerName: 'razorpay_key',
-      width: 250,
-      headerClassName: styles.boldHeader,
-      renderCell: (params) => (
-        <div>
-          {params.value || '-'}
-        </div>
-      )
-    },
-
-    {
-      field: 'email', headerName: 'email', width: 250, headerClassName: styles.boldHeader,
-      renderCell: (params) => (
-        <div>
-          {params.value || '-'}
-        </div>
-      )
-    },
-    {
-      field: 'change', headerName: 'change', width: 150, headerClassName: styles.boldHeader,
-      renderCell: (params) => (
-        <div onClick={handleOpenModal}>
-          <span className="badge bg-purple">Change</span>
-        </div>
-      )
-    },
-    {
-      field: 'Status', headerName: 'Status', width: 120, headerClassName: styles.boldHeader,
-      renderCell: (params) => (
-        <div>
-          <span className={`badge bg-success-light d-inline-flex align-items-center`}>
-            <i className={'fe fe-check me-1'} />Active
-          </span>
-        </div>
-      )
-    },
-    { field: 'createdAt', headerName: 'createdAt', width: 250, headerClassName: styles.boldHeader },
-
   ];
 
 
 
-
+  
   const showBrokerName = (value1, licence_type) => {
     let value = parseInt(value1);
 
@@ -568,15 +513,15 @@ const AllClients = () => {
       return "Demo";
     } else {
 
-      // console.log("BrokerDetails ",BrokerDetails)
-
+     // console.log("BrokerDetails ",BrokerDetails)
+      
       const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
-      if (foundNumber != undefined) {
-        return foundNumber.title
-      } else {
+      if(foundNumber != undefined){
+      return foundNumber.title
+      }else{
         return ""
       }
-
+   
       // if (value === 1) {
       //   return "Markethub";
       // } else if (value === 2) {
@@ -616,12 +561,12 @@ const AllClients = () => {
   };
 
   // MANAGE MULTIFILTER
-
+ 
 
   useEffect(() => {
 
     const filteredData = originalData.filter((item) => {
-      //  console.log("item", item.broker);
+    //  console.log("item", item.broker);
       const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
       const filter3Match = selectBroker === "null" || item.broker === selectBroker;
       const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
@@ -657,9 +602,40 @@ const AllClients = () => {
 
   };
 
+  //  For CSV
+  const forCSVdata = () => {
+    let csvArr = []
+    if (getAllClients.data.length > 0) {
+      getAllClients.data.map((item) => {
+        return csvArr.push({
+          "FullName": item.FullName,
+          "UserName": item.UserName,
+          "Email": item.Email,
+          "PhoneNo": item.PhoneNo,
+          "StartDate": fa_time(item.StartDate),
+          "EndDate": fa_time(item.EndDate),
+          "license type": showLicenceName(item.licence, item.license_type),
+          "broker": showBrokerName(item.broker, item.license_type),
+          "TradingStatus": item.TradingStatus,
+        })
+      })
+
+      setForGetCSV(csvArr)
+    }
+
+  }
+
+  useEffect(() => {
+    forCSVdata()
+  }, [getAllClients.data])
+
+
+
+
+
   return (
     <>
-      {companyData.loading ? (
+      {getAllClients.loading ? (
         <Loader />
       ) : (
         <>
@@ -668,74 +644,74 @@ const AllClients = () => {
             button_title="Add Client"
             route="/admin/client/add"
             show_csv_button={true} csv_data={ForGetCSV} csv_title="Client-List"
-          />
+          >
 
-          <div className="row">
-            <div className="col-lg-3">
-              <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">
-                  Search Something Here
-                </label>
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  class="form-control"
-                  id="exampleFormControlInput1"
-                />
+            <div className="row">
+              <div className="col-lg-3">
+                <div class="mb-3">
+                  <label for="exampleFormControlInput1" class="form-label">
+                    Search Something Here
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    class="form-control"
+                    id="exampleFormControlInput1"
+                  />
+                </div>
               </div>
-            </div>
-            <div className="col-lg-2 ">
-              <div class="mb-3">
-                <label for="select" class="form-label">
-                  Client Type
-                </label>
+              <div className="col-lg-2 ">
+                <div class="mb-3">
+                  <label for="select" class="form-label">
+                    Client Type
+                  </label>
 
-                <select
-                  class="default-select wide form-control"
-                  aria-label="Default select example"
-                  id="select"
-                  onChange={(e) => setClientStatus(e.target.value)}
-                  value={ClientStatus}
-                >
-                  <option value="null">All</option>
-                  <option value="2">Live</option>
-                  <option value="1">Demo</option>
-                  <option value="0">2 Days Only</option>
-                </select>
+                  <select
+                    class="default-select wide form-control"
+                    aria-label="Default select example"
+                    id="select"
+                    onChange={(e) => setClientStatus(e.target.value)}
+                    value={ClientStatus}
+                  >
+                    <option value="null">All</option>
+                    <option value="2">Live</option>
+                    <option value="1">Demo</option>
+                    <option value="0">2 Days Only</option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div className="col-lg-2">
-              <div class="mb-3">
-                <label for="select" class="form-label">
-                  Trading Type
-                </label>
+              <div className="col-lg-2">
+                <div class="mb-3">
+                  <label for="select" class="form-label">
+                    Trading Type
+                  </label>
 
-                <select
-                  class="default-select wide form-control"
-                  aria-label="Default select example"
-                  id="select"
-                  onChange={(e) => setPanelStatus(e.target.value)}
-                  value={PanelStatus}
-                >
-                  <option value="2">All</option>
-                  <option value="1">On</option>
-                  <option value="0">OFf</option>
-                </select>
+                  <select
+                    class="default-select wide form-control"
+                    aria-label="Default select example"
+                    id="select"
+                    onChange={(e) => setPanelStatus(e.target.value)}
+                    value={PanelStatus}
+                  >
+                    <option value="2">All</option>
+                    <option value="1">On</option>
+                    <option value="0">OFf</option>
+                  </select>
+                </div>
               </div>
-            </div>
 
 
-            <div className="col-lg-2">
+              <div className="col-lg-2">
 
-              <div className="mb-3">
+                <div className="mb-3">
 
-                <label for="select" className="form-label">
+                  <label for="select" className="form-label">
 
-                  Broker Type
-                </label>
-                <select
+                    Broker Type
+                  </label>
+                  <select
                   className="default-select wide form-control"
                   aria-label="Default select example"
                   id="select"
@@ -743,8 +719,8 @@ const AllClients = () => {
                   value={selectBroker}
                 >
                   <option value="null">All</option>
-
-
+                  
+                 
                   {BrokerDetails && BrokerDetails.map((element) => (
                     <option key={element.broker_id} value={element.broker_id}>
                       {element.title}
@@ -774,34 +750,32 @@ const AllClients = () => {
 
 
                 </select>
+                </div>
+              </div>
+
+
+
+              <div className="col-lg-2 mt-4">
+                <button
+                  className="btn btn-primary mt-2"
+                  onClick={(e) => ResetDate(e)}
+                >
+                  Reset
+                </button>
               </div>
             </div>
 
+            <FullDataTable
+              TableColumns={columns}
+              tableData={getAllClients.data}
+            />
+            <ToastButton />
 
-
-            <div className="col-lg-2 mt-4">
-              <button
-                className="btn btn-primary mt-2"
-                onClick={(e) => ResetDate(e)}
-              >
-                Reset
-              </button>
-            </div>
-          </div>
-
-          <FullDataTable
-            styles={styles}
-            label={label}
-            columns={columns}
-            rows={companyData.data}
-          />
-
-          <Content />
-
+          </Content>
         </>
       )}
-      </>
-      );
-}
+    </>
+  );
+};
 
-      export default SubAdminCompanyInfo;
+export default AllClients;
