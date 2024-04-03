@@ -43,6 +43,11 @@ console.log("111")
         $unwind: '$client_services',
       },
       {
+        $match: {
+          'client_services.active_status': '1'
+        }
+      },
+      {
         $lookup: {
           from: "services",
           localField: "client_services.service_id",

@@ -375,7 +375,7 @@ const TradeHistory = () => {
           if (res.data.stat) {
             const handleResponse = async (response) => {
 
-
+              console.log("response ",response)
               $('.BP1_Put_Price_' + response.tk).html();
               $('.SP1_Call_Price_' + response.tk).html();
 

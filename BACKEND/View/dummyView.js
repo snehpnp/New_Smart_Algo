@@ -1,0 +1,1869 @@
+// Angel
+db.createView("angelView", "users",
+[
+    {
+      $match: {
+        broker: "12",
+        TradingStatus: 'on',// Condition from the user collection
+        $or: [
+          { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
+          { EndDate: null } // EndDate is not set
+        ]
+      }
+    },
+    {
+      $lookup: {
+        from: 'client_services',
+        localField: '_id', // Field from the user collection to match
+        foreignField: 'user_id', // Field from the client_services collection to match
+        as: 'client_services'
+      }
+    },
+    {
+      $unwind: '$client_services',
+    },
+
+    {
+      $match: {
+        'client_services.active_status': '1'
+      }
+    },
+    {
+      $lookup: {
+        from: "services",
+        localField: "client_services.service_id",
+        foreignField: "_id",
+        as: "service",
+      },
+    },
+    {
+      $unwind: '$service',
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "service.categorie_id",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $unwind: '$category',
+    },
+    {
+      $lookup: {
+        from: "strategies",
+        localField: "client_services.strategy_id",
+        foreignField: "_id",
+        as: "strategys",
+      },
+    },
+    {
+      $unwind: '$strategys',
+    },
+    {
+      $project: {
+        "client_services": 1,
+        'service.name': 1,
+        'service.instrument_token': 1,
+        'service.exch_seg': 1,
+        "strategys.strategy_name": 1,
+        "category.segment": 1,
+        "service.zebu_token": 1,
+        _id: 1,
+        FullName: 1,
+        UserName: 1,
+        Email: 1,
+        EndDate: 1,
+        ActiveStatus: 1,
+        TradingStatus: 1,
+        access_token: 1,
+        api_secret: 1,
+        app_id: 1,
+        client_code: 1,
+        api_key: 1,
+        app_key: 1,
+        api_type: 1,
+        demat_userid: 1,
+        client_key: 1,
+        web_url: 1
+      }
+    },
+    {
+      $addFields: {
+        postdata:
+        {
+          variety: 'NORMAL',
+
+          // trading symbol condition here
+          tradingsymbol: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$category.segment', 'C'] },
+                  ]
+              },
+              then: "$service.zebu_token",
+              else: ""
+
+            }
+          },
+
+
+          // symbol token condition here
+          symboltoken: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$category.segment', 'C'] },
+                  ]
+              },
+              then: "$service.instrument_token",
+              else: ""
+
+            }
+          },
+
+          // transaction Type
+          transactiontype: 'BUY',
+
+          // exchange condition here
+          exchange: {
+            $cond: {
+              if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+              then: 'NSE',
+              else: {
+                $cond: {
+                  if: {
+                    $or: [
+                      { $eq: ['$category.segment', 'F'] },
+                      { $eq: ['$category.segment', 'O'] },
+                      { $eq: ['$category.segment', 'FO'] }
+                    ]
+                  },
+                  then: 'NFO',
+                  else: {
+
+                    $cond: {
+                      if: {
+                        $or: [
+                          { $eq: ['$category.segment', 'MF'] },
+                          { $eq: ['$category.segment', 'MO'] }
+                        ]
+                      },
+                      then: 'MCX',
+                      else: {
+
+                        $cond: {
+                          if: {
+                            $or: [
+                              { $eq: ['$category.segment', 'CF'] },
+                              { $eq: ['$category.segment', 'CO'] }
+                            ]
+                          },
+                          then: 'CDS',
+
+                          // all not exist condition 
+                          else: "NFO"
+
+                        }
+
+                      }
+
+                    }
+
+
+                  }
+
+                }
+
+              }
+
+            }
+          },
+
+          // ordertype code condition here
+          ordertype: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$client_services.order_type', '1'] },
+                  ]
+              },
+              then: 'MARKET',
+              else: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$client_services.order_type', '2'] },
+                      ]
+                  },
+                  then: 'LIMIT',
+                  else: {
+                    $cond: {
+                      if: {
+                        $and:
+                          [
+                            { $eq: ['$client_services.order_type', '3'] },
+                          ]
+                      },
+                      then: 'STOPLOSS_LIMIT',
+                      else: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.order_type', '4'] },
+                              ]
+                          },
+                          then: 'STOPLOSS_MARKET',
+
+                          //All condition exist
+                          else: "MARKET"
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+              }
+
+            }
+
+          },
+
+          // product code condition here
+          producttype: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$client_services.product_type', '1'] },
+                    {
+                      $or: [
+                        { $eq: ['$category.segment', 'F'] },
+                        { $eq: ['$category.segment', 'O'] },
+                        { $eq: ['$category.segment', 'FO'] }
+                      ]
+                    },
+                  ]
+              },
+              then: 'CARRYFORWARD',
+              else: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$client_services.product_type', '2'] },
+                      ]
+                  },
+                  then: 'INTRADAY',
+                  else: {
+                    $cond: {
+                      if: {
+                        $and:
+                          [
+                            { $eq: ['$client_services.product_type', '3'] },
+                          ]
+                      },
+                      then: 'BO',
+                      else: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.product_type', '4'] },
+                              ]
+                          },
+                          then: 'INTRADAY',
+                          else: "DELIVERY"
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+              }
+
+            }
+
+
+          },
+
+          // Duration
+          duration: 'DAY',
+
+
+          triggerprice: 0,
+          price: 0,
+          squareoff: 0,
+          stoploss: 0,
+          quantity: "$client_services.quantity",
+          trailingStopLoss: '',
+
+        }
+      }
+    }
+  ]
+)
+
+//Alce Blue
+db.createView("aliceblueView", "users",
+[
+    {
+      $match: {
+        broker: "2",
+        TradingStatus: 'on',// Condition from the user collection
+        $or: [
+          { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
+          { EndDate: null } // EndDate is not set
+        ]
+      }
+    },
+    {
+      $lookup: {
+        from: 'client_services',
+        localField: '_id', // Field from the user collection to match
+        foreignField: 'user_id', // Field from the client_services collection to match
+        as: 'client_services'
+      }
+    },
+    {
+      $unwind: '$client_services',
+    },
+    {
+        $match: {
+          'client_services.active_status': '1'
+        }
+    },
+    {
+      $lookup: {
+        from: "services",
+        localField: "client_services.service_id",
+        foreignField: "_id",
+        as: "service",
+      },
+    },
+    {
+      $unwind: '$service',
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "service.categorie_id",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $unwind: '$category',
+    },
+    {
+      $lookup: {
+        from: "strategies",
+        localField: "client_services.strategy_id",
+        foreignField: "_id",
+        as: "strategys",
+      },
+    },
+    {
+      $unwind: '$strategys',
+    },
+    {
+      $project: {
+        "client_services": 1,
+        'service.name': 1,
+        'service.instrument_token': 1,
+        'service.exch_seg': 1,
+        "strategys.strategy_name": 1,
+        "category.segment": 1,
+        "service.zebu_token": 1,
+        _id: 1,
+        FullName: 1,
+        UserName: 1,
+        Email: 1,
+        EndDate: 1,
+        ActiveStatus: 1,
+        TradingStatus: 1,
+        access_token: 1,
+        api_secret: 1,
+        app_id: 1,
+        client_code: 1,
+        api_key: 1,
+        app_key: 1,
+        api_type: 1,
+        demat_userid: 1,
+        client_key: 1,
+        web_url: 1
+      }
+    },
+    {
+      $addFields: {
+        
+       
+         
+        postdata:
+        {
+          complexty: 'REGULAR',
+          discqty: '0',
+
+          // exchange condition here
+          exch: {
+            $cond: {
+              if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+              then: 'NSE',
+              else: {
+                $cond: {
+                  if: {
+                    $or: [
+                      { $eq: ['$category.segment', 'F'] },
+                      { $eq: ['$category.segment', 'O'] },
+                      { $eq: ['$category.segment', 'FO'] }
+                    ]
+                  },
+                  then: 'NFO',
+                  else: {
+
+                    $cond: {
+                      if: {
+                        $or: [
+                          { $eq: ['$category.segment', 'MF'] },
+                          { $eq: ['$category.segment', 'MO'] }
+                        ]
+                      },
+                      then: 'MCX',
+                      else: {
+
+                        $cond: {
+                          if: {
+                            $or: [
+                              { $eq: ['$category.segment', 'CF'] },
+                              { $eq: ['$category.segment', 'CO'] }
+                            ]
+                          },
+                          then: 'CDS',
+
+                          // all not exist condition 
+                          else: "NFO"
+
+                        }
+
+                      }
+
+                    }
+
+
+                  }
+
+                }
+
+              }
+
+            }
+          },
+
+
+
+          // product code condition here
+          pCode: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$client_services.product_type', '1'] },
+                    {
+                      $or: [
+                        { $eq: ['$category.segment', 'F'] },
+                        { $eq: ['$category.segment', 'O'] },
+                        { $eq: ['$category.segment', 'FO'] }
+                      ]
+                    },
+                  ]
+              },
+              then: 'NRML',
+              else: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$client_services.product_type', '2'] },
+                      ]
+                  },
+                  then: 'MIS',
+                  else: {
+                    $cond: {
+                      if: {
+                        $and:
+                          [
+                            { $eq: ['$client_services.product_type', '3'] },
+                          ]
+                      },
+                      then: 'BO',
+                      else: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.product_type', '4'] },
+                              ]
+                          },
+                          then: 'CO',
+                          else: "CNC"
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+              }
+
+            }
+
+
+          },
+
+
+
+          // ordertype code condition here
+          prctyp: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$client_services.order_type', '1'] },
+                  ]
+              },
+              then: 'MKT',
+              else: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$client_services.order_type', '2'] },
+                      ]
+                  },
+                  then: 'L',
+                  else: {
+                    $cond: {
+                      if: {
+                        $and:
+                          [
+                            { $eq: ['$client_services.order_type', '3'] },
+                          ]
+                      },
+                      then: 'SL',
+                      else: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.order_type', '4'] },
+                              ]
+                          },
+                          then: 'SL-M',
+
+                          //All condition exist
+                          else: "MKT"
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+              }
+
+            }
+
+          },
+
+          price: '0',
+         // qty: "$client_services.quantity",
+
+          qty: {  
+            $cond: {
+              if: {
+                $or: [
+                  { $eq: ['$category.segment', 'MF'] },
+                  { $eq: ['$category.segment', 'MO'] }
+                ]
+              },
+              then: "$client_services.lot_size",
+              else:  "$client_services.quantity"
+
+            }
+
+          },
+
+
+          ret: 'DAY',
+
+          // symbol id token condition here
+          symbol_id: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$category.segment', 'C'] },
+                  ]
+              },
+              then: "$service.instrument_token",
+              else: ""
+
+            }
+          },
+
+
+          // trading symbol condition here
+          trading_symbol: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$category.segment', 'C'] },
+                  ]
+              },
+              then: "$service.zebu_token",
+              else: ""
+
+            }
+          },
+
+
+          transtype: 'BUY',
+          trigPrice: '',
+          orderTag: 'order1',
+
+        }
+      }
+    }
+  ]
+)
+
+//dhanView
+db.createView("dhanView", "users",
+[
+    {
+      $match: {
+        broker: "20",
+        TradingStatus: 'on',// Condition from the user collection
+        $or: [
+          { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
+          { EndDate: null } // EndDate is not set
+        ]
+      }
+    },
+    {
+      $lookup: {
+        from: 'client_services',
+        localField: '_id', // Field from the user collection to match
+        foreignField: 'user_id', // Field from the client_services collection to match
+        as: 'client_services'
+      }
+    },
+    {
+      $unwind: '$client_services',
+    },
+    {
+        $match: {
+          'client_services.active_status': '1'
+        }
+    },
+    {
+      $lookup: {
+        from: "services",
+        localField: "client_services.service_id",
+        foreignField: "_id",
+        as: "service",
+      },
+    },
+    {
+      $unwind: '$service',
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "service.categorie_id",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $unwind: '$category',
+    },
+    {
+      $lookup: {
+        from: "strategies",
+        localField: "client_services.strategy_id",
+        foreignField: "_id",
+        as: "strategys",
+      },
+    },
+    {
+      $unwind: '$strategys',
+    },
+    {
+      $project: {
+        "client_services": 1,
+        'service.name': 1,
+        'service.instrument_token': 1,
+        'service.exch_seg': 1,
+        "strategys.strategy_name": 1,
+        "category.segment": 1,
+        "service.zebu_token": 1,
+        _id: 1,
+        FullName: 1,
+        UserName: 1,
+        Email: 1,
+        EndDate: 1,
+        ActiveStatus: 1,
+        TradingStatus: 1,
+        access_token: 1,
+        api_secret: 1,
+        app_id: 1,
+        client_code: 1,
+        api_key: 1,
+        app_key: 1,
+        api_type: 1,
+        demat_userid: 1,
+        client_key: 1,
+        web_url: 1
+      }
+    },
+    {
+      $addFields: {
+        postdata:
+        {
+
+         
+          dhanClientId : "$client_code",
+
+          transactionType : "BUY",
+
+         
+          exchangeSegment: {
+            $cond: {
+              if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+              then: 'NSE_EQ',
+              else: {
+                $cond: {
+                  if: {
+                    $or: [
+                      { $eq: ['$category.segment', 'F'] },
+                      { $eq: ['$category.segment', 'O'] },
+                      { $eq: ['$category.segment', 'FO'] }
+                    ]
+                  },
+                  then: 'NSE_FNO',
+                  else: {
+
+                    $cond: {
+                      if: {
+                        $or: [
+                          { $eq: ['$category.segment', 'MF'] },
+                          { $eq: ['$category.segment', 'MO'] }
+                        ]
+                      },
+                      then: 'MCX_COMM',
+                      else: {
+
+                        $cond: {
+                          if: {
+                            $or: [
+                              { $eq: ['$category.segment', 'CF'] },
+                              { $eq: ['$category.segment', 'CO'] }
+                            ]
+                          },
+                          then: 'NSE_CURRENCY',
+
+                          // all not exist condition 
+                          else: "NFO"
+
+                        }
+
+                      }
+
+                    }
+
+
+                  }
+
+                }
+
+              }
+
+            }
+          },
+
+         
+          productType: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$client_services.product_type', '1'] },
+                    {
+                      $or: [
+                        { $eq: ['$category.segment', 'F'] },
+                        { $eq: ['$category.segment', 'O'] },
+                        { $eq: ['$category.segment', 'FO'] }
+                      ]
+                    },
+                  ]
+              },
+              then: 'CNC',
+              else: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$client_services.product_type', '2'] },
+                      ]
+                  },
+                  then: 'INTRADAY',
+                  else: {
+                    $cond: {
+                      if: {
+                        $and:
+                          [
+                            { $eq: ['$client_services.product_type', '3'] },
+                          ]
+                      },
+                      then: 'BO',
+                      else: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.product_type', '4'] },
+                              ]
+                          },
+                          then: 'CO',
+                          else: "CNC"
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+              }
+
+            }
+
+
+          },
+
+
+
+          orderType: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$client_services.order_type', '1'] },
+                  ]
+              },
+              then: 'MARKET',
+              else: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$client_services.order_type', '2'] },
+                      ]
+                  },
+                  then: 'LIMIT',
+                  else: {
+                    $cond: {
+                      if: {
+                        $and:
+                          [
+                            { $eq: ['$client_services.order_type', '3'] },
+                          ]
+                      },
+                      then: 'STOP_LOSS',
+                      else: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.order_type', '4'] },
+                              ]
+                          },
+                          then: 'STOP_LOSS_MARKET',
+
+                          //All condition exist
+                          else: "MARKET"
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+              }
+
+            }
+
+          },
+
+          validity : "DAY",
+
+          securityId: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$category.segment', 'C'] },
+                  ]
+              },
+              then: "$service.instrument_token",
+              else: ""
+
+            }
+          },
+
+         
+
+          quantity: { "$toInt": "$client_services.quantity" },
+         
+          // product code condition here
+         
+
+        
+          price: 0,
+          
+          triggerPrice :0,
+
+          afterMarketOrder : false ,
+
+          amoTime : "OPEN" ,
+
+          boProfitValue : 0 ,
+
+          boStopLossValue : 0
+
+        }
+      }
+    }
+  ]
+)
+
+
+//fivepaisaView
+db.createView("fivepaisaView", "users",
+[
+    {
+      $match: {
+        broker: "14",
+        TradingStatus: 'on',// Condition from the user collection
+        $or: [
+          { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
+          { EndDate: null } // EndDate is not set
+        ]
+      }
+    },
+    {
+      $lookup: {
+        from: 'client_services',
+        localField: '_id', // Field from the user collection to match
+        foreignField: 'user_id', // Field from the client_services collection to match
+        as: 'client_services'
+      }
+    },
+    {
+      $unwind: '$client_services',
+    },
+    {
+        $match: {
+          'client_services.active_status': '1'
+        }
+    },
+    {
+      $lookup: {
+        from: "services",
+        localField: "client_services.service_id",
+        foreignField: "_id",
+        as: "service",
+      },
+    },
+    {
+      $unwind: '$service',
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "service.categorie_id",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $unwind: '$category',
+    },
+    {
+      $lookup: {
+        from: "strategies",
+        localField: "client_services.strategy_id",
+        foreignField: "_id",
+        as: "strategys",
+      },
+    },
+    {
+      $unwind: '$strategys',
+    },
+    {
+      $project: {
+        "client_services": 1,
+        'service.name': 1,
+        'service.instrument_token': 1,
+        'service.exch_seg': 1,
+        "strategys.strategy_name": 1,
+        "category.segment": 1,
+        "service.zebu_token": 1,
+        _id: 1,
+        FullName: 1,
+        UserName: 1,
+        Email: 1,
+        EndDate: 1,
+        ActiveStatus: 1,
+        TradingStatus: 1,
+        access_token: 1,
+        api_secret: 1,
+        app_id: 1,
+        client_code: 1,
+        api_key: 1,
+        app_key: 1,
+        api_type: 1,
+        demat_userid: 1,
+        client_key: 1,
+        web_url: 1
+      }
+    },
+    {
+      $addFields: {
+        postdata:
+        {
+
+          head: {
+            key: "$api_key",
+          },
+          body: {
+            ClientCode: "$client_code",
+
+            Exchange: {
+              $cond: {
+                if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+                then: 'N',
+                else: {
+                  $cond: {
+                    if: {
+                      $or: [
+                        { $eq: ['$category.segment', 'F'] },
+                        { $eq: ['$category.segment', 'O'] },
+                        { $eq: ['$category.segment', 'FO'] }
+                      ]
+                    },
+                    then: 'N',
+                    else: {
+
+                      $cond: {
+                        if: {
+                          $or: [
+                            { $eq: ['$category.segment', 'MF'] },
+                            { $eq: ['$category.segment', 'MO'] }
+                          ]
+                        },
+                        then: 'M',
+                        else: {
+
+                          $cond: {
+                            if: {
+                              $or: [
+                                { $eq: ['$category.segment', 'CF'] },
+                                { $eq: ['$category.segment', 'CO'] }
+                              ]
+                            },
+                            then: 'N',
+
+                            // all not exist condition 
+                            else: "N"
+
+                          }
+
+                        }
+
+                      }
+
+
+                    }
+
+                  }
+
+                }
+
+              }
+            },
+
+
+            ExchangeType: {
+              $cond: {
+                if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+                then: 'C',
+                else: {
+                  $cond: {
+                    if: {
+                      $or: [
+                        { $eq: ['$category.segment', 'F'] },
+                        { $eq: ['$category.segment', 'O'] },
+                        { $eq: ['$category.segment', 'FO'] }
+                      ]
+                    },
+                    then: 'D',
+                    else: {
+
+                      $cond: {
+                        if: {
+                          $or: [
+                            { $eq: ['$category.segment', 'MF'] },
+                            { $eq: ['$category.segment', 'MO'] }
+                          ]
+                        },
+                        then: 'D',
+                        else: {
+
+                          $cond: {
+                            if: {
+                              $or: [
+                                { $eq: ['$category.segment', 'CF'] },
+                                { $eq: ['$category.segment', 'CO'] }
+                              ]
+                            },
+                            then: 'U',
+
+                            // all not exist condition 
+                            else: "D"
+
+                          }
+
+                        }
+
+                      }
+
+
+                    }
+
+                  }
+
+                }
+
+              }
+            },
+
+
+
+            Qty: "$client_services.quantity",
+            Price: "0",
+            OrderType: "Buy",
+
+            ScripCode: {
+              $cond: {
+                if: {
+                  $and:
+                    [
+                      { $eq: ['$category.segment', 'C'] },
+                    ]
+                },
+                then: "$service.instrument_token",
+                else: ""
+
+              }
+            },
+
+
+            IsIntraday: {
+              $cond: {
+                if: {
+                  $and:
+                    [
+                      { $eq: ['$client_services.product_type', '2'] },
+                    ]
+                },
+                then: true,
+                else: false,
+
+              }
+            },
+
+            DisQty: 0,
+            StopLossPrice: 0,
+            IsStopLossOrder: false
+          }
+
+        }
+      }
+    }
+  ]
+)
+
+//upstoxView
+db.createView("upstoxView", "users",
+[
+    {
+      $match: {
+        broker: "19",
+        TradingStatus: 'on',// Condition from the user collection
+        $or: [
+          { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
+          { EndDate: null } // EndDate is not set
+        ]
+      }
+    },
+    {
+      $lookup: {
+        from: 'client_services',
+        localField: '_id', // Field from the user collection to match
+        foreignField: 'user_id', // Field from the client_services collection to match
+        as: 'client_services'
+      }
+    },
+    {
+      $unwind: '$client_services',
+    },
+    {
+        $match: {
+          'client_services.active_status': '1'
+        }
+    },
+    {
+      $lookup: {
+        from: "services",
+        localField: "client_services.service_id",
+        foreignField: "_id",
+        as: "service",
+      },
+    },
+    {
+      $unwind: '$service',
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "service.categorie_id",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $unwind: '$category',
+    },
+    {
+      $lookup: {
+        from: "strategies",
+        localField: "client_services.strategy_id",
+        foreignField: "_id",
+        as: "strategys",
+      },
+    },
+    {
+      $unwind: '$strategys',
+    },
+    {
+      $project: {
+        "client_services": 1,
+        'service.name': 1,
+        'service.instrument_token': 1,
+        'service.exch_seg': 1,
+        "strategys.strategy_name": 1,
+        "category.segment": 1,
+        "service.zebu_token": 1,
+        _id: 1,
+        FullName: 1,
+        UserName: 1,
+        Email: 1,
+        EndDate: 1,
+        ActiveStatus: 1,
+        TradingStatus: 1,
+        access_token: 1,
+        api_secret: 1,
+        app_id: 1,
+        client_code: 1,
+        api_key: 1,
+        app_key: 1,
+        api_type: 1,
+        demat_userid: 1,
+        client_key: 1,
+        web_url: 1
+      }
+    },
+    {
+      $addFields: {
+        postdata:
+        {
+
+          //quantity: "$client_services.quantity",
+
+          quantity: { "$toInt": "$client_services.quantity" },
+         
+          // product code condition here
+          product: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$client_services.product_type', '1'] },
+                    {
+                      $or: [
+                        { $eq: ['$category.segment', 'F'] },
+                        { $eq: ['$category.segment', 'O'] },
+                        { $eq: ['$category.segment', 'FO'] }
+                      ]
+                    },
+                  ]
+              },
+              then: 'CARRYFORWARD',
+              else: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$client_services.product_type', '2'] },
+                      ]
+                  },
+                  then: 'I',
+                  else: {
+                    $cond: {
+                      if: {
+                        $and:
+                          [
+                            { $eq: ['$client_services.product_type', '3'] },
+                          ]
+                      },
+                      then: 'BO',
+                      else: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.product_type', '4'] },
+                              ]
+                          },
+                          then: 'CO',
+                          else: "D"
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+              }
+
+            }
+
+
+          },
+
+          validity : "DAY",
+          price: '0',
+          
+
+           // symbol id token condition here
+          instrument_token: "",
+
+          // ordertype code condition here
+          order_type: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$client_services.order_type', '1'] },
+                  ]
+              },
+              then: 'MARKET',
+              else: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$client_services.order_type', '2'] },
+                      ]
+                  },
+                  then: 'LIMIT',
+                  else: {
+                    $cond: {
+                      if: {
+                        $and:
+                          [
+                            { $eq: ['$client_services.order_type', '3'] },
+                          ]
+                      },
+                      then: 'SL',
+                      else: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.order_type', '4'] },
+                              ]
+                          },
+                          then: 'SL-M',
+
+                          //All condition exist
+                          else: "MARKET"
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+              }
+
+            }
+
+          },
+
+          transaction_type: 'BUY',
+
+          disclosed_quantity : 0,
+
+          trigger_price : 0 ,
+
+          is_amo : false
+
+        }
+      }
+    }
+  ]
+)
+
+//zerodhaView
+db.createView("zerodhaView", "users",
+[
+    {
+      $match: {
+        broker: "15",
+        TradingStatus: 'on',// Condition from the user collection
+        $or: [
+          { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
+          { EndDate: null } // EndDate is not set
+        ]
+      }
+    },
+    {
+      $lookup: {
+        from: 'client_services',
+        localField: '_id', // Field from the user collection to match
+        foreignField: 'user_id', // Field from the client_services collection to match
+        as: 'client_services'
+      }
+    },
+    {
+      $unwind: '$client_services',
+    },
+    {
+        $match: {
+          'client_services.active_status': '1'
+        }
+    },
+    {
+      $lookup: {
+        from: "services",
+        localField: "client_services.service_id",
+        foreignField: "_id",
+        as: "service",
+      },
+    },
+    {
+      $unwind: '$service',
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "service.categorie_id",
+        foreignField: "_id",
+        as: "category",
+      },
+    },
+    {
+      $unwind: '$category',
+    },
+    {
+      $lookup: {
+        from: "strategies",
+        localField: "client_services.strategy_id",
+        foreignField: "_id",
+        as: "strategys",
+      },
+    },
+    {
+      $unwind: '$strategys',
+    },
+    {
+      $project: {
+        "client_services": 1,
+        'service.name': 1,
+        'service.instrument_token': 1,
+        'service.exch_seg': 1,
+        "strategys.strategy_name": 1,
+        "category.segment": 1,
+        "service.zebu_token": 1,
+        _id: 1,
+        FullName: 1,
+        UserName: 1,
+        Email: 1,
+        EndDate: 1,
+        ActiveStatus: 1,
+        TradingStatus: 1,
+        access_token: 1,
+        api_secret: 1,
+        app_id: 1,
+        client_code: 1,
+        api_key: 1,
+        app_key: 1,
+        api_type: 1,
+        demat_userid: 1,
+        client_key: 1,
+        web_url: 1
+      }
+    },
+    {
+      $addFields: {
+        postdata:
+        {
+
+
+          // tradingsymbol condition here
+          tradingsymbol: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$category.segment', 'C'] },
+                  ]
+              },
+              then: "$service.instrument_token",
+              else: ""
+
+            }
+          },
+
+
+
+          // exchange condition here
+          exchange: {
+            $cond: {
+              if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+              then: 'NSE',
+              else: {
+                $cond: {
+                  if: {
+                    $or: [
+                      { $eq: ['$category.segment', 'F'] },
+                      { $eq: ['$category.segment', 'O'] },
+                      { $eq: ['$category.segment', 'FO'] }
+                    ]
+                  },
+                  then: 'NFO',
+                  else: {
+
+                    $cond: {
+                      if: {
+                        $or: [
+                          { $eq: ['$category.segment', 'MF'] },
+                          { $eq: ['$category.segment', 'MO'] }
+                        ]
+                      },
+                      then: 'MCX',
+                      else: {
+
+                        $cond: {
+                          if: {
+                            $or: [
+                              { $eq: ['$category.segment', 'CF'] },
+                              { $eq: ['$category.segment', 'CO'] }
+                            ]
+                          },
+                          then: 'CDS',
+
+                          // all not exist condition 
+                          else: "NFO"
+
+                        }
+
+                      }
+
+                    }
+
+
+                  }
+
+                }
+
+              }
+
+            }
+          },
+
+
+          // transaction Type
+          transaction_type: 'BUY',
+
+          // quantity
+          quantity: "$client_services.quantity",
+
+
+          // order_type code condition here
+          order_type: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$client_services.order_type', '1'] },
+                  ]
+              },
+              then: 'MARKET',
+              else: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$client_services.order_type', '2'] },
+                      ]
+                  },
+                  then: 'LIMIT',
+                  else: {
+                    $cond: {
+                      if: {
+                        $and:
+                          [
+                            { $eq: ['$client_services.order_type', '3'] },
+                          ]
+                      },
+                      then: 'SL',
+                      else: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.order_type', '4'] },
+                              ]
+                          },
+                          then: 'SL-M',
+
+                          //All condition exist
+                          else: "MARKET"
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+              }
+
+            }
+
+          },
+
+          // product code condition here
+          product: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$client_services.product_type', '1'] },
+                    {
+                      $or: [
+                        { $eq: ['$category.segment', 'F'] },
+                        { $eq: ['$category.segment', 'O'] },
+                        { $eq: ['$category.segment', 'FO'] }
+                      ]
+                    },
+                  ]
+              },
+              then: 'NRML',
+              else: {
+                $cond: {
+                  if: {
+                    $and:
+                      [
+                        { $eq: ['$client_services.product_type', '2'] },
+                      ]
+                  },
+                  then: 'MIS',
+                  else: {
+                    $cond: {
+                      if: {
+                        $and:
+                          [
+                            { $eq: ['$client_services.product_type', '3'] },
+                          ]
+                      },
+                      then: 'MIS',
+                      else: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.product_type', '4'] },
+                              ]
+                          },
+                          then: 'MIS',
+                          else: "CNC"
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+
+                }
+              }
+
+            }
+
+
+          },
+
+          //price
+          price: 0,
+
+          // trigger_price
+          trigger_price: 0,
+
+          // validity
+          validity: "DAY"
+
+        }
+      }
+    }
+  ]
+)
+
+
+
+
+
+// Delete View Command
+
+
+
+try {
+    db.runCommand({ drop: "angelView" });
+
+    print("View 'angelView' dropped successfully.");
+} catch (e) {
+    if (e.code === 26) {
+        print("View angelView doesn't exist.");
+    } else {
+        print("An error occurred while dropping the view: " + e);
+    }
+}
+
+
+try {
+  
+    db.runCommand({ drop: "aliceblueView" });
+ 
+    print("View 'aliceblueView' dropped successfully.");
+} catch (e) {
+    if (e.code === 26) {
+        print("View aliceblueView doesn't exist.");
+    } else {
+        print("An error occurred while dropping the view: " + e);
+    }
+}
+
+
+try {
+   
+    db.runCommand({ drop: "dhanView" });
+ 
+    print("View 'dhanView' dropped successfully.");
+} catch (e) {
+    if (e.code === 26) {
+        print("View dhanView doesn't exist.");
+    } else {
+        print("An error occurred while dropping the view: " + e);
+    }
+}
+
+
+try {
+ 
+    db.runCommand({ drop: "fivepaisaView" });
+    
+    print("View 'fivepaisaView' dropped successfully.");
+} catch (e) {
+    if (e.code === 26) {
+        print("View fivepaisaView doesn't exist.");
+    } else {
+        print("An error occurred while dropping the view: " + e);
+    }
+}
+
+
+try {
+  
+    db.runCommand({ drop: "upstoxView" });
+
+    print("View 'upstoxView' dropped successfully.");
+} catch (e) {
+    if (e.code === 26) {
+        print("View upstoxView doesn't exist.");
+    } else {
+        print("An error occurred while dropping the view: " + e);
+    }
+}
+
+
+try {
+    db.runCommand({ drop: "zerodhaView" });
+    print("View 'zerodhaView' dropped successfully.");
+} catch (e) {
+    if (e.code === 26) {
+        print("View zerodhaView doesn't exist.");
+    } else {
+        print("An error occurred while dropping the view: " + e);
+    }
+}
+
