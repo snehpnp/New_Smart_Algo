@@ -20,6 +20,10 @@ const { GetAccessTokenAngel,GetOrderFullInformationAngel} = require('../../Contr
 const { GetAccessTokenFivepaisa,GetOrderFullInformationFivepaisa} = require('../../Controllers/Brokerassecc_token/Fivepaisa')
 
 
+//  FYERS CONTROLLER FILE
+const { GetAccessTokenFyers,GetOrderFullInformationFyers} = require('../../Controllers/Brokerassecc_token/Fyers')
+
+
 // ZERODHA CONTROLLER FILE
 const { GetAccessTokenZerodha,GetOrderFullInformationZerodha} = require('../../Controllers/Brokerassecc_token/Zerodha')
 
@@ -59,6 +63,11 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
    // ANGEL   -  12
    else if(broker == 12){
     GetOrderFullInformationAngel(req,res,result);
+   }
+
+   // 5 PAISA   -  13
+   else if(broker == 13){
+    GetOrderFullInformationFyers(req,res,result);
    }
 
    // 5 PAISA   -  14
@@ -112,8 +121,12 @@ router.post('/getall/order/info', GetOrderFullInformationAll_broker);
 // ANGEL
 router.get('/angel', GetAccessTokenAngel);
 
+// Fyers
+router.get('/fyers', GetAccessTokenFyers);
+
 // 5 PPAISA
 router.get('/fivepaisa', GetAccessTokenFivepaisa);
+
 
 // ZERODHA
 router.get('/zerodha', GetAccessTokenZerodha);

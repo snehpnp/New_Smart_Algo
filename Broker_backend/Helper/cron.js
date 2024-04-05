@@ -7,7 +7,8 @@ module.exports = function (app) {
     // 1. LOGOUT AND TRADING OFF ALL USER 
     cron.schedule('* 1 * * *', () => {
         console.log('Run First Time');
-        downloadAlicetoken()
+        downloadAlicetoken();
+        downloadFyerstoken();
     });
     
     cron.schedule('10 7 * * *', () => {
@@ -143,8 +144,61 @@ module.exports = function (app) {
     }
 
 
+     // Fyers Files
+     const downloadFyerstoken = () => {
+
+
+        var TokenUrl = [
+            {
+                url: "https://public.fyers.in/sym_details/NSE_FO.csv",
+                key: "FYERS_NFO"
+            },
+            {
+                url: "https://public.fyers.in/sym_details/NSE_CM.csv",
+                key: "FYERS_NSE"
+            },
+            {
+                url: "https://public.fyers.in/sym_details/MCX_COM.csv",
+                key: "FYERS_MCX"
+            },
+            {
+                url: "https://public.fyers.in/sym_details/NSE_CD.csv",
+                key: "FYERS_CDS"
+            }
+        ]
+
+
+        TokenUrl.forEach((data) => {
+    
+            const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'Fyers', `${data.key}.csv`);
+          
+    
+            const fileUrl = data.url
+    
+            axios({
+                method: 'get',
+                url: fileUrl,
+                responseType: 'stream',
+            })
+                .then(function (response) {
+                    // Pipe the HTTP response stream to a local file
+                    response.data.pipe(fs.createWriteStream(filePath));
+    
+                    response.data.on('end', function () {
+                        console.log(`File downloaded to ${filePath}`);
+                    });
+                })
+                .catch(function (error) {
+                    console.log('Error downloading file:', error);
+                });
+        })
+
+
+    }
+
+
     // app.get('/chek-token', async (req, res) => {
-    //     downloadAndExtractUpstox()
+    //     downloadFyerstoken()
     //      res.send("okkk")
     //   })
 

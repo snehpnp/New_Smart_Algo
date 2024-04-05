@@ -53,6 +53,8 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     }
 
     else if (broker_id === "13" || broker_id === 13) {
+
+    window.location.href =`https://api.fyers.in/api/v2/generate-authcode?client_id=${UserDetails.app_id}&redirect_uri=${Config.base_url}fyers&response_type=code&state=${UserDetails.client_key}`
         alert("broker-13")
     }
 
