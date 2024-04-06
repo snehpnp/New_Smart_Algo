@@ -14,7 +14,7 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
      
-
+  //console.log("Inside Fyers")
       // curl -H "Authorization:app_id:access_token"  https://api.fyers.in/api/v2/orders?id=sample_order_id
 
 
@@ -63,7 +63,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         const filePath_fyers = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
 
        const command = `grep ,${pattern}, ${filePath_fyers}`;
-     //   const command = `findstr ,${pattern}, ${filePath_aliceblue}`;
+     // const command = `findstr ,${pattern}, ${filePath_fyers}`;
 
         console.log("command ", command)
 
@@ -248,7 +248,7 @@ if (segment && segment.toUpperCase() === 'C') {
 const filePath_fyers = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
 
 const command = `grep ,${pattern}, ${filePath_fyers}`;
-//   const command = `findstr ,${pattern}, ${filePath_aliceblue}`;
+//   const command = `findstr ,${pattern}, ${filePath_fyers}`;
 
 console.log("command ", command)
 

@@ -22,11 +22,12 @@ const { logger, getIPAddress } = require('../../Helper/logger.helper')
 
 class Fyers {
 
-    // Get GetAccessToken 5 PAISA
+    
     async GetAccessTokenFyers(req, res) {
-        try {
 
-            const auth_code = req.query.auth_code;
+        try {
+             
+           const auth_code = req.query.auth_code;
 
             const state_client_key = req.query.state;
 
@@ -44,8 +45,10 @@ class Fyers {
 
             if (auth_code != undefined) {
                 const Get_User = await User.find({ client_key: state_client_key }).limit(1)
-
-                let sha_string = sha256(Get_User[0].app_id + ':' + Get_User[0].api_secret);;
+               
+                
+                let sha_string = sha256(Get_User[0].app_id + ':' + Get_User[0].api_secret);
+               
 
                 if (Get_User.length > 0) {
 
@@ -67,16 +70,19 @@ class Fyers {
                     axios(config)
                         .then(async function (response) {
 
-
                             var access_token = response.data.access_token;
-                           
+
+                            
                             if (access_token != '') {
+                                
+                                var refresh_token = response.data.refresh_token;
 
                                 let result = await User.findByIdAndUpdate(
                                     Get_User[0]._id,
                                     {
                                         access_token: access_token,
                                         TradingStatus: "on",
+                                        client_code : refresh_token
                                     })
 
                                 if (result != "") {
@@ -102,6 +108,10 @@ class Fyers {
 
                         })
                         .catch(function (error) {
+
+                          console.log("error",error)
+                          return res.send(redirect_uri);
+
                         });
 
 

@@ -63,7 +63,9 @@ const TradeHistory = () => {
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
   const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
 
-  console.log("tradeHistoryData :", tradeHistoryData)
+  //console.log("tradeHistoryData :", tradeHistoryData)
+  
+ // console.log("ServiceData :", ServiceData)
 
   const [CatagoryData, setCatagoryData] = useState({
     loading: true,
@@ -113,6 +115,13 @@ const TradeHistory = () => {
             loading: false,
             data: response.data,
           });
+
+          setServiceData({
+            loading: false,
+            data: response.trade_symbols_filter,
+          });
+
+
         } else {
           setTradeHistoryData({
             loading: false,
@@ -704,9 +713,9 @@ const TradeHistory = () => {
       });
   };
 
-  useEffect(() => {
-    getSymbols();
-  }, []);
+  // useEffect(() => {
+  //   getSymbols();
+  // }, []);
 
 
   const getservice = async () => {
@@ -808,7 +817,7 @@ const TradeHistory = () => {
               />
             </div>
           </div>
-          <div className="col-lg-2 px-1">
+          <div className="col-lg-3 px-1">
             <div class="mb-3">
               <label for="select" class="form-label">
                 Symbol
@@ -823,11 +832,18 @@ const TradeHistory = () => {
                 <option value="null" selected>All</option>
                 {ServiceData.data &&
                   ServiceData.data.map((item) => {
+                    // return (
+                    //   <option className="mt-1" value={item.fullname}>
+                    //     {item.fullname}
+                    //   </option>
+                    // );
+
                     return (
-                      <option className="mt-1" value={item.fullname}>
-                        {item.fullname}
+                      <option className="mt-1" value={item}>
+                        {item}
                       </option>
                     );
+
                   })}
               </select>
             </div>

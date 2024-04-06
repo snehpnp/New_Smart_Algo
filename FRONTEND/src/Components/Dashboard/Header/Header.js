@@ -186,6 +186,7 @@ const Header = ({ ChatBox }) => {
 
   //  BROKER LOGIN
   const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
+
     const currentDate = new Date();
     const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const weekday = weekdays[currentDate.getDay()];

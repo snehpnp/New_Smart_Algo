@@ -251,6 +251,7 @@ const fivepaisa = require('./Broker/fivepaisa')
 const zerodha = require('./Broker/zerodha')
 const upstox = require('./Broker/upstox')
 const dhan = require('./Broker/dhan')
+const fyers = require('./Broker/fyers')
 
 
 // BROKER SIGNAL
@@ -462,7 +463,7 @@ app.post('/broker-signals', async (req, res) => {
           }
 
            
-          console.log("findSignal ",findSignal)
+         // console.log("findSignal ",findSignal)
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
             token = await services.find(instrument_query).maxTimeMS(20000).exec();
@@ -542,9 +543,11 @@ app.post('/broker-signals', async (req, res) => {
 
 
           console.log("client_key ",client_key)
-          console.log("process.env.PANEL_KEY ",client_key)
+          console.log("process.env.PANEL_KEY ",process.env.PANEL_KEY)
           // HIT TRADE IN BROKER SERVER
           if (process.env.PANEL_KEY == client_key) {
+            
+          //console.log("Inside  ",process.env.PANEL_KEY)
 
             //Process Alice Blue admin client
             try {
@@ -692,6 +695,31 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+           //Process fyers admin client
+           try {
+            const fyersCollection = db1.collection('fyersView');
+            const fyersdocuments = await fyersCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' fyers ALL CLIENT LENGTH ' + fyersdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+
+            if (fyersdocuments.length > 0) {
+              fyers.place_order(fyersdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get fyers Client In view", error);
+          }
+          //End Process fyers admin client
+
+
+
 
 
 
@@ -829,6 +857,28 @@ app.post('/broker-signals', async (req, res) => {
             console.log("Error Get dhan Client In view", error);
           }
           //End Process Tading View Client DHAN 
+
+
+          //Process Tading View Client fyers
+          try {
+            const fyersCollection = db1.collection('fyersView');
+            const fyersdocuments = await fyersCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' fyers TRADING VIEW CLIENT LENGTH ' + fyersdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+            if (fyersdocuments.length > 0) {
+              fyers.place_order(fyersdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get fyers Client In view", error);
+          }
+          //End Process Tading View Client fyers 
 
 
 
