@@ -709,8 +709,6 @@ const AddClient = () => {
   const data = async () => {
     await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
       .then((response) => {
-
-
         if (response.status) {
           setAllGroupServices({
             loading: false,

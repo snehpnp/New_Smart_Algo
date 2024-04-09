@@ -86,7 +86,7 @@ const AllClients = () => {
       });
   };
 
-  //console.log("BrokerDetails ",BrokerDetails)
+ 
 
   const Brokerdata = async () => {
   
@@ -513,7 +513,7 @@ const AllClients = () => {
       return "Demo";
     } else {
 
-     // console.log("BrokerDetails ",BrokerDetails)
+ 
       
       const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
       if(foundNumber != undefined){
@@ -561,12 +561,9 @@ const AllClients = () => {
   };
 
   // MANAGE MULTIFILTER
- 
-
   useEffect(() => {
-
     const filteredData = originalData.filter((item) => {
-    //  console.log("item", item.broker);
+    
       const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
       const filter3Match = selectBroker === "null" || item.broker === selectBroker;
       const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
@@ -598,8 +595,6 @@ const AllClients = () => {
       data: originalData,
     });
     console.log("originalData ", originalData)
-
-
   };
 
   //  For CSV

@@ -26,6 +26,7 @@ const ServicesList = () => {
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
     const [showModaluser, setshowModaluser] = useState(false)
+    const [showDeletModal, setShowDeletModal] = useState(false)
 
     //  For Mnage Multipfiter
     const [searchInput, setSearchInput] = useState("");
@@ -74,6 +75,7 @@ const ServicesList = () => {
             formatter: (cell, row) => (
                 <div>
                     <GanttChartSquare onClick={(e) => GetAllServicesName(row)} size={20} color="#198754" strokeWidth={2} className="mx-1" />
+
                 </div>
             ),
         },
@@ -188,24 +190,23 @@ const ServicesList = () => {
 
     // DELETE GROUP
     const DeleteGroup = async (row) => {
-
-        if (window.confirm("Do You Really Want To Delete ??")) {
-            var req = {
-                id: row._id
-            }
-            await dispatch(DELETE_GROUP_SERVICE(req)).unwrap()
-                .then((response) => {
-                    // console.log("response", response)
-                    if (response.status) {
-                        toast.success(response.msg)
-                        setrefresh(!refresh)
-                        // window.location.reload()
-                    } else {
-
-                        toast.error(response.msg)
-                    }
-                })
+        setShowDeletModal(true)
+        var req = {
+            id: row._id
         }
+        await dispatch(DELETE_GROUP_SERVICE(req)).unwrap()
+            .then((response) => {
+                // console.log("response", response)
+                if (response.status) {
+                    toast.success(response.msg)
+                    setrefresh(!refresh)
+                    // window.location.reload()
+                } else {
+
+                    toast.error(response.msg)
+                }
+            })
+
     }
 
     // GET ALL GROUP SERVICES NAME
@@ -253,10 +254,7 @@ const ServicesList = () => {
         e.preventDefault();
         setSearchInput("");
 
-        // setAllGroupServices({
-        //     loading: false,
-        //     data: AllGroupServices.data,
-        // });
+
     };
 
 
@@ -370,6 +368,51 @@ const ServicesList = () => {
                                     </>
                                     : ""
                             }
+
+                            {showDeletModal == true ?
+                                <div
+                                    className="modal custom-modal fade modal-delete"
+                                    id="delete_modal"
+                                    role="dialog"
+                                >
+                                    <div className="modal-dialog modal-dialog-centered modal-md">
+                                        <div className="modal-content">
+                                            <div className="modal-body">
+                                                <div className="form-header">
+                                                    <div className="delete-modal-icon">
+                                                        <span>
+                                                            <i className="fe fe-check-circle" />
+                                                        </span>
+                                                    </div>
+                                                    <h3>Are You Sure?</h3>
+                                                    <p>You want delete company</p>
+                                                </div>
+                                                <div className="modal-btn delete-action">
+                                                    <div className="modal-footer justify-content-center p-0">
+                                                        <button
+                                                            type="submit"
+                                                            data-bs-dismiss="modal"
+                                                            className="btn btn-primary paid-continue-btn me-2"
+                                                        >
+                                                            Yes, Delete
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            data-bs-dismiss="modal"
+                                                            className="btn btn-back cancel-btn"
+                                                        >
+                                                            No, Cancel
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                : ''
+                            }
+
+
 
                         </Content>
 

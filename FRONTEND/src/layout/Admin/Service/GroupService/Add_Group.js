@@ -1,6 +1,4 @@
-
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import React, { useEffect, useState } from 'react'
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form2"
 import { useFormik } from 'formik';
@@ -359,7 +357,7 @@ console.log("state", state)
 
 return (
     <>
-        <Content Page_title="Add Group" button_title="Back" route="/admin/groupservices"
+        <Content Page_title="Add Group " button_title="Back" route="/admin/groupservices"
             additional_field={
                 <div style={{ overflowY: 'scroll', height: '65vh' }}>
                     <h4 className='text-center text-decoration-underline mb-3'>Select Services And Quantity</h4>
@@ -409,7 +407,6 @@ return (
                     </table>
                 </div>
             }
-
         >
             <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Group" title='addstrategy'
                 additional_field={
