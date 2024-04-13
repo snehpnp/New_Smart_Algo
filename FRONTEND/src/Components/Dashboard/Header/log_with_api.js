@@ -11,7 +11,32 @@ import { GET_BROKER_INFORMATION } from "../../../Service/admin.service";
 export const loginWithApi = async (broker_id, UserDetails) => {
 
     if (broker_id === "1" || broker_id === 1) {
-        alert("broker-1")
+    
+        axios({
+            url: `${Config.base_url}markethub`,
+            method: "post",
+            data: {
+                Email : UserDetails.Email,
+            },
+          }).then((res) => {
+            // console.log("res", res);
+            if (res.data.status == true) {
+                alert(res.data.msg)
+                window.location.reload();
+            //   setrefresh(!refresh);
+            //   setShowAlert(true);
+            //   setAlertColor("success");
+            //   setTextAlert(res.data.msg);
+            } else {
+                alert(res.data.msg)
+            //   setrefresh(!refresh);
+            //   setShowAlert(true);
+            //   setAlertColor("error");
+            //   setTextAlert(res.data.msg);
+            }
+            
+          });
+        
     }
     else if (broker_id === "2" || broker_id === 2) {   
         const res = await GET_BROKER_INFORMATION();
@@ -87,7 +112,7 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     }
     else if (broker_id === "20" || broker_id === 20) {
 
-        axios({
+          axios({
             url: `${Config.base_url}dhan`,
             method: "post",
             data: {

@@ -252,6 +252,7 @@ const zerodha = require('./Broker/zerodha')
 const upstox = require('./Broker/upstox')
 const dhan = require('./Broker/dhan')
 const fyers = require('./Broker/fyers')
+const markethub = require('./Broker/markethub')
 
 
 // BROKER SIGNAL
@@ -718,7 +719,30 @@ app.post('/broker-signals', async (req, res) => {
           }
           //End Process fyers admin client
 
+         
+          
+           //Process markethub admin client
+           try {
+            const markethubCollection = db1.collection('markethubView');
+            const markethubdocuments = await markethubCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' markethub ALL CLIENT LENGTH ' + markethubdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+
+            if (markethubdocuments.length > 0) {
+              markethub.place_order(markethubdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get markethub Client In view", error);
+          }
+          //End Process markethub admin client
 
 
 
@@ -879,6 +903,29 @@ app.post('/broker-signals', async (req, res) => {
             console.log("Error Get fyers Client In view", error);
           }
           //End Process Tading View Client fyers 
+
+
+          
+           //Process Tading View Client markethub
+           try {
+            const markethubCollection = db1.collection('markethubView');
+            const markethubdocuments = await markethubCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' markethub TRADING VIEW CLIENT LENGTH ' + markethubdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+            if (markethubdocuments.length > 0) {
+              markethub.place_order(markethubdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get markethub Client In view", error);
+          }
+          //End Process Tading View Client markethub 
 
 
 

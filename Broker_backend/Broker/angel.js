@@ -48,7 +48,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 if (token != 0) {
 
 
-                    if (segment.toUpperCase() != "C") {
+                          if (segment.toUpperCase() != "C") {
 
 
                                 item.postdata.symboltoken = token[0].instrument_token;

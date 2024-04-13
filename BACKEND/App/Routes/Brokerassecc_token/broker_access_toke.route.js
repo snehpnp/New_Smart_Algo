@@ -34,13 +34,16 @@ const { GetAccessTokenUpstox,GetOrderFullInformationUpstox} = require('../../Con
 // Dhan CONTROLLER FILE
 const { GetAccessTokenDhan,GetOrderFullInformationDhan} = require('../../Controllers/Brokerassecc_token/Dhan')
 
+// Markethub CONTROLLER FILE
+
+const {GetAccessTokenMarkethub,GetOrderFullInformationMarkethub}=require('../../Controllers/Brokerassecc_token/Mhub')
 
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req,res)=>{
     
     let user_id =  req.body.user_id;
     const objectId = new ObjectId(user_id);
-
+    console.log("objectId",objectId)
     const pipeline =[
        {
          $match : {
@@ -55,11 +58,15 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
    const broker = result[0].broker;
    console.log("broker",broker)
 
+
+    // Market Hub   -  1
+     if(broker == 1){
+      GetOrderFullInformationMarkethub(req,res,result);
+     }
    // ALICE BLUE   -  2
-   if(broker == 2){
+    else if(broker == 2){
      GetOrderFullInformationAll(req,res);
-   }
-   
+    }
    // ANGEL   -  12
    else if(broker == 12){
     GetOrderFullInformationAngel(req,res,result);
@@ -134,8 +141,11 @@ router.get('/zerodha', GetAccessTokenZerodha);
 // Upstox
 router.get('/upstox', GetAccessTokenUpstox);
 
-// Upstox
+// Dhan
 router.post('/dhan', GetAccessTokenDhan);
+
+// Market Hub
+router.post('/markethub', GetAccessTokenMarkethub);
 
 
 module.exports = router;
