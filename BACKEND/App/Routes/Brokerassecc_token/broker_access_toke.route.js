@@ -55,8 +55,17 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
        }
     ]
    const result = await User.aggregate(pipeline)
-   const broker = result[0].broker;
-   console.log("broker",broker)
+
+
+
+  
+   
+
+   if(result.length > 0){
+
+     
+    const broker = result[0].broker;
+    console.log("broker",broker)
 
 
     // Market Hub   -  1
@@ -100,6 +109,13 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
    else{
     res.send({status:false,msg:"broker not found"});
    }
+
+
+
+  }else{
+    //console.log("User Not found")
+    res.send({status:false,msg:"User Not found"});
+  }
    
       
   }
