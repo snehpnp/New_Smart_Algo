@@ -14,8 +14,8 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
     
-    console.log("ANGEL token - ",token[0].instrument_token)
-    console.log("ANGEL tradesymbol -",token[0].tradesymbol)
+    //console.log("ANGEL token - ",token[0].instrument_token)
+    //console.log("ANGEL tradesymbol -",token[0].tradesymbol)
     
 
     try {
