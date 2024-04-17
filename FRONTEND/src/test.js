@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TradingViewWidget from 'react-tradingview-widget';
+// import TradingViewWidget from 'react-tradingview-widget';
 
 const CandlestickChart = () => {
   const [selectedData, setSelectedData] = useState(null);
@@ -26,14 +26,14 @@ const CandlestickChart = () => {
 
   return (
     <div  style={{ height: '50vh' }}s>
-      <TradingViewWidget
+      {/* <TradingViewWidget
         symbol="bhel"
         interval="M5"
         theme="light"
         locale="en"
         autosize
         onReady={handleChartReady}
-      />
+      /> */}
       <div>
         <h2>Selected Data:</h2>
         <pre>{JSON.stringify(selectedData, null, 2)}</pre>

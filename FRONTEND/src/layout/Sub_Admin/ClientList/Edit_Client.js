@@ -341,23 +341,30 @@ const AddClient = () => {
   ];
 
   const fields = [
-    { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false },
-    { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false },
-    { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false },
-    { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false },
+    { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },
+    { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },
+    { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, disable: false },
+    { name: 'mobile', label: 'Mobile', type: 'text', label_size: 12, col_size: 6, disable: false },
     {
       name: 'licence',
       label: 'Licence',
       type: 'select',
-      options: getPermissions && getPermissions.license_permision === 1 || getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? [
+      options: UserData.data.data !== undefined && UserData.data.data[0].license_type === "2" ? [
+        { label: 'Live', value: '2' },
+      ] : UserData.data.data !== undefined && UserData.data.data[0].license_type === "0" ? [
         { label: '2 Days', value: '0' },
-        { label: 'Demo', value: '1' },
         { label: 'Live', value: '2' },
       ] : [
         { label: '2 Days', value: '0' },
         { label: 'Demo', value: '1' },
+        { label: 'Live', value: '2' },
       ]
-      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
+      , label_size: 12, col_size: 6, disable: UserData.data.data !== undefined && UserData.data.data[0].license_type === "2" ? true : false
+    },
+    {
+      name: 'licence1', label: 'Use License Month', type: 'text', label_size: 12, col_size: 6, disable: true,
+      showWhen: values => values.licence === '2'
+
     },
     {
       name: 'tomonth',
@@ -365,7 +372,7 @@ const AddClient = () => {
       type: 'select',
       options: first && first.map((item) => ({ label: item.endDate, value: item.month })),
       showWhen: values => values.licence === '2'
-      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false, isSelected: true
+      , label_size: 12, col_size: 6, disable: false, isSelected: true
     },
     {
       name: 'broker',
@@ -373,35 +380,35 @@ const AddClient = () => {
       type: 'select',
       options: GetBrokerInfo && GetBrokerInfo.map((item) => ({ label: item.title, value: item.broker_id })),
       showWhen: values => values.licence === '2' || values.licence === '0'
-      , label_size: 12, col_size: 6, disable:  getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
+      , label_size: 12, col_size: 6, disable: false
     },
     //  For Demo Only Client
     {
       name: 'fromDate', label: 'From Date', type: 'date',
       showWhen: values => values.licence === '1'
-      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
+      , label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'todate', label: 'To Date', type: 'date',
       showWhen: values => values.licence === '1'
-      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
+      , label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'api_key',
-      label: formik.values.broker == 4 ? 'App Key' : formik.values.broker == 7 ? "Consumer Key" : formik.values.broker == 9 ? "Vendor Key" : formik.values.broker == 8 ? 'App Key' : formik.values.broker == 10 ? 'App Key' : "'Api Key", type: 'text',
-      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6',
+      label:  formik.values.broker == 20 ? "ACCESS TOKEN " : formik.values.broker == 19 ? "Api Key" : formik.values.broker == 4 ? 'App Key' : formik.values.broker == 7 ? "Consumer Key" : formik.values.broker == 9 ? "Vendor Key" : formik.values.broker == 8 ? 'App Key' : formik.values.broker == 10 ? 'App Key' : "'Api Key", type: 'text',
+      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6' || values.broker === '19'|| values.broker === '20',
       label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'client_code',
-      label: formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
-      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6',
+      label: formik.values.broker == 20 ? "CLIENT ID": formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
+      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6'|| values.broker === '20',
       label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'demat_userid',
-      label: formik.values.broker == 9 ? 'User Id' : '', type: 'text',
-      showWhen: values => values.broker === '9',
+      label: formik.values.broker === 9 ? 'User Id' : 'Demat UserId', type: 'text',
+      showWhen: values => values.broker === '9' || values.broker === '2',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -409,7 +416,7 @@ const AddClient = () => {
       label: formik.values.broker == 1 ? 'Verification Code' : formik.values.broker == 5 ? 'Password' : formik.values.broker == 7 ? 'Demat Password' : formik.values.broker == 11 ? 'Password' : formik.values.broker == 2 ? 'Demat UserId' : formik.values.broker == 13 ? 'App Id' : formik.values.broker == 9 ? 'Password' : formik.values.broker == 14 ? 'User Id ' : 'App Id', type: 'text',
       showWhen: values =>
         //  values.broker === '2' ||
-        values.broker === '1' || values.broker === '2' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14',
+        values.broker === '1' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -425,7 +432,7 @@ const AddClient = () => {
       showWhen: values => values.broker === '1'
         ||
         // values.broker === '2' ||
-        values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15',
+        values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15'|| values.broker === '19',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -434,6 +441,14 @@ const AddClient = () => {
       showWhen: values =>
         values.broker === '7' || values.broker === '9',
       label_size: 12, col_size: 6, disable: false
+    },
+
+    {
+      name: 'parent_id',
+      label: 'Sub-Admin',
+      type: 'select',
+      options: Addsubadmin.data && Addsubadmin.data.map((item) => ({ label: item.FullName, value: item._id }))
+      , label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'service_given_month',
@@ -453,11 +468,10 @@ const AddClient = () => {
         { label: '10', value: '10' },
         { label: '11', value: '11' },
         { label: '12', value: '12' },
-
       ],
       showWhen: values =>
         values.licence === '2' || values.licence === 2
-      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
+      , label_size: 12, col_size: 6, disable: false
 
     },
 
@@ -469,14 +483,22 @@ const AddClient = () => {
 
       options:
         AllGroupServices.data && AllGroupServices.data.map((item) => ({ label: item.name, value: item._id }))
-      , label_size: 12, col_size: 6, disable: getPermissions.Update_Api_Key && getPermissions.Update_Api_Key === 1 ? true : false
-    }
+      , label_size: 12, col_size: 6, disable: false
+    },
 
+
+    { name: 'multiple_strategy_select', label: 'Mutiple Selection Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false, check_box_true: formik.values.multiple_strategy_select ? true : false,
+  },
   ];
 
 
 
   useEffect(() => {
+
+
+
+    
+  ////////////////--------------START BROKER SET KEY----------------///////////
     if (formik.values.broker === '1' || formik.values.broker === 1) {
       formik.setFieldValue('api_key', 'null');
       formik.setFieldValue('app_key', 'null');
@@ -489,7 +511,7 @@ const AddClient = () => {
       formik.setFieldValue('app_key', 'null');
       formik.setFieldValue('client_code', 'null');
       formik.setFieldValue('api_type', 'null');
-      formik.setFieldValue('demat_userid', 'null');
+      // formik.setFieldValue('demat_userid', 'null');
     }
 
     if (formik.values.broker === '3' || formik.values.broker === 3) {
@@ -583,6 +605,30 @@ const AddClient = () => {
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
+
+    if (formik.values.broker === '19' || formik.values.broker === 19) {
+      formik.setFieldValue('app_id', 'null');
+      formik.setFieldValue('app_key', 'null');
+      formik.setFieldValue('client_code', 'null');
+      formik.setFieldValue('api_type', 'null');
+      formik.setFieldValue('demat_userid', 'null');
+    }
+
+    if (formik.values.broker === '20' || formik.values.broker === 20) {
+      formik.setFieldValue('app_id', 'null');
+      formik.setFieldValue('app_key', 'null');
+      formik.setFieldValue('api_type', 'null');
+      formik.setFieldValue('demat_userid', 'null');
+    }
+
+
+
+
+
+
+  ////////////////--------------END BROKER SET KEY----------------///////////
+
+
 
 
     if (formik.values.licence === '2' || formik.values.licence === 2) {

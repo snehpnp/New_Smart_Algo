@@ -198,9 +198,6 @@ class MakeStartegy {
     }
   }
 
-
-
-
   //Update Strategy..
   async UpdateMakeStartegy(req, res) {
 

@@ -1,0 +1,81 @@
+
+NEW TRADE TIME Tue Mar 19 2024 16:45:56 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:12,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21950,OType:CALL,Expiry:21032024,Strategy:jhg,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:25,StopLoss:8,ExitTime:15-25,MakeStartegyName:SHK_14366,Demo:demo
+TIME Tue Mar 19 2024 16:45:56 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 46466
+TIME Tue Mar 19 2024 16:45:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:45:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:45:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:45:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:45:56 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:45:56 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Tue Mar 19 2024 16:46:34 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:12,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21950,OType:CALL,Expiry:21032024,Strategy:jhg,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:25,StopLoss:8,ExitTime:15-25,MakeStartegyName:SHK_14366,Demo:demo
+TIME Tue Mar 19 2024 16:46:34 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 46466
+TIME Tue Mar 19 2024 16:46:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:46:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:46:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:46:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:46:34 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:46:34 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Tue Mar 19 2024 16:47:47 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:12,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21950,OType:CALL,Expiry:21032024,Strategy:jhg,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:25,StopLoss:8,ExitTime:15-25,MakeStartegyName:SHK_14366,Demo:demo
+TIME Tue Mar 19 2024 16:47:47 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 46466
+TIME Tue Mar 19 2024 16:47:47 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:47:47 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:47:47 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:47:47 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:47:47 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:47:47 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Tue Mar 19 2024 16:48:30 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:12,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21950,OType:CALL,Expiry:21032024,Strategy:jhg,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:25,StopLoss:8,ExitTime:15-25,MakeStartegyName:SHK_14366,Demo:demo
+TIME Tue Mar 19 2024 16:48:30 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 46466
+TIME Tue Mar 19 2024 16:48:30 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:48:30 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:48:30 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:48:30 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:48:30 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:48:30 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Tue Mar 19 2024 16:49:27 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:12,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21950,OType:CALL,Expiry:21032024,Strategy:jhg,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:25,StopLoss:8,ExitTime:15-25,MakeStartegyName:SHK_14366,Demo:demo
+TIME Tue Mar 19 2024 16:49:27 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 46466
+TIME Tue Mar 19 2024 16:49:27 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:49:27 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:49:27 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:49:27 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:49:27 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:49:27 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Tue Mar 19 2024 16:50:10 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:12,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21950,OType:CALL,Expiry:21032024,Strategy:RSI,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:25,StopLoss:8,ExitTime:15-25,MakeStartegyName:SHK_14366,Demo:demo
+TIME Tue Mar 19 2024 16:50:25 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 46466
+TIME Tue Mar 19 2024 16:50:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:50:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:50:25 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Tue Mar 19 2024 16:50:37 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:12,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21950,OType:CALL,Expiry:21032024,Strategy:RSI,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:25,StopLoss:8,ExitTime:15-25,MakeStartegyName:SHK_14366,Demo:demo
+TIME Tue Mar 19 2024 16:50:38 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 46466
+TIME Tue Mar 19 2024 16:50:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:50:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:50:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:50:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:50:38 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 16:50:38 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Tue Mar 19 2024 16:50:38 GMT+0530 (India Standard Time) DHAN BEFORE PLACE ORDER USER ENTRY- S_DHAN REQUEST -{"dhanClientId":"1101158377","transactionType":"BUY","exchangeSegment":"NSE_FNO","productType":"INTRADAY","orderType":"MARKET","validity":"DAY","securityId":"46466","quantity":50,"price":0,"triggerPrice":0,"afterMarketOrder":false,"amoTime":"OPEN","boProfitValue":0,"boStopLossValue":0}
+TIME Tue Mar 19 2024 16:50:38 GMT+0530 (India Standard Time) DHAN AFTER PLACE ORDER CATCH ENTRY - S_DHAN ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (C:\\NEWSMARTALGO\\NEW_ALGO\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (C:\\NEWSMARTALGO\\NEW_ALGO\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:526:35)\n    at endReadableNT (node:internal/streams/readable:1589:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json","access-token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkaGFuIiwicGFydG5lcklkIjoiIiwiZXhwIjoxNzEzMDcwNzIyLCJ0b2tlbkNvbnN1bWVyVHlwZSI6IlNFTEYiLCJ3ZWJob29rVXJsIjoiaHR0cHM6Ly9zb3B0b29scy50cmFkZXN0cmVldC5pbi8iLCJkaGFuQ2xpZW50SWQiOiIxMTAxMTU4Mzc3In0.lOiV57oTvq21kMRKh-W8biBlyYTudi-TihfakFYdM8xnSbYWeXpnE5W7UaNyfehfFi09qWDlkv7TUOykPFVCqw","User-Agent":"axios/1.5.0","Content-Length":"286","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.dhan.co/orders","data":"{\"dhanClientId\":\"1101158377\",\"transactionType\":\"BUY\",\"exchangeSegment\":\"NSE_FNO\",\"productType\":\"INTRADAY\",\"orderType\":\"MARKET\",\"validity\":\"DAY\",\"securityId\":\"46466\",\"quantity\":50,\"price\":0,\"triggerPrice\":0,\"afterMarketOrder\":false,\"amoTime\":\"OPEN\",\"boProfitValue\":0,\"boStopLossValue\":0}"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Tue Mar 19 2024 17:20:14 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:NIFTY,TType:LE,Tr_Price:131,Price:12,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:21950,OType:CALL,Expiry:21032024,Strategy:RSI,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:25,StopLoss:8,ExitTime:15-25,MakeStartegyName:SHK_14366,Demo:demo
+TIME Tue Mar 19 2024 17:20:14 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 46466
+TIME Tue Mar 19 2024 17:20:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 17:20:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 17:20:15 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 17:20:15 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 17:20:15 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Mar 19 2024 17:20:15 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Tue Mar 19 2024 17:20:15 GMT+0530 (India Standard Time) DHAN BEFORE PLACE ORDER USER ENTRY- S_DHAN REQUEST -{"dhanClientId":"1101158377","transactionType":"BUY","exchangeSegment":"NSE_FNO","productType":"INTRADAY","orderType":"MARKET","validity":"DAY","securityId":"46466","quantity":50,"price":0,"triggerPrice":0,"afterMarketOrder":false,"amoTime":"OPEN","boProfitValue":0,"boStopLossValue":0}
+TIME Tue Mar 19 2024 17:20:15 GMT+0530 (India Standard Time) DHAN AFTER PLACE ORDER CATCH ENTRY - S_DHAN ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (C:\\NEWSMARTALGO\\NEW_ALGO\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (C:\\NEWSMARTALGO\\NEW_ALGO\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:526:35)\n    at endReadableNT (node:internal/streams/readable:1589:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json","access-token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJkaGFuIiwicGFydG5lcklkIjoiIiwiZXhwIjoxNzEzMDcwNzIyLCJ0b2tlbkNvbnN1bWVyVHlwZSI6IlNFTEYiLCJ3ZWJob29rVXJsIjoiaHR0cHM6Ly9zb3B0b29scy50cmFkZXN0cmVldC5pbi8iLCJkaGFuQ2xpZW50SWQiOiIxMTAxMTU4Mzc3In0.lOiV57oTvq21kMRKh-W8biBlyYTudi-TihfakFYdM8xnSbYWeXpnE5W7UaNyfehfFi09qWDlkv7TUOykPFVCqw","User-Agent":"axios/1.5.0","Content-Length":"286","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://api.dhan.co/orders","data":"{\"dhanClientId\":\"1101158377\",\"transactionType\":\"BUY\",\"exchangeSegment\":\"NSE_FNO\",\"productType\":\"INTRADAY\",\"orderType\":\"MARKET\",\"validity\":\"DAY\",\"securityId\":\"46466\",\"quantity\":50,\"price\":0,\"triggerPrice\":0,\"afterMarketOrder\":false,\"amoTime\":\"OPEN\",\"boProfitValue\":0,\"boStopLossValue\":0}"},"code":"ERR_BAD_REQUEST","status":400}

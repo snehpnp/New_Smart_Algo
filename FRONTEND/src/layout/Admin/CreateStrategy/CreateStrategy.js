@@ -1537,13 +1537,13 @@ const saveStrategy = async (e) => {
                           </h4>
                           <p className="text-muted my-0">{x.exch_seg}</p>
                           <div className="d-flex justify-content-between my-1">
-                            <i className="fa-solid fa-pen-to-square"></i>
+                            {/* <i className="fa-solid fa-pen-to-square"></i> */}
                             <i className="fa-solid fa-trash-can"
                               onClick={() => handleRemoveItem(x)}
                             ></i>
                           </div>
-                          <h3 className="text-success my-0 ">45.5</h3>
-                          <p className="text-success my-0">%45.5</p>
+                          {/* <h3 className="text-success my-0 ">45.5</h3>
+                          <p className="text-success my-0">%45.5</p> */}
                         </div>
                       </div>
                     </div>

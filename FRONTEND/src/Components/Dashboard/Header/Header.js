@@ -186,6 +186,27 @@ const Header = ({ ChatBox }) => {
 
   //  BROKER LOGIN
   const LogIn_WIth_Api = (check, brokerid, tradingstatus, UserDetails) => {
+    if (check) {
+        loginWithApi(brokerid, UserDetails);
+    } else {
+      dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            // setUserDetails(response.data);
+            setrefresh(!refresh)
+          }
+        });
+
+    }
+
+
+  return
+
+
+
+    ///////
+    
     const currentDate = new Date();
     const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const weekday = weekdays[currentDate.getDay()];

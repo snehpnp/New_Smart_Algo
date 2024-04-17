@@ -75,9 +75,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
            // console.log("parts",parts)
 
             if (type == 'LE' || type == 'SX') {
-                item.postdata.transtype = 'BUY';
+                item.postdata.transaction_type = 'BUY';
             } else if (type == 'SE' || type == 'LX') {
-                item.postdata.transtype = 'SELL';
+                item.postdata.transaction_type = 'SELL';
             }
 
             // console.log("price", price)
@@ -111,13 +111,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
       
         const requestPromises = AllClientData.map(async (item) => {
     
-                
-    
-    
                 if (type == 'LE' || type == 'SX') {
-                    item.postdata.transtype = 'BUY';
+                    item.postdata.transaction_type = 'BUY';
                 } else if (type == 'SE' || type == 'LX') {
-                    item.postdata.transtype = 'SELL';
+                    item.postdata.transaction_type = 'SELL';
                 }
     
                 // console.log("price", price)

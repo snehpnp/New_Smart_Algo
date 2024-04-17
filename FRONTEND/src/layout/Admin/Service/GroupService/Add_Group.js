@@ -246,6 +246,9 @@ const filterFunction = async () => {
         return item.name.toLowerCase().includes(SerachService.toLowerCase())
     });
 
+   console.log(" filteredData add group ",filteredData)
+
+
     if (SerachService === "") {
         setstate([])
     } else {

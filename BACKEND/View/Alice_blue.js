@@ -11,7 +11,7 @@ client.connect();
 const db = client.db(process.env.DB_NAME); // Replace with your actual database name
 
 
-async function createView() {
+async function createViewAlice() {
 
 
 
@@ -42,6 +42,11 @@ async function createView() {
       },
       {
         $unwind: '$client_services',
+      },
+      {
+        $match: {
+          'client_services.active_status': '1'
+        }
       },
       {
         $lookup: {
@@ -106,6 +111,9 @@ async function createView() {
       },
       {
         $addFields: {
+          
+         
+           
           postdata:
           {
             complexty: 'REGULAR',
@@ -289,7 +297,24 @@ async function createView() {
             },
 
             price: '0',
-            qty: "$client_services.quantity",
+           // qty: "$client_services.quantity",
+
+            qty: {  
+              $cond: {
+                if: {
+                  $or: [
+                    { $eq: ['$category.segment', 'MF'] },
+                    { $eq: ['$category.segment', 'MO'] }
+                  ]
+                },
+                then: "$client_services.lot_size",
+                else:  "$client_services.quantity"
+
+              }
+
+            },
+
+
             ret: 'DAY',
 
             // symbol id token condition here
@@ -345,5 +370,5 @@ async function createView() {
 }
 
 
-module.exports = { createView }
+module.exports = { createViewAlice }
 

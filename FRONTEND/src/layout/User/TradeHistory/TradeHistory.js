@@ -187,13 +187,9 @@ const TradeHistory = () => {
     },
 
     {
-      dataField: "live",
-      text: "Live Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`LivePrice_${row.token}`}></span>
-        </div>
-      ),
+      dataField: "createdAt",
+      text: "Signals time",
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
 
     // {
@@ -211,6 +207,10 @@ const TradeHistory = () => {
       text: "Symbol",
     },
     {
+      dataField: "strategy",
+      text: "Strategy",
+    },
+    {
       dataField: "entry_qty",
       text: "Entry Qty",
       formatter: (cell, row, rowIndex) => (
@@ -224,6 +224,16 @@ const TradeHistory = () => {
       formatter: (cell, row, rowIndex) => (
         <span className="text">{cell !== "" ? parseInt(row.exit_qty_percent) : "-"}</span>
        // <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+      ),
+    },
+
+    {
+      dataField: "live",
+      text: "Live Price",
+      formatter: (cell, row, rowIndex) => (
+        <div>
+          <span className={`LivePrice_${row.token}`}></span>
+        </div>
       ),
     },
     {
@@ -299,15 +309,8 @@ const TradeHistory = () => {
         </div>
       ),
     },
-    {
-      dataField: "createdAt",
-      text: "Signals time",
-      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-    },
-    {
-      dataField: "strategy",
-      text: "Strategy",
-    },
+    
+   
 
     {
       dataField: "",
@@ -349,10 +352,6 @@ const TradeHistory = () => {
 
 
 
-
-
-
-
   useEffect(() => {
     ShowLivePrice();
   }, [tradeHistoryData.data, SocketState, UserDetails]);
@@ -360,6 +359,20 @@ const TradeHistory = () => {
   
 
   console.log("tradeHistoryData.data",tradeHistoryData.data)
+
+  let total=0;
+  tradeHistoryData.data &&
+    tradeHistoryData.data?.map((item) => {
+      CreatechannelList += `${item.exchange}|${item.token}#`;
+      console.log("item" ,item)
+
+       
+
+
+      if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
+      total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
+      }
+    });
 
   return (
     <>
@@ -430,6 +443,22 @@ const TradeHistory = () => {
           />
         ) : (
           <>
+
+<div className="table-responsive">
+
+
+{tradeHistoryData.data.length>0 ? 
+
+total >= 0 ? 
+  <h4 >Total Realised P/L : <span style={{color:"green"}}> {total.toFixed(2)}</span> </h4>  : 
+  <h4 >Total Realised P/L : <span style={{  color:"red"}}> {total.toFixed(2)}</span> </h4>  : ""
+
+}
+
+ 
+</div>
+
+
             <FullDataTable
               TableColumns={columns}
               tableData={tradeHistoryData.data}

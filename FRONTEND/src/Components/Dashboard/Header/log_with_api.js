@@ -3,6 +3,7 @@
 //  6=IIFl , 7=Kotak , 8=Mandot , 9=Choice, 10=Anand Rathi, 11=B2C, 13=Angel,
 // 13 =Fyers , 14 = 5-Paisa , 15 Zerodha ,
 import * as Config from "../../../Utils/Config";
+import axios from "axios";
 //import * as Config from "../Utils/Config";
 import { GET_BROKER_INFORMATION } from "../../../Service/admin.service";
 
@@ -10,7 +11,32 @@ import { GET_BROKER_INFORMATION } from "../../../Service/admin.service";
 export const loginWithApi = async (broker_id, UserDetails) => {
 
     if (broker_id === "1" || broker_id === 1) {
-        alert("broker-1")
+    
+        axios({
+            url: `${Config.base_url}markethub`,
+            method: "post",
+            data: {
+                Email : UserDetails.Email,
+            },
+          }).then((res) => {
+            // console.log("res", res);
+            if (res.data.status == true) {
+                alert(res.data.msg)
+                window.location.reload();
+            //   setrefresh(!refresh);
+            //   setShowAlert(true);
+            //   setAlertColor("success");
+            //   setTextAlert(res.data.msg);
+            } else {
+                alert(res.data.msg)
+            //   setrefresh(!refresh);
+            //   setShowAlert(true);
+            //   setAlertColor("error");
+            //   setTextAlert(res.data.msg);
+            }
+            
+          });
+        
     }
     else if (broker_id === "2" || broker_id === 2) {   
         const res = await GET_BROKER_INFORMATION();
@@ -52,6 +78,8 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     }
 
     else if (broker_id === "13" || broker_id === 13) {
+
+    window.location.href =`https://api.fyers.in/api/v2/generate-authcode?client_id=${UserDetails.app_id}&redirect_uri=${Config.base_url}fyers&response_type=code&state=${UserDetails.client_key}`
         alert("broker-13")
     }
 
@@ -83,7 +111,34 @@ export const loginWithApi = async (broker_id, UserDetails) => {
 
     }
     else if (broker_id === "20" || broker_id === 20) {
-        alert("broker-20")
+
+          axios({
+            url: `${Config.base_url}dhan`,
+            method: "post",
+            data: {
+                Email : UserDetails.Email,
+            },
+          }).then((res) => {
+            // console.log("res", res);
+            if (res.data.status == true) {
+                alert(res.data.msg)
+                window.location.reload();
+            //   setrefresh(!refresh);
+            //   setShowAlert(true);
+            //   setAlertColor("success");
+            //   setTextAlert(res.data.msg);
+            } else {
+                alert(res.data.msg)
+            //   setrefresh(!refresh);
+            //   setShowAlert(true);
+            //   setAlertColor("error");
+            //   setTextAlert(res.data.msg);
+            }
+            
+          });
+
+
+
     }
     else if (broker_id === "21" || broker_id === 21) {
         alert("broker-21")

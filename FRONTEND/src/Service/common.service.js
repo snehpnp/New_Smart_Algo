@@ -78,6 +78,23 @@ export async function GET_OPTION_SYMBOLS_EXPIRY(data, token) {
 }
 
 
+// OPTION_SYMBOLS_UPDATE_STATUS
+
+export async function OPTION_SYMBOLS_UPDATE_STATUS(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/option_symbols_status`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+    }
+
+}
+
+
 // GET OPTION SYMBOLS EXPIRY
 
 export async function GET_OPTION_ALL_ROUND_TOKEN(data, token) {

@@ -209,14 +209,14 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
           }
 
         } catch (error) {
-          console.log("Error-", error.response);
+          //console.log("Error-", error.response);
 
         }
       }
 
 
     }).catch((error) => {
-      console.log("Error -", error.response.data);
+     // console.log("Error -", error.response.data);
       return error.response.data
     })
 
@@ -250,11 +250,15 @@ const angel = require('./Broker/angel')
 const fivepaisa = require('./Broker/fivepaisa')
 const zerodha = require('./Broker/zerodha')
 const upstox = require('./Broker/upstox')
+const dhan = require('./Broker/dhan')
+const fyers = require('./Broker/fyers')
+const markethub = require('./Broker/markethub')
 
 
 // BROKER SIGNAL
 app.post('/broker-signals', async (req, res) => {
-
+  
+ 
   var d = new Date();
   var current_date = [d.getFullYear(),
   d.getMonth() + 1,
@@ -354,6 +358,8 @@ app.post('/broker-signals', async (req, res) => {
 
       var demo = signals.Demo;
 
+     
+
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
 
@@ -438,7 +444,7 @@ app.post('/broker-signals', async (req, res) => {
             instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, strike: strike, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
 
           } else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
@@ -457,7 +463,8 @@ app.post('/broker-signals', async (req, res) => {
             EXCHANGE = "CDS";
           }
 
-
+           
+         // console.log("findSignal ",findSignal)
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
             token = await services.find(instrument_query).maxTimeMS(20000).exec();
@@ -477,8 +484,8 @@ app.post('/broker-signals', async (req, res) => {
           const token_chain1 = db1.collection('token_chain');
           const stock_live_price1 = db1.collection('stock_live_price');
 
-          await ConnectSocket(EXCHANGE, instrument_token)
-          const result = await token_chain1.updateOne({ _id: instrument_token }, { $set: { _id: instrument_token, exch: EXCHANGE } }, { upsert: true });
+          // await ConnectSocket(EXCHANGE, instrument_token)
+          // const result = await token_chain1.updateOne({ _id: instrument_token }, { $set: { _id: instrument_token, exch: EXCHANGE } }, { upsert: true });
 
 
 
@@ -536,9 +543,12 @@ app.post('/broker-signals', async (req, res) => {
           }
 
 
-
+          console.log("client_key ",client_key)
+          console.log("process.env.PANEL_KEY ",process.env.PANEL_KEY)
           // HIT TRADE IN BROKER SERVER
           if (process.env.PANEL_KEY == client_key) {
+            
+          //console.log("Inside  ",process.env.PANEL_KEY)
 
             //Process Alice Blue admin client
             try {
@@ -661,6 +671,80 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+          //Process dhan admin client
+          try {
+            const dhanCollection = db1.collection('dhanView');
+            const dhandocuments = await dhanCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' dhan ALL CLIENT LENGTH ' + dhandocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+
+            if (dhandocuments.length > 0) {
+              dhan.place_order(dhandocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get dhan Client In view", error);
+          }
+          //End Process dhan admin client
+
+
+
+           //Process fyers admin client
+           try {
+            const fyersCollection = db1.collection('fyersView');
+            const fyersdocuments = await fyersCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' fyers ALL CLIENT LENGTH ' + fyersdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+
+            if (fyersdocuments.length > 0) {
+              fyers.place_order(fyersdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get fyers Client In view", error);
+          }
+          //End Process fyers admin client
+
+         
+          
+           //Process markethub admin client
+           try {
+            const markethubCollection = db1.collection('markethubView');
+            const markethubdocuments = await markethubCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' markethub ALL CLIENT LENGTH ' + markethubdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+
+            if (markethubdocuments.length > 0) {
+              markethub.place_order(markethubdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get markethub Client In view", error);
+          }
+          //End Process markethub admin client
+
+
 
 
           } else {
@@ -777,6 +861,73 @@ app.post('/broker-signals', async (req, res) => {
           //End Process Tading View Client UPSTOX  
 
 
+          //Process Tading View Client DHAN
+          try {
+            const dhanCollection = db1.collection('dhanView');
+            const dhandocuments = await dhanCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' dhan TRADING VIEW CLIENT LENGTH ' + dhandocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+            if (dhandocuments.length > 0) {
+              dhan.place_order(dhandocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get dhan Client In view", error);
+          }
+          //End Process Tading View Client DHAN 
+
+
+          //Process Tading View Client fyers
+          try {
+            const fyersCollection = db1.collection('fyersView');
+            const fyersdocuments = await fyersCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' fyers TRADING VIEW CLIENT LENGTH ' + fyersdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+            if (fyersdocuments.length > 0) {
+              fyers.place_order(fyersdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get fyers Client In view", error);
+          }
+          //End Process Tading View Client fyers 
+
+
+          
+           //Process Tading View Client markethub
+           try {
+            const markethubCollection = db1.collection('markethubView');
+            const markethubdocuments = await markethubCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' markethub TRADING VIEW CLIENT LENGTH ' + markethubdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+            if (markethubdocuments.length > 0) {
+              markethub.place_order(markethubdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get markethub Client In view", error);
+          }
+          //End Process Tading View Client markethub 
+
+
 
         
 
@@ -855,7 +1006,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
             // MainSignals FIND IN COLLECTION
-            if (findMainSignals.length == 0) {
+            // if (findMainSignals.length == 0) {
 
               var Entry_MainSignals_req = {
                 symbol: input_symbol,
@@ -895,35 +1046,41 @@ app.post('/broker-signals', async (req, res) => {
               const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
               await Entry_MainSignals.save();
 
-            } else {
+            // } else {
 
-              const entry_qty = Number(findMainSignals[0].entry_qty) || 0; // Use 0 if entry_qty is undefined or null
-              const lot_size = Number(findMainSignals[0].lot_size) || 0; // Use 0 if lot_size is undefined or null
-              const qty_percent1 = Number(qty_percent) || 0; // Use 0 if qty_percent is not a valid number
-              const result = entry_qty + (lot_size * Math.ceil(qty_percent1 / 100));
+            //   const entry_qty = Number(findMainSignals[0].entry_qty) || 0; // Use 0 if entry_qty is undefined or null
+            //   const lot_size = Number(findMainSignals[0].lot_size) || 0; // Use 0 if lot_size is undefined or null
+            //   const qty_percent1 = Number(qty_percent) || 0; // Use 0 if qty_percent is not a valid number
+            //   const result = entry_qty + (lot_size * Math.ceil(qty_percent1 / 100));
 
 
-              var updatedData = {
-                entry_price: (((parseFloat(price) * parseFloat(qty_percent)) + (parseFloat(findMainSignals[0].entry_price) * parseFloat(findMainSignals[0].entry_qty_percent))) / (parseFloat(findMainSignals[0].entry_qty_percent) + parseFloat(qty_percent))),
+            //   var updatedData = {
+            //     entry_price: (((parseFloat(price) * parseFloat(qty_percent)) + (parseFloat(findMainSignals[0].entry_price) * parseFloat(findMainSignals[0].entry_qty_percent))) / (parseFloat(findMainSignals[0].entry_qty_percent) + parseFloat(qty_percent))),
 
-                entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
+            //     entry_qty_percent: (parseFloat(qty_percent) + parseFloat(findMainSignals[0].entry_qty_percent)),
 
-                entry_qty: result,
+            //     entry_qty: result,
 
-                entry_dt_date: current_date
-              }
-              updatedData.$addToSet = { signals_id: SignalSave._id };
+            //     entry_dt_date: current_date
+            //   }
+            //   updatedData.$addToSet = { signals_id: SignalSave._id };
 
-              // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
-              const updatedDocument = await MainSignals.findByIdAndUpdate(findMainSignals[0]._id, updatedData)
+            //   // UPDATE PREVIOUS SIGNAL TO THIS SIGNAL 
+            //   const updatedDocument = await MainSignals.findByIdAndUpdate(findMainSignals[0]._id, updatedData)
 
-            }
+            // }
 
 
           }
           else if (type == "LX" || type == "lx" || type == "SX" || type == "Sx") {
 
-            var ExitMainSignals = await MainSignals.find(findSignal)
+            const updatedFindSignal = {
+              ...findSignal,
+              exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
+            };
+  
+            console.log("updatedFindSignal ",updatedFindSignal)
+            var ExitMainSignals = await MainSignals.find(updatedFindSignal)
 
             // // ExitMainSignals  FIND IN COLLECTION
             if (ExitMainSignals.length != 0) {
@@ -961,6 +1118,8 @@ app.post('/broker-signals', async (req, res) => {
                 const updatedDocument = await MainSignals.findByIdAndUpdate(ExitMainSignals[0]._id, updatedData)
 
               } else {
+
+              console.log("ExitMainSignals",ExitMainSignals)
 
                 if (parseFloat(ExitMainSignals[0].entry_qty_percent) >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
 
@@ -1021,7 +1180,7 @@ app.post('/broker-signals', async (req, res) => {
 // Server start
 app.listen(process.env.PORT, () => {
 
-  ConnectSocket()
+ // ConnectSocket()
   console.log(`Broker Server is running on http://0.0.0.0:${process.env.PORT}`)
 
 });

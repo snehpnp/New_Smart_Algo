@@ -106,6 +106,10 @@ import AddStrategyToClients from '../layout/Admin/Service/AllStrategy/AddStrateg
 import BrokerInfor from '../layout/Admin/BrokersInformation/Broker_info';
 
 
+// CHART DETAILS SET
+import ChartDetail from '../layout/Admin/ChartInformation/Chart_info';
+
+
 import { Get_Pmermission } from "../ReduxStore/Slice/Users/DashboardSlice";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -210,6 +214,8 @@ const Admin = () => {
                 <Route exact path="/optionchain" element={<Opation_Chain />} />
                 <Route exact path="/openposition" element={<Open_Positions />} />
                 <Route exact path="/addstratgytoclients" element={<AddStrategyToClients/>} />
+               
+                <Route exact path="/chart" element={<ChartDetail/>} />
 
 
 

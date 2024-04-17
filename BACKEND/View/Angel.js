@@ -41,6 +41,12 @@ async function createViewAngel() {
       {
         $unwind: '$client_services',
       },
+
+      {
+        $match: {
+          'client_services.active_status': '1'
+        }
+      },
       {
         $lookup: {
           from: "services",

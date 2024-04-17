@@ -30,11 +30,15 @@ class Tradehistory {
             let stg1
             let ser1
             //  For Strategy
-            if (strategy === "null") {
+
+
+            const strategyWord = strategy.trim();
+
+            if (strategyWord === "null") {
                 stg1 = { $exists: true }
 
             } else {
-                stg1 = strategy
+                stg1 = strategyWord
             }
 
             //  For Service
@@ -99,9 +103,79 @@ class Tradehistory {
                   },
                 },
               ]);
+
+            const filteredSignals_tradesymbols = await MainSignals_modal.aggregate([
+                {
+                  $match: {
+                    dt_date: {
+                      $gte: startDate,
+                      $lte: endDate,
+                    },
+                    client_persnal_key: client_persnal_key1,
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "signals",
+                    localField: "signals_id",
+                    foreignField: "_id",
+                    as: "result",
+                  },
+                },
+                {
+                  $lookup: {
+                    from: "services",
+                    localField: "symbol",
+                    foreignField: "name",
+                    as: "result1",
+                  },
+                },
+                {
+                  $sort: {
+                    _id: -1,
+                  },
+                },
+                {
+                  $match: {
+                    $expr: {
+                      $gt: [
+                        { $size: "$result" },
+                        0
+                      ],
+                    },
+                  },
+                },
+                {
+                  $match: {
+                    $expr: {
+                      $gt: [
+                        { $size: "$result1" },
+                        0
+                      ],
+                    },
+                  },
+                },
+              ]);
               
 
+              
 
+             // console.log("filteredSignals ",filteredSignals)
+
+
+              const groupedData = filteredSignals_tradesymbols.reduce((acc, curr) => {
+                if (!acc[curr.trade_symbol]) {
+                  acc[curr.trade_symbol] = 1;
+                } else {
+                  acc[curr.trade_symbol]++;
+                }
+                return acc;
+              }, {});
+              
+              const trade_symbols_filter = Object.keys(groupedData);
+
+             // console.log("trade_symbols_filter ",trade_symbols_filter)
+              
             if (filteredSignals.length > 0) {
 
                 filteredSignals.filter(function (item) {
@@ -117,7 +191,7 @@ class Tradehistory {
             if (filteredSignals.length === 0) {
                 return res.send({ status: false, msg: 'No signals founddate range.', data: [] });
             }
-            return res.send({ status: true, msg: 'Filtered Tradehistory', data: filteredSignals });
+            return res.send({ status: true, msg: 'Filtered Tradehistory', data: filteredSignals ,trade_symbols_filter : trade_symbols_filter });
 
 
         } catch (error) {
