@@ -547,13 +547,6 @@ const AllClients = () => {
 
 
 
-
-
-
-
-
-
-
   return (
     <>
       {getAllClients.loading ? (
