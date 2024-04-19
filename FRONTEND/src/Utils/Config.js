@@ -1,7 +1,7 @@
 
 // Front-End Comman Url  
 
-export const react_domain = `https://trade.pandpinfotech.com`;
+export const react_domain = `${window.location.origin}`;
 
 
 // export const smartAlogUrl = `https://trade.pandpinfotech.com/backend/`;
