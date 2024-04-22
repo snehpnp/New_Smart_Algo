@@ -396,7 +396,7 @@ const TradeHistory = () => {
                          return {
                              ...item,
                              sl_status: "1",
-                             [name]: event.target.value ? event.target.value : "testtt",
+                             [name]: event.target.value ? event.target.value : "0",
                          };
                      }
                      return item;
@@ -520,8 +520,12 @@ const TradeHistory = () => {
 
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
-        //console.log("CreateSignalRequest ",CreateSignalRequest.length)
+      //  console.log("CreateSignalRequest ",CreateSignalRequest.length)
+        
+       // console.log("CreateSignalRequest ",CreateSignalRequest)
+       
 
+         
         let count = 0
 
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
@@ -541,13 +545,14 @@ const TradeHistory = () => {
            
             console.log("req - ",req)
              
-            console.log("count ",count)
+          //  console.log("count ",count)
            // console.log("getBrokerUrl - ",getBrokerUrl)
-
+               
+            
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                 //url: 'http://localhost:8000/broker-signals',
+               //  url: 'http://localhost:8000/broker-signals',
                 url: `${getBrokerUrl && getBrokerUrl}`,
                 headers: {
                     'Content-Type': 'text/plain'

@@ -335,6 +335,16 @@ app.post('/broker-signals', async (req, res) => {
       var qty_percent = signals.Quntity;
       var client_key = signals.Key;
       var TradeType = signals.TradeType;
+     
+
+
+
+
+      var sl_status = "1";
+      if (signals.sl_status != undefined) {
+        sl_status = signals.sl_status;
+      }
+
       var Target = 0;
       if (signals.Target != undefined) {
         Target = signals.Target;
@@ -358,7 +368,8 @@ app.post('/broker-signals', async (req, res) => {
 
       var demo = signals.Demo;
 
-     
+       console.log("signals",signals)
+      
 
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
@@ -444,13 +455,13 @@ app.post('/broker-signals', async (req, res) => {
             instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType ,strike: strike}
 
           } else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType ,strike: strike}
 
           } else if (segment == 'MF' || segment == 'mf') {
             instrument_query = { symbol: input_symbol, segment: "MF", expiry: expiry }
@@ -961,7 +972,7 @@ app.post('/broker-signals', async (req, res) => {
           var strike;
           if (strike == undefined || strike == '') { strike = "0" } else { strike = strike }
 
-
+         
 
           try {
 
@@ -997,12 +1008,12 @@ app.post('/broker-signals', async (req, res) => {
             
           }
 
-
+          //console.log("findSignal -- strike",findSignal)
 
           // ENTRY OR EXIST CHECK
           if (type == "LE" || type == "le" || type == "SE" || type == "Se") {
 
-            var findMainSignals = await MainSignals.find(findSignal)
+            // var findMainSignals = await MainSignals.find(findSignal)
 
 
             // MainSignals FIND IN COLLECTION
@@ -1039,7 +1050,7 @@ app.post('/broker-signals', async (req, res) => {
                 exit_time: ExitTime,
                 exit_time1: 0,
                 complete_trade: 0,
-                sl_status: 0,
+                sl_status: sl_status,
                 MakeStartegyName: MakeStartegyName
 
               }
@@ -1079,7 +1090,9 @@ app.post('/broker-signals', async (req, res) => {
               exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
             };
   
-            console.log("updatedFindSignal ",updatedFindSignal)
+            //console.log("updatedFindSignal ",updatedFindSignal)
+
+            
             var ExitMainSignals = await MainSignals.find(updatedFindSignal)
 
             // // ExitMainSignals  FIND IN COLLECTION
