@@ -314,8 +314,8 @@ const AddClient = () => {
     },
     {
       name: 'client_code',
-      label: formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
-      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6',
+      label: formik.values.broker == 21 ? "CLIENT CODE" : formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
+      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6'|| values.broker === '21',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -326,10 +326,10 @@ const AddClient = () => {
     },
     {
       name: 'app_id',
-      label: formik.values.broker == 1 ? 'Verification Code' : formik.values.broker == 5 ? 'Password' : formik.values.broker == 7 ? 'Demat Password' : formik.values.broker == 11 ? 'Password' : formik.values.broker == 2 ? 'Demat UserId' : formik.values.broker == 13 ? 'App Id' : formik.values.broker == 9 ? 'Password' : formik.values.broker == 14 ? 'User Id ' : 'App Id', type: 'text',
+      label: formik.values.broker == 21 ? 'MPIN' :formik.values.broker == 1 ? 'Verification Code' : formik.values.broker == 5 ? 'Password' : formik.values.broker == 7 ? 'Demat Password' : formik.values.broker == 11 ? 'Password' : formik.values.broker == 2 ? 'Demat UserId' : formik.values.broker == 13 ? 'App Id' : formik.values.broker == 9 ? 'Password' : formik.values.broker == 14 ? 'User Id ' : 'App Id', type: 'text',
       showWhen: values =>
         //  values.broker === '2' ||
-        values.broker === '1' || values.broker === '2' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14',
+        values.broker === '1' || values.broker === '2' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker == '21',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -449,8 +449,8 @@ const AddClient = () => {
     },
     {
       name: 'client_code',
-      label: formik.values.broker == 20 ? "CLIENT ID": formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
-      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6'|| values.broker === '20',
+      label: formik.values.broker == 21 ? "CLIENT CODE":formik.values.broker == 20 ? "CLIENT ID": formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
+      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6'|| values.broker === '20' || values.broker === '21',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -461,10 +461,10 @@ const AddClient = () => {
     },
     {
       name: 'app_id',
-      label: formik.values.broker == 1 ? 'Verification Code' : formik.values.broker == 5 ? 'Password' : formik.values.broker == 7 ? 'Demat Password' : formik.values.broker == 11 ? 'Password' : formik.values.broker == 2 ? 'Demat UserId' : formik.values.broker == 13 ? 'App Id' : formik.values.broker == 9 ? 'Password' : formik.values.broker == 14 ? 'User Id ' : 'App Id', type: 'text',
+      label: formik.values.broker == 21 ? "MPIN": formik.values.broker == 1 ? 'Verification Code' : formik.values.broker == 5 ? 'Password' : formik.values.broker == 7 ? 'Demat Password' : formik.values.broker == 11 ? 'Password' : formik.values.broker == 2 ? 'Demat UserId' : formik.values.broker == 13 ? 'App Id' : formik.values.broker == 9 ? 'Password' : formik.values.broker == 14 ? 'User Id ' : 'App Id', type: 'text',
       showWhen: values =>
         //  values.broker === '2' ||
-        values.broker === '1' || values.broker === '2' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14',
+        values.broker === '1' || values.broker === '2' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '21',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -657,6 +657,14 @@ const AddClient = () => {
     if (formik.values.broker === '20' || formik.values.broker === 20) {
       formik.setFieldValue('app_id', 'null');
       formik.setFieldValue('app_key', 'null');
+      formik.setFieldValue('api_type', 'null');
+      formik.setFieldValue('demat_userid', 'null');
+    }
+
+    if (formik.values.broker === '21' || formik.values.broker === 21) {
+      formik.setFieldValue('app_id', 'null');
+      formik.setFieldValue('app_key', 'null');
+      formik.setFieldValue('client_code', 'null');
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }

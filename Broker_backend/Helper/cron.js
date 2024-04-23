@@ -4,6 +4,7 @@ module.exports = function (app) {
     const axios = require('axios');
     const fs = require('fs');
     var path = require('path');
+    const AdmZip = require('adm-zip');
     // 1. LOGOUT AND TRADING OFF ALL USER 
     cron.schedule('* 1 * * *', () => {
         console.log('Run First Time');
@@ -13,8 +14,10 @@ module.exports = function (app) {
     
     cron.schedule('10 7 * * *', () => {
         console.log('Run First Time');
-        downloadZerodhatoken()
-        downloadAndExtractUpstox()
+        downloadAndSwastika();
+        downloadZerodhatoken();
+        downloadAndExtractUpstox();
+        
     });
     
     // ALL Alice Token Genrate
@@ -196,11 +199,60 @@ module.exports = function (app) {
 
     }
 
+       // Swastika Token get
+       async function downloadAndSwastika() {
+        try {
+            
+            var ulrs = [
+                {url:"https://justradeuat.swastika.co.in/NSE_symbols.txt.zip",filename:"NSE_symbols.txt.zip"},
+                {url:"https://justradeuat.swastika.co.in/NFO_symbols.txt.zip",filename:"NFO_symbols.txt.zip"},
+                {url:"https://justradeuat.swastika.co.in/MCX_symbols.txt.zip",filename:"MCX_symbols.txt.zip"},{url:"https://justradeuat.swastika.co.in/CDS_symbols.txt.zip",filename:"CDS_symbols.txt.zip"},
+                {url:"https://justradeuat.swastika.co.in/BSE_symbols.txt.zip",filename:"BSE_symbols.txt.zip"},
+                {url:"https://justradeuat.swastika.co.in/NCX_symbols.txt.zip",filename:"NCX_symbols.txt.zip"}
+    
+            ];
+    
+           ulrs.forEach(async function(item) {
+                 //   console.log("urls",url);
+                //  const url = 'https://justradeuat.swastika.co.in/NFO_symbols.txt.zip';
+            
+                 // Download the zip file
+                 const response = await axios.get(item.url, { responseType: 'arraybuffer' });
+         
+                 // Create a folder to store the extracted files
+                 const outputFolder = path.join(__dirname, '../AllInstrumentToken/swastika');
+                 if (!fs.existsSync(outputFolder)) {
+                     fs.mkdirSync(outputFolder);
+                 }
+         
+                 // Save the zip file
+                 const zipFilePath = path.join(__dirname, item.filename);
+                 fs.writeFileSync(zipFilePath, Buffer.from(response.data, 'binary'));
+         
+                 // Extract the zip file
+                 const zip = new AdmZip(zipFilePath);
+                 zip.extractAllTo(outputFolder, true);
+         
+                 // Clean up the downloaded zip file
+                 fs.unlinkSync(zipFilePath);
+    
+    
+            console.log('Download and extraction completed successfully '+item.url + " filename ",item.filename);
+    
+            });
 
-    // app.get('/chek-token', async (req, res) => {
-    //     downloadFyerstoken()
-    //      res.send("okkk")
-    //   })
+    
+        } catch (err) {
+            console.error('Error:', err);
+        }  
+
+    }
+
+
+    app.get('/chek-token', async (req, res) => {
+       // downloadAndSwastika()
+         res.send("okkk")
+      })
 
 
   

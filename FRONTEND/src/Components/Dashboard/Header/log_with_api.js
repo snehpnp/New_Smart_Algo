@@ -137,11 +137,37 @@ export const loginWithApi = async (broker_id, UserDetails) => {
             
           });
 
-
-
     }
     else if (broker_id === "21" || broker_id === 21) {
         alert("broker-21")
+        var totp = prompt("Enter TOTP")
+        console.log("totp ",totp)
+
+        axios({
+            url: `${Config.base_url}swastika`,
+            method: "post",
+            data: {
+                Email : UserDetails.Email,
+                totp:totp
+            },
+          }).then((res) => {
+            // console.log("res", res);
+            if (res.data.status == true) {
+                alert(res.data.msg)
+                window.location.reload();
+            //   setrefresh(!refresh);
+            //   setShowAlert(true);
+            //   setAlertColor("success");
+            //   setTextAlert(res.data.msg);
+            } else {
+                alert(res.data.msg)
+            //   setrefresh(!refresh);
+            //   setShowAlert(true);
+            //   setAlertColor("error");
+            //   setTextAlert(res.data.msg);
+            }
+            
+          });
     }
     else if (broker_id === "22" || broker_id === 22) {
         alert("broker-22")
