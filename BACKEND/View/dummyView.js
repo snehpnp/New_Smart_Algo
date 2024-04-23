@@ -2742,6 +2742,11 @@ db.createView("open_position", "mainsignals",
   {
       $unwind: '$livePrice',
   },
+
+  
+
+
+
   {
       $match: {
           $and: [

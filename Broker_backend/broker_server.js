@@ -257,8 +257,7 @@ const markethub = require('./Broker/markethub')
 
 // BROKER SIGNAL
 app.post('/broker-signals', async (req, res) => {
-  
- 
+
   var d = new Date();
   var current_date = [d.getFullYear(),
   d.getMonth() + 1,
