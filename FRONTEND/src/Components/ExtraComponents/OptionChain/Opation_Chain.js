@@ -314,7 +314,6 @@ const HelpCenter = () => {
     // ------------------------------------ CREATE-CHAIN-FOR-EXECUTE-TRADE ------------------------------------
 
 
-    //  console.log("CreateSignalRequest ",CreateSignalRequest)
 
 
 
@@ -487,7 +486,6 @@ const HelpCenter = () => {
 
 
 
-                   // console.log("cpppp", response.data.status)
 
                     if (response.data.status) {
 
@@ -572,7 +570,6 @@ const HelpCenter = () => {
         // Check if the current time is after 3:30 PM in IST timezone
         const isAfterCutoffTime = new Date(currentDateIST).getTime() > cutoffTimeIST.getTime();
 
-        // console.log("isAfterCutoffTime", isAfterCutoffTime)
 
 
 
@@ -787,7 +784,6 @@ const filterFunction = async () => {
         return item.symbol.toLowerCase().includes(SerachService.toLowerCase())
     });
 
-    console.log(" filteredData add option chain stock ",filteredData)
 
     if (SerachService === "") {
         setstate([])
@@ -850,7 +846,7 @@ useEffect(() => {
             await dispatch(Option_Symbols_Update_status({ req: selectedServices, token: token })).unwrap()
                 .then((response) => {
 
-                    console.log("response.status ",response.status)
+                    
                     if (response.status) {
                       toast.success(response.msg);
                       setSerachService('')
@@ -885,8 +881,7 @@ useEffect(() => {
 
 
 
-    console.log("selectedServices --- ",selectedServices)
-    console.log("tags1 --- ",tags1)
+    
     
 
     return (
