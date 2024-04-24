@@ -2903,7 +2903,21 @@ db.createView("zerodhaView", "users",
 
           tp : "0" ,
 
-          ts : "",
+          ts: {
+            $cond: {
+              if: {
+                $and:
+                  [
+                    { $eq: ['$category.segment', 'C'] },
+                  ]
+              },
+              then: "$service.zebu_token",
+              else: ""
+
+            }
+          },
+
+          tt : "B",
          
         }
       }
