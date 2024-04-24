@@ -86,13 +86,12 @@ const AllClients = () => {
       });
   };
 
-  //console.log("BrokerDetails ",BrokerDetails)
+ 
 
   const Brokerdata = async () => {
   
     await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
         .then((response) => {
-           console.log(" response broker data",response)
             if (response.status) {
               setBrokerDetails(response.data);
             }
@@ -139,7 +138,6 @@ const AllClients = () => {
         if (response.status) {
 
 
-          console.log("client :", response);
           if (dashboard_filter !== undefined) {
             let abc =
               response.data &&
@@ -479,7 +477,7 @@ const AllClients = () => {
                   className="mx-1"
                 />
               </span>
-            </Link>
+            </Link> 
             {row.license_type == "1" ?
               <Link>
                 <span data-toggle="tooltip" data-placement="top" title="Delete">
@@ -513,7 +511,7 @@ const AllClients = () => {
       return "Demo";
     } else {
 
-     // console.log("BrokerDetails ",BrokerDetails)
+ 
       
       const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
       if(foundNumber != undefined){
@@ -561,12 +559,9 @@ const AllClients = () => {
   };
 
   // MANAGE MULTIFILTER
- 
-
   useEffect(() => {
-
     const filteredData = originalData.filter((item) => {
-    //  console.log("item", item.broker);
+    
       const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
       const filter3Match = selectBroker === "null" || item.broker === selectBroker;
       const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
@@ -597,9 +592,6 @@ const AllClients = () => {
       loading: false,
       data: originalData,
     });
-    console.log("originalData ", originalData)
-
-
   };
 
   //  For CSV
@@ -726,29 +718,7 @@ const AllClients = () => {
                       {element.title}
                     </option>
                   ))}
-
-
-
-                  {/* <option value="null">All</option>
-                    <option value="1">markethub</option>
-                    <option value="2">Alice Blue</option>
-                    <option value="3">Master Trust</option>
-                    <option value="4">Motilal Oswal</option>
-                    <option value="5">Zebull</option>
-                    <option value="6">IIFl</option>
-                    <option value="7">Kotak</option>
-                    <option value="8">Mandot</option>
-                    <option value="9">Choice</option>
-                    <option value="10">Anand Rathi</option>
-                    <option value="11">B2C</option>
-                    <option value="12">Angel</option>
-                    <option value="13">Fyers</option>
-                    <option value="14">5-Paisa</option>
-                    <option value="15">Zerodha</option>
-                    <option value="19">Upstox</option>
-                    <option value="20">Dhan</option> */}
-
-
+ 
                 </select>
                 </div>
               </div>

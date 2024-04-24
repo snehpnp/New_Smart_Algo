@@ -151,7 +151,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
 
 
                 </> :
-
                   field.type === "radio" ? <>
 
                     <label
@@ -229,9 +228,10 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                           <div className="row d-flex">
                             <div className="col-lg-12 ">
                               <div class="form-check custom-checkbox mb-3">
-                                <label className="col-lg-6 " for={field.name}>{field.name}</label>
-                                <input type={field.type} name={field.name} className="form-control" id={field.name}
+                                <label className="col-lg-6 " for={field.name}>{field.label}</label>
+                                <input type={field.type} name={field.name} className="form-control" id={field.name} 
                                   {...formik.getFieldProps(field.name)}
+                                  readOnly={field.disable}
 
                                 //  min={field.name === "todate" ? fromDate : getCurrentDate()}
                                 />

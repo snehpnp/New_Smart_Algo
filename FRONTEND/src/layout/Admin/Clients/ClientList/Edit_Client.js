@@ -340,7 +340,7 @@ const EditClient = () => {
     {
       name: 'fromDate', label: 'From Date', type: 'date',
       showWhen: values => values.licence === '1'
-      , label_size: 12, col_size: 6, disable: false
+      , label_size: 12, col_size: 6, disable: true
     },
     {
       name: 'todate', label: 'To Date', type: 'date',
