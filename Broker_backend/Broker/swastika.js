@@ -14,9 +14,7 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
      
-
-      
-
+  console.log("okkk swastika...")
     try {
 
         var dt = signals.DTime;
@@ -63,9 +61,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
         const filePath_swastika = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
 
-    //    const command = `grep ,${pattern}, ${filePath_swastika}`;
+     //    const command = `grep ,${pattern}, ${filePath_swastika}`;
        const command = `grep -E ".*,(${pattern}),.*.*(${input_symbol}).*" ${filePath_swastika}`;
-
+     
         console.log("command ", command)
 
         exec(command, (error, stdout, stderr) => {
@@ -82,13 +80,17 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             if(parts){
             // console.log("Extracted Part:", parts[9]);
             if (segment && segment.toUpperCase() === 'C') {
-                trading_symbol = token[0].instrument_token
-            } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
-                trading_symbol = parts[9];
-            } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
-                trading_symbol = parts[8];
-            } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
-                trading_symbol = parts[8];
+                Tsym = parts[4];
+            }
+             else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O' || segment.toUpperCase() === 'FO')) 
+             {
+                Tsym = parts[4];
+            }
+             else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
+                Tsym = parts[6];
+            }
+             else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
+                Tsym = parts[5];
             } else {
                 console.log('Invalid segment value');
                 
@@ -103,7 +105,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         order_status: 0,
                         order_id: "",
                         trading_symbol: "",
-                        broker_name: "",
+                        broker_name: "SWASTIKA",
                         send_request: "",
                         reject_reason: "Invalid segment value",
             
@@ -135,22 +137,22 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             } 
             const requestPromises = AllClientData.map(async (item) => {
 
-            item.postdata.symbol_id = token[0].instrument_token;
-
-            item.postdata.trading_symbol = trading_symbol;
+                item.postdata.Tsym = Tsym;
+               // item.postdata.Tsym = "BANKNIFTY24APR24P47500";
+            
 
 
             if (type == 'LE' || type == 'SX') {
-                item.postdata.transtype = 'BUY';
+                item.postdata.Trantype = 'B';
             } else if (type == 'SE' || type == 'LX') {
-                item.postdata.transtype = 'SELL';
+                item.postdata.Trantype = 'S';
             }
 
             // console.log("price", price)
             //console.log("item.client_services.order_type", item.client_services.order_type)
 
             if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                item.postdata.price = price
+                item.postdata.Prc = price
             }
 
             //  console.log("postData after ", item.postdata);
@@ -271,49 +273,42 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
       
         const requestPromises = AllClientData.map(async (item) => {
     
-                // console.log("user id ", item.demat_userid)
-                // console.log("postdata before", item.postdata)
-                if (segment.toUpperCase() != "C") {
-                    item.postdata.symbol_id = token[0].instrument_token;
-                }
-    
-    
+            
                 if (type == 'LE' || type == 'SX') {
-                    item.postdata.transtype = 'BUY';
+                    item.postdata.Trantype = 'B';
                 } else if (type == 'SE' || type == 'LX') {
-                    item.postdata.transtype = 'SELL';
+                    item.postdata.Trantype = 'S';
                 }
     
                 // console.log("price", price)
                 // console.log("item.client_services.order_type", item.client_services.order_type)
     
                 if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                    item.postdata.price = price
-                }
-    
-    
-    
+                    item.postdata.Prc = price
+                }    
                 var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
-    
-                var data_possition = {
-                    "ret": "NET"
-                }
-                var config = {
+                    
+                let data_possition = JSON.stringify({
+                    "Uid": item.client_code,
+                    "Actid": item.client_code
+                  });
+                  
+                  let config = {
                     method: 'post',
-                    url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/positionAndHoldings/positionBook',
-                    headers: {
-                        'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
+                    maxBodyLength: Infinity,
+                    // url: 'https://stagingtradingorestapi.swastika.co.in/kb/PositionBook/GetPositionBookList',
+                    url: 'https://tradingorestapi.swastika.co.in/kb/PositionBook/GetPositionBookList',
+                    headers: { 
+                        'Authorization': 'Bearer '+item.access_token, 
                         'Content-Type': 'application/json'
                     },
-                    data: JSON.stringify(data_possition)
+                    data: data_possition
                 };
                 axios(config)
                     .then(async (response) => {
-                        // console.log("response", response.data)
                        
-    
-    
-                        if (Array.isArray(response.data)) {
+                    
+                        if (response.data.IsError != true) {
     
                             fs.appendFile(filePath, 'TIME ' + new Date() + ' SWASTIKA POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
                                 if (err) {
@@ -321,58 +316,14 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                 }
                             });
     
-                            const Exist_entry_order = response.data.find(item1 => item1.Token === token[0].instrument_token && item1.Pcode == item.postdata.pCode);
+                           
+                            const Exist_entry_order = response.data.Result.Data.find(item1 => item1.Token === token[0].instrument_token);
+                          //  console.log("Exist_entry_order",Exist_entry_order)
     
                             if(Exist_entry_order != undefined){
-                                if (segment.toUpperCase() == 'C') {
-    
-                                    const possition_qty = parseInt(Exist_entry_order.Bqty) - parseInt(Exist_entry_order.Sqty);
-                                    // console.log("possition_qty Cash", possition_qty);
-                                    if (possition_qty == 0) {
-                                        // console.log("possition_qty Not Available", possition_qty);
-                                        BrokerResponse.create({
-                                            user_id: item._id,
-                                            receive_signal: signal_req,
-                                            strategy: strategy,
-                                            type: type,
-                                            symbol: input_symbol,
-                                            order_status: "Entry Not Exist",
-                                            reject_reason: "This Script position Empty ",
-                                            broker_name: "SWASTIKA",
-                                            send_request: send_rr,
-                                            open_possition_qty: possition_qty,
-    
-                                        })
-                                            .then((BrokerResponseCreate) => {
-                                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                                            })
-                                            .catch((err) => {
-                                                try {
-                                                    console.log('Error creating and saving user:', err);
-                                                } catch (e) {
-                                                    console.log("duplicate key")
-                                                }
-    
-                                            });
-    
-    
-                                    } else {
-    
-                                        console.log("possition_qty Cash trade", possition_qty);
-                                        if (possition_qty > 0 && type == 'LX') {
-                                            ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                        } else if (possition_qty < 0 && type == 'SX') {
-                                            ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                        }
-                                    }
-    
-    
-                                } else {
-
-
-                                    item.postdata.trading_symbol = Exist_entry_order.Tsym;
-
-                                    const possition_qty = Exist_entry_order.Netqty;
+                            
+                                    item.postdata.Tsym = Exist_entry_order.Tsym;
+                                    const possition_qty = parseInt(Exist_entry_order.Daybuyqty) - parseInt(Exist_entry_order.Daysellqty);
                                     // console.log("possition_qty", possition_qty);
     
                                     if (possition_qty == 0) {
@@ -413,7 +364,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
     
                                     }
     
-                                }
+                              
                             }else{
 
                                 BrokerResponse.create({
@@ -446,6 +397,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
     
                            
                         } else {
+
+                            const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
     
                             BrokerResponse.create({
                                 user_id: item._id,
@@ -458,7 +411,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                 trading_symbol: "",
                                 broker_name: "SWASTIKA",
                                 send_request: send_rr,
-                                reject_reason: "All position Empty",
+                                reject_reason: message,
     
                             })
                                 .then((BrokerResponseCreate) => {
@@ -652,17 +605,17 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     });
 
 
-    let config = {
+   
+    var config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-        headers: {
-            'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
-
-            'Content-Type': 'application/json',
+        // url: 'https://stagingtradingorestapi.swastika.co.in/kb/PlaceOrders/PlaceOrder',
+        url: 'https://tradingorestapi.swastika.co.in/kb/PlaceOrders/PlaceOrder',
+        headers: { 
+            'Authorization': 'Bearer '+item.access_token,
+            'Content-Type': 'application/json'
         },
-        data: JSON.stringify([item.postdata])
-
+        data : JSON.stringify(item.postdata)
     };
     // console.log(config);
     axios(config)
@@ -674,7 +627,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                 }
             });
 
-            if (response.data[0].stat == "Ok") {
+            if (response.data.IsError != true) {
 
                 BrokerResponse.create({
                     user_id: item._id,
@@ -682,8 +635,8 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data[0].stat,
-                    order_id: response.data[0].NOrdNo,
+                    order_status: response.data.Result.Data.Stat,
+                    order_id: response.data.Result.Data.NorenOrdNo,
                     trading_symbol: "",
                     broker_name: "SWASTIKA",
                     send_request: send_rr,
@@ -845,16 +798,16 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
         }
     });
 
-    let config = {
+    var config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-        headers: {
-            'Authorization': "Bearer " + item.demat_userid + " " + item.access_token,
+        // url: 'https://stagingtradingorestapi.swastika.co.in/kb/PlaceOrders/PlaceOrder',
+        url: 'https://tradingorestapi.swastika.co.in/kb/PlaceOrders/PlaceOrder',
+        headers: { 
+            'Authorization': 'Bearer '+item.access_token,
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify([item.postdata])
-
+        data : JSON.stringify(item.postdata)
     };
 
     axios(config)
@@ -869,15 +822,15 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
 
 
-            if (response.data[0].stat == "Ok") {
+            if (response.data.IsError != true) {
                 BrokerResponse.create({
                     user_id: item._id,
                     receive_signal: signal_req,
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data[0].stat,
-                    order_id: response.data[0].NOrdNo,
+                    order_status: response.data.Result.Data.Stat,
+                    order_id: response.data.Result.Data.NorenOrdNo,
                     trading_symbol: "",
                     broker_name: "SWASTIKA",
                     send_request: send_rr,

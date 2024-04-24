@@ -27,7 +27,7 @@ class Swastika {
     // Get GetAccessToken ANGEL
     async GetAccessTokenSwastika(req, res) {
        
-        console.log("req ",req.body.Email)
+        //console.log("req ",req.body.Email)
        
         var user_email = req.body.Email;
         var totp = req.body.totp;
@@ -191,58 +191,50 @@ const GetAllBrokerResponse = async (user_info,res) => {
  
     try {
         const objectId = new ObjectId(user_info[0]._id);
-       // console.log("objectId ",objectId)
-
        // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
 
-
-
-       // console.log("GetAllBrokerResponse ",FindUserBrokerResponse)
-     
-        if (FindUserBrokerResponse.length > 0) {
-    
+        if (FindUserBrokerResponse.length > 0) {    
             FindUserBrokerResponse.forEach((data1) => {    
-              
-               
-                var config = {
-                    method: 'get',
-                    url: 'http://trdapi.markethubonline.com:27005/api1/orderstatus?client_id='+user_info[0].client_code+'&user_order_number='+data1.order_id,
-                          headers: 
-                          { 
-                          "token": user_info[0].access_token,
-                          "content-type": "application/json" 
-                          },
-                     
-                      };
+          
+                      let data = JSON.stringify({
+                        "Uid": user_info[0].client_code
+                      });
+
+                      var config = {
+                        method: 'post',
+                        maxBodyLength: Infinity,
+                        // url: 'https://stagingtradingorestapi.swastika.co.in/kb/OrderBook/GetOrderBookList',
+                        url: 'https://tradingorestapi.swastika.co.in/kb/OrderBook/GetOrderBookList',
+                        headers: { 
+                            'Authorization': 'Bearer '+user_info[0].access_token, 
+                            'Content-Type': 'application/json'
+                        },
+                        data : data
+
+                    };
+
                 axios(config)
-                    .then(async (response) => {
-                       
+                    .then(async (response) => {                       
                          // console.log("response order details ",response.data.status)
-
-                          const result_order = response.data;
-
+                         if(response.data.IsError != true){
+                            const result_order = response.data.Result.Data.find(item2 => item2.norenordno === data1.order_id);
                             if(result_order != undefined){
-
-                                const message = (JSON.stringify(result_order));
-    
+                                const message = (JSON.stringify(result_order));    
                                 let result = await BrokerResponse.findByIdAndUpdate(
                                     { _id: data1._id },
                                     {
                                         order_view_date: message,
                                         order_view_status: '1',
-                                        order_view_response: response.data.data[0].status,
-                                        reject_reason: response.data.data[0].reason
+                                        order_view_response: result_order.status,
+                                        reject_reason: result_order.Rejreason
         
                                     },
                                     { new: true }
                                 )
 
                               }else{
-
-
-                                 const message = (JSON.stringify(result_order));
-    
+                                const message = (JSON.stringify(result_order));    
                                 let result = await BrokerResponse.findByIdAndUpdate(
                                     { _id: data1._id },
                                     {
@@ -252,9 +244,11 @@ const GetAllBrokerResponse = async (user_info,res) => {
                                     },
                                     { new: true }
                                 )
-
                               }
-           
+
+                         }else{
+
+                         }
 
                        
                     })

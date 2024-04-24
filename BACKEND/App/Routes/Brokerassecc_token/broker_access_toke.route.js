@@ -109,7 +109,7 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
     }
 
     // Swastika   -  21
-   else if(broker == 21){
+    else if(broker == 21){
     GetOrderFullInformationSwastika(req,res,result);
     }
 

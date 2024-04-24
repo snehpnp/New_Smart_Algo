@@ -139,9 +139,9 @@ export const loginWithApi = async (broker_id, UserDetails) => {
 
     }
     else if (broker_id === "21" || broker_id === 21) {
-        alert("broker-21")
+        //alert("broker-21")
         var totp = prompt("Enter TOTP")
-        console.log("totp ",totp)
+      //  console.log("totp ",totp)
 
         axios({
             url: `${Config.base_url}swastika`,
