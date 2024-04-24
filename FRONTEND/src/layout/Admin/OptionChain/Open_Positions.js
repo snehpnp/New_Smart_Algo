@@ -353,8 +353,6 @@ const TradeHistory = () => {
 
 
 
-
-
         setTradeHistoryAllData((prev) => {
             return {
                 ...prev,
@@ -364,7 +362,7 @@ const TradeHistory = () => {
                         return {
                             ...item,
                             sl_status: "1",
-                            [name]: event.target.value ? event.target.value : "testtt",
+                            [name]: event.target.value ? event.target.value : "0",
                         };
                     }
                     return item;
@@ -867,8 +865,8 @@ const TradeHistory = () => {
             <Content Page_title="Open Position" button_status={false}
             >
                 <div className="row col-lg-12">
-                    <div className="col-lg-2">
-                        <div class="mb-3">
+                    <div className="col-lg-3">
+                        <div class="mb-3 ">
                             <label for="exampleFormControlInput1" class="form-label">
                                 Search Something Here
                             </label>
