@@ -20,6 +20,10 @@ const { GetAccessTokenAngel,GetOrderFullInformationAngel} = require('../../Contr
 const { GetAccessTokenFivepaisa,GetOrderFullInformationFivepaisa} = require('../../Controllers/Brokerassecc_token/Fivepaisa')
 
 
+//  FYERS CONTROLLER FILE
+const { GetAccessTokenFyers,GetOrderFullInformationFyers} = require('../../Controllers/Brokerassecc_token/Fyers')
+
+
 // ZERODHA CONTROLLER FILE
 const { GetAccessTokenZerodha,GetOrderFullInformationZerodha} = require('../../Controllers/Brokerassecc_token/Zerodha')
 
@@ -30,13 +34,19 @@ const { GetAccessTokenUpstox,GetOrderFullInformationUpstox} = require('../../Con
 // Dhan CONTROLLER FILE
 const { GetAccessTokenDhan,GetOrderFullInformationDhan} = require('../../Controllers/Brokerassecc_token/Dhan')
 
+// Markethub CONTROLLER FILE
+const {GetAccessTokenMarkethub,GetOrderFullInformationMarkethub}=require('../../Controllers/Brokerassecc_token/Mhub')
+
+
+// Swastika CONTROLLER FILE
+const {GetAccessTokenSwastika,GetOrderFullInformationSwastika}=require('../../Controllers/Brokerassecc_token/Swastika')
 
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req,res)=>{
     
     let user_id =  req.body.user_id;
     const objectId = new ObjectId(user_id);
-
+    console.log("objectId",objectId)
     const pipeline =[
        {
          $match : {
@@ -48,17 +58,35 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
        }
     ]
    const result = await User.aggregate(pipeline)
-   const broker = result[0].broker;
-   console.log("broker",broker)
 
-   // ALICE BLUE   -  2
-   if(broker == 2){
-     GetOrderFullInformationAll(req,res);
-   }
+
+
+  
    
+
+   if(result.length > 0){
+
+     
+    const broker = result[0].broker;
+    console.log("broker",broker)
+
+
+    // Market Hub   -  1
+     if(broker == 1){
+      GetOrderFullInformationMarkethub(req,res,result);
+     }
+   // ALICE BLUE   -  2
+    else if(broker == 2){
+     GetOrderFullInformationAll(req,res);
+    }
    // ANGEL   -  12
    else if(broker == 12){
     GetOrderFullInformationAngel(req,res,result);
+   }
+
+   // 5 PAISA   -  13
+   else if(broker == 13){
+    GetOrderFullInformationFyers(req,res,result);
    }
 
    // 5 PAISA   -  14
@@ -75,15 +103,26 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
    else if(broker == 19){
     GetOrderFullInformationUpstox(req,res,result);
     }
-
     // DHAN   -  20
    else if(broker == 20){
     GetOrderFullInformationDhan(req,res,result);
     }
 
+    // Swastika   -  21
+    else if(broker == 21){
+    GetOrderFullInformationSwastika(req,res,result);
+    }
+
    else{
     res.send({status:false,msg:"broker not found"});
    }
+
+
+
+  }else{
+    //console.log("User Not found")
+    res.send({status:false,msg:"User Not found"});
+  }
    
       
   }
@@ -112,8 +151,12 @@ router.post('/getall/order/info', GetOrderFullInformationAll_broker);
 // ANGEL
 router.get('/angel', GetAccessTokenAngel);
 
+// Fyers
+router.get('/fyers', GetAccessTokenFyers);
+
 // 5 PPAISA
 router.get('/fivepaisa', GetAccessTokenFivepaisa);
+
 
 // ZERODHA
 router.get('/zerodha', GetAccessTokenZerodha);
@@ -121,8 +164,14 @@ router.get('/zerodha', GetAccessTokenZerodha);
 // Upstox
 router.get('/upstox', GetAccessTokenUpstox);
 
-// Upstox
+// Dhan
 router.post('/dhan', GetAccessTokenDhan);
+
+// Market Hub
+router.post('/markethub', GetAccessTokenMarkethub);
+
+// Swastika
+router.post('/swastika', GetAccessTokenSwastika);
 
 
 module.exports = router;

@@ -169,9 +169,8 @@ const Alice_Socket = async () => {
                           // alert('[close] Connection died');
                         }
                       };
-                  
-                  
-                      socket.onerror = function (error) {
+  
+                     socket.onerror = function (error) {
                         console.log("Socket -- onerror")
                        
                       };

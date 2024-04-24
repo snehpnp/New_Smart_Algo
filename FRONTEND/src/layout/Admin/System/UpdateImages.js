@@ -59,6 +59,10 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
                 }
             }
 
+
+           // console.log("req",req)
+             
+
             await dispatch(Update_smtp_details({ req: req, token: user_token })).unwrap().then((response) => {
 
                 if (response.status === 409) {
@@ -83,6 +87,7 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
         { name: 'favicon', label: 'Favicon', type: 'file', label_size: 12, col_size: 6, disable: false },
         { name: 'watermark', label: 'WaterMark', type: 'file', label_size: 12, col_size: 6, disable: false },
         { name: 'loginimg', label: 'loginImg', type: 'file', label_size: 12, col_size: 6, disable: false },
+       
 
     ];
 

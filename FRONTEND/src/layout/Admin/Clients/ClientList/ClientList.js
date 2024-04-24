@@ -477,8 +477,8 @@ const AllClients = () => {
                   className="mx-1"
                 />
               </span>
-            </Link>
-            {row.license_type == "1"  ?
+            </Link> 
+            {row.license_type == "1" ?
               <Link>
                 <span data-toggle="tooltip" data-placement="top" title="Delete">
                   <Trash2

@@ -111,9 +111,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
       
         const requestPromises = AllClientData.map(async (item) => {
     
-                
-    
-    
                 if (type == 'LE' || type == 'SX') {
                     item.postdata.transaction_type = 'BUY';
                 } else if (type == 'SE' || type == 'LX') {

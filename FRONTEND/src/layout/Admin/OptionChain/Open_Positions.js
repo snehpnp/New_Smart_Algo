@@ -487,7 +487,7 @@ const TradeHistory = () => {
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
 
-
+         
         let count = 0
 
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {

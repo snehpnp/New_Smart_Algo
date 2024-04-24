@@ -1,0 +1,55 @@
+
+NEW TRADE TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:SX,Tr_Price:4568,Price:7,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:47500,OType:PUT,Expiry:24042024,Strategy:Strategy2,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:15:21,Demo:demo
+TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67517
+TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 1
+TIME Wed Apr 24 2024 11:08:45 GMT+0530 (India Standard Time) SWASTIKA POSITION DATA ERROR CATCH - SHK_SWASTIKA ERROR - {"message":"Request failed with status code 401","name":"AxiosError","stack":"AxiosError: Request failed with status code 401\n    at settle (C:\\NEWSMARTALGO\\NEW_ALGO\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (C:\\NEWSMARTALGO\\NEW_ALGO\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:526:35)\n    at endReadableNT (node:internal/streams/readable:1589:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/json","Authorization":"Bearer null eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiMzRBNENEQ0QtQjhFOC00MzBDLUEyMzgtQjU5RTEzRUZDMDNEIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy91c2VyZGF0YSI6IjM0QTRDRENELUI4RTgtNDMwQy1BMjM4LUI1OUUxM0VGQzAzRCIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkNsaWVudCIsImV4cCI6MTcxNDAxMDQwMCwiaXNzIjoiaHR0cHM6Ly90cmFkaW5nb3Jlc3RhcGkuc3dhc3Rpa2EuY28uaW4iLCJhdWQiOiJodHRwczovL3RyYWRpbmdvcmVzdGFwaS5zd2FzdGlrYS5jby5pbiJ9.YKtfZwHWOCTPS5KtP-LpKdAly1dQo_rnKdf9K7iuiHM","User-Agent":"axios/1.5.0","Content-Length":"13","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/positionAndHoldings/positionBook","data":"{\"ret\":\"NET\"}"},"code":"ERR_BAD_REQUEST","status":401}
+
+NEW TRADE TIME Wed Apr 24 2024 11:09:00 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:7,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:47500,OType:PUT,Expiry:24042024,Strategy:Strategy2,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:15:21,Demo:demo
+TIME Wed Apr 24 2024 11:09:00 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67517
+TIME Wed Apr 24 2024 11:09:00 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:09:00 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:09:00 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:09:00 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:09:00 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:09:01 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:09:01 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:09:01 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:09:01 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 1
+
+NEW TRADE TIME Wed Apr 24 2024 11:11:46 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:7,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:47500,OType:PUT,Expiry:24042024,Strategy:Strategy2,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:15:21,Demo:demo
+TIME Wed Apr 24 2024 11:11:46 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67517
+TIME Wed Apr 24 2024 11:11:46 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:11:46 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:11:46 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:11:46 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:11:46 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:11:46 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:11:46 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:11:46 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:11:46 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 1
+
+NEW TRADE TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:7,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:47500,OType:PUT,Expiry:24042024,Strategy:Strategy2,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:15:21,Demo:demo
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 67517
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 1
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) SWASTIKA BEFORE PLACE ORDER USER ENTRY- SHK_SWASTIKA REQUEST -{"Uid":"U2602","Actid":"U2602","Exch":"NFO","Tsym":"BANKNIFTY24APR24P47500","Qty":"15","Prc":"0","Trgprc":"0","Dscqty":"0","Prd":"M","Trantype":"B","Prctyp":"MKT","Ret":"DAY","Remarks":"QRSTP"}
+TIME Wed Apr 24 2024 11:15:36 GMT+0530 (India Standard Time) SWASTIKA AFTER PLACE ORDER USER ENTRY - SHK_SWASTIKA RESPONSE -{"StatusCode":200,"Message":"Request successful.","IsError":false,"ResponseException":null,"Result":{"ResponseId":1,"ResponseMessage":"Order placed successfully","Data":{"Stat":"Ok","Request_time":"11:15:37 24-04-2024","NorenOrdNo":"24042400040771","Emsg":null}}}

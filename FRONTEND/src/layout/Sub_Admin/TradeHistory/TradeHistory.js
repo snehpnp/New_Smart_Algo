@@ -111,6 +111,12 @@ const TradeHistory = () => {
             loading: false,
             data: response.data,
           });
+
+          setServiceData({
+            loading: false,
+            data: response.trade_symbols_filter,
+          });
+
         } else {
           setTradeHistoryData({
             loading: false,
@@ -699,9 +705,9 @@ const TradeHistory = () => {
       });
   };
 
-  useEffect(() => {
-    getSymbols();
-  }, []);
+  // useEffect(() => {
+  //   getSymbols();
+  // }, []);
 
 
   const getservice = async () => {
@@ -734,7 +740,7 @@ const TradeHistory = () => {
   };
 
 
- console.log("ServiceData.data:", ServiceData.data)
+//  console.log("ServiceData.data:", ServiceData.data)
 
   return (
     <>
@@ -792,11 +798,18 @@ const TradeHistory = () => {
                 
                 {ServiceData.data &&
                   ServiceData.data.map((item) => {
+                    // return (
+                    //   <option className="mt-1" value={item.fullname}>
+                    //     {item.fullname}
+                    //   </option>
+                    // );
+
                     return (
-                      <option className="mt-1" value={item.fullname}>
-                        {item.fullname}
+                      <option className="mt-1" value={item}>
+                        {item}
                       </option>
                     );
+                    
                   })}
               </select>
             </div>
