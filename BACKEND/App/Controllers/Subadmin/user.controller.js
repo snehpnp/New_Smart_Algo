@@ -54,7 +54,27 @@ class Employee {
         api_type,
         demat_userid,
         group_service,
+        multiple_strategy_select
       } = req.body;
+
+
+
+      
+      let Strategies_id_array = [];
+     
+
+      if(multiple_strategy_select == "0"){
+        Strategies_id_array.push(Strategies[0].id)
+      }else{
+       let count = 0
+        for (const strategy of Strategies) {
+          count++
+          //console.log("count ",count)
+          if(parseInt(count_strategy_select) >= count){
+          Strategies_id_array.push(strategy.id)
+          }
+        }
+      }
 
       var Role = "USER";
       var StartDate1 = "";
@@ -289,7 +309,8 @@ class Employee {
                 user_id: User_id,
                 group_id: group_service,
                 service_id: data.Service_id,
-                strategy_id: Strategies[0].id,
+                //strategy_id: Strategies[0].id,
+                strategy_id: Strategies_id_array,
                 uniqueUserService: User_id + "_" + data.Service_id,
                 quantity: data.lotsize,
                 lot_size: 1

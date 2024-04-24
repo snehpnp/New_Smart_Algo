@@ -58,10 +58,25 @@ class Employee {
       var Role = "USER";
       var StartDate1 = "";
       var EndDate1 = "";
+
+
       let Strategies_id_array = [];
-      for (const strategy of Strategies) {
-        Strategies_id_array.push(strategy.id)
+     
+
+      if(multiple_strategy_select == "0"){
+        Strategies_id_array.push(Strategies[0].id)
+      }else{
+       let count = 0
+        for (const strategy of Strategies) {
+          count++
+          //console.log("count ",count)
+          if(parseInt(count_strategy_select) >= count){
+          Strategies_id_array.push(strategy.id)
+          }
+        }
       }
+
+
 
 
 
@@ -428,6 +443,7 @@ class Employee {
     try {
 
       var req = req.body.req;
+
       var StartDate1 = "";
       var EndDate1 = "";
 
