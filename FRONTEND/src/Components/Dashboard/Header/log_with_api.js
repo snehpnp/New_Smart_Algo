@@ -56,6 +56,55 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     }
     else if (broker_id === "7" || broker_id === 7) {
         alert("broker-7")
+        // console.log("RUN");
+        axios({
+            url: `${Config.base_url}kotakGetToken`,
+            method: "post",
+            data: {
+                Email : UserDetails.Email,
+            },
+           }).then((res) => {
+            // console.log("res", res);
+            // return
+            if (res.data.status == true) {
+              let value = prompt("Enter Your OTP Here");
+              if (value === null) {
+                // console.log("value", value);
+                return;
+              }
+              axios({
+                url: `${Config.base_url}kotakGetSession`,
+                method: "post",
+                data: {
+                    Email : UserDetails.Email,
+                    otp: value,
+                },
+              }).then((res) => {
+                // console.log("res", res.data);
+                if (res.data.status == true) {
+                    alert(res.data.msg)
+                //   setrefresh(!refresh);
+                //   setShowAlert(true);
+                //   setAlertColor("success");
+                //   setTextAlert("Trading On Successfully");
+                }
+                else if (res.data.status == false) {
+                    alert(res.data.msg)
+                //   setShowAlert(true);
+                //   setAlertColor("success");
+                //   setTextAlert(res.data.msg);
+                }
+              });
+            } else if (res.data.status == false) {
+                alert(res.data.msg)
+            //   setrefresh(!refresh);
+            //   setShowAlert(true);
+            //   setAlertColor("error");
+            //   setTextAlert(res.data.msg);
+            }
+          })
+
+
     }
     if (broker_id === "8" || broker_id === 8) {
         alert("broker-8")

@@ -41,6 +41,9 @@ const {GetAccessTokenMarkethub,GetOrderFullInformationMarkethub}=require('../../
 // Swastika CONTROLLER FILE
 const {GetAccessTokenSwastika,GetOrderFullInformationSwastika}=require('../../Controllers/Brokerassecc_token/Swastika')
 
+// Kotak Neo CONTROLLER FILE
+const {GetkotakGetToken , GetkotakGetSession,GetOrderFullInformationKotakNeo}=require('../../Controllers/Brokerassecc_token/KotakNeo')
+
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req,res)=>{
     
@@ -79,6 +82,11 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
     else if(broker == 2){
      GetOrderFullInformationAll(req,res);
     }
+     
+    // KotakNeo  - 7
+   else if(broker == 7){
+    GetOrderFullInformationKotakNeo(req,res,result);
+   }
    // ANGEL   -  12
    else if(broker == 12){
     GetOrderFullInformationAngel(req,res,result);
@@ -104,15 +112,13 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
     GetOrderFullInformationUpstox(req,res,result);
     }
     // DHAN   -  20
-   else if(broker == 20){
+    else if(broker == 20){
     GetOrderFullInformationDhan(req,res,result);
     }
-
     // Swastika   -  21
     else if(broker == 21){
     GetOrderFullInformationSwastika(req,res,result);
     }
-
    else{
     res.send({status:false,msg:"broker not found"});
    }
@@ -172,6 +178,10 @@ router.post('/markethub', GetAccessTokenMarkethub);
 
 // Swastika
 router.post('/swastika', GetAccessTokenSwastika);
+
+// Kotak Neo
+router.post('/kotakGetToken', GetkotakGetToken);
+router.post('/kotakGetSession', GetkotakGetSession);
 
 
 module.exports = router;
