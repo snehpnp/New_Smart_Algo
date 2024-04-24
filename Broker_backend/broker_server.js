@@ -253,12 +253,12 @@ const upstox = require('./Broker/upstox')
 const dhan = require('./Broker/dhan')
 const fyers = require('./Broker/fyers')
 const markethub = require('./Broker/markethub')
+const swastika = require('./Broker/swastika')
 
 
 // BROKER SIGNAL
 app.post('/broker-signals', async (req, res) => {
-  
- 
+
   var d = new Date();
   var current_date = [d.getFullYear(),
   d.getMonth() + 1,
@@ -335,6 +335,16 @@ app.post('/broker-signals', async (req, res) => {
       var qty_percent = signals.Quntity;
       var client_key = signals.Key;
       var TradeType = signals.TradeType;
+     
+
+
+
+
+      var sl_status = "1";
+      if (signals.sl_status != undefined) {
+        sl_status = signals.sl_status;
+      }
+
       var Target = 0;
       if (signals.Target != undefined) {
         Target = signals.Target;
@@ -358,7 +368,8 @@ app.post('/broker-signals', async (req, res) => {
 
       var demo = signals.Demo;
 
-     
+       console.log("signals",signals)
+      
 
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
@@ -444,13 +455,13 @@ app.post('/broker-signals', async (req, res) => {
             instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType ,strike: strike}
 
           } else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType }
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType ,strike: strike}
 
           } else if (segment == 'MF' || segment == 'mf') {
             instrument_query = { symbol: input_symbol, segment: "MF", expiry: expiry }
@@ -746,6 +757,31 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+          //Process swastika admin client
+          try {
+            const swastikaCollection = db1.collection('swastikaView');
+            const swastikadocuments = await swastikaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' swastika ALL CLIENT LENGTH ' + swastikadocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+
+            if (swastikadocuments.length > 0) {
+              swastika.place_order(swastikadocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get swastika Client In view", error);
+          }
+          //End Process swastika admin client
+
+
+
 
           } else {
 
@@ -929,6 +965,29 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+            //Process Tading View Client swastika
+            try {
+              const swastikaCollection = db1.collection('swastikaView');
+              const swastikadocuments = await swastikaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+  
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' swastika TRADING VIEW CLIENT LENGTH ' + swastikadocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+  
+  
+              if (swastikadocuments.length > 0) {
+                swastika.place_order(swastikadocuments, signals, token, filePath, signal_req);
+              }
+  
+            } catch (error) {
+              console.log("Error Get swastika Client In view", error);
+            }
+            //End Process Tading View Client swastika 
+
+
+
         
 
           }
@@ -961,7 +1020,7 @@ app.post('/broker-signals', async (req, res) => {
           var strike;
           if (strike == undefined || strike == '') { strike = "0" } else { strike = strike }
 
-
+         
 
           try {
 
@@ -997,12 +1056,12 @@ app.post('/broker-signals', async (req, res) => {
             
           }
 
-
+          //console.log("findSignal -- strike",findSignal)
 
           // ENTRY OR EXIST CHECK
           if (type == "LE" || type == "le" || type == "SE" || type == "Se") {
 
-            var findMainSignals = await MainSignals.find(findSignal)
+            // var findMainSignals = await MainSignals.find(findSignal)
 
 
             // MainSignals FIND IN COLLECTION
@@ -1039,7 +1098,7 @@ app.post('/broker-signals', async (req, res) => {
                 exit_time: ExitTime,
                 exit_time1: 0,
                 complete_trade: 0,
-                sl_status: 0,
+                sl_status: sl_status,
                 MakeStartegyName: MakeStartegyName
 
               }
@@ -1079,7 +1138,9 @@ app.post('/broker-signals', async (req, res) => {
               exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
             };
   
-            console.log("updatedFindSignal ",updatedFindSignal)
+            //console.log("updatedFindSignal ",updatedFindSignal)
+
+            
             var ExitMainSignals = await MainSignals.find(updatedFindSignal)
 
             // // ExitMainSignals  FIND IN COLLECTION

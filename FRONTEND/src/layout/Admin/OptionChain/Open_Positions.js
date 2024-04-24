@@ -32,13 +32,15 @@ const TradeHistory = () => {
     const location = useLocation();
 
 
-   // console.log("hello",location)
-    
+
+
 
     const token = JSON.parse(localStorage.getItem("user_details")).token;
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
 
     const [showModal, setshowModal] = useState(false);
+    const [searchInput, setSearchInput] = useState('');
+
     const [refresh, setrefresh] = useState(false);
     const [ButtonDisabled, setButtonDisabled] = useState(false);
     const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
@@ -52,30 +54,6 @@ const TradeHistory = () => {
     const [selected, setSelected] = useState([]);
     const [selected1, setSelected1] = useState([]);
 
-
-    // console.log("selected1", selected1)
-
-
-    // const [socketUrl, setSocketUrl] = useState("");
-    // let socketGetNotification = io(socketUrl);
-    // useEffect(() => {
-    //     // Connect to the server using Socket.IO
-    
-    //     // Listen for the "TEST_TRUST" event from the server
-    //     if(socketGetNotification != null){
-    //         socketGetNotification.on("EXIT_TRADE_GET_NOTIFICATION", (data) => {
-    //       //console.log("Received data from 'EXIT_TRADE_GET_NOTIFICATION':", data);
-    //        toast.success(data.data);
-    //        setrefresh(!refresh)
-    //       // Do something with the received data here
-    //     });
-    
-    //     // Clean up the socket connection when the component unmounts
-    //     return () => {
-    //       socketGetNotification.disconnect();
-    //     };
-    //    }
-    //   }, [socketGetNotification]);
 
 
 
@@ -102,7 +80,7 @@ const TradeHistory = () => {
             .unwrap()
             .then((response) => {
                 let res = response.data[0]
-              //  setSocketUrl(res.version)
+                //  setSocketUrl(res.version)
                 setBrokerUrl(res.broker_url)
             });
     };
@@ -136,36 +114,54 @@ const TradeHistory = () => {
             Get_Open_Position({ token: token })
         ).unwrap()
             .then((response) => {
-                 
+               
                 if (response.status) {
+
+                console.log("cp :", response && response.data[0].TradeType )
+                console.log("cp 1:", response && response.data[0].trade_symbol )
+                console.log("cp 2:",response && response.data[0].entry_type )
+                console.log("cp 3:", response && response.data[0].strategy )
+                console.log("cp 4:", searchInput)
+
+
+                const filterData = response && response.data.filter((item) => {
+                    const searchedMatch =
+                        searchInput == '' ||
+                        item.TradeType.toLowerCase().includes(searchInput.toLowerCase()) ||
+                        item.trade_symbol.toLowerCase().includes(searchInput.toLowerCase()) ||
+                        item.entry_type.toLowerCase().includes(searchInput.toLowerCase()) ||
+                        item.strategy.toLowerCase().includes(searchInput.toLowerCase());
+                
+                    return searchedMatch;
+                });
                     setTradeHistoryData({
                         loading: false,
-                        data: response.data,
+                        data: searchInput ? filterData : response.data,
                     });
 
                     setTradeHistoryAllData({
                         loading: false,
                         data: response.data,
-                      });
+                    });
 
 
                 } else {
                     setTradeHistoryData({
                         loading: false,
-                        data: response.data,
+                        data:   response.data,
                     });
 
                     setTradeHistoryAllData({
                         loading: false,
                         data: response.data,
-                      });
+                    });
                 }
             });
     };
 
     useEffect(() => {
         Get_Position();
-    }, [refresh]);
+    }, [refresh, searchInput]);
 
 
     const columns = [
@@ -179,7 +175,7 @@ const TradeHistory = () => {
             text: "Signals time",
             formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
         },
-       
+
         // {
         //     dataField: "closeprice",
         //     text: "Close Price sp",
@@ -236,7 +232,7 @@ const TradeHistory = () => {
                 </div>
             ),
         },
-        
+
         {
             dataField: "entry_price",
             text: "Entry Price",
@@ -346,8 +342,8 @@ const TradeHistory = () => {
                 </div>
             ),
         },
-        
-       
+
+
 
 
     ];
@@ -356,56 +352,28 @@ const TradeHistory = () => {
     const SetStopLostPrice = async (event, name, row, qty_persent, symbol) => {
 
 
-        // alert(row._id)
-       // console.log("row._id ",row._id)
-      //  console.log("event.target.value ",event.target.value)
-      //  console.log("name ",name)
- 
- 
- 
-         // setSelected1((prev) => {
-         //      return  prev.map((item) => {
- 
-         //         // console.log("row._id inside ",item._id)
-         //         // console.log("item.trade_symbol ",item.trade_symbol)
-         //         // console.log("symbol ",symbol)
-         //         // console.log("event.target.value ",event.target.value)
-         //         // console.log("name ",name)
-         //         if (item._id === row._id  ) {
- 
-         //             console.log("row._id inside 2 ",item._id)
- 
-         //             return {
-         //                 ...item,
-         //                 sl_status: "1",
-         //                 [name]: event.target.value ? event.target.value : "testtt",
-         //             };
-         //         }
-         //         return item;
-         //     });
-         // });
- 
-  
-       
-         setTradeHistoryAllData((prev) => {
-             return {
-                 ...prev,
-                 data: prev.data.map((item) => {
-                     if (item._id === row._id) {
-                         console.log("row._id inside 2 ",item._id)
-                         return {
-                             ...item,
-                             sl_status: "1",
-                             [name]: event.target.value ? event.target.value : "testtt",
-                         };
-                     }
-                     return item;
-                 })
-             };
-         });
- 
- 
-     }
+
+
+
+        setTradeHistoryAllData((prev) => {
+            return {
+                ...prev,
+                data: prev.data.map((item) => {
+                    if (item._id === row._id) {
+
+                        return {
+                            ...item,
+                            sl_status: "1",
+                            [name]: event.target.value ? event.target.value : "testtt",
+                        };
+                    }
+                    return item;
+                })
+            };
+        });
+
+
+    }
 
 
     const UpdateStopLoss = async () => {
@@ -423,8 +391,8 @@ const TradeHistory = () => {
                     alert("Please Select Atleast One Symbol")
                 }
                 else {
-                    console.log("UpdateStopLoss",filteredArray2);
-                    // return
+
+
                     await dispatch(
                         Update_Signals({
                             data: filteredArray2,
@@ -455,59 +423,57 @@ const TradeHistory = () => {
 
 
     const Set_Entry_Exit_Qty = (row, event, qty_persent, symbol) => {
-       
+
         //alert(qty_persent)
 
         let a = No_Negetive_Input_regex(event)
 
-      //  console.log("a -",a)
 
-       // console.log(event);
-         if (a) {
+        if (a) {
 
-        if (parseInt(event) > parseInt(qty_persent)) {
-            alert('Error: Value cannot be greater than ' + qty_persent);
-            //setInputValue('');
+            if (parseInt(event) > parseInt(qty_persent)) {
+                alert('Error: Value cannot be greater than ' + qty_persent);
+                //setInputValue('');
 
-            setInputValue(qty_persent);
-            console.log("inputValue" ,inputValue)
-            setCreateSignalRequest((prev) => {
-                return prev.map((item) => {
-  
-                    if (item.trade_symbol === symbol) { // Assuming 'symbol' is the unique identifier
-                        return {
-                            ...item,
-                            new_qty_persent: qty_persent ? event : item.old_qty_persent
-                        };
-                    }
-                    return item;
+                setInputValue(qty_persent);
 
-                    // return { ...item, new_qty_persent: event ? event : item.old_qty_persent };
+                setCreateSignalRequest((prev) => {
+                    return prev.map((item) => {
+
+                        if (item.trade_symbol === symbol) { // Assuming 'symbol' is the unique identifier
+                            return {
+                                ...item,
+                                new_qty_persent: qty_persent ? event : item.old_qty_persent
+                            };
+                        }
+                        return item;
+
+                        // return { ...item, new_qty_persent: event ? event : item.old_qty_persent };
+                    });
                 });
-            });
 
 
 
 
-        } else {
-            setInputValue(event);
-            console.log("inputValue" ,inputValue)
-            setCreateSignalRequest((prev) => {
-                return prev.map((item) => {
-                    
+            } else {
+                setInputValue(event);
 
-                    if (item.trade_symbol === symbol) { // Assuming 'symbol' is the unique identifier
-                        return {
-                            ...item,
-                            new_qty_persent: event ? event : item.old_qty_persent
-                        };
-                    }
-                    return item;
+                setCreateSignalRequest((prev) => {
+                    return prev.map((item) => {
 
-                    // return { ...item, new_qty_persent: event ? event : item.old_qty_persent };
+
+                        if (item.trade_symbol === symbol) { // Assuming 'symbol' is the unique identifier
+                            return {
+                                ...item,
+                                new_qty_persent: event ? event : item.old_qty_persent
+                            };
+                        }
+                        return item;
+
+                        // return { ...item, new_qty_persent: event ? event : item.old_qty_persent };
+                    });
                 });
-            });
-        }
+            }
         } else {
             alert('text not allow');
 
@@ -520,34 +486,31 @@ const TradeHistory = () => {
 
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
-        //console.log("CreateSignalRequest ",CreateSignalRequest.length)
 
+         
         let count = 0
 
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
 
-             count++
-             // console.log("pre_tag",pre_tag)
+            count++
+
             if (pre_tag.new_qty_persent > pre_tag.old_qty_persent) {
                 alert('Error: Value cannot be greater than ' + pre_tag.old_qty_persent);
                 return
             }
-           //  let price = pre_tag.price
+            //  let price = pre_tag.price
             const price = $('.LivePrice_' + pre_tag.token).html();
 
 
             let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${pre_tag.client_persnal_key}|TradeType:${pre_tag.TradeType}|Demo:demo`
-             
-           
-            console.log("req - ",req)
-             
-            console.log("count ",count)
-           // console.log("getBrokerUrl - ",getBrokerUrl)
+
+
+
 
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                 //url: 'http://localhost:8000/broker-signals',
+
                 url: `${getBrokerUrl && getBrokerUrl}`,
                 headers: {
                     'Content-Type': 'text/plain'
@@ -555,13 +518,13 @@ const TradeHistory = () => {
                 data: req
             };
 
-               axios.request(config)
+            axios.request(config)
                 .then((response) => {
                     setButtonDisabled(!ButtonDisabled)
                     toast.success("Order Place Sucessfully");
                     setshowModal(false)
-                  //  setrefresh(!refresh)
-                    if(CreateSignalRequest.length == count){
+
+                    if (CreateSignalRequest.length == count) {
                         window.location.reload()
                     }
                 })
@@ -570,7 +533,7 @@ const TradeHistory = () => {
                 });
         })
 
-        
+
     }
 
 
@@ -654,7 +617,7 @@ const TradeHistory = () => {
         let channelList = CreatechannelList;
 
         if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined) {
-            if(UserDetails.trading_status == "on"){ 
+            if (UserDetails.trading_status == "on") {
 
                 const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
@@ -663,7 +626,7 @@ const TradeHistory = () => {
                 }
                 if (res.status === 401 || res.status === '401') {
                     setSocketState("Unauthorized");
-    
+
                     tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
                         const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
                         calcultateRPL(row, null, previousRow);
@@ -672,25 +635,23 @@ const TradeHistory = () => {
                 else {
                     if (res.data.stat) {
                         const handleResponse = async (response) => {
-                            // console.log("response", response)
+
                             $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
                             $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
-    
+
                             // UPL_
                             $(".LivePrice_" + response.tk).html(response.lp);
                             $(".ClosePrice_" + response.tk).html(response.c);
-    
-    
+
+
                             var live_price = response.lp === undefined ? "" : response.lp;
-    
-                            //  if entry qty and exist qty both exist
+
                             tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-                                // $('.SP1_Call_Price_' + row.token + "_" + row._id).html(response.sp1);
-                                // $('.BP1_Put_Price_' + row.token + "_" + row._id).html(response.bp1);
-    
+
+
                                 let get_ids = '_id_' + response.tk + '_' + row._id
                                 let get_id_token = $('.' + get_ids).html();
-    
+
                                 const get_entry_qty = $(".entry_qty_" + response.tk + '_' + row._id).html();
                                 const get_exit_qty = $(".exit_qty_" + response.tk + '_' + row._id).html();
                                 const get_exit_price = $(".exit_price_" + response.tk + '_' + row._id).html();
@@ -698,22 +659,22 @@ const TradeHistory = () => {
                                 const get_entry_type = $(".entry_type_" + response.tk + '_' + row._id).html();
                                 const get_exit_type = $(".exit_type_" + response.tk + '_' + row._id).html();
                                 const get_Strategy = $(".strategy_" + response.tk + '_' + row._id).html();
-    
+
                                 if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
                                     if (get_entry_qty !== "" && get_exit_qty !== "") {
-    
+
                                         if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
                                             let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
                                             let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                                             let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
-    
+
                                             if ((isNaN(finalyupl) || isNaN(rpl))) {
                                                 return "-";
                                             } else {
                                                 $(".show_rpl_" + response.tk + "_" + get_id_token).html(rpl.toFixed(2));
                                                 $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
                                                 $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
-    
+
                                                 ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
                                                 ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
                                                 ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
@@ -734,9 +695,9 @@ const TradeHistory = () => {
                                         ShowColor1(".UPL_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
                                         ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
                                     }
-    
+
                                 }
-    
+
                                 //  if Only Exist qty Exist
                                 else if (
                                     (get_entry_type === "" && get_exit_type === "LX") ||
@@ -745,22 +706,20 @@ const TradeHistory = () => {
                                 } else {
                                 }
                             });
-    
-    
-    
-    
-    
+
+
+
+
+
                             // }
                         };
                         await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
                     } else {
-                        // $(".UPL_").html("-");
-                        // $(".show_rpl_").html("-");
-                        // $(".TPL_").html("-");
+
                     }
                 }
             }
-         
+
         }
 
     };
@@ -812,7 +771,7 @@ const TradeHistory = () => {
     const data = async () => {
 
         const response = await GetAccessToken({ broker_name: "aliceblue" });
-        console.log("cp: ",response)
+
         if (response.status) {
             setUserDetails(response.data && response.data[0]);
         }
@@ -901,14 +860,35 @@ const TradeHistory = () => {
     };
 
 
+
+
     return (
         <>
             <Content Page_title="Open Position" button_status={false}
             >
-                <button className="btn btn-primary mb-4 mx-2 ms-auto"
-                    onClick={(e) => UpdateStopLoss()}
-                >Update Price</button>
-                <button className="btn btn-primary mb-4 ms-auto" onClick={(e) => SquareOfAll()}>Square Off</button>
+                <div className="row col-lg-12">
+                    <div className="col-lg-2">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">
+                                Search Something Here
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Search..."
+
+                                value={searchInput}
+                                onChange={(e) => setSearchInput(e.target.value)}
+                                class=" p-2 rounded"
+                                id="exampleFormControlInput1"
+                            />
+                        </div>
+                    </div>
+
+                    <button className="col-lg-2  btn btn-primary mb-4  mx-3  " onClick={(e) => UpdateStopLoss()} >Update Price</button>
+                    <button className=" col-lg-2   btn btn-primary mb-4  " onClick={(e) => SquareOfAll()}>Square Off</button>
+
+                </div>
+
 
                 <FullDataTable
                     keyField="_id"
@@ -988,8 +968,8 @@ const TradeHistory = () => {
                                                                 row.trade_symbol
                                                             )
                                                     }
-                                                   
-                                                    
+
+
                                                     defaultValue={inputValue ? inputValue : row.old_qty_persent}
                                                     max={row.old_qty_persent}
                                                 // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}

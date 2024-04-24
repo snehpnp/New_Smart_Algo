@@ -35,8 +35,11 @@ const { GetAccessTokenUpstox,GetOrderFullInformationUpstox} = require('../../Con
 const { GetAccessTokenDhan,GetOrderFullInformationDhan} = require('../../Controllers/Brokerassecc_token/Dhan')
 
 // Markethub CONTROLLER FILE
-
 const {GetAccessTokenMarkethub,GetOrderFullInformationMarkethub}=require('../../Controllers/Brokerassecc_token/Mhub')
+
+
+// Swastika CONTROLLER FILE
+const {GetAccessTokenSwastika,GetOrderFullInformationSwastika}=require('../../Controllers/Brokerassecc_token/Swastika')
 
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req,res)=>{
@@ -100,10 +103,14 @@ const GetOrderFullInformationAll_broker = async (req,res)=>{
    else if(broker == 19){
     GetOrderFullInformationUpstox(req,res,result);
     }
-
     // DHAN   -  20
    else if(broker == 20){
     GetOrderFullInformationDhan(req,res,result);
+    }
+
+    // Swastika   -  21
+    else if(broker == 21){
+    GetOrderFullInformationSwastika(req,res,result);
     }
 
    else{
@@ -162,6 +169,9 @@ router.post('/dhan', GetAccessTokenDhan);
 
 // Market Hub
 router.post('/markethub', GetAccessTokenMarkethub);
+
+// Swastika
+router.post('/swastika', GetAccessTokenSwastika);
 
 
 module.exports = router;

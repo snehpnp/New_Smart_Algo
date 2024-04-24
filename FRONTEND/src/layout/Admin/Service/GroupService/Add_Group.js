@@ -1,6 +1,4 @@
-
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable react-hooks/exhaustive-deps */
+ 
 import React, { useEffect, useState } from 'react'
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form2"
 import { useFormik } from 'formik';
@@ -51,7 +49,6 @@ const AddStrategy = () => {
 
     const [selectAllFiltered, setSelectAllFiltered] = useState(false);
 
-    console.log("selectedServices", selectedServices && selectedServices)
 
 
 
@@ -73,6 +70,8 @@ const AddStrategy = () => {
     //  For Select All 
     const handleSelectAllFilteredChange = () => {
         setSelectAllFiltered((prevChecked) => !prevChecked);
+
+ 
 
         if (!selectAllFiltered) {
             // Filtered services ko select karo aur additional information store karo.
@@ -149,7 +148,7 @@ const AddStrategy = () => {
         const updatedQty = event.target.value === "" ? 0 : parseInt(event.target.value);
 
 
-        // console.log("No_Negetive_Input_regex", aa)
+ 
 
         // Update the quantity for the selected service
         setSelectedServices((prevInfo) =>
@@ -246,7 +245,7 @@ const filterFunction = async () => {
         return item.name.toLowerCase().includes(SerachService.toLowerCase())
     });
 
-   console.log(" filteredData add group ",filteredData)
+   
 
 
     if (SerachService === "") {
@@ -282,16 +281,19 @@ const formik = useFormik({
         if (!values.segment) {
             errors.segment = valid_err.SEGEMENTSELECT_ERROR;
         }
-        // if (selectedServices.length > 50) {
-        //     alert("can Not Add More Than 50 Service")
-        //     return
-        // }
+        
 
         return errors;
     },
     onSubmit: async (values) => {
         let checkValid = true
+ 
+        if(selectedServices.length==0){
+            toast.error("Please Select Atleast one service")
+            return 
+        }
         selectedServices && selectedServices.map((item) => {
+          
             if (item.lotsize !== 1) {
                 if ((item.group_qty) % (item.lotsize) !== 0) {
                     alert(`Please Enter Valid Lot Size Inside ${item.name}`)
@@ -352,14 +354,13 @@ useEffect(() => {
     setSelectAllFiltered(false)
 }, [formik.values.segment]);
 
-console.log("state", state)
 
 
 
 
 return (
     <>
-        <Content Page_title="Add Group" button_title="Back" route="/admin/groupservices"
+        <Content Page_title="Add Group " button_title="Back" route="/admin/groupservices"
             additional_field={
                 <div style={{ overflowY: 'scroll', height: '65vh' }}>
                     <h4 className='text-center text-decoration-underline mb-3'>Select Services And Quantity</h4>
@@ -409,7 +410,6 @@ return (
                     </table>
                 </div>
             }
-
         >
             <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Add Group" title='addstrategy'
                 additional_field={
