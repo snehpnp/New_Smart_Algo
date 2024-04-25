@@ -43,7 +43,7 @@ export const loginWithApi = async (broker_id, UserDetails) => {
         window.location.href = `https://ant.aliceblueonline.com/?appcode=${res.data[0].app_code}`;
     }
     else if (broker_id === "3" || broker_id === 3) {
-        alert("broker-3")
+      //  alert("broker-3")
         window.location.href =`https://masterswift-beta.mastertrust.co.in/oauth2/auth?scope=orders%20holdings&state=${UserDetails.Email}&redirect_uri=${Config.base_url}mastertrust&response_type=code&client_id=${UserDetails.app_id}`;
 
     }

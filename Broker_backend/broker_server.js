@@ -254,6 +254,8 @@ const dhan = require('./Broker/dhan')
 const fyers = require('./Broker/fyers')
 const markethub = require('./Broker/markethub')
 const swastika = require('./Broker/swastika')
+const mastertrust = require('./Broker/mastertrust')
+
 
 
 // BROKER SIGNAL
@@ -780,6 +782,29 @@ app.post('/broker-signals', async (req, res) => {
           }
           //End Process swastika admin client
 
+           //Process mastertrust admin client
+           try {
+            const mastertrustCollection = db1.collection('mastertrustView');
+            const mastertrustdocuments = await mastertrustCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' mastertrust ALL CLIENT LENGTH ' + mastertrustdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+
+            if (mastertrustdocuments.length > 0) {
+              mastertrust.place_order(mastertrustdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get mastertrust Client In view", error);
+          }
+          //End Process mastertrust admin client
+
 
 
 
@@ -985,6 +1010,29 @@ app.post('/broker-signals', async (req, res) => {
               console.log("Error Get swastika Client In view", error);
             }
             //End Process Tading View Client swastika 
+
+
+
+            //Process Tading View Client swastika
+            try {
+              const mastertrustCollection = db1.collection('mastertrustView');
+              const mastertrustdocuments = await mastertrustCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+  
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' mastertrust TRADING VIEW CLIENT LENGTH ' + mastertrustdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+  
+  
+              if (mastertrustdocuments.length > 0) {
+                mastertrust.place_order(mastertrustdocuments, signals, token, filePath, signal_req);
+              }
+  
+            } catch (error) {
+              console.log("Error Get mastertrust Client In view", error);
+            }
+            //End Process Tading View Client mastertrust 
 
 
 
