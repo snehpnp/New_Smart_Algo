@@ -68,17 +68,17 @@ class Employee {
       }else{
        let count = 0
         for (const strategy of Strategies) {
-          count++
-          //console.log("count ",count)
-          if(parseInt(count_strategy_select) >= count){
+          // count++
+          // //console.log("count ",count)
+          // if(parseInt(count_strategy_select) >= count){
           Strategies_id_array.push(strategy.id)
-          }
+        //  }
         }
       }
 
 
 
-
+  //  console.log("Strategies_id_array ",Strategies_id_array)
 
 
 
@@ -143,7 +143,7 @@ class Employee {
       }
 
       // IF CHECK GROUP SERVICES NULL
-      if (group_service == "") {
+      if (group_service == "" || group_service ==null) {
         return res.send({
           status: false,
           msg: "Please Select a one Group",
@@ -434,7 +434,7 @@ class Employee {
           }
         });
     } catch (error) {
-      res.send({ msg: "Error=>", error });
+      res.send({ msg:error});
     }
   }
 

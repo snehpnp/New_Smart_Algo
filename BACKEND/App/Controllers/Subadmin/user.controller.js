@@ -31,6 +31,10 @@ class Employee {
 
   // USER ADD
   async AddEmployee(req, res) {
+
+    
+
+
     try {
       const {
         FullName,
@@ -61,20 +65,28 @@ class Employee {
 
       
       let Strategies_id_array = [];
-     
+    
 
+    
       if(multiple_strategy_select == "0"){
         Strategies_id_array.push(Strategies[0].id)
+
+
       }else{
        let count = 0
         for (const strategy of Strategies) {
-          count++
-          //console.log("count ",count)
-          if(parseInt(count_strategy_select) >= count){
+      //  console.log("strategy ",strategy.id)
+             
+          // count++
+          // //console.log("count ",count)
+          // if(parseInt(count_strategy_select) >= count){
           Strategies_id_array.push(strategy.id)
-          }
+        //  }
         }
       }
+
+
+      console.log("Strategies_id_array ",Strategies_id_array)
 
       var Role = "USER";
       var StartDate1 = "";
