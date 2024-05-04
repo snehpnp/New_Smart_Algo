@@ -78,6 +78,10 @@ const SignalsSchema = Schema({
     MakeStartegyName: {
         type: String,
     },
+    exit_status: {
+        type: String,
+        default: null
+    },
 
     createdAt: {
         type: Date,

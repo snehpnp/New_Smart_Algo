@@ -180,6 +180,15 @@ const TradeHistory = () => {
       text: "Strategy",
     },
     {
+      dataField: "2",
+      text: "Entry Type",
+      formatter: (cell, row, rowIndex) => (
+        <div>
+          <span>{row.entry_type === "LE"?"BUY ENTRY":"SELL ENTRY"}</span>
+        </div>
+      ),
+    },
+    {
       dataField: "entry_qty",
       text: "Entry Qty",
       formatter: (cell, row, rowIndex) => (
@@ -275,7 +284,29 @@ const TradeHistory = () => {
         </div>
       ),
     },
-    
+      
+    {
+      dataField: "",
+      text: "Entry Status",
+      formatter: (cell, row, rowIndex) => (
+          <div>
+              <span>{row.result[0].exit_status}</span>
+
+
+          </div>
+      ),
+  },
+  {
+      dataField: "exit_status",
+      text: "Exit Status",
+      formatter: (cell, row, rowIndex) => (
+          <div>
+              <span>{row.exit_status}</span>
+
+
+          </div>
+      ),
+  },
     
 
     {
@@ -306,7 +337,7 @@ const TradeHistory = () => {
   const SquareOff = (rowdata, rowIndex) => {
     // $('.BP1_Put_Price_' + item.token).html();
     // $('.SP1_Call_Price_' + item.token).html();
-    console.log("rowdata", rowdata)
+   // console.log("rowdata", rowdata)
 
     var pre_tag = {
       option_type: rowdata.option_type,
@@ -317,7 +348,7 @@ const TradeHistory = () => {
       segment: rowdata.segment,
       strike: rowdata.strike_price,
     };
-    console.log("pre_tag", pre_tag)
+   // console.log("pre_tag", pre_tag)
 
     if (rowdata.entry_type === "") {
       setCreateSignalRequest(oldValues => {
@@ -345,13 +376,27 @@ const TradeHistory = () => {
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
-      console.log("item" ,item)
+    //  console.log("item" ,item)
 
-       
-
-
+  
       if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
-      total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty);
+      
+     
+      if(item.entry_type ==="LE"){
+       // console.log("item iFF" ,item._id , " total ",total)
+        let total1 = (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty);
+        if(!isNaN(total1)){
+          total += total1
+        }
+       
+      }else{
+       let total1 = (parseFloat(item.entry_price) - parseFloat(item.exit_price)) * parseInt(item.exit_qty);
+       // console.log("item ELSE" ,item._id , " total ",total)
+        if(!isNaN(total1)){
+          total += total1
+        }
+
+      }
       }
     });
 
@@ -366,7 +411,7 @@ const TradeHistory = () => {
 
 
     if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
-
+      //  alert("IF")
         const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
         if (res.status === 200) {
@@ -384,7 +429,7 @@ const TradeHistory = () => {
           if (res.data.stat) {
             const handleResponse = async (response) => {
 
-              console.log("response ",response)
+             // console.log("response ",response)
               $('.BP1_Put_Price_' + response.tk).html();
               $('.SP1_Call_Price_' + response.tk).html();
 
@@ -415,6 +460,14 @@ const TradeHistory = () => {
 
                     
                       let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+
+
+                      if(get_entry_type === "SE"){
+                        rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+                      }
+
+
+
                       let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                       let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
 
@@ -439,6 +492,12 @@ const TradeHistory = () => {
                 //  if Only entry qty Exist
                 else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
                   let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
+
+
+                  if(get_entry_type === "SE"){
+                    abc = ((parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_entry_qty)).toFixed();
+                  }
+
                   if (isNaN(abc)) {
                     return "-";
                   } else {
@@ -476,14 +535,12 @@ const TradeHistory = () => {
     }
 
     else{
-    
-
-
+      // alert("ELSE")
       tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
         
-        console.log(" row._id ",row._id)
-        console.log(" row token ",row.token)
-        console.log(" row ",row)
+        // console.log(" row._id ",row._id)
+        // console.log(" row token ",row.token)
+        // console.log(" row ",row)
         let get_ids = '_id_' + row.token + '_' + row._id
         let get_id_token = $('.' + get_ids).html();
 
@@ -496,21 +553,28 @@ const TradeHistory = () => {
         const get_Strategy = $(".strategy_" + row.token + '_' + row._id).html();
 
 
-        if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+      if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+       //   console.log("row._id ",row._id)
           if (get_entry_qty !== "" && get_exit_qty !== "") {
 
             if (parseInt(get_entry_qty) == parseInt(get_exit_qty)) {
 
-            
+              
               let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-             
- 
+              if(get_entry_type === "SE"){
+                rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+              }
+               
+            // console.log("rpl ",rpl)
               let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
               let finalyupl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * upl;
-
+             
+              // console.log("upl._id ",upl)
+              // console.log("finalyupl._id ",finalyupl)
               if ((isNaN(finalyupl) || isNaN(rpl))) {
                 return "-";
               } else {
+               // console.log("rpl inside",rpl)
                 $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
                 $(".UPL_" + row.token + "_" + get_id_token).html(finalyupl.toFixed(2));
                 $(".TPL_" + row.token + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
@@ -524,7 +588,17 @@ const TradeHistory = () => {
         }
         //  if Only entry qty Exist
         else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
+
+          //console.log("row._id else",row._id)
+
           let abc = ((parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
+           
+          if(get_entry_type === "SE"){
+            abc = ((parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_entry_qty)).toFixed();
+          }
+
+
+
           if (isNaN(abc)) {
             return "-";
           } else {
@@ -597,7 +671,12 @@ const TradeHistory = () => {
 
   useEffect(() => {
     ShowLivePrice();
-  }, [tradeHistoryData.data, SocketState, UserDetails]);
+  }, [tradeHistoryData.data,SocketState, UserDetails]);
+
+
+  // useEffect(() => {
+  //   ShowLivePrice();
+  // }, [tradeHistoryData.data,SocketState,]);
 
   //  GET ALL SERVICE NAME
 

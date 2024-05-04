@@ -340,9 +340,13 @@ app.post('/broker-signals', async (req, res) => {
      
 
 
+      let ExitStatus = '-'
 
+      if(signals.ExitStatus != undefined){
+        ExitStatus = signals.ExitStatus
+      }
 
-      var sl_status = "1";
+      var sl_status = 0;
       if (signals.sl_status != undefined) {
         sl_status = signals.sl_status;
       }
@@ -1094,7 +1098,8 @@ app.post('/broker-signals', async (req, res) => {
               TradeType: TradeType,
               token: instrument_token,
               lot_size: find_lot_size,
-              MakeStartegyName: MakeStartegyName
+              MakeStartegyName: MakeStartegyName,
+              exit_status:ExitStatus
             }
 
             let Signal_req1 = new Signals(Signal_req)
@@ -1218,7 +1223,8 @@ app.post('/broker-signals', async (req, res) => {
                   exit_price: parseFloat(price) + (isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)),
                   exit_qty_percent: exit_qty_percent1,
                   exit_qty: result,
-                  exit_dt_date: current_date
+                  exit_dt_date: current_date,
+                  exit_status:ExitStatus
                 }
                 updatedData.$addToSet = { signals_id: SignalSave._id };
 
@@ -1239,7 +1245,8 @@ app.post('/broker-signals', async (req, res) => {
 
                     exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
                     exit_qty: result,
-                    exit_dt_date: current_date
+                    exit_dt_date: current_date,
+                    exit_status:ExitStatus
                   }
                   updatedData.$addToSet = { signals_id: SignalSave._id };
 

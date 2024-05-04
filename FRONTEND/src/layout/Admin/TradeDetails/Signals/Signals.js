@@ -78,6 +78,12 @@ const Signals = () => {
       sort: true,
 
     },
+    {
+      dataField: "exit_status",
+      text: "Entry/Exit Status ",
+      sort: true,
+   
+    },
   ];
 
   const [SignalsData, getSignalsData] = useState({

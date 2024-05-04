@@ -109,6 +109,10 @@ const MainSignalsSchema = Schema({
         enum: ['0', '1'], // 1 = Admin panel status , 2 = Tradinview status
         default: '0'
     },
+    exit_status: {
+        type: String,
+        default: null
+    },
 
     signals_id: [
         {

@@ -3904,7 +3904,8 @@ db.createView("open_position_excute", "open_position",
               // { isLpInRange1: true },
               { isLpInRangeTarget: true },
               { isLpInRangeStoploss: true },
-              { isLpInRange: 1 }
+              { isLpInRange: 1 },
+              { isLpInRange: 0 }
           ]
       }
   }
