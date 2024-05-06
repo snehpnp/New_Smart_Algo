@@ -338,7 +338,8 @@ app.post('/broker-signals', async (req, res) => {
       var client_key = signals.Key;
       var TradeType = signals.TradeType;
      
-
+    
+      console.log()
 
       let ExitStatus = '-'
 
@@ -374,8 +375,10 @@ app.post('/broker-signals', async (req, res) => {
 
       var demo = signals.Demo;
 
-       console.log("signals",signals)
-      
+      // console.log("signals",signals)
+      // console.log("ExitTime",ExitTime)
+
+       return
 
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {

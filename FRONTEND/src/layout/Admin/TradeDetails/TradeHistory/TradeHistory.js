@@ -290,7 +290,7 @@ const TradeHistory = () => {
       text: "Entry Status",
       formatter: (cell, row, rowIndex) => (
           <div>
-              <span>{row.result[0].exit_status}</span>
+              <span>{row.result[0].exit_status ==="above"?"ABOVE":row.result[0].exit_status ==="below"?"BELOW":row.result[0].exit_status == "range"?"RANGE":" - "}</span>
 
 
           </div>
