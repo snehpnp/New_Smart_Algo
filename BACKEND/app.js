@@ -43,13 +43,13 @@ require('./App/Cron/cron')
 require("./App/Routes")(app)
 
 // Testing Api #Shakir
-//require("./shakirTeting")(app)
 
 
 // EMERGANCY
 require("./App/Emergency Apis/service")(app)
 require("./App/Emergency Apis/getOptionSymbols")(app)
 require("./request")(app)
+//require("./shakirTeting")(app)
 
 
 // Connect Local backend Socket

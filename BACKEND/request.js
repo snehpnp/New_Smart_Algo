@@ -7,6 +7,8 @@ module.exports = function (app) {
 
 
     const User = db.user;
+    const services = db.services;
+    const categorie = db.categorie;
     const user_logs = db.user_logs;
     const live_price = db.live_price;
     const UserMakeStrategy = db.UserMakeStrategy;
@@ -24,223 +26,476 @@ module.exports = function (app) {
 
 
     const { MongoClient } = require('mongodb');
+   
+      //Add stoch Api.....
+  app.get('/addstockExtra', async function (req, res) {
 
-    // Define MongoDB connection details
-    const servers = [
-        
-        //  "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/",
-        // "mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/",
-        // "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.93:27017/",
-        // "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.178:27017/",
-        // "mongodb://algobullstradingsolutions:p%26ol5Hd%26trad%26i@193.239.237.92:27017/",
-        // "mongodb://cpandit:im%3DCtv%7BOu%235V9QT%25@45.79.123.122:27017/",
-        // "mongodb://algokuber:p%26k506%267G%26y%26vnd%26@193.239.237.135:27017/",
-        // "mongodb://finnshri:p0%26k506%267s9Ry%26vn8d@193.239.237.137:27017/",
-        // "mongodb://visioniq:%26k%23sA8B%267Gmg%26vn3%237A%26@185.209.75.2:27017/",
-        // "mongodb://believetechnology:%26k%23sA8B%237Gsq%26vg3%237P%26@185.209.75.5:27017/",
-        // "mongodb://realbottrading:u%26r5nC86%267Gr%26vn37M%26@185.209.75.8:27017/",
-        // "mongodb://growskyinfotech:u%26j8gB85%267GN%26vn37m%26@185.209.75.9:27017/",
-        // "mongodb://corebizinfotech:c%26eaV8N%267KfT%26bc49A%26@185.209.75.10:27017/",
-        // "mongodb://inspirealgo:n%26pdF7G%265Png%26vn97A%26@185.209.75.11:27017/",
-        // "mongodb://uniquetechnology:c%26z9yB73%267Fn%26vn98V%26@185.209.75.12:27017/",
-        // "mongodb://yourstechexpert:sA8k%26n86%267Mv%26fh57B%26@185.209.75.14:27017/",
-        // "mongodb://alphapulsepro:un%26r4hv93%267Gr%26v%2637P%26@185.209.75.15:27017/",
-        // "mongodb://sumedhainnovations:p%26k5H6%267GsRy%26vnd@185.209.75.21:27017/",
-        // "mongodb://tradeonn:pw%26k5H6%267GsRy%26vn@185.209.75.23:27017/",
-        // "mongodb://vintyaitsolutions:byk%265fD328Pvjn3u7A%26@185.209.75.27:27017/",
-        // "mongodb://growupalgo:p%26k5H6%267GsRy%26vnd@185.209.75.22:27017/",
-        // "mongodb://robotexfintech:z43rk%265eF32%267Pcmn9i7B%26@185.209.75.28:27017/",
-        // "mongodb://metaprogramming:zc%26u9tD828Tnbh3u7A%26@185.209.75.29:27017/",
-        // "mongodb://fincodify:u%26v5%26bAn6%265Gv%26cn29A%26@185.209.75.30:27017/",
+    const pipeline = [
+
+      {
+        $project: {
+          // Include fields from the original collection
+          'segment': 1,
+        },
+      },
     ];
+    const categoryResult = await categorie.aggregate(pipeline);
+    //const matchingElements = categoryResult.filter(item => item.segment === "FO");
 
-    
+    // console.log('Matching elements:', matchingElements[0]._id);
+    // res.send("done");
+    // return
+    var axios = require('axios');
+    var config = {
+      method: 'get',
+      url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
+    };
 
+    axios(config)
+      .then(function (response) {
+
+        // res.send(response.data);
+        // console.log(response.data);
+        // Using a loop to extract 'name' and 'instrumenttype'
+
+
+        var unique_key = []
+        let count = 0
+        response.data.forEach((item) => {
+
+          //   function findRepeatedElements(array) {
+          //     const frequencyMap = {};
+          //     const repeatedElements = [];
+
+          //     array.forEach(element => {
+          //       if (frequencyMap[element.instrumenttype]) {
+          //         frequencyMap[element.instrumenttype]++;
+          //         if (frequencyMap[element.instrumenttype] === 2) {
+          //           repeatedElements.push(element.instrumenttype);
+          //         }
+          //       } else {
+          //         frequencyMap[element.instrumenttype] = 1;
+          //       }
+          //     });
+
+          //     return repeatedElements;
+          //   }
+
+          //   const inputArray = response.data;
+          //   const repeatedElements = findRepeatedElements(inputArray);
+
+          //   console.log('Repeated elements:', repeatedElements);
+          //   res.send(repeatedElements)
+          // return
+
+
+          //  if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
+
+
+          //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+          //     count++
+          //     console.log('item - CO ' + count + ' ', item)
+          //     const matchingElements = categoryResult.filter(item => item.segment === "CO");
+          //     const category_id = matchingElements[0]._id
+
+
+          //     services.create({
+          //       name: item.name,
+          //       instrument_token: item.token,
+          //       zebu_token: item.symbol,
+          //       kotak_token: "",
+          //       instrumenttype: item.instrumenttype,
+          //       exch_seg: item.exch_seg,
+          //       lotsize: item.lotsize,
+          //       categorie_id: category_id,
+          //       unique_column: item.name + '_' + category_id
+          //     })
+          //       .then((createdServices) => {
+          //         console.log('User created and saved:', createdServices._id)
+          //       })
+          //       .catch((err) => {
+          //         try {
+          //           console.error('Error creating and saving user:', err);
+          //         } catch (e) {
+          //           console.log("duplicate key")
+          //         }
+
+          //       });
+
+
+          //   }
+
+
+
+          //   if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+          //  unique_key.push(`${item.name}-${item.instrumenttype}`);
+
+
+          if (item.symbol.slice(-3) == '-EQ') {
+            count++
+
+            const matchingElements = categoryResult.filter(item => item.segment === "C");
+            const category_id = matchingElements[0]._id
+
+
+            services.create({
+              name: item.name + '#',
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '#_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.error('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+          }
+
+
+
+
+          // if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
+          //   count++
+          //   console.log('item - F ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "F");
+          //   const category_id = matchingElements[0]._id
+
+
+
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
+
+          //     });
+
+
+
+
+          // }
+
+
+
+          // if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
+          //   count++
+          //   console.log('item - O ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "O");
+          //   const category_id = matchingElements[0]._id
+
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
+
+          //     });
+
+
+
+
+          // }
+
+
+          // if (item.instrumenttype == 'OPTFUT') {
+          //   count++
+          //   console.log('item - MO ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "MO");
+          //   const category_id = matchingElements[0]._id
+
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
+
+          //     });
+
+
+
+
+          // }
+
+
+          // if (item.instrumenttype == 'FUTCOM') {
+          //   count++
+          //   console.log('item - MF ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "MF");
+          //   const category_id = matchingElements[0]._id
+
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
+
+          //     });
+
+
+
+          // }
+
+          // if (item.instrumenttype == 'FUTCUR') {
+          //   count++
+          //   console.log('item - CF ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "CF");
+          //   const category_id = matchingElements[0]._id
+
+
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
+
+          //     });
+
+
+          // }
+
+
+          //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+          //   count++
+          //   console.log('item - CO ' + count + ' ', item)
+          //   const matchingElements = categoryResult.filter(item => item.segment === "CO");
+          //   const category_id = matchingElements[0]._id
+
+
+          //   services.create({
+          //     name: item.name,
+          //     instrument_token: item.token,
+          //     zebu_token: item.symbol,
+          //     kotak_token: "",
+          //     instrumenttype: item.instrumenttype,
+          //     exch_seg: item.exch_seg,
+          //     lotsize: item.lotsize,
+          //     categorie_id: category_id,
+          //     unique_column: item.name + '_' + category_id
+          //   })
+          //     .then((createdServices) => {
+          //       console.log('User created and saved:', createdServices._id)
+          //     })
+          //     .catch((err) => {
+          //       try {
+          //         console.error('Error creating and saving user:', err);
+          //       } catch (e) {
+          //         console.log("duplicate key")
+          //       }
+
+          //     });
+
+
+          // }
+
+
+
+
+
+
+
+
+
+
+          // if(item.instrumenttype == 'AMXIDX'|| item.instrumenttype == 'OPTIRC' || item.instrumenttype == 'UNDIRC' || item.instrumenttype == 'FUTIRC' || item.instrumenttype == 'UNDCUR' || item.instrumenttype == 'INDEX' || item.instrumenttype == 'COMDTY' || item.instrumenttype == 'AUCSO'){
+          //       count++
+          //       console.log('item - OTHER CONTENT '+count+' ',item)
+          //       // const matchingElements = categoryResult.filter(item => item.segment === "C");
+          //       // const category_id = matchingElements[0]._id
+          //       services.create({
+          //         name:item.name,
+          //         instrument_token:item.token,
+          //         zebu_token:item.symbol,
+          //         kotak_token:"",
+          //         instrumenttype:item.instrumenttype,
+          //         exch_seg:item.exch_seg,
+          //         lotsize:item.lotsize,
+          //         categorie_id : "",
+          //         unique_column : item.name +'_'+'c9dbdc14a9fefd971c979'
+          //       })
+          //       .then((createdServices) => {
+          //         console.log('User created and saved:', createdServices._id)
+          //       })
+          //       .catch((err) => {
+          //         try{
+          //         console.error('Error creating and saving user:', err);
+          //         }catch(e){
+          //          console.log("duplicate key")
+          //         }
+
+          //       });
+
+
+          //       }
+
+          // }
+          //   }
+
+        });
+
+
+
+
+
+
+      });
+
+
+    //////// super trend logicc////////
+
+    // const calculateATR = (data, period) => {
+    //   // Calculate Average True Range (ATR)
+    //   let atr = [];
+
+    //   for (let i = 1; i < data.length; i++) {
+    //     const high = data[i].high;
+    //     const low = data[i].low;
+    //     const prevClose = data[i - 1].close;
+
+    //     const tr = Math.max(high - low, Math.abs(high - prevClose), Math.abs(low - prevClose));
+    //     atr.push(tr);
+    //   }
+
+    //   // Calculate the average ATR
+    //   const atrSum = atr.slice(0, period).reduce((acc, val) => acc + val, 0);
+    //   return atrSum / period;
+    // };
+
+    // const calculateSuperTrend = (data, atrPeriod, multiplier) => {
+    //   let superTrend = [];
+
+    //   for (let i = atrPeriod; i < data.length; i++) {
+    //     const prevSuperTrend = superTrend[i - 1] || 0;
+    //     const atr = calculateATR(data.slice(i - atrPeriod, i), atrPeriod);
+
+    //     const upperBand = (data[i].high + data[i].low - multiplier * atr);
+    //     const lowerBand = (data[i].high + data[i].low - multiplier * atr);
+
+    //     const close = data[i].close;
+
+    //     if (close <= upperBand) {
+    //       superTrend.push(upperBand);
+    //     } else if (close >= lowerBand) {
+    //       superTrend.push(lowerBand);
+    //     } else {
+    //       superTrend.push(prevSuperTrend);
+    //     }
+    //   }
+
+    //   return superTrend;
+    // };
+
+    // // Sample data (replace with your own dataset)
+    // const historicalData = [
+    //   { high: 150, low: 140, close: 145 },
+    //   { high: 155, low: 145, close: 150 },
+    //   // Add more data points
+    // ];
+
+    // const atrPeriod = 14; // ATR period
+    // const multiplier = 3; // Multiplier value
+
+    // const superTrendValues = calculateSuperTrend(historicalData, atrPeriod, multiplier);
+
+    // // Calculate the average Super Trend
+    // const averageSuperTrend = superTrendValues.reduce((acc, val) => acc + val, 0) / superTrendValues.length;
+
+    // console.log('Super Trend Values:', superTrendValues);
+    // console.log('Average Super Trend:', averageSuperTrend);
+
+
+    ////////// END SUper Trend logic///
+
+
+  })
    
-   
-  //testtt
-
-    // Connect to MongoDB and create views
-    async function createViewsAllDatabase() {
-        for (const server of servers) {
-            const client = new MongoClient(server);
-
-            try {
-                await client.connect();
-                const database = "test";
-                const db = client.db(database);
-
-                const viewName = "open_position_excute";
-                const collectionName = "open_position";
-
-                 // Define view pipeline
-                const viewPipeline = [
-                    {
-                        $match: {
-                            $or: [
-                                // { isLpInRange1: true },
-                                { isLpInRangeTarget: true },
-                                { isLpInRangeStoploss: true },
-                                { isLpInRange: 1 },
-                                { isLpInRange: 0 }
-                            ]
-                        }
-                    }
-                  ]
-
-
-
-                const collectionExists = await db.listCollections({ name: viewName }).hasNext();
-
-                if (!collectionExists) {
-                    // Create the view collection
-                    await db.createCollection(viewName, { viewOn: collectionName, pipeline: viewPipeline });
-                    console.log(`View ${viewName} created in 'test' on '${server}'`);
-                } else {
-                    console.log(`Collection ${viewName} already exists in 'test' on '${server}'`);
-                }
-            } 
-            
-            catch(error){
-                console.log(`An error occurred: ${error}`);
-            }
-            finally {
-                await client.close();
-            }
-        }
-    }
-
-    app.get("/AllViewCreate", async (req, res) => {
-        //createViewsAllDatabase();
-        //deleteViewsAllDatabase();
-        RunQueryUpdateAllDatabase()
-       // RunQueryAddAllDatabase()
-        res.send("okkkk")
-    });
-
-    async function deleteViewsAllDatabase() {
-        for (const server of servers) {
-            const client = new MongoClient(server);
-    
-            try {
-                await client.connect();
-                const database = "test";
-                const db = client.db(database);
-
-                const viewName = "open_position_excute";
-                //const collectionName = "users";
-                const collectionExists = await db.listCollections({ name: viewName }).hasNext();
-    
-                if (collectionExists) {
-
-                    // Drop the existing view collection
-                    await db.collection(viewName).drop();
-                    console.log(`View '${viewName}' dropped in '${database}' on '${server}'`);
-                 }else{
-                    console.log(`View '${viewName}' Not exist in '${database}' on '${server}'`);
-
-                }
-    
-
-
-                // Create the view collection
-                // await db.createCollection(viewName, { viewOn: collectionName, pipeline: viewPipeline });
-
-              //  console.log(`View '${viewName}' created in '${database}' on '${server}'`);
-
-              
-            } 
-            
-            catch(error){
-                console.log(`An error occurred: ${error}`);
-            }
-            finally {
-                await client.close();
-            }
-        }
-    }
-
-    async function RunQueryUpdateAllDatabase() {
-        for (const server of servers) {
-            const client = new MongoClient(server);
-    
-            try {
-                await client.connect();
-                const database = "test";
-                const db = client.db(database);
-
-                const collectionName = "mainsignals";
-
-                const fliter = {};
-
-                const updates = {$set:{ exit_time: "0", target: "0" ,stop_loss:"0"} };
-
-                const options = { multi: true };
-
-                const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
-    
-                if (collectionExists) {
-                
-                // Run the updateMany query
-                const result = await db.collection(collectionName).updateMany(fliter,updates,options);
-                console.log(`Updated ${result.modifiedCount} documents in 'mainsignals' collection on '${server}'`);
-
-                } else {
-                    console.log(`Collection Not exists in 'test' on '${server}'`);
-                }
-                
-               
-            } 
-            
-            catch(error){
-                console.log(`An error occurred: ${error}`);
-            }
-            finally {
-                await client.close();
-            }
-        }
-    }
-
-
-    async function RunQueryAddAllDatabase() {
-        for (const server of servers) {
-            const client = new MongoClient(server);
-    
-            try {
-                await client.connect();
-                const database = "test";
-                const db = client.db(database);
-                const collectionName = "mainsignals";
-    
-        
-                const documentToInsert = [{ss:"okk" }];
-    
-                const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
-    
-                if (collectionExists) {
-                    // Insert one document into the collection
-                    const result = await db.collection(collectionName).insertMany(documentToInsert);
-                    console.log(`Inserted 1 document into 'mainsignals' collection on '${server}'`);
-                } else {
-                    console.log(`Collection does not exist in 'test' on '${server}'`);
-                }
-            } 
-            
-            catch(error){
-                console.log(`An error occurred: ${error}`);
-            }
-            finally {
-                await client.close();
-            }
-        }
-    }
-
-
-
-
-
-
-
 
 
     app.get("/DT", async (req, res) => {
