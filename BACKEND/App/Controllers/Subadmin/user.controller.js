@@ -144,6 +144,60 @@ class Employee {
         });
       }
 
+
+
+
+
+      const totalLicense = await User_model.aggregate([
+        // Match documents based on your criteria (e.g., specific conditions)
+        {
+          $match: {
+            license_type: "2",
+            licence: { $exists: true, $ne: null, $not: { $type: 10 } }, // Exclude undefined or NaN values
+          },
+        },
+        {
+          $group: {
+            _id: null, // Group all documents into a single group
+            totalLicense: {
+              $sum: { $toInt: "$licence" },
+            },
+          },
+        },
+      ]);
+
+      if (totalLicense.length > 0) {
+        var TotalLicense = totalLicense[0].totalLicense;
+      } else {
+        var TotalLicense = 0;
+      }
+
+      console.log("SHK 4")
+
+      if (Number(licence) > 0) {
+        console.log("SHK 1")
+
+        if ((parseInt(TotalLicense) + parseInt(licence)) >= Number(Panel_key[0].licenses)  ) {
+         console.log("SHK 2")
+          return res.send({
+            status: false,
+            msg: "You Dont Have License",
+            data: [],
+          })
+        }
+
+      }
+
+
+      console.log("SHK 3")
+
+
+
+
+
+
+
+
       // USER 2 DAYS LICENSE USE
       if (license_type == "0") {
         var currentDate = new Date();
@@ -461,10 +515,22 @@ class Employee {
         new_licence = req.licence1;
       }
 
-      if (
-        Number(Panel_key[0].licenses) >=
-        Number(TotalLicense) + Number(new_licence)
-      ) {
+
+      if (Number(new_licence) > 0) {
+        //console.log("SHK 1")
+
+        if ((parseInt(TotalLicense) + parseInt(new_licence)) >= Number(Panel_key[0].licenses)  ) {
+         // console.log("SHK 2")
+          return res.send({
+            status: false,
+            msg: "You Dont Have License",
+            data: [],
+          })
+        }
+
+      }
+
+
 
         var is_active = "1"
         var ActiveStatus = "1"
@@ -836,13 +902,7 @@ class Employee {
           msg: "User Update successfully",
           data: [],
         });
-      } else {
-        return res.send({
-          status: false,
-          msg: "You Dont Have License",
-          data: [],
-        });
-      }
+      
     } catch (error) {
       console.log("Error In User Update-", error);
     }
