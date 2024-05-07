@@ -211,6 +211,15 @@ const TradeHistory = () => {
       text: "Strategy",
     },
     {
+      dataField: "2",
+      text: "Entry Type",
+      formatter: (cell, row, rowIndex) => (
+        <div>
+          <span>{row.entry_type === "LE"?"BUY ENTRY":"SELL ENTRY"}</span>
+        </div>
+      ),
+    },
+    {
       dataField: "entry_qty",
       text: "Entry Qty",
       formatter: (cell, row, rowIndex) => (
@@ -369,9 +378,29 @@ const TradeHistory = () => {
        
 
 
+      // if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
+      // total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
+      // }
+
       if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
-      total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
-      }
+      
+     
+        if(item.entry_type ==="LE"){
+         // console.log("item iFF" ,item._id , " total ",total)
+          let total1 = (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
+          if(!isNaN(total1)){
+            total += total1
+          }
+         
+        }else{
+         let total1 = (parseFloat(item.entry_price) - parseFloat(item.exit_price)) * parseInt(item.exit_qty_percent);
+         // console.log("item ELSE" ,item._id , " total ",total)
+          if(!isNaN(total1)){
+            total += total1
+          }
+  
+        }
+        }
     });
 
   return (

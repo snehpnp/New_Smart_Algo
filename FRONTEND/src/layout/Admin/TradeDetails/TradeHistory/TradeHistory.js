@@ -290,7 +290,8 @@ const TradeHistory = () => {
       text: "Entry Status",
       formatter: (cell, row, rowIndex) => (
           <div>
-              <span>{row.result[0].exit_status ==="above"?"ABOVE":row.result[0].exit_status ==="below"?"BELOW":row.result[0].exit_status == "range"?"RANGE":" - "}</span>
+               <span>{StatusEntry(row)}</span>
+              {/* <span>{row.result[0].exit_status ==="above"?"ABOVE":row.result[0].exit_status ==="below"?"BELOW":row.result[0].exit_status == "range"?"RANGE":" - "}</span> */}
 
 
           </div>
@@ -328,7 +329,17 @@ const TradeHistory = () => {
 
 
 
+  const StatusEntry = (row) => {
 
+    const filteredData = row.result.find(obj => obj.type === "LE" || obj.type === 'SE');
+
+    if(filteredData != undefined){
+      return filteredData.exit_status 
+    }else{
+      return'-' 
+    }
+     
+  }
 
   const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
 
@@ -491,6 +502,7 @@ const TradeHistory = () => {
                 }
                 //  if Only entry qty Exist
                 else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
+                  
                   let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
 
 

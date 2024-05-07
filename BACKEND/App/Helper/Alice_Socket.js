@@ -124,7 +124,8 @@ const Alice_Socket = async () => {
                                         exc: response.e,
                                         sp1: sp1,
                                         bp1: bp1,
-                                        curtime: `${hours}${minutes}`
+                                        curtime: `${hours}${minutes}`,
+                                        ft: response.ft
                                     },
                                 };
                                 const result = await stock_live_price.updateOne(filter, update, { upsert: true });

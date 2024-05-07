@@ -183,6 +183,13 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
 
 
                                     let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+
+                                    if(get_entry_type === "SE"){
+                                        rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+                                      }
+
+
+
                                     let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                                     let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
 
@@ -205,7 +212,14 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                         }
                         //  if Only entry qty Exist
                         else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
+
                             let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
+                           
+                            if(get_entry_type === "SE"){
+                                abc = ((parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_entry_qty)).toFixed();
+                              }
+                           
+                           
                             if (isNaN(abc)) {
                                 return "-";
                             } else {
@@ -275,6 +289,10 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                 // console.log(" get_exit_qty ",get_exit_qty)
   
                 let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+
+                if(get_entry_type === "SE"){
+                    rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+                  }
                
    
                 let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
@@ -297,6 +315,13 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
           //  if Only entry qty Exist
           else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
             let abc = ((parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
+
+
+            if(get_entry_type === "SE"){
+                abc = ((parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_entry_qty)).toFixed();
+              }
+
+
             if (isNaN(abc)) {
               return "-";
             } else {

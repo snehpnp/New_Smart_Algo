@@ -82,6 +82,10 @@ const SignalsSchema = Schema({
         type: String,
         default: null
     },
+    ft_time: {
+        type: String,
+        default: null
+    },
 
     createdAt: {
         type: Date,

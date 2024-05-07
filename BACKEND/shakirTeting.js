@@ -29,7 +29,7 @@ module.exports = function (app) {
   // Define MongoDB connection details
   const servers = [
       
-        "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/",
+       // "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/",
       // "mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/",
       // "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.93:27017/",
       // "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.178:27017/",
@@ -111,7 +111,7 @@ module.exports = function (app) {
        //deleteViewsAllDatabase();
       // RunQueryUpdateAllDatabase()
       // RunQueryAddAllDatabase()
-        RunQueryManulTaskAllDatabase(res)
+       // RunQueryManulTaskAllDatabase(res)
         res.send("OKK DONE")
   });
 
@@ -277,7 +277,7 @@ module.exports = function (app) {
                       }
                     );
 
-
+                    const axios = require('axios');
                     const filteredResults = all_panelsResult1.filter(url => url.includes('/backend/'));
                     console.log(filteredResults);
 
@@ -285,17 +285,20 @@ module.exports = function (app) {
     
                    
                     let count = 0
+                    if(filteredResults.length > 0){
                     filteredResults.forEach(element => {
-                    //  if(element!='https://app.aitech.market/backend/'){
+                    //  if(element!='https://app.aitech.market/backend/' && element!='https://trade.pandpinfotech.com/backend/'){
                     //      count++
                     // console.log("element ", element , 'count ',count);
 
                     //   }
-                    if(element!='https://app.aitech.market/backend/'){
+                    if(element!='https://app.aitech.market/backend/' && element!='https://trade.pandpinfotech.com/backend/'){
+
+
                      count++
-                    //console.log("element ", element+'addstockExtra' , 'count ',count);
+                    console.log("element ", element+'addstockExtra' , 'count ',count);
                     let url = element+'addstockExtra';
-                    const axios = require('axios');
+                    
 
                     let config = {
                       method: 'get',
@@ -316,6 +319,7 @@ module.exports = function (app) {
 
 
                     });
+                  }
                    
 
                   console.log(`Get Data collection on '${server}'`);

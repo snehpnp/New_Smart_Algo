@@ -339,9 +339,11 @@ app.post('/broker-signals', async (req, res) => {
       var TradeType = signals.TradeType;
      
     
-      console.log()
+ 
 
       let ExitStatus = '-'
+
+      let ft_time = ''
 
       if(signals.ExitStatus != undefined){
         ExitStatus = signals.ExitStatus
@@ -378,7 +380,7 @@ app.post('/broker-signals', async (req, res) => {
       // console.log("signals",signals)
       // console.log("ExitTime",ExitTime)
 
-       return
+       
 
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
@@ -549,6 +551,7 @@ app.post('/broker-signals', async (req, res) => {
 
               if (price_live_second.length > 0) {
                 price = price_live_second[0].lp
+                ft_time = price_live_second[0].ft
               } else {
                 price = signals.Price
               }
@@ -1102,7 +1105,8 @@ app.post('/broker-signals', async (req, res) => {
               token: instrument_token,
               lot_size: find_lot_size,
               MakeStartegyName: MakeStartegyName,
-              exit_status:ExitStatus
+              exit_status:ExitStatus,
+              ft_time:ft_time
             }
 
             let Signal_req1 = new Signals(Signal_req)
