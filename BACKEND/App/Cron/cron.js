@@ -16,6 +16,7 @@ var dateTime = require('node-datetime');
 var moment = require('moment');
 const db = require('../Models')
 const Alice_token = db.Alice_token;
+const services = db.services;
 const User = db.user;
 const user_logs = db.user_logs;
 const live_price = db.live_price;
@@ -869,6 +870,30 @@ const TokenSymbolUpdate = () => {
     
                     if (element.instrumenttype == 'FUTSTK' && element.exch_seg == "NFO") {
 
+
+                        const filter_service = { name: element.name };
+                        const updateOperation_service = { $set: { lotsize: element.lotsize } };
+                        try {
+                        const Update_service = await services.updateMany(filter_service, updateOperation_service);
+                        } catch (error) {
+                        console.log("Error updating documents:", error);
+                        }
+
+
+
+                        const filter_alice = { symbol: element.name };
+                        const updateOperation_alice = { $set: { lotsize: element.lotsize } };
+                        try {
+                        const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
+                        } catch (error) {
+                        console.log("Error updating documents:", error);
+                        }
+
+
+
+
+
+
                         let exist_token =   await Alice_token.findOne({instrument_token:element.token},{instrument_token:1})  
                         if(exist_token == null){
     
@@ -896,6 +921,28 @@ const TokenSymbolUpdate = () => {
     
     
                     } else if (element.instrumenttype == 'FUTIDX' && element.exch_seg == "NFO") {
+
+
+                        const filter_service = { name: element.name };
+                        const updateOperation_service = { $set: { lotsize: element.lotsize } };
+                        try {
+                        const Update_service = await services.updateMany(filter_service, updateOperation_service);
+                        } catch (error) {
+                        console.log("Error updating documents:", error);
+                        }
+
+
+
+                        const filter_alice = { symbol: element.name };
+                        const updateOperation_alice = { $set: { lotsize: element.lotsize } };
+                        try {
+                        const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
+                        } catch (error) {
+                        console.log("Error updating documents:", error);
+                        }
+
+
+
 
                         let exist_token =   await Alice_token.findOne({instrument_token:element.token},{instrument_token:1})  
                         if(exist_token == null){
@@ -926,6 +973,33 @@ const TokenSymbolUpdate = () => {
 
     
                     } else if (element.instrumenttype == 'FUTCOM') {
+
+
+
+                        const filter_service = { name: element.name };
+                        const updateOperation_service = { $set: { lotsize: element.lotsize } };
+                        try {
+                        const Update_service = await services.updateMany(filter_service, updateOperation_service);
+                        } catch (error) {
+                        console.log("Error updating documents:", error);
+                        }
+
+
+
+                        const filter_alice = { symbol: element.name };
+                        const updateOperation_alice = { $set: { lotsize: element.lotsize } };
+                        try {
+                        const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
+                        } catch (error) {
+                        console.log("Error updating documents:", error);
+                        }
+
+
+
+
+
+
+
                         let exist_token =   await Alice_token.findOne({instrument_token:element.token},{instrument_token:1})  
                         if(exist_token == null){
                         tradesymbol_m_w = element.name + year_end + moth_count + day_start + strike + option_type;
@@ -953,6 +1027,10 @@ const TokenSymbolUpdate = () => {
     
                     }
                     else if (element.instrumenttype == 'OPTIDX' && element.exch_seg == "NFO") {
+
+
+                    
+
 
                         let exist_token =   await Alice_token.findOne({instrument_token:element.token},{instrument_token:1})  
                         if(exist_token == null){
@@ -1120,6 +1198,27 @@ const TokenSymbolUpdate = () => {
                     }
     
                     } else if (element.instrumenttype == 'FUTCUR') {
+
+
+                        const filter_service = { name: element.name };
+                        const updateOperation_service = { $set: { lotsize: element.lotsize } };
+                        try {
+                        const Update_service = await services.updateMany(filter_service, updateOperation_service);
+                        } catch (error) {
+                        console.log("Error updating documents:", error);
+                        }
+
+
+
+                        const filter_alice = { symbol: element.name };
+                        const updateOperation_alice = { $set: { lotsize: element.lotsize } };
+                        try {
+                        const Update_alice = await Alice_token.updateMany(filter_alice, updateOperation_alice);
+                        } catch (error) {
+                        console.log("Error updating documents:", error);
+                        }
+
+
 
                         let exist_token =   await Alice_token.findOne({instrument_token:element.token},{instrument_token:1})  
                         if(exist_token == null){

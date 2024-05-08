@@ -5,6 +5,8 @@ module.exports = function (app) {
     var dateTime = require('node-datetime');
     var moment = require('moment');
 
+    const mongoose = require("mongoose");
+    const ObjectId = mongoose.Types.ObjectId;
 
     const User = db.user;
     const services = db.services;
@@ -13,6 +15,7 @@ module.exports = function (app) {
     const live_price = db.live_price;
     const UserMakeStrategy = db.UserMakeStrategy;
     const Get_Option_Chain_modal = db.option_chain_symbols;
+    const client_services = db.client_services;
 
 
     const { DashboardView } = require('./View/DashboardData')
@@ -26,6 +29,66 @@ module.exports = function (app) {
 
 
     const { MongoClient } = require('mongodb');
+
+
+   app.get("/UpdateQty",async(req,res)=>{
+
+    const pipeline = [
+
+        {
+          $project: {
+            // Include fields from the original collection
+            'lotsize': 1,
+            'name': 1,
+          },
+        },
+      ];
+      const servicesResult = await services.aggregate(pipeline);
+      if(servicesResult.length > 0){
+      servicesResult.forEach(async(element) => {
+           const Sid = new ObjectId(element._id);
+         // if(element.name == "TITAN"){
+          
+        //  console.log( "id ",element._id, "name ",element.name , "lotesize" ,element.lotsize)
+          const clsResult = await client_services.find({service_id:Sid});
+          if(clsResult.length > 0){
+              clsResult.forEach(async(item)  => {
+                  
+               //   console.log( "lotsize ",item.lot_size ,"element.lotsize ",element.lotsize ," qty" ,item.quantity)
+
+
+                     const filtet = { _id: item._id };
+                     const qty = parseInt(item.lot_size)*parseInt(element.lotsize)
+                    const updateOperation = { $set: { quantity: qty } };
+                    try {
+                    const UpdateD = await client_services.updateOne(filtet, updateOperation);
+                    console.log("UpdateD",UpdateD)
+                    } catch (error) {
+                    console.log("Error updating documents:", error);
+                    }
+
+
+
+              });
+            }
+
+       //}
+
+
+      });
+      
+    }
+
+
+
+     res.send({status:true})
+
+
+  
+
+
+
+ })
    
       //Add stoch Api.....
   app.get('/addstockExtra', async function (req, res) {

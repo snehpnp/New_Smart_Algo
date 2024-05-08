@@ -107,6 +107,7 @@ const Alice_Socket = async () => {
 
 
                             if (response.lp != undefined) {
+                                
                                 let bp1 = response.lp
                                 let sp1 = response.lp
 

@@ -334,7 +334,7 @@ const TradeHistory = () => {
     const filteredData = row.result.find(obj => obj.type === "LE" || obj.type === 'SE');
 
     if(filteredData != undefined){
-      return filteredData.exit_status 
+      return filteredData.exit_status=="above"?"ABOVE":filteredData.exit_status=="below"?"BELOW":filteredData.exit_status=="range"?"RANGE":filteredData.exit_status 
     }else{
       return'-' 
     }
