@@ -881,12 +881,13 @@ async function run() {
     };
 
     const exitOpentrade = async () => {
-     // console.log("DONEEE exitOpentrade")
-      if (holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
+    // console.log("DONEEE exitOpentrade")
+    if (weekday != 'Sunday' && weekday != 'Saturday') {
       try {
         const viewName = 'open_position_excute';
       
-      
+      //console.log("DONEEE 2")
+       
         var openPosition = await db_GET_VIEW.collection(viewName).find().toArray();
       
        // console.log("openPosition ",openPosition)

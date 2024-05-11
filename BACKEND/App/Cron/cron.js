@@ -27,15 +27,11 @@ const MainSignals_modal = db.MainSignals
 
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
-
-
 const MongoClient = require('mongodb').MongoClient;
-
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect();
 const db_main = client.db(process.env.DB_NAME);
-
 const token_chain_collection = db_main.collection('token_chain');
 
 
@@ -144,16 +140,57 @@ const pipeline =[
           },
           exch_seg: {
             $cond: {
-              if: {
-                $and : [
-                   { $eq : ["$segment","O"] }
-                ]
-              },
-              then : "NFO",
-              else:"NSE"
-        
+              if: { $eq: ['$segment', 'C'] }, // Your condition here
+              then: 'NSE',
+              else: {
+                $cond: {
+                  if: {
+                    $or: [
+                      { $eq: ['$segment', 'F'] },
+                      { $eq: ['$segment', 'O'] },
+                      { $eq: ['$segment', 'FO'] }
+                    ]
+                  },
+                  then: 'NFO',
+                  else: {
+
+                    $cond: {
+                      if: {
+                        $or: [
+                          { $eq: ['$segment', 'MF'] },
+                          { $eq: ['$segment', 'MO'] }
+                        ]
+                      },
+                      then: 'MCX',
+                      else: {
+
+                        $cond: {
+                          if: {
+                            $or: [
+                              { $eq: ['$segment', 'CF'] },
+                              { $eq: ['$segment', 'CO'] }
+                            ]
+                          },
+                          then: 'CDS',
+
+                          // all not exist condition 
+                          else: "NFO"
+
+                        }
+
+                      }
+
+                    }
+
+
+                  }
+
+                }
+
+              }
+
             }
-          }
+          },
         }
       },
       {

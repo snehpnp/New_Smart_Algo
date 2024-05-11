@@ -555,6 +555,10 @@ app.post('/broker-signals', async (req, res) => {
               } else {
                 price = signals.Price
               }
+            }else{
+              if(price_live_second.length > 0){
+                ft_time = price_live_second[0].ft
+              }
             }
           } catch (error) {
             console.log("Error  IN price Update", error);
