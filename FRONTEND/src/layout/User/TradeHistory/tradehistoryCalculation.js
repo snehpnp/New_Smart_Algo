@@ -261,7 +261,7 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
     }
 
     else{
-         
+    
        console.log("tradeHistoryData.data ",tradeHistoryData.length)
         tradeHistoryData && tradeHistoryData.forEach((row, i) => {
          
@@ -293,7 +293,8 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                 if(get_entry_type === "SE"){
                     rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
                   }
-               
+                 
+                
    
                 let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                 let finalyupl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * upl;
