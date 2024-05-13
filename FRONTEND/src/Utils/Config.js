@@ -1,8 +1,8 @@
 
 // Front-End Comman Url  
 
-export const react_domain = `${window.location.origin}`;
-// export const react_domain = `https://software.uniquetechnology.in`;
+// export const react_domain = `${window.location.origin}`;
+export const react_domain = `https://software.uniquetechnology.in`;
 
 
 
