@@ -86,16 +86,16 @@ const AllClients = () => {
       });
   };
 
- 
+
 
   const Brokerdata = async () => {
-  
-    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
-        .then((response) => {
-            if (response.status) {
-              setBrokerDetails(response.data);
-            }
-        })
+
+    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain, brokerId: -1 })).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setBrokerDetails(response.data);
+        }
+      })
   }
 
   useEffect(() => {
@@ -329,7 +329,7 @@ const AllClients = () => {
       return value;
     }
   };
-  
+
 
   const columns = [
     {
@@ -477,7 +477,7 @@ const AllClients = () => {
                   className="mx-1"
                 />
               </span>
-            </Link> 
+            </Link>
             {row.license_type == "1" ?
               <Link>
                 <span data-toggle="tooltip" data-placement="top" title="Delete">
@@ -500,7 +500,7 @@ const AllClients = () => {
 
 
 
-  
+
   const showBrokerName = (value1, licence_type) => {
     let value = parseInt(value1);
 
@@ -511,8 +511,8 @@ const AllClients = () => {
       return "Demo";
     } else {
 
- 
-      
+
+
       const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
       if (foundNumber != undefined) {
         return foundNumber.title
@@ -561,7 +561,7 @@ const AllClients = () => {
   // MANAGE MULTIFILTER
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
-    
+
       const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
       const filter3Match = selectBroker === "null" || item.broker === selectBroker;
       const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
@@ -704,22 +704,22 @@ const AllClients = () => {
                     Broker Type
                   </label>
                   <select
-                  className="default-select wide form-control"
-                  aria-label="Default select example"
-                  id="select"
-                  onChange={(e) => setSelectBroker(e.target.value)}
-                  value={selectBroker}
-                >
-                  <option value="null">All</option>
-                  
-                 
-                  {BrokerDetails && BrokerDetails.map((element) => (
-                    <option key={element.broker_id} value={element.broker_id}>
-                      {element.title}
-                    </option>
-                  ))}
- 
-                </select>
+                    className="default-select wide form-control"
+                    aria-label="Default select example"
+                    id="select"
+                    onChange={(e) => setSelectBroker(e.target.value)}
+                    value={selectBroker}
+                  >
+                    <option value="null">All</option>
+
+
+                    {BrokerDetails && BrokerDetails.map((element) => (
+                      <option key={element.broker_id} value={element.broker_id}>
+                        {element.title}
+                      </option>
+                    ))}
+
+                  </select>
                 </div>
               </div>
 
