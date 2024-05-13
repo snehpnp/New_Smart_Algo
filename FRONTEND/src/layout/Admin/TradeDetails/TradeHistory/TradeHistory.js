@@ -174,7 +174,7 @@ const TradeHistory = () => {
     {
       dataField: "exit_dt_date",
       text: "Signals Exit time",
-      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
+      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell) :"-"}</>,
     },
     {
       dataField: "trade_symbol",
@@ -207,15 +207,15 @@ const TradeHistory = () => {
     //     <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
     //   ),
     // },
-    {
-      dataField: "live",
-      text: "Live Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`LivePrice_${row.token}`}></span>
-        </div>
-      ),
-    },
+    // {
+    //   dataField: "live",
+    //   text: "Live Price",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`LivePrice_${row.token}`}></span>
+    //     </div>
+    //   ),
+    // },
     {
       dataField: "entry_price",
       text: "Entry Price",
