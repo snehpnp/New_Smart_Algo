@@ -313,19 +313,15 @@ const BrokerResponse = () => {
 
                       <td>{inputValue[data.service.name] ? parseInt(inputValue[data.service.name]) * parseInt(data.service.lotsize) :
                         parseInt(data.lot_size) * parseInt(data.service.lotsize)}</td>
-
+{/* 
                       <td className="color-primary col-md-2">
                         {data.userInfo.multiple_strategy_select === "1" ?
                           // "Multiple Startegy Select"
 
-
-
                           <Button variant="primary" onClick={() => handleShowStartegyModal(data)}>
                             Selected Strategy
                           </Button>
-
                           :
-
                           //  "Single Strategy Select"
                           <select
                             name="strategy_id"
@@ -380,7 +376,44 @@ const BrokerResponse = () => {
                           </select>
                         }
 
-                      </td>
+                      </td> */}
+
+<td className="color-primary col-md-2">
+  {data.userInfo.multiple_strategy_select === "1" ? (
+    <Button variant="primary" onClick={() => handleShowStartegyModal(data)}>
+      Selected Strategy
+    </Button>
+  ) : (
+    <select
+      name="strategy_id"
+      className="form-select form-select-lg"
+      aria-label=".form-select-lg example"
+      onChange={(e) =>
+        setgroup_qty_value_test(
+          e,
+          data.service.name,
+          data.service,
+          data
+        )
+      }
+    >
+      {Strategy.data &&
+        Strategy.data.map((item) => (
+          <option
+            key={item.result._id}
+            className={data.strategy_id.includes(item.result._id) ? "text-success h6" : "text-danger h6"}
+            value={item.result._id}
+            selected={data.strategy_id.includes(item.result._id)}
+          >
+            {item.result.strategy_name}
+          </option>
+        ))}
+    </select>
+  )}
+</td>
+
+
+
 
                       <td className="color-primary">
                         <select
@@ -403,6 +436,7 @@ const BrokerResponse = () => {
                           <option value="4">STOPLOSS MARKET</option>
                         </select>
                       </td>
+
                       <td className="color-primary">
                         <select
                           name="product_type"
@@ -424,6 +458,7 @@ const BrokerResponse = () => {
                           <option value="4">CO</option>
                         </select>
                       </td>
+
                       <td className="color-primary">
                         <label class="toggle">
                           <input
