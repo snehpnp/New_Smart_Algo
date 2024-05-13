@@ -46,7 +46,9 @@ const TradeHistory = () => {
   const [rowData, setRowData] = useState("");
 
 
-  console.log("rowdata :", rowData);
+
+  console.log("rowData :", rowData)
+   
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -188,7 +190,7 @@ const TradeHistory = () => {
 
     {
       dataField: "createdAt",
-      text: "Signals time",
+      text: "Signals Entry time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
 
@@ -216,62 +218,15 @@ const TradeHistory = () => {
       dataField: "strategy",
       text: "Strategy",
     },
-    {
-      dataField: "2",
-      text: "Entry Type",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span>{row.entry_type === "LE"?"BUY ENTRY":"SELL ENTRY"}</span>
-        </div>
-      ),
-    },
-    // {
-    //   dataField: "entry_qty",
-    //   text: "Entry Qty",
-    //   formatter: (cell, row, rowIndex) =>  (
-    //      <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span> 
-    //    )
-   
-    // },
 
     {
       dataField: "entry_qty",
-      text: "Entry Qty",
-      formatter: (cell, row, rowIndex) => {
-        return (
-          <div>
-            <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
-            <span className={`d-none entry_qty_${row.token}_${row._id}`}>
-              {row.entry_qty_percent}
-            </span>
-            <span className={`d-none exit_qty_${row.token}_${row._id}`}>
-              {row.exit_qty_percent}
-            </span>
-            <span className={`d-none exit_price_${row.token}_${row._id}`}>
-              {row.exit_price}
-            </span>
-            <span className={`d-none entry_price_${row.token}_${row._id}`}>
-              {row.entry_price}
-            </span>
-            <span className={`d-none entry_type_${row.token}_${row._id}`}>
-              {row.entry_type}
-            </span>
-            <span className={`d-none exit_type_${row.token}_${row._id}`}>
-              {row.exit_type}
-            </span>
-            <span className={`d-none strategy_${row.token}_${row._id}`}>
-              {row.strategy}
-            </span>
-            <span className={`d-none _id_${row.token}_${row._id}`}>
-              {row._id}
-            </span>
-          </div>
-        );
-      },
+      text: "Quantity",
+      formatter: (cell, row, rowIndex) => (
+         <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
+        // <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+      ),
     },
-
-
-
     // {
     //   dataField: "exit_qty",
     //   text: "Exit Qty",
@@ -362,6 +317,12 @@ const TradeHistory = () => {
           <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
         </div>
       ),
+    },
+
+    {
+      dataField: "exit_dt_date",
+      text: "Signals Exit time",
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
     
    
