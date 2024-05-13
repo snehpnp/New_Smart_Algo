@@ -129,7 +129,8 @@ const AddClient = () => {
       app_key: 'null',
       demat_userid: 'null',
       parent_role: null,
-      Strategy: false
+      Strategy: false,
+      multiple_strategy_select: false,
     },
     validate: (values) => {
 
@@ -216,7 +217,8 @@ const AddClient = () => {
         "app_key": values.app_key,
         "api_type": values.api_type,
         "demat_userid": values.demat_userid,
-        "group_service": values.groupservice
+        "group_service": values.groupservice,
+        "multiple_strategy_select": values.multiple_strategy_select === false ? '0' : '1'
       }
 
 

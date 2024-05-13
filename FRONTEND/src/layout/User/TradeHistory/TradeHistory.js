@@ -192,6 +192,12 @@ const TradeHistory = () => {
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
 
+    {
+      dataField: "exit_dt_date",
+      text: "Signals Exit time",
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
+    },
+
     // {
     //   dataField: "closeprice",
     //   text: "Close Price",
@@ -211,53 +217,30 @@ const TradeHistory = () => {
       text: "Strategy",
     },
     {
-      dataField: "entry_qty",
-      text: "Entry Qty",
-      formatter: (cell, row, rowIndex) => (
-         <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
-        // <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
-      ),
-    },
-    {
-      dataField: "exit_qty",
-      text: "Exit Qty",
-      formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== "" ? parseInt(row.exit_qty_percent) : "-"}</span>
-       // <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
-      ),
-    },
-
-    {
-      dataField: "live",
-      text: "Live Price",
+      dataField: "2",
+      text: "Entry Type",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span className={`LivePrice_${row.token}`}></span>
+          <span>{row.entry_type === "LE"?"BUY ENTRY":"SELL ENTRY"}</span>
         </div>
       ),
     },
-    {
-      dataField: "entry_price",
-      text: "Entry Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
-      ),
-    },
-    {
-      dataField: "exit_price",
-      text: "Exit Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
-      ),
-    },
+    // {
+    //   dataField: "entry_qty",
+    //   text: "Entry Qty",
+    //   formatter: (cell, row, rowIndex) =>  (
+    //      <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span> 
+    //    )
+   
+    // },
 
     {
-      dataField: "Action",
-      text: "Realised",
+      dataField: "entry_qty",
+      text: "Entry Qty",
       formatter: (cell, row, rowIndex) => {
         return (
           <div>
-            <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
+            <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
             <span className={`d-none entry_qty_${row.token}_${row._id}`}>
               {row.entry_qty_percent}
             </span>
@@ -288,17 +271,88 @@ const TradeHistory = () => {
     },
 
 
+
+    // {
+    //   dataField: "exit_qty",
+    //   text: "Exit Qty",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <span className="text">{cell !== "" ? parseInt(row.exit_qty_percent) : "-"}</span>
+    //    // <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+    //   ),
+    // },
+
+    // {
+    //   dataField: "live",
+    //   text: "Live Price",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`LivePrice_${row.token}`}></span>
+    //     </div>
+    //   ),
+    // },
     {
-      dataField: "UPL",
-      text: "Un-Realised",
+      dataField: "entry_price",
+      text: "Entry Price",
       formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
-
-
-        </div>
+        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
       ),
     },
+    {
+      dataField: "exit_price",
+      text: "Exit Price",
+      formatter: (cell, row, rowIndex) => (
+        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
+      ),
+    },
+
+    // {
+    //   dataField: "Action",
+    //   text: "Realised",
+    //   formatter: (cell, row, rowIndex) => {
+    //     return (
+    //       <div>
+    //         <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
+    //         <span className={`d-none entry_qty_${row.token}_${row._id}`}>
+    //           {row.entry_qty_percent}
+    //         </span>
+    //         <span className={`d-none exit_qty_${row.token}_${row._id}`}>
+    //           {row.exit_qty_percent}
+    //         </span>
+    //         <span className={`d-none exit_price_${row.token}_${row._id}`}>
+    //           {row.exit_price}
+    //         </span>
+    //         <span className={`d-none entry_price_${row.token}_${row._id}`}>
+    //           {row.entry_price}
+    //         </span>
+    //         <span className={`d-none entry_type_${row.token}_${row._id}`}>
+    //           {row.entry_type}
+    //         </span>
+    //         <span className={`d-none exit_type_${row.token}_${row._id}`}>
+    //           {row.exit_type}
+    //         </span>
+    //         <span className={`d-none strategy_${row.token}_${row._id}`}>
+    //           {row.strategy}
+    //         </span>
+    //         <span className={`d-none _id_${row.token}_${row._id}`}>
+    //           {row._id}
+    //         </span>
+    //       </div>
+    //     );
+    //   },
+    // },
+
+
+    // {
+    //   dataField: "UPL",
+    //   text: "Un-Realised",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
+
+
+    //     </div>
+    //   ),
+    // },
 
     {
       dataField: "TPL",
@@ -332,9 +386,6 @@ const TradeHistory = () => {
 
 
 
-
-
-
   var CreatechannelList = "";
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
@@ -357,8 +408,7 @@ const TradeHistory = () => {
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
   
-
-  console.log("tradeHistoryData.data",tradeHistoryData.data)
+   console.log("tradeHistoryData.data",tradeHistoryData.data)
 
   let total=0;
   tradeHistoryData.data &&
@@ -369,9 +419,29 @@ const TradeHistory = () => {
        
 
 
+      // if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
+      // total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
+      // }
+
       if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
-      total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
-      }
+      
+     
+        if(item.entry_type ==="LE"){
+         // console.log("item iFF" ,item._id , " total ",total)
+          let total1 = (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
+          if(!isNaN(total1)){
+            total += total1
+          }
+         
+        }else{
+         let total1 = (parseFloat(item.entry_price) - parseFloat(item.exit_price)) * parseInt(item.exit_qty_percent);
+         // console.log("item ELSE" ,item._id , " total ",total)
+          if(!isNaN(total1)){
+            total += total1
+          }
+  
+        }
+        }
     });
 
   return (

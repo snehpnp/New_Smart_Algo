@@ -254,6 +254,8 @@ const dhan = require('./Broker/dhan')
 const fyers = require('./Broker/fyers')
 const markethub = require('./Broker/markethub')
 const swastika = require('./Broker/swastika')
+const mastertrust = require('./Broker/mastertrust')
+
 
 
 // BROKER SIGNAL
@@ -336,11 +338,18 @@ app.post('/broker-signals', async (req, res) => {
       var client_key = signals.Key;
       var TradeType = signals.TradeType;
      
+    
+ 
 
+      let ExitStatus = '-'
 
+      let ft_time = ''
 
+      if(signals.ExitStatus != undefined){
+        ExitStatus = signals.ExitStatus
+      }
 
-      var sl_status = "1";
+      var sl_status = 0;
       if (signals.sl_status != undefined) {
         sl_status = signals.sl_status;
       }
@@ -368,8 +377,10 @@ app.post('/broker-signals', async (req, res) => {
 
       var demo = signals.Demo;
 
-       console.log("signals",signals)
-      
+      // console.log("signals",signals)
+      // console.log("ExitTime",ExitTime)
+
+       
 
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
@@ -540,8 +551,13 @@ app.post('/broker-signals', async (req, res) => {
 
               if (price_live_second.length > 0) {
                 price = price_live_second[0].lp
+                ft_time = price_live_second[0].ft
               } else {
                 price = signals.Price
+              }
+            }else{
+              if(price_live_second.length > 0){
+                ft_time = price_live_second[0].ft
               }
             }
           } catch (error) {
@@ -780,6 +796,29 @@ app.post('/broker-signals', async (req, res) => {
           }
           //End Process swastika admin client
 
+           //Process mastertrust admin client
+           try {
+            const mastertrustCollection = db1.collection('mastertrustView');
+            const mastertrustdocuments = await mastertrustCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' mastertrust ALL CLIENT LENGTH ' + mastertrustdocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+
+            if (mastertrustdocuments.length > 0) {
+              mastertrust.place_order(mastertrustdocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get mastertrust Client In view", error);
+          }
+          //End Process mastertrust admin client
+
 
 
 
@@ -988,6 +1027,29 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+            //Process Tading View Client swastika
+            try {
+              const mastertrustCollection = db1.collection('mastertrustView');
+              const mastertrustdocuments = await mastertrustCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+  
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' mastertrust TRADING VIEW CLIENT LENGTH ' + mastertrustdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+  
+  
+              if (mastertrustdocuments.length > 0) {
+                mastertrust.place_order(mastertrustdocuments, signals, token, filePath, signal_req);
+              }
+  
+            } catch (error) {
+              console.log("Error Get mastertrust Client In view", error);
+            }
+            //End Process Tading View Client mastertrust 
+
+
+
         
 
           }
@@ -1046,7 +1108,9 @@ app.post('/broker-signals', async (req, res) => {
               TradeType: TradeType,
               token: instrument_token,
               lot_size: find_lot_size,
-              MakeStartegyName: MakeStartegyName
+              MakeStartegyName: MakeStartegyName,
+              exit_status:ExitStatus,
+              ft_time:ft_time
             }
 
             let Signal_req1 = new Signals(Signal_req)
@@ -1170,7 +1234,8 @@ app.post('/broker-signals', async (req, res) => {
                   exit_price: parseFloat(price) + (isNaN(ExitMainSignals[0].exit_price) || ExitMainSignals[0].exit_price === "" ? 0 : parseFloat(ExitMainSignals[0].exit_price)),
                   exit_qty_percent: exit_qty_percent1,
                   exit_qty: result,
-                  exit_dt_date: current_date
+                  exit_dt_date: current_date,
+                  exit_status:ExitStatus
                 }
                 updatedData.$addToSet = { signals_id: SignalSave._id };
 
@@ -1191,7 +1256,8 @@ app.post('/broker-signals', async (req, res) => {
 
                     exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
                     exit_qty: result,
-                    exit_dt_date: current_date
+                    exit_dt_date: current_date,
+                    exit_status:ExitStatus
                   }
                   updatedData.$addToSet = { signals_id: SignalSave._id };
 

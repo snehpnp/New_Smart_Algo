@@ -58,12 +58,27 @@ class Employee {
       var Role = "USER";
       var StartDate1 = "";
       var EndDate1 = "";
+
+
       let Strategies_id_array = [];
-      for (const strategy of Strategies) {
-        Strategies_id_array.push(strategy.id)
+     
+
+      if(multiple_strategy_select == "0"){
+        Strategies_id_array.push(Strategies[0].id)
+      }else{
+       let count = 0
+        for (const strategy of Strategies) {
+          // count++
+          // //console.log("count ",count)
+          // if(parseInt(count_strategy_select) >= count){
+          Strategies_id_array.push(strategy.id)
+        //  }
+        }
       }
 
 
+
+  //  console.log("Strategies_id_array ",Strategies_id_array)
 
 
 
@@ -128,7 +143,7 @@ class Employee {
       }
 
       // IF CHECK GROUP SERVICES NULL
-      if (group_service == "") {
+      if (group_service == "" || group_service ==null) {
         return res.send({
           status: false,
           msg: "Please Select a one Group",
@@ -230,6 +245,54 @@ class Employee {
 
       var ccd = dt.format("ymd");
       var client_key = Panel_key[0].prefix + cli_key + ccd;
+
+      const totalLicense = await User_model.aggregate([
+        // Match documents based on your criteria (e.g., specific conditions)
+        {
+          $match: {
+            license_type: "2",
+            licence: { $exists: true, $ne: null, $not: { $type: 10 } }, // Exclude undefined or NaN values
+          },
+        },
+        {
+          $group: {
+            _id: null, // Group all documents into a single group
+            totalLicense: {
+              $sum: { $toInt: "$licence" },
+            },
+          },
+        },
+      ]);
+
+      if (totalLicense.length > 0) {
+        var TotalLicense = totalLicense[0].totalLicense;
+      } else {
+        var TotalLicense = 0;
+      }
+
+      console.log("SHK 4")
+
+      if (Number(licence) > 0) {
+        console.log("SHK 1")
+
+        if ((parseInt(TotalLicense) + parseInt(licence)) >= Number(Panel_key[0].licenses)  ) {
+         console.log("SHK 2")
+          return res.send({
+            status: false,
+            msg: "You Dont Have License",
+            data: [],
+          })
+        }
+
+      }
+
+
+      console.log("SHK 3")
+
+
+
+
+
 
 
 
@@ -419,7 +482,7 @@ class Employee {
           }
         });
     } catch (error) {
-      res.send({ msg: "Error=>", error });
+      res.send({ msg:error});
     }
   }
 
@@ -428,6 +491,7 @@ class Employee {
     try {
 
       var req = req.body.req;
+
       var StartDate1 = "";
       var EndDate1 = "";
 
@@ -517,13 +581,21 @@ class Employee {
 
 
 
+      if (Number(new_licence) > 0) {
+        //console.log("SHK 1")
 
-      if (
-        Number(Panel_key[0].licenses) >=
-        Number(TotalLicense) + Number(new_licence)
-      ) {
+        if ((parseInt(TotalLicense) + parseInt(new_licence)) >= Number(Panel_key[0].licenses)  ) {
+         // console.log("SHK 2")
+          return res.send({
+            status: false,
+            msg: "You Dont Have License",
+            data: [],
+          })
+        }
 
-       // console.log("existingUsername.license_type ",existingUsername.license_type)
+      }
+
+      
         // PREVIOS CLIENT IS LIVE
         if (existingUsername.license_type != "2") {
           console.log("ssss ")
@@ -569,7 +641,7 @@ class Employee {
           } else if (req.license_type == "1") {
             StartDate1 = req.fromdate;
             EndDate1 = req.todate;
-          } else if (req.license_type == "2") {
+          } else if (req.license_type == "2" && new_licence > 0) {
             var currentDate = new Date();
             var start_date_2days = dateTime.create(currentDate);
             start_date_2days = start_date_2days.format("Y-m-d H:M:S");
@@ -783,10 +855,6 @@ class Employee {
         }
 
 
-
-
-
-
         try {
           // GROUP SERVICES ADD EDIT
           const GroupServiceId = new ObjectId(req.group_service);
@@ -887,15 +955,7 @@ class Employee {
           console.log("Error Group Services Error-", error);
         }
 
-
-      
-
-        // console.log("StartDate1 --",StartDate1)
-        // console.log("EndDate1 -- ",EndDate1)
-       
-    
-        
-
+   
 
         var User_update = {
           FullName: req.FullName,
@@ -973,13 +1033,7 @@ class Employee {
 
 
 
-      } else {
-        return res.send({
-          status: false,
-          msg: "You Dont Have License",
-          data: [],
-        });
-      }
+      
     } catch (error) {
       console.log("Error In User Update-", error);
     }

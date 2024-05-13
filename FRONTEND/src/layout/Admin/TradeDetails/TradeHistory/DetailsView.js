@@ -131,16 +131,56 @@ const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
             dataField: 'strategy',
             text: 'Strategy',
         },
+        
         {
             dataField: 'createdAt',
             text: 'Signals time',
             formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>
         },
+
+        {
+            dataField: '',
+            text: 'Ft Time ',
+            formatter: (cell, row, rowIndex) =>
+                 <div>
+                {ft_time(row)}
+                </div>
+        },
     ];
+
+    const ft_time = (row) => {
+        if(row.ft_time != undefined){
+
+        var milliseconds = row.ft_time * 1000;
+
+    // Create a new Date object with the milliseconds
+    var dateObject = new Date(milliseconds);
+
+    // Get the year, month, day, hours, minutes, and seconds
+    var year = dateObject.getFullYear();
+    var month = ("0" + (dateObject.getMonth() + 1)).slice(-2);
+    var day = ("0" + dateObject.getDate()).slice(-2);
+    var hours = ("0" + dateObject.getHours()).slice(-2);
+    var minutes = ("0" + dateObject.getMinutes()).slice(-2);
+    var seconds = ("0" + dateObject.getSeconds()).slice(-2);
+
+    // Form the date string
+    var dateString = day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds + " (IST)";
+
+    // Output the result
+        // console.log(dateString);
+        return dateString
+        //return row.ft_time
+        }else{
+            return '-'
+
+        }
+    }
+
 
 
     return (
-        <div>   <Modal isOpen={showModal} size="xl" title="Trade Details" hideBtn={true}
+        <div><Modal isOpen={showModal} size="xl" title="Trade Details" hideBtn={true}
             handleClose={() => setshowModal(false)}
         >
             <BasicDataTable TableColumns={columns1} tableData={mergedArray} />

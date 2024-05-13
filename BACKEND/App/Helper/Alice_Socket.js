@@ -18,6 +18,12 @@ client.connect();
 
 const db_main = client.db(process.env.DB_NAME);
 const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
+
+
+const currentDate = new Date();
+const hours = currentDate.getHours().toString().padStart(2, '0');
+const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+const stock_live_price = db_main.collection('stock_live_price');
  
 
 let socketObject = null;
@@ -89,7 +95,10 @@ const Alice_Socket = async () => {
 
                        // console.log("response - ",response)
 
-
+                       const currentDate = new Date();
+                       const hours = currentDate.getHours().toString().padStart(2, '0');
+                       const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+                       const stock_live_price = db_main.collection('stock_live_price');
 
                         if (response.tk) {
 
@@ -98,15 +107,9 @@ const Alice_Socket = async () => {
                             // if (Make_startegy_token) {
                             //     ALice_View_data(response.tk, response,dbTradeTools);
                             // }
-
-                            const currentDate = new Date();
-                            const hours = currentDate.getHours().toString().padStart(2, '0');
-                            const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-                            const stock_live_price = db_main.collection('stock_live_price');
                             const filter = { _id: response.tk }; 
-
-
                             if (response.lp != undefined) {
+                                
                                 let bp1 = response.lp
                                 let sp1 = response.lp
 
@@ -124,16 +127,13 @@ const Alice_Socket = async () => {
                                         exc: response.e,
                                         sp1: sp1,
                                         bp1: bp1,
-                                        curtime: `${hours}${minutes}`
+                                        curtime: `${hours}${minutes}`,
+                                        ft: response.ft
                                     },
                                 };
-                                const result = await stock_live_price.updateOne(filter, update, { upsert: true });
+                               // const result = await stock_live_price.updateOne(filter, update, { upsert: true });
+                               await stock_live_price.updateOne(filter, update, { upsert: true });
                             }
-
-
-
-
-
 
 
                         } else {

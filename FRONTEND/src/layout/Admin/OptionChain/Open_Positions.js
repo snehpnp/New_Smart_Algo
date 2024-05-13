@@ -254,7 +254,7 @@ const TradeHistory = () => {
                 <div className="col-12"><input type="time"
                     // placeholder="Enter Price"
                     name="exit_time"
-                    defaultValue={cell}
+                    defaultValue={row.exit_time.substring(0, 2) + ":" + row.exit_time.substring(2)}
                     onChange={(e) => SetStopLostPrice(e, e.target.name, row, row.new_qty_persent, row.trade_symbol)}
                     className="w-100" /></div>
             ),
@@ -351,10 +351,12 @@ const TradeHistory = () => {
 
     const SetStopLostPrice = async (event, name, row, qty_persent, symbol) => {
 
-
-
-
-
+        
+        let value = event.target.value
+        if (name == "exit_time") {
+            value = (event.target.value).replace(":", "")
+        }
+        
         setTradeHistoryAllData((prev) => {
             return {
                 ...prev,
@@ -364,7 +366,7 @@ const TradeHistory = () => {
                         return {
                             ...item,
                             sl_status: "1",
-                            [name]: event.target.value ? event.target.value : "testtt",
+                            [name]: value ? value : "0",
                         };
                     }
                     return item;
@@ -379,7 +381,8 @@ const TradeHistory = () => {
     const UpdateStopLoss = async () => {
 
         const filteredArray2 = tradeHistoryAllData.data.filter(item => selected1.some(obj => obj._id === item._id));
-
+   
+        
         let MarketOpenToday = GetMarketOpenDays();
 
         if (MarketOpenToday) {
@@ -400,7 +403,7 @@ const TradeHistory = () => {
                         })
 
                     ).unwrap()
-                        .then((response) => {
+                    .then((response) => {
                             if (response.status) {
                                 setPanelKey(response.data)
                             }
@@ -409,7 +412,7 @@ const TradeHistory = () => {
                             setSelected1([])
                             setSelected([])
                             window.location.reload()
-                        });
+                    });
                 }
 
             }
@@ -423,12 +426,8 @@ const TradeHistory = () => {
 
 
     const Set_Entry_Exit_Qty = (row, event, qty_persent, symbol) => {
-
         //alert(qty_persent)
-
         let a = No_Negetive_Input_regex(event)
-
-
         if (a) {
 
             if (parseInt(event) > parseInt(qty_persent)) {
@@ -484,10 +483,7 @@ const TradeHistory = () => {
     const Done_For_Trade = () => {
         handleClickDisabled();
 
-        const currentTimestamp = Math.floor(Date.now() / 1000);
-
-
-         
+        const currentTimestamp = Math.floor(Date.now() / 1000); 
         let count = 0
 
         let abc = CreateSignalRequest && CreateSignalRequest.map((pre_tag) => {
@@ -502,7 +498,7 @@ const TradeHistory = () => {
             const price = $('.LivePrice_' + pre_tag.token).html();
 
 
-            let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${pre_tag.client_persnal_key}|TradeType:${pre_tag.TradeType}|Demo:demo`
+            let req = `DTime:${currentTimestamp}|Symbol:${pre_tag.symbol}|TType:${pre_tag.type}|Tr_Price:131|Price:${price}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${pre_tag.segment}|Strike:${pre_tag.strike}|OType:${pre_tag.option_type}|Expiry:${pre_tag.expiry}|Strategy:${pre_tag.strategy}|Quntity:${pre_tag.new_qty_persent}|Key:${pre_tag.client_persnal_key}|TradeType:${pre_tag.TradeType}|ExitStatus:SQUAREOFF|Demo:demo`
 
 
 
@@ -867,8 +863,8 @@ const TradeHistory = () => {
             <Content Page_title="Open Position" button_status={false}
             >
                 <div className="row col-lg-12">
-                    <div className="col-lg-2">
-                        <div class="mb-3">
+                    <div className="col-lg-3">
+                        <div class="mb-3 ">
                             <label for="exampleFormControlInput1" class="form-label">
                                 Search Something Here
                             </label>
