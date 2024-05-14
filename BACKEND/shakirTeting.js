@@ -52,7 +52,8 @@ module.exports = function (app) {
       // "mongodb://growupalgo:p%26k5H6%267GsRy%26vnd@185.209.75.22:27017/",
       // "mongodb://robotexfintech:z43rk%265eF32%267Pcmn9i7B%26@185.209.75.28:27017/",
       // "mongodb://metaprogramming:zc%26u9tD828Tnbh3u7A%26@185.209.75.29:27017/",
-     // "mongodb://fincodify:u%26v5%26bAn6%265Gv%26cn29A%26@185.209.75.30:27017/",
+      // "mongodb://fincodify:u%26v5%26bAn6%265Gv%26cn29A%26@185.209.75.30:27017/",
+       "mongodb://invicontechnology:k56ck%265eF89%267Phjn9i7B%26@185.209.75.62:27017/",
   ];
 //testtt
 
@@ -292,7 +293,34 @@ module.exports = function (app) {
                     // console.log("element ", element , 'count ',count);
 
                     //   }
-                    if(element!='https://app.aitech.market/backend/' && element!='https://trade.pandpinfotech.com/backend/'){
+
+
+                    // if(element!='https://app.aitech.market/backend/' && element!='https://trade.pandpinfotech.com/backend/'){
+
+
+                    //  count++
+                    // console.log("element ", element+'addstockExtra' , 'count ',count);
+                    // let url = element+'addstockExtra';
+                    
+
+                    // let config = {
+                    //   method: 'get',
+                    //   maxBodyLength: Infinity,
+                    //   url: url,
+                    //   headers: { }
+                    // };
+
+                    // axios.request(config)
+                    // .then((response) => {
+                    //   console.log(JSON.stringify(response.data));
+                    // })
+                    // .catch((error) => {
+                    //   console.log(error);
+                    // });
+
+                    // }
+
+                    if(element=='software.invicontechnology.com/backend/'){
 
 
                      count++

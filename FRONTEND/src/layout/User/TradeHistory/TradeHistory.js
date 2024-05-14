@@ -193,10 +193,12 @@ const TradeHistory = () => {
     },
 
     {
+
       dataField: "exit_dt_date",
       text: "Signals Exit time",
-      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-    },
+      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell):"-"}</>,
+      
+     },
 
     // {
     //   dataField: "closeprice",

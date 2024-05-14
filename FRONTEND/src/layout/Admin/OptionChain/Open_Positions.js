@@ -203,12 +203,42 @@ const TradeHistory = () => {
         {
             dataField: "strategy",
             text: "Strategy",
+            formatter: (cell, row, rowIndex) => (
+                <div>
+                  <span>{row.strategy}</span>
+                  <span className={`d-none entry_qty_${row.token}_${row._id}`}>
+                      {row.entry_qty}
+                    </span>
+                    <span className={`d-none exit_qty_${row.token}_${row._id}`}>
+                      {row.exit_qty}
+                    </span>
+                    <span className={`d-none exit_price_${row.token}_${row._id}`}>
+                      {row.exit_price}
+                    </span>
+                    <span className={`d-none entry_price_${row.token}_${row._id}`}>
+                      {row.entry_price}
+                    </span>
+                    <span className={`d-none entry_type_${row.token}_${row._id}`}>
+                      {row.entry_type}
+                    </span>
+                    <span className={`d-none exit_type_${row.token}_${row._id}`}>
+                      {row.exit_type}
+                    </span>
+                    <span className={`d-none strategy_${row.token}_${row._id}`}>
+                      {row.strategy}
+                    </span>
+                    <span className={`d-none _id_${row.token}_${row._id}`}>
+                      {row._id}
+                    </span>
+                </div>
+              ),
         },
         {
             dataField: "entry_qty_percent",
             text: "Entry Qty %",
             formatter: (cell, row, rowIndex) => (
                 <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+                
             ),
         },
         {
@@ -284,54 +314,54 @@ const TradeHistory = () => {
                 /></div>
             ),
         },
-        {
-            dataField: "Action",
-            text: "Realised",
-            formatter: (cell, row, rowIndex) => {
-                return (
-                    <div>
-                        <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
-                        <span className={`d-none entry_qty_${row.token}_${row._id}`}>
-                            {row.entry_qty_percent}
-                        </span>
-                        <span className={`d-none exit_qty_${row.token}_${row._id}`}>
-                            {row.exit_qty_percent}
-                        </span>
-                        <span className={`d-none exit_price_${row.token}_${row._id}`}>
-                            {row.exit_price}
-                        </span>
-                        <span className={`d-none entry_price_${row.token}_${row._id}`}>
-                            {row.entry_price}
-                        </span>
-                        <span className={`d-none entry_type_${row.token}_${row._id}`}>
-                            {row.entry_type}
-                        </span>
-                        <span className={`d-none exit_type_${row.token}_${row._id}`}>
-                            {row.exit_type}
-                        </span>
-                        <span className={`d-none strategy_${row.token}_${row._id}`}>
-                            {row.strategy}
-                        </span>
-                        <span className={`d-none _id_${row.token}_${row._id}`}>
-                            {row._id}
-                        </span>
-                    </div>
-                );
-            },
-        },
+        // {
+        //     dataField: "Action",
+        //     text: "Realised",
+        //     formatter: (cell, row, rowIndex) => {
+        //         return (
+        //             <div>
+        //                 <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
+        //                 <span className={`d-none entry_qty_${row.token}_${row._id}`}>
+        //                     {row.entry_qty_percent}
+        //                 </span>
+        //                 <span className={`d-none exit_qty_${row.token}_${row._id}`}>
+        //                     {row.exit_qty_percent}
+        //                 </span>
+        //                 <span className={`d-none exit_price_${row.token}_${row._id}`}>
+        //                     {row.exit_price}
+        //                 </span>
+        //                 <span className={`d-none entry_price_${row.token}_${row._id}`}>
+        //                     {row.entry_price}
+        //                 </span>
+        //                 <span className={`d-none entry_type_${row.token}_${row._id}`}>
+        //                     {row.entry_type}
+        //                 </span>
+        //                 <span className={`d-none exit_type_${row.token}_${row._id}`}>
+        //                     {row.exit_type}
+        //                 </span>
+        //                 <span className={`d-none strategy_${row.token}_${row._id}`}>
+        //                     {row.strategy}
+        //                 </span>
+        //                 <span className={`d-none _id_${row.token}_${row._id}`}>
+        //                     {row._id}
+        //                 </span>
+        //             </div>
+        //         );
+        //     },
+        // },
 
 
-        {
-            dataField: "UPL",
-            text: "Un-Realised",
-            formatter: (cell, row, rowIndex) => (
-                <div>
-                    <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
+        // {
+        //     dataField: "UPL",
+        //     text: "Un-Realised",
+        //     formatter: (cell, row, rowIndex) => (
+        //         <div>
+        //             <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
 
 
-                </div>
-            ),
-        },
+        //         </div>
+        //     ),
+        // },
 
         {
             dataField: "TPL",

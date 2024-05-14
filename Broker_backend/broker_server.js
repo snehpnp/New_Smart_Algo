@@ -542,8 +542,13 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+          if (segment == 'C' || segment == 'c') {
 
-          // LIVE PRICE GET
+            price = signals.Price
+
+          }else{
+
+             // LIVE PRICE GET
           const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
 
           try {
@@ -563,13 +568,17 @@ app.post('/broker-signals', async (req, res) => {
           } catch (error) {
             console.log("Error  IN price Update", error);
           }
-
           if (price == null) {
             price = signals.Price
 
           }
 
 
+         }
+         
+
+
+          console.log("price ",price)
           console.log("client_key ",client_key)
           console.log("process.env.PANEL_KEY ",process.env.PANEL_KEY)
           // HIT TRADE IN BROKER SERVER
