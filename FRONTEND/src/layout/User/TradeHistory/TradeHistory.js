@@ -45,8 +45,11 @@ const TradeHistory = () => {
 
   const [rowData, setRowData] = useState("");
 
+  const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
+  const [selectStrategy, setSelectStrategy] = useState("null");
 
-  console.log("rowdata :", rowData);
+  
+ // console.log("rowdata :", rowData);
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -68,8 +71,13 @@ const TradeHistory = () => {
     data: [],
   });
 
+  const [startegyFilterData, setStartegyFilterData] = useState({
+    loading: true,
+    data: [],
+  });
 
 
+ //console.log("startegyFilterData ",startegyFilterData)
 
 
   //  GET BROKER DETAILS
@@ -97,6 +105,8 @@ const TradeHistory = () => {
         user_id: gotodashboard ? gotodashboard_Details.user_id : user_id,
         startDate: startDate,
         endDate: endDate,
+        serviceIndex :SelectServiceIndex,
+        selectStrategy:selectStrategy,
         token: token,
       })
     )
@@ -106,6 +116,11 @@ const TradeHistory = () => {
           setTradeHistoryData({
             loading: false,
             data: response.data,
+          });
+
+          setStartegyFilterData({
+            loading: false,
+            data: response.trade_strategy_filter,
           });
         } else {
           setTradeHistoryData({
@@ -128,12 +143,16 @@ const TradeHistory = () => {
         user_id: gotodashboard ? gotodashboard_Details.user_id : user_id,
         startDate: full,
         endDate: full,
+        serviceIndex :SelectServiceIndex,
+        selectStrategy:selectStrategy,
         token: token,
       })
     )
       .unwrap()
       .then((response) => {
         if (response.status) {
+
+         // console.log("response.trade_strategy_filter ",response.trade_strategy_filter)
           setTradeHistoryData({
             loading: false,
             data: response.data,
@@ -141,6 +160,11 @@ const TradeHistory = () => {
           setTradeHistoryData1({
             loading: false,
             data: response.data,
+          });
+
+          setStartegyFilterData({
+            loading: false,
+            data: response.trade_strategy_filter,
           });
         }
         setTradeHistoryData({
@@ -152,7 +176,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     getsignals11();
-  }, []);
+  }, [SelectServiceIndex ,selectStrategy ]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -167,10 +191,14 @@ const TradeHistory = () => {
     e.preventDefault();
     setFromDate("");
     setToDate("");
+    setSelectServiceIndex("null")
+    setSelectStrategy("null")
     setTradeHistoryData({
       loading: false,
       data: tradeHistoryData1.data,
     });
+
+
   };
 
 
@@ -410,7 +438,7 @@ const TradeHistory = () => {
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
   
-   console.log("tradeHistoryData.data",tradeHistoryData.data)
+   //console.log("tradeHistoryData.data",tradeHistoryData.data)
 
   let total=0;
   tradeHistoryData.data &&
@@ -452,7 +480,7 @@ const TradeHistory = () => {
         {gotodashboard === "true" || gotodashboard === true ? (
           <>
             <div className="row d-flex  align-items-center justify-content-start">
-              <div className="col-lg-3">
+              <div className="col-lg-3 d-none">
                 <div className="form-check custom-checkbox mb-3">
                   <label className="col-lg-6" htmlFor="fromdate">
                     From Date
@@ -469,7 +497,7 @@ const TradeHistory = () => {
                   />
                 </div>
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3 d-none">
                 <div className="form-check custom-checkbox mb-3">
                   <label className="col-lg-6" htmlFor="endDate">
                     To Date
@@ -488,19 +516,76 @@ const TradeHistory = () => {
                   />
                 </div>
               </div>
+
+
+            
+            {/* <div className="col-lg-3 px-1">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Index Symbol
+              </label>
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectServiceIndex(e.target.value)}
+                value={SelectServiceIndex}
+              >
+                <option value="null" selected>All</option>
+                <option value="BANKNIFTY" selected>BANKNIFTY</option>
+                <option value="NIFTY" selected>NIFTY</option>
+                <option value="FINNIFTY" selected>FINNIFTY</option>
+              </select>
+            </div>
+           </div>
+
+           <div className="col-lg-3 px-1">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Strategy
+              </label>
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectStrategy(e.target.value)}
+                value={selectStrategy}
+              >
+                <option value="null" selected>All</option>
+                {startegyFilterData.data &&
+                  startegyFilterData.data.map((item) => {
+                    // return (
+                    //   <option className="mt-1" value={item.fullname}>
+                    //     {item.fullname}
+                    //   </option>
+                    // );
+
+                    return (
+                      <option className="mt-1" value={item}>
+                        {item}
+                      </option>
+                    );
+
+                  })}
+              </select>
+            </div>
+          </div> */}
+
+
+
               <div className="col-lg-3 d-flex">
-                <button
+                {/* <button
                   className="btn btn-primary mx-2"
                   onClick={(e) => getsignals(e)}
                 >
                   Search
-                </button>
-                <button
+                </button> */}
+                {/* <button
                   className="btn btn-primary"
                   onClick={(e) => ResetDate(e)}
                 >
                   Reset
-                </button>
+                </button> */}
               </div>
             </div>
           </>

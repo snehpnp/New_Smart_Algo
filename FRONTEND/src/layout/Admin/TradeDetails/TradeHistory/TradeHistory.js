@@ -78,7 +78,9 @@ const TradeHistory = () => {
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
   const [SelectSegment, setSelectSegment] = useState("null");
   const [SelectService, setSelectService] = useState("null");
+  const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
 
+ console.log("SelectServiceIndex",SelectServiceIndex)
   const [SocketState, setSocketState] = useState("null");
 
   const [ForGetCSV, setForGetCSV] = useState([]);
@@ -105,9 +107,9 @@ const TradeHistory = () => {
 
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
-
+   
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter, token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter ,serviceIndex :SelectServiceIndex,token: token})
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -133,7 +135,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
-  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter]);
+  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter ,SelectServiceIndex]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -149,6 +151,7 @@ const TradeHistory = () => {
     setFromDate("");
     setStrategyClientStatus("null");
     setSelectService("null");
+    setSelectServiceIndex('null')
     setToDate("");
     setTradeHistoryData({
       loading: false,
@@ -938,7 +941,9 @@ const TradeHistory = () => {
               />
             </div>
           </div>
-          <div className="col-lg-3 px-1">
+
+
+           <div className="col-lg-3 px-1">
             <div class="mb-3">
               <label for="select" class="form-label">
                 Symbol
@@ -969,6 +974,29 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
+
+          <div className="col-lg-3 px-1">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Index Symbol
+              </label>
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectServiceIndex(e.target.value)}
+                value={SelectServiceIndex}
+              >
+                <option value="null" selected>All</option>
+                <option value="BANKNIFTY" selected>BANKNIFTY</option>
+                <option value="NIFTY" selected>NIFTY</option>
+                <option value="FINNIFTY" selected>FINNIFTY</option>
+              </select>
+            </div>
+          </div>
+
+
+
           <div className="col-lg-2  px-1">
             <div class="mb-3">
               <label for="select" class="form-label">

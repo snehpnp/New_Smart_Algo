@@ -262,7 +262,7 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
 
     else{
     
-       console.log("tradeHistoryData.data ",tradeHistoryData.length)
+     //  console.log("tradeHistoryData.data ",tradeHistoryData.length)
         tradeHistoryData && tradeHistoryData.forEach((row, i) => {
          
         //   console.log(" row._id ",row._id)
