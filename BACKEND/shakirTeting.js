@@ -29,36 +29,40 @@ module.exports = function (app) {
   // Define MongoDB connection details
   const servers = [
       
-       // "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/",
-      // "mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/",
-      // "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.93:27017/",
-      // "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.178:27017/",
-      // "mongodb://algobullstradingsolutions:p%26ol5Hd%26trad%26i@193.239.237.92:27017/",
-      // "mongodb://cpandit:im%3DCtv%7BOu%235V9QT%25@45.79.123.122:27017/",
-      // "mongodb://algokuber:p%26k506%267G%26y%26vnd%26@193.239.237.135:27017/",
-      // "mongodb://finnshri:p0%26k506%267s9Ry%26vn8d@193.239.237.137:27017/",
-      // "mongodb://visioniq:%26k%23sA8B%267Gmg%26vn3%237A%26@185.209.75.2:27017/",
-      // "mongodb://believetechnology:%26k%23sA8B%237Gsq%26vg3%237P%26@185.209.75.5:27017/",
-      // "mongodb://realbottrading:u%26r5nC86%267Gr%26vn37M%26@185.209.75.8:27017/",
-      // "mongodb://growskyinfotech:u%26j8gB85%267GN%26vn37m%26@185.209.75.9:27017/",
-      // "mongodb://corebizinfotech:c%26eaV8N%267KfT%26bc49A%26@185.209.75.10:27017/",
-      // "mongodb://inspirealgo:n%26pdF7G%265Png%26vn97A%26@185.209.75.11:27017/",
-      // "mongodb://uniquetechnology:c%26z9yB73%267Fn%26vn98V%26@185.209.75.12:27017/",
-      // "mongodb://yourstechexpert:sA8k%26n86%267Mv%26fh57B%26@185.209.75.14:27017/",
-      // "mongodb://alphapulsepro:un%26r4hv93%267Gr%26v%2637P%26@185.209.75.15:27017/",
-      // "mongodb://sumedhainnovations:p%26k5H6%267GsRy%26vnd@185.209.75.21:27017/",
-      // "mongodb://tradeonn:pw%26k5H6%267GsRy%26vn@185.209.75.23:27017/",
-      // "mongodb://vintyaitsolutions:byk%265fD328Pvjn3u7A%26@185.209.75.27:27017/",
-      // "mongodb://growupalgo:p%26k5H6%267GsRy%26vnd@185.209.75.22:27017/",
-      // "mongodb://robotexfintech:z43rk%265eF32%267Pcmn9i7B%26@185.209.75.28:27017/",
-      // "mongodb://metaprogramming:zc%26u9tD828Tnbh3u7A%26@185.209.75.29:27017/",
-      // "mongodb://fincodify:u%26v5%26bAn6%265Gv%26cn29A%26@185.209.75.30:27017/",
-       "mongodb://invicontechnology:k56ck%265eF89%267Phjn9i7B%26@185.209.75.62:27017/",
+"mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/",
+"mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/",
+"mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.93:27017/",
+"mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.178:27017/",
+"mongodb://algobullstradingsolutions:p%26ol5Hd%26trad%26i@193.239.237.92:27017/",
+"mongodb://intelfintech:ugh%265rK86%26Fv%26yn37A%26@185.209.75.61:27017/",
+"mongodb://algokuber:p%26k506%267G%26y%26vnd%26@193.239.237.135:27017/",
+"mongodb://finnshri:p0%26k506%267s9Ry%26vn8d@193.239.237.137:27017/",
+"mongodb://visioniq:%26k%23sA8B%267Gmg%26vn3%237A%26@185.209.75.2:27017/",
+"mongodb://believetechnology:%26k%23sA8B%237Gsq%26vg3%237P%26@185.209.75.5:27017/",
+"mongodb://realbottrading:u%26r5nC86%267Gr%26vn37M%26@185.209.75.8:27017/",
+"mongodb://growskyinfotech:u%26j8gB85%267GN%26vn37m%26@185.209.75.9:27017/",
+"mongodb://corebizinfotech:c%26eaV8N%267KfT%26bc49A%26@185.209.75.10:27017/",
+"mongodb://inspirealgo:n%26pdF7G%265Png%26vn97A%26@185.209.75.11:27017/",
+"mongodb://uniquetechnology:c%26z9yB73%267Fn%26vn98V%26@185.209.75.12:27017/",
+"mongodb://yourstechexpert:sA8k%26n86%267Mv%26fh57B%26@185.209.75.14:27017/",
+"mongodb://alphapulsepro:un%26r4hv93%267Gr%26v%2637P%26@185.209.75.15:27017/",
+"mongodb://sumedhainnovations:p%26k5H6%267GsRy%26vnd@185.209.75.21:27017/",
+"mongodb://tradeonn:pw%26k5H6%267GsRy%26vn@185.209.75.23:27017/",
+"mongodb://vintyaitsolutions:byk%265fD328Pvjn3u7A%26@185.209.75.27:27017/",
+"mongodb://growupalgo:p%26k5H6%267GsRy%26vnd@185.209.75.22:27017/",
+"mongodb://robotexfintech:z43rk%265eF32%267Pcmn9i7B%26@185.209.75.28:27017/",
+"mongodb://metaprogramming:zc%26u9tD828Tnbh3u7A%26@185.209.75.29:27017/",
+"mongodb://fincodify:u%26v5%26bAn6%265Gv%26cn29A%26@185.209.75.30:27017/",
+"mongodb://invicontechnology:k56ck%265eF89%267Phjn9i7B%26@185.209.75.62:27017/",
+"mongodb://axcellencetechnology:pw%26k5H6%267GsRy%26vnn@185.209.75.63:27017/",
+"mongodb://sstechnologiess:Apw%26k5RH6%267GsRy%26vnM@185.209.75.64:27017/"
   ];
 //testtt
 
   // Connect to MongoDB and create views
   async function createViewsAllDatabase() {
+     console.log("okkkkkk")
+     return
       for (const server of servers) {
           const client = new MongoClient(server);
 
@@ -108,7 +112,7 @@ module.exports = function (app) {
   }
 
   app.get("/AllViewCreate", async (req, res) => {
-       //createViewsAllDatabase();
+       createViewsAllDatabase();
        //deleteViewsAllDatabase();
       // RunQueryUpdateAllDatabase()
       // RunQueryAddAllDatabase()
