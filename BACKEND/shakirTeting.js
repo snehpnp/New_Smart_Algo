@@ -112,7 +112,7 @@ module.exports = function (app) {
   }
 
   app.get("/AllViewCreate", async (req, res) => {
-       createViewsAllDatabase();
+        //createViewsAllDatabase();
        //deleteViewsAllDatabase();
       // RunQueryUpdateAllDatabase()
       // RunQueryAddAllDatabase()

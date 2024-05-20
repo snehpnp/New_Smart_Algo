@@ -271,6 +271,8 @@ const TradeHistory = () => {
         return (
           <div>
             <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
+
+
             <span className={`d-none entry_qty_${row.token}_${row._id}`}>
               {row.entry_qty_percent}
             </span>
@@ -324,7 +326,8 @@ const TradeHistory = () => {
       dataField: "entry_price",
       text: "Entry Price",
       formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
+        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}
+        </div>
       ),
     },
     {
