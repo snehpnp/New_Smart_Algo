@@ -370,6 +370,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     // console.log("possition_qty", possition_qty);
     
                                     if (possition_qty == 0) {
+
                                         // console.log("possition_qty Not Available", possition_qty);
                                         BrokerResponse.create({
                                             user_id: item._id,
@@ -1002,6 +1003,9 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
 
 }
+
+
+
 
 
 module.exports = { place_order }
