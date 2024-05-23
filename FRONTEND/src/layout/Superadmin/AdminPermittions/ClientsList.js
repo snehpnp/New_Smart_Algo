@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Loader from '../../../Utils/Loader'
 import { Pencil, Trash2 } from "lucide-react";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { Get_Admin_Helps } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
@@ -14,7 +14,7 @@ import { useLocation } from 'react-router-dom';
 import { Get_All_Admin_Client } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 
 import toast, { Toaster } from 'react-hot-toast';
-import { DELETE_USER_SERVICES } from "../../../ReduxStore/Slice/Admin/AdminSlice";
+import { DELETE_USER_SERVICES } from "../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
 
 
 
@@ -23,11 +23,13 @@ const SubAdminList = () => {
     const [ShowClients, setshowClients] = useState([])
     const [refresh, setrefresh] = useState(false);
     let location = useLocation();
-    console.log("=>", location.state._id)
 
+ const RowId= localStorage.getItem('RowData')
+ 
 
     const GetAllClients = async () => {
-        await dispatch(Get_All_Admin_Client({ id: location.state._id })).unwrap()
+        
+        await dispatch(Get_All_Admin_Client({ id: RowId })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setshowClients(
@@ -163,7 +165,7 @@ const SubAdminList = () => {
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
                     <div>
-                        <Link to={`/admin/client/edit/${row._id}`} state={row}>
+                        <Link to={`/super/client/edit/${row._id}`} state={row}>
                             <span data-toggle="tooltip" data-placement="top" title="Edit">
                                 <Pencil
                                     size={20}
@@ -173,6 +175,7 @@ const SubAdminList = () => {
                                 />
                             </span>
                         </Link>
+                      
 
                         <Link>
                             <span data-toggle="tooltip" data-placement="top" title="Delete">
@@ -198,8 +201,6 @@ const SubAdminList = () => {
         GetAllClients()
     }, [])
 
-
-    // console.log("ShowClients", ShowClients )
 
     return (
         <>

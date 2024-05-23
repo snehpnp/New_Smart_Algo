@@ -346,8 +346,9 @@ class Panel {
 
            // console.log("req body check sidebar codition ",req.body)
             // const { id, license } = req.body
-            const { db_name, db_url, key, domain, Create_Strategy, Option_chain, Strategy_plan } = req.body
+            const { db_name, db_url, key, domain, Create_Strategy, Option_chain, Strategy_plan , live_price } = req.body
 
+         
 
 
             var domain1 = "http://localhost:3000"
@@ -369,7 +370,8 @@ class Panel {
                 $set: {
                     Create_Strategy: Create_Strategy,
                     Option_chain: Option_chain,
-                    Strategy_plan: Strategy_plan
+                    Strategy_plan: Strategy_plan,
+                    live_price : live_price,
 
                 },
             };

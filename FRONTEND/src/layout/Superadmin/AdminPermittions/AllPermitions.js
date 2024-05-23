@@ -5,7 +5,7 @@ import Content from "../../../Components/Dashboard/Content/Content"
 import * as  valid_err from "../../../Utils/Common_Messages"
 import { Link } from "react-router-dom";
 import Loader from '../../../Utils/Loader'
-import { FolderLock, Plus, FileClock, HelpingHand, Users2,Link2, ScrollText } from 'lucide-react';
+import { FolderLock, Plus, FileClock, HelpingHand, Users2, Link2, ScrollText , RadioTower  } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel, GET_PANEL_INFORMATIONS, All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
@@ -30,6 +30,9 @@ const AllPermitions = () => {
     const dispatch = useDispatch()
 
     const token = JSON.parse(localStorage.getItem('user_details')).token
+
+    
+     
 
 
     //  for permission
@@ -68,6 +71,9 @@ const AllPermitions = () => {
     const [themeList, setThemeList] = useState();
     const [refresh, setRefresh] = useState(false)
 
+    //for search baar
+    const [searchInput, setSearchInput] = useState('')
+
 
     const [panelData, setPanelData] = useState({
         loading: true,
@@ -85,18 +91,42 @@ const AllPermitions = () => {
     const GetAllThemes = async () => {
         await dispatch(Get_All_Theme()).unwrap()
             .then((response) => {
-                 
+
                 setThemeList(response && response.data);
             })
     }
 
+
     const data = async () => {
         await dispatch(All_Panel_List()).unwrap()
             .then((response) => {
-                setPanelData({
-                    loading: false,
-                    data: response.data
-                });
+                if (response.status) {
+
+                    const filterData = response.data && response.data.filter((item) => {
+                        const matchSearch =
+                            searchInput == '' ||
+                            item.panel_name.toLowerCase().includes(searchInput.toLowerCase())
+
+                        return matchSearch
+                    })
+
+
+                    setPanelData({
+                        loading: false,
+                        data: searchInput ? filterData : response.data
+                    });
+
+                }
+                else {
+                    setPanelData({
+                        loading: false,
+                        data: []
+                    });
+
+                }
+            })
+            .catch((err) => {
+                console.log("Error to fatching the panle details", err)
             })
     }
 
@@ -109,15 +139,17 @@ const AllPermitions = () => {
 
 
     useEffect(() => {
+
+        localStorage.removeItem('RowData')
         data()
         GetAllThemes()
-    }, [refresh])
+    }, [refresh, searchInput])
 
 
 
 
 
-  
+
 
 
 
@@ -127,7 +159,7 @@ const AllPermitions = () => {
     // }
 
 
-   
+
 
     const CloseCompany = async (status) => {
 
@@ -150,6 +182,14 @@ const AllPermitions = () => {
 
 
 
+    const setLocalStorage = (row)=>{
+
+        console.log("row", row)
+
+        localStorage.setItem("RowData", row._id)
+
+    }
+
 
 
     const columns = [
@@ -160,14 +200,14 @@ const AllPermitions = () => {
         },
         {
             dataField: 'panel_name',
-            text: 'Panel Name', 
+            text: 'Panel Name',
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <Link to={`${row.domain}`}>
                         {row.panel_name}
                     </Link>
                 </span>
-            ) 
+            )
         },
 
         {
@@ -187,8 +227,10 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Sidebar Permission">
                     <FolderLock size={20} color="#198754" strokeWidth={2} className="mx-1"
+
                         onClick={(e) => { setshowPanelName({ rowdata: row, panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowModal(true) }}
                     />
+                    
                 </span>
             )
         },
@@ -220,7 +262,7 @@ const AllPermitions = () => {
             dataField: 'panel_name',
             text: 'Clients',
             formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+                <span data-toggle="tooltip" data-placement="top" title="Panel Views"  onClick={()=>setLocalStorage(row)}>
                     <Link to={`/super/showclient`} state={row}>
                         <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
@@ -270,6 +312,17 @@ const AllPermitions = () => {
                 </span >
             )
         },
+        {
+            dataField: 'signal',
+            text: 'Signal ',
+            formatter: (cell, row) => (
+                <span data-toggle="tooltip" data-placement="top" title="HelpingHand">
+                    <Link to='/super/signals' state={row}>
+                        <RadioTower  size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    </Link>
+                </span >
+            )
+        },
     ];
 
 
@@ -307,7 +360,15 @@ const AllPermitions = () => {
                 panelData.loading ? <Loader /> :
                     <>
                         <Content Page_title="Admin Permission" button_status={false}>
-                            <button onClick={() => SaveSS()}>click</button>
+                            <div className='mb-4'>
+                                <h6>Search here something</h6>
+                                <input type="text"
+                                    style={{ height: '2rem' }}
+                                    placeholder='search...'
+                                    className='p-2 rounded'
+                                    onChange={(e) => { setSearchInput(e.target.value) }}
+                                    value={searchInput} />
+                            </div>
 
                             {
                                 panelData.data && panelData.data.length === 0 ? (
@@ -318,7 +379,7 @@ const AllPermitions = () => {
                                         <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
                                         <LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
-                                        <FullDataTable TableColumns={columns} tableData={panelData.data}  pagination1={true} />
+                                        <FullDataTable TableColumns={columns} tableData={panelData.data} pagination1={true} />
                                         <ToastButton />
                                     </>
                             }

@@ -17,10 +17,10 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
     const [GetCreate_Strategy, setGetCreate_Strategy] = useState("")
     const [GetOption_chain, setGetOption_chain] = useState("")
     const [getStrategy_plan, setGetStrategy_plan] = useState("")
+    const [live_price, setLive_price] = useState("")
 
-    // console.log("GetCreate_Strategy", GetCreate_Strategy)
-    // console.log("GetOption_chain", GetOption_chain)
-    // console.log("getStrategy_plan", getStrategy_plan)
+
+
 
 
 
@@ -42,16 +42,17 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
             return errors;
         },
         onSubmit: async (values) => {
-     
-            console.log("GetOption_chain -",GetOption_chain && GetOption_chain)
-            console.log("GetCreate_Strategy -",GetCreate_Strategy && GetCreate_Strategy)
+
+            console.log("GetOption_chain -", GetOption_chain && GetOption_chain)
+            console.log("GetCreate_Strategy -", GetCreate_Strategy && GetCreate_Strategy)
             // console.log("showPanelName -",showPanelName)
-           
+
             const req = {
                 "Option_chain": GetOption_chain && GetOption_chain ? 1 : 0,
                 "Create_Strategy": GetCreate_Strategy && GetCreate_Strategy ? 1 : 0,
                 "Trade_History": 1 ? 1 : 0,
                 "Strategy_plan": getStrategy_plan && getStrategy_plan ? 1 : 0,
+                "live_price": live_price && live_price ? 1 : 0,
                 "db_url": showPanelName.db_url,
                 "db_name": showPanelName.db_name,
                 "key": showPanelName.key,
@@ -59,9 +60,9 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
 
             }
 
-            console.log("req -", req)
-            return
-             
+            
+
+
             await dispatch(Update_Admin_Permissions({ req: req, token: token })).unwrap().then((response) => {
                 if (response.status === 409) {
                     toast.error(response.data.msg);
@@ -86,6 +87,8 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
         setGetCreate_Strategy(showPanelName.rowdata && showPanelName.rowdata.Create_Strategy)
         setGetStrategy_plan(showPanelName.rowdata && showPanelName.rowdata.Strategy_plan)
         setGetOption_chain(showPanelName.rowdata && showPanelName.rowdata.Option_chain)
+        setLive_price(showPanelName.rowdata && showPanelName.rowdata.live_price)
+
     }, [showPanelName.rowdata])
 
 
@@ -145,7 +148,7 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
                                         </label>
                                     </div>
                                 </div>
-                                <div className={`col-lg-12 my-2`}
+                                <div className={`col-lg-6 my-2`}
                                 >
                                     <div className="col-lg-12 ">
                                         <input type='checkbox' className="form-check-input"
@@ -159,6 +162,23 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
                                             for='Strategy_plan'
                                         >
                                             Strategy Plan
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className={`col-lg-6 my-2`}
+                                >
+                                    <div className="col-lg-12 ">
+                                        <input type='checkbox' className="form-check-input"
+                                            name="live_price"
+                                            value={live_price && live_price}
+                                            onChange={(e) => setLive_price(e.target.checked)}
+                                            defaultChecked={live_price && live_price === 1}
+
+                                        />
+                                        <label className="form-check-label"
+                                            for='Strategy_plan'
+                                        >
+                                            Live Price
                                         </label>
                                     </div>
                                 </div>

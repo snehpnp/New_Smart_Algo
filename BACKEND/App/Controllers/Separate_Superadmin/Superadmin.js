@@ -4,7 +4,14 @@ const user = db.user;
 const count_licenses = db.count_licenses;
 const company_information = db.company_information;
 const HelpCenter_modal = db.HelpCenter
-
+const Signals = db.Signals
+const MainSignals = db.MainSignals
+const Old_MainSignals = db.OldMainSignals
+const Old_Signals = db.OldSignals
+const user_activity_logs = db.user_activity_logs
+const strategy_client = db.strategy_client
+const client_services = db.client_services
+const groupService_User = db.groupService_User
 
 
 const mongoose = require('mongoose');
@@ -131,7 +138,7 @@ class SuperAdmin {
             const { _id } = req.body;
             const objectId = new ObjectId(_id);
 
-            const today = new Date();   
+            const today = new Date();
             today.setHours(0, 0, 0, 0);
 
             try {
@@ -155,6 +162,421 @@ class SuperAdmin {
             console.log("Error Help Center error-", error);
         }
     }
+    async getSignal(req, res) {
+
+        try {
+            const today = new Date();
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+            yesterday.setHours(0, 0, 0, 0);
+
+            const endOfToday = new Date(today);
+            endOfToday.setHours(23, 59, 59, 999);
+
+            const filteredSignals = await MainSignals.find({
+                createdAt: {
+                    $gte: yesterday,
+                    $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+                },
+            }).sort({ createdAt: -1 });
+
+
+            if (filteredSignals.length == 0) {
+                return res.send({
+                    status: false,
+                    msg: "Empty data",
+                    data: [],
+                });
+            }
+
+            // DATA GET SUCCESSFULLY
+            return res.send({
+                status: true,
+                msg: "Get All Clients",
+                data: filteredSignals,
+
+            });
+        }
+        catch (error) {
+            return res.send({
+                status: false,
+                msg: "Empty data",
+                data: [],
+            });
+        }
+    }
+
+    async UpdateSignal(req, res) {
+
+        try {
+            const { id, price, signalId, entryPriceID } = req.body
+
+            if (!id) {
+                return res.send({ status: false, msg: "Id is not Found", data: [] })
+            }
+            if (signalId.length <= 0) {
+                return res.send({ status: false, msg: "signalId is not Found", data: [] })
+            }
+
+            if (entryPriceID == 1) {
+                // Update Number Of Trade
+                const filter = { _id: id }
+                const update_Price = {
+                    $set: {
+                        entry_price: price
+                    }
+                };
+
+                const filter2 = { _id: signalId[0] }
+                const update_Price2 = {
+                    $set: {
+                        price: price
+                    }
+                };
+
+                const updateData = await MainSignals.updateOne(filter, update_Price)
+                const updateInSignal = await Signals.updateOne(filter2, update_Price2)
+                return res.send({ status: true, msg: "price is updated successfully", data: [] })
+            }
+            else {
+
+                // Update Number Of Trade
+                const filter = { _id: id }
+                const update_Price = {
+                    $set: {
+                        exit_price: price
+                    }
+                };
+
+                const filter2 = { _id: signalId[1] }
+                const update_Price2 = {
+                    $set: {
+                        price: price
+                    }
+                };
+
+                const updateData = await MainSignals.updateOne(filter, update_Price)
+                const updateInSignal = await Signals.updateOne(filter2, update_Price2)
+                return res.send({ status: true, msg: "price is updated successfully", data: [] })
+
+            }
+
+        }
+        catch (err) {
+            return res.send({ status: false, msg: "server side error", data: [] })
+        }
+    }
+    async deletedSignal(req, res) {
+
+        try {
+            const today = new Date();
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+            yesterday.setHours(0, 0, 0, 0);
+
+            const endOfToday = new Date(today);
+            endOfToday.setHours(23, 59, 59, 999);
+
+            const filteredSignals = await Old_MainSignals.find({
+                createdAt: {
+                    $gte: yesterday,
+                    $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
+                },
+            }).sort({ createdAt: -1 });
+
+
+            if (filteredSignals.length == 0) {
+                return res.send({
+                    status: false,
+                    msg: "Empty data",
+                    data: [],
+                });
+            }
+
+            // DATA GET SUCCESSFULLY
+            return res.send({
+                status: true,
+                msg: "Get All Clients",
+                data: filteredSignals,
+
+            });
+        }
+        catch (error) {
+            return res.send({
+                status: false,
+                msg: "Empty data",
+                data: [],
+            });
+        }
+    }
+
+    async DeleteSignal(req, res) {
+
+        try {
+            const { id } = req.body;
+
+            if (!id) {
+                return res.send({
+                    status: false,
+                    msg: "Id is not found",
+                    data: []
+                });
+            }
+
+            let findData = await MainSignals.findOne({ _id: new ObjectId(id) });
+
+            if (!findData) {
+                return res.send({
+                    status: false,
+                    msg: "Invalid id found",
+                    data: []
+                });
+            }
+
+            const backupData = {
+                ...findData._doc,
+                backup_id: findData._id
+            };
+
+
+            const filter = { backup_id: findData._id };
+            const updatePrice = { $set: backupData };
+
+            const updateData = await Old_MainSignals.updateOne(filter, updatePrice, { upsert: true });
+
+
+            if (!updateData.acknowledged) {
+                return res.send({
+                    status: false,
+                    msg: "Failed to insert/update in the backup collection",
+                    data: []
+                });
+            }
+            if (Array.isArray(findData.signals_id) && findData.signals_id.length > 0) {
+                await Promise.all(findData.signals_id.map(async (sigId) => {
+                    try {
+                        let SignalData = await Signals.findOne({ _id: sigId });
+
+                        if (SignalData) {
+                            const SignalBackupData = {
+                                ...SignalData._doc,
+                                backup_id: SignalData._id
+                            };
+
+                            const signalUpdateData = await Old_Signals.updateOne({ backup_id: SignalData._id }, { $set: SignalBackupData }, { upsert: true });
+
+
+                            if (!signalUpdateData.acknowledged) {
+                                throw new Error(`Failed to insert/update signal with id ${sigId} in the backup collection`);
+                            }
+
+                            await Signals.deleteOne({ _id: sigId });
+                        }
+                    } catch (error) {
+                        console.error(`Error processing signal id ${sigId}:`, error);
+                    }
+                }));
+            }
+
+            await MainSignals.deleteOne({ _id: findData._id });
+
+            res.send({
+                status: true,
+                msg: "Data found and backed up successfully",
+                data: findData
+            });
+        } catch (error) {
+            console.error("Error in DeleteSignal:", error);
+            res.status(500).send({
+                status: false,
+                msg: "An error occurred",
+                data: []
+            });
+        }
+
+    }
+
+    async backupSignal(req, res) {
+        try {
+            const { id } = req.body;
+
+            if (!id) {
+                return res.send({
+                    status: false,
+                    msg: "ID is not found",
+                    data: []
+                });
+            }
+
+
+            const findData = await Old_MainSignals.findOne({ backup_id: id });
+
+
+            if (!findData) {
+                return res.send({
+                    status: false,
+                    msg: "Invalid Backup ID",
+                    data: []
+                });
+            }
+
+
+
+
+            if (findData.signals_id) {
+                findData.signals_id.forEach(async (sglId) => {
+                    try {
+                        const findOldSignal = await Old_Signals.findOne({ backup_id: sglId });
+
+                        if (findOldSignal) {
+                            const { backup_id, ...signalWithoutBackupId } = findOldSignal._doc;
+
+                            const signalUpdateData = await Signals.updateOne({ _id: sglId }, { $set: signalWithoutBackupId }, { upsert: true });
+
+                            if (!signalUpdateData.acknowledged) {
+                                return res.send({
+                                    status: false,
+                                    msg: "Faild to revert back old signal to signal",
+                                    data: []
+                                })
+                            }
+                            await Old_Signals.deleteOne({ _id: sglId });
+
+                        } else {
+                            return res.send({
+                                status: false,
+                                msg: `Signal with backup_id ${sglId} not found.`,
+                                data: []
+                            })
+
+                        }
+
+                        const { backup_id, ...signalWithoutBackupId } = findData._doc;
+
+                        const signalUpdateData = await MainSignals.updateOne({ _id: id }, { $set: signalWithoutBackupId }, { upsert: true });
+
+                        await Old_MainSignals.deleteOne({ _id: id });
+
+                        return res.send({
+                            status: true,
+                            msg: "Data found and backed up successfully",
+                            data: findData
+                        });
+
+
+                    } catch (err) {
+                        console.error(`Error finding signal with backup_id ${sglId}:`, err);
+                    }
+                });
+            }
+
+
+
+
+        } catch (err) {
+            console.error("Error finding data:", err);
+            res.status(500).send({
+                status: false,
+                msg: "Internal Server Error",
+                data: []
+            });
+        }
+    }
+
+    async FindUserById(req, res) {
+        try {
+            const { id } = req.body
+
+            if (!id) {
+                return res.send({
+                    status: false,
+                    msg: "Id is not Found",
+                    data: []
+                }
+                )
+            }
+            const findUser = await user.findOne({ _id: id })
+
+            if (!findUser) {
+                return res.send({
+                    status: false,
+                    msg: "Invalid Id Found",
+                    data: []
+                })
+            }
+
+            return res.send({ status: true, msg: "User fatched succeddfully ", data: findUser })
+
+        }
+        catch (err) {
+            return res.send({ status: false, msg: "Internal server error", data: [] })
+        }
+
+    }
+
+    async UpdateUser(req, res) {
+
+        try {
+            const { id, FullName, UserName, Email, PhoneNo } = req.body
+
+            const data = {
+                FullName: FullName,
+                UserName: UserName,
+                Email: Email,
+                PhoneNo: PhoneNo
+
+            }
+            const updateUser = await user.updateOne({ _id: id }, data)
+
+            if (!updateUser.acknowledged) {
+                return res.send({ status: false, msg: "User Not Update some error occer", data: [] })
+
+            }
+
+            return res.send({ status: true, msg: "User Updated Successfully", data: [] })
+
+
+
+
+        }
+        catch (err) {
+            return res.send({ status: false, msg: "Internal server error", data: [] })
+        }
+
+    }
+
+    async UserDelete(req, res) {
+        try {
+            const { id } = req.body
+            if (!id) {
+                res.send({ status: false, msg: "Id is Not Found", data: [] })
+            }
+
+            const deleteUser = await user.deleteMany({ _id: id })
+            await count_licenses.deleteMany({ user_id: id })
+            await strategy_client.deleteMany({ user_id: id })
+            await user_activity_logs.deleteMany({ user_id: id })
+            await client_services.deleteMany({ user_id: id })
+            await groupService_User.deleteMany({ user_id: id })
+
+
+            if (!deleteUser.acknowledged) {
+                return res.send({ status: false, msg: "Invalid User Id", data: [] })
+            }
+
+            return res.send({ status: true, msg: "User Deleted Successfully ", data: [] })
+
+        }
+        catch (err) {
+            res.sends({
+                status: false,
+                msg: "internal server error",
+                data: []
+            })
+        }
+
+    }
+
 
 }
 
