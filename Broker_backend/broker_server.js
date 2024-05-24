@@ -68,6 +68,7 @@ app.use(bodyparser.json({ verify: rawBodySaver }));
 app.use(bodyparser.urlencoded({ verify: rawBodySaver, extended: true }));
 app.use(bodyparser.raw({ verify: rawBodySaver, type: '*/*' }))
 var cors = require('cors');
+
 const corsOpts = {
   origin: '*',
 
@@ -80,10 +81,10 @@ const corsOpts = {
     'Content-Type',
   ],
 };
+
 app.use(cors(corsOpts));
 
 require('./Helper/cron')(app);
-
 
 // =======================SOCKET CONNECT AND ADD PRICE =====================
 
@@ -226,10 +227,6 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
   }
 
 }
-
-
-
-
 
 app.get('/r', (req, res) => {
   // Request on Socket Server 1
@@ -582,7 +579,7 @@ app.post('/broker-signals', async (req, res) => {
           console.log("client_key ",client_key)
           console.log("process.env.PANEL_KEY ",process.env.PANEL_KEY)
           // HIT TRADE IN BROKER SERVER
-          
+
           if (process.env.PANEL_KEY == client_key) {
             
           //console.log("Inside  ",process.env.PANEL_KEY)
@@ -1070,8 +1067,8 @@ app.post('/broker-signals', async (req, res) => {
           if (option_type == 'CALL') {
             is_CE_val_option = 'CE';
           }
-
-
+         
+          
           // IF SQ_PRICE
           var sq_value;
           if (sq_value == undefined) { sq_value = "0" } else { sq_value = sq_value }
