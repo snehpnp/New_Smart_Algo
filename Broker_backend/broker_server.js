@@ -579,6 +579,21 @@ app.post('/broker-signals', async (req, res) => {
           console.log("client_key ",client_key)
           console.log("process.env.PANEL_KEY ",process.env.PANEL_KEY)
           // HIT TRADE IN BROKER SERVER
+         let ExistExitSignal = '';
+         if(type.toUpperCase() == "LX" || type.toUpperCase() == "SX"){
+          const updatedFindSignal = {
+            ...findSignal,
+            exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
+          };
+          ExistExitSignal = await MainSignals.find(updatedFindSignal)
+         }
+          
+          // if(ExistExitSignal != ''){
+          //  console.log("IFFFFFF ",ExistExitSignal)
+          // }else{
+          //   console.log("ELLLSEEE ",ExistExitSignal)
+             
+          // }
 
           if (process.env.PANEL_KEY == client_key) {
             
@@ -599,7 +614,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (AliceBluedocuments.length > 0) {
-                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req , findSignal);
+                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req , ExistExitSignal);
                 }
 
             } catch (error) {

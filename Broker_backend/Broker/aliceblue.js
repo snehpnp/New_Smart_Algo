@@ -12,7 +12,7 @@ const AliceViewModel = db.AliceViewModel;
 const BrokerResponse = db.BrokerResponse;
 var dateTime = require('node-datetime');
 
-const place_order = async (AllClientData, signals, token, filePath, signal_req ,findSignal) => {
+const place_order = async (AllClientData, signals, token, filePath, signal_req ,ExistExitSignal) => {
      
     try {
 
@@ -321,7 +321,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                     // console.log("possition_qty Cash", possition_qty);
                                     if (possition_qty == 0) {
                                         // console.log("possition_qty Not Available", possition_qty);
-                                        PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
+                                        PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
 
                                         BrokerResponse.create({
                                             user_id: item._id,
@@ -371,7 +371,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                     if (possition_qty == 0) {
                                          
 
-                                       PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
+                                       PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
 
 
                                         // console.log("possition_qty Not Available", possition_qty);
@@ -414,7 +414,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                 }
                             }else{
 
-                                PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
+                                PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
 
                                 BrokerResponse.create({
                                     user_id: item._id,
@@ -447,7 +447,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                            
                         } else {
 
-                            PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
+                            PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
     
                             BrokerResponse.create({
                                 user_id: item._id,
@@ -482,7 +482,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
     
                     })
                     .catch(async (error) => {
-                        PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
+                        PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
                         fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
                             if (err) {
                                 return console.log(err);
@@ -518,7 +518,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                 });
                         } else {
 
-                            PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
+                            PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
                             const message = (JSON.stringify(error)).replace(/["',]/g, '');
     
                             BrokerResponse.create({
@@ -1012,21 +1012,10 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
 }
 
-const PendingOrderCancel = async(findSignal,token ,item ,filePath, signals, signal_req)=>{
+const PendingOrderCancel = async(ExistExitSignal,token ,item ,filePath, signals, signal_req)=>{
     // console.log("pending order") 
-    // console.log("findSignal" ,findSignal) 
-   const updatedFindSignal = {
-    ...findSignal,
-    exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
-  };
-
-  //console.log("updatedFindSignal ",updatedFindSignal)
-
-  
- const ExitMainSignals = await MainSignals.find(updatedFindSignal)
-
-
- if(ExitMainSignals.length > 0){
+if(ExistExitSignal != ''){
+  if(ExistExitSignal.length > 0){
 
 let config = {
   method: 'get',
@@ -1046,9 +1035,9 @@ axios.request(config)
   if (Array.isArray(response.data)) {
     if(response.data.length){
         
-        // console.log("token[0].instrument_token  -",token[0].instrument_token);
-        // console.log("price  -",ExitMainSignals[0].entry_price);
-        const Exist_open_trade = response.data.find(item1 => item1.token === token[0].instrument_token && parseFloat(item1.Prc) == parseFloat(ExitMainSignals[0].entry_price)); 
+       
+         console.log("price  -",ExistExitSignal[0].entry_price);
+        const Exist_open_trade = response.data.find(item1 => item1.token === token[0].instrument_token && parseFloat(item1.Prc) == parseFloat(ExistExitSignal[0].entry_price)); 
         //console.log("Exist_open_trade  -",Exist_open_trade); 
         if(Exist_open_trade != undefined && Exist_open_trade.Status == "cancelled"){
 
@@ -1176,8 +1165,9 @@ axios.request(config)
 
 
   }
+}
   
-  console.log("ExitMainSignals ",ExitMainSignals)
+
 }
 
 
