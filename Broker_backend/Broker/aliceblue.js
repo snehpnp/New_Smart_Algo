@@ -14,9 +14,6 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req ,findSignal) => {
      
-
-      
-
     try {
 
         var dt = signals.DTime;
@@ -324,6 +321,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                     // console.log("possition_qty Cash", possition_qty);
                                     if (possition_qty == 0) {
                                         // console.log("possition_qty Not Available", possition_qty);
+                                        PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
+
                                         BrokerResponse.create({
                                             user_id: item._id,
                                             receive_signal: signal_req,
@@ -370,6 +369,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                     // console.log("possition_qty", possition_qty);
     
                                     if (possition_qty == 0) {
+                                         
+
+                                       PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
+
 
                                         // console.log("possition_qty Not Available", possition_qty);
                                         BrokerResponse.create({
@@ -411,6 +414,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                 }
                             }else{
 
+                                PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
+
                                 BrokerResponse.create({
                                     user_id: item._id,
                                     receive_signal: signal_req,
@@ -441,6 +446,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
     
                            
                         } else {
+
+                            PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
     
                             BrokerResponse.create({
                                 user_id: item._id,
@@ -475,7 +482,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
     
                     })
                     .catch(async (error) => {
-    
+                        PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
                         fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
                             if (err) {
                                 return console.log(err);
@@ -510,6 +517,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
     
                                 });
                         } else {
+
+                            PendingOrderCancel(findSignal,token ,item ,filePath, signals, signal_req)
                             const message = (JSON.stringify(error)).replace(/["',]/g, '');
     
                             BrokerResponse.create({
@@ -565,7 +574,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
          });
     
       }
-
 
       }else{
 
@@ -1004,8 +1012,173 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
 }
 
+const PendingOrderCancel = async(findSignal,token ,item ,filePath, signals, signal_req)=>{
+    // console.log("pending order") 
+    // console.log("findSignal" ,findSignal) 
+   const updatedFindSignal = {
+    ...findSignal,
+    exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
+  };
+
+  //console.log("updatedFindSignal ",updatedFindSignal)
+
+  
+ const ExitMainSignals = await MainSignals.find(updatedFindSignal)
 
 
+ if(ExitMainSignals.length > 0){
+
+let config = {
+  method: 'get',
+  maxBodyLength: Infinity,
+  url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/fetchOrderBook',
+  headers: {
+    'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
+
+    'Content-Type': 'application/json',
+},
+};
+
+axios.request(config)
+.then((response) => {
+ // console.log("data  -",response.data);
+
+  if (Array.isArray(response.data)) {
+    if(response.data.length){
+        
+        // console.log("token[0].instrument_token  -",token[0].instrument_token);
+        // console.log("price  -",ExitMainSignals[0].entry_price);
+        const Exist_open_trade = response.data.find(item1 => item1.token === token[0].instrument_token && parseFloat(item1.Prc) == parseFloat(ExitMainSignals[0].entry_price)); 
+        //console.log("Exist_open_trade  -",Exist_open_trade); 
+        if(Exist_open_trade != undefined && Exist_open_trade.Status == "cancelled"){
+
+            
+            // console.log("item.postdata.exch  -",item.postdata.exch);
+            // console.log("Nstordno  -",Exist_open_trade.Nstordno);
+            // console.log("Exist_open_trade.Trsym  -",Exist_open_trade.Trsym);
+
+
+            const axios = require('axios');
+            let data = JSON.stringify({
+              "exch":item.postdata.exch,
+              "nestOrderNumber": Exist_open_trade.Nstordno,
+              "trading_symbol": Exist_open_trade.Trsym
+            });
+            
+            let config = {
+              method: 'post',
+              maxBodyLength: Infinity,
+              url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/cancelOrder',
+              headers: {
+                'Authorization': 'Bearer ' + item.demat_userid + ' ' + item.access_token,
+    
+                'Content-Type': 'application/json',
+            },
+              data : data
+            };
+            
+            axios.request(config)
+            .then((response) => {
+              console.log("Cancel Order ",response.data);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+            
+
+
+            
+        }
+        
+        
+    }
+  }
+
+
+//   {
+//     Prc: '2.00',
+//     RequestID: '1',
+//     Cancelqty: 0,
+//     discQtyPerc: 'NA',
+//     customText: 'NA',
+//     Mktpro: 'NA',
+//     defmktproval: '',
+//     optionType: 'CE',
+//     usecs: 'NA',
+//     mpro: '',
+//     Qty: 15,
+//     ordergenerationtype: '--',
+//     Unfilledsize: 0,
+//     orderAuthStatus: '',
+//     Usercomments: 'NA',
+//     ticksize: '0.05',
+//     Prctype: 'L',
+//     Status: 'open',
+//     Minqty: 0,
+//     orderCriteria: 'NA',
+//     Exseg: 'nse_fo',
+//     Sym: 'BANKNIFTY',
+//     multiplier: '1',
+//     ExchOrdID: '1600000031390394',
+//     ExchConfrmtime: '24-May-2024 10:13:45',
+//     Pcode: 'NRML',
+//     SyomOrderId: '',
+//     Dscqty: 0,
+//     Exchange: 'NFO',
+//     Ordvaldate: 'NA',
+//     accountId: '438760',
+//     exchangeuserinfo: 'NA',
+//     Avgprc: '0.00',
+//     Trgprc: '00.00',
+//     Trantype: 'B',
+//     bqty: '15',
+//     Trsym: 'BANKNIFTY29MAY24C48700',
+//     Fillshares: 0,
+//     AlgoCategory: 'NA',
+//     sipindicator: 'NA',
+//     strikePrice: '48700',
+//     reporttype: 'NA',
+//     AlgoID: 'NA',
+//     noMktPro: '',
+//     BrokerClient: '--',
+//     OrderUserMessage: '--',
+//     decprec: 'NA',
+//     ExpDate: '29 May, 2024',
+//     COPercentage: 0,
+//     marketprotectionpercentage: '--',
+//     Nstordno: '24052400089584',
+//     ExpSsbDate: 'NA',
+//     OrderedTime: '24/05/2024 10:13:45',
+//     RejReason: '--',
+//     modifiedBy: '--',
+//     Scripname: 'BANKNIFTY29MAY24C48700',
+//     stat: 'Ok',
+//     orderentrytime: 'May 24 2024 10:13:45',
+//     PriceDenomenator: '1',
+//     panNo: 'NA',
+//     RefLmtPrice: 0,
+//     PriceNumerator: '1',
+//     token: '56651',
+//     ordersource: 'NA',
+//     Validity: 'DAY',
+//     GeneralDenomenator: '1',
+//     series: '',
+//     InstName: 'OPTIDX',
+//     GeneralNumerator: '1',
+//     user: '438760',
+//     remarks: '--',
+//     iSinceBOE: 0
+//   }
+})
+.catch((error) => {
+  console.log(error);
+});
+
+
+  }
+  
+  console.log("ExitMainSignals ",ExitMainSignals)
+}
 
 
 module.exports = { place_order }
