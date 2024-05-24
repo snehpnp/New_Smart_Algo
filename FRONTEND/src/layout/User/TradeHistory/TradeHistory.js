@@ -216,7 +216,7 @@ const TradeHistory = () => {
 
     {
       dataField: "createdAt",
-      text: "Signals time",
+      text: "Signals Entry time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
 

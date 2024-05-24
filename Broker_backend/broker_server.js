@@ -601,8 +601,8 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (AliceBluedocuments.length > 0) {
-                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req);
-              }
+                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req , findSignal);
+                }
 
             } catch (error) {
               console.log("Error Get Aliceblue Client In view", error);

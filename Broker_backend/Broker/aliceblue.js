@@ -12,7 +12,7 @@ const AliceViewModel = db.AliceViewModel;
 const BrokerResponse = db.BrokerResponse;
 var dateTime = require('node-datetime');
 
-const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
+const place_order = async (AllClientData, signals, token, filePath, signal_req ,findSignal) => {
      
 
       
