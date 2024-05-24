@@ -472,3 +472,17 @@ export async function USER_DELETE(data) {
     }
 
 }
+
+export async function GET_USER(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}findOneUser`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err); 
+    }
+
+}

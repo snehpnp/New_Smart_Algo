@@ -7,7 +7,7 @@ const { verifyToken } = require('../../Middleware/authjwt')
 
 const { GetPanelDetails, GetAllClients, GetAllSubadmins, updateBrokerPermission, CloseThePanel, GetAllAdminHelps, GetAll_Broker_details, Admin_Permissions, AddLicensePanle, GetPanlePermistion  } = require('../../Controllers/Superadmin/Permission.controller')
 
-const {getSignal , UpdateSignal , DeleteSignal , backupSignal, deletedSignal , FindUserById ,UpdateUser , UserDelete} = require('../../Controllers/Separate_Superadmin/Superadmin')
+const {getSignal , UpdateSignal , DeleteSignal , backupSignal, deletedSignal , FindUserById ,UpdateUser , UserDelete , findOneUser} = require('../../Controllers/Separate_Superadmin/Superadmin')
 
 
 
@@ -31,6 +31,8 @@ router.post('/deleted/signal' , deletedSignal)
 router.post('/findUserById' , FindUserById)
 router.post('/update/user' , UpdateUser)
 router.post('/user/delete' , UserDelete)
+router.post('/findOneUser' , findOneUser)
+
 
 
 

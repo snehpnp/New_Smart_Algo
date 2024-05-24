@@ -196,6 +196,7 @@ const TradeHistory = () => {
     {
       dataField: "live",
       text: "Live Price",
+      // hidden: (getPermissions && getPermissions.live == 1 ? false : true),
       formatter: (cell, row, rowIndex) => (
         <div>
           <span className={`LivePrice_${row.token}`}></span>
@@ -731,9 +732,6 @@ const TradeHistory = () => {
   }
   useEffect(() => {
     getservice()
-
-
-
   }, [])
 
 
@@ -843,7 +841,6 @@ const TradeHistory = () => {
                         {item}
                       </option>
                     );
-
                   })}
               </select>
             </div>
@@ -878,11 +875,7 @@ const TradeHistory = () => {
             </button>
           </div>
         </div>
-
-
         <div className="table-responsive">
-
-
           {tradeHistoryData.data.length>0 ? 
 
           total >= 0 ? 
@@ -890,18 +883,12 @@ const TradeHistory = () => {
             <h4 >Total Realised P/L : <span style={{  color:"red"}}> {total.toFixed(2)}</span> </h4>  : ""
           
         }
-          
-
-    
-    
+        
           <FullDataTable
             TableColumns={columns}
             tableData={tradeHistoryData.data}
             pagination1={true}
-          />
-    
-
-           
+          />   
         </div>
 
         {/*  For Detailed View  */}

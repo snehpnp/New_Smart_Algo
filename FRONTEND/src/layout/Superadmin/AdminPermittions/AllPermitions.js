@@ -5,7 +5,7 @@ import Content from "../../../Components/Dashboard/Content/Content"
 import * as  valid_err from "../../../Utils/Common_Messages"
 import { Link } from "react-router-dom";
 import Loader from '../../../Utils/Loader'
-import { FolderLock, Plus, FileClock, HelpingHand, Users2, Link2, ScrollText , RadioTower  } from 'lucide-react';
+import { FolderLock, Plus, FileClock, HelpingHand, Users2, Link2, ScrollText, RadioTower, Eye } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel, GET_PANEL_INFORMATIONS, All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
@@ -31,8 +31,8 @@ const AllPermitions = () => {
 
     const token = JSON.parse(localStorage.getItem('user_details')).token
 
-    
-     
+
+
 
 
     //  for permission
@@ -40,15 +40,6 @@ const AllPermitions = () => {
 
     //  for Panel Details
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false)
-
-    //  for Show Clients
-    const [ShowClientsModal, setShowClientsModal] = useState(false)
-    const [ShowClientsList, setShowClientsList] = useState([])
-
-
-    //  for Subadmins
-    const [showSubadminsModal, setshowSubadminsModal] = useState(false)
-    const [ShowSubadminList, setShowSubadminList] = useState([])
 
     //  for Add Licence
     const [showAddLicenceModal, setshowAddLicenceModal] = useState(false)
@@ -59,8 +50,7 @@ const AllPermitions = () => {
     const [showLicenceModal, setshowLicenceModal] = useState(false)
     const [showLicenceDetails, setshowLicenceDetails] = useState([])
 
-    // For Admin Help
-    const [getAdminHelps, setGetAdminelp] = useState('')
+
 
     //  for Broker Permission
     const [showBrokerModal, setshowBrokerModal] = useState(false)
@@ -139,50 +129,36 @@ const AllPermitions = () => {
 
 
     useEffect(() => {
-
         localStorage.removeItem('RowData')
         data()
         GetAllThemes()
     }, [refresh, searchInput])
 
+ 
 
 
+    // const CloseCompany = async (status) => {
+
+    //     const req = {
+    //         "domain": Config.react_domain,
+    //         "status": status ? 1 : 0
+    //     }
 
 
-
-
-
-
-    // const panelDetails = (panel_id) => {
-    //     setPanelid(panel_id)
-    //     setshowModal(true)
+    //     await dispatch(Close_Admin_Panel(req)).unwrap()
+    //         .then((response) => {
+    //             if (response.status) {
+    //                 toast.success(response.msg);
+    //                 setRefresh(!refresh)
+    //             } else {
+    //                 toast.error(response.msg);
+    //             }
+    //         })
     // }
 
 
 
-
-    const CloseCompany = async (status) => {
-
-        const req = {
-            "domain": Config.react_domain,
-            "status": status ? 1 : 0
-        }
-
-
-        await dispatch(Close_Admin_Panel(req)).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    toast.success(response.msg);
-                    setRefresh(!refresh)
-                } else {
-                    toast.error(response.msg);
-                }
-            })
-    }
-
-
-
-    const setLocalStorage = (row)=>{
+    const setLocalStorage = (row) => {
 
         console.log("row", row)
 
@@ -230,7 +206,7 @@ const AllPermitions = () => {
 
                         onClick={(e) => { setshowPanelName({ rowdata: row, panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowModal(true) }}
                     />
-                    
+
                 </span>
             )
         },
@@ -262,7 +238,7 @@ const AllPermitions = () => {
             dataField: 'panel_name',
             text: 'Clients',
             formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="Panel Views"  onClick={()=>setLocalStorage(row)}>
+                <span data-toggle="tooltip" data-placement="top" title="Panel Views" onClick={() => setLocalStorage(row)}>
                     <Link to={`/super/showclient`} state={row}>
                         <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
@@ -318,7 +294,7 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="HelpingHand">
                     <Link to='/super/signals' state={row}>
-                        <RadioTower  size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                        <RadioTower size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
                 </span >
             )

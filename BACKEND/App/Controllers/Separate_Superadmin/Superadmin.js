@@ -578,6 +578,124 @@ class SuperAdmin {
     }
 
 
+    async findOneUser(req, res) {
+        try {
+            const { id } = req.body;
+
+            if (!id) {
+                return res.send({ status: false, msg: "Id Not Found", data: [] });
+            }
+
+            // const findUser = await user.findOne({ _id: new ObjectId(id) });
+
+            // if (!findUser) {
+            //     return res.send({ status: false, msg: "Invalid Id Found", data: [] });
+            // }
+
+            const getToMonth = await user.aggregate([
+                { $match: { _id: new ObjectId(id) } },
+                {
+                    $lookup: {
+                        from: "count_licenses",
+                        localField: "_id",
+                        foreignField: "user_id",
+                        as: "licenses"
+                    }
+                },
+                { $unwind: "$licenses" },
+                {
+                    $group: {
+                        _id: "$_id",
+                        totalLicence: { $sum: { $toDouble: "$licenses.license" } },
+                        UserName: { $first: "$UserName" },
+                        CreateDate: { $first: "$CreateDate" },
+                        StartDate: { $first: "$StartDate" },
+                        EndDate: { $first: "$EndDate" },
+                        licence: { $first: "$licence" },
+
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        UserName: 1,
+                        totalLicence: 1,
+                        CreateDate: 1,
+                        licence: 1,
+                        EndDate: 1,
+                        StartDate: 1
+                    }
+                }
+            ]).exec();  // Ensure the aggregation is executed and awaited properly
+
+            
+            // var stateRemaingLicense = []
+            // var arrLicense = []
+            // var sumWithInitial = ""
+
+            // for (var i = 1; i <= getToMonth[0].totalLicence; i++) {
+            //     arrLicense.push(1)
+            // }
+            
+            // var RemainingLicence = 0
+
+            // var past_date = new Date(getToMonth[0].StartDate);
+            // var current_date = new Date();
+
+
+
+
+            // var difference = (current_date.getDate() - past_date.getDate()) / 30 +
+            //     current_date.getMonth() - past_date.getMonth() +
+            //     (12 * (current_date.getFullYear() - past_date.getFullYear()));
+
+            // difference = Math.ceil(difference)
+
+            // for (var i = difference; i < arrLicense.length; i++) {
+            //     // console.log("Reamaing licence",i,":", arrLicense[i]);
+            //     stateRemaingLicense.push(arrLicense[i])
+            //     // console.log("stateRemaingLicense",stateRemaingLicense);
+            //     const initialValue = 0;
+            //     sumWithInitial = stateRemaingLicense.reduce(
+            //         (previousValue, currentValue) => previousValue + currentValue,
+            //         initialValue
+            //     );
+            // }
+            // console.log("sumWithInitial", sumWithInitial);
+
+            // var Aarry_Num = []
+            // for (i = 1; i <= sumWithInitial; i++) {
+            //     // console.log("i", i);
+            //     Aarry_Num.push(i)
+            // }
+
+
+
+            // console.log("Aarry_Num",Aarry_Num);
+
+            // console.log("StartDate", past_date)
+            // console.log("EndDate", getToMonth[0].EndDate)
+            // console.log("new Date", new Date())
+            // console.log("RemainingLicence", RemainingLicence)
+
+
+
+
+
+
+
+
+
+            return res.send({ status: true, msg: "Get Data", data: getToMonth });
+
+        } catch (err) {
+            console.error(err);  // Log the error for debugging
+            return res.send({ status: false, msg: 'Internal server error', data: [] });
+        }
+    }
+
+
+
 }
 
 

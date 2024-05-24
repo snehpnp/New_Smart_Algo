@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_ALL_PANELS_LIST, ALL_BROKERS, UPDATE_BROKERS, UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER, ADD_PANEL, UPDATE_PANEL ,GET_PANEL_HISTORY,UPDATE_QUERY , GET_ALL_SIGNAL , UPDATE_PRICE , DELETE_SIGNAL , GET_ALL_DELETED_SIGNAL  ,BACKUP_SIGNAL , UPDATE_USER  ,GET_ONE_USER , USER_DELETE} from "../../../Service/superadmin.service";
+import { GET_ALL_PANELS_LIST, ALL_BROKERS, UPDATE_BROKERS, UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER, ADD_PANEL, UPDATE_PANEL ,GET_PANEL_HISTORY,UPDATE_QUERY , GET_ALL_SIGNAL , UPDATE_PRICE , DELETE_SIGNAL , GET_ALL_DELETED_SIGNAL  ,BACKUP_SIGNAL , UPDATE_USER  ,GET_ONE_USER , USER_DELETE , GET_USER} from "../../../Service/superadmin.service";
 
 
 export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => {
@@ -265,6 +265,16 @@ export const DELETE_USER_SERVICES = createAsyncThunk("user/delete", async (data)
   }
 });
 
+export const Find_User = createAsyncThunk("findOneUser", async (data) => {
+   
+  try {
+    const res = await GET_USER(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
 
 
  
@@ -297,7 +307,8 @@ const SuperAdminSlice = createSlice({
     backupSignal:[],
     find_One_User:[],
     update_User:[],
-    user_Delete:[]
+    user_Delete:[],
+    find_User :[] 
   },
 
   recuders: {},
@@ -397,6 +408,10 @@ const SuperAdminSlice = createSlice({
     [DELETE_USER_SERVICES.fulfilled]: (state, { payload }) => {
       // state.isLoading = false;
       return { ...state, user_Delete: payload, isLoading: false };
+    },
+    [Find_User.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, find_User: payload, isLoading: false };
     },
   },
 
