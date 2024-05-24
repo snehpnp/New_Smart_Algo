@@ -1039,7 +1039,7 @@ axios.request(config)
          console.log("price  -",ExistExitSignal[0].entry_price);
         const Exist_open_trade = response.data.find(item1 => item1.token === token[0].instrument_token && parseFloat(item1.Prc) == parseFloat(ExistExitSignal[0].entry_price)); 
         //console.log("Exist_open_trade  -",Exist_open_trade); 
-        if(Exist_open_trade != undefined && Exist_open_trade.Status == "cancelled"){
+        if(Exist_open_trade != undefined && Exist_open_trade.Status == "open"){
 
             
             // console.log("item.postdata.exch  -",item.postdata.exch);
