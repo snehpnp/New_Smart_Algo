@@ -12,9 +12,11 @@ class Tradehistory {
     // GET ADMIN SIGNALS
     async GetAdminTradeHistory(req, res) {
         try {
-
-            const { startDate, endDate, strategy, service, type } = req.body;
-
+          // console.log("req.body" ,req.body)
+            
+            const { startDate, endDate, strategy, service, type , serviceIndex } = req.body;
+            
+            console.log("serviceIndex" ,serviceIndex)
             var client_persnal_key1 = ""
             if (type != undefined || type != 'undefined') {
                 if (type.toUpperCase() == "ADMIN") {
@@ -29,10 +31,19 @@ class Tradehistory {
             let endDateObj = new Date(endDate)
             let stg1
             let ser1
+            let serIndex
             //  For Strategy
 
 
             const strategyWord = strategy.trim();
+
+
+            if (serviceIndex === "null") {
+              serIndex = { $exists: true }
+              } else {
+              serIndex = serviceIndex
+              }
+
 
             if (strategyWord === "null") {
                 stg1 = { $exists: true }
@@ -58,6 +69,7 @@ class Tradehistory {
                     },
                     strategy: stg1,
                     trade_symbol: ser1,
+                    symbol: serIndex,
                     client_persnal_key: client_persnal_key1,
                   },
                 },

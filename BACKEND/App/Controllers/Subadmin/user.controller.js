@@ -31,6 +31,10 @@ class Employee {
 
   // USER ADD
   async AddEmployee(req, res) {
+
+    
+
+
     try {
       const {
         FullName,
@@ -54,7 +58,35 @@ class Employee {
         api_type,
         demat_userid,
         group_service,
+        multiple_strategy_select
       } = req.body;
+
+
+
+      
+      let Strategies_id_array = [];
+    
+
+    
+      if(multiple_strategy_select == "0"){
+        Strategies_id_array.push(Strategies[0].id)
+
+
+      }else{
+       let count = 0
+        for (const strategy of Strategies) {
+      //  console.log("strategy ",strategy.id)
+             
+          // count++
+          // //console.log("count ",count)
+          // if(parseInt(count_strategy_select) >= count){
+          Strategies_id_array.push(strategy.id)
+        //  }
+        }
+      }
+
+
+      console.log("Strategies_id_array ",Strategies_id_array)
 
       var Role = "USER";
       var StartDate1 = "";
@@ -111,6 +143,60 @@ class Employee {
           data: [],
         });
       }
+
+
+
+
+
+      const totalLicense = await User_model.aggregate([
+        // Match documents based on your criteria (e.g., specific conditions)
+        {
+          $match: {
+            license_type: "2",
+            licence: { $exists: true, $ne: null, $not: { $type: 10 } }, // Exclude undefined or NaN values
+          },
+        },
+        {
+          $group: {
+            _id: null, // Group all documents into a single group
+            totalLicense: {
+              $sum: { $toInt: "$licence" },
+            },
+          },
+        },
+      ]);
+
+      if (totalLicense.length > 0) {
+        var TotalLicense = totalLicense[0].totalLicense;
+      } else {
+        var TotalLicense = 0;
+      }
+
+      console.log("SHK 4")
+
+      if (Number(licence) > 0) {
+        console.log("SHK 1")
+
+        if ((parseInt(TotalLicense) + parseInt(licence)) >= Number(Panel_key[0].licenses)  ) {
+         console.log("SHK 2")
+          return res.send({
+            status: false,
+            msg: "You Dont Have License",
+            data: [],
+          })
+        }
+
+      }
+
+
+      console.log("SHK 3")
+
+
+
+
+
+
+
 
       // USER 2 DAYS LICENSE USE
       if (license_type == "0") {
@@ -289,7 +375,8 @@ class Employee {
                 user_id: User_id,
                 group_id: group_service,
                 service_id: data.Service_id,
-                strategy_id: Strategies[0].id,
+                //strategy_id: Strategies[0].id,
+                strategy_id: Strategies_id_array,
                 uniqueUserService: User_id + "_" + data.Service_id,
                 quantity: data.lotsize,
                 lot_size: 1
@@ -428,10 +515,22 @@ class Employee {
         new_licence = req.licence1;
       }
 
-      if (
-        Number(Panel_key[0].licenses) >=
-        Number(TotalLicense) + Number(new_licence)
-      ) {
+
+      if (Number(new_licence) > 0) {
+        //console.log("SHK 1")
+
+        if ((parseInt(TotalLicense) + parseInt(new_licence)) >= Number(Panel_key[0].licenses)  ) {
+         // console.log("SHK 2")
+          return res.send({
+            status: false,
+            msg: "You Dont Have License",
+            data: [],
+          })
+        }
+
+      }
+
+
 
         var is_active = "1"
         var ActiveStatus = "1"
@@ -803,13 +902,7 @@ class Employee {
           msg: "User Update successfully",
           data: [],
         });
-      } else {
-        return res.send({
-          status: false,
-          msg: "You Dont Have License",
-          data: [],
-        });
-      }
+      
     } catch (error) {
       console.log("Error In User Update-", error);
     }

@@ -100,7 +100,7 @@ class AliceBlue {
 
                                 //  For Client Only
 
-                                let result = await User.findByIdAndUpdate(
+                                   let result = await User.findByIdAndUpdate(
                                     Get_User[0]._id,
                                     {
                                         access_token: response.data.userSession,

@@ -588,7 +588,7 @@ const AddClient = () => {
 
     if (formik.values.broker === '7' || formik.values.broker === 7) {
       formik.setFieldValue('app_key', 'null');
-      formik.setFieldValue('api_type', 'null');
+      //formik.setFieldValue('api_type', 'null');
       // formik.setFieldValue('demat_userid', 'null');
     }
 

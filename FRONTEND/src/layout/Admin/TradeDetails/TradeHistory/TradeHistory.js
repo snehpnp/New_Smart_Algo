@@ -36,7 +36,7 @@ import $ from "jquery";
 const TradeHistory = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const checkStatusReff = useRef(false);
+ 
   var dashboard_filter = location.search.split("=")[1];
   // console.log("dashboard_filter", dashboard_filter);
 
@@ -50,13 +50,6 @@ const TradeHistory = () => {
   const [toDate, setToDate] = useState("");
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [refresh, setrefresh] = useState(false);
-  const [UserDetails, setUserDetails] = useState([]);
-  const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
-  const [SelectSegment, setSelectSegment] = useState("null");
-  const [SelectService, setSelectService] = useState("null");
-  const [SocketState, setSocketState] = useState("null");
-  const [ForGetCSV, setForGetCSV] = useState([]);
-  const [adminTradingStatus, setAdminTradingStatus] = useState(false);
   const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
 
 
@@ -89,17 +82,22 @@ const TradeHistory = () => {
   });
 
 
-  const handleFromDateChange = (e) => {
-    setFromDate(e.target.value);
-  };
 
-  const handleToDateChange = (e) => {
-    setToDate(e.target.value);
-  };
+  const [UserDetails, setUserDetails] = useState([]);
+  const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
+  const [SelectSegment, setSelectSegment] = useState("null");
+  const [SelectService, setSelectService] = useState("null");
+
+  const [SocketState, setSocketState] = useState("null");
+
+  const [ForGetCSV, setForGetCSV] = useState([]);
 
 
 
+  const [adminTradingStatus, setAdminTradingStatus] = useState(false);
 
+
+  const checkStatusReff = useRef(false);
 
   useEffect(() => {
     GetAdminTradingStatus()
@@ -116,9 +114,9 @@ const TradeHistory = () => {
 
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
-
+   
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter, token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter ,serviceIndex :SelectServiceIndex,token: token})
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -144,7 +142,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
-  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter]);
+  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter ,SelectServiceIndex]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -160,6 +158,7 @@ const TradeHistory = () => {
     setFromDate("");
     setStrategyClientStatus("null");
     setSelectService("null");
+    setSelectServiceIndex('null')
     setToDate("");
     setTradeHistoryData({
       loading: false,
@@ -206,9 +205,15 @@ const TradeHistory = () => {
 
     {
       dataField: "createdAt",
-      text: "Signals time",
+      text: "Signals Entry time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
+
+     {
+      dataField: "exit_dt_date",
+      text: "Signals Exit time",
+      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell):"-"}</>,
+      },
     {
       dataField: "trade_symbol",
       text: "Symbol",
@@ -218,52 +223,12 @@ const TradeHistory = () => {
       text: "Strategy",
     },
     {
-      dataField: "entry_qty",
-      text: "Entry Qty",
-      formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
-      ),
-    },
-    {
-      dataField: "exit_qty",
-      text: "Exit Qty",
-      formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
-      ),
-    },
-    {
-      dataField: "live",
-      text: "Live Price",
-      hidden: (getPermission.data[0] && getPermission.data[0].live_price == 1 ? false : true),
+      dataField: "2",
+      text: "Entry Type",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span className={`LivePrice_${row.token}`}></span>
-        </div>
-      ),
-    },
-    {
-      dataField: "entry_price",
-      text: "Entry Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
-      ),
-    },
-    {
-      dataField: "exit_price",
-      text: "Exit Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
-      ),
-    },
-
-    {
-      dataField: "Action",
-      text: "Realised",
-      formatter: (cell, row, rowIndex) => {
-        return (
-          <div>
-            <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
-            <span className={`d-none entry_qty_${row.token}_${row._id}`}>
+          <span>{row.entry_type === "LE"?"BUY ENTRY":"SELL ENTRY"}</span>
+          <span className={`d-none entry_qty_${row.token}_${row._id}`}>
               {row.entry_qty}
             </span>
             <span className={`d-none exit_qty_${row.token}_${row._id}`}>
@@ -287,23 +252,95 @@ const TradeHistory = () => {
             <span className={`d-none _id_${row.token}_${row._id}`}>
               {row._id}
             </span>
-          </div>
-        );
-      },
-    },
-
-
-    {
-      dataField: "UPL",
-      text: "Un-Realised",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
-
-
         </div>
       ),
     },
+    {
+      dataField: "entry_qty",
+      text: "Entry Qty",
+      formatter: (cell, row, rowIndex) => (
+        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+      ),
+    },
+    {
+      dataField: "exit_qty",
+      text: "Exit Qty",
+      formatter: (cell, row, rowIndex) => (
+        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+      ),
+    },
+    {
+      dataField: "live",
+      text: "Live Price",
+      formatter: (cell, row, rowIndex) => (
+        <div>
+          <span className={`LivePrice_${row.token}`}></span>
+        </div>
+      ),
+    },
+    {
+      dataField: "entry_price",
+      text: "Entry Price",
+      formatter: (cell, row, rowIndex) => (
+        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
+      ),
+    },
+    {
+      dataField: "exit_price",
+      text: "Exit Price",
+      formatter: (cell, row, rowIndex) => (
+        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
+      ),
+    },
+
+    // {
+    //   dataField: "Action",
+    //   text: "Realised",
+    //   formatter: (cell, row, rowIndex) => {
+    //     return (
+    //       <div>
+    //         <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
+    //         <span className={`d-none entry_qty_${row.token}_${row._id}`}>
+    //           {row.entry_qty}
+    //         </span>
+    //         <span className={`d-none exit_qty_${row.token}_${row._id}`}>
+    //           {row.exit_qty}
+    //         </span>
+    //         <span className={`d-none exit_price_${row.token}_${row._id}`}>
+    //           {row.exit_price}
+    //         </span>
+    //         <span className={`d-none entry_price_${row.token}_${row._id}`}>
+    //           {row.entry_price}
+    //         </span>
+    //         <span className={`d-none entry_type_${row.token}_${row._id}`}>
+    //           {row.entry_type}
+    //         </span>
+    //         <span className={`d-none exit_type_${row.token}_${row._id}`}>
+    //           {row.exit_type}
+    //         </span>
+    //         <span className={`d-none strategy_${row.token}_${row._id}`}>
+    //           {row.strategy}
+    //         </span>
+    //         <span className={`d-none _id_${row.token}_${row._id}`}>
+    //           {row._id}
+    //         </span>
+    //       </div>
+    //     );
+    //   },
+    // },
+
+
+    // {
+    //   dataField: "UPL",
+    //   text: "Un-Realised",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
+
+
+    //     </div>
+    //   ),
+    // },
 
     {
       dataField: "TPL",
@@ -314,8 +351,32 @@ const TradeHistory = () => {
         </div>
       ),
     },
+      
+    {
+      dataField: "",
+      text: "Entry Status",
+      formatter: (cell, row, rowIndex) => (
+          <div>
+               <span>{StatusEntry(row)}</span>
+              {/* <span>{row.result[0].exit_status ==="above"?"ABOVE":row.result[0].exit_status ==="below"?"BELOW":row.result[0].exit_status == "range"?"RANGE":" - "}</span> */}
 
 
+          </div>
+      ),
+  },
+  {
+      dataField: "exit_status",
+      text: "Exit Status",
+      formatter: (cell, row, rowIndex) => (
+          <div>
+              <span>{row.exit_status}</span>
+
+
+          </div>
+      ),
+    },
+    
+    
 
     {
       dataField: "view",
@@ -336,7 +397,17 @@ const TradeHistory = () => {
 
 
 
+  const StatusEntry = (row) => {
 
+    const filteredData = row.result.find(obj => obj.type === "LE" || obj.type === 'SE');
+
+    if(filteredData != undefined){
+      return filteredData.exit_status=="above"?"ABOVE":filteredData.exit_status=="below"?"BELOW":filteredData.exit_status=="range"?"RANGE":filteredData.exit_status 
+    }else{
+      return'-' 
+    }
+     
+  }
 
 
   // ----------------------------- SQUARE OFF ----------------------------
@@ -344,7 +415,7 @@ const TradeHistory = () => {
   const SquareOff = (rowdata, rowIndex) => {
     // $('.BP1_Put_Price_' + item.token).html();
     // $('.SP1_Call_Price_' + item.token).html();
-    console.log("rowdata", rowdata)
+   // console.log("rowdata", rowdata)
 
     var pre_tag = {
       option_type: rowdata.option_type,
@@ -355,7 +426,7 @@ const TradeHistory = () => {
       segment: rowdata.segment,
       strike: rowdata.strike_price,
     };
-    console.log("pre_tag", pre_tag)
+   // console.log("pre_tag", pre_tag)
 
     if (rowdata.entry_type === "") {
       setCreateSignalRequest(oldValues => {
@@ -383,13 +454,13 @@ const TradeHistory = () => {
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
-      console.log("item", item)
+      console.log("item" ,item)
+
+       
 
 
-
-
-      if (parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price != '' && item.exit_price) {
-        total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty);
+      if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
+      total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty);
       }
     });
 
@@ -405,7 +476,7 @@ const TradeHistory = () => {
 
     if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
 
-      const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
+        const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
       if (res.status === 200) {
         setSocketState("Ok");
@@ -422,9 +493,9 @@ const TradeHistory = () => {
         if (res.data.stat) {
           const handleResponse = async (response) => {
 
-            console.log("response ", response)
-            $('.BP1_Put_Price_' + response.tk).html();
-            $('.SP1_Call_Price_' + response.tk).html();
+              console.log("response ",response)
+              $('.BP1_Put_Price_' + response.tk).html();
+              $('.SP1_Call_Price_' + response.tk).html();
 
             // UPL_
             $(".LivePrice_" + response.tk).html(response.lp);
@@ -451,10 +522,10 @@ const TradeHistory = () => {
 
                   if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
 
-
-                    let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-                    let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
-                    let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
+                    
+                      let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                      let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
+                      let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
 
 
 
@@ -467,27 +538,27 @@ const TradeHistory = () => {
                       $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
                       $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
 
-                      ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
-                      ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
-                      ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
+                        ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
+                        ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
+                        ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
+                      }
                     }
                   }
                 }
-              }
-              //  if Only entry qty Exist
-              else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
-                let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
-                if (isNaN(abc)) {
-                  return "-";
-                } else {
-                  $(".show_rpl_" + response.tk + "_" + get_id_token).html("-");
-                  $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
-                  $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
-                  ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
-                  ShowColor1(".UPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
-                  ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+                //  if Only entry qty Exist
+                else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
+                  let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
+                  if (isNaN(abc)) {
+                    return "-";
+                  } else {
+                    $(".show_rpl_" + response.tk + "_" + get_id_token).html("-");
+                    $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
+                    $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
+                    ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
+                    ShowColor1(".UPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+                    ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+                  }
                 }
-              }
 
               //  if Only Exist qty Exist
               else if (
@@ -513,15 +584,15 @@ const TradeHistory = () => {
 
     }
 
-    else {
-
+    else{
+    
 
 
       tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-
-        console.log(" row._id ", row._id)
-        console.log(" row token ", row.token)
-        console.log(" row ", row)
+        
+        console.log(" row._id ",row._id)
+        console.log(" row token ",row.token)
+        console.log(" row ",row)
         let get_ids = '_id_' + row.token + '_' + row._id
         let get_id_token = $('.' + get_ids).html();
 
@@ -534,21 +605,25 @@ const TradeHistory = () => {
         const get_Strategy = $(".strategy_" + row.token + '_' + row._id).html();
 
 
-        if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+      if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+       //   console.log("row._id ",row._id)
           if (get_entry_qty !== "" && get_exit_qty !== "") {
 
             if (parseInt(get_entry_qty) == parseInt(get_exit_qty)) {
 
-
+            
               let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-
-
+             
+ 
               let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
               let finalyupl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * upl;
-
+             
+              // console.log("upl._id ",upl)
+              // console.log("finalyupl._id ",finalyupl)
               if ((isNaN(finalyupl) || isNaN(rpl))) {
                 return "-";
               } else {
+               // console.log("rpl inside",rpl)
                 $(".show_rpl_" + row.token + "_" + get_id_token).html(rpl.toFixed(2));
                 $(".UPL_" + row.token + "_" + get_id_token).html(finalyupl.toFixed(2));
                 $(".TPL_" + row.token + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
@@ -562,7 +637,17 @@ const TradeHistory = () => {
         }
         //  if Only entry qty Exist
         else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
+
+          //console.log("row._id else",row._id)
+
           let abc = ((parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
+           
+          if(get_entry_type === "SE"){
+            abc = ((parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_entry_qty)).toFixed();
+          }
+
+
+
           if (isNaN(abc)) {
             return "-";
           } else {
@@ -635,7 +720,12 @@ const TradeHistory = () => {
 
   useEffect(() => {
     ShowLivePrice();
-  }, [tradeHistoryData.data, SocketState, UserDetails]);
+  }, [tradeHistoryData.data,SocketState, UserDetails]);
+
+
+  // useEffect(() => {
+  //   ShowLivePrice();
+  // }, [tradeHistoryData.data,SocketState,]);
 
   //  GET ALL SERVICE NAME
 
@@ -852,7 +942,9 @@ const TradeHistory = () => {
               />
             </div>
           </div>
-          <div className="col-lg-3 px-1">
+
+
+           <div className="col-lg-3 px-1">
             <div class="mb-3">
               <label for="select" class="form-label">
                 Symbol
@@ -882,6 +974,29 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
+
+          <div className="col-lg-3 px-1">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Index Symbol
+              </label>
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectServiceIndex(e.target.value)}
+                value={SelectServiceIndex}
+              >
+                <option value="null" selected>All</option>
+                <option value="BANKNIFTY" selected>BANKNIFTY</option>
+                <option value="NIFTY" selected>NIFTY</option>
+                <option value="FINNIFTY" selected>FINNIFTY</option>
+              </select>
+            </div>
+          </div>
+
+
+
           <div className="col-lg-2  px-1">
             <div class="mb-3">
               <label for="select" class="form-label">

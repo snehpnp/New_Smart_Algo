@@ -11,121 +11,136 @@ const ObjectId = mongoose.Types.ObjectId;
 //const { GetAccessToken ,GetOrderFullInformation,GetLivePrice,Cancel_order,GetOrderFullInformationAll} = require('../../Controllers/Brokerassecc_token/Alice')
 
 // ALICE BLUE CONTROLLER FILE
-const { GetAccessToken ,GetLivePrice,Cancel_order,GetOrderFullInformationAll,backendRunSocket} = require('../../Controllers/Brokerassecc_token/Alice')
+const { GetAccessToken, GetLivePrice, Cancel_order, GetOrderFullInformationAll, backendRunSocket } = require('../../Controllers/Brokerassecc_token/Alice')
 
 // ANGEL CONTROLLER FILE
-const { GetAccessTokenAngel,GetOrderFullInformationAngel} = require('../../Controllers/Brokerassecc_token/Angel')
+const { GetAccessTokenAngel, GetOrderFullInformationAngel } = require('../../Controllers/Brokerassecc_token/Angel')
 
 // 5 PAISA CONTROLLER FILE
-const { GetAccessTokenFivepaisa,GetOrderFullInformationFivepaisa} = require('../../Controllers/Brokerassecc_token/Fivepaisa')
+const { GetAccessTokenFivepaisa, GetOrderFullInformationFivepaisa } = require('../../Controllers/Brokerassecc_token/Fivepaisa')
 
 
 //  FYERS CONTROLLER FILE
-const { GetAccessTokenFyers,GetOrderFullInformationFyers} = require('../../Controllers/Brokerassecc_token/Fyers')
+const { GetAccessTokenFyers, GetOrderFullInformationFyers } = require('../../Controllers/Brokerassecc_token/Fyers')
 
 
 // ZERODHA CONTROLLER FILE
-const { GetAccessTokenZerodha,GetOrderFullInformationZerodha} = require('../../Controllers/Brokerassecc_token/Zerodha')
+const { GetAccessTokenZerodha, GetOrderFullInformationZerodha } = require('../../Controllers/Brokerassecc_token/Zerodha')
 
 
 // UPSTOX CONTROLLER FILE
-const { GetAccessTokenUpstox,GetOrderFullInformationUpstox} = require('../../Controllers/Brokerassecc_token/Upstox')
+const { GetAccessTokenUpstox, GetOrderFullInformationUpstox } = require('../../Controllers/Brokerassecc_token/Upstox')
 
 // Dhan CONTROLLER FILE
-const { GetAccessTokenDhan,GetOrderFullInformationDhan} = require('../../Controllers/Brokerassecc_token/Dhan')
+const { GetAccessTokenDhan, GetOrderFullInformationDhan } = require('../../Controllers/Brokerassecc_token/Dhan')
 
 // Markethub CONTROLLER FILE
-const {GetAccessTokenMarkethub,GetOrderFullInformationMarkethub}=require('../../Controllers/Brokerassecc_token/Mhub')
+const { GetAccessTokenMarkethub, GetOrderFullInformationMarkethub } = require('../../Controllers/Brokerassecc_token/Mhub')
 
 
 // Swastika CONTROLLER FILE
-const {GetAccessTokenSwastika,GetOrderFullInformationSwastika}=require('../../Controllers/Brokerassecc_token/Swastika')
+const { GetAccessTokenSwastika, GetOrderFullInformationSwastika } = require('../../Controllers/Brokerassecc_token/Swastika')
+
+// Kotak Neo CONTROLLER FILE
+const { GetkotakGetToken, GetkotakGetSession, GetOrderFullInformationKotakNeo } = require('../../Controllers/Brokerassecc_token/KotakNeo')
+
+
+// MASTER TRUST CONTROLLER FILE
+const { GetAccessTokenMastertrust, GetOrderFullInformationMastertrust } = require('../../Controllers/Brokerassecc_token/Mastertrust')
 
 // BROKER REDIRECT
-const GetOrderFullInformationAll_broker = async (req,res)=>{
-    
-    let user_id =  req.body.user_id;
-    const objectId = new ObjectId(user_id);
-    console.log("objectId",objectId)
-    const pipeline =[
-       {
-         $match : {
-            _id : objectId
-         }
-       }, 
-       {
-        $limit: 1 
-       }
-    ]
-   const result = await User.aggregate(pipeline)
+const GetOrderFullInformationAll_broker = async (req, res) => {
+
+  let user_id = req.body.user_id;
+  const objectId = new ObjectId(user_id);
+  console.log("objectId", objectId)
+  const pipeline = [
+    {
+      $match: {
+        _id: objectId
+      }
+    },
+    {
+      $limit: 1
+    }
+  ]
+  const result = await User.aggregate(pipeline)
 
 
 
-  
-   
 
-   if(result.length > 0){
 
-     
+
+  if (result.length > 0) {
+
+
     const broker = result[0].broker;
-    console.log("broker",broker)
+    console.log("broker", broker)
 
 
     // Market Hub   -  1
-     if(broker == 1){
-      GetOrderFullInformationMarkethub(req,res,result);
-     }
-   // ALICE BLUE   -  2
-    else if(broker == 2){
-     GetOrderFullInformationAll(req,res);
+    if (broker == 1) {
+      GetOrderFullInformationMarkethub(req, res, result);
     }
-   // ANGEL   -  12
-   else if(broker == 12){
-    GetOrderFullInformationAngel(req,res,result);
-   }
+    // ALICE BLUE   -  2
+    else if (broker == 2) {
+      GetOrderFullInformationAll(req, res);
+    }
 
-   // 5 PAISA   -  13
-   else if(broker == 13){
-    GetOrderFullInformationFyers(req,res,result);
-   }
+    // MASTER TRUST   -  3
+    else if (broker == 3) {
+      GetOrderFullInformationMastertrust(req, res, result);
+    }
 
-   // 5 PAISA   -  14
-   else if(broker == 14){
-    GetOrderFullInformationFivepaisa(req,res,result);
-   }
+    // KotakNeo  - 7
+    else if (broker == 7) {
+      GetOrderFullInformationKotakNeo(req, res, result);
+    }
+    // ANGEL   -  12
+    else if (broker == 12) {
+      GetOrderFullInformationAngel(req, res, result);
+    }
 
-   // ZERODHA   -  15
-   else if(broker == 15){
-    GetOrderFullInformationZerodha(req,res,result);
-   }
+    // 5 PAISA   -  13
+    else if (broker == 13) {
+      GetOrderFullInformationFyers(req, res, result);
+    }
 
-  // UPSTOX   -  19
-   else if(broker == 19){
-    GetOrderFullInformationUpstox(req,res,result);
+    // 5 PAISA   -  14
+    else if (broker == 14) {
+      GetOrderFullInformationFivepaisa(req, res, result);
+    }
+
+    // ZERODHA   -  15
+    else if (broker == 15) {
+      GetOrderFullInformationZerodha(req, res, result);
+    }
+
+    // UPSTOX   -  19
+    else if (broker == 19) {
+      GetOrderFullInformationUpstox(req, res, result);
     }
     // DHAN   -  20
-   else if(broker == 20){
-    GetOrderFullInformationDhan(req,res,result);
+    else if (broker == 20) {
+      GetOrderFullInformationDhan(req, res, result);
     }
-
     // Swastika   -  21
-    else if(broker == 21){
-    GetOrderFullInformationSwastika(req,res,result);
+    else if (broker == 21) {
+      GetOrderFullInformationSwastika(req, res, result);
+    }
+    else {
+      res.send({ status: false, msg: "broker not found" });
     }
 
-   else{
-    res.send({status:false,msg:"broker not found"});
-   }
 
 
-
-  }else{
+  } else {
     //console.log("User Not found")
-    res.send({status:false,msg:"User Not found"});
+    res.send({ status: false, msg: "User Not found" });
   }
-   
-      
-  }
+
+
+}
 
 
 // AliCE BLUE
@@ -140,10 +155,10 @@ router.get('/backendRunSocket', backendRunSocket);
 
 
 
- router.post('/order/cancel', Cancel_order);
+router.post('/order/cancel', Cancel_order);
 
- 
- //router.post('/getall/order/info', GetOrderFullInformationAll);
+
+//router.post('/getall/order/info', GetOrderFullInformationAll);
 router.post('/getall/order/info', GetOrderFullInformationAll_broker);
 
 
@@ -172,6 +187,14 @@ router.post('/markethub', GetAccessTokenMarkethub);
 
 // Swastika
 router.post('/swastika', GetAccessTokenSwastika);
+
+// Kotak Neo
+router.post('/kotakGetToken', GetkotakGetToken);
+router.post('/kotakGetSession', GetkotakGetSession);
+
+
+// Master Trust
+router.get('/mastertrust', GetAccessTokenMastertrust);
 
 
 module.exports = router;

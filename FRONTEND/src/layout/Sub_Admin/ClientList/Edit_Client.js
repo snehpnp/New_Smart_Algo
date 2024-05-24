@@ -163,7 +163,8 @@ const AddClient = () => {
       demat_userid: 'null',
       parent_role: null,
       Strategy: false,
-      licence1: 'null'
+      licence1: 'null',
+      multiple_strategy_select: false
     },
     validate: (values) => {
 
@@ -259,7 +260,9 @@ const AddClient = () => {
         "group_service": values.groupservice,
         "licence": values.licence1,
         "Editor_role": Role,
-        "device": check_Device()
+        "device": check_Device(),
+        "multiple_strategy_select": values.multiple_strategy_select === false ? '0' : '1'
+
       }
 
 

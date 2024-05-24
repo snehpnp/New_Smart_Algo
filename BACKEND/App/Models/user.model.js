@@ -201,6 +201,26 @@ const userModel = Schema({
         trim: true,
         default: '0'
     },
+    oneTimeToken: {
+        type: String,
+        default: null
+    },
+    kotakneo_sid: {
+        type: String,
+        default: null
+    },
+    kotakneo_auth: {
+        type: String,
+        default: null
+    },
+    kotakneo_userd: {
+        type: String,
+        default: null
+    },
+    hserverid: {
+        type: String,
+        default: null
+    },
 },
     {
         timestamps: true

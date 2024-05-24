@@ -45,10 +45,11 @@ const TradeHistory = () => {
 
   const [rowData, setRowData] = useState("");
 
+  const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
+  const [selectStrategy, setSelectStrategy] = useState("null");
 
-
-  console.log("rowData :", rowData)
-   
+  
+ // console.log("rowdata :", rowData);
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -70,8 +71,13 @@ const TradeHistory = () => {
     data: [],
   });
 
+  const [startegyFilterData, setStartegyFilterData] = useState({
+    loading: true,
+    data: [],
+  });
 
 
+ //console.log("startegyFilterData ",startegyFilterData)
 
 
   //  GET BROKER DETAILS
@@ -99,6 +105,8 @@ const TradeHistory = () => {
         user_id: gotodashboard ? gotodashboard_Details.user_id : user_id,
         startDate: startDate,
         endDate: endDate,
+        serviceIndex :SelectServiceIndex,
+        selectStrategy:selectStrategy,
         token: token,
       })
     )
@@ -108,6 +116,11 @@ const TradeHistory = () => {
           setTradeHistoryData({
             loading: false,
             data: response.data,
+          });
+
+          setStartegyFilterData({
+            loading: false,
+            data: response.trade_strategy_filter,
           });
         } else {
           setTradeHistoryData({
@@ -130,12 +143,16 @@ const TradeHistory = () => {
         user_id: gotodashboard ? gotodashboard_Details.user_id : user_id,
         startDate: full,
         endDate: full,
+        serviceIndex :SelectServiceIndex,
+        selectStrategy:selectStrategy,
         token: token,
       })
     )
       .unwrap()
       .then((response) => {
         if (response.status) {
+
+         // console.log("response.trade_strategy_filter ",response.trade_strategy_filter)
           setTradeHistoryData({
             loading: false,
             data: response.data,
@@ -143,6 +160,11 @@ const TradeHistory = () => {
           setTradeHistoryData1({
             loading: false,
             data: response.data,
+          });
+
+          setStartegyFilterData({
+            loading: false,
+            data: response.trade_strategy_filter,
           });
         }
         setTradeHistoryData({
@@ -154,7 +176,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     getsignals11();
-  }, []);
+  }, [SelectServiceIndex ,selectStrategy ]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -169,10 +191,14 @@ const TradeHistory = () => {
     e.preventDefault();
     setFromDate("");
     setToDate("");
+    setSelectServiceIndex("null")
+    setSelectStrategy("null")
     setTradeHistoryData({
       loading: false,
       data: tradeHistoryData1.data,
     });
+
+
   };
 
 
@@ -194,6 +220,14 @@ const TradeHistory = () => {
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
 
+    {
+
+      dataField: "exit_dt_date",
+      text: "Signals Exit time",
+      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell):"-"}</>,
+      
+     },
+
     // {
     //   dataField: "closeprice",
     //   text: "Close Price",
@@ -214,13 +248,63 @@ const TradeHistory = () => {
     },
 
     {
-      dataField: "entry_qty",
-      text: "Quantity",
+      dataField: "2",
+      text: "Entry Type",
       formatter: (cell, row, rowIndex) => (
-         <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
-        // <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+        <div>
+          <span>{row.entry_type === "LE"?"BUY ENTRY":"SELL ENTRY"}</span>
+        </div>
       ),
     },
+    // {
+    //   dataField: "entry_qty",
+    //   text: "Entry Qty",
+    //   formatter: (cell, row, rowIndex) =>  (
+    //      <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span> 
+    //    )
+   
+    // },
+
+    {
+      dataField: "entry_qty",
+      text: "Entry Qty",
+      formatter: (cell, row, rowIndex) => {
+        return (
+          <div>
+            <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
+
+
+            <span className={`d-none entry_qty_${row.token}_${row._id}`}>
+              {row.entry_qty_percent}
+            </span>
+            <span className={`d-none exit_qty_${row.token}_${row._id}`}>
+              {row.exit_qty_percent}
+            </span>
+            <span className={`d-none exit_price_${row.token}_${row._id}`}>
+              {row.exit_price}
+            </span>
+            <span className={`d-none entry_price_${row.token}_${row._id}`}>
+              {row.entry_price}
+            </span>
+            <span className={`d-none entry_type_${row.token}_${row._id}`}>
+              {row.entry_type}
+            </span>
+            <span className={`d-none exit_type_${row.token}_${row._id}`}>
+              {row.exit_type}
+            </span>
+            <span className={`d-none strategy_${row.token}_${row._id}`}>
+              {row.strategy}
+            </span>
+            <span className={`d-none _id_${row.token}_${row._id}`}>
+              {row._id}
+            </span>
+          </div>
+        );
+      },
+    },
+
+
+
     // {
     //   dataField: "exit_qty",
     //   text: "Exit Qty",
@@ -243,7 +327,8 @@ const TradeHistory = () => {
       dataField: "entry_price",
       text: "Entry Price",
       formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
+        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}
+        </div>
       ),
     },
     {
@@ -341,9 +426,6 @@ const TradeHistory = () => {
 
 
 
-
-
-
   var CreatechannelList = "";
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
@@ -366,8 +448,7 @@ const TradeHistory = () => {
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
   
-
-  console.log("tradeHistoryData.data",tradeHistoryData.data)
+   //console.log("tradeHistoryData.data",tradeHistoryData.data)
 
   let total=0;
   tradeHistoryData.data &&
@@ -378,9 +459,29 @@ const TradeHistory = () => {
        
 
 
+      // if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
+      // total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
+      // }
+
       if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
-      total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
-      }
+      
+     
+        if(item.entry_type ==="LE"){
+         // console.log("item iFF" ,item._id , " total ",total)
+          let total1 = (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
+          if(!isNaN(total1)){
+            total += total1
+          }
+         
+        }else{
+         let total1 = (parseFloat(item.entry_price) - parseFloat(item.exit_price)) * parseInt(item.exit_qty_percent);
+         // console.log("item ELSE" ,item._id , " total ",total)
+          if(!isNaN(total1)){
+            total += total1
+          }
+  
+        }
+        }
     });
 
   return (
@@ -389,7 +490,7 @@ const TradeHistory = () => {
         {gotodashboard === "true" || gotodashboard === true ? (
           <>
             <div className="row d-flex  align-items-center justify-content-start">
-              <div className="col-lg-3">
+              <div className="col-lg-3 d-none">
                 <div className="form-check custom-checkbox mb-3">
                   <label className="col-lg-6" htmlFor="fromdate">
                     From Date
@@ -406,7 +507,7 @@ const TradeHistory = () => {
                   />
                 </div>
               </div>
-              <div className="col-lg-3">
+              <div className="col-lg-3 d-none">
                 <div className="form-check custom-checkbox mb-3">
                   <label className="col-lg-6" htmlFor="endDate">
                     To Date
@@ -425,19 +526,76 @@ const TradeHistory = () => {
                   />
                 </div>
               </div>
+
+
+            
+            {/* <div className="col-lg-3 px-1">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Index Symbol
+              </label>
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectServiceIndex(e.target.value)}
+                value={SelectServiceIndex}
+              >
+                <option value="null" selected>All</option>
+                <option value="BANKNIFTY" selected>BANKNIFTY</option>
+                <option value="NIFTY" selected>NIFTY</option>
+                <option value="FINNIFTY" selected>FINNIFTY</option>
+              </select>
+            </div>
+           </div>
+
+           <div className="col-lg-3 px-1">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Strategy
+              </label>
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectStrategy(e.target.value)}
+                value={selectStrategy}
+              >
+                <option value="null" selected>All</option>
+                {startegyFilterData.data &&
+                  startegyFilterData.data.map((item) => {
+                    // return (
+                    //   <option className="mt-1" value={item.fullname}>
+                    //     {item.fullname}
+                    //   </option>
+                    // );
+
+                    return (
+                      <option className="mt-1" value={item}>
+                        {item}
+                      </option>
+                    );
+
+                  })}
+              </select>
+            </div>
+          </div> */}
+
+
+
               <div className="col-lg-3 d-flex">
-                <button
+                {/* <button
                   className="btn btn-primary mx-2"
                   onClick={(e) => getsignals(e)}
                 >
                   Search
-                </button>
-                <button
+                </button> */}
+                {/* <button
                   className="btn btn-primary"
                   onClick={(e) => ResetDate(e)}
                 >
                   Reset
-                </button>
+                </button> */}
               </div>
             </div>
           </>

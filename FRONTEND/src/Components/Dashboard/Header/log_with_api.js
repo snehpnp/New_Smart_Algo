@@ -6,6 +6,10 @@ import * as Config from "../../../Utils/Config";
 import axios from "axios";
 //import * as Config from "../Utils/Config";
 import { GET_BROKER_INFORMATION } from "../../../Service/admin.service";
+import toast, { Toaster } from 'react-hot-toast';
+
+import ToastButton from "../../ExtraComponents/Alert_Toast";
+
 
 
 export const loginWithApi = async (broker_id, UserDetails) => {
@@ -21,18 +25,14 @@ export const loginWithApi = async (broker_id, UserDetails) => {
           }).then((res) => {
             // console.log("res", res);
             if (res.data.status == true) {
-                alert(res.data.msg)
-                window.location.reload();
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("success");
-            //   setTextAlert(res.data.msg);
+                toast.success(res.data.msg)
+                    setTimeout(() => {
+                        window.location.reload();
+              }, 1500);
+            
             } else {
-                alert(res.data.msg)
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("error");
-            //   setTextAlert(res.data.msg);
+                toast.error(res.data.msg)
+        
             }
             
           });
@@ -43,7 +43,9 @@ export const loginWithApi = async (broker_id, UserDetails) => {
         window.location.href = `https://ant.aliceblueonline.com/?appcode=${res.data[0].app_code}`;
     }
     else if (broker_id === "3" || broker_id === 3) {
-        alert("broker-3")
+      //  alert("broker-3")
+        window.location.href =`https://masterswift-beta.mastertrust.co.in/oauth2/auth?scope=orders%20holdings&state=${UserDetails.Email}&redirect_uri=${Config.base_url}mastertrust&response_type=code&client_id=${UserDetails.app_id}`;
+
     }
     else if (broker_id === "4" || broker_id === 4) {
         alert("broker-4")
@@ -55,7 +57,52 @@ export const loginWithApi = async (broker_id, UserDetails) => {
         alert("broker-6")
     }
     else if (broker_id === "7" || broker_id === 7) {
-        alert("broker-7")
+        
+     
+        //alert("broker-7")
+        // console.log("RUN");
+        axios({
+            url: `${Config.base_url}kotakGetToken`,
+            method: "post",
+            data: {
+                Email : UserDetails.Email,
+            },
+           }).then((res) => {
+            // console.log("res", res);
+            // return
+            if (res.data.status == true) {
+              let value = prompt("Enter Your OTP Here");
+              if (value === null) {
+                // console.log("value", value);
+                return;
+              }
+              axios({
+                url: `${Config.base_url}kotakGetSession`,
+                method: "post",
+                data: {
+                    Email : UserDetails.Email,
+                    otp: value,
+                },
+              }).then((res) => {
+                // console.log("res", res.data);
+                if (res.data.status == true) {
+                    toast.success(res.data.msg)
+                    setTimeout(() => {
+                        window.location.reload();
+                      }, 1500);
+                  
+                }
+                else if (res.data.status == false) {
+                    toast.error(res.data.msg)
+
+                }
+              });
+            } else if (res.data.status == false) {
+                  toast.error(res.data.msg)
+            }
+          })
+
+
     }
     if (broker_id === "8" || broker_id === 8) {
         alert("broker-8")
@@ -80,7 +127,7 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     else if (broker_id === "13" || broker_id === 13) {
 
     window.location.href =`https://api.fyers.in/api/v2/generate-authcode?client_id=${UserDetails.app_id}&redirect_uri=${Config.base_url}fyers&response_type=code&state=${UserDetails.client_key}`
-        alert("broker-13")
+       // alert("broker-13")
     }
 
     // FIVE PAISA
@@ -121,18 +168,13 @@ export const loginWithApi = async (broker_id, UserDetails) => {
           }).then((res) => {
             // console.log("res", res);
             if (res.data.status == true) {
-                alert(res.data.msg)
-                window.location.reload();
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("success");
-            //   setTextAlert(res.data.msg);
+
+            toast.success(res.data.msg)
+                setTimeout(() => {
+                    window.location.reload();
+                    }, 1500);
             } else {
-                alert(res.data.msg)
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("error");
-            //   setTextAlert(res.data.msg);
+                toast.error(res.data.msg)
             }
             
           });
@@ -153,18 +195,13 @@ export const loginWithApi = async (broker_id, UserDetails) => {
           }).then((res) => {
             // console.log("res", res);
             if (res.data.status == true) {
-                alert(res.data.msg)
-                window.location.reload();
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("success");
-            //   setTextAlert(res.data.msg);
+                toast.success(res.data.msg)
+                    setTimeout(() => {
+                        window.location.reload();
+                }, 1500);
             } else {
-                alert(res.data.msg)
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("error");
-            //   setTextAlert(res.data.msg);
+                toast.error(res.data.msg)
+           
             }
             
           });
@@ -173,5 +210,5 @@ export const loginWithApi = async (broker_id, UserDetails) => {
         alert("broker-22")
     }
 
-
+    <ToastButton />
 }
