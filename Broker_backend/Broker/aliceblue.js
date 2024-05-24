@@ -258,7 +258,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
       }
 
       else if (type == 'SX' || type == 'LX') {
-        console.log("trade exit")
+        // console.log("trade exit")
       
         const requestPromises = AllClientData.map(async (item) => {
     
@@ -321,7 +321,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                     // console.log("possition_qty Cash", possition_qty);
                                     if (possition_qty == 0) {
                                         // console.log("possition_qty Not Available", possition_qty);
-                                        PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
+                                       
 
                                         BrokerResponse.create({
                                             user_id: item._id,
@@ -347,6 +347,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                                 }
     
                                             });
+
+                                            PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
     
     
                                     } else {
@@ -371,7 +373,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                     if (possition_qty == 0) {
                                          
 
-                                       PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
 
 
                                         // console.log("possition_qty Not Available", possition_qty);
@@ -399,6 +400,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                                 }
     
                                             });
+                                      
+                                            PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
     
     
                                     } else {
@@ -414,7 +417,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                 }
                             }else{
 
-                                PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
+                               
 
                                 BrokerResponse.create({
                                     user_id: item._id,
@@ -441,13 +444,15 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                         }
         
                                     });
+
+                                    PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
     
                             }
     
                            
                         } else {
 
-                            PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
+                            
     
                             BrokerResponse.create({
                                 user_id: item._id,
@@ -474,6 +479,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                     }
     
                                 });
+
+                                PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
     
                         }
     
@@ -482,7 +489,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
     
                     })
                     .catch(async (error) => {
-                        PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
+                        
                         fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
                             if (err) {
                                 return console.log(err);
@@ -516,9 +523,12 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                     }
     
                                 });
+
+                                PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
+
                         } else {
 
-                            PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
+                            
                             const message = (JSON.stringify(error)).replace(/["',]/g, '');
     
                             BrokerResponse.create({
@@ -546,7 +556,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                     }
     
                                 });
-    
+                                PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
     
                         }
                     });

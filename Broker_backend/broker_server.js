@@ -637,7 +637,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (angelBluedocuments.length > 0) {
-                angel.place_order(angelBluedocuments, signals, token, filePath, signal_req);
+                angel.place_order(angelBluedocuments, signals, token, filePath, signal_req,ExistExitSignal);
               }
 
             } catch (error) {
@@ -859,7 +859,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (AliceBluedocuments.length > 0) {
-                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req);
+                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req,ExistExitSignal);
               }
 
             } catch (error) {
@@ -881,7 +881,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (angeldocuments.length > 0) {
-                angel.place_order(angeldocuments, signals, token, filePath, signal_req);
+                angel.place_order(angeldocuments, signals, token, filePath, signal_req ,ExistExitSignal);
               }
 
             } catch (error) {
