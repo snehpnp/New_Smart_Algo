@@ -23,7 +23,8 @@ import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Sl
 import { Get_All_Service } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { GET_ADMIN_TRADE_STATUS } from "../../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import Accordion from "react-bootstrap/Accordion";
-
+import { Get_Pmermission } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
+import * as Config from "../../../../Utils/Config";
 
 import { today } from "../../../../Utils/Date_formet";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -35,6 +36,7 @@ import $ from "jquery";
 const TradeHistory = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const checkStatusReff = useRef(false);
   var dashboard_filter = location.search.split("=")[1];
   // console.log("dashboard_filter", dashboard_filter);
 
@@ -48,6 +50,43 @@ const TradeHistory = () => {
   const [toDate, setToDate] = useState("");
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [refresh, setrefresh] = useState(false);
+  const [UserDetails, setUserDetails] = useState([]);
+  const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
+  const [SelectSegment, setSelectSegment] = useState("null");
+  const [SelectService, setSelectService] = useState("null");
+  const [SocketState, setSocketState] = useState("null");
+  const [ForGetCSV, setForGetCSV] = useState([]);
+  const [adminTradingStatus, setAdminTradingStatus] = useState(false);
+  const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
+
+
+  const [getPermission, setPermission] = useState({
+    loading: true,
+    data: []
+  });
+
+
+  // console.log("getPermission :", getPermission.data[0].live_price)
+  const [rowData, setRowData] = useState({
+    loading: true,
+    data: [],
+  });
+  const [getAllStrategyName, setAllStrategyName] = useState({
+    loading: true,
+    data: [],
+  });
+  const [tradeHistoryData, setTradeHistoryData] = useState({
+    loading: true,
+    data: []
+  });
+  const [ServiceData, setServiceData] = useState({
+    loading: true,
+    data: []
+  });
+  const [CatagoryData, setCatagoryData] = useState({
+    loading: true,
+    data: []
+  });
 
 
   const handleFromDateChange = (e) => {
@@ -58,37 +97,9 @@ const TradeHistory = () => {
     setToDate(e.target.value);
   };
 
-  const [rowData, setRowData] = useState({ loading: true, data: [], });
-  const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
-  const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
-  const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
-
-  //console.log("tradeHistoryData :", tradeHistoryData)
-  
- // console.log("ServiceData :", ServiceData)
-
-  const [CatagoryData, setCatagoryData] = useState({
-    loading: true,
-    data: []
-  });
 
 
 
-  const [UserDetails, setUserDetails] = useState([]);
-  const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
-  const [SelectSegment, setSelectSegment] = useState("null");
-  const [SelectService, setSelectService] = useState("null");
-
-  const [SocketState, setSocketState] = useState("null");
-
-  const [ForGetCSV, setForGetCSV] = useState([]);
-
-
-
-  const [adminTradingStatus, setAdminTradingStatus] = useState(false);
-
-
-  const checkStatusReff = useRef(false);
 
   useEffect(() => {
     GetAdminTradingStatus()
@@ -156,6 +167,33 @@ const TradeHistory = () => {
     });
   };
 
+  const getPermissions = async () => {
+    const data = { "domain": Config.react_domain, token: token, }
+    await dispatch(Get_Pmermission(data)).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setPermission({
+            loading: false,
+            data: response.data
+          })
+        }
+        else {
+          setPermission({
+            loading: false,
+            data: []
+          })
+        }
+      })
+      .catch((err) => {
+        console.log("Some error is found", err)
+      })
+  }
+
+
+  useEffect(() => {
+    getPermissions()
+  }, [])
+
 
 
   const columns = [
@@ -165,7 +203,7 @@ const TradeHistory = () => {
       // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
-   
+
     {
       dataField: "createdAt",
       text: "Signals time",
@@ -196,7 +234,7 @@ const TradeHistory = () => {
     {
       dataField: "live",
       text: "Live Price",
-      // hidden: (getPermissions && getPermissions.live == 1 ? false : true),
+      hidden: (getPermission.data[0] && getPermission.data[0].live_price == 1 ? false : true),
       formatter: (cell, row, rowIndex) => (
         <div>
           <span className={`LivePrice_${row.token}`}></span>
@@ -276,11 +314,11 @@ const TradeHistory = () => {
         </div>
       ),
     },
-    
-    
+
+
 
     {
-      dataField: "",
+      dataField: "view",
       text: "Details View",
       formatter: (cell, row, rowIndex) => (
         <div>
@@ -300,7 +338,6 @@ const TradeHistory = () => {
 
 
 
-  const [CreateSignalRequest, setCreateSignalRequest] = useState([]);
 
   // ----------------------------- SQUARE OFF ----------------------------
 
@@ -342,17 +379,17 @@ const TradeHistory = () => {
 
 
   var CreatechannelList = "";
-  let total=0;
+  let total = 0;
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
-      console.log("item" ,item)
-
-       
+      console.log("item", item)
 
 
-      if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
-      total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty);
+
+
+      if (parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price != '' && item.exit_price) {
+        total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty);
       }
     });
 
@@ -361,130 +398,130 @@ const TradeHistory = () => {
 
   const ShowLivePrice = async () => {
 
-   
+
     let type = { loginType: "API" };
     let channelList = CreatechannelList;
 
 
     if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
 
-        const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
+      const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
-        if (res.status === 200) {
-          setSocketState("Ok");
-        }
-        if (res.status === 401 || res.status === '401') {
-          setSocketState("Unauthorized");
+      if (res.status === 200) {
+        setSocketState("Ok");
+      }
+      if (res.status === 401 || res.status === '401') {
+        setSocketState("Unauthorized");
 
-          tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-            const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
-            calcultateRPL(row, null, previousRow);
-          });
-        }
-        else {
-          if (res.data.stat) {
-            const handleResponse = async (response) => {
+        tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+          const previousRow = i > 0 ? tradeHistoryData.data[i - 1] : null;
+          calcultateRPL(row, null, previousRow);
+        });
+      }
+      else {
+        if (res.data.stat) {
+          const handleResponse = async (response) => {
 
-              console.log("response ",response)
-              $('.BP1_Put_Price_' + response.tk).html();
-              $('.SP1_Call_Price_' + response.tk).html();
+            console.log("response ", response)
+            $('.BP1_Put_Price_' + response.tk).html();
+            $('.SP1_Call_Price_' + response.tk).html();
 
-              // UPL_
-              $(".LivePrice_" + response.tk).html(response.lp);
-              $(".ClosePrice_" + response.tk).html(response.c);
-
-
-              var live_price = response.lp === undefined ? "" : response.lp;
-
-              //  if entry qty and exist qty both exist
-              tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-                let get_ids = '_id_' + response.tk + '_' + row._id
-                let get_id_token = $('.' + get_ids).html();
-
-                const get_entry_qty = $(".entry_qty_" + response.tk + '_' + row._id).html();
-                const get_exit_qty = $(".exit_qty_" + response.tk + '_' + row._id).html();
-                const get_exit_price = $(".exit_price_" + response.tk + '_' + row._id).html();
-                const get_entry_price = $(".entry_price_" + response.tk + '_' + row._id).html();
-                const get_entry_type = $(".entry_type_" + response.tk + '_' + row._id).html();
-                const get_exit_type = $(".exit_type_" + response.tk + '_' + row._id).html();
-                const get_Strategy = $(".strategy_" + response.tk + '_' + row._id).html();
-
-                if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
-                  if (get_entry_qty !== "" && get_exit_qty !== "") {
-
-                    if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-
-                    
-                      let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-                      let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
-                      let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
+            // UPL_
+            $(".LivePrice_" + response.tk).html(response.lp);
+            $(".ClosePrice_" + response.tk).html(response.c);
 
 
-                   
+            var live_price = response.lp === undefined ? "" : response.lp;
+
+            //  if entry qty and exist qty both exist
+            tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
+              let get_ids = '_id_' + response.tk + '_' + row._id
+              let get_id_token = $('.' + get_ids).html();
+
+              const get_entry_qty = $(".entry_qty_" + response.tk + '_' + row._id).html();
+              const get_exit_qty = $(".exit_qty_" + response.tk + '_' + row._id).html();
+              const get_exit_price = $(".exit_price_" + response.tk + '_' + row._id).html();
+              const get_entry_price = $(".entry_price_" + response.tk + '_' + row._id).html();
+              const get_entry_type = $(".entry_type_" + response.tk + '_' + row._id).html();
+              const get_exit_type = $(".exit_type_" + response.tk + '_' + row._id).html();
+              const get_Strategy = $(".strategy_" + response.tk + '_' + row._id).html();
+
+              if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+                if (get_entry_qty !== "" && get_exit_qty !== "") {
+
+                  if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
 
 
-                      if ((isNaN(finalyupl) || isNaN(rpl))) {
-                        return "-";
-                      } else {
-                        $(".show_rpl_" + response.tk + "_" + get_id_token).html(rpl.toFixed(2));
-                        $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
-                        $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
+                    let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                    let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
+                    let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
 
-                        ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
-                        ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
-                        ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
-                      }
+
+
+
+
+                    if ((isNaN(finalyupl) || isNaN(rpl))) {
+                      return "-";
+                    } else {
+                      $(".show_rpl_" + response.tk + "_" + get_id_token).html(rpl.toFixed(2));
+                      $(".UPL_" + response.tk + "_" + get_id_token).html(finalyupl.toFixed(2));
+                      $(".TPL_" + response.tk + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
+
+                      ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, rpl.toFixed(2), response.tk, get_id_token);
+                      ShowColor1(".UPL_" + response.tk + "_" + get_id_token, finalyupl.toFixed(2), response.tk, get_id_token);
+                      ShowColor1(".TPL_" + response.tk + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.tk, get_id_token);
                     }
                   }
                 }
-                //  if Only entry qty Exist
-                else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
-                  let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
-                  if (isNaN(abc)) {
-                    return "-";
-                  } else {
-                    $(".show_rpl_" + response.tk + "_" + get_id_token).html("-");
-                    $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
-                    $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
-                    ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
-                    ShowColor1(".UPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
-                    ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
-                  }
-                }
-
-                //  if Only Exist qty Exist
-                else if (
-                  (get_entry_type === "" && get_exit_type === "LX") ||
-                  (get_entry_type === "" && get_exit_type === "SX")
-                ) {
+              }
+              //  if Only entry qty Exist
+              else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
+                let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
+                if (isNaN(abc)) {
+                  return "-";
                 } else {
+                  $(".show_rpl_" + response.tk + "_" + get_id_token).html("-");
+                  $(".UPL_" + response.tk + "_" + get_id_token).html(abc);
+                  $(".TPL_" + response.tk + "_" + get_id_token).html(abc);
+                  ShowColor1(".show_rpl_" + response.tk + "_" + get_id_token, "-", response.tk, get_id_token);
+                  ShowColor1(".UPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
+                  ShowColor1(".TPL_" + response.tk + "_" + get_id_token, abc, response.tk, get_id_token);
                 }
-              });
+              }
+
+              //  if Only Exist qty Exist
+              else if (
+                (get_entry_type === "" && get_exit_type === "LX") ||
+                (get_entry_type === "" && get_exit_type === "SX")
+              ) {
+              } else {
+              }
+            });
 
 
-              // }
-            };
-            await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
-          } else {
-            // $(".UPL_").html("-");
-            // $(".show_rpl_").html("-");
-            // $(".TPL_").html("-");
-          }
+            // }
+          };
+          await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
+        } else {
+          // $(".UPL_").html("-");
+          // $(".show_rpl_").html("-");
+          // $(".TPL_").html("-");
         }
-      
+      }
+
 
 
     }
 
-    else{
-    
+    else {
+
 
 
       tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-        
-        console.log(" row._id ",row._id)
-        console.log(" row token ",row.token)
-        console.log(" row ",row)
+
+        console.log(" row._id ", row._id)
+        console.log(" row token ", row.token)
+        console.log(" row ", row)
         let get_ids = '_id_' + row.token + '_' + row._id
         let get_id_token = $('.' + get_ids).html();
 
@@ -502,10 +539,10 @@ const TradeHistory = () => {
 
             if (parseInt(get_entry_qty) == parseInt(get_exit_qty)) {
 
-            
+
               let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-             
- 
+
+
               let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
               let finalyupl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * upl;
 
@@ -746,8 +783,8 @@ const TradeHistory = () => {
       });
   };
 
- 
-  
+
+
 
 
 
@@ -876,19 +913,19 @@ const TradeHistory = () => {
           </div>
         </div>
         <div className="table-responsive">
-          {tradeHistoryData.data.length>0 ? 
+          {tradeHistoryData.data.length > 0 ?
 
-          total >= 0 ? 
-            <h4 >Total Realised P/L : <span style={{color:"green"}}> {total.toFixed(2)}</span> </h4>  : 
-            <h4 >Total Realised P/L : <span style={{  color:"red"}}> {total.toFixed(2)}</span> </h4>  : ""
-          
-        }
-        
+            total >= 0 ?
+              <h4 >Total Realised P/L : <span style={{ color: "green" }}> {total.toFixed(2)}</span> </h4> :
+              <h4 >Total Realised P/L : <span style={{ color: "red" }}> {total.toFixed(2)}</span> </h4> : ""
+
+          }
+
           <FullDataTable
             TableColumns={columns}
             tableData={tradeHistoryData.data}
             pagination1={true}
-          />   
+          />
         </div>
 
         {/*  For Detailed View  */}
