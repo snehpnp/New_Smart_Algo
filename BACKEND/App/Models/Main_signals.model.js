@@ -113,6 +113,14 @@ const MainSignalsSchema = Schema({
         type: String,
         default: null
     },
+    pendin_order_status: {
+        type: String,
+        default:0
+    },
+    modify_order_status: {
+        type: String,
+        default:0
+    },
 
     signals_id: [
         {

@@ -905,9 +905,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 }
 
 const PendingOrderCancel = async(ExistExitSignal,token ,item ,filePath, signals, signal_req)=>{
-
-    return
-    // console.log("pending order") 
+// console.log("pending order") 
 if(ExistExitSignal != ''){
   if(ExistExitSignal.length > 0){
 
@@ -929,9 +927,10 @@ if(ExistExitSignal != ''){
     axios(config)
         .then(async (response) => {
             if(Array.isArray(response.data.data)){
-            if(response.data.data.length > 0){
+               if(response.data.data.length > 0){
                 
-              
+                
+                
             }
           }
 
