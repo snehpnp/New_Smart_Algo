@@ -40,7 +40,64 @@ class CancelOrder {
             
             const requestPromises = AllLiveClients.map(async (item) => {
 
-               console.log("item ",item)
+               console.log("item ",item.broker)
+               let broker = item.broker;
+
+               // Market Hub   -  1
+            // if (broker == 1) {
+            //     CancelOrderMarketHub(item);
+            // }
+            // ALICE BLUE   -  2
+             if (broker == 2) {
+                CancelOrderAliceBlue(item);
+            }
+        
+            // MASTER TRUST   -  3
+            // else if (broker == 3) {
+            //     CancelOrderAliceBlue(item);
+            // }
+        
+            // // KotakNeo  - 7
+            // else if (broker == 7) {
+            //     CancelOrderAliceBlue(item);
+            // }
+            // // ANGEL   -  12
+            // else if (broker == 12) {
+            //     CancelOrderAliceBlue(item);
+            // }
+        
+            // // 5 PAISA   -  13
+            // else if (broker == 13) {
+            //     CancelOrderAliceBlue(item);
+            // }
+        
+            // // 5 PAISA   -  14
+            // else if (broker == 14) {
+            //     CancelOrderAliceBlue(item);
+            // }
+        
+            // // ZERODHA   -  15
+            // else if (broker == 15) {
+            //     CancelOrderAliceBlue(item);
+            // }
+        
+            // // UPSTOX   -  19
+            // else if (broker == 19) {
+            //     CancelOrderAliceBlue(item);
+            // }
+            // // DHAN   -  20
+            // else if (broker == 20) {
+            //     CancelOrderAliceBlue(item);
+            // }
+            // // Swastika   -  21
+            // else if (broker == 21) {
+            //     CancelOrderAliceBlue(item);
+            // }
+            else {
+                res.send({ status: false, msg: "broker not found" });
+            }
+
+
 
             });
             // Send all requests concurrently using Promise.all
@@ -64,6 +121,10 @@ class CancelOrder {
     }
  }
 
+
+ const CancelOrderAliceBlue = (item) => {
+  console.log("DONEEEE OKKKK")
+ }
 
 
 

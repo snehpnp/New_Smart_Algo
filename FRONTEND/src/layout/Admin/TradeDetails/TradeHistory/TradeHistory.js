@@ -388,7 +388,9 @@ const TradeHistory = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("OKKKK",response)
+          console.log("if",response)
+        }else{
+          console.log("else",response)
         }
       });
 
