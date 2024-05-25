@@ -1,4 +1,16 @@
-const Subadmin_Permission = require("./subadmin_permision.model");
+const mongoose = require('mongoose');
+const MongoClient = require('mongodb').MongoClient;
+
+const uri = process.env.MONGO_URI
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
+const db_GET_VIEW = client.db(process.env.DB_NAME);
+const get_open_position_view = db_GET_VIEW.collection('open_position');
+const token_chain = db_GET_VIEW.collection('token_chain');
+const aliceblueView = db_GET_VIEW.collection('aliceblueView');
+
+
+
 
 module.exports = {
     categorie: require("./categorie.model"),
@@ -36,5 +48,6 @@ module.exports = {
     Superadmin_History: require('./superadmin_history.model'),
     source : require('./source.model'),
     comparators : require('./comparators.model'),
+    aliceblueView:aliceblueView
 
 };

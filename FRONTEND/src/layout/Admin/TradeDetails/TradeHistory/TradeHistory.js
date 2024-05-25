@@ -15,7 +15,7 @@ import { loginWithApi } from "../../../../Components/Dashboard/Header/log_with_a
 import DetailsView from "./DetailsView";
 import { User_Profile } from "../../../../ReduxStore/Slice/Common/commoSlice.js";
 import { TRADING_OFF_USER } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
-import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
+import { Get_All_Service_for_Client ,CancelOrderReq } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import { check_Device } from "../../../../Utils/find_device";
 import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../../Service/Alice_Socket";
 import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../../Utils/ShowTradeColor";
@@ -341,9 +341,8 @@ const TradeHistory = () => {
           </div>
       ),
   },
-    
 
-    {
+   {
       dataField: "",
       text: "Details View",
       formatter: (cell, row, rowIndex) => (
@@ -358,7 +357,48 @@ const TradeHistory = () => {
         </div>
       ),
     },
+
+    {
+      dataField: "",
+      text: "Cancel Order",
+      formatter: (cell, row, rowIndex) => (
+        <div>
+        {row.pendin_order_status=="0" ?
+         <>
+          <button className="btn btn-primary" onClick={(e) => cancelOrder(e , row)}>
+              Cancel
+           </button>
+         
+         </>
+        :"-"}
+        </div>
+      ),
+    },
   ];
+
+  const cancelOrder = async (e,row) => {
+    
+    console.log("row ",row.pendin_order_status)
+    await dispatch(
+      CancelOrderReq({
+        req: {data:row},
+        token: token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          console.log("OKKKK",response)
+        }
+      });
+
+
+
+
+
+
+
+  }
 
 
 
