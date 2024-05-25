@@ -26,7 +26,10 @@ class CancelOrder {
         try {
             // running task
             console.log("req -",req.body)
-            const AllLiveClients = await User.find({Role:"USER" , TradingStatus : "on" , access_token : { $ne: '' ,$exists: true}});
+            const AllLiveClients = await User.find({Role:"USER" , TradingStatus : "on" , $and: [
+                { access_token: { $ne: '' } },
+                { access_token: { $ne: null } }
+            ]});
 
           console.log("AllLiveClients - ",AllLiveClients.length)
 
