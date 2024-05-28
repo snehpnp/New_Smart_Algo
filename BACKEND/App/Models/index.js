@@ -48,6 +48,9 @@ module.exports = {
     Superadmin_History: require('./superadmin_history.model'),
     source : require('./source.model'),
     comparators : require('./comparators.model'),
-    aliceblueView:aliceblueView
+    aliceblueView:aliceblueView,
+    OldMainSignals : require('./OldMainSignals.model'),
+    OldSignals : require('./Old_signal.modal')
+
 
 };

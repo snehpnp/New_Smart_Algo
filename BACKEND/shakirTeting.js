@@ -19,7 +19,7 @@ module.exports = function (app) {
   const uri = process.env.MONGO_URI;
   const client = new MongoClient(uri, { useUnifiedTopology: true });
   client.connect();
-  // console.log("Connected to MongoDB successfully!.....");
+ 
 
 
   const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
@@ -61,7 +61,7 @@ module.exports = function (app) {
 
   // Connect to MongoDB and create views
   async function createViewsAllDatabase() {
-     console.log("okkkkkk")
+    
      return
       for (const server of servers) {
           const client = new MongoClient(server);
@@ -96,7 +96,7 @@ module.exports = function (app) {
               if (!collectionExists) {
                   // Create the view collection
                   await db.createCollection(viewName, { viewOn: collectionName, pipeline: viewPipeline });
-                  console.log(`View ${viewName} created in 'test' on '${server}'`);
+                 
               } else {
                   console.log(`Collection ${viewName} already exists in 'test' on '${server}'`);
               }
@@ -294,7 +294,7 @@ module.exports = function (app) {
                     filteredResults.forEach(element => {
                     //  if(element!='https://app.aitech.market/backend/' && element!='https://trade.pandpinfotech.com/backend/'){
                     //      count++
-                    // console.log("element ", element , 'count ',count);
+              
 
                     //   }
 
@@ -303,7 +303,7 @@ module.exports = function (app) {
 
 
                     //  count++
-                    // console.log("element ", element+'addstockExtra' , 'count ',count);
+                  
                     // let url = element+'addstockExtra';
                     
 
@@ -328,7 +328,7 @@ module.exports = function (app) {
 
 
                      count++
-                    console.log("element ", element+'addstockExtra' , 'count ',count);
+                  
                     let url = element+'addstockExtra';
                     
 
@@ -1723,7 +1723,7 @@ module.exports = function (app) {
       console.log("Condition evaluation result:", result);
       if (result == true) {
         console.log("True condition - ", lastElementTimeFrameViewData);
-        console.log("elemet True Condition -  ", element)
+        
 
         const getPricecollection = db.collection(element.tokensymbol);
 

@@ -5,7 +5,7 @@ import Content from "../../../Components/Dashboard/Content/Content"
 import * as  valid_err from "../../../Utils/Common_Messages"
 
 import Loader from '../../../Utils/Loader'
-import { Pencil, Trash2, Pointer } from 'lucide-react';
+import { Pencil, Trash2, Pointer   } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 
@@ -32,7 +32,9 @@ const AdminsList = () => {
     const [showModal, setshowModal] = useState(false)
     const [Panelid, setPanelid] = useState('')
     const [themeList, setThemeList] = useState();
-   
+    const [searchInput, setSearchInput] = useState('')
+
+
 
 
     const [themeData, setThemeData] = useState({
@@ -41,11 +43,13 @@ const AdminsList = () => {
     });
 
 
-    console.log("themeList ",themeList)
+
+
+
 
     const GetAllThemes = async () => {
 
-      
+
         await dispatch(Get_All_Theme()).unwrap()
             .then((response) => {
 
@@ -58,20 +62,33 @@ const AdminsList = () => {
 
         await dispatch(All_Panel_List()).unwrap()
             .then((response) => {
-                
-                //console.log("theme data",response.data)
+                if (response.status) {
+                    const filterData = response.data && response.data.filter((item) => {
+                        const matchSearch =
+                            searchInput == '' ||
+                            item.panel_name.toLowerCase().includes(searchInput.toLowerCase()) || 
+                            item.domain.toLowerCase().includes(searchInput.toLowerCase()) 
+                        return matchSearch
+                    })
+                    setThemeData({
+                        loading: false,
+                        data: searchInput ? filterData : response.data
+                    });
+                }
+                else {
+                    setThemeData({
+                        loading: false,
+                        data: response.data
+                    });
 
-                setThemeData({
-                    loading: false,
-                    data: response.data
-                });
+                }
             })
     }
-   
+
 
 
     const panelDetails = (panel_id) => {
-        
+
         setPanelid(panel_id)
         setshowModal(true)
     }
@@ -176,40 +193,40 @@ const AdminsList = () => {
     ];
 
 
-   const ShowThemeName = (row) => {
-   // console.log("themeList ",themeList)
-   
-      const doubledNumbers = themeList.map(item => {
-        if(item._id == row.theme_id){
-            return item.theme_name;
-        }
-      });
-     return doubledNumbers
-      
+    const ShowThemeName = (row) => {
+        // console.log("themeList ",themeList)
 
-
-   }
+        const doubledNumbers = themeList.map(item => {
+            if (item._id == row.theme_id) {
+                return item.theme_name;
+            }
+        });
+        return doubledNumbers
 
 
 
-//    useEffect(() => {
-//     GetAllThemes()
-//     data()
-// }, [])
+    }
 
-useEffect(() => {
-    const fetchData = async () => {
-        try {
-            await GetAllThemes();
-            await data();
-        } catch (error) {
-            // Handle errors appropriately
-            console.error('Error fetching data:', error);
-        }
-    };
 
-    fetchData();
-}, []);
+
+    //    useEffect(() => {
+    //     GetAllThemes()
+    //     data()
+    // }, [])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                await GetAllThemes();
+                await data();
+            } catch (error) {
+                // Handle errors appropriately
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, [searchInput]);
 
 
     const formik = useFormik({
@@ -225,7 +242,7 @@ useEffect(() => {
             return errors;
         },
         onSubmit: async (values) => {
-            
+
 
             const req = {
                 userid: Panelid,
@@ -289,23 +306,29 @@ useEffect(() => {
                         <Content Page_title="Company Names"
                             button_title="Add Client"
                             route="/super/panel/add">
+                            <div className='mb-4'>
+                                <h6>Search here something</h6>
+                                <input type="text"
+                                    style={{ height: '2rem' }}
+                                    placeholder='search...'
+                                    className='p-2 rounded'
+                                    onChange={(e) => { setSearchInput(e.target.value) }}
+                                    value={searchInput} />
+                            </div>
                             {
+
                                 themeData.data && themeData.data.length === 0 ? (
                                     'No data found') :
                                     <>
                                         <FullDataTable TableColumns={columns} tableData={themeData.data} pagination1={true} />
-
                                         <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
                                             handleClose={() => setshowModal(false)}
                                         >
-
                                             <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update Theme"
                                                 title="update_theme"
                                             />
                                         </Modal >
-
                                         <ToastButton />
-
                                     </>
                             }
                         </Content>

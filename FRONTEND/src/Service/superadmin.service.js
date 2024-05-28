@@ -360,3 +360,129 @@ export async function UPDATE_QUERY(data) {
 
 }
 
+
+export async function GET_ALL_SIGNAL(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}get/signal`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+       
+    }
+
+}
+
+export async function UPDATE_PRICE(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/price`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err); 
+    }
+
+}
+
+export async function DELETE_SIGNAL(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}signal/delete`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err); 
+    }
+
+}
+
+export async function GET_ALL_DELETED_SIGNAL(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}deleted/signal`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+       
+    }
+
+}
+
+export async function BACKUP_SIGNAL(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}backup/signal`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err); 
+    }
+
+}
+export async function GET_ONE_USER(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}findUserById`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err); 
+    }
+
+}
+export async function UPDATE_USER(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/user`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err); 
+    }
+
+}
+
+export async function USER_DELETE(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}user/delete`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err); 
+    }
+
+}
+
+export async function GET_USER(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}findOneUser`, data, {
+            // headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err); 
+    }
+
+}

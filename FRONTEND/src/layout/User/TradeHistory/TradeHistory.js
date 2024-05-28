@@ -246,6 +246,7 @@ const TradeHistory = () => {
       dataField: "strategy",
       text: "Strategy",
     },
+
     {
       dataField: "2",
       text: "Entry Type",
@@ -395,6 +396,12 @@ const TradeHistory = () => {
           <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
         </div>
       ),
+    },
+
+    {
+      dataField: "exit_dt_date",
+      text: "Signals Exit time",
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
     
    
