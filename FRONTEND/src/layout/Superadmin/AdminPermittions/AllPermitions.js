@@ -160,7 +160,7 @@ const AllPermitions = () => {
 
     const setLocalStorage = (row) => {
 
-        console.log("row", row)
+   
 
         localStorage.setItem("RowData", row._id)
 
@@ -203,7 +203,6 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Sidebar Permission">
                     <FolderLock size={20} color="#198754" strokeWidth={2} className="mx-1"
-
                         onClick={(e) => { setshowPanelName({ rowdata: row, panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowModal(true) }}
                     />
 
