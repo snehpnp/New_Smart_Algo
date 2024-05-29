@@ -122,5 +122,5 @@ server.listen(process.env.PORT, () =>{
   
   const { Alice_Socket } = require('./App/Helper/Alice_Socket')
   console.log(`Server is running on  http://0.0.0.0:${process.env.PORT}`)
-   //Alice_Socket()
+   Alice_Socket()
 });

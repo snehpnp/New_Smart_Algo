@@ -88,7 +88,7 @@ cron.schedule('1 1 * * *', () => {
 //     AccelpixTokenUpdate();
 // });
 
-cron.schedule('9 16 * * *', () => {
+cron.schedule('10 2 * * *', () => {
     console.log('running TokenSymbolUpdate Cron' );
     TokenSymbolUpdate()
 });
