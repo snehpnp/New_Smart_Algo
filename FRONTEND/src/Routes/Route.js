@@ -42,6 +42,12 @@ const Routing = () => {
       return
     }
 
+
+    if (location.pathname.startsWith('/update')) {
+      navigate(location.pathname);     
+      return  
+      }
+
     if (location.pathname === "/") {
       navigate("/login");
     }

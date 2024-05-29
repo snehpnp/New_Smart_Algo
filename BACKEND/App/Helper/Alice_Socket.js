@@ -63,13 +63,13 @@ const Alice_Socket = async () => {
   if(broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on"){
     try {
 
-        await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
+           await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
             headers: {
                 'Authorization': `Bearer ${userid} ${userSession1}`,
                 'Content-Type': 'application/json'
             },
 
-        }).then(res => {
+            }).then(res => {
 
             //console.log("res - ",res)
 
@@ -180,10 +180,8 @@ const Alice_Socket = async () => {
 
                 }
             }
-        })
+            })
             .catch((error) => {
-            
-
                 return "error"
             })
 

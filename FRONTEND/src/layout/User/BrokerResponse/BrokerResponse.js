@@ -20,7 +20,7 @@ const BrokerResponse = () => {
   const [showModal, setshowModal] = useState(false)
   const [BrokerResponseId, setBrokerResponseId] = useState([])
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
-
+ console.log("BrokerResponseId",BrokerResponseId)
 
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
@@ -245,12 +245,12 @@ const BrokerResponse = () => {
                   <tr>
 
                     <td className="bg-table"> Receive Signal</td>
-                    <td className="order-date-cell">{atob(BrokerResponseId.receive_signal)}</td>
+                    <td className="order-date-cell">{BrokerResponseId.receive_signal != undefined ? atob(BrokerResponseId.receive_signal) : ""}</td>
                   </tr>
                   <tr>
 
                     <td className="bg-table"> Signal</td>
-                    <td className="order-date-cell">{atob(BrokerResponseId.send_request)}</td>
+                    <td className="order-date-cell">{BrokerResponseId.send_request != undefined ? atob(BrokerResponseId.send_request):""}</td>
                   </tr>
                   <tr>
                     <td className="bg-table"> Order Status</td>
