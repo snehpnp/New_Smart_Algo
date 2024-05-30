@@ -198,7 +198,7 @@ const AdminHelps = () => {
                             <div>
                                 <button className='btn btn-primary mb-3' onClick={handleBackupBtn}>backup Signal</button>
                             </div>
-                            <FullDataTable TableColumns={columns} tableData={getAllSignals.data} pagination1={true} />
+                            <FullDataTable TableColumns={columns} tableData={getAllSignals.data} pagination1={false} />
                         </Content>
                     </>
             }
