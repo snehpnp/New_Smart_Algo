@@ -22,9 +22,13 @@ const AdminHelps = () => {
     const navigate = useNavigate()
     let location = useLocation();
     let admin_details = location.state
-    const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
+    const user_id = JSON.parse(localStorage.getItem("user_details"))
+    const backend_rul = localStorage.getItem("backend_rul");
     const token = JSON.parse(localStorage.getItem("user_details")).token
+
+ 
      
+    console.log("backend_rul :", backend_rul)
     const [refresh, setRefresh] = useState(false)
 
 
@@ -34,10 +38,11 @@ const AdminHelps = () => {
     });
 
 
-    
+ 
 
     const data = async () => {
-        await dispatch(GetAllDeletedSignal()).unwrap()
+        const data={backend_rul : backend_rul}
+        await dispatch(GetAllDeletedSignal(data)).unwrap()
             .then((response) => {
                 if (response.status) {
                     setDeletSignals({
@@ -56,8 +61,9 @@ const AdminHelps = () => {
         data()
     }, [refresh])
 
+
     const handleDelete = async (id) => {
-        const data = { id: id }
+        const data = { id: id  , backend_rul: backend_rul}
         await dispatch(BackupSignal(data)).unwrap()
             .then((response) => {
                 if (response.status) {

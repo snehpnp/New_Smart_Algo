@@ -24,6 +24,7 @@ const AdminHelps = () => {
     let admin_details = location.state
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
     const token = JSON.parse(localStorage.getItem("user_details")).token
+    const backend_rul = localStorage.getItem("backend_rul");
     const [showModal, setShowmodal] = useState(false)
     const [showModal1, setShowmodal1] = useState(false)
     const [entryPrice, setEntryPrice] = useState('')
@@ -33,6 +34,7 @@ const AdminHelps = () => {
     const [deleteSignalId, setDeleteSignalId] = useState('')
 
 
+    console.log(location.state)
     const [signalId, setSignalId] = useState('')
     const [refresh, setRefresh] = useState(false)
 
@@ -42,9 +44,10 @@ const AdminHelps = () => {
         data: []
     });
 
+ 
 
     const updatePrice = async () => {
-        const data = { id: entryPriceId, price: entryPrice, signalId: signalId, entryPriceID: 1 }
+        const data = { id: entryPriceId, price: entryPrice, signalId: signalId, entryPriceID: 1,backend_rul:backend_rul }
         await dispatch(Update_Price(data)).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -61,7 +64,7 @@ const AdminHelps = () => {
 
 
     const updateExitPrice = async () => {
-        const data = { id: exitPriceId, price: exitPrice, signalId: signalId, entryPriceID: 2 }
+        const data = { id: exitPriceId, price: exitPrice, signalId: signalId, entryPriceID: 2 ,backend_rul:backend_rul}
         await dispatch(Update_Price(data)).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -79,7 +82,7 @@ const AdminHelps = () => {
 
 
     const data = async () => {
-        await dispatch(GetAllSignal()).unwrap()
+        await dispatch(GetAllSignal({backend_rul:backend_rul })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setAllSignals({
@@ -99,7 +102,7 @@ const AdminHelps = () => {
     }, [refresh])
 
     const handleDelete = async (id) => {
-        const data = { id: id }
+        const data = { id: id , backend_rul:backend_rul}
         await dispatch(DeleteSignal(data)).unwrap()
             .then((response) => {
                 if (response.status) {

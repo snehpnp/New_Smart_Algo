@@ -130,6 +130,7 @@ const AllPermitions = () => {
 
     useEffect(() => {
         localStorage.removeItem('RowData')
+        localStorage.removeItem('backend_rul')
         data()
         GetAllThemes()
     }, [refresh, searchInput])
@@ -159,11 +160,13 @@ const AllPermitions = () => {
 
 
     const setLocalStorage = (row) => {
-
-   
-
         localStorage.setItem("RowData", row._id)
+        localStorage.setItem("backend_rul", row.backend_rul)   
+    }
 
+
+    const handleLocalStorage=(row)=>{
+        localStorage.setItem("backend_rul", row.backend_rul)
     }
 
 
@@ -267,6 +270,18 @@ const AllPermitions = () => {
                 </span>
             )
         },
+        
+        {
+            dataField: 'signal',
+            text: 'Signal ',
+            formatter: (cell, row) => (
+                <span data-toggle="tooltip" data-placement="top" title="HelpingHand" onClick={()=>handleLocalStorage(row)}>
+                    <Link to='/super/signals' state={row}>
+                        <RadioTower size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    </Link>
+                </span >
+            )
+        },
         {
             dataField: 'panel_name',
             text: 'Logs',
@@ -283,17 +298,6 @@ const AllPermitions = () => {
                 <span data-toggle="tooltip" data-placement="top" title="HelpingHand">
                     <Link to='/super/helps' state={row}>
                         <HelpingHand size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </Link>
-                </span >
-            )
-        },
-        {
-            dataField: 'signal',
-            text: 'Signal ',
-            formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="HelpingHand">
-                    <Link to='/super/signals' state={row}>
-                        <RadioTower size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
                 </span >
             )
@@ -354,7 +358,7 @@ const AllPermitions = () => {
                                         <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
                                         <LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
-                                        <FullDataTable TableColumns={columns} tableData={panelData.data} pagination1={true} />
+                                        <FullDataTable TableColumns={columns} tableData={panelData.data} pagination1={false} />
                                         <ToastButton />
                                     </>
                             }

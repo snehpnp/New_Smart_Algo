@@ -19,6 +19,7 @@ const EditClient = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const dispatch = useDispatch()
+    const backend_rul = localStorage.getItem("backend_rul");
  
     const [UserData, setUserData] = useState({
         loading: true,
@@ -43,7 +44,7 @@ const EditClient = () => {
 
     // GET USER DETAILS
     const data_1 = async () => {
-        const data = { id: location.state._id }
+        const data = { id: location.state._id  , backend_rul : backend_rul}
         await dispatch(Find_One_User(data)).unwrap()
             .then((response) => {
                 if (response.status) {

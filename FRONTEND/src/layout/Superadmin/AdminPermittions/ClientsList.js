@@ -21,6 +21,7 @@ import { DELETE_USER_SERVICES ,Find_User } from "../../../ReduxStore/Slice/Super
 
 
 const SubAdminList = () => {
+
     const dispatch = useDispatch()
     const [ShowClients, setshowClients] = useState([])
     const [refresh, setrefresh] = useState(false);
@@ -29,6 +30,7 @@ const SubAdminList = () => {
     const [getRowId, setRowId] = useState('')
 
     const RowId = localStorage.getItem('RowData')
+    const backend_rul = localStorage.getItem("backend_rul");
     
     const [UserData, setUserData] = useState({
         loading: true,
@@ -39,8 +41,10 @@ const SubAdminList = () => {
     
     
     const GetAllClients = async () => {
+        const data={ id: RowId  }
+       
         
-        await dispatch(Get_All_Admin_Client({ id: RowId })).unwrap()
+        await dispatch(Get_All_Admin_Client(data)).unwrap()
         .then((response) => {
             if (response.status) {
                 setshowClients(
@@ -52,11 +56,12 @@ const SubAdminList = () => {
     
 
     const Delete_user = async (id) => {
-        var req1 = {
+        var req = {
             id: id,
+            backend_rul : backend_rul
         };
         if (window.confirm("Do you want to delete this User ?")) {
-            await dispatch(DELETE_USER_SERVICES(req1))
+            await dispatch(DELETE_USER_SERVICES(req))
                 .unwrap()
                 .then((response) => {
                     if (response.status) {
@@ -133,10 +138,12 @@ const SubAdminList = () => {
 
     // GET USER DETAILS
     const handleViewFunction = async (row) => {
-        const data = { id:  row }
+        const data = { id:  row  , backend_rul : backend_rul}
         await dispatch(Find_User(data)).unwrap()
             .then((response) => {
                 if (response.status) {
+
+                    console.log("cpp", response.data)
                     setUserData({
                         loading: false,
                         data: response.data
@@ -237,7 +244,7 @@ const SubAdminList = () => {
     
  
 
-    console.log("UserData.data :", UserData.data)
+     
     return (
         <>
             {ShowClients.loading ? (

@@ -320,12 +320,13 @@ const AdminsList = () => {
                                 themeData.data && themeData.data.length === 0 ? (
                                     'No data found') :
                                     <>
-                                        <FullDataTable TableColumns={columns} tableData={themeData.data} pagination1={true} />
+                                        <FullDataTable TableColumns={columns} tableData={themeData.data} pagination1={false} />
                                         <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
                                             handleClose={() => setshowModal(false)}
                                         >
                                             <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update Theme"
-                                                title="update_theme"
+                                                title="update_theme" 
+                                                
                                             />
                                         </Modal >
                                         <ToastButton />

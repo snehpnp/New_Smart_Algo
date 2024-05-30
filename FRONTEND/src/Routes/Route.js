@@ -36,12 +36,15 @@ const Routing = () => {
 
 
   useEffect(() => {
-    if (location.pathname === "/forget") {
-      console.log("test1");
+    if (location.pathname === "/forget") {  
       navigate("/forget");
       return
     }
-
+    if (location.pathname.startsWith('/update')) {  
+      console.log("fdoifuepo")
+      navigate(location.pathname);
+      return
+    }
     if (location.pathname === "/") {
       navigate("/login");
     }

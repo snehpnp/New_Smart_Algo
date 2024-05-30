@@ -132,6 +132,7 @@ export async function GET_PANEL_INFORMATION(id, token) {
 
 // FIND ALL PANEL DATA
 export async function GET_ALL_ADMIN_CLIENT(id, token) {
+   
     try {
 
         const res = await axios.post(`${Config.base_url}getall/panel/clients`, id, {
@@ -363,7 +364,7 @@ export async function UPDATE_QUERY(data) {
 
 export async function GET_ALL_SIGNAL(data) {
     try {
-        const res = await axios.post(`${Config.base_url}get/signal`, data, {
+        const res = await axios.post(`${data.backend_rul}get/signal`, data, {
             // headers: header(token),
             data: {},
         })
@@ -377,8 +378,10 @@ export async function GET_ALL_SIGNAL(data) {
 }
 
 export async function UPDATE_PRICE(data) {
+    console.log("data",data.backend_rul)
+
     try {
-        const res = await axios.post(`${Config.base_url}update/price`, data, {
+        const res = await axios.post(`${data.backend_rul}update/price`, data, {
             // headers: header(token),
             data: {},
         })
@@ -392,7 +395,7 @@ export async function UPDATE_PRICE(data) {
 
 export async function DELETE_SIGNAL(data) {
     try {
-        const res = await axios.post(`${Config.base_url}signal/delete`, data, {
+        const res = await axios.post(`${data.backend_rul}signal/delete`, data, {
             // headers: header(token),
             data: {},
         })
@@ -406,7 +409,7 @@ export async function DELETE_SIGNAL(data) {
 
 export async function GET_ALL_DELETED_SIGNAL(data) {
     try {
-        const res = await axios.post(`${Config.base_url}deleted/signal`, data, {
+        const res = await axios.post(`${data.backend_rul}deleted/signal`, data, {
             // headers: header(token),
             data: {},
         })
@@ -421,7 +424,7 @@ export async function GET_ALL_DELETED_SIGNAL(data) {
 
 export async function BACKUP_SIGNAL(data) {
     try {
-        const res = await axios.post(`${Config.base_url}backup/signal`, data, {
+        const res = await axios.post(`${data.backend_rul}backup/signal`, data, {
             // headers: header(token),
             data: {},
         })
@@ -434,7 +437,7 @@ export async function BACKUP_SIGNAL(data) {
 }
 export async function GET_ONE_USER(data) {
     try {
-        const res = await axios.post(`${Config.base_url}findUserById`, data, {
+        const res = await axios.post(`${data.backend_rul}findUserById`, data, {
             // headers: header(token),
             data: {},
         })
@@ -460,8 +463,10 @@ export async function UPDATE_USER(data) {
 }
 
 export async function USER_DELETE(data) {
+
+    console.log("data.backend_rul :", data.backend_rul)
     try {
-        const res = await axios.post(`${Config.base_url}user/delete`, data, {
+        const res = await axios.post(`${data.backend_rul}user/delete`, data, {
             // headers: header(token),
             data: {},
         })
@@ -474,8 +479,10 @@ export async function USER_DELETE(data) {
 }
 
 export async function GET_USER(data) {
+
+    console.log("backend_rul : ", data.backend_rul)
     try {
-        const res = await axios.post(`${Config.base_url}findOneUser`, data, {
+        const res = await axios.post(`${data.backend_rul}findOneUser`, data, {
             // headers: header(token),
             data: {},
         })
