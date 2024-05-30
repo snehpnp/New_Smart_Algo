@@ -543,13 +543,27 @@ const TradeHistory = () => {
                   if (get_entry_qty !== "" && get_exit_qty !== "") {
 
                     if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                       
+                      console.log("row 1",row)
 
-                    
+                      
+                     
+                     
                       let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-
 
                       if(get_entry_type === "SE"){
                         rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+                      }
+
+
+                      if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                        rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+
+                        if(get_entry_type === "SE"){
+                          rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                        }
+                      
                       }
 
 
@@ -578,12 +592,25 @@ const TradeHistory = () => {
                 //  if Only entry qty Exist
                 else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
                   
+                  //console.log("row 2",row)
                   let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
-
 
                   if(get_entry_type === "SE"){
                     abc = ((parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_entry_qty)).toFixed();
                   }
+
+
+                  if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                    abc = (parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_exit_qty);
+
+                    if(get_entry_type === "SE"){
+                      abc = (parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                    }
+                  
+                  }
+
+
 
                   if (isNaN(abc)) {
                     return "-";
@@ -651,6 +678,22 @@ const TradeHistory = () => {
               if(get_entry_type === "SE"){
                 rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
               }
+
+
+
+              if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+
+                if(get_entry_type === "SE"){
+                  rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                }
+              
+              }
+
+
+
+
                
             // console.log("rpl ",rpl)
               let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
@@ -682,6 +725,17 @@ const TradeHistory = () => {
            
           if(get_entry_type === "SE"){
             abc = ((parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_entry_qty)).toFixed();
+          }
+
+
+          if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+            abc = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+
+            if(get_entry_type === "SE"){
+              abc = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+            }
+          
           }
 
 
