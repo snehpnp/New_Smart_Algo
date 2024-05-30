@@ -161,12 +161,15 @@ const AllPermitions = () => {
 
     const setLocalStorage = (row) => {
         localStorage.setItem("RowData", row._id)
-        localStorage.setItem("backend_rul", row.backend_rul)   
+        localStorage.setItem("backend_rul", row.backend_rul)
+        localStorage.setItem("panel_name", row.panel_name)
+
     }
 
 
     const handleLocalStorage=(row)=>{
         localStorage.setItem("backend_rul", row.backend_rul)
+        localStorage.setItem("panel_name", row.panel_name)
     }
 
 

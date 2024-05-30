@@ -22,9 +22,11 @@ const AdminHelps = () => {
     const navigate = useNavigate()
     let location = useLocation();
     let admin_details = location.state
-    const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
+    const UserName = JSON.parse(localStorage.getItem("user_details")).UserName
     const token = JSON.parse(localStorage.getItem("user_details")).token
     const backend_rul = localStorage.getItem("backend_rul");
+    const panel_name = localStorage.getItem("panel_name");
+
     const [showModal, setShowmodal] = useState(false)
     const [showModal1, setShowmodal1] = useState(false)
     const [entryPrice, setEntryPrice] = useState('')
@@ -34,7 +36,7 @@ const AdminHelps = () => {
     const [deleteSignalId, setDeleteSignalId] = useState('')
 
 
-    console.log(location.state)
+    
     const [signalId, setSignalId] = useState('')
     const [refresh, setRefresh] = useState(false)
 
@@ -47,7 +49,7 @@ const AdminHelps = () => {
  
 
     const updatePrice = async () => {
-        const data = { id: entryPriceId, price: entryPrice, signalId: signalId, entryPriceID: 1,backend_rul:backend_rul }
+        const data = { id: entryPriceId, price: entryPrice, signalId: signalId, entryPriceID: 1,backend_rul:backend_rul , superadmin_name: UserName ,  panel_name : panel_name }
         await dispatch(Update_Price(data)).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -64,7 +66,7 @@ const AdminHelps = () => {
 
 
     const updateExitPrice = async () => {
-        const data = { id: exitPriceId, price: exitPrice, signalId: signalId, entryPriceID: 2 ,backend_rul:backend_rul}
+        const data = { id: exitPriceId, price: exitPrice, signalId: signalId, entryPriceID: 2 ,backend_rul:backend_rul, superadmin_name: UserName ,  panel_name : panel_name }
         await dispatch(Update_Price(data)).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -102,7 +104,7 @@ const AdminHelps = () => {
     }, [refresh])
 
     const handleDelete = async (id) => {
-        const data = { id: id , backend_rul:backend_rul}
+        const data = { id: id , backend_rul:backend_rul , superadmin_name: UserName , panel_name : panel_name }
         await dispatch(DeleteSignal(data)).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -116,8 +118,6 @@ const AdminHelps = () => {
             }).catch((err) => {
                 console.log("Error is found in deleting the signal", err)
             })
-
-
     }
 
 
