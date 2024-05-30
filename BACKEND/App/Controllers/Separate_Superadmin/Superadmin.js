@@ -597,7 +597,7 @@ class SuperAdmin {
             const superadmin_History = new Superadmin_History({
                 superadmin_name: superadmin_name,
                 panal_name: panel_name,
-                msg: "Super admin update price" + price
+                msg: "Super admin delete User" 
             })
 
             await superadmin_History.save()
