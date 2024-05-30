@@ -1,13 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react'
-import Content from "../../../Components/Dashboard/Content/Content"
-import TableWithButtons from "../../../Components/ExtraComponents/Tables/TableWithIconButtons"
+ 
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory from 'react-bootstrap-table2-paginator';
-import cellEditFactory from 'react-bootstrap-table2-editor';
-import * as FileSaver from "file-saver";
-import * as XLSX from "xlsx";
-
+ 
 
 const FullDataTable = ({ tableData, TableColumns, tableoptions, selectRow, keyField, pagination1, rowStyle }) => {
 

@@ -489,6 +489,60 @@ class Panel {
     }
 
 
+    async getAllSignals(req, res) {
+        try {
+            const { id, db_name, db_url } = req.body;
+
+
+
+            const Find_panelInfo = await panel_model.find({ _id: id })
+
+            if (!Find_panelInfo) {
+                return res.status(409).send({ status: false, msg: 'Panel Not Exist', data: [] });
+            }
+
+
+            let config = {
+                method: 'post',
+                url: Find_panelInfo[0].backend_rul + 'get/signal',
+                
+            };
+            axios(config)
+                .then(async (response) => {
+                    console.log("hello", response)
+                    if (response.data.status) {
+
+                        return res.send({ status: true, msg: 'Get Data', data: response.data });
+
+                    } else {
+                        return res.send({ status: false, msg: 'User Not Get', data: response.data });
+                    }
+
+                })
+                .catch((error) => {
+                    try {
+
+                        console.log("Error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+
+                    } catch (error) {
+                        console.log("Error error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+                    }
+
+                });
+
+
+
+        } catch (error) {
+            console.log("Error Get all User error-", error);
+        }
+    }
+
+
+
 }
 
 

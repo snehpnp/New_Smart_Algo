@@ -10,7 +10,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const { formattedDateTime } = require('../../Helper/time.helper')
 class Theme {
 
-    // ADD THEME
+    // ADD THEMEcdccddcfdfdfkdl;gmdklgmdmsl;kdmsklfmdk
     async AddTheme(req, res) {
         try {
             const { theme_name, theme_version, primary_col, nav_head_col, header_col, sidebar_col

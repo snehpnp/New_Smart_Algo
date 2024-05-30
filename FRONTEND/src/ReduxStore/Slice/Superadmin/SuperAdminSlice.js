@@ -183,10 +183,10 @@ export const UPDATE_QUERY_PANEL = createAsyncThunk("update/query", async (data) 
   }
 });
 
-export const GetAllSignal = createAsyncThunk("get/signal", async () => {
+export const GetAllSignal = createAsyncThunk("get/signals", async (data) => {
    
   try {
-    const res = await GET_ALL_SIGNAL();
+    const res = await GET_ALL_SIGNAL(data);
     return await res;
   } catch (err) {
     return err;
@@ -225,10 +225,10 @@ export const BackupSignal = createAsyncThunk("backup/signal", async (data) => {
 });
 
 
-export const GetAllDeletedSignal = createAsyncThunk("deleted/signal", async () => {
+export const GetAllDeletedSignal = createAsyncThunk("deleted/signal", async (data) => {
    
   try {
-    const res = await GET_ALL_DELETED_SIGNAL();
+    const res = await GET_ALL_DELETED_SIGNAL(data);
     return await res;
   } catch (err) {
     return err;
