@@ -19,15 +19,15 @@ var firstOptPass = async (data) => {
     }
 }
 
-var disclaimer = async () => {
+const disclaimer = async () => {
     try {
-        var Companydata = await company_information.find();
+        const Companydata = await company_information.find();
 
         if (Companydata.length === 0) {
             throw new Error("No company data found");
         }
 
-        var a1 = `
+        const a1 = `
         <!doctype html>
         <html lang="en-US">
         <head>
@@ -57,23 +57,12 @@ var disclaimer = async () => {
                             <tr>
                                 <td>
                                     <h3>Welcome To ${Companydata[0].panel_name}</h3>
-                                    <p style="line-height: 25px;">${Companydata[0].disclaimer}</p><br/>
-                                    <p style="line-height: 25px;">Thank you</p><br/>
-                                    <p style="line-height: 25px;">You can login to your account <a href="${Companydata[0].login_url}" style="color: #0066cc; text-decoration: none;">here</a>.</p>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center" style="padding: 20px 0;">
-                        <!-- Footer -->
-                        <table width="670px" border="0" cellspacing="0" cellpadding="0" style="background:#fff; border-radius:3px; padding: 30px;">
-                            <tr>
-                                <td align="center" style="font-size: 14px; color: #999;">
-                                    <p>Contact us at: ${Companydata[0].email}</p>
-                                    <p><a href="${Companydata[0].privacy_policy_url}" style="color: #0066cc; text-decoration: none;">Privacy Policy</a> | <a href="${Companydata[0].terms_of_service_url}" style="color: #0066cc; text-decoration: none;">Terms of Service</a></p>
-                                    <p>© ${new Date().getFullYear()} ${Companydata[0].panel_name}. All rights reserved.</p>
+                                    <p style="line-height: 25px;">${Companydata[0].disclaimer}</p>
+                                    <p style="line-height: 25px;">${Companydata[0].disclaimer1}</p>
+                                    <p style="line-height: 25px;">${Companydata[0].disclaimer2}</p>
+                                    <p style="line-height: 25px;">${Companydata[0].disclaimer3}</p>
+                                    <p style="line-height: 25px;">${Companydata[0].disclaimer4}</p>
+                                    <p style="line-height: 25px;">${Companydata[0].disclaimer5}</p>
                                 </td>
                             </tr>
                         </table>
@@ -89,8 +78,7 @@ var disclaimer = async () => {
         console.error("Error fetching company information:", error);
         throw error;
     }
-}
-
+};
 
 
 

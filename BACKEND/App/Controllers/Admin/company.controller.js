@@ -36,26 +36,26 @@ class Company {
     // update company
     async UpdateDisclaimer(req, res) {
         try {
-            console.log(req.body)
-            const {id , disclaimer} = req.body
-            
+   
+            const { id, disclaimer, disclaimer1, disclaimer2, disclaimer3, disclaimer4, disclaimer5 } = req.body
 
-           const findData = await company_information.findOne({_id : new ObjectId(id)})
-           if(!findData){
-            return res.send({
-                status: false,
-                msg: "Id is not Match",
-                data:[]
-            })
-           }
 
-           const filter = { _id: id };
-           const updateOperation = { $set: {disclaimer :disclaimer }};
-           const result = await company_information.updateOne(filter, updateOperation);
-           if (!result) {
-               return res.send({ status: false, msg: 'Company not update', data: [] });
-           }
-           return res.send({ status: true, msg: 'Update Successfully.', data: [] });
+            const findData = await company_information.findOne({ _id: new ObjectId(id) })
+            if (!findData) {
+                return res.send({
+                    status: false,
+                    msg: "Id is not Match",
+                    data: []
+                })
+            }
+
+            const filter = { _id: id };
+            const updateOperation = { $set: { disclaimer: disclaimer , disclaimer1 : disclaimer1, disclaimer2 :disclaimer2, disclaimer3 :disclaimer3, disclaimer4 : disclaimer4, disclaimer5 : disclaimer5 } };
+            const result = await company_information.updateOne(filter, updateOperation);
+            if (!result) {
+                return res.send({ status: false, msg: 'Company not update', data: [] });
+            }
+            return res.send({ status: true, msg: 'Update Successfully.', data: [] });
 
         } catch (error) {
             console.log("Error Edit Company Api -", error);
