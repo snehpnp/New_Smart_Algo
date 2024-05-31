@@ -33,7 +33,7 @@ const AdminHelps = () => {
     const [exitPrice, setExitPrice] = useState('')
     const [entryPriceId, setEntryPriceId] = useState('')
     const [exitPriceId, setExitPriceId] = useState('')
-    const [deleteSignalId, setDeleteSignalId] = useState('')
+    const [inputSearch, setInputSearch] = useState('')
 
 
     
@@ -87,9 +87,24 @@ const AdminHelps = () => {
         await dispatch(GetAllSignal({backend_rul:backend_rul })).unwrap()
             .then((response) => {
                 if (response.status) {
+
+                    const filterData = response.data.filter((item)=>{
+                        const inputSearchMetch = 
+                               inputSearch== '' || 
+                               item.symbol.toLowerCase().includes(inputSearch.toLowerCase()) || 
+                               item.entry_type.toLowerCase().includes(inputSearch.toLowerCase()) || 
+                               item.exit_type.toLowerCase().includes(inputSearch.toLowerCase()) || 
+                               item.strategy.toLowerCase().includes(inputSearch.toLowerCase()) || 
+                               item.entry_price.toLowerCase().includes(inputSearch.toLowerCase()) || 
+                               item.exit_price.toLowerCase().includes(inputSearch.toLowerCase()) 
+
+                               return inputSearchMetch
+                            
+                    })
+
                     setAllSignals({
                         loading: false,
-                        data: response.data
+                        data: inputSearch ? filterData : response.data
                     });
                 } else {
                     setAllSignals({
@@ -101,7 +116,7 @@ const AdminHelps = () => {
     }
     useEffect(() => {
         data()
-    }, [refresh])
+    }, [refresh , inputSearch])
 
     const handleDelete = async (id) => {
         const data = { id: id , backend_rul:backend_rul , superadmin_name: UserName , panel_name : panel_name }
@@ -196,7 +211,14 @@ const AdminHelps = () => {
                     <>
                         <Content Page_title="Signal" button_status={true} button_title='Back' route='/super/permitions'>
                             <div>
-                                <button className='btn btn-primary mb-3' onClick={handleBackupBtn}>backup Signal</button>
+                                <input type="text"  
+                                placeholder='search here...' 
+                                className=' p-2 rounded border-none'
+                                onChange={(e)=>{setInputSearch(e.target.value)}}
+                                value={inputSearch}
+                                 />
+                                <button className='btn btn-primary mb-3 mt-3 mx-3' onClick={handleBackupBtn}>backup Signal</button>
+
                             </div>
                             <FullDataTable TableColumns={columns} tableData={getAllSignals.data} pagination1={true} />
                         </Content>

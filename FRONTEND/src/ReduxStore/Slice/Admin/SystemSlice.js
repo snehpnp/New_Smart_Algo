@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { UPDATE_SMTP_DETAILS, UPDATE_COMPANY_DETAILS } from "../../../Service/admin.service";
+import { UPDATE_SMTP_DETAILS, UPDATE_COMPANY_DETAILS , DISCLAIMER_MESSAGE } from "../../../Service/admin.service";
 
 
 
@@ -25,6 +25,16 @@ export const Update_Company_details = createAsyncThunk("update/company", async (
     }
 });
 
+export const DisclaimerMessage = createAsyncThunk("update/disclaimer", async (data) => {
+    
+    try {
+        const res = await DISCLAIMER_MESSAGE(data);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
 const AdminHelpSlice = createSlice({
     name: "AdminHelpSlice",
     initialState: {
@@ -32,7 +42,8 @@ const AdminHelpSlice = createSlice({
         isError: false,
         smtp: [],
         company: [],
-        status: false
+        status: false,
+        disclaimerMessage:[],
     },
 
     recuders: {},
@@ -49,6 +60,10 @@ const AdminHelpSlice = createSlice({
         [Update_Company_details.fulfilled]: (state, { payload }) => {
             // state.isLoading = false;
             return { ...state, company: payload, isLoading: false };
+        },
+        [DisclaimerMessage.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, disclaimerMessage: payload, isLoading: false };
         },
 
     },

@@ -15,7 +15,7 @@ const user_SignUp = db.UserSignUp;
 
 const formattedDateTime = require('../../Helper/time.helper')
 const user_logs = require('../../Models/user_logs.model')
- 
+
 
 
 
@@ -28,7 +28,7 @@ class Login {
             const { Email, Password, device } = req.body;
             // IF Login Time Email CHECK
 
-        
+
 
             const EmailCheck = await User.findOne({ Email: Email });
             if (!EmailCheck) {
@@ -157,27 +157,27 @@ class Login {
 
 
     // DELETE SIGNUP CLIENT DATA
-    async deletesignupclients(req,res){
-            try {
-              const { id } = req.body;
-             
-              const get_user = await user_SignUp.find({ _id: id });
+    async deletesignupclients(req, res) {
+        try {
+            const { id } = req.body;
 
-              
-              if (user_SignUp.length == 0) {
+            const get_user = await user_SignUp.find({ _id: id });
+
+
+            if (user_SignUp.length == 0) {
                 return res.send({ status: false, msg: "Empty data", data: [] });
-              }
-              var DeleteUser = await user_SignUp.deleteOne({ _id: get_user[0]._id });
-        
-              res.send({
+            }
+            var DeleteUser = await user_SignUp.deleteOne({ _id: get_user[0]._id });
+
+            res.send({
                 status: true,
                 msg: "Delete Successfully",
                 data: DeleteUser,
-              });
-            } catch (error) {
-              console.log("Error trading status Error-", error);
-            }
-          
+            });
+        } catch (error) {
+            console.log("Error trading status Error-", error);
+        }
+
 
     }
 
@@ -650,7 +650,7 @@ class Login {
             if (EmailCheck.Role == "SUBADMIN") {
 
                 var SubadminPermision = await Subadmin_Permission.find({ user_id: EmailCheck._id })
-               
+
                 var msg = {
                     'Email': EmailCheck.Email,
                     'user_id': EmailCheck._id,
@@ -721,6 +721,27 @@ class Login {
         }
 
     }
+
+
+
+    async DisclaimerMailSend(req, res) {
+        try {
+            console.log("SNEH ")
+            var disclaimerData = await disclaimer();
+
+            var toEmail = "chandraprakash06012000@gmail.com";
+            var subjectEmail = "disclaimer";
+            CommonEmail(toEmail, subjectEmail, disclaimerData);
+        }
+        catch (error) {
+
+            return res.send({ status: false, msg: "Server Side error", data: error })
+
+        }
+
+    }
+
+
 
 
 }
