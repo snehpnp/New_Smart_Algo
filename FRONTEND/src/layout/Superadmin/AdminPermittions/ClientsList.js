@@ -31,6 +31,8 @@ const SubAdminList = () => {
 
     const RowId = localStorage.getItem('RowData')
     const backend_rul = localStorage.getItem("backend_rul");
+    const UserName = JSON.parse(localStorage.getItem("user_details")).UserName
+    const panel_name = localStorage.getItem("panel_name");
     
     const [UserData, setUserData] = useState({
         loading: true,
@@ -58,7 +60,10 @@ const SubAdminList = () => {
     const Delete_user = async (id) => {
         var req = {
             id: id,
-            backend_rul : backend_rul
+            backend_rul : backend_rul,
+            superadmin_name : UserName,
+            panel_name : panel_name
+
         };
         if (window.confirm("Do you want to delete this User ?")) {
             await dispatch(DELETE_USER_SERVICES(req))

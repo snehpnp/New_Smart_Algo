@@ -6,7 +6,10 @@ import BasicDataTable from '../../../Components/ExtraComponents/Datatable/BasicD
 import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
 import { Pencil, Trash2 } from 'lucide-react';
+import ToastButton from '../../../Components/ExtraComponents/Alert_Toast'
+import toast from 'react-hot-toast'
 import $ from "jquery"
+import { DisclaimerMessage } from '../../../ReduxStore/Slice/Admin/SystemSlice'
 
 
 import UpdateCompanyInfo from './UpdateCompanyInfo';
@@ -27,8 +30,18 @@ const System = () => {
     });
 
 
+    const [refresh, setRefresh] = useState(false)
+
+
     //  for Panel Details
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false)
+    const [diss, setDiss] = useState('')
+    const [diss1, setDiss1] = useState('')
+    const [diss2, setDiss2] = useState('')
+    const [diss3, setDiss3] = useState('')
+    const [diss4, setDiss4] = useState('')
+    const [diss5, setDiss5] = useState('')
+
 
     //  for Show Clients
     const [ShowEmailModal, setShowEmailModal] = useState(false)
@@ -36,11 +49,18 @@ const System = () => {
     const [showImgModal, setshowImgModal] = useState(false)
 
 
+
     const CompanyName = async () => {
         await dispatch(GET_COMPANY_INFOS()).unwrap()
             .then((response) => {
                 if (response.status) {
-                     
+                    setDiss(response.data[0].disclaimer)
+                    setDiss1(response.data[0].disclaimer1)
+                    setDiss2(response.data[0].disclaimer2)
+                    setDiss3(response.data[0].disclaimer3)
+                    setDiss4(response.data[0].disclaimer4)
+                    setDiss5(response.data[0].disclaimer5)
+
                     setCompanyName({
                         loading: false,
                         data: response.data
@@ -78,10 +98,7 @@ const System = () => {
             dataField: 'panel_short_name',
             text: 'Company Short Name'
         },
-        // {
-        //     dataField: 'broker_url',
-        //     text: 'Broker Name'
-        // },
+
         {
             dataField: 'prefix',
             text: 'Version'
@@ -194,6 +211,28 @@ const System = () => {
             ),
         },
     ];
+
+
+
+    const handleSubmit = async () => {
+        const data = { id: "6501756b2a8e6d952493b7f4", disclaimer: diss, disclaimer1: diss1, disclaimer2: diss2, disclaimer3: diss3, disclaimer4: diss4, disclaimer5: diss5 }
+        await dispatch(DisclaimerMessage(data)).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    toast.success("Disclaimer added successfully...")
+                    setRefresh(!refresh)
+
+                }
+                else {
+                    toast.error("Disclaimer add error")
+                }
+            })
+            .catch((err) => {
+                console.log("Internal server error")
+            })
+    }
+
+
     return <>
         <Content Page_title="System" button_status={false}>
 
@@ -209,11 +248,24 @@ const System = () => {
             <h2>Background Images</h2>
             <BasicDataTable tableData={getCompanyName.data} TableColumns={background_images} dropdown={false} />
 
+            <h2>Disclaimer Message</h2>
+            <textarea className='col-lg-12 mb-3 p-2' rows="5" placeholder='Enter your disclaimer message' onChange={(e) => setDiss(e.target.value)} value={diss} />
+            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss1(e.target.value)} value={diss1} />
+            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss2(e.target.value)} value={diss2} />
+            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss3(e.target.value)} value={diss3} />
+            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss4(e.target.value)} value={diss4} />
+            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss5(e.target.value)} value={diss5} />
+            <button type='submit' className='btn btn-primary' onClick={handleSubmit}>Submit</button>
+
+
+
+
 
             <UpdateCompanyInfo data={getCompanyName && getCompanyName.data} showModal={PanelDetailsModal} setshowModal={() => setPanelDetailsModal(false)} />
             <UpdateSmptDetails data={getCompanyName && getCompanyName.data} showModal={ShowEmailModal} setshowModal={() => setShowEmailModal(false)} />
             <UpdateImages data={getCompanyName && getCompanyName.data} showModal={showImgModal} setshowModal={() => setshowImgModal(false)} />
             <br />
+            <ToastButton />
 
         </Content>
     </>

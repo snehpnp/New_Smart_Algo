@@ -25,6 +25,8 @@ const AdminHelps = () => {
     const user_id = JSON.parse(localStorage.getItem("user_details"))
     const backend_rul = localStorage.getItem("backend_rul");
     const token = JSON.parse(localStorage.getItem("user_details")).token
+    const UserName = JSON.parse(localStorage.getItem("user_details")).UserName
+    const panel_name = localStorage.getItem("panel_name");
 
  
      
@@ -63,7 +65,7 @@ const AdminHelps = () => {
 
 
     const handleDelete = async (id) => {
-        const data = { id: id  , backend_rul: backend_rul}
+        const data = { id: id , backend_rul: backend_rul , superadmin_name: UserName ,  panel_name : panel_name }
         await dispatch(BackupSignal(data)).unwrap()
             .then((response) => {
                 if (response.status) {
