@@ -19,7 +19,12 @@ const EditClient = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const dispatch = useDispatch()
+ 
+    
+    const RowId = localStorage.getItem('RowData')
     const backend_rul = localStorage.getItem("backend_rul");
+    const UserName = JSON.parse(localStorage.getItem("user_details")).UserName
+    const panel_name = localStorage.getItem("panel_name");
  
     const [UserData, setUserData] = useState({
         loading: true,
@@ -106,6 +111,8 @@ const EditClient = () => {
                 "Email": values.email,
                 "PhoneNo": values.mobile,
                 "license_type": values.licence,
+                "panel_name" : panel_name,
+                "superadmin_name":UserName
             }
 
          

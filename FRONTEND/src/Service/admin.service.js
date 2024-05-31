@@ -974,3 +974,16 @@ export async function UpdateStrategyToClient(data) {
     }
 
 }
+
+//UPDATE STRATEGY TO CLIENT
+export async function DISCLAIMER_MESSAGE(data) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/disclaimer`, data, {
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err); 
+    }
+}

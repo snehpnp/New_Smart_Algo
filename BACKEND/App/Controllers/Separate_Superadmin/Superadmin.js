@@ -12,6 +12,7 @@ const user_activity_logs = db.user_activity_logs
 const strategy_client = db.strategy_client
 const client_services = db.client_services
 const groupService_User = db.groupService_User
+const Superadmin_History = db.Superadmin_History
 
 
 const mongoose = require('mongoose');
@@ -210,7 +211,7 @@ class SuperAdmin {
     async UpdateSignal(req, res) {
 
         try {
-            const { id, price, signalId, entryPriceID } = req.body
+            const { id, price, signalId, entryPriceID, panel_name, superadmin_name } = req.body
 
             if (!id) {
                 return res.send({ status: false, msg: "Id is not Found", data: [] })
@@ -237,6 +238,13 @@ class SuperAdmin {
 
                 const updateData = await MainSignals.updateOne(filter, update_Price)
                 const updateInSignal = await Signals.updateOne(filter2, update_Price2)
+                const superadmin_History = new Superadmin_History({
+                    superadmin_name: superadmin_name,
+                    panal_name: panel_name,
+                    msg: "Super admin update price" + price
+                })
+
+                await superadmin_History.save()
                 return res.send({ status: true, msg: "price is updated successfully", data: [] })
             }
             else {
@@ -315,7 +323,7 @@ class SuperAdmin {
     async DeleteSignal(req, res) {
 
         try {
-            const { id } = req.body;
+            const { id , superadmin_name , panel_name } = req.body;
 
             if (!id) {
                 return res.send({
@@ -381,6 +389,13 @@ class SuperAdmin {
             }
 
             await MainSignals.deleteOne({ _id: findData._id });
+            const superadmin_History = new Superadmin_History({
+                superadmin_name: superadmin_name,
+                panal_name: panel_name,
+                msg: "Super admin Delete signal"
+            })
+
+            await superadmin_History.save()
 
             res.send({
                 status: true,
@@ -400,7 +415,7 @@ class SuperAdmin {
 
     async backupSignal(req, res) {
         try {
-            const { id } = req.body;
+            const { id , superadmin_name , panel_name } = req.body;
 
             if (!id) {
                 return res.send({
@@ -459,12 +474,20 @@ class SuperAdmin {
 
                         await Old_MainSignals.deleteOne({ _id: id });
 
+                        
+                        const superadmin_History = new Superadmin_History({
+                            superadmin_name: superadmin_name,
+                            panal_name: panel_name,
+                            msg: "Super admin Delete signal" 
+                        })
+                        
+                        await superadmin_History.save()
+                        
                         return res.send({
                             status: true,
                             msg: "Data found and backed up successfully",
                             data: findData
                         });
-
 
                     } catch (err) {
                         console.error(`Error finding signal with backup_id ${sglId}:`, err);
@@ -519,7 +542,7 @@ class SuperAdmin {
     async UpdateUser(req, res) {
 
         try {
-            const { id, FullName, UserName, Email, PhoneNo } = req.body
+            const { id, FullName, UserName, Email, PhoneNo , superadmin_name , panel_name } = req.body
 
             const data = {
                 FullName: FullName,
@@ -534,6 +557,13 @@ class SuperAdmin {
                 return res.send({ status: false, msg: "User Not Update some error occer", data: [] })
 
             }
+            const superadmin_History = new Superadmin_History({
+                superadmin_name: superadmin_name,
+                panal_name: panel_name,
+                msg: "Super admin Update User"
+            })
+
+            await superadmin_History.save()
 
             return res.send({ status: true, msg: "User Updated Successfully", data: [] })
 
@@ -549,7 +579,7 @@ class SuperAdmin {
 
     async UserDelete(req, res) {
         try {
-            const { id } = req.body
+            const { id , panel_name , superadmin_name } = req.body
             if (!id) {
                 res.send({ status: false, msg: "Id is Not Found", data: [] })
             }
@@ -565,6 +595,14 @@ class SuperAdmin {
             if (!deleteUser.acknowledged) {
                 return res.send({ status: false, msg: "Invalid User Id", data: [] })
             }
+
+            const superadmin_History = new Superadmin_History({
+                superadmin_name: superadmin_name,
+                panal_name: panel_name,
+                msg: "Super admin delete User" 
+            })
+
+            await superadmin_History.save()
 
             return res.send({ status: true, msg: "User Deleted Successfully ", data: [] })
 
@@ -630,7 +668,7 @@ class SuperAdmin {
                 }
             ]).exec();  // Ensure the aggregation is executed and awaited properly
 
-            
+
             // var stateRemaingLicense = []
             // var arrLicense = []
             // var sumWithInitial = ""
@@ -638,7 +676,7 @@ class SuperAdmin {
             // for (var i = 1; i <= getToMonth[0].totalLicence; i++) {
             //     arrLicense.push(1)
             // }
-            
+
             // var RemainingLicence = 0
 
             // var past_date = new Date(getToMonth[0].StartDate);
