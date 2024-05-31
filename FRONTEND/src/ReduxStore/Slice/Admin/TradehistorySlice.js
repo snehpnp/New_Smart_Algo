@@ -8,9 +8,9 @@ import { GET_TRADEHISTORY, GET_SEVAN_TRADEHISTORY,GET_ADMIN_TRADING_STATUS } fro
 
 export const Get_Tradehisotry = createAsyncThunk("admin/tradhistory", async (apireq) => {
 
-    const { startDate, endDate, service, strategy,type, token } = apireq
+    const { startDate, endDate, service, strategy,type,serviceIndex ,token } = apireq
     try {
-        const res = await GET_TRADEHISTORY({ startDate: startDate, endDate: endDate, service: service, strategy: strategy,type }, token);
+        const res = await GET_TRADEHISTORY({ startDate: startDate, endDate: endDate, service: service, strategy: strategy,type ,serviceIndex:serviceIndex}, token);
         return await res;
     } catch (err) {
         return err;

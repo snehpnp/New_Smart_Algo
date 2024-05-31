@@ -1,29 +1,22 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import Modal from '../../../Components/ExtraComponents/Modal';
 import { useFormik } from 'formik';
-import Formikform from "../../../Components/ExtraComponents/Form/Formik_form1"
+import Formikform from "../../../Components/ExtraComponents/Form/Formik_form1";
 import { useDispatch } from "react-redux";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-import { Update_Admin_Permissions } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { Update_Admin_Permissions } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 import toast from 'react-hot-toast';
 import * as Config from "../../../Utils/Config";
 
-
 const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const token = JSON.parse(localStorage.getItem('user_details')).token;
 
-    const token = JSON.parse(localStorage.getItem('user_details')).token
-
-    const [GetCreate_Strategy, setGetCreate_Strategy] = useState("")
-    const [GetOption_chain, setGetOption_chain] = useState("")
-    const [getStrategy_plan, setGetStrategy_plan] = useState("")
-
-    // console.log("GetCreate_Strategy", GetCreate_Strategy)
-    // console.log("GetOption_chain", GetOption_chain)
-    // console.log("getStrategy_plan", getStrategy_plan)
-
-
-
+    const [GetCreate_Strategy, setGetCreate_Strategy] = useState(false);
+    const [GetOption_chain, setGetOption_chain] = useState(false);
+    const [getStrategy_plan, setGetStrategy_plan] = useState(false);
+    const [live_price, setLive_price] = useState(false);
+    const [Two_day_client, setTwo_day_client] = useState(false);
 
     const formik = useFormik({
         initialValues: {
@@ -33,146 +26,143 @@ const Sidebar_permission = ({ showModal, setshowModal, showPanelName }) => {
             Strategy_plan: false,
         },
         validate: (values) => {
-
             const errors = {};
             if (!values.username) {
                 // errors.username = valid_err.USERNAME_ERROR;
             }
-
             return errors;
         },
         onSubmit: async (values) => {
-     
-            console.log("GetOption_chain -",GetOption_chain && GetOption_chain)
-            console.log("GetCreate_Strategy -",GetCreate_Strategy && GetCreate_Strategy)
-            // console.log("showPanelName -",showPanelName)
-           
             const req = {
-                "Option_chain": GetOption_chain && GetOption_chain ? 1 : 0,
-                "Create_Strategy": GetCreate_Strategy && GetCreate_Strategy ? 1 : 0,
-                "Trade_History": 1 ? 1 : 0,
-                "Strategy_plan": getStrategy_plan && getStrategy_plan ? 1 : 0,
+                "Option_chain": GetOption_chain ? 1 : 0,
+                "Create_Strategy": GetCreate_Strategy ? 1 : 0,
+                "Trade_History": 1,
+                "Strategy_plan": getStrategy_plan ? 1 : 0,
+                "live_price": live_price ? 1 : 0,
+                "Two_day_client": Two_day_client ? 1 : 0,
                 "db_url": showPanelName.db_url,
                 "db_name": showPanelName.db_name,
                 "key": showPanelName.key,
                 "domain": showPanelName.rowdata.domain,
+            };
 
-            }
-
-            console.log("req -", req)
-            return
-             
             await dispatch(Update_Admin_Permissions({ req: req, token: token })).unwrap().then((response) => {
                 if (response.status === 409) {
                     toast.error(response.data.msg);
-                }
-                else if (response.status) {
+                } else if (response.status) {
                     toast.success(response.msg);
-                    setshowModal(!showModal)
-                    window.location.reload()
-                }
-                else if (!response.status) {
+                    clearData();
+                    setshowModal(false);
+                    window.location.reload();
+                } else {
                     toast.error(response.msg);
                 }
-
-            })
+            });
         }
-
     });
 
-
-
     useEffect(() => {
-        setGetCreate_Strategy(showPanelName.rowdata && showPanelName.rowdata.Create_Strategy)
-        setGetStrategy_plan(showPanelName.rowdata && showPanelName.rowdata.Strategy_plan)
-        setGetOption_chain(showPanelName.rowdata && showPanelName.rowdata.Option_chain)
-    }, [showPanelName.rowdata])
+        if (showModal) {
+            loadInitialData();
+        }
+    }, [showModal, showPanelName.rowdata]);
 
+    const loadInitialData = () => {
+        setGetCreate_Strategy(!!showPanelName.rowdata?.Create_Strategy);
+        setGetStrategy_plan(!!showPanelName.rowdata?.Strategy_plan);
+        setGetOption_chain(!!showPanelName.rowdata?.Option_chain);
+        setLive_price(!!showPanelName.rowdata?.live_price);
+        setTwo_day_client(!!showPanelName.rowdata?.Two_day_client);
+    };
 
+    const clearData = () => {
+        setGetCreate_Strategy(false);
+        setGetOption_chain(false);
+        setGetStrategy_plan(false);
+        setLive_price(false);
+        setTwo_day_client(false);
+    };
 
-    const fields = [
-        // { name: 'optionchain', label: 'Option Chain', type: 'checkbox', label_size: 12, col_size: 6, disable: false },
-        // { name: 'createstrategy', label: 'Create Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false },
-        // { name: 'tradhistory', label: 'TradHistory', type: 'checkbox', label_size: 12, col_size: 6, disable: false },
-
-    ]
-
-
+    const fields = [];
 
     return (
         <div>
-            <Modal isOpen={showModal} backdrop="static" size="md" title="
-        Sidebar Permission" hideBtn={true}
-                handleClose={() => setshowModal(false)}
+            <Modal isOpen={showModal} backdrop="static" size="md" title="Sidebar Permission" hideBtn={true}
+                handleClose={() => { setshowModal(false); clearData(); }}
             >
                 <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
                     title="Update"
-
                     additional_field={
                         <>
                             <div className='d-flex row'>
-                                {/* {GetAllBrokerName && GetAllBrokerName.map((strategy) => ( */}
-                                <div className={`col-lg-6 my-2`}
-                                >
+                                <div className={`col-lg-6 my-2`}>
                                     <div className="col-lg-12 ">
                                         <input type='checkbox' className="form-check-input"
                                             name="createstrategy"
-                                            value={GetCreate_Strategy && GetCreate_Strategy}
+                                            checked={GetCreate_Strategy}
                                             onChange={(e) => setGetCreate_Strategy(e.target.checked)}
-                                            defaultChecked={GetCreate_Strategy && GetCreate_Strategy === 1}
                                         />
-                                        <label className="form-check-label"
-                                            for='createstrategy'
-                                        >
+                                        <label className="form-check-label" htmlFor='createstrategy'>
                                             Create Strategy
                                         </label>
                                     </div>
                                 </div>
-                                <div className={`col-lg-6 my-2`}
-                                >
+                                <div className={`col-lg-6 my-2`}>
                                     <div className="col-lg-12 ">
                                         <input type='checkbox' className="form-check-input"
                                             name="optionchain"
-                                            value={GetOption_chain && GetOption_chain}
+                                            checked={GetOption_chain}
                                             onChange={(e) => setGetOption_chain(e.target.checked)}
-                                            defaultChecked={GetOption_chain && GetOption_chain === 1}
-
                                         />
-                                        <label className="form-check-label"
-                                            for='optionchain'
-                                        >
+                                        <label className="form-check-label" htmlFor='optionchain'>
                                             Option Chain
                                         </label>
                                     </div>
                                 </div>
-                                <div className={`col-lg-12 my-2`}
-                                >
+                                <div className={`col-lg-6 my-2`}>
                                     <div className="col-lg-12 ">
                                         <input type='checkbox' className="form-check-input"
                                             name="Strategy_plan"
-                                            value={getStrategy_plan && getStrategy_plan}
+                                            checked={getStrategy_plan}
                                             onChange={(e) => setGetStrategy_plan(e.target.checked)}
-                                            defaultChecked={getStrategy_plan && getStrategy_plan === 1}
-
                                         />
-                                        <label className="form-check-label"
-                                            for='Strategy_plan'
-                                        >
+                                        <label className="form-check-label" htmlFor='Strategy_plan'>
                                             Strategy Plan
                                         </label>
                                     </div>
                                 </div>
-                                {/* ))} */}
-
+                                <div className={`col-lg-6 my-2`}>
+                                    <div className="col-lg-12 ">
+                                        <input type='checkbox' className="form-check-input"
+                                            name="live_price"
+                                            checked={live_price}
+                                            onChange={(e) => setLive_price(e.target.checked)}
+                                        />
+                                        <label className="form-check-label" htmlFor='live_price'>
+                                            Live Price
+                                        </label>
+                                    </div>
+                                </div>
+                                <div className={`col-lg-6 my-2`}>
+                                    <div className="col-lg-12 ">
+                                        <input type='checkbox' className="form-check-input"
+                                            name="Two_day_client"
+                                            checked={Two_day_client}
+                                            onChange={(e) => setTwo_day_client(e.target.checked)}
+                                        />
+                                        <label className="form-check-label" htmlFor='Two_day_client'>
+                                            Two Day Client
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                             <ToastButton />
-
                         </>}
                 />
-            </Modal >
+            </Modal>
             <ToastButton />
         </div>
-    )
-}
+    );
+};
 
-export default Sidebar_permission
+export default Sidebar_permission;

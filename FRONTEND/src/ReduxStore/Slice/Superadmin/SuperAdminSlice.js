@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_ALL_PANELS_LIST, ALL_BROKERS, UPDATE_BROKERS, UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER, ADD_PANEL, UPDATE_PANEL ,GET_PANEL_HISTORY,UPDATE_QUERY} from "../../../Service/superadmin.service";
+import { GET_ALL_PANELS_LIST, ALL_BROKERS, UPDATE_BROKERS, UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER, ADD_PANEL, UPDATE_PANEL ,GET_PANEL_HISTORY,UPDATE_QUERY , GET_ALL_SIGNAL , UPDATE_PRICE , DELETE_SIGNAL , GET_ALL_DELETED_SIGNAL  ,BACKUP_SIGNAL , UPDATE_USER  ,GET_ONE_USER , USER_DELETE , GET_USER} from "../../../Service/superadmin.service";
 
 
 export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => {
@@ -183,6 +183,101 @@ export const UPDATE_QUERY_PANEL = createAsyncThunk("update/query", async (data) 
   }
 });
 
+export const GetAllSignal = createAsyncThunk("get/signals", async (data) => {
+   
+  try {
+    const res = await GET_ALL_SIGNAL(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+
+export const Update_Price = createAsyncThunk("update/price", async (data) => {
+   
+  try {
+    const res = await UPDATE_PRICE(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+export const DeleteSignal = createAsyncThunk("signal/delete", async (data) => {
+   
+  try {
+    const res = await DELETE_SIGNAL(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+export const BackupSignal = createAsyncThunk("backup/signal", async (data) => {
+   
+  try {
+    const res = await BACKUP_SIGNAL(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+
+export const GetAllDeletedSignal = createAsyncThunk("deleted/signal", async (data) => {
+   
+  try {
+    const res = await GET_ALL_DELETED_SIGNAL(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+export const Find_One_User = createAsyncThunk("findUserById", async (data) => {
+   
+  try {
+    const res = await GET_ONE_USER(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+export const Update_User = createAsyncThunk("update/user", async (data) => {
+   
+  try {
+    const res = await UPDATE_USER(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+export const DELETE_USER_SERVICES = createAsyncThunk("user/delete", async (data) => {
+   
+  try {
+    const res = await USER_DELETE(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+export const Find_User = createAsyncThunk("findOneUser", async (data) => {
+   
+  try {
+    const res = await GET_USER(data);
+    return await res;
+  } catch (err) {
+    return err;
+  }
+});
+
+
+
+ 
 
 
 const SuperAdminSlice = createSlice({
@@ -205,6 +300,15 @@ const SuperAdminSlice = createSlice({
     Add_Panels: [],
     update_panel: [],
     panel_history: [],
+    getallsignal:[],
+    update_price:[],
+    deletesignal :[],
+    getalldeletedsignal:[],
+    backupSignal:[],
+    find_One_User:[],
+    update_User:[],
+    user_Delete:[],
+    find_User :[] 
   },
 
   recuders: {},
@@ -272,6 +376,42 @@ const SuperAdminSlice = createSlice({
     [Get_Panel_History.fulfilled]: (state, { payload }) => {
       // state.isLoading = false;
       return { ...state, panel_history: payload, isLoading: false };
+    },
+    [GetAllSignal.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, getallsignal: payload, isLoading: false };
+    },
+    [Update_Price.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, update_price: payload, isLoading: false };
+    },
+    [DeleteSignal.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, deletesignal: payload, isLoading: false };
+    },
+    [GetAllDeletedSignal.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, getalldeletedsignal: payload, isLoading: false };
+    },
+    [BackupSignal.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, backupSignal: payload, isLoading: false };
+    },
+    [Find_One_User.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, find_One_User: payload, isLoading: false };
+    },
+    [Update_User.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, update_User: payload, isLoading: false };
+    },
+    [DELETE_USER_SERVICES.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, user_Delete: payload, isLoading: false };
+    },
+    [Find_User.fulfilled]: (state, { payload }) => {
+      // state.isLoading = false;
+      return { ...state, find_User: payload, isLoading: false };
     },
   },
 

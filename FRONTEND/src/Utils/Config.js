@@ -27,7 +27,13 @@ export const base_url = `${window.location.origin}/backend/`
 // export const base_url = "https://software.corebizinfotech.com/backend/";
 // export const base_url = "https://software.growskyinfotech.com/backend/";
 // export const base_url = "https://software.sumedhainn.com/backend/";
+<<<<<<< HEAD
 // export const base_url = "https://software.uniquetechnology.in/backend/";
+=======
+// export const base_url = "https://software.growupalgo.com/backend/";
+// export const base_url = "https://software.fincodify.com/backend/";
+
+>>>>>>> 68ed5d686ff3a94031aab51f4fd1ffb1b701c9ed
 
 
 

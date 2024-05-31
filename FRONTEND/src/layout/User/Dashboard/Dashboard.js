@@ -260,7 +260,7 @@ const BrokerResponse = () => {
               <th>Symbol</th>
               <th>lot size</th>
               <th>max Qty</th>
-              <th>LotSize</th>
+              <th>No.Of Lot</th>
               <th>Quantity</th>
               <th>Strategy</th>
               <th>Order Type</th>

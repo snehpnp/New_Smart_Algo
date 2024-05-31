@@ -5,7 +5,7 @@ import Content from "../../../Components/Dashboard/Content/Content"
 import * as  valid_err from "../../../Utils/Common_Messages"
 import { Link } from "react-router-dom";
 import Loader from '../../../Utils/Loader'
-import { FolderLock, Plus, FileClock, HelpingHand, Users2,Link2, ScrollText } from 'lucide-react';
+import { FolderLock, Plus, FileClock, HelpingHand, Users2, Link2, ScrollText, RadioTower, Eye } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel, GET_PANEL_INFORMATIONS, All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
@@ -32,20 +32,14 @@ const AllPermitions = () => {
     const token = JSON.parse(localStorage.getItem('user_details')).token
 
 
+
+
+
     //  for permission
     const [showModal, setshowModal] = useState(false)
 
     //  for Panel Details
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false)
-
-    //  for Show Clients
-    const [ShowClientsModal, setShowClientsModal] = useState(false)
-    const [ShowClientsList, setShowClientsList] = useState([])
-
-
-    //  for Subadmins
-    const [showSubadminsModal, setshowSubadminsModal] = useState(false)
-    const [ShowSubadminList, setShowSubadminList] = useState([])
 
     //  for Add Licence
     const [showAddLicenceModal, setshowAddLicenceModal] = useState(false)
@@ -56,8 +50,7 @@ const AllPermitions = () => {
     const [showLicenceModal, setshowLicenceModal] = useState(false)
     const [showLicenceDetails, setshowLicenceDetails] = useState([])
 
-    // For Admin Help
-    const [getAdminHelps, setGetAdminelp] = useState('')
+
 
     //  for Broker Permission
     const [showBrokerModal, setshowBrokerModal] = useState(false)
@@ -67,6 +60,9 @@ const AllPermitions = () => {
     // const [Panelid, setPanelid] = useState('1')
     const [themeList, setThemeList] = useState();
     const [refresh, setRefresh] = useState(false)
+
+    //for search baar
+    const [searchInput, setSearchInput] = useState('')
 
 
     const [panelData, setPanelData] = useState({
@@ -85,18 +81,42 @@ const AllPermitions = () => {
     const GetAllThemes = async () => {
         await dispatch(Get_All_Theme()).unwrap()
             .then((response) => {
-                 
+
                 setThemeList(response && response.data);
             })
     }
 
+
     const data = async () => {
         await dispatch(All_Panel_List()).unwrap()
             .then((response) => {
-                setPanelData({
-                    loading: false,
-                    data: response.data
-                });
+                if (response.status) {
+
+                    const filterData = response.data && response.data.filter((item) => {
+                        const matchSearch =
+                            searchInput == '' ||
+                            item.panel_name.toLowerCase().includes(searchInput.toLowerCase())
+
+                        return matchSearch
+                    })
+
+
+                    setPanelData({
+                        loading: false,
+                        data: searchInput ? filterData : response.data
+                    });
+
+                }
+                else {
+                    setPanelData({
+                        loading: false,
+                        data: []
+                    });
+
+                }
+            })
+            .catch((err) => {
+                console.log("Error to fatching the panle details", err)
             })
     }
 
@@ -109,46 +129,45 @@ const AllPermitions = () => {
 
 
     useEffect(() => {
+        localStorage.removeItem('RowData')
+        localStorage.removeItem('backend_rul')
         data()
         GetAllThemes()
-    }, [refresh])
+    }, [refresh, searchInput])
+
+ 
 
 
+    // const CloseCompany = async (status) => {
+
+    //     const req = {
+    //         "domain": Config.react_domain,
+    //         "status": status ? 1 : 0
+    //     }
 
 
-
-  
-
-
-
-    // const panelDetails = (panel_id) => {
-    //     setPanelid(panel_id)
-    //     setshowModal(true)
+    //     await dispatch(Close_Admin_Panel(req)).unwrap()
+    //         .then((response) => {
+    //             if (response.status) {
+    //                 toast.success(response.msg);
+    //                 setRefresh(!refresh)
+    //             } else {
+    //                 toast.error(response.msg);
+    //             }
+    //         })
     // }
 
 
-   
 
-    const CloseCompany = async (status) => {
-
-        const req = {
-            "domain": Config.react_domain,
-            "status": status ? 1 : 0
-        }
-
-
-        await dispatch(Close_Admin_Panel(req)).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    toast.success(response.msg);
-                    setRefresh(!refresh)
-                } else {
-                    toast.error(response.msg);
-                }
-            })
+    const setLocalStorage = (row) => {
+        localStorage.setItem("RowData", row._id)
+        localStorage.setItem("backend_rul", row.backend_rul)   
     }
 
 
+    const handleLocalStorage=(row)=>{
+        localStorage.setItem("backend_rul", row.backend_rul)
+    }
 
 
 
@@ -160,14 +179,14 @@ const AllPermitions = () => {
         },
         {
             dataField: 'panel_name',
-            text: 'Panel Name', 
+            text: 'Panel Name',
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <Link to={`${row.domain}`}>
                         {row.panel_name}
                     </Link>
                 </span>
-            ) 
+            )
         },
 
         {
@@ -189,6 +208,7 @@ const AllPermitions = () => {
                     <FolderLock size={20} color="#198754" strokeWidth={2} className="mx-1"
                         onClick={(e) => { setshowPanelName({ rowdata: row, panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowModal(true) }}
                     />
+
                 </span>
             )
         },
@@ -220,7 +240,7 @@ const AllPermitions = () => {
             dataField: 'panel_name',
             text: 'Clients',
             formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+                <span data-toggle="tooltip" data-placement="top" title="Panel Views" onClick={() => setLocalStorage(row)}>
                     <Link to={`/super/showclient`} state={row}>
                         <Users2 size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
@@ -248,6 +268,18 @@ const AllPermitions = () => {
                         onClick={(e) => { setshowPanelName({ panel_name: row.panel_name, id: row._id, db_url: row.db_url, db_name: row.db_name, key: row.key }); setshowAddLicenceModal(true) }}
                     />
                 </span>
+            )
+        },
+        
+        {
+            dataField: 'signal',
+            text: 'Signal ',
+            formatter: (cell, row) => (
+                <span data-toggle="tooltip" data-placement="top" title="HelpingHand" onClick={()=>handleLocalStorage(row)}>
+                    <Link to='/super/signals' state={row}>
+                        <RadioTower size={20} color="#198754" strokeWidth={2} className="mx-1" />
+                    </Link>
+                </span >
             )
         },
         {
@@ -307,7 +339,15 @@ const AllPermitions = () => {
                 panelData.loading ? <Loader /> :
                     <>
                         <Content Page_title="Admin Permission" button_status={false}>
-                            <button onClick={() => SaveSS()}>click</button>
+                            <div className='mb-4'>
+                                <h6>Search here something</h6>
+                                <input type="text"
+                                    style={{ height: '2rem' }}
+                                    placeholder='search...'
+                                    className='p-2 rounded'
+                                    onChange={(e) => { setSearchInput(e.target.value) }}
+                                    value={searchInput} />
+                            </div>
 
                             {
                                 panelData.data && panelData.data.length === 0 ? (
@@ -318,7 +358,7 @@ const AllPermitions = () => {
                                         <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
                                         <LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
-                                        <FullDataTable TableColumns={columns} tableData={panelData.data}  pagination1={true} />
+                                        <FullDataTable TableColumns={columns} tableData={panelData.data} pagination1={false} />
                                         <ToastButton />
                                     </>
                             }

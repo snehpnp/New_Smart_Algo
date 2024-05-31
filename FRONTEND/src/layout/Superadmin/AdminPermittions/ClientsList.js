@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Loader from '../../../Utils/Loader'
-import { Pencil, Trash2 } from "lucide-react";
-import { Link } from 'react-router-dom';
+import { Pencil, Trash2, Eye } from "lucide-react";
+import { Link, useParams } from 'react-router-dom';
 
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { Get_Admin_Helps } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
@@ -14,36 +14,54 @@ import { useLocation } from 'react-router-dom';
 import { Get_All_Admin_Client } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 
 import toast, { Toaster } from 'react-hot-toast';
-import { DELETE_USER_SERVICES } from "../../../ReduxStore/Slice/Admin/AdminSlice";
+import { DELETE_USER_SERVICES ,Find_User } from "../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
+ 
+
 
 
 
 const SubAdminList = () => {
+
     const dispatch = useDispatch()
     const [ShowClients, setshowClients] = useState([])
     const [refresh, setrefresh] = useState(false);
     let location = useLocation();
-    console.log("=>", location.state._id)
+    const [showModal, setShowModal] = useState(false)
+    const [getRowId, setRowId] = useState('')
+
+    const RowId = localStorage.getItem('RowData')
+    const backend_rul = localStorage.getItem("backend_rul");
+    
+    const [UserData, setUserData] = useState({
+        loading: true,
+        data: []
+    });
 
 
+    
+    
     const GetAllClients = async () => {
-        await dispatch(Get_All_Admin_Client({ id: location.state._id })).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    setshowClients(
-                        response.data
-                    );
+        const data={ id: RowId  }
+       
+        
+        await dispatch(Get_All_Admin_Client(data)).unwrap()
+        .then((response) => {
+            if (response.status) {
+                setshowClients(
+                    response.data
+                );
                 }
             })
     }
-
+    
 
     const Delete_user = async (id) => {
-        var req1 = {
+        var req = {
             id: id,
+            backend_rul : backend_rul
         };
         if (window.confirm("Do you want to delete this User ?")) {
-            await dispatch(DELETE_USER_SERVICES(req1))
+            await dispatch(DELETE_USER_SERVICES(req))
                 .unwrap()
                 .then((response) => {
                     if (response.status) {
@@ -118,7 +136,21 @@ const SubAdminList = () => {
         }
     };
 
+    // GET USER DETAILS
+    const handleViewFunction = async (row) => {
+        const data = { id:  row  , backend_rul : backend_rul}
+        await dispatch(Find_User(data)).unwrap()
+            .then((response) => {
+                if (response.status) {
 
+                    console.log("cpp", response.data)
+                    setUserData({
+                        loading: false,
+                        data: response.data
+                    });
+                }
+            })
+    }
 
 
     const columns = [
@@ -163,7 +195,18 @@ const SubAdminList = () => {
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
                     <div>
-                        <Link to={`/admin/client/edit/${row._id}`} state={row}>
+                        <Link>
+                            <span data-toggle="tooltip" data-placement="top" title="Delete">
+                                <Eye
+                                    size={20}
+                                    strokeWidth={2}
+                                    className="mx-1"
+                                    onClick={(e) => { setShowModal(true);  handleViewFunction(row._id) }}
+                                />
+                            </span>
+
+                        </Link>
+                        <Link to={`/super/client/edit/${row._id}`} state={row}>
                             <span data-toggle="tooltip" data-placement="top" title="Edit">
                                 <Pencil
                                     size={20}
@@ -173,6 +216,7 @@ const SubAdminList = () => {
                                 />
                             </span>
                         </Link>
+
 
                         <Link>
                             <span data-toggle="tooltip" data-placement="top" title="Delete">
@@ -185,7 +229,7 @@ const SubAdminList = () => {
                                 />
                             </span>
                         </Link>
-                        {/* : ""}  */}
+
 
                     </div>
                 </div>
@@ -193,14 +237,14 @@ const SubAdminList = () => {
         },
 
     ];
-
+    
     useEffect(() => {
         GetAllClients()
     }, [])
+    
+ 
 
-
-    // console.log("ShowClients", ShowClients )
-
+     
     return (
         <>
             {ShowClients.loading ? (
@@ -214,6 +258,61 @@ const SubAdminList = () => {
                     }
                 </Content>
             )}
+            {
+                showModal && <Modal
+                    isOpen={showModal}
+                    size="md"
+                    title="Licence View"
+                    hideBtn={true}
+                    handleClose={() => setShowModal(false)}
+                >
+                    <table className="table table-responsive-sm table-bordered ">
+                        <tbody>
+                            <tr>
+                                <td>Create Date</td>
+                                <td>{UserData.data.length > 0 && UserData.data[0] && UserData.data[0].CreateDate}</td>
+
+                            </tr>
+                           
+                            <tr>
+                                <td>Start Date</td>
+                                <td>{UserData.data.length >0  && UserData.data[0] && UserData.data[0].StartDate}</td>
+                            </tr>
+                              
+                            <tr>
+                                <td>End Date</td>
+                                <td>{UserData.data.length >0  &&  UserData.data[0] && UserData.data[0].EndDate}</td>
+                            </tr>
+                            <tr>
+                                <td>To Month</td>
+                                <td>
+                                    {UserData.data.length >0  && UserData.data[0] &&  UserData.data[0].totalLicence}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Total Licence</td>
+                                <td>{UserData.data.length >0  &&  UserData.data[0] && UserData.data[0].licence}</td>
+                            </tr> 
+                            <tr>
+                                <td>Remaining Licence</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Minus Licence</td>
+                                <td>0</td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+
+
+
+                </Modal >
+
+            }
+
+
         </>
     )
 }

@@ -68,6 +68,7 @@ app.use(bodyparser.json({ verify: rawBodySaver }));
 app.use(bodyparser.urlencoded({ verify: rawBodySaver, extended: true }));
 app.use(bodyparser.raw({ verify: rawBodySaver, type: '*/*' }))
 var cors = require('cors');
+
 const corsOpts = {
   origin: '*',
 
@@ -80,10 +81,10 @@ const corsOpts = {
     'Content-Type',
   ],
 };
+
 app.use(cors(corsOpts));
 
 require('./Helper/cron')(app);
-
 
 // =======================SOCKET CONNECT AND ADD PRICE =====================
 
@@ -226,10 +227,6 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
   }
 
 }
-
-
-
-
 
 app.get('/r', (req, res) => {
   // Request on Socket Server 1
@@ -542,8 +539,13 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+          if (segment == 'C' || segment == 'c') {
 
-          // LIVE PRICE GET
+            price = signals.Price
+
+          }else{
+
+             // LIVE PRICE GET
           const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
 
           try {
@@ -563,16 +565,36 @@ app.post('/broker-signals', async (req, res) => {
           } catch (error) {
             console.log("Error  IN price Update", error);
           }
-
           if (price == null) {
             price = signals.Price
 
           }
 
 
+         }
+         
+
+
+          console.log("price ",price)
           console.log("client_key ",client_key)
           console.log("process.env.PANEL_KEY ",process.env.PANEL_KEY)
           // HIT TRADE IN BROKER SERVER
+         let ExistExitSignal = '';
+         if(type.toUpperCase() == "LX" || type.toUpperCase() == "SX"){
+          const updatedFindSignal = {
+            ...findSignal,
+            exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
+          };
+          ExistExitSignal = await MainSignals.find(updatedFindSignal)
+         }
+          
+          // if(ExistExitSignal != ''){
+          //  console.log("IFFFFFF ",ExistExitSignal)
+          // }else{
+          //   console.log("ELLLSEEE ",ExistExitSignal)
+             
+          // }
+
           if (process.env.PANEL_KEY == client_key) {
             
           //console.log("Inside  ",process.env.PANEL_KEY)
@@ -592,8 +614,8 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (AliceBluedocuments.length > 0) {
-                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req);
-              }
+                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req , ExistExitSignal);
+                }
 
             } catch (error) {
               console.log("Error Get Aliceblue Client In view", error);
@@ -615,7 +637,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (angelBluedocuments.length > 0) {
-                angel.place_order(angelBluedocuments, signals, token, filePath, signal_req);
+                angel.place_order(angelBluedocuments, signals, token, filePath, signal_req,ExistExitSignal);
               }
 
             } catch (error) {
@@ -837,7 +859,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (AliceBluedocuments.length > 0) {
-                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req);
+                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req,ExistExitSignal);
               }
 
             } catch (error) {
@@ -859,7 +881,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (angeldocuments.length > 0) {
-                angel.place_order(angeldocuments, signals, token, filePath, signal_req);
+                angel.place_order(angeldocuments, signals, token, filePath, signal_req ,ExistExitSignal);
               }
 
             } catch (error) {
@@ -1060,8 +1082,8 @@ app.post('/broker-signals', async (req, res) => {
           if (option_type == 'CALL') {
             is_CE_val_option = 'CE';
           }
-
-
+         
+          
           // IF SQ_PRICE
           var sq_value;
           if (sq_value == undefined) { sq_value = "0" } else { sq_value = sq_value }

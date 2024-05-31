@@ -5,8 +5,9 @@ const router = require("express").Router()
 const { verifyToken } = require('../../Middleware/authjwt')
 
 
-const { GetPanelDetails, GetAllClients, GetAllSubadmins, updateBrokerPermission, CloseThePanel, GetAllAdminHelps, GetAll_Broker_details, Admin_Permissions, AddLicensePanle, GetPanlePermistion } = require('../../Controllers/Superadmin/Permission.controller')
+const { GetPanelDetails, GetAllClients, GetAllSubadmins, updateBrokerPermission, CloseThePanel, GetAllAdminHelps, GetAll_Broker_details, Admin_Permissions, AddLicensePanle, GetPanlePermistion ,getAllSignals } = require('../../Controllers/Superadmin/Permission.controller')
 
+const {getSignal , UpdateSignal , DeleteSignal , backupSignal, deletedSignal , FindUserById ,UpdateUser , UserDelete , findOneUser} = require('../../Controllers/Separate_Superadmin/Superadmin')
 
 
 
@@ -22,6 +23,25 @@ router.post('/update/permission', Admin_Permissions)
 router.post('/get/panel/permission', GetPanlePermistion)
 
 router.post('/get/panel/panelclose', CloseThePanel)
+router.post('/get/signal',getSignal )
+router.post('/update/price',UpdateSignal )
+router.post('/signal/delete' , DeleteSignal)
+router.post('/backup/signal' , backupSignal)
+router.post('/deleted/signal' , deletedSignal)
+router.post('/findUserById' , FindUserById)
+router.post('/update/user' , UpdateUser)
+router.post('/user/delete' , UserDelete)
+router.post('/findOneUser' , findOneUser)
+
+
+
+
+
+router.post('/get/signals',getAllSignals )
+
+
+
+
 
 
 

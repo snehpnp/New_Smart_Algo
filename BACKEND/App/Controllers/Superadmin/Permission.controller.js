@@ -346,9 +346,10 @@ class Panel {
 
            // console.log("req body check sidebar codition ",req.body)
             // const { id, license } = req.body
-            const { db_name, db_url, key, domain, Create_Strategy, Option_chain, Strategy_plan } = req.body
+            const { db_name, db_url, key, domain, Create_Strategy, Option_chain, Strategy_plan , live_price , Two_day_client } = req.body
 
-
+         
+    
 
             var domain1 = "http://localhost:3000"
 
@@ -369,7 +370,9 @@ class Panel {
                 $set: {
                     Create_Strategy: Create_Strategy,
                     Option_chain: Option_chain,
-                    Strategy_plan: Strategy_plan
+                    Strategy_plan: Strategy_plan,
+                    live_price : live_price,
+                    Two_day_client:Two_day_client
 
                 },
             };
@@ -484,6 +487,60 @@ class Panel {
             // console.log("Theme error-", error);
         }
     }
+
+
+    async getAllSignals(req, res) {
+        try {
+            const { id, db_name, db_url } = req.body;
+
+
+
+            const Find_panelInfo = await panel_model.find({ _id: id })
+
+            if (!Find_panelInfo) {
+                return res.status(409).send({ status: false, msg: 'Panel Not Exist', data: [] });
+            }
+
+
+            let config = {
+                method: 'post',
+                url: Find_panelInfo[0].backend_rul + 'get/signal',
+                
+            };
+            axios(config)
+                .then(async (response) => {
+                    console.log("hello", response)
+                    if (response.data.status) {
+
+                        return res.send({ status: true, msg: 'Get Data', data: response.data });
+
+                    } else {
+                        return res.send({ status: false, msg: 'User Not Get', data: response.data });
+                    }
+
+                })
+                .catch((error) => {
+                    try {
+
+                        console.log("Error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+
+                    } catch (error) {
+                        console.log("Error error", error);
+                        return res.send({ status: false, msg: 'User Not Get', data: error });
+
+                    }
+
+                });
+
+
+
+        } catch (error) {
+            console.log("Error Get all User error-", error);
+        }
+    }
+
 
 
 }

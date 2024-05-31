@@ -414,7 +414,7 @@ class strategy {
             if(req.body.clientId.length > 0){
 
                 req.body.clientId.forEach(async(element) => {
-                   console.log("element add",element); 
+           
                    
                    //  ADD  STRATEGY CLIENT
                   const strategy_client = new strategy_client_model({
@@ -433,7 +433,7 @@ class strategy {
                  
                 
                  const deleteResult = await strategy_client_model.deleteOne({ strategy_id: req.body.strategyId , user_id : element});
-               // console.log("element delete",element);  
+        
                     
                 });
             }

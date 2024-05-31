@@ -3238,11 +3238,6 @@ db.createView("zerodhaView", "users",
   )
 
 
-
-
-
-
-
 /// Dashboard Data
 db.createView("dashboard_data", "users",
 [

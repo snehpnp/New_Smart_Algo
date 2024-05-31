@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const { Schema, model } = require('mongoose');
-const MainSignalsSchema = Schema({
+const Old_MainSignals = Schema({
+    backup_id: {
+        type: String,
+    },
     symbol: {
         type: String,
     },
@@ -109,18 +112,6 @@ const MainSignalsSchema = Schema({
         enum: ['0', '1'], // 1 = Admin panel status , 2 = Tradinview status
         default: '0'
     },
-    exit_status: {
-        type: String,
-        default: null
-    },
-    pendin_order_status: {
-        type: String,
-        default:0
-    },
-    modify_order_status: {
-        type: String,
-        default:0
-    },
 
     signals_id: [
         {
@@ -138,7 +129,7 @@ const MainSignalsSchema = Schema({
     timestamps: true
 });
 
-const MainSignal = model('MainSignal', MainSignalsSchema);
-module.exports = MainSignal;
+const OldMainSignals = model('Old_MainSignal', Old_MainSignals);
+module.exports = OldMainSignals;
 
 

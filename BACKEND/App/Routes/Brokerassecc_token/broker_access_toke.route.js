@@ -8,6 +8,10 @@ const User = db.user;
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
+
+// ALICE BLUE CONTROLLER FILE
+const { CancelorderByAdmin } = require('../../Controllers/Brokerassecc_token/CancelOrder')
+
 //const { GetAccessToken ,GetOrderFullInformation,GetLivePrice,Cancel_order,GetOrderFullInformationAll} = require('../../Controllers/Brokerassecc_token/Alice')
 
 // ALICE BLUE CONTROLLER FILE
@@ -141,6 +145,13 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
 
 
 }
+
+
+
+//Cancel Order By Admin Route
+router.post('/cancelorderByAdmin', CancelorderByAdmin);
+
+
 
 
 // AliCE BLUE

@@ -1,4 +1,19 @@
-const Subadmin_Permission = require("./subadmin_permision.model");
+const mongoose = require('mongoose');
+const MongoClient = require('mongodb').MongoClient;
+
+const uri = process.env.MONGO_URI
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
+const db_GET_VIEW = client.db(process.env.DB_NAME);
+const get_open_position_view = db_GET_VIEW.collection('open_position');
+const aliceblueView = db_GET_VIEW.collection('aliceblueView');
+const token_chain = db_GET_VIEW.collection('token_chain');
+const stock_live_price = db_GET_VIEW.collection('stock_live_price');
+const open_position = db_GET_VIEW.collection('open_position');
+const open_position_excute = db_GET_VIEW.collection('open_position_excute');
+
+
+
 
 module.exports = {
     categorie: require("./categorie.model"),
@@ -36,5 +51,14 @@ module.exports = {
     Superadmin_History: require('./superadmin_history.model'),
     source : require('./source.model'),
     comparators : require('./comparators.model'),
+    aliceblueView:aliceblueView,
+    OldMainSignals : require('./OldMainSignals.model'),
+    OldSignals : require('./Old_signal.modal'),
+    token_chain:token_chain,
+    stock_live_price:stock_live_price,
+    open_position:open_position,
+    open_position_excute:open_position_excute,
+    dbTradeTools:dbTradeTools,
+
 
 };

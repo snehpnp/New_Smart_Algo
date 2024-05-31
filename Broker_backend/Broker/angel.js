@@ -12,7 +12,7 @@ const AliceViewModel = db.AliceViewModel;
 const BrokerResponse = db.BrokerResponse;
 var dateTime = require('node-datetime');
 
-const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
+const place_order = async (AllClientData, signals, token, filePath, signal_req ,ExistExitSignal) => {
     
     //console.log("ANGEL token - ",token[0].instrument_token)
     //console.log("ANGEL tradesymbol -",token[0].tradesymbol)
@@ -215,6 +215,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                         var possition_qty = parseInt(Exist_entry_order.buyqty) - parseInt(Exist_entry_order.sellqty);
                                         // console.log("possition_qty Cash", possition_qty);
                                         if (possition_qty == 0) {
+                                           
                                             // console.log("possition_qty Not Available", possition_qty);
                                             BrokerResponse.create({
                                                 user_id: item._id,
@@ -240,6 +241,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                                     }
 
                                                 });
+
+                                                PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)      
 
 
                                         } else {
@@ -283,6 +286,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                                     }
 
                                                 });
+
+                                                PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
 
 
                                         } else {
@@ -330,6 +335,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                                     });
 
+                                    PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
+
                             }
 
 
@@ -371,6 +378,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                         }
 
                                     });
+                                    PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
                             } else {
                                 const message = (JSON.stringify(error)).replace(/["',]/g, '');
 
@@ -399,6 +407,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                         }
 
                                     });
+
+                                    PendingOrderCancel(ExistExitSignal,token ,item ,filePath, signals, signal_req)
 
 
                             }
@@ -891,6 +901,49 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
         });
 
+
+}
+
+const PendingOrderCancel = async(ExistExitSignal,token ,item ,filePath, signals, signal_req)=>{
+// console.log("pending order") 
+if(ExistExitSignal != ''){
+  if(ExistExitSignal.length > 0){
+
+    var config = {
+        method: 'get',
+        url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getOrderBook',
+        headers: {
+            'Authorization': 'Bearer ' + item.access_token,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-UserType': 'USER',
+            'X-SourceID': 'WEB',
+            'X-ClientLocalIP': 'CLIENT_LOCAL_IP',
+            'X-ClientPublicIP': 'CLIENT_PUBLIC_IP',
+            'X-MACAddress': 'MAC_ADDRESS',
+            'X-PrivateKey': item.api_key
+        },
+    };
+    axios(config)
+        .then(async (response) => {
+            if(Array.isArray(response.data.data)){
+               if(response.data.data.length > 0){
+                
+                
+                
+            }
+          }
+
+           
+        })
+        .catch(async (error) => {
+
+        });
+
+
+  }
+}
+  
 
 }
 

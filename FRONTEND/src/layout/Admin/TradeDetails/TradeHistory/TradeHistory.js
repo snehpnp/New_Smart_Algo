@@ -15,7 +15,7 @@ import { loginWithApi } from "../../../../Components/Dashboard/Header/log_with_a
 import DetailsView from "./DetailsView";
 import { User_Profile } from "../../../../ReduxStore/Slice/Common/commoSlice.js";
 import { TRADING_OFF_USER } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
-import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
+import { Get_All_Service_for_Client ,CancelOrderReq } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import { check_Device } from "../../../../Utils/find_device";
 import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../../Service/Alice_Socket";
 import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../../Utils/ShowTradeColor";
@@ -78,7 +78,9 @@ const TradeHistory = () => {
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
   const [SelectSegment, setSelectSegment] = useState("null");
   const [SelectService, setSelectService] = useState("null");
+  const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
 
+ console.log("SelectServiceIndex",SelectServiceIndex)
   const [SocketState, setSocketState] = useState("null");
 
   const [ForGetCSV, setForGetCSV] = useState([]);
@@ -105,9 +107,9 @@ const TradeHistory = () => {
 
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
-
+   
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter, token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter ,serviceIndex :SelectServiceIndex,token: token})
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -133,7 +135,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
-  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter]);
+  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter ,SelectServiceIndex]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -149,6 +151,7 @@ const TradeHistory = () => {
     setFromDate("");
     setStrategyClientStatus("null");
     setSelectService("null");
+    setSelectServiceIndex('null')
     setToDate("");
     setTradeHistoryData({
       loading: false,
@@ -171,6 +174,12 @@ const TradeHistory = () => {
       text: "Signals Entry time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
+
+     {
+      dataField: "exit_dt_date",
+      text: "Signals Exit time",
+      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell):"-"}</>,
+      },
     {
       dataField: "exit_dt_date",
       text: "Signals Exit time",
@@ -190,6 +199,30 @@ const TradeHistory = () => {
       formatter: (cell, row, rowIndex) => (
         <div>
           <span>{row.entry_type === "LE"?"BUY ENTRY":"SELL ENTRY"}</span>
+          <span className={`d-none entry_qty_${row.token}_${row._id}`}>
+              {row.entry_qty}
+            </span>
+            <span className={`d-none exit_qty_${row.token}_${row._id}`}>
+              {row.exit_qty}
+            </span>
+            <span className={`d-none exit_price_${row.token}_${row._id}`}>
+              {row.exit_price}
+            </span>
+            <span className={`d-none entry_price_${row.token}_${row._id}`}>
+              {row.entry_price}
+            </span>
+            <span className={`d-none entry_type_${row.token}_${row._id}`}>
+              {row.entry_type}
+            </span>
+            <span className={`d-none exit_type_${row.token}_${row._id}`}>
+              {row.exit_type}
+            </span>
+            <span className={`d-none strategy_${row.token}_${row._id}`}>
+              {row.strategy}
+            </span>
+            <span className={`d-none _id_${row.token}_${row._id}`}>
+              {row._id}
+            </span>
         </div>
       ),
     },
@@ -313,9 +346,8 @@ const TradeHistory = () => {
           </div>
       ),
   },
-    
 
-    {
+   {
       dataField: "",
       text: "Details View",
       formatter: (cell, row, rowIndex) => (
@@ -330,7 +362,50 @@ const TradeHistory = () => {
         </div>
       ),
     },
+
+    {
+      dataField: "",
+      text: "Cancel Order",
+      formatter: (cell, row, rowIndex) => (
+        <div>
+        {row.pendin_order_status=="0" ?
+         <>
+          <button className="btn btn-primary" onClick={(e) => cancelOrder(e , row)}>
+              Cancel
+           </button>
+         
+         </>
+        :"-"}
+        </div>
+      ),
+    },
   ];
+
+  const cancelOrder = async (e,row) => {
+    
+    console.log("row ",row.pendin_order_status)
+    await dispatch(
+      CancelOrderReq({
+        req: {data:row},
+        token: token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          console.log("if",response)
+        }else{
+          console.log("else",response)
+        }
+      });
+
+
+
+
+
+
+
+  }
 
 
 
@@ -473,13 +548,27 @@ const TradeHistory = () => {
                   if (get_entry_qty !== "" && get_exit_qty !== "") {
 
                     if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                       
+                      console.log("row 1",row)
 
-                    
+                      
+                     
+                     
                       let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-
 
                       if(get_entry_type === "SE"){
                         rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+                      }
+
+
+                      if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                        rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+
+                        if(get_entry_type === "SE"){
+                          rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                        }
+                      
                       }
 
 
@@ -508,12 +597,25 @@ const TradeHistory = () => {
                 //  if Only entry qty Exist
                 else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
                   
+                  //console.log("row 2",row)
                   let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
-
 
                   if(get_entry_type === "SE"){
                     abc = ((parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_entry_qty)).toFixed();
                   }
+
+
+                  if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                    abc = (parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_exit_qty);
+
+                    if(get_entry_type === "SE"){
+                      abc = (parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                    }
+                  
+                  }
+
+
 
                   if (isNaN(abc)) {
                     return "-";
@@ -581,6 +683,22 @@ const TradeHistory = () => {
               if(get_entry_type === "SE"){
                 rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
               }
+
+
+
+              if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+
+                if(get_entry_type === "SE"){
+                  rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                }
+              
+              }
+
+
+
+
                
             // console.log("rpl ",rpl)
               let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
@@ -612,6 +730,17 @@ const TradeHistory = () => {
            
           if(get_entry_type === "SE"){
             abc = ((parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_entry_qty)).toFixed();
+          }
+
+
+          if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+            abc = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+
+            if(get_entry_type === "SE"){
+              abc = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+            }
+          
           }
 
 
@@ -913,7 +1042,9 @@ const TradeHistory = () => {
               />
             </div>
           </div>
-          <div className="col-lg-3 px-1">
+
+
+           <div className="col-lg-3 px-1">
             <div class="mb-3">
               <label for="select" class="form-label">
                 Symbol
@@ -944,6 +1075,29 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
+
+          <div className="col-lg-3 px-1">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Index Symbol
+              </label>
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectServiceIndex(e.target.value)}
+                value={SelectServiceIndex}
+              >
+                <option value="null" selected>All</option>
+                <option value="BANKNIFTY" selected>BANKNIFTY</option>
+                <option value="NIFTY" selected>NIFTY</option>
+                <option value="FINNIFTY" selected>FINNIFTY</option>
+              </select>
+            </div>
+          </div>
+
+
+
           <div className="col-lg-2  px-1">
             <div class="mb-3">
               <label for="select" class="form-label">

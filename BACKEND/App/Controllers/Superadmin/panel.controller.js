@@ -412,6 +412,7 @@ class Panel {
                 .find({})
                 .skip(skip)
                 .limit(Number(limit))
+                .sort({createdAt : -1})
 
 
             // IF DATA NOT EXIST

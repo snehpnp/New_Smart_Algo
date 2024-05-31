@@ -358,7 +358,6 @@ export async function DELETE_MAKE_STRATEGY_SELECTED(data, token) {
 
     try {
         const res = await axios.post(`${Config.base_url}DeleteMakeStartegySelected`, data, {
-
             headers: header(token),
         })
         return await res?.data;
@@ -370,6 +369,22 @@ export async function DELETE_MAKE_STRATEGY_SELECTED(data, token) {
     }
 }
 
+
+// Cancel order by Admin
+export async function CANCEL_ORDER_BY_ADMIN(data, token) {
+
+    try {
+        const res = await axios.post(`${Config.base_url}cancelorderByAdmin`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        console.log("error", err);
+        // custom error
+        
+    }
+}
 
 
 
