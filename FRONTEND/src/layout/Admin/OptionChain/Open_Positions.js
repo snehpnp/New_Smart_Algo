@@ -235,7 +235,7 @@ const TradeHistory = () => {
         },
         {
             dataField: "entry_qty_percent",
-            text: "Entry Qty %",
+            text: "Entry Qty",
             formatter: (cell, row, rowIndex) => (
                 <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
                 
@@ -243,7 +243,7 @@ const TradeHistory = () => {
         },
         {
             dataField: "exit_qty_percent",
-            text: "Exit Qty %",
+            text: "Exit Qty",
             formatter: (cell, row, rowIndex) => (
                 <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
             ),
