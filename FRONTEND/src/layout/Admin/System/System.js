@@ -10,6 +10,8 @@ import ToastButton from '../../../Components/ExtraComponents/Alert_Toast'
 import toast from 'react-hot-toast'
 import $ from "jquery"
 import { DisclaimerMessage } from '../../../ReduxStore/Slice/Admin/SystemSlice'
+import { SquarePlus, CirclePlus } from 'lucide-react';
+import { Button, Container, Row, Col, Form } from 'react-bootstrap';
 
 
 import UpdateCompanyInfo from './UpdateCompanyInfo';
@@ -20,7 +22,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 const System = () => {
 
-
+ 
+    
+    const [dissArr , setDissArr] = useState([])
+    const [inputs, setInputs] = useState();
 
 
     const dispatch = useDispatch()
@@ -36,11 +41,7 @@ const System = () => {
     //  for Panel Details
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false)
     const [diss, setDiss] = useState('')
-    const [diss1, setDiss1] = useState('')
-    const [diss2, setDiss2] = useState('')
-    const [diss3, setDiss3] = useState('')
-    const [diss4, setDiss4] = useState('')
-    const [diss5, setDiss5] = useState('')
+ 
 
 
     //  for Show Clients
@@ -50,16 +51,13 @@ const System = () => {
 
 
 
+ 
     const CompanyName = async () => {
         await dispatch(GET_COMPANY_INFOS()).unwrap()
             .then((response) => {
                 if (response.status) {
                     setDiss(response.data[0].disclaimer)
-                    setDiss1(response.data[0].disclaimer1)
-                    setDiss2(response.data[0].disclaimer2)
-                    setDiss3(response.data[0].disclaimer3)
-                    setDiss4(response.data[0].disclaimer4)
-                    setDiss5(response.data[0].disclaimer5)
+                    setDissArr(response.data[0].dissArr)
 
                     setCompanyName({
                         loading: false,
@@ -215,7 +213,9 @@ const System = () => {
 
 
     const handleSubmit = async () => {
-        const data = { id: "6501756b2a8e6d952493b7f4", disclaimer: diss, disclaimer1: diss1, disclaimer2: diss2, disclaimer3: diss3, disclaimer4: diss4, disclaimer5: diss5 }
+        const data1 = inputs.map((input, index) => ({ id: index + 1, value: input.value }));
+        const data = { id: "6501756b2a8e6d952493b7f4", disclaimer: diss, dataArr: data1 }
+ 
         await dispatch(DisclaimerMessage(data)).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -233,6 +233,27 @@ const System = () => {
     }
 
 
+
+
+
+
+    const handleAddInput = () => {
+        setInputs([...inputs, { value: '' }]);
+    };
+
+    const handleRemoveInput = () => {
+        if (inputs.length > 1) {
+            setInputs(inputs.slice(0, -1));
+        }
+    };
+
+    const handleInputChange = (index, event) => {
+        const newInputs = inputs.map((input, i) =>
+            i === index ? { value: event.target.value } : input
+        );
+        setInputs(newInputs);
+    };
+ 
     return <>
         <Content Page_title="System" button_status={false}>
 
@@ -250,16 +271,34 @@ const System = () => {
 
             <h2>Disclaimer Message</h2>
             <textarea className='col-lg-12 mb-3 p-2' rows="5" placeholder='Enter your disclaimer message' onChange={(e) => setDiss(e.target.value)} value={diss} />
-            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss1(e.target.value)} value={diss1} />
-            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss2(e.target.value)} value={diss2} />
-            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss3(e.target.value)} value={diss3} />
-            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss4(e.target.value)} value={diss4} />
-            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss5(e.target.value)} value={diss5} />
-            <button type='submit' className='btn btn-primary' onClick={handleSubmit}>Submit</button>
+            {/* <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss2(e.target.value)} value={diss2} />
+            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss3(e.target.value)} value={diss3} /> */}
+            {/* <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss4(e.target.value)} value={diss4} />
+            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss5(e.target.value)} value={diss5} /> */}
 
 
 
 
+            {/* {inputs.map((input, index) => (
+                <Row key={index} className="mb-3">
+                    <Col>
+                        <Form.Control
+                            type="text"
+                            value={input.value}
+                            onChange={(e) => handleInputChange(index, e)}
+                            placeholder='Enter your disclaimer message'
+                        />
+                    </Col>
+                </Row>
+            ))}
+            <Button variant="primary" onClick={handleAddInput}>
+                +
+            </Button>{' '}
+            <Button variant="danger" onClick={handleRemoveInput}>
+                -
+            </Button> */}
+
+            <button type='submit' className='btn btn-primary mx-2' onClick={handleSubmit}>Submit</button>
 
             <UpdateCompanyInfo data={getCompanyName && getCompanyName.data} showModal={PanelDetailsModal} setshowModal={() => setPanelDetailsModal(false)} />
             <UpdateSmptDetails data={getCompanyName && getCompanyName.data} showModal={ShowEmailModal} setshowModal={() => setShowEmailModal(false)} />

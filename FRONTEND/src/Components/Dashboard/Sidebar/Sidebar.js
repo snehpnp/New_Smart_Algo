@@ -28,6 +28,7 @@ const Sidebar = ({ ShowSidebar }) => {
     const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
     const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
     const token = JSON.parse(localStorage.getItem("user_details")).token
+    const goTouser_ID = JSON.parse(localStorage.getItem("user_details_goTo"))
 
 
     const [getPermissions, setGetPermissions] = useState([])
@@ -35,13 +36,7 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
 
-    
 
-    // if(admin_permission.length > 0 ){
-
-    //     console.log("  admin_permission.data[0].Create_Strategy  ",admin_permission.data[0].Create_Strategy)
-
-    // }
 
 
     //  GET SUBADMIN PERMISSION
@@ -54,7 +49,20 @@ const Sidebar = ({ ShowSidebar }) => {
 
                     }
                 })
+        } else if (user_role_goTo === 'SUBADMIN') {
+            await dispatch(Get_Sub_Admin_Permissions({ id: goTouser_ID && goTouser_ID.user_id })).unwrap()
+                .then((response) => {
+                    if (response.status) {
+
+                        setGetPermissions(response.data[0])
+
+                    }
+                })
         }
+
+
+
+
         if (roles === 'ADMIN') {
             await dispatch(
                 Get_Pmermission({
@@ -80,7 +88,6 @@ const Sidebar = ({ ShowSidebar }) => {
     }
     useEffect(() => {
         data2()
-
     }, [])
 
 
@@ -195,41 +202,38 @@ const Sidebar = ({ ShowSidebar }) => {
                             }) :
                                 user_role_goTo === "SUBADMIN" ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
 
-                                    return <>
-                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                            {item.Data.length > 0 ? <>
-                                                <Link
-                                                    className="has-arrow "
-                                                    aria-expanded="false"
-                                                >
-                                                    <IconComponent key={item.id} icon={item.Icon} />
-                                                    <span className="nav-text mx-2">{item.name}</span>
-                                                </Link>
-                                            </>
+                                    console.log("1", (item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 0))
 
-                                                : ""}
-                                            <ul aria-expanded="false">
-                                                {item.Data.length > 0 ?
-                                                    item.Data.map((nested_item) => {
-                                                        return <>
-                                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                                <Link to={nested_item.route}>{nested_item.name}</Link>
-                                                            </li>
+
+                                    return (
+                                        <>
+                                            {(item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 0) ? null : (
+                                                <li className={`${location.pathname === item.route ? 'mm-active' : ""}`}>
+                                                    {item.Data.length > 0 ? (
+                                                        <>
+                                                            <Link className="has-arrow" aria-expanded="false">
+                                                                <IconComponent key={item.id} icon={item.Icon} />
+                                                                <span className="nav-text mx-2">{item.name}</span>
+                                                            </Link>
+                                                            <ul aria-expanded="false">
+                                                                {item.Data.map((nested_item) => (
+                                                                    <li key={nested_item.route} className={`${location.pathname === nested_item.route ? 'mm-active' : ""}`}>
+                                                                        <Link to={nested_item.route}>{nested_item.name}</Link>
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
                                                         </>
-                                                    })
-                                                    : ""}
-                                            </ul>
-                                        </li>
-                                        {item.Data.length === 0 ? <>
-                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                <Link to={item.route} className="" aria-expanded="false">
-                                                    <IconComponent key={item.id} icon={item.Icon} />
+                                                    ) : (
+                                                        <Link to={item.route} className="" aria-expanded="false">
+                                                            <IconComponent key={item.id} icon={item.Icon} />
+                                                            <span className="nav-text mx-2">{item.name}</span>
+                                                        </Link>
+                                                    )}
+                                                </li>
+                                            )}
+                                        </>
+                                    );
 
-                                                    <span className="nav-text mx-2">{item.name}</span>
-                                                </Link>
-                                            </li>
-                                        </> : ""}
-                                    </>
                                 }) : "" :
                                 roles === 'ADMIN' ? admin_sidebar && admin_sidebar.map((item) => {
 
@@ -260,7 +264,6 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
                                                                 } else {
-                                                                    // console.log(" NOT OKKKK")
 
                                                                     return <>
                                                                         <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
@@ -354,7 +357,7 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
                                             if (item.id === 10 || item.id === 9) {
-                                                console.log("location.pathname ", location.pathname)
+
                                                 if ((item.id == 10 && getPermissions && getPermissions.optionchain === 0) || (item.id == 9 && getPermissions && getPermissions.makestrategy === 0)) {
 
                                                 }
@@ -403,37 +406,38 @@ const Sidebar = ({ ShowSidebar }) => {
                                             else {
 
                                                 return <>
-                                                    {(item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 1) ? <>
+                                                    {(item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 1) ?
+                                                        <>
 
-                                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                            {item.Data.length > 0 ? <>
+                                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                                {item.Data.length > 0 ? <>
 
-                                                                <Link
-                                                                    className="has-arrow "
-                                                                    // href="javascript:void()"
-                                                                    aria-expanded="false"
-                                                                >
-                                                                    <IconComponent key={item.id} icon={item.Icon} />
+                                                                    <Link
+                                                                        className="has-arrow "
+                                                                        // href="javascript:void()"
+                                                                        aria-expanded="false"
+                                                                    >
+                                                                        <IconComponent key={item.id} icon={item.Icon} />
 
-                                                                    <span className="nav-text  mx-2">{item.name}</span>
-                                                                </Link>
-                                                            </> : ""}
-                                                            {
-                                                                item.Data.length === 0 ? "" : <>
-                                                                    <ul aria-expanded="false">
-                                                                        {item.Data.length > 0 ?
-                                                                            item.Data.map((nested_item) => {
-                                                                                return <>
-                                                                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                                                        <Link to={nested_item.route}>{nested_item.name}</Link>
-                                                                                    </li>
-                                                                                </>
-                                                                            })
-                                                                            : ""}
-                                                                    </ul>
-                                                                </>}
-                                                        </li>
-                                                    </> : ""}
+                                                                        <span className="nav-text  mx-2">{item.name}</span>
+                                                                    </Link>
+                                                                </> : ""}
+                                                                {
+                                                                    item.Data.length === 0 ? "" : <>
+                                                                        <ul aria-expanded="false">
+                                                                            {item.Data.length > 0 ?
+                                                                                item.Data.map((nested_item) => {
+                                                                                    return <>
+                                                                                        <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                                                            <Link to={nested_item.route}>{nested_item.name}</Link>
+                                                                                        </li>
+                                                                                    </>
+                                                                                })
+                                                                                : ""}
+                                                                        </ul>
+                                                                    </>}
+                                                            </li>
+                                                        </> : ""}
 
                                                     {item.Data.length === 0 ? <>
                                                         {item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 0 ? '' :
@@ -491,10 +495,10 @@ const Sidebar = ({ ShowSidebar }) => {
                                                 </>
                                             }) : ""
                         }
-                        </ul>
+                    </ul>
                 </div>
             </div>
-        </div>
+        </div >
 
     )
 }
