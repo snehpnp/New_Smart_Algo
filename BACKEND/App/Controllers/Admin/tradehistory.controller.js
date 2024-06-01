@@ -292,7 +292,6 @@ class Tradehistory {
                 var entry_qty_percent1 = data.entry_qty_percent ? Number(data.entry_qty_percent) : 0
                 var exit_qty_percent1 = data.exit_qty_percent ? Number(data.exit_qty_percent) : 0
 
-                // console.log( entry_qty_percent1 ,"-", exit_qty_percent1);
 
                 if (entry_qty_percent1 > exit_qty_percent1) {
                     data.entry_qty_percent = entry_qty_percent1 - exit_qty_percent1
@@ -303,10 +302,10 @@ class Tradehistory {
 
 
             if (tradeArr.length == 0) {
-                res.send({ status: false, data: tradeArr, msg: "Empty Data" })
+              return res.send({ status: false, data: tradeArr, msg: "Empty Data" })
             }
 
-            res.send({ status: true, data: tradeArr, msg: "Get All Data" })
+           return res.send({ status: true, data: tradeArr, msg: "Get All Data" })
 
 
         } catch (error) {
