@@ -58,11 +58,7 @@ const disclaimer = async () => {
                                 <td>
                                     <h3>Welcome To ${Companydata[0].panel_name}</h3>
                                     <p style="line-height: 25px;">${Companydata[0].disclaimer}</p>
-                                    <p style="line-height: 25px;">${Companydata[0].disclaimer1}</p>
-                                    <p style="line-height: 25px;">${Companydata[0].disclaimer2}</p>
-                                    <p style="line-height: 25px;">${Companydata[0].disclaimer3}</p>
-                                    <p style="line-height: 25px;">${Companydata[0].disclaimer4}</p>
-                                    <p style="line-height: 25px;">${Companydata[0].disclaimer5}</p>
+                                    ${Companydata[0].dissArr.map((item) => `<p style="line-height: 25px;">${item.value}</p>`).join('')}
                                 </td>
                             </tr>
                         </table>
