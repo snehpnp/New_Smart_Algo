@@ -17,14 +17,12 @@ export const maskEmail = (email) => {
 export const maskNumber = (number) => {
     var replaced = number.replace(/.(?=.{4,}$)/g, '*');
     return replaced;
-    // console.log("number", replaced);
 };
 
 
 export const maskPassword = (number) => {
     var replaced = number.replace(/.(?=.{0,}$)/g, '*');
     return replaced;
-    // console.log("number", replaced);
 };
 
 

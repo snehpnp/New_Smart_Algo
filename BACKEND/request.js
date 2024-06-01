@@ -49,12 +49,10 @@ module.exports = function (app) {
            const Sid = new ObjectId(element._id);
          // if(element.name == "TITAN"){
           
-        //  console.log( "id ",element._id, "name ",element.name , "lotesize" ,element.lotsize)
           const clsResult = await client_services.find({service_id:Sid});
           if(clsResult.length > 0){
               clsResult.forEach(async(item)  => {
                   
-               //   console.log( "lotsize ",item.lot_size ,"element.lotsize ",element.lotsize ," qty" ,item.quantity)
 
 
                      const filtet = { _id: item._id };
@@ -62,7 +60,7 @@ module.exports = function (app) {
                     const updateOperation = { $set: { quantity: qty } };
                     try {
                     const UpdateD = await client_services.updateOne(filtet, updateOperation);
-                    console.log("UpdateD",UpdateD)
+             
                     } catch (error) {
                     console.log("Error updating documents:", error);
                     }
@@ -103,11 +101,7 @@ module.exports = function (app) {
       },
     ];
     const categoryResult = await categorie.aggregate(pipeline);
-    //const matchingElements = categoryResult.filter(item => item.segment === "FO");
-
-    // console.log('Matching elements:', matchingElements[0]._id);
-    // res.send("done");
-    // return
+   
     var axios = require('axios');
     var config = {
       method: 'get',
@@ -117,81 +111,11 @@ module.exports = function (app) {
     axios(config)
       .then(function (response) {
 
-        // res.send(response.data);
-        // console.log(response.data);
-        // Using a loop to extract 'name' and 'instrumenttype'
-
-
         var unique_key = []
         let count = 0
         response.data.forEach((item) => {
 
-          //   function findRepeatedElements(array) {
-          //     const frequencyMap = {};
-          //     const repeatedElements = [];
-
-          //     array.forEach(element => {
-          //       if (frequencyMap[element.instrumenttype]) {
-          //         frequencyMap[element.instrumenttype]++;
-          //         if (frequencyMap[element.instrumenttype] === 2) {
-          //           repeatedElements.push(element.instrumenttype);
-          //         }
-          //       } else {
-          //         frequencyMap[element.instrumenttype] = 1;
-          //       }
-          //     });
-
-          //     return repeatedElements;
-          //   }
-
-          //   const inputArray = response.data;
-          //   const repeatedElements = findRepeatedElements(inputArray);
-
-          //   console.log('Repeated elements:', repeatedElements);
-          //   res.send(repeatedElements)
-          // return
-
-
-          //  if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
-
-
-          //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
-          //     count++
-          //     console.log('item - CO ' + count + ' ', item)
-          //     const matchingElements = categoryResult.filter(item => item.segment === "CO");
-          //     const category_id = matchingElements[0]._id
-
-
-          //     services.create({
-          //       name: item.name,
-          //       instrument_token: item.token,
-          //       zebu_token: item.symbol,
-          //       kotak_token: "",
-          //       instrumenttype: item.instrumenttype,
-          //       exch_seg: item.exch_seg,
-          //       lotsize: item.lotsize,
-          //       categorie_id: category_id,
-          //       unique_column: item.name + '_' + category_id
-          //     })
-          //       .then((createdServices) => {
-          //         console.log('User created and saved:', createdServices._id)
-          //       })
-          //       .catch((err) => {
-          //         try {
-          //           console.error('Error creating and saving user:', err);
-          //         } catch (e) {
-          //           console.log("duplicate key")
-          //         }
-
-          //       });
-
-
-          //   }
-
-
-
-          //   if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
-          //  unique_key.push(`${item.name}-${item.instrumenttype}`);
+        
 
 
           if (item.symbol.slice(-3) == '-EQ') {

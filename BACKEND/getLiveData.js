@@ -26,8 +26,6 @@ module.exports = function (app ,io) {
   
     app.get("/rr",async(req,res)=>{
   
-      console.log("ppppp")
-      // io.emit("shk", { status: "ok check" });
 
 
       await runSocket(io)
@@ -46,7 +44,7 @@ module.exports = function (app ,io) {
     var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
     const stock_live_price = db_main.collection('token_chain');
     const updateToken = await stock_live_price.find({}).toArray();
-    console.log("updateToken",updateToken.length)
+
      
     var channelstr = ""
     if (updateToken.length > 0) {
@@ -69,9 +67,6 @@ module.exports = function (app ,io) {
     // var channelList = "NSE|14366#NFO|43227"
     var type = { "loginType": "API" }
 
-    //  Step -1
-
-    //console.log("channelList",channelList)
 
     if(broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on"){
     try {
@@ -84,7 +79,6 @@ module.exports = function (app ,io) {
 
         }).then(res => {
 
-            // console.log("res - ",res)
 
             if (res.data.stat == "Ok") {
 
@@ -109,7 +103,6 @@ module.exports = function (app ,io) {
 
                         if (response.tk) {
 
-                            console.log("response ",response)
                             io.emit("LiVE_DATA", { data: response });
 
                             const Make_startegy_token = await UserMakeStrategy.findOne({ tokensymbol: response.tk }, { _id: 1 });
@@ -156,7 +149,6 @@ module.exports = function (app ,io) {
 
 
                         } else {
-                            // console.log("else", response)
                         }
 
                         if (response.s === 'OK') {
