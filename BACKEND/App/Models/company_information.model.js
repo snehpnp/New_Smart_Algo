@@ -102,7 +102,11 @@ const CompanySchema = new mongoose.Schema({
             }
         }
     ],
-
+    disclaimer_status: {
+        type: String,
+        enum: ['1', '0'],
+        default: '0'
+    },
     licenses: {
         type: Number
     },

@@ -36,26 +36,44 @@ class Company {
     // update company
     async UpdateDisclaimer(req, res) {
         try {
-   
-            const { id, disclaimer, dataArr } = req.body
-     
-           console.log("dataArrdataArr :", dataArr)
-            const findData = await company_information.findOne({ _id: new ObjectId(id) })
-            if (!findData) {
-                return res.send({
-                    status: false,
-                    msg: "Id is not Match",
-                    data: []
-                })
+
+            const { id, disclaimer, dataArr, disclaimer_status } = req.body
+            if (disclaimer_status) {
+                const findData = await company_information.findOne({ _id: new ObjectId(id) })
+                if (!findData) {
+                    return res.send({
+                        status: false,
+                        msg: "Id is not Match",
+                        data: []
+                    })
+                }
+
+                const filter = { _id: id };
+                const updateOperation = { $set: { disclaimer_status: disclaimer_status } };
+                const result = await company_information.updateOne(filter, updateOperation);
+                if (!result) {
+                    return res.send({ status: false, msg: 'Company not update', data: [] });
+                }
+                return res.send({ status: true, msg: 'Update Successfully.', data: [] });
+            } else {
+
+                const findData = await company_information.findOne({ _id: new ObjectId(id) })
+                if (!findData) {
+                    return res.send({
+                        status: false,
+                        msg: "Id is not Match",
+                        data: []
+                    })
+                }
+
+                const filter = { _id: id };
+                const updateOperation = { $set: { disclaimer: disclaimer, dissArr: dataArr } };
+                const result = await company_information.updateOne(filter, updateOperation);
+                if (!result) {
+                    return res.send({ status: false, msg: 'Company not update', data: [] });
+                }
+                return res.send({ status: true, msg: 'Update Successfully.', data: [] });
             }
- 
-            const filter = { _id: id };
-            const updateOperation = { $set: { disclaimer: disclaimer ,  dissArr : dataArr } };
-            const result = await company_information.updateOne(filter, updateOperation);
-            if (!result) {
-                return res.send({ status: false, msg: 'Company not update', data: [] });
-            }
-            return res.send({ status: true, msg: 'Update Successfully.', data: [] });
 
         } catch (error) {
             console.log("Error Edit Company Api -", error);

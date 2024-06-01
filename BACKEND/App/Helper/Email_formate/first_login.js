@@ -30,7 +30,7 @@ const disclaimer = async () => {
 
         let emailTemplate;
 
-        if (companyData[0].disclaimer) {
+        if (companyData[0].disclaimer_status == 1) {
             emailTemplate = `
                 <!doctype html>
                 <html lang="en-US">

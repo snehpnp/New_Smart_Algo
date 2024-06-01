@@ -35,6 +35,8 @@ const System = () => {
     //  for Panel Details
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false);
     const [diss, setDiss] = useState('');
+    const [getDissStatus, setDissStatus] = useState('');
+
 
     //  for Show Clients
     const [ShowEmailModal, setShowEmailModal] = useState(false);
@@ -47,6 +49,8 @@ const System = () => {
                 if (response.status) {
                     setDiss(response.data[0].disclaimer);
                     setDissArr(response.data[0].dissArr);
+                    setDissStatus(response.data[0].disclaimer_status);
+
                     setInputs(response.data[0].dissArr);
 
                     setCompanyName({
@@ -196,7 +200,7 @@ const System = () => {
     const handleSubmit = async () => {
         const data1 = inputs.map((input, index) => ({ id: index + 1, value: input.value }));
         const data = { id: "6501756b2a8e6d952493b7f4", disclaimer: diss, dataArr: data1 };
-        
+
         await dispatch(DisclaimerMessage(data)).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -228,6 +232,25 @@ const System = () => {
         setInputs(newInputs);
     };
 
+    const updateDiscStatus = async (e) => {
+        console.log("Checkbox value:", e.target.checked);
+        const data = { id: "6501756b2a8e6d952493b7f4", disclaimer_status: e.target.checked ? "1" : "0" };
+
+        await dispatch(DisclaimerMessage(data)).unwrap()
+            .then((response) => {
+                if (response.status) {
+                    toast.success("Disclaimer added successfully...");
+                    setRefresh(!refresh);
+                } else {
+                    toast.error("Disclaimer add error");
+                }
+            })
+            .catch((err) => {
+                console.log("Internal server error");
+            });
+    }
+
+
     return (
         <Content Page_title="System" button_status={false}>
             <h2>Company Information</h2>
@@ -241,7 +264,22 @@ const System = () => {
             <h2>Background Images</h2>
             <BasicDataTable tableData={getCompanyName.data} TableColumns={background_images} dropdown={false} />
 
-            <h2>Disclaimer Message</h2>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <h2 style={{ marginRight: "10px" }}>Disclaimer Message</h2>
+                <div className='toogle-new'>
+                    <input type="checkbox"
+                        id="switch"
+                        defaultChecked={getDissStatus && getDissStatus == 1}
+                        onChange={(e) => updateDiscStatus(e)}
+                    /><label for="switch">Toggle</label>
+                </div>
+
+
+            </div>
+
+
+
+
             <textarea
                 className='col-lg-12 mb-3 p-2'
                 rows="5"
