@@ -26,6 +26,8 @@ export const base_url = "https://trade.pandpinfotech.com/backend/";
 // export const base_url = "https://software.growskyinfotech.com/backend/";
 // export const base_url = "https://software.sumedhainn.com/backend/";
 // export const base_url = "https://software.growupalgo.com/backend/";
+// export const base_url = "https://software.fincodify.com/backend/";
+
 
 
 

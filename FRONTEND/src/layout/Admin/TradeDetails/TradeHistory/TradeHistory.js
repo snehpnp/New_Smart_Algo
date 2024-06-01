@@ -15,7 +15,7 @@ import { loginWithApi } from "../../../../Components/Dashboard/Header/log_with_a
 import DetailsView from "./DetailsView";
 import { User_Profile } from "../../../../ReduxStore/Slice/Common/commoSlice.js";
 import { TRADING_OFF_USER } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
-import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
+import { Get_All_Service_for_Client ,CancelOrderReq } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import { check_Device } from "../../../../Utils/find_device";
 import { CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../../Service/Alice_Socket";
 import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../../Utils/ShowTradeColor";
@@ -235,15 +235,15 @@ const TradeHistory = () => {
         <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
       ),
     },
-    // {
-    //   dataField: "live",
-    //   text: "Live Price",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <div>
-    //       <span className={`LivePrice_${row.token}`}></span>
-    //     </div>
-    //   ),
-    // },
+    {
+      dataField: "live",
+      text: "Live Price",
+      formatter: (cell, row, rowIndex) => (
+        <div>
+          <span className={`LivePrice_${row.token}`}></span>
+        </div>
+      ),
+    },
     {
       dataField: "entry_price",
       text: "Entry Price",
@@ -341,9 +341,8 @@ const TradeHistory = () => {
           </div>
       ),
   },
-    
 
-    {
+   {
       dataField: "",
       text: "Details View",
       formatter: (cell, row, rowIndex) => (
@@ -358,7 +357,50 @@ const TradeHistory = () => {
         </div>
       ),
     },
+
+    {
+      dataField: "",
+      text: "Cancel Order",
+      formatter: (cell, row, rowIndex) => (
+        <div>
+        {row.pendin_order_status=="0" ?
+         <>
+          <button className="btn btn-primary" onClick={(e) => cancelOrder(e , row)}>
+              Cancel
+           </button>
+         
+         </>
+        :"-"}
+        </div>
+      ),
+    },
   ];
+
+  const cancelOrder = async (e,row) => {
+    
+    console.log("row ",row.pendin_order_status)
+    await dispatch(
+      CancelOrderReq({
+        req: {data:row},
+        token: token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          console.log("if",response)
+        }else{
+          console.log("else",response)
+        }
+      });
+
+
+
+
+
+
+
+  }
 
 
 
@@ -501,13 +543,27 @@ const TradeHistory = () => {
                   if (get_entry_qty !== "" && get_exit_qty !== "") {
 
                     if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                       
+                      console.log("row 1",row)
 
-                    
+                      
+                     
+                     
                       let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-
 
                       if(get_entry_type === "SE"){
                         rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+                      }
+
+
+                      if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                        rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+
+                        if(get_entry_type === "SE"){
+                          rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                        }
+                      
                       }
 
 
@@ -536,12 +592,25 @@ const TradeHistory = () => {
                 //  if Only entry qty Exist
                 else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
                   
+                  //console.log("row 2",row)
                   let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
-
 
                   if(get_entry_type === "SE"){
                     abc = ((parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_entry_qty)).toFixed();
                   }
+
+
+                  if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                    abc = (parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_exit_qty);
+
+                    if(get_entry_type === "SE"){
+                      abc = (parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                    }
+                  
+                  }
+
+
 
                   if (isNaN(abc)) {
                     return "-";
@@ -609,6 +678,22 @@ const TradeHistory = () => {
               if(get_entry_type === "SE"){
                 rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
               }
+
+
+
+              if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+
+                if(get_entry_type === "SE"){
+                  rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                }
+              
+              }
+
+
+
+
                
             // console.log("rpl ",rpl)
               let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
@@ -640,6 +725,17 @@ const TradeHistory = () => {
            
           if(get_entry_type === "SE"){
             abc = ((parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_entry_qty)).toFixed();
+          }
+
+
+          if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+            abc = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+
+            if(get_entry_type === "SE"){
+              abc = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+            }
+          
           }
 
 

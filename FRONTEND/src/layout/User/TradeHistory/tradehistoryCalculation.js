@@ -204,6 +204,17 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                                         rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
                                       }
 
+
+                                      if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                                        rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+                        
+                                        if(get_entry_type === "SE"){
+                                          rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                                        }
+                                      
+                                      }
+
                                  
 
                                     let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
@@ -233,6 +244,17 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                            
                             if(get_entry_type === "SE"){
                                 abc = ((parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_entry_qty)).toFixed();
+                              }
+
+
+                              if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                                abc = (parseFloat(get_entry_price) - parseFloat(live_price)) * parseInt(get_exit_qty);
+                
+                                if(get_entry_type === "SE"){
+                                  abc = (parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                                }
+                              
                               }
                            
                            
@@ -309,6 +331,16 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                 if(get_entry_type === "SE"){
                     rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
                   }
+
+                  if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                    rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+    
+                    if(get_entry_type === "SE"){
+                      rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                    }
+                  
+                  }
                  
                 
    
@@ -336,6 +368,16 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
 
             if(get_entry_type === "SE"){
                 abc = ((parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_entry_qty)).toFixed();
+              }
+
+              if( ["FO", "MFO", "CFO", "BFO"].includes(row.segment.toUpperCase()) && row.option_type.toUpperCase() == "PUT"){
+                        
+                abc = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
+
+                if(get_entry_type === "SE"){
+                  abc = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
+                }
+              
               }
 
 

@@ -60,7 +60,7 @@ const { setIO ,getIO} = require('./App/Helper/BackendSocketIo');
 
 // Socket Connect get data in live make socket
 
- require('./App/Helper/Store_live_data')
+// require('./App/Helper/Store_live_data')
 
 //  END-------------
 

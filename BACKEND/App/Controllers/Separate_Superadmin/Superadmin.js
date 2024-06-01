@@ -163,6 +163,7 @@ class SuperAdmin {
             console.log("Error Help Center error-", error);
         }
     }
+
     async getSignal(req, res) {
 
         try {
@@ -274,6 +275,7 @@ class SuperAdmin {
             return res.send({ status: false, msg: "server side error", data: [] })
         }
     }
+    
     async deletedSignal(req, res) {
 
         try {

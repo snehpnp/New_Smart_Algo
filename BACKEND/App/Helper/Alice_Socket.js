@@ -1,29 +1,20 @@
 var axios = require('axios');
 const WebSocket = require('ws');
 var CryptoJS = require("crypto-js");
-
 const db = require('../Models');
 
 const { ALice_View_data } = require('./ALice_View_data');
 
 const live_price = db.live_price;
 const UserMakeStrategy = db.UserMakeStrategy;
-const mongoose = require('mongoose');
-const MongoClient = require('mongodb').MongoClient;
-
-
-const uri = process.env.MONGO_URI
-const client = new MongoClient(uri);
-client.connect();
-
-const db_main = client.db(process.env.DB_NAME);
-const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
+const stock_live_price = db.stock_live_price;
+const token_chain = db.token_chain;
 
 
 const currentDate = new Date();
 const hours = currentDate.getHours().toString().padStart(2, '0');
 const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-const stock_live_price = db_main.collection('stock_live_price');
+
  
 
 let socketObject = null;
@@ -34,9 +25,7 @@ const Alice_Socket = async () => {
     const url = "wss://ws1.aliceblueonline.com/NorenWS/"
     var socket = null
     var broker_infor = await live_price.findOne({ broker_name: "ALICE_BLUE" });
-  const stock_live_price = db_main.collection('token_chain');
-    const updateToken = await stock_live_price.find({}).toArray();
-
+    const updateToken = await token_chain.find({}).toArray();
     var channelstr = ""
     if (updateToken.length > 0) {
         updateToken.forEach((data) => {
@@ -60,16 +49,22 @@ const Alice_Socket = async () => {
 
     //  Step -1
 
+
+    // const currentDate = new Date();
+    // const hours = currentDate.getHours().toString().padStart(2, '0');
+    // const minutes = currentDate.getMinutes().toString().padStart(2, '0');
+    // const stock_live_price = db_main.collection('stock_live_price');
+
   if(broker_infor.user_id !== undefined && broker_infor.access_token !== undefined && broker_infor.trading_status == "on"){
     try {
 
-        await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
+           await axios.post(`${aliceBaseUrl}ws/createSocketSess`, type, {
             headers: {
                 'Authorization': `Bearer ${userid} ${userSession1}`,
                 'Content-Type': 'application/json'
             },
 
-        }).then(res => {
+            }).then(res => {
 
             //console.log("res - ",res)
 
@@ -94,11 +89,6 @@ const Alice_Socket = async () => {
                         var response = JSON.parse(msg.data)
 
                        // console.log("response - ",response)
-
-                       const currentDate = new Date();
-                       const hours = currentDate.getHours().toString().padStart(2, '0');
-                       const minutes = currentDate.getMinutes().toString().padStart(2, '0');
-                       const stock_live_price = db_main.collection('stock_live_price');
 
                         if (response.tk) {
 
@@ -180,10 +170,8 @@ const Alice_Socket = async () => {
 
                 }
             }
-        })
+            })
             .catch((error) => {
-            
-
                 return "error"
             })
 
