@@ -82,6 +82,19 @@ const CompanySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    disclaimer: {
+        type: String,
+        required: true
+    },
+    disclaimer: {
+        type: String,
+        required: true
+    },
+    dissArr: {
+        type: String,
+        required: true
+    },
+     
     licenses: {
         type: Number
     },

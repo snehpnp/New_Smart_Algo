@@ -70,6 +70,16 @@ const panelSchema = new mongoose.Schema({
         enum: [0, 1],
         default: 0
     },
+    live_price: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+    },
+    Two_day_client: {
+        type: Number,
+        enum: [0, 1],
+        default: 0
+    },
     backend_rul: {
         type: String,
        

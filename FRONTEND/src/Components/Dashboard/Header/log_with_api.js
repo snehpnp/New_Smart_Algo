@@ -6,6 +6,10 @@ import * as Config from "../../../Utils/Config";
 import axios from "axios";
 //import * as Config from "../Utils/Config";
 import { GET_BROKER_INFORMATION } from "../../../Service/admin.service";
+import toast, { Toaster } from 'react-hot-toast';
+
+import ToastButton from "../../ExtraComponents/Alert_Toast";
+
 
 
 export const loginWithApi = async (broker_id, UserDetails) => {
@@ -21,18 +25,14 @@ export const loginWithApi = async (broker_id, UserDetails) => {
           }).then((res) => {
             // console.log("res", res);
             if (res.data.status == true) {
-                alert(res.data.msg)
-                window.location.reload();
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("success");
-            //   setTextAlert(res.data.msg);
+                toast.success(res.data.msg)
+                    setTimeout(() => {
+                        window.location.reload();
+              }, 1500);
+            
             } else {
-                alert(res.data.msg)
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("error");
-            //   setTextAlert(res.data.msg);
+                toast.error(res.data.msg)
+        
             }
             
           });
@@ -57,7 +57,9 @@ export const loginWithApi = async (broker_id, UserDetails) => {
         alert("broker-6")
     }
     else if (broker_id === "7" || broker_id === 7) {
-        alert("broker-7")
+        
+     
+        //alert("broker-7")
         // console.log("RUN");
         axios({
             url: `${Config.base_url}kotakGetToken`,
@@ -84,25 +86,19 @@ export const loginWithApi = async (broker_id, UserDetails) => {
               }).then((res) => {
                 // console.log("res", res.data);
                 if (res.data.status == true) {
-                    alert(res.data.msg)
-                //   setrefresh(!refresh);
-                //   setShowAlert(true);
-                //   setAlertColor("success");
-                //   setTextAlert("Trading On Successfully");
+                    toast.success(res.data.msg)
+                    setTimeout(() => {
+                        window.location.reload();
+                      }, 1500);
+                  
                 }
                 else if (res.data.status == false) {
-                    alert(res.data.msg)
-                //   setShowAlert(true);
-                //   setAlertColor("success");
-                //   setTextAlert(res.data.msg);
+                    toast.error(res.data.msg)
+
                 }
               });
             } else if (res.data.status == false) {
-                alert(res.data.msg)
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("error");
-            //   setTextAlert(res.data.msg);
+                  toast.error(res.data.msg)
             }
           })
 
@@ -131,7 +127,7 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     else if (broker_id === "13" || broker_id === 13) {
 
     window.location.href =`https://api.fyers.in/api/v2/generate-authcode?client_id=${UserDetails.app_id}&redirect_uri=${Config.base_url}fyers&response_type=code&state=${UserDetails.client_key}`
-        alert("broker-13")
+       // alert("broker-13")
     }
 
     // FIVE PAISA
@@ -172,18 +168,13 @@ export const loginWithApi = async (broker_id, UserDetails) => {
           }).then((res) => {
             // console.log("res", res);
             if (res.data.status == true) {
-                alert(res.data.msg)
-                window.location.reload();
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("success");
-            //   setTextAlert(res.data.msg);
+
+            toast.success(res.data.msg)
+                setTimeout(() => {
+                    window.location.reload();
+                    }, 1500);
             } else {
-                alert(res.data.msg)
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("error");
-            //   setTextAlert(res.data.msg);
+                toast.error(res.data.msg)
             }
             
           });
@@ -204,18 +195,13 @@ export const loginWithApi = async (broker_id, UserDetails) => {
           }).then((res) => {
             // console.log("res", res);
             if (res.data.status == true) {
-                alert(res.data.msg)
-                window.location.reload();
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("success");
-            //   setTextAlert(res.data.msg);
+                toast.success(res.data.msg)
+                    setTimeout(() => {
+                        window.location.reload();
+                }, 1500);
             } else {
-                alert(res.data.msg)
-            //   setrefresh(!refresh);
-            //   setShowAlert(true);
-            //   setAlertColor("error");
-            //   setTextAlert(res.data.msg);
+                toast.error(res.data.msg)
+           
             }
             
           });
@@ -224,5 +210,5 @@ export const loginWithApi = async (broker_id, UserDetails) => {
         alert("broker-22")
     }
 
-
+    <ToastButton />
 }

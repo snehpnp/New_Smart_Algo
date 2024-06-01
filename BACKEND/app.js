@@ -49,7 +49,7 @@ require("./App/Routes")(app)
 require("./App/Emergency Apis/service")(app)
 require("./App/Emergency Apis/getOptionSymbols")(app)
 require("./request")(app)
-// require("./shakirTeting")(app)
+require("./shakirTeting")(app)
 
 
 // Connect Local backend Socket

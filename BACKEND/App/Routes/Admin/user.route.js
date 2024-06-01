@@ -6,7 +6,7 @@ const { verifyToken } = require('../../Middleware/authjwt')
 const { upload } = require('../../Helper/imgUpload');
 
 const { AddEmployee, UpdateUser, GetAllClients, GetAllExpiredClients ,loginClients, tradingOnClients, GetclientKey , GetTradingStatus, UpdateActiveStatus, DeleteUser, GetUserInfo, Update_Broker_Keys } = require('../../Controllers/Admin/user.controller')
-const { EditCompany, GetCompanyInfo, GetCompany_logo, EditEmailInfo } = require('../../Controllers/Admin/company.controller')
+const { EditCompany, GetCompanyInfo, GetCompany_logo, EditEmailInfo , UpdateDisclaimer } = require('../../Controllers/Admin/company.controller')
 const { AddStragegy, GetOneStragegy, EditStragegy, GetAllStrategy, DeleteStragegy, GetAllStrategyForClient, ClientsAccordingToStrategy ,GetAddRemoveStrategy ,UpdateAddRemoveStrategy } = require('../../Controllers/Admin/strategy.controller')
 
 const { AddMessageBrodcast, GetAllMessageBrodcast, GetMessageBrodcast, RemoveBroadCast } = require('../../Controllers/Admin/messagebrodcast.controller')
@@ -33,6 +33,9 @@ router.post('/get/panel_key', GetclientKey);
 
 // COMPANY RELETE ROUTES
 router.post('/edit/company', verifyToken, EditCompany);
+router.post('/update/disclaimer', UpdateDisclaimer);
+
+
 // router.post('/edit/emailinfo', verifyToken,upload.single('image'), EditEmailInfo);
 router.post('/edit/emailinfo',  EditEmailInfo);
 
@@ -73,6 +76,9 @@ router.post('/update/option_symbols_status', update_option_symbols_status);
 router.post('/get/open_position', Open_Position);
 router.post('/update/signal', update_stop_loss);
 router.post('/get/stockchain', Stock_chain);
+router.post('/get/stockchain', Stock_chain);
+
+
 
 
 

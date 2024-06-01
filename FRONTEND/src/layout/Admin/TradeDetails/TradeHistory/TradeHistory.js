@@ -78,7 +78,9 @@ const TradeHistory = () => {
   const [StrategyClientStatus, setStrategyClientStatus] = useState("null");
   const [SelectSegment, setSelectSegment] = useState("null");
   const [SelectService, setSelectService] = useState("null");
+  const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
 
+ console.log("SelectServiceIndex",SelectServiceIndex)
   const [SocketState, setSocketState] = useState("null");
 
   const [ForGetCSV, setForGetCSV] = useState([]);
@@ -105,9 +107,9 @@ const TradeHistory = () => {
 
     let startDate = getActualDateFormate(fromDate);
     let endDate = getActualDateFormate(toDate);
-
+   
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter, token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter ,serviceIndex :SelectServiceIndex,token: token})
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -133,7 +135,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
-  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter]);
+  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter ,SelectServiceIndex]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -149,6 +151,7 @@ const TradeHistory = () => {
     setFromDate("");
     setStrategyClientStatus("null");
     setSelectService("null");
+    setSelectServiceIndex('null')
     setToDate("");
     setTradeHistoryData({
       loading: false,
@@ -168,9 +171,15 @@ const TradeHistory = () => {
    
     {
       dataField: "createdAt",
-      text: "Signals time",
+      text: "Signals Entry time",
       formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
+
+     {
+      dataField: "exit_dt_date",
+      text: "Signals Exit time",
+      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell):"-"}</>,
+      },
     {
       dataField: "trade_symbol",
       text: "Symbol",
@@ -185,55 +194,7 @@ const TradeHistory = () => {
       formatter: (cell, row, rowIndex) => (
         <div>
           <span>{row.entry_type === "LE"?"BUY ENTRY":"SELL ENTRY"}</span>
-        </div>
-      ),
-    },
-    {
-      dataField: "entry_qty",
-      text: "Entry Qty",
-      formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
-      ),
-    },
-    {
-      dataField: "exit_qty",
-      text: "Exit Qty",
-      formatter: (cell, row, rowIndex) => (
-        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
-      ),
-    },
-    {
-      dataField: "live",
-      text: "Live Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`LivePrice_${row.token}`}></span>
-        </div>
-      ),
-    },
-    {
-      dataField: "entry_price",
-      text: "Entry Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
-      ),
-    },
-    {
-      dataField: "exit_price",
-      text: "Exit Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
-      ),
-    },
-
-    {
-      dataField: "Action",
-      text: "Realised",
-      formatter: (cell, row, rowIndex) => {
-        return (
-          <div>
-            <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
-            <span className={`d-none entry_qty_${row.token}_${row._id}`}>
+          <span className={`d-none entry_qty_${row.token}_${row._id}`}>
               {row.entry_qty}
             </span>
             <span className={`d-none exit_qty_${row.token}_${row._id}`}>
@@ -257,23 +218,95 @@ const TradeHistory = () => {
             <span className={`d-none _id_${row.token}_${row._id}`}>
               {row._id}
             </span>
-          </div>
-        );
-      },
-    },
-
-
-    {
-      dataField: "UPL",
-      text: "Un-Realised",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
-
-
         </div>
       ),
     },
+    {
+      dataField: "entry_qty",
+      text: "Entry Qty",
+      formatter: (cell, row, rowIndex) => (
+        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+      ),
+    },
+    {
+      dataField: "exit_qty",
+      text: "Exit Qty",
+      formatter: (cell, row, rowIndex) => (
+        <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
+      ),
+    },
+    // {
+    //   dataField: "live",
+    //   text: "Live Price",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`LivePrice_${row.token}`}></span>
+    //     </div>
+    //   ),
+    // },
+    {
+      dataField: "entry_price",
+      text: "Entry Price",
+      formatter: (cell, row, rowIndex) => (
+        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
+      ),
+    },
+    {
+      dataField: "exit_price",
+      text: "Exit Price",
+      formatter: (cell, row, rowIndex) => (
+        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
+      ),
+    },
+
+    // {
+    //   dataField: "Action",
+    //   text: "Realised",
+    //   formatter: (cell, row, rowIndex) => {
+    //     return (
+    //       <div>
+    //         <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
+    //         <span className={`d-none entry_qty_${row.token}_${row._id}`}>
+    //           {row.entry_qty}
+    //         </span>
+    //         <span className={`d-none exit_qty_${row.token}_${row._id}`}>
+    //           {row.exit_qty}
+    //         </span>
+    //         <span className={`d-none exit_price_${row.token}_${row._id}`}>
+    //           {row.exit_price}
+    //         </span>
+    //         <span className={`d-none entry_price_${row.token}_${row._id}`}>
+    //           {row.entry_price}
+    //         </span>
+    //         <span className={`d-none entry_type_${row.token}_${row._id}`}>
+    //           {row.entry_type}
+    //         </span>
+    //         <span className={`d-none exit_type_${row.token}_${row._id}`}>
+    //           {row.exit_type}
+    //         </span>
+    //         <span className={`d-none strategy_${row.token}_${row._id}`}>
+    //           {row.strategy}
+    //         </span>
+    //         <span className={`d-none _id_${row.token}_${row._id}`}>
+    //           {row._id}
+    //         </span>
+    //       </div>
+    //     );
+    //   },
+    // },
+
+
+    // {
+    //   dataField: "UPL",
+    //   text: "Un-Realised",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
+
+
+    //     </div>
+    //   ),
+    // },
 
     {
       dataField: "TPL",
@@ -908,7 +941,9 @@ const TradeHistory = () => {
               />
             </div>
           </div>
-          <div className="col-lg-3 px-1">
+
+
+           <div className="col-lg-3 px-1">
             <div class="mb-3">
               <label for="select" class="form-label">
                 Symbol
@@ -939,6 +974,29 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
+
+          <div className="col-lg-3 px-1">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Index Symbol
+              </label>
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectServiceIndex(e.target.value)}
+                value={SelectServiceIndex}
+              >
+                <option value="null" selected>All</option>
+                <option value="BANKNIFTY" selected>BANKNIFTY</option>
+                <option value="NIFTY" selected>NIFTY</option>
+                <option value="FINNIFTY" selected>FINNIFTY</option>
+              </select>
+            </div>
+          </div>
+
+
+
           <div className="col-lg-2  px-1">
             <div class="mb-3">
               <label for="select" class="form-label">

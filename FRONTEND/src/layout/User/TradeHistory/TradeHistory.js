@@ -1,511 +1,242 @@
-// import React from 'react'
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
-import Content from "../../../Components/Dashboard/Content/Content";
-import FullDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
-import { Get_Tradehisotry } from "../../../ReduxStore/Slice/Users/TradehistorySlice";
-import { useDispatch, useSelector } from "react-redux";
-import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
-import { Eye, CandlestickChart, Pencil } from "lucide-react";
+"use strict";
+const db = require('../../Models');
+const MainSignals = db.MainSignals
+const client_services = db.client_services
+const { formattedDateTime } = require('../../Helper/time.helper')
+const mongoose = require('mongoose');
+const ObjectId = mongoose.Types.ObjectId;
 
 
-import DetailsView from "./DetailsView";
-import {
-  GetAliceTokenAndID,
-  CreateSocketSession,
-  ConnctSocket,
-  GetAccessToken
-} from "../../../Service/Alice_Socket";
-import {
-  ShowColor,
-  ShowColor_Compare_two,
-} from "../../../Utils/ShowTradeColor";
-import $ from "jquery";
-import { FunctionForLivePriceCalculation } from "./tradehistoryCalculation";
+class TradeHistory {
+
+    // GET ADMIN SIGNALS
+    async GetUserTradeHistory(req, res) {
+        try {
+
+           // console.log("req.body ",req.body)
+            const { user_id, startDate, endDate , serviceIndex ,selectStrategy} = req.body;
+
+            const objectId = new ObjectId(user_id);
+
+            const pipeline = [
+                {
+                    $match: {
+                        user_id: objectId
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "services",
+                        localField: "service_id",
+                        foreignField: "_id",
+                        as: "service",
+                    },
+                },
+                {
+                    $unwind: '$service',
+                },
+                {
+                    $lookup: {
+                        from: "users",
+                        localField: 'user_id',
+                        foreignField: "_id",
+                        as: "users",
+                    },
+                },
+                {
+                    $unwind: '$users',
+                },
+                {
+                    $lookup: {
+                        from: "strategies",
+                        localField: "strategy_id",
+                        foreignField: "_id",
+                        as: "strategys",
+                    },
+                },
+                {
+                    $unwind: '$strategys',
+                },
+
+                {
+                    $project: {
+                        'service.name': 1,
+                        'strategys.strategy_name': 1,
+                        'users.web_url': 1,
+                        'users.client_key': 1,
+                        quantity: 1
+
+                    },
+                },
+            ];
+
+            const GetAllClientServices = await client_services.aggregate(pipeline)
+
+           // console.log("GetAllClientServices ",GetAllClientServices.length)
+
+            var abc = [];
+            var abc1 = [];
+            let serIndex;
+            let strategyset;
+            if (GetAllClientServices.length > 0) {
+                for (const item of GetAllClientServices) {
+                    var client_persnal_key1 = ""
+                    if (item.users.web_url == '1') {
+                        client_persnal_key1 = ""
+                    } else if (item.users.web_url == '2') {
+                        client_persnal_key1 = item.users.client_key
+                    }
+
+                    try {
+                        // console.log("client_persnal_key1", item.quantity);
 
 
-const TradeHistory = () => {
-  const dispatch = useDispatch();
+                           if (serviceIndex === "null") {
+                            serIndex = item.service.name
+                            } else {
+                            serIndex = serviceIndex
+                            }
 
-  const token = JSON.parse(localStorage.getItem("user_details")).token;
-  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
-  const gotodashboard_Details = JSON.parse(localStorage.getItem('user_details_goTo'))
+                            if (selectStrategy === "null") {
+                            strategyset = item.strategys.strategy_name
+                            } else {
+                            strategyset = selectStrategy
+                            }
 
-  const [showModal, setshowModal] = useState(false);
-  const [SocketState, setSocketState] = useState("null");
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [disableFromDate, setDisableFromDate] = useState(false);
+                          var data = await MainSignals.aggregate([
+                            {
+                                $match: {
+                                   // symbol: item.service.name,
+                                    symbol: serIndex,
+                                    strategy: strategyset,
+                                   // strategy: item.strategys.strategy_name,
+                                    dt_date: {
+                                        $gte: startDate,
+                                        $lte: endDate,
+                                    },
+                                    client_persnal_key: client_persnal_key1
+                                }
+                            },
+                            {
+                                $lookup: {
+                                    from: "signals",
+                                    localField: "signals_id",
+                                    foreignField: "_id",
+                                    as: "result",
+                                },
+                            },
+                            {
+                                $sort: {
+                                    _id: -1 // Sort in ascending order. Use -1 for descending.
+                                }
+                            }
+                          ]);
 
-  const [UserDetails, setUserDetails] = useState([]);
+                          var data1 = await MainSignals.aggregate([
+                            {
+                                $match: {
+                                     symbol: item.service.name,
+                                    strategy: item.strategys.strategy_name,
+                                    dt_date: {
+                                        $gte: startDate,
+                                        $lte: endDate,
+                                    },
+                                    client_persnal_key: client_persnal_key1
+                                }
+                            },
+                            {
+                                $lookup: {
+                                    from: "signals",
+                                    localField: "signals_id",
+                                    foreignField: "_id",
+                                    as: "result",
+                                },
+                            },
+                            {
+                                $sort: {
+                                    _id: -1 // Sort in ascending order. Use -1 for descending.
+                                }
+                            }
+                          ]);
 
+                          if (data.length > 0) {
+                          //  console.log("data ",data.length)
+                            data.forEach(function (item) {
+                          
+                                var findstg = GetAllClientServices.find((data) => data.service.name == item.symbol && data.strategys.strategy_name == item.strategy)
+                               // console.log("findstg ",findstg)
+                               //  console.log("item.result ",item.result)
+                              if(findstg != undefined){
+                                item.result.forEach(function (signal) {
 
-  const [rowData, setRowData] = useState("");
+                                    signal.qty_percent = findstg.quantity * (Math.ceil(Number(signal.qty_percent) / 100) * 100) * 0.01
 
+                                });
 
+                                item.entry_qty_percent = findstg.quantity * (Math.ceil(Number(item.entry_qty_percent) / 100) * 100) * 0.01,
+                                    item.exit_qty_percent = findstg.quantity * (Math.ceil(Number(item.exit_qty_percent) / 100) * 100) * 0.01
+                              }
 
-  console.log("rowData :", rowData)
-   
+                            });
 
-  const handleFromDateChange = (e) => {
-    setFromDate(e.target.value);
-  };
+                            abc.push(data)
+                          }
 
-  const handleToDateChange = (e) => {
-    setToDate(e.target.value);
+                          if(data1.length > 0){
+                        //    console.log("data1 ",data1.length)
+                            abc1.push(data1)
+                          }
 
-    setDisableFromDate(true);
-  };
-
-  const [tradeHistoryData, setTradeHistoryData] = useState({
-    loading: true,
-    data: [],
-  });
-
-  const [tradeHistoryData1, setTradeHistoryData1] = useState({
-    loading: true,
-    data: [],
-  });
-
-
-
-
-
-  //  GET BROKER DETAILS
-  const data = async () => {
-    const response = await GetAccessToken({ broker_name: "aliceblue" });
-    if (response.status) {
-      setUserDetails(response.data[0]);
-    }
-
-  };
-  useEffect(() => {
-    data();
-  }, []);
-
-
-
-
-  const getsignals = async (e) => {
-    let startDate = getActualDateFormate(fromDate);
-    let endDate = getActualDateFormate(toDate);
-    e.preventDefault();
-
-    await dispatch(
-      Get_Tradehisotry({
-        user_id: gotodashboard ? gotodashboard_Details.user_id : user_id,
-        startDate: startDate,
-        endDate: endDate,
-        token: token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setTradeHistoryData({
-            loading: false,
-            data: response.data,
-          });
-        } else {
-          setTradeHistoryData({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
-    // }
-  };
-
-  const getsignals11 = async (e) => {
-    let abc = new Date();
-    let month = abc.getMonth() + 1;
-    let date = abc.getDate();
-    let year = abc.getFullYear();
-    let full = `${year}/${month}/${date}`;
-    await dispatch(
-      Get_Tradehisotry({
-        user_id: gotodashboard ? gotodashboard_Details.user_id : user_id,
-        startDate: full,
-        endDate: full,
-        token: token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setTradeHistoryData({
-            loading: false,
-            data: response.data,
-          });
-          setTradeHistoryData1({
-            loading: false,
-            data: response.data,
-          });
-        }
-        setTradeHistoryData({
-          loading: false,
-          data: response.data,
-        });
-      });
-  };
-
-  useEffect(() => {
-    getsignals11();
-  }, []);
-
-  const getActualDateFormate = (date) => {
-    const dateParts = date.split("-");
-    const formattedDate = `${dateParts[0]}/${parseInt(
-      dateParts[1],
-      10
-    )}/${parseInt(dateParts[2], 10)}`;
-    return formattedDate;
-  };
-
-  const ResetDate = (e) => {
-    e.preventDefault();
-    setFromDate("");
-    setToDate("");
-    setTradeHistoryData({
-      loading: false,
-      data: tradeHistoryData1.data,
-    });
-  };
+                    } catch (error) {
+                        console.log("Error fetching data:", error);
+                    }
 
 
+                }
+            } else {
+                res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
+            }
+            
+            //console.log("abc.flat()1 ",abc1.flat())
+             var trade_strategy_filter
+             if(abc1.length >0){
 
+              //  console.log("abc1 ",abc1.flat())
 
-
-
-  const columns = [
-    {
-      dataField: "index",
-      text: "S.No.",
-      // hidden: true,
-      formatter: (cell, row, rowIndex) => rowIndex + 1,
-    },
-
-    {
-      dataField: "createdAt",
-      text: "Signals Entry time",
-      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-    },
-
-    {
-      dataField: "exit_dt_date",
-      text: "Signals Exit time",
-      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-    },
-
-    // {
-    //   dataField: "closeprice",
-    //   text: "Close Price",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <div>
-    //       <span className={`ClosePrice_${row.token}`}></span>
-    //     </div>
-    //   ),
-    // },
-
-    {
-      dataField: "trade_symbol",
-      text: "Symbol",
-    },
-    {
-      dataField: "strategy",
-      text: "Strategy",
-    },
-
-    {
-      dataField: "entry_qty",
-      text: "Quantity",
-      formatter: (cell, row, rowIndex) => (
-         <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span>
-        // <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
-      ),
-    },
-    // {
-    //   dataField: "exit_qty",
-    //   text: "Exit Qty",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <span className="text">{cell !== "" ? parseInt(row.exit_qty_percent) : "-"}</span>
-    //    // <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
-    //   ),
-    // },
-
-    // {
-    //   dataField: "live",
-    //   text: "Live Price",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <div>
-    //       <span className={`LivePrice_${row.token}`}></span>
-    //     </div>
-    //   ),
-    // },
-    {
-      dataField: "entry_price",
-      text: "Entry Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
-      ),
-    },
-    {
-      dataField: "exit_price",
-      text: "Exit Price",
-      formatter: (cell, row, rowIndex) => (
-        <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
-      ),
-    },
-
-    // {
-    //   dataField: "Action",
-    //   text: "Realised",
-    //   formatter: (cell, row, rowIndex) => {
-    //     return (
-    //       <div>
-    //         <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
-    //         <span className={`d-none entry_qty_${row.token}_${row._id}`}>
-    //           {row.entry_qty_percent}
-    //         </span>
-    //         <span className={`d-none exit_qty_${row.token}_${row._id}`}>
-    //           {row.exit_qty_percent}
-    //         </span>
-    //         <span className={`d-none exit_price_${row.token}_${row._id}`}>
-    //           {row.exit_price}
-    //         </span>
-    //         <span className={`d-none entry_price_${row.token}_${row._id}`}>
-    //           {row.entry_price}
-    //         </span>
-    //         <span className={`d-none entry_type_${row.token}_${row._id}`}>
-    //           {row.entry_type}
-    //         </span>
-    //         <span className={`d-none exit_type_${row.token}_${row._id}`}>
-    //           {row.exit_type}
-    //         </span>
-    //         <span className={`d-none strategy_${row.token}_${row._id}`}>
-    //           {row.strategy}
-    //         </span>
-    //         <span className={`d-none _id_${row.token}_${row._id}`}>
-    //           {row._id}
-    //         </span>
-    //       </div>
-    //     );
-    //   },
-    // },
-
-
-    // {
-    //   dataField: "UPL",
-    //   text: "Un-Realised",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <div>
-    //       <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
-
-
-    //     </div>
-    //   ),
-    // },
-
-    {
-      dataField: "TPL",
-      text: "Total",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <span className={`fw-bold  TPL_${row.token}_${row._id}`}></span>
-        </div>
-      ),
-    },
-
-    {
-      dataField: "exit_dt_date",
-      text: "Signals Exit time",
-      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
-    },
+                const groupedDataStrategy = abc1.flat().reduce((acc, curr) => {
+                    if (!acc[curr.strategy]) {
+                      acc[curr.strategy] = 1;
+                    } else {
+                      acc[curr.strategy]++;
+                    }
+                    return acc;
+                  }, {});
+                  
+             trade_strategy_filter = Object.keys(groupedDataStrategy);
+             //console.log("trade_strategy_filter ",trade_strategy_filter)
     
-   
+             }
 
-    {
-      dataField: "",
-      text: "Details View",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          <Eye
-            className="mx-2"
-            onClick={() => {
-              setRowData(row);
-              setshowModal(true);
-            }}
-          />
-        </div>
-      ),
-    },
-  ];
+            if (abc.length > 0) {
+               
+                
+               // console.log("trade_strategy_filter ",trade_strategy_filter)
+                res.send({ status: true, data: abc.flat(), msg: "Get Signals" ,trade_strategy_filter:trade_strategy_filter})
+            } else {
+                res.send({ status: false, data: [], msg: "Data Empty" })
+
+            }
 
 
 
 
-  var CreatechannelList = "";
-  tradeHistoryData.data &&
-    tradeHistoryData.data?.map((item) => {
-      CreatechannelList += `${item.exchange}|${item.token}#`;
-    });
 
-
-
-  //  SHOW lIVE PRICE
-  const ShowLivePrice = async () => {
-    await FunctionForLivePriceCalculation(CreatechannelList, UserDetails, setSocketState, tradeHistoryData.data &&
-      tradeHistoryData.data)
-
-  };
-
-
-
-  useEffect(() => {
-    ShowLivePrice();
-  }, [tradeHistoryData.data, SocketState, UserDetails]);
-
-  
-   console.log("tradeHistoryData.data",tradeHistoryData.data)
-
-  let total=0;
-  tradeHistoryData.data &&
-    tradeHistoryData.data?.map((item) => {
-      CreatechannelList += `${item.exchange}|${item.token}#`;
-      console.log("item" ,item)
-
-       
-
-
-      // if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
-      // total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
-      // }
-
-      if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
-      
-     
-        if(item.entry_type ==="LE"){
-         // console.log("item iFF" ,item._id , " total ",total)
-          let total1 = (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
-          if(!isNaN(total1)){
-            total += total1
-          }
-         
-        }else{
-         let total1 = (parseFloat(item.entry_price) - parseFloat(item.exit_price)) * parseInt(item.exit_qty_percent);
-         // console.log("item ELSE" ,item._id , " total ",total)
-          if(!isNaN(total1)){
-            total += total1
-          }
-  
+        } catch (error) {
+            console.log("Error get user trading Status error -", error);
         }
-        }
-    });
-
-  return (
-    <>
-      <Content Page_title="Trade History" button_status={false} button_status1={true}>
-        {gotodashboard === "true" || gotodashboard === true ? (
-          <>
-            <div className="row d-flex  align-items-center justify-content-start">
-              <div className="col-lg-3">
-                <div className="form-check custom-checkbox mb-3">
-                  <label className="col-lg-6" htmlFor="fromdate">
-                    From Date
-                  </label>
-                  <input
-                    type="date"
-                    name="fromdate"
-                    className="form-control"
-                    id="fromdate"
-                    value={fromDate}
-                    onChange={handleFromDateChange}
-                  // min={new Date().toISOString().split('T')[0]} // Disable past dates
-                  // disabled={disableFromDate}
-                  />
-                </div>
-              </div>
-              <div className="col-lg-3">
-                <div className="form-check custom-checkbox mb-3">
-                  <label className="col-lg-6" htmlFor="endDate">
-                    To Date
-                  </label>
-                  <input
-                    type="date"
-                    name="endDate"
-                    className="form-control"
-                    id="endDate"
-                    value={toDate}
-                    onChange={handleToDateChange}
-                    min={
-                      // new Date().toISOString().split('T')[0] &&
-                      fromDate
-                    } // Disable past dates
-                  />
-                </div>
-              </div>
-              <div className="col-lg-3 d-flex">
-                <button
-                  className="btn btn-primary mx-2"
-                  onClick={(e) => getsignals(e)}
-                >
-                  Search
-                </button>
-                <button
-                  className="btn btn-primary"
-                  onClick={(e) => ResetDate(e)}
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-          </>
-        ) : (
-          ""
-        )}
-
-        {tradeHistoryData.data && tradeHistoryData.data.length === 0 ? (
-          <FullDataTable
-            TableColumns={columns}
-            tableData={tradeHistoryData.data}
-          />
-        ) : (
-          <>
-
-<div className="table-responsive">
-
-
-{tradeHistoryData.data.length>0 ? 
-
-total >= 0 ? 
-  <h4 >Total Realised P/L : <span style={{color:"green"}}> {total.toFixed(2)}</span> </h4>  : 
-  <h4 >Total Realised P/L : <span style={{  color:"red"}}> {total.toFixed(2)}</span> </h4>  : ""
+    }
 
 }
 
- 
-</div>
 
-
-            <FullDataTable
-              TableColumns={columns}
-              tableData={tradeHistoryData.data}
-            />
-          </>
-        )}
-
-        {/*  For Detailed View  */}
-        <DetailsView
-          showModal={showModal}
-          setshowModal={() => setshowModal(false)}
-          tradeHistoryData={rowData}
-        />
-      </Content>
-    </>
-  );
-};
-
-export default TradeHistory;
+module.exports = new TradeHistory();

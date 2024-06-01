@@ -162,6 +162,10 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                     var live_price = response.lp === undefined ? "" : response.lp;
                     //  if entry qty and exist qty both exist
                     tradeHistoryData && tradeHistoryData.forEach((row, i) => {
+                             
+                    //  console.log("row trade_symbol ",row.trade_symbol)
+
+
                         let get_ids = '_id_' + response.tk + '_' + row._id
                         let get_id_token = $('.' + get_ids).html();
 
@@ -173,13 +177,25 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                         const get_exit_type = $(".exit_type_" + response.tk + '_' + row._id).html();
                         const get_Strategy = $(".strategy_" + response.tk + '_' + row._id).html();
 
-                        if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
-                            if (get_entry_qty !== "" && get_exit_qty !== "") {
 
-                                if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                        // console.log("row trade_symbol ",row.trade_symbol ," row._id ",row._id , " entry_type  ",row.entry_type , " exit_type  ",row.exit_type , " get_entry_type ",get_entry_type ," get_exit_type ",get_exit_type , " get_entry_price ",get_entry_price , "exit_price " ,get_exit_price  , "live_price ",live_price)
+                        
 
-                                    // console.log(" get_entry_qty L",get_entry_qty)
+
+                    if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
+
+                    //  console.log("row trade_symbol ",row.trade_symbol)
+                      
+                        if (get_entry_qty !== "" && get_exit_qty !== "") {
+
+                            if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
+                      // console.log("row trade_symbol ",row.trade_symbol)
+                                      
+                                    // console.log(" get_exit_price L",get_exit_price)
+                                    // console.log(" get_entry_price L",get_entry_price)
                                     // console.log(" get_exit_qty L",get_exit_qty)
+                                    // console.log(" get_entry_qty L",get_entry_qty)
+                                    // console.log(" live_price L",live_price)
 
 
                                     let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
@@ -188,13 +204,13 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
                                         rpl = (parseFloat(get_entry_price) - parseFloat(get_exit_price)) * parseInt(get_exit_qty);
                                       }
 
-
+                                 
 
                                     let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
                                     let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
 
-                                    console.log("finalyupl" ,finalyupl)
-                                    console.log("rpl" ,rpl)
+                                    // console.log("finalyupl" ,finalyupl)
+                                    // console.log("rpl" ,rpl)
 
                                     if ((isNaN(finalyupl) || isNaN(rpl))) {
                                         return "-";
@@ -262,7 +278,7 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
 
     else{
     
-       console.log("tradeHistoryData.data ",tradeHistoryData.length)
+     //  console.log("tradeHistoryData.data ",tradeHistoryData.length)
         tradeHistoryData && tradeHistoryData.forEach((row, i) => {
          
         //   console.log(" row._id ",row._id)

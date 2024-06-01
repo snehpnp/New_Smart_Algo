@@ -222,7 +222,7 @@ const result = await MainSignals_modal.aggregate(pipeline)
 
  result.forEach(async(element) => {
 
- console.log("element ",element.token , "exch_seg" ,element.exch_seg)   
+ 
 
 const filter = { _id: element.token };
 const update = {

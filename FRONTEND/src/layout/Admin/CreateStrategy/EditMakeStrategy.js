@@ -600,7 +600,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
   const selectSource = (e , condition_item , element_first_second,index,buy_sell) => {
    // console.log("e -",e.target.value)
    // console.log("condition_item -",condition_item);
-   // console.log("element_first_second -",element_first_second);
+
 
   //   if(e.target.value != ""){
   //      //alert(e.target.value)

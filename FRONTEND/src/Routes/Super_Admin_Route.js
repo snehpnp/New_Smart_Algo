@@ -27,6 +27,9 @@ import EditApiCreateInfo from '../layout/Superadmin/ApiCreateInfo/EditApiCreateI
 
 import AddPanel from '../layout/Superadmin/AdminList/AddPanel';
 import EditPanel from '../layout/Superadmin/AdminList/EditPanel';
+import Signal from '../layout/Superadmin/signals/Signal';
+import BackupSignal from '../layout/Superadmin/signals/BackupSignal'
+import EditClients from '../layout/Superadmin/AdminPermittions/EditClients';
 
 
 
@@ -52,7 +55,6 @@ const Admin = () => {
                 <Route exact path="/history" element={<History />} />
                 <Route exact path="/support" element={<Support />} />
                 <Route exact path="/query" element={<Queryupdate />} />
-
                 <Route exact path="/selecttheme" element={<CompanyTheme />} />
                 <Route exact path="/profile" element={<Profile />} />
                 <Route exact path="/helps" element={<AdminHelps />} />
@@ -62,6 +64,9 @@ const Admin = () => {
                 <Route exact path="/apicreateinfo" element={<ApiCreateInfo />} />
                 <Route exact path="/apicreateinfo/add" element={<AddApiCreateInfo />} />
                 <Route exact path="/apicreateinfo/edit" element={<EditApiCreateInfo />} />
+                <Route exact path="/signals" element={<Signal />} />
+                <Route exact path="/backupsignal" element={<BackupSignal />} />
+                <Route exact path="/client/edit/:id" element={<EditClients />} />
                 {/* </> */}
             </Routes>
 
