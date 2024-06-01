@@ -729,7 +729,7 @@ class Login {
             console.log("SNEH ")
             var disclaimerData = await disclaimer();
 
-            var toEmail = "chandraprakash06012000@gmail.com";
+            var toEmail = "snehpnp@gmail.com";
             var subjectEmail = "disclaimer";
             CommonEmail(toEmail, subjectEmail, disclaimerData);
         }
