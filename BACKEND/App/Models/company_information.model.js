@@ -90,11 +90,19 @@ const CompanySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    dissArr: {
-        type: String,
-        required: true
-    },
-     
+    dissArr: [
+        {
+            id: {
+                type: Number,
+                required: true
+            },
+            value: {
+                type: String,
+                required: true
+            }
+        }
+    ],
+
     licenses: {
         type: Number
     },

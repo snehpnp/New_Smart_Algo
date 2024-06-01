@@ -37,7 +37,9 @@ class Company {
     async UpdateDisclaimer(req, res) {
         try {
    
-            const { id, disclaimer, dissArr } = req.body
+            const { id, disclaimer, dataArr } = req.body
+     
+           console.log("dataArrdataArr :", dataArr)
             const findData = await company_information.findOne({ _id: new ObjectId(id) })
             if (!findData) {
                 return res.send({
@@ -46,9 +48,9 @@ class Company {
                     data: []
                 })
             }
-
+ 
             const filter = { _id: id };
-            const updateOperation = { $set: { disclaimer: disclaimer ,  dissArr : dissArr } };
+            const updateOperation = { $set: { disclaimer: disclaimer ,  dissArr : dataArr } };
             const result = await company_information.updateOne(filter, updateOperation);
             if (!result) {
                 return res.send({ status: false, msg: 'Company not update', data: [] });
