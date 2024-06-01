@@ -27,7 +27,6 @@ const disclaimer = async () => {
             throw new Error("No company data found");
         }
 
-        console.log("Companydata", companyData[0].disclaimer);
 
         let emailTemplate;
 
