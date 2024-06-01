@@ -90,26 +90,19 @@ const CompanySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    disclaimer1: {
-        type: String,
-        required: true
-    },
-    disclaimer2: {
-        type: String,
-        required: true
-    },
-    disclaimer3: {
-        type: String,
-        required: true
-    },
-    disclaimer4: {
-        type: String,
-        required: true
-    },
-    disclaimer5: {
-        type: String,
-        required: true
-    },
+    dissArr: [
+        {
+            id: {
+                type: Number,
+                required: true
+            },
+            value: {
+                type: String,
+                required: true
+            }
+        }
+    ],
+
     licenses: {
         type: Number
     },

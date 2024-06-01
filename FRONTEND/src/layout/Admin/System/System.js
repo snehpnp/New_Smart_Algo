@@ -10,6 +10,8 @@ import ToastButton from '../../../Components/ExtraComponents/Alert_Toast'
 import toast from 'react-hot-toast'
 import $ from "jquery"
 import { DisclaimerMessage } from '../../../ReduxStore/Slice/Admin/SystemSlice'
+import { SquarePlus, CirclePlus } from 'lucide-react';
+import { Button, Container, Row, Col, Form } from 'react-bootstrap';
 
 
 import UpdateCompanyInfo from './UpdateCompanyInfo';
@@ -19,53 +21,39 @@ import UpdateSmptDetails from './UpdateSmptDetails';
 import { useDispatch, useSelector } from "react-redux";
 
 const System = () => {
+    const [dissArr, setDissArr] = useState([]);
+    const [inputs, setInputs] = useState([]);
 
-
-
-
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const [getCompanyName, setCompanyName] = useState({
         loading: true,
         data: []
     });
 
-
-    const [refresh, setRefresh] = useState(false)
-
+    const [refresh, setRefresh] = useState(false);
 
     //  for Panel Details
-    const [PanelDetailsModal, setPanelDetailsModal] = useState(false)
-    const [diss, setDiss] = useState('')
-    const [diss1, setDiss1] = useState('')
-    const [diss2, setDiss2] = useState('')
-    const [diss3, setDiss3] = useState('')
-    const [diss4, setDiss4] = useState('')
-    const [diss5, setDiss5] = useState('')
-
+    const [PanelDetailsModal, setPanelDetailsModal] = useState(false);
+    const [diss, setDiss] = useState('');
 
     //  for Show Clients
-    const [ShowEmailModal, setShowEmailModal] = useState(false)
+    const [ShowEmailModal, setShowEmailModal] = useState(false);
     //  for Subadmins
-    const [showImgModal, setshowImgModal] = useState(false)
-
-
+    const [showImgModal, setshowImgModal] = useState(false);
 
     const CompanyName = async () => {
         await dispatch(GET_COMPANY_INFOS()).unwrap()
             .then((response) => {
                 if (response.status) {
-                    setDiss(response.data[0].disclaimer)
-                    setDiss1(response.data[0].disclaimer1)
-                    setDiss2(response.data[0].disclaimer2)
-                    setDiss3(response.data[0].disclaimer3)
-                    setDiss4(response.data[0].disclaimer4)
-                    setDiss5(response.data[0].disclaimer5)
+                    setDiss(response.data[0].disclaimer);
+                    setDissArr(response.data[0].dissArr);
+                    setInputs(response.data[0].dissArr);
 
                     setCompanyName({
                         loading: false,
                         data: response.data
                     });
-                    $(".set_Favicon")
+                    $(".set_Favicon");
 
                     let favicon = $("link[rel='icon']").length
                         ? $("link[rel='icon']")
@@ -73,18 +61,18 @@ const System = () => {
                     favicon.attr('href', response.data && response.data[0].favicon);
                     $('head').append(favicon);
                 }
-            })
+            });
     }
+
     useEffect(() => {
-        CompanyName()
-    }, [])
+        CompanyName();
+    }, []);
 
     const Company_columns = [
         {
             dataField: 'index',
             text: 'Company ID',
             formatter: (cell, row, rowIndex) => rowIndex + 1,
-
         },
         {
             dataField: 'panel_name',
@@ -98,7 +86,6 @@ const System = () => {
             dataField: 'panel_short_name',
             text: 'Company Short Name'
         },
-
         {
             dataField: 'prefix',
             text: 'Version'
@@ -111,7 +98,6 @@ const System = () => {
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" onClick={() => setPanelDetailsModal(true)} />
                     </span>
-
                 </div>
             ),
         },
@@ -155,12 +141,10 @@ const System = () => {
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" onClick={() => setShowEmailModal(true)} />
                     </span>
-
                 </div>
             ),
         },
     ];
-
 
     const background_images = [
         {
@@ -168,7 +152,6 @@ const System = () => {
             text: 'ID',
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
-
         {
             dataField: 'favicon',
             text: 'Favicon',
@@ -197,7 +180,6 @@ const System = () => {
                 <img src={cell} alt="Water Mark" className='logo-abbr ' width="100" height='100' />
             ),
         },
-
         {
             dataField: 'Action',
             text: 'Action',
@@ -206,37 +188,48 @@ const System = () => {
                     <span data-toggle="tooltip" data-placement="top" title="Edit">
                         <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" onClick={() => setshowImgModal(true)} />
                     </span>
-
                 </div>
             ),
         },
     ];
 
-
-
     const handleSubmit = async () => {
-        const data = { id: "6501756b2a8e6d952493b7f4", disclaimer: diss, disclaimer1: diss1, disclaimer2: diss2, disclaimer3: diss3, disclaimer4: diss4, disclaimer5: diss5 }
+        const data1 = inputs.map((input, index) => ({ id: index + 1, value: input.value }));
+        const data = { id: "6501756b2a8e6d952493b7f4", disclaimer: diss, dataArr: data1 };
+        
         await dispatch(DisclaimerMessage(data)).unwrap()
             .then((response) => {
                 if (response.status) {
-                    toast.success("Disclaimer added successfully...")
-                    setRefresh(!refresh)
-
-                }
-                else {
-                    toast.error("Disclaimer add error")
+                    toast.success("Disclaimer added successfully...");
+                    setRefresh(!refresh);
+                } else {
+                    toast.error("Disclaimer add error");
                 }
             })
             .catch((err) => {
-                console.log("Internal server error")
-            })
+                console.log("Internal server error");
+            });
     }
 
+    const handleAddInput = () => {
+        setInputs([...inputs, { value: '' }]);
+    };
 
-    return <>
+    const handleRemoveInput = () => {
+        if (inputs.length > 1) {
+            setInputs(inputs.slice(0, -1));
+        }
+    };
+
+    const handleInputChange = (index, event) => {
+        const newInputs = inputs.map((input, i) =>
+            i === index ? { ...input, value: event.target.value } : input
+        );
+        setInputs(newInputs);
+    };
+
+    return (
         <Content Page_title="System" button_status={false}>
-
-
             <h2>Company Information</h2>
             <BasicDataTable tableData={getCompanyName.data} TableColumns={Company_columns} dropdown={false} />
             <br />
@@ -249,28 +242,42 @@ const System = () => {
             <BasicDataTable tableData={getCompanyName.data} TableColumns={background_images} dropdown={false} />
 
             <h2>Disclaimer Message</h2>
-            <textarea className='col-lg-12 mb-3 p-2' rows="5" placeholder='Enter your disclaimer message' onChange={(e) => setDiss(e.target.value)} value={diss} />
-            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss1(e.target.value)} value={diss1} />
-            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss2(e.target.value)} value={diss2} />
-            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss3(e.target.value)} value={diss3} />
-            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss4(e.target.value)} value={diss4} />
-            <textarea className='col-lg-12 mb-3 p-2' rows="2" placeholder='Enter your disclaimer message' onChange={(e) => setDiss5(e.target.value)} value={diss5} />
-            <button type='submit' className='btn btn-primary' onClick={handleSubmit}>Submit</button>
+            <textarea
+                className='col-lg-12 mb-3 p-2'
+                rows="5"
+                placeholder='Enter your disclaimer message'
+                onChange={(e) => setDiss(e.target.value)}
+                value={diss}
+            />
 
+            {inputs.map((input, index) => (
+                <Row key={index} className="mb-3">
+                    <Col>
+                        <Form.Control
+                            type="text"
+                            value={input.value}
+                            onChange={(e) => handleInputChange(index, e)}
+                            placeholder='Enter your disclaimer message'
+                        />
+                    </Col>
+                </Row>
+            ))}
+            <Button variant="primary" onClick={handleAddInput}>
+                +
+            </Button>{' '}
+            <Button variant="danger" onClick={handleRemoveInput}>
+                -
+            </Button>
 
-
-
+            <button type='submit' className='btn btn-primary mx-2' onClick={handleSubmit}>Submit</button>
 
             <UpdateCompanyInfo data={getCompanyName && getCompanyName.data} showModal={PanelDetailsModal} setshowModal={() => setPanelDetailsModal(false)} />
             <UpdateSmptDetails data={getCompanyName && getCompanyName.data} showModal={ShowEmailModal} setshowModal={() => setShowEmailModal(false)} />
             <UpdateImages data={getCompanyName && getCompanyName.data} showModal={showImgModal} setshowModal={() => setshowImgModal(false)} />
             <br />
             <ToastButton />
-
         </Content>
-    </>
+    );
 }
 
-
-export default System
-
+export default System;
