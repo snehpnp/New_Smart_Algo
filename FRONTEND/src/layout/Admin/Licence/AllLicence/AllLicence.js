@@ -47,6 +47,7 @@ const AllLicence = () => {
 
 
 
+  var headerName = "Transaction Licence"
 
   const data = async () => {
     await dispatch(Transcation_Licence({ token: token }))
@@ -240,7 +241,7 @@ const AllLicence = () => {
       }
     });
 
-   // console.log("filteredData", filteredData);
+    // console.log("filteredData", filteredData);
 
 
     setAllClients({
@@ -254,7 +255,11 @@ const AllLicence = () => {
 
 
 
-
+  if (dashboard_filter === "1") {
+    headerName = "Used License"
+  }else   if (dashboard_filter === "0") {
+    headerName = "Total License"
+  }
 
   return (
     <>
@@ -263,7 +268,7 @@ const AllLicence = () => {
       ) : (
         <>
           <Content
-            Page_title="Transaction Licence"
+            Page_title={headerName}
             Filter_tab={true}
             button_status={false}
           >

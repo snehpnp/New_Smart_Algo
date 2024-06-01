@@ -12,7 +12,7 @@ import {
 
   DELETE_USER_SERVICES,
 } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
- 
+
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 
 import * as Config from "../../../../Utils/Config";
@@ -26,7 +26,7 @@ import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 const AllClients = () => {
   const [refresh, setrefresh] = useState(false);
 
-  
+
 
 
   const navigate = useNavigate();
@@ -99,7 +99,7 @@ const AllClients = () => {
   }
 
   useEffect(() => {
-   // Brokerdata();
+    // Brokerdata();
     GetAllStrategyName();
   }, []);
 
@@ -127,6 +127,7 @@ const AllClients = () => {
     }
   };
 
+  var headerName = "All Clients"
   const data = async () => {
     var req1 = {
       Find_Role: Role,
@@ -137,16 +138,18 @@ const AllClients = () => {
       .then((response) => {
         if (response.status) {
 
-
           if (dashboard_filter !== undefined) {
             let abc =
               response.data &&
               response.data.filter((item) => {
                 if (dashboard_filter === "000") {
-                  return (item.Role === "USER" && item.Is_Active === '1' && new Date(item.EndDate) <= new Date())
+                  headerName = ""
+                  return (item.Role === "USER" && new Date(item.EndDate) <= new Date())
                 }
                 if (dashboard_filter === "111") {
-                  return (item.Role === "USER" && item.Is_Active === '1' && new Date(item.EndDate) >= new Date())
+                  headerName = "Total Active Clients"
+
+                  return (item.Role === "USER" && new Date(item.EndDate) >= new Date())
 
                 }
 
@@ -232,24 +235,21 @@ const AllClients = () => {
       });
   };
 
-  // useEffect(() => {
-  //   data();
-  // }, [refresh]);
 
 
   useEffect(() => {
     const fetchData = async () => {
-        try {
-            await Brokerdata();
-            await data();
-        } catch (error) {
-            // Handle errors appropriately
-            console.error('Error fetching data:', error);
-        }
+      try {
+        await Brokerdata();
+        await data();
+      } catch (error) {
+        // Handle errors appropriately
+        console.error('Error fetching data:', error);
+      }
     };
 
     fetchData();
-}, [refresh]);
+  }, [refresh]);
 
   // GO TO DASHBOARD
   const goToDashboard = async (row, asyncid, email) => {
@@ -316,7 +316,7 @@ const AllClients = () => {
 
 
 
- 
+
 
   const showLicenceName = (value1, licence_type) => {
     let value = parseInt(value1);
@@ -371,31 +371,31 @@ const AllClients = () => {
     },
     {
       dataField: "ActiveStatus",
-      
+
       text: "Status",
       formatter: (cell, row) => (
         <>
-         { row.StartDate == null && row.EndDate==null ?
-          ''
-       : 
-       <label class="toggle mt-3">
-            <input
-              class="toggle-checkbox bg-primary"
-              type="checkbox"
-              checked={row.ActiveStatus === "1" ? true : false}
-              onChange={(e) => {
-                activeUser(e, row);
-                setSwitchButton(e.target.checked)
-              }}
-            />
-            <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
-          </label>
-          
-        }
-         </>
+          {row.StartDate == null && row.EndDate == null ?
+            ''
+            :
+            <label class="toggle mt-3">
+              <input
+                class="toggle-checkbox bg-primary"
+                type="checkbox"
+                checked={row.ActiveStatus === "1" ? true : false}
+                onChange={(e) => {
+                  activeUser(e, row);
+                  setSwitchButton(e.target.checked)
+                }}
+              />
+              <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
+            </label>
+
+          }
+        </>
       ),
-       
-      },
+
+    },
     {
       dataField: "ActiveStatus",
       text: "Go To Dashboard",
@@ -421,28 +421,28 @@ const AllClients = () => {
       text: "TradingStatus",
       formatter: (cell, row) => (
         <>
-        {row.StartDate == null && row.EndDate==null ?
-         <span
-         style={
-           cell == "off" || cell === null
-             ? { color: "#FF0000", fontSize: "13px" }
-             : { color: "#008000", fontSize: "13px" }
-         }
-       >
-        Activate Subadmin Clients 
-       </span>
-       : 
-       <span
-            style={
-              cell == "off" || cell === null
-                ? { color: "#FF0000", fontSize: "40px" }
-                : { color: "#008000", fontSize: "40px" }
-            }
-          >
-            &#9679;
-          </span>
-      }
-          
+          {row.StartDate == null && row.EndDate == null ?
+            <span
+              style={
+                cell == "off" || cell === null
+                  ? { color: "#FF0000", fontSize: "13px" }
+                  : { color: "#008000", fontSize: "13px" }
+              }
+            >
+              Activate Subadmin Clients
+            </span>
+            :
+            <span
+              style={
+                cell == "off" || cell === null
+                  ? { color: "#FF0000", fontSize: "40px" }
+                  : { color: "#008000", fontSize: "40px" }
+              }
+            >
+              &#9679;
+            </span>
+          }
+
         </>
       ),
     },
@@ -514,12 +514,12 @@ const AllClients = () => {
  
       
       const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
-      if(foundNumber != undefined){
-      return foundNumber.title
-      }else{
+      if (foundNumber != undefined) {
+        return foundNumber.title
+      } else {
         return ""
       }
-   
+
       // if (value === 1) {
       //   return "Markethub";
       // } else if (value === 2) {
@@ -632,7 +632,7 @@ const AllClients = () => {
       ) : (
         <>
           <Content
-            Page_title="All Clients"
+            Page_title={headerName}
             button_title="Add Client"
             route="/admin/client/add"
             show_csv_button={true} csv_data={ForGetCSV} csv_title="Client-List"

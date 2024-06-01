@@ -257,7 +257,6 @@ export async function CLOSE_ADMIN_PANEL(domain, token) {
 export async function ALL_BROKERS(domain, token) {
     try {
          
-       // console.log("domain ",domain)
 
         const res = await axios.post(`${Config.base_url}getall/brokers`, domain, {
             headers: header(token),
@@ -302,7 +301,6 @@ export async function ADD_PANEL(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error =", err);
         return err
         // custom error
     }
@@ -378,7 +376,6 @@ export async function GET_ALL_SIGNAL(data) {
 }
 
 export async function UPDATE_PRICE(data) {
-    console.log("data",data.backend_rul)
 
     try {
         const res = await axios.post(`${data.backend_rul}update/price`, data, {
@@ -464,7 +461,6 @@ export async function UPDATE_USER(data) {
 
 export async function USER_DELETE(data) {
 
-    console.log("data.backend_rul :", data.backend_rul)
     try {
         const res = await axios.post(`${data.backend_rul}user/delete`, data, {
             // headers: header(token),
@@ -480,7 +476,6 @@ export async function USER_DELETE(data) {
 
 export async function GET_USER(data) {
 
-    console.log("backend_rul : ", data.backend_rul)
     try {
         const res = await axios.post(`${data.backend_rul}findOneUser`, data, {
             // headers: header(token),

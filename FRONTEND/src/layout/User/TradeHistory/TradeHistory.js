@@ -213,20 +213,20 @@ const TradeHistory = () => {
       // hidden: true,
       formatter: (cell, row, rowIndex) => rowIndex + 1,
     },
+
     {
       dataField: "createdAt",
       text: "Signals Entry time",
-      formatter: (cell, row, rowIndex) => <>{fDateTimeSuffix(row.createdAt)}</>,
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
     },
+
     {
 
       dataField: "exit_dt_date",
       text: "Signals Exit time",
-      formatter: (cell, row, rowIndex) => <>{row.exit_dt_date ? fDateTimeSuffix(row.exit_dt_date):"-"}</>,
+      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell):"-"}</>,
       
      },
-
-
 
     // {
     //   dataField: "closeprice",
@@ -397,6 +397,14 @@ const TradeHistory = () => {
         </div>
       ),
     },
+
+    {
+      dataField: "exit_dt_date",
+      text: "Signals Exit time",
+      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
+    },
+    
+   
 
     {
       dataField: "",

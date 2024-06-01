@@ -53,8 +53,7 @@ export async function GET_ALL_THEME_NAME(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+     
         return err
     }
 
