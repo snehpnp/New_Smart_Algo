@@ -265,7 +265,7 @@ class Panel {
 
             const panel_data = await panel_model.find({ domain: req.body.url }).select('broker_id')
             if (!panel_data) {
-                return res.status(409).send({ status: false, msg: 'Panel Not exists', data: [] });
+                return res.send({ status: false, msg: 'Panel Not exists', data: [] });
             }
 
             var objectIds = panel_data[0].broker_id.map((data) => data.id);
@@ -284,11 +284,11 @@ class Panel {
 
             // IF DATA NOT EXIST
             if (getAllpanel.length == 0) {
-                res.send({ status: false, msg: "Empty data", data: getAllpanel })
+                return res.send({ status: false, msg: "Empty data", data: getAllpanel })
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Api Info",
                 data: getAllpanel,
