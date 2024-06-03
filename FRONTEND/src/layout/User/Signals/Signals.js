@@ -41,7 +41,6 @@ const Signals = () => {
       })
   }
 
-  console.log("setSignalsData :", SignalsData)
 
 
   useEffect(() => {

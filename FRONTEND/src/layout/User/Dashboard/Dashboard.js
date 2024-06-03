@@ -75,7 +75,7 @@ const BrokerResponse = () => {
 
 
 
-  
+
 
   const getservice = async () => {
     await dispatch(
@@ -112,9 +112,6 @@ const BrokerResponse = () => {
       });
   };
 
-  useEffect(() => {
-    getservice();
-  }, [refresh]);
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
     const numericValue = e.target.value.replace(/[^0-9]/g, '');
@@ -122,6 +119,7 @@ const BrokerResponse = () => {
     if (e.target.name === "lot_size") {
 
       if (numericValue) {
+
         setInputValue((prevPrices) => ({ ...prevPrices, [symboll]: e.target.value }))
         if ((data.servicegroup_services_ids.group_qty !== 0) && ((parseInt(e.target.value) * parseInt(data.service.lotsize)) > parseInt(data.servicegroup_services_ids.group_qty))) {
           toast.error(`cant update more then ${data.servicegroup_services_ids.group_qty} In ${symboll}`);
@@ -164,8 +162,6 @@ const BrokerResponse = () => {
     let id = rowdata._id;
 
 
-    // alert(name)
-    // alert(value)
 
     setUpdatedData((prevData) => ({
       ...prevData,
@@ -173,7 +169,7 @@ const BrokerResponse = () => {
         ...prevData[id],
         [name]: name === "active_status" ? e.target.checked : value,
         ...(name === "lot_size" && { "quantity": parseInt(e.target.value) * parseInt(data.service.lotsize) }),
-        ...(name !== "lot_size" && { "quantity": data.service.lotsize, "lot_size": "1" }),
+        // ...(name !== "lot_size" && { "quantity": data.service.lotsize, "lot_size": "1" }),
       },
     }));
   };
@@ -192,9 +188,9 @@ const BrokerResponse = () => {
   }
 
   const UpdateDashboard = async (e) => {
-
     if (statusStartegyUser == "1") {
       const isEmpty = Object.keys(updatedData).length === 0;
+
 
       if (isEmpty == false) {
         // Filter objects with empty strategy_id
@@ -240,14 +236,20 @@ const BrokerResponse = () => {
 
         if (response.status) {
           toast.success(response.msg);
-          // setrefresh(!refresh)
-          window.location.reload();
+          setrefresh(!refresh)
+          getservice();
+          // window.location.reload();
         } else {
           toast.error(response.msg);
         }
       });
   };
 
+
+
+  useEffect(() => {
+    getservice();
+  }, [refresh]);
 
   return (
     <Content Page_title="Dashboard" button_status={false}>
@@ -256,7 +258,6 @@ const BrokerResponse = () => {
           <thead className="bg-primary">
             <tr>
               <th>#</th>
-              {/* <th>Live Price</th> */}
               <th>Symbol</th>
               <th>lot size</th>
               <th>max Qty</th>
@@ -376,7 +377,7 @@ const BrokerResponse = () => {
                                 }
 
                               })
-                              }
+                            }
                           </select>
                         }
 
@@ -454,11 +455,11 @@ const BrokerResponse = () => {
               })}
 
             <ToastButton />
-         
+
           </tbody>
         </table>
       </div>
-      
+
 
       <Modal show={showStartegyModal} onHide={handleCloseStartegyModal}>
         <Modal.Header closeButton>
@@ -503,9 +504,6 @@ const BrokerResponse = () => {
                 : ""
             }
           </div>
-
-
-
 
         </Modal.Body>
         <Modal.Footer>
