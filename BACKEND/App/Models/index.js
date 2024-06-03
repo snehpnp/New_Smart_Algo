@@ -1,4 +1,4 @@
-śconst mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const MongoClient = require('mongodb').MongoClient;
 
 const uri = process.env.MONGO_URI
