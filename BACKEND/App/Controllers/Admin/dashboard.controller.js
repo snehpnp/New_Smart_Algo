@@ -27,8 +27,7 @@ class Dashboard {
             const result = await db1.collection(viewName).find().toArray();
              
             if (result) {
-                console.log("result :", result)
-                res.send({
+               return res.send({
                     status: true,
                     msg: "Get Dashboard Data",
                     totalCount: {

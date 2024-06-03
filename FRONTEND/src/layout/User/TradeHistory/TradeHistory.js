@@ -48,8 +48,8 @@ const TradeHistory = () => {
   const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
   const [selectStrategy, setSelectStrategy] = useState("null");
 
-  
- // console.log("rowdata :", rowData);
+
+  // console.log("rowdata :", rowData);
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -77,7 +77,7 @@ const TradeHistory = () => {
   });
 
 
- //console.log("startegyFilterData ",startegyFilterData)
+  //console.log("startegyFilterData ",startegyFilterData)
 
 
   //  GET BROKER DETAILS
@@ -105,8 +105,8 @@ const TradeHistory = () => {
         user_id: gotodashboard ? gotodashboard_Details.user_id : user_id,
         startDate: startDate,
         endDate: endDate,
-        serviceIndex :SelectServiceIndex,
-        selectStrategy:selectStrategy,
+        serviceIndex: SelectServiceIndex,
+        selectStrategy: selectStrategy,
         token: token,
       })
     )
@@ -143,8 +143,8 @@ const TradeHistory = () => {
         user_id: gotodashboard ? gotodashboard_Details.user_id : user_id,
         startDate: full,
         endDate: full,
-        serviceIndex :SelectServiceIndex,
-        selectStrategy:selectStrategy,
+        serviceIndex: SelectServiceIndex,
+        selectStrategy: selectStrategy,
         token: token,
       })
     )
@@ -152,7 +152,7 @@ const TradeHistory = () => {
       .then((response) => {
         if (response.status) {
 
-         // console.log("response.trade_strategy_filter ",response.trade_strategy_filter)
+          // console.log("response.trade_strategy_filter ",response.trade_strategy_filter)
           setTradeHistoryData({
             loading: false,
             data: response.data,
@@ -176,7 +176,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     getsignals11();
-  }, [SelectServiceIndex ,selectStrategy ]);
+  }, [SelectServiceIndex, selectStrategy]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -217,27 +217,15 @@ const TradeHistory = () => {
     {
       dataField: "createdAt",
       text: "Signals Entry time",
-      formatter: (cell) => <>{fDateTimeSuffix(cell)}</>,
+      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell) : "-"}</>,
     },
-
     {
 
       dataField: "exit_dt_date",
       text: "Signals Exit time",
-      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell):"-"}</>,
-      
-     },
+      formatter: (cell) => <>{cell ? fDateTimeSuffix(cell) : "-"}</>,
 
-    // {
-    //   dataField: "closeprice",
-    //   text: "Close Price",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <div>
-    //       <span className={`ClosePrice_${row.token}`}></span>
-    //     </div>
-    //   ),
-    // },
-
+    },
     {
       dataField: "trade_symbol",
       text: "Symbol",
@@ -252,19 +240,10 @@ const TradeHistory = () => {
       text: "Entry Type",
       formatter: (cell, row, rowIndex) => (
         <div>
-          <span>{row.entry_type === "LE"?"BUY ENTRY":"SELL ENTRY"}</span>
+          <span>{row.entry_type === "LE" ? "BUY ENTRY" : "SELL ENTRY"}</span>
         </div>
       ),
     },
-    // {
-    //   dataField: "entry_qty",
-    //   text: "Entry Qty",
-    //   formatter: (cell, row, rowIndex) =>  (
-    //      <span className="text">{cell !== "" ? parseInt(row.entry_qty_percent) : "-"}</span> 
-    //    )
-   
-    // },
-
     {
       dataField: "entry_qty",
       text: "Entry Qty",
@@ -303,26 +282,6 @@ const TradeHistory = () => {
       },
     },
 
-
-
-    // {
-    //   dataField: "exit_qty",
-    //   text: "Exit Qty",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <span className="text">{cell !== "" ? parseInt(row.exit_qty_percent) : "-"}</span>
-    //    // <span className="text">{cell !== "" ? parseInt(cell) : "-"}</span>
-    //   ),
-    // },
-
-    // {
-    //   dataField: "live",
-    //   text: "Live Price",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <div>
-    //       <span className={`LivePrice_${row.token}`}></span>
-    //     </div>
-    //   ),
-    // },
     {
       dataField: "entry_price",
       text: "Entry Price",
@@ -339,55 +298,6 @@ const TradeHistory = () => {
       ),
     },
 
-    // {
-    //   dataField: "Action",
-    //   text: "Realised",
-    //   formatter: (cell, row, rowIndex) => {
-    //     return (
-    //       <div>
-    //         <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
-    //         <span className={`d-none entry_qty_${row.token}_${row._id}`}>
-    //           {row.entry_qty_percent}
-    //         </span>
-    //         <span className={`d-none exit_qty_${row.token}_${row._id}`}>
-    //           {row.exit_qty_percent}
-    //         </span>
-    //         <span className={`d-none exit_price_${row.token}_${row._id}`}>
-    //           {row.exit_price}
-    //         </span>
-    //         <span className={`d-none entry_price_${row.token}_${row._id}`}>
-    //           {row.entry_price}
-    //         </span>
-    //         <span className={`d-none entry_type_${row.token}_${row._id}`}>
-    //           {row.entry_type}
-    //         </span>
-    //         <span className={`d-none exit_type_${row.token}_${row._id}`}>
-    //           {row.exit_type}
-    //         </span>
-    //         <span className={`d-none strategy_${row.token}_${row._id}`}>
-    //           {row.strategy}
-    //         </span>
-    //         <span className={`d-none _id_${row.token}_${row._id}`}>
-    //           {row._id}
-    //         </span>
-    //       </div>
-    //     );
-    //   },
-    // },
-
-
-    // {
-    //   dataField: "UPL",
-    //   text: "Un-Realised",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <div>
-    //       <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
-
-
-    //     </div>
-    //   ),
-    // },
-
     {
       dataField: "TPL",
       text: "Total",
@@ -398,7 +308,6 @@ const TradeHistory = () => {
       ),
     },
 
-   
     {
       dataField: "",
       text: "Details View",
@@ -440,41 +349,41 @@ const TradeHistory = () => {
     ShowLivePrice();
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
-  
-   //console.log("tradeHistoryData.data",tradeHistoryData.data)
 
-  let total=0;
+  //console.log("tradeHistoryData.data",tradeHistoryData.data)
+
+  let total = 0;
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
-      console.log("item" ,item)
+      console.log("item", item)
 
-       
+
 
 
       // if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
       // total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
       // }
 
-      if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
-      
-     
-        if(item.entry_type ==="LE"){
-         // console.log("item iFF" ,item._id , " total ",total)
+      if (parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price != '' && item.exit_price) {
+
+
+        if (item.entry_type === "LE") {
+          // console.log("item iFF" ,item._id , " total ",total)
           let total1 = (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
-          if(!isNaN(total1)){
+          if (!isNaN(total1)) {
             total += total1
           }
-         
-        }else{
-         let total1 = (parseFloat(item.entry_price) - parseFloat(item.exit_price)) * parseInt(item.exit_qty_percent);
-         // console.log("item ELSE" ,item._id , " total ",total)
-          if(!isNaN(total1)){
+
+        } else {
+          let total1 = (parseFloat(item.entry_price) - parseFloat(item.exit_price)) * parseInt(item.exit_qty_percent);
+          // console.log("item ELSE" ,item._id , " total ",total)
+          if (!isNaN(total1)) {
             total += total1
           }
-  
+
         }
-        }
+      }
     });
 
   return (
@@ -521,8 +430,8 @@ const TradeHistory = () => {
               </div>
 
 
-            
-            {/* <div className="col-lg-3 px-1">
+
+              {/* <div className="col-lg-3 px-1">
             <div class="mb-3">
               <label for="select" class="form-label">
                 Index Symbol
@@ -604,19 +513,19 @@ const TradeHistory = () => {
         ) : (
           <>
 
-<div className="table-responsive">
+            <div className="table-responsive">
 
 
-{tradeHistoryData.data.length>0 ? 
+              {tradeHistoryData.data.length > 0 ?
 
-total >= 0 ? 
-  <h4 >Total Realised P/L : <span style={{color:"green"}}> {total.toFixed(2)}</span> </h4>  : 
-  <h4 >Total Realised P/L : <span style={{  color:"red"}}> {total.toFixed(2)}</span> </h4>  : ""
+                total >= 0 ?
+                  <h4 >Total Realised P/L : <span style={{ color: "green" }}> {total.toFixed(2)}</span> </h4> :
+                  <h4 >Total Realised P/L : <span style={{ color: "red" }}> {total.toFixed(2)}</span> </h4> : ""
 
-}
+              }
 
- 
-</div>
+
+            </div>
 
 
             <FullDataTable

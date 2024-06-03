@@ -292,7 +292,7 @@ export async function UPDATE_BROKERS(domain, token) {
 
 // Add Panel
 export async function ADD_PANEL(data, token) {
-    console.log(data);
+
     try {
         const res = await axios.post(`${Config.base_url}add/panel`, data, {
             headers: header(token),
