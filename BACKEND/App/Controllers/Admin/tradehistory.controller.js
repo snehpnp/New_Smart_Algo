@@ -38,12 +38,11 @@ class Tradehistory {
             const strategyWord = strategy.trim();
 
 
-            if (serviceIndex === "null") {
-              serIndex = { $exists: true }
-              } else {
-              serIndex = serviceIndex
-              }
-
+            if (typeof serviceIndex === "object" || serviceIndex == "null") {
+              serIndex = { $exists: true };
+            } else {
+              serIndex = serviceIndex;
+            }
 
             if (strategyWord === "null") {
                 stg1 = { $exists: true }
