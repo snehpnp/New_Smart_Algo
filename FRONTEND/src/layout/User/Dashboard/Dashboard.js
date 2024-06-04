@@ -92,15 +92,7 @@ const BrokerResponse = () => {
             loading: false,
             data: response.services,
           });
-          // const filteredArray1 = response.strategy.filter((item1) =>
-          //   response.services.some(
-          //     (item2) => item1.result._id !== item2.strategys._id
-          //   )
-          // );
-          // setStrategy({
-          //   loading: false,
-          //   data: filteredArray1,
-          // });
+
           setStrategy({
             loading: false,
             data: response.strategy,
@@ -116,6 +108,15 @@ const BrokerResponse = () => {
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
     const numericValue = e.target.value.replace(/[^0-9]/g, '');
 
+
+    if (numericValue == 0) {
+      e.target.value = 1
+      toast.error(`cant update  0 Quantity In ${symboll}`);
+      return
+
+    }
+
+
     if (e.target.name === "lot_size") {
 
       if (numericValue) {
@@ -123,11 +124,11 @@ const BrokerResponse = () => {
         setInputValue((prevPrices) => ({ ...prevPrices, [symboll]: e.target.value }))
         if ((data.servicegroup_services_ids.group_qty !== 0) && ((parseInt(e.target.value) * parseInt(data.service.lotsize)) > parseInt(data.servicegroup_services_ids.group_qty))) {
           toast.error(`cant update more then ${data.servicegroup_services_ids.group_qty} In ${symboll}`);
-          e.target.value = ''
+          e.target.value = 1
           return
         }
       } else {
-        e.target.value = ''
+        e.target.value = 1
         return
       }
     }

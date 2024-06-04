@@ -59,11 +59,6 @@ const Header = ({ ChatBox }) => {
   const UserNamego_localstg = JSON.parse(localStorage.getItem("user_details_goTo"))
 
 
-  // console.log("UserName_localstg", UserName_localstg);
-  // console.log("UserNamego_localstg", UserNamego_localstg);
-
-
-  // console.log("gotodashboard-", user_role);
 
   if (theme_id != null) {
     let themedata = JSON.parse(theme_id);
