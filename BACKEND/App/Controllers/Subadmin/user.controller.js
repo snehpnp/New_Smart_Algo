@@ -32,9 +32,6 @@ class Employee {
   // USER ADD
   async AddEmployee(req, res) {
 
-    
-
-
     try {
       const {
         FullName,
@@ -62,7 +59,8 @@ class Employee {
       } = req.body;
 
 
-
+    // Panel Prifix key Find
+    var Panel_key = await Company_info.find();
       
       let Strategies_id_array = [];
     
@@ -75,18 +73,13 @@ class Employee {
       }else{
        let count = 0
         for (const strategy of Strategies) {
-      //  console.log("strategy ",strategy.id)
-             
-          // count++
-          // //console.log("count ",count)
-          // if(parseInt(count_strategy_select) >= count){
+
           Strategies_id_array.push(strategy.id)
-        //  }
+ 
         }
       }
 
 
-      console.log("Strategies_id_array ",Strategies_id_array)
 
       var Role = "USER";
       var StartDate1 = "";
@@ -109,6 +102,7 @@ class Employee {
           data: [],
         });
       }
+
       const existingemail = await User_model.findOne({ Email: Email });
       if (existingemail) {
         return res.send({
@@ -117,6 +111,7 @@ class Employee {
           data: [],
         });
       }
+
       const existingePhone = await User_model.findOne({ PhoneNo: PhoneNo });
       if (existingePhone) {
         return res.send({
@@ -172,13 +167,15 @@ class Employee {
         var TotalLicense = 0;
       }
 
-      console.log("SHK 4")
+      console.log("licence",licence)
+      console.log("Panel_key[0]",Panel_key[0])
 
       if (Number(licence) > 0) {
-        console.log("SHK 1")
+        console.log("TotalLicense",TotalLicense)
+     
 
-        if ((parseInt(TotalLicense) + parseInt(licence)) >= Number(Panel_key[0].licenses)  ) {
-         console.log("SHK 2")
+        if ((parseInt(TotalLicense) + parseInt(licence)) >= Number(Panel_key[0].licenses || 0)  ) {
+      
           return res.send({
             status: false,
             msg: "You Dont Have License",
@@ -189,7 +186,6 @@ class Employee {
       }
 
 
-      console.log("SHK 3")
 
 
 
@@ -269,8 +265,7 @@ class Employee {
         salt
       );
 
-      // Panel Prifix key Find
-      var Panel_key = await Company_info.find();
+  
       if (Panel_key.length == 0) {
         return res.send({
           status: false,
@@ -517,10 +512,10 @@ class Employee {
 
 
       if (Number(new_licence) > 0) {
-        //console.log("SHK 1")
+     
 
         if ((parseInt(TotalLicense) + parseInt(new_licence)) >= Number(Panel_key[0].licenses)  ) {
-         // console.log("SHK 2")
+       
           return res.send({
             status: false,
             msg: "You Dont Have License",
