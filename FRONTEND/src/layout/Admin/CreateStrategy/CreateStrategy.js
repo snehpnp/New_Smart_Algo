@@ -18,7 +18,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Signals } from "../../../ReduxStore/Slice/Admin/SignalsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Get_All_Strategy } from "../../../ReduxStore/Slice/Admin/StrategySlice";
-import { get_time_frame , get_source , get_comparators ,Add_Make_Strategy ,get_instrument } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
+import { get_time_frame, get_source, get_comparators, Add_Make_Strategy, get_instrument } from "../../../ReduxStore/Slice/Common/make_strategy_slice";
 
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
@@ -27,64 +27,68 @@ import * as Config from "../../../Utils/Config";
 
 
 const CreateStrategy = () => {
-  const navigate = useNavigate()
-  const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
-  const user_role = JSON.parse(localStorage.getItem("user_role"));
-
-
-
-  const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
-  const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
-
-
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+
+
+  const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
+
   const [show, setShow] = useState(false);
+  const user_role = JSON.parse(localStorage.getItem("user_role"));
   const [storeServiceData, setStoreServiceData] = useState([])
   const [filterServices, setFilterServices] = useState("")
-
   const [selectedItems, setSelectedItems] = useState([]);
-
-
   const [getIndicators, setGetIndicators] = useState([])
   const [selectAddIndicators, setSelectAddIndicators] = useState([])
   const [indicatorModalRowData, setIndicatorModalRowData] = useState([])
-
   const [showEnterPrice, setShowEnterPrice] = useState(false);
-  const handleCloseEnterPrice = () => setShowEnterPrice(false);
-  const handleShowEnterPrice = () => {
-    setShowEnterPrice(true)
-  }
-  const jumbotronStyles = {
-    border: '5px outset #b463ff',
-    backgroundColor: 'white',
-    textAlign: 'center',
-    height: '250px'
-  }
-
-  const handleClose = () => setShow(false);
-
   const [priceAction, setPriceAction] = useState("above");
   const [inputValue, setInputValue] = useState(0);
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(0);
+  const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState({ loading: true, data: [] });
+  const [selectStrategy, setSelectStrategy] = useState("");
+  const [timeFrameData, setTimeFrameData] = useState({ loading: true, data: [] });
+  const [getSources, setGetSources] = useState({ loading: true, data: [] });
+  const [getComparators, setGetComparators] = useState({ loading: true, data: [] });
+  const [disableSaveButtun, setDisableSaveButtun] = useState(false);
+  const [strategyName, setStrategyName] = useState("");
+  const [numberOfTrade, setNumberOfTrade] = useState("");
+  const [maxProfit, setMaxProfit] = useState("");
+  const [maxLoss, setMaxLoss] = useState("");
+  const [timeFrameVal, setTimeFrameVal] = useState("");
+  const [buyCheck, setBuyCheck] = useState(false);
+  const [sellCheck, setSellCheck] = useState(false);
+  const [coditionRequestArr, setCoditionRequestArr] = useState([])
+  const [coditionRequestArrSell, setCoditionRequestArrSell] = useState([])
+  const [selectedSource, setSelectedSource] = useState('');
+  const [selectConditionItem, setSelectConditionItem] = useState('');
+  const [selectedElementFirsSecond, setSelectedElementFirsSecond] = useState('');
+  const [offSetValue, setOffSetValue] = useState(0);
+  const [selectedIndexConditionArr, setSelectedIndexConditionArr] = useState('');
+  const [selectAndOrOperater, setSelectAndOrOperater] = useState('or');
+  const [showModalOffset, setShowModalOffset] = useState(false);
+  const [showModalAndOrOperator, setShowModalAndOrOperator] = useState(false);
+  const [checkBuySellAndOr, setCheckBuySellAndOr] = useState("");
+  const [exitConditionBuyOrSell, setExitConditionBuyOrSell] = useState([{ buy: { stoploss: "0", target: "0", tsl: "0", }, sell: { stoploss: "0", target: "0", tsl: "0", }, }]);
+  const [timeTradeConddition, setTimeTradeConddition] = useState([{ entry: { time: "", }, exit: { time: "", }, notrade: { time: "", } }]);
 
-  const handlePriceActionChange = (event) => {
-    setPriceAction(event.target.value);
-  };
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
-  const handleMinValueChange = (event) => {
-    setMinValue(event.target.value);
-  };
-
-  const handleMaxValueChange = (event) => {
-    setMaxValue(event.target.value);
-  };
+  const selectTimeFrame = (item) => { setTimeFrameVal(item.value); }
+  const handleCloseEnterPrice = () => setShowEnterPrice(false);
+  const handleClose = () => setShow(false);
+  const handleShowEnterPrice = () => { setShowEnterPrice(true) }
+  const handlePriceActionChange = (event) => { setPriceAction(event.target.value); };
+  const handleInputChange = (event) => { setInputValue(event.target.value); };
+  const handleMinValueChange = (event) => { setMinValue(event.target.value); };
+  const handleMaxValueChange = (event) => { setMaxValue(event.target.value); };
+  const openModalOffset = () => { setShowModalOffset(true); };
+  const closeModalOffset = () => { setShowModalOffset(false); };
+  const closeModalAndOrOperator = () => { setShowModalAndOrOperator(false); };
+  const openModalAndOrOperator = () => { setShowModalAndOrOperator(true); };
+  const ChangeOffset = (e) => { setOffSetValue(e.target.value) }
 
 
   useEffect(() => {
@@ -93,17 +97,20 @@ const CreateStrategy = () => {
     }
   }, [filterServices]);
 
+  useEffect(() => {
+    getAllSteategyApi();
+    getAllTimeFrameApi();
+    getAllSourceApi();
+    getAllComparatorsApi();
+  }, []);
 
-
-
+  
   const handleShow = async () => {
     setShow(true);
 
-
-
     const config = {
       method: 'post',
-      url:`${Config.base_url}add/getservicename`,
+      url: `${Config.base_url}add/getservicename`,
       data: {
         searchQuery: filterServices
       }
@@ -111,7 +118,7 @@ const CreateStrategy = () => {
 
     axios(config)
       .then(function (response) {
-        
+
         setStoreServiceData(response.data.data);
       })
       .catch(function (error) {
@@ -119,8 +126,6 @@ const CreateStrategy = () => {
       });
 
   };
-
-
 
 
   const handleAddItem = (item) => {
@@ -132,13 +137,11 @@ const CreateStrategy = () => {
     }
   };
 
+
   const handleRemoveItem = (itemToRemove) => {
     const updatedItems = selectedItems.filter((item) => item !== itemToRemove);
     setSelectedItems(updatedItems);
   };
-
- 
- 
 
   const indicatorAddItem = (item) => {
     const isItemAlreadySelected = selectAddIndicators.some(
@@ -149,40 +152,17 @@ const CreateStrategy = () => {
     }
   };
 
+
   const indicatorRemoveItem = (itemToRemove) => {
     const updatedItems = selectAddIndicators.filter((item) => item !== itemToRemove);
     setSelectAddIndicators(updatedItems);
   };
 
 
-  useEffect(() => {
-    getAllSteategyApi();
-    getAllTimeFrameApi();
-    getAllSourceApi();
-    getAllComparatorsApi();
-  }, []);
-
-  //const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState([]);
-  const [strategyDataAllAdmin, setStrategyDataAllAdmin] = useState({ loading: true, data: [] });
-  const [selectStrategy, setSelectStrategy] = useState("");
-
-  // get data time frame 
-  const [timeFrameData, setTimeFrameData] = useState({ loading: true, data: [] });
-
-  // get data Source 
-  const [getSources, setGetSources] = useState({ loading: true, data: [] });
-
-   // get data comparators 
-   const [getComparators, setGetComparators] = useState({ loading: true, data: [] });
-   
-   //disableSaveButtun
-   const [disableSaveButtun, setDisableSaveButtun] = useState(false);
-
-
 
 
   const getAllTimeFrameApi = async () => {
-      await dispatch(
+    await dispatch(
       get_time_frame({
         req: {
           page: "1",
@@ -190,10 +170,10 @@ const CreateStrategy = () => {
         },
         token: AdminToken,
       })
-      )
+    )
       .unwrap()
       .then((response) => {
-      
+
         if (response) {
           if (response.status) {
             setTimeFrameData({
@@ -222,7 +202,7 @@ const CreateStrategy = () => {
     )
       .unwrap()
       .then((response) => {
-       
+
         if (response) {
           if (response.status) {
             setGetSources({
@@ -251,7 +231,7 @@ const CreateStrategy = () => {
     )
       .unwrap()
       .then((response) => {
-       
+
         if (response) {
           if (response.status) {
             setGetComparators({
@@ -280,7 +260,7 @@ const CreateStrategy = () => {
     )
       .unwrap()
       .then((response) => {
-        
+
         if (response.status) {
           if (response.status) {
             setStrategyDataAllAdmin({
@@ -298,204 +278,155 @@ const CreateStrategy = () => {
   };
 
 
-  const [strategyName, setStrategyName] = useState("");
-  
-  const [numberOfTrade, setNumberOfTrade] = useState("");
- 
-  const [maxProfit, setMaxProfit] = useState("");
- 
-  const [maxLoss, setMaxLoss] = useState("");
-  
-  const [timeFrameVal, setTimeFrameVal] = useState("");
 
-  const [buyCheck, setBuyCheck] = useState(false);
-
-  const [sellCheck, setSellCheck] = useState(false);
-
-
-  const selectTimeFrame = (item) => {
-   
-    setTimeFrameVal(item.value);
-  }
-
-
-
-  
-
-  const [coditionRequestArr, setCoditionRequestArr] = useState([
-    
-
-  ])
-
-  const [coditionRequestArrSell, setCoditionRequestArrSell] = useState([
-    
-  
-  ])
-
-
- 
-
-  const [selectedSource, setSelectedSource] = useState('');
-  const [selectConditionItem, setSelectConditionItem] = useState('');
-  const [selectedElementFirsSecond, setSelectedElementFirsSecond] = useState('');
-  const [offSetValue, setOffSetValue] = useState(0);
-  const [selectedIndexConditionArr, setSelectedIndexConditionArr] = useState('');
-  const [selectAndOrOperater, setSelectAndOrOperater] = useState('or');
-  
-  
-  const [showModalOffset, setShowModalOffset] = useState(false);
-  
-  // And or Operator
-
-  const [showModalAndOrOperator, setShowModalAndOrOperator] = useState(false);
 
   const onChange = (e) => {
 
-   
-   if(e.target.name == "strategy_name"){
-    if(e.target.value != ""){
-     setStrategyName(e.target.value)
-    }else{
-     setStrategyName("")
-    }
-  }
 
-    else if(e.target.name == "no_of_trade"){
-    const type = No_Negetive_Input_regex(e.target.value)
-     if(type){
-      if(e.target.value != ""){
-        setNumberOfTrade(e.target.value)
-        }else{
-        setNumberOfTrade("")
-        }
-     }else{
-        if(e.target.value == ""){
-        setNumberOfTrade("")
-        }else{
-        setNumberOfTrade("1") 
-        }
-     }
-
+    if (e.target.name == "strategy_name") {
+      if (e.target.value != "") {
+        setStrategyName(e.target.value)
+      } else {
+        setStrategyName("")
+      }
     }
 
-    else if(e.target.name == "max_profit"){
+    else if (e.target.name == "no_of_trade") {
       const type = No_Negetive_Input_regex(e.target.value)
-       if(type){
-        if(e.target.value != ""){
+      if (type) {
+        if (e.target.value != "") {
+          setNumberOfTrade(e.target.value)
+        } else {
+          setNumberOfTrade("")
+        }
+      } else {
+        if (e.target.value == "") {
+          setNumberOfTrade("")
+        } else {
+          setNumberOfTrade("1")
+        }
+      }
+
+    }
+
+    else if (e.target.name == "max_profit") {
+      const type = No_Negetive_Input_regex(e.target.value)
+      if (type) {
+        if (e.target.value != "") {
           setMaxProfit(e.target.value)
-          }else{
+        } else {
           setMaxProfit("")
-          }
-       }else{
-          if(e.target.value == ""){
+        }
+      } else {
+        if (e.target.value == "") {
           setMaxProfit("")
-          }else{
-          setMaxProfit("1") 
-          }
-       }
-  
-     }
-
-     else if(e.target.name == "max_loss"){
-      const type = No_Negetive_Input_regex(e.target.value)
-       if(type){
-        if(e.target.value != ""){
-          setMaxLoss(e.target.value)
-          }else{
-          setMaxLoss("")
-          }
-       }else{
-          if(e.target.value == ""){
-          setMaxLoss("")
-          }else{
-          setMaxLoss("1") 
-          }
-       }
-  
+        } else {
+          setMaxProfit("1")
+        }
       }
 
-
-   }
-
-
-
-  const selectSource = (e , condition_item , element_first_second,index,buy_sell) => {
-   
-  
-  if(e.target.value != ""){
-
-    if(buy_sell == "buy"){
-    const foundObject = coditionRequestArr.find((item,i) => i === index);
-    if (foundObject) {
-    // Update the source field of the found object
-    if(element_first_second == "first"){
-      foundObject.first_element.source = e.target.value;
-    }else if (element_first_second == "second"){
-      foundObject.second_element.source = e.target.value;
-    }
-    // Create a new array to trigger a state update
-    setCoditionRequestArr([...coditionRequestArr]);
-    }
-    }
-    else if(buy_sell == "sell"){
-      const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-    if (foundObject) {
-    // Update the source field of the found object
-    if(element_first_second == "first"){
-      foundObject.first_element.source = e.target.value;
-    }else if (element_first_second == "second"){
-      foundObject.second_element.source = e.target.value;
-    }
-    // Create a new array to trigger a state update
-    setCoditionRequestArrSell([...coditionRequestArrSell]);
-    }
     }
 
-   }
-  
+    else if (e.target.name == "max_loss") {
+      const type = No_Negetive_Input_regex(e.target.value)
+      if (type) {
+        if (e.target.value != "") {
+          setMaxLoss(e.target.value)
+        } else {
+          setMaxLoss("")
+        }
+      } else {
+        if (e.target.value == "") {
+          setMaxLoss("")
+        } else {
+          setMaxLoss("1")
+        }
+      }
+
+    }
+
+
   }
 
-  const ChangeOffsetval = (e , condition_item , element_first_second,index,buy_sell) => {
-    if(e.target.value != ""){
-      if(buy_sell == "buy"){
-        const foundObject = coditionRequestArr.find((item,i) => i === index);
-     
-      if (foundObject) {
-        if(element_first_second == "first"){
-          foundObject.first_element.offset = e.target.value;
-        }else if (element_first_second == "second"){
-          foundObject.second_element.offset = e.target.value;
-        }
-        // Create a new array to trigger a state update
-        setCoditionRequestArr([...coditionRequestArr]);
-      }
-      }else if(buy_sell == "sell"){
-        const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-       
+
+
+  const selectSource = (e, condition_item, element_first_second, index, buy_sell) => {
+
+
+    if (e.target.value != "") {
+
+      if (buy_sell == "buy") {
+        const foundObject = coditionRequestArr.find((item, i) => i === index);
         if (foundObject) {
-          if(element_first_second == "first"){
+          // Update the source field of the found object
+          if (element_first_second == "first") {
+            foundObject.first_element.source = e.target.value;
+          } else if (element_first_second == "second") {
+            foundObject.second_element.source = e.target.value;
+          }
+          // Create a new array to trigger a state update
+          setCoditionRequestArr([...coditionRequestArr]);
+        }
+      }
+      else if (buy_sell == "sell") {
+        const foundObject = coditionRequestArrSell.find((item, i) => i === index);
+        if (foundObject) {
+          // Update the source field of the found object
+          if (element_first_second == "first") {
+            foundObject.first_element.source = e.target.value;
+          } else if (element_first_second == "second") {
+            foundObject.second_element.source = e.target.value;
+          }
+          // Create a new array to trigger a state update
+          setCoditionRequestArrSell([...coditionRequestArrSell]);
+        }
+      }
+
+    }
+
+  }
+
+  const ChangeOffsetval = (e, condition_item, element_first_second, index, buy_sell) => {
+    if (e.target.value != "") {
+      if (buy_sell == "buy") {
+        const foundObject = coditionRequestArr.find((item, i) => i === index);
+
+        if (foundObject) {
+          if (element_first_second == "first") {
             foundObject.first_element.offset = e.target.value;
-          }else if (element_first_second == "second"){
+          } else if (element_first_second == "second") {
+            foundObject.second_element.offset = e.target.value;
+          }
+          // Create a new array to trigger a state update
+          setCoditionRequestArr([...coditionRequestArr]);
+        }
+      } else if (buy_sell == "sell") {
+        const foundObject = coditionRequestArrSell.find((item, i) => i === index);
+
+        if (foundObject) {
+          if (element_first_second == "first") {
+            foundObject.first_element.offset = e.target.value;
+          } else if (element_first_second == "second") {
             foundObject.second_element.offset = e.target.value;
           }
           // Create a new array to trigger a state update
           setCoditionRequestArrSell([...coditionRequestArrSell]);
         }
-       }
+      }
 
-     }
+    }
   }
 
-  const selectComparators = (e , condition_item,index,buy_sell) => {
-   
-    if(buy_sell == "buy"){
-      const foundObject = coditionRequestArr.find((item,i) => i === index);
+  const selectComparators = (e, condition_item, index, buy_sell) => {
+
+    if (buy_sell == "buy") {
+      const foundObject = coditionRequestArr.find((item, i) => i === index);
       if (foundObject) {
         foundObject.comparators = e.target.value;
         setCoditionRequestArr([...coditionRequestArr]);
       }
-    }else if(buy_sell == "sell"){
-      const foundObject = coditionRequestArrSell.find((item,i) => i === index);
+    } else if (buy_sell == "sell") {
+      const foundObject = coditionRequestArrSell.find((item, i) => i === index);
       if (foundObject) {
         foundObject.comparators = e.target.value;
         setCoditionRequestArrSell([...coditionRequestArrSell]);
@@ -504,212 +435,190 @@ const CreateStrategy = () => {
 
   }
 
-  const openModalOffset = () => {
-    setShowModalOffset(true);
-  };
-
-  const closeModalOffset = () => {
-    setShowModalOffset(false);
-  };
-
-  
-  const closeModalAndOrOperator = () => {
-    setShowModalAndOrOperator(false);
-  };
-
-  
-  const openModalAndOrOperator = () => {
-    setShowModalAndOrOperator(true);
-  };
-
-  
-  const conditionRemove = (index,buy_sell) => {
-    if(buy_sell == "buy"){
+  const conditionRemove = (index, buy_sell) => {
+    if (buy_sell == "buy") {
       setCoditionRequestArr(oldValues => {
-        return oldValues.filter((item , i) => i !== index)
+        return oldValues.filter((item, i) => i !== index)
       })
-    }else if(buy_sell == "sell"){
+    } else if (buy_sell == "sell") {
       setCoditionRequestArrSell(oldValues => {
-        return oldValues.filter((item , i) => i !== index)
+        return oldValues.filter((item, i) => i !== index)
       })
     }
 
   }
 
 
-  
-  const [checkBuySellAndOr, setCheckBuySellAndOr] = useState("");
-  const conditionAdd = (ArrCondition,buy_sell) => {
-     
-    if(buy_sell == "buy"){
-      if(coditionRequestArr.length == 0){
 
-        let pre_tag =  {
-          start_bracket : [],
-          first_element : {
-          source : "",
-          offset : "0"
-         },
-    
-          comparators : "==",
-    
-         second_element : {
-          source : "",
-          offset : "0"
-         },
-         and_or_operator:"",
-         end_bracket : [],
+  const conditionAdd = (ArrCondition, buy_sell) => {
+
+    if (buy_sell == "buy") {
+      if (coditionRequestArr.length == 0) {
+
+        let pre_tag = {
+          start_bracket: [],
+          first_element: {
+            source: "",
+            offset: "0"
+          },
+
+          comparators: "==",
+
+          second_element: {
+            source: "",
+            offset: "0"
+          },
+          and_or_operator: "",
+          end_bracket: [],
         }
-     
-         setCoditionRequestArr((oldArray) => [...oldArray,pre_tag]);
-       
-       }else{
-         
-         const lastIndex = ArrCondition.length - 1;
-  
-  
-       const foundObject = coditionRequestArr.find((item,i) => i === lastIndex);
-       if (foundObject) {
-         // Update the source field of the found object
-  
-         if(foundObject.first_element.source == "" && foundObject.second_element.source == ""){
-         alert("please select first and second element")
-         }else{
-           setCheckBuySellAndOr("buy")
-           openModalAndOrOperator();
-         }
-       }
-  
-          
-       }
 
-    }else if(buy_sell == "sell"){
+        setCoditionRequestArr((oldArray) => [...oldArray, pre_tag]);
 
-      if(coditionRequestArrSell.length == 0){
+      } else {
 
-        let pre_tag =  {
-          start_bracket : [],
-          first_element : {
-          source : "",
-          offset : "0"
-         },
-    
-          comparators : "==",
-    
-         second_element : {
-          source : "",
-          offset : "0"
-         },
-         and_or_operator:"",
-         end_bracket : [],
+        const lastIndex = ArrCondition.length - 1;
+
+
+        const foundObject = coditionRequestArr.find((item, i) => i === lastIndex);
+        if (foundObject) {
+          // Update the source field of the found object
+
+          if (foundObject.first_element.source == "" && foundObject.second_element.source == "") {
+            alert("please select first and second element")
+          } else {
+            setCheckBuySellAndOr("buy")
+            openModalAndOrOperator();
+          }
         }
-     
-        setCoditionRequestArrSell((oldArray) => [...oldArray,pre_tag]);
-       
-       }else{
-         
-         const lastIndex = ArrCondition.length - 1;
-  
-      
-       const foundObject = coditionRequestArrSell.find((item,i) => i === lastIndex);
-       if (foundObject) {
-         // Update the source field of the found object
-      
-         if(foundObject.first_element.source == "" && foundObject.second_element.source == ""){
-         alert("please select first and second element")
-         }else{
-          setCheckBuySellAndOr("sell")
-           openModalAndOrOperator();
-         }
-       }
-  
-            
-       }
-      
+
+
+      }
+
+    } else if (buy_sell == "sell") {
+
+      if (coditionRequestArrSell.length == 0) {
+
+        let pre_tag = {
+          start_bracket: [],
+          first_element: {
+            source: "",
+            offset: "0"
+          },
+
+          comparators: "==",
+
+          second_element: {
+            source: "",
+            offset: "0"
+          },
+          and_or_operator: "",
+          end_bracket: [],
+        }
+
+        setCoditionRequestArrSell((oldArray) => [...oldArray, pre_tag]);
+
+      } else {
+
+        const lastIndex = ArrCondition.length - 1;
+
+
+        const foundObject = coditionRequestArrSell.find((item, i) => i === lastIndex);
+        if (foundObject) {
+          // Update the source field of the found object
+
+          if (foundObject.first_element.source == "" && foundObject.second_element.source == "") {
+            alert("please select first and second element")
+          } else {
+            setCheckBuySellAndOr("sell")
+            openModalAndOrOperator();
+          }
+        }
+
+
+      }
+
     }
-      
+
   }
 
   const ModalConfirmAndOrOperator = (buy_sell) => {
-    if(buy_sell == "buy"){
+    if (buy_sell == "buy") {
       const lastIndex = coditionRequestArr.length - 1;
-      const foundObject = coditionRequestArr.find((item,i) => i === lastIndex);
+      const foundObject = coditionRequestArr.find((item, i) => i === lastIndex);
       if (foundObject) {
         // Update the source field of the found object
         foundObject.and_or_operator = selectAndOrOperater;
         // Create a new array to trigger a state update
         setCoditionRequestArr([...coditionRequestArr]);
       }
-  
-      let pre_tag =  {
-        start_bracket : [],
-        first_element : {
-        source : "",
-        offset : "0"
-       },
-  
-        comparators : "==",
-  
-       second_element : {
-        source : "",
-        offset : "0"
-       },
-       and_or_operator:"",
-       end_bracket : [],
-       //and_or_operator:selectAndOrOperater,
+
+      let pre_tag = {
+        start_bracket: [],
+        first_element: {
+          source: "",
+          offset: "0"
+        },
+
+        comparators: "==",
+
+        second_element: {
+          source: "",
+          offset: "0"
+        },
+        and_or_operator: "",
+        end_bracket: [],
+        //and_or_operator:selectAndOrOperater,
       }
-       setCoditionRequestArr((oldArray) => [...oldArray,pre_tag]);
-       closeModalAndOrOperator();
-    }else if(buy_sell == "sell"){
+      setCoditionRequestArr((oldArray) => [...oldArray, pre_tag]);
+      closeModalAndOrOperator();
+    } else if (buy_sell == "sell") {
       const lastIndex = coditionRequestArrSell.length - 1;
-      const foundObject = coditionRequestArrSell.find((item,i) => i === lastIndex);
+      const foundObject = coditionRequestArrSell.find((item, i) => i === lastIndex);
       if (foundObject) {
         // Update the source field of the found object
         foundObject.and_or_operator = selectAndOrOperater;
         // Create a new array to trigger a state update
         setCoditionRequestArrSell([...coditionRequestArrSell]);
       }
-  
-      let pre_tag =  {
-        start_bracket : [],
-        first_element : {
-        source : "",
-        offset : "0"
-       },
-  
-        comparators : "==",
-  
-       second_element : {
-        source : "",
-        offset : "0"
-       },
-       and_or_operator:"",
-       end_bracket : [],
-       //and_or_operator:selectAndOrOperater,
+
+      let pre_tag = {
+        start_bracket: [],
+        first_element: {
+          source: "",
+          offset: "0"
+        },
+
+        comparators: "==",
+
+        second_element: {
+          source: "",
+          offset: "0"
+        },
+        and_or_operator: "",
+        end_bracket: [],
+        //and_or_operator:selectAndOrOperater,
       }
-      setCoditionRequestArrSell((oldArray) => [...oldArray,pre_tag]);
-       closeModalAndOrOperator();
+      setCoditionRequestArrSell((oldArray) => [...oldArray, pre_tag]);
+      closeModalAndOrOperator();
     }
-    
+
   }
 
-  const ChangeOffset = (e) => {
-   setOffSetValue(e.target.value)
-  }
-
-  const ModalConfirmOffset = (selectConditionItem,selectedElementFirsSecond,index,source,buy_sell) => {
 
 
-    if(buy_sell == "buy"){
-      const foundObject = coditionRequestArr.find((item,i) => i === index);
+  const ModalConfirmOffset = (selectConditionItem, selectedElementFirsSecond, index, source, buy_sell) => {
+
+
+    if (buy_sell == "buy") {
+      const foundObject = coditionRequestArr.find((item, i) => i === index);
       if (foundObject) {
         // Update the source field of the found object
-        if(selectedElementFirsSecond == "first"){
-  
+        if (selectedElementFirsSecond == "first") {
+
           foundObject.first_element.source = source;
           foundObject.first_element.offset = offSetValue;
-  
-        }else if (selectedElementFirsSecond == "second"){
+
+        } else if (selectedElementFirsSecond == "second") {
           foundObject.second_element.source = source;
           foundObject.second_element.offset = offSetValue;
         }
@@ -718,368 +627,345 @@ const CreateStrategy = () => {
       }
       setOffSetValue(0)
       closeModalOffset();
-    }else if(buy_sell == "sell"){
-      const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-    if (foundObject) {
-      // Update the source field of the found object
-      if(selectedElementFirsSecond == "first"){
+    } else if (buy_sell == "sell") {
+      const foundObject = coditionRequestArrSell.find((item, i) => i === index);
+      if (foundObject) {
+        // Update the source field of the found object
+        if (selectedElementFirsSecond == "first") {
 
-        foundObject.first_element.source = source;
-        foundObject.first_element.offset = offSetValue;
+          foundObject.first_element.source = source;
+          foundObject.first_element.offset = offSetValue;
 
-      }else if (selectedElementFirsSecond == "second"){
-        foundObject.second_element.source = source;
-        foundObject.second_element.offset = offSetValue;
+        } else if (selectedElementFirsSecond == "second") {
+          foundObject.second_element.source = source;
+          foundObject.second_element.offset = offSetValue;
+        }
+        // Create a new array to trigger a state update
+        setCoditionRequestArrSell([...coditionRequestArrSell]);
       }
-      // Create a new array to trigger a state update
-      setCoditionRequestArrSell([...coditionRequestArrSell]);
+      setOffSetValue(0)
+      closeModalOffset();
     }
-    setOffSetValue(0)
-    closeModalOffset();
-    }
-   
-    
+
+
 
 
   };
 
-  const selectAndOrOperaterChange = (e ,condition_item ,index,buy_sell) => {
-    
-    if(buy_sell == "buy"){
-      const foundObject = coditionRequestArr.find((item,i) => i === index);
+  const selectAndOrOperaterChange = (e, condition_item, index, buy_sell) => {
+
+    if (buy_sell == "buy") {
+      const foundObject = coditionRequestArr.find((item, i) => i === index);
       if (foundObject) {
         foundObject.and_or_operator = e.target.value;
         setCoditionRequestArr([...coditionRequestArr]);
       }
-    }else if(buy_sell == "sell"){
-      const foundObject = coditionRequestArrSell.find((item,i) => i === index);
+    } else if (buy_sell == "sell") {
+      const foundObject = coditionRequestArrSell.find((item, i) => i === index);
       if (foundObject) {
         foundObject.and_or_operator = e.target.value;
         setCoditionRequestArrSell([...coditionRequestArrSell]);
       }
     }
 
-  
-    
-  }
-  
 
-  
-  
+
+  }
+
+
+
+  // ===================================START================================================
+
   let condition_string = "";
   let condition_string_pass = "";
- 
+  let condition_string_sell = "";
+  let condition_string_sell_pass = "";
+
   for (let index = 0; index < coditionRequestArr.length; index++) {
     const val = coditionRequestArr[index];
-    
 
-  
+
+
     if (val.first_element.source !== "" && val.second_element.source !== "") {
 
 
-      let and_or= ""
-      let and_or_pass= ""
-      if(val.and_or_operator == "or"){
+      let and_or = ""
+      let and_or_pass = ""
+      if (val.and_or_operator == "or") {
         and_or = "OR"
         and_or_pass = "||"
-      }else if(val.and_or_operator == "and"){
+      } else if (val.and_or_operator == "and") {
         and_or = "AND"
         and_or_pass = "&&"
       }
 
-      if(coditionRequestArr.length ==1){
-        and_or=""
+      if (coditionRequestArr.length == 1) {
+        and_or = ""
       }
 
       let start_bracket = ""
-      if(val.start_bracket.length > 0){
+      if (val.start_bracket.length > 0) {
         start_bracket = val.start_bracket.join('');
       }
-      
+
       let end_bracket = "";
-      if(val.end_bracket.length > 0){
+      if (val.end_bracket.length > 0) {
         end_bracket = val.end_bracket.join('');
       }
- 
+
       // condition_string += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
 
       let first_element = `${val.first_element.source}[${val.first_element.offset}]`;
-      if(val.first_element.source == "number"){
+      if (val.first_element.source == "number") {
         first_element = val.first_element.offset
       }
 
       let second_element = `${val.second_element.source}[${val.second_element.offset}]`;
-      if(val.second_element.source == "number"){
+      if (val.second_element.source == "number") {
         second_element = val.second_element.offset
       }
 
 
       condition_string += `${start_bracket}(${first_element} ${val.comparators} ${second_element})${end_bracket}  ${and_or}  `;
 
-        
+
 
       let first_element_pass = `data.${val.first_element.source}[${val.first_element.offset}]`;
-      if(val.first_element.source == "number"){
+      if (val.first_element.source == "number") {
         first_element_pass = val.first_element.offset
       }
 
-    let second_element_pass = `data.${val.second_element.source}[${val.second_element.offset}]`;
-      if(val.second_element.source == "number"){
+      let second_element_pass = `data.${val.second_element.source}[${val.second_element.offset}]`;
+      if (val.second_element.source == "number") {
         second_element_pass = val.second_element.offset
       }
-      
+
       condition_string_pass += `${start_bracket}(${first_element_pass}${val.comparators}${second_element_pass})${end_bracket}${and_or_pass}`;
-    } 
-     else {
+    }
+    else {
       break; // Break out of the loop
     }
   }
-  
-
-
-
-  let condition_string_sell  = "";
-  let condition_string_sell_pass  = "";
 
   for (let index = 0; index < coditionRequestArrSell.length; index++) {
     const val = coditionRequestArrSell[index];
-    
 
-  
+
+
     if (val.first_element.source !== "" && val.second_element.source !== "") {
 
 
-      let and_or= ""
-      let and_or_pass= ""
-      if(val.and_or_operator == "or"){
+      let and_or = ""
+      let and_or_pass = ""
+      if (val.and_or_operator == "or") {
         and_or = "OR"
-        and_or_pass= "||"
-      }else if(val.and_or_operator == "and"){
+        and_or_pass = "||"
+      } else if (val.and_or_operator == "and") {
         and_or = "AND"
-       and_or_pass= "&&"
+        and_or_pass = "&&"
       }
 
-      if(coditionRequestArrSell.length ==1){
-        and_or=""
+      if (coditionRequestArrSell.length == 1) {
+        and_or = ""
       }
 
       let start_bracket = ""
-      if(val.start_bracket.length > 0){
+      if (val.start_bracket.length > 0) {
         start_bracket = val.start_bracket.join('');
       }
-      
+
       let end_bracket = "";
-      if(val.end_bracket.length > 0){
+      if (val.end_bracket.length > 0) {
         end_bracket = val.end_bracket.join('');
       }
- 
+
       // condition_string_sell += `${start_bracket}(${val.first_element.source}[${val.first_element.offset}] ${val.comparators} ${val.second_element.source}[${val.second_element.offset}])${end_bracket}  ${and_or}  `;
 
 
       // condition_string_sell_pass += `${start_bracket}(data.${val.first_element.source}[${val.first_element.offset}]${val.comparators}data.${val.second_element.source}[${val.second_element.offset}])${end_bracket}${and_or_pass}`;
 
       let first_element = `${val.first_element.source}[${val.first_element.offset}]`;
-      if(val.first_element.source == "number"){
+      if (val.first_element.source == "number") {
         first_element = val.first_element.offset
       }
 
       let second_element = `${val.second_element.source}[${val.second_element.offset}]`;
-      if(val.second_element.source == "number"){
+      if (val.second_element.source == "number") {
         second_element = val.second_element.offset
       }
 
 
       condition_string_sell += `${start_bracket}(${first_element} ${val.comparators} ${second_element})${end_bracket}  ${and_or}  `;
 
-        
+
 
       let first_element_pass = `data.${val.first_element.source}[${val.first_element.offset}]`;
-      if(val.first_element.source == "number"){
+      if (val.first_element.source == "number") {
         first_element_pass = val.first_element.offset
       }
 
-    let second_element_pass = `data.${val.second_element.source}[${val.second_element.offset}]`;
-      if(val.second_element.source == "number"){
+      let second_element_pass = `data.${val.second_element.source}[${val.second_element.offset}]`;
+      if (val.second_element.source == "number") {
         second_element_pass = val.second_element.offset
       }
-      
+
       condition_string_sell_pass += `${start_bracket}(${first_element_pass}${val.comparators}${second_element_pass})${end_bracket}${and_or_pass}`;
 
-    } 
-     else {
+    }
+    else {
       break; // Break out of the loop
     }
   }
-  
-  // Continue with the rest of your code
+
+  // ======================================END=============================================
 
 
-  const AddBracket = (index,start_and,buy_sell) => {
-  
-    if(buy_sell == "buy"){
-      if(start_and == "start"){
+  const AddBracket = (index, start_and, buy_sell) => {
 
-        const foundObject = coditionRequestArr.find((item,i) => i === index);
-       
+    if (buy_sell == "buy") {
+      if (start_and == "start") {
+
+        const foundObject = coditionRequestArr.find((item, i) => i === index);
+
         if (foundObject) {
           // Update the source field of the found object
           foundObject.start_bracket.push("(");
           // Create a new array to trigger a state update
           setCoditionRequestArr([...coditionRequestArr]);
         }
-    
-       }else if(start_and == "end"){
-        const foundObject = coditionRequestArr.find((item,i) => i === index);
-    
+
+      } else if (start_and == "end") {
+        const foundObject = coditionRequestArr.find((item, i) => i === index);
+
         if (foundObject) {
           // Update the source field of the found object
           foundObject.end_bracket.push(")");
           // Create a new array to trigger a state update
           setCoditionRequestArr([...coditionRequestArr]);
         }
-    
-       }
-    }else if(buy_sell == "sell"){
-      if(start_and == "start"){
 
-        const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-      
+      }
+    } else if (buy_sell == "sell") {
+      if (start_and == "start") {
+
+        const foundObject = coditionRequestArrSell.find((item, i) => i === index);
+
         if (foundObject) {
           // Update the source field of the found object
           foundObject.start_bracket.push("(");
           // Create a new array to trigger a state update
           setCoditionRequestArrSell([...coditionRequestArrSell]);
         }
-    
-       }else if(start_and == "end"){
-        const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-       
+
+      } else if (start_and == "end") {
+        const foundObject = coditionRequestArrSell.find((item, i) => i === index);
+
         if (foundObject) {
           // Update the source field of the found object
           foundObject.end_bracket.push(")");
           // Create a new array to trigger a state update
           setCoditionRequestArrSell([...coditionRequestArrSell]);
         }
-    
-       }
+
+      }
     }
 
   }
 
-  
-  const RemoveBracket = (index,start_and,last_index,buy_sell) => {
-   
-    if(buy_sell == "buy"){
-      if(last_index > -1){
-        if(start_and == "start"){
-    
-          const foundObject = coditionRequestArr.find((item,i) => i === index);
-     
+  const RemoveBracket = (index, start_and, last_index, buy_sell) => {
+
+    if (buy_sell == "buy") {
+      if (last_index > -1) {
+        if (start_and == "start") {
+
+          const foundObject = coditionRequestArr.find((item, i) => i === index);
+
           if (foundObject) {
             // Update the source field of the found object
             foundObject.start_bracket.pop();
             // Create a new array to trigger a state update
             setCoditionRequestArr([...coditionRequestArr]);
           }
-    
-    
-        }else if(start_and == "end"){
-    
-          const foundObject = coditionRequestArr.find((item,i) => i === index);
-   
+
+
+        } else if (start_and == "end") {
+
+          const foundObject = coditionRequestArr.find((item, i) => i === index);
+
           if (foundObject) {
             // Update the source field of the found object
             foundObject.end_bracket.pop();
             // Create a new array to trigger a state update
             setCoditionRequestArr([...coditionRequestArr]);
           }
-     
-        }
-    
+
         }
 
-    }else if(buy_sell == "sell"){
+      }
 
-      if(last_index > -1){
-        if(start_and == "start"){
-    
-          const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-      
+    } else if (buy_sell == "sell") {
+
+      if (last_index > -1) {
+        if (start_and == "start") {
+
+          const foundObject = coditionRequestArrSell.find((item, i) => i === index);
+
           if (foundObject) {
             // Update the source field of the found object
             foundObject.start_bracket.pop();
             // Create a new array to trigger a state update
             setCoditionRequestArrSell([...coditionRequestArrSell]);
           }
-    
-    
-        }else if(start_and == "end"){
-    
-          const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-         
+
+
+        } else if (start_and == "end") {
+
+          const foundObject = coditionRequestArrSell.find((item, i) => i === index);
+
           if (foundObject) {
             // Update the source field of the found object
             foundObject.end_bracket.pop();
             // Create a new array to trigger a state update
             setCoditionRequestArrSell([...coditionRequestArrSell]);
           }
-     
+
         }
-    
-        }
-      
+
+      }
+
     }
 
   }
 
- 
+  const StoplossChange = (e, buy_sell) => {
 
+    if (parseInt(e.target.value) > 0) {
+      if (buy_sell == "buy") {
+        const foundObjectexit = exitConditionBuyOrSell.find((item, i) => i === 0);
+        if (foundObjectexit) {
+          foundObjectexit.buy.stoploss = e.target.value
+          setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+        }
+      } else if (buy_sell == "sell") {
+        const foundObjectexit = exitConditionBuyOrSell.find((item, i) => i === 0);
+        if (foundObjectexit) {
+          foundObjectexit.sell.stoploss = e.target.value
+          setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
+        }
 
-  const [exitConditionBuyOrSell, setExitConditionBuyOrSell] = useState(
-    [{
-      buy : {
-      stoploss : "0",
-      target : "0",
-      tsl : "0",
-     },
-     sell : {
-      stoploss : "0",
-      target : "0",
-      tsl : "0",
-     },
-    }]
-  );
-
-  const StoplossChange = (e,buy_sell) => {
-   
-   if(parseInt(e.target.value) > 0 ){
-    if(buy_sell == "buy"){
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
-      if (foundObjectexit) {
-        foundObjectexit.buy.stoploss = e.target.value
-        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
       }
-    }else if(buy_sell == "sell"){
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
-      if (foundObjectexit) {
-        foundObjectexit.sell.stoploss = e.target.value
-        setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
-      }
-     
     }
-  }  
   }
- 
 
-  const TargetChange = (e,buy_sell) => {
-    if(buy_sell == "buy"){
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+  const TargetChange = (e, buy_sell) => {
+    if (buy_sell == "buy") {
+      const foundObjectexit = exitConditionBuyOrSell.find((item, i) => i === 0);
       if (foundObjectexit) {
         foundObjectexit.buy.target = e.target.value
         setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
       }
-    }else if(buy_sell == "sell"){
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+    } else if (buy_sell == "sell") {
+      const foundObjectexit = exitConditionBuyOrSell.find((item, i) => i === 0);
       if (foundObjectexit) {
         foundObjectexit.sell.target = e.target.value
         setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
@@ -1087,16 +973,16 @@ const CreateStrategy = () => {
     }
   }
 
-  const TSLChange = (e,buy_sell) => {
-    if(buy_sell == "buy"){
-     
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+  const TSLChange = (e, buy_sell) => {
+    if (buy_sell == "buy") {
+
+      const foundObjectexit = exitConditionBuyOrSell.find((item, i) => i === 0);
       if (foundObjectexit) {
         foundObjectexit.buy.tsl = e.target.value
         setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
       }
-    }else if(buy_sell == "sell"){
-      const foundObjectexit = exitConditionBuyOrSell.find((item,i) => i === 0);
+    } else if (buy_sell == "sell") {
+      const foundObjectexit = exitConditionBuyOrSell.find((item, i) => i === 0);
       if (foundObjectexit) {
         foundObjectexit.sell.tsl = e.target.value
         setExitConditionBuyOrSell([...exitConditionBuyOrSell]);
@@ -1104,303 +990,279 @@ const CreateStrategy = () => {
     }
   }
 
+  const selectTime = (e, type) => {
+    //  alert(e.target.value)
+    if (e.target.value != "") {
 
-  const [timeTradeConddition, setTimeTradeConddition] = useState(
-    [
+      if (type == "entry") {
 
-     {
-      entry : {
-      time : "",
-      },
-      exit : {
-
-        time : "",
-        },
-      notrade : {
-
-        time : "",
-        }
-     }
-    ]
-  );
-
- 
-
-  const selectTime = (e,type) => {
-  //  alert(e.target.value)
-    if(e.target.value != ""){
-  
-     if(type == "entry"){
-     
-      const foundObjectTime = timeTradeConddition.find((item,i) => i === 0);
-      if (foundObjectTime) {
+        const foundObjectTime = timeTradeConddition.find((item, i) => i === 0);
+        if (foundObjectTime) {
 
           foundObjectTime.entry.time = e.target.value
           setTimeTradeConddition([...timeTradeConddition]);
-        
-      }
-  
-     }else if(type == "exit"){
-  
-      const foundObjectTime = timeTradeConddition.find((item,i) => i === 0);
-      if (foundObjectTime) {
 
-        
+        }
+
+      } else if (type == "exit") {
+
+        const foundObjectTime = timeTradeConddition.find((item, i) => i === 0);
+        if (foundObjectTime) {
+
+
           foundObjectTime.exit.time = e.target.value
           setTimeTradeConddition([...timeTradeConddition]);
-         
-        
-      }
-  
-     }
-     else if(type == "notrade"){
-  
-      const foundObjectTime = timeTradeConddition.find((item,i) => i === 0);
-      if (foundObjectTime) {
 
-       
+
+        }
+
+      }
+      else if (type == "notrade") {
+
+        const foundObjectTime = timeTradeConddition.find((item, i) => i === 0);
+        if (foundObjectTime) {
+
+
           foundObjectTime.notrade.time = e.target.value
           setTimeTradeConddition([...timeTradeConddition]);
-         
-        
+
+
+        }
+
       }
-  
-     }
-  
-    }
 
     }
 
+  }
 
   function areParenthesesBalanced(expression) {
     const stack = [];
     for (let char of expression) {
-    if (char === '(') {
-    stack.push(char);
-    } else if (char === ')') {
-    if (stack.length === 0 || stack.pop() !== '(') {
-        return false; // Unbalanced parentheses
-       }
+      if (char === '(') {
+        stack.push(char);
+      } else if (char === ')') {
+        if (stack.length === 0 || stack.pop() !== '(') {
+          return false; // Unbalanced parentheses
+        }
       }
     }
     return stack.length === 0; // True if parentheses are balanced
-    }
-
-
-const saveStrategy = async (e) => {
-   // alert(condition_string)
-   
-   if (strategyName == "") {
-    alert("Please select a strategy name");
-    return;
   }
+
+  const saveStrategy = async (e) => {
+    // alert(condition_string)
+
+    if (strategyName == "") {
+      alert("Please select a strategy name");
+      return;
+    }
 
     if (selectStrategy == "") {
       alert("Please select a strategy tag");
       return;
     }
 
-    if(selectedItems.length == 0){
+    if (selectedItems.length == 0) {
       alert("Please select a Instruments");
       return;
     }
 
-    if(!buyCheck && !sellCheck){
+    if (!buyCheck && !sellCheck) {
       alert("Please select a Buy or Sell");
       return;
     }
 
-    if(condition_string =="" && condition_string_sell == ""){
+    if (condition_string == "" && condition_string_sell == "") {
       alert("Please select a add condition");
       return;
     }
 
- 
-    
 
-      
-      let buy_cond = false
-      if(condition_string != ""){
-       buy_cond =  areParenthesesBalanced(condition_string);
-      if(!buy_cond){
-         alert("Please correct Buy condition");
-         return;
-       }
+
+
+
+    let buy_cond = false
+    if (condition_string != "") {
+      buy_cond = areParenthesesBalanced(condition_string);
+      if (!buy_cond) {
+        alert("Please correct Buy condition");
+        return;
       }
-      
+    }
 
-      let sell_cond =false
-      if(condition_string_sell != ""){ 
-        sell_cond =  areParenthesesBalanced(condition_string_sell);
-        if(!sell_cond){
-           alert("Please correct Sell condition");
-           return;
-         }
+
+    let sell_cond = false
+    if (condition_string_sell != "") {
+      sell_cond = areParenthesesBalanced(condition_string_sell);
+      if (!sell_cond) {
+        alert("Please correct Sell condition");
+        return;
       }
+    }
 
-      if(sellCheck){
-        if(!sell_cond){
-          alert("Please add Sell condition");
-          return;
-        }
+    if (sellCheck) {
+      if (!sell_cond) {
+        alert("Please add Sell condition");
+        return;
       }
+    }
 
-      if(buyCheck){
-        if(!buy_cond){
-          alert("Please add Buy condition");
-          return;
-        }
+    if (buyCheck) {
+      if (!buy_cond) {
+        alert("Please add Buy condition");
+        return;
       }
+    }
 
-      setDisableSaveButtun(true)
+    setDisableSaveButtun(true)
 
-   
-      let condition_string_source = [];
-      for (let index = 0; index < coditionRequestArr.length; index++) {
-        const val = coditionRequestArr[index];
- 
-      
-        if (val.first_element.source !== "" && val.second_element.source !== "") {
-        if(val.first_element.source != "number"){
-        if (!condition_string_source.includes(`${val.first_element.source}(${val.first_element.offset})`)) {
+
+    let condition_string_source = [];
+    for (let index = 0; index < coditionRequestArr.length; index++) {
+      const val = coditionRequestArr[index];
+
+
+      if (val.first_element.source !== "" && val.second_element.source !== "") {
+        if (val.first_element.source != "number") {
+          if (!condition_string_source.includes(`${val.first_element.source}(${val.first_element.offset})`)) {
             condition_string_source.push(`${val.first_element.source}(${val.first_element.offset})`);
-         }  
+          }
         }
-        
-        if(val.second_element.source != "number"){
-         if (!condition_string_source.includes(`${val.second_element.source}(${val.second_element.offset})`)) {
-          condition_string_source.push(`${val.second_element.source}(${val.second_element.offset})`);
-        } 
-       } 
 
-        } 
-         else {
-          break; // Break out of the loop
+        if (val.second_element.source != "number") {
+          if (!condition_string_source.includes(`${val.second_element.source}(${val.second_element.offset})`)) {
+            condition_string_source.push(`${val.second_element.source}(${val.second_element.offset})`);
+          }
         }
+
       }
-     
+      else {
+        break; // Break out of the loop
+      }
+    }
 
 
 
 
-      let condition_string_sell_source = [];
-      for (let index = 0; index < coditionRequestArrSell.length; index++) {
-        const val = coditionRequestArrSell[index];
-        if (val.first_element.source !== "" && val.second_element.source !== "") {
 
-          if(val.first_element.source != "number"){ 
-        if (!condition_string_sell_source.includes(`${val.first_element.source}(${val.first_element.offset})`)) {
+    let condition_string_sell_source = [];
+    for (let index = 0; index < coditionRequestArrSell.length; index++) {
+      const val = coditionRequestArrSell[index];
+      if (val.first_element.source !== "" && val.second_element.source !== "") {
+
+        if (val.first_element.source != "number") {
+          if (!condition_string_sell_source.includes(`${val.first_element.source}(${val.first_element.offset})`)) {
             condition_string_sell_source.push(`${val.first_element.source}(${val.first_element.offset})`);
-         }  
+          }
         }
-         
-        if(val.second_element.source != "number"){
-         if (!condition_string_sell_source.includes(`${val.second_element.source}(${val.second_element.offset})`)) {
-          condition_string_sell_source.push(`${val.second_element.source}(${val.second_element.offset})`);
-        } 
-      }
 
-        } 
-         else {
-          break; // Break out of the loop
+        if (val.second_element.source != "number") {
+          if (!condition_string_sell_source.includes(`${val.second_element.source}(${val.second_element.offset})`)) {
+            condition_string_sell_source.push(`${val.second_element.source}(${val.second_element.offset})`);
+          }
         }
+
       }
-   
+      else {
+        break; // Break out of the loop
+      }
+    }
+
 
 
     // Send Request Buy ------
     if (buyCheck && buy_cond) {
-     // alert("buy")
-      
+      // alert("buy")
+
       let data = {
 
         "scriptArray": selectedItems,
-        "name":strategyName,
+        "name": strategyName,
         "user_id": user_Id,
-        
+
         "strategy_name": selectStrategy,
-        
+
         "timeframe": timeFrameVal,
         "type": "BUY",
         "indicator": "MA",
         "price_source": "open",
         "period": "1",
         "inside_indicator": "EMA",
-        
+
         "condition": condition_string_pass.replace(/(\|\||&&)$/, ''),
-  
+
         "condition_source": condition_string_source,
         "buffer_value": "2",
         "offset": "0",
         "target_stoploss": exitConditionBuyOrSell[0].buy,
-        "timeTradeConddition":timeTradeConddition,
-        "condition_array":coditionRequestArr,
-        "target_stoloss_array":exitConditionBuyOrSell,
-        "numberOfTrade":numberOfTrade,
-        "maxProfit":maxProfit,
-        "maxLoss":maxLoss
-       }
-       
-      
+        "timeTradeConddition": timeTradeConddition,
+        "condition_array": coditionRequestArr,
+        "target_stoloss_array": exitConditionBuyOrSell,
+        "numberOfTrade": numberOfTrade,
+        "maxProfit": maxProfit,
+        "maxLoss": maxLoss
+      }
 
-       await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
+
+
+      await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
         if (response.status === 409) {
           toast.error(response.data.msg);
         }
         else if (response.status) {
-          if(!sellCheck && !sell_cond){
-           toast.success(response.msg);
-        
-           setTimeout(() => {
-            if(user_role==='ADMIN'){
-              navigate("/admin/AllMakeStrategy")
-            }
-            else if(user_role==='SUBADMIN'){
-              navigate("/subadmin/AllMakeStrategy")
-            }
-           }, 1000); 
-          }else{
-            
+          if (!sellCheck && !sell_cond) {
+            toast.success(response.msg);
+
+            setTimeout(() => {
+              if (user_role === 'ADMIN') {
+                navigate("/admin/AllMakeStrategy")
+              }
+              else if (user_role === 'SUBADMIN') {
+                navigate("/subadmin/AllMakeStrategy")
+              }
+            }, 1000);
+          } else {
+
           }
         }
         else if (!response.status) {
           toast.error(response.msg);
         }
-       })
-       
+      })
+
     }
 
     // Send Request Sell ------
     if (sellCheck && sell_cond) {
-    //  alert("sell")
+      //  alert("sell")
       let data = {
         "scriptArray": selectedItems,
-        "name":strategyName,
+        "name": strategyName,
         "user_id": user_Id,
-      
+
         "strategy_name": selectStrategy,
-     
+
         "timeframe": timeFrameVal,
         "type": "SELL",
         "indicator": "MA",
         "price_source": "open",
         "period": "1",
         "inside_indicator": "EMA",
-         
+
         "condition": condition_string_sell_pass.replace(/(\|\||&&)$/, ''),
-     
+
         "condition_source": condition_string_sell_source,
         "buffer_value": "2",
         "offset": "0",
         "target_stoploss": exitConditionBuyOrSell[0].sell,
-        "timeTradeConddition":timeTradeConddition,
-        "condition_array":coditionRequestArrSell,
-        "target_stoloss_array":exitConditionBuyOrSell,
-        "numberOfTrade":numberOfTrade,
-        "maxProfit":maxProfit,
-        "maxLoss":maxLoss
+        "timeTradeConddition": timeTradeConddition,
+        "condition_array": coditionRequestArrSell,
+        "target_stoloss_array": exitConditionBuyOrSell,
+        "numberOfTrade": numberOfTrade,
+        "maxProfit": maxProfit,
+        "maxLoss": maxLoss
       }
-    
+
 
       await dispatch(Add_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
         if (response.status === 409) {
@@ -1408,38 +1270,38 @@ const saveStrategy = async (e) => {
         }
         else if (response.status) {
 
-         toast.success(response.msg);
-         //window.location.reload();
-         setTimeout(() => {
-          if(user_role==='ADMIN'){
-            navigate("/admin/AllMakeStrategy")
-          }
-          else if(user_role==='SUBADMIN'){
-            navigate("/subadmin/AllMakeStrategy")
-          }
-         
-         }, 1000); 
+          toast.success(response.msg);
+          //window.location.reload();
+          setTimeout(() => {
+            if (user_role === 'ADMIN') {
+              navigate("/admin/AllMakeStrategy")
+            }
+            else if (user_role === 'SUBADMIN') {
+              navigate("/subadmin/AllMakeStrategy")
+            }
+
+          }, 1000);
         }
         else if (!response.status) {
           toast.error(response.msg);
         }
       })
- 
- 
+
+
     }
 
   }
 
- 
+
   return (
     <>
       <>
-      <Content Page_title="Create Strategy" button_title="Back" route={user_role==="ADMIN" ? "/admin/AllMakeStrategy" : user_role === "SUBADMIN" ? "/subadmin/AllMakeStrategy" : ""}>
-          <div>
+        <Content Page_title="Create Strategy" button_title="Back" route={user_role === "ADMIN" ? "/admin/AllMakeStrategy" : user_role === "SUBADMIN" ? "/subadmin/AllMakeStrategy" : ""}>
 
-           <div className="col-md-2 ">
+          <div>
+            <div className="col-md-2 ">
               <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Strategy Name</label>
-             <input type="text" onChange={(e)=>{onChange(e)}} name="strategy_name" className="form-control stratergy-box"></input>
+              <input type="text" onChange={(e) => { onChange(e) }} name="strategy_name" className="form-control stratergy-box"></input>
             </div>
 
             <div className="col-md-2 ">
@@ -1453,13 +1315,13 @@ const saveStrategy = async (e) => {
 
             <div className="col-md-2 ">
               <label className=" ps-5" style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }} >Number of Trade</label>
-             <input min={1} type="text" onChange={(e)=>{onChange(e)}}  name="no_of_trade" className="form-control stratergy-box" value={numberOfTrade}></input>
- 
+              <input min={1} type="text" onChange={(e) => { onChange(e) }} name="no_of_trade" className="form-control stratergy-box" value={numberOfTrade}></input>
+
 
 
             </div>
 
-            
+
             <Modal show={show} onHide={handleClose} className="right">
               <Modal.Header>
                 <input
@@ -1469,7 +1331,7 @@ const saveStrategy = async (e) => {
                   value={filterServices}
                   onChange={(e) => setFilterServices(e.target.value)}
                 />
-                
+
               </Modal.Header>
               <Modal.Body>
                 <ul className="ps-0">
@@ -1489,7 +1351,7 @@ const saveStrategy = async (e) => {
                             <p className="text-muted my-0">{x.exch_seg}</p>
                           </div>
                           <div className="col-md-3 d-flex list-btn">
-                            
+
                             <button className="btn border-0">
                               <i
                                 className="fa-regular fa-square-plus"
@@ -1507,6 +1369,7 @@ const saveStrategy = async (e) => {
               </Modal.Body>
               <Modal.Footer></Modal.Footer>
             </Modal>
+
             <ul class="StepProgress">
               <li class="StepProgress-item is-done">
 
@@ -1551,7 +1414,7 @@ const saveStrategy = async (e) => {
 
                 </div>
               </li>
-               <li class="StepProgress-item is-done">
+              <li class="StepProgress-item is-done">
                 <div className="row">
                   <div className="col-xl-6">
                     <div className="card">
@@ -1577,10 +1440,10 @@ const saveStrategy = async (e) => {
                             ))
                           }
 
- 
+
 
                         </ul>
-                    
+
                       </div>
                     </div>
                   </div>
@@ -1588,15 +1451,15 @@ const saveStrategy = async (e) => {
                 </div>
               </li>
 
-              
-             
-               <Row className="mt-4">
+
+
+              <Row className="mt-4">
                 <Col md={2}>
                   <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Entry Time</h5>
                 </Col>
                 <Col md={2}>
                   {/* <label>Time</label> */}
-                  <Form.Control style={{ height: 'auto' }} type="time" id="text3" value={timeTradeConddition[0].entry.time}  onChange={(e) => { selectTime(e,"entry") }}/>
+                  <Form.Control style={{ height: 'auto' }} type="time" id="text3" value={timeTradeConddition[0].entry.time} onChange={(e) => { selectTime(e, "entry") }} />
                 </Col>
               </Row>
 
@@ -1604,25 +1467,25 @@ const saveStrategy = async (e) => {
                 <Col md={2}>
                   <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>Exit Time</h5>
                 </Col>
-               
+
                 <Col md={2}>
                   {/* <label>Time</label> */}
-                  <Form.Control  style={{ height: 'auto' }} type="time" id="text3" value={timeTradeConddition[0].exit.time} onChange={(e) => { selectTime(e,"exit") }}/>
+                  <Form.Control style={{ height: 'auto' }} type="time" id="text3" value={timeTradeConddition[0].exit.time} onChange={(e) => { selectTime(e, "exit") }} />
                 </Col>
               </Row>
 
-              <Row  className="mt-4">
+              <Row className="mt-4">
                 <Col md={2}>
                   <h5 style={{ fontWeight: 'bold', color: 'black', fontSize: '15px' }}>No Trade Time</h5>
                 </Col>
-                
+
                 <Col md={2}>
                   {/* <label>Time</label> */}
-                  <Form.Control  style={{ height: 'auto' }} type="time" id="text3" value={timeTradeConddition[0].notrade.time} onChange={(e) => { selectTime(e,"notrade") }}/>
+                  <Form.Control style={{ height: 'auto' }} type="time" id="text3" value={timeTradeConddition[0].notrade.time} onChange={(e) => { selectTime(e, "notrade") }} />
                 </Col>
               </Row>
 
-              <li class="StepProgress-item current is-done" style={{marginTop:"50px"}}>
+              <li class="StepProgress-item current is-done" style={{ marginTop: "50px" }}>
 
                 <div className="form-check form-check-inline">
                   <input className="form-check-input" onChange={(e) => setBuyCheck(e.target.checked)} type="checkbox" id="inlineCheckbox1" value="option1" />
@@ -1632,223 +1495,223 @@ const saveStrategy = async (e) => {
 
                 <strong>Buy Entry Condition</strong>
 
-                
-                 {
-                  buyCheck == true ? 
-                  <Tabs
-                  // defaultActiveKey="profile"
-                  id="uncontrolled-tab-example"
-                  className="mb-3"
-                >
- 
-      
-                  <Tab eventKey="home" title="Price">
 
-                    <h4>{condition_string}</h4>
+                {
+                  buyCheck == true ?
+                    <Tabs
+                      // defaultActiveKey="profile"
+                      id="uncontrolled-tab-example"
+                      className="mb-3"
+                    >
 
 
-                    {coditionRequestArr.length > 0 ? 
-                    <>
-                  <Row>
-                  <Col md={2}>
-                  
-                  </Col>
-                  <Col md={4}>
-                  <label style={{ marginRight: '82px'}}><b>First</b></label>
-                  
-                  <label style={{ marginRight: '32px'}}><b>Comparators</b></label>
-                  
-                  <label><b>Second</b></label>
-                  </Col>
-                  <Col md={2}>
-                  </Col>
-                  {
-                    coditionRequestArr.length==2? <Col md={2}>
-                    <label><b>AND / OR</b></label>
-                    </Col>:""
-                  }
-                  
-                  </Row>
-                    </>
-                    :""}
+                      <Tab eventKey="home" title="Price">
+
+                        <h4>{condition_string}</h4>
 
 
-                  
-                 
-                  
-                  {coditionRequestArr && coditionRequestArr.map((condition_item,index) => (
-                      <>
-                     <Row className="mb-2">
-                    <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px'}}>
+                        {coditionRequestArr.length > 0 ?
+                          <>
+                            <Row>
+                              <Col md={2}>
 
-                     
-                      <button className="btn " onClick={() => AddBracket(index,"start","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}>
-                      + Bracket
-                     </button>
+                              </Col>
+                              <Col md={4}>
+                                <label style={{ marginRight: '82px' }}><b>First</b></label>
 
+                                <label style={{ marginRight: '32px' }}><b>Comparators</b></label>
 
-                      {condition_item.start_bracket.length > 0 ? 
-                       <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1,"buy")}>
-                       <i className="fa-solid fa-xmark"></i>
-                       </button>
-                       :""}
-
-                       
-                        <p  style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
-                        {condition_item.start_bracket.join('')}
-                       </p> 
-                       
-                    
-
-                     </Col>
-
-                      <Col md={4} className="d-flex px-0" style={{ height: '25px'}}>
-                        {/* <label>First Element</label> */}
-                     <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index,"buy"); }}>
-                              {/* <option value="">Select Expiry Date</option> */}
-                              <option value="" >---</option>
+                                <label><b>Second</b></label>
+                              </Col>
+                              <Col md={2}>
+                              </Col>
                               {
-                                getSources.data.map((sm, i) =>
-                                  <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                                coditionRequestArr.length == 2 ? <Col md={2}>
+                                  <label><b>AND / OR</b></label>
+                                </Col> : ""
                               }
-                      </select>
 
-                      <input style={{ height: '25px', margin:'0 20px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"buy") }} min="0" className="form-control new-field" />
-                    
-                      
-                     
-                        {/* <label>Comparators</label> */}
-                        <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index,"buy"); }}>
-                              {/* <option value="">Select Expiry Date</option> */}
-                              {/* <option value="" >---</option> */}
-                              {
-                                getComparators.data.map((sm, i) =>
-                                  <option selected={condition_item.comparators == sm.value} value={sm.value}>{sm.name}</option>)
-                              }
-                      </select>
-                    
-                        {/* <label>Second Element</label> */}
-                        <select style={{ margin:'0 20px'}} className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"buy"); }}>
-                              {/* <option value="">Select Expiry Date</option> */}
-                              <option value="" >---</option>
-                              {
-                                getSources.data.map((sm, i) =>
-                                  <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
-                              }
-                      </select>
-                      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"buy") }} min="0" className="form-control new-field" />
-                      </Col>
-                      {/* <Col md={2}>
+                            </Row>
+                          </>
+                          : ""}
+
+
+
+
+
+                        {coditionRequestArr && coditionRequestArr.map((condition_item, index) => (
+                          <>
+                            <Row className="mb-2">
+                              <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px' }}>
+
+
+                                <button className="btn " onClick={() => AddBracket(index, "start", "buy")} style={{ border: '1px dashed orange', fontSize: '10px', color: '#000', padding: '5px 10px', marginRight: '10px' }}>
+                                  + Bracket
+                                </button>
+
+
+                                {condition_item.start_bracket.length > 0 ?
+                                  <button className="border-0 px-2" onClick={() => RemoveBracket(index, "start", condition_item.start_bracket.length - 1, "buy")}>
+                                    <i className="fa-solid fa-xmark"></i>
+                                  </button>
+                                  : ""}
+
+
+                                <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
+                                  {condition_item.start_bracket.join('')}
+                                </p>
+
+
+
+                              </Col>
+
+                              <Col md={4} className="d-flex px-0" style={{ height: '25px' }}>
+                                {/* <label>First Element</label> */}
+                                <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e, condition_item, "first", index, "buy"); }}>
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  <option value="" >---</option>
+                                  {
+                                    getSources.data.map((sm, i) =>
+                                      <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                                  }
+                                </select>
+
+                                <input style={{ height: '25px', margin: '0 20px' }} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e, condition_item, "first", index, "buy") }} min="0" className="form-control new-field" />
+
+
+
+                                {/* <label>Comparators</label> */}
+                                <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e, condition_item, index, "buy"); }}>
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  {/* <option value="" >---</option> */}
+                                  {
+                                    getComparators.data.map((sm, i) =>
+                                      <option selected={condition_item.comparators == sm.value} value={sm.value}>{sm.name}</option>)
+                                  }
+                                </select>
+
+                                {/* <label>Second Element</label> */}
+                                <select style={{ margin: '0 20px' }} className="form-select" name="expiry_date" onChange={(e) => { selectSource(e, condition_item, "second", index, "buy"); }}>
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  <option value="" >---</option>
+                                  {
+                                    getSources.data.map((sm, i) =>
+                                      <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                                  }
+                                </select>
+                                <input style={{ height: '25px' }} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e, condition_item, "second", index, "buy") }} min="0" className="form-control new-field" />
+                              </Col>
+                              {/* <Col md={2}>
                         <label>Offset</label>
                         <Form.Control type="number" id="text3" />
                       </Col> */}
 
-                     <Col md={2} className="d-flex px-0 justify-content-center"  style={{ height: '25px'}}>
+                              <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px' }}>
 
-                      <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
-                        {condition_item.end_bracket.join('')}
-                       </p> 
+                                <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
+                                  {condition_item.end_bracket.join('')}
+                                </p>
 
-                       {
-                         condition_item.end_bracket.length > 0 ?
-                       <button className="border-0 px-2"  onClick={() => RemoveBracket(index,"end",condition_item.end_bracket.length - 1,"buy")}>
-                      <i className="fa-solid fa-xmark"></i>
-                     </button>
-                         :"" 
-                        }
-                     
-                      <button className=" btn " onClick={() => AddBracket(index,"end","buy")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}> 
-                      + Bracket
-                     </button>
+                                {
+                                  condition_item.end_bracket.length > 0 ?
+                                    <button className="border-0 px-2" onClick={() => RemoveBracket(index, "end", condition_item.end_bracket.length - 1, "buy")}>
+                                      <i className="fa-solid fa-xmark"></i>
+                                    </button>
+                                    : ""
+                                }
 
-
-                     </Col>
-                       <Col md={2}>
-                        {
-                          coditionRequestArr.length >= 2?
-                          condition_item.and_or_operator == ""?"":
-                          <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index,"buy"); }}>
-                              {/* <option value="">Select Expiry Date</option> */}
-                              <option selected={condition_item.and_or_operator == "and"} value="and">AND</option>
-                              <option selected={condition_item.and_or_operator == "or"} value="or">OR</option>
-                              
-                         </select>
-                          :
-                          ""
-                        }
-            
-                       </Col> 
-                      <Col md={2} style={{ height: '25px'}}> 
-                     {
-                     index==0? 
-                     coditionRequestArr.length == 1? 
-                   
-                     <button className="btn btn-danger " onClick={() => conditionRemove(index,"buy")} style={{fontSize:'10px',padding:'5px 10px'}}>
-                     Remove
-                    </button>
-                    
-                     : ""
-                     :
-                   
-                      <button className="btn btn-danger  " style={{fontSize:'10px',padding:'5px 10px'}} onClick={() => conditionRemove(index,"buy")} >
-                      Remove
-                     </button>
-                    
-                      
-                     }
-                       </Col>
-                      
-                      
-                    </Row>
-                      
-                      </>
-                  ))}
+                                <button className=" btn " onClick={() => AddBracket(index, "end", "buy")} style={{ border: '1px dashed orange', fontSize: '10px', color: '#000', padding: '5px 10px', marginRight: '10px' }}>
+                                  + Bracket
+                                </button>
 
 
-                   <button style={{border:'1px dashed orange'}} className="btn p-2" onClick={() => conditionAdd(coditionRequestArr,"buy")}>
-                      + Add
-                  </button>
+                              </Col>
+                              <Col md={2}>
+                                {
+                                  coditionRequestArr.length >= 2 ?
+                                    condition_item.and_or_operator == "" ? "" :
+                                      <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e, condition_item, index, "buy"); }}>
+                                        {/* <option value="">Select Expiry Date</option> */}
+                                        <option selected={condition_item.and_or_operator == "and"} value="and">AND</option>
+                                        <option selected={condition_item.and_or_operator == "or"} value="or">OR</option>
+
+                                      </select>
+                                    :
+                                    ""
+                                }
+
+                              </Col>
+                              <Col md={2} style={{ height: '25px' }}>
+                                {
+                                  index == 0 ?
+                                    coditionRequestArr.length == 1 ?
+
+                                      <button className="btn btn-danger " onClick={() => conditionRemove(index, "buy")} style={{ fontSize: '10px', padding: '5px 10px' }}>
+                                        Remove
+                                      </button>
+
+                                      : ""
+                                    :
+
+                                    <button className="btn btn-danger  " style={{ fontSize: '10px', padding: '5px 10px' }} onClick={() => conditionRemove(index, "buy")} >
+                                      Remove
+                                    </button>
 
 
-                    {condition_string != "" ? 
-                    <li class="StepProgress-item">
-                    <strong>Buy Exit Condition</strong>
-                    <div className="row mt-3">
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-danger">Stop loss (point)</label>
-                          <input type="number" onChange={(e)=>{StoplossChange(e,"buy")}}  className="form-control"></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-success">Target Profit (point)</label>
-                          <input type="number" onChange={(e)=>{TargetChange(e,"buy")}} className="form-control"></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="">Trailing SL (point) (optional)</label>
-                          <input type="number" onChange={(e)=>{TSLChange(e,"buy")}} className="form-control"></input>
-                        </div>
-                      </div>
-                    </div>
-                    </li>
-                    :""}
+                                }
+                              </Col>
 
-                  </Tab>
 
-            
-                 </Tabs>
+                            </Row>
 
-                  :""
-                 }
+                          </>
+                        ))}
 
-                 
+
+                        <button style={{ border: '1px dashed orange' }} className="btn p-2" onClick={() => conditionAdd(coditionRequestArr, "buy")}>
+                          + Add
+                        </button>
+
+
+                        {condition_string != "" ?
+                          <li class="StepProgress-item">
+                            <strong>Buy Exit Condition</strong>
+                            <div className="row mt-3">
+                              <div className="col-md-4">
+                                <div className="form-group">
+                                  <label className="text-danger">Stop loss (point)</label>
+                                  <input type="number" onChange={(e) => { StoplossChange(e, "buy") }} className="form-control"></input>
+                                </div>
+                              </div>
+                              <div className="col-md-4">
+                                <div className="form-group">
+                                  <label className="text-success">Target Profit (point)</label>
+                                  <input type="number" onChange={(e) => { TargetChange(e, "buy") }} className="form-control"></input>
+                                </div>
+                              </div>
+                              <div className="col-md-4">
+                                <div className="form-group">
+                                  <label className="">Trailing SL (point) (optional)</label>
+                                  <input type="number" onChange={(e) => { TSLChange(e, "buy") }} className="form-control"></input>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                          : ""}
+
+                      </Tab>
+
+
+                    </Tabs>
+
+                    : ""
+                }
+
+
 
               </li>
 
-              <li class="StepProgress-item current is-done" style={{marginTop:"50px"}}>
+              <li class="StepProgress-item current is-done" style={{ marginTop: "50px" }}>
 
                 <div className="form-check form-check-inline">
                   <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" />
@@ -1857,241 +1720,221 @@ const saveStrategy = async (e) => {
                 <strong >Sell Entry Condition</strong>
 
                 {
-  sellCheck == true ? 
-  <Tabs
-  // defaultActiveKey="profile"
-  id="uncontrolled-tab-example"
-  className="mb-3"
->
+                  sellCheck == true ?
+                    <Tabs
+                      // defaultActiveKey="profile"
+                      id="uncontrolled-tab-example"
+                      className="mb-3"
+                    >
 
 
-  <Tab eventKey="home" title="Price">
+                      <Tab eventKey="home" title="Price">
 
-    <h4>{condition_string_sell}</h4>
-
-
-    {coditionRequestArrSell.length > 0 ? 
-    <>
-  <Row>
-  <Col md={2}>
-  
-  </Col>
-  <Col md={4}>
-  <label style={{ marginRight: '82px'}}><b>First</b></label>
-  
-  <label style={{ marginRight: '32px'}}><b>Comparators</b></label>
-  
-  <label><b>Second</b></label>
-  </Col>
-  <Col md={2}>
-  </Col>
-  {
-    coditionRequestArrSell.length==2? <Col md={2}>
-    <label><b>AND / OR</b></label>
-    </Col>:""
-  }
-  
-  </Row>
-    </>
-    :""}
+                        <h4>{condition_string_sell}</h4>
 
 
-  
- 
-  
-  {coditionRequestArrSell && coditionRequestArrSell.map((condition_item,index) => (
-      <>
-      <Row className="mb-2">
-      <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px'}}>
-      <button className="btn " onClick={() => AddBracket(index,"start","sell")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}>
-      + Bracket
-     </button>
-     
-     {condition_item.start_bracket.length > 0 ? 
-       <button className="border-0 px-2" onClick={() => RemoveBracket(index,"start",condition_item.start_bracket.length - 1,"sell")}>
-       <i className="fa-solid fa-xmark"></i>
-       </button>
-       :""}
-       
-        <p  style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
-        {condition_item.start_bracket.join('')}
-       </p> 
-       
-      
-      
+                        {coditionRequestArrSell.length > 0 ?
+                          <>
+                            <Row>
+                              <Col md={2}>
 
-     </Col>
+                              </Col>
+                              <Col md={4}>
+                                <label style={{ marginRight: '82px' }}><b>First</b></label>
 
-      <Col md={4} className="d-flex px-0" style={{ height: '25px'}}>
-        {/* <label>First Element</label> */}
-        <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e,condition_item ,"first",index,"sell"); }}>
-              {/* <option value="">Select Expiry Date</option> */}
-              <option value="" >---</option>
-              {
-                getSources.data.map((sm, i) =>
-                  <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
-              }
-       </select>
-      
+                                <label style={{ marginRight: '32px' }}><b>Comparators</b></label>
 
-      <input style={{ height: '25px', margin: '0 20px'}} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"first",index,"sell") }} min="0" className="form-control new-field" />
-    
-      {/* <Col md={2}>
+                                <label><b>Second</b></label>
+                              </Col>
+                              <Col md={2}>
+                              </Col>
+                              {
+                                coditionRequestArrSell.length == 2 ? <Col md={2}>
+                                  <label><b>AND / OR</b></label>
+                                </Col> : ""
+                              }
+
+                            </Row>
+                          </>
+                          : ""}
+
+
+
+
+
+                        {coditionRequestArrSell && coditionRequestArrSell.map((condition_item, index) => (
+                          <>
+                            <Row className="mb-2">
+                              <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px' }}>
+                                <button className="btn " onClick={() => AddBracket(index, "start", "sell")} style={{ border: '1px dashed orange', fontSize: '10px', color: '#000', padding: '5px 10px', marginRight: '10px' }}>
+                                  + Bracket
+                                </button>
+
+                                {condition_item.start_bracket.length > 0 ?
+                                  <button className="border-0 px-2" onClick={() => RemoveBracket(index, "start", condition_item.start_bracket.length - 1, "sell")}>
+                                    <i className="fa-solid fa-xmark"></i>
+                                  </button>
+                                  : ""}
+
+                                <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
+                                  {condition_item.start_bracket.join('')}
+                                </p>
+
+
+
+
+                              </Col>
+
+                              <Col md={4} className="d-flex px-0" style={{ height: '25px' }}>
+                                {/* <label>First Element</label> */}
+                                <select className="form-select" name="expiry_date" onChange={(e) => { selectSource(e, condition_item, "first", index, "sell"); }}>
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  <option value="" >---</option>
+                                  {
+                                    getSources.data.map((sm, i) =>
+                                      <option selected={condition_item.first_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                                  }
+                                </select>
+
+
+                                <input style={{ height: '25px', margin: '0 20px' }} type="number" defaultValue={condition_item.first_element.offset} onChange={(e) => { ChangeOffsetval(e, condition_item, "first", index, "sell") }} min="0" className="form-control new-field" />
+
+                                {/* <Col md={2}>
         <label>Offset</label>
         <Form.Control type="number" id="text2" />
       </Col> */}
-     
-        {/* <label>Comparators</label> */}
-        <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e ,condition_item ,index,"sell"); }}>
-              {/* <option value="">Select Expiry Date</option> */}
-              {/* <option value="" >---</option> */}
-              {
-                getComparators.data.map((sm, i) =>
-                  <option selected={condition_item.comparators == sm.value} value={sm.value}>{sm.name}</option>)
-              }
-      </select>
-    
-        {/* <label>Second Element</label> */}
-        <select style={{ margin: '0 20px'}} className="form-select" name="expiry_date" onChange={(e) => { selectSource(e ,condition_item ,"second",index,"sell"); }}>
-              {/* <option value="">Select Expiry Date</option> */}
-              <option value="" >---</option>
-              {
-                getSources.data.map((sm, i) =>
-                  <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
-              }
-      </select>
-      <input style={{ height: '25px'}} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e,condition_item ,"second",index,"sell") }} min="0" className="form-control new-field" />
-      </Col>
-      {/* <Col md={2}>
+
+                                {/* <label>Comparators</label> */}
+                                <select className="form-select" name="expiry_date" onChange={(e) => { selectComparators(e, condition_item, index, "sell"); }}>
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  {/* <option value="" >---</option> */}
+                                  {
+                                    getComparators.data.map((sm, i) =>
+                                      <option selected={condition_item.comparators == sm.value} value={sm.value}>{sm.name}</option>)
+                                  }
+                                </select>
+
+                                {/* <label>Second Element</label> */}
+                                <select style={{ margin: '0 20px' }} className="form-select" name="expiry_date" onChange={(e) => { selectSource(e, condition_item, "second", index, "sell"); }}>
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  <option value="" >---</option>
+                                  {
+                                    getSources.data.map((sm, i) =>
+                                      <option selected={condition_item.second_element.source == sm.value} value={sm.value}>{sm.name}</option>)
+                                  }
+                                </select>
+                                <input style={{ height: '25px' }} type="number" defaultValue={condition_item.second_element.offset} onChange={(e) => { ChangeOffsetval(e, condition_item, "second", index, "sell") }} min="0" className="form-control new-field" />
+                              </Col>
+                              {/* <Col md={2}>
         <label>Offset</label>
         <Form.Control type="number" id="text3" />
       </Col> */}
 
-     <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px'}}>
-
-        
-        <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
-        {condition_item.end_bracket.join('')}
-       </p>                     
-        
-
-        {
-         condition_item.end_bracket.length > 0 ?
-       <button className="border-0 px-2"  onClick={() => RemoveBracket(index,"end",condition_item.end_bracket.length - 1,"sell")}>
-      <i className="fa-solid fa-xmark"></i>
-     </button>
-         :"" 
-        }
-     
-      <button className=" btn " onClick={() => AddBracket(index,"end","sell")} style={{border:'1px dashed orange',fontSize:'10px',color:'#000',padding:'5px 10px',marginRight:'10px'}}> 
-      + Bracket
-     </button>
+                              <Col md={2} className="d-flex px-0 justify-content-center" style={{ height: '25px' }}>
 
 
-     </Col>
-       <Col md={2} >
-        {
-          coditionRequestArrSell.length>=2?
-          condition_item.and_or_operator == ""?"":
-          <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e ,condition_item ,index,"sell"); }}>
-              {/* <option value="">Select Expiry Date</option> */}
-              <option selected={condition_item.and_or_operator == "and"} value="and">AND</option>
-              <option selected={condition_item.and_or_operator == "or"} value="or">OR</option>
-              
-         </select>
-          :
-          ""
-        }
-
-      </Col>
-      <Col md={2} style={{ height: '25px'}}>
-     {
-     index==0? 
-     coditionRequestArrSell.length == 1? 
-   
-     <button className="btn btn-danger " onClick={() => conditionRemove(index,"sell")} style={{fontSize:'10px',padding:'5px 10px'}}>
-     Remove
-    </button>
-    
-     : ""
-     :
-   
-      <button className="btn btn-danger  " style={{fontSize:'10px',padding:'5px 10px'}} onClick={() => conditionRemove(index,"sell")} >
-      Remove
-     </button>
-    
-      
-     }
-      </Col>
-      
-      
-    </Row>
-      
-      </>
-  ))}
+                                <p style={{ marginRight: '10px', fontSize: 'larger', fontWeight: 'bold' }}>
+                                  {condition_item.end_bracket.join('')}
+                                </p>
 
 
-   <button style={{border:'1px dashed orange'}} className="btn p-2" onClick={() => conditionAdd(coditionRequestArrSell,"sell")}>
-      + Add
-  </button>
+                                {
+                                  condition_item.end_bracket.length > 0 ?
+                                    <button className="border-0 px-2" onClick={() => RemoveBracket(index, "end", condition_item.end_bracket.length - 1, "sell")}>
+                                      <i className="fa-solid fa-xmark"></i>
+                                    </button>
+                                    : ""
+                                }
+
+                                <button className=" btn " onClick={() => AddBracket(index, "end", "sell")} style={{ border: '1px dashed orange', fontSize: '10px', color: '#000', padding: '5px 10px', marginRight: '10px' }}>
+                                  + Bracket
+                                </button>
 
 
-          {condition_string_sell!=""?
-           <li class="StepProgress-item">
-           <strong>Sell Exit Condition</strong>
-           <div className="row mt-3">
-             <div className="col-md-4">
-               <div className="form-group">
-                 <label className="text-danger">Stop loss (point)</label>
-                 <input type="number" onChange={(e)=>{StoplossChange(e,"sell")}}  className="form-control"></input>
-               </div>
-             </div>
-             <div className="col-md-4">
-               <div className="form-group">
-                 <label className="text-success">Target Profit (point)</label>
-                 <input type="number" onChange={(e)=>{TargetChange(e,"sell")}} className="form-control"></input>
-               </div>
-             </div>
-             <div className="col-md-4">
-               <div className="form-group">
-                 <label className="">Trailing SL (point) (optional)</label>
-                 <input type="number" onChange={(e)=>{TSLChange(e,"sell")}} className="form-control"></input>
-               </div>
-             </div>
-           </div>
-           </li>
-          :""}
+                              </Col>
+                              <Col md={2} >
+                                {
+                                  coditionRequestArrSell.length >= 2 ?
+                                    condition_item.and_or_operator == "" ? "" :
+                                      <select className="form-select" name="and_or" onChange={(e) => { selectAndOrOperaterChange(e, condition_item, index, "sell"); }}>
+                                        {/* <option value="">Select Expiry Date</option> */}
+                                        <option selected={condition_item.and_or_operator == "and"} value="and">AND</option>
+                                        <option selected={condition_item.and_or_operator == "or"} value="or">OR</option>
 
-     </Tab>
+                                      </select>
+                                    :
+                                    ""
+                                }
 
-  
-</Tabs>
-  :""
- }
+                              </Col>
+                              <Col md={2} style={{ height: '25px' }}>
+                                {
+                                  index == 0 ?
+                                    coditionRequestArrSell.length == 1 ?
+
+                                      <button className="btn btn-danger " onClick={() => conditionRemove(index, "sell")} style={{ fontSize: '10px', padding: '5px 10px' }}>
+                                        Remove
+                                      </button>
+
+                                      : ""
+                                    :
+
+                                    <button className="btn btn-danger  " style={{ fontSize: '10px', padding: '5px 10px' }} onClick={() => conditionRemove(index, "sell")} >
+                                      Remove
+                                    </button>
+
+
+                                }
+                              </Col>
+
+
+                            </Row>
+
+                          </>
+                        ))}
+
+
+                        <button style={{ border: '1px dashed orange' }} className="btn p-2" onClick={() => conditionAdd(coditionRequestArrSell, "sell")}>
+                          + Add
+                        </button>
+
+
+                        {condition_string_sell != "" ?
+                          <li class="StepProgress-item">
+                            <strong>Sell Exit Condition</strong>
+                            <div className="row mt-3">
+                              <div className="col-md-4">
+                                <div className="form-group">
+                                  <label className="text-danger">Stop loss (point)</label>
+                                  <input type="number" onChange={(e) => { StoplossChange(e, "sell") }} className="form-control"></input>
+                                </div>
+                              </div>
+                              <div className="col-md-4">
+                                <div className="form-group">
+                                  <label className="text-success">Target Profit (point)</label>
+                                  <input type="number" onChange={(e) => { TargetChange(e, "sell") }} className="form-control"></input>
+                                </div>
+                              </div>
+                              <div className="col-md-4">
+                                <div className="form-group">
+                                  <label className="">Trailing SL (point) (optional)</label>
+                                  <input type="number" onChange={(e) => { TSLChange(e, "sell") }} className="form-control"></input>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+                          : ""}
+
+                      </Tab>
+
+
+                    </Tabs>
+                    : ""
+                }
 
               </li>
 
             </ul>
-
-
-            {/* {getIndicators.map((x) => (
-              <div key={x.id}>
-                <input type="checkbox" onClick={() => indicatorAddItem(x)} name="simple_moving_average" />
-                <label>{x.name}</label><br />
-              </div>
-            ))}
-
-            {selectAddIndicators && selectAddIndicators.map((x) => (
-              <div className="d-flex border-box" >
-                <p>{x.value}</p>
-                <p>0</p>
-                <p>open</p>
-                <p>EMA</p>
-                <p>0</p>
-                <p><i onClick={() => { handleShowEnterPrice(); setIndicatorModalRowData(x) }} className="fa-solid fa-gear"></i></p>
-                <p><i onClick={() => indicatorRemoveItem(x)} className="fa-solid fa-xmark"></i></p>
-              </div>
-            ))} */}
 
             <>
               <Modal show={showEnterPrice} onHide={handleCloseEnterPrice}>
@@ -2146,74 +1989,74 @@ const saveStrategy = async (e) => {
                 </Modal.Footer>
               </Modal>
             </>
-
-
           </div>
 
           <div className="mt-5">
             <button className='btn btn-info float-start m-0'
-            disabled={disableSaveButtun == true ? true : false}
-            onClick={()=>saveStrategy("e")}>save</button>
+              disabled={disableSaveButtun == true ? true : false}
+              onClick={() => saveStrategy("e")}>save</button>
           </div>
 
-
-          <ToastButton />
-       
         </Content>
 
         <Modal show={showModalOffset} onHide={closeModalOffset}>
-        <Modal.Body>
-          <p><b>{selectedSource}</b></p>
-           {selectedSource=="number"?"":<label>Offset</label>}
-          <Col md={2}>
-           {
-            selectedElementFirsSecond=="first"?<><input type="number" defaultValue={selectConditionItem.first_element.offset} onChange={(e) => { ChangeOffset(e) }} min="0" className="form-control" /></>
-            :
-           selectedElementFirsSecond=="second"? <><input type="number" defaultValue={selectConditionItem.second_element.offset} onChange={(e) => { ChangeOffset(e) }} min="0" className="form-control" /> </>
-            :
-            ""
-           }
-          
-          </Col>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModalOffset}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={() => ModalConfirmOffset(selectConditionItem,selectedElementFirsSecond,selectedIndexConditionArr,selectedSource)}>
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
+          <Modal.Body>
+            <p><b>{selectedSource}</b></p>
+            {selectedSource == "number" ? "" : <label>Offset</label>}
+            <Col md={2}>
+              {
+                selectedElementFirsSecond == "first" ? <><input type="number" defaultValue={selectConditionItem.first_element.offset} onChange={(e) => { ChangeOffset(e) }} min="0" className="form-control" /></>
+                  :
+                  selectedElementFirsSecond == "second" ? <><input type="number" defaultValue={selectConditionItem.second_element.offset} onChange={(e) => { ChangeOffset(e) }} min="0" className="form-control" /> </>
+                    :
+                    ""
+              }
+
+            </Col>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={closeModalOffset}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={() => ModalConfirmOffset(selectConditionItem, selectedElementFirsSecond, selectedIndexConditionArr, selectedSource)}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
 
-      <Modal show={showModalAndOrOperator} onHide={closeModalAndOrOperator}>
-        <Modal.Body>
-          <p><b>{selectedSource}</b></p>
-           
-          <label>Offset</label>
+        <Modal show={showModalAndOrOperator} onHide={closeModalAndOrOperator}>
+          <Modal.Body>
+            <p><b>{selectedSource}</b></p>
 
-          <Col md={2}>
-           
-           <div className="radio">
-                  <label for="or"><input id="or" value="or" type="radio" checked={selectAndOrOperater === 'or'} name="at_check" onChange={(e) => { setSelectAndOrOperater(e.target.value) }} />OR</label>
-            </div>
+            <label>Offset</label>
 
-            <div className="radio">
-                  <label for="and"><input id="and" value="and" type="radio" checked={selectAndOrOperater === 'and'} name="at_check" onChange={(e) => { setSelectAndOrOperater(e.target.value) }} />AND</label>
-            </div>
-          
-          </Col>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModalAndOrOperator}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={() => ModalConfirmAndOrOperator(checkBuySellAndOr)}>
-            Confirm
-          </Button>
-        </Modal.Footer>
-      </Modal>
+            <Col md={2}>
+
+              <div className="radio">
+                <label for="or"><input id="or" value="or" type="radio" checked={selectAndOrOperater === 'or'} name="at_check" onChange={(e) => { setSelectAndOrOperater(e.target.value) }} />OR</label>
+              </div>
+
+              <div className="radio">
+                <label for="and"><input id="and" value="and" type="radio" checked={selectAndOrOperater === 'and'} name="at_check" onChange={(e) => { setSelectAndOrOperater(e.target.value) }} />AND</label>
+              </div>
+
+            </Col>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={closeModalAndOrOperator}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={() => ModalConfirmAndOrOperator(checkBuySellAndOr)}>
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
+
+
+        <ToastButton />
+
+
       </>
     </>
   );
@@ -2222,13 +2065,3 @@ const saveStrategy = async (e) => {
 export default CreateStrategy;
 
 
-
-{/* <button value="math_function" className="btn btn-info btn-sm">Math Function</button>
-<button value="indicators" className="btn btn-info btn-sm">Indicators</button>
-<button value="bracket" className="btn btn-info btn-sm">Bracket</button>
-  <select name="cars" id="cars">
-    <option value="volvo">Volvo</option>
-    <option value="saab">Saab</option>
-    <option value="mercedes">Mercedes</option>
-    <option value="audi">Audi</option>
-  </select> */}
