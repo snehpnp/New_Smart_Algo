@@ -270,11 +270,11 @@ class Employee {
         var TotalLicense = 0;
       }
 
-
+console.log("parseInt(TotalLicense)",(parseInt(TotalLicense) + parseInt(licence)))
       if (Number(licence) > 0) {
       
 
-        if ((parseInt(TotalLicense) + parseInt(licence)) >= Number(Panel_key[0].licenses)  ) {
+        if ((parseInt(TotalLicense) + parseInt(licence)) > Number(Panel_key[0].licenses)  ) {
     
           return res.send({
             status: false,
@@ -1004,7 +1004,7 @@ class Employee {
             multy_stgfind.forEach(async(data) => {
 
               if (data.strategy_id.length > 1) {
-                console.log("data", data.strategy_id[0])
+                // console.log("data", data.strategy_id[0])
 
                 const filter = { _id: data._id };
                 const updateOperation = { $set:{ strategy_id: [data.strategy_id[0]]} }
@@ -1538,7 +1538,7 @@ class Employee {
         }
       ]);
       
-      console.log(Client_key);
+      // console.log(Client_key);
       
     
       

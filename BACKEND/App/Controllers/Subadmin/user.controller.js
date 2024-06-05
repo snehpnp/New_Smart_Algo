@@ -167,14 +167,12 @@ class Employee {
         var TotalLicense = 0;
       }
 
-      console.log("licence",licence)
-      console.log("Panel_key[0]",Panel_key[0])
+ 
 
       if (Number(licence) > 0) {
-        console.log("TotalLicense",TotalLicense)
      
 
-        if ((parseInt(TotalLicense) + parseInt(licence)) >= Number(Panel_key[0].licenses || 0)  ) {
+        if ((parseInt(TotalLicense) + parseInt(licence)) > Number(Panel_key[0].licenses || 0)  ) {
       
           return res.send({
             status: false,
