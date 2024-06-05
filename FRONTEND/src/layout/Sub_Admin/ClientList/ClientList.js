@@ -57,7 +57,7 @@ const AllClients = () => {
     const [refresh, setrefresh] = useState(false)
 
     const [getPermissions, setGetPermissions] = useState([])
- 
+
 
 
 
@@ -71,14 +71,14 @@ const AllClients = () => {
 
     const Brokerdata = async () => {
 
-        await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
+        await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain, brokerId: -1 })).unwrap()
             .then((response) => {
-               console.log(" response broker data",response)
+                console.log(" response broker data", response)
                 if (response.status) {
-                  setBrokerDetails(response.data);
+                    setBrokerDetails(response.data);
                 }
             })
-      }
+    }
 
     // DELETE USET FUNCTION TO DELETE ALL SERVICES
     const Delete_user = async (id) => {
@@ -97,7 +97,7 @@ const AllClients = () => {
 
 
     }
- 
+
 
     // GET ALL CLIENTS
 
@@ -139,7 +139,7 @@ const AllClients = () => {
                 console.error('Error fetching data:', error);
             }
         };
-    
+
         fetchData();
     }, [refresh]);
 
@@ -230,92 +230,92 @@ const AllClients = () => {
                 items.UserName.toLowerCase().includes(searchInput.toLowerCase()) ||
                 items.Email.toLowerCase().includes(searchInput.toLowerCase()) ||
                 items.PhoneNo.includes(searchInput)
-            return searchTermMatch && filter1Match && filter2Match ;
+            return searchTermMatch && filter1Match && filter2Match;
         });
         setAllClients({
             loading: false,
-            data: searchInput ||  ClientStatus !== "null" || PanelStatus !== "2" ? filteredData : originalData,
+            data: searchInput || ClientStatus !== "null" || PanelStatus !== "2" ? filteredData : originalData,
         });
 
-    }, [searchInput, originalData, PanelStatus , ClientStatus])
-      const ResetDate = (e) => {
+    }, [searchInput, originalData, PanelStatus, ClientStatus])
+    const ResetDate = (e) => {
         e.preventDefault();
         setSearchInput("");
         setClientStatus("null");
         setPanelStatus("2");
         setAllClients({
-          loading: false,
-          data: originalData,
+            loading: false,
+            data: originalData,
         });
-      };
-
-     
-    
+    };
 
 
-   
-      const showBrokerName = (value1, licence_type) => {
+
+
+
+
+    const showBrokerName = (value1, licence_type) => {
         let value = parseInt(value1);
-    
+
         // if (licence_type === "0") {
         //   return "2 Days Only";
         // } 
         if (licence_type === "1") {
-          return "Demo";
+            return "Demo";
         } else {
-           
-        const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
-    // console.log("foundNumber ",foundNumber)
-      if(foundNumber != undefined){
-      return foundNumber.title
-      }else{
-        return ""
-      }
 
-        //   if (value === 1) {
-        //     return "markethub";
-        //   }
-        //   if (value === 1) {
-        //     return "Markethub";
-        //   } else if (value === 2) {
-        //     return "Alice Blue";
-        //   } else if (value === 3) {
-        //     return "Master Trust";
-        //   } else if (value === 4) {
-        //     return "Motilal Oswal";
-        //   } else if (value === 5) {
-        //     return "Zebull";
-        //   } else if (value === 6) {
-        //     return "IIFl";
-        //   } else if (value === 7) {
-        //     return "Kotak";
-        //   } else if (value === 8) {
-        //     return "Mandot";
-        //   } else if (value === 9) {
-        //     return "Choice";
-        //   } else if (value === 10) {
-        //     return "Anand Rathi";
-        //   } else if (value === 11) {
-        //     return "B2C";
-        //   } else if (value === 12) {
-        //     return "Angel";
-        //   } else if (value === 13) {
-        //     return "Fyers";
-        //   } else if (value === 14) {
-        //     return "5-Paisa";
-        //   } else if (value === 15) {
-        //     return "Zerodha";
-        //   } else if (value === 19) {
-        //     return "Upstox";
-        //   }
-        //   else if (value === 20) {
-        //     return "Dhan";
-        //   }
+            const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
+            // console.log("foundNumber ",foundNumber)
+            if (foundNumber != undefined) {
+                return foundNumber.title
+            } else {
+                return ""
+            }
+
+            //   if (value === 1) {
+            //     return "markethub";
+            //   }
+            //   if (value === 1) {
+            //     return "Markethub";
+            //   } else if (value === 2) {
+            //     return "Alice Blue";
+            //   } else if (value === 3) {
+            //     return "Master Trust";
+            //   } else if (value === 4) {
+            //     return "Motilal Oswal";
+            //   } else if (value === 5) {
+            //     return "Zebull";
+            //   } else if (value === 6) {
+            //     return "IIFl";
+            //   } else if (value === 7) {
+            //     return "Kotak";
+            //   } else if (value === 8) {
+            //     return "Mandot";
+            //   } else if (value === 9) {
+            //     return "Choice";
+            //   } else if (value === 10) {
+            //     return "Anand Rathi";
+            //   } else if (value === 11) {
+            //     return "B2C";
+            //   } else if (value === 12) {
+            //     return "Angel";
+            //   } else if (value === 13) {
+            //     return "Fyers";
+            //   } else if (value === 14) {
+            //     return "5-Paisa";
+            //   } else if (value === 15) {
+            //     return "Zerodha";
+            //   } else if (value === 19) {
+            //     return "Upstox";
+            //   }
+            //   else if (value === 20) {
+            //     return "Dhan";
+            //   }
 
 
 
         }
-      };
+    };
 
 
     const columns = [
@@ -350,7 +350,7 @@ const AllClients = () => {
 
             dataField: "client_key",
             text: "Client Key",
-          },
+        },
 
         {
             dataField: 'broker',
@@ -430,27 +430,28 @@ const AllClients = () => {
 
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
-                    <div> 
-                     
-                        {(getPermissions && getPermissions.client_edit === 1) || (getPermissions && getPermissions.Update_Api_Key === 1 && row.license_type !== "1" && row.Is_Active === "1" ) ? <>
-                       
+
+                    {row.Is_Active == 1 ? <div>
+
+                        {(getPermissions && getPermissions.client_edit === 1) || (getPermissions && getPermissions.Update_Api_Key === 1 && row.license_type !== "1" && row.Is_Active === "1") ? <>
+
                             <Link to={`/subadmin/client/edit/${row._id}`} state={row}>
                                 <span data-toggle="tooltip" data-placement="top" title="Edit">
                                     <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
                                 </span>
-                                
-                            </Link> 
-               
-                            {row.license_type == "1"  && (getPermissions && getPermissions.Update_Api_Key === 0) ? <>
+
+                            </Link>
+
+                            {row.license_type == "1" && (getPermissions && getPermissions.Update_Api_Key === 0) ? <>
                                 <Link>
-                               
+
                                     <span data-toggle="tooltip" data-placement="top" title="Delete">
                                         <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={(e) => Delete_user(row._id)} />
                                     </span>
                                 </Link>
                             </> : ""}
-                        </> :  ""}
-                    </div>
+                        </> : ""}
+                    </div> : null}
                 </div>
             ),
         },
@@ -481,7 +482,7 @@ const AllClients = () => {
                                         />
                                     </div>
                                 </div>
-                               <div className="col-lg-2 ">
+                                <div className="col-lg-2 ">
                                     <div class="mb-3">
                                         <label for="select" class="form-label">
                                             Client Type
@@ -501,7 +502,7 @@ const AllClients = () => {
                                         </select>
                                     </div>
                                 </div>
-                                 <div className="col-lg-2">
+                                <div className="col-lg-2">
                                     <div class="mb-3">
                                         <label for="select" class="form-label">
                                             Trading Type
@@ -522,7 +523,7 @@ const AllClients = () => {
                                 </div>
 
 
-                                
+
 
                                 <div className="col-lg-2 mt-4">
                                     <button
