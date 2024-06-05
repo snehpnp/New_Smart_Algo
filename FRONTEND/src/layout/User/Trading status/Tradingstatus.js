@@ -2,19 +2,15 @@
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
+// import { GET_ALL_CLIENTS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import React, { useEffect, useState } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
 import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content";
 import Loader from "../../../Utils/Loader";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
-// import { GET_ALL_CLIENTS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
-import {
-  Get_All_TRADINGSTATUS_USER,
-  user_activity_logs,
-} from "../../../ReduxStore/Slice/Users/TradingStatusSlice";
+import { Get_All_TRADINGSTATUS_USER, user_activity_logs } from "../../../ReduxStore/Slice/Users/TradingStatusSlice";
 
 import { useDispatch, useSelector } from "react-redux";
-// import Modal from '../../../../Components/ExtraComponents/Modal';
 import { fDate, fDateTimeSuffix } from "../../../Utils/Date_formet";
 
 import Tab from "react-bootstrap/Tab";
@@ -29,25 +25,18 @@ const TradingStatus = () => {
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
 
 
-
-
   const [first, setfirst] = useState("all");
-
+  const [first1, setfirst1] = useState("all");
   const [DateFilter, setDateFilter] = useState();
   const [DateArray, setDateArray] = useState([]);
+  const [getAllUserTrading_status, setAllUserTrading_status] = useState({ loading: true, data: [] });
+  const [userLogs, setUserLogs] = useState({ loading: true, data: [] });
 
-  const [getAllUserTrading_status, setAllUserTrading_status] = useState({
-    loading: true,
-    data: [],
-  });
-  const [userLogs, setUserLogs] = useState({
-    loading: true,
-    data: [],
-  });
 
   let req = {
     user_Id: isgotodashboard ? gotodashboard.user_id : user_Id,
   };
+
 
   const data1 = async () => {
     await dispatch(Get_All_TRADINGSTATUS_USER(req))
@@ -75,37 +64,50 @@ const TradingStatus = () => {
           });
         }
       });
+
+  };
+
+  const data3 = async () => {
+
     await dispatch(user_activity_logs(req))
       .unwrap()
       .then((response) => {
+
         if (response.status) {
+          if (first1 === "all") {
+            setUserLogs({
+              loading: false,
+              data: response.data,
+            });
+          }
+
+          let abc = response.data.filter((item) => {
+            return item.createdAt.split("T")[0] === first1;
+          });
           setUserLogs({
             loading: false,
-            data: response.data,
+            data: abc,
+          });
+        } else {
+          setUserLogs({
+            loading: false,
+            data: [],
           });
         }
+
+
       });
-  };
+  }
+
+
   useEffect(() => {
     data1();
-  }, [first]);
+    data3();
+  }, [first,first1]);
 
 
-  const data2 = async () => {
-    await dispatch(user_activity_logs(req))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setUserLogs({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
-  };
-  useEffect(() => {
-    data2();
-  }, []);
+
+
 
   const columns = [
     {
@@ -195,6 +197,8 @@ const TradingStatus = () => {
     },
   ];
 
+
+
   var dateArray = [];
   const dateArr = () => {
     for (let i = 0; i < 3; i++) {
@@ -214,12 +218,13 @@ const TradingStatus = () => {
     }
     setDateArray(dateArray);
     setfirst(dateArray[0]);
+    setfirst1(dateArray[0]);
+
   };
   useEffect(() => {
     dateArr();
   }, []);
 
-  console.log("getAllUserTrading_status", getAllUserTrading_status);
 
   return (
     <>
@@ -242,9 +247,6 @@ const TradingStatus = () => {
                         id="validationCustom05"
                         onChange={(e) => setfirst(e.target.value)}
                       >
-                        {/* <option selected value="all">
-                                                All
-                                            </option> */}
                         {DateArray &&
                           DateArray.map((item) => {
                             return (
@@ -273,6 +275,26 @@ const TradingStatus = () => {
                 )}
               </Tab>
               <Tab eventKey="profile" title="Update Status">
+                <div className="col-lg-6">
+                  <div className="mb-3 row">
+                    <div className="col-lg-7">
+                      <select
+                        className="default-select wide form-control"
+                        id="validationCustom05"
+                        onChange={(e) => setfirst1(e.target.value)}
+                      >
+                        {DateArray &&
+                          DateArray.map((item) => {
+                            return (
+                              <>
+                                <option value={item}>{item}</option>
+                              </>
+                            );
+                          })}
+                      </select>
+                    </div>
+                  </div>
+                </div>
                 <FullDataTable
                   TableColumns={columns1}
                   tableData={userLogs.data}

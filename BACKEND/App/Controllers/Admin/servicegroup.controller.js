@@ -27,8 +27,8 @@ class GroupService {
         return res.send({ status: false, msg: "Group Name Is already Exist", data: groupServices })
       }
 
-      if (services_id.length > 50) {
-        return res.send({ status: false, msg: "You are Select Only 50 Services", data: groupServices })
+      if (services_id.length > 150) {
+        return res.send({ status: false, msg: "You are Select Only 150 Services", data: groupServices })
       }
 
 
@@ -86,8 +86,8 @@ class GroupService {
         return res.send({ status: false, msg: "Name is already Exist", data: groupServices })
       }
 
-      if (services_id.length > 50) {
-        return res.send({ status: false, msg: "You are Select Only 50 Services", data: groupServices })
+      if (services_id.length > 150) {
+        return res.send({ status: false, msg: "You are Select Only 150 Services", data: groupServices })
       }
 
       let result = await serviceGroupName.findByIdAndUpdate(

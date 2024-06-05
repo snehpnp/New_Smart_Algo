@@ -12,20 +12,16 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 const Update_Broker_Key = ({ closeModal }) => {
 
-
-
     const dispatch = useDispatch();
 
+    const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
     const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
     const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
     const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
 
     const [Refresh, setRefresh] = useState(false)
-    const [UserDetails, setUserDetails] = useState({
-        loading: true,
-        data: [],
-    });
+    const [UserDetails, setUserDetails] = useState({loading: true,data: []});
 
 
 
@@ -47,10 +43,6 @@ const Update_Broker_Key = ({ closeModal }) => {
     }, [Refresh]);
 
 
-
-
-
-
     const formik = useFormik({
         initialValues: {
             app_id: 'null',
@@ -64,20 +56,11 @@ const Update_Broker_Key = ({ closeModal }) => {
         },
         validate: (values) => {
             const errors = {};
-            // if (!values.setapikey) {
-            //   errors.setapikey = valid_err.APIKEY_ERROR;
-            // }
-            // if (!values.setappid) {
-            //   errors.setappid = valid_err.APIID_ERROR;
-            // }
-            // if (!values.setapisecret) {
-            //   errors.setapisecret = valid_err.APISECRET_ERROR;
-            // }
+      
 
             return errors;
         },
         onSubmit: async (values) => {
-
 
 
             const req = {
@@ -107,6 +90,7 @@ const Update_Broker_Key = ({ closeModal }) => {
                     setTimeout(() => {
                         closeModal(false)
                         setRefresh(!Refresh)
+                        window.location.reload()
                     }, 1000);
                 }
                 else if (!response.status) {
@@ -190,9 +174,13 @@ const Update_Broker_Key = ({ closeModal }) => {
 
     return (
         <div>
-            <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update" title="brokerkey"
+          {UserDetails && (
+            <>
+            <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name={ (gotodashboard && user_role_goTo == "USER") ? "sneh":"Update"} title="brokerkey"
             />
             <ToastButton />
+            </>
+          )  }
 
         </div>
     )

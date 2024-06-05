@@ -30,8 +30,6 @@ const AddClient = () => {
   const location = useLocation()
  
 
-  console.log(" locationAdd ",location)
-
   const user_token = JSON.parse(localStorage.getItem("user_details")).token
   const Role = JSON.parse(localStorage.getItem("user_details")).Role
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
