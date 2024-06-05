@@ -12,20 +12,16 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 const Update_Broker_Key = ({ closeModal }) => {
 
-
-
     const dispatch = useDispatch();
 
+    const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
     const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
     const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
     const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
 
     const [Refresh, setRefresh] = useState(false)
-    const [UserDetails, setUserDetails] = useState({
-        loading: true,
-        data: [],
-    });
+    const [UserDetails, setUserDetails] = useState({loading: true,data: []});
 
 
 
@@ -47,10 +43,6 @@ const Update_Broker_Key = ({ closeModal }) => {
     }, [Refresh]);
 
 
-
-
-
-
     const formik = useFormik({
         initialValues: {
             app_id: 'null',
@@ -64,20 +56,11 @@ const Update_Broker_Key = ({ closeModal }) => {
         },
         validate: (values) => {
             const errors = {};
-            // if (!values.setapikey) {
-            //   errors.setapikey = valid_err.APIKEY_ERROR;
-            // }
-            // if (!values.setappid) {
-            //   errors.setappid = valid_err.APIID_ERROR;
-            // }
-            // if (!values.setapisecret) {
-            //   errors.setapisecret = valid_err.APISECRET_ERROR;
-            // }
+      
 
             return errors;
         },
         onSubmit: async (values) => {
-
 
 
             const req = {
@@ -107,6 +90,7 @@ const Update_Broker_Key = ({ closeModal }) => {
                     setTimeout(() => {
                         closeModal(false)
                         setRefresh(!Refresh)
+                        window.location.reload()
                     }, 1000);
                 }
                 else if (!response.status) {
@@ -140,10 +124,10 @@ const Update_Broker_Key = ({ closeModal }) => {
         },
         {
             name: 'app_id',
-            label: formik.values.broker == 21 ? 'MPIN' : formik.values.broker == 1 ? 'Password Code' : formik.values.broker === 5 ? 'Password' : formik.values.broker == 7 ? 'Demat Password' : formik.values.broker === 11 ? 'Password' : formik.values.broker === 13 ? 'App Id' : formik.values.broker === 9 ? 'Password' : formik.values.broker === 14 ? 'User Id ' : 'App Id', type: 'text',
+            label: formik.values.broker == 21 ? 'MPIN' : formik.values.broker == 1 ? 'Password Code' : formik.values.broker === 5 ? 'Password' :  formik.values.broker === 11 ? 'Password' : formik.values.broker === 13 ? 'App Id' : formik.values.broker === 9 ? 'Password' : formik.values.broker === 14 ? 'User Id ' : 'App Id', type: 'text',
             showWhen: values =>
                 //  values.broker === '2' ||
-                values.broker === '1' || values.broker === "3" || values.broker === '5' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '21',
+                values.broker === '1' || values.broker === "3" || values.broker === '5' ||  values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '21',
             label_size: 12, col_size: 6, disable: false
         },
         {
@@ -190,9 +174,13 @@ const Update_Broker_Key = ({ closeModal }) => {
 
     return (
         <div>
-            <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update" title="brokerkey"
+          {UserDetails && (
+            <>
+            <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name={ (gotodashboard && user_role_goTo == "USER") ? "sneh":"Update"} title="brokerkey"
             />
             <ToastButton />
+            </>
+          )  }
 
         </div>
     )

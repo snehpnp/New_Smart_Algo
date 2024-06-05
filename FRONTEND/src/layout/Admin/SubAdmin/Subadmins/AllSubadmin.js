@@ -218,10 +218,7 @@ const AllSubadmin = () => {
       formatter: (cell, row) => (
         <>
           <span
-            className={`${row.AppLoginStatus === "0" && row.WebLoginStatus === "0"
-              ? "btn-danger"
-              : "btn-success "
-              }  btn btn-new-block`}
+            className={`btn-success btn btn-new-block`}
             onClick={() => goToDashboard(row._id, row.Email)}
           // disabled={row.AppLoginStatus === "0" && row.WebLoginStatus === "0"}
           >

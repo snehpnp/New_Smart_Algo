@@ -28,7 +28,6 @@ class KotakNeo {
     // Get GetkotakGetToken
     async GetkotakGetToken(req, res) {
        
-        //console.log("req ",req.body.Email)
        
         var user_email = req.body.Email;
       
@@ -57,7 +56,7 @@ class KotakNeo {
 
                     const qs = require('qs');
                     const apiUrl = 'https://napi.kotaksecurities.com/oauth2/token';
-                    const dematepassword = Get_User[0].app_id;
+                    // const dematepassword = Get_User[0].app_id;
                     const consumerKey = Get_User[0].api_key;
                     const consumerSecret = Get_User[0].api_secret;
                     const username = Get_User[0].client_code;
@@ -87,9 +86,9 @@ class KotakNeo {
                     if(username==""|| username==null){
                         return res.send({ status: false, msg: "Please Update User Name in Broker key..."});
                     }
-                    if(dematepassword==""|| dematepassword==null){
-                        return res.send({ status: false, msg: "Please Update Demat Password in Broker key..."});
-                    }
+                    // if(dematepassword==""|| dematepassword==null){
+                    //     return res.send({ status: false, msg: "Please Update Demat Password in Broker key..."});
+                    // }
                     if(consumerSecret==""|| consumerSecret==null){
                         return res.send({ status: false, msg: "Please Update Consumer Secret in Broker key..."});
                     }

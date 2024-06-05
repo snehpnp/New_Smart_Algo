@@ -37,6 +37,7 @@ class License {
   // GET TRANSECTION LICENSE DATA
   async GetTransctionLicense(req, res) {
     try {
+
       const Transection_license = await count_licenses.aggregate([
 
         {
@@ -71,6 +72,19 @@ class License {
       ]);
 
       const total_licence = await company_information.find({});
+      const sumUsedLicenses = await count_licenses.aggregate([
+        {
+          $addFields: {
+            convertedLicense: { $toInt: "$license" }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            totalUsedLicenses: { $sum: "$convertedLicense" }
+          }
+        }
+      ]);
 
       if (Transection_license.length == 0) {
         return res.send({
@@ -84,6 +98,7 @@ class License {
         msg: "Get all Transection license",
         data: Transection_license,
         total_licence: total_licence[0].licenses,
+        used_licence: sumUsedLicenses[0].totalUsedLicenses
       });
     } catch (error) {
       console.log("Error Get All Transction License -", error);

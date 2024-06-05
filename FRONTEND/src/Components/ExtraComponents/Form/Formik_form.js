@@ -409,7 +409,7 @@ field.type === "number" ? (
           {additional_field}
 
           <div className="form-group mb-0">
-            {btn_name == 'Sign In' ?
+            {btn_name == 'sneh' ? "" : btn_name == 'Sign In' ?
               < >
                 <button className={`btn btn-primary col-lg-12 btn-rounded ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
                   {btn_name}

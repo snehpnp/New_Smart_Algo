@@ -270,13 +270,12 @@ class Employee {
         var TotalLicense = 0;
       }
 
-      console.log("SHK 4")
 
       if (Number(licence) > 0) {
-        console.log("SHK 1")
+      
 
         if ((parseInt(TotalLicense) + parseInt(licence)) >= Number(Panel_key[0].licenses)  ) {
-         console.log("SHK 2")
+    
           return res.send({
             status: false,
             msg: "You Dont Have License",
@@ -287,7 +286,6 @@ class Employee {
       }
 
 
-      console.log("SHK 3")
 
 
 
@@ -582,10 +580,10 @@ class Employee {
 
 
       if (Number(new_licence) > 0) {
-        //console.log("SHK 1")
+ 
 
         if ((parseInt(TotalLicense) + parseInt(new_licence)) >= Number(Panel_key[0].licenses)  ) {
-         // console.log("SHK 2")
+  
           return res.send({
             status: false,
             msg: "You Dont Have License",
