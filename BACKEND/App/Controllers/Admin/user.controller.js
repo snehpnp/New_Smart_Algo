@@ -270,11 +270,11 @@ class Employee {
         var TotalLicense = 0;
       }
 
-
+console.log("parseInt(TotalLicense)",(parseInt(TotalLicense) + parseInt(licence)))
       if (Number(licence) > 0) {
       
 
-        if ((parseInt(TotalLicense) + parseInt(licence)) >= Number(Panel_key[0].licenses)  ) {
+        if ((parseInt(TotalLicense) + parseInt(licence)) > Number(Panel_key[0].licenses)  ) {
     
           return res.send({
             status: false,
@@ -1004,7 +1004,7 @@ class Employee {
             multy_stgfind.forEach(async(data) => {
 
               if (data.strategy_id.length > 1) {
-                console.log("data", data.strategy_id[0])
+                // console.log("data", data.strategy_id[0])
 
                 const filter = { _id: data._id };
                 const updateOperation = { $set:{ strategy_id: [data.strategy_id[0]]} }
@@ -1479,6 +1479,80 @@ class Employee {
 
     }
   }
+
+
+
+
+
+
+
+  // Duplicate Data
+  async GetDuplicateData(req, res) {
+    try {
+
+      const Client_key = await User_model.aggregate([
+        { $match: { license_type: "2" } },
+        {
+          $lookup: {
+            from: 'count_licenses',
+            localField: '_id',
+            foreignField: 'user_id',
+            as: 'license_details'
+          }
+        },
+        {
+          $addFields: {
+            total_licenses: {
+              $sum: {
+                $map: {
+                  input: "$license_details.license",
+                  as: "license",
+                  in: { $toInt: "$$license" }
+                }
+              }
+            }
+          }
+        },
+        {
+          $group: {
+            _id: "$UserName",
+            licence: { $first: "$licence" },
+            total_licenses: { $first: "$total_licenses" }
+          }
+        },
+        {
+          $match: {
+            $or: [
+              { licence: { $exists: false } },
+              { total_licenses: { $exists: false } }
+            ]
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            UserName: "$_id",
+            licence: 1,
+            total_licenses: 1
+          }
+        }
+      ]);
+      
+      // console.log(Client_key);
+      
+    
+      
+      
+      // CHECK IF PANEL EXIST OR NOT
+
+      res.send({ status: true, msg: "Get Client key", data: Client_key })
+    } catch (error) {
+
+    }
+  }
+
+
+
 
 }
 
