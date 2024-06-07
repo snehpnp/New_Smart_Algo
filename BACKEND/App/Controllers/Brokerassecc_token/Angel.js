@@ -196,12 +196,10 @@ const GetAllBrokerResponse = async (user_info,res) => {
                        
                     })
                     .catch(async (error) => {
-    
                     });
+
     
-    
-    
-            })
+             })
            res.send({status:true,msg:"broker response updated successfully"})
     
         } else {
