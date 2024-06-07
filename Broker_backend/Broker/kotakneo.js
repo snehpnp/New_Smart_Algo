@@ -685,7 +685,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
     let url = `https://gw-napi.kotaksecurities.com/Orders/2.0/quick/order/rule/ms/place?sId=${item.hserverid}`
 
-    var send_rr = Buffer.from(JSON.stringify(data)).toString('base64');
+    var send_rr = Buffer.from(JSON.stringify(requestData)).toString('base64');
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
@@ -885,7 +885,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
     let url = `https://gw-napi.kotaksecurities.com/Orders/2.0/quick/order/rule/ms/place?sId=${item.hserverid}`
 
-    var send_rr = Buffer.from(JSON.stringify(data)).toString('base64');
+    var send_rr = Buffer.from(JSON.stringify(requestData)).toString('base64');
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
