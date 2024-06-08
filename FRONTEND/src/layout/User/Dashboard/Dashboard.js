@@ -98,8 +98,7 @@ const BrokerResponse = () => {
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
     const numericValue = e.target.value.replace(/[^0-9]/g, '');
-    console.log("e", numericValue)
-    console.log("e.target.name", e.target.name)
+
 
     if (e.target.name != "active_status" && numericValue == 0) {
       e.target.value = 1
