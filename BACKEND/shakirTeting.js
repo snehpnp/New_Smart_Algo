@@ -29,7 +29,7 @@ module.exports = function (app) {
   // Define MongoDB connection details
   const servers = [
       
-"mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/",
+// "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/",
 "mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/",
 "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.93:27017/",
 "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.178:27017/",
@@ -55,14 +55,25 @@ module.exports = function (app) {
 "mongodb://fincodify:u%26v5%26bAn6%265Gv%26cn29A%26@185.209.75.30:27017/",
 "mongodb://invicontechnology:k56ck%265eF89%267Phjn9i7B%26@185.209.75.62:27017/",
 "mongodb://axcellencetechnology:pw%26k5H6%267GsRy%26vnn@185.209.75.63:27017/",
-"mongodb://sstechnologiess:Apw%26k5RH6%267GsRy%26vnM@185.209.75.64:27017/"
+"mongodb://sstechnologiess:Apw%26k5RH6%267GsRy%26vnM@185.209.75.64:27017/",
+"mongodb://skwinvestmentadviser:Tapw%26k5R56%267GsRy%26vnTy@185.209.75.65:27017/",
+"mongodb://satviktech:Apw%26k5R6%267GsRy%26vnM@185.209.75.66:27017/",
+"mongodb://thinkaumatictechnology:Aapw%26k5R56%267GsRy%26vnT@185.209.75.67:27017/",
+"mongodb://visionresearchandsolution:Apw%26k5R56%267GsRy%26vn@185.209.75.68:27017/",
+"mongodb://smartwavetechnology:Aapw%26k5R56%267GsRy%26vnTy@185.209.75.69:27017/",
+"mongodb://codinghornet:Tapw%26k5R56%267GsRy%26vn@185.209.75.70:27017/",
+"mongodb://inteltrade:Tapw%26k5R56%267GsRy%26n@185.209.75.180:27017/",
+"mongodb://fintechit:Tapw%26k5R56%267GsRy%26nP@185.209.75.181:27017/",
+"mongodb://thrivinginfotech:TGw%26k5RT56%267GsRy%26nP@185.209.75.182:27017/",
+"mongodb://firstalgo:Taw%26k5RT56%267GsRy%26nP@185.209.75.183:27017/",
+"mongodb://visioncodesoftware:TGw%26k5RT56%267GsRy%26HR@185.209.75.184:27017/",
   ];
 //testtt
 
   // Connect to MongoDB and create views
   async function createViewsAllDatabase() {
     
-     return
+     
       for (const server of servers) {
           const client = new MongoClient(server);
 
@@ -71,23 +82,317 @@ module.exports = function (app) {
               const database = "test";
               const db = client.db(database);
 
-              const viewName = "open_position_excute";
-              const collectionName = "open_position";
+              const viewName = "kotakneoView";
+              const collectionName = "users";
 
                // Define view pipeline
               const viewPipeline = [
-                  {
-                      $match: {
-                          $or: [
-                              // { isLpInRange1: true },
-                              { isLpInRangeTarget: true },
-                              { isLpInRangeStoploss: true },
-                              { isLpInRange: 1 },
-                              { isLpInRange: 0 }
-                          ]
-                      }
+                {
+                  $match: {
+                    broker: "7",
+                    TradingStatus: 'on',// Condition from the user collection
+                    $or: [
+                      { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
+                      { EndDate: null } // EndDate is not set
+                    ]
                   }
-                ]
+                },
+                {
+                  $lookup: {
+                    from: 'client_services',
+                    localField: '_id', // Field from the user collection to match
+                    foreignField: 'user_id', // Field from the client_services collection to match
+                    as: 'client_services'
+                  }
+                },
+                {
+                  $unwind: '$client_services',
+                },
+                {
+                  $match: {
+                    'client_services.active_status': '1'
+                  }
+                },
+                {
+                  $lookup: {
+                    from: "services",
+                    localField: "client_services.service_id",
+                    foreignField: "_id",
+                    as: "service",
+                  },
+                },
+                {
+                  $unwind: '$service',
+                },
+                {
+                  $lookup: {
+                    from: "categories",
+                    localField: "service.categorie_id",
+                    foreignField: "_id",
+                    as: "category",
+                  },
+                },
+                {
+                  $unwind: '$category',
+                },
+                {
+                  $lookup: {
+                    from: "strategies",
+                    localField: "client_services.strategy_id",
+                    foreignField: "_id",
+                    as: "strategys",
+                  },
+                },
+                {
+                  $unwind: '$strategys',
+                },
+                {
+                  $project: {
+                    "client_services": 1,
+                    'service.name': 1,
+                    'service.instrument_token': 1,
+                    'service.exch_seg': 1,
+                    "strategys.strategy_name": 1,
+                    "category.segment": 1,
+                    "service.zebu_token": 1,
+                    _id: 1,
+                    FullName: 1,
+                    UserName: 1,
+                    Email: 1,
+                    EndDate: 1,
+                    ActiveStatus: 1,
+                    TradingStatus: 1,
+                    access_token: 1,
+                    api_secret: 1,
+                    app_id: 1,
+                    client_code: 1,
+                    api_key: 1,
+                    app_key: 1,
+                    api_type: 1,
+                    demat_userid: 1,
+                    client_key: 1,
+                    web_url: 1,
+                    kotakneo_sid: 1,
+                    kotakneo_auth: 1,
+                    kotakneo_userd: 1,
+                    hserverid: 1,
+                    oneTimeToken: 1
+                  }
+                },
+                {
+                  $addFields: {
+                    postdata:
+                    {
+                      
+            
+            
+                      am : "NO",
+                      dq : "0",
+            
+                      es: {
+                        $cond: {
+                          if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+                          then: 'nse_cm',
+                          else: {
+                            $cond: {
+                              if: {
+                                $or: [
+                                  { $eq: ['$category.segment', 'F'] },
+                                  { $eq: ['$category.segment', 'O'] },
+                                  { $eq: ['$category.segment', 'FO'] }
+                                ]
+                              },
+                              then: 'nse_fo',
+                              else: {
+            
+                                $cond: {
+                                  if: {
+                                    $or: [
+                                      { $eq: ['$category.segment', 'MF'] },
+                                      { $eq: ['$category.segment', 'MO'] }
+                                    ]
+                                  },
+                                  then: 'mcx_fo',
+                                  else: {
+            
+                                    $cond: {
+                                      if: {
+                                        $or: [
+                                          { $eq: ['$category.segment', 'CF'] },
+                                          { $eq: ['$category.segment', 'CO'] }
+                                        ]
+                                      },
+                                      then: 'cde_fo',
+            
+                                      // all not exist condition 
+                                      else: "nse_fo"
+            
+                                    }
+            
+                                  }
+            
+                                }
+            
+            
+                              }
+            
+                            }
+            
+                          }
+            
+                        }
+                      },
+            
+                      mp: "0",
+            
+                      // product code condition here
+                      pc: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.product_type', '1'] },
+                                {
+                                  $or: [
+                                    { $eq: ['$category.segment', 'F'] },
+                                    { $eq: ['$category.segment', 'O'] },
+                                    { $eq: ['$category.segment', 'FO'] }
+                                  ]
+                                },
+                              ]
+                          },
+                          then: 'NRML',
+                          else: {
+                            $cond: {
+                              if: {
+                                $and:
+                                  [
+                                    { $eq: ['$client_services.product_type', '2'] },
+                                  ]
+                              },
+                              then: 'MIS',
+                              else: {
+                                $cond: {
+                                  if: {
+                                    $and:
+                                      [
+                                        { $eq: ['$client_services.product_type', '3'] },
+                                      ]
+                                  },
+                                  then: 'BO',
+                                  else: {
+                                    $cond: {
+                                      if: {
+                                        $and:
+                                          [
+                                            { $eq: ['$client_services.product_type', '4'] },
+                                          ]
+                                      },
+                                      then: 'CO',
+                                      else: "CNC"
+            
+                                    }
+            
+                                  }
+            
+                                }
+            
+                              }
+            
+                            }
+                          }
+            
+                        }
+            
+            
+                      },
+                       
+                      pf : "N",
+            
+                      pr : "0",
+                      
+            
+                      pt: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$client_services.order_type', '1'] },
+                              ]
+                          },
+                          then: 'MKT',
+                          else: {
+                            $cond: {
+                              if: {
+                                $and:
+                                  [
+                                    { $eq: ['$client_services.order_type', '2'] },
+                                  ]
+                              },
+                              then: 'L',
+                              else: {
+                                $cond: {
+                                  if: {
+                                    $and:
+                                      [
+                                        { $eq: ['$client_services.order_type', '3'] },
+                                      ]
+                                  },
+                                  then: 'SL',
+                                  else: {
+                                    $cond: {
+                                      if: {
+                                        $and:
+                                          [
+                                            { $eq: ['$client_services.order_type', '4'] },
+                                          ]
+                                      },
+                                      then: ' SL-M',
+            
+                                      //All condition exist
+                                      else: "MKT"
+            
+                                    }
+            
+                                  }
+            
+                                }
+            
+                              }
+            
+                            }
+                          }
+            
+                        }
+            
+                      },
+            
+                      qt : "$client_services.quantity",
+            
+                      rt : "DAY",
+            
+                      tp : "0" ,
+            
+                      ts: {
+                        $cond: {
+                          if: {
+                            $and:
+                              [
+                                { $eq: ['$category.segment', 'C'] },
+                              ]
+                          },
+                          then: "$service.zebu_token",
+                          else: ""
+            
+                        }
+                      },
+            
+                      tt : "B",
+                     
+                    }
+                  }
+                }
+              ]
 
 
 
@@ -96,6 +401,8 @@ module.exports = function (app) {
               if (!collectionExists) {
                   // Create the view collection
                   await db.createCollection(viewName, { viewOn: collectionName, pipeline: viewPipeline });
+
+                  console.log(`View '${viewName}' Created in '${database}' on '${server}'`);
                  
               } else {
                   console.log(`Collection ${viewName} already exists in 'test' on '${server}'`);
@@ -112,12 +419,12 @@ module.exports = function (app) {
   }
 
   app.get("/AllViewCreate", async (req, res) => {
-        //createViewsAllDatabase();
-       //deleteViewsAllDatabase();
+      //  createViewsAllDatabase();
+      // deleteViewsAllDatabase();
       // RunQueryUpdateAllDatabase()
       // RunQueryAddAllDatabase()
        // RunQueryManulTaskAllDatabase(res)
-        res.send("OKK DONE")
+        res.send("OKK DONE FF")
   });
 
   async function deleteViewsAllDatabase() {
@@ -129,7 +436,7 @@ module.exports = function (app) {
               const database = "test";
               const db = client.db(database);
 
-              const viewName = "open_position_excute";
+              const viewName = "kotakneoView";
               //const collectionName = "users";
               const collectionExists = await db.listCollections({ name: viewName }).hasNext();
   

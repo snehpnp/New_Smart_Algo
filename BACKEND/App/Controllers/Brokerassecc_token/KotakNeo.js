@@ -444,47 +444,57 @@ const GetAllBrokerResponse = async (user_info,res) => {
        // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
 
-        if (FindUserBrokerResponse.length > 0) {    
+        if (FindUserBrokerResponse.length > 0) {  
+            
+           
             FindUserBrokerResponse.forEach((data1) => {    
           
-                      let data = JSON.stringify({
-                        "Uid": user_info[0].client_code
-                      });
 
-                      var config = {
+                    var data_orderHistory = qs.stringify({
+                        'jData': '{"nOrdNo":"' + data1.order_id + '"}'
+                    });
+
+
+                    let url1 = `https://gw-napi.kotaksecurities.com/Orders/2.0/quick/order/history?sId=${user_info[0].hserverid}`
+
+                    let config = {
                         method: 'post',
                         maxBodyLength: Infinity,
-                        // url: 'https://stagingtradingorestapi.swastika.co.in/kb/OrderBook/GetOrderBookList',
-                        url: 'https://tradingorestapi.swastika.co.in/kb/OrderBook/GetOrderBookList',
-                        headers: { 
-                            'Authorization': 'Bearer '+user_info[0].access_token, 
-                            'Content-Type': 'application/json'
+                        url: url1,
+                        headers: {
+                            'accept': 'application/json',
+                            'Sid': user_info[0].kotakneo_sid,
+                            'Auth': user_info[0].access_token,
+                            'neo-fin-key': 'neotradeapi',
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Authorization': 'Bearer ' + user_info[0].oneTimeToken
                         },
-                        data : data
-
+                        data: data_orderHistory
                     };
 
-                axios(config)
-                    .then(async (response) => {                       
-                         // console.log("response order details ",response.data.status)
-                         if(response.data.IsError != true){
-                            const result_order = response.data.Result.Data.find(item2 => item2.norenordno === data1.order_id);
-                            if(result_order != undefined){
-                                const message = (JSON.stringify(result_order));    
+                    axios(config)
+                        .then(async function(response) {
+
+                            if (response.data.stat == "Ok") {
+
+                                const message = (JSON.stringify(response.data.data[0]));    
                                 let result = await BrokerResponse.findByIdAndUpdate(
                                     { _id: data1._id },
                                     {
                                         order_view_date: message,
                                         order_view_status: '1',
-                                        order_view_response: result_order.status,
-                                        reject_reason: result_order.Rejreason
+                                        order_view_response: response.data.data[0].ordSt,
+                                        reject_reason: response.data.data[0].rejRsn
         
                                     },
                                     { new: true }
                                 )
 
-                              }else{
-                                const message = (JSON.stringify(result_order));    
+
+                            } else {
+                                
+
+                                const message = (JSON.stringify(response.data.data[0]));    
                                 let result = await BrokerResponse.findByIdAndUpdate(
                                     { _id: data1._id },
                                     {
@@ -494,19 +504,45 @@ const GetAllBrokerResponse = async (user_info,res) => {
                                     },
                                     { new: true }
                                 )
-                              }
 
-                         }else{
+                            }
 
-                         }
+                        })
+                        .catch(async function (error) {
 
-                       
-                    })
-                    .catch(async (error) => {
-    
-                    });
-    
-    
+                           
+                            if (error) {
+                                if (error.response) {
+                                    const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+   
+                                 let result = await BrokerResponse.findByIdAndUpdate(
+                                     { _id: data1._id },
+                                     {
+                                        order_view_date: message,
+
+                                    },
+                                    { new: true }
+                                 )
+                                }
+                                 else {
+                                    const message = (JSON.stringify(error)).replace(/["',]/g, '');
+
+                                    let result = await BrokerResponse.findByIdAndUpdate(
+                                        { _id: data1._id },
+                                        {
+                                           order_view_date: message,
+   
+                                       },
+                                       { new: true }
+                                    )
+                                }
+                            }
+
+
+
+                        });
+
+
     
             })
            res.send({status:true,msg:"broker response updated successfully"})

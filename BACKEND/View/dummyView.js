@@ -2706,7 +2706,12 @@ db.createView("zerodhaView", "users",
         api_type: 1,
         demat_userid: 1,
         client_key: 1,
-        web_url: 1
+        web_url: 1,
+        kotakneo_sid: 1,
+        kotakneo_auth: 1,
+        kotakneo_userd: 1,
+        hserverid: 1,
+        oneTimeToken: 1
       }
     },
     {

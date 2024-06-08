@@ -308,7 +308,6 @@ const TradeHistory = () => {
       ),
     },
 
-
     {
       dataField: "",
       text: "Details View",

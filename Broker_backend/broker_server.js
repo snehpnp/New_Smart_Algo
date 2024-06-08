@@ -252,6 +252,7 @@ const fyers = require('./Broker/fyers')
 const markethub = require('./Broker/markethub')
 const swastika = require('./Broker/swastika')
 const mastertrust = require('./Broker/mastertrust')
+const kotakneo = require('./Broker/kotakneo')
 
 
 
@@ -842,6 +843,30 @@ app.post('/broker-signals', async (req, res) => {
           //End Process mastertrust admin client
 
 
+          //Process kotakneo admin client
+          try {
+            const kotakneoCollection = db1.collection('kotakneoView');
+            const kotakneodocuments = await kotakneoCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' kotakneo ALL CLIENT LENGTH ' + kotakneodocuments.length + '\n', function (err) {
+              if (err) {
+                return console.log(err);
+              }
+            });
+
+
+
+            if (kotakneodocuments.length > 0) {
+              kotakneo.place_order(kotakneodocuments, signals, token, filePath, signal_req);
+            }
+
+          } catch (error) {
+            console.log("Error Get kotakneo Client In view", error);
+          }
+          //End Process kotakneo admin client
+
+
 
 
           } else {
@@ -1049,7 +1074,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-            //Process Tading View Client swastika
+            //Process Tading View Client mastertrust
             try {
               const mastertrustCollection = db1.collection('mastertrustView');
               const mastertrustdocuments = await mastertrustCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
@@ -1071,8 +1096,27 @@ app.post('/broker-signals', async (req, res) => {
             //End Process Tading View Client mastertrust 
 
 
+             //Process Tading View Client kotakneo
+             try {
+              const kotakneoCollection = db1.collection('kotakneoView');
+              const kotakneodocuments = await kotakneoCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+  
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' kotakneo TRADING VIEW CLIENT LENGTH ' + kotakneodocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+  
+  
+              if (kotakneodocuments.length > 0) {
+                kotakneo.place_order(kotakneodocuments, signals, token, filePath, signal_req);
+              }
+  
+            } catch (error) {
+              console.log("Error Get kotakneo Client In view", error);
+            }
+            //End Process Tading View Client kotakneo 
 
-        
 
           }
 
