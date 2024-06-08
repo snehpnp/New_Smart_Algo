@@ -1,29 +1,47 @@
 const axios = require('axios');
-const crypto = require('crypto');
+var sha256 = require("crypto-js/sha256");
 
-const uid = "FA108922";
-const pwd = "Mithu@99";
-const vendor_code = "FA108922_U";  // Vendor code provided by the Noren team
-const appkey = crypto.createHash('sha256').update(`${uid}|${vendor_code}`).digest('hex');
-const hashedPwd = crypto.createHash('sha256').update(pwd).digest('hex');
 
-const data = {
-  jData: JSON.stringify({
-    apkversion: "1.0.0",
-    uid: uid,
-    pwd: hashedPwd,
-    factor2: "31-08-2017",
-    vc: vendor_code,
-    appkey: appkey,
-    imei: "abc1234",
-    source: "API"
-  })
-};
+const otplib = require('otplib');
 
-axios.post('https://api.shoonya.com/NorenWClientTP/QuickAuth', data)
-  .then(response => {
-    console.log(response.data);
-  })
-  .catch(error => {
-    console.log("error", error.response.data);
-  });
+const totp = otplib.authenticator.generate("2556TMC52Y667O27SB7A4LDN2326HZLE");
+
+var params = {
+    'userid'   : 'FA108922',
+    'password' : 'Mithu@99',
+    'twoFA'    :totp,
+    'vendor_code' : 'FA108922_U',
+    'api_secret' : '99313d0d32798a1af4e35fe50e807cf8',
+    'imei'       : 'abc1234'
+    }
+   
+    let pwd       = sha256(params.password).toString(); 
+    let u_app_key =  `${params.userid}|${params.api_secret}`
+    let app_key   = sha256(u_app_key).toString();
+
+    let authparams = {
+        "source": "API" , 
+        "apkversion": "js:1.0.0",
+        "uid": params.userid,
+        "pwd": pwd,
+        "factor2": params.twoFA,
+        "vc": params.vendor_code,
+        "appkey": app_key,
+        "imei": params.imei            
+    };
+
+
+    let payload = 'jData=' + JSON.stringify(authparams);
+
+
+axios.post('https://api.shoonya.com/NorenWClientTP/QuickAuth', payload, {
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
+})
+.then(response => {
+  console.log(response.data);
+})
+.catch(error => {
+  console.error("error", error.response.data);
+});

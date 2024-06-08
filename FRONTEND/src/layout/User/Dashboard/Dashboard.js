@@ -29,9 +29,27 @@ const BrokerResponse = () => {
   const dispatch = useDispatch();
   const location = useLocation()
 
-  // SET MODAL IN STARTEGY
+
+  const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
+  const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
+  const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
+  const Role = JSON.parse(localStorage.getItem("user_role"));
+
+
   const [showStartegyModal, setShowStartegyModal] = useState(false);
   const [modalsingleValue, setModalsingleValue] = useState({});
+  const [Strategy, setStrategy] = useState({ loading: true, data: [] });
+  const [GetServiceStrategy, setGetServiceStrategy] = useState([]);
+  const [statusStartegyUser, setStatusStartegy] = useState("0");
+  const [enterqty, setEnterQty] = useState("");
+  const [inputValue, setInputValue] = useState('1');
+  const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
+  const [refresh, setrefresh] = useState(false);
+  const [updatedData, setUpdatedData] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+
   const handleCloseStartegyModal = () => {
     setShowStartegyModal(false);
     setModalsingleValue({})
@@ -40,40 +58,13 @@ const BrokerResponse = () => {
     setModalsingleValue(data)
     setShowStartegyModal(true);
   }
-  //
-
-  const [enterqty, setEnterQty] = useState("");
-  const [inputValue, setInputValue] = useState('1');
-  const [DashboardData, setDashboardData] = useState({
-    loading: true,
-    data: [],
-  });
-
-  const [Strategy, setStrategy] = useState({ loading: true, data: [] });
-  const [GetServiceStrategy, setGetServiceStrategy] = useState([]);
-  const [statusStartegyUser, setStatusStartegy] = useState("0");
-  const [refresh, setrefresh] = useState(false);
-  const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
-  const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
-  const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
-  const [updatedData, setUpdatedData] = useState({});
-  const Role = JSON.parse(localStorage.getItem("user_role"));
 
 
-
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Set the number of items per page here
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = DashboardData.data.slice(indexOfFirstItem, indexOfLastItem);
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-
-
 
 
 
@@ -107,9 +98,10 @@ const BrokerResponse = () => {
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
     const numericValue = e.target.value.replace(/[^0-9]/g, '');
+    console.log("e", numericValue)
+    console.log("e.target.name", e.target.name)
 
-
-    if (numericValue == 0) {
+    if (e.target.name != "active_status" && numericValue == 0) {
       e.target.value = 1
       toast.error(`cant update  0 Quantity In ${symboll}`);
       return
@@ -237,15 +229,13 @@ const BrokerResponse = () => {
 
         if (response.status) {
           toast.success(response.msg);
-          setrefresh(!refresh)
-          getservice();
-          // window.location.reload();
+          // setrefresh(!refresh)
+          window.location.reload();
         } else {
           toast.error(response.msg);
         }
       });
   };
-
 
 
   useEffect(() => {
