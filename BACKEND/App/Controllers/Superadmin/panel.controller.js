@@ -262,37 +262,70 @@ class Panel {
     async GetAllAPiInfo(req, res) {
         try {
 
+            if (req.body.key == 1) {
+                const panel_data = await panel_model.find({ domain: req.body.url }).select('broker_id')
+                if (!panel_data) {
+                    return res.send({ status: false, msg: 'Panel Not exists', data: [] });
+                }
 
-            const panel_data = await panel_model.find({ domain: req.body.url }).select('broker_id')
-            if (!panel_data) {
-                return res.send({ status: false, msg: 'Panel Not exists', data: [] });
-            }
+                var objectIds = panel_data[0].broker_id.map((data) => data.id);
 
-            var objectIds = panel_data[0].broker_id.map((data) => data.id);
+                var tt
+                if (req.body.brokerId == -1) {
+                    tt = { $in: objectIds }
+                } else {
+                    tt = req.body.brokerId
+                }
 
-            var tt
-            if (req.body.brokerId == -1) {
-                tt = { $in: objectIds }
+
+                // Find documents with matching ids
+                const getAllpanel = await ApiCreateInfo.find({ broker_id: tt }).select('title broker_id')
+
+
+                // IF DATA NOT EXIST
+                if (getAllpanel.length == 0) {
+                    return res.send({ status: false, msg: "Empty data", data: getAllpanel })
+                }
+
+                // DATA GET SUCCESSFULLY
+                return res.send({
+                    status: true,
+                    msg: "Get All Api Info",
+                    data: getAllpanel,
+                })
             } else {
-                tt = req.body.brokerId
+                const panel_data = await panel_model.find({ domain: req.body.url }).select('broker_id')
+                if (!panel_data) {
+                    return res.send({ status: false, msg: 'Panel Not exists', data: [] });
+                }
+
+                var objectIds = panel_data[0].broker_id.map((data) => data.id);
+
+                var tt
+                if (req.body.brokerId == -1) {
+                    tt = { $in: objectIds }
+                } else {
+                    tt = req.body.brokerId
+                }
+
+
+                // Find documents with matching ids
+                const getAllpanel = await ApiCreateInfo.find({ broker_id: tt })
+
+
+                // IF DATA NOT EXIST
+                if (getAllpanel.length == 0) {
+                    return res.send({ status: false, msg: "Empty data", data: getAllpanel })
+                }
+
+                // DATA GET SUCCESSFULLY
+                return res.send({
+                    status: true,
+                    msg: "Get All Api Info",
+                    data: getAllpanel,
+                })
             }
 
-
-            // Find documents with matching ids
-            const getAllpanel = await ApiCreateInfo.find({ broker_id: tt })
-
-
-            // IF DATA NOT EXIST
-            if (getAllpanel.length == 0) {
-                return res.send({ status: false, msg: "Empty data", data: getAllpanel })
-            }
-
-            // DATA GET SUCCESSFULLY
-            return res.send({
-                status: true,
-                msg: "Get All Api Info",
-                data: getAllpanel,
-            })
 
 
         } catch (error) {
@@ -412,7 +445,7 @@ class Panel {
                 .find({})
                 .skip(skip)
                 .limit(Number(limit))
-                .sort({createdAt : -1})
+                .sort({ createdAt: -1 })
 
 
             // IF DATA NOT EXIST
@@ -498,12 +531,12 @@ class Panel {
         try {
             const { your_view_name, collection_name, pipeline } = req.body;
             const { MongoClient } = require('mongodb');
-    
+
             const panelInformation = await panel_model.find().select('db_url');
-    
+
             const errorArray = [];
             const successResults = [];
-    
+
             await Promise.all(panelInformation.map(async (url) => {
                 const view = {
                     $unionWith: {
@@ -511,22 +544,22 @@ class Panel {
                         pipeline: pipeline,
                     },
                 };
-    
+
                 console.log("view", view);
-    
+
                 const client = new MongoClient(url.db_url, { useNewUrlParser: true, useUnifiedTopology: true });
-    
+
                 try {
                     await client.connect();
                     const database = client.db();
-    
+
                     // Create a new collection or view
                     const result = await database.command({
                         create: your_view_name,
                         viewOn: collection_name,
                         pipeline: [view], // Ensure pipeline is an array of objects
                     });
-    
+
                     // Check if view creation was successful
                     if (result.ok === 1) {
                         successResults.push({ db_url: url.db_url, status: 'success' });
@@ -541,20 +574,20 @@ class Panel {
                     await client.close();
                 }
             }));
-    
+
             res.send({
                 status: true,
                 msg: 'View creation completed',
                 successResults: successResults,
                 errorResults: errorArray,
             });
-    
+
         } catch (error) {
             console.error('View creation error:', error);
             res.status(500).send({ status: false, msg: 'Internal Server Error' });
         }
     }
-    
+
 
 
 

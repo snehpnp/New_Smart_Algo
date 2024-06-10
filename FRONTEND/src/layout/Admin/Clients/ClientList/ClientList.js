@@ -90,7 +90,7 @@ const AllClients = () => {
 
   const Brokerdata = async () => {
   
-    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
+    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1,key:1})).unwrap()
         .then((response) => {
             if (response.status) {
               setBrokerDetails(response.data);
