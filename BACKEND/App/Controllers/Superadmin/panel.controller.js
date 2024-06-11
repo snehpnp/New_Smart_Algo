@@ -347,16 +347,15 @@ class Panel {
 
 
             // THEME LIST DATA
-            const getAllpanel = await ApiCreateInfo
-                .find({})
+            const getAllpanel = await ApiCreateInfo.find({})
 
             // IF DATA NOT EXIST
             if (getAllpanel.length == 0) {
-                res.send({ status: false, msg: "Empty data", data: getAllpanel })
+                return res.send({ status: false, msg: "Empty data", data: getAllpanel })
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Api Info",
                 data: getAllpanel,
