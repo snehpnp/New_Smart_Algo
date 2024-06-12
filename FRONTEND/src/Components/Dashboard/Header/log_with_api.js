@@ -209,6 +209,13 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     else if (broker_id === "22" || broker_id === 22) {
         alert("broker-22")
     }
+    else if (broker_id === "25" || broker_id === 25) {
+       // alert("broker-25")
+        console.log("UserDetails.api_key", UserDetails.api_key);
+        const encodedApiKey = encodeURIComponent(UserDetails.api_key);
+             console.log("encodedApiKey", encodedApiKey);
+        window.location.href = `https://api.icicidirect.com/apiuser/login?api_key=${encodedApiKey}`;
+    }
 
     <ToastButton />
 }

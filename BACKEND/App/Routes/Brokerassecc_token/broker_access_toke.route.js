@@ -52,6 +52,13 @@ const { GetkotakGetToken, GetkotakGetSession, GetOrderFullInformationKotakNeo } 
 // MASTER TRUST CONTROLLER FILE
 const { GetAccessTokenMastertrust, GetOrderFullInformationMastertrust } = require('../../Controllers/Brokerassecc_token/Mastertrust')
 
+// ICICI DIRECT CONTROLLER FILE
+const { GetAccessTokenIcicidirect, GetOrderFullInformationIcicidirect } = require('../../Controllers/Brokerassecc_token/Icicidirect')
+
+
+
+
+
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req, res) => {
 
@@ -132,6 +139,11 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
     else if (broker == 21) {
       GetOrderFullInformationSwastika(req, res, result);
     }
+
+    // Icicidirect   -  25
+    else if (broker == 25) {
+      GetOrderFullInformationIcicidirect(req, res, result);
+    }
     else {
       res.send({ status: false, msg: "broker not found" });
     }
@@ -206,6 +218,11 @@ router.post('/kotakGetSession', GetkotakGetSession);
 
 // Master Trust
 router.get('/mastertrust', GetAccessTokenMastertrust);
+
+// icicidirect 
+router.get('/icicidirect', GetAccessTokenIcicidirect);
+
+
 
 
 module.exports = router;
