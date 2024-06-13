@@ -1347,7 +1347,7 @@ db.createView("upstoxView", "users",
                     },
                   ]
               },
-              then: 'CARRYFORWARD',
+              then: 'D',
               else: {
                 $cond: {
                   if: {

@@ -29,7 +29,7 @@ module.exports = function (app) {
   // Define MongoDB connection details
   const servers = [
       
-// "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/",
+"mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/",
 "mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/",
 "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.93:27017/",
 "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.178:27017/",
@@ -37,7 +37,7 @@ module.exports = function (app) {
 "mongodb://intelfintech:ugh%265rK86%26Fv%26yn37A%26@185.209.75.61:27017/",
 "mongodb://algokuber:p%26k506%267G%26y%26vnd%26@193.239.237.135:27017/",
 "mongodb://finnshri:p0%26k506%267s9Ry%26vn8d@193.239.237.137:27017/",
-"mongodb://visioniq:%26k%23sA8B%267Gmg%26vn3%237A%26@185.209.75.2:27017/",
+// "mongodb://visioniq:%26k%23sA8B%267Gmg%26vn3%237A%26@185.209.75.2:27017/",
 "mongodb://believetechnology:%26k%23sA8B%237Gsq%26vg3%237P%26@185.209.75.5:27017/",
 "mongodb://realbottrading:u%26r5nC86%267Gr%26vn37M%26@185.209.75.8:27017/",
 "mongodb://growskyinfotech:u%26j8gB85%267GN%26vn37m%26@185.209.75.9:27017/",
@@ -67,6 +67,9 @@ module.exports = function (app) {
 "mongodb://thrivinginfotech:TGw%26k5RT56%267GsRy%26nP@185.209.75.182:27017/",
 "mongodb://firstalgo:Taw%26k5RT56%267GsRy%26nP@185.209.75.183:27017/",
 "mongodb://visioncodesoftware:TGw%26k5RT56%267GsRy%26HR@185.209.75.184:27017/",
+"mongodb://shinesofttrade:T5wP%26k56T56%267GsRy%26H@185.209.75.186:27017/",
+"mongodb://algoruns:Tw%26k5RT56%267GsRy%26HR@185.209.75.187:27017/",
+"mongodb://techoceantechnologies:P5wP%26k6T5M%26L7GsRy%26H@185.209.75.189:27017/",
   ];
 //testtt
 
@@ -82,14 +85,14 @@ module.exports = function (app) {
               const database = "test";
               const db = client.db(database);
 
-              const viewName = "kotakneoView";
+              const viewName = "upstoxView";
               const collectionName = "users";
 
                // Define view pipeline
               const viewPipeline = [
                 {
                   $match: {
-                    broker: "7",
+                    broker: "19",
                     TradingStatus: 'on',// Condition from the user collection
                     $or: [
                       { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
@@ -109,9 +112,9 @@ module.exports = function (app) {
                   $unwind: '$client_services',
                 },
                 {
-                  $match: {
-                    'client_services.active_status': '1'
-                  }
+                    $match: {
+                      'client_services.active_status': '1'
+                    }
                 },
                 {
                   $lookup: {
@@ -171,82 +174,20 @@ module.exports = function (app) {
                     api_type: 1,
                     demat_userid: 1,
                     client_key: 1,
-                    web_url: 1,
-                    kotakneo_sid: 1,
-                    kotakneo_auth: 1,
-                    kotakneo_userd: 1,
-                    hserverid: 1,
-                    oneTimeToken: 1
+                    web_url: 1
                   }
                 },
                 {
                   $addFields: {
                     postdata:
                     {
-                      
             
+                      //quantity: "$client_services.quantity",
             
-                      am : "NO",
-                      dq : "0",
-            
-                      es: {
-                        $cond: {
-                          if: { $eq: ['$category.segment', 'C'] }, // Your condition here
-                          then: 'nse_cm',
-                          else: {
-                            $cond: {
-                              if: {
-                                $or: [
-                                  { $eq: ['$category.segment', 'F'] },
-                                  { $eq: ['$category.segment', 'O'] },
-                                  { $eq: ['$category.segment', 'FO'] }
-                                ]
-                              },
-                              then: 'nse_fo',
-                              else: {
-            
-                                $cond: {
-                                  if: {
-                                    $or: [
-                                      { $eq: ['$category.segment', 'MF'] },
-                                      { $eq: ['$category.segment', 'MO'] }
-                                    ]
-                                  },
-                                  then: 'mcx_fo',
-                                  else: {
-            
-                                    $cond: {
-                                      if: {
-                                        $or: [
-                                          { $eq: ['$category.segment', 'CF'] },
-                                          { $eq: ['$category.segment', 'CO'] }
-                                        ]
-                                      },
-                                      then: 'cde_fo',
-            
-                                      // all not exist condition 
-                                      else: "nse_fo"
-            
-                                    }
-            
-                                  }
-            
-                                }
-            
-            
-                              }
-            
-                            }
-            
-                          }
-            
-                        }
-                      },
-            
-                      mp: "0",
-            
+                      quantity: { "$toInt": "$client_services.quantity" },
+                     
                       // product code condition here
-                      pc: {
+                      product: {
                         $cond: {
                           if: {
                             $and:
@@ -261,7 +202,7 @@ module.exports = function (app) {
                                 },
                               ]
                           },
-                          then: 'NRML',
+                          then: 'D',
                           else: {
                             $cond: {
                               if: {
@@ -270,7 +211,7 @@ module.exports = function (app) {
                                     { $eq: ['$client_services.product_type', '2'] },
                                   ]
                               },
-                              then: 'MIS',
+                              then: 'I',
                               else: {
                                 $cond: {
                                   if: {
@@ -289,7 +230,7 @@ module.exports = function (app) {
                                           ]
                                       },
                                       then: 'CO',
-                                      else: "CNC"
+                                      else: "D"
             
                                     }
             
@@ -306,13 +247,16 @@ module.exports = function (app) {
             
             
                       },
-                       
-                      pf : "N",
             
-                      pr : "0",
+                      validity : "DAY",
+                      price: '0',
                       
             
-                      pt: {
+                       // symbol id token condition here
+                      instrument_token: "",
+            
+                      // ordertype code condition here
+                      order_type: {
                         $cond: {
                           if: {
                             $and:
@@ -320,7 +264,7 @@ module.exports = function (app) {
                                 { $eq: ['$client_services.order_type', '1'] },
                               ]
                           },
-                          then: 'MKT',
+                          then: 'MARKET',
                           else: {
                             $cond: {
                               if: {
@@ -329,7 +273,7 @@ module.exports = function (app) {
                                     { $eq: ['$client_services.order_type', '2'] },
                                   ]
                               },
-                              then: 'L',
+                              then: 'LIMIT',
                               else: {
                                 $cond: {
                                   if: {
@@ -347,10 +291,10 @@ module.exports = function (app) {
                                             { $eq: ['$client_services.order_type', '4'] },
                                           ]
                                       },
-                                      then: ' SL-M',
+                                      then: 'SL-M',
             
                                       //All condition exist
-                                      else: "MKT"
+                                      else: "MARKET"
             
                                     }
             
@@ -367,28 +311,14 @@ module.exports = function (app) {
             
                       },
             
-                      qt : "$client_services.quantity",
+                      transaction_type: 'BUY',
             
-                      rt : "DAY",
+                      disclosed_quantity : 0,
             
-                      tp : "0" ,
+                      trigger_price : 0 ,
             
-                      ts: {
-                        $cond: {
-                          if: {
-                            $and:
-                              [
-                                { $eq: ['$category.segment', 'C'] },
-                              ]
-                          },
-                          then: "$service.zebu_token",
-                          else: ""
+                      is_amo : false
             
-                        }
-                      },
-            
-                      tt : "B",
-                     
                     }
                   }
                 }
@@ -419,7 +349,7 @@ module.exports = function (app) {
   }
 
   app.get("/AllViewCreate", async (req, res) => {
-      //  createViewsAllDatabase();
+       // createViewsAllDatabase();
       // deleteViewsAllDatabase();
       // RunQueryUpdateAllDatabase()
       // RunQueryAddAllDatabase()
@@ -436,7 +366,7 @@ module.exports = function (app) {
               const database = "test";
               const db = client.db(database);
 
-              const viewName = "kotakneoView";
+              const viewName = "upstoxView";
               //const collectionName = "users";
               const collectionExists = await db.listCollections({ name: viewName }).hasNext();
   
