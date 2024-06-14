@@ -79,12 +79,35 @@ class License {
           }
         },
         {
+          $lookup: {
+            from: "users",
+            localField: "user_id",
+            foreignField: "_id",
+            as: "user",
+          },
+        },
+        {
+          $unwind: "$user",
+        },
+        {
+          $match: {
+            "user.Role": "USER",
+            "user.license_type": "2",
+
+            "user.Is_Active": "1",
+
+          },
+        },
+        {
           $group: {
             _id: null,
             totalUsedLicenses: { $sum: "$convertedLicense" }
           }
         }
       ]);
+
+      console.log("sumUsedLicenses", sumUsedLicenses)
+
 
       if (Transection_license.length == 0) {
         return res.send({

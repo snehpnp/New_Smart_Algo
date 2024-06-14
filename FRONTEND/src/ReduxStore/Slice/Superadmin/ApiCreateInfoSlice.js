@@ -4,10 +4,10 @@ import { GET_API_INFORMATION, UPDATE_API_INFORMATION, CREATE_API_INFORMATION, GE
 
 
 export const All_Api_Info_List = createAsyncThunk("getall/apiInfo", async (data) => {
-    const { token, url, brokerId } = data
+    const { token, url, brokerId ,key} = data
 
     try {
-        const res = await GET_API_INFORMATION({ url: url, brokerId: brokerId }, token);
+        const res = await GET_API_INFORMATION({ url: url, brokerId: brokerId,key:key }, token);
         return await res;
     } catch (err) {
         return err;
