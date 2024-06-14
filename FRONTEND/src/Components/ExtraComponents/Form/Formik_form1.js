@@ -341,7 +341,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                       <span className="text-danger">*</span>
                                     </label>
                                     <div
-                                    // className={`col-lg-${field.col_size}`}
                                     >
                                       <input
                                         type="text"
@@ -350,7 +349,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                         id={field.name}
                                         placeholder={`Enter ${field.label}`}
                                         {...formik.getFieldProps(field.name)}
-                                        // required=""
+                                     
                                         readOnly={field.disable}
                                       />
                                       <div className="invalid-feedback">

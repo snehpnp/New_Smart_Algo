@@ -52,6 +52,10 @@ const { GetkotakGetToken, GetkotakGetSession, GetOrderFullInformationKotakNeo } 
 // MASTER TRUST CONTROLLER FILE
 const { GetAccessTokenMastertrust, GetOrderFullInformationMastertrust } = require('../../Controllers/Brokerassecc_token/Mastertrust')
 
+
+
+// Kotak Neo CONTROLLER FILE
+const { GetAccessTokenZebull,GetOrderFullInformationZebull } = require('../../Controllers/Brokerassecc_token/Zebull')
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req, res) => {
 
@@ -132,6 +136,9 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
     else if (broker == 21) {
       GetOrderFullInformationSwastika(req, res, result);
     }
+    else if (broker == 5) {
+      GetOrderFullInformationZebull(req, res, result);
+    }
     else {
       res.send({ status: false, msg: "broker not found" });
     }
@@ -206,6 +213,9 @@ router.post('/kotakGetSession', GetkotakGetSession);
 
 // Master Trust
 router.get('/mastertrust', GetAccessTokenMastertrust);
+
+// Zebull
+router.post('/zebu', GetAccessTokenZebull);
 
 
 module.exports = router;

@@ -1,7 +1,5 @@
 const sha256 = require('sha256');
 var axios = require('axios');
-const url = require('url');
-var dateTime = require('node-datetime');
 const qs = require('querystring');
 
 "use strict";
@@ -20,78 +18,61 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
-// const { formattedDateTime } = require('../../Helper/time.helper')
 
-class Swastika {
+class Zebull {
 
     // Get GetAccessToken ANGEL
-    async GetAccessTokenSwastika(req, res) {
+    async GetAccessTokenZebull(req, res) {
        
+    
         var user_email = req.body.Email;
-        var totp = req.body.totp;
-
-         
+ 
         try {
-
             if(user_email != undefined){
 
-                var hosts = req.headers.host;
-    
-                var redirect = hosts.split(':')[0];
-                var redirect_uri = '';
-                if (redirect == "localhost") {
-                    redirect_uri = "http://localhost:3000"
-                } else {
-                    redirect_uri = `https://${redirect}/`
-                }
-    
+         
                 const Get_User = await User.find({ Email: user_email })
     
                 if (Get_User.length > 0) {
+                    
+                    var password = Get_User[0].app_id;
+                    var appkey = Get_User[0].app_key;
+                    var DOB = Get_User[0].api_secret;
+                    var uid = Get_User[0].client_code;
 
-                    if(totp != ""){
-                   
-                    var client_code = Get_User[0].client_code;
-                    var mpin = Get_User[0].app_id;
-                   
+                    console.log(password)
+                    console.log(appkey)
+                    console.log(DOB)
+                    console.log(uid)
 
-                    if(client_code==""|| client_code==null){
-                        return res.send({ status: false, msg: "Please Update CLIENT CODE in Broker key..."});
-                    }
-                    if(mpin==""|| mpin==null){
-                        return res.send({ status: false, msg: "Please Update MPIN in Broker key..."});
-                    }
+            
+                    var pwd_sha256 = sha256(password);
+                    var appkey_sha256 = sha256(uid + "|" + appkey);
+            
+            
+                    var data = { uid: uid, pwd: pwd_sha256, factor2: DOB, apkversion: '1.0.8', imei: '', vc: uid, appkey: appkey_sha256, source: 'API' }
+                    var raw = "jData=" + JSON.stringify(data);
                     
+
+                    console.log("raw",raw)
                     
-                    //console.log("req ",req.body.Email)
-                    
-                    var data = JSON.stringify({
-                        "Totp": totp,
-                        "ClientCode": client_code,
-                        "MPIN": mpin,
-                        "GenerationSourceTP": "FTLTP",
-                        "IPAddress": "192.168.0.1"
-                    })
-    
                     var config = {
-                        method: "post",
-                        // url: 'https://stagingtradingorestapi.swastika.co.in/auth/TOTP/VerifyTotp',
-                        url: 'https://tradingorestapi.swastika.co.in/auth/TOTP/VerifyTotp',
+                        method: 'post',
+                        url: 'https://go.mynt.in/NorenWClientTP/QuickAuth',
                         headers: {
-                            'Content-Type': 'application/json'
+                          'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                        data: data
-                    };
+                        data: raw
+                      };
                       
                       await axios.request(config)
                       .then(async(response) => {
 
-                        //console.log("req ",response.data.token)
+                        console.log("req ",response.data)
                        
-                       
-
-                        if(response.data.IsError == false){
-                           let AccessToken = response.data.Result.Data.AccessToken;
+                    
+                        if (response.data.stat == "Ok") {
+                           let AccessToken = response.data.susertoken
                             let result = await User.findByIdAndUpdate(
                                 Get_User[0]._id,
                                 {
@@ -117,18 +98,18 @@ class Swastika {
 
                            
                         }else{
-                            return res.send({ status: false, msg: response.data.ResponseException.ExceptionMessage});
+                            return res.send({ status: false, msg: response.data});
                           
                         }
 
 
                       })
                       .catch((error) => {
-                        // console.log("error -- ",error.response.data);
+                        console.log("error -- ",error.response.data);
                         
                      if(error){
-                         if(error.response.data.ResponseException.ExceptionMessage != undefined){
-                         return res.send({ status: false, msg: error.response.data.ResponseException.ExceptionMessage});
+                         if(error.response.data.emsgd){
+                         return res.send({ status: false, msg: error.response.data.emsg});
                          } 
                         }else{
 
@@ -138,9 +119,7 @@ class Swastika {
                       });
 
 
-                    }else{
-                        return res.send({ status: false, msg: "Please Enter TOTP"});
-                    }
+                  
                
                     }else{
                     return res.send({ status: false, msg: "User not found"});
@@ -160,7 +139,7 @@ class Swastika {
     }
 
       // UPDATE ALL CLIENT BROKER RESPONSE
-     async GetOrderFullInformationSwastika(req, res , user_info) {
+     async GetOrderFullInformationZebull(req, res , user_info) {
        
         try {
             const { user_id } = req.body
@@ -270,7 +249,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
  
 }
 
-module.exports = new Swastika();
+module.exports = new Zebull();
 
 
 

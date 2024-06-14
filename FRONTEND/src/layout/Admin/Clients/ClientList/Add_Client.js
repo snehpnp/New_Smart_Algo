@@ -100,7 +100,7 @@ const AddClient = () => {
       api_type: 'null',
       client_code: 'null',
       api_key: 'null',
-      api_secret: 'null',
+      api_secret: '',
       app_key: 'null',
       demat_userid: 'null',
       parent_role: null,
@@ -338,7 +338,7 @@ const AddClient = () => {
     },
     {
       name: 'api_secret',
-      label: formik.values.broker == 1 ? 'Password Code' : formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker == 9 ? 'Encryption Secret Key' : formik.values.broker == 10 ? 'Api Secret Key' : formik.values.broker == 11 ? '2FA' : formik.values.broker == 14 ? 'Encryption Key' : 'Api Secret', type: 'text',
+      label: formik.values.broker == 1 ? 'Password Code' : formik.values.broker == 5 ? 'DOB ' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker == 9 ? 'Encryption Secret Key' : formik.values.broker == 10 ? 'Api Secret Key' : formik.values.broker == 11 ? '2FA' : formik.values.broker == 14 ? 'Encryption Key' : 'Api Secret', type: 'text',
       showWhen: values => values.broker === '1'
         ||
         // values.broker === '2' ||

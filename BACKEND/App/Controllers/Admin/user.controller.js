@@ -604,9 +604,6 @@ console.log("parseInt(TotalLicense)",(parseInt(TotalLicense) + parseInt(licence)
 
           if (req.license_type == "0") {
 
-
-            //console.log("ssss 2")
-
             if(existingUsername.license_type != "0"){
               var currentDate = new Date();
             var start_date_2days = dateTime.create(currentDate);
