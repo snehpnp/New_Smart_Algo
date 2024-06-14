@@ -217,9 +217,6 @@ const AllLicence = () => {
 
 
 
-  console.log("getAllClients", getAllClients.data)
-
-
   return (
     <>
       {getAllClients.loading ? (

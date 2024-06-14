@@ -106,7 +106,6 @@ class License {
         }
       ]);
 
-      console.log("sumUsedLicenses", sumUsedLicenses)
 
 
       if (Transection_license.length == 0) {

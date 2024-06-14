@@ -40,9 +40,6 @@ const AllLicence = () => {
   const [searchInput, setSearchInput] = useState("");
   const [originalData, setOriginalData] = useState([]);
 
-// console.log("getAllClients" ,getAllClients)
-// console.log("getAllClients1" ,getAllClients1)
-
 
 
   const data = async () => {

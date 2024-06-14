@@ -338,12 +338,12 @@ const EditClient = () => {
     },
     //  For Demo Only Client
     {
-      name: 'fromDate', label: 'From Date', type: 'date',
+      name: 'fromDate', label: 'From Date', type: 'date1',
       showWhen: values => values.licence === '1'
       , label_size: 12, col_size: 6, disable: true
     },
     {
-      name: 'todate', label: 'To Date', type: 'date',
+      name: 'todate', label: 'To Date', type: 'date1',
       showWhen: values => values.licence === '1'
       , label_size: 12, col_size: 6, disable: false
     },

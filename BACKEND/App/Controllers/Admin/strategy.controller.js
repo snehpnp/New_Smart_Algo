@@ -370,7 +370,7 @@ class strategy {
 
             const GetAllClientStrategy = await strategy_client_model.aggregate(pipeline)
 
-         //   console.log("GetAllClientStrategy",GetAllClientStrategy)
+
 
             const pipeline1 = [
                 {
