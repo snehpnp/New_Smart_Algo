@@ -27,6 +27,8 @@ class Swastika {
     // Get GetAccessToken ANGEL
     async GetAccessTokenSwastika(req, res) {
        
+        //console.log("req ",req.body.Email)
+       
         var user_email = req.body.Email;
         var totp = req.body.totp;
 

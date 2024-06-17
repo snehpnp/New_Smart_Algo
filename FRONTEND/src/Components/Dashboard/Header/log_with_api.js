@@ -48,7 +48,7 @@ export const loginWithApi = async (broker_id, UserDetails) => {
 
     }
     else if (broker_id === "4" || broker_id === 4) {
-        alert("broker-4")
+        window.location.href = `https://invest.motilaloswal.com/OpenAPI/Login.aspx?apikey=${UserDetails.api_key}`;
     }
     else if (broker_id === "5" || broker_id === 5) {
         axios({
@@ -221,6 +221,24 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     }
     else if (broker_id === "22" || broker_id === 22) {
         alert("broker-22")
+    }
+    else if (broker_id === "26" || broker_id === 26) {
+
+        axios({
+            url: `${Config.base_url}iiflsecurities`,
+            method: "post",
+            data: { Email: UserDetails.Email },
+
+        }).then((res) => {
+            console.log("res", res);
+            if (res.data.status == true) {
+
+            } else {
+
+            }
+
+        });;
+
     }
 
     <ToastButton />
