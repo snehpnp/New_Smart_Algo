@@ -255,6 +255,8 @@ const mastertrust = require('./Broker/mastertrust')
 const kotakneo = require('./Broker/kotakneo')
 
 const iiflView = require('./Broker/Iifl')
+const Motilaloswal = require('./Broker/Motilaloswal')
+
 
 
 
@@ -571,10 +573,6 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-          // console.log("price ",price)
-          // console.log("client_key ",client_key)
-          // console.log("process.env.PANEL_KEY ",process.env.PANEL_KEY)
-          // HIT TRADE IN BROKER SERVER
           let ExistExitSignal = '';
           if (type.toUpperCase() == "LX" || type.toUpperCase() == "SX") {
             const updatedFindSignal = {
@@ -888,6 +886,30 @@ app.post('/broker-signals', async (req, res) => {
             //End Process iiflView admin client
 
 
+            //Process Motilaloswal admin client
+            try {
+              const MotilaloswalViewCollection = db1.collection('MotilalOswalView');
+              const MotilaloswalViewdocuments = await MotilaloswalViewCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' MotilaloswalView ALL CLIENT LENGTH ' + MotilaloswalViewdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (MotilaloswalViewdocuments.length > 0) {
+                Motilaloswal.place_order(MotilaloswalViewdocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get MotilaloswalView Client In view", error);
+            }
+            //End Process MotilaloswalView admin client
+
+
           } else {
 
             //Process Tading View Client Alice Blue
@@ -1138,8 +1160,8 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-             //Process Tading View Client iifl
-             try {
+            //Process Tading View Client iifl
+            try {
               const iiflCollection = db1.collection('iiflView');
               const iifldocuments = await iiflCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
 
@@ -1162,7 +1184,26 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+            //Process Tading View Client Motilaloswal
+            try {
+              const MotilaloswalCollection = db1.collection('MotilaloswalView');
+              const Motilaloswaldocuments = await MotilaloswalCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
 
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' Motilaloswal TRADING VIEW CLIENT LENGTH ' + Motilaloswaldocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+              if (Motilaloswaldocuments.length > 0) {
+                Motilaloswal.place_order(Motilaloswaldocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get Motilaloswal Client In view", error);
+            }
+            //End Process Tading View Client Motilaloswal 
 
 
 

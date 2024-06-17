@@ -7,7 +7,7 @@ const BrokerResponse = db.BrokerResponse;
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
 
-    console.log("IIFL")
+    console.log("MOTILALOSWAL")
 
     try {
 
@@ -15,7 +15,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         var input_symbol = signals.Symbol;
         var type = signals.TType.toUpperCase();
         var tr_price = signals.Tr_Price;
-        var limitPrice = signals.Price;
+        var price = signals.Price;
         var sq_value = signals.Sq_Value;
         var sl_value = signals.Sl_Value;
         var tsl = signals.TSL;
@@ -39,17 +39,19 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                     const requestPromises = AllClientData.map(async (item) => {
 
-                        item.postdata.exchangeInstrumentID = token[0].instrument_token;
+                        item.postdata.symboltoken = Number(token[0].instrument_token);
+                        item.postdata.quantityinlot = Number( item.postdata.quantityinlot);
+
 
                         if (type == 'LE' || type == 'SX') {
-                            item.postdata.orderSide = 'BUY';
+                            item.postdata.buyorsell = 'BUY';
                         } else if (type == 'SE' || type == 'LX') {
-                            item.postdata.orderSide = 'SELL';
+                            item.postdata.buyorsell = 'SELL';
                         }
 
 
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                            item.postdata.limitPrice = limitPrice
+                            item.postdata.price = price
                         }
 
                         EntryPlaceOrder(item, filePath, signals, signal_req);
@@ -68,19 +70,20 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
                     const requestPromises = AllClientData.map(async (item) => {
-
-                        item.postdata.exchangeInstrumentID = token[0].instrument_token;
+                        
+                        item.postdata.symboltoken = Number(token[0].instrument_token);
+                        item.postdata.quantityinlot = Number( item.postdata.quantityinlot);
 
                         if (type == 'LE' || type == 'SX') {
-                            item.postdata.orderSide = 'BUY';
+                            item.postdata.buyorsell = 'BUY';
                         } else if (type == 'SE' || type == 'LX') {
-                            item.postdata.orderSide = 'SELL';
+                            item.postdata.buyorsell = 'SELL';
                         }
 
 
 
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                            item.postdata.limitPrice = limitPrice
+                            item.postdata.price = price
                         }
 
                         EntryPlaceOrder(item, filePath, signals, signal_req);
@@ -106,49 +109,72 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
                     if (segment.toUpperCase() != "C") {
-                        item.postdata.securityId = token[0].instrument_token;
+                        item.postdata.symboltoken = Number(token[0].instrument_token);
                     }
 
 
                     if (type == 'LE' || type == 'SX') {
-                        item.postdata.orderSide = 'BUY';
+                        item.postdata.buyorsell = 'BUY';
                     } else if (type == 'SE' || type == 'LX') {
-                        item.postdata.orderSide = 'SELL';
+                        item.postdata.buyorsell = 'SELL';
                     }
 
 
 
                     if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                        item.postdata.limitPrice = limitPrice
+                        item.postdata.price = price
                     }
 
 
 
                     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
+                    var data_possition = {
+                        "clientcode": item.client_code
+                    }
+
                     var config = {
                         method: 'get',
-                        url: item.api_type + '/portfolio/positions?dayOrNet=DayWise',
+                        url: 'https://openapi.motilaloswal.com/rest/book/v1/getposition',
                         headers: {
-                            'authorization': item.access_token,
+                            'Accept': ' application/json',
+                            'ApiKey': item.api_key,
+                            'User-Agent': ' MOSL/V.1.1.0',
+                            'vendorinfo': item.client_code,
+                            'SourceId': ' WEB',
+                            'MacAddress': ' B8-CA-3A-95-66-72',
+                            'ClientLocalIp': ' 192.168.0.47',
+                            'ClientPublicIp': ' 255.255.255.0',
+                            'osname': ' Windows 10',
+                            'osversion': ' 10.0.19041',
+                            'devicemodel': ' AHV',
+                            'manufacturer': ' DELL',
+                            'productname': ' Smart Algo',
+                            'productversion': ' 1.1',
+                            'browsername': ' Chrome',
+                            'browserversion': ' 109.0.5414.120',
+                            'Authorization': item.access_token,
                             'Content-Type': 'application/json'
                         },
+                        data: JSON.stringify(data_possition)
                     };
                     axios(config)
                         .then(async (response) => {
 
 
-                            if (response.data.result.positionList.length > 0) {
+                            if (response.data.data.length > 0) {
 
                                 fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
                                     if (err) { }
                                 });
 
-                                const Exist_entry_order = response.data.result.positionList.find(item1 => item1.ExchangeInstrumentID === token[0].instrument_token);
+                                const Exist_entry_order = response.data.data.find(item1 => item1.symboltoken === token[0].instrument_token);
+
+
 
                                 if (Exist_entry_order != undefined) {
 
-                                    const possition_qty = Exist_entry_order.Quantity
+                                    const possition_qty = Exist_entry_order.buyquantity - Exist_entry_order.sellquantity;
 
                                     if (possition_qty == 0) {
                                         BrokerResponse.create({
@@ -255,7 +281,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                 }
                             });
 
-                            if (error) {
+                            if (error.response) {
                                 const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
                                 BrokerResponse.create({
                                     user_id: item._id,
@@ -376,7 +402,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     var input_symbol = signals.Symbol;
     var type = signals.TType.toUpperCase();
     var tr_price = signals.Tr_Price;
-    var limitPrice = signals.Price;
+    var price = signals.Price;
     var sq_value = signals.Sq_Value;
     var sl_value = signals.Sl_Value;
     var tsl = signals.TSL;
@@ -403,16 +429,31 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: item.api_type + '/orders',
+        url: 'https://openapi.motilaloswal.com/rest/trans/v1/placeorder',
         headers: {
-            'authorization': item.access_token,
+            'Accept': 'application/json',
+            'ApiKey': item.api_key,
+            'User-Agent': 'MOSL/V.1.1.0',
+            'vendorinfo': item.client_code,
+            'SourceId': 'WEB',
+            'MacAddress': 'B8-CA-3A-95-66-72',
+            'ClientLocalIp': '192.168.0.47',
+            'ClientPublicIp': '255.255.255.0',
+            'osname': 'Windows 10',
+            'osversion': '10.0.19041',
+            'devicemodel': 'AHV',
+            'manufacturer': 'DELL',
+            'productname': 'Smart Algo',
+            'productversion': '1.1',
+            'browsername': 'Chrome',
+            'browserversion': '109.0.5414.120',
+            'Authorization': item.access_token,
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify(item.postdata)
-
-
-
+        data: item.postdata
+ 
     };
+    console.log("config", config.data)
     axios(config)
         .then(async (response) => {
             fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
@@ -420,8 +461,9 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     return console.log(err);
                 }
             });
+            console.log("response", response.data)
 
-            if (response.data.type == "success") {
+            if (response.data.status == "SUCCESS") {
 
                 BrokerResponse.create({
                     user_id: item._id,
@@ -429,8 +471,8 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data.type,
-                    order_id: response.data.result.AppOrderID,
+                    order_status: response.data.orderStatus,
+                    order_id: response.data.orderId,
                     trading_symbol: "",
                     broker_name: "iifl",
                     send_request: send_rr,
@@ -457,7 +499,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: 0,
+                    order_status: response.data.orderStatus,
                     order_id: "",
                     trading_symbol: "",
                     broker_name: "iifl",
@@ -563,7 +605,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
     var input_symbol = signals.Symbol;
     var type = signals.TType.toUpperCase();
     var tr_price = signals.Tr_Price;
-    var limitPrice = signals.Price;
+    var price = signals.Price;
     var sq_value = signals.Sq_Value;
     var sl_value = signals.Sl_Value;
     var tsl = signals.TSL;
@@ -588,13 +630,29 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: item.api_type + '/orders',
+        url: 'https://openapi.motilaloswal.com/rest/trans/v1/placeorder',
         headers: {
-            'authorization': item.access_token,
+            'Accept': 'application/json',
+            'ApiKey': item.api_key,
+            'User-Agent': 'MOSL/V.1.1.0',
+            'vendorinfo': item.client_code,
+            'SourceId': 'WEB',
+            'MacAddress': 'B8-CA-3A-95-66-72',
+            'ClientLocalIp': '192.168.0.47',
+            'ClientPublicIp': '255.255.255.0',
+            'osname': 'Windows 10',
+            'osversion': '10.0.19041',
+            'devicemodel': 'AHV',
+            'manufacturer': 'DELL',
+            'productname': 'Smart Algo',
+            'productversion': '1.1',
+            'browsername': 'Chrome',
+            'browserversion': '109.0.5414.120',
+            'Authorization': item.access_token,
             'Content-Type': 'application/json'
         },
-        data: JSON.stringify(item.postdata)
 
+        data: item.postdata
     };
 
     axios(config)
@@ -608,7 +666,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
 
 
-            if (response.data.orderStatus != undefined) {
+            if (response.data.status == "SUCCESS") {
 
                 BrokerResponse.create({
                     user_id: item._id,

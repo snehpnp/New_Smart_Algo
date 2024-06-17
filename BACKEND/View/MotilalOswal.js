@@ -109,16 +109,11 @@ async function createViewMotilalOswal() {
       },
       {
         $addFields: {
-          
-         
-           
+
           postdata:
           {
-            complexty: 'REGULAR',
-            discqty: '0',
 
-            // exchange condition here
-            exch: {
+            exchange: {
               $cond: {
                 if: { $eq: ['$category.segment', 'C'] }, // Your condition here
                 then: 'NSE',
@@ -131,7 +126,7 @@ async function createViewMotilalOswal() {
                         { $eq: ['$category.segment', 'FO'] }
                       ]
                     },
-                    then: 'NFO',
+                    then: 'NSEFO',
                     else: {
 
                       $cond: {
@@ -151,10 +146,10 @@ async function createViewMotilalOswal() {
                                 { $eq: ['$category.segment', 'CO'] }
                               ]
                             },
-                            then: 'CDS',
+                            then: 'NSECD',
 
                             // all not exist condition 
-                            else: "NFO"
+                            else: "NSEFO"
 
                           }
 
@@ -172,10 +167,11 @@ async function createViewMotilalOswal() {
               }
             },
 
+            buyorsell: 'BUY',
 
 
             // product code condition here
-            pCode: {
+            producttype: {
               $cond: {
                 if: {
                   $and:
@@ -190,7 +186,7 @@ async function createViewMotilalOswal() {
                       },
                     ]
                 },
-                then: 'NRML',
+                then: 'NORMAL',
                 else: {
                   $cond: {
                     if: {
@@ -199,7 +195,7 @@ async function createViewMotilalOswal() {
                           { $eq: ['$client_services.product_type', '2'] },
                         ]
                     },
-                    then: 'MIS',
+                    then: 'NORMAL',
                     else: {
                       $cond: {
                         if: {
@@ -218,7 +214,7 @@ async function createViewMotilalOswal() {
                                 ]
                             },
                             then: 'CO',
-                            else: "CNC"
+                            else: "NORMAL"
 
                           }
 
@@ -236,10 +232,8 @@ async function createViewMotilalOswal() {
 
             },
 
-
-
             // ordertype code condition here
-            prctyp: {
+            ordertype: {
               $cond: {
                 if: {
                   $and:
@@ -247,7 +241,7 @@ async function createViewMotilalOswal() {
                       { $eq: ['$client_services.order_type', '1'] },
                     ]
                 },
-                then: 'MKT',
+                then: 'MARKET',
                 else: {
                   $cond: {
                     if: {
@@ -256,7 +250,7 @@ async function createViewMotilalOswal() {
                           { $eq: ['$client_services.order_type', '2'] },
                         ]
                     },
-                    then: 'L',
+                    then: 'LIMIT',
                     else: {
                       $cond: {
                         if: {
@@ -265,7 +259,7 @@ async function createViewMotilalOswal() {
                               { $eq: ['$client_services.order_type', '3'] },
                             ]
                         },
-                        then: 'SL',
+                        then: 'STOPLOSS',
                         else: {
                           $cond: {
                             if: {
@@ -274,10 +268,10 @@ async function createViewMotilalOswal() {
                                   { $eq: ['$client_services.order_type', '4'] },
                                 ]
                             },
-                            then: 'SL-M',
+                            then: 'STOPLOSS',
 
                             //All condition exist
-                            else: "MKT"
+                            else: "MARKET"
 
                           }
 
@@ -294,10 +288,11 @@ async function createViewMotilalOswal() {
 
             },
 
-            price: '0',
-           // qty: "$client_services.quantity",
 
-            qty: {  
+            price: 0,
+
+
+            quantityinlot: {
               $cond: {
                 if: {
                   $or: [
@@ -306,50 +301,17 @@ async function createViewMotilalOswal() {
                   ]
                 },
                 then: "$client_services.lot_size",
-                else:  "$client_services.quantity"
+                else: "$client_services.lot_size"
 
               }
 
             },
 
-
-            ret: 'DAY',
-
-            // symbol id token condition here
-            symbol_id: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$category.segment', 'C'] },
-                    ]
-                },
-                then: "$service.instrument_token",
-                else: ""
-
-              }
-            },
+            orderduration: 'DAY',
 
 
-            // trading symbol condition here
-            trading_symbol: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$category.segment', 'C'] },
-                    ]
-                },
-                then: "$service.zebu_token",
-                else: ""
+            amoorder: 'N',
 
-              }
-            },
-
-
-            transtype: 'BUY',
-            trigPrice: '',
-            orderTag: 'order1',
 
           }
         }
