@@ -27,11 +27,7 @@ class Iifl {
     // Get GetAccessToken ANGEL
     async GetAccessTokenIifl(req, res) {
 
-        console.log("req ", req.body.Email)
-
         var user_email = req.body.Email;
-
-
 
         try {
 
@@ -85,16 +81,19 @@ class Iifl {
                             };
 
                             axios(config)
-                                .then(async (response) => {
-                                    if (response.data.type == 'success') {
+                                .then(async (response1) => {
+                                    console.log("req -", response1.data.result.token)
+
+                                    if (response1.data.type == 'success') {
 
 
-                                        let AccessToken = response.data.Result.Data.AccessToken;
+                                        let AccessToken = response1.data.result.token;
                                         let result = await User.findByIdAndUpdate(
                                             Get_User[0]._id,
                                             {
                                                 access_token: AccessToken,
                                                 TradingStatus: "on",
+                                                api_type:connectionString
 
                                             })
 
@@ -123,15 +122,15 @@ class Iifl {
 
                         })
                         .catch((error) => {
-                            // console.log("error -- ",error.response.data);
+                            console.log("error -- ", error.response.data);
 
                             if (error) {
-                                if (error.response.data.ResponseException.ExceptionMessage != undefined) {
-                                    return res.send({ status: false, msg: error.response.data.ResponseException.ExceptionMessage });
+                                if (error.response.data != undefined) {
+                                    return res.send({ status: false, msg: error.response.data });
                                 }
                             } else {
 
-                                const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+                                const message = (JSON.stringify(error)).replace(/["',]/g, '');
                                 return res.send({ status: false, msg: message });
                             }
                         });

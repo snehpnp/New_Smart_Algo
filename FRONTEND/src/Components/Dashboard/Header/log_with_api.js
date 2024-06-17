@@ -230,10 +230,13 @@ export const loginWithApi = async (broker_id, UserDetails) => {
             data: { Email: UserDetails.Email },
 
         }).then((res) => {
-            console.log("res", res);
             if (res.data.status == true) {
-
+                toast.success(res.data.msg)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
             } else {
+                toast.error(res.data.msg)
 
             }
 
