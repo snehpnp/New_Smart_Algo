@@ -59,8 +59,6 @@ class Iifl {
                     await axios.request(config)
                         .then(async (response) => {
 
-                            console.log("req ", response.data)
-
                             var accesspassword = response.data.result.uniqueKey
                             var connectionString = response.data.result.connectionString
 
@@ -82,7 +80,6 @@ class Iifl {
 
                             axios(config)
                                 .then(async (response1) => {
-                                    console.log("req -", response1.data.result.token)
 
                                     if (response1.data.type == 'success') {
 
@@ -122,7 +119,6 @@ class Iifl {
 
                         })
                         .catch((error) => {
-                            console.log("error -- ", error.response.data);
 
                             if (error) {
                                 if (error.response.data != undefined) {
@@ -170,7 +166,6 @@ class Iifl {
 
 
         } catch (error) {
-            console.log("Error Some Error In Order information get -", error);
             return res.send({ status: false, msg: 'error in Server side', data: error });
 
         }
@@ -210,7 +205,6 @@ const GetAllBrokerResponse = async (user_info, res) => {
 
                 axios(config)
                     .then(async (response) => {
-                        // console.log("response order details ",response.data.status)
                         if (response.data.IsError != true) {
                             const result_order = response.data.Result.Data.find(item2 => item2.norenordno === data1.order_id);
                             if (result_order != undefined) {
