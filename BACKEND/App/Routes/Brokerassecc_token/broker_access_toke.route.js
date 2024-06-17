@@ -68,7 +68,7 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
 
   let user_id = req.body.user_id;
   const objectId = new ObjectId(user_id);
-  console.log("objectId", objectId)
+
   const pipeline = [
     {
       $match: {

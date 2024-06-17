@@ -109,19 +109,18 @@ async function createViewIifl() {
       },
       {
         $addFields: {
-          
-         
-           
+
+
+
           postdata:
           {
-            complexty: 'REGULAR',
-            discqty: '0',
+ 
 
             // exchange condition here
-            exch: {
+            exchangeSegment: {
               $cond: {
                 if: { $eq: ['$category.segment', 'C'] }, // Your condition here
-                then: 'NSE',
+                then: 'NSECM',
                 else: {
                   $cond: {
                     if: {
@@ -131,7 +130,7 @@ async function createViewIifl() {
                         { $eq: ['$category.segment', 'FO'] }
                       ]
                     },
-                    then: 'NFO',
+                    then: 'NSEFO',
                     else: {
 
                       $cond: {
@@ -141,7 +140,7 @@ async function createViewIifl() {
                             { $eq: ['$category.segment', 'MO'] }
                           ]
                         },
-                        then: 'MCX',
+                        then: 'MCXFO',
                         else: {
 
                           $cond: {
@@ -151,10 +150,10 @@ async function createViewIifl() {
                                 { $eq: ['$category.segment', 'CO'] }
                               ]
                             },
-                            then: 'CDS',
+                            then: 'NCDEX',
 
                             // all not exist condition 
-                            else: "NFO"
+                            else: "NSEFO"
 
                           }
 
@@ -174,8 +173,66 @@ async function createViewIifl() {
 
 
 
+            // ordertype code condition here
+            orderType: {
+              $cond: {
+                if: {
+                  $and:
+                    [
+                      { $eq: ['$client_services.order_type', '1'] },
+                    ]
+                },
+                then: 'Market',
+                else: {
+                  $cond: {
+                    if: {
+                      $and:
+                        [
+                          { $eq: ['$client_services.order_type', '2'] },
+                        ]
+                    },
+                    then: 'Limit',
+                    else: {
+                      $cond: {
+                        if: {
+                          $and:
+                            [
+                              { $eq: ['$client_services.order_type', '3'] },
+                            ]
+                        },
+                        then: 'StopLimit',
+                        else: {
+                          $cond: {
+                            if: {
+                              $and:
+                                [
+                                  { $eq: ['$client_services.order_type', '4'] },
+                                ]
+                            },
+                            then: 'StopMarket',
+
+                            //All condition exist
+                            else: "Market"
+
+                          }
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+                }
+
+              }
+
+            },
+
+
+
             // product code condition here
-            pCode: {
+            productType: {
               $cond: {
                 if: {
                   $and:
@@ -238,66 +295,11 @@ async function createViewIifl() {
 
 
 
-            // ordertype code condition here
-            prctyp: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$client_services.order_type', '1'] },
-                    ]
-                },
-                then: 'MKT',
-                else: {
-                  $cond: {
-                    if: {
-                      $and:
-                        [
-                          { $eq: ['$client_services.order_type', '2'] },
-                        ]
-                    },
-                    then: 'L',
-                    else: {
-                      $cond: {
-                        if: {
-                          $and:
-                            [
-                              { $eq: ['$client_services.order_type', '3'] },
-                            ]
-                        },
-                        then: 'SL',
-                        else: {
-                          $cond: {
-                            if: {
-                              $and:
-                                [
-                                  { $eq: ['$client_services.order_type', '4'] },
-                                ]
-                            },
-                            then: 'SL-M',
 
-                            //All condition exist
-                            else: "MKT"
+            limitPrice: 0,
+            disclosedQuantity: "0",
 
-                          }
-
-                        }
-
-                      }
-
-                    }
-
-                  }
-                }
-
-              }
-
-            },
-
-            price: '0',
-           // qty: "$client_services.quantity",
-
-            qty: {  
+            orderQuantity: {
               $cond: {
                 if: {
                   $or: [
@@ -306,50 +308,20 @@ async function createViewIifl() {
                   ]
                 },
                 then: "$client_services.lot_size",
-                else:  "$client_services.quantity"
+                else: "$client_services.quantity"
 
               }
 
             },
 
 
-            ret: 'DAY',
+            timeInForce: 'DAY',
+            orderUniqueIdentifier:"123abc",
 
-            // symbol id token condition here
-            symbol_id: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$category.segment', 'C'] },
-                    ]
-                },
-                then: "$service.instrument_token",
-                else: ""
+       
 
-              }
-            },
-
-
-            // trading symbol condition here
-            trading_symbol: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$category.segment', 'C'] },
-                    ]
-                },
-                then: "$service.zebu_token",
-                else: ""
-
-              }
-            },
-
-
-            transtype: 'BUY',
-            trigPrice: '',
-            orderTag: 'order1',
+            orderSide: 'BUY',
+            stopPrice: 0,
 
           }
         }

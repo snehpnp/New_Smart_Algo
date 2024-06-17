@@ -520,41 +520,7 @@ const AllClients = () => {
         return ""
       }
 
-      // if (value === 1) {
-      //   return "Markethub";
-      // } else if (value === 2) {
-      //   return "Alice Blue";
-      // } else if (value === 3) {
-      //   return "Master Trust";
-      // } else if (value === 4) {
-      //   return "Motilal Oswal";
-      // } else if (value === 5) {
-      //   return "Zebull";
-      // } else if (value === 6) {
-      //   return "IIFl";
-      // } else if (value === 7) {
-      //   return "Kotak";
-      // } else if (value === 8) {
-      //   return "Mandot";
-      // } else if (value === 9) {
-      //   return "Choice";
-      // } else if (value === 10) {
-      //   return "Anand Rathi";
-      // } else if (value === 11) {
-      //   return "B2C";
-      // } else if (value === 12) {
-      //   return "Angel";
-      // } else if (value === 13) {
-      //   return "Fyers";
-      // } else if (value === 14) {
-      //   return "5-Paisa";
-      // } else if (value === 15) {
-      //   return "Zerodha";
-      // } else if (value === 19) {
-      //   return "Upstox";
-      // }else if (value === 20) {
-      //   return "Dhan";
-      // }
+     
     }
   };
 

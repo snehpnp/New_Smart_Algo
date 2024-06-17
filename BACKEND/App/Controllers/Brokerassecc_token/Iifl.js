@@ -90,7 +90,7 @@ class Iifl {
                                             {
                                                 access_token: AccessToken,
                                                 TradingStatus: "on",
-                                                api_type:connectionString
+                                                api_type: connectionString
 
                                             })
 
@@ -177,36 +177,33 @@ class Iifl {
 
 const GetAllBrokerResponse = async (user_info, res) => {
 
-
     try {
         const objectId = new ObjectId(user_info[0]._id);
         // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
-        var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId, order_view_status: "0" })
+        var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId, order_view_status: "0", order_status: "success" })
+
 
         if (FindUserBrokerResponse.length > 0) {
             FindUserBrokerResponse.forEach((data1) => {
 
-                let data = JSON.stringify({
-                    "Uid": user_info[0].client_code
-                });
-
                 var config = {
-                    method: 'post',
+                    method: 'get',
                     maxBodyLength: Infinity,
-                    // url: 'https://stagingtradingorestapi.swastika.co.in/kb/OrderBook/GetOrderBookList',
-                    url: 'https://tradingorestapi.swastika.co.in/kb/OrderBook/GetOrderBookList',
+                    url: user_info[0].api_type + '/orders',
+
                     headers: {
-                        'Authorization': 'Bearer ' + user_info[0].access_token,
+                        'authorization': user_info[0].access_token,
                         'Content-Type': 'application/json'
                     },
-                    data: data
+
 
                 };
-
                 axios(config)
                     .then(async (response) => {
-                        if (response.data.IsError != true) {
-                            const result_order = response.data.Result.Data.find(item2 => item2.norenordno === data1.order_id);
+                        if (response.data.type == "success") {
+                            const result_order = response.data.result.find(item2 => item2.AppOrderID == data1.order_id);
+
+
                             if (result_order != undefined) {
                                 const message = (JSON.stringify(result_order));
                                 let result = await BrokerResponse.findByIdAndUpdate(
@@ -214,8 +211,8 @@ const GetAllBrokerResponse = async (user_info, res) => {
                                     {
                                         order_view_date: message,
                                         order_view_status: '1',
-                                        order_view_response: result_order.status,
-                                        reject_reason: result_order.Rejreason
+                                        order_view_response: result_order.OrderStatus,
+                                        reject_reason: result_order.CancelRejectReason
 
                                     },
                                     { new: true }

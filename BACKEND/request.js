@@ -36,7 +36,7 @@ module.exports = function (app) {
 
     app.get("/iifl/brokerview", (req, res) => {
 
-        createViewZebul()
+        createViewIifl()
 
         res.send("DONEE")
     })
