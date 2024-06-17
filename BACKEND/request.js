@@ -4,6 +4,7 @@ module.exports = function (app) {
     const Alice_token = db.Alice_token;
     var dateTime = require('node-datetime');
     var moment = require('moment');
+    const { MongoClient } = require('mongodb');
 
     const mongoose = require("mongoose");
     const ObjectId = mongoose.Types.ObjectId;
@@ -25,150 +26,170 @@ module.exports = function (app) {
     const { createViewDhan } = require('./View/dhan')
     const { createViewFyers } = require('./View/fyers')
     const { MainSignalsRemainToken } = require('./App/Cron/cron')
+    const { createViewIifl } = require('./View/Iifl')
+    const { createViewMotilalOswal } = require('./View/MotilalOswal')
+    const { createViewZebul } = require('./View/Zebul')
 
 
 
-    const { MongoClient } = require('mongodb');
 
 
-   app.get("/UpdateQty",async(req,res)=>{
+    app.get("/iifl/brokerview", (req, res) => {
 
-    const pipeline = [
+        createViewZebul()
 
-        {
-          $project: {
-            // Include fields from the original collection
-            'lotsize': 1,
-            'name': 1,
-          },
-        },
-      ];
-      const servicesResult = await services.aggregate(pipeline);
-      if(servicesResult.length > 0){
-      servicesResult.forEach(async(element) => {
-           const Sid = new ObjectId(element._id);
-         // if(element.name == "TITAN"){
-          
-          const clsResult = await client_services.find({service_id:Sid});
-          if(clsResult.length > 0){
-              clsResult.forEach(async(item)  => {
-                  
+        res.send("DONEE")
+    })
+
+    app.get("/all/brokerview", (req, res) => {
+        createViewIifl()
+        createViewMotilalOswal()
+        createViewUpstox()
+        createViewDhan()
+        createViewFyers()
+        createViewAlice()
+        createViewZebul()
+        res.send("DONEE")
+    })
 
 
-                     const filtet = { _id: item._id };
-                     const qty = parseInt(item.lot_size)*parseInt(element.lotsize)
-                    const updateOperation = { $set: { quantity: qty } };
-                    try {
-                    const UpdateD = await client_services.updateOne(filtet, updateOperation);
-             
-                    } catch (error) {
-                    console.log("Error updating documents:", error);
+    app.get("/UpdateQty", async (req, res) => {
+
+        const pipeline = [
+
+            {
+                $project: {
+                    // Include fields from the original collection
+                    'lotsize': 1,
+                    'name': 1,
+                },
+            },
+        ];
+        const servicesResult = await services.aggregate(pipeline);
+        if (servicesResult.length > 0) {
+            servicesResult.forEach(async (element) => {
+                const Sid = new ObjectId(element._id);
+                // if(element.name == "TITAN"){
+
+                const clsResult = await client_services.find({ service_id: Sid });
+                if (clsResult.length > 0) {
+                    clsResult.forEach(async (item) => {
+
+
+
+                        const filtet = { _id: item._id };
+                        const qty = parseInt(item.lot_size) * parseInt(element.lotsize)
+                        const updateOperation = { $set: { quantity: qty } };
+                        try {
+                            const UpdateD = await client_services.updateOne(filtet, updateOperation);
+
+                        } catch (error) {
+                            console.log("Error updating documents:", error);
+                        }
+
+
+
+                    });
+                }
+
+                //}
+
+
+            });
+
+        }
+
+
+
+        res.send({ status: true })
+
+
+
+
+
+
+    })
+
+
+    app.get('/addstockExtra', async function (req, res) {
+
+        const pipeline = [
+
+            {
+                $project: {
+                    // Include fields from the original collection
+                    'segment': 1,
+                },
+            },
+        ];
+        const categoryResult = await categorie.aggregate(pipeline);
+
+        var axios = require('axios');
+        var config = {
+            method: 'get',
+            url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
+        };
+
+        axios(config)
+            .then(function (response) {
+
+                var unique_key = []
+                let count = 0
+                response.data.forEach((item) => {
+
+
+
+
+                    if (item.symbol.slice(-3) == '-EQ') {
+                        count++
+
+                        const matchingElements = categoryResult.filter(item => item.segment === "C");
+                        const category_id = matchingElements[0]._id
+
+
+                        services.create({
+                            name: item.name + '#',
+                            instrument_token: item.token,
+                            zebu_token: item.symbol,
+                            kotak_token: "",
+                            instrumenttype: item.instrumenttype,
+                            exch_seg: item.exch_seg,
+                            lotsize: item.lotsize,
+                            categorie_id: category_id,
+                            unique_column: item.name + '#_' + category_id
+                        })
+                            .then((createdServices) => {
+                                console.log('User created and saved:', createdServices._id)
+                            })
+                            .catch((err) => {
+                                try {
+                                    console.error('Error creating and saving user:', err);
+                                } catch (e) {
+                                    console.log("duplicate key")
+                                }
+
+                            });
+
+
                     }
 
 
 
-              });
-            }
-
-       //}
-
-
-      });
-      
-    }
 
 
 
-     res.send({status:true})
-
-
-  
-
-
-
- })
-   
-      //Add stoch Api.....
-  app.get('/addstockExtra', async function (req, res) {
-
-    const pipeline = [
-
-      {
-        $project: {
-          // Include fields from the original collection
-          'segment': 1,
-        },
-      },
-    ];
-    const categoryResult = await categorie.aggregate(pipeline);
-   
-    var axios = require('axios');
-    var config = {
-      method: 'get',
-      url: 'https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json',
-    };
-
-    axios(config)
-      .then(function (response) {
-
-        var unique_key = []
-        let count = 0
-        response.data.forEach((item) => {
-
-        
-
-
-          if (item.symbol.slice(-3) == '-EQ') {
-            count++
-
-            const matchingElements = categoryResult.filter(item => item.segment === "C");
-            const category_id = matchingElements[0]._id
-
-
-            services.create({
-              name: item.name + '#',
-              instrument_token: item.token,
-              zebu_token: item.symbol,
-              kotak_token: "",
-              instrumenttype: item.instrumenttype,
-              exch_seg: item.exch_seg,
-              lotsize: item.lotsize,
-              categorie_id: category_id,
-              unique_column: item.name + '#_' + category_id
-            })
-              .then((createdServices) => {
-                console.log('User created and saved:', createdServices._id)
-              })
-              .catch((err) => {
-                try {
-                  console.error('Error creating and saving user:', err);
-                } catch (e) {
-                  console.log("duplicate key")
-                }
-
-              });
-
-
-          }
-
-
-
-
-     
-
-        });
+                });
 
 
 
 
 
 
-      });
+            });
 
 
 
-  })
-   
+    })
 
 
     app.get("/DT", async (req, res) => {
@@ -447,7 +468,7 @@ module.exports = function (app) {
                                 exch_seg: element.exch_seg
                             };
 
-                      
+
 
                             const filter = { instrument_token: element.token };
                             var updateOperation = { $set: user_data };
@@ -591,24 +612,18 @@ module.exports = function (app) {
     });
 
 
-
     app.get("/test", (req, res) => {
         MainSignalsRemainToken()
         res.send("DONEE")
     })
-
 
     app.get('/dropOpenPosition', async (req, res) => {
         dropOpenPosition()
         res.send({ msg: "Delete Done!!!" })
     })
 
-
     app.get('/createView', async (req, res) => {
         createViewFyers();
-        // createViewAlice();
-        //createView()
-        // open_position_excute()
         res.send({ msg: "Create View Done!  !!" })
     })
 
