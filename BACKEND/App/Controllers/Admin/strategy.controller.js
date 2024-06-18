@@ -147,8 +147,8 @@ class strategy {
             const skip = (page - 1) * limit;
 
             // var getAllTheme = await strategy_model.find()
-            const getAllstrategy = await strategy_model.find({}).sort({createdAt:-1})
-           
+            const getAllstrategy = await strategy_model.find({}).sort({ createdAt: -1 })
+
             // IF DATA NOT EXIST
             if (getAllstrategy.length == 0) {
                 res.send({ status: false, msg: "Empty data", data: getAllstrategy })
@@ -292,44 +292,41 @@ class strategy {
 
     // Get Add Remove Strategy
     async GetAddRemoveStrategy(req, res) {
-        //console.log("req",req.body)
+
         try {
             const { _id } = req.body;
-            // GET LOGIN CLIENTS
+
             const objectId = new ObjectId(_id);
 
-         const pipeline2 = [
-            {
-                $lookup: {
-                    from: "strategy_clients", // Replace "collection2" with the name of the second collection
-                    localField: "_id", // Field in the first collection
-                    foreignField: "user_id", // Field in the second collection
-                    as: "matched_docs"
-                }
-            },
-            {
-                $unwind: "$matched_docs"
-            },
-            {
-                $group: {
-                    _id: "$_id",
-                    count: { $sum: 1 }
-                }
-            },
-            {
-                $project: {
-                    _id: 1, // include or exclude fields as needed
-                    count: 1,
-                    // Add other fields you want to include
-                }
-            }
-        ];
-        
-        const duplicateids = await User.aggregate(pipeline2)
+            const pipeline2 = [
+                {
+                    $lookup: {
+                        from: "strategy_clients",
+                        localField: "_id",
+                        foreignField: "user_id",
+                        as: "matched_docs"
+                    }
+                },
+                {
+                    $unwind: "$matched_docs"
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        count: { $sum: 1 }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        count: 1,
 
-      
-         
-        //console.log("duplicateids ",duplicateids)
+                    }
+                }
+            ];
+
+            const duplicateids = await User.aggregate(pipeline2)
+
 
 
 
@@ -350,19 +347,19 @@ class strategy {
                 {
                     $unwind: '$users',
                 },
-              
+
 
                 {
                     $project: {
-                         strategy_id:1,
+                        strategy_id: 1,
                         'users._id': 1,
                         'users.FullName': 1,
                         'users.UserName': 1,
                         'users.license_type': 1,
                         'users.Email': 1,
-                        
 
-                      
+
+
 
                     },
                 },
@@ -375,27 +372,27 @@ class strategy {
             const pipeline1 = [
                 {
                     $project: {
-                       
+
                         _id: 1,
                         FullName: 1,
                         UserName: 1,
                         license_type: 1,
-                        Email:1
+                        Email: 1
 
                     },
                 },
 
             ];
-            
-           const AllClients = await User.aggregate(pipeline1)
 
-           if(AllClients.length > 0){
-            return res.send({status: true, msg: "Get All data", StrategyClient: GetAllClientStrategy , AllClients: AllClients ,duplicateids:duplicateids })
-           }else{
-            
-            return res.send({status: false, msg: "Get All data", data: []})
-           }
-    
+            const AllClients = await User.aggregate(pipeline1)
+
+            if (AllClients.length > 0) {
+                return res.send({ status: true, msg: "Get All data", StrategyClient: GetAllClientStrategy, AllClients: AllClients, duplicateids: duplicateids })
+            } else {
+
+                return res.send({ status: false, msg: "Get All data", data: [] })
+            }
+
 
         } catch (error) {
             console.log("Error Get All Strategy Error-", error);
@@ -403,54 +400,47 @@ class strategy {
     }
 
 
-     // Update Add Remove Strategy
-     async UpdateAddRemoveStrategy(req, res) {
-      //  console.log("req",req.body)
-
+    // Update Add Remove Strategy
+    async UpdateAddRemoveStrategy(req, res) {
         try {
+            if (req.body.clientId.length > 0) {
 
+                req.body.clientId.forEach(async (element) => {
 
+                    const strategy_client = new strategy_client_model({
+                        strategy_id: req.body.strategyId,
+                        user_id: element,
+                    });
+                    strategy_client.save();
 
-            if(req.body.clientId.length > 0){
-
-                req.body.clientId.forEach(async(element) => {
-           
-                   
-                   //  ADD  STRATEGY CLIENT
-                  const strategy_client = new strategy_client_model({
-                    strategy_id: req.body.strategyId,
-                    user_id: element,
-                  });
-                  strategy_client.save();
-                    
                 });
-                
+
             }
-    
-            if(req.body.clientIdDelete.length > 0){
-            
-                req.body.clientIdDelete.forEach(async(element) => {
-                 
-                
-                 const deleteResult = await strategy_client_model.deleteOne({ strategy_id: req.body.strategyId , user_id : element});
-        
-                    
+
+            if (req.body.clientIdDelete.length > 0) {
+
+                req.body.clientIdDelete.forEach(async (element) => {
+
+
+                    const deleteResult = await strategy_client_model.deleteOne({ strategy_id: req.body.strategyId, user_id: element });
+
+
                 });
             }
 
-            
-            return res.send({status: true, msg: "Startegy Update Successfully...." })
+
+            return res.send({ status: true, msg: "Startegy Update Successfully...." })
 
 
         } catch (error) {
             console.log("Error Get All Strategy Error-", error);
-            return res.send({status: false, msg: "Catch Error"})
+            return res.send({ status: false, msg: "Catch Error" })
         }
     }
 
-    
 
-    
+
+
 
 
 }

@@ -185,12 +185,12 @@ class GroupService {
           const updateOperation = { $set: { group_qty: data.group_qty } };
           var deleteGroupServices = await serviceGroup_services_id.updateOne(filter, updateOperation)
 
-         
+
 
         })
       }
 
-     
+
 
 
       // Client Services Update
@@ -207,7 +207,7 @@ class GroupService {
         add_Group_services.forEach(async (data) => {
           var stgId = new ObjectId(data)
           var Qty_find = services_id.filter((data1) => data1.service_id == data)
-         
+
           var find_user_service = await groupServices_client1.find({ groupService_id: GroupServices_Id })
 
 
@@ -226,7 +226,7 @@ class GroupService {
                 lot_size: 1
 
               })
-        
+
 
               User_client_services.save()
 
@@ -478,11 +478,7 @@ class GroupService {
   // DELETE GROUP SERVICES
   async DELETEGROUPSERVICES(req, res) {
     try {
-      const { id } = req.body; // Assuming your ID is passed as 'id' in the request body
-
-      // console.log("Received ID:", id);
-
-      // Convert the string ID to an ObjectId
+      const { id } = req.body;
       const objectId = new ObjectId(id);
 
       const groupServices_user = await groupServices_client1.find({ groupService_id: objectId })
@@ -495,17 +491,11 @@ class GroupService {
       const result = await serviceGroupName.deleteOne({ _id: objectId });
       const result1 = await serviceGroup_services_id.deleteMany({ Servicegroup_id: objectId });
 
-
-      // console.log("result", result.acknowledged);
-
-
-      // Handle the results here, e.g., send them in the response
       if (result.acknowledged == true) {
         return res.send({ status: true, msg: 'Delete successfully ', data: result.acknowledged });
 
       }
     } catch (error) {
-      console.log("Error:", error);
 
       return res.json({ status: false, msg: 'server error delete group service-', data: error });
     }
@@ -607,7 +597,7 @@ class GroupService {
     try {
 
       const { _id } = req.body
-    
+
       if (_id != "yyyyyyyYYYYYY") {
         const objectId = new ObjectId(_id);
 

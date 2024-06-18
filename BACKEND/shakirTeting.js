@@ -451,12 +451,6 @@ module.exports = function (app) {
               }
   
 
-
-              // Create the view collection
-              // await db.createCollection(viewName, { viewOn: collectionName, pipeline: viewPipeline });
-
-            //  console.log(`View '${viewName}' created in '${database}' on '${server}'`);
-
             
           } 
           
@@ -546,7 +540,6 @@ module.exports = function (app) {
 
   async function RunQueryManulTaskAllDatabase(res) {
 
-       console.log("OKk")
 
 
       for (const server of servers) {
@@ -562,21 +555,17 @@ module.exports = function (app) {
               const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
   
               if (collectionExists) {
-                  // Insert one document into the collection
-                  // const result = await db.collection(collectionName).insertMany(documentToInsert);
                   
                   const pipeline = [
 
                       {
                         $project: {
-                          // Include fields from the original collection
                           'backend_rul': 1,
                         },
                       },
                     ];
                     const cursor = db.collection(collectionName).aggregate(pipeline);
 
-                    // Convert cursor to an array of documents
                     const all_panelsResult = await cursor.toArray();
 
                     const all_panelsResult1 = all_panelsResult.map(item =>
@@ -599,40 +588,8 @@ module.exports = function (app) {
                     let count = 0
                     if(filteredResults.length > 0){
                     filteredResults.forEach(element => {
-                    //  if(element!='https://app.aitech.market/backend/' && element!='https://trade.pandpinfotech.com/backend/'){
-                    //      count++
-              
-
-                    //   }
-
-
-                    // if(element!='https://app.aitech.market/backend/' && element!='https://trade.pandpinfotech.com/backend/'){
-
-
-                    //  count++
                   
-                    // let url = element+'addstockExtra';
-                    
-
-                    // let config = {
-                    //   method: 'get',
-                    //   maxBodyLength: Infinity,
-                    //   url: url,
-                    //   headers: { }
-                    // };
-
-                    // axios.request(config)
-                    // .then((response) => {
-                    //   console.log(JSON.stringify(response.data));
-                    // })
-                    // .catch((error) => {
-                    //   console.log(error);
-                    // });
-
-                    // }
-
                     if(element=='software.invicontechnology.com/backend/'){
-
 
                      count++
                   
@@ -647,22 +604,17 @@ module.exports = function (app) {
                     };
 
                     axios.request(config)
-                    .then((response) => {
-                      console.log(JSON.stringify(response.data));
-                    })
+                    .then((response) => { })
                     .catch((error) => {
                       console.log(error);
                     });
 
                     }
 
-
                     });
-                  }
-                   
+                  }                
 
                   console.log(`Get Data collection on '${server}'`);
-                 
                  
                     
               } else {
@@ -679,18 +631,6 @@ module.exports = function (app) {
       }
 
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -771,12 +711,8 @@ module.exports = function (app) {
 
     });
 
-    // Send all requests concurrently using Promise.all
     Promise.all(requestPromises)
-      .then(responses => {
-        // console.log("Response:", responses.data);
-
-      })
+      .then(responses => {})
       .catch(errors => {
         console.log("errors:", errors);
 
@@ -785,42 +721,6 @@ module.exports = function (app) {
 
 
 
-    // Create an array of promises for sending requests
-    // const requestPromises = requestData.map(async(data) => {
-    //   const config = {
-    //     method: 'post',
-    //     maxBodyLength: Infinity,
-    //     url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-    //     headers: {
-    //       'Authorization': "Bearer " + data.demat_userid + " " + data.access_token,
-    //       'Content-Type': 'application/json',
-    //     },
-    //     data: JSON.stringify([data.data]),
-    //   };
-    //   const trade = await axios(config)
-    //   const return_data = {res:trade ,name:data.name}
-
-    //   return return_data
-    //  // return axios(config);
-    // });
-
-    // // Send all requests concurrently using Promise.all
-    // Promise.all(requestPromises)
-    //   .then(responses => {
-    //   //console.log("Response:", responses.data);
-    //     responses.forEach(response => {
-    //    //   console.log("Response :", response);
-    //       console.log("Response Trade:", response.res.data);
-    //       console.log("client name ", response.name);
-    //     });
-    //   })
-    //   .catch(errors => {
-    //   console.log("errors:", errors);
-
-    //     // errors.forEach(error => {
-    //     //   console.log("Error:", error);
-    //     // });
-    //   });
 
 
     res.send("doneeeee")
@@ -843,21 +743,12 @@ module.exports = function (app) {
 
 
 
-
-      // Add more requests as needed
     ];
 
-    // Function to make an Axios request for a single item
     function makeRequest(item) {
       console.log("2")
 
-      // return axios.get(`https://www.nseindia.com/api/holiday-master?type=${item.key}`) // Replace with your API URL
-      //     .then(response => {
-      //         return `Request for ${item.key} completed: ${response.data}`;
-      //     })
-      //     .catch(error => {
-      //         return `Request for ${item.key} failed: ${error.message}`;
-      //     });
+ 
 
       let data = {
         complexty: 'regular',
@@ -891,7 +782,6 @@ module.exports = function (app) {
 
       axios(config)
         .then(async (response) => {
-          //  console.log("response",response)
 
         })
         .catch(async (error) => {
@@ -901,10 +791,8 @@ module.exports = function (app) {
 
     }
 
-    // Execute all requests concurrently using Promise.all
     Promise.all(requests.map(item => makeRequest(item)))
       .then(results => {
-        // All requests have completed
         console.log('All requests completed', results);
       })
       .catch(error => {
@@ -936,11 +824,6 @@ module.exports = function (app) {
         }
       },
 
-      // {$project: {
-
-
-
-      //  }},
       { $sort: { _id: 1 } },
 
       {
@@ -961,26 +844,13 @@ module.exports = function (app) {
   async function connectToDB(collectionName, response) {
     try {
 
-      //const db = dbTradeTools; // Replace 'mydb' with your desired database name
-      const db = dbTradeTools; // Replace 'mydb' with your desired database name
-      // console.log("db",db);
-      //  const collectionName = 'shakir'; // Replace with your desired collection name
+      const db = dbTradeTools; 
 
-      // List all collections in the database
       const collections = await db.listCollections().toArray();
 
-      // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === collectionName);
 
       if (collectionExists) {
-
-        // const changeStream = db.collection(collectionName).watch();
-
-        // changeStream.on('change', (change) => {
-        //   // Handle the change event
-        //   console.log('Change event:', change);
-        // });
-        //console.log(`Collection '${collectionName}' exists.`);
 
         const collection = db.collection(collectionName);
 
@@ -994,15 +864,7 @@ module.exports = function (app) {
             v: parseFloat(response.v)
           }
 
-          // const changeStream = collection.watch();
-          // changeStream.on('change', (change) => {
-          //   console.log('Change event:', change);
-          //   // You can add your logic here to evaluate changes
-          //   // For example, run an eval function
-          //   evaluateFunction(change);
-          // });
-
-          // Define a function to evaluate changes
+       
           function evaluateFunction(change) {
 
             console.log('Evaluating changes:', change);
@@ -1010,22 +872,14 @@ module.exports = function (app) {
 
 
           const insertResult = await collection.insertOne(singleDocument);
-          // console.log('Inserted document:', insertResult.insertedId);
         }
 
         createView(collectionName);
         createViewM3(collectionName);
-        //  createViewM5(collectionName);
-        // createViewM10(collectionName)
-        // createViewM15(collectionName)
-        // createViewM30(collectionName)
-        // createViewM60(collectionName)
-        // createViewM1DAY(collectionName)
+ 
 
       } else {
-        // console.log(`Collection '${collectionName}' does not exist.`);
         await db.createCollection(collectionName);
-        // console.log(`Collection '${collectionName}' created successfully`);
 
         const collection = db.collection(collectionName);
         // const singleDocument = { name: 'John', age: 30 };

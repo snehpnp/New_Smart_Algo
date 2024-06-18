@@ -158,9 +158,7 @@ module.exports = function (app) {
                             categorie_id: category_id,
                             unique_column: item.name + '#_' + category_id
                         })
-                            .then((createdServices) => {
-                                console.log('User created and saved:', createdServices._id)
-                            })
+                            .then((createdServices) => {})
                             .catch((err) => {
                                 try {
                                     console.error('Error creating and saving user:', err);
@@ -236,9 +234,8 @@ module.exports = function (app) {
         if (result.length > 0) {
             const idsToDelete = result.map(item => item._id);
             await Alice_token.deleteMany({ _id: { $in: result[0].idsToDelete } });
-            console.log(`${result.length} expired tokens deleted.`);
+        
         } else {
-            console.log('No expired tokens found.');
         }
 
         res.send({ data: result, count: result.length })
@@ -653,7 +650,6 @@ module.exports = function (app) {
 
         axios.request(config)
             .then(async (response) => {
-                // console.log(JSON.stringify(response.data));
                 const result = await Alice_token.aggregate([
                     {
                         $project: {
@@ -667,8 +663,7 @@ module.exports = function (app) {
 
                     const Exist_token = response.data.find(item1 => item1.tk === parseInt(element.instrument_token));
 
-                    //  console.log("Exist tkr ",Exist_token.tkr , "Exist a3tkr ",Exist_token.a3tkr , "Token ",element.instrument_token)
-
+                  
 
 
                     const update = {
@@ -681,12 +676,11 @@ module.exports = function (app) {
                     const filter = { instrument_token: element.instrument_token };
 
                     const options = {
-                        upsert: true, // If no documents match the query, insert a new document
+                        upsert: true,
                     };
 
                     let Res = await Alice_token.updateMany(filter, update, options);
 
-                    // console.log("Res ", Res)
 
 
                 });
@@ -910,12 +904,8 @@ module.exports = function (app) {
                 concatenatedArray += data + "#"
             });
 
-            console.log("concatenatedArray - ", concatenatedArray)
 
-            // var concatenatedArray1 = concatenatedArray.substring(0, concatenatedArray.length - 1)
-            //   const filter = { broker_name: "ALICE_BLUE" };
-            //  const updateOperation = { $set: { Stock_chain: concatenatedArray1 } };
-            // const Update_Stock_chain = await live_price.updateOne(filter, updateOperation);
+
             res.send("Donee")
             return
 
