@@ -477,7 +477,6 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
         data: item.postdata
 
     };
-    console.log("config", config.data)
     axios(config)
         .then(async (response) => {
             fs.appendFile(filePath, 'TIME ' + new Date() + ' motilaloswal AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
@@ -485,7 +484,6 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     return console.log(err);
                 }
             });
-            console.log("response", response.data)
 
             if (response.data.status == "SUCCESS") {
 

@@ -1,26 +1,346 @@
-TIME Tue Jun 18 2024 11:17:39 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- iifl REQUEST -{"exchangeSegment":"NSEFO","orderType":"Market","productType":"MIS","limitPrice":0,"disclosedQuantity":"0","orderQuantity":"15","timeInForce":"DAY","orderUniqueIdentifier":"123abc","orderSide":"BUY","stopPrice":0,"exchangeInstrumentID":"41060"}
-TIME Tue Jun 18 2024 11:17:39 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 11:17:40 GMT+0530 (India Standard Time) motilaloswal BEFORE PLACE ORDER USER ENTRY- motilal REQUEST -{"exchange":"NSEFO","buyorsell":"BUY","producttype":"NORMAL","ordertype":"MARKET","price":0,"quantityinlot":1,"orderduration":"DAY","amoorder":"N","symboltoken":41060}
-TIME Tue Jun 18 2024 11:17:40 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - iifl RESPONSE -{"type":"success","code":"s-orders-0001","description":"API Order Id sent","result":{"AppOrderID":1100967332,"ClientID":"BM000002","OrderUniqueIdentifier":"123abc"}}
-TIME Tue Jun 18 2024 11:17:40 GMT+0530 (India Standard Time) motilaloswal AFTER PLACE ORDER USER ENTRY - motilal RESPONSE -{"status":"ERROR","message":"Oops Sorry! You Have Not Authorised To Access This Segment","errorcode":"100029","uniqueorderid":"1800008CDPL9786"}
 
-NEW TRADE TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time)
+NEW TRADE TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time)
 RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- iifl REQUEST -{"exchangeSegment":"NSEFO","orderType":"Market","productType":"MIS","limitPrice":0,"disclosedQuantity":"0","orderQuantity":"15","timeInForce":"DAY","orderUniqueIdentifier":"123abc","orderSide":"BUY","stopPrice":0,"exchangeInstrumentID":"41060"}
-TIME Tue Jun 18 2024 11:17:46 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 11:17:46 GMT+0530 (India Standard Time) motilaloswal BEFORE PLACE ORDER USER ENTRY- motilal REQUEST -{"exchange":"NSEFO","buyorsell":"BUY","producttype":"NORMAL","ordertype":"MARKET","price":0,"quantityinlot":1,"orderduration":"DAY","amoorder":"N","symboltoken":41060}
-TIME Tue Jun 18 2024 11:17:46 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - iifl RESPONSE -{"type":"success","code":"s-orders-0001","description":"API Order Id sent","result":{"AppOrderID":1100967333,"ClientID":"BM000002","OrderUniqueIdentifier":"123abc"}}
-TIME Tue Jun 18 2024 11:17:46 GMT+0530 (India Standard Time) motilaloswal AFTER PLACE ORDER USER ENTRY - motilal RESPONSE -{"status":"ERROR","message":"Oops Sorry! You Have Not Authorised To Access This Segment","errorcode":"100029","uniqueorderid":"1800009CDPL9786"}
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) Zebull BEFORE PLACE ORDER USER ENTRY- zebul REQUEST -{"uid":"DEL65001","actid":"DEL65001","tsym":"BANKNIFTY19JUN24C48000","qty":15,"mkt_protection":"MKT","ret":"DAY","prc":0,"trgprc":0,"dscqty":"0","prctyp":"I","prd":"MKT","ordersource":"WEB","exch":"NFO","trantype":"BUY","buyorsell":"BUY"}
+TIME Tue Jun 18 2024 16:57:05 GMT+0530 (India Standard Time) Zebull AFTER PLACE ORDER CATCH ENTRY - zebul ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"314","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://go.mynt.in/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"tsym\":\"BANKNIFTY19JUN24C48000\",\"qty\":15,\"mkt_protection\":\"MKT\",\"ret\":\"DAY\",\"prc\":0,\"trgprc\":0,\"dscqty\":\"0\",\"prctyp\":\"I\",\"prd\":\"MKT\",\"ordersource\":\"WEB\",\"exch\":\"NFO\",\"trantype\":\"BUY\",\"buyorsell\":\"BUY\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 16:59:10 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 16:59:13 GMT+0530 (India Standard Time) Zebull BEFORE PLACE ORDER USER ENTRY- zebul REQUEST -{"uid":"DEL65001","actid":"DEL65001","tsym":"BANKNIFTY19JUN24C48000","qty":15,"mkt_protection":"MKT","ret":"DAY","prc":0,"trgprc":0,"dscqty":0,"prctyp":"I","prd":"MKT","ordersource":"WEB","exch":"NFO","trantype":"BUY","buyorsell":"BUY"}
+TIME Tue Jun 18 2024 16:59:13 GMT+0530 (India Standard Time) Zebull AFTER PLACE ORDER CATCH ENTRY - zebul ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"312","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://go.mynt.in/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"tsym\":\"BANKNIFTY19JUN24C48000\",\"qty\":15,\"mkt_protection\":\"MKT\",\"ret\":\"DAY\",\"prc\":0,\"trgprc\":0,\"dscqty\":0,\"prctyp\":\"I\",\"prd\":\"MKT\",\"ordersource\":\"WEB\",\"exch\":\"NFO\",\"trantype\":\"BUY\",\"buyorsell\":\"BUY\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Tue Jun 18 2024 17:01:00 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) Zebull BEFORE PLACE ORDER USER ENTRY- zebul REQUEST -{"uid":"DEL65001","actid":"DEL65001","tsym":"BANKNIFTY19JUN24C48000","qty":"15","mkt_protection":"MKT","ret":"DAY","prc":0,"trgprc":"0","dscqty":"0","prctyp":"I","prd":"MKT","ordersource":"WEB","exch":"NFO","trantype":"BUY","buyorsell":"BUY"}
+TIME Tue Jun 18 2024 17:01:01 GMT+0530 (India Standard Time) Zebull AFTER PLACE ORDER CATCH ENTRY - zebul ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"318","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://go.mynt.in/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"tsym\":\"BANKNIFTY19JUN24C48000\",\"qty\":\"15\",\"mkt_protection\":\"MKT\",\"ret\":\"DAY\",\"prc\":0,\"trgprc\":\"0\",\"dscqty\":\"0\",\"prctyp\":\"I\",\"prd\":\"MKT\",\"ordersource\":\"WEB\",\"exch\":\"NFO\",\"trantype\":\"BUY\",\"buyorsell\":\"BUY\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:31 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:32 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:32 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:32 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:01:32 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 17:01:32 GMT+0530 (India Standard Time) Zebull BEFORE PLACE ORDER USER ENTRY- zebul REQUEST -{"uid":"DEL65001","actid":"DEL65001","tsym":"BANKNIFTY19JUN24C48000","qty":"15","mkt_protection":"MKT","ret":"DAY","prc":"0","trgprc":"0","dscqty":"0","prctyp":"I","prd":"MKT","ordersource":"WEB","exch":"NFO","trantype":"BUY","buyorsell":"BUY"}
+TIME Tue Jun 18 2024 17:01:32 GMT+0530 (India Standard Time) Zebull AFTER PLACE ORDER CATCH ENTRY - zebul ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"320","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://go.mynt.in/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"tsym\":\"BANKNIFTY19JUN24C48000\",\"qty\":\"15\",\"mkt_protection\":\"MKT\",\"ret\":\"DAY\",\"prc\":\"0\",\"trgprc\":\"0\",\"dscqty\":\"0\",\"prctyp\":\"I\",\"prd\":\"MKT\",\"ordersource\":\"WEB\",\"exch\":\"NFO\",\"trantype\":\"BUY\",\"buyorsell\":\"BUY\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) Zebull BEFORE PLACE ORDER USER ENTRY- zebul REQUEST -{"uid":"DEL65001","actid":"DEL65001","tsym":"BANKNIFTY19JUN24C48000","qty":"15","mkt_protection":"MKT","ret":"DAY","prc":"0","trgprc":"0","dscqty":"0","prctyp":"I","prd":"M","ordersource":"WEB","exch":"NFO","trantype":"BUY","buyorsell":"BUY"}
+TIME Tue Jun 18 2024 17:08:26 GMT+0530 (India Standard Time) Zebull AFTER PLACE ORDER CATCH ENTRY - zebul ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"318","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://go.mynt.in/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"tsym\":\"BANKNIFTY19JUN24C48000\",\"qty\":\"15\",\"mkt_protection\":\"MKT\",\"ret\":\"DAY\",\"prc\":\"0\",\"trgprc\":\"0\",\"dscqty\":\"0\",\"prctyp\":\"I\",\"prd\":\"M\",\"ordersource\":\"WEB\",\"exch\":\"NFO\",\"trantype\":\"BUY\",\"buyorsell\":\"BUY\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) Zebull BEFORE PLACE ORDER USER ENTRY- zebul REQUEST -{"uid":"DEL65001","actid":"DEL65001","tsym":"BANKNIFTY19JUN24C48000","qty":"15","mkt_protection":"MKT","ret":"DAY","prc":"0","trgprc":"0","dscqty":"0","prctyp":"LMT","prd":"M","ordersource":"WEB","exch":"NFO","trantype":"BUY","buyorsell":"BUY"}
+TIME Tue Jun 18 2024 17:10:20 GMT+0530 (India Standard Time) Zebull AFTER PLACE ORDER CATCH ENTRY - zebul ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"320","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://go.mynt.in/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"tsym\":\"BANKNIFTY19JUN24C48000\",\"qty\":\"15\",\"mkt_protection\":\"MKT\",\"ret\":\"DAY\",\"prc\":\"0\",\"trgprc\":\"0\",\"dscqty\":\"0\",\"prctyp\":\"LMT\",\"prd\":\"M\",\"ordersource\":\"WEB\",\"exch\":\"NFO\",\"trantype\":\"BUY\",\"buyorsell\":\"BUY\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:12:34 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 17:12:35 GMT+0530 (India Standard Time) Zebull BEFORE PLACE ORDER USER ENTRY- zebul REQUEST -{"uid":"DEL65001","actid":"DEL65001","tsym":"BANKNIFTY19JUN24C48000","qty":"15","mkt_protection":"MKT","ret":"DAY","prc":"0","trgprc":"0","dscqty":"0","prctyp":"LMT","prd":"M","ordersource":"WEB","exch":"NFO","trantype":"BUY","buyorsell":"BUY"}
+TIME Tue Jun 18 2024 17:12:35 GMT+0530 (India Standard Time) Zebull AFTER PLACE ORDER CATCH ENTRY - zebul ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"320","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://go.mynt.in/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"tsym\":\"BANKNIFTY19JUN24C48000\",\"qty\":\"15\",\"mkt_protection\":\"MKT\",\"ret\":\"DAY\",\"prc\":\"0\",\"trgprc\":\"0\",\"dscqty\":\"0\",\"prctyp\":\"LMT\",\"prd\":\"M\",\"ordersource\":\"WEB\",\"exch\":\"NFO\",\"trantype\":\"BUY\",\"buyorsell\":\"BUY\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) Zebull BEFORE PLACE ORDER USER ENTRY- zebul REQUEST -{"uid":"DEL65001","actid":"DEL65001","tsym":"BANKNIFTY19JUN24C48000","qty":"15","mkt_protection":"MKT","ret":"DAY","prc":"5","trgprc":"0","dscqty":"0","prctyp":"LMT","prd":"M","ordersource":"WEB","exch":"NFO","trantype":"BUY","buyorsell":"BUY"}
+TIME Tue Jun 18 2024 17:13:22 GMT+0530 (India Standard Time) Zebull AFTER PLACE ORDER CATCH ENTRY - zebul ERROR -{"message":"Request failed with status code 400","name":"AxiosError","stack":"AxiosError: Request failed with status code 400\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":null,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"320","Accept-Encoding":"gzip, compress, deflate, br"},"method":"post","url":"https://go.mynt.in/NorenWClientTP/PlaceOrder","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"tsym\":\"BANKNIFTY19JUN24C48000\",\"qty\":\"15\",\"mkt_protection\":\"MKT\",\"ret\":\"DAY\",\"prc\":\"5\",\"trgprc\":\"0\",\"dscqty\":\"0\",\"prctyp\":\"LMT\",\"prd\":\"M\",\"ordersource\":\"WEB\",\"exch\":\"NFO\",\"trantype\":\"BUY\",\"buyorsell\":\"BUY\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":400}
+
+NEW TRADE TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:15:42 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 17:15:43 GMT+0530 (India Standard Time) Zebull BEFORE PLACE ORDER USER ENTRY- zebul REQUEST -{"uid":"DEL65001","actid":"DEL65001","tsym":"BANKNIFTY19JUN24C48000","qty":"15","mkt_protection":"MKT","ret":"DAY","prc":"5","trgprc":"0","dscqty":"0","prctyp":"LMT","prd":"M","ordersource":"WEB","exch":"NFO","trantype":"B"}
+TIME Tue Jun 18 2024 17:15:43 GMT+0530 (India Standard Time) Zebull AFTER PLACE ORDER USER ENTRY - zebul RESPONSE -{"request_time":"17:15:42 18-06-2024","stat":"Ok","norenordno":"24061800044320"}
+
+NEW TRADE TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LX,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:27:33 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+
+NEW TRADE TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LX,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:28:32 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+
+NEW TRADE TIME Tue Jun 18 2024 17:30:48 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LX,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:30:48 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:30:48 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:48 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:48 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:48 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:49 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:49 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:49 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:49 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:49 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:49 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:49 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:49 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:49 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:30:49 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 17:30:49 GMT+0530 (India Standard Time) Zebull POSITION DATA ERROR CATCH - zebul ERROR - {"message":"Request failed with status code 405","name":"AxiosError","stack":"AxiosError: Request failed with status code 405\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"125","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://go.mynt.in/NorenWClientTP/PositionBook","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"ret\":\"NET\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":405}
+
+NEW TRADE TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LX,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 17:31:38 GMT+0530 (India Standard Time) Zebull POSITION DATA ERROR CATCH - zebul ERROR - {"message":"Request failed with status code 405","name":"AxiosError","stack":"AxiosError: Request failed with status code 405\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"125","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://go.mynt.in/NorenWClientTP/PositionBook","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"ret\":\"NET\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":405}
+
+NEW TRADE TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LX,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:03 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 17:32:04 GMT+0530 (India Standard Time) Zebull POSITION DATA ERROR CATCH - zebul ERROR - {"message":"Request failed with status code 405","name":"AxiosError","stack":"AxiosError: Request failed with status code 405\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"125","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://go.mynt.in/NorenWClientTP/PositionBook","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"ret\":\"NET\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":405}
+
+NEW TRADE TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LX,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:28 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 17:32:29 GMT+0530 (India Standard Time) Zebull POSITION DATA ERROR CATCH - zebul ERROR - {"message":"Request failed with status code 405","name":"AxiosError","stack":"AxiosError: Request failed with status code 405\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Content-Type":"application/x-www-form-urlencoded","User-Agent":"axios/1.5.0","Content-Length":"125","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://go.mynt.in/NorenWClientTP/PositionBook","data":"jData={\"uid\":\"DEL65001\",\"actid\":\"DEL65001\",\"ret\":\"NET\"}&jKey=1118dfb6432693f2aaf0b5ffd8d7895af683d46e54e72b6729d84fd96299396c"},"code":"ERR_BAD_REQUEST","status":405}
+
+NEW TRADE TIME Tue Jun 18 2024 17:32:40 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LX,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:32:40 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:32:41 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+
+NEW TRADE TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LX,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:13 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1
+
+NEW TRADE TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LX,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 17:34:34 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 1

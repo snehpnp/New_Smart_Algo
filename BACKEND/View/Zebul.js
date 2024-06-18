@@ -109,13 +109,157 @@ async function createViewZebul() {
       },
       {
         $addFields: {
-          
-         
-           
+
+
+
           postdata:
           {
-            complexty: 'REGULAR',
-            discqty: '0',
+
+            uid: "$client_code",
+            actid: "$client_code",
+            tsym: "",
+
+            qty: {
+              $cond: {
+                if: {
+                  $or: [
+                    { $eq: ['$category.segment', 'MF'] },
+                    { $eq: ['$category.segment', 'MO'] }
+                  ]
+                },
+                then: "$client_services.lot_size",
+                else: "$client_services.quantity"
+
+              }
+
+            },
+
+            mkt_protection: 'MKT',
+            ret: 'DAY',
+
+
+            prc: "0",
+            trgprc: "0",
+            dscqty: "0",
+
+            // product code condition here
+            prctyp: {
+              $cond: {
+                if: {
+                  $and:
+                    [
+                      { $eq: ['$client_services.product_type', '1'] },
+                      {
+                        $or: [
+                          { $eq: ['$category.segment', 'F'] },
+                          { $eq: ['$category.segment', 'O'] },
+                          { $eq: ['$category.segment', 'FO'] }
+                        ]
+                      },
+                    ]
+                },
+                then: 'MKT',
+                else: {
+                  $cond: {
+                    if: {
+                      $and:
+                        [
+                          { $eq: ['$client_services.product_type', '2'] },
+                        ]
+                    },
+                    then: 'LMT',
+                    else: {
+                      $cond: {
+                        if: {
+                          $and:
+                            [
+                              { $eq: ['$client_services.product_type', '3'] },
+                            ]
+                        },
+                        then: 'SL-LMT',
+                        else: {
+                          $cond: {
+                            if: {
+                              $and:
+                                [
+                                  { $eq: ['$client_services.product_type', '4'] },
+                                ]
+                            },
+                            then: 'SL-MKT',
+                            else: "MKT"
+
+                          }
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+                }
+
+              }
+
+
+            },
+
+            // ordertype code condition here
+            prd: {
+              $cond: {
+                if: {
+                  $and:
+                    [
+                      { $eq: ['$client_services.order_type', '1'] },
+                    ]
+                },
+                then: 'M',
+                else: {
+                  $cond: {
+                    if: {
+                      $and:
+                        [
+                          { $eq: ['$client_services.order_type', '2'] },
+                        ]
+                    },
+                    then: 'I',
+                    else: {
+                      $cond: {
+                        if: {
+                          $and:
+                            [
+                              { $eq: ['$client_services.order_type', '3'] },
+                            ]
+                        },
+                        then: 'B',
+                        else: {
+                          $cond: {
+                            if: {
+                              $and:
+                                [
+                                  { $eq: ['$client_services.order_type', '4'] },
+                                ]
+                            },
+                            then: 'H',
+
+                            else: "C"
+
+                          }
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+                }
+
+              }
+
+            },
+            ordersource: 'WEB',
+
 
             // exchange condition here
             exch: {
@@ -171,187 +315,9 @@ async function createViewZebul() {
 
               }
             },
+            trantype: 'BUY',
 
-
-
-            // product code condition here
-            pCode: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$client_services.product_type', '1'] },
-                      {
-                        $or: [
-                          { $eq: ['$category.segment', 'F'] },
-                          { $eq: ['$category.segment', 'O'] },
-                          { $eq: ['$category.segment', 'FO'] }
-                        ]
-                      },
-                    ]
-                },
-                then: 'NRML',
-                else: {
-                  $cond: {
-                    if: {
-                      $and:
-                        [
-                          { $eq: ['$client_services.product_type', '2'] },
-                        ]
-                    },
-                    then: 'MIS',
-                    else: {
-                      $cond: {
-                        if: {
-                          $and:
-                            [
-                              { $eq: ['$client_services.product_type', '3'] },
-                            ]
-                        },
-                        then: 'BO',
-                        else: {
-                          $cond: {
-                            if: {
-                              $and:
-                                [
-                                  { $eq: ['$client_services.product_type', '4'] },
-                                ]
-                            },
-                            then: 'CO',
-                            else: "CNC"
-
-                          }
-
-                        }
-
-                      }
-
-                    }
-
-                  }
-                }
-
-              }
-
-
-            },
-
-
-
-            // ordertype code condition here
-            prctyp: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$client_services.order_type', '1'] },
-                    ]
-                },
-                then: 'MKT',
-                else: {
-                  $cond: {
-                    if: {
-                      $and:
-                        [
-                          { $eq: ['$client_services.order_type', '2'] },
-                        ]
-                    },
-                    then: 'L',
-                    else: {
-                      $cond: {
-                        if: {
-                          $and:
-                            [
-                              { $eq: ['$client_services.order_type', '3'] },
-                            ]
-                        },
-                        then: 'SL',
-                        else: {
-                          $cond: {
-                            if: {
-                              $and:
-                                [
-                                  { $eq: ['$client_services.order_type', '4'] },
-                                ]
-                            },
-                            then: 'SL-M',
-
-                            //All condition exist
-                            else: "MKT"
-
-                          }
-
-                        }
-
-                      }
-
-                    }
-
-                  }
-                }
-
-              }
-
-            },
-
-            price: '0',
-           // qty: "$client_services.quantity",
-
-            qty: {  
-              $cond: {
-                if: {
-                  $or: [
-                    { $eq: ['$category.segment', 'MF'] },
-                    { $eq: ['$category.segment', 'MO'] }
-                  ]
-                },
-                then: "$client_services.lot_size",
-                else:  "$client_services.quantity"
-
-              }
-
-            },
-
-
-            ret: 'DAY',
-
-            // symbol id token condition here
-            symbol_id: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$category.segment', 'C'] },
-                    ]
-                },
-                then: "$service.instrument_token",
-                else: ""
-
-              }
-            },
-
-
-            // trading symbol condition here
-            trading_symbol: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$category.segment', 'C'] },
-                    ]
-                },
-                then: "$service.zebu_token",
-                else: ""
-
-              }
-            },
-
-
-            transtype: 'BUY',
-            trigPrice: '',
-            orderTag: 'order1',
-
-          }
+ }
         }
       }
     ];

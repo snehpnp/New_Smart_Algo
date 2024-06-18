@@ -256,6 +256,8 @@ const kotakneo = require('./Broker/kotakneo')
 
 const iiflView = require('./Broker/Iifl')
 const Motilaloswal = require('./Broker/Motilaloswal')
+const Zebull = require('./Broker/Zebull')
+
 
 
 
@@ -910,6 +912,48 @@ app.post('/broker-signals', async (req, res) => {
             //End Process MotilaloswalView admin client
 
 
+
+            //Process Zebull admin client
+            try {
+              const ZebullViewCollection = db1.collection('ZebulView');
+              const ZebullViewdocuments = await ZebullViewCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' ZebullView ALL CLIENT LENGTH ' + ZebullViewdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (ZebullViewdocuments.length > 0) {
+                Zebull.place_order(ZebullViewdocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get ZebullView Client In view", error);
+            }
+            //End Process ZebullView admin client
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           } else {
 
             //Process Tading View Client Alice Blue
@@ -1207,7 +1251,26 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+            //Process Tading View Client Zebull
+            try {
+              const ZebullCollection = db1.collection('ZebulView');
+              const Zebulldocuments = await ZebullCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
 
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' Zebull TRADING VIEW CLIENT LENGTH ' + Zebulldocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+              if (Zebulldocuments.length > 0) {
+                Zebull.place_order(Zebulldocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get Zebull Client In view", error);
+            }
+            //End Process Tading View Client Zebull 
 
 
 
