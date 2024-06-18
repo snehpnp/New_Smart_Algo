@@ -18,7 +18,7 @@ import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCr
 import * as Config from "../../../../Utils/Config";
 
 import { useDispatch } from "react-redux";
-import { fa_time } from "../../../../Utils/Date_formet";
+import { fa_time ,fDateTime} from "../../../../Utils/Date_formet";
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
@@ -449,12 +449,12 @@ const AllClients = () => {
     {
       dataField: "CreateDate",
       text: "Create Date",
-      formatter: (cell, row) => fa_time(row.CreateDate),
+      formatter: (cell, row) => fDateTime(row.CreateDate),
     },
     {
       dataField: "StartDate",
       text: "Start Date",
-      formatter: (cell, row) => row.StartDate ? (row.StartDate) : "-",
+      formatter: (cell, row) => row.StartDate ? fa_time(row.StartDate) : "-",
     },
     {
       dataField: "EndDate",

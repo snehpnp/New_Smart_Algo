@@ -40,7 +40,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     const requestPromises = AllClientData.map(async (item) => {
 
                         item.postdata.symboltoken = Number(token[0].instrument_token);
-                        item.postdata.quantityinlot = Number( item.postdata.quantityinlot);
+                        item.postdata.quantityinlot = Number(item.postdata.quantityinlot);
 
 
                         if (type == 'LE' || type == 'SX') {
@@ -70,9 +70,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
                     const requestPromises = AllClientData.map(async (item) => {
-                        
+
                         item.postdata.symboltoken = Number(token[0].instrument_token);
-                        item.postdata.quantityinlot = Number( item.postdata.quantityinlot);
+                        item.postdata.quantityinlot = Number(item.postdata.quantityinlot);
 
                         if (type == 'LE' || type == 'SX') {
                             item.postdata.buyorsell = 'BUY';
@@ -162,21 +162,57 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         .then(async (response) => {
 
 
-                            if (response.data.data.length > 0) {
+                            if (response.data.status == "SUCCESS") {
 
-                                fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
+                                fs.appendFile(filePath, 'TIME ' + new Date() + ' motilaloswal POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data) + '\n', function (err) {
                                     if (err) { }
                                 });
+                                if (response.data.data.length > 0) {
 
-                                const Exist_entry_order = response.data.data.find(item1 => item1.symboltoken === token[0].instrument_token);
+                                    const Exist_entry_order = response.data.data.find(item1 => item1.symboltoken === token[0].instrument_token);
+
+                                    if (Exist_entry_order != undefined) {
+
+                                        const possition_qty = Exist_entry_order.buyquantity - Exist_entry_order.sellquantity;
+
+                                        if (possition_qty == 0) {
+                                            BrokerResponse.create({
+                                                user_id: item._id,
+                                                receive_signal: signal_req,
+                                                strategy: strategy,
+                                                type: type,
+                                                symbol: input_symbol,
+                                                order_status: "Entry Not Exist",
+                                                reject_reason: "This Script position Empty ",
+                                                broker_name: "motilaloswal",
+                                                send_request: send_rr,
+                                                open_possition_qty: possition_qty,
+
+                                            })
+                                                .then((BrokerResponseCreate) => { })
+                                                .catch((err) => {
+                                                    try {
+                                                        console.log('Error creating and saving user:', err);
+                                                    } catch (e) {
+                                                        console.log("duplicate key")
+                                                    }
+
+                                                });
+
+
+                                        } else {
+
+                                            if (possition_qty > 0 && type == 'LX') {
+                                                ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
+                                            } else if (possition_qty < 0 && type == 'SX') {
+                                                ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
+                                            }
+                                        }
 
 
 
-                                if (Exist_entry_order != undefined) {
+                                    } else {
 
-                                    const possition_qty = Exist_entry_order.buyquantity - Exist_entry_order.sellquantity;
-
-                                    if (possition_qty == 0) {
                                         BrokerResponse.create({
                                             user_id: item._id,
                                             receive_signal: signal_req,
@@ -184,10 +220,11 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                             type: type,
                                             symbol: input_symbol,
                                             order_status: "Entry Not Exist",
-                                            reject_reason: "This Script position Empty ",
-                                            broker_name: "iifl",
+                                            order_id: "",
+                                            trading_symbol: "",
+                                            broker_name: "motilaloswal",
                                             send_request: send_rr,
-                                            open_possition_qty: possition_qty,
+                                            reject_reason: "position Not Exist",
 
                                         })
                                             .then((BrokerResponseCreate) => { })
@@ -200,20 +237,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                                             });
 
-
-                                    } else {
-
-                                        if (possition_qty > 0 && type == 'LX') {
-                                            ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                        } else if (possition_qty < 0 && type == 'SX') {
-                                            ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                        }
                                     }
 
-
-
                                 } else {
-
                                     BrokerResponse.create({
                                         user_id: item._id,
                                         receive_signal: signal_req,
@@ -223,9 +249,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                         order_status: "Entry Not Exist",
                                         order_id: "",
                                         trading_symbol: "",
-                                        broker_name: "iifl",
+                                        broker_name: "motilaloswal",
                                         send_request: send_rr,
-                                        reject_reason: "position Not Exist",
+                                        reject_reason: "All position Empty",
 
                                     })
                                         .then((BrokerResponseCreate) => { })
@@ -237,9 +263,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                             }
 
                                         });
-
                                 }
-
 
                             } else {
 
@@ -252,7 +276,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     order_status: "Entry Not Exist",
                                     order_id: "",
                                     trading_symbol: "",
-                                    broker_name: "iifl",
+                                    broker_name: "motilaloswal",
                                     send_request: send_rr,
                                     reject_reason: "All position Empty",
 
@@ -275,7 +299,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         })
                         .catch(async (error) => {
 
-                            fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
+                            fs.appendFile(filePath, 'TIME ' + new Date() + ' motilaloswal POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
                                 if (err) {
                                     return console.log(err);
                                 }
@@ -292,7 +316,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     order_status: "position request error",
                                     order_id: "",
                                     trading_symbol: "",
-                                    broker_name: "iifl",
+                                    broker_name: "motilaloswal",
                                     send_request: send_rr,
                                     reject_reason: message,
 
@@ -318,7 +342,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     order_status: "position request error",
                                     order_id: "",
                                     trading_symbol: "",
-                                    broker_name: "iifl",
+                                    broker_name: "motilaloswal",
                                     send_request: send_rr,
                                     reject_reason: message,
 
@@ -364,7 +388,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     order_status: "",
                     order_id: "",
                     trading_symbol: "",
-                    broker_name: "iifl",
+                    broker_name: "motilaloswal",
                     send_request: "",
                     reject_reason: "Token not received due to wrong trade",
 
@@ -419,7 +443,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
 
-    fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl BEFORE PLACE ORDER USER ENTRY- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
+    fs.appendFile(filePath, 'TIME ' + new Date() + ' motilaloswal BEFORE PLACE ORDER USER ENTRY- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
         if (err) {
             return console.log(err);
         }
@@ -451,12 +475,12 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
             'Content-Type': 'application/json'
         },
         data: item.postdata
- 
+
     };
     console.log("config", config.data)
     axios(config)
         .then(async (response) => {
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' motilaloswal AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
@@ -471,10 +495,10 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data.orderStatus,
-                    order_id: response.data.orderId,
+                    order_status: response.data.status,
+                    order_id: response.data.uniqueorderid,
                     trading_symbol: "",
-                    broker_name: "iifl",
+                    broker_name: "motilaloswal",
                     send_request: send_rr,
 
 
@@ -499,10 +523,10 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data.orderStatus,
-                    order_id: "",
+                    order_status: response.data.status,
+                    order_id: response.data.uniqueorderid || '',
                     trading_symbol: "",
-                    broker_name: "iifl",
+                    broker_name: "motilaloswal",
                     send_request: send_rr,
                     reject_reason: message,
 
@@ -523,7 +547,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
         })
         .catch(async (error) => {
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl AFTER PLACE ORDER CATCH ENTRY - ' + item.UserName + ' ERROR -' + JSON.stringify(error) + '\n', function (err) {
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' motilaloswal AFTER PLACE ORDER CATCH ENTRY - ' + item.UserName + ' ERROR -' + JSON.stringify(error) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
@@ -545,7 +569,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "iifl",
+                            broker_name: "motilaloswal",
                             send_request: send_rr,
                             reject_reason: message,
                         })
@@ -571,7 +595,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "iifl",
+                            broker_name: "motilaloswal",
                             send_request: send_rr,
                             reject_reason: message,
                         })
@@ -621,7 +645,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
-    fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl BEFORE PLACE ORDER USER EXIT- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
+    fs.appendFile(filePath, 'TIME ' + new Date() + ' motilaloswal BEFORE PLACE ORDER USER EXIT- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
         if (err) {
             return console.log(err);
         }
@@ -658,7 +682,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
     axios(config)
         .then(async (response) => {
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' motilaloswal AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
@@ -674,10 +698,10 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data.orderStatus,
-                    order_id: response.data.orderId,
+                    order_status: response.data.status,
+                    order_id: response.data.uniqueorderid,
                     trading_symbol: "",
-                    broker_name: "iifl",
+                    broker_name: "motilaloswal",
                     send_request: send_rr,
 
 
@@ -702,10 +726,10 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: 0,
-                    order_id: "",
+                    order_status: response.data.status || 0,
+                    order_id: response.data.uniqueorderid || "",
                     trading_symbol: "",
-                    broker_name: "iifl",
+                    broker_name: "motilaloswal",
                     send_request: send_rr,
                     reject_reason: message,
 
@@ -726,7 +750,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
         })
         .catch(async (error) => {
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl AFTER PLACE ORDER USER EXIT CATCH- ' + item.UserName + ' RESPONSE -' + JSON.stringify(error) + '\n', function (err) {
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' motilaloswal AFTER PLACE ORDER USER EXIT CATCH- ' + item.UserName + ' RESPONSE -' + JSON.stringify(error) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
@@ -746,7 +770,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "iifl",
+                            broker_name: "motilaloswal",
                             send_request: send_rr,
                             reject_reason: message,
                         })
@@ -772,7 +796,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "iifl",
+                            broker_name: "motilaloswal",
                             send_request: send_rr,
                             reject_reason: message,
                         })

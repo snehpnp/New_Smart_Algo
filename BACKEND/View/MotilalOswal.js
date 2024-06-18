@@ -195,7 +195,7 @@ async function createViewMotilalOswal() {
                           { $eq: ['$client_services.product_type', '2'] },
                         ]
                     },
-                    then: 'NORMAL',
+                    then: 'DELIVERY',
                     else: {
                       $cond: {
                         if: {
