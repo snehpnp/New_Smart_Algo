@@ -1,126 +1,26 @@
+TIME Tue Jun 18 2024 11:17:39 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- iifl REQUEST -{"exchangeSegment":"NSEFO","orderType":"Market","productType":"MIS","limitPrice":0,"disclosedQuantity":"0","orderQuantity":"15","timeInForce":"DAY","orderUniqueIdentifier":"123abc","orderSide":"BUY","stopPrice":0,"exchangeInstrumentID":"41060"}
+TIME Tue Jun 18 2024 11:17:39 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 11:17:40 GMT+0530 (India Standard Time) motilaloswal BEFORE PLACE ORDER USER ENTRY- motilal REQUEST -{"exchange":"NSEFO","buyorsell":"BUY","producttype":"NORMAL","ordertype":"MARKET","price":0,"quantityinlot":1,"orderduration":"DAY","amoorder":"N","symboltoken":41060}
+TIME Tue Jun 18 2024 11:17:40 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - iifl RESPONSE -{"type":"success","code":"s-orders-0001","description":"API Order Id sent","result":{"AppOrderID":1100967332,"ClientID":"BM000002","OrderUniqueIdentifier":"123abc"}}
+TIME Tue Jun 18 2024 11:17:40 GMT+0530 (India Standard Time) motilaloswal AFTER PLACE ORDER USER ENTRY - motilal RESPONSE -{"status":"ERROR","message":"Oops Sorry! You Have Not Authorised To Access This Segment","errorcode":"100029","uniqueorderid":"1800008CDPL9786"}
 
-NEW TRADE TIME Tue Jun 18 2024 09:35:48 GMT+0530 (India Standard Time)
+NEW TRADE TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time)
 RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
-TIME Tue Jun 18 2024 09:35:48 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
-TIME Tue Jun 18 2024 09:35:48 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:35:48 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:35:48 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- iifl REQUEST -{"exchangeSegment":"NSEFO","orderType":"Market","productType":"MIS","limitPrice":0,"disclosedQuantity":"0","orderQuantity":"15","timeInForce":"DAY","orderUniqueIdentifier":"123abc","orderSide":"BUY","stopPrice":0,"exchangeInstrumentID":"41060"}
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- motilal REQUEST -{"exchange":"NSEFO","buyorsell":"BUY","producttype":"NORMAL","ordertype":"MARKET","price":0,"quantityinlot":1,"orderduration":"DAY","amoorder":"N","symboltoken":41060}
-TIME Tue Jun 18 2024 09:35:49 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - iifl RESPONSE -{"type":"success","code":"s-orders-0001","description":"API Order Id sent","result":{"AppOrderID":1100967136,"ClientID":"BM000002","OrderUniqueIdentifier":"123abc"}}
-TIME Tue Jun 18 2024 09:35:52 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - motilal RESPONSE -{"status":"ERROR","message":"Only Limit Order Accepted for Scrip Entered for Trading.","errorcode":"100071","uniqueorderid":"1800002CDPL9786"}
-
-NEW TRADE TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time)
-RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- iifl REQUEST -{"exchangeSegment":"NSEFO","orderType":"Market","productType":"MIS","limitPrice":0,"disclosedQuantity":"0","orderQuantity":"15","timeInForce":"DAY","orderUniqueIdentifier":"123abc","orderSide":"BUY","stopPrice":0,"exchangeInstrumentID":"41060"}
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- motilal REQUEST -{"exchange":"NSEFO","buyorsell":"BUY","producttype":"NORMAL","ordertype":"MARKET","price":0,"quantityinlot":1,"orderduration":"DAY","amoorder":"N","symboltoken":41060}
-TIME Tue Jun 18 2024 09:38:02 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - iifl RESPONSE -{"type":"success","code":"s-orders-0001","description":"API Order Id sent","result":{"AppOrderID":1100967151,"ClientID":"BM000002","OrderUniqueIdentifier":"123abc"}}
-TIME Tue Jun 18 2024 09:38:05 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - motilal RESPONSE -{"status":"ERROR","message":"Only Limit Order Accepted for Scrip Entered for Trading.","errorcode":"100071","uniqueorderid":"1800003CDPL9786"}
-
-NEW TRADE TIME Tue Jun 18 2024 09:40:14 GMT+0530 (India Standard Time)
-RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
-TIME Tue Jun 18 2024 09:40:14 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
-TIME Tue Jun 18 2024 09:40:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:14 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:15 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:15 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:15 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:15 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:15 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:15 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:15 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 09:40:15 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- iifl REQUEST -{"exchangeSegment":"NSEFO","orderType":"Market","productType":"MIS","limitPrice":0,"disclosedQuantity":"0","orderQuantity":"15","timeInForce":"DAY","orderUniqueIdentifier":"123abc","orderSide":"BUY","stopPrice":0,"exchangeInstrumentID":"41060"}
-TIME Tue Jun 18 2024 09:40:15 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 09:40:15 GMT+0530 (India Standard Time) motilaloswal BEFORE PLACE ORDER USER ENTRY- motilal REQUEST -{"exchange":"NSEFO","buyorsell":"BUY","producttype":"NORMAL","ordertype":"MARKET","price":0,"quantityinlot":1,"orderduration":"DAY","amoorder":"N","symboltoken":41060}
-TIME Tue Jun 18 2024 09:40:15 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - iifl RESPONSE -{"type":"success","code":"s-orders-0001","description":"API Order Id sent","result":{"AppOrderID":1100967162,"ClientID":"BM000002","OrderUniqueIdentifier":"123abc"}}
-TIME Tue Jun 18 2024 09:40:23 GMT+0530 (India Standard Time) motilaloswal AFTER PLACE ORDER USER ENTRY - motilal RESPONSE -{"status":"ERROR","message":"Only Limit Order Accepted for Scrip Entered for Trading.","errorcode":"100071","uniqueorderid":"1800004CDPL9786"}
-
-NEW TRADE TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time)
-RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 09:40:29 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- iifl REQUEST -{"exchangeSegment":"NSEFO","orderType":"Market","productType":"MIS","limitPrice":0,"disclosedQuantity":"0","orderQuantity":"15","timeInForce":"DAY","orderUniqueIdentifier":"123abc","orderSide":"BUY","stopPrice":0,"exchangeInstrumentID":"41060"}
-TIME Tue Jun 18 2024 09:40:30 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 09:40:30 GMT+0530 (India Standard Time) motilaloswal BEFORE PLACE ORDER USER ENTRY- motilal REQUEST -{"exchange":"NSEFO","buyorsell":"BUY","producttype":"NORMAL","ordertype":"MARKET","price":0,"quantityinlot":1,"orderduration":"DAY","amoorder":"N","symboltoken":41060}
-TIME Tue Jun 18 2024 09:40:30 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - iifl RESPONSE -{"type":"success","code":"s-orders-0001","description":"API Order Id sent","result":{"AppOrderID":1100967163,"ClientID":"BM000002","OrderUniqueIdentifier":"123abc"}}
-TIME Tue Jun 18 2024 09:40:33 GMT+0530 (India Standard Time) motilaloswal AFTER PLACE ORDER USER ENTRY - motilal RESPONSE -{"status":"ERROR","message":"Only Limit Order Accepted for Scrip Entered for Trading.","errorcode":"100071","uniqueorderid":"1800005CDPL9786"}
-
-NEW TRADE TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time)
-RECEIVED_SIGNALS DTime:1698647568,Symbol:BANKNIFTY,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- iifl REQUEST -{"exchangeSegment":"NSEFO","orderType":"Market","productType":"MIS","limitPrice":0,"disclosedQuantity":"0","orderQuantity":"15","timeInForce":"DAY","orderUniqueIdentifier":"123abc","orderSide":"BUY","stopPrice":0,"exchangeInstrumentID":"41060"}
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) motilaloswal BEFORE PLACE ORDER USER ENTRY- motilal REQUEST -{"exchange":"NSEFO","buyorsell":"BUY","producttype":"NORMAL","ordertype":"MARKET","price":0,"quantityinlot":1,"orderduration":"DAY","amoorder":"N","symboltoken":41060}
-TIME Tue Jun 18 2024 09:41:14 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - iifl RESPONSE -{"type":"success","code":"s-orders-0001","description":"API Order Id sent","result":{"AppOrderID":1100967164,"ClientID":"BM000002","OrderUniqueIdentifier":"123abc"}}
-TIME Tue Jun 18 2024 09:41:18 GMT+0530 (India Standard Time) motilaloswal AFTER PLACE ORDER USER ENTRY - motilal RESPONSE -{"status":"ERROR","message":"Only Limit Order Accepted for Scrip Entered for Trading.","errorcode":"100071","uniqueorderid":"1800006CDPL9786"}
-
-NEW TRADE TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time)
-RECEIVED_SIGNALS DTime:1698647568,Symbol:IDEA#,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
-TIME Tue Jun 18 2024 10:13:05 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 10:13:08 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- iifl REQUEST -{"exchangeSegment":"NSECM","orderType":"Market","productType":"MIS","limitPrice":0,"disclosedQuantity":"0","orderQuantity":"1","timeInForce":"DAY","orderUniqueIdentifier":"123abc","orderSide":"BUY","stopPrice":0,"exchangeInstrumentID":"14366"}
-TIME Tue Jun 18 2024 10:13:08 GMT+0530 (India Standard Time) motilaloswal BEFORE PLACE ORDER USER ENTRY- motilal REQUEST -{"exchange":"NSE","buyorsell":"BUY","producttype":"NORMAL","ordertype":"MARKET","price":0,"quantityinlot":1,"orderduration":"DAY","amoorder":"N","symboltoken":14366}
-TIME Tue Jun 18 2024 10:13:08 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 1
-TIME Tue Jun 18 2024 10:13:08 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - iifl RESPONSE -{"type":"success","code":"s-orders-0001","description":"API Order Id sent","result":{"AppOrderID":1101037564,"ClientID":"BM000002","OrderUniqueIdentifier":"123abc"}}
-TIME Tue Jun 18 2024 10:13:08 GMT+0530 (India Standard Time) motilaloswal AFTER PLACE ORDER USER ENTRY - motilal RESPONSE -{"status":"ERROR","message":"Client/Dealer Code Is Suspended. Please Get In Touch With Your CSE Desk","errorcode":"100007","uniqueorderid":"1800007CDPL9786"}
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 41060
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 11:17:45 GMT+0530 (India Standard Time) iifl BEFORE PLACE ORDER USER ENTRY- iifl REQUEST -{"exchangeSegment":"NSEFO","orderType":"Market","productType":"MIS","limitPrice":0,"disclosedQuantity":"0","orderQuantity":"15","timeInForce":"DAY","orderUniqueIdentifier":"123abc","orderSide":"BUY","stopPrice":0,"exchangeInstrumentID":"41060"}
+TIME Tue Jun 18 2024 11:17:46 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 1
+TIME Tue Jun 18 2024 11:17:46 GMT+0530 (India Standard Time) motilaloswal BEFORE PLACE ORDER USER ENTRY- motilal REQUEST -{"exchange":"NSEFO","buyorsell":"BUY","producttype":"NORMAL","ordertype":"MARKET","price":0,"quantityinlot":1,"orderduration":"DAY","amoorder":"N","symboltoken":41060}
+TIME Tue Jun 18 2024 11:17:46 GMT+0530 (India Standard Time) iifl AFTER PLACE ORDER USER ENTRY - iifl RESPONSE -{"type":"success","code":"s-orders-0001","description":"API Order Id sent","result":{"AppOrderID":1100967333,"ClientID":"BM000002","OrderUniqueIdentifier":"123abc"}}
+TIME Tue Jun 18 2024 11:17:46 GMT+0530 (India Standard Time) motilaloswal AFTER PLACE ORDER USER ENTRY - motilal RESPONSE -{"status":"ERROR","message":"Oops Sorry! You Have Not Authorised To Access This Segment","errorcode":"100029","uniqueorderid":"1800009CDPL9786"}

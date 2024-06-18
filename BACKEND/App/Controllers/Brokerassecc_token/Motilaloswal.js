@@ -26,68 +26,66 @@ class Motilaloswal {
     async GetAccessTokenMotilaloswal(req, res) {
 
         try {
-            console.log("runn")
+
+            var hosts = req.headers.host;
+
+            var redirect = hosts.split(':')[0];
+            var redirect_uri = '';
+            if (redirect == "localhost") {
+                redirect_uri = "http://localhost:3000"
+            } else {
+                redirect_uri = `https://${redirect}/`
+            }
+
+            var usernamestr = req.query.email;
+
+            var email = usernamestr.split('?authtoken=')[0];
+            var authtoken = usernamestr.split('?authtoken=')[1];
 
 
-                var hosts = req.headers.host;
-
-                var redirect = hosts.split(':')[0];
-                var redirect_uri = '';
-                if (redirect == "localhost") {
-                    redirect_uri = "http://localhost:3000"
-                } else {
-                    redirect_uri = `https://${redirect}/`
-                }
-
-                var usernamestr = req.query.email;
-
-                var email = usernamestr.split('?authtoken=')[0];
-                var authtoken = usernamestr.split('?authtoken=')[1];
-
-
-                console.log("email",email)
-                console.log("authtoken",authtoken)
+            console.log("email", email)
+            console.log("authtoken", authtoken)
 
 
 
-                const Get_User = await User.find({ Email: email })
+            const Get_User = await User.find({ Email: email })
 
-                if (Get_User.length > 0) {
+            if (Get_User.length > 0) {
 
-                    if (authtoken != '') {
-                        let AccessToken = authtoken
-                        let result = await User.findByIdAndUpdate(
-                            Get_User[0]._id,
-                            {
-                                access_token: AccessToken,
-                                TradingStatus: "on",
+                if (authtoken != '') {
+                    let AccessToken = authtoken
+                    let result = await User.findByIdAndUpdate(
+                        Get_User[0]._id,
+                        {
+                            access_token: AccessToken,
+                            TradingStatus: "on",
 
-                            })
+                        })
 
-                        if (result != "") {
+                    if (result != "") {
 
-                            const user_login = new user_logs({
-                                user_Id: Get_User[0]._id,
-                                login_status: "Trading On",
-                                role: Get_User[0].Role,
-                                device: "WEB",
-                                system_ip: getIPAddress()
-                            })
-                            await user_login.save();
-                            if (user_login) {
-                                return res.redirect(redirect_uri);
-                            }
+                        const user_login = new user_logs({
+                            user_Id: Get_User[0]._id,
+                            login_status: "Trading On",
+                            role: Get_User[0].Role,
+                            device: "WEB",
+                            system_ip: getIPAddress()
+                        })
+                        await user_login.save();
+                        if (user_login) {
+                            return res.redirect(redirect_uri);
                         }
+                    }
 
 
-                    } else { return res.send({ status: false, msg: "Error" }); }
+                } else { return res.send({ status: false, msg: "Error" }); }
 
-                } else {
-                    return res.send({ status: false, msg: "User not found" });
-                }
+            } else {
+                return res.send({ status: false, msg: "User not found" });
+            }
 
 
-        
+
 
 
 
@@ -126,70 +124,95 @@ const GetAllBrokerResponse = async (user_info, res) => {
 
     try {
         const objectId = new ObjectId(user_info[0]._id);
-        // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId, order_view_status: "0" })
+  
+
 
         if (FindUserBrokerResponse.length > 0) {
             FindUserBrokerResponse.forEach((data1) => {
 
-                let data = JSON.stringify({
-                    "Uid": user_info[0].client_code
-                });
+                if (data1.order_id != '') {
 
-                var config = {
-                    method: 'post',
-                    maxBodyLength: Infinity,
-                    // url: 'https://stagingtradingorestapi.swastika.co.in/kb/OrderBook/GetOrderBookList',
-                    url: 'https://tradingorestapi.swastika.co.in/kb/OrderBook/GetOrderBookList',
-                    headers: {
-                        'Authorization': 'Bearer ' + user_info[0].access_token,
-                        'Content-Type': 'application/json'
-                    },
-                    data: data
+                    var data_order = {
+                        "clientcode": user_info[0].client_code
+                    }
 
-                };
+                    var config = {
+                        method: 'post',
+                        maxBodyLength: Infinity,
+                        url: 'https://openapi.motilaloswal.com/rest/book/v2/getorderbook',
+                        headers: {
+                            'Accept': ' application/json',
+                            'ApiKey': user_info[0].api_key,
+                            'User-Agent': ' MOSL/V.1.1.0',
+                            'vendorinfo': user_info[0].client_code,
+                            'SourceId': ' WEB',
+                            'MacAddress': ' B8-CA-3A-95-66-72',
+                            'ClientLocalIp': ' 192.168.0.47',
+                            'ClientPublicIp': ' 255.255.255.0',
+                            'osname': ' Windows 10',
+                            'osversion': ' 10.0.19041',
+                            'devicemodel': ' AHV',
+                            'manufacturer': ' DELL',
+                            'productname': ' Smart Algo',
+                            'productversion': ' 1.1',
+                            'browsername': ' Chrome',
+                            'browserversion': ' 109.0.5414.120',
+                            'Authorization': user_info[0].access_token,
 
-                axios(config)
-                    .then(async (response) => {
-                        // console.log("response order details ",response.data.status)
-                        if (response.data.IsError != true) {
-                            const result_order = response.data.Result.Data.find(item2 => item2.norenordno === data1.order_id);
-                            if (result_order != undefined) {
-                                const message = (JSON.stringify(result_order));
-                                let result = await BrokerResponse.findByIdAndUpdate(
-                                    { _id: data1._id },
-                                    {
-                                        order_view_date: message,
-                                        order_view_status: '1',
-                                        order_view_response: result_order.status,
-                                        reject_reason: result_order.Rejreason
+                        },
+                        data: data_order
+                    };
 
-                                    },
-                                    { new: true }
-                                )
+                    axios(config)
+                        .then(async (response) => {
+                    
 
-                            } else {
-                                const message = (JSON.stringify(result_order));
-                                let result = await BrokerResponse.findByIdAndUpdate(
-                                    { _id: data1._id },
-                                    {
-                                        order_view_date: message,
-                                        order_view_status: '1',
+                            if (response.data.status == "SUCCESS") {
+                                if (response.data.data.length > 0) {
+                                    const result_order = response.data.data.find(item2 => item2.uniqueorderid === data1.order_id);
+                                    console.log("response order details ", result_order)
 
-                                    },
-                                    { new: true }
-                                )
+
+                                    if (result_order != undefined) {
+                                        const message = (JSON.stringify(result_order));
+                                        let result = await BrokerResponse.findByIdAndUpdate(
+                                            { _id: data1._id },
+                                            {
+                                                order_view_date: message,
+                                                order_view_status: '1',
+                                                order_view_response: result_order.status,
+                                                reject_reason: result_order.Rejreason
+
+                                            },
+                                            { new: true }
+                                        )
+
+                                    } else {
+                                        const message = (JSON.stringify(result_order));
+                                        let result = await BrokerResponse.findByIdAndUpdate(
+                                            { _id: data1._id },
+                                            {
+                                                order_view_date: message,
+                                                order_view_status: '1',
+
+                                            },
+                                            { new: true }
+                                        )
+                                    }
+                                }
+
+
                             }
 
-                        } else {
 
-                        }
+                        })
+                        .catch(async (error) => {
+
+                        });
+                }
 
 
-                    })
-                    .catch(async (error) => {
-
-                    });
 
 
 
