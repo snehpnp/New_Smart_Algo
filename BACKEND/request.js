@@ -18,6 +18,8 @@ module.exports = function (app) {
     const Get_Option_Chain_modal = db.option_chain_symbols;
     const company = db.company_information;
     const Roledata = db.role;
+    const Broker_information = db.Broker_information;
+
 
 
     const { DashboardView } = require('./View/DashboardData')
@@ -41,29 +43,27 @@ module.exports = function (app) {
     const { createViewZerodha } = require('./View/zerodha')
 
 
-
+    // ========================================================================================================
 
     app.get("/all/brokerview", (req, res) => {
 
-        // createViewAlice()
-        // createViewAngel()
-        // createViewDhan()
-        // createViewFivepaisa()
-        // createViewFyers()
-        // createViewIifl()
-        // createViewKotakNeo()
-        // createViewMarketHub()
-        // createViewMastertrust()
-        // createViewMotilalOswal()
-        // createViewSwastika()
-        // createViewUpstox()
-        // createViewZebul()
-        // createViewZerodha()
-        // service_token_update()
+        createViewAlice()
+        createViewAngel()
+        createViewDhan()
+        createViewFivepaisa()
+        createViewFyers()
+        createViewIifl()
+        createViewKotakNeo()
+        createViewMarketHub()
+        createViewMastertrust()
+        createViewMotilalOswal()
+        createViewSwastika()
+        createViewUpstox()
+        createViewZebul()
+        createViewZerodha()
 
         res.send("DONEE")
     })
-
 
 
     app.get("/all/tabel", (req, res) => {
@@ -102,6 +102,14 @@ module.exports = function (app) {
 
             })
 
+        Broker_information.find()
+            .then((role) => {
+                if (role.length == 0) {
+                    CreateBrokerinfo()
+                }
+                return role;
+
+            })
 
         service_token_update()
         TokenSymbolUpdate()
@@ -110,9 +118,6 @@ module.exports = function (app) {
 
         res.send("DONEE")
     })
-
-
-
 
     const DawnloadOptionChainSymbol = async () => {
         console.log("symbolupdate")
@@ -152,9 +157,6 @@ module.exports = function (app) {
 
 
     }
-
-
-
 
     // Role Create
     const RoleCreate = () => {
@@ -206,6 +208,31 @@ module.exports = function (app) {
         // console.log("newRole", newRole);
         return companyData.save();
     }
+
+    const CreateBrokerinfo = async () => {
+        try {
+            const Broker_informationData = new Broker_information({
+                "broker_name": "Alice Blue",
+                "app_code": "",
+                "apiSecret": "",
+                "createdAt": new Date("2023-10-04T11:57:02.903Z"),
+                "updatedAt": new Date("2024-06-19T09:43:10.690Z"),
+                "__v": 0,
+                "broker_id": "2",
+                "api_key": null,
+                "client_code": null
+            });
+
+            const savedData = await Broker_informationData.save();
+            console.log('Broker information saved successfully:', savedData);
+            return savedData;
+        } catch (error) {
+            console.error('Error saving broker information:', error);
+            // throw error; // Rethrow the error if you want it to be handled by the calling function
+            return null
+        }
+    };
+
 
     // Create categorys 
     const categorys = async () => {
@@ -279,7 +306,6 @@ module.exports = function (app) {
 
 
 
-
     app.post("/add/admin", async (req, res) => {
         const { panelname, client_key } = req.body;
 
@@ -334,6 +360,18 @@ module.exports = function (app) {
             res.status(500).send("Error creating admin");
         }
     });
+    
+    
+    
+    // =====================================================================================================================
+
+
+
+
+
+
+
+
 
 
 
