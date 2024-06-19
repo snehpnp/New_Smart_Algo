@@ -16,8 +16,7 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async AddPanel(req, res) {
         try {
-            const { panel_name, domain, port, key, ip_address, theme_id, backend_rul, parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id } = req.body.req
-
+            const { panel_name, domain, port, key, ip_address, theme_id, backend_rul, parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id, UserName } = req.body.req
 
             // FIND PANEL NAME DUPLICATE
             const panel_data = await panel_model.findOne({ panel_name: panel_name });
@@ -42,7 +41,21 @@ class Panel {
             });
             AddPanel.save()
                 .then(async (data) => {
-                    logger.info('Panel Add successfully', { role: "SUPERADMIN", user_id: parent_id });
+                    // logger.info('Panel Add successfully', { role: "SUPERADMIN", user_id: parent_id });
+
+                    const filter = { panal_name: "111" };
+                    const update = {
+                        $set: {
+                            superadmin_name: UserName,
+                            panal_name: panel_name,
+                            client_id: null,
+                            msg: "Add Panel"
+                        }
+                    };
+
+                    const options = { upsert: true };
+
+                    await Superadmin_History.updateOne(filter, update, options);
 
 
                     const fetchBrokerView = async () => {
@@ -95,6 +108,7 @@ class Panel {
                     };
                     fetchBrokerView()
                     fetchBrokerView1()
+                    AdminAdd()
 
                     return res.send({ status: true, msg: "successfully Add!", data: data });
                 })
@@ -117,7 +131,7 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async EditPanel(req, res) {
         try {
-            const { _id, panel_name, domain, port, key, ip_address, theme_id, db_url, backend_rul, db_name, broker_id, Create_Strategy, Option_chain, Strategy_plan } = req.body
+            const { _id, panel_name, domain, port, key, ip_address, theme_id, db_url, backend_rul, db_name, broker_id, Create_Strategy, Option_chain, Strategy_planm,UserName } = req.body
 
 
             var panle_data = {
@@ -153,6 +167,21 @@ class Panel {
             if (!result) {
                 return res.status(409).send({ status: false, msg: 'Company not update', data: [] });
             }
+
+
+            const update = {
+                $set: {
+                    superadmin_name: UserName,
+                    panal_name: panel_name,
+                    client_id: null,
+                    msg: "Edit Panel"
+                }
+            };
+
+            const options = { upsert: true };
+
+            await Superadmin_History.updateOne({ panal_name: "111" }, update, options);
+
             // logger.info('Update Successfully', { role: "SUPERADMIN", user_id: parent_id });
             return res.status(200).send({ status: true, msg: 'Update Successfully.', data: result });
 
