@@ -15,9 +15,7 @@ async function createViewAlice() {
 
 
 
-  // All Client Trading on view
   try {
-
     const currentDate = new Date(); // Get the current date and time
 
     // Define the pipeline to create the view

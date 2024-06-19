@@ -228,16 +228,16 @@ const AllPermitions = () => {
             )
 
         },
-        {
-            dataField: 'panel_name',
-            text: 'Panel Details',
-            formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-                    <FileClock size={20} color="#198754" strokeWidth={2}
-                        className="mx-1" />
-                </span>
-            )
-        },
+        // {
+        //     dataField: 'panel_name',
+        //     text: 'Panel Details',
+        //     formatter: (cell, row) => (
+        //         <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+        //             <FileClock size={20} color="#198754" strokeWidth={2}
+        //                 className="mx-1" />
+        //         </span>
+        //     )
+        // },
 
         {
             dataField: 'panel_name',

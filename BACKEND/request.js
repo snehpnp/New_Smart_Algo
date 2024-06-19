@@ -16,41 +16,328 @@ module.exports = function (app) {
     const live_price = db.live_price;
     const UserMakeStrategy = db.UserMakeStrategy;
     const Get_Option_Chain_modal = db.option_chain_symbols;
-    const client_services = db.client_services;
+    const company = db.company_information;
+    const Roledata = db.role;
 
 
     const { DashboardView } = require('./View/DashboardData')
     const { createView, dropOpenPosition, open_position_excute } = require('./View/Open_position')
+    const { MainSignalsRemainToken, service_token_update, TokenSymbolUpdate } = require('./App/Cron/cron')
+
+
     const { createViewAlice } = require('./View/Alice_blue')
-    const { createViewUpstox } = require('./View/Upstox')
+    const { createViewAngel } = require('./View/Angel')
     const { createViewDhan } = require('./View/dhan')
+    const { createViewFivepaisa } = require('./View/fivepaisa')
     const { createViewFyers } = require('./View/fyers')
-    const { MainSignalsRemainToken } = require('./App/Cron/cron')
     const { createViewIifl } = require('./View/Iifl')
+    const { createViewKotakNeo } = require('./View/KotakNeo')
+    const { createViewMarketHub } = require('./View/markethub')
+    const { createViewMastertrust } = require('./View/Mastertrust')
     const { createViewMotilalOswal } = require('./View/MotilalOswal')
+    const { createViewSwastika } = require('./View/swastika')
+    const { createViewUpstox } = require('./View/Upstox')
     const { createViewZebul } = require('./View/Zebul')
+    const { createViewZerodha } = require('./View/zerodha')
 
 
 
-
-
-    app.get("/iifl/brokerview", (req, res) => {
-
-        createViewIifl()
-
-        res.send("DONEE")
-    })
 
     app.get("/all/brokerview", (req, res) => {
-        createViewIifl()
-        createViewMotilalOswal()
-        createViewUpstox()
-        createViewDhan()
-        createViewFyers()
-        createViewAlice()
-        createViewZebul()
+
+        // createViewAlice()
+        // createViewAngel()
+        // createViewDhan()
+        // createViewFivepaisa()
+        // createViewFyers()
+        // createViewIifl()
+        // createViewKotakNeo()
+        // createViewMarketHub()
+        // createViewMastertrust()
+        // createViewMotilalOswal()
+        // createViewSwastika()
+        // createViewUpstox()
+        // createViewZebul()
+        // createViewZerodha()
+        // service_token_update()
+
         res.send("DONEE")
     })
+
+
+
+    app.get("/all/tabel", (req, res) => {
+
+
+        Roledata.find()
+            .then((role) => {
+                if (role.length != 4) {
+                    RoleCreate()
+                }
+                return role;
+
+            })
+
+        // Company Information table check
+        company.find()
+            .then((role) => {
+                if (role.length == 0) {
+                    console.log("Run");
+                    CompanyCreate()
+                }
+                return role;
+
+            })
+
+        // categorys data Create If not Exist 
+        categorie.find()
+            .then(async (role) => {
+                if (role.length != 8) {
+                    console.log("role.length", role.length);
+                    await categorie.deleteMany({});
+                    console.log('All data deleted successfully.');
+                    categorys()
+                }
+                return role;
+
+            })
+
+
+        service_token_update()
+        TokenSymbolUpdate()
+        DawnloadOptionChainSymbol()
+
+
+        res.send("DONEE")
+    })
+
+
+
+
+    const DawnloadOptionChainSymbol = async () => {
+        console.log("symbolupdate")
+        var axios = require('axios');
+        const Papa = require('papaparse')
+        const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
+        const { data } = await axios.get(csvFilePath);
+
+        Papa.parse(data, {
+            complete: async (result) => {
+                let sheet_Data = result.data;
+                sheet_Data.forEach(async (element) => {
+
+                    let symbol = element.SYMBOL;
+
+
+                    if (symbol == "NIFTY_BANK") {
+                        symbol = "BANKNIFTY";
+                    }
+                    else if (symbol == "NIFTY_50") {
+                        symbol = "NIFTY";
+                    }
+                    else if (symbol == "NIFTY_FIN_SERVICE") {
+                        symbol = "FINNIFTY";
+                    }
+
+                    const filter = { symbol: symbol };
+                    const update = { $set: { price: element.CPrice } };
+
+                    await Get_Option_Chain_modal.updateOne(filter, update, { upsert: true });
+
+                });
+            },
+            header: true,
+        });
+
+
+
+    }
+
+
+
+
+    // Role Create
+    const RoleCreate = () => {
+        var arr = [
+            {
+                role: "1",
+                name: 'SUPERADMIN',
+                description: 'SuperAdmin role with full access'
+            },
+            {
+
+                role: "2",
+                name: 'ADMIN',
+                description: 'Admin role with full access'
+            },
+            {
+
+                role: "3",
+                name: 'SUBADMIN',
+                description: 'SubAdmin role with only self user access'
+            },
+            {
+
+                role: "4",
+                name: 'USER',
+                description: 'User role '
+            }
+        ]
+        arr.forEach((role) => {
+            const newRole = new Roledata(role)
+            // console.log("newRole", newRole);
+            return newRole.save();
+        })
+    }
+
+    // Create Company information Table 
+    const CompanyCreate = () => {
+        const companyData = new company({
+            panel_name: "Demo Comapnyname",
+            panel_key: "panel_key",
+            prefix: "prefix",
+            domain_url: "domain_url",
+            domain_url_https: "domain_url_https",
+            broker_url: "broker_url",
+            theme_id: "64d0c04a0e38c94d0e20ee28",
+            theme_name: "theme_name"
+
+        })
+        // console.log("newRole", newRole);
+        return companyData.save();
+    }
+
+    // Create categorys 
+    const categorys = async () => {
+
+        var category = [
+            {
+                category_id: "1",
+                name: 'CASH',
+                segment: 'C',
+                status: 0,
+                CID: "1"
+            },
+            {
+                category_id: "2",
+                name: 'FUTURE',
+                segment: 'F',
+                status: 0,
+                CID: "2"
+            },
+            {
+                category_id: "3",
+                name: 'OPTION',
+                segment: 'O',
+                status: 0,
+                CID: "3"
+            },
+            {
+                category_id: "4",
+                name: 'MCXFUTURE',
+                segment: 'MF',
+                status: 0,
+                CID: "4"
+            },
+            {
+                category_id: "5",
+                name: 'MCXOPTION',
+                segment: 'MO',
+                status: 0,
+                CID: "5"
+            },
+            {
+                category_id: "6",
+                name: 'CURRENCY OPTION',
+                segment: 'CO',
+                status: 0,
+                CID: "6"
+            },
+            {
+                category_id: "7",
+                name: 'CURRENCY FUTURE',
+                segment: 'CF',
+                status: 0,
+                CID: "7"
+            },
+            {
+                category_id: "8",
+                name: 'FUTURE OPTION',
+                segment: 'FO',
+                status: 0,
+                CID: "3"
+            }
+        ]
+
+        category.forEach(async (data) => {
+            const newCategory = new categorie(data)
+            // console.log("newCategory", newCategory);
+            await newCategory.save();
+        })
+
+    }
+
+
+
+
+    app.post("/add/admin", async (req, res) => {
+        const { panelname, client_key } = req.body;
+
+        if (!panelname || !client_key) {
+            return res.status(400).send("Panel name and client key are required.");
+        }
+
+        const Email = `${panelname}@gmail.com`;
+
+        const UserData = new User({
+            FullName: "admin",
+            UserName: "admin",
+            Email: Email,
+            PhoneNo: "9999999999",
+            Password: "$2b$08$x3Sm7wmIGOaUPnjxZulVXeYZaZCg8LsRBZQDrvzhui8gqeXEAcJGK",
+            Otp: "123456",
+            StartDate: new Date("2023-07-10T00:00:00.000Z"),
+            EndDate: new Date("2024-07-15T00:00:00.000Z"),
+            ActiveStatus: "1",
+            Role: "ADMIN",
+            AppLoginStatus: "0",
+            WebLoginStatus: "1",
+            TradingStatus: "off",
+            CreateDate: new Date("2023-07-31T08:21:49.854Z"),
+            reset_password_status: "1",
+            web_login_token: "",
+            api_key: "",
+            api_secret: "",
+            api_type: "",
+            app_id: "",
+            app_key: "null",
+            client_code: "",
+            demat_userid: "123",
+            broker: "2",
+            access_token: "",
+            web_url: "1",
+            qty_type: "1",
+            signals_execution_type: "1",
+            parent_role: "SUPERADMIN",
+            parent_id: "64c76f0b32067577d02310d8",
+            Is_Active: "1",
+            client_key: client_key,
+            Is_First_login: "1"
+        });
+
+        try {
+            const savedUser = await UserData.save();
+            console.log("newRole", savedUser);
+            res.status(201).send("Admin created successfully");
+        } catch (error) {
+            console.error("Error saving user:", error);
+            res.status(500).send("Error creating admin");
+        }
+    });
+
+
+
+
 
 
     app.get("/UpdateQty", async (req, res) => {
@@ -158,7 +445,7 @@ module.exports = function (app) {
                             categorie_id: category_id,
                             unique_column: item.name + '#_' + category_id
                         })
-                            .then((createdServices) => {})
+                            .then((createdServices) => { })
                             .catch((err) => {
                                 try {
                                     console.error('Error creating and saving user:', err);
@@ -234,7 +521,7 @@ module.exports = function (app) {
         if (result.length > 0) {
             const idsToDelete = result.map(item => item._id);
             await Alice_token.deleteMany({ _id: { $in: result[0].idsToDelete } });
-        
+
         } else {
         }
 
@@ -630,13 +917,10 @@ module.exports = function (app) {
         res.send({ msg: "Create View broker!  !!" })
     })
 
-
     app.get('/dashboard-view', async (req, res) => {
         DashboardView()
         res.send({ msg: "Dashboard view create Done!!!" })
     })
-
-
 
     app.get('/AccelpixTokenUpdate', async (req, res) => {
 
@@ -663,7 +947,7 @@ module.exports = function (app) {
 
                     const Exist_token = response.data.find(item1 => item1.tk === parseInt(element.instrument_token));
 
-                  
+
 
 
                     const update = {
@@ -698,16 +982,8 @@ module.exports = function (app) {
         res.send({ msg: "okk" })
     })
 
-
-
     app.get("/optionStockData", async (req, res) => {
-
-
         try {
-
-
-
-            ///const symbols = ["HDFCBANK","ACC"];
 
             const pipeline_stock_symbol = [
                 {

@@ -10,7 +10,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
 const { formattedDateTime } = require('../../Helper/time.helper')
-
+const axios = require('axios');
 class Panel {
 
     // ADD PANEL IN A COLLECTION
@@ -37,11 +37,65 @@ class Panel {
                 Option_chain: Option_chain,
                 Strategy_plan: Strategy_plan,
                 broker_id: broker_id,
-                backend_rul: backend_rul
+                backend_rul: backend_rul,
+                is_active: 0
             });
             AddPanel.save()
                 .then(async (data) => {
                     logger.info('Panel Add successfully', { role: "SUPERADMIN", user_id: parent_id });
+
+
+                    const fetchBrokerView = async () => {
+                        try {
+                            const response = await axios.get(backend_rul + 'all/brokerview');
+                            return response.data;
+                        } catch (error) {
+                            console.error('Error fetching broker view data:', error.message);
+                            throw error;
+                        }
+                    };
+
+                    const fetchBrokerView1 = async () => {
+                        try {
+                            const response = await axios.get(backend_rul + 'all/tabel');
+                            return response.data;
+                        } catch (error) {
+                            console.error('Error fetching broker view data:', error.message);
+                            throw error;
+                        }
+                    };
+
+                    const AdminAdd = async () => {
+                        try {
+                            let data = JSON.stringify({
+                                "panelname": panel_name,
+                                "client_key": key
+                            });
+
+                            let config = {
+                                method: 'post',
+                                maxBodyLength: Infinity,
+                                url: backend_rul + 'add/admin',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                data: data
+                            };
+                            axios.request(config)
+                                .then((response) => {
+                                    console.log(JSON.stringify(response.data));
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
+                        } catch (error) {
+                            console.error('Error fetching broker view data:', error.message);
+                            throw error;
+                        }
+                    };
+                    fetchBrokerView()
+                    fetchBrokerView1()
+
                     return res.send({ status: true, msg: "successfully Add!", data: data });
                 })
                 .catch((err) => {
@@ -187,6 +241,7 @@ class Panel {
                 .find({})
                 .skip(skip)
                 .limit(Number(limit))
+                .sort({ createdAt: -1 })
 
 
             // IF DATA NOT EXIST

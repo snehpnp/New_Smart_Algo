@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import * as  valid_err from "../../../Utils/Common_Messages"
-
+import axios from 'axios';
 import Loader from '../../../Utils/Loader'
-import { Pencil, Trash2, Pointer   } from 'lucide-react';
+import { Pencil, Trash2, Pointer } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 
@@ -66,8 +66,8 @@ const AdminsList = () => {
                     const filterData = response.data && response.data.filter((item) => {
                         const matchSearch =
                             searchInput == '' ||
-                            item.panel_name.toLowerCase().includes(searchInput.toLowerCase()) || 
-                            item.domain.toLowerCase().includes(searchInput.toLowerCase()) 
+                            item.panel_name.toLowerCase().includes(searchInput.toLowerCase()) ||
+                            item.domain.toLowerCase().includes(searchInput.toLowerCase())
                         return matchSearch
                     })
                     setThemeData({
@@ -94,25 +94,55 @@ const AdminsList = () => {
     }
 
 
+
+
+
+    const fetchBrokerView = async (row) => {
+        try {
+            const response = await axios.get(row.backend_rul + 'all/brokerview');
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching broker view data:', error.message);
+            return null; // Return a default value to prevent errors from reflecting on the frontend
+        }
+    };
+    
+    const fetchBrokerView1 = async (row) => {
+        try {
+            const response = await axios.get(row.backend_rul + 'all/tabel');
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching broker view data:', error.message);
+            return null; // Return a default value to prevent errors from reflecting on the frontend
+        }
+    };
+    
+
+
+
+
+
+
+
     const columns = [
         {
             dataField: "index",
             text: "SR. No.",
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
-        {
-            dataField: 'panel_name',
-            text: 'Panel Name'
-        },
+        // {
+        //     dataField: 'panel_name',
+        //     text: 'Panel Name'
+        // },
         {
             dataField: 'domain',
             text: 'Domain Name'
         },
 
-        {
-            dataField: 'port',
-            text: 'Port No'
-        },
+        // {
+        //     dataField: 'port',
+        //     text: 'Port No'
+        // },
         {
             dataField: 'key',
             text: 'Key'
@@ -130,12 +160,12 @@ const AdminsList = () => {
             dataField: 'is_active',
             text: 'Close Panel',
             formatter: (cell, row) => (
-                <label class="toggle mt-3">
+                <label class="toggle mt-3 ">
                     <input class="toggle-checkbox bg-primary" type="checkbox"
                         defaultChecked={row.is_active == 0}
                         onChange={(e) => CloseCompany(row.domain, e.target.checked)}
                     />
-                    <div class={`toggle-switch bg-primary`}></div>
+                    <div class={`toggle-switch ${row.is_active == 0 ? "bg-green" : "bg-danger"}`}></div>
                 </label>
             )
         },
@@ -190,11 +220,38 @@ const AdminsList = () => {
                 </div>
             ),
         },
+        {
+            dataField: 'a',
+            text: 'Update Broker & Table ',
+            formatter: (cell, row) => (
+                <span style={{display:"flex"}}>
+                    <div className="tooltip-wrapper" title="All Brokers View Create">
+                        <Pointer
+                            size={20}
+                            color="#198754"
+                            strokeWidth={2}
+                            className="mx-2 pointer-icon"
+                            onClick={() => fetchBrokerView(row)}
+                        />
+                    </div>
+                    <div className="tooltip-wrapper" title="All Tables Update">
+                        <Pointer
+                            size={20}
+                            color="#198754"
+                            strokeWidth={2}
+                            className="mx-1 pointer-icon"
+                            onClick={() => fetchBrokerView1(row)}
+                        />
+                    </div>
+                </span>
+
+
+            ),
+        },
     ];
 
 
     const ShowThemeName = (row) => {
-        // console.log("themeList ",themeList)
 
         const doubledNumbers = themeList.map(item => {
             if (item._id == row.theme_id) {
@@ -208,19 +265,12 @@ const AdminsList = () => {
     }
 
 
-
-    //    useEffect(() => {
-    //     GetAllThemes()
-    //     data()
-    // }, [])
-
     useEffect(() => {
         const fetchData = async () => {
             try {
                 await GetAllThemes();
                 await data();
             } catch (error) {
-                // Handle errors appropriately
                 console.error('Error fetching data:', error);
             }
         };
@@ -271,8 +321,7 @@ const AdminsList = () => {
             type: 'select',
             options:
                 themeList && themeList.map((item) => ({ label: item.theme_name, value: item._id }))
-            ,
-            // showWhen: values => values.licence === '2'
+
         },
 
     ];
@@ -320,13 +369,13 @@ const AdminsList = () => {
                                 themeData.data && themeData.data.length === 0 ? (
                                     'No data found') :
                                     <>
-                                        <FullDataTable TableColumns={columns} tableData={themeData.data} pagination1={false} />
+                                        <FullDataTable TableColumns={columns} tableData={themeData.data} pagination1={true} />
                                         <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
                                             handleClose={() => setshowModal(false)}
                                         >
                                             <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update Theme"
-                                                title="update_theme" 
-                                                
+                                                title="update_theme"
+
                                             />
                                         </Modal >
                                         <ToastButton />

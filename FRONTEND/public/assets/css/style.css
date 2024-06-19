@@ -46483,3 +46483,16 @@ body {
 	width: 130px;
 }
 
+.pointer-icon {
+    margin-right: 10px; /* Adjust the spacing between the icons */
+    cursor: pointer; /* Change cursor to pointer on hover */
+}
+
+.pointer-icon:last-child {
+    margin-right: 0; /* Remove margin from the last icon */
+}
+
+.pointer-icon:hover {
+    opacity: 0.7; /* Optional: Add hover effect to change opacity */
+    transition: opacity 0.3s; /* Smooth transition for hover effect */
+}

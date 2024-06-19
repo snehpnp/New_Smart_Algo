@@ -200,12 +200,12 @@ const Broker_info = () => {
 
 
     const fields = [
-        // {
-        //     name: 'demat_userid',
-        //     label: formik.values.broker === '2' ? 'Demat User Id' : '', type: 'text',
-        //     showWhen: values => values.broker === '2',
-        //     label_size: 12, col_size: 6, disable: false
-        // },
+        {
+            name: 'demat_userid',
+            label: formik.values.broker === '2' ? 'Demat User Id' : '', type: 'text',
+            showWhen: values => values.broker === '2',
+            label_size: 12, col_size: 6, disable: false
+        },
 
         {
             name: 'app_id',

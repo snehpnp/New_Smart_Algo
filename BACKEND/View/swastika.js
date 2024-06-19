@@ -12,7 +12,7 @@ const db = client.db(process.env.DB_NAME); // Replace with your actual database 
 
 
 
-async function createViewDhan() {
+async function createViewSwastika() {
 
 console.log("111")
   // All Client Trading on view
@@ -312,5 +312,5 @@ console.log("111")
 }
 
 
-module.exports = { createViewDhan }
+module.exports = { createViewSwastika }
 
