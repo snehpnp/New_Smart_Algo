@@ -535,9 +535,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                 }
             });
 
-
             try {
-
                 if (error) {
                     if (error.response) {
                         const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
