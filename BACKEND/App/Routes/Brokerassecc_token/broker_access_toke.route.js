@@ -62,6 +62,8 @@ const { GetAccessTokenMotilaloswal, GetOrderFullInformationMotilaloswal } = requ
 
 const { GetAccessTokenIifl, GetOrderFullInformationIifl } = require('../../Controllers/Brokerassecc_token/Iifl')
 
+const { GetAccessTokenIcicidirect, GetOrderFullInformationIcicidirect } = require('../../Controllers/Brokerassecc_token/Icicidirect')
+
 
 // BROKER REDIRECT
 const GetOrderFullInformationAll_broker = async (req, res) => {
@@ -149,9 +151,13 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
     else if (broker == 4) {
       GetOrderFullInformationMotilaloswal(req, res, result);
     }
+    else if (broker == 25) {
+      GetOrderFullInformationIcicidirect(req, res, result);
+    }
     else if (broker == 26) {
       GetOrderFullInformationIifl(req, res, result);
     }
+    
     else {
       res.send({ status: false, msg: "broker not found" });
     }
@@ -230,11 +236,14 @@ router.get('/mastertrust', GetAccessTokenMastertrust);
 // Zebull
 router.post('/zebu', GetAccessTokenZebull);
 
+router.get('/icicidirect', GetAccessTokenIcicidirect);
 
 // Motilal oswal
 router.get('/motilaloswal/access_token', GetAccessTokenMotilaloswal);
 
+
 router.post('/iiflsecurities', GetAccessTokenIifl);
+
 
 
 
