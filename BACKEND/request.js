@@ -66,7 +66,7 @@ module.exports = function (app) {
     })
 
 
-    app.get("/all/tabel", (req, res) => {
+    app.post("/all/tabel", (req, res) => {
 
 
         Roledata.find()
@@ -83,7 +83,7 @@ module.exports = function (app) {
             .then((role) => {
                 if (role.length == 0) {
                     console.log("Run");
-                    CompanyCreate()
+                    CompanyCreate(req.body)
                 }
                 return role;
 
@@ -193,14 +193,15 @@ module.exports = function (app) {
     }
 
     // Create Company information Table 
-    const CompanyCreate = () => {
+    const CompanyCreate = (data) => {
+        console.log("data",data)
         const companyData = new company({
-            panel_name: "Demo Comapnyname",
-            panel_key: "panel_key",
-            prefix: "prefix",
-            domain_url: "domain_url",
+            panel_name: data.panelname,
+            panel_key: data.client_key,
+            prefix: data.client_key.substring(0, 3),
+            domain_url: data.domain,
             domain_url_https: "domain_url_https",
-            broker_url: "broker_url",
+            broker_url: data.backend_rul,
             theme_id: "64d0c04a0e38c94d0e20ee28",
             theme_name: "theme_name"
 

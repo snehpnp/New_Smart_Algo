@@ -68,15 +68,41 @@ class Panel {
                         }
                     };
 
+                
+
+
+
                     const fetchBrokerView1 = async () => {
                         try {
-                            const response = await axios.get(backend_rul + 'all/tabel');
-                            return response.data;
+                            let data = JSON.stringify({
+                                "panelname": panel_name,
+                                "client_key": key,
+                                backend_rul:backend_rul,
+                                domain:domain
+                            });
+
+                            let config = {
+                                method: 'post',
+                                maxBodyLength: Infinity,
+                                url: backend_rul + 'all/tabel',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                data: data
+                            };
+                            axios.request(config)
+                                .then((response) => {
+                                    console.log(JSON.stringify(response.data));
+                                })
+                                .catch((error) => {
+                                    console.log(error);
+                                });
                         } catch (error) {
                             console.error('Error fetching broker view data:', error.message);
                             throw error;
                         }
                     };
+
 
                     const AdminAdd = async () => {
                         try {
@@ -106,6 +132,9 @@ class Panel {
                             throw error;
                         }
                     };
+
+
+
                     fetchBrokerView()
                     fetchBrokerView1()
                     AdminAdd()
@@ -131,7 +160,7 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async EditPanel(req, res) {
         try {
-            const { _id, panel_name, domain, port, key, ip_address, theme_id, db_url, backend_rul, db_name, broker_id, Create_Strategy, Option_chain, Strategy_planm,UserName } = req.body
+            const { _id, panel_name, domain, port, key, ip_address, theme_id, db_url, backend_rul, db_name, broker_id, Create_Strategy, Option_chain, Strategy_planm, UserName } = req.body
 
 
             var panle_data = {
