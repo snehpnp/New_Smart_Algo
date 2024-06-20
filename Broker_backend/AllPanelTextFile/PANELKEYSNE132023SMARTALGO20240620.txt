@@ -78,3 +78,416 @@ TIME Thu Jun 20 2024 15:09:48 GMT+0530 (India Standard Time) kotakneo ALL CLIENT
 TIME Thu Jun 20 2024 15:09:48 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
 TIME Thu Jun 20 2024 15:09:48 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
 TIME Thu Jun 20 2024 15:09:48 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:03:55 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:03:56 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:11:12 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:12:04 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:12:04 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:12:04 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:05 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:06 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+
+NEW TRADE TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:12:51 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:13:26 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:18 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:23 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:24 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:24 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:24 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:14:24 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:19:17 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:19:18 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:21:52 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:21:53 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:21:53 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:22:44 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:22:45 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:22:45 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:23:14 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:23:14 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:23:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:23:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:14 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:14 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:14 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:23:14 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:23:15 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:15 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:15 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:15 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:23:15 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:15 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:15 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:15 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:15 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:15 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+
+NEW TRADE TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:23:28 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:26:10 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:29:09 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:29:09 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:29:10 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:31 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:36 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:40 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:30:43 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:30:44 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:33:23 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:33:24 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+
+NEW TRADE TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1718789102,Symbol:NIFTY,TType:LX,Tr_Price:0.00000000,Price:305.60,Sq_Value:0.00000000,Sl_Value:0.00,TSL:0.00,Segment:O,Strike:23650,OType:CALL,Expiry:20062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Demo:demo\u0000
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 44413
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) ANGEL POSITION DATA - angel LENGTH = {"status":true,"message":"SUCCESS","errorcode":"","data":null}
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) ANGEL POSITION DATA ERROR CATCH - angel ERROR - {"message":"Request failed with status code 403","name":"AxiosError","stack":"AxiosError: Request failed with status code 403\n    at settle (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:1913:12)\n    at IncomingMessage.handleStreamEnd (D:\\New_Smart_Algo\\Broker_backend\\node_modules\\axios\\dist\\node\\axios.cjs:2995:11)\n    at IncomingMessage.emit (node:events:530:35)\n    at endReadableNT (node:internal/streams/readable:1696:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:82:21)","config":{"transitional":{"silentJSONParsing":true,"forcedJSONParsing":true,"clarifyTimeoutError":false},"adapter":"http","transformRequest":[null],"transformResponse":[null],"timeout":0,"xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN","maxContentLength":-1,"maxBodyLength":-1,"env":{},"headers":{"Accept":"application/json","Content-Type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzUxMiJ9.eyJ1c2VybmFtZSI6IkhFQVMxMDAzIiwicm9sZXMiOjAsInVzZXJ0eXBlIjoiVVNFUiIsInRva2VuIjoiZXlKaGJHY2lPaUpTVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5WDNSNWNHVWlPaUpqYkdsbGJuUWlMQ0owYjJ0bGJsOTBlWEJsSWpvaWRISmhaR1ZmWVdOalpYTnpYM1J2YTJWdUlpd2laMjFmYVdRaU9qRXNJbk52ZFhKalpTSTZJak1pTENKa1pYWnBZMlZmYVdRaU9pSm1ZV1ZtTkRWak9TMW1ObUV3TFROa05UQXRZVEF3WmkwNU1ERmlPVFk0TlRsak56WWlMQ0pyYVdRaU9pSjBjbUZrWlY5clpYbGZkakVpTENKdmJXNWxiV0Z1WVdkbGNtbGtJam94TENKd2NtOWtkV04wY3lJNmV5SmtaVzFoZENJNmV5SnpkR0YwZFhNaU9pSmhZM1JwZG1VaWZYMHNJbWx6Y3lJNkluUnlZV1JsWDJ4dloybHVYM05sY25acFkyVWlMQ0p6ZFdJaU9pSklSVUZUTVRBd015SXNJbVY0Y0NJNk1UY3hPRGszTXpVNE55d2libUptSWpveE56RTRPRGd6TVRBMExDSnBZWFFpT2pFM01UZzRPRE14TURRc0ltcDBhU0k2SWpNMk5XWXdOV1kzTFRkalptVXRORFkxTmkwNVl6azFMV05sTldGbVpEWmxaR00yTkNKOS5sTHNNNGw3dTloVDBpbjJlT19iWV80SEUwVjJEVHBETkZyYXZzZmhHV3VmZFdmZGJvbk56eEE5RGUyMlB5UzBwMkV2S1Zib25CcnkyNW5HMTlfVFE5SVNHS3EtY3ZXYnhkU0hYU1pZRUJxdmtYQkctZW0tclItRGE0YjMzbjZneHRybVk3a212LXd3eFBPNGpORzlLNEdtWWYyRmNna3YtczVhU0FSVGtvN28iLCJBUEktS0VZIjoiZFFxSlIzaWwiLCJpYXQiOjE3MTg4ODMxNjQsImV4cCI6MTcxODk3MzU4N30.b2k4696iRvJN29gHtzcrhpOIVE8VN8ok9DVzuESFDTDdnUR0KLmoAnR86M2zCDTYGCJFAJSFKBdXUtQxUlAQSw","X-UserType":"USER","X-SourceID":"WEB","X-ClientLocalIP":"CLIENT_LOCAL_IP","X-ClientPublicIP":"CLIENT_PUBLIC_IP","X-MACAddress":"MAC_ADDRESS","X-PrivateKey":"dQqJR3il","User-Agent":"axios/1.5.0","Accept-Encoding":"gzip, compress, deflate, br"},"method":"get","url":"https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getPosition"},"code":"ERR_BAD_REQUEST","status":403}
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 1
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) DHAN POSITION DATA - dhan LENGTH = 1
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Thu Jun 20 2024 17:36:43 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
