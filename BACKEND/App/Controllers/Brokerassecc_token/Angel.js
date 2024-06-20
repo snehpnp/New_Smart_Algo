@@ -121,7 +121,6 @@ class Angel {
 const GetAllBrokerResponse = async (user_info,res) => {
     try {
         const objectId = new ObjectId(user_info[0]._id);
-       // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
      
         if (FindUserBrokerResponse.length > 0) {

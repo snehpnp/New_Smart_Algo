@@ -163,10 +163,8 @@ class Dhan {
 const GetAllBrokerResponse = async (user_info,res) => {
     try {
         const objectId = new ObjectId(user_info[0]._id);
-       // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
 
-      //  console.log("GetAllBrokerResponse ",FindUserBrokerResponse)
      
         if (FindUserBrokerResponse.length > 0) {
     
@@ -183,7 +181,6 @@ const GetAllBrokerResponse = async (user_info,res) => {
                 axios(config)
                     .then(async (response) => {
                        
-                          console.log("response order details ",response.data)
 
                           const result_order = response.data;
 

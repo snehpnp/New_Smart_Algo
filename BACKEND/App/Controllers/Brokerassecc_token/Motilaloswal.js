@@ -171,8 +171,7 @@ const GetAllBrokerResponse = async (user_info, res) => {
                             if (response.data.status == "SUCCESS") {
                                 if (response.data.data.length > 0) {
                                     const result_order = response.data.data.find(item2 => item2.uniqueorderid === data1.order_id);
-                                    console.log("response order details ", result_order)
-
+                         
 
                                     if (result_order != undefined) {
                                         const message = (JSON.stringify(result_order));
