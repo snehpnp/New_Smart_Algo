@@ -386,7 +386,8 @@ CREATE TABLE jobs (
     FOREIGN KEY (customer_contact_details_id) REFERENCES customer_contact_details(id),
     FOREIGN KEY (service_id) REFERENCES services(id),
     FOREIGN KEY (job_type_id) REFERENCES job_types(id)
-   
     );
+
+    
 
 
