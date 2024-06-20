@@ -25,13 +25,11 @@ class CancelOrder {
     async CancelorderByAdmin(req, res) {
         try {
             // running task
-            console.log("req -",req.body)
             const AllLiveClients = await User.find({Role:"USER" , TradingStatus : "on" , $and: [
                 { access_token: { $ne: '' } },
                 { access_token: { $ne: null } }
             ]});
 
-          console.log("AllLiveClients - ",AllLiveClients.length)
 
 
 
@@ -40,7 +38,6 @@ class CancelOrder {
             
             const requestPromises = AllLiveClients.map(async (item) => {
 
-               console.log("item ",item.broker)
                let broker = item.broker;
 
                // Market Hub   -  1
@@ -102,9 +99,7 @@ class CancelOrder {
             });
             // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
-            .then(responses => {
-                // console.log("Response:", responses.data);
-            })
+            .then(responses => {  })
             .catch(errors => {
                 console.log("errors:", errors);
               });

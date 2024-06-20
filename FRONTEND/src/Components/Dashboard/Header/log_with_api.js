@@ -15,92 +15,105 @@ import ToastButton from "../../ExtraComponents/Alert_Toast";
 export const loginWithApi = async (broker_id, UserDetails) => {
 
     if (broker_id === "1" || broker_id === 1) {
-    
+
         axios({
             url: `${Config.base_url}markethub`,
             method: "post",
             data: {
-                Email : UserDetails.Email,
+                Email: UserDetails.Email,
             },
-          }).then((res) => {
+        }).then((res) => {
             // console.log("res", res);
             if (res.data.status == true) {
                 toast.success(res.data.msg)
-                    setTimeout(() => {
-                        window.location.reload();
-              }, 1500);
-            
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+
             } else {
                 toast.error(res.data.msg)
-        
+
             }
-            
-          });
-        
+
+        });
+
     }
-    else if (broker_id === "2" || broker_id === 2) {   
+    else if (broker_id === "2" || broker_id === 2) {
         const res = await GET_BROKER_INFORMATION();
         window.location.href = `https://ant.aliceblueonline.com/?appcode=${res.data[0].app_code}`;
     }
     else if (broker_id === "3" || broker_id === 3) {
-      //  alert("broker-3")
-        window.location.href =`https://masterswift-beta.mastertrust.co.in/oauth2/auth?scope=orders%20holdings&state=${UserDetails.Email}&redirect_uri=${Config.base_url}mastertrust&response_type=code&client_id=${UserDetails.app_id}`;
+        //  alert("broker-3")
+        window.location.href = `https://masterswift-beta.mastertrust.co.in/oauth2/auth?scope=orders%20holdings&state=${UserDetails.Email}&redirect_uri=${Config.base_url}mastertrust&response_type=code&client_id=${UserDetails.app_id}`;
 
     }
     else if (broker_id === "4" || broker_id === 4) {
-        alert("broker-4")
+        window.location.href = `https://invest.motilaloswal.com/OpenAPI/Login.aspx?apikey=${UserDetails.api_key}`;
     }
     else if (broker_id === "5" || broker_id === 5) {
-        alert("broker-5")
+        axios({
+            url: `${Config.base_url}zebu`,
+            method: "post",
+            data: UserDetails,
+        }).then((res) => {
+            if (res.data.status == true) {
+                toast.success(res.data.msg)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                toast.error(res.data.msg)
+            }
+        });
     }
     else if (broker_id === "6" || broker_id === 6) {
         alert("broker-6")
     }
     else if (broker_id === "7" || broker_id === 7) {
-        
-     
+
+
         //alert("broker-7")
         // console.log("RUN");
         axios({
             url: `${Config.base_url}kotakGetToken`,
             method: "post",
             data: {
-                Email : UserDetails.Email,
+                Email: UserDetails.Email,
             },
-           }).then((res) => {
+        }).then((res) => {
             // console.log("res", res);
             // return
             if (res.data.status == true) {
-              let value = prompt("Enter Your OTP Here");
-              if (value === null) {
-                // console.log("value", value);
-                return;
-              }
-              axios({
-                url: `${Config.base_url}kotakGetSession`,
-                method: "post",
-                data: {
-                    Email : UserDetails.Email,
-                    otp: value,
-                },
-              }).then((res) => {
-                // console.log("res", res.data);
-                if (res.data.status == true) {
-                    toast.success(res.data.msg)
-                    setTimeout(() => {
-                        window.location.reload();
-                      }, 1500);
-                  
+                let value = prompt("Enter Your OTP Here");
+                if (value === null) {
+                    // console.log("value", value);
+                    return;
                 }
-                else if (res.data.status == false) {
-                    toast.error(res.data.msg)
+                axios({
+                    url: `${Config.base_url}kotakGetSession`,
+                    method: "post",
+                    data: {
+                        Email: UserDetails.Email,
+                        otp: value,
+                    },
+                }).then((res) => {
+                    // console.log("res", res.data);
+                    if (res.data.status == true) {
+                        toast.success(res.data.msg)
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
 
-                }
-              });
+                    }
+                    else if (res.data.status == false) {
+                        toast.error(res.data.msg)
+
+                    }
+                });
             } else if (res.data.status == false) {
-                  toast.error(res.data.msg)
+                toast.error(res.data.msg)
             }
-          })
+        })
 
 
     }
@@ -126,8 +139,8 @@ export const loginWithApi = async (broker_id, UserDetails) => {
 
     else if (broker_id === "13" || broker_id === 13) {
 
-    window.location.href =`https://api.fyers.in/api/v2/generate-authcode?client_id=${UserDetails.app_id}&redirect_uri=${Config.base_url}fyers&response_type=code&state=${UserDetails.client_key}`
-       // alert("broker-13")
+        window.location.href = `https://api.fyers.in/api/v2/generate-authcode?client_id=${UserDetails.app_id}&redirect_uri=${Config.base_url}fyers&response_type=code&state=${UserDetails.client_key}`
+        // alert("broker-13")
     }
 
     // FIVE PAISA
@@ -159,62 +172,76 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     }
     else if (broker_id === "20" || broker_id === 20) {
 
-          axios({
+        axios({
             url: `${Config.base_url}dhan`,
             method: "post",
             data: {
-                Email : UserDetails.Email,
+                Email: UserDetails.Email,
             },
-          }).then((res) => {
+        }).then((res) => {
             // console.log("res", res);
             if (res.data.status == true) {
 
-            toast.success(res.data.msg)
+                toast.success(res.data.msg)
                 setTimeout(() => {
                     window.location.reload();
-                    }, 1500);
+                }, 1500);
             } else {
                 toast.error(res.data.msg)
             }
-            
-          });
+
+        });
 
     }
     else if (broker_id === "21" || broker_id === 21) {
         //alert("broker-21")
         var totp = prompt("Enter TOTP")
-      //  console.log("totp ",totp)
+        //  console.log("totp ",totp)
 
         axios({
             url: `${Config.base_url}swastika`,
             method: "post",
             data: {
-                Email : UserDetails.Email,
-                totp:totp
+                Email: UserDetails.Email,
+                totp: totp
             },
-          }).then((res) => {
+        }).then((res) => {
             // console.log("res", res);
             if (res.data.status == true) {
                 toast.success(res.data.msg)
-                    setTimeout(() => {
-                        window.location.reload();
+                setTimeout(() => {
+                    window.location.reload();
                 }, 1500);
             } else {
                 toast.error(res.data.msg)
-           
+
             }
-            
-          });
+
+        });
     }
     else if (broker_id === "22" || broker_id === 22) {
         alert("broker-22")
     }
-    else if (broker_id === "25" || broker_id === 25) {
-       // alert("broker-25")
-        console.log("UserDetails.api_key", UserDetails.api_key);
-        const encodedApiKey = encodeURIComponent(UserDetails.api_key);
-             console.log("encodedApiKey", encodedApiKey);
-        window.location.href = `https://api.icicidirect.com/apiuser/login?api_key=${encodedApiKey}`;
+    else if (broker_id === "26" || broker_id === 26) {
+
+        axios({
+            url: `${Config.base_url}iiflsecurities`,
+            method: "post",
+            data: { Email: UserDetails.Email },
+
+        }).then((res) => {
+            if (res.data.status == true) {
+                toast.success(res.data.msg)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                toast.error(res.data.msg)
+
+            }
+
+        });;
+
     }
 
     <ToastButton />

@@ -11,10 +11,8 @@ client.connect();
 const db = client.db(process.env.DB_NAME); // Replace with your actual database name
 
 
+async function createViewMotilalOswal() {
 
-async function createViewSwastika() {
-
-console.log("111")
   // All Client Trading on view
   try {
 
@@ -24,10 +22,10 @@ console.log("111")
     const pipeline = [
       {
         $match: {
-          broker: "21",
+          broker: "4",
           TradingStatus: 'on',// Condition from the user collection
           $or: [
-            { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
+            { EndDate: { $gte: currentDate } }, // EndDate is today or in the future
             { EndDate: null } // EndDate is not set
           ]
         }
@@ -111,13 +109,11 @@ console.log("111")
       },
       {
         $addFields: {
+
           postdata:
           {
 
-           
-            Uid : "$client_code",
-            Actid : "$client_code",
-            Exch: {
+            exchange: {
               $cond: {
                 if: { $eq: ['$category.segment', 'C'] }, // Your condition here
                 then: 'NSE',
@@ -130,7 +126,7 @@ console.log("111")
                         { $eq: ['$category.segment', 'FO'] }
                       ]
                     },
-                    then: 'NFO',
+                    then: 'NSEFO',
                     else: {
 
                       $cond: {
@@ -150,10 +146,10 @@ console.log("111")
                                 { $eq: ['$category.segment', 'CO'] }
                               ]
                             },
-                            then: 'CDS',
+                            then: 'NSECD',
 
                             // all not exist condition 
-                            else: "NFO"
+                            else: "NSEFO"
 
                           }
 
@@ -170,12 +166,12 @@ console.log("111")
 
               }
             },
-            Tsym : "",
-            Qty : "$client_services.quantity",
-            Prc : "0",
-            Trgprc : "0",
-            Dscqty : "0",
-            Prd: {
+
+            buyorsell: 'BUY',
+
+
+            // product code condition here
+            producttype: {
               $cond: {
                 if: {
                   $and:
@@ -190,7 +186,7 @@ console.log("111")
                       },
                     ]
                 },
-                then: 'M',
+                then: 'NORMAL',
                 else: {
                   $cond: {
                     if: {
@@ -199,7 +195,7 @@ console.log("111")
                           { $eq: ['$client_services.product_type', '2'] },
                         ]
                     },
-                    then: 'I',
+                    then: 'DELIVERY',
                     else: {
                       $cond: {
                         if: {
@@ -208,7 +204,7 @@ console.log("111")
                               { $eq: ['$client_services.product_type', '3'] },
                             ]
                         },
-                        then: 'B',
+                        then: 'BO',
                         else: {
                           $cond: {
                             if: {
@@ -217,8 +213,8 @@ console.log("111")
                                   { $eq: ['$client_services.product_type', '4'] },
                                 ]
                             },
-                            then: 'H',
-                            else: "C"
+                            then: 'CO',
+                            else: "NORMAL"
 
                           }
 
@@ -235,9 +231,9 @@ console.log("111")
 
 
             },
-            Trantype : "B",
 
-            Prctyp: {
+            // ordertype code condition here
+            ordertype: {
               $cond: {
                 if: {
                   $and:
@@ -245,7 +241,7 @@ console.log("111")
                       { $eq: ['$client_services.order_type', '1'] },
                     ]
                 },
-                then: 'MKT',
+                then: 'MARKET',
                 else: {
                   $cond: {
                     if: {
@@ -254,7 +250,7 @@ console.log("111")
                           { $eq: ['$client_services.order_type', '2'] },
                         ]
                     },
-                    then: 'LMT',
+                    then: 'LIMIT',
                     else: {
                       $cond: {
                         if: {
@@ -263,7 +259,7 @@ console.log("111")
                               { $eq: ['$client_services.order_type', '3'] },
                             ]
                         },
-                        then: 'SL-LMT',
+                        then: 'STOPLOSS',
                         else: {
                           $cond: {
                             if: {
@@ -272,10 +268,10 @@ console.log("111")
                                   { $eq: ['$client_services.order_type', '4'] },
                                 ]
                             },
-                            then: ' SL-MKT',
+                            then: 'STOPLOSS',
 
                             //All condition exist
-                            else: "MKT"
+                            else: "MARKET"
 
                           }
 
@@ -292,18 +288,40 @@ console.log("111")
 
             },
 
-            Ret : "DAY",
-            Remarks:"QRSTP"
+
+            price: 0,
+
+
+            quantityinlot: {
+              $cond: {
+                if: {
+                  $or: [
+                    { $eq: ['$category.segment', 'MF'] },
+                    { $eq: ['$category.segment', 'MO'] }
+                  ]
+                },
+                then: "$client_services.lot_size",
+                else: "$client_services.lot_size"
+
+              }
+
+            },
+
+            orderduration: 'DAY',
+
+
+            amoorder: 'N',
+
+
           }
         }
       }
     ];
-   
-    console.log("pipeline",pipeline)
-    // Create the view
-    await db.createCollection('swastikaView', { viewOn: 'users', pipeline });
 
-    console.log('View dhanView created successfully.');
+    // Create the view
+    await db.createCollection('MotilalOswalView', { viewOn: 'users', pipeline });
+
+    console.log('View created successfully.');
   } catch (error) {
     console.log('Error:', error);
   } finally {
@@ -312,5 +330,5 @@ console.log("111")
 }
 
 
-module.exports = { createViewSwastika }
+module.exports = { createViewMotilalOswal }
 

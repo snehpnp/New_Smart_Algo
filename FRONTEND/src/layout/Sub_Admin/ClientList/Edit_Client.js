@@ -105,7 +105,7 @@ const AddClient = () => {
       })
 
 
-    await dispatch(All_Api_Info_List({ token: user_token, url: Config.react_domain, brokerId: -1 })).unwrap()
+    await dispatch(All_Api_Info_List({ token: user_token, url: Config.react_domain, brokerId: -1 ,key:1})).unwrap()
       .then((response) => {
         if (response.status) {
           setGetBrokerInfo(
@@ -387,12 +387,12 @@ const AddClient = () => {
     },
     //  For Demo Only Client
     {
-      name: 'fromDate', label: 'From Date', type: 'date',
+      name: 'fromDate', label: 'From Date', type: 'date1',
       showWhen: values => values.licence === '1'
       , label_size: 12, col_size: 6, disable: false
     },
     {
-      name: 'todate', label: 'To Date', type: 'date',
+      name: 'todate', label: 'To Date', type: 'date1',
       showWhen: values => values.licence === '1'
       , label_size: 12, col_size: 6, disable: false
     },

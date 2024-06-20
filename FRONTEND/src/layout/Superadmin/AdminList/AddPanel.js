@@ -23,6 +23,8 @@ const Add_Panel = () => {
     const user_token = JSON.parse(localStorage.getItem("user_details")).token;
     const Role = JSON.parse(localStorage.getItem("user_details")).Role;
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+    const UserName = JSON.parse(localStorage.getItem("user_details")).UserName;
+
 
     const [getAllThemeName, setAllThemeName] = useState([]);
     const [getGetAllBrokerName, setGetAllBrokerName] = useState([]);
@@ -108,7 +110,8 @@ const Add_Panel = () => {
                 Create_Strategy: values.Create_Strategy && values.Create_Strategy ? 1 : 0,
                 Option_chain: values.Option_chain && values.Option_chain ? 1 : 0,
                 Strategy_plan: values.Strategy_plan && values.Strategy_plan ? 1 : 0,
-                backend_rul:values.backend_rul
+                backend_rul:values.backend_rul,
+                UserName:UserName
             };
 
           

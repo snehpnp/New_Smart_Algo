@@ -52,11 +52,15 @@ const { GetkotakGetToken, GetkotakGetSession, GetOrderFullInformationKotakNeo } 
 // MASTER TRUST CONTROLLER FILE
 const { GetAccessTokenMastertrust, GetOrderFullInformationMastertrust } = require('../../Controllers/Brokerassecc_token/Mastertrust')
 
-// ICICI DIRECT CONTROLLER FILE
-const { GetAccessTokenIcicidirect, GetOrderFullInformationIcicidirect } = require('../../Controllers/Brokerassecc_token/Icicidirect')
 
 
+// Kotak Neo CONTROLLER FILE
+const { GetAccessTokenZebull, GetOrderFullInformationZebull } = require('../../Controllers/Brokerassecc_token/Zebull')
 
+
+const { GetAccessTokenMotilaloswal, GetOrderFullInformationMotilaloswal } = require('../../Controllers/Brokerassecc_token/Motilaloswal')
+
+const { GetAccessTokenIifl, GetOrderFullInformationIifl } = require('../../Controllers/Brokerassecc_token/Iifl')
 
 
 // BROKER REDIRECT
@@ -64,7 +68,7 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
 
   let user_id = req.body.user_id;
   const objectId = new ObjectId(user_id);
-  console.log("objectId", objectId)
+
   const pipeline = [
     {
       $match: {
@@ -139,10 +143,14 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
     else if (broker == 21) {
       GetOrderFullInformationSwastika(req, res, result);
     }
-
-    // Icicidirect   -  25
-    else if (broker == 25) {
-      GetOrderFullInformationIcicidirect(req, res, result);
+    else if (broker == 5) {
+      GetOrderFullInformationZebull(req, res, result);
+    }
+    else if (broker == 4) {
+      GetOrderFullInformationMotilaloswal(req, res, result);
+    }
+    else if (broker == 26) {
+      GetOrderFullInformationIifl(req, res, result);
     }
     else {
       res.send({ status: false, msg: "broker not found" });
@@ -219,9 +227,14 @@ router.post('/kotakGetSession', GetkotakGetSession);
 // Master Trust
 router.get('/mastertrust', GetAccessTokenMastertrust);
 
-// icicidirect 
-router.get('/icicidirect', GetAccessTokenIcicidirect);
+// Zebull
+router.post('/zebu', GetAccessTokenZebull);
 
+
+// Motilal oswal
+router.get('/motilaloswal/access_token', GetAccessTokenMotilaloswal);
+
+router.post('/iiflsecurities', GetAccessTokenIifl);
 
 
 

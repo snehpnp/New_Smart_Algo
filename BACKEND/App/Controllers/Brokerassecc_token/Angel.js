@@ -189,8 +189,6 @@ const GetAllBrokerResponse = async (user_info,res) => {
                               }
                           
                           
-                        }else{
-                            // console.log("NO DATA FOUND");
                         }
 
                        

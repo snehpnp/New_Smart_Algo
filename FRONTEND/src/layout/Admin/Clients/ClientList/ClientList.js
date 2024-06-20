@@ -18,7 +18,7 @@ import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCr
 import * as Config from "../../../../Utils/Config";
 
 import { useDispatch } from "react-redux";
-import { fa_time } from "../../../../Utils/Date_formet";
+import { fa_time ,fDateTime} from "../../../../Utils/Date_formet";
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
@@ -86,16 +86,16 @@ const AllClients = () => {
       });
   };
 
- 
+
 
   const Brokerdata = async () => {
-  
-    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
-        .then((response) => {
-            if (response.status) {
-              setBrokerDetails(response.data);
-            }
-        })
+
+    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
+      .then((response) => {
+        if (response.status) {
+          setBrokerDetails(response.data);
+        }
+      })
   }
 
   useEffect(() => {
@@ -329,7 +329,7 @@ const AllClients = () => {
       return value;
     }
   };
-  
+
 
   const columns = [
     {
@@ -449,17 +449,17 @@ const AllClients = () => {
     {
       dataField: "CreateDate",
       text: "Create Date",
-      formatter: (cell, row) => fa_time(row.CreateDate),
+      formatter: (cell, row) => fDateTime(row.CreateDate),
     },
     {
       dataField: "StartDate",
       text: "Start Date",
-      formatter: (cell, row) => fa_time(row.StartDate),
+      formatter: (cell, row) => row.StartDate ? fa_time(row.StartDate) : "-",
     },
     {
       dataField: "EndDate",
       text: "End Date",
-      formatter: (cell, row) => fa_time(row.EndDate),
+      formatter: (cell, row) => row.EndDate ? fa_time(row.EndDate) : "-",
     },
 
     {
@@ -477,7 +477,7 @@ const AllClients = () => {
                   className="mx-1"
                 />
               </span>
-            </Link> 
+            </Link>
             {row.license_type == "1" ?
               <Link>
                 <span data-toggle="tooltip" data-placement="top" title="Delete">
@@ -500,7 +500,7 @@ const AllClients = () => {
 
 
 
-  
+
   const showBrokerName = (value1, licence_type) => {
     let value = parseInt(value1);
 
@@ -511,8 +511,8 @@ const AllClients = () => {
       return "Demo";
     } else {
 
- 
-      
+
+
       const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
       if (foundNumber != undefined) {
         return foundNumber.title
@@ -520,48 +520,14 @@ const AllClients = () => {
         return ""
       }
 
-      // if (value === 1) {
-      //   return "Markethub";
-      // } else if (value === 2) {
-      //   return "Alice Blue";
-      // } else if (value === 3) {
-      //   return "Master Trust";
-      // } else if (value === 4) {
-      //   return "Motilal Oswal";
-      // } else if (value === 5) {
-      //   return "Zebull";
-      // } else if (value === 6) {
-      //   return "IIFl";
-      // } else if (value === 7) {
-      //   return "Kotak";
-      // } else if (value === 8) {
-      //   return "Mandot";
-      // } else if (value === 9) {
-      //   return "Choice";
-      // } else if (value === 10) {
-      //   return "Anand Rathi";
-      // } else if (value === 11) {
-      //   return "B2C";
-      // } else if (value === 12) {
-      //   return "Angel";
-      // } else if (value === 13) {
-      //   return "Fyers";
-      // } else if (value === 14) {
-      //   return "5-Paisa";
-      // } else if (value === 15) {
-      //   return "Zerodha";
-      // } else if (value === 19) {
-      //   return "Upstox";
-      // }else if (value === 20) {
-      //   return "Dhan";
-      // }
+     
     }
   };
 
   // MANAGE MULTIFILTER
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
-    
+
       const filter1Match = ClientStatus == "null" || item.license_type.includes(ClientStatus);
       const filter3Match = selectBroker === "null" || item.broker === selectBroker;
       const filter2Match = PanelStatus == 2 || item.TradingStatus.includes(PanelStatus == 1 ? "on" : "off")
@@ -704,22 +670,22 @@ const AllClients = () => {
                     Broker Type
                   </label>
                   <select
-                  className="default-select wide form-control"
-                  aria-label="Default select example"
-                  id="select"
-                  onChange={(e) => setSelectBroker(e.target.value)}
-                  value={selectBroker}
-                >
-                  <option value="null">All</option>
-                  
-                 
-                  {BrokerDetails && BrokerDetails.map((element) => (
-                    <option key={element.broker_id} value={element.broker_id}>
-                      {element.title}
-                    </option>
-                  ))}
- 
-                </select>
+                    className="default-select wide form-control"
+                    aria-label="Default select example"
+                    id="select"
+                    onChange={(e) => setSelectBroker(e.target.value)}
+                    value={selectBroker}
+                  >
+                    <option value="null">All</option>
+
+
+                    {BrokerDetails && BrokerDetails.map((element) => (
+                      <option key={element.broker_id} value={element.broker_id}>
+                        {element.title}
+                      </option>
+                    ))}
+
+                  </select>
                 </div>
               </div>
 

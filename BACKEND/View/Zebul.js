@@ -11,10 +11,8 @@ client.connect();
 const db = client.db(process.env.DB_NAME); // Replace with your actual database name
 
 
+async function createViewZebul() {
 
-async function createViewSwastika() {
-
-console.log("111")
   // All Client Trading on view
   try {
 
@@ -24,10 +22,10 @@ console.log("111")
     const pipeline = [
       {
         $match: {
-          broker: "21",
+          broker: "5",
           TradingStatus: 'on',// Condition from the user collection
           $or: [
-            { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
+            { EndDate: { $gte: currentDate } }, // EndDate is today or in the future
             { EndDate: null } // EndDate is not set
           ]
         }
@@ -111,13 +109,160 @@ console.log("111")
       },
       {
         $addFields: {
+
+
+
           postdata:
           {
 
-           
-            Uid : "$client_code",
-            Actid : "$client_code",
-            Exch: {
+            uid: "$client_code",
+            actid: "$client_code",
+            tsym: "",
+
+            qty: {
+              $cond: {
+                if: {
+                  $or: [
+                    { $eq: ['$category.segment', 'MF'] },
+                    { $eq: ['$category.segment', 'MO'] }
+                  ]
+                },
+                then: "$client_services.lot_size",
+                else: "$client_services.quantity"
+
+              }
+
+            },
+
+            mkt_protection: 'MKT',
+            ret: 'DAY',
+
+
+            prc: "0",
+            trgprc: "0",
+            dscqty: "0",
+
+            // product code condition here
+            prctyp: {
+              $cond: {
+                if: {
+                  $and:
+                    [
+                      { $eq: ['$client_services.product_type', '1'] },
+                      {
+                        $or: [
+                          { $eq: ['$category.segment', 'F'] },
+                          { $eq: ['$category.segment', 'O'] },
+                          { $eq: ['$category.segment', 'FO'] }
+                        ]
+                      },
+                    ]
+                },
+                then: 'MKT',
+                else: {
+                  $cond: {
+                    if: {
+                      $and:
+                        [
+                          { $eq: ['$client_services.product_type', '2'] },
+                        ]
+                    },
+                    then: 'LMT',
+                    else: {
+                      $cond: {
+                        if: {
+                          $and:
+                            [
+                              { $eq: ['$client_services.product_type', '3'] },
+                            ]
+                        },
+                        then: 'SL-LMT',
+                        else: {
+                          $cond: {
+                            if: {
+                              $and:
+                                [
+                                  { $eq: ['$client_services.product_type', '4'] },
+                                ]
+                            },
+                            then: 'SL-MKT',
+                            else: "MKT"
+
+                          }
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+                }
+
+              }
+
+
+            },
+
+            // ordertype code condition here
+            prd: {
+              $cond: {
+                if: {
+                  $and:
+                    [
+                      { $eq: ['$client_services.order_type', '1'] },
+                    ]
+                },
+                then: 'M',
+                else: {
+                  $cond: {
+                    if: {
+                      $and:
+                        [
+                          { $eq: ['$client_services.order_type', '2'] },
+                        ]
+                    },
+                    then: 'I',
+                    else: {
+                      $cond: {
+                        if: {
+                          $and:
+                            [
+                              { $eq: ['$client_services.order_type', '3'] },
+                            ]
+                        },
+                        then: 'B',
+                        else: {
+                          $cond: {
+                            if: {
+                              $and:
+                                [
+                                  { $eq: ['$client_services.order_type', '4'] },
+                                ]
+                            },
+                            then: 'H',
+
+                            else: "C"
+
+                          }
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+                }
+
+              }
+
+            },
+            ordersource: 'WEB',
+
+
+            // exchange condition here
+            exch: {
               $cond: {
                 if: { $eq: ['$category.segment', 'C'] }, // Your condition here
                 then: 'NSE',
@@ -170,140 +315,17 @@ console.log("111")
 
               }
             },
-            Tsym : "",
-            Qty : "$client_services.quantity",
-            Prc : "0",
-            Trgprc : "0",
-            Dscqty : "0",
-            Prd: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$client_services.product_type', '1'] },
-                      {
-                        $or: [
-                          { $eq: ['$category.segment', 'F'] },
-                          { $eq: ['$category.segment', 'O'] },
-                          { $eq: ['$category.segment', 'FO'] }
-                        ]
-                      },
-                    ]
-                },
-                then: 'M',
-                else: {
-                  $cond: {
-                    if: {
-                      $and:
-                        [
-                          { $eq: ['$client_services.product_type', '2'] },
-                        ]
-                    },
-                    then: 'I',
-                    else: {
-                      $cond: {
-                        if: {
-                          $and:
-                            [
-                              { $eq: ['$client_services.product_type', '3'] },
-                            ]
-                        },
-                        then: 'B',
-                        else: {
-                          $cond: {
-                            if: {
-                              $and:
-                                [
-                                  { $eq: ['$client_services.product_type', '4'] },
-                                ]
-                            },
-                            then: 'H',
-                            else: "C"
+            trantype: 'BUY',
 
-                          }
-
-                        }
-
-                      }
-
-                    }
-
-                  }
-                }
-
-              }
-
-
-            },
-            Trantype : "B",
-
-            Prctyp: {
-              $cond: {
-                if: {
-                  $and:
-                    [
-                      { $eq: ['$client_services.order_type', '1'] },
-                    ]
-                },
-                then: 'MKT',
-                else: {
-                  $cond: {
-                    if: {
-                      $and:
-                        [
-                          { $eq: ['$client_services.order_type', '2'] },
-                        ]
-                    },
-                    then: 'LMT',
-                    else: {
-                      $cond: {
-                        if: {
-                          $and:
-                            [
-                              { $eq: ['$client_services.order_type', '3'] },
-                            ]
-                        },
-                        then: 'SL-LMT',
-                        else: {
-                          $cond: {
-                            if: {
-                              $and:
-                                [
-                                  { $eq: ['$client_services.order_type', '4'] },
-                                ]
-                            },
-                            then: ' SL-MKT',
-
-                            //All condition exist
-                            else: "MKT"
-
-                          }
-
-                        }
-
-                      }
-
-                    }
-
-                  }
-                }
-
-              }
-
-            },
-
-            Ret : "DAY",
-            Remarks:"QRSTP"
-          }
+ }
         }
       }
     ];
-   
-    console.log("pipeline",pipeline)
-    // Create the view
-    await db.createCollection('swastikaView', { viewOn: 'users', pipeline });
 
-    console.log('View dhanView created successfully.');
+    // Create the view
+    await db.createCollection('ZebulView', { viewOn: 'users', pipeline });
+
+    console.log('View created successfully.');
   } catch (error) {
     console.log('Error:', error);
   } finally {
@@ -312,5 +334,5 @@ console.log("111")
 }
 
 
-module.exports = { createViewSwastika }
+module.exports = { createViewZebul }
 

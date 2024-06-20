@@ -428,7 +428,7 @@ const Header = ({ ChatBox }) => {
                 {/* GO TO DASHBOARD */}
 
                 <>
-                  {user_role === "USER" || (gotodashboard && user_role_goTo == "USER") ?
+                  {user_role === "ADMIN" || user_role === "USER" || (gotodashboard && user_role_goTo == "USER") ?
 
                     <li className="nav-item dropdown header-profile me-2">
                       <button

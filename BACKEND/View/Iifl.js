@@ -11,10 +11,8 @@ client.connect();
 const db = client.db(process.env.DB_NAME); // Replace with your actual database name
 
 
+async function createViewIifl() {
 
-async function createViewSwastika() {
-
-console.log("111")
   // All Client Trading on view
   try {
 
@@ -24,10 +22,10 @@ console.log("111")
     const pipeline = [
       {
         $match: {
-          broker: "21",
+          broker: "26",
           TradingStatus: 'on',// Condition from the user collection
           $or: [
-            { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
+            { EndDate: { $gte: currentDate } }, // EndDate is today or in the future
             { EndDate: null } // EndDate is not set
           ]
         }
@@ -111,16 +109,18 @@ console.log("111")
       },
       {
         $addFields: {
+
+
+
           postdata:
           {
+ 
 
-           
-            Uid : "$client_code",
-            Actid : "$client_code",
-            Exch: {
+            // exchange condition here
+            exchangeSegment: {
               $cond: {
                 if: { $eq: ['$category.segment', 'C'] }, // Your condition here
-                then: 'NSE',
+                then: 'NSECM',
                 else: {
                   $cond: {
                     if: {
@@ -130,7 +130,7 @@ console.log("111")
                         { $eq: ['$category.segment', 'FO'] }
                       ]
                     },
-                    then: 'NFO',
+                    then: 'NSEFO',
                     else: {
 
                       $cond: {
@@ -140,7 +140,7 @@ console.log("111")
                             { $eq: ['$category.segment', 'MO'] }
                           ]
                         },
-                        then: 'MCX',
+                        then: 'MCXFO',
                         else: {
 
                           $cond: {
@@ -150,10 +150,10 @@ console.log("111")
                                 { $eq: ['$category.segment', 'CO'] }
                               ]
                             },
-                            then: 'CDS',
+                            then: 'NCDEX',
 
                             // all not exist condition 
-                            else: "NFO"
+                            else: "NSEFO"
 
                           }
 
@@ -170,12 +170,69 @@ console.log("111")
 
               }
             },
-            Tsym : "",
-            Qty : "$client_services.quantity",
-            Prc : "0",
-            Trgprc : "0",
-            Dscqty : "0",
-            Prd: {
+
+
+
+            // ordertype code condition here
+            orderType: {
+              $cond: {
+                if: {
+                  $and:
+                    [
+                      { $eq: ['$client_services.order_type', '1'] },
+                    ]
+                },
+                then: 'Market',
+                else: {
+                  $cond: {
+                    if: {
+                      $and:
+                        [
+                          { $eq: ['$client_services.order_type', '2'] },
+                        ]
+                    },
+                    then: 'Limit',
+                    else: {
+                      $cond: {
+                        if: {
+                          $and:
+                            [
+                              { $eq: ['$client_services.order_type', '3'] },
+                            ]
+                        },
+                        then: 'StopLimit',
+                        else: {
+                          $cond: {
+                            if: {
+                              $and:
+                                [
+                                  { $eq: ['$client_services.order_type', '4'] },
+                                ]
+                            },
+                            then: 'StopMarket',
+
+                            //All condition exist
+                            else: "Market"
+
+                          }
+
+                        }
+
+                      }
+
+                    }
+
+                  }
+                }
+
+              }
+
+            },
+
+
+
+            // product code condition here
+            productType: {
               $cond: {
                 if: {
                   $and:
@@ -190,7 +247,7 @@ console.log("111")
                       },
                     ]
                 },
-                then: 'M',
+                then: 'NRML',
                 else: {
                   $cond: {
                     if: {
@@ -199,7 +256,7 @@ console.log("111")
                           { $eq: ['$client_services.product_type', '2'] },
                         ]
                     },
-                    then: 'I',
+                    then: 'MIS',
                     else: {
                       $cond: {
                         if: {
@@ -208,7 +265,7 @@ console.log("111")
                               { $eq: ['$client_services.product_type', '3'] },
                             ]
                         },
-                        then: 'B',
+                        then: 'BO',
                         else: {
                           $cond: {
                             if: {
@@ -217,8 +274,8 @@ console.log("111")
                                   { $eq: ['$client_services.product_type', '4'] },
                                 ]
                             },
-                            then: 'H',
-                            else: "C"
+                            then: 'CO',
+                            else: "CNC"
 
                           }
 
@@ -235,75 +292,46 @@ console.log("111")
 
 
             },
-            Trantype : "B",
 
-            Prctyp: {
+
+
+
+            limitPrice: 0,
+            disclosedQuantity: "0",
+
+            orderQuantity: {
               $cond: {
                 if: {
-                  $and:
-                    [
-                      { $eq: ['$client_services.order_type', '1'] },
-                    ]
+                  $or: [
+                    { $eq: ['$category.segment', 'MF'] },
+                    { $eq: ['$category.segment', 'MO'] }
+                  ]
                 },
-                then: 'MKT',
-                else: {
-                  $cond: {
-                    if: {
-                      $and:
-                        [
-                          { $eq: ['$client_services.order_type', '2'] },
-                        ]
-                    },
-                    then: 'LMT',
-                    else: {
-                      $cond: {
-                        if: {
-                          $and:
-                            [
-                              { $eq: ['$client_services.order_type', '3'] },
-                            ]
-                        },
-                        then: 'SL-LMT',
-                        else: {
-                          $cond: {
-                            if: {
-                              $and:
-                                [
-                                  { $eq: ['$client_services.order_type', '4'] },
-                                ]
-                            },
-                            then: ' SL-MKT',
-
-                            //All condition exist
-                            else: "MKT"
-
-                          }
-
-                        }
-
-                      }
-
-                    }
-
-                  }
-                }
+                then: "$client_services.lot_size",
+                else: "$client_services.quantity"
 
               }
 
             },
 
-            Ret : "DAY",
-            Remarks:"QRSTP"
+
+            timeInForce: 'DAY',
+            orderUniqueIdentifier:"123abc",
+
+       
+
+            orderSide: 'BUY',
+            stopPrice: 0,
+
           }
         }
       }
     ];
-   
-    console.log("pipeline",pipeline)
-    // Create the view
-    await db.createCollection('swastikaView', { viewOn: 'users', pipeline });
 
-    console.log('View dhanView created successfully.');
+    // Create the view
+    await db.createCollection('iiflView', { viewOn: 'users', pipeline });
+
+    console.log('View created successfully.');
   } catch (error) {
     console.log('Error:', error);
   } finally {
@@ -312,5 +340,5 @@ console.log("111")
 }
 
 
-module.exports = { createViewSwastika }
+module.exports = { createViewIifl }
 

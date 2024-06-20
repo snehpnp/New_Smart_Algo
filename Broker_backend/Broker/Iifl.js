@@ -1,21 +1,13 @@
 var axios = require('axios');
 var qs = require('qs');
-var path = require('path');
-const { exec } = require('child_process');
 const fs = require('fs');
 const db = require('../../BACKEND/App/Models');
-const services = db.services;
-const Alice_token = db.Alice_token;
-const Signals = db.Signals;
-const MainSignals = db.MainSignals;
-const AliceViewModel = db.AliceViewModel;
+
 const BrokerResponse = db.BrokerResponse;
-var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
 
-    console.log("DHANNNNN")
-
+    console.log("IIFL")
 
     try {
 
@@ -23,7 +15,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         var input_symbol = signals.Symbol;
         var type = signals.TType.toUpperCase();
         var tr_price = signals.Tr_Price;
-        var price = signals.Price;
+        var limitPrice = signals.Price;
         var sq_value = signals.Sq_Value;
         var sl_value = signals.Sl_Value;
         var tsl = signals.TSL;
@@ -47,29 +39,26 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                     const requestPromises = AllClientData.map(async (item) => {
 
-                        item.postdata.securityId = token[0].instrument_token;
+                        item.postdata.exchangeInstrumentID = token[0].instrument_token;
 
                         if (type == 'LE' || type == 'SX') {
-                            item.postdata.transactionType = 'BUY';
+                            item.postdata.orderSide = 'BUY';
                         } else if (type == 'SE' || type == 'LX') {
-                            item.postdata.transactionType = 'SELL';
+                            item.postdata.orderSide = 'SELL';
                         }
-
-                        // console.log("price", price)
 
 
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                            item.postdata.price = price
+                            item.postdata.limitPrice = limitPrice
                         }
 
                         EntryPlaceOrder(item, filePath, signals, signal_req);
 
                     });
+
                     // Send all requests concurrently using Promise.all
                     Promise.all(requestPromises)
-                        .then(responses => {
-                            // console.log("Response:", responses.data);
-                        })
+                        .then(responses => { })
                         .catch(errors => {
                             console.log("errors:", errors);
                         });
@@ -80,27 +69,27 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                     const requestPromises = AllClientData.map(async (item) => {
 
+                        item.postdata.exchangeInstrumentID = token[0].instrument_token;
+
                         if (type == 'LE' || type == 'SX') {
-                            item.postdata.transactionType = 'BUY';
+                            item.postdata.orderSide = 'BUY';
                         } else if (type == 'SE' || type == 'LX') {
-                            item.postdata.transactionType = 'SELL';
+                            item.postdata.orderSide = 'SELL';
                         }
 
-                        // console.log("price", price)
 
 
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                            item.postdata.price = price
+                            item.postdata.limitPrice = limitPrice
                         }
 
                         EntryPlaceOrder(item, filePath, signals, signal_req);
 
                     });
-                    // Send all requests concurrently using Promise.all
+
+
                     Promise.all(requestPromises)
-                        .then(responses => {
-                            // console.log("Response:", responses.data);
-                        })
+                        .then(responses => { })
                         .catch(errors => {
                             console.log("errors:", errors);
                         });
@@ -111,28 +100,26 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             }
 
             else if (type == 'SX' || type == 'LX') {
-                console.log("trade exit")
+
 
                 const requestPromises = AllClientData.map(async (item) => {
 
-                    // console.log("user id ", item.demat_userid)
-                    // console.log("postdata before", item.postdata)
+
                     if (segment.toUpperCase() != "C") {
                         item.postdata.securityId = token[0].instrument_token;
                     }
 
 
                     if (type == 'LE' || type == 'SX') {
-                        item.postdata.transactionType = 'BUY';
+                        item.postdata.orderSide = 'BUY';
                     } else if (type == 'SE' || type == 'LX') {
-                        item.postdata.transactionType = 'SELL';
+                        item.postdata.orderSide = 'SELL';
                     }
 
-                    // console.log("price", price)
-                    // console.log("item.client_services.order_type", item.client_services.order_type)
+
 
                     if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                        item.postdata.price = price
+                        item.postdata.limitPrice = limitPrice
                     }
 
 
@@ -141,34 +128,29 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                     var config = {
                         method: 'get',
-                        url: 'https://api.dhan.co/positions',
+                        url: item.api_type + '/portfolio/positions?dayOrNet=DayWise',
                         headers: {
-                            'access-token': item.access_token,
+                            'authorization': item.access_token,
                             'Content-Type': 'application/json'
                         },
                     };
                     axios(config)
                         .then(async (response) => {
-                            // console.log("response", response.data)
 
 
+                            if (response.data.result.positionList.length > 0) {
 
-                            if (Array.isArray(response.data)) {
-
-                                fs.appendFile(filePath, 'TIME ' + new Date() + ' DHAN POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
-                                    if (err) {
-                                        //  return console.log(err);
-                                    }
+                                fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
+                                    if (err) { }
                                 });
 
-                                const Exist_entry_order = response.data.find(item1 => item1.securityId === token[0].instrument_token);
+                                const Exist_entry_order = response.data.result.positionList.find(item1 => item1.ExchangeInstrumentID === token[0].instrument_token);
 
                                 if (Exist_entry_order != undefined) {
 
-                                    const possition_qty = parseInt(Exist_entry_order.buyQty) - parseInt(Exist_entry_order.sellQty);
-                                    // console.log("possition_qty Cash", possition_qty);
+                                    const possition_qty = Exist_entry_order.Quantity
+
                                     if (possition_qty == 0) {
-                                        // console.log("possition_qty Not Available", possition_qty);
                                         BrokerResponse.create({
                                             user_id: item._id,
                                             receive_signal: signal_req,
@@ -177,14 +159,12 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                             symbol: input_symbol,
                                             order_status: "Entry Not Exist",
                                             reject_reason: "This Script position Empty ",
-                                            broker_name: "DHAN",
+                                            broker_name: "iifl",
                                             send_request: send_rr,
                                             open_possition_qty: possition_qty,
 
                                         })
-                                            .then((BrokerResponseCreate) => {
-                                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                                            })
+                                            .then((BrokerResponseCreate) => { })
                                             .catch((err) => {
                                                 try {
                                                     console.log('Error creating and saving user:', err);
@@ -217,14 +197,12 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                         order_status: "Entry Not Exist",
                                         order_id: "",
                                         trading_symbol: "",
-                                        broker_name: "DHAN",
+                                        broker_name: "iifl",
                                         send_request: send_rr,
                                         reject_reason: "position Not Exist",
 
                                     })
-                                        .then((BrokerResponseCreate) => {
-                                            // console.log('User created and saved:', BrokerResponseCreate._id)
-                                        })
+                                        .then((BrokerResponseCreate) => { })
                                         .catch((err) => {
                                             try {
                                                 console.log('Error creating and saving user:', err);
@@ -248,14 +226,12 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     order_status: "Entry Not Exist",
                                     order_id: "",
                                     trading_symbol: "",
-                                    broker_name: "DHAN",
+                                    broker_name: "iifl",
                                     send_request: send_rr,
                                     reject_reason: "All position Empty",
 
                                 })
-                                    .then((BrokerResponseCreate) => {
-                                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                                    })
+                                    .then((BrokerResponseCreate) => { })
                                     .catch((err) => {
                                         try {
                                             console.log('Error creating and saving user:', err);
@@ -273,7 +249,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         })
                         .catch(async (error) => {
 
-                            fs.appendFile(filePath, 'TIME ' + new Date() + ' DHAN POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
+                            fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
                                 if (err) {
                                     return console.log(err);
                                 }
@@ -290,14 +266,12 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     order_status: "position request error",
                                     order_id: "",
                                     trading_symbol: "",
-                                    broker_name: "DHAN",
+                                    broker_name: "iifl",
                                     send_request: send_rr,
                                     reject_reason: message,
 
                                 })
-                                    .then((BrokerResponseCreate) => {
-                                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                                    })
+                                    .then((BrokerResponseCreate) => { })
                                     .catch((err) => {
                                         try {
                                             console.log('Error creating and saving user:', err);
@@ -318,14 +292,12 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     order_status: "position request error",
                                     order_id: "",
                                     trading_symbol: "",
-                                    broker_name: "DHAN",
+                                    broker_name: "iifl",
                                     send_request: send_rr,
                                     reject_reason: message,
 
                                 })
-                                    .then((BrokerResponseCreate) => {
-                                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                                    })
+                                    .then((BrokerResponseCreate) => { })
                                     .catch((err) => {
                                         try {
                                             console.log('Error creating and saving user:', err);
@@ -341,21 +313,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
 
-
-
-
-
-
-
-
-
                 });
                 // Send all requests concurrently using Promise.all
                 Promise.all(requestPromises)
-                    .then(responses => {
-                        // console.log("Response:", responses.data);
-
-                    })
+                    .then(responses => { })
                     .catch(errors => {
                         console.log("errors:", errors);
 
@@ -377,14 +338,12 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     order_status: "",
                     order_id: "",
                     trading_symbol: "",
-                    broker_name: "DHAN",
+                    broker_name: "iifl",
                     send_request: "",
                     reject_reason: "Token not received due to wrong trade",
 
                 })
-                    .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                    })
+                    .then((BrokerResponseCreate) => { })
                     .catch((err) => {
                         try {
                             console.log('Error creating and saving user:', err);
@@ -397,10 +356,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
             });
             // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
-                .then(responses => {
-                    // console.log("Response:", responses.data);
-
-                })
+                .then(responses => { })
                 .catch(errors => {
                     console.log("errors:", errors);
 
@@ -420,7 +376,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     var input_symbol = signals.Symbol;
     var type = signals.TType.toUpperCase();
     var tr_price = signals.Tr_Price;
-    var price = signals.Price;
+    var limitPrice = signals.Price;
     var sq_value = signals.Sq_Value;
     var sl_value = signals.Sl_Value;
     var tsl = signals.TSL;
@@ -437,7 +393,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
 
-    fs.appendFile(filePath, 'TIME ' + new Date() + ' DHAN BEFORE PLACE ORDER USER ENTRY- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
+    fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl BEFORE PLACE ORDER USER ENTRY- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
         if (err) {
             return console.log(err);
         }
@@ -447,25 +403,25 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://api.dhan.co/orders',
+        url: item.api_type + '/orders',
         headers: {
-            'access-token': item.access_token,
+            'authorization': item.access_token,
             'Content-Type': 'application/json'
         },
-        data: item.postdata
+        data: JSON.stringify(item.postdata)
+
+
 
     };
-    // console.log(config);
     axios(config)
         .then(async (response) => {
-            console.log("respose ENTRY", response.data)
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' DHAN AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
             });
 
-            if (response.data.orderStatus != undefined) {
+            if (response.data.type == "success") {
 
                 BrokerResponse.create({
                     user_id: item._id,
@@ -473,17 +429,15 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     strategy: strategy,
                     type: type,
                     symbol: input_symbol,
-                    order_status: response.data.orderStatus,
-                    order_id: response.data.orderId,
+                    order_status: response.data.type,
+                    order_id: response.data.result.AppOrderID,
                     trading_symbol: "",
-                    broker_name: "DHAN",
+                    broker_name: "iifl",
                     send_request: send_rr,
 
 
                 })
-                    .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                    })
+                    .then((BrokerResponseCreate) => { })
                     .catch((err) => {
                         try {
                             console.log('Error creating and saving user:', err);
@@ -506,14 +460,12 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                     order_status: 0,
                     order_id: "",
                     trading_symbol: "",
-                    broker_name: "DHAN",
+                    broker_name: "iifl",
                     send_request: send_rr,
                     reject_reason: message,
 
                 })
-                    .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                    })
+                    .then((BrokerResponseCreate) => { })
                     .catch((err) => {
                         try {
                             console.log('Error creating and saving user:', err);
@@ -528,14 +480,17 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
         })
         .catch(async (error) => {
-            console.log("error", error.response.data)
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' DHAN AFTER PLACE ORDER CATCH ENTRY - ' + item.UserName + error.response.data + JSON.stringify(error) + '\n', function (err) {
+
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl AFTER PLACE ORDER CATCH ENTRY - ' + item.UserName + ' ERROR -' + JSON.stringify(error) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
             });
 
+
+
             try {
+
                 if (error) {
                     if (error.response) {
                         const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
@@ -548,11 +503,11 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "DHAN",
+                            broker_name: "iifl",
                             send_request: send_rr,
                             reject_reason: message,
                         })
-                            .then((BrokerResponseCreate) => {})
+                            .then((BrokerResponseCreate) => { })
                             .catch((err) => {
                                 try {
                                     console.log('Error creating and saving user:', err);
@@ -574,13 +529,11 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "DHAN",
+                            broker_name: "iifl",
                             send_request: send_rr,
                             reject_reason: message,
                         })
-                            .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                            })
+                            .then((BrokerResponseCreate) => { })
                             .catch((err) => {
                                 try {
                                     console.log('Error creating and saving user:', err);
@@ -610,7 +563,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
     var input_symbol = signals.Symbol;
     var type = signals.TType.toUpperCase();
     var tr_price = signals.Tr_Price;
-    var price = signals.Price;
+    var limitPrice = signals.Price;
     var sq_value = signals.Sq_Value;
     var sl_value = signals.Sl_Value;
     var tsl = signals.TSL;
@@ -626,7 +579,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
     var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
 
-    fs.appendFile(filePath, 'TIME ' + new Date() + ' DHAN BEFORE PLACE ORDER USER EXIT- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
+    fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl BEFORE PLACE ORDER USER EXIT- ' + item.UserName + ' REQUEST -' + JSON.stringify(item.postdata) + '\n', function (err) {
         if (err) {
             return console.log(err);
         }
@@ -635,20 +588,19 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
     let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'https://api.dhan.co/orders',
+        url: item.api_type + '/orders',
         headers: {
-            'access-token': item.access_token,
+            'authorization': item.access_token,
             'Content-Type': 'application/json'
         },
-        data: item.postdata
+        data: JSON.stringify(item.postdata)
 
     };
 
     axios(config)
         .then(async (response) => {
-            // console.log("respose Exit", response.data)
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' DHAN AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
@@ -667,14 +619,12 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                     order_status: response.data.orderStatus,
                     order_id: response.data.orderId,
                     trading_symbol: "",
-                    broker_name: "DHAN",
+                    broker_name: "iifl",
                     send_request: send_rr,
 
 
                 })
-                    .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                    })
+                    .then((BrokerResponseCreate) => { })
                     .catch((err) => {
                         try {
                             console.log('Error creating and saving user:', err);
@@ -697,14 +647,12 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                     order_status: 0,
                     order_id: "",
                     trading_symbol: "",
-                    broker_name: "DHAN",
+                    broker_name: "iifl",
                     send_request: send_rr,
                     reject_reason: message,
 
                 })
-                    .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                    })
+                    .then((BrokerResponseCreate) => { })
                     .catch((err) => {
                         try {
                             console.log('Error creating and saving user:', err);
@@ -720,7 +668,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
         })
         .catch(async (error) => {
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' DHAN AFTER PLACE ORDER USER EXIT CATCH- ' + item.UserName + ' RESPONSE -' + JSON.stringify(error) + '\n', function (err) {
+            fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl AFTER PLACE ORDER USER EXIT CATCH- ' + item.UserName + ' RESPONSE -' + JSON.stringify(error) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
                 }
@@ -740,13 +688,11 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "DHAN",
+                            broker_name: "iifl",
                             send_request: send_rr,
                             reject_reason: message,
                         })
-                            .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                            })
+                            .then((BrokerResponseCreate) => { })
                             .catch((err) => {
                                 try {
                                     console.log('Error creating and saving user:', err);
@@ -768,13 +714,11 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             symbol: input_symbol,
                             order_status: "Error",
                             trading_symbol: "",
-                            broker_name: "DHAN",
+                            broker_name: "iifl",
                             send_request: send_rr,
                             reject_reason: message,
                         })
-                            .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                            })
+                            .then((BrokerResponseCreate) => { })
                             .catch((err) => {
                                 try {
                                     console.log('Error creating and saving user:', err);

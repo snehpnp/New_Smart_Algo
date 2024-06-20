@@ -217,7 +217,7 @@ const ConnectSocket = async (EXCHANGE, instrument_token) => {
 
 
     }).catch((error) => {
-     // console.log("Error -", error.response.data);
+      // console.log("Error -", error.response.data);
       return error.response.data
     })
 
@@ -253,6 +253,13 @@ const markethub = require('./Broker/markethub')
 const swastika = require('./Broker/swastika')
 const mastertrust = require('./Broker/mastertrust')
 const kotakneo = require('./Broker/kotakneo')
+
+const iiflView = require('./Broker/Iifl')
+const Motilaloswal = require('./Broker/Motilaloswal')
+const Zebull = require('./Broker/Zebull')
+
+
+
 
 
 
@@ -335,15 +342,15 @@ app.post('/broker-signals', async (req, res) => {
       var qty_percent = signals.Quntity;
       var client_key = signals.Key;
       var TradeType = signals.TradeType;
-     
-    
- 
+
+
+
 
       let ExitStatus = '-'
 
       let ft_time = ''
 
-      if(signals.ExitStatus != undefined){
+      if (signals.ExitStatus != undefined) {
         ExitStatus = signals.ExitStatus
       }
 
@@ -375,10 +382,7 @@ app.post('/broker-signals', async (req, res) => {
 
       var demo = signals.Demo;
 
-      // console.log("signals",signals)
-      // console.log("ExitTime",ExitTime)
 
-       
 
       // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
@@ -464,13 +468,13 @@ app.post('/broker-signals', async (req, res) => {
             instrument_query = { symbol: input_symbol, segment: "O", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "NFO";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType ,strike: strike}
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType, strike: strike }
 
           } else if (segment == 'MO' || segment == 'mo') {
             instrument_query = { symbol: input_symbol, segment: "MO", expiry: expiry, strike: strike, option_type: Trade_Option_Type }
             EXCHANGE = "MCX";
             trade_symbol = input_symbol + day_expiry + ex_day_expiry + ex_year_expiry + strike + Trade_Option_Type;
-            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType ,strike: strike}
+            findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: option_type, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: client_persnal_key, TradeType: TradeType, strike: strike }
 
           } else if (segment == 'MF' || segment == 'mf') {
             instrument_query = { symbol: input_symbol, segment: "MF", expiry: expiry }
@@ -483,8 +487,8 @@ app.post('/broker-signals', async (req, res) => {
             EXCHANGE = "CDS";
           }
 
-           
-         // console.log("findSignal ",findSignal)
+
+          // console.log("findSignal ",findSignal)
           // TOKEN SET IN TOKEN
           if (segment == 'C' || segment == 'c') {
             token = await services.find(instrument_query).maxTimeMS(20000).exec();
@@ -503,11 +507,6 @@ app.post('/broker-signals', async (req, res) => {
 
           const token_chain1 = db1.collection('token_chain');
           const stock_live_price1 = db1.collection('stock_live_price');
-
-          // await ConnectSocket(EXCHANGE, instrument_token)
-          // const result = await token_chain1.updateOne({ _id: instrument_token }, { $set: { _id: instrument_token, exch: EXCHANGE } }, { upsert: true });
-
-
 
 
           var find_lot_size = 1
@@ -544,61 +543,57 @@ app.post('/broker-signals', async (req, res) => {
 
             price = signals.Price
 
-          }else{
+          } else {
 
-             // LIVE PRICE GET
-          const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
+            // LIVE PRICE GET
+            const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
 
-          try {
-            if (signals.TradeType == "MT_4") {
+            try {
+              if (signals.TradeType == "MT_4") {
 
-              if (price_live_second.length > 0) {
-                price = price_live_second[0].lp
-                ft_time = price_live_second[0].ft
+                if (price_live_second.length > 0) {
+                  price = price_live_second[0].lp
+                  ft_time = price_live_second[0].ft
+                } else {
+                  price = signals.Price
+                }
               } else {
-                price = signals.Price
+                if (price_live_second.length > 0) {
+                  ft_time = price_live_second[0].ft
+                }
               }
-            }else{
-              if(price_live_second.length > 0){
-                ft_time = price_live_second[0].ft
-              }
+            } catch (error) {
+              console.log("Error  IN price Update", error);
             }
-          } catch (error) {
-            console.log("Error  IN price Update", error);
+            if (price == null) {
+              price = signals.Price
+
+            }
+
+
           }
-          if (price == null) {
-            price = signals.Price
 
+
+
+          let ExistExitSignal = '';
+          if (type.toUpperCase() == "LX" || type.toUpperCase() == "SX") {
+            const updatedFindSignal = {
+              ...findSignal,
+              exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
+            };
+            ExistExitSignal = await MainSignals.find(updatedFindSignal)
           }
 
-
-         }
-         
-
-
-          console.log("price ",price)
-          console.log("client_key ",client_key)
-          console.log("process.env.PANEL_KEY ",process.env.PANEL_KEY)
-          // HIT TRADE IN BROKER SERVER
-         let ExistExitSignal = '';
-         if(type.toUpperCase() == "LX" || type.toUpperCase() == "SX"){
-          const updatedFindSignal = {
-            ...findSignal,
-            exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
-          };
-          ExistExitSignal = await MainSignals.find(updatedFindSignal)
-         }
-          
           // if(ExistExitSignal != ''){
           //  console.log("IFFFFFF ",ExistExitSignal)
           // }else{
           //   console.log("ELLLSEEE ",ExistExitSignal)
-             
+
           // }
 
           if (process.env.PANEL_KEY == client_key) {
-            
-          //console.log("Inside  ",process.env.PANEL_KEY)
+
+            //console.log("Inside  ",process.env.PANEL_KEY)
 
             //Process Alice Blue admin client
             try {
@@ -615,8 +610,8 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (AliceBluedocuments.length > 0) {
-                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req , ExistExitSignal);
-                }
+                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req, ExistExitSignal);
+              }
 
             } catch (error) {
               console.log("Error Get Aliceblue Client In view", error);
@@ -638,7 +633,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (angelBluedocuments.length > 0) {
-                angel.place_order(angelBluedocuments, signals, token, filePath, signal_req,ExistExitSignal);
+                angel.place_order(angelBluedocuments, signals, token, filePath, signal_req, ExistExitSignal);
               }
 
             } catch (error) {
@@ -695,176 +690,266 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-          //Process UPSTOX admin client
-          try {
-            const upstoxCollection = db1.collection('upstoxView');
-            const upstoxdocuments = await upstoxCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+            //Process UPSTOX admin client
+            try {
+              const upstoxCollection = db1.collection('upstoxView');
+              const upstoxdocuments = await upstoxCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' UPSTOX ALL CLIENT LENGTH ' + upstoxdocuments.length + '\n', function (err) {
-              if (err) {
-                return console.log(err);
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' UPSTOX ALL CLIENT LENGTH ' + upstoxdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (upstoxdocuments.length > 0) {
+                upstox.place_order(upstoxdocuments, signals, token, filePath, signal_req);
               }
-            });
 
-
-
-            if (upstoxdocuments.length > 0) {
-              upstox.place_order(upstoxdocuments, signals, token, filePath, signal_req);
+            } catch (error) {
+              console.log("Error Get UPSTOX Client In view", error);
             }
-
-          } catch (error) {
-            console.log("Error Get UPSTOX Client In view", error);
-          }
-          //End Process UPSTOX admin client
+            //End Process UPSTOX admin client
 
 
 
 
-          //Process dhan admin client
-          try {
-            const dhanCollection = db1.collection('dhanView');
-            const dhandocuments = await dhanCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+            //Process dhan admin client
+            try {
+              const dhanCollection = db1.collection('dhanView');
+              const dhandocuments = await dhanCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' dhan ALL CLIENT LENGTH ' + dhandocuments.length + '\n', function (err) {
-              if (err) {
-                return console.log(err);
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' dhan ALL CLIENT LENGTH ' + dhandocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (dhandocuments.length > 0) {
+                dhan.place_order(dhandocuments, signals, token, filePath, signal_req);
               }
-            });
 
-
-
-            if (dhandocuments.length > 0) {
-              dhan.place_order(dhandocuments, signals, token, filePath, signal_req);
+            } catch (error) {
+              console.log("Error Get dhan Client In view", error);
             }
-
-          } catch (error) {
-            console.log("Error Get dhan Client In view", error);
-          }
-          //End Process dhan admin client
+            //End Process dhan admin client
 
 
 
-           //Process fyers admin client
-           try {
-            const fyersCollection = db1.collection('fyersView');
-            const fyersdocuments = await fyersCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+            //Process fyers admin client
+            try {
+              const fyersCollection = db1.collection('fyersView');
+              const fyersdocuments = await fyersCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' fyers ALL CLIENT LENGTH ' + fyersdocuments.length + '\n', function (err) {
-              if (err) {
-                return console.log(err);
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' fyers ALL CLIENT LENGTH ' + fyersdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (fyersdocuments.length > 0) {
+                fyers.place_order(fyersdocuments, signals, token, filePath, signal_req);
               }
-            });
 
-
-
-            if (fyersdocuments.length > 0) {
-              fyers.place_order(fyersdocuments, signals, token, filePath, signal_req);
+            } catch (error) {
+              console.log("Error Get fyers Client In view", error);
             }
-
-          } catch (error) {
-            console.log("Error Get fyers Client In view", error);
-          }
-          //End Process fyers admin client
-
-         
-          
-           //Process markethub admin client
-           try {
-            const markethubCollection = db1.collection('markethubView');
-            const markethubdocuments = await markethubCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+            //End Process fyers admin client
 
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' markethub ALL CLIENT LENGTH ' + markethubdocuments.length + '\n', function (err) {
-              if (err) {
-                return console.log(err);
+
+            //Process markethub admin client
+            try {
+              const markethubCollection = db1.collection('markethubView');
+              const markethubdocuments = await markethubCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' markethub ALL CLIENT LENGTH ' + markethubdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (markethubdocuments.length > 0) {
+                markethub.place_order(markethubdocuments, signals, token, filePath, signal_req);
               }
-            });
 
-
-
-            if (markethubdocuments.length > 0) {
-              markethub.place_order(markethubdocuments, signals, token, filePath, signal_req);
+            } catch (error) {
+              console.log("Error Get markethub Client In view", error);
             }
-
-          } catch (error) {
-            console.log("Error Get markethub Client In view", error);
-          }
-          //End Process markethub admin client
+            //End Process markethub admin client
 
 
 
-          //Process swastika admin client
-          try {
-            const swastikaCollection = db1.collection('swastikaView');
-            const swastikadocuments = await swastikaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+            //Process swastika admin client
+            try {
+              const swastikaCollection = db1.collection('swastikaView');
+              const swastikadocuments = await swastikaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' swastika ALL CLIENT LENGTH ' + swastikadocuments.length + '\n', function (err) {
-              if (err) {
-                return console.log(err);
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' swastika ALL CLIENT LENGTH ' + swastikadocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (swastikadocuments.length > 0) {
+                swastika.place_order(swastikadocuments, signals, token, filePath, signal_req);
               }
-            });
 
-
-
-            if (swastikadocuments.length > 0) {
-              swastika.place_order(swastikadocuments, signals, token, filePath, signal_req);
+            } catch (error) {
+              console.log("Error Get swastika Client In view", error);
             }
-
-          } catch (error) {
-            console.log("Error Get swastika Client In view", error);
-          }
-          //End Process swastika admin client
-
-           //Process mastertrust admin client
-           try {
-            const mastertrustCollection = db1.collection('mastertrustView');
-            const mastertrustdocuments = await mastertrustCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+            //End Process swastika admin client
 
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' mastertrust ALL CLIENT LENGTH ' + mastertrustdocuments.length + '\n', function (err) {
-              if (err) {
-                return console.log(err);
+
+            //Process mastertrust admin client
+            try {
+              const mastertrustCollection = db1.collection('mastertrustView');
+              const mastertrustdocuments = await mastertrustCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' mastertrust ALL CLIENT LENGTH ' + mastertrustdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (mastertrustdocuments.length > 0) {
+                mastertrust.place_order(mastertrustdocuments, signals, token, filePath, signal_req);
               }
-            });
 
-
-
-            if (mastertrustdocuments.length > 0) {
-              mastertrust.place_order(mastertrustdocuments, signals, token, filePath, signal_req);
+            } catch (error) {
+              console.log("Error Get mastertrust Client In view", error);
             }
-
-          } catch (error) {
-            console.log("Error Get mastertrust Client In view", error);
-          }
-          //End Process mastertrust admin client
+            //End Process mastertrust admin client
 
 
-          //Process kotakneo admin client
-          try {
-            const kotakneoCollection = db1.collection('kotakneoView');
-            const kotakneodocuments = await kotakneoCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+            //Process kotakneo admin client
+            try {
+              const kotakneoCollection = db1.collection('kotakneoView');
+              const kotakneodocuments = await kotakneoCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' kotakneo ALL CLIENT LENGTH ' + kotakneodocuments.length + '\n', function (err) {
-              if (err) {
-                return console.log(err);
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' kotakneo ALL CLIENT LENGTH ' + kotakneodocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (kotakneodocuments.length > 0) {
+                kotakneo.place_order(kotakneodocuments, signals, token, filePath, signal_req);
               }
-            });
 
-
-
-            if (kotakneodocuments.length > 0) {
-              kotakneo.place_order(kotakneodocuments, signals, token, filePath, signal_req);
+            } catch (error) {
+              console.log("Error Get kotakneo Client In view", error);
             }
+            //End Process kotakneo admin client
 
-          } catch (error) {
-            console.log("Error Get kotakneo Client In view", error);
-          }
-          //End Process kotakneo admin client
+
+            //Process IIFL admin client
+            try {
+              const iiflViewCollection = db1.collection('iiflView');
+              const iiflViewdocuments = await iiflViewCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' iiflView ALL CLIENT LENGTH ' + iiflViewdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (iiflViewdocuments.length > 0) {
+                iiflView.place_order(iiflViewdocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get iiflView Client In view", error);
+            }
+            //End Process iiflView admin client
+
+
+            //Process Motilaloswal admin client
+            try {
+              const MotilaloswalViewCollection = db1.collection('MotilalOswalView');
+              const MotilaloswalViewdocuments = await MotilaloswalViewCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' MotilaloswalView ALL CLIENT LENGTH ' + MotilaloswalViewdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (MotilaloswalViewdocuments.length > 0) {
+                Motilaloswal.place_order(MotilaloswalViewdocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get MotilaloswalView Client In view", error);
+            }
+            //End Process MotilaloswalView admin client
+
+
+
+            //Process Zebull admin client
+            try {
+              const ZebullViewCollection = db1.collection('ZebulView');
+              const ZebullViewdocuments = await ZebullViewCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
+
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' ZebullView ALL CLIENT LENGTH ' + ZebullViewdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (ZebullViewdocuments.length > 0) {
+                Zebull.place_order(ZebullViewdocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get ZebullView Client In view", error);
+            }
+            //End Process ZebullView admin client
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -884,7 +969,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (AliceBluedocuments.length > 0) {
-                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req,ExistExitSignal);
+                aliceblue.place_order(AliceBluedocuments, signals, token, filePath, signal_req, ExistExitSignal);
               }
 
             } catch (error) {
@@ -906,7 +991,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
               if (angeldocuments.length > 0) {
-                angel.place_order(angeldocuments, signals, token, filePath, signal_req ,ExistExitSignal);
+                angel.place_order(angeldocuments, signals, token, filePath, signal_req, ExistExitSignal);
               }
 
             } catch (error) {
@@ -961,93 +1046,93 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-           //Process Tading View Client UPSTOX
-           try {
-            const upstoxCollection = db1.collection('upstoxView');
-            const upstoxdocuments = await upstoxCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+            //Process Tading View Client UPSTOX
+            try {
+              const upstoxCollection = db1.collection('upstoxView');
+              const upstoxdocuments = await upstoxCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' UPSTOX TRADING VIEW CLIENT LENGTH ' + upstoxdocuments.length + '\n', function (err) {
-              if (err) {
-                return console.log(err);
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' UPSTOX TRADING VIEW CLIENT LENGTH ' + upstoxdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+              if (upstoxdocuments.length > 0) {
+                upstox.place_order(upstoxdocuments, signals, token, filePath, signal_req);
               }
-            });
 
-
-            if (upstoxdocuments.length > 0) {
-              upstox.place_order(upstoxdocuments, signals, token, filePath, signal_req);
+            } catch (error) {
+              console.log("Error Get upstox Client In view", error);
             }
-
-          } catch (error) {
-            console.log("Error Get upstox Client In view", error);
-          }
-          //End Process Tading View Client UPSTOX  
+            //End Process Tading View Client UPSTOX  
 
 
-          //Process Tading View Client DHAN
-          try {
-            const dhanCollection = db1.collection('dhanView');
-            const dhandocuments = await dhanCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+            //Process Tading View Client DHAN
+            try {
+              const dhanCollection = db1.collection('dhanView');
+              const dhandocuments = await dhanCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' dhan TRADING VIEW CLIENT LENGTH ' + dhandocuments.length + '\n', function (err) {
-              if (err) {
-                return console.log(err);
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' dhan TRADING VIEW CLIENT LENGTH ' + dhandocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+              if (dhandocuments.length > 0) {
+                dhan.place_order(dhandocuments, signals, token, filePath, signal_req);
               }
-            });
 
-
-            if (dhandocuments.length > 0) {
-              dhan.place_order(dhandocuments, signals, token, filePath, signal_req);
+            } catch (error) {
+              console.log("Error Get dhan Client In view", error);
             }
-
-          } catch (error) {
-            console.log("Error Get dhan Client In view", error);
-          }
-          //End Process Tading View Client DHAN 
+            //End Process Tading View Client DHAN 
 
 
-          //Process Tading View Client fyers
-          try {
-            const fyersCollection = db1.collection('fyersView');
-            const fyersdocuments = await fyersCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+            //Process Tading View Client fyers
+            try {
+              const fyersCollection = db1.collection('fyersView');
+              const fyersdocuments = await fyersCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' fyers TRADING VIEW CLIENT LENGTH ' + fyersdocuments.length + '\n', function (err) {
-              if (err) {
-                return console.log(err);
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' fyers TRADING VIEW CLIENT LENGTH ' + fyersdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+              if (fyersdocuments.length > 0) {
+                fyers.place_order(fyersdocuments, signals, token, filePath, signal_req);
               }
-            });
 
-
-            if (fyersdocuments.length > 0) {
-              fyers.place_order(fyersdocuments, signals, token, filePath, signal_req);
+            } catch (error) {
+              console.log("Error Get fyers Client In view", error);
             }
-
-          } catch (error) {
-            console.log("Error Get fyers Client In view", error);
-          }
-          //End Process Tading View Client fyers 
+            //End Process Tading View Client fyers 
 
 
-          
-           //Process Tading View Client markethub
-           try {
-            const markethubCollection = db1.collection('markethubView');
-            const markethubdocuments = await markethubCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
 
-            fs.appendFile(filePath, 'TIME ' + new Date() + ' markethub TRADING VIEW CLIENT LENGTH ' + markethubdocuments.length + '\n', function (err) {
-              if (err) {
-                return console.log(err);
+            //Process Tading View Client markethub
+            try {
+              const markethubCollection = db1.collection('markethubView');
+              const markethubdocuments = await markethubCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' markethub TRADING VIEW CLIENT LENGTH ' + markethubdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+              if (markethubdocuments.length > 0) {
+                markethub.place_order(markethubdocuments, signals, token, filePath, signal_req);
               }
-            });
 
-
-            if (markethubdocuments.length > 0) {
-              markethub.place_order(markethubdocuments, signals, token, filePath, signal_req);
+            } catch (error) {
+              console.log("Error Get markethub Client In view", error);
             }
-
-          } catch (error) {
-            console.log("Error Get markethub Client In view", error);
-          }
-          //End Process Tading View Client markethub 
+            //End Process Tading View Client markethub 
 
 
 
@@ -1055,18 +1140,18 @@ app.post('/broker-signals', async (req, res) => {
             try {
               const swastikaCollection = db1.collection('swastikaView');
               const swastikadocuments = await swastikaCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
-  
+
               fs.appendFile(filePath, 'TIME ' + new Date() + ' swastika TRADING VIEW CLIENT LENGTH ' + swastikadocuments.length + '\n', function (err) {
                 if (err) {
                   return console.log(err);
                 }
               });
-  
-  
+
+
               if (swastikadocuments.length > 0) {
                 swastika.place_order(swastikadocuments, signals, token, filePath, signal_req);
               }
-  
+
             } catch (error) {
               console.log("Error Get swastika Client In view", error);
             }
@@ -1078,44 +1163,126 @@ app.post('/broker-signals', async (req, res) => {
             try {
               const mastertrustCollection = db1.collection('mastertrustView');
               const mastertrustdocuments = await mastertrustCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
-  
+
               fs.appendFile(filePath, 'TIME ' + new Date() + ' mastertrust TRADING VIEW CLIENT LENGTH ' + mastertrustdocuments.length + '\n', function (err) {
                 if (err) {
                   return console.log(err);
                 }
               });
-  
-  
+
+
               if (mastertrustdocuments.length > 0) {
                 mastertrust.place_order(mastertrustdocuments, signals, token, filePath, signal_req);
               }
-  
+
             } catch (error) {
               console.log("Error Get mastertrust Client In view", error);
             }
             //End Process Tading View Client mastertrust 
 
 
-             //Process Tading View Client kotakneo
-             try {
+            //Process Tading View Client kotakneo
+            try {
               const kotakneoCollection = db1.collection('kotakneoView');
               const kotakneodocuments = await kotakneoCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
-  
+
               fs.appendFile(filePath, 'TIME ' + new Date() + ' kotakneo TRADING VIEW CLIENT LENGTH ' + kotakneodocuments.length + '\n', function (err) {
                 if (err) {
                   return console.log(err);
                 }
               });
-  
-  
+
+
               if (kotakneodocuments.length > 0) {
                 kotakneo.place_order(kotakneodocuments, signals, token, filePath, signal_req);
               }
-  
+
             } catch (error) {
               console.log("Error Get kotakneo Client In view", error);
             }
             //End Process Tading View Client kotakneo 
+
+
+
+            //Process Tading View Client iifl
+            try {
+              const iiflCollection = db1.collection('iiflView');
+              const iifldocuments = await iiflCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' iifl TRADING VIEW CLIENT LENGTH ' + iifldocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+              if (iifldocuments.length > 0) {
+                iifl.place_order(iifldocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get iifl Client In view", error);
+            }
+            //End Process Tading View Client iifl 
+
+
+
+
+            //Process Tading View Client Motilaloswal
+            try {
+              const MotilaloswalCollection = db1.collection('MotilaloswalView');
+              const Motilaloswaldocuments = await MotilaloswalCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' Motilaloswal TRADING VIEW CLIENT LENGTH ' + Motilaloswaldocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+              if (Motilaloswaldocuments.length > 0) {
+                Motilaloswal.place_order(Motilaloswaldocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get Motilaloswal Client In view", error);
+            }
+            //End Process Tading View Client Motilaloswal 
+
+
+
+            //Process Tading View Client Zebull
+            try {
+              const ZebullCollection = db1.collection('ZebulView');
+              const Zebulldocuments = await ZebullCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' Zebull TRADING VIEW CLIENT LENGTH ' + Zebulldocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+              if (Zebulldocuments.length > 0) {
+                Zebull.place_order(Zebulldocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get Zebull Client In view", error);
+            }
+            //End Process Tading View Client Zebull 
+
+
+
+
+
+
+
+
+
+
+
+
 
 
           }
@@ -1126,8 +1293,8 @@ app.post('/broker-signals', async (req, res) => {
           if (option_type == 'CALL') {
             is_CE_val_option = 'CE';
           }
-         
-          
+
+
           // IF SQ_PRICE
           var sq_value;
           if (sq_value == undefined) { sq_value = "0" } else { sq_value = sq_value }
@@ -1148,7 +1315,7 @@ app.post('/broker-signals', async (req, res) => {
           var strike;
           if (strike == undefined || strike == '') { strike = "0" } else { strike = strike }
 
-         
+
 
           try {
 
@@ -1175,15 +1342,15 @@ app.post('/broker-signals', async (req, res) => {
               token: instrument_token,
               lot_size: find_lot_size,
               MakeStartegyName: MakeStartegyName,
-              exit_status:ExitStatus,
-              ft_time:ft_time
+              exit_status: ExitStatus,
+              ft_time: ft_time
             }
 
             let Signal_req1 = new Signals(Signal_req)
             var SignalSave = await Signal_req1.save();
           } catch (error) {
             return res.send({ status: false, msg: "Insert signal issue" })
-            
+
           }
 
           //console.log("findSignal -- strike",findSignal)
@@ -1197,43 +1364,43 @@ app.post('/broker-signals', async (req, res) => {
             // MainSignals FIND IN COLLECTION
             // if (findMainSignals.length == 0) {
 
-              var Entry_MainSignals_req = {
-                symbol: input_symbol,
-                entry_type: type,
-                exit_type: "",
-                entry_price: parseFloat(price),
-                exit_price: "",
-                entry_qty_percent: parseFloat(qty_percent),
-                entry_qty: Number(find_lot_size) * (Math.ceil(Number(qty_percent) / 100)),
-                exit_qty: 0,
-                exit_qty_percent: "",
-                entry_dt_date: current_date,
-                exit_dt_date: "",
-                dt: Math.round(+new Date() / 1000),
-                dt_date: dt_date,
-                exchange: EXCHANGE,
-                strategy: strategy,
-                option_type: option_type,
-                strike: strike,
-                expiry: expiry,
-                segment: segment,
-                trade_symbol: trade_symbol + "[" + segment1 + "]",
-                client_persnal_key: client_persnal_key,
-                TradeType: TradeType,
-                signals_id: SignalSave._id,
-                token: instrument_token,
-                lot_size: find_lot_size,
-                target: Target,
-                stop_loss: StopLoss,
-                exit_time: ExitTime,
-                exit_time1: 0,
-                complete_trade: 0,
-                sl_status: sl_status,
-                MakeStartegyName: MakeStartegyName
+            var Entry_MainSignals_req = {
+              symbol: input_symbol,
+              entry_type: type,
+              exit_type: "",
+              entry_price: parseFloat(price),
+              exit_price: "",
+              entry_qty_percent: parseFloat(qty_percent),
+              entry_qty: Number(find_lot_size) * (Math.ceil(Number(qty_percent) / 100)),
+              exit_qty: 0,
+              exit_qty_percent: "",
+              entry_dt_date: current_date,
+              exit_dt_date: "",
+              dt: Math.round(+new Date() / 1000),
+              dt_date: dt_date,
+              exchange: EXCHANGE,
+              strategy: strategy,
+              option_type: option_type,
+              strike: strike,
+              expiry: expiry,
+              segment: segment,
+              trade_symbol: trade_symbol + "[" + segment1 + "]",
+              client_persnal_key: client_persnal_key,
+              TradeType: TradeType,
+              signals_id: SignalSave._id,
+              token: instrument_token,
+              lot_size: find_lot_size,
+              target: Target,
+              stop_loss: StopLoss,
+              exit_time: ExitTime,
+              exit_time1: 0,
+              complete_trade: 0,
+              sl_status: sl_status,
+              MakeStartegyName: MakeStartegyName
 
-              }
-              const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
-              await Entry_MainSignals.save();
+            }
+            const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
+            await Entry_MainSignals.save();
 
             // } else {
 
@@ -1267,10 +1434,10 @@ app.post('/broker-signals', async (req, res) => {
               ...findSignal,
               exit_qty_percent: "" // Adding the exit_qty_percent field with an empty string value
             };
-  
+
             //console.log("updatedFindSignal ",updatedFindSignal)
 
-            
+
             var ExitMainSignals = await MainSignals.find(updatedFindSignal)
 
             // // ExitMainSignals  FIND IN COLLECTION
@@ -1301,7 +1468,7 @@ app.post('/broker-signals', async (req, res) => {
                   exit_qty_percent: exit_qty_percent1,
                   exit_qty: result,
                   exit_dt_date: current_date,
-                  exit_status:ExitStatus
+                  exit_status: ExitStatus
                 }
                 updatedData.$addToSet = { signals_id: SignalSave._id };
 
@@ -1311,7 +1478,7 @@ app.post('/broker-signals', async (req, res) => {
 
               } else {
 
-              console.log("ExitMainSignals",ExitMainSignals)
+                console.log("ExitMainSignals", ExitMainSignals)
 
                 if (parseFloat(ExitMainSignals[0].entry_qty_percent) >= (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent)))) {
 
@@ -1323,7 +1490,7 @@ app.post('/broker-signals', async (req, res) => {
                     exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
                     exit_qty: result,
                     exit_dt_date: current_date,
-                    exit_status:ExitStatus
+                    exit_status: ExitStatus
                   }
                   updatedData.$addToSet = { signals_id: SignalSave._id };
 
@@ -1359,7 +1526,7 @@ app.post('/broker-signals', async (req, res) => {
       }
 
     } else {
-     // console.log('receive signals -', req.body);
+      // console.log('receive signals -', req.body);
       return res.send({ status: false, msg: "req is not correct" });
     }
 
@@ -1373,7 +1540,7 @@ app.post('/broker-signals', async (req, res) => {
 // Server start
 app.listen(process.env.PORT, () => {
 
- // ConnectSocket()
+  // ConnectSocket()
   console.log(`Broker Server is running on http://0.0.0.0:${process.env.PORT}`)
 
 });

@@ -19,608 +19,617 @@ module.exports = function (app) {
   const uri = process.env.MONGO_URI;
   const client = new MongoClient(uri, { useUnifiedTopology: true });
   client.connect();
- 
+
 
 
   const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
-  
+
   const dbTest = client.db(process.env.DB_NAME);
 
   // Define MongoDB connection details
   const servers = [
-      
-"mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/",
-"mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/",
-"mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.93:27017/",
-"mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.178:27017/",
-"mongodb://algobullstradingsolutions:p%26ol5Hd%26trad%26i@193.239.237.92:27017/",
-"mongodb://intelfintech:ugh%265rK86%26Fv%26yn37A%26@185.209.75.61:27017/",
-"mongodb://algokuber:p%26k506%267G%26y%26vnd%26@193.239.237.135:27017/",
-"mongodb://finnshri:p0%26k506%267s9Ry%26vn8d@193.239.237.137:27017/",
-// "mongodb://visioniq:%26k%23sA8B%267Gmg%26vn3%237A%26@185.209.75.2:27017/",
-"mongodb://believetechnology:%26k%23sA8B%237Gsq%26vg3%237P%26@185.209.75.5:27017/",
-"mongodb://realbottrading:u%26r5nC86%267Gr%26vn37M%26@185.209.75.8:27017/",
-"mongodb://growskyinfotech:u%26j8gB85%267GN%26vn37m%26@185.209.75.9:27017/",
-"mongodb://corebizinfotech:c%26eaV8N%267KfT%26bc49A%26@185.209.75.10:27017/",
-"mongodb://inspirealgo:n%26pdF7G%265Png%26vn97A%26@185.209.75.11:27017/",
-"mongodb://uniquetechnology:c%26z9yB73%267Fn%26vn98V%26@185.209.75.12:27017/",
-"mongodb://yourstechexpert:sA8k%26n86%267Mv%26fh57B%26@185.209.75.14:27017/",
-"mongodb://alphapulsepro:un%26r4hv93%267Gr%26v%2637P%26@185.209.75.15:27017/",
-"mongodb://sumedhainnovations:p%26k5H6%267GsRy%26vnd@185.209.75.21:27017/",
-"mongodb://tradeonn:pw%26k5H6%267GsRy%26vn@185.209.75.23:27017/",
-"mongodb://vintyaitsolutions:byk%265fD328Pvjn3u7A%26@185.209.75.27:27017/",
-"mongodb://growupalgo:p%26k5H6%267GsRy%26vnd@185.209.75.22:27017/",
-"mongodb://robotexfintech:z43rk%265eF32%267Pcmn9i7B%26@185.209.75.28:27017/",
-"mongodb://metaprogramming:zc%26u9tD828Tnbh3u7A%26@185.209.75.29:27017/",
-"mongodb://fincodify:u%26v5%26bAn6%265Gv%26cn29A%26@185.209.75.30:27017/",
-"mongodb://invicontechnology:k56ck%265eF89%267Phjn9i7B%26@185.209.75.62:27017/",
-"mongodb://axcellencetechnology:pw%26k5H6%267GsRy%26vnn@185.209.75.63:27017/",
-"mongodb://sstechnologiess:Apw%26k5RH6%267GsRy%26vnM@185.209.75.64:27017/",
-"mongodb://skwinvestmentadviser:Tapw%26k5R56%267GsRy%26vnTy@185.209.75.65:27017/",
-"mongodb://satviktech:Apw%26k5R6%267GsRy%26vnM@185.209.75.66:27017/",
-"mongodb://thinkaumatictechnology:Aapw%26k5R56%267GsRy%26vnT@185.209.75.67:27017/",
-"mongodb://visionresearchandsolution:Apw%26k5R56%267GsRy%26vn@185.209.75.68:27017/",
-"mongodb://smartwavetechnology:Aapw%26k5R56%267GsRy%26vnTy@185.209.75.69:27017/",
-"mongodb://codinghornet:Tapw%26k5R56%267GsRy%26vn@185.209.75.70:27017/",
-"mongodb://inteltrade:Tapw%26k5R56%267GsRy%26n@185.209.75.180:27017/",
-"mongodb://fintechit:Tapw%26k5R56%267GsRy%26nP@185.209.75.181:27017/",
-"mongodb://thrivinginfotech:TGw%26k5RT56%267GsRy%26nP@185.209.75.182:27017/",
-"mongodb://firstalgo:Taw%26k5RT56%267GsRy%26nP@185.209.75.183:27017/",
-"mongodb://visioncodesoftware:TGw%26k5RT56%267GsRy%26HR@185.209.75.184:27017/",
-"mongodb://shinesofttrade:T5wP%26k56T56%267GsRy%26H@185.209.75.186:27017/",
-"mongodb://algoruns:Tw%26k5RT56%267GsRy%26HR@185.209.75.187:27017/",
-"mongodb://techoceantechnologies:P5wP%26k6T5M%26L7GsRy%26H@185.209.75.189:27017/",
+
+    // "mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/",
+    "mongodb://codingpandit:zsg%26k5sB76%263H%26dk7A%26@185.209.75.31:27017/",
+    "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.93:27017/",
+    "mongodb://adonomist:p%26k5H6%267GsRy%26vnd%26@193.239.237.178:27017/",
+    "mongodb://algobullstradingsolutions:p%26ol5Hd%26trad%26i@193.239.237.92:27017/",
+    "mongodb://intelfintech:ugh%265rK86%26Fv%26yn37A%26@185.209.75.61:27017/",
+    "mongodb://algokuber:p%26k506%267G%26y%26vnd%26@193.239.237.135:27017/",
+    "mongodb://finnshri:p0%26k506%267s9Ry%26vn8d@193.239.237.137:27017/",
+    "mongodb://visioniq:%26k%23sA8B%267Gmg%26vn3%237A%26@185.209.75.2:27017/",
+    "mongodb://believetechnology:%26k%23sA8B%237Gsq%26vg3%237P%26@185.209.75.5:27017/",
+    "mongodb://realbottrading:u%26r5nC86%267Gr%26vn37M%26@185.209.75.8:27017/",
+    "mongodb://growskyinfotech:u%26j8gB85%267GN%26vn37m%26@185.209.75.9:27017/",
+    "mongodb://corebizinfotech:c%26eaV8N%267KfT%26bc49A%26@185.209.75.10:27017/",
+    "mongodb://inspirealgo:n%26pdF7G%265Png%26vn97A%26@185.209.75.11:27017/",
+    "mongodb://uniquetechnology:c%26z9yB73%267Fn%26vn98V%26@185.209.75.12:27017/",
+    "mongodb://yourstechexpert:sA8k%26n86%267Mv%26fh57B%26@185.209.75.14:27017/",
+    "mongodb://alphapulsepro:un%26r4hv93%267Gr%26v%2637P%26@185.209.75.15:27017/",
+    "mongodb://sumedhainnovations:p%26k5H6%267GsRy%26vnd@185.209.75.21:27017/",
+    "mongodb://tradeonn:pw%26k5H6%267GsRy%26vn@185.209.75.23:27017/",
+    "mongodb://vintyaitsolutions:byk%265fD328Pvjn3u7A%26@185.209.75.27:27017/",
+    "mongodb://growupalgo:p%26k5H6%267GsRy%26vnd@185.209.75.22:27017/",
+    "mongodb://robotexfintech:z43rk%265eF32%267Pcmn9i7B%26@185.209.75.28:27017/",
+    "mongodb://metaprogramming:zc%26u9tD828Tnbh3u7A%26@185.209.75.29:27017/",
+    "mongodb://fincodify:u%26v5%26bAn6%265Gv%26cn29A%26@185.209.75.30:27017/",
+    "mongodb://invicontechnology:k56ck%265eF89%267Phjn9i7B%26@185.209.75.62:27017/",
+    "mongodb://axcellencetechnology:pw%26k5H6%267GsRy%26vnn@185.209.75.63:27017/",
+    "mongodb://sstechnologiess:Apw%26k5RH6%267GsRy%26vnM@185.209.75.64:27017/",
+    "mongodb://skwinvestmentadviser:Tapw%26k5R56%267GsRy%26vnTy@185.209.75.65:27017/",
+    "mongodb://satviktech:Apw%26k5R6%267GsRy%26vnM@185.209.75.66:27017/",
+    "mongodb://thinkaumatictechnology:Aapw%26k5R56%267GsRy%26vnT@185.209.75.67:27017/",
+    "mongodb://visionresearchandsolution:Apw%26k5R56%267GsRy%26vn@185.209.75.68:27017/",
+    "mongodb://smartwavetechnology:Aapw%26k5R56%267GsRy%26vnTy@185.209.75.69:27017/",
+    "mongodb://codinghornet:Tapw%26k5R56%267GsRy%26vn@185.209.75.70:27017/",
+    "mongodb://inteltrade:Tapw%26k5R56%267GsRy%26n@185.209.75.180:27017/",
+    "mongodb://fintechit:Tapw%26k5R56%267GsRy%26nP@185.209.75.181:27017/",
+    "mongodb://thrivinginfotech:TGw%26k5RT56%267GsRy%26nP@185.209.75.182:27017/",
+    "mongodb://firstalgo:Taw%26k5RT56%267GsRy%26nP@185.209.75.183:27017/",
+    "mongodb://visioncodesoftware:TGw%26k5RT56%267GsRy%26HR@185.209.75.184:27017/",
   ];
-//testtt
+  //testtt
 
   // Connect to MongoDB and create views
   async function createViewsAllDatabase() {
-    
-     
-      for (const server of servers) {
-          const client = new MongoClient(server);
 
-          try {
-              await client.connect();
-              const database = "test";
-              const db = client.db(database);
 
-              const viewName = "upstoxView";
-              const collectionName = "users";
+    for (const server of servers) {
+      const client = new MongoClient(server);
 
-               // Define view pipeline
-              const viewPipeline = [
-                {
-                  $match: {
-                    broker: "19",
-                    TradingStatus: 'on',// Condition from the user collection
-                    $or: [
-                      { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
-                      { EndDate: null } // EndDate is not set
-                    ]
-                  }
-                },
-                {
-                  $lookup: {
-                    from: 'client_services',
-                    localField: '_id', // Field from the user collection to match
-                    foreignField: 'user_id', // Field from the client_services collection to match
-                    as: 'client_services'
-                  }
-                },
-                {
-                  $unwind: '$client_services',
-                },
-                {
-                    $match: {
-                      'client_services.active_status': '1'
-                    }
-                },
-                {
-                  $lookup: {
-                    from: "services",
-                    localField: "client_services.service_id",
-                    foreignField: "_id",
-                    as: "service",
-                  },
-                },
-                {
-                  $unwind: '$service',
-                },
-                {
-                  $lookup: {
-                    from: "categories",
-                    localField: "service.categorie_id",
-                    foreignField: "_id",
-                    as: "category",
-                  },
-                },
-                {
-                  $unwind: '$category',
-                },
-                {
-                  $lookup: {
-                    from: "strategies",
-                    localField: "client_services.strategy_id",
-                    foreignField: "_id",
-                    as: "strategys",
-                  },
-                },
-                {
-                  $unwind: '$strategys',
-                },
-                {
-                  $project: {
-                    "client_services": 1,
-                    'service.name': 1,
-                    'service.instrument_token': 1,
-                    'service.exch_seg': 1,
-                    "strategys.strategy_name": 1,
-                    "category.segment": 1,
-                    "service.zebu_token": 1,
-                    _id: 1,
-                    FullName: 1,
-                    UserName: 1,
-                    Email: 1,
-                    EndDate: 1,
-                    ActiveStatus: 1,
-                    TradingStatus: 1,
-                    access_token: 1,
-                    api_secret: 1,
-                    app_id: 1,
-                    client_code: 1,
-                    api_key: 1,
-                    app_key: 1,
-                    api_type: 1,
-                    demat_userid: 1,
-                    client_key: 1,
-                    web_url: 1
-                  }
-                },
-                {
-                  $addFields: {
-                    postdata:
-                    {
-            
-                      //quantity: "$client_services.quantity",
-            
-                      quantity: { "$toInt": "$client_services.quantity" },
-                     
-                      // product code condition here
-                      product: {
-                        $cond: {
-                          if: {
-                            $and:
-                              [
-                                { $eq: ['$client_services.product_type', '1'] },
-                                {
+      try {
+        await client.connect();
+        const database = "test";
+        const db = client.db(database);
+
+        const viewName = "kotakneoView";
+        const collectionName = "users";
+
+        // Define view pipeline
+        const viewPipeline = [
+          {
+            $match: {
+              broker: "7",
+              TradingStatus: 'on',// Condition from the user collection
+              $or: [
+                { EndDate: { $gte: new Date() } }, // EndDate is today or in the future
+                { EndDate: null } // EndDate is not set
+              ]
+            }
+          },
+          {
+            $lookup: {
+              from: 'client_services',
+              localField: '_id', // Field from the user collection to match
+              foreignField: 'user_id', // Field from the client_services collection to match
+              as: 'client_services'
+            }
+          },
+          {
+            $unwind: '$client_services',
+          },
+          {
+            $match: {
+              'client_services.active_status': '1'
+            }
+          },
+          {
+            $lookup: {
+              from: "services",
+              localField: "client_services.service_id",
+              foreignField: "_id",
+              as: "service",
+            },
+          },
+          {
+            $unwind: '$service',
+          },
+          {
+            $lookup: {
+              from: "categories",
+              localField: "service.categorie_id",
+              foreignField: "_id",
+              as: "category",
+            },
+          },
+          {
+            $unwind: '$category',
+          },
+          {
+            $lookup: {
+              from: "strategies",
+              localField: "client_services.strategy_id",
+              foreignField: "_id",
+              as: "strategys",
+            },
+          },
+          {
+            $unwind: '$strategys',
+          },
+          {
+            $project: {
+              "client_services": 1,
+              'service.name': 1,
+              'service.instrument_token': 1,
+              'service.exch_seg': 1,
+              "strategys.strategy_name": 1,
+              "category.segment": 1,
+              "service.zebu_token": 1,
+              _id: 1,
+              FullName: 1,
+              UserName: 1,
+              Email: 1,
+              EndDate: 1,
+              ActiveStatus: 1,
+              TradingStatus: 1,
+              access_token: 1,
+              api_secret: 1,
+              app_id: 1,
+              client_code: 1,
+              api_key: 1,
+              app_key: 1,
+              api_type: 1,
+              demat_userid: 1,
+              client_key: 1,
+              web_url: 1,
+              kotakneo_sid: 1,
+              kotakneo_auth: 1,
+              kotakneo_userd: 1,
+              hserverid: 1,
+              oneTimeToken: 1
+            }
+          },
+          {
+            $addFields: {
+              postdata:
+              {
+
+
+
+                am: "NO",
+                dq: "0",
+
+                es: {
+                  $cond: {
+                    if: { $eq: ['$category.segment', 'C'] }, // Your condition here
+                    then: 'nse_cm',
+                    else: {
+                      $cond: {
+                        if: {
+                          $or: [
+                            { $eq: ['$category.segment', 'F'] },
+                            { $eq: ['$category.segment', 'O'] },
+                            { $eq: ['$category.segment', 'FO'] }
+                          ]
+                        },
+                        then: 'nse_fo',
+                        else: {
+
+                          $cond: {
+                            if: {
+                              $or: [
+                                { $eq: ['$category.segment', 'MF'] },
+                                { $eq: ['$category.segment', 'MO'] }
+                              ]
+                            },
+                            then: 'mcx_fo',
+                            else: {
+
+                              $cond: {
+                                if: {
                                   $or: [
-                                    { $eq: ['$category.segment', 'F'] },
-                                    { $eq: ['$category.segment', 'O'] },
-                                    { $eq: ['$category.segment', 'FO'] }
+                                    { $eq: ['$category.segment', 'CF'] },
+                                    { $eq: ['$category.segment', 'CO'] }
                                   ]
                                 },
-                              ]
-                          },
-                          then: 'D',
-                          else: {
-                            $cond: {
-                              if: {
-                                $and:
-                                  [
-                                    { $eq: ['$client_services.product_type', '2'] },
-                                  ]
-                              },
-                              then: 'I',
-                              else: {
-                                $cond: {
-                                  if: {
-                                    $and:
-                                      [
-                                        { $eq: ['$client_services.product_type', '3'] },
-                                      ]
-                                  },
-                                  then: 'BO',
-                                  else: {
-                                    $cond: {
-                                      if: {
-                                        $and:
-                                          [
-                                            { $eq: ['$client_services.product_type', '4'] },
-                                          ]
-                                      },
-                                      then: 'CO',
-                                      else: "D"
-            
-                                    }
-            
-                                  }
-            
-                                }
-            
+                                then: 'cde_fo',
+
+                                // all not exist condition 
+                                else: "nse_fo"
+
                               }
-            
+
                             }
+
                           }
-            
+
+
                         }
-            
-            
-                      },
-            
-                      validity : "DAY",
-                      price: '0',
-                      
-            
-                       // symbol id token condition here
-                      instrument_token: "",
-            
-                      // ordertype code condition here
-                      order_type: {
-                        $cond: {
-                          if: {
-                            $and:
-                              [
-                                { $eq: ['$client_services.order_type', '1'] },
-                              ]
-                          },
-                          then: 'MARKET',
-                          else: {
-                            $cond: {
-                              if: {
-                                $and:
-                                  [
-                                    { $eq: ['$client_services.order_type', '2'] },
-                                  ]
-                              },
-                              then: 'LIMIT',
-                              else: {
-                                $cond: {
-                                  if: {
-                                    $and:
-                                      [
-                                        { $eq: ['$client_services.order_type', '3'] },
-                                      ]
-                                  },
-                                  then: 'SL',
-                                  else: {
-                                    $cond: {
-                                      if: {
-                                        $and:
-                                          [
-                                            { $eq: ['$client_services.order_type', '4'] },
-                                          ]
-                                      },
-                                      then: 'SL-M',
-            
-                                      //All condition exist
-                                      else: "MARKET"
-            
-                                    }
-            
-                                  }
-            
-                                }
-            
-                              }
-            
-                            }
-                          }
-            
-                        }
-            
-                      },
-            
-                      transaction_type: 'BUY',
-            
-                      disclosed_quantity : 0,
-            
-                      trigger_price : 0 ,
-            
-                      is_amo : false
-            
+
+                      }
+
                     }
+
                   }
-                }
-              ]
+                },
+
+                mp: "0",
+
+                // product code condition here
+                pc: {
+                  $cond: {
+                    if: {
+                      $and:
+                        [
+                          { $eq: ['$client_services.product_type', '1'] },
+                          {
+                            $or: [
+                              { $eq: ['$category.segment', 'F'] },
+                              { $eq: ['$category.segment', 'O'] },
+                              { $eq: ['$category.segment', 'FO'] }
+                            ]
+                          },
+                        ]
+                    },
+                    then: 'NRML',
+                    else: {
+                      $cond: {
+                        if: {
+                          $and:
+                            [
+                              { $eq: ['$client_services.product_type', '2'] },
+                            ]
+                        },
+                        then: 'MIS',
+                        else: {
+                          $cond: {
+                            if: {
+                              $and:
+                                [
+                                  { $eq: ['$client_services.product_type', '3'] },
+                                ]
+                            },
+                            then: 'BO',
+                            else: {
+                              $cond: {
+                                if: {
+                                  $and:
+                                    [
+                                      { $eq: ['$client_services.product_type', '4'] },
+                                    ]
+                                },
+                                then: 'CO',
+                                else: "CNC"
+
+                              }
+
+                            }
+
+                          }
+
+                        }
+
+                      }
+                    }
+
+                  }
 
 
+                },
 
-              const collectionExists = await db.listCollections({ name: viewName }).hasNext();
+                pf: "N",
 
-              if (!collectionExists) {
-                  // Create the view collection
-                  await db.createCollection(viewName, { viewOn: collectionName, pipeline: viewPipeline });
+                pr: "0",
 
-                  console.log(`View '${viewName}' Created in '${database}' on '${server}'`);
-                 
-              } else {
-                  console.log(`Collection ${viewName} already exists in 'test' on '${server}'`);
+
+                pt: {
+                  $cond: {
+                    if: {
+                      $and:
+                        [
+                          { $eq: ['$client_services.order_type', '1'] },
+                        ]
+                    },
+                    then: 'MKT',
+                    else: {
+                      $cond: {
+                        if: {
+                          $and:
+                            [
+                              { $eq: ['$client_services.order_type', '2'] },
+                            ]
+                        },
+                        then: 'L',
+                        else: {
+                          $cond: {
+                            if: {
+                              $and:
+                                [
+                                  { $eq: ['$client_services.order_type', '3'] },
+                                ]
+                            },
+                            then: 'SL',
+                            else: {
+                              $cond: {
+                                if: {
+                                  $and:
+                                    [
+                                      { $eq: ['$client_services.order_type', '4'] },
+                                    ]
+                                },
+                                then: ' SL-M',
+
+                                //All condition exist
+                                else: "MKT"
+
+                              }
+
+                            }
+
+                          }
+
+                        }
+
+                      }
+                    }
+
+                  }
+
+                },
+
+                qt: "$client_services.quantity",
+
+                rt: "DAY",
+
+                tp: "0",
+
+                ts: {
+                  $cond: {
+                    if: {
+                      $and:
+                        [
+                          { $eq: ['$category.segment', 'C'] },
+                        ]
+                    },
+                    then: "$service.zebu_token",
+                    else: ""
+
+                  }
+                },
+
+                tt: "B",
+
               }
-          } 
-          
-          catch(error){
-              console.log(`An error occurred: ${error}`);
+            }
           }
-          finally {
-              await client.close();
-          }
+        ]
+
+
+
+        const collectionExists = await db.listCollections({ name: viewName }).hasNext();
+
+        if (!collectionExists) {
+          // Create the view collection
+          await db.createCollection(viewName, { viewOn: collectionName, pipeline: viewPipeline });
+
+          console.log(`View '${viewName}' Created in '${database}' on '${server}'`);
+
+        } else {
+          console.log(`Collection ${viewName} already exists in 'test' on '${server}'`);
+        }
       }
+
+      catch (error) {
+        console.log(`An error occurred: ${error}`);
+      }
+      finally {
+        await client.close();
+      }
+    }
   }
 
   app.get("/AllViewCreate", async (req, res) => {
-       // createViewsAllDatabase();
-      // deleteViewsAllDatabase();
-      // RunQueryUpdateAllDatabase()
-      // RunQueryAddAllDatabase()
-       // RunQueryManulTaskAllDatabase(res)
-        res.send("OKK DONE FF")
+    //  createViewsAllDatabase();
+    // deleteViewsAllDatabase();
+    // RunQueryUpdateAllDatabase()
+    // RunQueryAddAllDatabase()
+    // RunQueryManulTaskAllDatabase(res)
+    res.send("OKK DONE FF")
   });
 
   async function deleteViewsAllDatabase() {
-      for (const server of servers) {
-          const client = new MongoClient(server);
-  
-          try {
-              await client.connect();
-              const database = "test";
-              const db = client.db(database);
+    for (const server of servers) {
+      const client = new MongoClient(server);
 
-              const viewName = "upstoxView";
-              //const collectionName = "users";
-              const collectionExists = await db.listCollections({ name: viewName }).hasNext();
-  
-              if (collectionExists) {
+      try {
+        await client.connect();
+        const database = "test";
+        const db = client.db(database);
 
-                  // Drop the existing view collection
-                  await db.collection(viewName).drop();
-                  console.log(`View '${viewName}' dropped in '${database}' on '${server}'`);
-               }else{
-                  console.log(`View '${viewName}' Not exist in '${database}' on '${server}'`);
+        const viewName = "kotakneoView";
+        //const collectionName = "users";
+        const collectionExists = await db.listCollections({ name: viewName }).hasNext();
 
-              }
-  
+        if (collectionExists) {
+
+          // Drop the existing view collection
+          await db.collection(viewName).drop();
+          console.log(`View '${viewName}' dropped in '${database}' on '${server}'`);
+        } else {
+          console.log(`View '${viewName}' Not exist in '${database}' on '${server}'`);
+
+        }
 
 
-              // Create the view collection
-              // await db.createCollection(viewName, { viewOn: collectionName, pipeline: viewPipeline });
 
-            //  console.log(`View '${viewName}' created in '${database}' on '${server}'`);
-
-            
-          } 
-          
-          catch(error){
-              console.log(`An error occurred: ${error}`);
-          }
-          finally {
-              await client.close();
-          }
       }
+
+      catch (error) {
+        console.log(`An error occurred: ${error}`);
+      }
+      finally {
+        await client.close();
+      }
+    }
   }
 
   async function RunQueryUpdateAllDatabase() {
-      for (const server of servers) {
-          const client = new MongoClient(server);
-  
-          try {
-              await client.connect();
-              const database = "test";
-              const db = client.db(database);
+    for (const server of servers) {
+      const client = new MongoClient(server);
 
-              const collectionName = "mainsignals";
+      try {
+        await client.connect();
+        const database = "test";
+        const db = client.db(database);
 
-              const fliter = {};
+        const collectionName = "mainsignals";
 
-              const updates = {$set:{ exit_time: "0", target: "0" ,stop_loss:"0"} };
+        const fliter = {};
 
-              const options = { multi: true };
+        const updates = { $set: { exit_time: "0", target: "0", stop_loss: "0" } };
 
-              const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
-  
-              if (collectionExists) {
-              
-              // Run the updateMany query
-              const result = await db.collection(collectionName).updateMany(fliter,updates,options);
-              console.log(`Updated ${result.modifiedCount} documents in 'mainsignals' collection on '${server}'`);
+        const options = { multi: true };
 
-              } else {
-                  console.log(`Collection Not exists in 'test' on '${server}'`);
-              }
-              
-             
-          } 
-          
-          catch(error){
-              console.log(`An error occurred: ${error}`);
-          }
-          finally {
-              await client.close();
-          }
+        const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
+
+        if (collectionExists) {
+
+          // Run the updateMany query
+          const result = await db.collection(collectionName).updateMany(fliter, updates, options);
+          console.log(`Updated ${result.modifiedCount} documents in 'mainsignals' collection on '${server}'`);
+
+        } else {
+          console.log(`Collection Not exists in 'test' on '${server}'`);
+        }
+
+
       }
+
+      catch (error) {
+        console.log(`An error occurred: ${error}`);
+      }
+      finally {
+        await client.close();
+      }
+    }
   }
 
 
   async function RunQueryAddAllDatabase() {
-      for (const server of servers) {
-          const client = new MongoClient(server);
-  
-          try {
-              await client.connect();
-              const database = "test";
-              const db = client.db(database);
-              const collectionName = "mainsignals";
-  
-      
-              const documentToInsert = [{ss:"okk" }];
-  
-              const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
-  
-              if (collectionExists) {
-                  // Insert one document into the collection
-                  const result = await db.collection(collectionName).insertMany(documentToInsert);
-                  console.log(`Inserted 1 document into 'mainsignals' collection on '${server}'`);
-              } else {
-                  console.log(`Collection does not exist in 'test' on '${server}'`);
-              }
-          } 
-          
-          catch(error){
-              console.log(`An error occurred: ${error}`);
-          }
-          finally {
-              await client.close();
-          }
+    for (const server of servers) {
+      const client = new MongoClient(server);
+
+      try {
+        await client.connect();
+        const database = "test";
+        const db = client.db(database);
+        const collectionName = "mainsignals";
+
+
+        const documentToInsert = [{ ss: "okk" }];
+
+        const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
+
+        if (collectionExists) {
+          // Insert one document into the collection
+          const result = await db.collection(collectionName).insertMany(documentToInsert);
+          console.log(`Inserted 1 document into 'mainsignals' collection on '${server}'`);
+        } else {
+          console.log(`Collection does not exist in 'test' on '${server}'`);
+        }
       }
+
+      catch (error) {
+        console.log(`An error occurred: ${error}`);
+      }
+      finally {
+        await client.close();
+      }
+    }
   }
 
   async function RunQueryManulTaskAllDatabase(res) {
 
-       console.log("OKk")
 
 
-      for (const server of servers) {
-          const client = new MongoClient(server);
-  
-          try {
-              await client.connect();
-              const database = "test";
-              const db = client.db(database);
-              const collectionName = "all_panels";  
-              
-  
-              const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
-  
-              if (collectionExists) {
-                  // Insert one document into the collection
-                  // const result = await db.collection(collectionName).insertMany(documentToInsert);
-                  
-                  const pipeline = [
+    for (const server of servers) {
+      const client = new MongoClient(server);
 
-                      {
-                        $project: {
-                          // Include fields from the original collection
-                          'backend_rul': 1,
-                        },
-                      },
-                    ];
-                    const cursor = db.collection(collectionName).aggregate(pipeline);
-
-                    // Convert cursor to an array of documents
-                    const all_panelsResult = await cursor.toArray();
-
-                    const all_panelsResult1 = all_panelsResult.map(item =>
-                      {
-                          if(item.backend_rul != "http://localhost:7700/"){
-                            return  item.backend_rul
-                          }else{
-                              return ''
-                          }
-                      }
-                    );
-
-                    const axios = require('axios');
-                    const filteredResults = all_panelsResult1.filter(url => url.includes('/backend/'));
-                    console.log(filteredResults);
-
-                  
-    
-                   
-                    let count = 0
-                    if(filteredResults.length > 0){
-                    filteredResults.forEach(element => {
-                    //  if(element!='https://app.aitech.market/backend/' && element!='https://trade.pandpinfotech.com/backend/'){
-                    //      count++
-              
-
-                    //   }
+      try {
+        await client.connect();
+        const database = "test";
+        const db = client.db(database);
+        const collectionName = "all_panels";
 
 
-                    // if(element!='https://app.aitech.market/backend/' && element!='https://trade.pandpinfotech.com/backend/'){
+        const collectionExists = await db.listCollections({ name: collectionName }).hasNext();
+
+        if (collectionExists) {
+
+          const pipeline = [
+
+            {
+              $project: {
+                'backend_rul': 1,
+              },
+            },
+          ];
+          const cursor = db.collection(collectionName).aggregate(pipeline);
+
+          const all_panelsResult = await cursor.toArray();
+
+          const all_panelsResult1 = all_panelsResult.map(item => {
+            if (item.backend_rul != "http://localhost:7700/") {
+              return item.backend_rul
+            } else {
+              return ''
+            }
+          }
+          );
+
+          const axios = require('axios');
+          const filteredResults = all_panelsResult1.filter(url => url.includes('/backend/'));
+          console.log(filteredResults);
 
 
-                    //  count++
-                  
-                    // let url = element+'addstockExtra';
-                    
-
-                    // let config = {
-                    //   method: 'get',
-                    //   maxBodyLength: Infinity,
-                    //   url: url,
-                    //   headers: { }
-                    // };
-
-                    // axios.request(config)
-                    // .then((response) => {
-                    //   console.log(JSON.stringify(response.data));
-                    // })
-                    // .catch((error) => {
-                    //   console.log(error);
-                    // });
-
-                    // }
-
-                    if(element=='software.invicontechnology.com/backend/'){
 
 
-                     count++
-                  
-                    let url = element+'addstockExtra';
-                    
+          let count = 0
+          if (filteredResults.length > 0) {
+            filteredResults.forEach(element => {
 
-                    let config = {
-                      method: 'get',
-                      maxBodyLength: Infinity,
-                      url: url,
-                      headers: { }
-                    };
+              if (element == 'software.invicontechnology.com/backend/') {
 
-                    axios.request(config)
-                    .then((response) => {
-                      console.log(JSON.stringify(response.data));
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                    });
+                count++
 
-                    }
+                let url = element + 'addstockExtra';
 
 
-                    });
-                  }
-                   
+                let config = {
+                  method: 'get',
+                  maxBodyLength: Infinity,
+                  url: url,
+                  headers: {}
+                };
 
-                  console.log(`Get Data collection on '${server}'`);
-                 
-                 
-                    
-              } else {
-                  console.log(`Collection does not exist in 'test' on '${server}'`);
+                axios.request(config)
+                  .then((response) => { })
+                  .catch((error) => {
+                    console.log(error);
+                  });
+
               }
-          } 
-          
-          catch(error){
-              console.log(`An error occurred: ${error}`);
+
+            });
           }
-          finally {
-              await client.close();
-          }
+
+          console.log(`Get Data collection on '${server}'`);
+
+
+        } else {
+          console.log(`Collection does not exist in 'test' on '${server}'`);
+        }
       }
 
+      catch (error) {
+        console.log(`An error occurred: ${error}`);
+      }
+      finally {
+        await client.close();
+      }
+    }
+
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -701,12 +710,8 @@ module.exports = function (app) {
 
     });
 
-    // Send all requests concurrently using Promise.all
     Promise.all(requestPromises)
-      .then(responses => {
-        // console.log("Response:", responses.data);
-
-      })
+      .then(responses => { })
       .catch(errors => {
         console.log("errors:", errors);
 
@@ -715,42 +720,6 @@ module.exports = function (app) {
 
 
 
-    // Create an array of promises for sending requests
-    // const requestPromises = requestData.map(async(data) => {
-    //   const config = {
-    //     method: 'post',
-    //     maxBodyLength: Infinity,
-    //     url: 'https://ant.aliceblueonline.com/rest/AliceBlueAPIService/api/placeOrder/executePlaceOrder',
-    //     headers: {
-    //       'Authorization': "Bearer " + data.demat_userid + " " + data.access_token,
-    //       'Content-Type': 'application/json',
-    //     },
-    //     data: JSON.stringify([data.data]),
-    //   };
-    //   const trade = await axios(config)
-    //   const return_data = {res:trade ,name:data.name}
-
-    //   return return_data
-    //  // return axios(config);
-    // });
-
-    // // Send all requests concurrently using Promise.all
-    // Promise.all(requestPromises)
-    //   .then(responses => {
-    //   //console.log("Response:", responses.data);
-    //     responses.forEach(response => {
-    //    //   console.log("Response :", response);
-    //       console.log("Response Trade:", response.res.data);
-    //       console.log("client name ", response.name);
-    //     });
-    //   })
-    //   .catch(errors => {
-    //   console.log("errors:", errors);
-
-    //     // errors.forEach(error => {
-    //     //   console.log("Error:", error);
-    //     // });
-    //   });
 
 
     res.send("doneeeee")
@@ -773,21 +742,12 @@ module.exports = function (app) {
 
 
 
-
-      // Add more requests as needed
     ];
 
-    // Function to make an Axios request for a single item
     function makeRequest(item) {
       console.log("2")
 
-      // return axios.get(`https://www.nseindia.com/api/holiday-master?type=${item.key}`) // Replace with your API URL
-      //     .then(response => {
-      //         return `Request for ${item.key} completed: ${response.data}`;
-      //     })
-      //     .catch(error => {
-      //         return `Request for ${item.key} failed: ${error.message}`;
-      //     });
+
 
       let data = {
         complexty: 'regular',
@@ -821,7 +781,6 @@ module.exports = function (app) {
 
       axios(config)
         .then(async (response) => {
-          //  console.log("response",response)
 
         })
         .catch(async (error) => {
@@ -831,10 +790,8 @@ module.exports = function (app) {
 
     }
 
-    // Execute all requests concurrently using Promise.all
     Promise.all(requests.map(item => makeRequest(item)))
       .then(results => {
-        // All requests have completed
         console.log('All requests completed', results);
       })
       .catch(error => {
@@ -866,11 +823,6 @@ module.exports = function (app) {
         }
       },
 
-      // {$project: {
-
-
-
-      //  }},
       { $sort: { _id: 1 } },
 
       {
@@ -891,26 +843,13 @@ module.exports = function (app) {
   async function connectToDB(collectionName, response) {
     try {
 
-      //const db = dbTradeTools; // Replace 'mydb' with your desired database name
-      const db = dbTradeTools; // Replace 'mydb' with your desired database name
-      // console.log("db",db);
-      //  const collectionName = 'shakir'; // Replace with your desired collection name
+      const db = dbTradeTools;
 
-      // List all collections in the database
       const collections = await db.listCollections().toArray();
 
-      // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === collectionName);
 
       if (collectionExists) {
-
-        // const changeStream = db.collection(collectionName).watch();
-
-        // changeStream.on('change', (change) => {
-        //   // Handle the change event
-        //   console.log('Change event:', change);
-        // });
-        //console.log(`Collection '${collectionName}' exists.`);
 
         const collection = db.collection(collectionName);
 
@@ -924,15 +863,7 @@ module.exports = function (app) {
             v: parseFloat(response.v)
           }
 
-          // const changeStream = collection.watch();
-          // changeStream.on('change', (change) => {
-          //   console.log('Change event:', change);
-          //   // You can add your logic here to evaluate changes
-          //   // For example, run an eval function
-          //   evaluateFunction(change);
-          // });
 
-          // Define a function to evaluate changes
           function evaluateFunction(change) {
 
             console.log('Evaluating changes:', change);
@@ -940,22 +871,14 @@ module.exports = function (app) {
 
 
           const insertResult = await collection.insertOne(singleDocument);
-          // console.log('Inserted document:', insertResult.insertedId);
         }
 
         createView(collectionName);
         createViewM3(collectionName);
-        //  createViewM5(collectionName);
-        // createViewM10(collectionName)
-        // createViewM15(collectionName)
-        // createViewM30(collectionName)
-        // createViewM60(collectionName)
-        // createViewM1DAY(collectionName)
+
 
       } else {
-        // console.log(`Collection '${collectionName}' does not exist.`);
         await db.createCollection(collectionName);
-        // console.log(`Collection '${collectionName}' created successfully`);
 
         const collection = db.collection(collectionName);
         // const singleDocument = { name: 'John', age: 30 };
@@ -1960,7 +1883,7 @@ module.exports = function (app) {
       console.log("Condition evaluation result:", result);
       if (result == true) {
         console.log("True condition - ", lastElementTimeFrameViewData);
-        
+
 
         const getPricecollection = db.collection(element.tokensymbol);
 
@@ -2197,10 +2120,10 @@ module.exports = function (app) {
       // Drop each collection
       for (const collectionInfo of collections) {
         const collectionName = collectionInfo.name;
-        
-        if(collectionName != "system.views"){
-        await dbTradeTools.collection(collectionName).drop();
-        console.log(`Dropped collection: ${collectionName}`);
+
+        if (collectionName != "system.views") {
+          await dbTradeTools.collection(collectionName).drop();
+          console.log(`Dropped collection: ${collectionName}`);
         }
 
       }
@@ -2241,10 +2164,10 @@ module.exports = function (app) {
   }
 
 
-  app.get("/d-s",async (req, res)=>{
+  app.get("/d-s", async (req, res) => {
 
-    
-   let array = ['usermakestrategies','signals','mainsignals'];
+
+    let array = ['usermakestrategies', 'signals', 'mainsignals'];
 
     let col1 = "usermakestrategies"
     await dbTest.collection(col1).drop();
@@ -2254,18 +2177,18 @@ module.exports = function (app) {
 
     let col3 = "mainsignals"
     await dbTest.collection(col3).drop();
-   
 
 
-  res.send("okkkk")
+
+    res.send("okkkk")
   });
 
 
 
   app.get('/socket-api', async (req, res) => {
-     const collection = "shakir2";
+    const collection = "shakir2";
     dropAllCollections();
-    res.send("okkkk"); 
+    res.send("okkkk");
     return
     //connectToDB(collection);
 
@@ -3879,6 +3802,7 @@ module.exports = function (app) {
 
 
   app.get("/stockPriceupdate", async (req, res) => {
+
     var axios = require('axios');
     const Papa = require('papaparse')
     const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
@@ -3889,9 +3813,7 @@ module.exports = function (app) {
         let sheet_Data = result.data;
         sheet_Data.forEach(async (element) => {
 
-          console.log(" element ", element)
           let symbol = element.SYMBOL;
-          // const get_symbol_row = await option_chain_symbols.findOne({symbol:element.SYMBOL})
 
 
           if (symbol == "NIFTY_BANK") {
@@ -3903,8 +3825,6 @@ module.exports = function (app) {
           else if (symbol == "NIFTY_FIN_SERVICE") {
             symbol = "FINNIFTY";
           }
-
-
 
           const filter = { symbol: symbol };
           const update = { $set: { price: element.CPrice } };
@@ -3918,19 +3838,6 @@ module.exports = function (app) {
 
 
 
-    // const pipeline = [
-    //   {$sort:{
-    //     _id:-1
-    //   }},
-    //   {
-    //     $project:{
-    //       symbol:1,
-    //       price:1
-    //     }
-    //   }
-    // ]
-
-    // const result = await option_chain_symbols.aggregate(pipeline);
 
     res.send("okk");
 
@@ -4131,22 +4038,22 @@ module.exports = function (app) {
   // }
 
 
- 
+
 
   async function setupChangeStream() {
-  //  console.log("runnn trigers")
+    //  console.log("runnn trigers")
     return
     try {
-  
-  
+
+
       const collection = dbTest.collection('mainsignals');
-  
+
       // Set up a change stream on the collection
       const changeStream = collection.watch();
-  
+
       // Listen for changes
       changeStream.on('change', (change) => {
-        console.log("change ",change)
+        console.log("change ", change)
         // Check the type of change and perform actions accordingly
         if (change.operationType === 'insert') {
           const insertedDocument = change.fullDocument;
@@ -4159,13 +4066,13 @@ module.exports = function (app) {
         }
         // Add conditions or additional checks as needed
       });
-  
+
     } finally {
       // Ensure the client is closed when you finish
       await client.close();
     }
   }
-  
+
   // Call the setup function
   setupChangeStream();
 

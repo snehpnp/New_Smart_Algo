@@ -80,9 +80,7 @@ const io = socketIo(server, {
 );
 
 io.on("connection", (socket) => {
-  // console.log(`a user connected with id ${socket.id}`);
 
-  
   socket.on("help_from_client", (data) => {
     socket.broadcast.emit("test_msg_Response", data);
   });
@@ -96,13 +94,9 @@ io.on("connection", (socket) => {
 
 
 setIO(io).then(() => {
-  // console.log("io set successfully");
    
-   // After io is set, you can call getIO
    getIO().then(ioObject => {
-      // console.log("ioObject from getIO: ", ioObject);
    }).catch(error => {
-       //console.error("Error getting io:", error);
    });
  
  }).catch((error) => {
