@@ -216,7 +216,6 @@ const GetAllBrokerResponse = async (user_info,res) => {
 
                 axios(config)
                     .then(async (response) => {                       
-                         // console.log("response order details ",response.data.status)
                          if(response.data.IsError != true){
                             const result_order = response.data.Result.Data.find(item2 => item2.norenordno === data1.order_id);
                             if(result_order != undefined){

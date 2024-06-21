@@ -186,8 +186,6 @@ const GetAllBrokerResponse = async (user_info,res) => {
                 };
                 axios(config)
                     .then(async (response) => {
-                       
-                          console.log("response order details ",response.data)
 
                           const result_order = response.data.data[response.data.data.length - 1];
                         

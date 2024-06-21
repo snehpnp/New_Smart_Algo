@@ -66,58 +66,46 @@ module.exports = function (app) {
     })
 
 
-    app.post("/all/tabel", (req, res) => {
 
+    app.post("/all/tabel", async (req, res) => {
+        try {
+     
+            const roles = await Roledata.find();
+            if (roles.length !== 4) {
+                await RoleCreate();
+            }
 
-        Roledata.find()
-            .then((role) => {
-                if (role.length != 4) {
-                    RoleCreate()
-                }
-                return role;
+   
+            const companies = await company.find();
+            if (companies.length === 0) {
+                await CompanyCreate(req.body);
+            }
 
-            })
+         
+            const categories = await categorie.find();
+            if (categories.length !== 8) {
+                console.log("Categories length:", categories.length);
+                await categorie.deleteMany({});
+                console.log('All categories deleted successfully.');
+                await categorys();
+            }
 
-        // Company Information table check
-        company.find()
-            .then((role) => {
-                if (role.length == 0) {
-                    console.log("Run");
-                    CompanyCreate(req.body)
-                }
-                return role;
+   
+            const brokers = await Broker_information.find();
+            if (brokers.length === 0) {
+                await CreateBrokerinfo();
+            }
 
-            })
+            await service_token_update();
+            await TokenSymbolUpdate();
+            await DawnloadOptionChainSymbol();
 
-        // categorys data Create If not Exist 
-        categorie.find()
-            .then(async (role) => {
-                if (role.length != 8) {
-                    console.log("role.length", role.length);
-                    await categorie.deleteMany({});
-                    console.log('All data deleted successfully.');
-                    categorys()
-                }
-                return role;
-
-            })
-
-        Broker_information.find()
-            .then((role) => {
-                if (role.length == 0) {
-                    CreateBrokerinfo()
-                }
-                return role;
-
-            })
-
-        service_token_update()
-        TokenSymbolUpdate()
-        DawnloadOptionChainSymbol()
-
-
-        res.send("DONEE")
-    })
+            res.send("DONE");
+        } catch (error) {
+            console.error("Error in /all/tabel route:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    });
 
     const DawnloadOptionChainSymbol = async () => {
         console.log("symbolupdate")
@@ -194,7 +182,6 @@ module.exports = function (app) {
 
     // Create Company information Table 
     const CompanyCreate = (data) => {
-        console.log("data",data)
         const companyData = new company({
             panel_name: data.panelname,
             panel_key: data.client_key,
@@ -237,9 +224,9 @@ module.exports = function (app) {
 
     // Create categorys 
     const categorys = async () => {
-
-        var category = [
+        const categoriesData = [
             {
+                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c9797"),
                 category_id: "1",
                 name: 'CASH',
                 segment: 'C',
@@ -247,6 +234,7 @@ module.exports = function (app) {
                 CID: "1"
             },
             {
+                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c9798"),
                 category_id: "2",
                 name: 'FUTURE',
                 segment: 'F',
@@ -254,6 +242,7 @@ module.exports = function (app) {
                 CID: "2"
             },
             {
+                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c9799"),
                 category_id: "3",
                 name: 'OPTION',
                 segment: 'O',
@@ -261,20 +250,23 @@ module.exports = function (app) {
                 CID: "3"
             },
             {
+                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c979a"),
                 category_id: "4",
-                name: 'MCXFUTURE',
+                name: 'MCX FUTURE',
                 segment: 'MF',
                 status: 0,
                 CID: "4"
             },
             {
+                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c979b"),
                 category_id: "5",
-                name: 'MCXOPTION',
+                name: 'MCX OPTION',
                 segment: 'MO',
                 status: 0,
                 CID: "5"
             },
             {
+                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c979c"),
                 category_id: "6",
                 name: 'CURRENCY OPTION',
                 segment: 'CO',
@@ -282,6 +274,7 @@ module.exports = function (app) {
                 CID: "6"
             },
             {
+                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c979d"),
                 category_id: "7",
                 name: 'CURRENCY FUTURE',
                 segment: 'CF',
@@ -289,21 +282,25 @@ module.exports = function (app) {
                 CID: "7"
             },
             {
+                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c979e"),
                 category_id: "8",
                 name: 'FUTURE OPTION',
                 segment: 'FO',
                 status: 0,
                 CID: "3"
             }
-        ]
+        ];
 
-        category.forEach(async (data) => {
-            const newCategory = new categorie(data)
-            // console.log("newCategory", newCategory);
-            await newCategory.save();
-        })
+        for (const data of categoriesData) {
+            await categorie.updateOne(
+                { _id: data._id },
+                { $set: data },
+                { upsert: true }
+            );
+        }
+    };
 
-    }
+    
 
 
 
@@ -361,9 +358,9 @@ module.exports = function (app) {
             res.status(500).send("Error creating admin");
         }
     });
-    
-    
-    
+
+
+
     // =====================================================================================================================
 
 

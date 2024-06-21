@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import * as  valid_err from "../../../Utils/Common_Messages"
@@ -8,55 +6,36 @@ import Loader from '../../../Utils/Loader'
 import { Pencil, Trash2, Pointer } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
-
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
 import Modal from '../../../Components/ExtraComponents/Modal';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 import { useFormik } from 'formik';
 import toast from 'react-hot-toast';
-
-
 import Formikform from "../../../Components/ExtraComponents/Form/Formik_form"
-
 
 const AdminsList = () => {
 
     const dispatch = useDispatch()
-
     const token = JSON.parse(localStorage.getItem('user_details')).token
-
 
     const [showModal, setshowModal] = useState(false)
     const [Panelid, setPanelid] = useState('')
     const [themeList, setThemeList] = useState();
     const [searchInput, setSearchInput] = useState('')
-
-
-
-
-    const [themeData, setThemeData] = useState({
-        loading: true,
-        data: []
-    });
-
-
-
+    const [themeData, setThemeData] = useState({ loading: true, data: [] });
 
 
 
     const GetAllThemes = async () => {
-
-
         await dispatch(Get_All_Theme()).unwrap()
             .then((response) => {
-
-                //console.log("response get all theme" ,response.data)
                 setThemeList(response && response.data);
             })
     }
+
+
 
     const data = async () => {
 
@@ -106,7 +85,7 @@ const AdminsList = () => {
             return null; // Return a default value to prevent errors from reflecting on the frontend
         }
     };
-    
+
     const fetchBrokerView1 = async (row) => {
         try {
             const response = await axios.get(row.backend_rul + 'all/tabel');
@@ -116,7 +95,7 @@ const AdminsList = () => {
             return null; // Return a default value to prevent errors from reflecting on the frontend
         }
     };
-    
+
 
 
 
@@ -224,7 +203,7 @@ const AdminsList = () => {
             dataField: 'a',
             text: 'Update Broker & Table ',
             formatter: (cell, row) => (
-                <span style={{display:"flex"}}>
+                <span style={{ display: "flex" }}>
                     <div className="tooltip-wrapper" title="All Brokers View Create">
                         <Pointer
                             size={20}
@@ -252,23 +231,22 @@ const AdminsList = () => {
 
 
     const ShowThemeName = (row) => {
-
-        const doubledNumbers = themeList.map(item => {
-            if (item._id == row.theme_id) {
-                return item.theme_name;
-            }
-        });
-        return doubledNumbers
-
-
-
+        console.log("themeList",themeList)
+        if (themeList && themeList.length > 0) {
+            const doubledNumbers = themeList && themeList.map(item => {
+                if (item._id == row.theme_id) {
+                    return item.theme_name;
+                }
+            });
+            return doubledNumbers
+        }
     }
 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await GetAllThemes();
+                // await GetAllThemes();
                 await data();
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -277,6 +255,20 @@ const AdminsList = () => {
 
         fetchData();
     }, [searchInput]);
+
+
+    useEffect(() => {
+        const fetchData1 = async () => {
+            try {
+                await GetAllThemes();
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData1();
+    }, []);
 
 
     const formik = useFormik({
@@ -346,6 +338,10 @@ const AdminsList = () => {
                 }
             })
     }
+
+
+
+
 
     return (
         <>

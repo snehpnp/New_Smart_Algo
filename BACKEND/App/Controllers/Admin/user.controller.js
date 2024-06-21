@@ -563,7 +563,7 @@ class Employee {
       if (Number(new_licence) > 0) {
 
 
-        if ((parseInt(TotalLicense) + parseInt(new_licence)) >= Number(Panel_key[0].licenses)) {
+        if ((parseInt(TotalLicense) + parseInt(new_licence)) > Number(Panel_key[0].licenses)) {
 
           return res.send({
             status: false,

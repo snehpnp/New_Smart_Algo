@@ -138,24 +138,10 @@ const AllPermitions = () => {
  
 
 
-    // const CloseCompany = async (status) => {
-
-    //     const req = {
-    //         "domain": Config.react_domain,
-    //         "status": status ? 1 : 0
-    //     }
-
-
-    //     await dispatch(Close_Admin_Panel(req)).unwrap()
-    //         .then((response) => {
-    //             if (response.status) {
-    //                 toast.success(response.msg);
-    //                 setRefresh(!refresh)
-    //             } else {
-    //                 toast.error(response.msg);
-    //             }
-    //         })
-    // }
+    useEffect(() => {
+     
+        GetAllThemes()
+    }, [refresh])
 
 
 

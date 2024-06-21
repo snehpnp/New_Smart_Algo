@@ -17,14 +17,11 @@ import { check_Device } from "../../../Utils/find_device";
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
 import { All_Api_Info_List } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import * as Config from "../../../Utils/Config";
-
-import { Add_User } from '../../../ReduxStore/Slice/Admin/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
-
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-
 import "../../../App.css"
 import { f_time } from '../../../Utils/Date_formet';
+
 
 const AddClient = () => {
   const navigate = useNavigate()
@@ -37,44 +34,17 @@ const AddClient = () => {
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
 
 
-  const [UserData, setUserData] = useState({
-    loading: true,
-    data: []
-  });
-
-
+  const [UserData, setUserData] = useState({ loading: true, data: [] });
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [ShowAllStratagy, setShowAllStratagy] = useState(true)
-
   const [first, setfirst] = useState([])
-
-
   const [getPermissions, setGetPermissions] = useState([])
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
+  const [AllGroupServices, setAllGroupServices] = useState({ loading: true, data: [] });
 
-
-
-  const [AllGroupServices, setAllGroupServices] = useState({
-    loading: true,
-    data: []
-  });
-
-  const [Addsubadmin, setAddsubadmin] = useState({
-    loading: true,
-    data: []
-  });
-
-
-  const [AllStrategy, setAllStrategy] = useState({
-    loading: true,
-    data: []
-  });
-
-
-  const [GetServices, setGetServices] = useState({
-    loading: true,
-    data: []
-  });
+  const [Addsubadmin, setAddsubadmin] = useState({ loading: true, data: [] });
+  const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
+  const [GetServices, setGetServices] = useState({ loading: true, data: [] });
 
 
   const isValidEmail = (email) => {
@@ -105,7 +75,7 @@ const AddClient = () => {
       })
 
 
-    await dispatch(All_Api_Info_List({ token: user_token, url: Config.react_domain, brokerId: -1 ,key:1})).unwrap()
+    await dispatch(All_Api_Info_List({ token: user_token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
       .then((response) => {
         if (response.status) {
           setGetBrokerInfo(
@@ -352,16 +322,26 @@ const AddClient = () => {
       name: 'licence',
       label: 'Licence',
       type: 'select',
-      options: UserData.data.data !== undefined && UserData.data.data[0].license_type === "2" ? [
-        { label: 'Live', value: '2' },
-      ] : UserData.data.data !== undefined && UserData.data.data[0].license_type === "0" ? [
-        { label: '2 Days', value: '0' },
-        { label: 'Live', value: '2' },
-      ] : [
-        { label: '2 Days', value: '0' },
-        { label: 'Demo', value: '1' },
-        { label: 'Live', value: '2' },
-      ]
+      options: getPermissions && getPermissions.license_permision == 1 ?
+
+        UserData.data.data !== undefined && UserData.data.data[0].license_type === "2" ? [
+          { label: 'Live', value: '2' },
+        ] : UserData.data.data !== undefined && UserData.data.data[0].license_type === "0" ? [
+          { label: '2 Days', value: '0' },
+          { label: 'Live', value: '2' },
+        ] : [
+          { label: '2 Days', value: '0' },
+          { label: 'Demo', value: '1' },
+          { label: 'Live', value: '2' },
+        ]
+        : UserData.data.data !== undefined && UserData.data.data[0].license_type === "2" ? [
+          { label: 'Live', value: '2' },
+        ] : UserData.data.data !== undefined && UserData.data.data[0].license_type === "0" ? [
+          { label: '2 Days', value: '0' },
+        ] : [
+          { label: '2 Days', value: '0' },
+          { label: 'Demo', value: '1' },
+        ]
       , label_size: 12, col_size: 6, disable: UserData.data.data !== undefined && UserData.data.data[0].license_type === "2" ? true : false
     },
     {
@@ -374,7 +354,7 @@ const AddClient = () => {
       label: 'To Month',
       type: 'select',
       options: first && first.map((item) => ({ label: item.endDate, value: item.month })),
-      showWhen: values => values.licence === '2'
+      showWhen: values => getPermissions && getPermissions.license_permision == 1 ? values.licence == '2' : null
       , label_size: 12, col_size: 6, disable: false, isSelected: true
     },
     {
@@ -385,7 +365,6 @@ const AddClient = () => {
       showWhen: values => values.licence === '2' || values.licence === '0'
       , label_size: 12, col_size: 6, disable: false
     },
-    //  For Demo Only Client
     {
       name: 'fromDate', label: 'From Date', type: 'date1',
       showWhen: values => values.licence === '1'
@@ -399,13 +378,13 @@ const AddClient = () => {
     {
       name: 'api_key',
       label:  formik.values.broker == 20 ? "ACCESS TOKEN " : formik.values.broker == 19 ? "Api Key" : formik.values.broker == 4 ? 'App Key' : formik.values.broker == 7 ? "Consumer Key" : formik.values.broker == 9 ? "Vendor Key" : formik.values.broker == 8 ? 'App Key' : formik.values.broker == 10 ? 'App Key' : "'Api Key", type: 'text',
-      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6' || values.broker === '19'|| values.broker === '20' || values.broker == '25',
+      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6' || values.broker === '19'|| values.broker === '20',
       label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'client_code',
-      label: formik.values.broker == 20 ? "CLIENT ID": formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
-      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6'|| values.broker === '20',
+      label: formik.values.broker == 20 ? "CLIENT ID" : formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
+      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6' || values.broker === '20',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -428,14 +407,13 @@ const AddClient = () => {
       showWhen: values => values.broker === '5',
       label_size: 12, col_size: 6, disable: false
     },
-
     {
       name: 'api_secret',
       label: formik.values.broker == 1 ? 'Password Code' : formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker == 9 ? 'Encryption Secret Key' : formik.values.broker == 10 ? 'Api Secret Key' : formik.values.broker == 11 ? '2FA' : formik.values.broker == 14 ? 'Encryption Key' : 'Api Secret', type: 'text',
       showWhen: values => values.broker === '1'
         ||
         // values.broker === '2' ||
-        values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15'|| values.broker === '19' || values.broker == '25',
+        values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15'|| values.broker === '19',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -445,7 +423,6 @@ const AddClient = () => {
         values.broker === '7' || values.broker === '9',
       label_size: 12, col_size: 6, disable: false
     },
-
     {
       name: 'parent_id',
       label: 'Sub-Admin',
@@ -475,9 +452,7 @@ const AddClient = () => {
       showWhen: values =>
         values.licence === '2' || values.licence === 2
       , label_size: 12, col_size: 6, disable: false
-
     },
-
 
     {
       name: 'groupservice',
@@ -488,20 +463,15 @@ const AddClient = () => {
         AllGroupServices.data && AllGroupServices.data.map((item) => ({ label: item.name, value: item._id }))
       , label_size: 12, col_size: 6, disable: false
     },
-
-
-    { name: 'multiple_strategy_select', label: 'Mutiple Selection Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false, check_box_true: formik.values.multiple_strategy_select ? true : false,
-  },
+    {
+      name: 'multiple_strategy_select', label: 'Mutiple Selection Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false, check_box_true: formik.values.multiple_strategy_select ? true : false,
+    },
   ];
 
 
 
   useEffect(() => {
 
-
-
-    
-  ////////////////--------------START BROKER SET KEY----------------///////////
     if (formik.values.broker === '1' || formik.values.broker === 1) {
       formik.setFieldValue('api_key', 'null');
       formik.setFieldValue('app_key', 'null');
@@ -514,7 +484,6 @@ const AddClient = () => {
       formik.setFieldValue('app_key', 'null');
       formik.setFieldValue('client_code', 'null');
       formik.setFieldValue('api_type', 'null');
-      // formik.setFieldValue('demat_userid', 'null');
     }
 
     if (formik.values.broker === '3' || formik.values.broker === 3) {
@@ -544,7 +513,6 @@ const AddClient = () => {
     if (formik.values.broker === '6' || formik.values.broker === 6) {
       formik.setFieldValue('app_id', 'null');
       formik.setFieldValue('app_key', 'null');
-      // formik.setFieldValue('client_code', 'null');
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
@@ -552,7 +520,6 @@ const AddClient = () => {
     if (formik.values.broker === '7' || formik.values.broker === 7) {
       formik.setFieldValue('app_key', 'null');
       formik.setFieldValue('api_type', 'null');
-      // formik.setFieldValue('demat_userid', 'null');
     }
 
     if (formik.values.broker === '8' || formik.values.broker === 8) {
@@ -624,16 +591,6 @@ const AddClient = () => {
       formik.setFieldValue('demat_userid', 'null');
     }
 
-
-
-
-
-
-  ////////////////--------------END BROKER SET KEY----------------///////////
-
-
-
-
     if (formik.values.licence === '2' || formik.values.licence === 2) {
       formik.setFieldValue('fromDate', null);
       formik.setFieldValue('todate', null);
@@ -643,8 +600,6 @@ const AddClient = () => {
       formik.setFieldValue('broker', null);
     }
     if (formik.values.licence === '0' || formik.values.licence === 0) {
-      // formik.setFieldValue('tomonth', null);
-      // formik.setFieldValue('broker', null);
       formik.setFieldValue('fromDate', null);
       formik.setFieldValue('todate', null);
     }
@@ -667,13 +622,11 @@ const AddClient = () => {
         });
     }
   };
+
   useEffect(() => {
     getGroupeServics();
   }, [formik.values.groupservice]);
 
-
-
-  // GET ALL GROUP SERVICES NAME / GET ALL SUBAMDIN / STRATEGY
   const data = async () => {
     await dispatch(GET_ALL_GROUP_SERVICES()).unwrap()
       .then((response) => {
@@ -705,7 +658,7 @@ const AddClient = () => {
 
         if (getPermissions && getPermissions.strategy !== undefined) {
           let abc = response.data && response.data.filter(item => getPermissions.strategy !== undefined && getPermissions.strategy.includes(item._id))
-        
+
 
           if (abc.length > 0) {
             setAllStrategy({
@@ -724,14 +677,11 @@ const AddClient = () => {
     })
   }
 
-
   useEffect(() => {
     data()
   }, [getPermissions])
 
 
-
-  //  For Checked Strategy
 
   const handleStrategyChange = (event) => {
     const strategyId = event.target.value;
@@ -758,8 +708,6 @@ const AddClient = () => {
 
 
 
-
-
   return (
     <>
       <Content Page_title="Edit  Client" button_title='Back' route="/subadmin/clients" showEdit={true} show_Stat_End_date={UserData.data.data !== undefined && UserData.data.data[0]}>
@@ -768,7 +716,6 @@ const AddClient = () => {
           toDate={formik.values.todate}
           additional_field={
             <>
-              {/*  For Show All Services */}
               <h5 className='mt-5'> All Group Services </h5>
 
               {GetServices && GetServices.data.map((strategy) => (
@@ -782,43 +729,40 @@ const AddClient = () => {
                 <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
                   setShowAllStratagy(e.target.checked)
                 }} />
-                {/* <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`} ></div>
-                <span class="toggle-label">Show Strategy</span> */}
+
               </label>
 
-              {/*  For Show All Strategy */}
-              {/* {ShowAllStratagy ? ( */}
-
-              {getPermissions.Update_Api_Key && getPermissions.Update_Api_Key == 1 ? "" : 
-              <>
-              <h5> All Strategy </h5>
-              {selectedStrategies.map((strategy) => (
 
 
-                <div className={`col-lg-2 mt-2`} key={strategy.id}>
-                  <div className="row ">
-                    <div className="col-lg-12 ">
-                      <div className="form-check custom-checkbox mb-3">
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                          name={strategy.id}
-                          value={strategy.id}
-                          onChange={(e) => handleStrategyChange(e)}
-                          checked={strategy.checked}
-                        />
-                        <label className="form-check-label" htmlFor={strategy.name}>
-                          {strategy.name}
-                        </label>
+              {getPermissions.Update_Api_Key && getPermissions.Update_Api_Key == 1 ? "" :
+                <>
+                  <h5> All Strategy </h5>
+                  {selectedStrategies.map((strategy) => (
+
+
+                    <div className={`col-lg-2 mt-2`} key={strategy.id}>
+                      <div className="row ">
+                        <div className="col-lg-12 ">
+                          <div className="form-check custom-checkbox mb-3">
+                            <input
+                              type="checkbox"
+                              className="form-check-input"
+                              name={strategy.id}
+                              value={strategy.id}
+                              onChange={(e) => handleStrategyChange(e)}
+                              checked={strategy.checked}
+                            />
+                            <label className="form-check-label" htmlFor={strategy.name}>
+                              {strategy.name}
+                            </label>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </>}
+                  ))}
+                </>}
 
 
-              {/* ) : ""} */}
             </>
           }
         />

@@ -455,7 +455,6 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
         data: item.postdata
 
     };
-    // console.log(config);
     axios(config)
         .then(async (response) => {
             console.log("respose ENTRY", response.data)
@@ -578,9 +577,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             send_request: send_rr,
                             reject_reason: message,
                         })
-                            .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                            })
+                            .then((BrokerResponseCreate) => { })
                             .catch((err) => {
                                 try {
                                     console.log('Error creating and saving user:', err);
