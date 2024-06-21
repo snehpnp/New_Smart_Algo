@@ -28,18 +28,20 @@ const AdminsList = () => {
 
 
 
+
+
+
     const GetAllThemes = async () => {
         await dispatch(Get_All_Theme()).unwrap()
             .then((response) => {
-                if(response.data){
-
-                    console.log(response.data)
-    
-                    setThemeList(response && response.data);
+                if (response.status) {
+                    setThemeList(response.data);
                 }
             })
     }
-
+    useEffect(() => {
+        GetAllThemes()
+    }, [])
 
 
     const data = async () => {
@@ -133,10 +135,10 @@ const AdminsList = () => {
         },
 
         {
-            dataField: 'theme_id',
+            dataField: 'theme_name',
             text: 'Set theme',
             formatter: (cell, row) => (
-                <span>{ShowThemeName(row)} </span>
+                <span>{cell} </span>
             )
         },
 
@@ -235,23 +237,12 @@ const AdminsList = () => {
     ];
 
 
-    const ShowThemeName = (row) => {
-        console.log("themeList", themeList)
-        if (themeList && themeList.length > 0) {
-            const doubledNumbers = themeList && themeList.map(item => {
-                if (item._id == row.theme_id) {
-                    return item.theme_name;
-                }
-            });
-            return doubledNumbers
-        }
-    }
+ 
 
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // await GetAllThemes();
                 await data();
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -262,10 +253,7 @@ const AdminsList = () => {
     }, [searchInput]);
 
 
-    useEffect(() => {
-        GetAllThemes();
 
-    }, []);
 
 
     const formik = useFormik({
