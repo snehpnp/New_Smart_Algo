@@ -182,7 +182,6 @@ module.exports = function (app) {
 
     // Create Company information Table 
     const CompanyCreate = (data) => {
-        console.log("data", data)
         const companyData = new company({
             panel_name: data.panelname,
             panel_key: data.client_key,

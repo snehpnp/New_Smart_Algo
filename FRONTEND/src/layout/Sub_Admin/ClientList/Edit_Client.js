@@ -706,7 +706,6 @@ const AddClient = () => {
     }
   }, [UserData.data.strategy, AllStrategy.data]);
 
-  console.log("getPermissions", getPermissions.license_permision)
 
 
   return (
