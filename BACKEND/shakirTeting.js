@@ -805,39 +805,7 @@ module.exports = function (app) {
   });
 
 
-  app.get('/shakirTest', async (req, res) => {
 
-    const pipeline = [
-
-      {
-        $lookup: {
-          from: 'categories',
-          localField: 'categorie_id',
-          foreignField: '_id',
-          as: 'categoryResult'
-        }
-      },
-      {
-        $match: {
-          'categoryResult.segment': "C",
-        }
-      },
-
-      { $sort: { _id: 1 } },
-
-      {
-        $unwind: '$categoryResult', // Unwind the 'categoryResult' array
-      },
-
-    ];
-
-    const result = await services.aggregate(pipeline);
-    res.send({ status: true, data: result });
-    return
-
-
-
-  });
 
 
   async function connectToDB(collectionName, response) {
@@ -1978,24 +1946,7 @@ module.exports = function (app) {
     }
 
 
-    //   1679060373|IDEA#|LX|0|11|0|0|0|C|20050|CALL|28092023|sneh|10|SNE132023|demo
 
-    // 1 date
-    // 2 symbol
-    // 3 type
-    // 4 tr_price
-    // 5 price
-    // 6 sq_value
-    // 7 sl_value
-    // 8 tsl
-    // 9 segment
-    // 10 strike
-    // 11 option_type
-    // 12 expiry
-    // 13 strategy
-    // 14 qty_percent
-    // 15 client_key
-    // 16 demo
 
     let request = dt_date + '|' + element.symbol_name + '|' + type + '|' + tr_price + '|' + price.toString() + '|' + sq_value + '|' + sl_value + '|' + tsl + '|' + element.segment + '|' + strike + '|' + option_type + '|' + element.expiry + '|' + element.strategy_name + '|' + qty_percent + '|' + client_key + '|demo'
     console.log("request", request)
@@ -2005,7 +1956,6 @@ module.exports = function (app) {
 
     var options = {
       method: 'POST',
-      // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
       url: 'http://localhost:8000/broker-signals',
       headers: {
         Accept: '*/*',

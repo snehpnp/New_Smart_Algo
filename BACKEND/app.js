@@ -4,7 +4,7 @@ const mongoConnection = require('./App/Connection/mongo_connection')
 const express = require("express");
 const app = express();
 
-// HELLO SNEH
+// HELLO SNEH JAISWAL
 const http = require("http");
 const https = require('https');
 const socketIo = require("socket.io");
@@ -42,7 +42,6 @@ require('./App/Cron/cron')
 // Routes all
 require("./App/Routes")(app)
 
-// Testing Api #Shakir
 
 
 // EMERGANCY
@@ -54,19 +53,6 @@ require("./shakirTeting")(app)
 
 // Connect Local backend Socket
 const { setIO ,getIO} = require('./App/Helper/BackendSocketIo');
-
-
-
-
-// Socket Connect get data in live make socket
-
-// require('./App/Helper/Store_live_data')
-
-//  END-------------
-
-
-
-
 
 
 

@@ -312,7 +312,6 @@ const Header = ({ ChatBox }) => {
     }
   }, []);
 
-  //  Clear Session  After 24 Hours
 
   const ClearSession = async () => {
     var decoded = jwt_decode(token);

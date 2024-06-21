@@ -243,15 +243,7 @@ class Panel {
         try {
             const { domain } = req.body
 
-            // var domain1 = "http://localhost:3000"
-
-            // if (domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
-            //     domain1 = "http://localhost:3000"
-            // } else {
-            //     domain1 = domain
-            // }
-            // const Panle_information = await panel_model.findOne({ _id: id })
-            const desiredDomain = 'your_desired_domain_value'; // Replace with the desired domain value
+            const desiredDomain = 'your_desired_domain_value'; 
 
             const Panle_information = await panel_model.aggregate([
                 {

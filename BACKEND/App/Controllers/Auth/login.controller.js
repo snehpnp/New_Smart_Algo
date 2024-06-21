@@ -735,7 +735,7 @@ class Login {
 
     async DisclaimerMailSend(req, res) {
         try {
-            console.log("SNEH ")
+        
             var disclaimerData = await disclaimer();
 
             var toEmail = "snehpnp@gmail.com";
