@@ -11,14 +11,11 @@ const BrokerResponse = db.BrokerResponse;
 const Broker_information = db.Broker_information;
 const live_price = db.live_price;
 
-
-
-
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
-// const { formattedDateTime } = require('../../Helper/time.helper')
+
 
 class Angel {
 
