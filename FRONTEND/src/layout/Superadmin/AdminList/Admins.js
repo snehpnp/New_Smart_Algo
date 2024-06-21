@@ -22,7 +22,7 @@ const AdminsList = () => {
 
     const [showModal, setshowModal] = useState(false)
     const [Panelid, setPanelid] = useState('')
-    const [themeList, setThemeList] = useState();
+    const [themeList, setThemeList] = useState([]);
     const [searchInput, setSearchInput] = useState('')
     const [themeData, setThemeData] = useState({ loading: true, data: [] });
 
@@ -31,7 +31,12 @@ const AdminsList = () => {
     const GetAllThemes = async () => {
         await dispatch(Get_All_Theme()).unwrap()
             .then((response) => {
-                setThemeList(response && response.data);
+                if(response.data){
+
+                    console.log(response.data)
+    
+                    setThemeList(response && response.data);
+                }
             })
     }
 
@@ -231,7 +236,7 @@ const AdminsList = () => {
 
 
     const ShowThemeName = (row) => {
-        console.log("themeList",themeList)
+        console.log("themeList", themeList)
         if (themeList && themeList.length > 0) {
             const doubledNumbers = themeList && themeList.map(item => {
                 if (item._id == row.theme_id) {
@@ -258,16 +263,8 @@ const AdminsList = () => {
 
 
     useEffect(() => {
-        const fetchData1 = async () => {
-            try {
-                await GetAllThemes();
+        GetAllThemes();
 
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData1();
     }, []);
 
 
