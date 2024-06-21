@@ -2,9 +2,7 @@ import Main_Router from './Routes/Route'
 import NotFound from './layout/Auth/Deactivate_Company'
 
 import React, { useState, useEffect, useRef } from 'react'
-import { BrowserRouter as Router, Routes, Route, Redirect } from 'react-router-dom';
-import { Get_Pmermission } from "./ReduxStore/Slice/Users/DashboardSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as Config from "./Utils/Config";
 import axios from "axios";
 import {
@@ -25,15 +23,11 @@ const App = () => {
 
     try {
 
-      const data = {
-        "domain": Config.react_domain,
-        // token: token,
-      }
+      const data = { "domain": Config.react_domain }
 
       const res = await axios.post(`${Config.smartAlogUrl}get/panel/permission`, data, {
         data: { data },
       })
-      // console.log("res", res)
 
       if (res.data.status) {
         setAdmin_permission(
@@ -50,24 +44,6 @@ const App = () => {
     }
 
 
-    // await dispatch(
-    //   Get_Pmermission({
-    //     "domain": Config.react_domain,
-    //     // token: token,
-    //   })
-    // )
-    //   .unwrap()
-    //   .then((response) => {
-    //     if (response.status) {
-    //       setAdmin_permission(
-    //         response.data[0],
-    //       );
-    //     } else {
-    //       setAdmin_permission(
-    //         response.data,
-    //       );
-    //     }
-    //   });
   }
 
 
@@ -106,8 +82,7 @@ const App = () => {
       <div ref={pageRef} >
         {admin_permission && admin_permission.is_active == 1 ?  <NotFound /> : <Main_Router />}
       </div>
-      {/* <button className='d-flex mx-auto' style={{ marginTop: '70px' }} onClick={captureScreenshot}>123Capture Screenshot</button> */}
-
+   
     </div>
   )
 }

@@ -160,7 +160,7 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async EditPanel(req, res) {
         try {
-            const { _id, panel_name, domain, port, key, ip_address, theme_id, db_url, backend_rul, db_name, broker_id, Create_Strategy, Option_chain, Strategy_planm, UserName } = req.body
+            const { _id, panel_name, domain, port, key, ip_address, theme_id, db_url, backend_rul, db_name, broker_id, Create_Strategy, Option_chain, Strategy_plan, UserName } = req.body
 
 
             var panle_data = {
@@ -211,13 +211,11 @@ class Panel {
 
             await Superadmin_History.updateOne({ panal_name: "111" }, update, options);
 
-            // logger.info('Update Successfully', { role: "SUPERADMIN", user_id: parent_id });
             return res.status(200).send({ status: true, msg: 'Update Successfully.', data: result });
 
 
         } catch (error) {
             // console.log("Theme error-", error);
-            logger.error('Server Error', { role: "SUPERADMIN", user_id: parent_id });
 
         }
     }
@@ -300,6 +298,7 @@ class Panel {
                 .skip(skip)
                 .limit(Number(limit))
                 .sort({ createdAt: -1 })
+                .select('panel_name domain key is_active is_expired theme_id')
 
 
             // IF DATA NOT EXIST
@@ -321,6 +320,7 @@ class Panel {
 
         } catch (error) {
             console.log("Error Get all Panels error-", error);
+            return null
         }
     }
 
