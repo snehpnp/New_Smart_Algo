@@ -243,15 +243,7 @@ class Panel {
         try {
             const { domain } = req.body
 
-            // var domain1 = "http://localhost:3000"
-
-            // if (domain == "sneh.com" || domain == "https://trade.pandpinfotech.com") {
-            //     domain1 = "http://localhost:3000"
-            // } else {
-            //     domain1 = domain
-            // }
-            // const Panle_information = await panel_model.findOne({ _id: id })
-            const desiredDomain = 'your_desired_domain_value'; // Replace with the desired domain value
+            const desiredDomain = 'your_desired_domain_value'; 
 
             const Panle_information = await panel_model.aggregate([
                 {
@@ -286,26 +278,49 @@ class Panel {
     // GET All Panel
     async GetAllPanel(req, res) {
         try {
-
-            const { page, limit } = req.body;     //LIMIT & PAGE
+            const { page, limit } = req.body; // LIMIT & PAGE
             const skip = (page - 1) * limit;
-
+    
             const totalCount = await panel_model.countDocuments();
-
-            // THEME LIST DATA
-            const getAllpanel = await panel_model
-                .find({})
-                .skip(skip)
-                .limit(Number(limit))
-                .sort({ createdAt: -1 })
-                .select('panel_name domain key is_active is_expired theme_id')
-
-
+    
+            // THEME LIST DATA with lookup to get theme_name
+            const getAllpanel = await panel_model.aggregate([
+                {
+                    $lookup: {
+                        from: 'theme_lists', // The collection name of the themes
+                        localField: 'theme_id', // The field from the panel_model that references theme_id
+                        foreignField: '_id', // The field from theme_lists that matches _id
+                        as: 'theme_info' // The resulting field in the output documents
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$theme_info',
+                        preserveNullAndEmptyArrays: true // To include panels that may not have a matching theme
+                    }
+                },
+                {
+                    $project: {
+                        panel_name: 1,
+                        domain: 1,
+                        key: 1,
+                        is_active: 1,
+                        is_expired: 1,
+                        theme_id: 1,
+                        theme_name: { $ifNull: ['$theme_info.theme_name', ''] } // Add the theme_name from the theme_info or empty string if no theme
+                    }
+                },
+                {
+                    $sort: { createdAt: -1 }
+                }
+                
+            ]);
+    
             // IF DATA NOT EXIST
             if (getAllpanel.length == 0) {
-                return res.send({ status: false, msg: "Empty data", data: getAllpanel })
+                return res.send({ status: false, msg: "Empty data", data: getAllpanel });
             }
-
+    
             // DATA GET SUCCESSFULLY
             return res.send({
                 status: true,
@@ -315,14 +330,13 @@ class Panel {
                 limit: Number(limit),
                 totalCount: totalCount,
                 totalPages: Math.ceil(totalCount / Number(limit)),
-            })
-
-
+            });
         } catch (error) {
             console.log("Error Get all Panels error-", error);
-            return null
+            return res.status(500).send({ status: false, msg: "Internal Server Error" });
         }
     }
+    
 
 
 
