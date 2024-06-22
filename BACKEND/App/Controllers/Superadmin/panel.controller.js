@@ -287,16 +287,16 @@ class Panel {
             const getAllpanel = await panel_model.aggregate([
                 {
                     $lookup: {
-                        from: 'theme_lists', // The collection name of the themes
-                        localField: 'theme_id', // The field from the panel_model that references theme_id
-                        foreignField: '_id', // The field from theme_lists that matches _id
-                        as: 'theme_info' // The resulting field in the output documents
+                        from: 'theme_lists', 
+                        localField: 'theme_id', 
+                        foreignField: '_id', 
+                        as: 'theme_info' 
                     }
                 },
                 {
                     $unwind: {
                         path: '$theme_info',
-                        preserveNullAndEmptyArrays: true // To include panels that may not have a matching theme
+                        preserveNullAndEmptyArrays: true 
                     }
                 },
                 {
@@ -307,11 +307,11 @@ class Panel {
                         is_active: 1,
                         is_expired: 1,
                         theme_id: 1,
-                        theme_name: { $ifNull: ['$theme_info.theme_name', ''] } // Add the theme_name from the theme_info or empty string if no theme
+                        theme_name: { $ifNull: ['$theme_info.theme_name', ''] }
                     }
                 },
                 {
-                    $sort: { createdAt: -1 }
+                    $sort: { _id : -1 }
                 }
                 
             ]);

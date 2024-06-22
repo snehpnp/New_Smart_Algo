@@ -25,6 +25,8 @@ const AdminsList = () => {
     const [themeList, setThemeList] = useState([]);
     const [searchInput, setSearchInput] = useState('')
     const [themeData, setThemeData] = useState({ loading: true, data: [] });
+    const [themeData1, setThemeData1] = useState({ loading: true, data: [] });
+
 
 
 
@@ -58,7 +60,11 @@ const AdminsList = () => {
                     })
                     setThemeData({
                         loading: false,
-                        data: searchInput ? filterData : response.data
+                        data: response.data
+                    });
+                    setThemeData1({
+                        loading: false,
+                        data: response.data
                     });
                 }
                 else {
@@ -74,7 +80,6 @@ const AdminsList = () => {
 
 
     const panelDetails = (panel_id) => {
-
         setPanelid(panel_id)
         setshowModal(true)
     }
@@ -85,7 +90,8 @@ const AdminsList = () => {
 
     const fetchBrokerView = async (row) => {
         try {
-            const response = await axios.get(row.backend_rul + 'all/brokerview');
+            console.log("row", row)
+            const response = await axios.get(row.domain + '/backend/all/brokerview');
             return response.data;
         } catch (error) {
             console.error('Error fetching broker view data:', error.message);
@@ -95,11 +101,32 @@ const AdminsList = () => {
 
     const fetchBrokerView1 = async (row) => {
         try {
-            const response = await axios.get(row.backend_rul + 'all/tabel');
-            return response.data;
+            let data = JSON.stringify({
+                "panelname": row.panel_name,
+                "client_key": row.key,
+                backend_rul:row.domain+"/backend/",
+                domain:row.domain
+            });
+
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: row.domain  + '/backend/all/tabel',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+            axios.request(config)
+                .then((response) => {
+                    console.log(JSON.stringify(response.data));
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         } catch (error) {
             console.error('Error fetching broker view data:', error.message);
-            return null; // Return a default value to prevent errors from reflecting on the frontend
+            throw error;
         }
     };
 
@@ -237,7 +264,7 @@ const AdminsList = () => {
     ];
 
 
- 
+
 
 
     useEffect(() => {
@@ -250,7 +277,7 @@ const AdminsList = () => {
         };
 
         fetchData();
-    }, [searchInput]);
+    }, []);
 
 
 
@@ -328,10 +355,31 @@ const AdminsList = () => {
 
 
 
+
+
+
+    useEffect(() => {
+        if (themeData && themeData.data) {
+            const filterData = themeData && themeData.data.filter((item) => {
+                const matchSearch =
+                    searchInput == '' ||
+                    item.panel_name.toLowerCase().includes(searchInput.toLowerCase()) ||
+                    item.domain.toLowerCase().includes(searchInput.toLowerCase())
+                return matchSearch
+            })
+            setThemeData1({
+                loading: false,
+                data: searchInput ? filterData : themeData.data
+            });
+        }
+    }, [searchInput]);
+
+
+
     return (
         <>
             {
-                themeData.loading ? <Loader /> :
+                themeData1.loading ? <Loader /> :
                     <>
                         <Content Page_title="Company Names"
                             button_title="Add Client"
@@ -347,10 +395,10 @@ const AdminsList = () => {
                             </div>
                             {
 
-                                themeData.data && themeData.data.length === 0 ? (
+                                themeData1.data && themeData1.data.length === 0 ? (
                                     'No data found') :
                                     <>
-                                        <FullDataTable TableColumns={columns} tableData={themeData.data} pagination1={true} />
+                                        <FullDataTable TableColumns={columns} tableData={themeData1.data} pagination1={true} />
                                         <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
                                             handleClose={() => setshowModal(false)}
                                         >
