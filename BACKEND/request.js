@@ -83,7 +83,7 @@ module.exports = function (app) {
 
 
             const categories = await categorie.find();
-            if (categories.length != 0) {
+            if (categories.length == 0) {
                 categorys();
             }
 
@@ -102,6 +102,9 @@ module.exports = function (app) {
             res.status(500).send("Internal Server Error");
         }
     });
+
+
+    
 
     const DawnloadOptionChainSymbol = async () => {
         console.log("symbolupdate")
@@ -142,6 +145,8 @@ module.exports = function (app) {
 
     }
 
+
+
     // Role Create
     const RoleCreate = () => {
         var arr = [
@@ -176,6 +181,8 @@ module.exports = function (app) {
         })
     }
 
+
+
     // Create Company information Table 
     const CompanyCreate = (data) => {
         const companyData = new company({
@@ -194,6 +201,8 @@ module.exports = function (app) {
         })
         return companyData.save();
     }
+
+
 
     const CreateBrokerinfo = async () => {
         try {
@@ -297,8 +306,6 @@ module.exports = function (app) {
             );
         }
     };
-
-
 
 
 
