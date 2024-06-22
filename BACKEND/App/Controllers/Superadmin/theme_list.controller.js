@@ -111,38 +111,35 @@ class Theme {
         }
     }
 
-
-
- // GET THEME
- async GetAllThemeName(req, res) {
-    try {
+    // GET THEME
+    async GetAllThemeName(req, res) {
+        try {
 
 
 
-        const getAllTheme = await Theme_list
-            .find({}).select('theme_name')
-     
+            const getAllTheme = await Theme_list
+                .find({}).select('theme_name')
 
 
-        // IF DATA NOT EXIST
-        if (getAllTheme.length == 0) {
-            res.send({ status: false, msg: "Empty data", data: getAllTheme })
+
+            // IF DATA NOT EXIST
+            if (getAllTheme.length == 0) {
+                res.send({ status: false, msg: "Empty data", data: getAllTheme })
+            }
+
+            // DATA GET SUCCESSFULLY
+            res.send({
+                status: true,
+                msg: "Get All Theme name",
+                data: getAllTheme,
+
+            })
+
+
+        } catch (error) {
+            console.log("Error Get all theme error-", error);
         }
-
-        // DATA GET SUCCESSFULLY
-        res.send({
-            status: true,
-            msg: "Get All Theme name",
-            data: getAllTheme,
-        
-        })
-
-
-    } catch (error) {
-        console.log("Error Get all theme error-", error);
     }
-}
-
 
     // GET ALL TRADING ON  CLIENTS
     async GetThemeByIdThemeId(req, res) {
@@ -173,7 +170,6 @@ class Theme {
 
 
     // UPDATE COMPANY THEME
-
     async UpdatePanelTheme(req, res) {
         try {
 
@@ -202,10 +198,6 @@ class Theme {
             });
 
 
-            // DATA GET SUCCESSFULLY
-
-
-
             res.send({
                 status: true,
                 msg: "Theme Update Successfully",
@@ -219,7 +211,6 @@ class Theme {
 
 
     // UPDATE THEME IMAGE
-
     async UpdatetThemeImage(req, res) {
         try {
 
@@ -245,7 +236,7 @@ class Theme {
             const filter = { _id: req.body.theme_id };
             const updateOperation = { $set: { image: req.body.image } };
 
-            
+
             const result = await Theme_list.updateOne(filter, updateOperation);
 
             if (!result) {
