@@ -1,13 +1,10 @@
 import React, { useEffect } from 'react'
-import { BrowserRouter, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Admin from './Admin_Route'
 import SuperAdmin from './Super_Admin_Route'
 import SubAdmin from "./Sub_Admin_Route"
 import Client from "./User_Route"
-
 import Login from "../layout/Auth/Login"
-
-
 import ForgetPassword from '../layout/Auth/ForgetPassword';
 import UpdatePassword from '../layout/Auth/UpdatePassword.js';
 import Testing from "../test"
@@ -18,17 +15,10 @@ import NewSignUp from '../layout/Sign_Up_Users/signUp'
 
 
 
-
-// import NotFound from "../Layout/NotFound"
-
-
-
 const Routing = () => {
   const location = useLocation();
-
   const navigate = useNavigate()
   const accessToken = JSON.parse(localStorage.getItem("user_details"))
-
   const roles = JSON.parse(localStorage.getItem('user_role'))
   const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
   const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
@@ -36,11 +26,11 @@ const Routing = () => {
 
 
   useEffect(() => {
-    if (location.pathname === "/forget") {  
+    if (location.pathname === "/forget") {
       navigate("/forget");
       return
     }
-    if (location.pathname.startsWith('/update')) {  
+    if (location.pathname.startsWith('/update')) {
       console.log("fdoifuepo")
       navigate(location.pathname);
       return
@@ -50,11 +40,11 @@ const Routing = () => {
     }
     if (location.pathname === "/newsignup") {
       navigate("/newsignup");
-      return 
+      return
     }
 
 
-    if (accessToken === null || accessToken === undefined || accessToken === "null"  ) {
+    if (accessToken === null || accessToken === undefined || accessToken === "null") {
       navigate("/login");
       return
     }
@@ -75,11 +65,9 @@ const Routing = () => {
         navigate("/super/dashboard");
         window.location.reload()
       }
-      // else {
-      //   navigate("/login");
-      // }
-    } 
-     else if (gotodashboard != null) {
+
+    }
+    else if (gotodashboard != null) {
 
       if (user_role_goTo === "USER" && location.pathname === "/") {
         navigate("/client/dashboard");
@@ -89,7 +77,6 @@ const Routing = () => {
     }
 
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname])
 
 
@@ -97,16 +84,12 @@ const Routing = () => {
     <Routes>
       <Route path="/super/*" element={(roles === "SUPERADMIN") ? <SuperAdmin /> : <Login />} />
       <Route path="/admin/*" element={(roles === "ADMIN") ? <Admin /> : <Login />} />
-      {/* <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} /> */}
       <Route path="/client/*" element={gotodashboard != null ? <Client /> : (roles === "USER") ? <Client /> : <Login />} />
-
       <Route path="/subadmin/*" element={gotodashboard != null ? <SubAdmin /> : (roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
-
       <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
       <Route path="/client/*" element={gotodashboard != null ? <Client /> : (roles === "USER") ? <Client /> : <Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/newsignup" element={<NewSignUp />} />
-
       <Route path="/forget" element={<ForgetPassword />} />
       <Route path="/profile" element={<ForgetPassword />} />
       <Route path="/update/:id" element={<UpdatePassword />} />
@@ -114,7 +97,6 @@ const Routing = () => {
       <Route path="/notfound" element={<Deactivate_Company />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/*" element={<NotFound />} />
-
     </Routes>
 
 

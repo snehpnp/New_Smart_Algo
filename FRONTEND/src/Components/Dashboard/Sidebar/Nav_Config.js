@@ -30,11 +30,6 @@ export const admin_sidebar = [
                 "name": 'Clients',
                 "route": "/admin/allclients",
             },
-            // {
-            //     'id': 3,
-            //     "name": 'SignUp - Clients',
-            //     "route": "/admin/signupclients",
-            // },
             {
                 'id': 4,
                 "name": 'Expired-Clients',
@@ -85,18 +80,13 @@ export const admin_sidebar = [
                 "name": 'Trading Status',
                 "route": "/admin/tradingstatus",
             },
-            // {
-            //     'id': 4,
-            //     "name": 'Trade Execution Report',
-            //     "route": "/admin/tradeexecution",
-            // },
 
             {
                 'id': 5,
                 "name": '7 Days Entry',
                 "route": "/admin/sevendaysentry",
             },
-             
+
         ]
     },
     {
@@ -223,7 +213,7 @@ export const admin_sidebar = [
     },
 
 
-   
+
 ]
 
 
@@ -302,20 +292,7 @@ export const sub_admin_sidebar = [
         "route": "/subadmin/clients",
         "Data": []
     },
-    // {
-    //     'id': 3,
-    //     "name": 'All Services',
-    //     "Icon": "Wrench",
-    //     "route": "/subadmin/services",
-    //     "Data": []
-    // },
-    // {
-    //     'id': 4,
-    //     "name": 'Group Services',
-    //     "Icon": "Frame",
-    //     "route": "/subadmin/groupservices",
-    //     "Data": []
-    // },
+
     {
         'id': 5,
         "name": 'Trade History',
@@ -324,13 +301,7 @@ export const sub_admin_sidebar = [
         "Data": []
 
     },
-    // {
-    //     'id': 6,
-    //     "name": 'Trading Status',
-    //     "Icon": "Activity",
-    //     "route": "/subadmin/tradingstatus",
-    //     "Data": []
-    // },
+
     {
         'id': 7,
         "name": 'Api Create Info',
@@ -345,41 +316,7 @@ export const sub_admin_sidebar = [
         "route": "/subadmin/helpcenter",
         "Data": []
     },
-    // {
-    //     'id': 9,
-    //     "name": 'Make Strategy',
-    //     "Icon": "Boxes",
-    //     "Data": [
-    //         {
-    //             'id': 1,
-    //             "name": 'Create Strategy',
-    //             "route": "/subadmin/createstrategy",
-    //         },
-    //         {
-    //             'id': 2,
-    //             "name": 'All Strategies',
-    //             "route": "/subadmin/AllMakeStrategy",
-    //         },
-    //     ]
-    // },
-    // {
-    //     'id': 10,
-    //     "name": 'Option Chain',
-    //     "Icon": "Link2",
-    //     "Data": [
-    //         {
-    //             'id': 1,
-    //             "name": 'Option Chain',
-    //             "route": "/subadmin/optionchain",
-    //         },
-    //         {
-    //             'id': 2,
-    //             "name": 'Open Position',
-    //             "route": "/subadmin/openposition",
 
-    //         },
-    //     ]
-    // },
 ]
 
 
@@ -442,11 +379,5 @@ export const Client = [
         "route": "/client/strategydesc",
         "Data": []
     },
-    // {
-    //     'id': 9,
-    //     "name": 'Option Chain',
-    //     "Icon": "Link2",
-    //     "route": "/admin/optionchain",
-    //     "Data": []
-    // },
+
 ]

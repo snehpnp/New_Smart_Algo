@@ -2,8 +2,6 @@ import React, { useRef, useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config'
 import { Signal, Users, Wrench, Link2, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Boxes, Rocket, Paintbrush, Vote, Info } from 'lucide-react';
-import Test from "../../../test"
-import html2canvas from 'html2canvas';
 import $ from "jquery";
 import Logo from '../Header/Logo';
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
@@ -14,14 +12,9 @@ import { Get_Pmermission } from "../../../ReduxStore/Slice/Users/DashboardSlice"
 
 
 
-
-
 const Sidebar = ({ ShowSidebar }) => {
-
     const location = useLocation()
     const dispatch = useDispatch()
-
-
 
     const roles = JSON.parse(localStorage.getItem('user_role'))
     const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
@@ -30,12 +23,8 @@ const Sidebar = ({ ShowSidebar }) => {
     const token = JSON.parse(localStorage.getItem("user_details")).token
     const goTouser_ID = JSON.parse(localStorage.getItem("user_details_goTo"))
 
-
     const [getPermissions, setGetPermissions] = useState([])
     const [admin_permission, setAdmin_permission] = useState([]);
-
-
-
 
 
 
@@ -86,11 +75,10 @@ const Sidebar = ({ ShowSidebar }) => {
                 });
         }
     }
+
     useEffect(() => {
         data2()
     }, [])
-
-
 
 
     const CompanyName = async () => {
@@ -109,44 +97,11 @@ const Sidebar = ({ ShowSidebar }) => {
                 }
             })
     }
+
     useEffect(() => {
         CompanyName()
     }, [])
 
-
-
-
-    const test = async () => {
-
-        const element = document.getElementById('root');
-
-
-        const options = {
-            width: document.documentElement.scrollWidth, // Set custom width
-            height: document.documentElement.scrollHeight, // Set custom height
-        };
-
-        // Set the window size and scroll position to match the content size
-        // window.resizeTo(width, height);
-        window.scrollTo(0, 0);
-
-        var screenshotUrl
-        // setIsModalOpen(false)
-
-
-        // Capture the screenshot
-        await html2canvas(document.documentElement, options).then(canvas => {
-            // Convert canvas to an image and download it
-            const screenshot = canvas.toDataURL('image/png');
-            screenshotUrl = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = screenshot;
-            link.download = 'screenshot.png';
-            link.click();
-
-
-        })
-    }
 
 
     return (
@@ -155,8 +110,6 @@ const Sidebar = ({ ShowSidebar }) => {
             <div className="deznav pt-3" >
                 <div className="deznav-scroll">
                     <ul className="metismenu" id="menu">
-
-                        {/* <button onClick={test()}>click</button> */}
 
                         <div className='sidebar-logo'>
                             <Logo />
@@ -168,7 +121,6 @@ const Sidebar = ({ ShowSidebar }) => {
                                         {item.Data.length > 0 ? <>
                                             <Link
                                                 className="has-arrow "
-                                                // href="javascript:void()"
                                                 aria-expanded="false"
                                             >
                                                 <IconComponent key={item.id} icon={item.Icon} />
@@ -253,7 +205,8 @@ const Sidebar = ({ ShowSidebar }) => {
                                                         <span className="nav-text">{item.name}</span>
                                                     </a>
                                                 </> : ""}
-                                                {item.Data.length !== 0 ? <>
+                                                {item.Data.length !== 0 ?
+                                                 <>
                                                     <ul aria-expanded='false'>
                                                         {item.Data.length > 0 ?
                                                             item.Data.map((nested_item) => {
@@ -280,7 +233,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                                             })
                                                             : ""}
                                                     </ul>
-                                                </> : ""}
+                                                </> : null}
                                             </li>
 
                                             {/* : ""} */}
