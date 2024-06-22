@@ -17,7 +17,7 @@ const App = () => {
       data: { data },
     });
 
-    const delay = new Promise(resolve => setTimeout(resolve, 3000)); // 3-second delay
+    const delay = new Promise(resolve => setTimeout(resolve, 3000)); 
 
     try {
       const res = await Promise.all([fetchData, delay]).then(values => values[0]);
