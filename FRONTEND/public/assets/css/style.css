@@ -46541,3 +46541,44 @@ body {
   50% { clip-path: inset(0 1ch 0 0); }
   75% { clip-path: inset(0 0ch 0 0); }
 }
+
+
+
+.image-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .3s ease;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container:hover .overlay {
+    opacity: 1;
+}
+
+.eye-icon {
+    color: white;
+    width: 200px;
+    height: 24px;
+    cursor: pointer;
+}
