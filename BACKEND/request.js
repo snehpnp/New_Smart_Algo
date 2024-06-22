@@ -69,36 +69,32 @@ module.exports = function (app) {
 
     app.post("/all/tabel", async (req, res) => {
         try {
-     
+
             const roles = await Roledata.find();
             if (roles.length !== 4) {
-                await RoleCreate();
+                RoleCreate();
             }
 
-   
+
             const companies = await company.find();
-            if (companies.length === 0) {
-                await CompanyCreate(req.body);
+            if (companies.length == 0) {
+                CompanyCreate(req.body);
             }
 
-         
+
             const categories = await categorie.find();
-            if (categories.length !== 8) {
-                console.log("Categories length:", categories.length);
-                await categorie.deleteMany({});
-                console.log('All categories deleted successfully.');
-                await categorys();
+            if (categories.length != 0) {
+                categorys();
             }
 
-   
+
             const brokers = await Broker_information.find();
-            if (brokers.length === 0) {
-                await CreateBrokerinfo();
+            if (brokers.length == 0) {
+                CreateBrokerinfo();
             }
 
-            await service_token_update();
-            await TokenSymbolUpdate();
-            await DawnloadOptionChainSymbol();
+            service_token_update();
+            TokenSymbolUpdate();
 
             res.send("DONE");
         } catch (error) {
@@ -187,13 +183,15 @@ module.exports = function (app) {
             panel_key: data.client_key,
             prefix: data.client_key.substring(0, 3),
             domain_url: data.domain,
-            domain_url_https: "domain_url_https",
+            domain_url_https: data.backend_rul+'/#/login',
             broker_url: data.backend_rul,
             theme_id: "64d0c04a0e38c94d0e20ee28",
-            theme_name: "theme_name"
+            theme_name: "theme_name",
+            disclaimer:"Disclaimer: The risk of loss in trading in any financial markets or exchange can be substantial. These are leveraged products that carry a substantial risk of loss up to your invested capital and may not be suitable for everyone. You should therefore carefully consider whether such trading is suitable for you considering your financial condition. Please ensure that you fully understand the risks involved and do not invest money you cannot afford to lose. Past performance does not guarantee future performance. Historical returns, expected returns, and probability projections are provided for informational and illustrative purposes, and may not reflect actual future performance. SKW Investment Adviser does not guarantee returns in any of its products or services.",
+            version:"1.0",
+            panel_short_name:data.client_key.substring(0, 3),
 
         })
-        // console.log("newRole", newRole);
         return companyData.save();
     }
 
@@ -226,7 +224,7 @@ module.exports = function (app) {
     const categorys = async () => {
         const categoriesData = [
             {
-                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c9797"),
+                _id: new ObjectId("64c9dbdc14a9fefd971c9797"),
                 category_id: "1",
                 name: 'CASH',
                 segment: 'C',
@@ -234,7 +232,7 @@ module.exports = function (app) {
                 CID: "1"
             },
             {
-                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c9798"),
+                _id: new ObjectId("64c9dbdc14a9fefd971c9798"),
                 category_id: "2",
                 name: 'FUTURE',
                 segment: 'F',
@@ -242,7 +240,7 @@ module.exports = function (app) {
                 CID: "2"
             },
             {
-                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c9799"),
+                _id: new ObjectId("64c9dbdc14a9fefd971c9799"),
                 category_id: "3",
                 name: 'OPTION',
                 segment: 'O',
@@ -250,7 +248,7 @@ module.exports = function (app) {
                 CID: "3"
             },
             {
-                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c979a"),
+                _id: new ObjectId("64c9dbdc14a9fefd971c979a"),
                 category_id: "4",
                 name: 'MCX FUTURE',
                 segment: 'MF',
@@ -258,7 +256,7 @@ module.exports = function (app) {
                 CID: "4"
             },
             {
-                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c979b"),
+                _id: new ObjectId("64c9dbdc14a9fefd971c979b"),
                 category_id: "5",
                 name: 'MCX OPTION',
                 segment: 'MO',
@@ -266,7 +264,7 @@ module.exports = function (app) {
                 CID: "5"
             },
             {
-                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c979c"),
+                _id: new ObjectId("64c9dbdc14a9fefd971c979c"),
                 category_id: "6",
                 name: 'CURRENCY OPTION',
                 segment: 'CO',
@@ -274,7 +272,7 @@ module.exports = function (app) {
                 CID: "6"
             },
             {
-                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c979d"),
+                _id: new ObjectId("64c9dbdc14a9fefd971c979d"),
                 category_id: "7",
                 name: 'CURRENCY FUTURE',
                 segment: 'CF',
@@ -282,7 +280,7 @@ module.exports = function (app) {
                 CID: "7"
             },
             {
-                _id: mongoose.Types.ObjectId("64c9dbdc14a9fefd971c979e"),
+                _id: new ObjectId("64c9dbdc14a9fefd971c979e"),
                 category_id: "8",
                 name: 'FUTURE OPTION',
                 segment: 'FO',
@@ -300,7 +298,7 @@ module.exports = function (app) {
         }
     };
 
-    
+
 
 
 
