@@ -6,27 +6,23 @@ import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDat
 import { Get_All_Theme, getthemedata } from '../../../ReduxStore/Slice/ThemeSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
-import { Upload } from 'lucide-react';
+import { Upload, Eye } from 'lucide-react';
+// import './CompanyTheme.css'; // Import the CSS file
 
 const CompanyTheme = () => {
 
     const dispatch = useDispatch()
-
     const theme_list = useSelector(getthemedata && getthemedata)
-
     const [showModal, setshowModal] = useState(false)
-
-    const [themeData, setThemeData] = useState({
-        loading: true,
-        data: []
-    });
-
+    const [showImageModal, setShowImageModal] = useState(false)
+    const [themeData, setThemeData] = useState({ loading: true, data: [] });
+    const [selectedRow, setSelectedRow] = useState(null);
+    const [file, setFile] = useState();
+    const [fullImage, setFullImage] = useState(null);
 
     useEffect(() => {
         dispatch(Get_All_Theme())
     }, [dispatch])
-
-
 
     useEffect(() => {
         if (theme_list !== undefined) {
@@ -42,9 +38,6 @@ const CompanyTheme = () => {
         }
     }, [theme_list]);
 
-
-
-
     const columns = [
         {
             dataField: "index",
@@ -57,76 +50,98 @@ const CompanyTheme = () => {
         },
         {
             dataField: 'price',
-            text: 'Product Name'
+            text: 'Upload Theme Img',
+            formatter: (cell, row, rowIndex) => (
+                <Upload onClick={() => handleUploadClick(row)} />
+            ),
         },
         {
-            dataField: 'price',
-            text: 'Uplaod Theme Img',
-            formatter: (cell, row, rowIndex) => <>
-                <Upload onClick={() => setshowModal(true)} />
-            </>,
-
+            dataField: 'image',
+            text: 'Uploaded Image',
+            formatter: (cell, row, rowIndex) => (
+                <div className="image-container">
+                    <img style={{ height: "100px",width:"auto" }} src={cell} alt="Theme Thumbnail" onClick={() => handleImageClick(cell)} />
+                    <div className="overlay">
+                        <Eye className="eye-icon" onClick={() => handleImageClick(cell)} />
+                    </div>
+                </div>
+            ),
         },
-        // {
-        //     dataField: 'price',
-        //     text: 'Product Name'
-        // },
-        // {
-        //     dataField: 'price',
-        //     text: 'Product Name'
-        // },
     ];
 
+    const handleUploadClick = (row) => {
+        setSelectedRow(row);
+        setshowModal(true);
+    }
 
-    const [file, setFile] = useState();
-    function handleChange(e) {
+    const handleChange = (e) => {
         console.log(e.target.files);
         setFile(URL.createObjectURL(e.target.files[0]));
     }
 
+    const handleCloseModal = () => {
+        setshowModal(false);
+        setFile(null);
+        setSelectedRow(null);
+    }
+
+    const handleImageClick = (imageUrl) => {
+        setFullImage(imageUrl);
+        setShowImageModal(true);
+    }
+
+    const handleCloseImageModal = () => {
+        setShowImageModal(false);
+        setFullImage(null);
+    }
 
     return (
         <Content Page_title="Company Theme" button_status={false}>
-            <button onClick={() => setshowModal(true)} className='btn btn-primary mb-3'> Upload Theme Img</button>
             {
                 themeData.loading ? (
                     <Loader />
                 ) : themeData.data && themeData.data.length === 0 ? (
                     'No data found'
                 ) : (
-                    <FullDataTable TableColumns={columns} tableData={themeData.data.data} />
+                    <FullDataTable TableColumns={columns} tableData={themeData.data.data} pagination1={true} />
                 )
             }
 
             <Modal isOpen={showModal} size="md" title="Upload Theme Image" hideBtn={true}
-                handleClose={() => setshowModal(false)}
+                handleClose={handleCloseModal}
             >
-
-
-                {/* <div className={`col-lg-12`}>
+                <div className={`col-lg-12`}>
                     <div className="row d-flex">
                         <div className="mb-3">
                             <label className={`col-form-12`} htmlFor="uploadtheme">
-                                uploadtheme
+                                Upload Theme
                                 <span className="text-danger">*</span>
                             </label>
                             <input
                                 type="file"
                                 id="uploadtheme"
-                                onChange={(e) => handleChange(e)}
+                                onChange={handleChange}
                                 className={`form-control`}
                             />
                         </div>
-                        <img src={file} name='uploadtheme' alt={`Upload Theme Img`} className={`col-lg-12 ms-3
-                                   mb-3 border border-2`}
-                            style={{ height: '150px', width: "95%" }}
-                        />
+                        {file && (
+                            <img src={file} name='uploadtheme' alt={`Upload Theme Img`} className={`col-lg-12 ms-3 mb-3 border border-2`}
+                                style={{ height: '150px', width: "95%" }}
+                            />
+                        )}
                     </div>
-                </div> */}
+                </div>
             </Modal>
-        </Content >
+
+            <Modal isOpen={showImageModal} size="lg" title="Full Size Image" hideBtn={true}
+                handleClose={handleCloseImageModal}
+            >
+                <div className={`col-lg-12`}>
+                    <img src={fullImage} alt="Full Size Theme Img" className={`col-lg-12`} style={{ width: '100%' }} />
+                </div>
+            </Modal>
+        </Content>
     );
 }
 
-
-export default CompanyTheme
+export default CompanyTheme;

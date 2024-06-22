@@ -28,11 +28,6 @@ const AdminsList = () => {
     const [themeData1, setThemeData1] = useState({ loading: true, data: [] });
 
 
-
-
-
-
-
     const GetAllThemes = async () => {
         await dispatch(Get_All_Theme()).unwrap()
             .then((response) => {
@@ -44,6 +39,7 @@ const AdminsList = () => {
     useEffect(() => {
         GetAllThemes()
     }, [])
+
 
 
     const data = async () => {
@@ -86,16 +82,13 @@ const AdminsList = () => {
 
 
 
-
-
     const fetchBrokerView = async (row) => {
         try {
-            console.log("row", row)
             const response = await axios.get(row.domain + '/backend/all/brokerview');
             return response.data;
         } catch (error) {
             console.error('Error fetching broker view data:', error.message);
-            return null; // Return a default value to prevent errors from reflecting on the frontend
+            return null;
         }
     };
 
@@ -104,14 +97,14 @@ const AdminsList = () => {
             let data = JSON.stringify({
                 "panelname": row.panel_name,
                 "client_key": row.key,
-                backend_rul:row.domain+"/backend/",
-                domain:row.domain
+                backend_rul: row.domain + "/backend/",
+                domain: row.domain
             });
 
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: row.domain  + '/backend/all/tabel',
+                url: row.domain + '/backend/all/tabel',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -132,30 +125,17 @@ const AdminsList = () => {
 
 
 
-
-
-
-
-
     const columns = [
         {
             dataField: "index",
             text: "SR. No.",
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
-        // {
-        //     dataField: 'panel_name',
-        //     text: 'Panel Name'
-        // },
+
         {
             dataField: 'domain',
             text: 'Domain Name'
         },
-
-        // {
-        //     dataField: 'port',
-        //     text: 'Port No'
-        // },
         {
             dataField: 'key',
             text: 'Key'
@@ -265,21 +245,7 @@ const AdminsList = () => {
 
 
 
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await data();
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-
+   
 
 
 
@@ -307,11 +273,11 @@ const AdminsList = () => {
 
             await dispatch(Update_Panel_Theme(req)).unwrap()
                 .then((response) => {
-                    // console.log("response", response);
                     if (response.status) {
                         toast.success(response.msg)
                         setshowModal(false)
 
+                        fetchData()
                     }
                 })
         }
@@ -352,8 +318,19 @@ const AdminsList = () => {
     }
 
 
+    const fetchData = async () => {
+        try {
+            await data();
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
 
 
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
 
 

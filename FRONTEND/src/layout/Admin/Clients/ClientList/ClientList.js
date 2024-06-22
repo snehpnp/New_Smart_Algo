@@ -5,29 +5,17 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
-import {
-  GET_ALL_CLIENTS,
-  GO_TO_DASHBOARDS,
-  UPDATE_USER_ACTIVE_STATUS,
-
-  DELETE_USER_SERVICES,
-} from "../../../../ReduxStore/Slice/Admin/AdminSlice";
+import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS, DELETE_USER_SERVICES } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
-
 import * as Config from "../../../../Utils/Config";
-
 import { useDispatch } from "react-redux";
-import { fa_time ,fDateTime} from "../../../../Utils/Date_formet";
+import { fa_time, fDateTime } from "../../../../Utils/Date_formet";
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 
 const AllClients = () => {
-  const [refresh, setrefresh] = useState(false);
-
-
-
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,34 +25,25 @@ const AllClients = () => {
   const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id;
   const token = JSON.parse(localStorage.getItem("user_details")).token;
 
-  // For Filter
+  const [refresh, setrefresh] = useState(false);
   const [originalData, setOriginalData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [PanelStatus, setPanelStatus] = useState("2");
   const [ClientStatus, setClientStatus] = useState("null");
   const [SwitchButton, setSwitchButton] = useState(true);
   const [selectBroker, setSelectBroker] = useState("null");
-
   const [BrokerDetails, setBrokerDetails] = useState([]);
-
+  const [ForGetCSV, setForGetCSV] = useState([])
 
   const [getAllClients, setAllClients] = useState({
     loading: true,
     data: [],
   });
 
-
-
-
-  const [ForGetCSV, setForGetCSV] = useState([])
-
-
   const [getAllStrategyName, setAllStrategyName] = useState({
     loading: true,
     data: [],
   });
-
-
 
 
   //  GET ALL SERVICE NAME
@@ -87,7 +66,6 @@ const AllClients = () => {
   };
 
 
-
   const Brokerdata = async () => {
 
     await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
@@ -99,7 +77,6 @@ const AllClients = () => {
   }
 
   useEffect(() => {
-    // Brokerdata();
     GetAllStrategyName();
   }, []);
 
@@ -243,8 +220,7 @@ const AllClients = () => {
         await Brokerdata();
         await data();
       } catch (error) {
-        // Handle errors appropriately
-        console.error('Error fetching data:', error);
+        console.log('Error fetching data:', error);
       }
     };
 
@@ -504,14 +480,9 @@ const AllClients = () => {
   const showBrokerName = (value1, licence_type) => {
     let value = parseInt(value1);
 
-    // if (licence_type === "0") {
-    //   return "2 Days Only";
-    // } 
     if (licence_type === "1") {
       return "Demo";
     } else {
-
-
 
       const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
       if (foundNumber != undefined) {
@@ -520,7 +491,7 @@ const AllClients = () => {
         return ""
       }
 
-     
+
     }
   };
 
@@ -589,127 +560,130 @@ const AllClients = () => {
 
 
 
-
+  console.log("getAllClients.loading ", !getAllClients.loading)
 
   return (
     <>
-      {getAllClients.loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Content
-            Page_title={headerName}
-            button_title="Add Client"
-            route="/admin/client/add"
-            show_csv_button={true} csv_data={ForGetCSV} csv_title="Client-List"
-          >
 
-            <div className="row">
-              <div className="col-lg-3">
-                <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">
-                    Search Something Here
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Search..."
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    class="form-control"
-                    id="exampleFormControlInput1"
-                  />
-                </div>
-              </div>
-              <div className="col-lg-2 ">
-                <div class="mb-3">
-                  <label for="select" class="form-label">
-                    Client Type
-                  </label>
+      <Content
+        Page_title={headerName}
+        button_title="Add Client"
+        route="/admin/client/add"
+        show_csv_button={true} csv_data={ForGetCSV} csv_title="Client-List"
+      >
 
-                  <select
-                    class="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setClientStatus(e.target.value)}
-                    value={ClientStatus}
-                  >
-                    <option value="null">All</option>
-                    <option value="2">Live</option>
-                    <option value="1">Demo</option>
-                    <option value="0">2 Days Only</option>
-                  </select>
-                </div>
-              </div>
-              <div className="col-lg-2">
-                <div class="mb-3">
-                  <label for="select" class="form-label">
-                    Trading Type
-                  </label>
-
-                  <select
-                    class="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setPanelStatus(e.target.value)}
-                    value={PanelStatus}
-                  >
-                    <option value="2">All</option>
-                    <option value="1">On</option>
-                    <option value="0">OFf</option>
-                  </select>
-                </div>
-              </div>
-
-
-              <div className="col-lg-2">
-
-                <div className="mb-3">
-
-                  <label for="select" className="form-label">
-
-                    Broker Type
-                  </label>
-                  <select
-                    className="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setSelectBroker(e.target.value)}
-                    value={selectBroker}
-                  >
-                    <option value="null">All</option>
-
-
-                    {BrokerDetails && BrokerDetails.map((element) => (
-                      <option key={element.broker_id} value={element.broker_id}>
-                        {element.title}
-                      </option>
-                    ))}
-
-                  </select>
-                </div>
-              </div>
-
-
-
-              <div className="col-lg-2 mt-4">
-                <button
-                  className="btn btn-primary mt-2"
-                  onClick={(e) => ResetDate(e)}
-                >
-                  Reset
-                </button>
-              </div>
+        <div className="row">
+          <div className="col-lg-3">
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label">
+                Search Something Here
+              </label>
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                class="form-control"
+                id="exampleFormControlInput1"
+              />
             </div>
+          </div>
+          <div className="col-lg-2 ">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Client Type
+              </label>
 
-            <FullDataTable
-              TableColumns={columns}
-              tableData={getAllClients.data}
-            />
-            <ToastButton />
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setClientStatus(e.target.value)}
+                value={ClientStatus}
+              >
+                <option value="null">All</option>
+                <option value="2">Live</option>
+                <option value="1">Demo</option>
+                <option value="0">2 Days Only</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-lg-2">
+            <div class="mb-3">
+              <label for="select" class="form-label">
+                Trading Type
+              </label>
 
-          </Content>
-        </>
-      )}
+              <select
+                class="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setPanelStatus(e.target.value)}
+                value={PanelStatus}
+              >
+                <option value="2">All</option>
+                <option value="1">On</option>
+                <option value="0">OFf</option>
+              </select>
+            </div>
+          </div>
+
+
+          <div className="col-lg-2">
+
+            <div className="mb-3">
+
+              <label for="select" className="form-label">
+
+                Broker Type
+              </label>
+              <select
+                className="default-select wide form-control"
+                aria-label="Default select example"
+                id="select"
+                onChange={(e) => setSelectBroker(e.target.value)}
+                value={selectBroker}
+              >
+                <option value="null">All</option>
+
+
+                {BrokerDetails && BrokerDetails.map((element) => (
+                  <option key={element.broker_id} value={element.broker_id}>
+                    {element.title}
+                  </option>
+                ))}
+
+              </select>
+            </div>
+          </div>
+
+
+
+          <div className="col-lg-2 mt-4">
+            <button
+              className="btn btn-primary mt-2"
+              onClick={(e) => ResetDate(e)}
+            >
+              Reset
+            </button>
+          </div>
+        </div>
+        
+        {!getAllClients.loading ? (
+          <FullDataTable
+            TableColumns={columns}
+            tableData={getAllClients.data}
+          />
+          
+        ) : (<Loader />)
+
+        }
+
+        <ToastButton />
+
+      </Content>
+
+
     </>
   );
 };
