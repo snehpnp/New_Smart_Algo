@@ -138,24 +138,10 @@ const AllPermitions = () => {
  
 
 
-    // const CloseCompany = async (status) => {
-
-    //     const req = {
-    //         "domain": Config.react_domain,
-    //         "status": status ? 1 : 0
-    //     }
-
-
-    //     await dispatch(Close_Admin_Panel(req)).unwrap()
-    //         .then((response) => {
-    //             if (response.status) {
-    //                 toast.success(response.msg);
-    //                 setRefresh(!refresh)
-    //             } else {
-    //                 toast.error(response.msg);
-    //             }
-    //         })
-    // }
+    useEffect(() => {
+     
+        GetAllThemes()
+    }, [refresh])
 
 
 
@@ -185,12 +171,13 @@ const AllPermitions = () => {
             text: 'Panel Name',
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-                    <Link to={`${row.domain}`}>
+                    <Link to={`${row.domain}`} target="_blank" rel="noopener noreferrer">
                         {row.panel_name}
                     </Link>
                 </span>
             )
         },
+        
 
         {
             dataField: 'Broker',
@@ -228,16 +215,16 @@ const AllPermitions = () => {
             )
 
         },
-        {
-            dataField: 'panel_name',
-            text: 'Panel Details',
-            formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-                    <FileClock size={20} color="#198754" strokeWidth={2}
-                        className="mx-1" />
-                </span>
-            )
-        },
+        // {
+        //     dataField: 'panel_name',
+        //     text: 'Panel Details',
+        //     formatter: (cell, row) => (
+        //         <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+        //             <FileClock size={20} color="#198754" strokeWidth={2}
+        //                 className="mx-1" />
+        //         </span>
+        //     )
+        // },
 
         {
             dataField: 'panel_name',

@@ -262,7 +262,7 @@ const AllClients = () => {
 
     if (licence_type === "0") {
       return "Live 2 Days Only";
-    } else if (licence_type === "1") {
+    } else if (licence_type == "1") {
       return "Paper Trading";
     } else {
       if (value === 1) {

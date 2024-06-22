@@ -18,6 +18,7 @@ module.exports = function (app) {
         downloadKotakNeotoken();
         downloadZerodhatoken();
         downloadAndExtractUpstox();
+        downloadAndExtractICICIDirect();
         
     });
     
@@ -314,9 +315,41 @@ module.exports = function (app) {
 
     }
 
+     // ICICI DIRECT FILES
+    const downloadAndExtractICICIDirect = async ()=> {
+        try {
+            const url = 'https://directlink.icicidirect.com/NewSecurityMaster/SecurityMaster.zip';
+
+            // Download the zip file
+            const response = await axios.get(url, { responseType: 'arraybuffer' });
+
+            // Create a folder to store the extracted files
+            const outputFolder = path.join(__dirname, '../AllInstrumentToken/iciciinstrument');
+            if (!fs.existsSync(outputFolder)) {
+                fs.mkdirSync(outputFolder);
+            }
+
+            // Save the zip file
+            const zipFilePath = path.join(__dirname, 'SecurityMaster.zip');
+            fs.writeFileSync(zipFilePath, Buffer.from(response.data, 'binary'));
+
+            // Extract the zip file
+            const zip = new AdmZip(zipFilePath);
+            zip.extractAllTo(outputFolder, true);
+
+            // Clean up the downloaded zip file
+            fs.unlinkSync(zipFilePath);
+
+            // Send a response to indicate success
+            console.log('Download and extraction completed successfully');
+        } catch (err) {
+            console.error('Error:', err);
+        }
+    }
+
 
     app.get('/chek-token', async (req, res) => {
-       // downloadKotakNeotoken()
+       // downloadAndExtractICICIDirect()
          res.send("okkk")
       })
 

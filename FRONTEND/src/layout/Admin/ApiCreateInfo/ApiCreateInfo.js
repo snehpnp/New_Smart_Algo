@@ -65,9 +65,7 @@ const ApiCreateInfo = () => {
 
                     {/* {goToDashboard ? } */}
                     {UserDetails.data && UserDetails.data.map((item) => {
-                        // {UserDetails.data && UserDetails.data.map((item) => {
-                        
-                              
+                                             
                         return <>
                             <div class="card__bx card__1">
                                 <div class="card__data">

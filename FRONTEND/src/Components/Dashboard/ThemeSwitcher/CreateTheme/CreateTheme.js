@@ -1,128 +1,69 @@
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { primaryColor, Nav_Heaer_Color, Header_Color, Sidebar_Color } from "./Data"
 import $ from "jquery";
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import { Tabs, Tab, Button } from 'react-bootstrap';
 import Modal_Component from '../../../ExtraComponents/Modal';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from "react-redux";
 import html2canvas from 'html2canvas';
-import * as Config from "../../../../Utils/Config";
 import { Add_Theme } from '../../../../ReduxStore/Slice/ThemeSlice';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
-
-
-
-
 const CreateTheme = ({ SelectTheme1 }) => {
-
     const dispatch = useDispatch()
-
-
     const [toggleSelection, setToggleSelection] = useState(false)
-
-    // for theme selection
     const [ThemeVersion, setThemeVersion] = useState("")
     const [ThemeDashboard, setThemeDashboard] = useState("")
     const [PrimaryColor, setPrimaryColor] = useState("")
     const [NavHeaderColor, setNavHeaderColor] = useState("")
     const [HeaderColor, setHeaderColor] = useState("")
     const [SidebarColor, setSidebarColor] = useState("")
-
-    // for header selection
     const [Layout, setLayout] = useState("")
     const [Sidebar, setSidebar] = useState("")
     const [HeaderPosition, setHeaderPosition] = useState("")
     const [SidebarPosition, setSidebarPosition] = useState("")
-    // for Container selection
     const [Container, setContainer] = useState("")
     const [BodyFont, setBodyFont] = useState("")
-
-    // for Multistep Form
     const [activeTab, setActiveTab] = useState(1);
-
-    const handleNextTab = (prevTab) => {
-
-        setActiveTab((prevTab) => prevTab + 1)
-
-    };
-
-    const handlePreviousTab = () => {
-        setActiveTab(prevTab => (prevTab > 1 ? prevTab - 1 : prevTab));
-    };
-
-
-    // const handleTabClick = (tabNumber) => {
-    //     setActiveTab(tabNumber);
-    // };
-
-
-
-
-    // For Show Modal
     const [isModalOpen, setIsModalOpen] = useState(false);
-
-
-    // For Theme Name
-
     const [themeName, setThemeName] = useState('');
+
+    const handleNextTab = (prevTab) => { setActiveTab((prevTab) => prevTab + 1) };
+    const handlePreviousTab = () => { setActiveTab(prevTab => (prevTab > 1 ? prevTab - 1 : prevTab)) };
 
     SelectTheme1(ThemeVersion, PrimaryColor, NavHeaderColor, HeaderColor, SidebarColor, Layout, Sidebar, HeaderPosition, SidebarPosition, Container, BodyFont)
 
-    // ------------------ for Theme Selection ------------------------
-
-    // for  Version Selection
-    const PreviewVersion = (e) => {
-        $('body').attr('data-theme-version', e.target.value);
-        setThemeVersion(e.target.value);
-    }
-
-
-
+    const PreviewVersion = (e) => { $('body').attr('data-theme-version', e.target.value); setThemeVersion(e.target.value); }
 
     const PreviewDashboard = (e) => {
-
         $('body').attr('data-dashboard', e.target.value);
         $('body').removeClass('theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9 theme-10');
         $('body').addClass(e.target.value)
-
-
         setThemeDashboard(e.target.value);
     }
 
-    // for  primary Color Selection
+
     const PreviewPrimaryColor = (e) => {
         $('body').attr('data-primary', e.target.value);
         setPrimaryColor(e.target.value);
     }
 
-    // for  Nav-Header Selection
     const PreviewNavHeaderColor = (e) => {
         $('body').attr('data-nav-headerbg', e.target.value);
         setNavHeaderColor(e.target.value);
     }
 
-    // for  Header Selection
     const PreviewHeaderColor = (e) => {
         $('body').attr('data-headerbg', e.target.value);
         setHeaderColor(e.target.value);
     }
 
-    // for  Sidebar Selection
     const PreviewSIdebarColor = (e) => {
         $('body').attr('data-sibebarbg', e.target.value);
         setSidebarColor(e.target.value);
     }
 
-    //-------------------  for Header selection -------------------
-
-    // for Preview Layout
     const PreviewLayout = (e) => {
         if ($('body').attr('data-sidebar-style') === 'overlay') {
             $('body').attr('data-sidebar-style', 'full');
@@ -133,8 +74,6 @@ const CreateTheme = ({ SelectTheme1 }) => {
         setLayout(e.target.value);
     }
 
-
-    // for  Sidebar Selection
     const PreviewSIdebar = (e) => {
         if ($('body').attr('data-layout') === "horizontal") {
             if (e.target.value === "overlay") {
@@ -163,30 +102,24 @@ const CreateTheme = ({ SelectTheme1 }) => {
                 $('#main-wrapper').removeClass('iconhover-toggle');
             });
         }
-
         setSidebar(e.target.value);
     }
 
-    // for  Navigation Header  Selection
     const PreviewHeaderPosition = (e) => {
         $('body').attr('data-header-position', e.target.value);
         setHeaderPosition(e.target.value);
     }
 
-    // for  Sidebar Position  Selection
     const PreviewSidebarPosition = (e) => {
         $('body').attr('data-sidebar-position', e.target.value);
         setSidebarPosition(e.target.value);
     }
 
-    // ------------------ for Container selection ------------------------
-
-    // for  Typography Selection
     const PreviewTypeGraphy = (e) => {
         $('body').attr('data-typography', e.target.value);
         setBodyFont(e.target.value);
     }
-    // for  Container Selection
+
     const PreviewContainer = (e) => {
         if (e.target.value === "boxed") {
             if ($('body').attr('data-layout') === "vertical" && $('body').attr('data-sidebar-style') === "full") {
@@ -203,68 +136,11 @@ const CreateTheme = ({ SelectTheme1 }) => {
     }
 
 
-
-    const ApplyChanges = async (e) => {
-
-        // return
-        setToggleSelection(false)
-        setIsModalOpen(true)
-
-    }
-
     const AddTheme = async (e) => {
-        // e.preventDefault();
-
-        const element = document.getElementById('root');
-
-
-        const options = {
-            width: document.documentElement.scrollWidth, // Set custom width
-            height: document.documentElement.scrollHeight, // Set custom height
-        };
-
-        // Set the window size and scroll position to match the content size
-        // window.resizeTo(width, height);
         window.scrollTo(0, 0);
-
-        var screenshotUrl
         setIsModalOpen(false)
 
-
-        // Capture the screenshot
-        await html2canvas(document.documentElement, options).then(canvas => {
-            // Convert canvas to an image and download it
-            const screenshot = canvas.toDataURL('image/png');
-            screenshotUrl = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = screenshot;
-            link.download = 'screenshot.png';
-            link.click();
-
-
-        })
-
-
-
-        // return
         const req = {
-            // body_font: BodyFont,
-            // theme_version: ThemeVersion,
-            // layout: Layout,
-            // primary_col: PrimaryColor,
-            // header_col: HeaderColor,
-            // nav_head_col: NavHeaderColor,
-            // sidebar_col: SidebarColor,
-            // sidebar: Sidebar,
-            // sidebar_position: SidebarPosition,
-            // header_position: HeaderPosition,
-            // container: Container,
-            // panel_name: "smartalgo",
-            // image: screenshotUrl,
-            // theme_name: themeName,
-            // dashboard: ThemeDashboard
-
-
             body_font: BodyFont,
             theme_version: ThemeVersion,
             layout: Layout,
@@ -277,40 +153,18 @@ const CreateTheme = ({ SelectTheme1 }) => {
             header_position: HeaderPosition,
             container: Container,
             panel_name: "smartalgo",
-            image: screenshotUrl,
+            image: "",
             theme_name: themeName,
             dashboard: ThemeDashboard
-
-
-
-            // body_font: "poppins",
-            // theme_version: "light",
-            // layout: "horizontal",
-            // primary_col: "color_9",
-            // header_col: "color_1",
-            // nav_head_col: 'color_9',
-            // sidebar_col: "color_9",
-            // sidebar: "full",
-            // sidebar_position: "fixed",
-            // header_position: "fixed",
-            // container: "full",
-            // panel_name: "smartalgo",
-            // image: "smartalgo",
-            // theme_name: "Theme-8",
-            // dashboard: "Theme-8"
-
-
         }
 
-
-
-        // axios.post(`${Config}/add/theme`, req).then((res) => {
         dispatch(Add_Theme(req)).then((res) => {
             setIsModalOpen(false)
         }).catch((err) => {
             console.log("error", err);
         })
     }
+
     const fun1 = () => {
         if (activeTab === 1) {
             if (ThemeVersion === "" || ThemeDashboard === "" || PrimaryColor === "" || NavHeaderColor === "" || HeaderColor === "" || SidebarColor === "")

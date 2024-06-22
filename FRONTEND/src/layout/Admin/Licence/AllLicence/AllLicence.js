@@ -1,7 +1,4 @@
-// import React from 'react'
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import Theme_Content from "../../../../Components/Dashboard/Content/Theme_Content";
@@ -127,16 +124,21 @@ const AllLicence = () => {
             }
           });
         }
+
+        if (searchInput) {
+          filteredData = filteredData.filter(item =>
+            item.user.UserName.toLowerCase().includes(searchInput.toLowerCase()) 
+          );
+        }
+
         setAllClients1({
           loading: false,
           data: filteredData,
-
         });
 
         setAllClients({
           loading: false,
           data: filteredData,
-
         });
 
       }
@@ -146,10 +148,9 @@ const AllLicence = () => {
     }
   };
 
-
   useEffect(() => {
     data();
-  }, []);
+  }, [searchInput]); 
 
 
 
@@ -215,9 +216,6 @@ const AllLicence = () => {
     headerName = "Total License"
   }
 
-
-
-  console.log("getAllClients", getAllClients.data)
 
 
   return (

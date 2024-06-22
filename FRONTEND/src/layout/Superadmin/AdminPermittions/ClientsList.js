@@ -14,8 +14,8 @@ import { useLocation } from 'react-router-dom';
 import { Get_All_Admin_Client } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 
 import toast, { Toaster } from 'react-hot-toast';
-import { DELETE_USER_SERVICES ,Find_User } from "../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
- 
+import { DELETE_USER_SERVICES, Find_User } from "../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
+
 
 
 
@@ -28,41 +28,52 @@ const SubAdminList = () => {
     let location = useLocation();
     const [showModal, setShowModal] = useState(false)
     const [getRowId, setRowId] = useState('')
+    const [searchInput, setSearchInput] = useState('')
 
     const RowId = localStorage.getItem('RowData')
     const backend_rul = localStorage.getItem("backend_rul");
     const UserName = JSON.parse(localStorage.getItem("user_details")).UserName
     const panel_name = localStorage.getItem("panel_name");
-    
+
     const [UserData, setUserData] = useState({
         loading: true,
         data: []
     });
 
 
-    
-    
+
+
     const GetAllClients = async () => {
-        const data={ id: RowId  }
-       
-        
+        const data = { id: RowId }
+
+
         await dispatch(Get_All_Admin_Client(data)).unwrap()
-        .then((response) => {
-            if (response.status) {
-                setshowClients(
-                    response.data
-                );
+            .then((response) => {
+                if (response.status) {
+                    console.log(response.data.data)
+
+                    const filterData = response.data && response.data.data.filter((item) => {
+                        const matchSearch =
+                            searchInput == '' ||
+                            item.UserName.toLowerCase().includes(searchInput.toLowerCase())
+
+                        return matchSearch
+                    })
+
+                    setshowClients(
+                        searchInput ? filterData : response.data.data
+                    );
                 }
             })
     }
-    
+
 
     const Delete_user = async (id) => {
         var req = {
             id: id,
-            backend_rul : backend_rul,
-            superadmin_name : UserName,
-            panel_name : panel_name
+            backend_rul: backend_rul,
+            superadmin_name: UserName,
+            panel_name: panel_name
 
         };
         if (window.confirm("Do you want to delete this User ?")) {
@@ -143,7 +154,7 @@ const SubAdminList = () => {
 
     // GET USER DETAILS
     const handleViewFunction = async (row) => {
-        const data = { id:  row  , backend_rul : backend_rul}
+        const data = { id: row, backend_rul: backend_rul }
         await dispatch(Find_User(data)).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -206,7 +217,7 @@ const SubAdminList = () => {
                                     size={20}
                                     strokeWidth={2}
                                     className="mx-1"
-                                    onClick={(e) => { setShowModal(true);  handleViewFunction(row._id) }}
+                                    onClick={(e) => { setShowModal(true); handleViewFunction(row._id) }}
                                 />
                             </span>
 
@@ -242,22 +253,35 @@ const SubAdminList = () => {
         },
 
     ];
-    
+
     useEffect(() => {
         GetAllClients()
-    }, [])
-    
- 
+    }, [searchInput])
 
-     
+
+
+
     return (
         <>
-            {ShowClients.loading ? (
+            {!ShowClients && ShowClients ? (
                 <Loader />
             ) : (
                 <Content Page_title="Client List" button_status={true} button_title='Back' route='/super/permitions'>
-                    {ShowClients.data ?
-                        <FullDataTable TableColumns={columns} tableData={ShowClients.data} />
+                    {ShowClients ?
+
+
+                        <>
+                            <div className='mb-4'>
+                                <h6>Search here something</h6>
+                                <input type="text"
+                                    style={{ height: '2rem' }}
+                                    placeholder='search...'
+                                    className='p-2 rounded'
+                                    onChange={(e) => { setSearchInput(e.target.value) }}
+                                    value={searchInput} />
+                            </div>
+                            <FullDataTable TableColumns={columns} tableData={ShowClients} />
+                        </>
                         :
                         <FullDataTable TableColumns={columns} tableData={[]} />
                     }
@@ -278,26 +302,26 @@ const SubAdminList = () => {
                                 <td>{UserData.data.length > 0 && UserData.data[0] && UserData.data[0].CreateDate}</td>
 
                             </tr>
-                           
+
                             <tr>
                                 <td>Start Date</td>
-                                <td>{UserData.data.length >0  && UserData.data[0] && UserData.data[0].StartDate}</td>
+                                <td>{UserData.data.length > 0 && UserData.data[0] && UserData.data[0].StartDate}</td>
                             </tr>
-                              
+
                             <tr>
                                 <td>End Date</td>
-                                <td>{UserData.data.length >0  &&  UserData.data[0] && UserData.data[0].EndDate}</td>
+                                <td>{UserData.data.length > 0 && UserData.data[0] && UserData.data[0].EndDate}</td>
                             </tr>
                             <tr>
                                 <td>To Month</td>
                                 <td>
-                                    {UserData.data.length >0  && UserData.data[0] &&  UserData.data[0].totalLicence}
+                                    {UserData.data.length > 0 && UserData.data[0] && UserData.data[0].totalLicence}
                                 </td>
                             </tr>
                             <tr>
                                 <td>Total Licence</td>
-                                <td>{UserData.data.length >0  &&  UserData.data[0] && UserData.data[0].licence}</td>
-                            </tr> 
+                                <td>{UserData.data.length > 0 && UserData.data[0] && UserData.data[0].licence}</td>
+                            </tr>
                             <tr>
                                 <td>Remaining Licence</td>
                                 <td>0</td>

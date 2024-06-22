@@ -85,7 +85,7 @@ const EditClient = () => {
 
 
 
- // GET USER DETAILS
+  // GET USER DETAILS
   const data_1 = async () => {
     await dispatch(Find_One_User({ 'id': location.state._id })).unwrap()
       .then((response) => {
@@ -160,16 +160,16 @@ const EditClient = () => {
         if (!values.broker) {
           errors.broker = valid_err.BROKER_ERROR;
         }
-        
+
       }
       else if (values.licence === '0' || values.licence === 0) {
         if (!values.broker) {
           errors.broker = valid_err.BROKER_ERROR;
         }
-        
+
       }
       else if (values.licence === '1' || values.licence === 1) {
-        
+
       }
       if (!values.groupservice) {
         errors.groupservice = valid_err.GROUPSELECT_ERROR;
@@ -239,29 +239,7 @@ const EditClient = () => {
 
 
 
-  useEffect(() => {
-    
-    formik.setFieldValue('username', UserData.data.data !== undefined && UserData.data.data[0].UserName);
-    formik.setFieldValue('fullName', UserData.data.data !== undefined && UserData.data.data[0].FullName);
-    formik.setFieldValue('email', UserData.data.data !== undefined && UserData.data.data[0].Email);
-    formik.setFieldValue('mobile', UserData.data.data !== undefined && UserData.data.data[0].PhoneNo);
-    formik.setFieldValue('licence', UserData.data.data !== undefined && UserData.data.data[0].license_type);
-    formik.setFieldValue('licence1', UserData.data.data !== undefined && UserData.data.data[0].licence);
-    formik.setFieldValue('groupservice', UserData.data.data !== undefined && UserData.data.data[0].groupservices_clients.groupService_id);
-    formik.setFieldValue('service_given_month', UserData.data.data !== undefined && UserData.data.data[0].service_given_month);
-    formik.setFieldValue('broker', UserData.data.data !== undefined && UserData.data.data[0].broker);
-    formik.setFieldValue('parent_id', UserData.data.data !== undefined && UserData.data.data[0].parent_id);
-    formik.setFieldValue('app_id', UserData.data.data !== undefined && UserData.data.data[0].app_id);
-    formik.setFieldValue('api_type', UserData.data.data !== undefined && UserData.data.data[0].api_type);
-    formik.setFieldValue('client_code', UserData.data.data !== undefined && UserData.data.data[0].client_code);
-    formik.setFieldValue('api_key', UserData.data.data !== undefined && UserData.data.data[0].api_key);
-    formik.setFieldValue('api_secret', UserData.data.data !== undefined && UserData.data.data[0].api_secret);
-    formik.setFieldValue('app_key', UserData.data.data !== undefined && UserData.data.data[0].app_key);
-    formik.setFieldValue('demat_userid', UserData.data.data !== undefined && UserData.data.data[0].demat_userid);
-    formik.setFieldValue('todate', UserData.data.data !== undefined && f_time(UserData.data.data[0].EndDate));
-    formik.setFieldValue('fromDate', UserData.data.data !== undefined && f_time(UserData.data.data[0].StartDate));
-    formik.setFieldValue('multiple_strategy_select', UserData.data.data !== undefined && UserData.data.data[0].multiple_strategy_select === '1' ? true : false);
-  }, [UserData.data]);
+
 
 
   useEffect(() => {
@@ -289,11 +267,11 @@ const EditClient = () => {
     { label: 'Angel', value: '12' },
     { label: '5 Paisa', value: '14' },
     { label: 'Zerodha', value: '15' },
-    
-    
+
+
   ];
 
-  
+
   const fields = [
     { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },
     { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },
@@ -338,25 +316,25 @@ const EditClient = () => {
     },
     //  For Demo Only Client
     {
-      name: 'fromDate', label: 'From Date', type: 'date',
+      name: 'fromDate', label: 'From Date', type: 'date1',
       showWhen: values => values.licence === '1'
       , label_size: 12, col_size: 6, disable: true
     },
     {
-      name: 'todate', label: 'To Date', type: 'date',
+      name: 'todate', label: 'To Date', type: 'date1',
       showWhen: values => values.licence === '1'
       , label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'api_key',
-      label:  formik.values.broker == 20 ? "ACCESS TOKEN " : formik.values.broker == 19 ? "Api Key" : formik.values.broker == 4 ? 'App Key' : formik.values.broker == 7 ? "Consumer Key" : formik.values.broker == 9 ? "Vendor Key" : formik.values.broker == 8 ? 'App Key' : formik.values.broker == 10 ? 'App Key' : "'Api Key", type: 'text',
-      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6' || values.broker === '19'|| values.broker === '20',
+      label: formik.values.broker == 20 ? "ACCESS TOKEN " : formik.values.broker == 19 ? "Api Key" : formik.values.broker == 4 ? 'App Key' : formik.values.broker == 7 ? "Consumer Key" : formik.values.broker == 9 ? "Vendor Key" : formik.values.broker == 8 ? 'App Key' : formik.values.broker == 10 ? 'App Key' : formik.values.broker == 26 ? 'App Key' : "'Api Key", type: 'text',
+      showWhen: values => values.broker === '4' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '12' || values.broker === '14' || values.broker === '15' || values.broker === '6' || values.broker === '19' || values.broker === '20' || values.broker === '26',
       label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'client_code',
-      label: formik.values.broker == 21 ? "CLIENT CODE": formik.values.broker == 20 ? "CLIENT ID": formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
-      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6'|| values.broker === '20' || values.broker === '21',
+      label: formik.values.broker == 21 ? "CLIENT CODE" : formik.values.broker == 20 ? "CLIENT ID" : formik.values.broker == 1 ? 'User' : formik.values.broker == 4 ? "Client Code" : formik.values.broker == 7 ? "User Name" : formik.values.broker == 9 ? "Vander Id" : formik.values.broker == 11 ? "Client Code" : formik.values.broker == 11 ? "client_code" : 'User Id', type: 'text',
+      showWhen: values => values.broker === '1' || values.broker === '5' || values.broker === '4' || values.broker === '7' || values.broker === '9' || values.broker === '11' || values.broker === '6' || values.broker === '20' || values.broker === '21',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -367,26 +345,21 @@ const EditClient = () => {
     },
     {
       name: 'app_id',
-      label: formik.values.broker == 21 ? "MPIN": formik.values.broker == 1 ? 'Verification Code' : formik.values.broker == 5 ? 'Password' :  formik.values.broker == 11 ? 'Password' : formik.values.broker == 2 ? 'Demat UserId' : formik.values.broker == 13 ? 'App Id' : formik.values.broker == 9 ? 'Password' : formik.values.broker == 14 ? 'User Id ' : 'App Id', type: 'text',
-      showWhen: values =>
-        //  values.broker === '2' ||
-        values.broker === '1' || values.broker === "3" || values.broker === '5' ||  values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '21',
+      label: formik.values.broker == 21 ? "MPIN" : formik.values.broker == 1 ? 'Verification Code' : formik.values.broker == 5 ? 'Password' : formik.values.broker == 11 ? 'Password' : formik.values.broker == 2 ? 'Demat UserId' : formik.values.broker == 13 ? 'App Id' : formik.values.broker == 9 ? 'Password' : formik.values.broker == 14 ? 'User Id ' : 'App Id', type: 'text',
+      showWhen: values => values.broker === '1' || values.broker === "3" || values.broker === '5' || values.broker === '9' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '21',
       label_size: 12, col_size: 6, disable: false
     },
     {
       name: 'app_key',
-      label: formik.values.broker == 5 || 6 ? 'App Key' : "", type: 'text',
+      label: formik.values.broker == 5 || formik.values.broker == 6 ? 'App Key' : "", type: 'text',
       showWhen: values => values.broker === '5',
       label_size: 12, col_size: 6, disable: false
     },
 
     {
       name: 'api_secret',
-      label: formik.values.broker == 1 ? 'Password Code' : formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker == 9 ? 'Encryption Secret Key' : formik.values.broker == 10 ? 'Api Secret Key' : formik.values.broker == 11 ? '2FA' : formik.values.broker == 14 ? 'Encryption Key' : 'Api Secret', type: 'text',
-      showWhen: values => values.broker === '1'
-        ||
-        // values.broker === '2' ||
-        values.broker === '3' || values.broker === '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15'|| values.broker === '19',
+      label: formik.values.broker == 1 ? 'Password Code' : formik.values.broker == 5 ? 'DOB' : formik.values.broker == 7 ? 'Consumer Secret' : formik.values.broker == 9 ? 'Encryption Secret Key' : formik.values.broker == 10 ? 'Api Secret Key' : formik.values.broker == 11 ? '2FA' : formik.values.broker == 14 ? 'Encryption Key' : formik.values.broker == 26 ? 'Api Secret' : 'Api Secret', type: 'text',
+      showWhen: values => values.broker === '1' || values.broker === '3' || values.broker == '5' || values.broker === '6' || values.broker === '7' || values.broker === '8' || values.broker === '9' || values.broker === '10' || values.broker === '11' || values.broker === '13' || values.broker === '14' || values.broker === '15' || values.broker === '19' || values.broker === '26',
       label_size: 12, col_size: 6, disable: false
     },
     {
@@ -441,8 +414,9 @@ const EditClient = () => {
     },
 
 
-    { name: 'multiple_strategy_select', label: 'Mutiple Selection Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false, check_box_true: formik.values.multiple_strategy_select ? true : false,
-  },
+    {
+      name: 'multiple_strategy_select', label: 'Mutiple Selection Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false, check_box_true: formik.values.multiple_strategy_select ? true : false,
+    },
   ];
 
 
@@ -450,9 +424,9 @@ const EditClient = () => {
   useEffect(() => {
 
 
+    console.log("CPPPP")
 
-    
-  ////////////////--------------START BROKER SET KEY----------------///////////
+    ////////////////--------------START BROKER SET KEY----------------///////////
     if (formik.values.broker === '1' || formik.values.broker === 1) {
       formik.setFieldValue('api_key', 'null');
       formik.setFieldValue('app_key', 'null');
@@ -477,7 +451,7 @@ const EditClient = () => {
     }
 
     if (formik.values.broker === '4' || formik.values.broker === 4) {
-      formik.setFieldValue('api_secret', 'null');
+      formik.setFieldValue('api_secret', 'null 1');
       formik.setFieldValue('app_id', 'null');
       formik.setFieldValue('app_key', 'null');
       formik.setFieldValue('api_type', 'null');
@@ -485,9 +459,9 @@ const EditClient = () => {
     }
 
     if (formik.values.broker === '5' || formik.values.broker === 5) {
-      formik.setFieldValue('api_secret', 'null');
+      // formik.setFieldValue('api_secret', 'null 2');
       formik.setFieldValue('api_key', 'null');
-      formik.setFieldValue('app_key', 'null');
+      // formik.setFieldValue('app_key', 'null');
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
@@ -495,15 +469,12 @@ const EditClient = () => {
     if (formik.values.broker === '6' || formik.values.broker === 6) {
       formik.setFieldValue('app_id', 'null');
       formik.setFieldValue('app_key', 'null');
-      // formik.setFieldValue('client_code', 'null');
       formik.setFieldValue('api_type', 'null');
       formik.setFieldValue('demat_userid', 'null');
     }
 
     if (formik.values.broker === '7' || formik.values.broker === 7) {
       formik.setFieldValue('app_key', 'null');
-      //formik.setFieldValue('api_type', 'null');
-      // formik.setFieldValue('demat_userid', 'null');
     }
 
     if (formik.values.broker === '8' || formik.values.broker === 8) {
@@ -532,7 +503,7 @@ const EditClient = () => {
       formik.setFieldValue('demat_userid', 'null');
     }
     if (formik.values.broker === '12' || formik.values.broker === 12) {
-      formik.setFieldValue('api_secret', 'null');
+      formik.setFieldValue('api_secret', 'null 3');
       formik.setFieldValue('app_id', 'null');
       formik.setFieldValue('app_key', 'null');
       formik.setFieldValue('client_code', 'null');
@@ -584,9 +555,14 @@ const EditClient = () => {
 
 
 
+    if (formik.values.broker === '26' || formik.values.broker === 26) {
+      formik.setFieldValue('app_key', 'null');
+      formik.setFieldValue('api_type', 'null');
+      formik.setFieldValue('demat_userid', 'null');
+    }
 
 
-  ////////////////--------------END BROKER SET KEY----------------///////////
+    ////////////////--------------END BROKER SET KEY----------------///////////
 
 
 
@@ -600,8 +576,6 @@ const EditClient = () => {
       formik.setFieldValue('broker', null);
     }
     if (formik.values.licence === '0' || formik.values.licence === 0) {
-      // formik.setFieldValue('tomonth', null);
-      // formik.setFieldValue('broker', null);
       formik.setFieldValue('fromDate', null);
       formik.setFieldValue('todate', null);
     }
@@ -671,7 +645,7 @@ const EditClient = () => {
 
 
 
-    await dispatch(All_Api_Info_List({ token: user_token, url: Config.react_domain, brokerId: -1 })).unwrap()
+    await dispatch(All_Api_Info_List({ token: user_token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
       .then((response) => {
         if (response.status) {
           setGetBrokerInfo(
@@ -690,7 +664,6 @@ const EditClient = () => {
 
 
   //  For Checked Strategy
-
   const handleStrategyChange = (event) => {
     const strategyId = event.target.value;
     setSelectedStrategies((prevStrategies) => {
@@ -700,6 +673,44 @@ const EditClient = () => {
       );
     });
   };
+
+
+
+
+
+  useEffect(() => {
+    const userData = UserData.data?.data?.[0];
+
+    if (userData) {
+      console.log("app_key", userData.app_key);
+      console.log("api_secret", userData.api_secret);
+
+
+      formik.setFieldValue('username', userData.UserName);
+      formik.setFieldValue('fullName', userData.FullName);
+      formik.setFieldValue('email', userData.Email);
+      formik.setFieldValue('mobile', userData.PhoneNo);
+      formik.setFieldValue('licence', userData.license_type);
+      formik.setFieldValue('licence1', userData.licence);
+      formik.setFieldValue('groupservice', userData.groupservices_clients?.groupService_id);
+      formik.setFieldValue('service_given_month', userData.service_given_month);
+      formik.setFieldValue('broker', userData.broker);
+      formik.setFieldValue('parent_id', userData.parent_id);
+      formik.setFieldValue('app_id', userData.app_id);
+      formik.setFieldValue('api_type', userData.api_type);
+      formik.setFieldValue('client_code', userData.client_code);
+      formik.setFieldValue('api_key', userData.api_key);
+      formik.setFieldValue('api_secret', userData && userData.api_secret);
+      formik.setFieldValue('app_key', userData.app_key);
+      formik.setFieldValue('demat_userid', userData.demat_userid);
+      formik.setFieldValue('todate', f_time(userData.EndDate));
+      formik.setFieldValue('fromDate', f_time(userData.StartDate));
+      formik.setFieldValue('multiple_strategy_select', userData.multiple_strategy_select == '1');
+    }
+  }, [UserData.data]);
+
+
+
 
   useEffect(() => {
     if (UserData.data.strategy) {
@@ -713,7 +724,6 @@ const EditClient = () => {
       setSelectedStrategies(initialSelectedStrategies);
     }
   }, [UserData.data.strategy, AllStrategy.data]);
-
 
   return (
     <>
@@ -769,8 +779,8 @@ const EditClient = () => {
 
               {/* ) : ""} */}
             </>
-           
-            
+
+
           }
         />
         <ToastButton />

@@ -68,6 +68,15 @@ class Login {
                 }
             }
 
+            if ( EmailCheck.Role == "SUBADMIN" ) {
+
+           // User active Status  
+                if (EmailCheck.ActiveStatus == 0) {
+                return res.send({ status: false, msg: 'please contact admin you are inactive.', data: [] });
+          
+                }   
+            }
+
 
 
             // JWT TOKEN CREATE
@@ -726,7 +735,7 @@ class Login {
 
     async DisclaimerMailSend(req, res) {
         try {
-            console.log("SNEH ")
+        
             var disclaimerData = await disclaimer();
 
             var toEmail = "snehpnp@gmail.com";

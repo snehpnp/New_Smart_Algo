@@ -24,6 +24,8 @@ const Edit_panel = () => {
     const user_token = JSON.parse(localStorage.getItem("user_details")).token;
     const Role = JSON.parse(localStorage.getItem("user_details")).Role;
     const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+    const UserName = JSON.parse(localStorage.getItem("user_details")).UserName;
+
 
     const [getAllThemeName, setAllThemeName] = useState([]);
     const [getGetAllBrokerName, setGetAllBrokerName] = useState([]);
@@ -119,7 +121,8 @@ const Edit_panel = () => {
                 Create_Strategy: values.Create_Strategy && values.Create_Strategy ? 1 : 0,
                 Option_chain: values.Option_chain && values.Option_chain ? 1 : 0,
                 Strategy_plan: values.Strategy_plan && values.Strategy_plan ? 1 : 0,
-                backend_rul:values.backend_rul
+                backend_rul:values.backend_rul,
+                UserName:UserName
             };
 
 
@@ -223,32 +226,24 @@ const Edit_panel = () => {
 
 
 
-    // useEffect(() => {
-    //     if (getBrokerNames.length > 1) {
-    //         formik.setFieldValue("broker_id", "");
-    //     }
-    // }, [getBrokerNames]);
-
-
     useEffect(() => {
         if (UserData.data && UserData.data.length > 0 && UserData.data[0]) {
             const userPanelData = UserData.data[0];
 
-            formik.setFieldValue('panel_name', userPanelData.panel_name || '');
-            formik.setFieldValue('domain', userPanelData.domain || '');
-            formik.setFieldValue('port', userPanelData.port || '');
-            formik.setFieldValue('key', userPanelData.key || '');
-            formik.setFieldValue('ip_address', userPanelData.ip_address || '');
-            formik.setFieldValue('theme_id', userPanelData.theme_id || '');
-            formik.setFieldValue('db_url', userPanelData.db_url || '');
-            formik.setFieldValue('db_name', userPanelData.db_name || '');
-            formik.setFieldValue('backend_rul', userPanelData.backend_rul || '');
-
-            formik.setFieldValue('Create_Strategy', userPanelData.Create_Strategy == 1 ? true : false);
-            formik.setFieldValue('Option_chain', userPanelData.Option_chain == 1 ? true : false);
-            formik.setFieldValue('Strategy_plan', userPanelData.Strategy_plan == 1 ? true : false);
+            formik.setFieldValue('panel_name', userPanelData && userPanelData.panel_name || '');
+            formik.setFieldValue('domain', userPanelData && userPanelData.domain || '');
+            formik.setFieldValue('port', userPanelData && userPanelData.port || '');
+            formik.setFieldValue('key', userPanelData && userPanelData.key || '');
+            formik.setFieldValue('ip_address', userPanelData && userPanelData.ip_address || '');
+            formik.setFieldValue('theme_id', userPanelData && userPanelData.theme_id || '');
+            formik.setFieldValue('db_url', userPanelData && userPanelData.db_url || '');
+            formik.setFieldValue('db_name', userPanelData && userPanelData.db_name || '');
+            formik.setFieldValue('backend_rul', userPanelData && userPanelData.backend_rul || '');
+            formik.setFieldValue('Create_Strategy', userPanelData && userPanelData.Create_Strategy == 1 ? true : false);
+            formik.setFieldValue('Option_chain', userPanelData && userPanelData.Option_chain == 1 ? true : false);
+            formik.setFieldValue('Strategy_plan', userPanelData && userPanelData.Strategy_plan == 1 ? true : false);
         } else {
-            // Set default values if UserData.data is not present or empty
+           
             formik.setValues({
                 panel_name: '',
                 domain: '',

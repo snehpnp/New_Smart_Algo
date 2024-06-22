@@ -181,8 +181,6 @@ module.exports = function (app ,io) {
         console.log("Error createSocketSess", error);
     }
 
-    }else{
-        console.log("ELSSSS")
     }
       
       

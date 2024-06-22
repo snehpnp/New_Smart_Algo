@@ -287,7 +287,9 @@ async function DashboardView() {
                             {
                               $and: [
                                 { $eq: ["$Role", "USER"] },
-                                { $eq: ["$license_type", "2"] }
+                                { $eq: ["$license_type", "2"] },
+                                { $eq: ["$Is_Active", "1"] }
+
                               ]
                             },
                             { $toInt: { $ifNull: ["$licence", "0"] } }, 

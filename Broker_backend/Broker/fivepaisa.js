@@ -138,10 +138,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                 if (token != 0) {
 
-                    // console.log("user id ", item.demat_userid)
-                    // console.log("postdata before", item.postdata)
-
-                    if (segment.toUpperCase() != "C") {
+                   if (segment.toUpperCase() != "C") {
                         item.postdata.body.ScripCode = token[0].instrument_token;
                     }
 
@@ -182,12 +179,12 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 
                     axios(config)
                         .then(async (response) => {
-                            // console.log("response", response.data)
-                            // fs.appendFile(filePath, 'TIME ' + new Date() + ' FIVEPAISA POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
-                            //     if (err) {
-                            //         return console.log(err);
-                            //     }
-                            // });
+                            
+                            fs.appendFile(filePath, 'TIME ' + new Date() + ' FIVEPAISA POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data) + '\n', function (err) {
+                                if (err) {
+                                    return console.log(err);
+                                }
+                            });
 
                             if (response) {
 
@@ -403,12 +400,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
             });
-            // Send all requests concurrently using Promise.all
+           
             Promise.all(requestPromises)
-                .then(responses => {
-                    // console.log("Response:", responses.data);
-
-                })
+                .then(responses => {  })
                 .catch(errors => {
                     console.log("Error :", errors);
 
@@ -426,22 +420,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
-    // var dt = splitArray[0]
-    // var input_symbol = splitArray[1]
-    // var type = splitArray[2]
-    // var tr_price = splitArray[3]
-    // var price = splitArray[4]
-    // var sq_value = splitArray[5]
-    // var sl_value = splitArray[6]
-    // var tsl = splitArray[7]
-    // var segment = splitArray[8]
-    // var strike = splitArray[9]
-    // var option_type = splitArray[10]
-    // var expiry = splitArray[11]
-    // var strategy = splitArray[12]
-    // var qty_percent = splitArray[13]
-    // var client_key = splitArray[14]
-    // var demo = splitArray[15]
 
     var dt = signals.DTime;
     var input_symbol = signals.Symbol;
@@ -635,25 +613,6 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
 const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req) => {
 
-    // console.log("INSIDE EXIT FUNCTION")
-    // console.log("INSIDE EXIT FUNCTION possition_qty",possition_qty)
-
-    // var dt = splitArray[0]
-    // var input_symbol = splitArray[1]
-    // var type = splitArray[2]
-    // var tr_price = splitArray[3]
-    // var price = splitArray[4]
-    // var sq_value = splitArray[5]
-    // var sl_value = splitArray[6]
-    // var tsl = splitArray[7]
-    // var segment = splitArray[8]
-    // var strike = splitArray[9]
-    // var option_type = splitArray[10]
-    // var expiry = splitArray[11]
-    // var strategy = splitArray[12]
-    // var qty_percent = splitArray[13]
-    // var client_key = splitArray[14]
-    // var demo = splitArray[15]
 
     var dt = signals.DTime;
     var input_symbol = signals.Symbol;
@@ -693,7 +652,6 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
     };
     axios(config)
         .then(async (response) => {
-            // console.log("respose Exit", response.data)
 
             fs.appendFile(filePath, 'TIME ' + new Date() + ' FIVEPAISA AFTER PLACE ORDER USER EXIT- ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
@@ -718,9 +676,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                     open_possition_qty: possition_qty,
 
                 })
-                    .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                    })
+                    .then((BrokerResponseCreate) => { })
                     .catch((err) => {
                         try {
                             console.log('Error creating and saving user:', err);
@@ -748,9 +704,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                     reject_reason: message,
 
                 })
-                    .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                    })
+                    .then((BrokerResponseCreate) => {  })
                     .catch((err) => {
                         try {
                             console.log('Error creating and saving user:', err);
@@ -790,9 +744,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             send_request: send_rr,
                             reject_reason: message,
                         })
-                            .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                            })
+                            .then((BrokerResponseCreate) => {  })
                             .catch((err) => {
                                 try {
                                     console.log('Error creating and saving user:', err);
@@ -818,9 +770,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             send_request: send_rr,
                             reject_reason: message,
                         })
-                            .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                            })
+                            .then((BrokerResponseCreate) => { })
                             .catch((err) => {
                                 try {
                                     console.log('Error creating and saving user:', err);

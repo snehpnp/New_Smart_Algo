@@ -512,7 +512,7 @@ class Employee {
       if (Number(new_licence) > 0) {
      
 
-        if ((parseInt(TotalLicense) + parseInt(new_licence)) >= Number(Panel_key[0].licenses)  ) {
+        if ((parseInt(TotalLicense) + parseInt(new_licence)) > Number(Panel_key[0].licenses)  ) {
        
           return res.send({
             status: false,
@@ -965,11 +965,7 @@ class Employee {
       if (result) {
         // STATUS UPDATE SUCCESSFULLY
         var status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
-        logger1.info(`${status_msg} user Successfully`, {
-          Email: get_user[0].Email,
-          role: get_user[0].Role,
-          user_id: get_user[0]._id,
-        });
+
 
         res.send({
           status: true,

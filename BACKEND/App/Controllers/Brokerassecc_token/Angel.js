@@ -11,14 +11,11 @@ const BrokerResponse = db.BrokerResponse;
 const Broker_information = db.Broker_information;
 const live_price = db.live_price;
 
-
-
-
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
-// const { formattedDateTime } = require('../../Helper/time.helper')
+
 
 class Angel {
 
@@ -121,7 +118,6 @@ class Angel {
 const GetAllBrokerResponse = async (user_info,res) => {
     try {
         const objectId = new ObjectId(user_info[0]._id);
-       // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
      
         if (FindUserBrokerResponse.length > 0) {
@@ -189,19 +185,15 @@ const GetAllBrokerResponse = async (user_info,res) => {
                               }
                           
                           
-                        }else{
-                            // console.log("NO DATA FOUND");
                         }
 
                        
                     })
                     .catch(async (error) => {
-    
                     });
+
     
-    
-    
-            })
+             })
            res.send({status:true,msg:"broker response updated successfully"})
     
         } else {

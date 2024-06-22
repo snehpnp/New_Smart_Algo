@@ -4,7 +4,7 @@ const mongoConnection = require('./App/Connection/mongo_connection')
 const express = require("express");
 const app = express();
 
-// HELLO SNEH
+// HELLO SNEH JAISWAL
 const http = require("http");
 const https = require('https');
 const socketIo = require("socket.io");
@@ -42,31 +42,17 @@ require('./App/Cron/cron')
 // Routes all
 require("./App/Routes")(app)
 
-// Testing Api #Shakir
 
 
 // EMERGANCY
 require("./App/Emergency Apis/service")(app)
 require("./App/Emergency Apis/getOptionSymbols")(app)
 require("./request")(app)
-require("./shakirTeting")(app)
+// require("./shakirTeting")(app)
 
 
 // Connect Local backend Socket
 const { setIO ,getIO} = require('./App/Helper/BackendSocketIo');
-
-
-
-
-// Socket Connect get data in live make socket
-
-// require('./App/Helper/Store_live_data')
-
-//  END-------------
-
-
-
-
 
 
 
@@ -80,9 +66,7 @@ const io = socketIo(server, {
 );
 
 io.on("connection", (socket) => {
-  // console.log(`a user connected with id ${socket.id}`);
 
-  
   socket.on("help_from_client", (data) => {
     socket.broadcast.emit("test_msg_Response", data);
   });
@@ -96,13 +80,9 @@ io.on("connection", (socket) => {
 
 
 setIO(io).then(() => {
-  // console.log("io set successfully");
    
-   // After io is set, you can call getIO
    getIO().then(ioObject => {
-      // console.log("ioObject from getIO: ", ioObject);
    }).catch(error => {
-       //console.error("Error getting io:", error);
    });
  
  }).catch((error) => {
