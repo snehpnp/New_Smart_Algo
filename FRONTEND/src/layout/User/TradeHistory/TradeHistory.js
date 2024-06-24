@@ -12,17 +12,8 @@ import { Eye, CandlestickChart, Pencil } from "lucide-react";
 
 
 import DetailsView from "./DetailsView";
-import {
-  GetAliceTokenAndID,
-  CreateSocketSession,
-  ConnctSocket,
-  GetAccessToken
-} from "../../../Service/Alice_Socket";
-import {
-  ShowColor,
-  ShowColor_Compare_two,
-} from "../../../Utils/ShowTradeColor";
-import $ from "jquery";
+import { GetAccessToken } from "../../../Service/Alice_Socket";
+
 import { FunctionForLivePriceCalculation } from "./tradehistoryCalculation";
 
 

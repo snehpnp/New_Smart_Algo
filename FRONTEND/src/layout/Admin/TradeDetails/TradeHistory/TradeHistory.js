@@ -331,22 +331,22 @@ const TradeHistory = () => {
       ),
     },
 
-    {
-      dataField: "",
-      text: "Cancel Order",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          {row.pendin_order_status == "0" ?
-            <>
-              <button className="btn btn-primary" onClick={(e) => cancelOrder(e, row)}>
-                Cancel
-              </button>
+    // {
+    //   dataField: "",
+    //   text: "Cancel Order",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       {row.pendin_order_status == "0" ?
+    //         <>
+    //           <button className="btn btn-primary" onClick={(e) => cancelOrder(e, row)}>
+    //             Cancel
+    //           </button>
 
-            </>
-            : "-"}
-        </div>
-      ),
-    },
+    //         </>
+    //         : "-"}
+    //     </div>
+    //   ),
+    // },
   ];
 
   const cancelOrder = async (e, row) => {
