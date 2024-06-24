@@ -424,7 +424,7 @@ const TradeHistory = () => {
     let channelList = CreatechannelList;
 
 
-    if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
+    if (UserDetails && UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
       const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
       if (res.status === 200) {
@@ -564,7 +564,6 @@ const TradeHistory = () => {
 
 
     }
-
     else {
 
       tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
@@ -871,11 +870,12 @@ const TradeHistory = () => {
 
   return (
     <>
+
       <Content Page_title={dashboard_filter === "client" ? "Trading View" : "Trade History"} button_status={false}
         show_csv_button={true} csv_data={ForGetCSV} csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-        
+
           {dashboard_filter === "client" ? "" :
             < div className="col-lg-12 flex-column">
               <div className="headaer-title">
@@ -1033,6 +1033,12 @@ const TradeHistory = () => {
           setshowModal={() => setshowModal(false)}
           tradeHistoryData={rowData}
         />
+        <br />
+        <br />
+
+        <h6><b>THIS RESULTS IS VALID FOR TODAY ONLY, WE DO NOT DIRECTLY OR INDIRECTLY MAKE ANY REFERENCE TO THE PAST OR EXPECTED FUTURE RETURN/PERFORMANCE OF THE ALGORITHM.</b></h6>
+        <br />
+        <h6><b>सभी प्रतिभूतियां एल्गो ट्रेडिंग सिस्टम बाजार जोखिमों के अधीन हैं और इस बात का कोई आश्वासन नहीं दिया जा सकता है कि उपयोगकर्ता के उद्देश्यों को आज के प्रदर्शन के आधार पर प्राप्त किया जाएगा। यह परिणाम केवल आज के लिए मान्य है।</b></h6>
       </Content >
     </>
   );

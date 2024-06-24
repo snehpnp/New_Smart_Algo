@@ -25,7 +25,6 @@ class Icicidirect {
     async GetAccessTokenIcicidirect(req, res) {
 
         try {
-
             var keystr = req.query.key;
 
 
@@ -69,7 +68,6 @@ class Icicidirect {
                         },
                         data: data
                       };
-                       console.log("configggggggggg", config);
               
                       axios(config)
                         .then(async function (response) {
@@ -77,7 +75,6 @@ class Icicidirect {
                           if (response.data.Status == 200) {
                             
                             var access_token = response.data.Success.session_token
-                             console.log("session_tokensession_token", access_token);
               
                             let result = await User.findByIdAndUpdate(
                                 Get_User[0]._id,
@@ -113,31 +110,6 @@ class Icicidirect {
                         .catch(function (error) {
                             return res.send(redirect_uri); 
                         });
-
-    
-                    let result = await User.findByIdAndUpdate(
-                        Get_User[0]._id,
-                        {
-                            access_token: auth_token,
-                            TradingStatus: "on"
-                        })
-
-                    if (result != "") {
-
-                        const user_login = new user_logs({
-                            user_Id: Get_User[0]._id,
-                            login_status: "Trading On",
-                            role: Get_User[0].Role,
-                            device: "WEB",
-                            system_ip: getIPAddress()
-                        })
-                        await user_login.save();
-                        if (user_login) {
-
-                            return res.redirect(redirect_uri);
-
-                        }
-                    }
     
                 }else{
                     return res.send(redirect_uri);   

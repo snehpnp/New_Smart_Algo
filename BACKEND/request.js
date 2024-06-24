@@ -41,6 +41,8 @@ module.exports = function (app) {
     const { createViewUpstox } = require('./View/Upstox')
     const { createViewZebul } = require('./View/Zebul')
     const { createViewZerodha } = require('./View/zerodha')
+    const { createViewIcicidirect } = require('./View/Icicidirectview')
+
 
 
     // ========================================================================================================
@@ -61,6 +63,7 @@ module.exports = function (app) {
         createViewUpstox()
         createViewZebul()
         createViewZerodha()
+        createViewIcicidirect()
 
         res.send("DONEE")
     })
