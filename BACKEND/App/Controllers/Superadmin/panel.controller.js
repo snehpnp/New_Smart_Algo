@@ -307,7 +307,14 @@ class Panel {
                         is_active: 1,
                         is_expired: 1,
                         theme_id: 1,
-                        theme_name: { $ifNull: ['$theme_info.theme_name', ''] }
+                        theme_name: { $ifNull: ['$theme_info.theme_name', ''] },
+                        broker_id:1,
+                        Two_day_client:1,
+                        live_price:1,
+                        backend_rul:1,
+                        Strategy_plan:1,
+                        Option_chain:1,
+                        Create_Strategy:1,
                     }
                 },
                 {

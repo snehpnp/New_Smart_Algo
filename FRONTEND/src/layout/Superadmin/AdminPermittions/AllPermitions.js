@@ -295,30 +295,7 @@ const AllPermitions = () => {
     ];
 
 
-    const SaveSS = async () => {
-        const element = document.getElementById('main-wrapper');
-
-
-        const options = {
-            width: document.documentElement.scrollWidth, // Set custom width
-            height: document.documentElement.scrollHeight, // Set custom height
-        };
-
-
-        window.scrollTo(0, 0);
-
-        var screenshotUrl
-        await html2canvas(document.documentElement, options).then(canvas => {
-            // Convert canvas to an image and download it
-            const screenshot = canvas.toDataURL('image/png');
-            screenshotUrl = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = screenshot;
-            link.download = 'screenshot.png';
-            link.click();
-
-        })
-    }
+  
 
 
 

@@ -18,7 +18,6 @@ const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
 const { logger, getIPAddress } = require('../../Helper/logger.helper')
-// const { formattedDateTime } = require('../../Helper/time.helper')
 
 class Icicidirect {
 
@@ -32,9 +31,6 @@ class Icicidirect {
 
             console.log("keystr",keystr)
 
-            // http://localhost:7700/icicidirect?key=SNE625547240612?apisession=42358008
-
-            // return
 
             if(keystr != undefined){
     

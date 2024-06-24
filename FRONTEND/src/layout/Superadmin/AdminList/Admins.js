@@ -245,7 +245,7 @@ const AdminsList = () => {
 
 
 
-   
+
 
 
 
@@ -355,42 +355,41 @@ const AdminsList = () => {
 
     return (
         <>
-            {
-                themeData1.loading ? <Loader /> :
-                    <>
-                        <Content Page_title="Company Names"
-                            button_title="Add Client"
-                            route="/super/panel/add">
-                            <div className='mb-4'>
-                                <h6>Search here something</h6>
-                                <input type="text"
-                                    style={{ height: '2rem' }}
-                                    placeholder='search...'
-                                    className='p-2 rounded'
-                                    onChange={(e) => { setSearchInput(e.target.value) }}
-                                    value={searchInput} />
-                            </div>
-                            {
 
-                                themeData1.data && themeData1.data.length === 0 ? (
-                                    'No data found') :
-                                    <>
-                                        <FullDataTable TableColumns={columns} tableData={themeData1.data} pagination1={true} />
-                                        <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
-                                            handleClose={() => setshowModal(false)}
-                                        >
-                                            <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update Theme"
-                                                title="update_theme"
+            <Content Page_title="Company Names"
+                button_title="Add Client"
+                route="/super/panel/add">
+                <div className='mb-4'>
+                    <h6>Search here something</h6>
+                    <input type="text"
+                        style={{ height: '2rem' }}
+                        placeholder='search...'
+                        className='p-2 rounded'
+                        onChange={(e) => { setSearchInput(e.target.value) }}
+                        value={searchInput} />
+                </div>
 
-                                            />
-                                        </Modal >
-                                        <ToastButton />
-                                    </>
-                            }
-                        </Content>
-                    </>
-            }
-        </ >
+                {
+
+                    themeData1.loading ? <Loader /> :
+                        <>
+                            <FullDataTable TableColumns={columns} tableData={themeData1.data} />
+                            <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
+                                handleClose={() => setshowModal(false)}
+                            >
+                                <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update Theme"
+                                    title="update_theme"
+
+                                />
+                            </Modal >
+                            <ToastButton />
+                        </>
+                }
+
+
+            </Content>
+        </>
+
     );
 }
 

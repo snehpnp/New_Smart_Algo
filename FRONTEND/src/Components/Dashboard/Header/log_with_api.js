@@ -224,10 +224,7 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     }
     else if (broker_id === "25" || broker_id === 25) {
 
-        // alert("broker-25")
-        
-        console.log("UserDetails.api_key", UserDetails.api_key);
-        
+
         const encodedApiKey = encodeURIComponent(UserDetails.api_key);
         
         console.log("encodedApiKey", encodedApiKey);
