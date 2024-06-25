@@ -28,7 +28,6 @@ class Icicidirect {
             var keystr = req.query.key;
 
 
-            console.log("keystr",keystr)
 
 
             if(keystr != undefined){
@@ -71,7 +70,6 @@ class Icicidirect {
               
                       axios(config)
                         .then(async function (response) {
-                           console.log("response", response.data);
                           if (response.data.Status == 200) {
                             
                             var access_token = response.data.Success.session_token
@@ -225,7 +223,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
                           
                           
                         }else{
-                            // console.log("NO DATA FOUND");
+              
                         }
 
                        

@@ -110,7 +110,7 @@ module.exports = function (app) {
     
 
     const DawnloadOptionChainSymbol = async () => {
-        console.log("symbolupdate")
+     
         var axios = require('axios');
         const Papa = require('papaparse')
         const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
@@ -179,7 +179,6 @@ module.exports = function (app) {
         ]
         arr.forEach((role) => {
             const newRole = new Roledata(role)
-            // console.log("newRole", newRole);
             return newRole.save();
         })
     }
@@ -222,7 +221,6 @@ module.exports = function (app) {
             });
 
             const savedData = await Broker_informationData.save();
-            console.log('Broker information saved successfully:', savedData);
             return savedData;
         } catch (error) {
             console.error('Error saving broker information:', error);
@@ -359,7 +357,6 @@ module.exports = function (app) {
 
         try {
             const savedUser = await UserData.save();
-            console.log("newRole", savedUser);
             res.status(201).send("Admin created successfully");
         } catch (error) {
             console.error("Error saving user:", error);
@@ -494,7 +491,6 @@ module.exports = function (app) {
                                 try {
                                     console.error('Error creating and saving user:', err);
                                 } catch (e) {
-                                    console.log("duplicate key")
                                 }
 
                             });
