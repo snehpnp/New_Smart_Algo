@@ -27,9 +27,6 @@ class Icicidirect {
         try {
             var keystr = req.query.key;
 
-
-
-
             if(keystr != undefined){
     
     
@@ -127,6 +124,7 @@ class Icicidirect {
         }
     }
 
+
       // UPDATE ALL CLIENT BROKER RESPONSE
       async GetOrderFullInformationIcicidirect(req, res , user_info) {
        
@@ -154,12 +152,13 @@ class Icicidirect {
 const GetAllBrokerResponse = async (user_info,res) => {
     try {
         const objectId = new ObjectId(user_info[0]._id);
-       // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
      
         if (FindUserBrokerResponse.length > 0) {
     
-            FindUserBrokerResponse.forEach((data1) => {    
+            FindUserBrokerResponse.forEach((data1) => {  
+                
+                
                 var config = {
                     method: 'get',
                     url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getOrderBook',
@@ -175,6 +174,35 @@ const GetAllBrokerResponse = async (user_info,res) => {
                         'X-PrivateKey': user_info[0].api_key
                     },
                 };
+
+
+
+
+
+                var dataGetOrder = {
+                    "exchange_code": exchange_code,
+                    "order_id": data1.order_id
+                }
+
+                var currentDateGetOrder = new Date().toISOString().split(".")[0] + '.000Z';
+                let checksumcodeForGetOrder = sha256(currentDateGetOrder + JSON.stringify(dataGetOrder) + item.api_secret);
+
+
+                var config1 = {
+                    method: 'get',
+                    url: 'https://api.icicidirect.com/breezeapi/api/v1/order',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Checksum': "token " + checksumcodeForGetOrder,
+                        'X-Timestamp': currentDateGetOrder,
+                        'X-AppKey': item.api_key,
+                        'X-SessionToken': item.access_token,
+                    },
+                    data: dataGetOrder
+                };
+
+
+
                 axios(config)
                     .then(async (response) => {
                        
