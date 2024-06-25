@@ -175,28 +175,24 @@ const GetAllBrokerResponse = async (user_info,res) => {
                     },
                 };
 
-
-
-
-
                 var dataGetOrder = {
                     "exchange_code": exchange_code,
                     "order_id": data1.order_id
                 }
 
                 var currentDateGetOrder = new Date().toISOString().split(".")[0] + '.000Z';
-                let checksumcodeForGetOrder = sha256(currentDateGetOrder + JSON.stringify(dataGetOrder) + item.api_secret);
+                let checksumcodeForGetOrder = sha256(currentDateGetOrder + JSON.stringify(dataGetOrder) + user_info[0].api_secret);
 
 
-                var config1 = {
+                var config = {
                     method: 'get',
                     url: 'https://api.icicidirect.com/breezeapi/api/v1/order',
                     headers: {
                         'Content-Type': 'application/json',
                         'X-Checksum': "token " + checksumcodeForGetOrder,
                         'X-Timestamp': currentDateGetOrder,
-                        'X-AppKey': item.api_key,
-                        'X-SessionToken': item.access_token,
+                        'X-AppKey': user_info[0].api_key,
+                        'X-SessionToken': user_info[0].access_token,
                     },
                     data: dataGetOrder
                 };
