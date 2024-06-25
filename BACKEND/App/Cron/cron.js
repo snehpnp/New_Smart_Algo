@@ -254,7 +254,6 @@ const TruncateTableTokenChainAdd_fiveMinute = async () => {
 
     await Alice_Socket();
 
-
 }
 
 
