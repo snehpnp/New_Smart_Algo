@@ -159,21 +159,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
             FindUserBrokerResponse.forEach((data1) => {  
                 
                 
-                var config = {
-                    method: 'get',
-                    url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getOrderBook',
-                    headers: {
-                        'Authorization': 'Bearer ' + user_info[0].access_token,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-UserType': 'USER',
-                        'X-SourceID': 'WEB',
-                        'X-ClientLocalIP': 'CLIENT_LOCAL_IP',
-                        'X-ClientPublicIP': 'CLIENT_PUBLIC_IP',
-                        'X-MACAddress': 'MAC_ADDRESS',
-                        'X-PrivateKey': user_info[0].api_key
-                    },
-                };
+         
 
                 var dataGetOrder = {
                     "exchange_code": exchange_code,
