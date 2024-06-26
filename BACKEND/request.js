@@ -18,6 +18,7 @@ module.exports = function (app) {
     const Get_Option_Chain_modal = db.option_chain_symbols;
     const company = db.company_information;
     const Roledata = db.role;
+
     const Broker_information = db.Broker_information;
 
 
@@ -96,8 +97,20 @@ module.exports = function (app) {
                 CreateBrokerinfo();
             }
 
-            service_token_update();
-            TokenSymbolUpdate();
+            const servicesData = await services.find();
+            if (servicesData.length == 0) {
+                service_token_update();
+            }
+
+
+            const Alice_tokenData = await Alice_token.find();
+            if (Alice_tokenData.length == 0) {
+                TokenSymbolUpdate();
+            }
+
+
+            console.log("SNEH")
+          
 
             res.send("DONE");
         } catch (error) {
@@ -107,10 +120,10 @@ module.exports = function (app) {
     });
 
 
-    
+
 
     const DawnloadOptionChainSymbol = async () => {
-     
+
         var axios = require('axios');
         const Papa = require('papaparse')
         const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
@@ -192,13 +205,13 @@ module.exports = function (app) {
             panel_key: data.client_key,
             prefix: data.client_key.substring(0, 3),
             domain_url: data.domain,
-            domain_url_https: data.backend_rul+'/#/login',
+            domain_url_https: data.backend_rul + '/#/login',
             broker_url: data.backend_rul,
             theme_id: "64d0c04a0e38c94d0e20ee28",
             theme_name: "theme_name",
-            disclaimer:"Disclaimer: The risk of loss in trading in any financial markets or exchange can be substantial. These are leveraged products that carry a substantial risk of loss up to your invested capital and may not be suitable for everyone. You should therefore carefully consider whether such trading is suitable for you considering your financial condition. Please ensure that you fully understand the risks involved and do not invest money you cannot afford to lose. Past performance does not guarantee future performance. Historical returns, expected returns, and probability projections are provided for informational and illustrative purposes, and may not reflect actual future performance. SKW Investment Adviser does not guarantee returns in any of its products or services.",
-            version:"1.0",
-            panel_short_name:data.client_key.substring(0, 3),
+            disclaimer: "Disclaimer: The risk of loss in trading in any financial markets or exchange can be substantial. These are leveraged products that carry a substantial risk of loss up to your invested capital and may not be suitable for everyone. You should therefore carefully consider whether such trading is suitable for you considering your financial condition. Please ensure that you fully understand the risks involved and do not invest money you cannot afford to lose. Past performance does not guarantee future performance. Historical returns, expected returns, and probability projections are provided for informational and illustrative purposes, and may not reflect actual future performance. SKW Investment Adviser does not guarantee returns in any of its products or services.",
+            version: "1.0",
+            panel_short_name: data.client_key.substring(0, 3),
 
         })
         return companyData.save();

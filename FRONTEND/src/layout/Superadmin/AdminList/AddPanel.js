@@ -72,9 +72,9 @@ const Add_Panel = () => {
                 errors.domain = valid_err.DOMAIN_ERROR;
             }
 
-            if (!values.port) {
-                errors.port = valid_err.PORT_ERROR;
-            }
+            // if (!values.port) {
+            //     errors.port = valid_err.PORT_ERROR;
+            // }
 
             if (!values.key) {
                 errors.key = valid_err.KEY_ERROR;
@@ -84,13 +84,13 @@ const Add_Panel = () => {
                 errors.db_url = valid_err.DBURL_ERROR;
             }
 
-            if (!values.db_name) {
-                errors.db_name = valid_err.DBNAME_ERROR;
-            }
+            // if (!values.db_name) {
+            //     errors.db_name = valid_err.DBNAME_ERROR;
+            // }
 
-            if (!values.backend_rul) {
-                errors.backend_rul = valid_err.DBNAME_ERROR;
-            }
+            // if (!values.backend_rul) {
+            //     errors.backend_rul = valid_err.DBNAME_ERROR;
+            // }
 
 
             return errors;
