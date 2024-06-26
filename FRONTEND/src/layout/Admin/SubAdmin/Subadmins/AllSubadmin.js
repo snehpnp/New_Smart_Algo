@@ -179,16 +179,16 @@ const AllSubadmin = () => {
       text: "Status",
       formatter: (cell, row) => (
         <>
-          <label class="toggle mt-3">
+          <label className="toggle mt-3">
             <input
-              class="toggle-checkbox bg-primary"
+              className="toggle-checkbox bg-primary"
               type="checkbox"
               checked={row.ActiveStatus == "1" ? true : false}
               onChange={(e) => {
                 activeUser(e, row);
               }}
             />
-            <div class={`toggle-switch ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
+            <div className={`toggle-switch ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
           </label>
         </>
       ),
@@ -323,8 +323,8 @@ const AllSubadmin = () => {
           >
             <div className="row">
               <div className="col-lg-4">
-                <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
                     Search Something Here
                   </label>
                   <input
@@ -332,19 +332,19 @@ const AllSubadmin = () => {
                     placeholder="Search..."
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
-                    class="form-control"
+                    className="form-control"
                     id="exampleFormControlInput1"
                   />
                 </div>
               </div>
               {/* <div className="col-lg-4 ">
-                <div class="mb-3">
-                  <label for="select" class="form-label">
+                <div className="mb-3">
+                  <label for="select" className="form-label">
                     Panel Status
                   </label>
 
                   <select
-                    class="default-select wide form-control"
+                    className="default-select wide form-control"
                     aria-label="Default select example"
                     id="select"
                     onChange={(e) => setPanelStatus(e.target.value)}

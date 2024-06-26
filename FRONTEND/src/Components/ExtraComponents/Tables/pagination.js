@@ -67,25 +67,25 @@
 //                     <option value={20}>20</option>
 //                 </select>
 //             </div>
-//             <ul class="pagination">
+//             <ul className="pagination">
 
 //                 {/* <div className="pagination-container">
 //                     <div className="custom-pagination"> */}
 //                 <li
-//                     class="page-item"
+//                     className="page-item"
 //                     disabled={currentPage === 1}
 //                     onClick={handleShiftFirst}
 //                 >
-//                     <button class="page-link" href="#">
+//                     <button className="page-link" href="#">
 //                         First
 //                     </button>
 //                 </li>
 //                 <li
-//                     class="page-item"
+//                     className="page-item"
 //                     disabled={currentPage === 1}
 //                     onClick={() => handlePageClick(currentPage - 1)}
 //                 >
-//                     <button class="page-link" href="#">
+//                     <button className="page-link" href="#">
 //                         Previous
 //                     </button>
 
@@ -96,7 +96,7 @@
 //                         className={` page-item  ${page === currentPage ? 'active' : ''}`}
 //                         onClick={() => handlePageClick(page)}
 //                     >
-//                         <button class="page-link" href={page}>
+//                         <button className="page-link" href={page}>
 //                             {page}
 //                         </button>
 
@@ -107,14 +107,14 @@
 //                     disabled={currentPage === totalPages}
 //                     onClick={() => handlePageClick(currentPage + 1)}
 //                 >
-//                     <button class="page-link" href="#">
+//                     <button className="page-link" href="#">
 
 //                         Next
 //                     </button>
 
 //                 </li>
 //                 <li className="page-item" onClick={handleShiftLast}>
-//                     <button class="page-link" href="#">
+//                     <button className="page-link" href="#">
 //                         Last
 //                     </button>
 

@@ -8,9 +8,9 @@ const Notification = ({ data }) => {
 
 
     const show_Name = (item) => {
-        console.log(" sdadasd ", item.split("_").map((part) => part[0]).join(''))
-
-        return item.split("_").map((part) => part[0]).join('')
+        if (item) {
+            return item.split("_").map((part) => part[0]).join('')
+        }
     }
 
 
@@ -45,7 +45,7 @@ const Notification = ({ data }) => {
                     <div
                         id="DZ_W_Notification1"
                         className="widget-media dz-scroll p-3"
-                        // style={{ height: auto }}
+                    // style={{ height: auto }}
                     >
                         <ul className="timeline">
                             {data.data && data.data.slice(0, 6).map((item) => {

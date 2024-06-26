@@ -153,12 +153,12 @@ const AdminsList = () => {
             dataField: 'is_active',
             text: 'Close Panel',
             formatter: (cell, row) => (
-                <label class="toggle mt-3 ">
-                    <input class="toggle-checkbox bg-primary" type="checkbox"
+                <label className="toggle mt-3 ">
+                    <input className="toggle-checkbox bg-primary" type="checkbox"
                         defaultChecked={row.is_active == 0}
                         onChange={(e) => CloseCompany(row.domain, e.target.checked)}
                     />
-                    <div class={`toggle-switch ${row.is_active == 0 ? "bg-green" : "bg-danger"}`}></div>
+                    <div className={`toggle-switch ${row.is_active == 0 ? "bg-green" : "bg-danger"}`}></div>
                 </label>
             )
         },

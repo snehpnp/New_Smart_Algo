@@ -352,9 +352,9 @@ const AllClients = () => {
       text: "Status",
       formatter: (cell, row) => (
         <>
-          <label class="toggle mt-3">
+          <label className="toggle mt-3">
             <input
-              class="toggle-checkbox bg-primary"
+              className="toggle-checkbox bg-primary"
               type="checkbox"
               checked={row.ActiveStatus === "1" ? true : false}
               onChange={(e) => {
@@ -362,7 +362,7 @@ const AllClients = () => {
                 setSwitchButton(e.target.checked)
               }}
             />
-            <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
+            <div className={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
           </label>
         </>
       ),
@@ -562,8 +562,8 @@ const AllClients = () => {
 
             <div className="row">
               <div className="col-lg-3">
-                <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
                     Search Something Here
                   </label>
                   <input
@@ -571,19 +571,19 @@ const AllClients = () => {
                     placeholder="Search..."
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
-                    class="form-control"
+                    className="form-control"
                     id="exampleFormControlInput1"
                   />
                 </div>
               </div>
               <div className="col-lg-2 ">
-                <div class="mb-3">
-                  <label for="select" class="form-label">
+                <div className="mb-3">
+                  <label for="select" className="form-label">
                     Client Type
                   </label>
 
                   <select
-                    class="default-select wide form-control"
+                    className="default-select wide form-control"
                     aria-label="Default select example"
                     id="select"
                     onChange={(e) => setClientStatus(e.target.value)}
@@ -597,13 +597,13 @@ const AllClients = () => {
                 </div>
               </div>
               <div className="col-lg-2">
-                <div class="mb-3">
-                  <label for="select" class="form-label">
+                <div className="mb-3">
+                  <label for="select" className="form-label">
                     Trading Type
                   </label>
 
                   <select
-                    class="default-select wide form-control"
+                    className="default-select wide form-control"
                     aria-label="Default select example"
                     id="select"
                     onChange={(e) => setPanelStatus(e.target.value)}
@@ -616,12 +616,12 @@ const AllClients = () => {
                 </div>
               </div>
               {/* <div className="col-lg-2 ">
-                <div class="mb-3">
-                  <label for="select" class="form-label">
+                <div className="mb-3">
+                  <label for="select" className="form-label">
                     Strategy Clients
                   </label>
                   <select
-                    class="default-select wide form-control"
+                    className="default-select wide form-control"
                     aria-label="Default select example"
                     id="select"
                     onChange={(e) => StrategyClientStatus(e.target.value)}

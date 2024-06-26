@@ -1345,8 +1345,8 @@ const CreateStrategy = () => {
               <Modal.Footer></Modal.Footer>
             </Modal>
 
-            <ul class="StepProgress">
-              <li class="StepProgress-item is-done">
+            <ul className="StepProgress">
+              <li className="StepProgress-item is-done">
                 <strong>Instruments</strong>
                 <div className="row">
                   <div className="col-md-2">
@@ -1388,7 +1388,7 @@ const CreateStrategy = () => {
                     ))}
                 </div>
               </li>
-              <li class="StepProgress-item is-done">
+              <li className="StepProgress-item is-done">
                 <div className="row">
                   <div className="col-xl-6">
                     <div className="card">
@@ -1501,7 +1501,7 @@ const CreateStrategy = () => {
               </Row>
 
               <li
-                class="StepProgress-item current is-done"
+                className="StepProgress-item current is-done"
                 style={{ marginTop: "50px" }}
               >
                 <div className="form-check form-check-inline">
@@ -1519,8 +1519,8 @@ const CreateStrategy = () => {
 
                 <strong>Buy Entry Condition</strong>
                <div>
-               <button class="btn btn-primary float-lg-end ">
-                  <i class="fa-solid  fa-plus "></i> Add Row
+               <button className="btn btn-primary float-lg-end ">
+                  <i className="fa-solid  fa-plus "></i> Add Row
                 </button>
                </div>
                 <div className="table-responsive w-100">
@@ -1973,7 +1973,7 @@ const CreateStrategy = () => {
                       </button>
 
                       {condition_string != "" ? (
-                        <li class="StepProgress-item">
+                        <li className="StepProgress-item">
                           <strong>Buy Exit Condition</strong>
                           <div className="row mt-3">
                             <div className="col-md-4">
@@ -2031,7 +2031,7 @@ const CreateStrategy = () => {
               </li>
 
               <li
-                class="StepProgress-item current is-done"
+                className="StepProgress-item current is-done"
                 style={{ marginTop: "50px" }}
               >
                 <div className="form-check form-check-inline">
@@ -2420,7 +2420,7 @@ const CreateStrategy = () => {
                       </button>
 
                       {condition_string_sell != "" ? (
-                        <li class="StepProgress-item">
+                        <li className="StepProgress-item">
                           <strong>Sell Exit Condition</strong>
                           <div className="row mt-3">
                             <div className="col-md-4">

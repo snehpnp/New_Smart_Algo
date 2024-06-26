@@ -881,7 +881,7 @@ const TradeHistory = () => {
               <div className="headaer-title">
                 <h5 className="font-w400 mb-0">Live Price</h5>
               </div> <div className="Api Login m-2">
-                <label class="switch">
+                <label className="switch">
                   <input
                     type="checkbox"
                     className="bg-primary"
@@ -895,7 +895,7 @@ const TradeHistory = () => {
                       )
                     }
                   />
-                  <span class="slider round"></span>
+                  <span className="slider round"></span>
                 </label>
               </div>
             </div>
@@ -934,12 +934,12 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Symbol
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectService(e.target.value)}
@@ -960,12 +960,12 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Index Symbol
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectServiceIndex(e.target.value)}
@@ -979,12 +979,12 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2  px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Strategy
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setStrategyClientStatus(e.target.value)}
@@ -1003,7 +1003,7 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2  px-1">
-            <div class="mb-3">
+            <div className="mb-3">
               <button className="btn btn-primary" onClick={(e) => ResetAllData(e)}>
                 Reset
               </button>

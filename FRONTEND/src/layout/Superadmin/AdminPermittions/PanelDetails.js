@@ -27,7 +27,7 @@ const PanelDetails = ({ showModal, data, setshowModal }) => {
                             <th>2</th>
                             <td>Maintenance Charges</td>
                             <td >
-                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Enter Amount" />
+                                <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Enter Amount" />
 
                             </td>
                         </tr>
@@ -35,7 +35,7 @@ const PanelDetails = ({ showModal, data, setshowModal }) => {
                             <th>3</th>
                             <td>Licence ID Charges</td>
                             <td >
-                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Enter Amount" />
+                                <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Enter Amount" />
 
                             </td>
                         </tr>
@@ -43,14 +43,14 @@ const PanelDetails = ({ showModal, data, setshowModal }) => {
                             <th>4</th>
                             <td>Licence ID Charges</td>
                             <td >
-                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Enter Amount" />
+                                <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Enter Amount" />
                             </td>
                         </tr>
                         <tr>
                             <th>5</th>
                             <td>Current Pending</td>
                             <td >
-                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Enter Amount" />
+                                <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Enter Amount" />
 
                             </td>
                         </tr>
@@ -58,7 +58,7 @@ const PanelDetails = ({ showModal, data, setshowModal }) => {
                             <th>6</th>
                             <td>Received</td>
                             <td >
-                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Enter Amount" />
+                                <input type="email" className="form-control" id="exampleFormControlInput1" placeholder="Enter Amount" />
                             </td>
                         </tr>
 

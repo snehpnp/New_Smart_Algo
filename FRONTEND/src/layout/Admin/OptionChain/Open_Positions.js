@@ -894,8 +894,8 @@ const TradeHistory = () => {
             >
                 <div className="row col-lg-12">
                     <div className="col-lg-3">
-                        <div class="mb-3 ">
-                            <label for="exampleFormControlInput1" class="form-label">
+                        <div className="mb-3 ">
+                            <label for="exampleFormControlInput1" className="form-label">
                                 Search Something Here
                             </label>
                             <input
@@ -904,7 +904,7 @@ const TradeHistory = () => {
 
                                 value={searchInput}
                                 onChange={(e) => setSearchInput(e.target.value)}
-                                class=" p-2 rounded"
+                                className=" p-2 rounded"
                                 id="exampleFormControlInput1"
                             />
                         </div>

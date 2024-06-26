@@ -356,8 +356,8 @@ const ServicesList = () => {
           >
             <div className="row">
               <div className="col-lg-4">
-                <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
                     Search Something Here
                   </label>
                   <input
@@ -365,7 +365,7 @@ const ServicesList = () => {
                     placeholder="Search..."
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
-                    class="form-control"
+                    className="form-control"
                     id="exampleFormControlInput1"
                   />
                 </div>

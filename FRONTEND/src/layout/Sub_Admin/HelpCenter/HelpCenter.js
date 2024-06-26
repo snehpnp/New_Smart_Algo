@@ -88,36 +88,7 @@ const HelpCenter = () => {
 
             ),
         },
-        // {
-        //     dataField: 'ActiveStatus',
-        //     text: 'Status',
-        //     formatter: (cell, row) => (
-        //         <>
-        //             <label class="switch" >
-        //                 <input type="checkbox" className="bg-primary" checked={row.ActiveStatus == "1" ? true : false} />
-        //                 <span class="slider round"></span>
-        //             </label>
-
-        //         </>
-
-
-        //     ),
-        // },
-        // {
-        //     dataField: 'actions',
-        //     text: 'Actions',
-        //     formatter: (cell, row) => (
-        //         <div>
-        //             <span data-toggle="tooltip" data-placement="top" title="Edit">
-        //                 <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-        //             </span>
-        //             <span data-toggle="tooltip" data-placement="top" title="Delete">
-        //                 <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" />
-        //             </span>
-
-        //         </div>
-        //     ),
-        // },
+      
     ];
     return (
         <>

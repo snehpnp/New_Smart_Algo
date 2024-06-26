@@ -131,9 +131,9 @@ const AllClients = () => {
             text: 'Status',
             formatter: (cell, row) => (
                 <>
-                    <label class="switch" >
+                    <label className="switch" >
                         <input type="checkbox" className="bg-primary" defaultChecked={row.ActiveStatus == "1" ? true : false} onChange={(e) => activeUser(e, row)} />
-                        <span class="slider round"></span>
+                        <span className="slider round"></span>
                         {/* <BootstrapSwitchButton
                             checked={row.ActiveStatus === '1' ? true : false}
                             size="xs"

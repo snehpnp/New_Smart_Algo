@@ -782,12 +782,12 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Service
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectService(e.target.value)}
@@ -815,12 +815,12 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2  px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Strategy
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setStrategyClientStatus(e.target.value)}
@@ -840,12 +840,12 @@ const TradeHistory = () => {
           </div>
 
           {/* <div className="col-lg-2 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Segment
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectSegment(e.target.value)}

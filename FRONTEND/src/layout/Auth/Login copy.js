@@ -493,7 +493,7 @@ const Login = () => {
 
 
   return (
-    <div class="vh-100">
+    <div className="vh-100">
 
       {1 == 0 ?
         <div className="authincation h-100">
@@ -521,8 +521,8 @@ const Login = () => {
                           btn_name_signUp="Sign Up"
                           title="forlogin"
                         />
-                        <div class="form-row d-flex justify-content-end mt-4 mb-2">
-                          <div class="mb-3 mt-1">
+                        <div className="form-row d-flex justify-content-end mt-4 mb-2">
+                          <div className="mb-3 mt-1">
                             <Link to="/forget">Forgot Password?</Link>
                           </div>
                         </div>
@@ -561,8 +561,8 @@ const Login = () => {
                           //  btn_name_signUp="Sign Up"
                           title="forlogin1"
                         />
-                        <div class="form-row mt-4 mb-2">
-                          <div class="mb-3 mt-1  d-flex justify-content-between ">
+                        <div className="form-row mt-4 mb-2">
+                          <div className="mb-3 mt-1  d-flex justify-content-between ">
                             <div><Link to="/forget">Forgot Password?</Link></div>
                             <div><Link to="/newsignup">Sign Up</Link></div>
                           </div>

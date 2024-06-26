@@ -737,100 +737,100 @@ export default CandlestickChart;
 
 //   return (
 //     <div>
-//       <div class="container-fluid">
-//         <div class="row mb-5">
-//           <div class="col-12 col-sm-6 col-md-3">
-//             <div class="card card-purple-blue text-white mb-3 mb-md-0">
-//               <div class="d-flex justify-content-between " >
+//       <div className="container-fluid">
+//         <div className="row mb-5">
+//           <div className="col-12 col-sm-6 col-md-3">
+//             <div className="card card-purple-blue text-white mb-3 mb-md-0">
+//               <div className="d-flex justify-content-between " >
 //                 <div>
-//                   <p class="new-un">Undefined</p>
+//                   <p className="new-un">Undefined</p>
 //                 </div>
 //                 <div>
-//                   <p class="new-de">Undefined</p>
+//                   <p className="new-de">Undefined</p>
 //                 </div>
 //               </div>
-//               <h4 class="card-new-heading">Test</h4>
-//               <div class="card-body d-flex justify-between align-items-end">
-//                 <div class="card-number">
-//                   <div class="h3">Recommended</div><small><strong>Capital : undefined PER LOT</strong></small>
+//               <h4 className="card-new-heading">Test</h4>
+//               <div className="card-body d-flex justify-between align-items-end">
+//                 <div className="card-number">
+//                   <div className="h3">Recommended</div><small><strong>Capital : undefined PER LOT</strong></small>
 //                 </div>
-//                 <div class="card-description text-right">
-//                   <small class="new-sma">Info</small>
+//                 <div className="card-description text-right">
+//                   <small className="new-sma">Info</small>
 //                 </div>
-//                 <div class="card-description text-right ml-3">
-//                   <small class="new-sma">Join</small>
-//                 </div>
-//               </div>
-//             </div>
-//           </div>
-//           <div class="col-12 col-sm-6 col-md-3">
-//             <div class="card card-salmon-pink text-white">
-//               <div class="d-flex justify-content-space-between" >
-//                 <div>
-//                   <p class="new-un">Undefined</p>
-//                 </div>
-//                 <div>
-//                   <p class="new-de">Undefined</p>
-//                 </div>
-//               </div>
-//               <h4 class="card-new-heading">Test1</h4>
-//               <div class="card-body d-flex justify-content-between align-items-end">
-//                 <div class="card-number">
-//                   <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
-//                 </div>
-//                 <div class="card-description text-right">
-//                   <small class="new-sma">Info</small>
-//                 </div>
-//                 <div class="card-description text-right ml-3">
-//                   <small class="new-sma">Join</small>
+//                 <div className="card-description text-right ml-3">
+//                   <small className="new-sma">Join</small>
 //                 </div>
 //               </div>
 //             </div>
 //           </div>
-//           <div class="col-12 col-sm-6 col-md-3">
-//             <div class="card card-blue-green text-white">
-//               <div class="d-flex justify-content-space-between" >
+//           <div className="col-12 col-sm-6 col-md-3">
+//             <div className="card card-salmon-pink text-white">
+//               <div className="d-flex justify-content-space-between" >
 //                 <div>
-//                   <p class="new-un">Undefined</p>
+//                   <p className="new-un">Undefined</p>
 //                 </div>
 //                 <div>
-//                   <p class="new-de">Undefined</p>
+//                   <p className="new-de">Undefined</p>
 //                 </div>
 //               </div>
-//               <h4 class="card-new-heading">Test2</h4>
-//               <div class="card-body d-flex justify-content-between align-items-end">
-//                 <div class="card-number">
-//                   <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
+//               <h4 className="card-new-heading">Test1</h4>
+//               <div className="card-body d-flex justify-content-between align-items-end">
+//                 <div className="card-number">
+//                   <div className="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
 //                 </div>
-//                 <div class="card-description text-right">
-//                   <small class="new-sma">Info</small>
+//                 <div className="card-description text-right">
+//                   <small className="new-sma">Info</small>
 //                 </div>
-//                 <div class="card-description text-right ml-3">
-//                   <small class="new-sma">Join</small>
+//                 <div className="card-description text-right ml-3">
+//                   <small className="new-sma">Join</small>
 //                 </div>
 //               </div>
 //             </div>
 //           </div>
-//           <div class="col-12 col-sm-6 col-md-3">
-//             <div class="card card-purple-pink text-white">
-//               <div class="d-flex justify-content-space-between" >
+//           <div className="col-12 col-sm-6 col-md-3">
+//             <div className="card card-blue-green text-white">
+//               <div className="d-flex justify-content-space-between" >
 //                 <div>
-//                   <p class="new-un">Undefined</p>
+//                   <p className="new-un">Undefined</p>
 //                 </div>
 //                 <div>
-//                   <p class="new-de">Undefined</p>
+//                   <p className="new-de">Undefined</p>
 //                 </div>
 //               </div>
-//               <h4 class="card-new-heading">Test3</h4>
-//               <div class="card-body d-flex justify-content-between align-items-end">
-//                 <div class="card-number">
-//                   <div class="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
+//               <h4 className="card-new-heading">Test2</h4>
+//               <div className="card-body d-flex justify-content-between align-items-end">
+//                 <div className="card-number">
+//                   <div className="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
 //                 </div>
-//                 <div class="card-description text-right">
-//                   <small class="new-sma">Info</small>
+//                 <div className="card-description text-right">
+//                   <small className="new-sma">Info</small>
 //                 </div>
-//                 <div class="card-description text-right ml-3">
-//                   <small class="new-sma">Join</small>
+//                 <div className="card-description text-right ml-3">
+//                   <small className="new-sma">Join</small>
+//                 </div>
+//               </div>
+//             </div>
+//           </div>
+//           <div className="col-12 col-sm-6 col-md-3">
+//             <div className="card card-purple-pink text-white">
+//               <div className="d-flex justify-content-space-between" >
+//                 <div>
+//                   <p className="new-un">Undefined</p>
+//                 </div>
+//                 <div>
+//                   <p className="new-de">Undefined</p>
+//                 </div>
+//               </div>
+//               <h4 className="card-new-heading">Test3</h4>
+//               <div className="card-body d-flex justify-content-between align-items-end">
+//                 <div className="card-number">
+//                   <div className="h3">Recommended</div><small><strong>Capital : 99999 PER LOT</strong></small>
+//                 </div>
+//                 <div className="card-description text-right">
+//                   <small className="new-sma">Info</small>
+//                 </div>
+//                 <div className="card-description text-right ml-3">
+//                   <small className="new-sma">Join</small>
 //                 </div>
 //               </div>
 //             </div>

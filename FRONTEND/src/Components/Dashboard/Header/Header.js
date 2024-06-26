@@ -41,21 +41,16 @@ const Header = ({ ChatBox }) => {
 
 
 
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
 
   //  lOCAL STORAGE VALUE
   let theme_id = localStorage.getItem("theme");
+  const page = localStorage.getItem("page")
+  const routePath = localStorage.getItem("route");
+
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
   const user_role = JSON.parse(localStorage.getItem("user_role"));
-  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const page = localStorage.getItem("page")
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role
-  const routePath = localStorage.getItem("route");
-
-  const token = JSON.parse(localStorage.getItem("user_details")).token;
-
-  const UserName_localstg = JSON.parse(localStorage.getItem("user_details"))
-
   const UserNamego_localstg = JSON.parse(localStorage.getItem("user_details_goTo"))
 
 
@@ -148,10 +143,6 @@ const Header = ({ ChatBox }) => {
   }
 
   const redirectToAdmin = () => {
-    console.log("page", page);
-    console.log("user_role_goTo", user_role_goTo);
-    console.log("routePath", routePath);
-
 
 
     if (page != null) {
@@ -184,79 +175,22 @@ const Header = ({ ChatBox }) => {
     if (check) {
       loginWithApi(brokerid, UserDetails);
     } else {
-      dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
+      dispatch(TRADING_OFF_USER({ user_id: user_details.user_id, device: CheckUser, token: user_details.token }))
         .unwrap()
         .then((response) => {
           if (response.status) {
-            // setUserDetails(response.data);
             setrefresh(!refresh)
           }
         });
 
     }
 
-
-    return
-
-
-
-    ///////
-
-    const currentDate = new Date();
-    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const weekday = weekdays[currentDate.getDay()];
-    const holidays = new Holidays();
-
-    const userCountry = 'US' || "UK" || "SA";
-    const userLocalTime = currentDate
-
-    let isAllowed = isForeignUserAllowedToLogin(userCountry, userLocalTime)
-
-    if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday') {
-      if (check) {
-        if (isAllowed) {
-          loginWithApi(brokerid, UserDetails);
-        } else {
-          alert('Market Time Is Close');
-        }
-      } else {
-        dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
-          .unwrap()
-          .then((response) => {
-            if (response.status) {
-              // setUserDetails(response.data);
-              setrefresh(!refresh)
-            }
-          });
-
-      }
-    }
-    else {
-      alert('Market Is Closed Today');
-    }
-
-
-
-    return
-    if (check) {
-      loginWithApi(brokerid, UserDetails);
-    } else {
-      dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
-        .unwrap()
-        .then((response) => {
-          if (response.status) {
-            // setUserDetails(response.data);
-            setrefresh(!refresh)
-          }
-        });
-
-    }
 
   };
 
   //  GET_USER_DETAILS
   const data = async () => {
-    await dispatch(User_Profile({ id: gotodashboard ? UserNamego_localstg.user_id : user_id }))
+    await dispatch(User_Profile({ id: gotodashboard ? UserNamego_localstg.user_id : user_details.user_id ,token: user_details.token}))
       .unwrap()
       .then((response) => {
         if (response.status) {
@@ -268,12 +202,11 @@ const Header = ({ ChatBox }) => {
 
   //  GET_USER_DETAILS
   const message_brod = async () => {
-    if (Role == "USER") {
-      await dispatch(GET_MESSAGE_BRODS({ id: user_id }))
+    if (user_details.Role == "USER") {
+      await dispatch(GET_MESSAGE_BRODS({ id: user_details.user_id }))
         .unwrap()
         .then((response) => {
           if (response.status) {
-            // setUserDetails(response.data);
           }
         });
     }
@@ -288,7 +221,7 @@ const Header = ({ ChatBox }) => {
   //  For Show Notfication
   const Notfication = async () => {
     if (user_role == "ADMIN") {
-      await dispatch(GET_HELPS({ user_id: user_id, token: token }))
+      await dispatch(GET_HELPS({ user_id: user_details.user_id, token: user_details.token }))
         .unwrap()
         .then((response) => {
           if (response.status) {
@@ -314,18 +247,26 @@ const Header = ({ ChatBox }) => {
 
 
   const ClearSession = async () => {
-    var decoded = jwt_decode(token);
-
+    var decoded = jwt_decode(user_details.token);
 
     if (decoded.exp * 1000 < new Date().getTime()) {
+
+
       const request = {
-        userId: user_id,
+        userId: user_details.user_id,
         Device: CheckUser,
       };
 
       await dispatch(Log_Out_User(request))
         .then((res) => {
           if (res.payload.status) {
+            localStorage.removeItem("user_role");
+            localStorage.removeItem("user_details");
+            localStorage.clear();
+            setTimeout(() => {
+              navigate("/");
+            }, 1000);
+          } else {
             localStorage.removeItem("user_role");
             localStorage.removeItem("user_details");
             localStorage.clear();
@@ -388,7 +329,7 @@ const Header = ({ ChatBox }) => {
                       </div>
 
                       <div className="Api Login">
-                        <label class="switch mb-0">
+                        <label className="switch mb-0">
                           <input
                             type="checkbox"
                             className="bg-primary"
@@ -404,7 +345,7 @@ const Header = ({ ChatBox }) => {
                               )
                             }
                           />
-                          <span class="slider round"></span>
+                          <span className="slider round"></span>
                         </label>
                       </div>
                     </>
@@ -446,7 +387,7 @@ const Header = ({ ChatBox }) => {
                     {UserNamego_localstg != null ?
                       <h4 className="text-white border-1 mb-0">{UserNamego_localstg.UserName}</h4>
                       :
-                      <h4 className="text-white border-1 mb-0">{UserName_localstg.UserName}</h4>
+                      <h4 className="text-white border-1 mb-0">{user_details.UserName}</h4>
                     }
                   </li>
 

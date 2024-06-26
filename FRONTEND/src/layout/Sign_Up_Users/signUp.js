@@ -151,7 +151,7 @@ const SignUp = () => {
   }, [])
   return (
     <>
-      <div class="vh-100">
+      <div className="vh-100">
         <div className="authincation h-100">
           <div className="container h-100">
             <div className="row justify-content-center h-100 align-items-center">
@@ -177,8 +177,8 @@ const SignUp = () => {
                           // btn_name_login='Sign In'
                           title="forlogin1"
                         />
-                        <div class="form-row mt-4 mb-2">
-                          <div class="mb-3 mt-1  d-flex justify-content-end ">
+                        <div className="form-row mt-4 mb-2">
+                          <div className="mb-3 mt-1  d-flex justify-content-end ">
 
                             <div><Link to="/login">Sign In</Link></div>
                           </div>

@@ -301,7 +301,7 @@ const Add_Panel = () => {
                                         <div className={`col-lg-2 mt-2`} key={broker.broker_id}>
                                             <div className="row ">
                                                 <div className="col-lg-12 ">
-                                                    <div class="form-check custom-checkbox mb-3">
+                                                    <div className="form-check custom-checkbox mb-3">
                                                         <input
                                                             type="checkbox"
                                                             className="form-check-input"

@@ -664,12 +664,12 @@ const AddClient = () => {
                   </div>
                 </div>
               ))}
-              <label class="toggle mt-3">
-                <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
+              <label className="toggle mt-3">
+                <input className="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
                   setShowAllStratagy(e.target.checked)
                 }} />
-                <div class={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
-                <span class="toggle-label">Show Strategy</span>
+                <div className={`toggle-switch ${ShowAllStratagy ? 'bg-primary' : "bg-secondary"}`}></div>
+                <span className="toggle-label">Show Strategy</span>
               </label>
 
               {formik.errors.Strategy &&
@@ -681,7 +681,7 @@ const AddClient = () => {
                   <div className={`col-lg-2 mt-2`} key={strategy._id}>
                     <div className="row ">
                       <div className="col-lg-12 ">
-                        <div class="form-check custom-checkbox mb-3">
+                        <div className="form-check custom-checkbox mb-3">
                           <input type='checkbox' className="form-check-input" name={strategy.strategy_name}
                             value={strategy._id}
                             onChange={(e) => handleStrategyChange(e)}

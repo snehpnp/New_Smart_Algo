@@ -321,7 +321,7 @@ const BrokerResponse = () => {
                           <select
                             name="strategy_id"
 
-                            class="form-select form-select-lg "
+                            className="form-select form-select-lg "
                             aria-label=".form-select-lg example"
                             onChange={(e) =>
                               setgroup_qty_value_test(
@@ -376,7 +376,7 @@ const BrokerResponse = () => {
                       <td className="color-primary">
                         <select
                           name="order_type"
-                          class="form-select form-select-lg "
+                          className="form-select form-select-lg "
                           aria-label=".form-select-lg example"
                           onChange={(e) =>
                             setgroup_qty_value_test(
@@ -397,7 +397,7 @@ const BrokerResponse = () => {
                       <td className="color-primary">
                         <select
                           name="product_type"
-                          class="form-select form-select-lg "
+                          className="form-select form-select-lg "
                           aria-label=".form-select-lg example"
                           onChange={(e) =>
                             setgroup_qty_value_test(
@@ -416,9 +416,9 @@ const BrokerResponse = () => {
                         </select>
                       </td>
                       <td className="color-primary">
-                        <label class="toggle">
+                        <label className="toggle">
                           <input
-                            class="toggle-checkbox bg-primary"
+                            className="toggle-checkbox bg-primary"
                             type="checkbox"
                             name="active_status"
                             defaultChecked={data.active_status === "1"}
@@ -432,7 +432,7 @@ const BrokerResponse = () => {
                             }
                           />
                           <div
-                            class={`toggle-switch ${data.active_status === "1"
+                            className={`toggle-switch ${data.active_status === "1"
                               ? "bg-primary"
                               : "bg-secondary"
                               }`}
@@ -512,7 +512,7 @@ const BrokerResponse = () => {
         <>
           <button
             type="button"
-            class="btn btn-outline-primary btn-lg mt-4"
+            className="btn btn-outline-primary btn-lg mt-4"
             onClick={(e) => UpdateDashboard(e)}
           >
             Update
