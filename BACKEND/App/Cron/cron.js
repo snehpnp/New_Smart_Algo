@@ -220,9 +220,6 @@ const MainSignalsRemainToken = async () => {
     const result = await MainSignals_modal.aggregate(pipeline)
 
     result.forEach(async (element) => {
-
-
-
         const filter = { _id: element.token };
         const update = {
             $set: { _id: element.token, exch: element.exch_seg },
@@ -230,6 +227,9 @@ const MainSignalsRemainToken = async () => {
         const update_token = await token_chain_collection.updateOne(filter, update, { upsert: true });
         //console.log("update_token",update_token)
     });
+
+
+    
 
 
 

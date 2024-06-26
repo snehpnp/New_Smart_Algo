@@ -20,12 +20,9 @@ module.exports = function (app) {
     const Roledata = db.role;
     const Broker_information = db.Broker_information;
 
-
-
     const { DashboardView } = require('./View/DashboardData')
     const { createView, dropOpenPosition, open_position_excute } = require('./View/Open_position')
     const { MainSignalsRemainToken, service_token_update, TokenSymbolUpdate } = require('./App/Cron/cron')
-
 
     const { createViewAlice } = require('./View/Alice_blue')
     const { createViewAngel } = require('./View/Angel')
@@ -42,6 +39,24 @@ module.exports = function (app) {
     const { createViewZebul } = require('./View/Zebul')
     const { createViewZerodha } = require('./View/zerodha')
     const { createViewIcicidirect } = require('./View/Icicidirectview')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
 
 
@@ -67,8 +82,6 @@ module.exports = function (app) {
 
         res.send("DONEE")
     })
-
-
 
     app.post("/all/tabel", async (req, res) => {
         try {
@@ -105,9 +118,6 @@ module.exports = function (app) {
             res.status(500).send("Internal Server Error");
         }
     });
-
-
-    
 
     const DawnloadOptionChainSymbol = async () => {
         console.log("symbolupdate")
@@ -147,9 +157,6 @@ module.exports = function (app) {
 
 
     }
-
-
-
     // Role Create
     const RoleCreate = () => {
         var arr = [
@@ -183,9 +190,6 @@ module.exports = function (app) {
             return newRole.save();
         })
     }
-
-
-
     // Create Company information Table 
     const CompanyCreate = (data) => {
         const companyData = new company({
@@ -204,8 +208,6 @@ module.exports = function (app) {
         })
         return companyData.save();
     }
-
-
 
     const CreateBrokerinfo = async () => {
         try {
@@ -230,7 +232,6 @@ module.exports = function (app) {
             return null
         }
     };
-
 
     // Create categorys 
     const categorys = async () => {
@@ -370,19 +371,6 @@ module.exports = function (app) {
 
 
     // =====================================================================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     app.get("/UpdateQty", async (req, res) => {
 
