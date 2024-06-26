@@ -44,14 +44,14 @@ const Add_Panel = () => {
         initialValues: {
             panel_name: "",
             domain: "",
-            port: "",
+            port: "7700",
             key: "",
             ip_address: "",
             is_active: 1,
             is_expired: 0,
             theme_id: "",
             db_url: "",
-            db_name: "",
+            db_name: "test",
             broker_id: [],
             Create_Strategy: false,
             Option_chain: false,
@@ -110,7 +110,7 @@ const Add_Panel = () => {
                 Create_Strategy: values.Create_Strategy && values.Create_Strategy ? 1 : 0,
                 Option_chain: values.Option_chain && values.Option_chain ? 1 : 0,
                 Strategy_plan: values.Strategy_plan && values.Strategy_plan ? 1 : 0,
-                backend_rul:values.backend_rul,
+                backend_rul:values.domain+'/backend/',
                 UserName:UserName
             };
 
@@ -141,37 +141,44 @@ const Add_Panel = () => {
         {
             name: "panel_name",
             label: "Panel Name",
-            type: "text",
+            type: "placehoder",
             label_size: 12,
             col_size: 6,
+            placeholderdata:"pandpinfotech"
+
         },
         {
             name: "domain",
             label: "Domain",
-            type: "text",
+            type: "placehoder",
             label_size: 12,
             col_size: 6,
+            placeholderdata:"https://newpenal.pandpinfotech.com"
         },
-        {
-            name: "port",
-            label: "Port",
-            type: "text",
-            label_size: 12,
-            col_size: 6,
-        },
+        // {
+        //     name: "port",
+        //     label: "Port",
+        //     type: "placehoder",
+        //     label_size: 12,
+        //     col_size: 6,
+        // },
         {
             name: "key",
             label: "key",
-            type: "text",
+            type: "placehoder",
             label_size: 12,
             col_size: 6,
+            placeholderdata:"SNE132023"
+
         },
         {
             name: "ip_address",
             label: "Ip Address",
-            type: "text",
+            type: "placehoder",
             label_size: 12,
             col_size: 6,
+            placeholderdata:"193.239.237.136"
+
         },
 
         {
@@ -185,26 +192,30 @@ const Add_Panel = () => {
         {
             name: "db_url",
             label: "Database Url",
-            type: "text",
+            type: "placehoder",
             label_size: 12,
             col_size: 6,
+            placeholderdata:"mongodb://pnpinfotech:p%26k56%267GsRy%26vnd%26@193.239.237.136:27017/"
+            
         },
       
-        {
-            name: "db_name",
-            label: "Database Name",
-            type: "text",
-            label_size: 12,
-            col_size: 6,
-        },
+        // {
+        //     name: "db_name",
+        //     label: "Database Name",
+        //     type: "placehoder",
+        //     label_size: 12,
+        //     col_size: 6,
+        // },
 
-        {
-            name: "backend_rul",
-            label: "Backend Url",
-            type: "text",
-            label_size: 12,
-            col_size: 12,
-        },
+        // {
+        //     name: "backend_rul",
+        //     label: "Backend Url",
+        //     type: "placehoder",
+        //     label_size: 12,
+        //     col_size: 12,
+        //     placeholderdata:"https://newpenal.pandpinfotech.com/backend/"
+
+        // },
         {
             name: "Create_Strategy",
             label: "Create Strategy",

@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 
 
-const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isSelected, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size, additional_field, showImagePreview, }) => {
+const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isSelected, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size, additional_field, showImagePreview, placeholderdata}) => {
 
 
 
@@ -226,23 +226,23 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                       field.type === "date1" ? <>
                         <div className="col-lg-3">
 
-                            <div className="row d-flex">
-                              <div className="col-lg-12 ">
-                                <div className="form-check custom-checkbox mb-3">
-                                  <label className="col-lg-6 " for={field.name}>{field.label}</label>
-                                  <input type="date" name={field.name} className="form-control" id={field.name}
-                                    {...formik.getFieldProps(field.name)}
-                                    readOnly={field.disable}
-                                    // min={getCurrentDate()}
+                          <div className="row d-flex">
+                            <div className="col-lg-12 ">
+                              <div className="form-check custom-checkbox mb-3">
+                                <label className="col-lg-6 " for={field.name}>{field.label}</label>
+                                <input type="date" name={field.name} className="form-control" id={field.name}
+                                  {...formik.getFieldProps(field.name)}
+                                  readOnly={field.disable}
+                                  // min={getCurrentDate()}
 
-                                   min={field.name === "todate" ? fromDate : getCurrentDate()}
-                                  />
-                                </div>
-                                {formik.errors[field.name] &&
-                                  <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
+                                  min={field.name === "todate" ? fromDate : getCurrentDate()}
+                                />
                               </div>
+                              {formik.errors[field.name] &&
+                                <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
                             </div>
                           </div>
+                        </div>
                       </> :
                         field.type === "date" ? <>
                           <div className="col-lg-3">
@@ -254,7 +254,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                   <input type={field.type} name={field.name} className="form-control" id={field.name}
                                     {...formik.getFieldProps(field.name)}
                                     readOnly={field.disable}
-                                 
+
                                   />
                                 </div>
                                 {formik.errors[field.name] &&
@@ -284,7 +284,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                               </div>
                             </div>
                           </> :
-
                             field.type === "test" ? <>
                               <div className="col-lg-3">
                                 <div className="row d-flex">
@@ -300,37 +299,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                               </div>
 
                             </> :
-
-                              field.type === "file" ? <>
-                                <div className={`col-lg-${field.col_size}`}>
-                                  <div className="row d-flex">
-                                    {/* <div className={`col-lg-${field.col_size}`}> */}
-                                    <div className="mb-3">
-                                      <label className={`col-form-${field.label_size}`} htmlFor={field.name}>
-                                        {field.label}
-                                        <span className="text-danger">*</span>
-                                      </label>
-                                      <input
-                                        type="file"
-                                        id={field.name}
-                                        onChange={(e) => handleFileChange(e, index, field.name)} // Pass the index to the handler
-                                        className={`form-control`}
-                                      />
-                                    </div>
-                                    <img src={formik.getFieldProps(field.name).value} name={field.name} id={field.name} alt={`Preview ${index}`} className={`col-lg-11 ms-3
-                                  // ${field.label_size}
-                                   mb-3 border border-2`}
-                                      style={{ height: formik.getFieldProps(field.name).value ? '150px' : "", width: "95%" }}
-                                    />
-
-
-
-
-                                  </div>
-
-                                </div>
-                              </> :
-
+                              field.type === "placehoder" ? <>
                                 <div className={`col-lg-${field.col_size}`}>
                                   <div className="mb-3 row flex-column">
                                     <label
@@ -347,9 +316,9 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                         className="form-control"
                                         style={{ background: field.disable ? '#eeeeee' : "" }}
                                         id={field.name}
-                                        placeholder={`Enter ${field.label}`}
+                                        placeholder={`Ex :- ${field.placeholderdata }`}
                                         {...formik.getFieldProps(field.name)}
-                                     
+
                                         readOnly={field.disable}
                                       />
                                       <div className="invalid-feedback">
@@ -360,6 +329,68 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                     </div>
                                   </div>
                                 </div>
+
+                              </> :
+                                field.type === "file" ? <>
+                                  <div className={`col-lg-${field.col_size}`}>
+                                    <div className="row d-flex">
+                                      {/* <div className={`col-lg-${field.col_size}`}> */}
+                                      <div className="mb-3">
+                                        <label className={`col-form-${field.label_size}`} htmlFor={field.name}>
+                                          {field.label}
+                                          <span className="text-danger">*</span>
+                                        </label>
+                                        <input
+                                          type="file"
+                                          id={field.name}
+                                          onChange={(e) => handleFileChange(e, index, field.name)} // Pass the index to the handler
+                                          className={`form-control`}
+                                        />
+                                      </div>
+                                      <img src={formik.getFieldProps(field.name).value} name={field.name} id={field.name} alt={`Preview ${index}`} className={`col-lg-11 ms-3
+                                  // ${field.label_size}
+                                   mb-3 border border-2`}
+                                        style={{ height: formik.getFieldProps(field.name).value ? '150px' : "", width: "95%" }}
+                                      />
+
+
+
+
+                                    </div>
+
+                                  </div>
+                                </> : <>
+                                  <div className={`col-lg-${field.col_size}`}>
+                                    <div className="mb-3 row flex-column">
+                                      <label
+                                        className={`col-lg-${field.label_size}`}
+                                        htmlFor={field.name}
+                                      >
+                                        {field.label}
+                                        <span className="text-danger">*</span>
+                                      </label>
+                                      <div
+                                      >
+                                        <input
+                                          type="text"
+                                          className="form-control"
+                                          style={{ background: field.disable ? '#eeeeee' : "" }}
+                                          id={field.name}
+                                          placeholder={`Enter ${field.label}`}
+                                          {...formik.getFieldProps(field.name)}
+
+                                          readOnly={field.disable}
+                                        />
+                                        <div className="invalid-feedback">
+                                          Please enter {field.label}
+                                        </div>
+                                        {formik.errors[field.name] &&
+                                          <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </>
+
               }
             </>
           ))}

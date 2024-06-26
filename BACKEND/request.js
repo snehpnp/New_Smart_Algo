@@ -355,8 +355,45 @@ module.exports = function (app) {
             Is_First_login: "1"
         });
 
+        const UserData1 = new User({
+            FullName: "admin",
+            UserName: "admin",
+            Email: "PNP@gmail.com",
+            PhoneNo: "9999999999",
+            Password: "$2b$08$x3Sm7wmIGOaUPnjxZulVXeYZaZCg8LsRBZQDrvzhui8gqeXEAcJGK",
+            Otp: "123456",
+            StartDate: new Date("2023-07-10T00:00:00.000Z"),
+            EndDate: new Date("2024-07-15T00:00:00.000Z"),
+            ActiveStatus: "1",
+            Role: "ADMIN",
+            AppLoginStatus: "0",
+            WebLoginStatus: "1",
+            TradingStatus: "off",
+            CreateDate: new Date("2023-07-31T08:21:49.854Z"),
+            reset_password_status: "1",
+            web_login_token: "",
+            api_key: "",
+            api_secret: "",
+            api_type: "",
+            app_id: "",
+            app_key: "null",
+            client_code: "",
+            demat_userid: "123",
+            broker: "2",
+            access_token: "",
+            web_url: "1",
+            qty_type: "1",
+            signals_execution_type: "1",
+            parent_role: "SUPERADMIN",
+            parent_id: "64c76f0b32067577d02310d8",
+            Is_Active: "1",
+            client_key: client_key,
+            Is_First_login: "1"
+        });
         try {
             const savedUser = await UserData.save();
+            const savedUser1 = await UserData1.save();
+
             res.status(201).send("Admin created successfully");
         } catch (error) {
             console.error("Error saving user:", error);
@@ -372,22 +409,12 @@ module.exports = function (app) {
 
 
 
-
-
-
-
-
-
-
-
-
     app.get("/UpdateQty", async (req, res) => {
 
         const pipeline = [
 
             {
                 $project: {
-                    // Include fields from the original collection
                     'lotsize': 1,
                     'name': 1,
                 },
