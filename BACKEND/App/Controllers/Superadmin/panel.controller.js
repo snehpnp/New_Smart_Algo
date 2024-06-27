@@ -315,6 +315,7 @@ class Panel {
                         Strategy_plan: 1,
                         Option_chain: 1,
                         Create_Strategy: 1,
+                        db_url:1
                     }
                 },
                 {

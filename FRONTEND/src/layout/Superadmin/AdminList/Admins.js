@@ -95,12 +95,14 @@ const AdminsList = () => {
     };
 
     const fetchBrokerView1 = async (row) => {
+        console.log("row",row)
         try {
             let data = JSON.stringify({
                 "panelname": row.panel_name,
                 "client_key": row.key,
                 backend_rul: row.domain + "/backend/",
-                domain: row.domain
+                domain: row.domain,
+                db_url:row.db_url
             });
 
             let config = {
