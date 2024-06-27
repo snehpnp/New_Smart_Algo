@@ -90,7 +90,7 @@ const UpdatePassword = () => {
     ];
 
     return (
-        <div class="vh-100" >
+        <div className="vh-100" >
             <div className="authincation h-100">
                 <div className="container h-100">
                     <div className="row justify-content-center h-100 align-items-center">

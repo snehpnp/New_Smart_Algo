@@ -108,22 +108,22 @@ const ApiCreateInfo = () => {
           <div><h5>Client is Demo</h5> </div>
         ) : (
           <>
-            <div class="row">
-              <section class="card__container">
+            <div className="row">
+              <section className="card__container">
                 {UserDetails.data &&
                   UserDetails.data.map((item) => {
                     // if (item.broker_id == UserInfo.broker) {
                     return (
                       <>
-                        <div class="card__bx card__1">
-                          <div class="card__data">
-                            <div class="card__icon">
-                              <div class="card__icon-bx">
+                        <div className="card__bx card__1">
+                          <div className="card__data">
+                            <div className="card__icon">
+                              <div className="card__icon-bx">
                                 <CandlestickChart />
                               </div>
                             </div>
 
-                            <div class="card__content">
+                            <div className="card__content">
                               <h3 className="text-center">{item.title}</h3>
                               <Link
                                 style={{
@@ -211,7 +211,7 @@ const ApiCreateInfo = () => {
                             <img
                               src={modalData.imageone}
                               alt=""
-                              class="w-100 my-3 border border-dark"
+                              className="w-100 my-3 border border-dark"
                             />
                           ) : (
                             ""
@@ -236,7 +236,7 @@ const ApiCreateInfo = () => {
                           {`${Config.base_url + modalData.steptwourl}`}
                         </a>
                         <br />
-                      {modalData.imagetwo ? ( <img src={modalData.imagetwo}  alt="" class="w-100 border border-dark"
+                      {modalData.imagetwo ? ( <img src={modalData.imagetwo}  alt="" className="w-100 border border-dark"
                     />
                   ) : (
                     ""
@@ -259,7 +259,7 @@ const ApiCreateInfo = () => {
                           <img
                             src={modalData.imagethree}
                             alt=""
-                            class="w-100 border border-dark"
+                            className="w-100 border border-dark"
                           />
                         ) : (
                           ""

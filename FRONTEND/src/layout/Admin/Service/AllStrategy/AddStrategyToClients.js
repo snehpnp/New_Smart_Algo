@@ -164,9 +164,9 @@ const AddStraegyNormal = () => {
                 //             <div className='row'>
                 //                 <div className="col-12">
                 //                     {/* <h6>Select Plans</h6> */}
-                //                     <div class="form-check">
-                //                         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" onChange={() => setSelectPlan(!SelectPlan)} />
-                //                         <label class="form-check-label" for="flexCheckDefault">
+                //                     <div className="form-check">
+                //                         <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault" onChange={() => setSelectPlan(!SelectPlan)} />
+                //                         <label className="form-check-label" for="flexCheckDefault">
                 //                             Select Plans
                 //                         </label>
                 //                     </div>

@@ -154,16 +154,16 @@ const AllSignUpClients = () => {
                        Active
                     </span> :
                         <Link to={`/admin/client/add`} state={row}>
-                            <label class="toggle mt-3">
+                            <label className="toggle mt-3">
                                 <input
-                                    class="toggle-checkbox bg-primary"
+                                    className="toggle-checkbox bg-primary"
                                     type="checkbox"
                                     checked={row.ActiveStatus === "1" ? true : false}
                                     onChange={(e) => {
 
                                     }}
                                 />
-                                <div class={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
+                                <div className={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
                             </label>
                         </Link>
                     }

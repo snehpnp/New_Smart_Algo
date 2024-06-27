@@ -1004,13 +1004,8 @@ class Employee {
     }
   }
 
-
-
-
   // GET ALL EXPIRED USERS
   async GetAllExpiredClients(req, res) {
-
-
     try {
       const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
       const skip = (page - 1) * limit;
@@ -1064,13 +1059,9 @@ class Employee {
   async GetAllClients(req, res) {
     try {
       const { page, limit, Find_Role, user_ID } = req.body; //LIMIT & PAGE
-      // const skip = (page - 1) * limit;
 
       // GET ALL CLIENTS
       var AdminMatch;
-
-
-
 
       if (Find_Role == "ADMIN") {
         AdminMatch = { Role: "USER" };
@@ -1116,31 +1107,25 @@ class Employee {
   // GET ALL LOGIN CLIENTS
   async loginClients(req, res) {
     try {
-      // GET LOGIN CLIENTS
+
       const getAllLoginClients = await User_model.find({
         $or: [{ AppLoginStatus: 1 }, { WebLoginStatus: 1 }],
-      });
-      // const totalCount = getAllLoginClients.length;
-      // IF DATA NOT EXIST
+      })
+
       if (getAllLoginClients.length == 0) {
         return res.send({
           status: false,
           msg: "Empty data",
           data: [],
-          // totalCount: totalCount,
         });
       }
 
-      // DATA GET SUCCESSFULLY
-      res.send({
+      return res.send({
         status: true,
         msg: "Get All Login Clients",
-        // totalCount: totalCount,
         data: getAllLoginClients,
-        // page: Number(page),
-        // limit: Number(limit),
-        // totalPages: Math.ceil(totalCount / Number(limit)),
       });
+
     } catch (error) {
       console.log("Error loginClients Error-", error);
     }
@@ -1153,7 +1138,6 @@ class Employee {
       const getAllTradingClients = await User_model.find({
         TradingStatus: "on",
       });
-      // const totalCount = getAllTradingClients.length;
 
       // IF DATA NOT EXIST
       if (getAllTradingClients.length == 0) {
@@ -1179,6 +1163,7 @@ class Employee {
       console.log("Error trading Clients Error-", error);
     }
   }
+
 
   // GET ALL TRADING ON  CLIENTS
   async GetTradingStatus(req, res) {
@@ -1225,32 +1210,57 @@ class Employee {
   async UpdateActiveStatus(req, res) {
     try {
       const { id, user_active_status } = req.body;
-      // UPDATE ACTTIVE STATUS CLIENT
 
+      // Retrieve the user
       const get_user = await User_model.find({ _id: id });
       if (get_user.length == 0) {
         return res.send({
           status: false,
           msg: "Empty data",
           data: [],
-          totalCount: totalCount,
+          totalCount: 0,
         });
       }
 
       const filter = { _id: id };
-      const updateOperation = { $set: { ActiveStatus: user_active_status } };
+      let updateOperation = {
+        $set: {
+          ActiveStatus: user_active_status,
+          AppLoginStatus: "0",
+          WebLoginStatus: "0",
+          web_login_token: null,
+          app_login_token: null
+        }
+      };
+
+      if (get_user[0].TradingStatus == "on" && user_active_status == 0) {
+        updateOperation.$set.TradingStatus = "off";
+        updateOperation.$set.access_token = "";
+      }
 
       const result = await User_model.updateOne(filter, updateOperation);
 
-      if (result) {
-        // STATUS UPDATE SUCCESSFULLY
-        var status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
-        logger1.info(`${status_msg} user Successfully`, {
-          Email: get_user[0].Email,
-          role: get_user[0].Role,
-          user_id: get_user[0]._id,
+      if (get_user[0].TradingStatus == "on" && user_active_status == 0) {
+        const user_login1 = new user_logs({
+          user_Id: new ObjectId(id),
+          login_status: "Trading Off By System you are Inactive by admin",
+          role: "USER",
+          system_ip: getIPAddress()
         });
+        await user_login1.save();
+      }
 
+      const user_login = new user_logs({
+        user_Id: new ObjectId(id),
+        login_status: "Admin " + (user_active_status == 0 ? "InActive" : "Active") + " User",
+        role: "USER",
+        device: "",
+        system_ip: getIPAddress()
+      });
+      await user_login.save();
+
+      if (result) {
+        const status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
         res.send({
           status: true,
           msg: "Update Successfully",
@@ -1258,9 +1268,14 @@ class Employee {
         });
       }
     } catch (error) {
-      console.log("Error trading status Error-", error);
+      return res.send({
+        status: false,
+        msg: "Internal Server Error",
+        error: error.message
+      });
     }
   }
+
 
 
 

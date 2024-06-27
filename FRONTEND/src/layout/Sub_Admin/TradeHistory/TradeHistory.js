@@ -13,7 +13,6 @@ import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
 import { Eye, CandlestickChart, Pencil } from "lucide-react";
 import { loginWithApi } from "../../../Components/Dashboard/Header/log_with_api";
 import DetailsView from "./DetailsView";
-import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
 import { check_Device } from "../../../Utils/find_device";
@@ -782,12 +781,12 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Service
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectService(e.target.value)}
@@ -815,12 +814,12 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2  px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Strategy
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setStrategyClientStatus(e.target.value)}
@@ -840,12 +839,12 @@ const TradeHistory = () => {
           </div>
 
           {/* <div className="col-lg-2 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Segment
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectSegment(e.target.value)}

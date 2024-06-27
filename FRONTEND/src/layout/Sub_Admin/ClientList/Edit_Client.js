@@ -725,8 +725,8 @@ const AddClient = () => {
                   </div>
                 </div>
               ))}
-              <label class="toggle mt-3">
-                <input class="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
+              <label className="toggle mt-3">
+                <input className="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
                   setShowAllStratagy(e.target.checked)
                 }} />
 

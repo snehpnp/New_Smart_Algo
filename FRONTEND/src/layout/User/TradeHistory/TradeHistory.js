@@ -423,12 +423,12 @@ const TradeHistory = () => {
 
 
               {/* <div className="col-lg-3 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Index Symbol
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectServiceIndex(e.target.value)}
@@ -443,12 +443,12 @@ const TradeHistory = () => {
            </div>
 
            <div className="col-lg-3 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Strategy
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectStrategy(e.target.value)}
@@ -532,7 +532,7 @@ const TradeHistory = () => {
           setshowModal={() => setshowModal(false)}
           tradeHistoryData={rowData}
         />
-         <br />
+        <br />
         <br />
 
         <h6><b>THIS RESULTS IS VALID FOR TODAY ONLY, WE DO NOT DIRECTLY OR INDIRECTLY MAKE ANY REFERENCE TO THE PAST OR EXPECTED FUTURE RETURN/PERFORMANCE OF THE ALGORITHM.</b></h6>

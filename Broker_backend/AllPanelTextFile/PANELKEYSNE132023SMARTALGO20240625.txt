@@ -78,3 +78,43 @@ TIME Tue Jun 25 2024 10:14:32 GMT+0530 (India Standard Time) ZebullView ALL CLIE
 TIME Tue Jun 25 2024 10:14:32 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
 TIME Tue Jun 25 2024 10:14:33 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- icici REQUEST -{"exchange_code":"NFO","product":"options","action":"buy","order_type":"market","stoploss":"","quantity":"15","price":"","validity":"DAY","expiry_date":"2024-06-25T18:30:00.000Z","stock_code":"CNXBAN","strike_price":"51000","right":"call"}
 TIME Tue Jun 25 2024 10:14:33 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - icici RESPONSE -{"Success":null,"Status":500,"Error":"Available Futures and Options Limit is insufficient to cover the trade value: "}
+
+NEW TRADE TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:IDEA#,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:12 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:13 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:13 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 12:59:13 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+
+NEW TRADE TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time)
+RECEIVED_SIGNALS DTime:1698647568,Symbol:IDEA#,TType:LE,Tr_Price:4568,Price:5,Sq_Value:0.00,Sl_Value:0.00,TSL:0.00,Segment:C,Strike:48000,OType:CALL,Expiry:19062024,Strategy:Test1,Quntity:100,Key:SNE132023,TradeType:MT_4,Target:10,StopLoss:10,ExitTime:0,Demo:demo
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) RECEIVED_SIGNALS_TOKEN 14366
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) ALICE BLUE ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) UPSTOX ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) dhan ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) fyers ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) markethub ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) swastika ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) mastertrust ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) kotakneo ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) iiflView ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) MotilaloswalView ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) ZebullView ALL CLIENT LENGTH 0
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) ICICI DIRECT View ALL CLIENT LENGTH 1
+TIME Tue Jun 25 2024 13:00:15 GMT+0530 (India Standard Time) ALICE BLUE BEFORE PLACE ORDER USER ENTRY- icici REQUEST -{"exchange_code":"NSE","product":"cash","action":"buy","order_type":"market","stoploss":"","quantity":"1","price":"","validity":"DAY","stock_code":"IDECEL","strike_price":"1","right":"others"}
+TIME Tue Jun 25 2024 13:00:16 GMT+0530 (India Standard Time) ALICE BLUE AFTER PLACE ORDER USER ENTRY - icici RESPONSE -{"Success":null,"Status":500,"Error":"Insufficient limit  :Allocate funds to increase your limit. Available Limits :-1652.00"}

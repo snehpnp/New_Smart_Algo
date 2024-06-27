@@ -27,10 +27,6 @@ class Icicidirect {
         try {
             var keystr = req.query.key;
 
-
-            console.log("keystr",keystr)
-
-
             if(keystr != undefined){
     
     
@@ -71,7 +67,6 @@ class Icicidirect {
               
                       axios(config)
                         .then(async function (response) {
-                           console.log("response", response.data);
                           if (response.data.Status == 200) {
                             
                             var access_token = response.data.Success.session_token
@@ -129,6 +124,7 @@ class Icicidirect {
         }
     }
 
+
       // UPDATE ALL CLIENT BROKER RESPONSE
       async GetOrderFullInformationIcicidirect(req, res , user_info) {
        
@@ -156,27 +152,39 @@ class Icicidirect {
 const GetAllBrokerResponse = async (user_info,res) => {
     try {
         const objectId = new ObjectId(user_info[0]._id);
-       // var FindUserAccessToken = await User.find({ _id: objectId }).limit(1);
         var FindUserBrokerResponse = await BrokerResponse.find({ user_id: objectId , order_view_status : "0" })
      
         if (FindUserBrokerResponse.length > 0) {
     
-            FindUserBrokerResponse.forEach((data1) => {    
+            FindUserBrokerResponse.forEach((data1) => {  
+                
+                
+         
+
+                var dataGetOrder = {
+                    "exchange_code": exchange_code,
+                    "order_id": data1.order_id
+                }
+
+                var currentDateGetOrder = new Date().toISOString().split(".")[0] + '.000Z';
+                let checksumcodeForGetOrder = sha256(currentDateGetOrder + JSON.stringify(dataGetOrder) + user_info[0].api_secret);
+
+
                 var config = {
                     method: 'get',
-                    url: 'https://apiconnect.angelbroking.com/rest/secure/angelbroking/order/v1/getOrderBook',
+                    url: 'https://api.icicidirect.com/breezeapi/api/v1/order',
                     headers: {
-                        'Authorization': 'Bearer ' + user_info[0].access_token,
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-UserType': 'USER',
-                        'X-SourceID': 'WEB',
-                        'X-ClientLocalIP': 'CLIENT_LOCAL_IP',
-                        'X-ClientPublicIP': 'CLIENT_PUBLIC_IP',
-                        'X-MACAddress': 'MAC_ADDRESS',
-                        'X-PrivateKey': user_info[0].api_key
+                        'X-Checksum': "token " + checksumcodeForGetOrder,
+                        'X-Timestamp': currentDateGetOrder,
+                        'X-AppKey': user_info[0].api_key,
+                        'X-SessionToken': user_info[0].access_token,
                     },
+                    data: dataGetOrder
                 };
+
+
+
                 axios(config)
                     .then(async (response) => {
                        
@@ -225,7 +233,7 @@ const GetAllBrokerResponse = async (user_info,res) => {
                           
                           
                         }else{
-                            // console.log("NO DATA FOUND");
+              
                         }
 
                        

@@ -526,7 +526,7 @@ const Login = () => {
 
 
   return (
-    <div class="vh-100" style={{ 
+    <div className="vh-100" style={{ 
       backgroundImage: `url(${backgroundImage})` ,backgroundSize:'cover'
     }}>
 
@@ -555,8 +555,8 @@ const Login = () => {
                         //  btn_name_signUp="Sign Up"
                         title="forlogin1"
                       />
-                      <div class="form-row mt-4 mb-2">
-                        <div class="mb-3 mt-1  d-flex justify-content-between ">
+                      <div className="form-row mt-4 mb-2">
+                        <div className="mb-3 mt-1  d-flex justify-content-between ">
                           <div><Link to="/forget">Forgot Password?</Link></div>
                           <div><Link to="/newsignup">Sign Up</Link></div>
                         </div>

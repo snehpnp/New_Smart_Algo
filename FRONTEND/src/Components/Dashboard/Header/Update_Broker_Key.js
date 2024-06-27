@@ -15,7 +15,7 @@ const Update_Broker_Key = ({ closeModal }) => {
     const dispatch = useDispatch();
 
     const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
-    const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+    const user_details = JSON.parse(localStorage.getItem("user_details"));
     const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
     const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
     const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
@@ -27,7 +27,12 @@ const Update_Broker_Key = ({ closeModal }) => {
 
 
     const data = async () => {
-        await dispatch(User_Profile({ id: isgotodashboard ? gotodashboard.user_id : user_id }))
+
+        const userId = isgotodashboard ? gotodashboard.user_id : user_details.user_id;
+        const token = isgotodashboard ? gotodashboard.token : user_details.token;
+
+        await dispatch(User_Profile({   id:userId,
+            token: token }))
             .unwrap()
             .then((response) => {
                 if (response.status) {
@@ -64,7 +69,7 @@ const Update_Broker_Key = ({ closeModal }) => {
 
 
             const req = {
-                "id": user_id,
+                "id":user_details.user_id,
                 data: {
                     "api_secret": values.api_secret,
                     "demat_userid": values.demat_userid,

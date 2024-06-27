@@ -60,22 +60,22 @@ const ApiCreateInfo = () => {
      
     return <>
         <Content Page_title="All Api-Create Info's" button_status={false}>
-            <div class="row">
-                <section class="card__container">
+            <div className="row">
+                <section className="card__container">
 
                     {/* {goToDashboard ? } */}
                     {UserDetails.data && UserDetails.data.map((item) => {
                                              
                         return <>
-                            <div class="card__bx card__1">
-                                <div class="card__data">
-                                    <div class="card__icon">
-                                        <div class="card__icon-bx">
+                            <div className="card__bx card__1">
+                                <div className="card__data">
+                                    <div className="card__icon">
+                                        <div className="card__icon-bx">
                                             <CandlestickChart />
                                         </div>
                                     </div>
 
-                                    <div class="card__content">
+                                    <div className="card__content">
                                         <h3>{item.title}</h3>
                                         <Link style={{
                                             marginRight: '20px',
@@ -128,7 +128,7 @@ const ApiCreateInfo = () => {
                         https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB
                     </a> */}
                     <br />
-                    {modalData.imageone ? <img src={modalData.imageone} alt="" class="w-100 my-3 border border-dark" /> : ""}
+                    {modalData.imageone ? <img src={modalData.imageone} alt="" className="w-100 my-3 border border-dark" /> : ""}
 
                 </> : ""}
 
@@ -143,13 +143,13 @@ const ApiCreateInfo = () => {
                         {`${Config.base_url + modalData.steptwourl}`}
                     </a>
                     <br />
-                    {modalData.imagetwo ? <img src={modalData.imagetwo} alt="" class="w-100 border border-dark" /> : ""}
+                    {modalData.imagetwo ? <img src={modalData.imagetwo} alt="" className="w-100 border border-dark" /> : ""}
                 </> : ""}
 
                 {modalData.imagethree || modalData.imagethree ? <>
                     <h4 className="text-decoration-underline my-3">Step 3:  Create API</h4>
                     <a href={modalData.stepthreeurl} target="_blank"  >{modalData.stepthree} </a><br />
-                    {modalData.imagethree ? <img src={modalData.imagethree} alt="" class="w-100 border border-dark" /> : ""}
+                    {modalData.imagethree ? <img src={modalData.imagethree} alt="" className="w-100 border border-dark" /> : ""}
                 </> : ""}
 
 

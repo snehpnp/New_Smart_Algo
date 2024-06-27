@@ -1,22 +1,25 @@
 import axios from "axios";
-// import Files
 import * as Config from "../Utils/Config";
 import { header } from "../Utils/ApiHeader";
 
 
 
-// FORGET PASSWORD
 export async function USER_PROFILE(data, token) {
     try {
         const res = await axios.post(`${Config.base_url}get/profile`, data, {
-            // headers: header(token),
+            headers: header(data.token),
             data: {},
-        })
-        // console.log("res", res);
-        return await res?.data;
-    }
-    catch (err) {
-        return err
+        });
+
+        const responseData = await res?.data;
+        if (responseData?.status === false && responseData?.msg === "Unauthorized!") {
+            localStorage.clear();
+            window.location.reload()
+        }
+
+        return responseData;
+    } catch (err) {
+        return err;
     }
 }
 
@@ -37,7 +40,7 @@ export async function GET_ALL_SERVICE_FOR_CLIENTS(data, token) {
     }
 }
 
- 
+
 
 
 // -----------------------------------   FOR GET OPTIONS CHAIN -------------------------------
@@ -195,7 +198,7 @@ export async function GET_INSTRUMENT(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 
@@ -213,7 +216,7 @@ export async function GET_CANDLE_DATA(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 
@@ -230,7 +233,7 @@ export async function GET_TIMEFRAME(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 
@@ -247,7 +250,7 @@ export async function GET_SOURCE(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 
@@ -264,7 +267,7 @@ export async function GET_COMPARATORS(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 
@@ -281,7 +284,7 @@ export async function ADD_MAKE_STRATEGY(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 
@@ -298,7 +301,7 @@ export async function GET_ALL_MAKE_STRATEGY(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 
@@ -315,7 +318,7 @@ export async function DELETE_MAKE_STRATEGY(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 
@@ -332,7 +335,7 @@ export async function EDIT_MAKE_STRATEGY(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 
@@ -349,7 +352,7 @@ export async function UPDATE_MAKE_STRATEGY(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 
@@ -365,7 +368,7 @@ export async function DELETE_MAKE_STRATEGY_SELECTED(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 
@@ -382,7 +385,7 @@ export async function CANCEL_ORDER_BY_ADMIN(data, token) {
     catch (err) {
         console.log("error", err);
         // custom error
-        
+
     }
 }
 

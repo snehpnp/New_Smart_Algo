@@ -18,6 +18,7 @@ module.exports = function (app) {
     const Get_Option_Chain_modal = db.option_chain_symbols;
     const company = db.company_information;
     const Roledata = db.role;
+
     const Broker_information = db.Broker_information;
 
     const { DashboardView } = require('./View/DashboardData')
@@ -109,8 +110,20 @@ module.exports = function (app) {
                 CreateBrokerinfo();
             }
 
-            service_token_update();
-            TokenSymbolUpdate();
+            const servicesData = await services.find();
+            if (servicesData.length == 0) {
+                service_token_update();
+            }
+
+
+            const Alice_tokenData = await Alice_token.find();
+            if (Alice_tokenData.length == 0) {
+                TokenSymbolUpdate();
+            }
+
+
+            console.log("SNEH")
+          
 
             res.send("DONE");
         } catch (error) {
@@ -119,8 +132,11 @@ module.exports = function (app) {
         }
     });
 
+
+    
+
     const DawnloadOptionChainSymbol = async () => {
-        console.log("symbolupdate")
+
         var axios = require('axios');
         const Papa = require('papaparse')
         const csvFilePath = 'https://docs.google.com/spreadsheets/d/1wwSMDmZuxrDXJsmxSIELk1O01F0x1-0LEpY03iY1tWU/export?format=csv';
@@ -186,7 +202,6 @@ module.exports = function (app) {
         ]
         arr.forEach((role) => {
             const newRole = new Roledata(role)
-            // console.log("newRole", newRole);
             return newRole.save();
         })
     }
@@ -197,13 +212,13 @@ module.exports = function (app) {
             panel_key: data.client_key,
             prefix: data.client_key.substring(0, 3),
             domain_url: data.domain,
-            domain_url_https: data.backend_rul+'/#/login',
+            domain_url_https: data.backend_rul + '/#/login',
             broker_url: data.backend_rul,
             theme_id: "64d0c04a0e38c94d0e20ee28",
             theme_name: "theme_name",
-            disclaimer:"Disclaimer: The risk of loss in trading in any financial markets or exchange can be substantial. These are leveraged products that carry a substantial risk of loss up to your invested capital and may not be suitable for everyone. You should therefore carefully consider whether such trading is suitable for you considering your financial condition. Please ensure that you fully understand the risks involved and do not invest money you cannot afford to lose. Past performance does not guarantee future performance. Historical returns, expected returns, and probability projections are provided for informational and illustrative purposes, and may not reflect actual future performance. SKW Investment Adviser does not guarantee returns in any of its products or services.",
-            version:"1.0",
-            panel_short_name:data.client_key.substring(0, 3),
+            disclaimer: "Disclaimer: The risk of loss in trading in any financial markets or exchange can be substantial. These are leveraged products that carry a substantial risk of loss up to your invested capital and may not be suitable for everyone. You should therefore carefully consider whether such trading is suitable for you considering your financial condition. Please ensure that you fully understand the risks involved and do not invest money you cannot afford to lose. Past performance does not guarantee future performance. Historical returns, expected returns, and probability projections are provided for informational and illustrative purposes, and may not reflect actual future performance. SKW Investment Adviser does not guarantee returns in any of its products or services.",
+            version: "1.0",
+            panel_short_name: data.client_key.substring(0, 3),
 
         })
         return companyData.save();
@@ -224,7 +239,6 @@ module.exports = function (app) {
             });
 
             const savedData = await Broker_informationData.save();
-            console.log('Broker information saved successfully:', savedData);
             return savedData;
         } catch (error) {
             console.error('Error saving broker information:', error);
@@ -358,9 +372,45 @@ module.exports = function (app) {
             Is_First_login: "1"
         });
 
+        const UserData1 = new User({
+            FullName: "admin",
+            UserName: "admin",
+            Email: "PNP@gmail.com",
+            PhoneNo: "9999999999",
+            Password: "$2b$08$x3Sm7wmIGOaUPnjxZulVXeYZaZCg8LsRBZQDrvzhui8gqeXEAcJGK",
+            Otp: "123456",
+            StartDate: new Date("2023-07-10T00:00:00.000Z"),
+            EndDate: new Date("2024-07-15T00:00:00.000Z"),
+            ActiveStatus: "1",
+            Role: "ADMIN",
+            AppLoginStatus: "0",
+            WebLoginStatus: "1",
+            TradingStatus: "off",
+            CreateDate: new Date("2023-07-31T08:21:49.854Z"),
+            reset_password_status: "1",
+            web_login_token: "",
+            api_key: "",
+            api_secret: "",
+            api_type: "",
+            app_id: "",
+            app_key: "null",
+            client_code: "",
+            demat_userid: "123",
+            broker: "2",
+            access_token: "",
+            web_url: "1",
+            qty_type: "1",
+            signals_execution_type: "1",
+            parent_role: "SUPERADMIN",
+            parent_id: "64c76f0b32067577d02310d8",
+            Is_Active: "1",
+            client_key: client_key,
+            Is_First_login: "1"
+        });
         try {
             const savedUser = await UserData.save();
-            console.log("newRole", savedUser);
+            const savedUser1 = await UserData1.save();
+
             res.status(201).send("Admin created successfully");
         } catch (error) {
             console.error("Error saving user:", error);
@@ -372,13 +422,25 @@ module.exports = function (app) {
 
     // =====================================================================================================================
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     app.get("/UpdateQty", async (req, res) => {
 
         const pipeline = [
 
             {
                 $project: {
-                    // Include fields from the original collection
                     'lotsize': 1,
                     'name': 1,
                 },
@@ -482,7 +544,6 @@ module.exports = function (app) {
                                 try {
                                     console.error('Error creating and saving user:', err);
                                 } catch (e) {
-                                    console.log("duplicate key")
                                 }
 
                             });

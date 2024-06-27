@@ -213,39 +213,39 @@ const StrategyDesc = () => {
         </div>
 
       </> : <>
-        <div class="row mb-5">
+        <div className="row mb-5">
           {StrategyData.data &&
             StrategyData.data.map((item) => {
               return (
                 <>
                   <div
-                    class="col-12 col-sm-6 col-md-4"
+                    className="col-12 col-sm-6 col-md-4"
                     style={{ height: "250px" }}
                   >
-                    <div class="card card-purple-blue text-white mb-3 mb-md-0">
-                      <div class="d-flex justify-content-between ">
+                    <div className="card card-purple-blue text-white mb-3 mb-md-0">
+                      <div className="d-flex justify-content-between ">
                         <div>
-                          <p class="new-un">{item.result.strategy_category}</p>
+                          <p className="new-un">{item.result.strategy_category}</p>
                         </div>
                         <div>
-                          <p class="new-de">{item.result.strategy_segment}</p>
+                          <p className="new-de">{item.result.strategy_segment}</p>
                         </div>
                       </div>
-                      <h4 class="card-new-heading">
+                      <h4 className="card-new-heading">
                         {item.result.strategy_name}
                       </h4>
-                      <div class="card-number text-center">
-                        <div class="h3">Recommended</div>
+                      <div className="card-number text-center">
+                        <div className="h3">Recommended</div>
                         <small>
                           <strong>
                             Capital : {item.result.strategy_amount} PER LOT
                           </strong>
                         </small>
                       </div>
-                      <div class="card-body d-flex justify-content-between  align-items-end p-2">
-                        <div class="card-description text-right">
+                      <div className="card-body d-flex justify-content-between  align-items-end p-2">
+                        <div className="card-description text-right">
                           <small
-                            class="new-sma mx-2"
+                            className="new-sma mx-2"
                             onClick={(e) => {
                               setshowModal(true);
                               setModalData(item.result);
@@ -254,8 +254,8 @@ const StrategyDesc = () => {
                             Info
                           </small>
                         </div>
-                        <div class="card-description text-right ml-3">
-                          <small class="new-sma">Join</small>
+                        <div className="card-description text-right ml-3">
+                          <small className="new-sma">Join</small>
                         </div>
                       </div>
                     </div>
@@ -279,26 +279,26 @@ const StrategyDesc = () => {
               // onHide={handleClose}
               handleClose={() => setshowModal(false)}
             >
-              <div class="content ml-5 mr-5 ">
-                <h5 class=" text-center">{ModalData.strategy_name}</h5>
+              <div className="content ml-5 mr-5 ">
+                <h5 className=" text-center">{ModalData.strategy_name}</h5>
 
                 <li>{ModalData.strategy_description}</li>
-                <div class="text-center">
-                  <h5 class=" mb-0">SETTINGS OF INDICATOR</h5>
+                <div className="text-center">
+                  <h5 className=" mb-0">SETTINGS OF INDICATOR</h5>
                   <span>
                     <img
                       src={ModalData.strategy_indicator}
                       alt="INDICATOR"
-                      class="w-100 my-3 border border-dark"
+                      className="w-100 my-3 border border-dark"
                     />
                   </span>
                 </div>
-                <div class="text-center">
-                  <h5 class=" ">NIFTY STRATEGY TESTER</h5>
+                <div className="text-center">
+                  <h5 className=" ">NIFTY STRATEGY TESTER</h5>
                   <span>
                     <img
                       src={ModalData.strategy_tester}
-                      class="w-100 my-3 border border-dark"
+                      className="w-100 my-3 border border-dark"
                       alt="STRATEGY TESTER"
                     />
                   </span>
