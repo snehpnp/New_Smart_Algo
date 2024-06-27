@@ -47,8 +47,6 @@ const Edit_panel = () => {
 
 
 
-
-
     const formik = useFormik({
         initialValues: {
             panel_name: "",
@@ -56,7 +54,7 @@ const Edit_panel = () => {
             port: "",
             key: "",
             ip_address: "",
-            is_active: 1,
+            is_active: 0,
             is_expired: 0,
             theme_id: "",
             db_url: "",

@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import * as  valid_err from "../../../Utils/Common_Messages"
@@ -7,18 +5,14 @@ import { Link } from "react-router-dom";
 import Loader from '../../../Utils/Loader'
 import { FolderLock, Plus, FileClock, HelpingHand, Users2, Link2, ScrollText, RadioTower, Eye } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel, GET_PANEL_INFORMATIONS, All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { All_Panel_List, Update_Panel_Theme, GET_PANEL_INFORMATIONS, All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch, useSelector } from "react-redux";
 import * as Config from "../../../Utils/Config";
-
 import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import toast, { Toaster } from 'react-hot-toast';
-
 import SidebarPermission from './Sidebar_permission';
 import PanelDetails from './PanelDetails';
-
-
 import AddLicence from './Add_Licence';
 import LicenceDetails from './LicenceDetails';
 import BrokerPermittion from './Broker_Permittion';
@@ -28,49 +22,24 @@ import html2canvas from 'html2canvas';
 const AllPermitions = () => {
 
     const dispatch = useDispatch()
-
     const token = JSON.parse(localStorage.getItem('user_details')).token
 
 
-
-
-
-    //  for permission
     const [showModal, setshowModal] = useState(false)
-
-    //  for Panel Details
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false)
-
-    //  for Add Licence
     const [showAddLicenceModal, setshowAddLicenceModal] = useState(false)
     const [showPanelName, setshowPanelName] = useState(false)
-
-
-    //  for Add Licence
     const [showLicenceModal, setshowLicenceModal] = useState(false)
-    const [showLicenceDetails, setshowLicenceDetails] = useState([])
-
-
-
-    //  for Broker Permission
+    const [showLicenceDetails, setshowLicenceDetails] = useState({})
     const [showBrokerModal, setshowBrokerModal] = useState(false)
     const [showBrokerDetails, setshowBrokerDetails] = useState("")
-
-
-    // const [Panelid, setPanelid] = useState('1')
     const [themeList, setThemeList] = useState();
     const [refresh, setRefresh] = useState(false)
-
-    //for search baar
     const [searchInput, setSearchInput] = useState('')
-
-
     const [panelData, setPanelData] = useState({
         loading: true,
         data: []
     });
-
-
 
     const [panelInfo, setpanelInfo] = useState({
         loading: true,
@@ -121,7 +90,8 @@ const AllPermitions = () => {
     }
 
     const Panel_Info = async (row) => {
-        setshowLicenceDetails({ id: row._id, db_url: row.db_url, db_name: row.db_name })
+        console.log(row)
+        setshowLicenceDetails({ id: row._id, db_url: row.backend_rul, db_name: row.db_name })
         setshowLicenceModal(true)
     }
 
@@ -135,11 +105,11 @@ const AllPermitions = () => {
         GetAllThemes()
     }, [refresh, searchInput])
 
- 
+
 
 
     useEffect(() => {
-     
+
         GetAllThemes()
     }, [refresh])
 
@@ -153,7 +123,7 @@ const AllPermitions = () => {
     }
 
 
-    const handleLocalStorage=(row)=>{
+    const handleLocalStorage = (row) => {
         localStorage.setItem("backend_rul", row.backend_rul)
         localStorage.setItem("panel_name", row.panel_name)
     }
@@ -177,7 +147,7 @@ const AllPermitions = () => {
                 </span>
             )
         },
-        
+
 
         {
             dataField: 'Broker',
@@ -208,23 +178,12 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <FileClock size={20} color="#198754" strokeWidth={2}
-                        // onClick={(e) => { setshowLicenceModal(true) }}
                         onClick={(e) => Panel_Info(row)}
                         className="mx-1" />
                 </span>
             )
 
         },
-        // {
-        //     dataField: 'panel_name',
-        //     text: 'Panel Details',
-        //     formatter: (cell, row) => (
-        //         <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-        //             <FileClock size={20} color="#198754" strokeWidth={2}
-        //                 className="mx-1" />
-        //         </span>
-        //     )
-        // },
 
         {
             dataField: 'panel_name',
@@ -260,12 +219,12 @@ const AllPermitions = () => {
                 </span>
             )
         },
-        
+
         {
             dataField: 'signal',
             text: 'Signal ',
             formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="HelpingHand" onClick={()=>handleLocalStorage(row)}>
+                <span data-toggle="tooltip" data-placement="top" title="HelpingHand" onClick={() => handleLocalStorage(row)}>
                     <Link to='/super/signals' state={row}>
                         <RadioTower size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
@@ -295,7 +254,7 @@ const AllPermitions = () => {
     ];
 
 
-  
+
 
 
 
@@ -324,7 +283,9 @@ const AllPermitions = () => {
                                         <BrokerPermittion List={showBrokerDetails} showModal={showBrokerModal} setshowModal={() => setshowBrokerModal(false)} />
                                         <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
-                                        <LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
+
+                                        {showLicenceModal && (<LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />)}
+
                                         <FullDataTable TableColumns={columns} tableData={panelData.data} pagination1={false} />
                                         <ToastButton />
                                     </>

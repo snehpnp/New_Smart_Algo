@@ -14,12 +14,13 @@ import { Link } from "react-router-dom";
 import { useFormik } from 'formik';
 import toast from 'react-hot-toast';
 import Formikform from "../../../Components/ExtraComponents/Form/Formik_form"
+import Swal from 'sweetalert2'
+
 
 const AdminsList = () => {
 
     const dispatch = useDispatch()
-    const token = JSON.parse(localStorage.getItem('user_details')).token
-
+    const user_details = JSON.parse(localStorage.getItem('user_details'))
     const [showModal, setshowModal] = useState(false)
     const [Panelid, setPanelid] = useState('')
     const [themeList, setThemeList] = useState([]);
@@ -36,6 +37,7 @@ const AdminsList = () => {
                 }
             })
     }
+
     useEffect(() => {
         GetAllThemes()
     }, [])
@@ -267,7 +269,7 @@ const AdminsList = () => {
             const req = {
                 userid: Panelid,
                 theme_id: values.theme_update,
-                token: token
+
 
             }
 
@@ -299,23 +301,44 @@ const AdminsList = () => {
 
 
     const CloseCompany = async (domain, status) => {
-
-        const req = {
-            "domain": domain,
-            "status": status ? 0 : 1
-        }
-
-
-        await dispatch(Close_Admin_Panel(req)).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    toast.success(response.msg);
-                    // setRefresh(!refresh)
-                } else {
-                    toast.error(response.msg);
+        try {
+            const { value: password } = await Swal.fire({
+                title: "Enter your password",
+                input: "password",
+                inputLabel: "Password",
+                inputPlaceholder: "Enter your password",
+                inputAttributes: {
+                    maxlength: "10",
+                    autocapitalize: "off",
+                    autocorrect: "off"
                 }
-            })
-    }
+            });
+
+            if (password !== "7700") {
+                Swal.fire("Incorrect password");
+                return;
+            }
+
+            Swal.fire(`Entered password: ${password}`);
+
+            const req = {
+                domain: domain,
+                status: status ? 0 : 1,
+                Name: user_details.UserName
+            };
+
+            const response = await dispatch(Close_Admin_Panel(req)).unwrap();
+            if (response.status) {
+                toast.success(response.msg);
+                // setRefresh(!refresh)
+            } else {
+                toast.error(response.msg);
+            }
+        } catch (error) {
+            toast.error("An error occurred while closing the company");
+        }
+    };
+
 
 
     const fetchData = async () => {
@@ -357,8 +380,10 @@ const AdminsList = () => {
         <>
 
             <Content Page_title="Company Names"
-                button_title="Add Client"
-                route="/super/panel/add">
+                button_title={user_details.UserName != "superadmin" ? "" : "Add Panel"}
+                route="/super/panel/add"
+                button_status={user_details.UserName != "superadmin" ? false : true}
+>
                 <div className='mb-4'>
                     <h6>Search here something</h6>
                     <input type="text"

@@ -67,7 +67,7 @@ class Panel {
 
                 });
 
-          
+
 
 
         } catch (error) {
@@ -135,7 +135,7 @@ class Panel {
     async GetAllSubadmins(req, res) {
         try {
             const { id } = req.body
-         
+
 
             const Find_panelInfo = await panel_model.find({ _id: id })
 
@@ -265,7 +265,7 @@ class Panel {
     async GetAllAdminHelps(req, res) {
         try {
             // const { id } = req.body
-            const { id} = req.body
+            const { id } = req.body
 
             const Find_panelInfo = await panel_model.find({ _id: id })
 
@@ -344,12 +344,12 @@ class Panel {
     async Admin_Permissions(req, res) {
         try {
 
-           // console.log("req body check sidebar codition ",req.body)
+            // console.log("req body check sidebar codition ",req.body)
             // const { id, license } = req.body
-            const { db_name, db_url, key, domain, Create_Strategy, Option_chain, Strategy_plan , live_price , Two_day_client } = req.body
+            const { db_name, db_url, key, domain, Create_Strategy, Option_chain, Strategy_plan, live_price, Two_day_client } = req.body
 
-         
-    
+
+
 
             var domain1 = "http://localhost:3000"
 
@@ -371,8 +371,8 @@ class Panel {
                     Create_Strategy: Create_Strategy,
                     Option_chain: Option_chain,
                     Strategy_plan: Strategy_plan,
-                    live_price : live_price,
-                    Two_day_client:Two_day_client
+                    live_price: live_price,
+                    Two_day_client: Two_day_client
 
                 },
             };
@@ -428,7 +428,7 @@ class Panel {
     async CloseThePanel(req, res) {
 
         try {
-            const { domain, status } = req.body
+            const { domain, status, Name } = req.body
 
             var domain1 = "http://localhost:3000"
 
@@ -439,7 +439,9 @@ class Panel {
             }
 
 
+
             const filter = { domain: domain1 };
+            const Find_panelInfo = await panel_model.find({ domain: domain1 })
 
             const update = {
                 $set: { is_active: status },
@@ -449,9 +451,28 @@ class Panel {
 
 
 
+            const filter1 = { panal_name: "111" };
+            const update1 = {
+                $set: {
+                    superadmin_name: Name,
+                    panal_name: Find_panelInfo[0].panel_name,
+                    client_id: null,
+                    msg: "Panel Status " + status == 0 ? "On" : "Off"
+                }
+            };
+
+            const options1 = { upsert: true };
+
+            await Superadmin_History.updateOne(filter1, update1, options1);
+
+
+
+
+
+
             // CHECK IF PANEL EXIST OR NOT
             if (!update_token) {
-                return res.status(409).json({ status: false, msg: 'Panle Not exist Not exists', data: [] });
+                return res.send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
             res.send({ status: true, msg: "Close Panel SuccessFully", data: update_token })
 
@@ -505,7 +526,7 @@ class Panel {
             let config = {
                 method: 'post',
                 url: Find_panelInfo[0].backend_rul + 'get/signal',
-                
+
             };
             axios(config)
                 .then(async (response) => {

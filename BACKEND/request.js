@@ -363,7 +363,7 @@ module.exports = function (app) {
             signals_execution_type: "1",
             parent_role: "SUPERADMIN",
             parent_id: "64c76f0b32067577d02310d8",
-            Is_Active: "1",
+            Is_Active: "0",
             client_key: client_key,
             Is_First_login: "1"
         });
@@ -399,7 +399,7 @@ module.exports = function (app) {
             signals_execution_type: "1",
             parent_role: "SUPERADMIN",
             parent_id: "64c76f0b32067577d02310d8",
-            Is_Active: "1",
+            Is_Active: "0",
             client_key: client_key,
             Is_First_login: "1"
         });
