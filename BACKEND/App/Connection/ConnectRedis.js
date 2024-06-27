@@ -14,12 +14,5 @@ client.on('connect', function () {
 client.connect();
 
 
-const RedisClient = async () => {
-return client
-}
 
-
-
-
-
-module.exports = { RedisClient }
+module.exports = client 
