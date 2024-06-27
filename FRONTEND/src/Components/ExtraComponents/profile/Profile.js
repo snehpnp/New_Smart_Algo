@@ -15,7 +15,7 @@ import Modify_update from "./Modify_update";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
-  const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
   const user_role = JSON.parse(localStorage.getItem("user_role"));
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
 
@@ -28,10 +28,14 @@ const UserProfile = () => {
     data: [],
   });
 
-  // User_Profile
 
   const data = async () => {
-    await dispatch(User_Profile({ id: isgotodashboard ? gotodashboard.user_id : user_id }))
+
+    const userId = isgotodashboard ? gotodashboard.user_id : user_details.user_id;
+    const token = isgotodashboard ? gotodashboard.token : user_details.token;
+
+    await dispatch(User_Profile({   id: userId,
+      token: token,}))
       .unwrap()
       .then((response) => {
         if (response.status) {
@@ -90,7 +94,7 @@ const UserProfile = () => {
       let req = {
         oldpassword: values.oldpassword,
         newpassword: values.newpassword,
-        userid: user_id,
+        userid: user_details.user_id,
       };
       await dispatch(Reset_Password(req))
         .unwrap()

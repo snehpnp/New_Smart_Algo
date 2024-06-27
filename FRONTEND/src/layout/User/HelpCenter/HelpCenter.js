@@ -15,7 +15,7 @@ import socketIOClient from "socket.io-client";
 import toast, { Toaster } from 'react-hot-toast';
 
 const ApiCreateInfo = () => {
-    
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const user_details = JSON.parse(localStorage.getItem("user_details"));
@@ -23,7 +23,7 @@ const ApiCreateInfo = () => {
     const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
     const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
     const [refresh, setRefresh] = useState(false);
-    const [UserDetails, setUserDetails] = useState({loading: true,data: []});
+    const [UserDetails, setUserDetails] = useState({ loading: true, data: [] });
 
 
     const formik = useFormik({
@@ -52,7 +52,7 @@ const ApiCreateInfo = () => {
                 "email": values.email,
                 "mobile": values.mobile,
                 "helpmsg": values.msg,
-                "admin_id":  values.admin_id,
+                "admin_id": values.admin_id,
                 "user_id": user_details.user_id,
             }
 
@@ -93,7 +93,14 @@ const ApiCreateInfo = () => {
 
 
     const data = async () => {
-        await dispatch(User_Profile({ id: isgotodashboard ? gotodashboard.user_id : user_details.user_id }))
+
+        const userId = isgotodashboard ? gotodashboard.user_id : user_details.user_id;
+        const token = isgotodashboard ? gotodashboard.token : user_details.token;
+
+        await dispatch(User_Profile({
+            id: userId,
+            token: token,
+        }))
             .unwrap()
             .then((response) => {
                 if (response.status) {

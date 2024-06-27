@@ -190,14 +190,26 @@ const Header = ({ ChatBox }) => {
 
   //  GET_USER_DETAILS
   const data = async () => {
-    await dispatch(User_Profile({ id: gotodashboard ? UserNamego_localstg.user_id : user_details.user_id ,token: user_details.token}))
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setUserDetails(response.data);
-        }
-      });
+    try {
+      const userId = gotodashboard ? UserNamego_localstg.user_id : user_details.user_id;
+      const token = gotodashboard ? UserNamego_localstg.token : user_details.token;
+  
+      const response = await dispatch(
+        User_Profile({
+          id: userId,
+          token: token,
+        })
+      ).unwrap();
+  
+      if (response.status) {
+        setUserDetails(response.data);
+      }
+    } catch (error) {
+      console.error('Failed to fetch user profile:', error);
+      // Handle error accordingly, e.g., show an error message to the user
+    }
   };
+  
 
 
   //  GET_USER_DETAILS

@@ -69,9 +69,11 @@ const History = () => {
 
     useEffect(() => {
         filterData();
-    }, [searchInput, monthFilter, licAdd]);
+    }, [searchInput, monthFilter, licAdd,getfiltervalue]);
 
     const filterData = () => {
+console.log("getfiltervalue",getfiltervalue)
+
         let filtered = AllData.data;
 
         if (licAdd) {
@@ -96,7 +98,8 @@ const History = () => {
         if (getfiltervalue) {
             filtered = filtered.filter(obj => dateFormate(obj.createdAt).split(" ")[0].substring(0, 10) === getfiltervalue);
         }
-        console.log("==", filtered.filter(obj => dateFormate(obj.createdAt).split(" ")[0].substring(0, 10)))
+
+         filtered.filter(obj => console.log("=>",dateFormate(obj.createdAt).split(" ")[0].substring(0, 10)))
         setFilteredData(filtered);
     };
 

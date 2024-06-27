@@ -13,7 +13,6 @@ import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
 import { Eye, CandlestickChart, Pencil } from "lucide-react";
 import { loginWithApi } from "../../../Components/Dashboard/Header/log_with_api";
 import DetailsView from "./DetailsView";
-import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
 import { check_Device } from "../../../Utils/find_device";
