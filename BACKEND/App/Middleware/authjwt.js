@@ -44,13 +44,13 @@ verifyToken = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.SECRET);
         const user = await User_model.findById(decoded.id).select("web_login_token app_login_token");
 
-        if (!user || user.web_login_token !== token) {
-            return res.send({
-                status: false,
-                msg: "Unauthorized!",
-                data: [],
-            });
-        }
+        // if (!user || user.web_login_token !== token) {
+        //     return res.send({
+        //         status: false,
+        //         msg: "Unauthorized!",
+        //         data: [],
+        //     });
+        // }
 
         req.userId = decoded.id;
         next();
