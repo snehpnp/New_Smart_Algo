@@ -68,7 +68,7 @@ class Panel {
                         }
                     };
 
-                
+
 
 
 
@@ -77,8 +77,8 @@ class Panel {
                             let data = JSON.stringify({
                                 "panelname": panel_name,
                                 "client_key": key,
-                                backend_rul:backend_rul,
-                                domain:domain
+                                backend_rul: backend_rul,
+                                domain: domain
                             });
 
                             let config = {
@@ -243,7 +243,7 @@ class Panel {
         try {
             const { domain } = req.body
 
-            const desiredDomain = 'your_desired_domain_value'; 
+            const desiredDomain = 'your_desired_domain_value';
 
             const Panle_information = await panel_model.aggregate([
                 {
@@ -280,23 +280,23 @@ class Panel {
         try {
             const { page, limit } = req.body; // LIMIT & PAGE
             const skip = (page - 1) * limit;
-    
+
             const totalCount = await panel_model.countDocuments();
-    
+
             // THEME LIST DATA with lookup to get theme_name
             const getAllpanel = await panel_model.aggregate([
                 {
                     $lookup: {
-                        from: 'theme_lists', 
-                        localField: 'theme_id', 
-                        foreignField: '_id', 
-                        as: 'theme_info' 
+                        from: 'theme_lists',
+                        localField: 'theme_id',
+                        foreignField: '_id',
+                        as: 'theme_info'
                     }
                 },
                 {
                     $unwind: {
                         path: '$theme_info',
-                        preserveNullAndEmptyArrays: true 
+                        preserveNullAndEmptyArrays: true
                     }
                 },
                 {
@@ -308,26 +308,26 @@ class Panel {
                         is_expired: 1,
                         theme_id: 1,
                         theme_name: { $ifNull: ['$theme_info.theme_name', ''] },
-                        broker_id:1,
-                        Two_day_client:1,
-                        live_price:1,
-                        backend_rul:1,
-                        Strategy_plan:1,
-                        Option_chain:1,
-                        Create_Strategy:1,
+                        broker_id: 1,
+                        Two_day_client: 1,
+                        live_price: 1,
+                        backend_rul: 1,
+                        Strategy_plan: 1,
+                        Option_chain: 1,
+                        Create_Strategy: 1,
                     }
                 },
                 {
-                    $sort: { _id : -1 }
+                    $sort: { _id: -1 }
                 }
-                
+
             ]);
-    
+
             // IF DATA NOT EXIST
             if (getAllpanel.length == 0) {
                 return res.send({ status: false, msg: "Empty data", data: getAllpanel });
             }
-    
+
             // DATA GET SUCCESSFULLY
             return res.send({
                 status: true,
@@ -343,7 +343,7 @@ class Panel {
             return res.status(500).send({ status: false, msg: "Internal Server Error" });
         }
     }
-    
+
 
 
 

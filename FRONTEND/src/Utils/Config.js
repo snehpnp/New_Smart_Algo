@@ -1,6 +1,8 @@
 
 // Front-End Comman Url  
-export const react_domain = `${window.location.origin}`;
+// export const react_domain = `${window.location.origin}`;
+export const react_domain = `https://newpenal.pandpinfotech.com`;
+
 
 export const smartAlogUrl = `https://newpenal.pandpinfotech.com/backend/`;
 // export const smartAlogUrl = `http://localhost:7700/`;
