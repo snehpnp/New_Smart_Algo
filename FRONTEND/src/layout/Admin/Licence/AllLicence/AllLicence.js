@@ -22,7 +22,6 @@ const AllLicence = () => {
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
   const [getAllClients1, setAllClients1] = useState({ loading: true, data: [] });
-  // const [CountLicence, setCountLicence] = useState(get_year_and_month_only(new Date()));
   const [CountLicence, setCountLicence] = useState("");
   const [usedLicence, setUsedLicence] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -32,7 +31,6 @@ const AllLicence = () => {
 
   var headerName = "Transaction Licence"
 
-  // COLUMNS DATA
   const columns = [
     {
       dataField: "index",
@@ -141,6 +139,11 @@ const AllLicence = () => {
           data: filteredData,
         });
 
+      }else{
+        setAllClients({
+          loading: false,
+          data: [],
+        });
       }
     } catch (error) {
       console.error('Error fetching data:', error);
