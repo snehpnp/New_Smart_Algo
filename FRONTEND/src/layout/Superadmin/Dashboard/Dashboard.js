@@ -14,14 +14,11 @@ import {useLocation, useParams} from 'react-router-dom'
 const Dashboard = () => {
 
   let { id } = useParams();
- 
 
-  const location = useLocation()
- 
-          
+  const location = useLocation()  
   const dispatch = useDispatch();
-  const [themeList, setThemeList] = useState();
   
+
   const [AllData, setAllData] = useState({
     loading: true,
     data: []
@@ -35,13 +32,6 @@ const inActiveUserCount = AllData.data.filter(user=> user.is_expired).length;
   
  
 
-const GetAllThemes = async () => {
-  await dispatch(Get_All_Theme()).unwrap()
-      .then((response) => {
-          setThemeList(response && response.data);
-      })
-}
-
   const data = async () => {
     await dispatch(All_Panel_List()).unwrap()
         .then((response) => {
@@ -53,7 +43,7 @@ const GetAllThemes = async () => {
 }
 useEffect(() => {
     data()
-    GetAllThemes()
+
 }, [])
  
 

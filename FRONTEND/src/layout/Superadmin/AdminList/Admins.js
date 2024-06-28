@@ -38,10 +38,7 @@ const AdminsList = () => {
             })
     }
 
-    useEffect(() => {
-        GetAllThemes()
-    }, [])
-
+   
 
 
     const data = async () => {
@@ -49,19 +46,13 @@ const AdminsList = () => {
         await dispatch(All_Panel_List()).unwrap()
             .then((response) => {
                 if (response.status) {
-                    const filterData = response.data && response.data.filter((item) => {
-                        const matchSearch =
-                            searchInput == '' ||
-                            item.panel_name.toLowerCase().includes(searchInput.toLowerCase()) ||
-                            item.domain.toLowerCase().includes(searchInput.toLowerCase())
-                        return matchSearch
-                    })
+                
                     setThemeData({
                         loading: false,
                         data: response.data
                     });
                     setThemeData1({
-                        loading: false,
+                        loading: true,
                         data: response.data
                     });
                 }
@@ -75,7 +66,9 @@ const AdminsList = () => {
             })
     }
 
+
     const panelDetails = (panel_id) => {
+        GetAllThemes()
         setPanelid(panel_id)
         setshowModal(true)
     }
@@ -234,9 +227,6 @@ const AdminsList = () => {
 
 
 
-
-
-
     const formik = useFormik({
         initialValues: {
             theme_update: null,
@@ -262,7 +252,7 @@ const AdminsList = () => {
                     if (response.status) {
                         toast.success(response.msg)
                         setshowModal(false)
-                        fetchData()
+                        data()
                     }
                 })
         }
@@ -326,19 +316,9 @@ const AdminsList = () => {
 
 
 
-    const fetchData = async () => {
-        try {
-            await data();
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
-
-
-
 
     useEffect(() => {
-        fetchData();
+        data();
     }, []);
 
 

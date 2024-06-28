@@ -241,26 +241,26 @@ const AllPermitions = () => {
                 </span >
             )
         },
-        {
-            dataField: 'panel_name',
-            text: 'Logs',
-            formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="Admin Logs">
-                    <ScrollText size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                </span>
-            )
-        },
-        {
-            dataField: 'panel_name',
-            text: 'HelpingHand ',
-            formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="HelpingHand">
-                    <Link to='/super/helps' state={row}>
-                        <HelpingHand size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </Link>
-                </span >
-            )
-        },
+        // {
+        //     dataField: 'panel_name',
+        //     text: 'Logs',
+        //     formatter: (cell, row) => (
+        //         <span data-toggle="tooltip" data-placement="top" title="Admin Logs">
+        //             <ScrollText size={20} color="#198754" strokeWidth={2} className="mx-1" />
+        //         </span>
+        //     )
+        // },
+        // {
+        //     dataField: 'panel_name',
+        //     text: 'HelpingHand ',
+        //     formatter: (cell, row) => (
+        //         <span data-toggle="tooltip" data-placement="top" title="HelpingHand">
+        //             <Link to='/super/helps' state={row}>
+        //                 <HelpingHand size={20} color="#198754" strokeWidth={2} className="mx-1" />
+        //             </Link>
+        //         </span >
+        //     )
+        // },
     ];
 
 
