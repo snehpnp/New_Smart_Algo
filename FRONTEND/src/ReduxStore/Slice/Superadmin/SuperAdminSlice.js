@@ -13,9 +13,9 @@ export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => 
 });
 
 export const Update_Panel_Theme = createAsyncThunk("update/theme", async (data) => {
-  const { theme_id, userid, token } = data
+  const { theme_id, userid,UserName, token } = data
   try {
-    const res = await UPDATE_PANEL_THEME({ theme_id: theme_id, userid: userid }, token);
+    const res = await UPDATE_PANEL_THEME({ theme_id: theme_id, userid: userid ,UserName:UserName}, token);
     return await res;
   } catch (err) {
     return err;

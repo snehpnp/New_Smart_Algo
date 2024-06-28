@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import Content from "../../../Components/Dashboard/Content/Content"
-import * as  valid_err from "../../../Utils/Common_Messages"
+import Content from "../../../Components/Dashboard/Content/Content";
 import { Link } from "react-router-dom";
 import Loader from '../../../Utils/Loader'
 import { FolderLock, Plus, FileClock, HelpingHand, Users2, Link2, ScrollText, RadioTower, Eye } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { All_Panel_List, Update_Panel_Theme, GET_PANEL_INFORMATIONS, All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
-import { useDispatch, useSelector } from "react-redux";
+import { All_Panel_List } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { useDispatch } from "react-redux";
 import * as Config from "../../../Utils/Config";
 import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
@@ -16,13 +15,13 @@ import PanelDetails from './PanelDetails';
 import AddLicence from './Add_Licence';
 import LicenceDetails from './LicenceDetails';
 import BrokerPermittion from './Broker_Permittion';
-import html2canvas from 'html2canvas';
+
 
 
 const AllPermitions = () => {
 
     const dispatch = useDispatch()
-    const token = JSON.parse(localStorage.getItem('user_details')).token
+    const user_details = JSON.parse(localStorage.getItem('user_details'))
 
 
     const [showModal, setshowModal] = useState(false)

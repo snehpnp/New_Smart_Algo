@@ -16,7 +16,7 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async AddPanel(req, res) {
         try {
-            const { panel_name, domain, port, key, ip_address, theme_id, backend_rul, parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id, UserName } = req.body.req
+            const { panel_name, domain, port, key, ip_address, theme_id, backend_rul, parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id, UserName ,db_url} = req.body.req
 
             // FIND PANEL NAME DUPLICATE
             const panel_data = await panel_model.findOne({ panel_name: panel_name });
@@ -37,7 +37,8 @@ class Panel {
                 Strategy_plan: Strategy_plan,
                 broker_id: broker_id,
                 backend_rul: backend_rul,
-                is_active: 0
+                is_active: 0,
+                db_url:db_url
             });
             AddPanel.save()
                 .then(async (data) => {
@@ -78,7 +79,8 @@ class Panel {
                                 "panelname": panel_name,
                                 "client_key": key,
                                 backend_rul: backend_rul,
-                                domain: domain
+                                domain: domain,
+                                db_url:db_url
                             });
 
                             let config = {

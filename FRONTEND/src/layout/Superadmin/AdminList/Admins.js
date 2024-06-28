@@ -271,6 +271,8 @@ const AdminsList = () => {
             const req = {
                 userid: Panelid,
                 theme_id: values.theme_update,
+                token:user_details.token,
+                UserName:user_details.UserName
 
 
             }

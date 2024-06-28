@@ -127,25 +127,29 @@ module.exports = function (app) {
     });
 
     var CreateDataBase = async (data) => {
-        const uri = data.db_url;
+        const uri = data;
         const databaseName = "TradeTools"
         console.log("uri", uri)
-        if (!databaseName) {
-            console.log('Database name is required');
-        }
 
-        try {
-            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-            await client.connect();
+        if(uri){
 
-            const db = client.db(databaseName);
-            await db.createCollection('dummy'); // Create a dummy collection to initialize the database
-
-            await client.close();
-            console.log(`Database ${databaseName} created successfully`);
-        } catch (error) {
-            console.error(error);
-
+            if (!databaseName) {
+                console.log('Database name is required');
+            }
+    
+            try {
+                const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+                await client.connect();
+    
+                const db = client.db(databaseName);
+                await db.createCollection('dummy'); // Create a dummy collection to initialize the database
+    
+                await client.close();
+                console.log(`Database ${databaseName} created successfully`);
+            } catch (error) {
+                console.error(error);
+    
+            }
         }
     }
 
