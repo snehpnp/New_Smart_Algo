@@ -6,23 +6,23 @@ import { FolderLock, Plus, FileClock, HelpingHand, Users2, Link2, ScrollText, Ra
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { All_Panel_List } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
 import { useDispatch } from "react-redux";
-import * as Config from "../../../Utils/Config";
-import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-import toast, { Toaster } from 'react-hot-toast';
 import SidebarPermission from './Sidebar_permission';
 import PanelDetails from './PanelDetails';
 import AddLicence from './Add_Licence';
 import LicenceDetails from './LicenceDetails';
 import BrokerPermittion from './Broker_Permittion';
+import { fDateTimeSuffix, dateFormate } from "../../../Utils/Date_formet";
+import Modal from '../../../Components/ExtraComponents/Modal';
 
-
+import { Get_Panel_History } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 
 const AllPermitions = () => {
 
     const dispatch = useDispatch()
-    const user_details = JSON.parse(localStorage.getItem('user_details'))
 
+    const [filteredData, setFilteredData] = useState([]);
+    const [filteredData1, setFilteredData1] = useState([]);
 
     const [showModal, setshowModal] = useState(false)
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false)
@@ -32,8 +32,8 @@ const AllPermitions = () => {
     const [showLicenceDetails, setshowLicenceDetails] = useState({})
     const [showBrokerModal, setshowBrokerModal] = useState(false)
     const [showBrokerDetails, setshowBrokerDetails] = useState("")
-    const [themeList, setThemeList] = useState();
-    const [refresh, setRefresh] = useState(false)
+    const [HistoryStatus, SetHistoryStatus] = useState(false)
+
     const [searchInput, setSearchInput] = useState('')
     const [panelData, setPanelData] = useState({
         loading: true,
@@ -46,13 +46,7 @@ const AllPermitions = () => {
     });
 
 
-    const GetAllThemes = async () => {
-        await dispatch(Get_All_Theme()).unwrap()
-            .then((response) => {
 
-                setThemeList(response && response.data);
-            })
-    }
 
 
     const data = async () => {
@@ -96,21 +90,27 @@ const AllPermitions = () => {
 
 
 
+    const Panel_History = async (row) => {
+        console.log(row.panel_name)
+        var FilterData = filteredData.filter((data) => data.panal_name == row.panel_name)
+        setFilteredData1(FilterData)
+        SetHistoryStatus(true)
+
+
+
+    }
+
+
 
     useEffect(() => {
         localStorage.removeItem('RowData')
         localStorage.removeItem('backend_rul')
         data()
-        GetAllThemes()
-    }, [refresh, searchInput])
+
+    }, [searchInput])
 
 
 
-
-    useEffect(() => {
-
-        GetAllThemes()
-    }, [refresh])
 
 
 
@@ -178,6 +178,17 @@ const AllPermitions = () => {
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <FileClock size={20} color="#198754" strokeWidth={2}
                         onClick={(e) => Panel_Info(row)}
+                        className="mx-1" />
+                </span>
+            )
+        },
+        {
+            dataField: 'panel_name',
+            text: 'History',
+            formatter: (cell, row) => (
+                <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+                    <FileClock size={20} color="#198754" strokeWidth={2}
+                        onClick={(e) => Panel_History(row)}
                         className="mx-1" />
                 </span>
             )
@@ -253,8 +264,51 @@ const AllPermitions = () => {
     ];
 
 
+    const columns1 = [
+        {
+            dataField: "index",
+            text: "SR. No.",
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
+        },
+        {
+            dataField: 'panal_name',
+            text: 'Panel Name'
+        },
+        {
+            dataField: 'superadmin_name',
+            text: 'Super Admin Name'
+        },
+        {
+            dataField: 'client_id',
+            text: 'Client Id',
+            formatter: (cell, row, rowIndex) => <div>{cell == null ? "-" : cell}</div>
+        },
+        {
+            dataField: 'msg',
+            text: 'Message'
+        },
+        {
+            dataField: "createdAt",
+            text: "Date & Time",
+            formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>,
+            sort: true,
+        }
+    ];
 
+    const fetchData = async () => {
+        const response = await dispatch(Get_Panel_History()).unwrap();
+        if (response.status) {
 
+            setFilteredData(response.data);
+        } else {
+
+            setFilteredData([]);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
 
 
@@ -288,6 +342,17 @@ const AllPermitions = () => {
                                         <FullDataTable TableColumns={columns} tableData={panelData.data} pagination1={false} />
                                         <ToastButton />
                                     </>
+                            }
+
+
+                            {
+                                HistoryStatus && (
+                                    <div>
+                                        <Modal isOpen={true} size="md" title="History" hideBtn={true}  handleClose={() => SetHistoryStatus(false)}>
+                                            <FullDataTable TableColumns={columns1} tableData={filteredData1} />
+                                        </Modal >
+                                    </div>
+                                )
                             }
                         </Content>
                     </>

@@ -52,6 +52,7 @@ const History = () => {
         }
     ];
 
+    
     const fetchData = async () => {
         const response = await dispatch(Get_Panel_History()).unwrap();
         if (response.status) {
@@ -72,7 +73,6 @@ const History = () => {
     }, [searchInput, monthFilter, licAdd,getfiltervalue]);
 
     const filterData = () => {
-console.log("getfiltervalue",getfiltervalue)
 
         let filtered = AllData.data;
 
@@ -102,6 +102,8 @@ console.log("getfiltervalue",getfiltervalue)
          filtered.filter(obj => console.log("=>",dateFormate(obj.createdAt).split(" ")[0].substring(0, 10)))
         setFilteredData(filtered);
     };
+
+
 
     return (
         <Theme_Content Page_title="History" button_status={false}>
