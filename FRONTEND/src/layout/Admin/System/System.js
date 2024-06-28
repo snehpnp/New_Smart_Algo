@@ -20,7 +20,47 @@ import UpdateSmptDetails from './UpdateSmptDetails';
 
 import { useDispatch, useSelector } from "react-redux";
 
+
+import WebSocketService from '../../../Utils/LiveDataRedisSocket';
+const WEBSOCKET_URI = 'ws://193.239.237.157:6789';
+
 const System = () => {
+
+
+    // const [messages, setMessages] = useState([]);
+    // useEffect(() => {
+    //     const webSocketService = new WebSocketService(WEBSOCKET_URI);
+    //     const handleMessage = (message) => {
+    //      setMessages((prevMessages) => [...prevMessages, message]);
+    //     console.log("message ",message)
+    //     };
+    
+    //     const handleOpen = () => {
+    //       console.log('WebSocket connection opened');
+    //     };
+    
+    //     const handleClose = () => {
+    //       console.log('WebSocket connection closed');
+    //     };
+    
+    //     const handleError = (error) => {
+    //       console.error('WebSocket error:', error);
+    //     };
+    
+    //     const disconnect = webSocketService.connect(handleMessage, handleOpen, handleClose, handleError);
+    
+    //     return () => {
+    //       disconnect();
+    //     };
+    //   }, []);
+
+
+
+
+
+
+
+
     const [dissArr, setDissArr] = useState([]);
     const [inputs, setInputs] = useState([]);
 
@@ -253,6 +293,9 @@ const System = () => {
 
     return (
         <Content Page_title="System" button_status={false}>
+           
+           {/* <button onClick={()=>connect()}>OKKK</button> */}
+
             <h2>Company Information</h2>
             <BasicDataTable tableData={getCompanyName.data} TableColumns={Company_columns} dropdown={false} />
             <br />

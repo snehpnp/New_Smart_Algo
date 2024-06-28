@@ -43,6 +43,7 @@ CREATE TABLE staffs (
     status ENUM('0', '1') NOT NULL DEFAULT '1' COMMENT '0: deactive, 1: active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    login_auth_token TEXT,
     FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
