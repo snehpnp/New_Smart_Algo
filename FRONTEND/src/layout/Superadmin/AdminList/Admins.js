@@ -75,14 +75,10 @@ const AdminsList = () => {
             })
     }
 
-
-
     const panelDetails = (panel_id) => {
         setPanelid(panel_id)
         setshowModal(true)
     }
-
-
 
     const fetchBrokerView = async (row) => {
         try {
@@ -94,15 +90,16 @@ const AdminsList = () => {
         }
     };
 
+
     const fetchBrokerView1 = async (row) => {
-        console.log("row",row)
+        console.log("row", row)
         try {
             let data = JSON.stringify({
                 "panelname": row.panel_name,
                 "client_key": row.key,
                 backend_rul: row.domain + "/backend/",
                 domain: row.domain,
-                db_url:row.db_url
+                db_url: row.db_url
             });
 
             let config = {
@@ -135,7 +132,6 @@ const AdminsList = () => {
             text: "SR. No.",
             formatter: (cell, row, rowIndex) => rowIndex + 1,
         },
-
         {
             dataField: 'domain',
             text: 'Domain Name'
@@ -144,7 +140,6 @@ const AdminsList = () => {
             dataField: 'key',
             text: 'Key'
         },
-
         {
             dataField: 'theme_name',
             text: 'Set theme',
@@ -152,7 +147,6 @@ const AdminsList = () => {
                 <span>{cell} </span>
             )
         },
-
         {
             dataField: 'is_active',
             text: 'Close Panel',
@@ -166,8 +160,6 @@ const AdminsList = () => {
                 </label>
             )
         },
-
-
         {
             dataField: 'a',
             text: 'Update Theme',
@@ -177,14 +169,10 @@ const AdminsList = () => {
                 </span>
             ),
         },
-
         {
             dataField: 'actions',
             text: 'Actions',
             formatter: (cell, row) => (
-
-
-
                 <div style={{ width: "120px" }}>
                     <div>
                         <Link to={`/super/panel/edit/${row._id}`} state={row}>
@@ -197,8 +185,6 @@ const AdminsList = () => {
                                 />
                             </span>
                         </Link>
-
-
                         {0 == "1" ?
                             <Link>
                                 <span data-toggle="tooltip" data-placement="top" title="Delete">
@@ -207,12 +193,10 @@ const AdminsList = () => {
                                         color="#d83131"
                                         strokeWidth={2}
                                         className="mx-1"
-                                    // onClick={(e) => Delete_user(row._id)}
                                     />
                                 </span>
                             </Link>
                             : ""}
-
                     </div>
                 </div>
             ),
@@ -267,22 +251,17 @@ const AdminsList = () => {
         },
         onSubmit: async (values) => {
 
-
             const req = {
                 userid: Panelid,
                 theme_id: values.theme_update,
-                token:user_details.token,
-                UserName:user_details.UserName
-
-
+                token: user_details.token,
+                UserName: user_details.UserName
             }
-
             await dispatch(Update_Panel_Theme(req)).unwrap()
                 .then((response) => {
                     if (response.status) {
                         toast.success(response.msg)
                         setshowModal(false)
-
                         fetchData()
                     }
                 })
@@ -297,7 +276,6 @@ const AdminsList = () => {
             type: 'select',
             options:
                 themeList && themeList.map((item) => ({ label: item.theme_name, value: item._id }))
-
         },
 
     ];
@@ -320,10 +298,11 @@ const AdminsList = () => {
 
             if (password !== "7700") {
                 Swal.fire("Incorrect password");
+                window.location.reload()
                 return;
             }
 
-            Swal.fire(`Entered password: ${password}`);
+
 
             const req = {
                 domain: domain,
@@ -334,7 +313,9 @@ const AdminsList = () => {
             const response = await dispatch(Close_Admin_Panel(req)).unwrap();
             if (response.status) {
                 toast.success(response.msg);
-                // setRefresh(!refresh)
+                Swal.fire(`Entered password: ${password}`);
+                window.location.reload()
+
             } else {
                 toast.error(response.msg);
             }
@@ -355,11 +336,10 @@ const AdminsList = () => {
 
 
 
+
     useEffect(() => {
         fetchData();
     }, []);
-
-
 
 
     useEffect(() => {
@@ -387,7 +367,7 @@ const AdminsList = () => {
                 button_title={user_details.UserName != "superadmin" ? "" : "Add Panel"}
                 route="/super/panel/add"
                 button_status={user_details.UserName != "superadmin" ? false : true}
->
+            >
                 <div className='mb-4'>
                     <h6>Search here something</h6>
                     <input type="text"

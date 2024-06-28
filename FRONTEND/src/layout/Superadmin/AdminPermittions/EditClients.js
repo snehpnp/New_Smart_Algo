@@ -8,7 +8,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Email_regex, Mobile_regex, Name_regex } from "../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
 import Content from '../../../Components/Dashboard/Content/Content';
-import { Find_One_User, Update_User } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
+import { Find_One_User, SUPER_UPDATE_USER_DATA } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
@@ -105,6 +105,7 @@ const EditClient = () => {
         onSubmit: async (values) => {
 
             const req = {
+                "backend_rul":backend_rul,
                 "id" :location.state._id ,
                 "FullName": values.fullName,
                 "UserName": values.username,
@@ -117,7 +118,7 @@ const EditClient = () => {
 
          
 
-            await dispatch(Update_User(req)).unwrap()
+            await dispatch(SUPER_UPDATE_USER_DATA(req)).unwrap()
             .then((response) => {
                 if (response.status === 409) {
                     toast.error(response.data.msg);

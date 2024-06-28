@@ -29,7 +29,7 @@ router.post('/signal/delete' , DeleteSignal)
 router.post('/backup/signal' , backupSignal)
 router.post('/deleted/signal' , deletedSignal)
 router.post('/findUserById' , FindUserById)
-router.post('/update/user' , UpdateUser)
+router.post('/super/update/user' , UpdateUser)
 router.post('/user/delete' , UserDelete)
 router.post('/findOneUser' , findOneUser)
 
