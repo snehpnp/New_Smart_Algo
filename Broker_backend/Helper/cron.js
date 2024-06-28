@@ -348,8 +348,8 @@ module.exports = function (app) {
     }
 
 
-    app.get('/chek-token', async (req, res) => {
-       // downloadAndExtractICICIDirect()
+    app.get('/sneh', async (req, res) => {
+       downloadKotakNeotoken()
          res.send("okkk")
       })
 
