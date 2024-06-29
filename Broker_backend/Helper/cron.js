@@ -32,9 +32,8 @@ module.exports = function (app) {
         downloadZerodhatoken();
         downloadAndExtractUpstox();
         downloadAndExtractICICIDirect();
-        
+    
     });
-
 
 
     // ALL Alice Token Genrate
