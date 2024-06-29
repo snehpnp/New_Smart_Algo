@@ -13,61 +13,28 @@ import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/Grou
 import Form from 'react-bootstrap/Form';
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import * as Config from "../../../../Utils/Config";
-
-
 import { Add_User } from '../../../../ReduxStore/Slice/Admin/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
-
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
-
 import "../../../../App.css"
-
 
 
 const AddClient = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const location = useLocation()
- 
 
   const user_token = JSON.parse(localStorage.getItem("user_details")).token
   const Role = JSON.parse(localStorage.getItem("user_details")).Role
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
-
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
-
-
-
   const [ShowAllStratagy, setShowAllStratagy] = useState(false)
-
   const [first, setfirst] = useState([])
-
-
-
-
-
-  const [AllGroupServices, setAllGroupServices] = useState({
-    loading: true,
-    data: []
-  });
-
-  const [Addsubadmin, setAddsubadmin] = useState({
-    loading: true,
-    data: []
-  });
-
-
-  const [AllStrategy, setAllStrategy] = useState({
-    loading: true,
-    data: []
-  });
-
-
-  const [GetServices, setGetServices] = useState({
-    loading: true,
-    data: []
-  });
+  const [AllGroupServices, setAllGroupServices] = useState({loading: true, data: []});
+  const [Addsubadmin, setAddsubadmin] = useState({loading: true, data: []});
+  const [AllStrategy, setAllStrategy] = useState({loading: true, data: [] });
+  const [GetServices, setGetServices] = useState({loading: true,data: []});
 
 
   const isValidEmail = (email) => {
@@ -167,6 +134,15 @@ const AddClient = () => {
       return errors;
     },
     onSubmit: async (values) => {
+
+
+      // if(Email != ""  &&  FullName !="" && PhoneNo != ""){
+
+      // }
+
+
+
+
       const req = {
         "FullName": values.fullName,
         "UserName": values.username,
@@ -191,6 +167,10 @@ const AddClient = () => {
         "group_service": values.groupservice,
         "multiple_strategy_select": values.multiple_strategy_select === false ? '0' : '1'
       }
+
+
+      console.log("req",req)
+      return
 
 
       await dispatch(Add_User({ req: req, token: user_token })).unwrap().then((response) => {
