@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable react/jsx-pascal-case */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from "react";
 import Logo from "./Logo";
 import DropDown from "./DropDown";
@@ -20,12 +23,17 @@ import { isForeignUserAllowedToLogin } from "../../../Utils/Date_formet";
 import jwt_decode from "jwt-decode";
 
 const Header = ({ ChatBox }) => {
+  // HOOKS
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [showModal, setshowModal] = useState(false);
   const [refresh, setrefresh] = useState(false);
+
   const [UserDetails, setUserDetails] = useState([]);
+
   const [CheckUser, setCheckUser] = useState(check_Device());
+
   const [getAllClients, setAllClients] = useState({
     loading: true,
     data: [],
@@ -35,10 +43,11 @@ const Header = ({ ChatBox }) => {
 
   const user_details = JSON.parse(localStorage.getItem("user_details"));
 
-
+  //  lOCAL STORAGE VALUE
   let theme_id = localStorage.getItem("theme");
   const page = localStorage.getItem("page")
   const routePath = localStorage.getItem("route");
+
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
   const user_role = JSON.parse(localStorage.getItem("user_role"));
@@ -289,6 +298,10 @@ const Header = ({ ChatBox }) => {
   }, []);
 
 
+
+
+
+
   const CompanyName = async () => {
     await dispatch(Get_Company_Logo()).unwrap()
       .then((response) => {
@@ -301,7 +314,11 @@ const Header = ({ ChatBox }) => {
   }
 
 
+
+
+
   useEffect(() => {
+
     CompanyName()
   }, []);
 

@@ -14,16 +14,13 @@ import LicenceDetails from './LicenceDetails';
 import BrokerPermittion from './Broker_Permittion';
 import { fDateTimeSuffix, dateFormate } from "../../../Utils/Date_formet";
 import Modal from '../../../Components/ExtraComponents/Modal';
-
 import { Get_Panel_History } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 
+
 const AllPermitions = () => {
-
     const dispatch = useDispatch()
-
     const [filteredData, setFilteredData] = useState([]);
     const [filteredData1, setFilteredData1] = useState([]);
-
     const [showModal, setshowModal] = useState(false)
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false)
     const [showAddLicenceModal, setshowAddLicenceModal] = useState(false)
@@ -33,20 +30,10 @@ const AllPermitions = () => {
     const [showBrokerModal, setshowBrokerModal] = useState(false)
     const [showBrokerDetails, setshowBrokerDetails] = useState("")
     const [HistoryStatus, SetHistoryStatus] = useState(false)
-
     const [searchInput, setSearchInput] = useState('')
-    const [panelData, setPanelData] = useState({
-        loading: true,
-        data: []
-    });
-
-    const [panelInfo, setpanelInfo] = useState({
-        loading: true,
-        data: []
-    });
-
-
-
+    const [panelData, setPanelData] = useState({ loading: true, data: [] });
+    const [panelData1, setPanelData1] = useState({ loading: true, data: [] });
+    const [panelInfo, setpanelInfo] = useState({ loading: true, data: [] });
 
 
     const data = async () => {
@@ -54,23 +41,24 @@ const AllPermitions = () => {
             .then((response) => {
                 if (response.status) {
 
-                    const filterData = response.data && response.data.filter((item) => {
-                        const matchSearch =
-                            searchInput == '' ||
-                            item.panel_name.toLowerCase().includes(searchInput.toLowerCase())
 
-                        return matchSearch
-                    })
-
+                    setPanelData1({
+                        loading: false,
+                        data: response.data
+                    });
 
                     setPanelData({
                         loading: false,
-                        data: searchInput ? filterData : response.data
+                        data: response.data
                     });
 
                 }
                 else {
                     setPanelData({
+                        loading: false,
+                        data: []
+                    });
+                    setPanelData1({
                         loading: false,
                         data: []
                     });
@@ -83,36 +71,15 @@ const AllPermitions = () => {
     }
 
     const Panel_Info = async (row) => {
-        console.log(row)
         setshowLicenceDetails({ id: row._id, db_url: row.backend_rul, db_name: row.db_name })
         setshowLicenceModal(true)
     }
 
-
-
     const Panel_History = async (row) => {
-        console.log(row.panel_name)
         var FilterData = filteredData.filter((data) => data.panal_name == row.panel_name)
         setFilteredData1(FilterData)
         SetHistoryStatus(true)
-
-
-
     }
-
-
-
-    useEffect(() => {
-        localStorage.removeItem('RowData')
-        localStorage.removeItem('backend_rul')
-        data()
-
-    }, [searchInput])
-
-
-
-
-
 
     const setLocalStorage = (row) => {
         localStorage.setItem("RowData", row._id)
@@ -121,13 +88,10 @@ const AllPermitions = () => {
 
     }
 
-
     const handleLocalStorage = (row) => {
         localStorage.setItem("backend_rul", row.backend_rul)
         localStorage.setItem("panel_name", row.panel_name)
     }
-
-
 
     const columns = [
         {
@@ -263,7 +227,6 @@ const AllPermitions = () => {
         // },
     ];
 
-
     const columns1 = [
         {
             dataField: "index",
@@ -306,9 +269,44 @@ const AllPermitions = () => {
         }
     };
 
+
+
+    useEffect(() => {
+        if (panelData1 && panelData1.data) {
+            const filterData = panelData1.data && panelData1.data.filter((item) => {
+                const matchSearch =
+                    searchInput == '' ||
+                    item.panel_name.toLowerCase().includes(searchInput.toLowerCase())
+
+                return matchSearch
+            })
+            setPanelData({
+                loading: false,
+                data: filterData
+            });
+
+
+
+        } else {
+            setPanelData({
+                loading: false,
+                data: []
+            });
+        }
+    }, [searchInput]);
+
+
+
     useEffect(() => {
         fetchData();
     }, []);
+
+
+    useEffect(() => {
+        localStorage.removeItem('RowData')
+        localStorage.removeItem('backend_rul')
+        data()
+    }, [])
 
 
 
@@ -327,7 +325,6 @@ const AllPermitions = () => {
                                     onChange={(e) => { setSearchInput(e.target.value) }}
                                     value={searchInput} />
                             </div>
-
                             {
                                 panelData.data && panelData.data.length === 0 ? (
                                     'No data found') :
@@ -348,7 +345,7 @@ const AllPermitions = () => {
                             {
                                 HistoryStatus && (
                                     <div>
-                                        <Modal isOpen={true} size="md" title="History" hideBtn={true}  handleClose={() => SetHistoryStatus(false)}>
+                                        <Modal isOpen={true} size="xl" title="History" hideBtn={true} handleClose={() => SetHistoryStatus(false)}>
                                             <FullDataTable TableColumns={columns1} tableData={filteredData1} />
                                         </Modal >
                                     </div>
