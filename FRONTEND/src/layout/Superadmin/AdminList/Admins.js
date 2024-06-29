@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import Content from "../../../Components/Dashboard/Content/Content"
-import * as  valid_err from "../../../Utils/Common_Messages"
+import React, { useEffect, useState } from 'react';
+import Content from "../../../Components/Dashboard/Content/Content";
+import * as valid_err from "../../../Utils/Common_Messages";
 import axios from 'axios';
-import Loader from '../../../Utils/Loader'
+import Loader from '../../../Utils/Loader';
 import { Pencil, Trash2, Pointer } from 'lucide-react';
-import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
+import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 import { useDispatch } from "react-redux";
 import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -13,65 +13,61 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { Link } from "react-router-dom";
 import { useFormik } from 'formik';
 import toast from 'react-hot-toast';
-import Formikform from "../../../Components/ExtraComponents/Form/Formik_form"
-import Swal from 'sweetalert2'
-
+import Formikform from "../../../Components/ExtraComponents/Form/Formik_form";
+import Swal from 'sweetalert2';
 
 const AdminsList = () => {
-
-    const dispatch = useDispatch()
-    const user_details = JSON.parse(localStorage.getItem('user_details'))
-    const [showModal, setshowModal] = useState(false)
-    const [Panelid, setPanelid] = useState('')
+    const dispatch = useDispatch();
+    const user_details = JSON.parse(localStorage.getItem('user_details'));
+    const [showModal, setShowModal] = useState(false);
+    const [Panelid, setPanelid] = useState('');
     const [themeList, setThemeList] = useState([]);
-    const [searchInput, setSearchInput] = useState('')
+    const [searchInput, setSearchInput] = useState('');
     const [themeData, setThemeData] = useState({ loading: true, data: [] });
-    const [themeData1, setThemeData1] = useState({ loading: true, data: [] });
-
+    const [filteredData, setFilteredData] = useState([]);
 
     const GetAllThemes = async () => {
-        await dispatch(Get_All_Theme()).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    setThemeList(response.data);
-                }
-            })
-    }
+        try {
+            const response = await dispatch(Get_All_Theme()).unwrap();
+            if (response.status) {
+                setThemeList(response.data);
+            }
+        } catch (error) {
+            console.error('Error fetching themes:', error.message);
+        }
+    };
 
-   
-
-
-    const data = async () => {
-
-        await dispatch(All_Panel_List()).unwrap()
-            .then((response) => {
-                if (response.status) {
-                
-                    setThemeData({
-                        loading: false,
-                        data: response.data
-                    });
-                    setThemeData1({
-                        loading: true,
-                        data: response.data
-                    });
-                }
-                else {
-                    setThemeData({
-                        loading: false,
-                        data: response.data
-                    });
-
-                }
-            })
-    }
-
+    const fetchAllPanels = async () => {
+        try {
+            const response = await dispatch(All_Panel_List()).unwrap();
+            if (response.status) {
+                setThemeData({
+                    loading: false,
+                    data: response.data,
+                });
+                setFilteredData(response.data); // Initialize filteredData with fetched data
+            } else {
+                setThemeData({
+                    loading: false,
+                    data: [],
+                });
+                setFilteredData([]); // Initialize filteredData with empty array
+            }
+        } catch (error) {
+            console.error('Error fetching panels:', error.message);
+            setThemeData({
+                loading: false,
+                data: [],
+            });
+            setFilteredData([]); // Initialize filteredData with empty array
+        }
+    };
 
     const panelDetails = (panel_id) => {
-        GetAllThemes()
-        setPanelid(panel_id)
-        setshowModal(true)
-    }
+        GetAllThemes();
+        setPanelid(panel_id);
+        setShowModal(true);
+    };
 
     const fetchBrokerView = async (row) => {
         try {
@@ -83,9 +79,7 @@ const AdminsList = () => {
         }
     };
 
-
     const fetchBrokerView1 = async (row) => {
-        console.log("row", row)
         try {
             let data = JSON.stringify({
                 "panelname": row.panel_name,
@@ -104,20 +98,13 @@ const AdminsList = () => {
                 },
                 data: data
             };
-            axios.request(config)
-                .then((response) => {
-                    console.log(JSON.stringify(response.data));
-                })
-                .catch((error) => {
-                    console.log(error);
-                });
+
+            await axios.request(config);
         } catch (error) {
             console.error('Error fetching broker view data:', error.message);
             throw error;
         }
     };
-
-
 
     const columns = [
         {
@@ -146,10 +133,10 @@ const AdminsList = () => {
             formatter: (cell, row) => (
                 <label className="toggle mt-3 ">
                     <input className="toggle-checkbox bg-primary" type="checkbox"
-                        defaultChecked={row.is_active == 0}
+                        defaultChecked={row.is_active === 0}
                         onChange={(e) => CloseCompany(row.domain, e.target.checked)}
                     />
-                    <div className={`toggle-switch ${row.is_active == 0 ? "bg-green" : "bg-danger"}`}></div>
+                    <div className={`toggle-switch ${row.is_active === 0 ? "bg-green" : "bg-danger"}`}></div>
                 </label>
             )
         },
@@ -178,7 +165,7 @@ const AdminsList = () => {
                                 />
                             </span>
                         </Link>
-                        {0 == "1" ?
+                        {false && (
                             <Link>
                                 <span data-toggle="tooltip" data-placement="top" title="Delete">
                                     <Trash2
@@ -189,14 +176,14 @@ const AdminsList = () => {
                                     />
                                 </span>
                             </Link>
-                            : ""}
+                        )}
                     </div>
                 </div>
             ),
         },
         {
             dataField: 'a',
-            text: 'Update Broker & Table ',
+            text: 'Update Broker & Table',
             formatter: (cell, row) => (
                 <span style={{ display: "flex" }}>
                     <div className="tooltip-wrapper" title="All Brokers View Create">
@@ -218,19 +205,13 @@ const AdminsList = () => {
                         />
                     </div>
                 </span>
-
-
             ),
         },
     ];
 
-
-
-
     const formik = useFormik({
         initialValues: {
             theme_update: null,
-
         },
         validate: (values) => {
             const errors = {};
@@ -240,37 +221,33 @@ const AdminsList = () => {
             return errors;
         },
         onSubmit: async (values) => {
-
             const req = {
                 userid: Panelid,
                 theme_id: values.theme_update,
                 token: user_details.token,
                 UserName: user_details.UserName
+            };
+            try {
+                const response = await dispatch(Update_Panel_Theme(req)).unwrap();
+                if (response.status) {
+                    toast.success(response.msg);
+                    setShowModal(false);
+                    fetchAllPanels();
+                }
+            } catch (error) {
+                toast.error("An error occurred while updating the theme");
             }
-            await dispatch(Update_Panel_Theme(req)).unwrap()
-                .then((response) => {
-                    if (response.status) {
-                        toast.success(response.msg)
-                        setshowModal(false)
-                        data()
-                    }
-                })
         }
     });
-
 
     const fields = [
         {
             name: 'theme_update',
             label: 'Theme',
             type: 'select',
-            options:
-                themeList && themeList.map((item) => ({ label: item.theme_name, value: item._id }))
+            options: themeList.map((item) => ({ label: item.theme_name, value: item._id }))
         },
-
     ];
-
-
 
     const CloseCompany = async (domain, status) => {
         try {
@@ -288,11 +265,9 @@ const AdminsList = () => {
 
             if (password !== "7700") {
                 Swal.fire("Incorrect password");
-                window.location.reload()
+                window.location.reload();
                 return;
             }
-
-
 
             const req = {
                 domain: domain,
@@ -304,49 +279,39 @@ const AdminsList = () => {
             if (response.status) {
                 toast.success(response.msg);
                 Swal.fire(`Entered password: ${password}`);
-                window.location.reload()
-
+                fetchAllPanels();
             } else {
                 toast.error(response.msg);
+                window.location.reload();
             }
         } catch (error) {
-            toast.error("An error occurred while closing the company");
+            toast.error("An error occurred while closing the panel");
+            console.error('Error closing company:', error.message);
         }
     };
 
-
-
-
     useEffect(() => {
-        data();
+        fetchAllPanels();
     }, []);
 
-
     useEffect(() => {
-        if (themeData && themeData.data) {
-            const filterData = themeData && themeData.data.filter((item) => {
-                const matchSearch =
-                    searchInput == '' ||
+        if (themeData.data.length > 0) {
+            const filteredData = themeData.data.filter((item) => {
+                const matchSearch = searchInput === '' ||
                     item.panel_name.toLowerCase().includes(searchInput.toLowerCase()) ||
-                    item.domain.toLowerCase().includes(searchInput.toLowerCase())
-                return matchSearch
-            })
-            setThemeData1({
-                loading: false,
-                data: searchInput ? filterData : themeData.data
+                    item.domain.toLowerCase().includes(searchInput.toLowerCase());
+                return matchSearch;
             });
+            setFilteredData(filteredData);
         }
-    }, [searchInput]);
-
-
+    }, [searchInput, themeData.data]);
 
     return (
         <>
-
             <Content Page_title="Company Names"
-                button_title={user_details.UserName != "superadmin" ? "" : "Add Panel"}
+                button_title={user_details.UserName !== "superadmin" ? "" : "Add Panel"}
                 route="/super/panel/add"
-                button_status={user_details.UserName != "superadmin" ? false : true}
+                button_status={user_details.UserName === "superadmin"}
             >
                 <div className='mb-4'>
                     <h6>Search here something</h6>
@@ -358,29 +323,22 @@ const AdminsList = () => {
                         value={searchInput} />
                 </div>
 
-                {
-
-                    themeData1.loading ? <Loader /> :
-                        <>
-                            <FullDataTable TableColumns={columns} tableData={themeData1.data} />
-                            <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
-                                handleClose={() => setshowModal(false)}
-                            >
-                                <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update Theme"
-                                    title="update_theme"
-
-                                />
-                            </Modal >
-                            <ToastButton />
-                        </>
+                {themeData.loading ? <Loader /> :
+                    <>
+                        <FullDataTable TableColumns={columns} tableData={filteredData} />
+                        <Modal isOpen={showModal} backdrop="static" size="sm" title="Update Company Theme" hideBtn={true}
+                            handleClose={() => setShowModal(false)}
+                        >
+                            <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update Theme"
+                                title="update_theme"
+                            />
+                        </Modal >
+                        <ToastButton />
+                    </>
                 }
-
-
             </Content>
         </>
-
     );
-}
+};
 
-
-export default AdminsList
+export default AdminsList;

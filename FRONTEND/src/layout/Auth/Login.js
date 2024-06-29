@@ -30,38 +30,26 @@ const Login = () => {
   const data = useRef();
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
-
   const [CheckUser, setCheckUser] = useState(check_Device());
-
   const [showModal, setshowModal] = useState(false);
   const [showModal1, setshowModal1] = useState(false);
   const [showModal2, setshowModal2] = useState(false);
-
   const [CheckDesclaimer, setCheckDesclaimer] = useState(false);
   const [desclaimerModal, setDesclaimerModal] = useState(false);
   const [getCompanyName, setGetCompanyName] = useState("");
-
   const [backgroundImage, setBackgroundImage] = useState("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQA+wMBIgACEQEDEQH/xAAYAAEBAQEBAAAAAAAAAAAAAAAAAQMCB//EABoQAQEBAAMBAAAAAAAAAAAAAAARATFBUSH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9kiRSgQAAFBBQEigCaKAgoCCgIKAgqAkIoCRcwANRTQQ3Dg5BBUALvoA7SEAFAAAAAAAAAAAAADTAAAAQAAANKEBKGgCKgAAOlS4oAAAAAAAAAqAAAAAAAIAAUABOwXUq6gAIAAAgsB0oAAAAAAoIKgAAAAAGgCAAAAIAFABNMBU00AEAAAd4oAAAAAAAAAAAIAAAAFBN5XE0AE+gKgAAAAAgIBqoA0VAFAAAACgAIAAACboGmABuiAAAAigAAIAAACKgBRLnoNaUhMAVAFqVQAE3QASgpRAKCAqaAAABBAWIAAAAACAAAAkzwoDSmACiUoKJQFIhQAQFuiAAACACiAKgAAAAgKioAAAmqgCKfAaCFBRAFQAAAAABAFQADAAAAAAoFAEUEAAABBekACoDQAAAAAAAEAAAAAAAAAAQAAAAAAAAATQANAB/9k=");
-
   const [getOtpStatus, setgetOtpStatus] = useState(false);
-
   const [getOtp, setgetOtp] = useState("");
-
   const [typeOtp, setTypeOtp] = useState("");
-
   const [typeOtp1, setTypeOtp1] = useState("");
-
   const [UserData, setUserData] = useState("");
-
   const [test, settest] = useState([]);
-
 
 
   let SetTheme = async () => {
     let domain = window.location.host
     const req = {
       domain: Config.react_domain
-      // domain: "sneh.com",
     };
 
     await dispatch(Get_Panel_Informtion(req))
@@ -71,8 +59,6 @@ const Login = () => {
         localStorage.setItem("theme", JSON.stringify(themedata));
 
        
-
-     
 
         if (themedata != undefined) {
 
