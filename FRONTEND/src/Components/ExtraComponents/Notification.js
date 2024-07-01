@@ -3,10 +3,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { fDate, fDateTimeSuffix } from '../../Utils/Date_formet';
-const Notification = ({ data }) => {
-
-    console.log("data",data)
-
+const Notification = ({ status, NotificationData }) => {
 
     const show_Name = (item) => {
         if (item) {
@@ -49,25 +46,38 @@ const Notification = ({ data }) => {
                     // style={{ height: auto }}
                     >
                         <ul className="timeline">
-                            {data.data && data.data.slice(0, 6).map((item) => {
-                                return <>
-                                    <li>
-                                        <div className="timeline-panel">
-                                            <div className="media me-2 media-info">{show_Name(item.fullname)}</div>
-                                            <div className="media-body">
-                                                <h6 className="mb-1">
-                                                    Recieved From {item.username}
-                                                </h6>
-                                                <small className="d-block">
-                                                    {fDateTimeSuffix(item.createdAt)}
-                                                </small>
+                            {NotificationData.data && NotificationData.data.slice(0, 6).map((item) => {
+                                return (
+                                    status == 2 ? (
+                                        <li key={item.id}>
+                                            <div className="timeline-panel">
+                                                <div className="media-body">
+                                                  <p>{item.Message}</p>
+                                                    <small className="d-block">
+                                                        {fDateTimeSuffix(item.createdAt)}
+                                                    </small>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li></>
+                                        </li>
+                                    ) : (
+                                        <li key={item.id}>
+                                            <div className="timeline-panel">
+                                                <div className="media me-2 media-info">{show_Name(item.fullname)}</div>
+                                                <div className="media-body">
+                                                    <h6 className="mb-1">
+                                                        Received From {item.username}
+                                                    </h6>
+                                                    <small className="d-block">
+                                                        {fDateTimeSuffix(item.createdAt)}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    )
+                                );
                             })}
-
-
                         </ul>
+
                     </div>
                     <Link to='/admin/helpcenter' className="all-notification">
                         See all notifications <i className="ti-arrow-end" />

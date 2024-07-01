@@ -17,27 +17,22 @@ import { check_Device } from "../../../Utils/find_device";
 import { GET_HELPS } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice";
-import { Get_Company_Logo } from '../../../ReduxStore/Slice/Admin/AdminSlice'
-import { isForeignUserAllowedToLogin } from "../../../Utils/Date_formet";
+import { Get_Company_Logo } from '../../../ReduxStore/Slice/Admin/AdminSlice';
 
 import jwt_decode from "jwt-decode";
 
 const Header = ({ ChatBox }) => {
-  // HOOKS
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [showModal, setshowModal] = useState(false);
   const [refresh, setrefresh] = useState(false);
-
   const [UserDetails, setUserDetails] = useState([]);
-
   const [CheckUser, setCheckUser] = useState(check_Device());
+  const [getAllClients, setAllClients] = useState({loading: true, data: [] });
+  const [messageData, SetMessageData] = useState({loading: true, data: [] });
 
-  const [getAllClients, setAllClients] = useState({
-    loading: true,
-    data: [],
-  });
 
 
 
@@ -153,7 +148,6 @@ const Header = ({ ChatBox }) => {
 
       // return 
       navigate(routePath)
-      // navigate("/admin/dashboard")
 
       window.location.reload();
       localStorage.removeItem("gotodashboard");
@@ -219,6 +213,7 @@ const Header = ({ ChatBox }) => {
         .unwrap()
         .then((response) => {
           if (response.status) {
+            SetMessageData({loading:false,data:response.data})
           }
         });
     }
@@ -409,12 +404,12 @@ const Header = ({ ChatBox }) => {
                 {/*  For Show Notification Box */}
                 {user_role === "ADMIN" ? (
                   <>
-                    <Notification data={getAllClients} />
+                    <Notification status="1" NotificationData={getAllClients} />
                   </>
                 ) : (
                   user_role === "USER" ? (
                     <>
-                      <Notification data={[]} />
+                      <Notification status="2" NotificationData={messageData} />
 
                     </>
                   ) : (
