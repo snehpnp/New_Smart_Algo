@@ -16,31 +16,28 @@ const Logo = ({ ShowSidebar }) => {
         $('#root').removeClass("menu-toggle")
     }
 
-
-
     return (
-        <div>   <div className="nav-header">
-            <span className="brand-logo">
-                <img className="logo-abbr" src="" alt="logo" />
-            </span>
+        <div>
+            <div className="nav-header">
+                <span className="brand-logo">
+
+                    <img className="logo-abbr1" src="/assets/images/download2.png" alt="logo" />
+                </span>
 
 
-            <div className="nav-control bg-primary"
-                //  onClick={ShowSidebar}
-                onClick={() => ShowSidebar123()}
+                <div className="nav-control bg-primary"
+                    //  onClick={ShowSidebar}
+                    onClick={() => ShowSidebar123()}
 
 
-            >
-                <div className="hamburger ">
-                    <span className="line" />
-                    <span className="line" />
-                    <span className="line" />
+                >
+                    <div className="hamburger ">
+                        <span className="line" />
+                        <span className="line" />
+                        <span className="line" />
+                    </div>
                 </div>
             </div>
-        </div>
-
-
-
         </div>
     )
 }

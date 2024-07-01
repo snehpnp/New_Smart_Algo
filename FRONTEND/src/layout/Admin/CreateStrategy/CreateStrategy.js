@@ -1238,66 +1238,72 @@ const CreateStrategy = () => {
             user_role === "ADMIN"
               ? "/admin/AllMakeStrategy"
               : user_role === "SUBADMIN"
-              ? "/subadmin/AllMakeStrategy"
-              : ""
+                ? "/subadmin/AllMakeStrategy"
+                : ""
           }
         >
           <div>
-            <div className="col-md-2 ">
-              <label
-                className=" ps-5"
-                style={{ fontWeight: "bold", color: "black", fontSize: "15px" }}
-              >
-                Strategy Name
-              </label>
-              <input
-                type="text"
-                onChange={(e) => {
-                  onChange(e);
-                }}
-                name="strategy_name"
-                className="form-control stratergy-box"
-              ></input>
-            </div>
 
-            <div className="col-md-2 ">
-              <label
-                className=" ps-5"
-                style={{ fontWeight: "bold", color: "black", fontSize: "15px" }}
-              >
-                Strategy Tag
-              </label>
-              <select
-                className="form-select stratergy-box"
-                onChange={(e) => setSelectStrategy(e.target.value)}
-                name="strategyname"
-              >
-                <option value="">-- Select Strategy Tag--</option>
-                {strategyDataAllAdmin.data &&
-                  strategyDataAllAdmin.data.map((sm, i) => (
-                    <option value={sm.strategy_name}>{sm.strategy_name}</option>
-                  ))}
-              </select>
-            </div>
+            <form>
+              <div className="row">
+                <div className="col-md-4">
+                  <label
 
-            <div className="col-md-2 ">
-              <label
-                className=" ps-5"
-                style={{ fontWeight: "bold", color: "black", fontSize: "15px" }}
-              >
-                Number of Trade
-              </label>
-              <input
-                min={1}
-                type="text"
-                onChange={(e) => {
-                  onChange(e);
-                }}
-                name="no_of_trade"
-                className="form-control stratergy-box"
-                value={numberOfTrade}
-              ></input>
-            </div>
+                    style={{ fontWeight: "bold", color: "black", fontSize: "15px" }}
+                  >
+                    Strategy Name
+                  </label>
+                  <input
+                    type="text"
+                    onChange={(e) => {
+                      onChange(e);
+                    }}
+                    name="strategy_name"
+                    className="form-control "
+                  ></input>
+                </div>
+
+                <div className="col-md-4">
+                  <label
+
+                    style={{ fontWeight: "bold", color: "black", fontSize: "15px" }}
+                  >
+                    Strategy Tag
+                  </label>
+                  <select
+                    className="form-control"
+                    onChange={(e) => setSelectStrategy(e.target.value)}
+                    name="strategyname"
+                  >
+                    <option value="">-- Select Strategy Tag--</option>
+                    {strategyDataAllAdmin.data &&
+                      strategyDataAllAdmin.data.map((sm, i) => (
+                        <option value={sm.strategy_name}>{sm.strategy_name}</option>
+                      ))}
+                  </select>
+                </div>
+
+                <div className="col-md-4">
+                  <label
+
+                    style={{ fontWeight: "bold", color: "black", fontSize: "15px" }}
+                  >
+                    Number of Trade
+                  </label>
+                  <input
+                    min={1}
+                    type="text"
+                    onChange={(e) => {
+                      onChange(e);
+                    }}
+                    name="no_of_trade"
+                    className="form-control"
+                    value={numberOfTrade}
+                  ></input>
+                </div>
+
+              </div>
+            </form>
 
             <Modal show={show} onHide={handleClose} className="right">
               <Modal.Header>
@@ -1345,9 +1351,9 @@ const CreateStrategy = () => {
               <Modal.Footer></Modal.Footer>
             </Modal>
 
-            <ul class="StepProgress">
+            <ul class="StepProgress mt-4">
               <li class="StepProgress-item is-done">
-                <strong>Instruments</strong>
+                <strong className="mb-2">Instruments</strong>
                 <div className="row">
                   <div className="col-md-2">
                     <button
@@ -1390,7 +1396,7 @@ const CreateStrategy = () => {
               </li>
               <li class="StepProgress-item is-done">
                 <div className="row">
-                  <div className="col-xl-6">
+                  <div className="col-xl-12">
                     <div className="card">
                       <div className="">
                         <label>Candle Interval</label>
@@ -1402,9 +1408,8 @@ const CreateStrategy = () => {
                               <li className=" nav-item">
                                 <a
                                   href="#navpills2-1"
-                                  className={`nav-link ${
-                                    timeFrameVal === item.value ? "active" : ""
-                                  }`}
+                                  className={`nav-link ${timeFrameVal === item.value ? "active" : ""
+                                    }`}
                                   data-bs-toggle="tab"
                                   aria-expanded="false"
                                   onClick={() => selectTimeFrame(item)}
@@ -1421,7 +1426,7 @@ const CreateStrategy = () => {
               </li>
 
               <Row className="mt-4">
-                <Col md={2}>
+                <Col md={4}>
                   <h5
                     style={{
                       fontWeight: "bold",
@@ -1431,9 +1436,6 @@ const CreateStrategy = () => {
                   >
                     Entry Time
                   </h5>
-                </Col>
-                <Col md={2}>
-                  {/* <label>Time</label> */}
                   <Form.Control
                     style={{ height: "auto" }}
                     type="time"
@@ -1444,10 +1446,11 @@ const CreateStrategy = () => {
                     }}
                   />
                 </Col>
-              </Row>
 
-              <Row className="mt-4">
-                <Col md={2}>
+
+
+
+                <Col md={4}>
                   <h5
                     style={{
                       fontWeight: "bold",
@@ -1457,10 +1460,6 @@ const CreateStrategy = () => {
                   >
                     Exit Time
                   </h5>
-                </Col>
-
-                <Col md={2}>
-                  {/* <label>Time</label> */}
                   <Form.Control
                     style={{ height: "auto" }}
                     type="time"
@@ -1471,10 +1470,12 @@ const CreateStrategy = () => {
                     }}
                   />
                 </Col>
-              </Row>
 
-              <Row className="mt-4">
-                <Col md={2}>
+
+
+
+
+                <Col md={4}>
                   <h5
                     style={{
                       fontWeight: "bold",
@@ -1484,10 +1485,6 @@ const CreateStrategy = () => {
                   >
                     No Trade Time
                   </h5>
-                </Col>
-
-                <Col md={2}>
-                  {/* <label>Time</label> */}
                   <Form.Control
                     style={{ height: "auto" }}
                     type="time"
@@ -1498,6 +1495,8 @@ const CreateStrategy = () => {
                     }}
                   />
                 </Col>
+
+
               </Row>
 
               <li
@@ -1518,53 +1517,34 @@ const CreateStrategy = () => {
                 </div>
 
                 <strong>Buy Entry Condition</strong>
-               <div>
-               <button class="btn btn-primary float-lg-end ">
-                  <i class="fa-solid  fa-plus "></i> Add Row
-                </button>
-               </div>
+                <div>
+                  <button class="btn btn-primary float-lg-end ">
+                    <i class="fa-solid  fa-plus "></i> Add Row
+                  </button>
+                </div>
                 <div className="table-responsive w-100">
                   <table className="table">
                     <thead className="bg-transparent">
                       <tr>
-                        <th className="text-dark text-center" style={{fontSize:'15px'}}>Bracket</th>
-                        <th className="text-dark text-center" style={{fontSize:'15px'}}>First</th>
-                        <th className="text-dark text-center" style={{fontSize:'15px'}}>Comparators</th>
-                        <th className="text-dark text-center" style={{fontSize:'15px'}}>Second</th>
-                        <th className="text-dark text-center" style={{fontSize:'15px'}}>Bracket</th>
-                        <th className="text-dark text-center" style={{fontSize:'15px'}}>Action</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>First</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Comparators</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Second</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <td >
                           {/* <i className="fa-solid fa-circle-plus"></i> */}
-                          <button className="btn btn-success" style={{fontSize:'15px',padding:'2px 5px'}} ><i className="fa-solid fa-circle-plus"></i></button>
+                          <button className="btn btn-success" style={{ fontSize: '15px', padding: '2px 5px' }} ><i className="fa-solid fa-circle-plus"></i></button>
 
-<button className="btn btn-danger mx-1" style={{fontSize:'10px',padding:'2px 3px'}} ><i className="fa-solid fa-circle-minus"></i></button>
+                          <button className="btn btn-danger mx-1" style={{ fontSize: '10px', padding: '2px 3px' }} ><i className="fa-solid fa-circle-minus"></i></button>
 
                         </td>
                         <td>
-                        <div  className="d-flex">
-                          <select className="form-select" name="expiry_date">
-                            <option value="">---</option>
-                            <option value="close">Close</option>
-                            <option value="open">Open</option>
-                            <option value="high">High</option>
-                            <option value="low">Low</option>
-                            <option value="number">Number</option>
-                          </select>
-                          <input
-                            type="number"
-                            min={0}
-                            className="form-control w-50 ms-2"
-                            defaultValue={0}
-                          />
-                          </div>
-                        </td>
-                        <td>
-                       
-                           
+                          <div className="d-flex">
                             <select className="form-select" name="expiry_date">
                               <option value="">---</option>
                               <option value="close">Close</option>
@@ -1573,10 +1553,17 @@ const CreateStrategy = () => {
                               <option value="low">Low</option>
                               <option value="number">Number</option>
                             </select>
-                          
+                            <input
+                              type="number"
+                              min={0}
+                              className="form-control w-50 ms-2"
+                              defaultValue={0}
+                            />
+                          </div>
                         </td>
                         <td>
-                         <div  className="d-flex">
+
+
                           <select className="form-select" name="expiry_date">
                             <option value="">---</option>
                             <option value="close">Close</option>
@@ -1585,24 +1572,36 @@ const CreateStrategy = () => {
                             <option value="low">Low</option>
                             <option value="number">Number</option>
                           </select>
-                          <input
-                            type="number"
-                            min={0}
-                            className="form-control w-50 ms-2"
-                            defaultValue={0}
-                          />
+
+                        </td>
+                        <td>
+                          <div className="d-flex">
+                            <select className="form-select" name="expiry_date">
+                              <option value="">---</option>
+                              <option value="close">Close</option>
+                              <option value="open">Open</option>
+                              <option value="high">High</option>
+                              <option value="low">Low</option>
+                              <option value="number">Number</option>
+                            </select>
+                            <input
+                              type="number"
+                              min={0}
+                              className="form-control w-50 ms-2"
+                              defaultValue={0}
+                            />
                           </div>
                         </td>
-                        
+
                         <td>
-                        <button className="btn btn-danger" style={{fontSize:'10px',padding:'2px 3px'}} ><i className="fa-solid fa-circle-minus"></i></button>
-                          <button className="btn btn-success mx-1" style={{fontSize:'15px',padding:'2px 4px'}} ><i className="fa-solid fa-circle-plus"></i></button>
+                          <button className="btn btn-danger" style={{ fontSize: '10px', padding: '2px 3px' }} ><i className="fa-solid fa-circle-minus"></i></button>
+                          <button className="btn btn-success mx-1" style={{ fontSize: '15px', padding: '2px 4px' }} ><i className="fa-solid fa-circle-plus"></i></button>
 
 
                           {/* <i className="fa-solid fa-circle-plus"></i> */}
                         </td>
                         <td>
-                          <button className="btn btn-danger" style={{fontSize:'10px',padding:'5px 10px'}} >Remove</button>
+                          <button className="btn btn-danger" style={{ fontSize: '10px', padding: '5px 10px' }} >Remove</button>
                         </td>
                       </tr>
                     </tbody>
@@ -2050,7 +2049,7 @@ const CreateStrategy = () => {
 
                 {sellCheck == true ? (
                   <Tabs
-                    // defaultActiveKey="profile"
+                  
                     id="uncontrolled-tab-example"
                     className="mb-3"
                   >
@@ -2149,7 +2148,7 @@ const CreateStrategy = () => {
                                 className="d-flex px-0"
                                 style={{ height: "25px" }}
                               >
-                                {/* <label>First Element</label> */}
+                             
                                 <select
                                   className="form-select"
                                   name="expiry_date"
@@ -2163,7 +2162,7 @@ const CreateStrategy = () => {
                                     );
                                   }}
                                 >
-                                  {/* <option value="">Select Expiry Date</option> */}
+                                  
                                   <option value="">---</option>
                                   {getSources.data.map((sm, i) => (
                                     <option
@@ -2197,12 +2196,7 @@ const CreateStrategy = () => {
                                   className="form-control new-field"
                                 />
 
-                                {/* <Col md={2}>
-        <label>Offset</label>
-        <Form.Control type="number" id="text2" />
-      </Col> */}
-
-                                {/* <label>Comparators</label> */}
+                               
                                 <select
                                   className="form-select"
                                   name="expiry_date"
@@ -2215,8 +2209,7 @@ const CreateStrategy = () => {
                                     );
                                   }}
                                 >
-                                  {/* <option value="">Select Expiry Date</option> */}
-                                  {/* <option value="" >---</option> */}
+                                  
                                   {getComparators.data.map((sm, i) => (
                                     <option
                                       selected={
@@ -2229,7 +2222,7 @@ const CreateStrategy = () => {
                                   ))}
                                 </select>
 
-                                {/* <label>Second Element</label> */}
+                                
                                 <select
                                   style={{ margin: "0 20px" }}
                                   className="form-select"
@@ -2476,6 +2469,539 @@ const CreateStrategy = () => {
                   ""
                 )}
               </li>
+
+              <li
+                class="StepProgress-item current is-done"
+                style={{ marginTop: "50px" }}
+              >
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    onChange={(e) => setBuyCheck(e.target.checked)}
+                    type="checkbox"
+                    id="inlineCheckbox1"
+                    value="option1"
+                  />
+                  <label className="form-check-label" for="inlineCheckbox1">
+                    Buy
+                  </label>
+                </div>
+
+                <strong>Buy Entry Condition</strong>
+                <div>
+                  <button class="btn btn-primary float-lg-end ">
+                    <i class="fa-solid  fa-plus "></i> Add Row
+                  </button>
+                </div>
+                <div className="table-responsive w-100">
+                  <table className="table">
+                    <thead className="bg-transparent">
+                      <tr>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>First</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Comparators</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Second</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td >
+                          {/* <i className="fa-solid fa-circle-plus"></i> */}
+                          <button className="btn btn-success" style={{ fontSize: '15px', padding: '2px 5px' }} ><i className="fa-solid fa-circle-plus"></i></button>
+
+                          <button className="btn btn-danger mx-1" style={{ fontSize: '10px', padding: '2px 3px' }} ><i className="fa-solid fa-circle-minus"></i></button>
+
+                        </td>
+                        <td>
+                          <div className="d-flex">
+                            <select className="form-select" name="expiry_date">
+                              <option value="">---</option>
+                              <option value="close">Close</option>
+                              <option value="open">Open</option>
+                              <option value="high">High</option>
+                              <option value="low">Low</option>
+                              <option value="number">Number</option>
+                            </select>
+                            <input
+                              type="number"
+                              min={0}
+                              className="form-control w-50 ms-2"
+                              defaultValue={0}
+                            />
+                          </div>
+                        </td>
+                        <td>
+
+
+                          <select className="form-select" name="expiry_date">
+                            <option value="">---</option>
+                            <option value="close">Close</option>
+                            <option value="open">Open</option>
+                            <option value="high">High</option>
+                            <option value="low">Low</option>
+                            <option value="number">Number</option>
+                          </select>
+
+                        </td>
+                        <td>
+                          <div className="d-flex">
+                            <select className="form-select" name="expiry_date">
+                              <option value="">---</option>
+                              <option value="close">Close</option>
+                              <option value="open">Open</option>
+                              <option value="high">High</option>
+                              <option value="low">Low</option>
+                              <option value="number">Number</option>
+                            </select>
+                            <input
+                              type="number"
+                              min={0}
+                              className="form-control w-50 ms-2"
+                              defaultValue={0}
+                            />
+                          </div>
+                        </td>
+
+                        <td>
+                          <button className="btn btn-danger" style={{ fontSize: '10px', padding: '2px 3px' }} ><i className="fa-solid fa-circle-minus"></i></button>
+                          <button className="btn btn-success mx-1" style={{ fontSize: '15px', padding: '2px 4px' }} ><i className="fa-solid fa-circle-plus"></i></button>
+
+
+                          {/* <i className="fa-solid fa-circle-plus"></i> */}
+                        </td>
+                        <td>
+                          <button className="btn btn-danger" style={{ fontSize: '10px', padding: '5px 10px' }} >Remove</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                {buyCheck == true ? (
+                  <Tabs
+                    // defaultActiveKey="profile"
+                    id="uncontrolled-tab-example"
+                    className="mb-3"
+                  >
+                    <Tab eventKey="home" title="Price">
+                      <h4>{condition_string}</h4>
+
+                      {coditionRequestArr.length > 0 ? (
+                        <>
+                          <Row>
+                            <Col md={2}></Col>
+                            <Col md={4}>
+                              <label style={{ marginRight: "82px" }}>
+                                <b>First</b>
+                              </label>
+
+                              <label style={{ marginRight: "32px" }}>
+                                <b>Comparators</b>
+                              </label>
+
+                              <label>
+                                <b>Second</b>
+                              </label>
+                            </Col>
+                            <Col md={2}></Col>
+                            {coditionRequestArr.length == 2 ? (
+                              <Col md={2}>
+                                <label>
+                                  <b>AND / OR</b>
+                                </label>
+                              </Col>
+                            ) : (
+                              ""
+                            )}
+                          </Row>
+                        </>
+                      ) : (
+                        ""
+                      )}
+
+                      {coditionRequestArr &&
+                        coditionRequestArr.map((condition_item, index) => (
+                          <>
+                            <Row className="mb-2">
+                              <Col
+                                md={2}
+                                className="d-flex px-0 justify-content-center"
+                                style={{ height: "25px" }}
+                              >
+                                <button
+                                  className="btn "
+                                  onClick={() =>
+                                    AddBracket(index, "start", "buy")
+                                  }
+                                  style={{
+                                    border: "1px dashed orange",
+                                    fontSize: "10px",
+                                    color: "#000",
+                                    padding: "5px 10px",
+                                    marginRight: "10px",
+                                  }}
+                                >
+                                  + Bracket
+                                </button>
+
+                                {condition_item.start_bracket.length > 0 ? (
+                                  <button
+                                    className="border-0 px-2"
+                                    onClick={() =>
+                                      RemoveBracket(
+                                        index,
+                                        "start",
+                                        condition_item.start_bracket.length - 1,
+                                        "buy"
+                                      )
+                                    }
+                                  >
+                                    <i className="fa-solid fa-xmark"></i>
+                                  </button>
+                                ) : (
+                                  ""
+                                )}
+
+                                <p
+                                  style={{
+                                    marginRight: "10px",
+                                    fontSize: "larger",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {condition_item.start_bracket.join("")}
+                                </p>
+                              </Col>
+
+                              <Col
+                                md={4}
+                                className="d-flex px-0"
+                                style={{ height: "25px" }}
+                              >
+                                {/* <label>First Element</label> */}
+                                <select
+                                  className="form-select"
+                                  name="expiry_date"
+                                  onChange={(e) => {
+                                    selectSource(
+                                      e,
+                                      condition_item,
+                                      "first",
+                                      index,
+                                      "buy"
+                                    );
+                                  }}
+                                >
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  <option value="">---</option>
+                                  {getSources.data.map((sm, i) => (
+                                    <option
+                                      selected={
+                                        condition_item.first_element.source ==
+                                        sm.value
+                                      }
+                                      value={sm.value}
+                                    >
+                                      {sm.name}
+                                    </option>
+                                  ))}
+                                </select>
+
+                                <input
+                                  style={{ height: "25px", margin: "0 20px" }}
+                                  type="number"
+                                  defaultValue={
+                                    condition_item.first_element.offset
+                                  }
+                                  onChange={(e) => {
+                                    ChangeOffsetval(
+                                      e,
+                                      condition_item,
+                                      "first",
+                                      index,
+                                      "buy"
+                                    );
+                                  }}
+                                  min="0"
+                                  className="form-control new-field"
+                                />
+
+                                {/* <label>Comparators</label> */}
+                                <select
+                                  className="form-select"
+                                  name="expiry_date"
+                                  onChange={(e) => {
+                                    selectComparators(
+                                      e,
+                                      condition_item,
+                                      index,
+                                      "buy"
+                                    );
+                                  }}
+                                >
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  {/* <option value="" >---</option> */}
+                                  {getComparators.data.map((sm, i) => (
+                                    <option
+                                      selected={
+                                        condition_item.comparators == sm.value
+                                      }
+                                      value={sm.value}
+                                    >
+                                      {sm.name}
+                                    </option>
+                                  ))}
+                                </select>
+
+                                {/* <label>Second Element</label> */}
+                                <select
+                                  style={{ margin: "0 20px" }}
+                                  className="form-select"
+                                  name="expiry_date"
+                                  onChange={(e) => {
+                                    selectSource(
+                                      e,
+                                      condition_item,
+                                      "second",
+                                      index,
+                                      "buy"
+                                    );
+                                  }}
+                                >
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  <option value="">---</option>
+                                  {getSources.data.map((sm, i) => (
+                                    <option
+                                      selected={
+                                        condition_item.second_element.source ==
+                                        sm.value
+                                      }
+                                      value={sm.value}
+                                    >
+                                      {sm.name}
+                                    </option>
+                                  ))}
+                                </select>
+                                <input
+                                  style={{ height: "25px" }}
+                                  type="number"
+                                  defaultValue={
+                                    condition_item.second_element.offset
+                                  }
+                                  onChange={(e) => {
+                                    ChangeOffsetval(
+                                      e,
+                                      condition_item,
+                                      "second",
+                                      index,
+                                      "buy"
+                                    );
+                                  }}
+                                  min="0"
+                                  className="form-control new-field"
+                                />
+                              </Col>
+                              {/* <Col md={2}>
+                        <label>Offset</label>
+                        <Form.Control type="number" id="text3" />
+                      </Col> */}
+
+                              <Col
+                                md={2}
+                                className="d-flex px-0 justify-content-center"
+                                style={{ height: "25px" }}
+                              >
+                                <p
+                                  style={{
+                                    marginRight: "10px",
+                                    fontSize: "larger",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {condition_item.end_bracket.join("")}
+                                </p>
+
+                                {condition_item.end_bracket.length > 0 ? (
+                                  <button
+                                    className="border-0 px-2"
+                                    onClick={() =>
+                                      RemoveBracket(
+                                        index,
+                                        "end",
+                                        condition_item.end_bracket.length - 1,
+                                        "buy"
+                                      )
+                                    }
+                                  >
+                                    <i className="fa-solid fa-xmark"></i>
+                                  </button>
+                                ) : (
+                                  ""
+                                )}
+
+                                <button
+                                  className=" btn "
+                                  onClick={() =>
+                                    AddBracket(index, "end", "buy")
+                                  }
+                                  style={{
+                                    border: "1px dashed orange",
+                                    fontSize: "10px",
+                                    color: "#000",
+                                    padding: "5px 10px",
+                                    marginRight: "10px",
+                                  }}
+                                >
+                                  + Bracket
+                                </button>
+                              </Col>
+                              <Col md={2}>
+                                {coditionRequestArr.length >= 2 ? (
+                                  condition_item.and_or_operator == "" ? (
+                                    ""
+                                  ) : (
+                                    <select
+                                      className="form-select"
+                                      name="and_or"
+                                      onChange={(e) => {
+                                        selectAndOrOperaterChange(
+                                          e,
+                                          condition_item,
+                                          index,
+                                          "buy"
+                                        );
+                                      }}
+                                    >
+                                      {/* <option value="">Select Expiry Date</option> */}
+                                      <option
+                                        selected={
+                                          condition_item.and_or_operator ==
+                                          "and"
+                                        }
+                                        value="and"
+                                      >
+                                        AND
+                                      </option>
+                                      <option
+                                        selected={
+                                          condition_item.and_or_operator == "or"
+                                        }
+                                        value="or"
+                                      >
+                                        OR
+                                      </option>
+                                    </select>
+                                  )
+                                ) : (
+                                  ""
+                                )}
+                              </Col>
+                              <Col md={2} style={{ height: "25px" }}>
+                                {index == 0 ? (
+                                  coditionRequestArr.length == 1 ? (
+                                    <button
+                                      className="btn btn-danger "
+                                      onClick={() =>
+                                        conditionRemove(index, "buy")
+                                      }
+                                      style={{
+                                        fontSize: "10px",
+                                        padding: "5px 10px",
+                                      }}
+                                    >
+                                      Remove
+                                    </button>
+                                  ) : (
+                                    ""
+                                  )
+                                ) : (
+                                  <button
+                                    className="btn btn-danger  "
+                                    style={{
+                                      fontSize: "10px",
+                                      padding: "5px 10px",
+                                    }}
+                                    onClick={() =>
+                                      conditionRemove(index, "buy")
+                                    }
+                                  >
+                                    Remove
+                                  </button>
+                                )}
+                              </Col>
+                            </Row>
+                          </>
+                        ))}
+
+                      <button
+                        style={{ border: "1px dashed orange" }}
+                        className="btn p-2"
+                        onClick={() => conditionAdd(coditionRequestArr, "buy")}
+                      >
+                        + Add
+                      </button>
+
+                      {condition_string != "" ? (
+                        <li class="StepProgress-item">
+                          <strong>Buy Exit Condition</strong>
+                          <div className="row mt-3">
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label className="text-danger">
+                                  Stop loss (point)
+                                </label>
+                                <input
+                                  type="number"
+                                  onChange={(e) => {
+                                    StoplossChange(e, "buy");
+                                  }}
+                                  className="form-control"
+                                ></input>
+                              </div>
+                            </div>
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label className="text-success">
+                                  Target Profit (point)
+                                </label>
+                                <input
+                                  type="number"
+                                  onChange={(e) => {
+                                    TargetChange(e, "buy");
+                                  }}
+                                  className="form-control"
+                                ></input>
+                              </div>
+                            </div>
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label className="">
+                                  Trailing SL (point) (optional)
+                                </label>
+                                <input
+                                  type="number"
+                                  onChange={(e) => {
+                                    TSLChange(e, "buy");
+                                  }}
+                                  className="form-control"
+                                ></input>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      ) : (
+                        ""
+                      )}
+                    </Tab>
+                  </Tabs>
+                ) : (
+                  ""
+                )}
+              </li>
+
+
+
             </ul>
 
             <>
@@ -2522,7 +3048,7 @@ const CreateStrategy = () => {
                             >
                               {
                                 indicatorModalRowData.data[index][
-                                  Object.keys(item)[0]
+                                Object.keys(item)[0]
                                 ]
                               }
                             </option>

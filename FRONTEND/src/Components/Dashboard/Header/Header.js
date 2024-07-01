@@ -200,7 +200,7 @@ const Header = ({ ChatBox }) => {
 
 
 
-    ///////
+
 
     const currentDate = new Date();
     const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -372,7 +372,7 @@ const Header = ({ ChatBox }) => {
   return (
     <div className="header-container">
       <Logo />
-      <div className="header">
+      <div className="header" style={{position:"fixed"}}>
         <div className="header-content">
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">

@@ -1092,9 +1092,9 @@ input:checked+.slider:before {
     display: none;
 }
 
-.header-container .brand-logo {
+/* .header-container .brand-logo {
     display: none;
-}
+} */
 
 
 .StepProgress {
@@ -1131,11 +1131,12 @@ input:checked+.slider:before {
     height: 100%;
     width: 10px;
 }
-.stratergy-box
-{
+
+.stratergy-box {
     margin-left: 45px;
-    margin-bottom:15px
+    margin-bottom: 15px
 }
+
 .StepProgress-item::after {
     content: '';
     display: none;
@@ -1770,10 +1771,12 @@ span.button_sell.active {
     font-size: 45px;
     font-weight: bold;
 }
+
 button.button_BUY.active {
     background: #4BB543;
     color: white;
 }
+
 button.button_sell.active {
     background: #FF0000;
     color: white;

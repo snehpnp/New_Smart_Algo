@@ -640,7 +640,7 @@ const AllClients = () => {
 
               <div className="col-lg-2 mt-4">
                 <button
-                  className="btn btn-primary mt-2"
+                  className="btn btn-primary mt-1"
                   onClick={(e) => ResetDate(e)}
                 >
                   Reset

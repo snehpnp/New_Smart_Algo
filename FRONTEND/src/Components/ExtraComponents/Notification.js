@@ -8,9 +8,11 @@ const Notification = ({ data }) => {
 
 
     const show_Name = (item) => {
-        console.log(" sdadasd ", item.split("_").map((part) => part[0]).join(''))
+        if (item){
 
-        return item.split("_").map((part) => part[0]).join('')
+            return item.split("_").map((part) => part[0]).join('')
+        }
+
     }
 
 

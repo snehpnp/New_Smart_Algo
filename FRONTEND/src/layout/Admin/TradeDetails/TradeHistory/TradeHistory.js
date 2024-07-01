@@ -875,7 +875,7 @@ const TradeHistory = () => {
         show_csv_button={true} csv_data={ForGetCSV} csv_title="TradeHistory"
       >
         <div className="row d-flex  align-items-center justify-content-start">
-        
+
           {dashboard_filter === "client" ? "" :
             < div className="col-lg-12 flex-column">
               <div className="headaer-title">
@@ -1002,8 +1002,8 @@ const TradeHistory = () => {
               </select>
             </div>
           </div>
-          <div className="col-lg-2  px-1">
-            <div class="mb-3">
+          <div className="col-lg-2">
+            <div class="mt-2">
               <button className="btn btn-primary" onClick={(e) => ResetAllData(e)}>
                 Reset
               </button>

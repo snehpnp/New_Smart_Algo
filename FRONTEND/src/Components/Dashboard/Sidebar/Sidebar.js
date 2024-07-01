@@ -111,9 +111,9 @@ const Sidebar = ({ ShowSidebar }) => {
                 <div className="deznav-scroll">
                     <ul className="metismenu" id="menu">
 
-                        <div className='sidebar-logo'>
+                        {/* <div className='sidebar-logo'>
                             <Logo />
-                        </div>
+                        </div> */}
                         {
                             gotodashboard != null ? user_role_goTo === "USER" ? Client && Client.map((item) => {
                                 return <>
@@ -206,34 +206,34 @@ const Sidebar = ({ ShowSidebar }) => {
                                                     </a>
                                                 </> : ""}
                                                 {item.Data.length !== 0 ?
-                                                 <>
-                                                    <ul aria-expanded='false'>
-                                                        {item.Data.length > 0 ?
-                                                            item.Data.map((nested_item) => {
+                                                    <>
+                                                        <ul aria-expanded='false'>
+                                                            {item.Data.length > 0 ?
+                                                                item.Data.map((nested_item) => {
 
-                                                                if (nested_item.route == "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 || nested_item.route == "/admin/AllMakeStrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0
-                                                                    || nested_item.route == "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0
-                                                                ) {
-
-
-                                                                } else {
-
-                                                                    return <>
-                                                                        <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
-
-                                                                            <Link to={nested_item.route}>{nested_item.name}</Link>
-
-                                                                        </li>
-                                                                    </>
-
-                                                                }
+                                                                    if (nested_item.route == "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 || nested_item.route == "/admin/AllMakeStrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0
+                                                                        || nested_item.route == "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0
+                                                                    ) {
 
 
+                                                                    } else {
 
-                                                            })
-                                                            : ""}
-                                                    </ul>
-                                                </> : null}
+                                                                        return <>
+                                                                            <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
+
+                                                                                <Link to={nested_item.route}>{nested_item.name}</Link>
+
+                                                                            </li>
+                                                                        </>
+
+                                                                    }
+
+
+
+                                                                })
+                                                                : ""}
+                                                        </ul>
+                                                    </> : null}
                                             </li>
 
                                             {/* : ""} */}
