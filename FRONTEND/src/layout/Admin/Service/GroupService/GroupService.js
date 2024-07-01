@@ -22,30 +22,17 @@ const ServicesList = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-
     const [first, setfirst] = useState('all')
     const [showModal, setshowModal] = useState(false)
     const [showModaluser, setshowModaluser] = useState(false)
     const [showDeletModal, setShowDeletModal] = useState(false)
-
-    //  For Mnage Multipfiter
     const [searchInput, setSearchInput] = useState("");
     const [originalData, setOriginalData] = useState([]);
-
     const [test, settest] = useState(false)
-
-
     const [refresh, setrefresh] = useState(false)
-    const [getServicesName, setServicesName] = useState({
-        loading: true,
-        data: []
-    })
+    const [getServicesName, setServicesName] = useState({loading: true, data: [] })
     const [getServicesuserName, setServicesuserName] = useState([])
-    const [AllGroupServices, setAllGroupServices] = useState({
-        loading: true,
-        data: []
-    });
-
+    const [AllGroupServices, setAllGroupServices] = useState({loading: true, data: []});
 
 
     const columns = [
@@ -82,19 +69,10 @@ const ServicesList = () => {
         {
             dataField: 'dsd',
             text: 'Client Using',
-
             sort: true,
-
             formatter: (cell, row) => (
                 <div>
-                    {/* <button
-                        className="btn  btn-color"
-                        onClick={(e) => GetAllServicesUserName(row)}
-                    >
-                        OKK */}
                     <GanttChartSquare size={20} onClick={(e) => GetAllServicesUserName(row)} color="#198754" strokeWidth={2} className="mx-1" />
-
-                    {/* </button> */}
                 </div>
             ),
         },
@@ -126,13 +104,11 @@ const ServicesList = () => {
             data: row
         })).unwrap()
             .then((response) => {
-
                 if (response.status) {
                     setServicesName({
                         loading: false,
                         data: response.data
                     });
-
                 }
                 else {
                     setServicesName({
@@ -234,11 +210,7 @@ const ServicesList = () => {
         data()
     }, [refresh])
 
-
-
-    //  MANAGE MULTIFILTER
     useEffect(() => {
-
         const filteredData = originalData.filter((item) => {
             return (
                 item.name.toLowerCase().includes(searchInput.toLowerCase())
@@ -253,12 +225,7 @@ const ServicesList = () => {
     const ResetDate = (e) => {
         e.preventDefault();
         setSearchInput("");
-
-
     };
-
-
-
 
     return (
         <>
@@ -299,7 +266,7 @@ const ServicesList = () => {
                             {
                                 showModal ?
                                     <>
-                                        <Modal isOpen={showModal} backdrop="static" size="ms-5" title="Services" hideBtn={true}
+                                        <Modal isOpen={showModal} backdrop="static" size="xxl" title="Services" hideBtn={true}
                                             // onHide={handleClose}
                                             handleClose={() => setshowModal(false)}
                                         >
@@ -329,8 +296,7 @@ const ServicesList = () => {
                             {
                                 test ?
                                     <>
-                                        <Modal isOpen={test} backdrop="static" size="ms-5" title="Clients Using" hideBtn={true}
-                                            // onHide={handleClose}
+                                        <Modal isOpen={test} backdrop="static" size="xl" title="Clients Using" hideBtn={true}
                                             handleClose={() => settest(false)}
                                         >
                                             <BasicDataTable TableColumns={[
@@ -348,7 +314,7 @@ const ServicesList = () => {
                                                     text: 'Go To Dashboard',
                                                     formatter: (cell, row, rowIndex) =>
                                                         <>
-                                                            {console.log("==>", row.user)}
+                                                           
                                                             <button
                                                                 className={`btn  ${row.user.AppLoginStatus == '1' || row.user.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
 
@@ -412,17 +378,10 @@ const ServicesList = () => {
                                 : ''
                             }
 
-
-
                         </Content>
-
-
                         <ToastButton />
                     </>
             }
-
-
-
         </ >
     );
 }

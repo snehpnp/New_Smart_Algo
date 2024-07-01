@@ -5,8 +5,6 @@ import { Modal, Button } from 'react-bootstrap';
 
 const Modal_Component = ({ isOpen, handleClose, Submit_Function, Submit_Function_2, disabled_submit, Submit_Cancel_Function, cancel_btn, title, btn_name, btn_2, btn_name_2, backdrop, size, hideBtn, ...rest }) => {
 
-
-     
     return (
         <div>
             <Modal show={isOpen} centered size={size} backdrop={backdrop} onHide={handleClose}>

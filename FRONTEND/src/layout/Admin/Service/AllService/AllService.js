@@ -1,214 +1,141 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
-import Content from "../../../../Components/Dashboard/Content/Content"
-import Loader from '../../../../Utils/Loader'
-import { Pencil, Trash2 } from 'lucide-react';
-import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import Content from '../../../../Components/Dashboard/Content/Content';
+import Loader from '../../../../Utils/Loader';
+import FullDataTable from '../../../../Components/ExtraComponents/Datatable/FullDataTable';
+import { Get_All_Catagory, Service_By_Catagory } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
+import { useDispatch } from 'react-redux';
 
 const ServicesList = () => {
+  const dispatch = useDispatch();
+  const [first, setFirst] = useState('CF');
+  const [allServices, setAllServices] = useState({ loading: true, data: [] });
+  const [filteredServices, setFilteredServices] = useState({ loading: true, data: [] });
+  const [categoryData, setCategoryData] = useState({ loading: true, data: [] });
+  const [searchInput, setSearchInput] = useState('');
 
-    const dispatch = useDispatch()
-
-    const [first, setfirst] = useState('CF')
-
-    const [AllServices, setAllServices] = useState({
-        loading: true,
-        data: []
-    });
-
-    const [CatagoryData, setCatagoryData] = useState({
-        loading: true,
-        data: []
-    });
-
-
-
-
-    const getservice = async () => {
-        await dispatch(Get_All_Catagory()).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    setCatagoryData({
-                        loading: false,
-                        data: response.data
-                    });
-                }
-            })
-    }
-    useEffect(() => {
-        getservice()
-    }, [])
-
-
-
-    const data = async () => {
-        await dispatch(Service_By_Catagory({ segment: first })).unwrap()
-            .then((response) => {
-                setAllServices({
-                    loading: false,
-                    data: []
-                });
-                if (response.status) {
-                    setAllServices({
-                        loading: false,
-                        data: response.data
-                    });
-                }
-            })
-    }
-
-    useEffect(() => {
-        data()
-    }, [first])
-
-
-
-
-    const columns = [
-        {
-            dataField: "index",
-            text: "SR. No.",
-            sort: true,
-
-            formatter: (cell, row, rowIndex) => rowIndex + 1,
-        },
-        {
-            dataField: 'category.name',
-            text: 'Catagory',
-            sort: true,
-
-
-        },
-        {
-            dataField: 'name',
-            text: 'Service Name',
-            sort: true,
-        },
-        {
-            dataField: 'category.segment',
-            text: 'Segment',
-            sort: true,
-        },
-        // {
-        //     dataField: 'category.name',
-        //     text: 'Segment',
-        //     formatter: (cell, row , index) => (
-        //         <>
-        //             <input type="text" className="form-control" placeholder="Enter Quantity" aria-label="Username" aria-describedby="basic-addon1" name={row.name} onChange={(e) => EditQty(e, cell , index)} />
-
-        //         </>
-        //     )
-
-        // },
-
-    ];
-
-    const [QtyValue, setQtyValue] = useState([])
-    const [first2, setfirst2] = useState([])
-
-    const EditQty = (e, rowdata , index) => {
-        let value = e.target.value
-        let name = e.target.name
-
-        console.log("index" ,index);
-
-        const newData = {
-            serviceName: name,
-            setqty: value,
-        };
-        setQtyValue((prevSelected) => {
-            prevSelected.filter((id) => id.serviceName !== newData.serviceName);
+  const getCategories = async () => {
+    await dispatch(Get_All_Catagory()).unwrap().then((response) => {
+      if (response.status) {
+        setCategoryData({
+          loading: false,
+          data: response.data,
         });
+      }
+    });
+  };
 
-        setQtyValue((prevQtys) => ([
-            ...prevQtys,
-            newData
-        ]));
+  useEffect(() => {
+    getCategories();
+  }, []);
 
-    }
+  const getData = async () => {
+    await dispatch(Service_By_Catagory({ segment: first })).unwrap().then((response) => {
+      if (response.status) {
+        setAllServices({
+          loading: false,
+          data: response.data,
+        });
+        setFilteredServices({
+          loading: false,
+          data: response.data,
+        });
+      } else {
+        setAllServices({
+          loading: false,
+          data: [],
+        });
+        setFilteredServices({
+          loading: false,
+          data: [],
+        });
+      }
+    });
+  };
 
+  useEffect(() => {
+    getData();
+  }, [first]);
 
-    const UpdateQuantity = (e) => {
+  const columns = [
+    {
+      dataField: 'index',
+      text: 'SR. No.',
+      sort: true,
+      formatter: (cell, row, rowIndex) => rowIndex + 1,
+    },
+    {
+      dataField: 'category.name',
+      text: 'Category',
+      sort: true,
+    },
+    {
+      dataField: 'name',
+      text: 'Service Name',
+      sort: true,
+    },
+    {
+      dataField: 'category.segment',
+      text: 'Segment',
+      sort: true,
+    },
+  ];
 
-        e.preventDefault()
+  useEffect(() => {
+    const filteredData = allServices.data.filter((item) => {
+      return item.name.toLowerCase().includes(searchInput.toLowerCase());
+    });
+    setFilteredServices({
+      loading: false,
+      data: searchInput ? filteredData : allServices.data,
+    });
+  }, [searchInput, allServices]);
 
-        // let unique = QtyValue.reduce(function (acc, curr) {
-        //     if (!acc.includes(curr.serviceName))
-        //         acc.push(curr);
-        //     return acc;
-        // }, []);
-        console.log("removeDuplicates", QtyValue);
-
-    }
-
-
-
-
-    return (
+  return (
+    <>
+      {allServices.loading ? (
+        <Loader />
+      ) : (
         <>
-            {
-                AllServices.loading ? <Loader /> :
-                    <>
-                        <Content Page_title="All Services" button_status={false}>
-                            <div className='d-flex'>
+          <Content Page_title="All Services" button_status={false}>
+            <div className="d-flex">
+              <div className="col-lg-6" style={{ display: 'flex' }}>
+                <div className="mb-3 row">
+                  <div className="col-lg-7">
+                    <select
+                      className="default-select wide form-control"
+                      id="validationCustom05"
+                      onChange={(e) => setFirst(e.target.value)}
+                      value={first}
+                    >
+                      <option disabled>Please Select Category</option>
+                      <option value="all">All</option>
+                      {categoryData.data &&
+                        categoryData.data.map((item) => (
+                          <option key={item.segment} value={item.segment}>
+                            {item.name}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    className="form-control"
+                    id="exampleFormControlInput1"
+                  />
+                </div>
+              </div>
+            </div>
+            <FullDataTable TableColumns={columns} tableData={filteredServices.data} />
+          </Content>
+        </>
+      )}
+    </>
+  );
+};
 
-                                <div className="col-lg-6">
-                                    <div className="mb-3 row">
-                                        <div className="col-lg-7">
-                                            <select
-                                                className="default-select wide form-control"
-                                                id="validationCustom05"
-                                                onChange={(e) => setfirst(e.target.value)}
-                                                value={first}
-                                            >
-                                                <option disabled>
-                                                    Please Select Catagory
-                                                </option>
-                                                <option selected value="all">
-                                                    All
-                                                </option>
-                                                {CatagoryData.data && CatagoryData.data.map((item) => {
-                                                    return <>
-                                                        <option value={item.segment}>{item.name}</option>
-                                                    </>
-                                                })}
-
-                                            </select>
-
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div className="col-lg-6 ">
-                                    {/* <button className='btn float-end btn-primary' onClick={(e) => UpdateQuantity(e)}>updateQty</button> */}
-                                </div>
-                            </div>
-
-                            {
-                                AllServices.data && AllServices.data.length === 0 ? (
-                                    // 'No data found'
-                                    <FullDataTable TableColumns={columns} tableData={AllServices.data} />
-                                )
-                                    :
-                                    <>
-                                        <FullDataTable TableColumns={columns} tableData={AllServices.data} />
-                                    </>
-
-
-                            }
-                        </Content>
-                    </>
-            }
-
-
-
-        </ >
-    );
-}
-
-
-export default ServicesList
+export default ServicesList;
