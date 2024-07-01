@@ -186,62 +186,7 @@ const Header = ({ ChatBox }) => {
     }
 
 
-    return
-
-
-
-
-
-    const currentDate = new Date();
-    const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const weekday = weekdays[currentDate.getDay()];
-    const holidays = new Holidays();
-
-    const userCountry = 'US' || "UK" || "SA";
-    const userLocalTime = currentDate
-
-    let isAllowed = isForeignUserAllowedToLogin(userCountry, userLocalTime)
-
-    if (!holidays.isHoliday(currentDate) && weekday !== 'Sunday' && weekday !== 'Saturday') {
-      if (check) {
-        if (isAllowed) {
-          loginWithApi(brokerid, UserDetails);
-        } else {
-          alert('Market Time Is Close');
-        }
-      } else {
-        dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
-          .unwrap()
-          .then((response) => {
-            if (response.status) {
-              // setUserDetails(response.data);
-              setrefresh(!refresh)
-            }
-          });
-
-      }
-    }
-    else {
-      alert('Market Is Closed Today');
-    }
-
-
-
-    return
-    if (check) {
-      loginWithApi(brokerid, UserDetails);
-    } else {
-      dispatch(TRADING_OFF_USER({ user_id: user_id, device: CheckUser, token: token }))
-        .unwrap()
-        .then((response) => {
-          if (response.status) {
-            // setUserDetails(response.data);
-            setrefresh(!refresh)
-          }
-        });
-
-    }
-
+  
   };
 
   //  GET_USER_DETAILS

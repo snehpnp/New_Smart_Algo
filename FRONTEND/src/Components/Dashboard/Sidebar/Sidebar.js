@@ -22,6 +22,9 @@ const Sidebar = ({ ShowSidebar }) => {
     const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
     const token = JSON.parse(localStorage.getItem("user_details")).token
     const goTouser_ID = JSON.parse(localStorage.getItem("user_details_goTo"))
+    const theme = JSON.parse(localStorage.getItem("theme"))
+
+    console.log(theme.layout == "horizontal")
 
     const [getPermissions, setGetPermissions] = useState([])
     const [admin_permission, setAdmin_permission] = useState([]);
@@ -111,9 +114,7 @@ const Sidebar = ({ ShowSidebar }) => {
                 <div className="deznav-scroll">
                     <ul className="metismenu" id="menu">
 
-                        {/* <div className='sidebar-logo'>
-                            <Logo />
-                        </div> */}
+
                         {
                             gotodashboard != null ? user_role_goTo === "USER" ? Client && Client.map((item) => {
                                 return <>

@@ -67,7 +67,7 @@ const HelpCenter = () => {
         data: [],
     });
 
-    const [PanelKey, setPanelKey] = useState('');
+    const [PanelKey, setPanelKey] = useState('');    
 
     const [TokenSymbolChain, setTokenSymbolChain] = useState('')
     const [UserDetails, setUserDetails] = useState([]);
