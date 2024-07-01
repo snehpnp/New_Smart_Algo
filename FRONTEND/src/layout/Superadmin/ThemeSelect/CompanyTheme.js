@@ -24,6 +24,7 @@ const CompanyTheme = () => {
     const [getThemeId, setThemeId] = useState(null);
 
     useEffect(() => {
+        console.log("hiiii")
         dispatch(Get_All_Theme());
     }, [dispatch]);
 
