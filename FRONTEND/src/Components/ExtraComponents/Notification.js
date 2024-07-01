@@ -52,7 +52,7 @@ const Notification = ({ status, NotificationData }) => {
                                         <li key={item.id}>
                                             <div className="timeline-panel">
                                                 <div className="media-body">
-                                                  <p>{item.Message}</p>
+                                                    <p>{item.Message}</p>
                                                     <small className="d-block">
                                                         {fDateTimeSuffix(item.createdAt)}
                                                     </small>
@@ -79,9 +79,9 @@ const Notification = ({ status, NotificationData }) => {
                         </ul>
 
                     </div>
-                    <Link to='/admin/helpcenter' className="all-notification">
+                    {status == 2 ? null : <Link to='/admin/helpcenter' className="all-notification">
                         See all notifications <i className="ti-arrow-end" />
-                    </Link>
+                    </Link>}
                 </div>
             </li>
         </div>
