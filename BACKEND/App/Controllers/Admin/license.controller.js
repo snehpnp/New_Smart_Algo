@@ -120,7 +120,7 @@ class License {
         msg: "Get all Transection license",
         data: Transection_license,
         total_licence: total_licence[0].licenses,
-        used_licence: sumUsedLicenses[0].totalUsedLicenses
+        used_licence:sumUsedLicenses.length != 0 ?   sumUsedLicenses[0].totalUsedLicenses : 0
       });
     } catch (error) {
       console.log("Error Get All Transction License -", error);
