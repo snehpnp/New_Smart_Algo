@@ -1,23 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from "react-router-dom";
 
-
-
-const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isSelected, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size, additional_field, showImagePreview, placeholderdata}) => {
-
+const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isSelected, fieldtype, formik, btn_name, forlogin, title, label_size, col_size, disable, check_box_true, row_size, additional_field, showImagePreview, placeholderdata,disabled }) => {
 
 
   const location = useLocation()
-
   const [passwordVisible, setPasswordVisible] = useState({});
 
-
-
-  const [previews, setPreviews] = useState([]); // Array to store individual previews
+  const [previews, setPreviews] = useState([]);
 
   const handleFileChange = (event, index, name) => {
-
-
     if (event.target.files[0].size > 420000) {
       alert("Please  Select file less then 420KB")
       event.target.value = ''
@@ -45,13 +37,13 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
     }
 
   }
+
   const getCurrentDate = () => {
     const today = new Date();
     const year = today.getFullYear();
     let month = today.getMonth() + 1;
     let day = today.getDate();
 
-    // Add leading zeros if month or day is less than 10
     if (month < 10) {
       month = `0${month}`;
     }
@@ -63,14 +55,10 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
   };
 
 
-  // console.log(getCurrentDate())
-
-
 
   return (
 
 
-    // <Content Page_title="HelpCenter">
     <form onSubmit={formik.handleSubmit}>
       <div className='row' style={{ height: `${title === "addgroup" ? '65vh' : ""}`, overflowY: `${title === "addgroup" ? 'scroll' : ""}` }}>
         <div className={`row`}>
@@ -316,7 +304,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
                                         className="form-control"
                                         style={{ background: field.disable ? '#eeeeee' : "" }}
                                         id={field.name}
-                                        placeholder={`Ex :- ${field.placeholderdata }`}
+                                        placeholder={`Ex :- ${field.placeholderdata}`}
                                         {...formik.getFieldProps(field.name)}
 
                                         readOnly={field.disable}
@@ -398,7 +386,11 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
         </div >
         {additional_field}
         <div className="form-group mb-0">
-          <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
+          {/* <button className={`btn btn-primary  ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
+            {btn_name}
+          </button> */}
+
+          <button className={`btn btn-primary ${location.pathname === 'resetpassword' ? 'col-md-11' : ''}`} type="submit" disabled={formik.isSubmitting}>
             {btn_name}
           </button>
         </div>

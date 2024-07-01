@@ -267,13 +267,13 @@ export const supper_admin_sidebar = [
         "route": "/super/query",
         "Data": []
     },
-    {
-        'id': 8,
-        "name": 'Support',
-        "Icon": "HelpingHand",
-        "route": "/super/support",
-        "Data": []
-    },
+    // {
+    //     'id': 8,
+    //     "name": 'Support',
+    //     "Icon": "HelpingHand",
+    //     "route": "/super/support",
+    //     "Data": []
+    // },
 ]
 
 

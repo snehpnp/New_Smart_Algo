@@ -445,9 +445,9 @@ export async function GET_ONE_USER(data) {
     }
 
 }
-export async function UPDATE_USER(data) {
+export async function SUPER_UPDATE_USER(data) {
     try {
-        const res = await axios.post(`${Config.base_url}update/user`, data, {
+        const res = await axios.post(`${data.backend_rul}super/update/user`, data, {
             // headers: header(token),
             data: {},
         })

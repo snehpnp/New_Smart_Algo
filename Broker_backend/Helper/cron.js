@@ -15,13 +15,27 @@ module.exports = function (app) {
     cron.schedule('10 7 * * *', () => {
         console.log('Run First Time');
         downloadAndSwastika();
-        downloadKotakNeotoken();
-        downloadZerodhatoken();
-        downloadAndExtractUpstox();
-        downloadAndExtractICICIDirect();
+     
         
     });
     
+    cron.schedule('15 7 * * *', () => {
+        console.log('Run First Time');
+      
+        downloadKotakNeotoken();
+        
+    });
+
+    cron.schedule('20 7 * * *', () => {
+        console.log('Run First Time');
+      
+        downloadZerodhatoken();
+        downloadAndExtractUpstox();
+        downloadAndExtractICICIDirect();
+    
+    });
+
+
     // ALL Alice Token Genrate
     const downloadAlicetoken = () => {
     
@@ -348,8 +362,8 @@ module.exports = function (app) {
     }
 
 
-    app.get('/chek-token', async (req, res) => {
-       // downloadAndExtractICICIDirect()
+    app.get('/sneh', async (req, res) => {
+       downloadKotakNeotoken()
          res.send("okkk")
       })
 

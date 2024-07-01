@@ -52,11 +52,8 @@ const TradeHistory = () => {
   const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
   const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
-
-  const [CatagoryData, setCatagoryData] = useState({
-    loading: true,
-    data: []
-  });
+  const [lotMultypaly, SetlotMultypaly] = useState(1);
+  const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
 
 
 
@@ -85,7 +82,7 @@ const TradeHistory = () => {
     let endDate = getActualDateFormate(toDate);
 
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter, serviceIndex: SelectServiceIndex, token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter, serviceIndex: SelectServiceIndex, lotMultypaly: lotMultypaly, token: token })
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -111,7 +108,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
-  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter, SelectServiceIndex]);
+  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter, SelectServiceIndex, lotMultypaly]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -233,56 +230,6 @@ const TradeHistory = () => {
         <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
       ),
     },
-
-    // {
-    //   dataField: "Action",
-    //   text: "Realised",
-    //   formatter: (cell, row, rowIndex) => {
-    //     return (
-    //       <div>
-    //         <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
-    //         <span className={`d-none entry_qty_${row.token}_${row._id}`}>
-    //           {row.entry_qty}
-    //         </span>
-    //         <span className={`d-none exit_qty_${row.token}_${row._id}`}>
-    //           {row.exit_qty}
-    //         </span>
-    //         <span className={`d-none exit_price_${row.token}_${row._id}`}>
-    //           {row.exit_price}
-    //         </span>
-    //         <span className={`d-none entry_price_${row.token}_${row._id}`}>
-    //           {row.entry_price}
-    //         </span>
-    //         <span className={`d-none entry_type_${row.token}_${row._id}`}>
-    //           {row.entry_type}
-    //         </span>
-    //         <span className={`d-none exit_type_${row.token}_${row._id}`}>
-    //           {row.exit_type}
-    //         </span>
-    //         <span className={`d-none strategy_${row.token}_${row._id}`}>
-    //           {row.strategy}
-    //         </span>
-    //         <span className={`d-none _id_${row.token}_${row._id}`}>
-    //           {row._id}
-    //         </span>
-    //       </div>
-    //     );
-    //   },
-    // },
-
-
-    // {
-    //   dataField: "UPL",
-    //   text: "Un-Realised",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <div>
-    //       <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
-
-
-    //     </div>
-    //   ),
-    // },
-
     {
       dataField: "TPL",
       text: "Total",
@@ -1023,7 +970,8 @@ const TradeHistory = () => {
             < div className="col-lg-12 flex-column">
               <div className="headaer-title">
                 <h5 className="font-w400 mb-0">Live Price</h5>
-              </div> <div className="Api Login m-2">
+              </div>
+              <div className="Api Login m-2">
                 <label className="switch">
                   <input
                     type="checkbox"
@@ -1146,14 +1094,36 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2  px-1">
+            <div className="form-check custom-checkbox mb-3 ps-0">
+              <label className="col-lg-12" htmlFor="fromdate">
+               Lots
+              </label>
+              <input
+                type="Number"
+                className="default-select wide form-control"
+                onChange={(e) => SetlotMultypaly(e.target.value)}
+              />
+
+              <div />
+              <div />
+
+            </div>
+
+
+
+          </div>
+
+          <div className="col-lg-2  px-1">
             <div className="mb-3">
               <button className="btn btn-primary" onClick={(e) => ResetAllData(e)}>
                 Reset
               </button>
             </div>
           </div>
-        </div>
 
+
+
+        </div>
 
         <div className="table-responsive">
 
@@ -1171,6 +1141,7 @@ const TradeHistory = () => {
 
         </div>
 
+
         <DetailsView
           showModal={showModal}
           setshowModal={() => setshowModal(false)}
@@ -1182,6 +1153,7 @@ const TradeHistory = () => {
         <h6><b>THIS RESULTS IS VALID FOR TODAY ONLY, WE DO NOT DIRECTLY OR INDIRECTLY MAKE ANY REFERENCE TO THE PAST OR EXPECTED FUTURE RETURN/PERFORMANCE OF THE ALGORITHM.</b></h6>
         <br />
         <h6><b>सभी प्रतिभूतियां एल्गो ट्रेडिंग सिस्टम बाजार जोखिमों के अधीन हैं और इस बात का कोई आश्वासन नहीं दिया जा सकता है कि उपयोगकर्ता के उद्देश्यों को आज के प्रदर्शन के आधार पर प्राप्त किया जाएगा। यह परिणाम केवल आज के लिए मान्य है।</b></h6>
+
       </Content >
     </>
   );

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_ALL_PANELS_LIST, ALL_BROKERS, UPDATE_BROKERS, UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER, ADD_PANEL, UPDATE_PANEL ,GET_PANEL_HISTORY,UPDATE_QUERY , GET_ALL_SIGNAL , UPDATE_PRICE , DELETE_SIGNAL , GET_ALL_DELETED_SIGNAL  ,BACKUP_SIGNAL , UPDATE_USER  ,GET_ONE_USER , USER_DELETE , GET_USER} from "../../../Service/superadmin.service";
+import { GET_ALL_PANELS_LIST, ALL_BROKERS, UPDATE_BROKERS, UPDATE_PANEL_THEME, CLOSE_ADMIN_PANEL, GET_PANEL_INFORMATION, UPDATE_ADMIN_PERMISSION, GET_ADMIN_HELPS, ADD_LICENCE_TO_COMPANY, GET_ALL_SUBADMIN_CLIENT, GET_ALL_ADMIN_CLIENT, GET_PANEL_BROKER, ADD_PANEL, UPDATE_PANEL ,GET_PANEL_HISTORY,UPDATE_QUERY , GET_ALL_SIGNAL , UPDATE_PRICE , DELETE_SIGNAL , GET_ALL_DELETED_SIGNAL  ,BACKUP_SIGNAL , SUPER_UPDATE_USER  ,GET_ONE_USER , USER_DELETE , GET_USER} from "../../../Service/superadmin.service";
 
 
 export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => {
@@ -13,9 +13,9 @@ export const All_Panel_List = createAsyncThunk("DispatchLogin", async (data) => 
 });
 
 export const Update_Panel_Theme = createAsyncThunk("update/theme", async (data) => {
-  const { theme_id, userid, token } = data
+  const { theme_id, userid,UserName, token } = data
   try {
-    const res = await UPDATE_PANEL_THEME({ theme_id: theme_id, userid: userid }, token);
+    const res = await UPDATE_PANEL_THEME({ theme_id: theme_id, userid: userid ,UserName:UserName}, token);
     return await res;
   } catch (err) {
     return err;
@@ -245,10 +245,10 @@ export const Find_One_User = createAsyncThunk("findUserById", async (data) => {
   }
 });
 
-export const Update_User = createAsyncThunk("update/user", async (data) => {
+export const SUPER_UPDATE_USER_DATA = createAsyncThunk("super/update/user", async (data) => {
    
   try {
-    const res = await UPDATE_USER(data);
+    const res = await SUPER_UPDATE_USER(data);
     return await res;
   } catch (err) {
     return err;
@@ -306,7 +306,7 @@ const SuperAdminSlice = createSlice({
     getalldeletedsignal:[],
     backupSignal:[],
     find_One_User:[],
-    update_User:[],
+    SUPER_UPDATE_USER_DATA:[],
     user_Delete:[],
     find_User :[] 
   },
@@ -401,9 +401,9 @@ const SuperAdminSlice = createSlice({
       // state.isLoading = false;
       return { ...state, find_One_User: payload, isLoading: false };
     },
-    [Update_User.fulfilled]: (state, { payload }) => {
+    [SUPER_UPDATE_USER_DATA.fulfilled]: (state, { payload }) => {
       // state.isLoading = false;
-      return { ...state, update_User: payload, isLoading: false };
+      return { ...state, SUPER_UPDATE_USER_DATA: payload, isLoading: false };
     },
     [DELETE_USER_SERVICES.fulfilled]: (state, { payload }) => {
       // state.isLoading = false;

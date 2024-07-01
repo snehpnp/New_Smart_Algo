@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Formikform from "../../../../Components/ExtraComponents/Form/Formik_form1"
 import { useFormik } from 'formik';
@@ -225,9 +223,7 @@ const EditClient = () => {
         }
         else if (response.status) {
           toast.success(response.msg);
-          setTimeout(() => {
-            navigate("/admin/allclients")
-          }, 500);
+          navigate("/admin/allclients")
         }
         else if (!response.status) {
           toast.error(response.msg);
