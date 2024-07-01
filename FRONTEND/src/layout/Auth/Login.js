@@ -30,29 +30,19 @@ const Login = () => {
   const data = useRef();
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
-
   const [CheckUser, setCheckUser] = useState(check_Device());
-
   const [showModal, setshowModal] = useState(false);
   const [showModal1, setshowModal1] = useState(false);
   const [showModal2, setshowModal2] = useState(false);
-
   const [CheckDesclaimer, setCheckDesclaimer] = useState(false);
   const [desclaimerModal, setDesclaimerModal] = useState(false);
   const [getCompanyName, setGetCompanyName] = useState("");
-
   const [backgroundImage, setBackgroundImage] = useState("data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQA+wMBIgACEQEDEQH/xAAYAAEBAQEBAAAAAAAAAAAAAAAAAQMCB//EABoQAQEBAAMBAAAAAAAAAAAAAAARATFBUSH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A9kiRSgQAAFBBQEigCaKAgoCCgIKAgqAkIoCRcwANRTQQ3Dg5BBUALvoA7SEAFAAAAAAAAAAAAADTAAAAQAAANKEBKGgCKgAAOlS4oAAAAAAAAAqAAAAAAAIAAUABOwXUq6gAIAAAgsB0oAAAAAAoIKgAAAAAGgCAAAAIAFABNMBU00AEAAAd4oAAAAAAAAAAAIAAAAFBN5XE0AE+gKgAAAAAgIBqoA0VAFAAAACgAIAAACboGmABuiAAAAigAAIAAACKgBRLnoNaUhMAVAFqVQAE3QASgpRAKCAqaAAABBAWIAAAAACAAAAkzwoDSmACiUoKJQFIhQAQFuiAAACACiAKgAAAAgKioAAAmqgCKfAaCFBRAFQAAAAABAFQADAAAAAAoFAEUEAAABBekACoDQAAAAAAAEAAAAAAAAAAQAAAAAAAAATQANAB/9k=");
-
   const [getOtpStatus, setgetOtpStatus] = useState(false);
-
   const [getOtp, setgetOtp] = useState("");
-
   const [typeOtp, setTypeOtp] = useState("");
-
   const [typeOtp1, setTypeOtp1] = useState("");
-
   const [UserData, setUserData] = useState("");
-
   const [test, settest] = useState([]);
 
 
@@ -61,7 +51,6 @@ const Login = () => {
     let domain = window.location.host
     const req = {
       domain: Config.react_domain
-      // domain: "sneh.com",
     };
 
     await dispatch(Get_Panel_Informtion(req))
@@ -526,7 +515,7 @@ const Login = () => {
 
 
   return (
-    <div class="vh-100" style={{ 
+    <div className="vh-100" style={{ 
       backgroundImage: `url(${backgroundImage})` ,backgroundSize:'cover'
     }}>
 
@@ -555,8 +544,8 @@ const Login = () => {
                         //  btn_name_signUp="Sign Up"
                         title="forlogin1"
                       />
-                      <div class="form-row mt-4 mb-2">
-                        <div class="mb-3 mt-1  d-flex justify-content-between ">
+                      <div className="form-row mt-4 mb-2">
+                        <div className="mb-3 mt-1  d-flex justify-content-between ">
                           <div><Link to="/forget">Forgot Password?</Link></div>
                           <div><Link to="/newsignup">Sign Up</Link></div>
                         </div>

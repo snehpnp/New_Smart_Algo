@@ -74,7 +74,7 @@ const ResetPassword = () => {
     ];
 
     return (
-        <div class="vh-100" >
+        <div className="vh-100" >
             <div className="authincation h-100">
                 <div className="container h-100">
                     <div className="row justify-content-center h-100 align-items-center">
@@ -87,8 +87,8 @@ const ResetPassword = () => {
                                                 Password Reset
                                             </h4>
                                             <Formikform fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Continue" title="forResetPassword" />
-                                            <div class="form-row d-flex justify-content-end mt-4 mb-2">
-                                                <div class="mb-3 mt-1">
+                                            <div className="form-row d-flex justify-content-end mt-4 mb-2">
+                                                <div className="mb-3 mt-1">
                                                     <Link to="/login">Back To Sign In</Link>
                                                 </div>
                                             </div>

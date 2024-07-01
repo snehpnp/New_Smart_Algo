@@ -4,7 +4,8 @@
 export const react_domain = `https://newpenal.pandpinfotech.com`;
 
 export const smartAlogUrl = `https://newpenal.pandpinfotech.com/backend/`;
-// export const smartAlogUrl = `http://localhost:7700/`;
+
+
 
 export const base_url = "https://newpenal.pandpinfotech.com/backend/"
 // export const base_url = "https://trade.pandpinfotech.com/backend/";

@@ -708,7 +708,7 @@ const Get_Option_All_Token_Chain_stock = async () => {
 const LogoutAllUsers = async () => {
 
     // APP LOGOUT USERS  
-    const AppLoginUser = await User.find({ AppLoginStatus: '1' });
+    const AppLoginUser = await User.find({ AppLoginStatus: '1', app_login_token: null });
 
 
     if (AppLoginUser.length > 0) {
@@ -730,7 +730,7 @@ const LogoutAllUsers = async () => {
     }
 
     // WEB LOGOUT USERS  
-    const WebLoginUser = await User.find({ WebLoginStatus: '1' });
+    const WebLoginUser = await User.find({ WebLoginStatus: '1', web_login_token: null });
     if (WebLoginUser.length > 0) {
         WebLoginUser.map(async (user) => {
             const updateValues = { WebLoginStatus: '0' };
@@ -779,6 +779,7 @@ const LogoutAllUsers = async () => {
 
 // SERVICES TOKEN CREATE
 const service_token_update = () => {
+    console.log("SERVICES")
 
     let config = {
         method: 'get',
@@ -862,7 +863,7 @@ const DeleteTokenAliceToken = async () => {
 
 // TOKEN SYMBOL CREATE
 const TokenSymbolUpdate = () => {
-
+    console.log("TOKENSYMbOL")
     try {
         var d = new Date();
         dformat = [d.getFullYear(),

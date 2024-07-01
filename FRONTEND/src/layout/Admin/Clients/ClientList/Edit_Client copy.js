@@ -707,7 +707,7 @@ const EditClient = () => {
               {GetServices && GetServices.data.map((strategy) => (
                 <div className={`col-lg-2 `} key={strategy._id}>
                   <div className="col-lg-12 ">
-                    {/* <div class="form-check custom-checkbox mb-3"> */}
+                    {/* <div className="form-check custom-checkbox mb-3"> */}
                     <label className="form-check-label bg-primary py-2 px-4" for={strategy.ServiceResult.name}>{strategy.ServiceResult.name}</label>
                   </div>
                 </div>
@@ -717,7 +717,7 @@ const EditClient = () => {
               <div className="">
                 <div className="row d-flex mt-3">
                   <div className="col-lg-12 ">
-                    <div class="form-check custom-checkbox mb-3">
+                    <div className="form-check custom-checkbox mb-3">
                       <input type="checkbox" name="strategy" className="form-check-input" id='strategy'
                         // {...formik.getFieldProps(field.name)}
                         onChange={(e) => {
@@ -736,7 +736,7 @@ const EditClient = () => {
                   <div className={`col-lg-2 mt-2`} key={strategy._id}>
                     <div className="row ">
                       <div className="col-lg-12 ">
-                        <div class="form-check custom-checkbox mb-3">
+                        <div className="form-check custom-checkbox mb-3">
                           <input type='checkbox' className="form-check-input" name={strategy.strategy_name}
                             value={strategy._id}
                             onChange={(e) => handleStrategyChange(e)}

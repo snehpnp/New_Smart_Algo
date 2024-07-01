@@ -12,17 +12,8 @@ import { Eye, CandlestickChart, Pencil } from "lucide-react";
 
 
 import DetailsView from "./DetailsView";
-import {
-  GetAliceTokenAndID,
-  CreateSocketSession,
-  ConnctSocket,
-  GetAccessToken
-} from "../../../Service/Alice_Socket";
-import {
-  ShowColor,
-  ShowColor_Compare_two,
-} from "../../../Utils/ShowTradeColor";
-import $ from "jquery";
+import { GetAccessToken } from "../../../Service/Alice_Socket";
+
 import { FunctionForLivePriceCalculation } from "./tradehistoryCalculation";
 
 
@@ -432,12 +423,12 @@ const TradeHistory = () => {
 
 
               {/* <div className="col-lg-3 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Index Symbol
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectServiceIndex(e.target.value)}
@@ -452,12 +443,12 @@ const TradeHistory = () => {
            </div>
 
            <div className="col-lg-3 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Strategy
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectStrategy(e.target.value)}
@@ -541,6 +532,12 @@ const TradeHistory = () => {
           setshowModal={() => setshowModal(false)}
           tradeHistoryData={rowData}
         />
+        <br />
+        <br />
+
+        <h6><b>THIS RESULTS IS VALID FOR TODAY ONLY, WE DO NOT DIRECTLY OR INDIRECTLY MAKE ANY REFERENCE TO THE PAST OR EXPECTED FUTURE RETURN/PERFORMANCE OF THE ALGORITHM.</b></h6>
+        <br />
+        <h6><b>सभी प्रतिभूतियां एल्गो ट्रेडिंग सिस्टम बाजार जोखिमों के अधीन हैं और इस बात का कोई आश्वासन नहीं दिया जा सकता है कि उपयोगकर्ता के उद्देश्यों को आज के प्रदर्शन के आधार पर प्राप्त किया जाएगा। यह परिणाम केवल आज के लिए मान्य है।</b></h6>
       </Content>
     </>
   );

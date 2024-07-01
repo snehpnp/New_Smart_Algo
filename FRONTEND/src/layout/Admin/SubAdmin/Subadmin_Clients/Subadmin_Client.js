@@ -185,9 +185,9 @@ const SubadminClient = () => {
       text: "Status",
       formatter: (cell, row) => (
         <>
-          <label class="toggle mt-3">
+          <label className="toggle mt-3">
             <input
-              class="toggle-checkbox bg-primary"
+              className="toggle-checkbox bg-primary"
               type="checkbox"
               checked={row.Is_Active === "1" ? true : false}
               onChange={(e) => {
@@ -195,11 +195,11 @@ const SubadminClient = () => {
                 setSwitchButton(e.target.checked)
               }}
             />
-            <div class={`toggle-switch  ${SwitchButton ? 'bg-primary' : 'bg-secondary'}`}></div>
+            <div className={`toggle-switch  ${SwitchButton ? 'bg-primary' : 'bg-secondary'}`}></div>
           </label>
-          {/* <label class="switch" >
+          {/* <label className="switch" >
                         <input type="checkbox" className="bg-primary" defaultChecked={row.ActiveStatus == "1" ? true : false} onChange={(e) => activeUser(e, row)} />
-                        <span class="slider round"></span>
+                        <span className="slider round"></span>
                     </label> */}
         </>
       ),
@@ -209,13 +209,13 @@ const SubadminClient = () => {
     //   text: "Status",
     //   formatter: (cell, row) => (
     //     <>
-    //       <label class="switch">
+    //       <label className="switch">
     //         <input
     //           type="checkbox"
     //           className="bg-primary"
     //           defaultChecked={row.Is_Active === "1" ? true : false}
     //         />
-    //         <span class="slider round"></span>
+    //         <span className="slider round"></span>
     //       </label>
     //     </>
     //   ),

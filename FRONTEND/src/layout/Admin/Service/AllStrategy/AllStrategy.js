@@ -1,24 +1,14 @@
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import BasicDataTable from "../../../../Components/ExtraComponents/Datatable/BasicDataTable";
-
 import { Pencil, Trash2, UserPlus, PlusSquare, LayoutList } from "lucide-react";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
-
 import { useDispatch } from "react-redux";
 import Modal from "../../../../Components/ExtraComponents/Modal";
-import {
-  Get_All_Strategy,
-  Remove_Strategy_BY_Id,
-  Get_client_By_strategy_Id,
-  Add_And_Remove_Strategy_To_Client,
-  UpDate_strategy_Id
-} from "../../../../ReduxStore/Slice/Admin/StrategySlice";
+import {  Get_All_Strategy, Remove_Strategy_BY_Id, Get_client_By_strategy_Id, Add_And_Remove_Strategy_To_Client, UpDate_strategy_Id} from "../../../../ReduxStore/Slice/Admin/StrategySlice";
+import { GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 
 import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
@@ -38,21 +28,8 @@ const ServicesList = () => {
   const [originalData, setOriginalData] = useState([]);
   const [oneStrategyClient, setOneStrategyClient] = useState([]);
   const [showStrategyName, setShowStrategyName] = useState('');
-
-
-
-
-
-  const [AllStrategy, setAllStrategy] = useState({
-    loading: true,
-    data: [],
-  });
-
-  const [getServicesName, setServicesName] = useState({
-    loading: true,
-    data: [],
-  });
-
+  const [AllStrategy, setAllStrategy] = useState({  loading: true, data: []});
+  const [getServicesName, setServicesName] = useState({loading: true, data: []});
 
 
   const data = async () => {
@@ -158,7 +135,6 @@ const ServicesList = () => {
 
 
   const Add_Strategy_To_Client = async (row) => {
-// console.log("row", row)
     setShowStrategyName(row.strategy_name)
     await dispatch(
       Add_And_Remove_Strategy_To_Client({
@@ -168,22 +144,14 @@ const ServicesList = () => {
     )
       .unwrap()
       .then((response) => {
-
         setshowModal2(true);
-
         if (response.status) {
-
-
-
           let sclientid = [];
-
-
           let OneStategyClientArr = [];
           response.StrategyClient.forEach(element => {
             sclientid.push(element.users._id)
             response.duplicateids.forEach(element1 => {
               if (element1.count == 1 && element.users._id == element1._id) {
-
                 OneStategyClientArr.push(element1._id)
               }
 
@@ -206,7 +174,6 @@ const ServicesList = () => {
       });
   };
 
-  // GET ALL CLIENTS BY STRATEGY ID
 
   const GetClientsByStrategyID = async (row) => {
     await dispatch(
@@ -217,12 +184,8 @@ const ServicesList = () => {
     )
       .unwrap()
       .then((response) => {
-
         setshowModal(true);
-
         if (response.status) {
-
-
           setServicesName({
             loading: false,
             data: response.data,
@@ -237,11 +200,7 @@ const ServicesList = () => {
   };
 
 
-
-
-  //  MANAGE MULTIFILTER
   useEffect(() => {
-
     const filteredData = originalData.filter((item) => {
       return (
         item.strategy_name.toLowerCase().includes(searchInput.toLowerCase()) ||
@@ -265,8 +224,6 @@ const ServicesList = () => {
       data: getServicesName.data,
     });
   };
-
-
 
 
 
@@ -300,14 +257,10 @@ const ServicesList = () => {
     const CheckedClientId = event.target.name;
 
     if (event.target.checked) {
-      // Add the selected strategy to the array
       setStartegyClientIds([...startegyClientIds, CheckedClientId]);
       setStartegyClientIdsDelete(startegyClientIdsDelete.filter((item) => item !== CheckedClientId));
-
     } else {
-      // Remove the deselected strategy from the array
       setStartegyClientIdsDelete([...startegyClientIdsDelete, CheckedClientId]);
-
       setStartegyClientIds(startegyClientIds.filter((item) => item !== CheckedClientId));
     }
   };
@@ -315,12 +268,7 @@ const ServicesList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-
     let filteredArray = startegyClientIds.filter(item => !oneStrategyClient.includes(item));
-
-
-
-
 
     const req = {
       "clientId": filteredArray,
@@ -329,7 +277,6 @@ const ServicesList = () => {
     }
 
     await dispatch(UpDate_strategy_Id({ req: req })).unwrap()
-
       .then((response) => {
         if (response.status) {
           toast.success(response.msg)
@@ -342,6 +289,27 @@ const ServicesList = () => {
         }
       })
   }
+
+
+  const goToDashboard = async (email) => {
+    let req = {
+        Email: email.users.Email,
+
+    };
+    await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
+        .then((response) => {
+            if (response.status) {
+                localStorage.setItem("gotodashboard", JSON.stringify(true));
+                localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
+                localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
+                localStorage.setItem("page", "groupservices");
+
+                navigate("/client/dashboard")
+
+            }
+        })
+
+}
 
   return (
     <>
@@ -356,8 +324,8 @@ const ServicesList = () => {
           >
             <div className="row">
               <div className="col-lg-4">
-                <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
                     Search Something Here
                   </label>
                   <input
@@ -365,7 +333,7 @@ const ServicesList = () => {
                     placeholder="Search..."
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
-                    class="form-control"
+                    className="form-control"
                     id="exampleFormControlInput1"
                   />
                 </div>
@@ -392,10 +360,9 @@ const ServicesList = () => {
               <>
                 <Modal
                   isOpen={showModal}
-                  size="ms-5"
+                  size="x"
                   title="Clients"
                   hideBtn={true}
-                  // onHide={handleClose}
                   handleClose={() =>
                     setshowModal(false)}
                 >
@@ -425,6 +392,22 @@ const ServicesList = () => {
                           </>
                         ),
                       },
+                      {
+                        dataField: 'users.TradingStatus',
+                        text: 'Go To Dashboard',
+                        formatter: (cell, row, rowIndex) =>
+                            <>
+              
+                               
+                                <button
+                                    className={`btn  ${row.users.AppLoginStatus == '1' || row.users.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
+
+                                    onClick={() => goToDashboard(row)}
+                                    disabled={row.users.AppLoginStatus === '0' && row.users.WebLoginStatus === '0'}
+
+                                > click</button>
+                            </>
+                    },
                     ]}
                     tableData={getServicesName && getServicesName.data}
                   />
@@ -443,16 +426,11 @@ const ServicesList = () => {
                     size="ms-5"
                     title={showStrategyName}
                     hideBtn={true}
-                    // onHide={handleClose}
                     handleClose={() =>
-
                       setshowModal2(false)
-
-
-
                     }
                   >
-                    {/* <input type="text" placeholder="Search Here" className="p-1 rounded my-4"/> */}
+               
                     <form onSubmit={(e) => handleSubmit(e)}>
                       <table className="mb-5">
                         <thead>

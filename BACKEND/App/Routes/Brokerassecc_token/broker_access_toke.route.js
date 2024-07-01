@@ -236,7 +236,7 @@ router.get('/mastertrust', GetAccessTokenMastertrust);
 // Zebull
 router.post('/zebu', GetAccessTokenZebull);
 
-router.get('/icicidirect', GetAccessTokenIcicidirect);
+router.post('/icicidirect', GetAccessTokenIcicidirect);
 
 // Motilal oswal
 router.get('/motilaloswal/access_token', GetAccessTokenMotilaloswal);

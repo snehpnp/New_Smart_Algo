@@ -257,6 +257,8 @@ const kotakneo = require('./Broker/kotakneo')
 const iiflView = require('./Broker/Iifl')
 const Motilaloswal = require('./Broker/Motilaloswal')
 const Zebull = require('./Broker/Zebull')
+const icicidirect = require('./Broker/icicidirect')
+
 
 
 
@@ -301,7 +303,6 @@ app.post('/broker-signals', async (req, res) => {
 
       const signals = {};
 
-      // Iterate through the pairs and split each pair into key and value
       splitArray.forEach(pair => {
         const [key, value] = pair.split(':');
         signals[key] = value;
@@ -316,10 +317,10 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-      const epochTimestamp = signals.DTime; // Replace with your timestamp
+      const epochTimestamp = signals.DTime;
 
-      // Create a new Date object using the epoch timestamp
-      const date = new Date(epochTimestamp * 1000); // Convert to milliseconds by multiplying by 1000
+
+      const date = new Date(epochTimestamp * 1000);
       const formattedDate1 = date.toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
       const parts = formattedDate1.split('/');
 
@@ -384,26 +385,18 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-      // IF CLIENT KEY UNDEFINED
       if (client_key != undefined) {
 
         const FIRST3_KEY = client_key.substring(0, 3);
 
-        // IF SIGNEL KEY NOT MATCH CHECK
         if (FIRST3_KEY == process.env.PANEL_FIRST_THREE) {
 
-
-          // SIGNEL REQUEST
           var signal_req = Buffer.from(JSON.stringify(req.rawBody)).toString('base64');
 
-
-
-          // TOKEN CREATE 
           if (segment == "FO" || segment == "fo") {
             segment = 'O';
           }
 
-          // SET OPTION TYPE
           var Trade_Option_Type;
           if (option_type == "Call" || option_type == "CALL") {
             Trade_Option_Type = "CE";
@@ -411,7 +404,6 @@ app.post('/broker-signals', async (req, res) => {
             Trade_Option_Type = "PE";
           }
 
-          // DATE MONTH SET
           const day_expiry = expiry.substr(0, 2);
           var dateHash = {
             'Jan': '01',
@@ -435,13 +427,11 @@ app.post('/broker-signals', async (req, res) => {
           const ex_day_expiry = getKeyByValue(dateHash, month_expiry).toUpperCase();
           const ex_year_expiry = expiry.substr(-2);
 
-          //  TOKEN  CREATE FUNCTION
           var token = ""
           var instrument_query = { name: input_symbol }
           var EXCHANGE = "NFO";
           var trade_symbol = '';
 
-          // IF CHECK SIGNEL KET IS ADMIN OR CLIENT
           let client_persnal_key = "";
           if (process.env.PANEL_KEY == client_key) {
             client_persnal_key = "";
@@ -450,7 +440,6 @@ app.post('/broker-signals', async (req, res) => {
           }
 
           // MT_4 , OPTION_CHAIN , MAKE_STG, SQUAR_OFF
-
           var findSignal = { entry_type: "LE", dt_date: dt_date, symbol: input_symbol, expiry: expiry, option_type: expiry, segment: segment, strategy: strategy, entry_type: type === "LE" || type === "LX" ? 'LE' : type === "SE" || type === "SX" ? "SE" : "LE", client_persnal_key: "", TradeType: "MT_4" }
 
           if (segment == 'C' || segment == 'c') {
@@ -488,8 +477,7 @@ app.post('/broker-signals', async (req, res) => {
           }
 
 
-          // console.log("findSignal ",findSignal)
-          // TOKEN SET IN TOKEN
+
           if (segment == 'C' || segment == 'c') {
             token = await services.find(instrument_query).maxTimeMS(20000).exec();
           } else {
@@ -545,7 +533,7 @@ app.post('/broker-signals', async (req, res) => {
 
           } else {
 
-            // LIVE PRICE GET
+
             const price_live_second = await stock_live_price1.find({ _id: instrument_token }).toArray();
 
             try {
@@ -584,18 +572,9 @@ app.post('/broker-signals', async (req, res) => {
             ExistExitSignal = await MainSignals.find(updatedFindSignal)
           }
 
-          // if(ExistExitSignal != ''){
-          //  console.log("IFFFFFF ",ExistExitSignal)
-          // }else{
-          //   console.log("ELLLSEEE ",ExistExitSignal)
-
-          // }
 
           if (process.env.PANEL_KEY == client_key) {
 
-            //console.log("Inside  ",process.env.PANEL_KEY)
-
-            //Process Alice Blue admin client
             try {
               const AliceBlueCollection = db1.collection('aliceblueView');
               const AliceBluedocuments = await AliceBlueCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
@@ -864,6 +843,7 @@ app.post('/broker-signals', async (req, res) => {
             //End Process kotakneo admin client
 
 
+
             //Process IIFL admin client
             try {
               const iiflViewCollection = db1.collection('iiflView');
@@ -939,7 +919,28 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
+            //Process icicidirect admin client
+            try {
+              const IciciDirectViewCollection = db1.collection('icicidirectview');
+              const IciciDirectViewdocuments = await IciciDirectViewCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, web_url: "1" }).toArray();
 
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' ICICI DIRECT View ALL CLIENT LENGTH ' + IciciDirectViewdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+
+              if (IciciDirectViewdocuments.length > 0) {
+                icicidirect.place_order(IciciDirectViewdocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get Icicidirect Client In view", error);
+            }
+            //End Process icicidirect admin client
 
 
 
@@ -1272,6 +1273,31 @@ app.post('/broker-signals', async (req, res) => {
             }
             //End Process Tading View Client Zebull 
 
+
+
+
+
+            
+            //Process Tading View Client icicidirect
+            try {
+              const IciciDirectlCollection = db1.collection('icicidirectview');
+              const Icicidirectdocuments = await IciciDirectlCollection.find({ "strategys.strategy_name": strategy, "service.name": input_symbol, "category.segment": segment, client_key: client_key, web_url: "2" }).toArray();
+
+              fs.appendFile(filePath, 'TIME ' + new Date() + ' icicidirect TRADING VIEW CLIENT LENGTH ' + Icicidirectdocuments.length + '\n', function (err) {
+                if (err) {
+                  return console.log(err);
+                }
+              });
+
+
+              if (Icicidirectdocuments.length > 0) {
+                icicidirect.place_order(Icicidirectdocuments, signals, token, filePath, signal_req);
+              }
+
+            } catch (error) {
+              console.log("Error Get icicidirect Client In view", error);
+            }
+            //End Process Tading View Client icicidirect 
 
 
 

@@ -22,7 +22,6 @@ const AllLicence = () => {
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
   const [getAllClients1, setAllClients1] = useState({ loading: true, data: [] });
-  // const [CountLicence, setCountLicence] = useState(get_year_and_month_only(new Date()));
   const [CountLicence, setCountLicence] = useState("");
   const [usedLicence, setUsedLicence] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -32,7 +31,6 @@ const AllLicence = () => {
 
   var headerName = "Transaction Licence"
 
-  // COLUMNS DATA
   const columns = [
     {
       dataField: "index",
@@ -141,6 +139,11 @@ const AllLicence = () => {
           data: filteredData,
         });
 
+      }else{
+        setAllClients({
+          loading: false,
+          data: [],
+        });
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -232,8 +235,8 @@ const AllLicence = () => {
             <div className="row flex">
 
               <div className="col-lg-3">
-                <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
                     Search Something Here
                   </label>
                   <input
@@ -241,7 +244,7 @@ const AllLicence = () => {
                     placeholder="Search..."
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
-                    class="form-control"
+                    className="form-control"
                     id="exampleFormControlInput1"
                   />
                 </div>
@@ -252,7 +255,7 @@ const AllLicence = () => {
               <div className="col-lg-3 mb-4 ">
                 <div className="mb-3 row  d-flex flex-column">
                   <label
-                    for="validationCustom05" class="form-label"
+                    for="validationCustom05" className="form-label"
                   >
                     Please Select Month
                   </label>

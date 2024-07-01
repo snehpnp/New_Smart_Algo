@@ -1,17 +1,11 @@
-// import React from 'react'
-/* eslint-disable react/jsx-pascal-case */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
-// import { GET_ALL_CLIENTS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import React, { useEffect, useState } from "react";
 import Content from "../../../Components/Dashboard/Content/Content";
-import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content";
 import Loader from "../../../Utils/Loader";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { Get_All_TRADINGSTATUS_USER, user_activity_logs } from "../../../ReduxStore/Slice/Users/TradingStatusSlice";
 
-import { useDispatch, useSelector } from "react-redux";
-import { fDate, fDateTimeSuffix } from "../../../Utils/Date_formet";
+import { useDispatch } from "react-redux";
+import {  fDateTimeSuffix } from "../../../Utils/Date_formet";
 
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
@@ -27,7 +21,6 @@ const TradingStatus = () => {
 
   const [first, setfirst] = useState("all");
   const [first1, setfirst1] = useState("all");
-  const [DateFilter, setDateFilter] = useState();
   const [DateArray, setDateArray] = useState([]);
   const [getAllUserTrading_status, setAllUserTrading_status] = useState({ loading: true, data: [] });
   const [userLogs, setUserLogs] = useState({ loading: true, data: [] });

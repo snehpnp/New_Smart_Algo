@@ -219,8 +219,8 @@ const Signals = () => {
               <div className="col-lg-6">
                 <div className="mb-3 row d-flex">
                   <div className="col-lg-6">
-                    <div class="mb-3">
-                      <label for="exampleFormControlInput1" class="form-label">
+                    <div className="mb-3">
+                      <label for="exampleFormControlInput1" className="form-label">
                         Search Something Here
                       </label>
                       <input
@@ -228,7 +228,7 @@ const Signals = () => {
                         placeholder="Search..."
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
-                        class="form-control"
+                        className="form-control"
                         id="exampleFormControlInput1"
                       />
                     </div>
@@ -239,7 +239,7 @@ const Signals = () => {
                       Select Strategy
                     </label>
                     <select
-                      class="default-select wide form-control"
+                      className="default-select wide form-control"
                       aria-label="Default select example"
                       id="select"
                       onChange={(e) => setStrategyClientStatus(e.target.value)}

@@ -91,7 +91,7 @@ const Modify = ({ UserDetails }) => {
                     <h4>Web Login</h4>
                     <div className="d-flex">
                         <div className="col-6">
-                            <div class="form-check">
+                            <div className="form-check">
                                 <input
                                     className="form-check-input"
                                     type="radio"
@@ -101,13 +101,13 @@ const Modify = ({ UserDetails }) => {
                                     checked={selectedOptions && selectedOptions.web_url === "1"}
                                     onChange={(e) => handleRadioChange(e)}
                                 />
-                                <label class="form-check-label" for="admin">
+                                <label className="form-check-label" for="admin">
                                     Admin
                                 </label>
                             </div>
                         </div>
                         <div className="col-6">
-                            <div class="form-check">
+                            <div className="form-check">
                                 <input
                                     className="form-check-input"
                                     type="radio"
@@ -117,7 +117,7 @@ const Modify = ({ UserDetails }) => {
                                     checked={selectedOptions && selectedOptions.web_url === "2"}
                                     onChange={(e) => handleRadioChange(e)}
                                 />
-                                <label class="form-check-label" for="individual">
+                                <label className="form-check-label" for="individual">
                                     Individual
                                 </label>
                             </div>
@@ -128,9 +128,9 @@ const Modify = ({ UserDetails }) => {
                     <h4>Qty Type</h4>
                     <div className="d-flex">
                         <div className="col-6">
-                            <div class="form-check">
+                            <div className="form-check">
                                 <input
-                                    class="form-check-input"
+                                    className="form-check-input"
                                     type="radio"
                                     name="qty_type"
                                     id="adminQty"
@@ -140,15 +140,15 @@ const Modify = ({ UserDetails }) => {
                                     onChange={(e) => handleRadioChange(e)}
 
                                 />
-                                <label class="form-check-label" for="adminQty">
+                                <label className="form-check-label" for="adminQty">
                                     Admin
                                 </label>
                             </div>
                         </div>
                         <div className="col-6">
-                            <div class="form-check">
+                            <div className="form-check">
                                 <input
-                                    class="form-check-input"
+                                    className="form-check-input"
                                     type="radio"
                                     name="qty_type"
                                     id="individualQty"
@@ -159,7 +159,7 @@ const Modify = ({ UserDetails }) => {
                                     onChange={(e) => handleRadioChange(e)}
 
                                 />
-                                <label class="form-check-label" for="individualQty">
+                                <label className="form-check-label" for="individualQty">
                                     Individual
                                 </label>
                             </div>
@@ -170,9 +170,9 @@ const Modify = ({ UserDetails }) => {
                     <h4>Signals Execution Type</h4>
                     <div className="d-flex mt-2">
                         <div className="col-6">
-                            <div class="form-check">
+                            <div className="form-check">
                                 <input
-                                    class="form-check-input font"
+                                    className="form-check-input font"
                                     type="radio"
                                     name="signals_execution_type"
                                     id="webExecution"
@@ -182,15 +182,15 @@ const Modify = ({ UserDetails }) => {
                                     onChange={(e) => handleRadioChange(e)}
 
                                 />
-                                <label class="form-check-label" for="webExecution">
+                                <label className="form-check-label" for="webExecution">
                                     Web
                                 </label>
                             </div>
                         </div>
                         <div className="col-6">
-                            <div class="form-check">
+                            <div className="form-check">
                                 <input
-                                    class="form-check-input"
+                                    className="form-check-input"
                                     type="radio"
                                     name="signals_execution_type"
                                     id="appExecution"
@@ -199,7 +199,7 @@ const Modify = ({ UserDetails }) => {
 
                                     onChange={(e) => handleRadioChange(e)}
                                 />
-                                <label class="form-check-label" for="appExecution">
+                                <label className="form-check-label" for="appExecution">
                                     App
                                 </label>
                             </div>

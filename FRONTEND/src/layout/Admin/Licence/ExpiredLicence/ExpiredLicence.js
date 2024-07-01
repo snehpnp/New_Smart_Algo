@@ -111,8 +111,8 @@ const ExpiredLicence = () => {
           <Content Page_title="Expired Soon Licence" button_status={false}>
             <div className="row">
               <div className="col-lg-4">
-                <div class="mb-3">
-                  <label for="exampleFormControlInput1" class="form-label">
+                <div className="mb-3">
+                  <label for="exampleFormControlInput1" className="form-label">
                     Search Something Here
                   </label>
                   <input
@@ -120,7 +120,7 @@ const ExpiredLicence = () => {
                     placeholder="Search..."
                     value={searchInput}
                     onChange={(e) => setSearchInput(e.target.value)}
-                    class="form-control"
+                    className="form-control"
                     id="exampleFormControlInput1"
                   />
                 </div>

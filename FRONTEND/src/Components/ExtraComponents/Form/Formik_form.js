@@ -92,7 +92,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                         <div className={`col-lg-${title === "addgroup" ? 2 : 3}`} key={option.id}>
                           <div className="row d-flex">
                             <div className="col-lg-12 ">
-                              <div class="form-check custom-checkbox mb-3">
+                              <div className="form-check custom-checkbox mb-3">
                                 <input type={field.type} className="form-check-input" id={option.label}   {...formik.getFieldProps(option.label)}
                                 />
                                 <label className="form-check-label" for={option.label} >{option.label}</label>
@@ -107,13 +107,13 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                   </> :
                     field.s === "toggle" ? <>
                       <div id="app-cover">
-                        {/* <div class="row"> */}
-                        <div class="toggle-button-cover">
-                          <div class="button-cover">
-                            <div class="button r" id="button-1">
-                              <input type="checkbox" class="checkbox" />
-                              <div class="knobs"></div>
-                              <div class="layer"></div>
+                        {/* <div className="row"> */}
+                        <div className="toggle-button-cover">
+                          <div className="button-cover">
+                            <div className="button r" id="button-1">
+                              <input type="checkbox" className="checkbox" />
+                              <div className="knobs"></div>
+                              <div className="layer"></div>
                               <label className="form-check-label" for={field.label} >{field.label}</label>
                             </div>
                           </div>
@@ -127,7 +127,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                         <div className={`col-lg-${title === "addgroup" ? 2 : 3}`} key={field.id}>
                           <div className="row d-flex">
                             <div className="col-lg-12 ">
-                              <div class="form-check custom-checkbox mb-3">
+                              <div className="form-check custom-checkbox mb-3">
                                 <input type={field.type} className="form-check-input" id={field.label}   {...formik.getFieldProps(field.label)}
                                 />
                                 <label className="form-check-label" for={field.label} >{field.label}</label>
@@ -150,7 +150,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                     <div className="col-lg-3">
                       <div className="row d-flex">
                         <div className="col-lg-12 ">
-                          <div class="form-check custom-checkbox mb-3">
+                          <div className="form-check custom-checkbox mb-3">
                             <input type={field.type} name={field.name} className="form-check-input" id={field.name}
                               {...formik.getFieldProps(field.name)}
                             />
@@ -180,7 +180,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                               {...formik.getFieldProps(field.name)}
                               className={` form-control`}
                             />
-                            <i class={`fa-solid ${passwordVisible[field.name] ? 'fa-eye-slash' : 'fa-eye'}`} style={{
+                            <i className={`fa-solid ${passwordVisible[field.name] ? 'fa-eye-slash' : 'fa-eye'}`} style={{
                               position: 'absolute',
                               top: '1.5px',
                               right: '20px',
@@ -221,7 +221,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                                 {...formik.getFieldProps(field.name)}
                                 className={` form-control`}
                               />
-                              <i class={`fa-solid ${passwordVisible[field.name] ? 'fa-eye-slash' : 'fa-eye'}`} style={{
+                              <i className={`fa-solid ${passwordVisible[field.name] ? 'fa-eye-slash' : 'fa-eye'}`} style={{
                                 position: 'absolute',
                                 top: '1.5px',
                                 right: '20px',
@@ -247,7 +247,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                           <div className="col-lg-3">
                             <div className="row d-flex">
                               <div className="col-lg-12 ">
-                                <div class="form-check custom-checkbox mb-3">
+                                <div className="form-check custom-checkbox mb-3">
                                   <label className="col-lg-6 " for={field.name}>{field.name}</label>
                                   <input type={field.type} name={field.name} className="form-control" id={field.name}
                                     {...formik.getFieldProps(field.name)}
@@ -265,9 +265,9 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                             <div className="col-lg-12">
                               <div className="row d-flex">
                                 <div className="col-lg-12 ">
-                                  <div class="mb-3">
+                                  <div className="mb-3">
                                     <label className="col-lg-4 " for={field.name}>{field.label}</label>
-                                    <textarea class="form-control" rows="2" id={field.name} name={field.name}
+                                    <textarea className="form-control" rows="2" id={field.name} name={field.name}
                                       {...formik.getFieldProps(field.name)}
                                       placeholder={field.label}
                                     ></textarea>
@@ -285,7 +285,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                               <div className="col-lg-3">
                                 <div className="row d-flex">
                                   <div className="col-lg-12 ">
-                                    <div class="form-check custom-checkbox mb-3">
+                                    <div className="form-check custom-checkbox mb-3">
                                       <input type={field.type} name={field.name} className="form-check-input" id={field.name}
                                         {...formik.getFieldProps(field.name)}
                                       />

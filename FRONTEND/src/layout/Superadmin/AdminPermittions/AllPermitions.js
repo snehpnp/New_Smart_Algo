@@ -1,90 +1,39 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
-import Content from "../../../Components/Dashboard/Content/Content"
-import * as  valid_err from "../../../Utils/Common_Messages"
+import Content from "../../../Components/Dashboard/Content/Content";
 import { Link } from "react-router-dom";
 import Loader from '../../../Utils/Loader'
 import { FolderLock, Plus, FileClock, HelpingHand, Users2, Link2, ScrollText, RadioTower, Eye } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { All_Panel_List, Update_Panel_Theme, Close_Admin_Panel, GET_PANEL_INFORMATIONS, All_Brokers } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
-import { useDispatch, useSelector } from "react-redux";
-import * as Config from "../../../Utils/Config";
-
-import { Get_All_Theme } from '../../../ReduxStore/Slice/ThemeSlice';
+import { All_Panel_List } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import { useDispatch } from "react-redux";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-import toast, { Toaster } from 'react-hot-toast';
-
 import SidebarPermission from './Sidebar_permission';
 import PanelDetails from './PanelDetails';
-
-
 import AddLicence from './Add_Licence';
 import LicenceDetails from './LicenceDetails';
 import BrokerPermittion from './Broker_Permittion';
-import html2canvas from 'html2canvas';
+import { fDateTimeSuffix, dateFormate } from "../../../Utils/Date_formet";
+import Modal from '../../../Components/ExtraComponents/Modal';
+import { Get_Panel_History } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 
 
 const AllPermitions = () => {
-
     const dispatch = useDispatch()
-
-    const token = JSON.parse(localStorage.getItem('user_details')).token
-
-
-
-
-
-    //  for permission
+    const [filteredData, setFilteredData] = useState([]);
+    const [filteredData1, setFilteredData1] = useState([]);
     const [showModal, setshowModal] = useState(false)
-
-    //  for Panel Details
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false)
-
-    //  for Add Licence
     const [showAddLicenceModal, setshowAddLicenceModal] = useState(false)
     const [showPanelName, setshowPanelName] = useState(false)
-
-
-    //  for Add Licence
     const [showLicenceModal, setshowLicenceModal] = useState(false)
-    const [showLicenceDetails, setshowLicenceDetails] = useState([])
-
-
-
-    //  for Broker Permission
+    const [showLicenceDetails, setshowLicenceDetails] = useState({})
     const [showBrokerModal, setshowBrokerModal] = useState(false)
     const [showBrokerDetails, setshowBrokerDetails] = useState("")
-
-
-    // const [Panelid, setPanelid] = useState('1')
-    const [themeList, setThemeList] = useState();
-    const [refresh, setRefresh] = useState(false)
-
-    //for search baar
+    const [HistoryStatus, SetHistoryStatus] = useState(false)
     const [searchInput, setSearchInput] = useState('')
-
-
-    const [panelData, setPanelData] = useState({
-        loading: true,
-        data: []
-    });
-
-
-
-    const [panelInfo, setpanelInfo] = useState({
-        loading: true,
-        data: []
-    });
-
-
-    const GetAllThemes = async () => {
-        await dispatch(Get_All_Theme()).unwrap()
-            .then((response) => {
-
-                setThemeList(response && response.data);
-            })
-    }
+    const [panelData, setPanelData] = useState({ loading: true, data: [] });
+    const [panelData1, setPanelData1] = useState({ loading: true, data: [] });
+    const [panelInfo, setpanelInfo] = useState({ loading: true, data: [] });
 
 
     const data = async () => {
@@ -92,23 +41,24 @@ const AllPermitions = () => {
             .then((response) => {
                 if (response.status) {
 
-                    const filterData = response.data && response.data.filter((item) => {
-                        const matchSearch =
-                            searchInput == '' ||
-                            item.panel_name.toLowerCase().includes(searchInput.toLowerCase())
 
-                        return matchSearch
-                    })
-
+                    setPanelData1({
+                        loading: false,
+                        data: response.data
+                    });
 
                     setPanelData({
                         loading: false,
-                        data: searchInput ? filterData : response.data
+                        data: response.data
                     });
 
                 }
                 else {
                     setPanelData({
+                        loading: false,
+                        data: []
+                    });
+                    setPanelData1({
                         loading: false,
                         data: []
                     });
@@ -121,29 +71,15 @@ const AllPermitions = () => {
     }
 
     const Panel_Info = async (row) => {
-        setshowLicenceDetails({ id: row._id, db_url: row.db_url, db_name: row.db_name })
+        setshowLicenceDetails({ id: row._id, db_url: row.backend_rul, db_name: row.db_name })
         setshowLicenceModal(true)
     }
 
-
-
-
-    useEffect(() => {
-        localStorage.removeItem('RowData')
-        localStorage.removeItem('backend_rul')
-        data()
-        GetAllThemes()
-    }, [refresh, searchInput])
-
- 
-
-
-    useEffect(() => {
-     
-        GetAllThemes()
-    }, [refresh])
-
-
+    const Panel_History = async (row) => {
+        var FilterData = filteredData.filter((data) => data.panal_name == row.panel_name)
+        setFilteredData1(FilterData)
+        SetHistoryStatus(true)
+    }
 
     const setLocalStorage = (row) => {
         localStorage.setItem("RowData", row._id)
@@ -152,13 +88,10 @@ const AllPermitions = () => {
 
     }
 
-
-    const handleLocalStorage=(row)=>{
+    const handleLocalStorage = (row) => {
         localStorage.setItem("backend_rul", row.backend_rul)
         localStorage.setItem("panel_name", row.panel_name)
     }
-
-
 
     const columns = [
         {
@@ -177,7 +110,7 @@ const AllPermitions = () => {
                 </span>
             )
         },
-        
+
 
         {
             dataField: 'Broker',
@@ -208,23 +141,23 @@ const AllPermitions = () => {
             formatter: (cell, row) => (
                 <span data-toggle="tooltip" data-placement="top" title="Panel Views">
                     <FileClock size={20} color="#198754" strokeWidth={2}
-                        // onClick={(e) => { setshowLicenceModal(true) }}
                         onClick={(e) => Panel_Info(row)}
+                        className="mx-1" />
+                </span>
+            )
+        },
+        {
+            dataField: 'panel_name',
+            text: 'History',
+            formatter: (cell, row) => (
+                <span data-toggle="tooltip" data-placement="top" title="Panel Views">
+                    <FileClock size={20} color="#198754" strokeWidth={2}
+                        onClick={(e) => Panel_History(row)}
                         className="mx-1" />
                 </span>
             )
 
         },
-        // {
-        //     dataField: 'panel_name',
-        //     text: 'Panel Details',
-        //     formatter: (cell, row) => (
-        //         <span data-toggle="tooltip" data-placement="top" title="Panel Views">
-        //             <FileClock size={20} color="#198754" strokeWidth={2}
-        //                 className="mx-1" />
-        //         </span>
-        //     )
-        // },
 
         {
             dataField: 'panel_name',
@@ -260,66 +193,120 @@ const AllPermitions = () => {
                 </span>
             )
         },
-        
+
         {
             dataField: 'signal',
             text: 'Signal ',
             formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="HelpingHand" onClick={()=>handleLocalStorage(row)}>
+                <span data-toggle="tooltip" data-placement="top" title="HelpingHand" onClick={() => handleLocalStorage(row)}>
                     <Link to='/super/signals' state={row}>
                         <RadioTower size={20} color="#198754" strokeWidth={2} className="mx-1" />
                     </Link>
                 </span >
             )
         },
-        {
-            dataField: 'panel_name',
-            text: 'Logs',
-            formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="Admin Logs">
-                    <ScrollText size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                </span>
-            )
-        },
-        {
-            dataField: 'panel_name',
-            text: 'HelpingHand ',
-            formatter: (cell, row) => (
-                <span data-toggle="tooltip" data-placement="top" title="HelpingHand">
-                    <Link to='/super/helps' state={row}>
-                        <HelpingHand size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </Link>
-                </span >
-            )
-        },
+        // {
+        //     dataField: 'panel_name',
+        //     text: 'Logs',
+        //     formatter: (cell, row) => (
+        //         <span data-toggle="tooltip" data-placement="top" title="Admin Logs">
+        //             <ScrollText size={20} color="#198754" strokeWidth={2} className="mx-1" />
+        //         </span>
+        //     )
+        // },
+        // {
+        //     dataField: 'panel_name',
+        //     text: 'HelpingHand ',
+        //     formatter: (cell, row) => (
+        //         <span data-toggle="tooltip" data-placement="top" title="HelpingHand">
+        //             <Link to='/super/helps' state={row}>
+        //                 <HelpingHand size={20} color="#198754" strokeWidth={2} className="mx-1" />
+        //             </Link>
+        //         </span >
+        //     )
+        // },
     ];
 
+    const columns1 = [
+        {
+            dataField: "index",
+            text: "SR. No.",
+            formatter: (cell, row, rowIndex) => rowIndex + 1,
+        },
+        {
+            dataField: 'panal_name',
+            text: 'Panel Name'
+        },
+        {
+            dataField: 'superadmin_name',
+            text: 'Super Admin Name'
+        },
+        {
+            dataField: 'client_id',
+            text: 'Client Id',
+            formatter: (cell, row, rowIndex) => <div>{cell == null ? "-" : cell}</div>
+        },
+        {
+            dataField: 'msg',
+            text: 'Message'
+        },
+        {
+            dataField: "createdAt",
+            text: "Date & Time",
+            formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>,
+            sort: true,
+        }
+    ];
 
-    const SaveSS = async () => {
-        const element = document.getElementById('main-wrapper');
+    const fetchData = async () => {
+        const response = await dispatch(Get_Panel_History()).unwrap();
+        if (response.status) {
+
+            setFilteredData(response.data);
+        } else {
+
+            setFilteredData([]);
+        }
+    };
 
 
-        const options = {
-            width: document.documentElement.scrollWidth, // Set custom width
-            height: document.documentElement.scrollHeight, // Set custom height
-        };
+
+    useEffect(() => {
+        if (panelData1 && panelData1.data) {
+            const filterData = panelData1.data && panelData1.data.filter((item) => {
+                const matchSearch =
+                    searchInput == '' ||
+                    item.panel_name.toLowerCase().includes(searchInput.toLowerCase())
+
+                return matchSearch
+            })
+            setPanelData({
+                loading: false,
+                data: filterData
+            });
 
 
-        window.scrollTo(0, 0);
 
-        var screenshotUrl
-        await html2canvas(document.documentElement, options).then(canvas => {
-            // Convert canvas to an image and download it
-            const screenshot = canvas.toDataURL('image/png');
-            screenshotUrl = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = screenshot;
-            link.download = 'screenshot.png';
-            link.click();
+        } else {
+            setPanelData({
+                loading: false,
+                data: []
+            });
+        }
+    }, [searchInput]);
 
-        })
-    }
 
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+
+    useEffect(() => {
+        localStorage.removeItem('RowData')
+        localStorage.removeItem('backend_rul')
+        data()
+    }, [])
 
 
 
@@ -338,7 +325,6 @@ const AllPermitions = () => {
                                     onChange={(e) => { setSearchInput(e.target.value) }}
                                     value={searchInput} />
                             </div>
-
                             {
                                 panelData.data && panelData.data.length === 0 ? (
                                     'No data found') :
@@ -347,10 +333,23 @@ const AllPermitions = () => {
                                         <BrokerPermittion List={showBrokerDetails} showModal={showBrokerModal} setshowModal={() => setshowBrokerModal(false)} />
                                         <PanelDetails showModal={PanelDetailsModal} data={panelInfo && panelInfo} setshowModal={() => setPanelDetailsModal(false)} />
                                         <AddLicence showPanelName={showPanelName} showModal={showAddLicenceModal} setshowModal={() => setshowAddLicenceModal(false)} />
-                                        <LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />
+
+                                        {showLicenceModal && (<LicenceDetails id={showLicenceDetails} showModal={showLicenceModal} setshowModal={() => setshowLicenceModal(false)} />)}
+
                                         <FullDataTable TableColumns={columns} tableData={panelData.data} pagination1={false} />
                                         <ToastButton />
                                     </>
+                            }
+
+
+                            {
+                                HistoryStatus && (
+                                    <div>
+                                        <Modal isOpen={true} size="xl" title="History" hideBtn={true} handleClose={() => SetHistoryStatus(false)}>
+                                            <FullDataTable TableColumns={columns1} tableData={filteredData1} />
+                                        </Modal >
+                                    </div>
+                                )
                             }
                         </Content>
                     </>

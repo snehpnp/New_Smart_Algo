@@ -2,12 +2,12 @@
 const db = require('../../Models');
 const Theme_list = db.theme_list;
 const panel_model = db.panel_model;
+const Superadmin_History = db.Superadmin_History;
 
 const mongoose = require('mongoose');
-
 const ObjectId = mongoose.Types.ObjectId;
 
-const { formattedDateTime } = require('../../Helper/time.helper')
+
 class Theme {
 
     // ADD THEMEcdccddcfdfdfkdl;gmdklgmdmsl;kdmsklfmdk
@@ -54,12 +54,11 @@ class Theme {
 
             AddTheme.save()
                 .then(async (data) => {
-                    res.send({ status: true, msg: "successfully Add!", data: data });
+                  return  res.send({ status: true, msg: "successfully Add!", data: data });
                 })
                 .catch((err) => {
-                    // console.log("err", err);
                     if (err.keyValue) {
-                        res.send({ status: false, msg: "Duplicate data", data: err.keyValue });
+                      return  res.send({ status: false, msg: "Duplicate data", data: err.keyValue });
                     }
 
                 })
@@ -75,18 +74,39 @@ class Theme {
     async GetAllTheme(req, res) {
         try {
 
-            // const { page, limit } = req.body;
-            // const skip = (page - 1) * limit;
-
             const totalCount = await Theme_list.countDocuments();
 
-
-            // THEME LIST DATA
-            // var getAllTheme = await Theme_list.find()
             const getAllTheme = await Theme_list
                 .find({})
-            // .skip(skip)
-            // .limit(Number(limit))
+
+
+            // IF DATA NOT EXIST
+            if (getAllTheme.length == 0) {
+              return  res.send({ status: false, msg: "Empty data", data: getAllTheme })
+            }
+
+            // DATA GET SUCCESSFULLY
+            return res.send({
+                status: true,
+                msg: "Get All Theme name",
+                data: getAllTheme,
+            })
+
+
+        } catch (error) {
+            console.log("Error Get all theme error-", error);
+        }
+    }
+
+    // GET THEME
+    async GetAllThemeName(req, res) {
+        try {
+
+
+
+            const getAllTheme = await Theme_list
+                .find({}).select('theme_name')
+
 
 
             // IF DATA NOT EXIST
@@ -99,10 +119,7 @@ class Theme {
                 status: true,
                 msg: "Get All Theme name",
                 data: getAllTheme,
-                // page: Number(page),
-                // limit: Number(limit),
-                // totalCount: totalCount,
-                // totalPages: Math.ceil(totalCount / Number(limit)),
+
             })
 
 
@@ -110,39 +127,6 @@ class Theme {
             console.log("Error Get all theme error-", error);
         }
     }
-
-
-
- // GET THEME
- async GetAllThemeName(req, res) {
-    try {
-
-
-
-        const getAllTheme = await Theme_list
-            .find({}).select('theme_name')
-     
-
-
-        // IF DATA NOT EXIST
-        if (getAllTheme.length == 0) {
-            res.send({ status: false, msg: "Empty data", data: getAllTheme })
-        }
-
-        // DATA GET SUCCESSFULLY
-        res.send({
-            status: true,
-            msg: "Get All Theme name",
-            data: getAllTheme,
-        
-        })
-
-
-    } catch (error) {
-        console.log("Error Get all theme error-", error);
-    }
-}
-
 
     // GET ALL TRADING ON  CLIENTS
     async GetThemeByIdThemeId(req, res) {
@@ -173,40 +157,43 @@ class Theme {
 
 
     // UPDATE COMPANY THEME
-
     async UpdatePanelTheme(req, res) {
         try {
 
 
-            // GET LOGIN CLIENTS
             const getAllTradingClients = await panel_model.find({
                 _id: req.body.userid
             });
 
-
             const totalCount = getAllTradingClients.length;
 
-            // IF DATA NOT EXIST
             if (getAllTradingClients.length == 0) {
                 return res.send({ status: false, msg: "Theme Not Found", data: [], totalCount: totalCount, })
             }
 
-
             var objectId = new ObjectId(req.body.theme_id);
-
-
             var updateValues = { theme_id: objectId, };
 
             const updatedDocument = await panel_model.findByIdAndUpdate(getAllTradingClients[0]._id, updateValues, {
-                new: true, // To return the updated document
+                new: true, 
             });
 
+            const filter = { panal_name: "111" };
+            const update = {
+                $set: {
+                    superadmin_name: req.body.UserName,
+                    panal_name: getAllTradingClients[0].panel_name,
+                    client_id: null,
+                    msg: "Theme Change"
+                }
+            };
 
-            // DATA GET SUCCESSFULLY
+            const options = { upsert: true };
+
+            await Superadmin_History.updateOne(filter, update, options);
 
 
-
-            res.send({
+           return res.send({
                 status: true,
                 msg: "Theme Update Successfully",
                 data: updatedDocument,
@@ -219,7 +206,6 @@ class Theme {
 
 
     // UPDATE THEME IMAGE
-
     async UpdatetThemeImage(req, res) {
         try {
 
@@ -245,7 +231,7 @@ class Theme {
             const filter = { _id: req.body.theme_id };
             const updateOperation = { $set: { image: req.body.image } };
 
-            
+
             const result = await Theme_list.updateOne(filter, updateOperation);
 
             if (!result) {

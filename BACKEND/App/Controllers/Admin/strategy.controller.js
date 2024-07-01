@@ -233,14 +233,10 @@ class strategy {
         }
     }
 
-    // GET ALL STRATEGYS FOR CLIENT
     async ClientsAccordingToStrategy(req, res) {
-
         try {
-
-
             const { _id } = req.body;
-            // GET LOGIN CLIENTS
+         
             const objectId = new ObjectId(_id);
             const pipeline = [
                 {
@@ -265,6 +261,13 @@ class strategy {
                         'users.FullName': 1,
                         'users.UserName': 1,
                         'users.license_type': 1,
+                        'users.WebLoginStatus': 1,
+                        'users.AppLoginStatus': 1,
+                        'users.TradingStatus': 1,
+                        'users.Email': 1,
+
+
+
 
                     },
                 },

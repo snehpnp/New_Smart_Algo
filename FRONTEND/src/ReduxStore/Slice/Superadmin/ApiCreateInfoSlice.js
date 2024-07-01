@@ -4,10 +4,10 @@ import { GET_API_INFORMATION, UPDATE_API_INFORMATION, CREATE_API_INFORMATION, GE
 
 
 export const All_Api_Info_List = createAsyncThunk("getall/apiInfo", async (data) => {
-    const { token, url, brokerId ,key} = data
+    const { token, url, brokerId, key } = data
 
     try {
-        const res = await GET_API_INFORMATION({ url: url, brokerId: brokerId,key:key }, token);
+        const res = await GET_API_INFORMATION({ url: url, brokerId: brokerId, key: key }, token);
         return await res;
     } catch (err) {
         return err;
@@ -18,7 +18,7 @@ export const All_Api_Info_List = createAsyncThunk("getall/apiInfo", async (data)
 
 export const All_Api_Info_List_superadmin = createAsyncThunk("getall/apiInfo", async (data) => {
     const { token, url } = data
-    
+
     try {
         const res = await GET_API_INFORMATION_SUPERADMIN({ url: url }, token);
         return await res;
@@ -63,23 +63,23 @@ const ApiCreateInfoSlice = createSlice({
     recuders: {},
     extraReducers: {
         [Create_Api_Information.pending]: (state, { payload }) => {
-            // state.isLoading = false;
+
             return { ...state, getPanelList: [], isLoading: true };
         },
         [Create_Api_Information.fulfilled]: (state, { payload }) => {
-            // state.isLoading = false;
+
             return { ...state, Create_Api_Information: payload, isLoading: false };
         },
         [All_Api_Info_List.fulfilled]: (state, { payload }) => {
-            // state.isLoading = false;
+
             return { ...state, get_all_Api_Information: payload, isLoading: false };
         },
         [All_Api_Info_List_superadmin.fulfilled]: (state, { payload }) => {
-            // state.isLoading = false;
+
             return { ...state, get_all_Api_Informationsuper: payload, isLoading: false };
         },
         [Update_Api_Info_Theme.fulfilled]: (state, { payload }) => {
-            // state.isLoading = false;
+
             return { ...state, update_Api_Information: payload, isLoading: false };
         },
     },
@@ -88,5 +88,4 @@ const ApiCreateInfoSlice = createSlice({
 
 
 
-// export const {ganpat} = HomeScreenSlice.actions
 export default ApiCreateInfoSlice;

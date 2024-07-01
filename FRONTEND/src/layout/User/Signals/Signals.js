@@ -19,12 +19,12 @@ const Signals = () => {
   const dispatch = useDispatch()
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-  const user_Id = JSON.parse(localStorage.getItem('user_details')).user_id;
-  const AdminToken = JSON.parse(localStorage.getItem('user_details')).token;
+  const user_details = JSON.parse(localStorage.getItem('user_details'))
+  const AdminToken = JSON.parse(localStorage.getItem('user_details'));
 
 
   const getClientsignals = async (e) => {
-    await dispatch(Get_Signals({ _id: isgotodashboard ? gotodashboard.user_id : user_Id, token: AdminToken })).unwrap()
+    await dispatch(Get_Signals({ _id: isgotodashboard ? gotodashboard.user_id : user_details.user_id, token: AdminToken.token })).unwrap()
       .then((response) => {
          
         if (response.status) {

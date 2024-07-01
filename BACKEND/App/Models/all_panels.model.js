@@ -38,7 +38,7 @@ const panelSchema = new mongoose.Schema({
     is_active: {
         type: Number, // Change the type to Number
         enum: [1, 0], // Use numbers instead of strings
-        default: 1
+        default: 0
     },
     is_expired: {
         type: Number, // Change the type to Number

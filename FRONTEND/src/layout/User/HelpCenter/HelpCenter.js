@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import AlertToast from '../../../Components/ExtraComponents/Alert_Toast'
@@ -6,46 +5,25 @@ import Formikform1 from "../../../Components/ExtraComponents/Form/Formik_form1"
 import { useFormik } from 'formik';
 import * as  valid_err from "../../../Utils/Common_Messages"
 import * as Config from "../../../Utils/Config";
-
 import { useNavigate } from "react-router-dom";
 import { Email_regex, Mobile_regex } from "../../../Utils/Common_regex"
 import { useDispatch, useSelector } from "react-redux";
 import { User_Profile } from "../../../ReduxStore/Slice/Common/commoSlice.js";
 import { Create_Help } from "../../../ReduxStore/Slice/Users/ClientHelpSlice";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-
 import socketIOClient from "socket.io-client";
-
-// import { io  , socketIOClient} from "socket.io-client";
-
-
 import toast, { Toaster } from 'react-hot-toast';
-
 
 const ApiCreateInfo = () => {
 
-
-
-
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
-    const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-    const token = JSON.parse(localStorage.getItem("user_details")).token;
+    const user_details = JSON.parse(localStorage.getItem("user_details"));
     const role = JSON.parse(localStorage.getItem("user_role"));
-
-
     const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
     const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-  
-
-    
     const [refresh, setRefresh] = useState(false);
-
-    const [UserDetails, setUserDetails] = useState({
-        loading: true,
-        data: [],
-    });
+    const [UserDetails, setUserDetails] = useState({ loading: true, data: [] });
 
 
     const formik = useFormik({
@@ -74,11 +52,11 @@ const ApiCreateInfo = () => {
                 "email": values.email,
                 "mobile": values.mobile,
                 "helpmsg": values.msg,
-                "admin_id":  values.admin_id,
-                "user_id": user_id,
+                "admin_id": values.admin_id,
+                "user_id": user_details.user_id,
             }
 
-            await dispatch(Create_Help({ req: req, token: token })).unwrap().then((response) => {
+            await dispatch(Create_Help({ req: req, token: user_details.token })).unwrap().then((response) => {
                 if (response.status === 409) {
                     toast.error(response.data.msg);
                 }
@@ -103,9 +81,6 @@ const ApiCreateInfo = () => {
 
 
 
-
-
-
     const fields = [
         { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 3, disable: true },
         { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 3, disable: true },
@@ -118,7 +93,14 @@ const ApiCreateInfo = () => {
 
 
     const data = async () => {
-        await dispatch(User_Profile({ id: isgotodashboard ? gotodashboard.user_id : user_id }))
+
+        const userId = isgotodashboard ? gotodashboard.user_id : user_details.user_id;
+        const token = isgotodashboard ? gotodashboard.token : user_details.token;
+
+        await dispatch(User_Profile({
+            id: userId,
+            token: token,
+        }))
             .unwrap()
             .then((response) => {
                 if (response.status) {
@@ -134,7 +116,6 @@ const ApiCreateInfo = () => {
     }, [refresh]);
 
 
-
     useEffect(() => {
         formik.setFieldValue('username', UserDetails.data.UserName);
         formik.setFieldValue('fullName', UserDetails.data.FullName);
@@ -145,16 +126,11 @@ const ApiCreateInfo = () => {
 
 
 
-
-
-
-
     return <>
         <Content Page_title="Help Center" button_status={false} >
             <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Send"
             />
             <ToastButton />
-
         </Content>
         )
     </>

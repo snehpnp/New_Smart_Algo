@@ -7,7 +7,6 @@ import { fa_time, fDateTimeSuffix } from "../../../../Utils/Date_formet";
 import { Eye, CandlestickChart, Pencil } from "lucide-react";
 import { loginWithApi } from "../../../../Components/Dashboard/Header/log_with_api";
 import DetailsView from "./DetailsView";
-import { User_Profile } from "../../../../ReduxStore/Slice/Common/commoSlice.js";
 import { TRADING_OFF_USER } from "../../../../ReduxStore/Slice/Users/DashboardSlice";
 import { Get_All_Service_for_Client, CancelOrderReq } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import { check_Device } from "../../../../Utils/find_device";
@@ -50,11 +49,8 @@ const TradeHistory = () => {
   const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [], });
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
   const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
-
-  const [CatagoryData, setCatagoryData] = useState({
-    loading: true,
-    data: []
-  });
+  const [lotMultypaly, SetlotMultypaly] = useState(1);
+  const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
 
 
 
@@ -83,7 +79,7 @@ const TradeHistory = () => {
     let endDate = getActualDateFormate(toDate);
 
     await dispatch(
-      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter, serviceIndex: SelectServiceIndex, token: token })
+      Get_Tradehisotry({ startDate: !fromDate ? full : startDate, endDate: !toDate ? fromDate ? "" : full : endDate, service: SelectService, strategy: StrategyClientStatus, type: dashboard_filter, serviceIndex: SelectServiceIndex, lotMultypaly: lotMultypaly, token: token })
     ).unwrap()
       .then((response) => {
         if (response.status) {
@@ -109,7 +105,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     Get_TradHistory();
-  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter, SelectServiceIndex]);
+  }, [refresh, SocketState, fromDate, toDate, SelectService, StrategyClientStatus, dashboard_filter, SelectServiceIndex, lotMultypaly]);
 
   const getActualDateFormate = (date) => {
     const dateParts = date.split("-");
@@ -231,56 +227,6 @@ const TradeHistory = () => {
         <div>{cell !== "" ? parseFloat(cell).toFixed(2) : "-"}</div>
       ),
     },
-
-    // {
-    //   dataField: "Action",
-    //   text: "Realised",
-    //   formatter: (cell, row, rowIndex) => {
-    //     return (
-    //       <div>
-    //         <span className={`fw-bold show_rpl_${row.token}_${row._id}`}></span>
-    //         <span className={`d-none entry_qty_${row.token}_${row._id}`}>
-    //           {row.entry_qty}
-    //         </span>
-    //         <span className={`d-none exit_qty_${row.token}_${row._id}`}>
-    //           {row.exit_qty}
-    //         </span>
-    //         <span className={`d-none exit_price_${row.token}_${row._id}`}>
-    //           {row.exit_price}
-    //         </span>
-    //         <span className={`d-none entry_price_${row.token}_${row._id}`}>
-    //           {row.entry_price}
-    //         </span>
-    //         <span className={`d-none entry_type_${row.token}_${row._id}`}>
-    //           {row.entry_type}
-    //         </span>
-    //         <span className={`d-none exit_type_${row.token}_${row._id}`}>
-    //           {row.exit_type}
-    //         </span>
-    //         <span className={`d-none strategy_${row.token}_${row._id}`}>
-    //           {row.strategy}
-    //         </span>
-    //         <span className={`d-none _id_${row.token}_${row._id}`}>
-    //           {row._id}
-    //         </span>
-    //       </div>
-    //     );
-    //   },
-    // },
-
-
-    // {
-    //   dataField: "UPL",
-    //   text: "Un-Realised",
-    //   formatter: (cell, row, rowIndex) => (
-    //     <div>
-    //       <span className={`fw-bold UPL_${row.token}_${row._id}`}></span>
-
-
-    //     </div>
-    //   ),
-    // },
-
     {
       dataField: "TPL",
       text: "Total",
@@ -331,22 +277,22 @@ const TradeHistory = () => {
       ),
     },
 
-    {
-      dataField: "",
-      text: "Cancel Order",
-      formatter: (cell, row, rowIndex) => (
-        <div>
-          {row.pendin_order_status == "0" ?
-            <>
-              <button className="btn btn-primary" onClick={(e) => cancelOrder(e, row)}>
-                Cancel
-              </button>
+    // {
+    //   dataField: "",
+    //   text: "Cancel Order",
+    //   formatter: (cell, row, rowIndex) => (
+    //     <div>
+    //       {row.pendin_order_status == "0" ?
+    //         <>
+    //           <button className="btn btn-primary" onClick={(e) => cancelOrder(e, row)}>
+    //             Cancel
+    //           </button>
 
-            </>
-            : "-"}
-        </div>
-      ),
-    },
+    //         </>
+    //         : "-"}
+    //     </div>
+    //   ),
+    // },
   ];
 
   const cancelOrder = async (e, row) => {
@@ -424,7 +370,7 @@ const TradeHistory = () => {
     let channelList = CreatechannelList;
 
 
-    if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
+    if (UserDetails && UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
       const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
       if (res.status === 200) {
@@ -564,7 +510,6 @@ const TradeHistory = () => {
 
 
     }
-
     else {
 
       tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
@@ -871,6 +816,7 @@ const TradeHistory = () => {
 
   return (
     <>
+
       <Content Page_title={dashboard_filter === "client" ? "Trading View" : "Trade History"} button_status={false}
         show_csv_button={true} csv_data={ForGetCSV} csv_title="TradeHistory"
       >
@@ -880,8 +826,9 @@ const TradeHistory = () => {
             < div className="col-lg-12 flex-column">
               <div className="headaer-title">
                 <h5 className="font-w400 mb-0">Live Price</h5>
-              </div> <div className="Api Login m-2">
-                <label class="switch">
+              </div>
+              <div className="Api Login m-2">
+                <label className="switch">
                   <input
                     type="checkbox"
                     className="bg-primary"
@@ -895,7 +842,7 @@ const TradeHistory = () => {
                       )
                     }
                   />
-                  <span class="slider round"></span>
+                  <span className="slider round"></span>
                 </label>
               </div>
             </div>
@@ -934,12 +881,12 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Symbol
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectService(e.target.value)}
@@ -960,12 +907,12 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2 px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Index Symbol
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setSelectServiceIndex(e.target.value)}
@@ -979,12 +926,12 @@ const TradeHistory = () => {
             </div>
           </div>
           <div className="col-lg-2  px-1">
-            <div class="mb-3">
-              <label for="select" class="form-label">
+            <div className="mb-3">
+              <label for="select" className="form-label">
                 Strategy
               </label>
               <select
-                class="default-select wide form-control"
+                className="default-select wide form-control"
                 aria-label="Default select example"
                 id="select"
                 onChange={(e) => setStrategyClientStatus(e.target.value)}
@@ -1009,8 +956,10 @@ const TradeHistory = () => {
               </button>
             </div>
           </div>
-        </div>
 
+
+
+        </div>
 
         <div className="table-responsive">
 
@@ -1028,11 +977,19 @@ const TradeHistory = () => {
 
         </div>
 
+
         <DetailsView
           showModal={showModal}
           setshowModal={() => setshowModal(false)}
           tradeHistoryData={rowData}
         />
+        <br />
+        <br />
+
+        <h6><b>THIS RESULTS IS VALID FOR TODAY ONLY, WE DO NOT DIRECTLY OR INDIRECTLY MAKE ANY REFERENCE TO THE PAST OR EXPECTED FUTURE RETURN/PERFORMANCE OF THE ALGORITHM.</b></h6>
+        <br />
+        <h6><b>सभी प्रतिभूतियां एल्गो ट्रेडिंग सिस्टम बाजार जोखिमों के अधीन हैं और इस बात का कोई आश्वासन नहीं दिया जा सकता है कि उपयोगकर्ता के उद्देश्यों को आज के प्रदर्शन के आधार पर प्राप्त किया जाएगा। यह परिणाम केवल आज के लिए मान्य है।</b></h6>
+
       </Content >
     </>
   );

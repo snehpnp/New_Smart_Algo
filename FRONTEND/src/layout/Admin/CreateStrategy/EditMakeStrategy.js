@@ -1768,8 +1768,8 @@ const updateStrategy = async (e) => {
               </Modal.Body>
               <Modal.Footer></Modal.Footer>
             </Modal>
-            <ul class="StepProgress">
-              <li class="StepProgress-item is-done">
+            <ul className="StepProgress">
+              <li className="StepProgress-item is-done">
 
 
                 <strong>Instruments</strong>
@@ -1834,7 +1834,7 @@ const updateStrategy = async (e) => {
 
 
               </li>
-               <li class="StepProgress-item is-done">
+               <li className="StepProgress-item is-done">
                 <div className="row">
                   <div className="col-xl-6">
                     <div className="card">
@@ -1916,7 +1916,7 @@ const updateStrategy = async (e) => {
               
               {singleMakeStrategyData.type == "BUY" ? 
 
-              <li class="StepProgress-item current is-done" style={{marginTop:"50px"}}>
+              <li className="StepProgress-item current is-done" style={{marginTop:"50px"}}>
 
               <div className="form-check form-check-inline">
                 <input className="form-check-input" onChange={(e) => setBuyCheck(e.target.checked)} type="checkbox" id="inlineCheckbox1" value="option1" 
@@ -2115,7 +2115,7 @@ const updateStrategy = async (e) => {
 
 
                   {condition_string != "" ? 
-                  <li class="StepProgress-item">
+                  <li className="StepProgress-item">
                   <strong>Buy Exit Condition</strong>
                   <div className="row mt-3">
                     <div className="col-md-4">
@@ -2156,7 +2156,7 @@ const updateStrategy = async (e) => {
               
               {singleMakeStrategyData.type == "SELL"?
                
-               <li class="StepProgress-item current is-done" style={{marginTop:"50px"}}>
+               <li className="StepProgress-item current is-done" style={{marginTop:"50px"}}>
 
                 <div className="form-check form-check-inline">
                   <input className="form-check-input" onChange={(e) => setSellCheck(e.target.checked)} type="checkbox" id="inlineCheckbox2" value="option1" 
@@ -2347,7 +2347,7 @@ const updateStrategy = async (e) => {
 
 
           {condition_string_sell!=""?
-           <li class="StepProgress-item">
+           <li className="StepProgress-item">
            <strong>Sell Exit Condition</strong>
            <div className="row mt-3">
              <div className="col-md-4">

@@ -30,13 +30,13 @@ const ApiCreateInfo = () => {
 
 
     const goToDashboard = JSON.parse(localStorage.getItem("user_details_goTo"));
-    
- 
+
+
 
 
     const data = async () => {
 
-        await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain  , brokerId: -1})).unwrap()
+        await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain, brokerId: -1 })).unwrap()
             .then((response) => {
                 if (response.status) {
                     setUserDetails({
@@ -57,25 +57,25 @@ const ApiCreateInfo = () => {
     }
 
 
-     
+
     return <>
         <Content Page_title="All Api-Create Info's" button_status={false}>
-            <div class="row">
-                <section class="card__container">
+            <div className="row">
+                <section className="card__container">
 
-                    {/* {goToDashboard ? } */}
+
                     {UserDetails.data && UserDetails.data.map((item) => {
-                                             
+
                         return <>
-                            <div class="card__bx card__1">
-                                <div class="card__data">
-                                    <div class="card__icon">
-                                        <div class="card__icon-bx">
+                            <div className="card__bx card__1">
+                                <div className="card__data">
+                                    <div className="card__icon">
+                                        <div className="card__icon-bx">
                                             <CandlestickChart />
                                         </div>
                                     </div>
 
-                                    <div class="card__content">
+                                    <div className="card__content">
                                         <h3>{item.title}</h3>
                                         <Link style={{
                                             marginRight: '20px',
@@ -84,9 +84,7 @@ const ApiCreateInfo = () => {
                                         }} onClick={() => ShowData(item)} >
                                             <Eye className='mx-2' />
                                         </Link>
-                                        {/* <Link to="/admin/apicreateinfo/edit" state={item}>
-                                            <Pencil className='mx-2' onClick={() => ShowData(item)} />
-                                        </Link> */}
+
                                     </div>
                                 </div>
                             </div>
@@ -118,24 +116,16 @@ const ApiCreateInfo = () => {
                 {modalData.steptwourl || modalData.imageone ? <>
                     <h4 className="text-decoration-underline">Step 1:  Click below link and Login</h4>
                     <a href={modalData.steponeurl} target="_blank" className="my-3" >{modalData.steponeurl} </a><br />
-                    {/* <a
-                        href={
-                            "https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB"
-                        }
-                        target="_blank"
-                        className="my-3"
-                    >
-                        https://ant.aliceblueonline.com/?appcode=G9EOSWCEIF9ARCB
-                    </a> */}
+
                     <br />
-                    {modalData.imageone ? <img src={modalData.imageone} alt="" class="w-100 my-3 border border-dark" /> : ""}
+                    {modalData.imageone ? <img src={modalData.imageone} alt="" className="w-100 my-3 border border-dark" /> : ""}
 
                 </> : ""}
 
                 {modalData.steptwourl || modalData.imagetwo ? <>
 
                     <h4 className="text-decoration-underline my-3">Step 2:  Enter your Details and the Redirect URL which is given below.</h4>
-                    {/* <a href={modalData.steptwourl} target="_blank"  >{modalData.steptwourl} </a> */}
+
                     <a
                         href={`${Config.base_url + modalData.steptwourl}`}
                         target="_blank"
@@ -143,13 +133,13 @@ const ApiCreateInfo = () => {
                         {`${Config.base_url + modalData.steptwourl}`}
                     </a>
                     <br />
-                    {modalData.imagetwo ? <img src={modalData.imagetwo} alt="" class="w-100 border border-dark" /> : ""}
+                    {modalData.imagetwo ? <img src={modalData.imagetwo} alt="" className="w-100 border border-dark" /> : ""}
                 </> : ""}
 
                 {modalData.imagethree || modalData.imagethree ? <>
                     <h4 className="text-decoration-underline my-3">Step 3:  Create API</h4>
                     <a href={modalData.stepthreeurl} target="_blank"  >{modalData.stepthree} </a><br />
-                    {modalData.imagethree ? <img src={modalData.imagethree} alt="" class="w-100 border border-dark" /> : ""}
+                    {modalData.imagethree ? <img src={modalData.imagethree} alt="" className="w-100 border border-dark" /> : ""}
                 </> : ""}
 
 
@@ -163,9 +153,7 @@ const ApiCreateInfo = () => {
                     </ul>
                     : ""
                 }
-                {/* {modalData.note ?
-                    <h3 className="text-alert my-3 text-info">NOTE- {modalData.note}</h3>
-                    : ""} */}
+
 
                 {modalData.youtubeurl ?
                     <>
@@ -174,6 +162,12 @@ const ApiCreateInfo = () => {
                     </>
                     : ""}
 
+                {modalData.dawnload ?
+                    <>
+                        <h4 className="text-decoration-underline mt-3">Dawnload Excel</h4>
+                        <a href={modalData.dawnload} className="btn btn-primary mx-3" >DAWNLOAD</a>
+                    </>
+                    : ""}
 
 
             </Modal>

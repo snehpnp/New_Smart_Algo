@@ -698,11 +698,10 @@ class Login {
             );
 
 
-            let result11 = await User.findByIdAndUpdate(
-                EmailCheck._id,
-                token_query,
-                { new: true }
-            )
+            // let result11 = await User.findByIdAndUpdate(
+            //     EmailCheck._id,           
+            //     { new: true }
+            // )
 
             const user_login = new user_logs({
                 user_Id: EmailCheck._id,
