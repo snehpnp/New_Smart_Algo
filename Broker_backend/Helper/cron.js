@@ -14,21 +14,18 @@ module.exports = function (app) {
     
     cron.schedule('10 7 * * *', () => {
         console.log('Run First Time');
-        downloadAndSwastika();
-     
-        
+        downloadAndSwastika(); 
     });
     
+
     cron.schedule('15 7 * * *', () => {
         console.log('Run First Time');
-      
         downloadKotakNeotoken();
-        
     });
+
 
     cron.schedule('20 7 * * *', () => {
         console.log('Run First Time');
-      
         downloadZerodhatoken();
         downloadAndExtractUpstox();
         downloadAndExtractICICIDirect();
