@@ -174,7 +174,8 @@ class OptionChain {
 
     // GET All ROUND TOKEN
     async Get_Option_All_Round_Token(req, res) {
-
+        console.log("Get_Option_All_Round_Token",req.body.symbol,req.body.expiry)
+        try {
         const symbol = req.body.symbol;
         const expiry = req.body.expiry;
 
@@ -283,6 +284,10 @@ class OptionChain {
         }
         else {
            return res.send({ status: false, data: [], channellist: "" })
+        }
+
+        } catch (error) {
+            console.log("Error Get_Option_All_Round_Token", error);
         }
     }
 

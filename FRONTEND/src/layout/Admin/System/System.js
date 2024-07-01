@@ -28,31 +28,31 @@ const System = () => {
 
 
     const [messages, setMessages] = useState([]);
-    useEffect(() => {
-        const webSocketService = new WebSocketService(WEBSOCKET_URI);
-        const handleMessage = (message) => {
-         setMessages((prevMessages) => [...prevMessages, message]);
-        console.log("message ",message)
-        };
+    // useEffect(() => {
+    //     const webSocketService = new WebSocketService(WEBSOCKET_URI);
+    //     const handleMessage = (message) => {
+    //      setMessages((prevMessages) => [...prevMessages, message]);
+    //     console.log("message ",message)
+    //     };
     
-        const handleOpen = () => {
-          console.log('WebSocket connection opened');
-        };
+    //     const handleOpen = () => {
+    //       console.log('WebSocket connection opened');
+    //     };
     
-        const handleClose = () => {
-          console.log('WebSocket connection closed');
-        };
+    //     const handleClose = () => {
+    //       console.log('WebSocket connection closed');
+    //     };
     
-        const handleError = (error) => {
-          console.error('WebSocket error:', error);
-        };
+    //     const handleError = (error) => {
+    //       console.error('WebSocket error:', error);
+    //     };
     
-        const disconnect = webSocketService.connect(handleMessage, handleOpen, handleClose, handleError);
+    //     const disconnect = webSocketService.connect(handleMessage, handleOpen, handleClose, handleError);
     
-        return () => {
-          disconnect();
-        };
-      }, []);
+    //     return () => {
+    //       disconnect();
+    //     };
+    //   }, []);
 
 
 
