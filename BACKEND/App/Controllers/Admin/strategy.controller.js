@@ -263,7 +263,9 @@ class strategy {
                         'users.license_type': 1,
                         'users.WebLoginStatus': 1,
                         'users.AppLoginStatus': 1,
-                        'users.TradingStatus': 1
+                        'users.TradingStatus': 1,
+                        'users.Email': 1,
+
 
 
 
