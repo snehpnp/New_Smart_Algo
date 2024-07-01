@@ -8,6 +8,7 @@ import FullDataTable from "../../../../Components/ExtraComponents/Datatable/Full
 import { useDispatch } from "react-redux";
 import Modal from "../../../../Components/ExtraComponents/Modal";
 import {  Get_All_Strategy, Remove_Strategy_BY_Id, Get_client_By_strategy_Id, Add_And_Remove_Strategy_To_Client, UpDate_strategy_Id} from "../../../../ReduxStore/Slice/Admin/StrategySlice";
+import { GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 
 import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
@@ -289,6 +290,27 @@ const ServicesList = () => {
       })
   }
 
+
+  const goToDashboard = async (email) => {
+    let req = {
+        Email: email.users.Email,
+
+    };
+    await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
+        .then((response) => {
+            if (response.status) {
+                localStorage.setItem("gotodashboard", JSON.stringify(true));
+                localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
+                localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
+                localStorage.setItem("page", "groupservices");
+
+                navigate("/client/dashboard")
+
+            }
+        })
+
+}
+
   return (
     <>
       {AllStrategy.loading ? (
@@ -375,12 +397,12 @@ const ServicesList = () => {
                         text: 'Go To Dashboard',
                         formatter: (cell, row, rowIndex) =>
                             <>
-               {             console.log("row",row)}
+              
                                
                                 <button
                                     className={`btn  ${row.users.AppLoginStatus == '1' || row.users.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
 
-                                    // onClick={() => goToDashboard(row)}
+                                    onClick={() => goToDashboard(row)}
                                     disabled={row.users.AppLoginStatus === '0' && row.users.WebLoginStatus === '0'}
 
                                 > click</button>
