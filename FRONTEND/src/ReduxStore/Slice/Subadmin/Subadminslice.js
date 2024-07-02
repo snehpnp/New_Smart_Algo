@@ -61,7 +61,7 @@ const SubadminSlice = createSlice({
             return { ...state, allSubadmin: payload, isLoading: false };
         },
         [Get_All_SUBADMIN.rejected]: (state, action) => {
-            console.log("pending reject ");
+    
             // return { ...state, allService: action, isLoading: false };
         },
         [Get_All_SUBADMIN_CLIENT.fulfilled]: (state, { payload }) => {

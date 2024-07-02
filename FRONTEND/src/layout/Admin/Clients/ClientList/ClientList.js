@@ -40,7 +40,6 @@ const AllClients = () => {
   const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [] });
 
 
-  //  GET ALL SERVICE NAME
   const GetAllStrategyName = async (e) => {
     await dispatch(
       Get_All_Service_for_Client({
@@ -75,7 +74,6 @@ const AllClients = () => {
   }, []);
 
 
-  // DELETE USET FUNCTION TO DELETE ALL SERVICES
   const Delete_user = async (id) => {
     var req1 = {
       id: id,
@@ -221,7 +219,6 @@ const AllClients = () => {
     fetchData();
   }, [refresh]);
 
-  // GO TO DASHBOARD
   const goToDashboard = async (row, asyncid, email) => {
     if (row.AppLoginStatus == "1" || row.WebLoginStatus == "1") {
       let req = {
@@ -249,7 +246,6 @@ const AllClients = () => {
 
   };
 
-  // ACTIVE USER TO API
   const activeUser = async (e, data) => {
 
     if (window.confirm("Do you want To Change Status For This User ?") === true) {
@@ -295,7 +291,6 @@ const AllClients = () => {
       return value;
     }
   };
-
 
   const columns = [
     {
@@ -496,9 +491,6 @@ const AllClients = () => {
     }
   ];
 
-
-
-
   const showBrokerName = (value1, licence_type) => {
     let value = parseInt(value1);
 
@@ -517,7 +509,6 @@ const AllClients = () => {
     }
   };
 
-  // MANAGE MULTIFILTER
   useEffect(() => {
     const filteredData = originalData.filter((item) => {
 
@@ -582,9 +573,6 @@ const AllClients = () => {
 
 
   const DownloadsData = async (id, key) => {
-
-    console.log("----------", id)
-
 
     await dispatch(
       DawnloadDataUser({

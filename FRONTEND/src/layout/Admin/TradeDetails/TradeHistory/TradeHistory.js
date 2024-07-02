@@ -296,9 +296,9 @@ const TradeHistory = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          console.log("if", response)
+       
         } else {
-          console.log("else", response)
+     
         }
       });
 
@@ -779,8 +779,6 @@ const TradeHistory = () => {
 // CONDITION  MANAGE TO LIVE PRICE SHOW
   if (selector && selector.permission) {
     if (selector.permission && selector.permission.data && selector.permission.data[0]) {
-      console.log("selector", selector.permission.data[0].live_price);
-      
       if (selector.permission.data[0].live_price == 0) {
         columns = columns.filter((data) => data.dataField !== "live");
       }

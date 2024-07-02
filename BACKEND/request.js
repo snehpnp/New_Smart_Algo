@@ -129,8 +129,6 @@ module.exports = function (app) {
     var CreateDataBase = async (data) => {
         const uri = data;
         const databaseName = "TradeTools"
-        console.log("uri", uri)
-
         if(uri){
 
             if (!databaseName) {

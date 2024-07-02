@@ -10,14 +10,8 @@ import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from 'lucide-react';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
-
-
-
-
 import { All_Api_Info_List } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
-
 import * as Config from "../../../Utils/Config";
-
 import { DELETE_USER_SERVICES } from '../../../ReduxStore/Slice/Subadmin/userSlice'
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
@@ -25,7 +19,6 @@ import { fDate, fDateTimeSuffix } from '../../../Utils/Date_formet';
 import { maskEmail, maskNumber } from "../../../Utils/HideWIthStart";
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
 import toast, { Toaster } from 'react-hot-toast';
-
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 
@@ -37,43 +30,25 @@ const AllClients = () => {
     const [searchInput, setSearchInput] = useState("");
     const [ClientStatus, setClientStatus] = useState("null");
     const [PanelStatus, setPanelStatus] = useState("2");
-
-
-
     const dispatch = useDispatch()
     const Role = JSON.parse(localStorage.getItem("user_details")).Role
     const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
     const Subadmin_permision = JSON.parse(localStorage.getItem('user_details')).Subadmin_permision
     const token = JSON.parse(localStorage.getItem("user_details")).token;
-
     const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
     const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-
-
     const [first, setfirst] = useState('all')
-
-
     const [btncolor, setbtncolor] = useState(false)
     const [refresh, setrefresh] = useState(false)
-
     const [getPermissions, setGetPermissions] = useState([])
-
-
-
-
-    const [getAllClients, setAllClients] = useState({
-        loading: true,
-        data: []
-    });
-
+    const [getAllClients, setAllClients] = useState({loading: true,data: [] });
     const [BrokerDetails, setBrokerDetails] = useState([]);
-    //console.log("BrokerDetails ",BrokerDetails)
+
 
     const Brokerdata = async () => {
 
         await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain, brokerId: -1 ,key:1})).unwrap()
             .then((response) => {
-                console.log(" response broker data", response)
                 if (response.status) {
                     setBrokerDetails(response.data);
                 }
@@ -88,7 +63,7 @@ const AllClients = () => {
         if (window.confirm("Do you want to delete this User ?")) {
             await dispatch(DELETE_USER_SERVICES(req1)).unwrap()
                 .then((response) => {
-                    // console.log("response", response);
+                    
                     if (response.status) {
                         setrefresh(!refresh)
                     }
@@ -199,7 +174,7 @@ const AllClients = () => {
                 .unwrap()
                 .then((response) => {
                     if (response.status) {
-                        // console.log("response", response)
+                     
                         toast.success(response.msg);
                         setTimeout(() => {
                             setrefresh(!refresh)
@@ -265,7 +240,7 @@ const AllClients = () => {
         } else {
 
             const foundNumber = BrokerDetails && BrokerDetails.find((value) => value.broker_id == value1);
-            // console.log("foundNumber ",foundNumber)
+          
             if (foundNumber != undefined) {
                 return foundNumber.title
             } else {
@@ -457,8 +432,7 @@ const AllClients = () => {
         },
     ];
 
-    // console.log("getPermissions && getPermissions.Update_Api_Key" ,getPermissions && getPermissions.Update_Api_Key)
-
+   
     return (
         <>
             {

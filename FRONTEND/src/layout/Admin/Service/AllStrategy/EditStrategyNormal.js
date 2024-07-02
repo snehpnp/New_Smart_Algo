@@ -170,8 +170,7 @@ const EditStrategyNormal = () => {
     )
       .unwrap()
       .then((response) => {
-        // console.log("response :",response)
-
+  
         if (response.status) {
           setone_strategy(response.data);
           formik.setFieldValue("strategyname", response.data.strategy_name);

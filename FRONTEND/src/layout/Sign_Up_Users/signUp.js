@@ -48,7 +48,6 @@ const SignUp = () => {
           setGetCompanyName(response.data && response.data[0].panel_name)
 
           $(".logo-abbr").attr('src', response.data && response.data[0].logo);
-          // console.log("response.data && response.data", response.data && response.data)
           $(".Company_logo").html(response.data && response.data[0].panel_name);
 
 
@@ -111,8 +110,6 @@ const SignUp = () => {
         device: CheckUser,
       };
 
-
-      //  console.log("req:", req);
 
       await dispatch(SignUpUser(req))
         .unwrap()

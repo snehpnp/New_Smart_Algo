@@ -1218,15 +1218,13 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
 
   }
 
- // console.log("timeFrameVal - ", timeFrameVal)
 
- // console.log("buyCheck - ", buyCheck)
 
 
   
 
   const StoplossChange = (e,buy_sell) => {
-     console.log("e", e.target.value)
+ 
    if(parseInt(e.target.value) > 0 ){
    
     if(buy_sell == "buy"){
@@ -1552,7 +1550,6 @@ const updateStrategy = async (e) => {
         "maxLoss":singleMakeStrategyData.maxLoss
        }
        
-       console.log("data request buy",data)
 
        await dispatch(Update_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
         if (response.status === 409) {
@@ -1618,7 +1615,6 @@ const updateStrategy = async (e) => {
         "maxProfit":singleMakeStrategyData.maxProfit,
         "maxLoss":singleMakeStrategyData.maxLoss
       }
-      console.log("data request sell",data)
 
       await dispatch(Update_Make_Strategy({ req: data, token: AdminToken })).unwrap().then((response) => {
         if (response.status === 409) {
@@ -1648,10 +1644,6 @@ const updateStrategy = async (e) => {
   }
 
 
-
-  console.log("timeTradeConddition - ",timeTradeConddition);
-  console.log("update oject - ",singleMakeStrategyData);
-  console.log("update oject selectStrategy- ",selectStrategy);
   
   const SelectStrategyTag = (e) => {
     //alert("okk ssss")

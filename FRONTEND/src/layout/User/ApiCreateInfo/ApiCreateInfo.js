@@ -94,7 +94,7 @@ const ApiCreateInfo = () => {
 
   const ShowData = (item) => {
     setshowModal(true);
-    console.log("item", item);
+  
     setModalData(item);
   };
 
@@ -164,7 +164,6 @@ const ApiCreateInfo = () => {
                   : <>
 
 
-                    {/* {console.log("modalData", modalData.broker_id)} */}
                     <h4>API Process of {modalData.title}: -</h4>
                     {modalData.description ? (
                       <ul>

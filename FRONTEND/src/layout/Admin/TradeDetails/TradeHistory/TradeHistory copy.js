@@ -579,7 +579,6 @@ const TradeHistory = () => {
     await dispatch(Get_All_Service({})).unwrap()
       .then((response) => {
         if (response.status) {
-          // console.log("response", response)
           setServiceData({
             loading: false,
             data: response.data,
@@ -615,9 +614,6 @@ const TradeHistory = () => {
   }, [])
 
 
-  // console.log("originalData", originalData)
-
-  //  MANAGE MULTIFILTER
 
   // Existing code...
   useEffect(() => {
@@ -632,7 +628,7 @@ const TradeHistory = () => {
         const isStrategyMatch = StrategyClientStatus === "null" || itemStrategy === StrategyClientStatus.toLowerCase();
         return isStrategyMatch && isServiceMatch
       });
-      console.log("filteredData", filteredData);
+    
     }
 
   }, [SelectService, StrategyClientStatus, originalData]);

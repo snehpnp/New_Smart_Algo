@@ -178,10 +178,6 @@ const AllSubadmin = () => {
             }    
 
 
-            console.log("req:", req)
-            // return 
-
- 
 
             await dispatch(Edit_Subadmin({ req: req, token: user_token })).unwrap().then((response) => {
                 if (response.status === 409) {
@@ -189,7 +185,6 @@ const AllSubadmin = () => {
                 }
                 else if (response.status) {
                     toast.success(response.msg);
-                    console.log("response:", response)
                     setTimeout(() => {
                         navigate("/admin/allsubadmins")
                     }, 1000);
@@ -205,7 +200,6 @@ const AllSubadmin = () => {
 
 
     //  SET INTIAL VALUE
-console.log("UserData :", UserData)
     useEffect(() => {
         if (UserData.data.data !== undefined) {
             let userStrategyIds = UserData.data.data !== undefined && UserData.data.data[0].subadmin_permissions[0]

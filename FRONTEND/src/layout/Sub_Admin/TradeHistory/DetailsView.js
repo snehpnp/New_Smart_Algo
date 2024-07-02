@@ -5,7 +5,7 @@ import { fa_time, fDateTimeSuffix } from '../../../Utils/Date_formet'
 
 
 const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
-    console.log("tradeHistoryData", tradeHistoryData.data);
+   
 
     const columns1 = [
         {

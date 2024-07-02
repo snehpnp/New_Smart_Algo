@@ -116,14 +116,6 @@ const TradeHistory = () => {
             .then((response) => {
                
                 if (response.status) {
-
-                console.log("cp :", response && response.data[0].TradeType )
-                console.log("cp 1:", response && response.data[0].trade_symbol )
-                console.log("cp 2:",response && response.data[0].entry_type )
-                console.log("cp 3:", response && response.data[0].strategy )
-                console.log("cp 4:", searchInput)
-
-
                 const filterData = response && response.data.filter((item) => {
                     const searchedMatch =
                         searchInput == '' ||

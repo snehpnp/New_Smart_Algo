@@ -834,7 +834,6 @@ module.exports = function (app) {
 
           function evaluateFunction(change) {
 
-            console.log('Evaluating changes:', change);
           }
 
 
@@ -862,7 +861,6 @@ module.exports = function (app) {
           }
 
           const insertResult = await collection.insertOne(singleDocument);
-          //console.log('Inserted document:', insertResult.insertedId);
         }
 
       }
@@ -907,10 +905,9 @@ module.exports = function (app) {
 
 
       const collections = await db.listCollections().toArray();
-      // Check if the desired collection exists
+
       const collectionExists = collections.some(coll => coll.name === 'M_' + collectionName);
-      //console.log("collectionExists view 1 minute", collectionExists)
-      // console.log("pipeline",pipeline)
+   
 
       if (collectionExists) {
 
@@ -998,8 +995,7 @@ module.exports = function (app) {
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M3_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1019,7 +1015,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1085,8 +1081,7 @@ module.exports = function (app) {
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M5_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1106,7 +1101,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1172,8 +1167,7 @@ module.exports = function (app) {
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M10_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1193,7 +1187,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1259,8 +1253,7 @@ module.exports = function (app) {
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M15_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1280,7 +1273,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1346,8 +1339,7 @@ module.exports = function (app) {
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M30_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1367,7 +1359,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1433,8 +1425,7 @@ module.exports = function (app) {
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M60_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1454,7 +1445,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1516,8 +1507,7 @@ module.exports = function (app) {
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M1DAY_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1537,7 +1527,7 @@ module.exports = function (app) {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1556,13 +1546,12 @@ module.exports = function (app) {
 
     // Listen for the "pankaj_sir" event from the server
     socket.on("testing_data", (response) => {
-      console.log("Received data ':", response);
-      // Do something with the received data here
+
+
       if (response.tk) {
-        // console.log("response",response)
+
         connectToDB(response.tk, response);
-        // console.log("token --",response.tk);
-        // getTokenStrategy(response.tk)
+       
       }
     });
 
@@ -1573,14 +1562,14 @@ module.exports = function (app) {
 
     // Handle errors (optional)
     socket.on("error", (error) => {
-      console.log("Socket.IO Error:", error);
+
     });
 
     res.send("okkkk ")
   })
 
   async function getTokenStrategy(token) {
-    console.log("inside token --", token);
+ 
 
     const pipeline1 = [
 
@@ -1629,7 +1618,7 @@ module.exports = function (app) {
     const result = await UserMakeStrategy.aggregate(pipeline1);
 
     if (result.length > 0) {
-      // console.log("result ",result)
+  
 
       result.forEach(element => {
         callStartegy(element)
@@ -1660,19 +1649,12 @@ module.exports = function (app) {
     let buffer_value = element.buffer_value;
     let UserName = element.userResult.UserName;
 
-    console.log("inside tokensymbol ", tokensymbol)
-    console.log("offset ", offset)
-    // console.log("inside UserName ",UserName)
-    // console.log("price_source ",price_source)
-
     const db = dbTradeTools;
     let collectionName = 'M' + timeframe + '_' + tokensymbol;
 
     const collections = await db.listCollections({ name: collectionName }).toArray();
 
     if (collections.length > 0) {
-
-      // console.log("exist collection",collectionName)
 
       const collection = db.collection(collectionName);
 
@@ -1718,8 +1700,6 @@ module.exports = function (app) {
 
 
 
-
-      console.log("get_view_data - ", get_view_data)
 
       const pipelineTimeFrameData = [
         { $sort: { _id: 1 } }

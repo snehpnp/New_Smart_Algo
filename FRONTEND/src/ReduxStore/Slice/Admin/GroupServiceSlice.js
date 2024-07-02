@@ -91,35 +91,11 @@ const GroupServiceSlice = createSlice({
         updatServiceByGroupId: [],
         getServiceByGroupId_forEdit: []
     },
-    reducers: {}, // Reducers should be defined here, if you have any
-    // extraReducers: (builder) => { // Define extra reducers using builder
-    //     builder
-    //         .addCase(Add_Group.pending, (state, action) => {
-    //             console.log("pending Add_Group");
-    //             state.isLoading = true;
-    //         })
-    //         .addCase(Add_Group.fulfilled, (state, action) => {
-    //             state.addgroup = action.payload;
-    //             state.isLoading = false;
-    //         })
-    //         .addCase(GET_ALL_SERVICES_NAMES.fulfilled, (state, action) => {
-    //             state.AllservicesName = action.payload;
-    //             state.isLoading = false;
-    //         })
-    //         .addCase(GET_ALL_SERVICES_USER_NAMES.fulfilled, (state, action) => {
-    //             state.AllservicesuserName = action.payload;
-    //             state.isLoading = false;
-    //         })
-    //         .addCase(DELETE_GROUP_SERVICE.fulfilled, (state, action) => {
-    //             state.deletegroupService = action.payload;
-    //             state.isLoading = false;
-    //         });
-    // },
-
+    reducers: {}, 
+ 
     extraReducers: {
         [Add_Group.fulfilled]: (state, action) => {
-            // return { ...state, add_user: payload, isLoading: false };
-            console.log("pending Add_Group");
+       
 
         },
         [Add_Group.fulfilled]: (state, { payload }) => {

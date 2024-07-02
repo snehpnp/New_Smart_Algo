@@ -142,8 +142,7 @@ const MsgBroadCast = () => {
                     toast.error(response.msg);
                 }
             })
-        } else {
-            return console.log("Ss")
+        }
         }
     }
 

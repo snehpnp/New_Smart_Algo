@@ -233,7 +233,7 @@ const System = () => {
     };
 
     const updateDiscStatus = async (e) => {
-        console.log("Checkbox value:", e.target.checked);
+
         const data = { id: "6501756b2a8e6d952493b7f4", disclaimer_status: e.target.checked ? "1" : "0" };
 
         await dispatch(DisclaimerMessage(data)).unwrap()

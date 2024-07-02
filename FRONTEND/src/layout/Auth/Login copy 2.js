@@ -141,38 +141,7 @@ const Login = () => {
         Password: values.password,
         device: CheckUser,
       };
-       
-      // await dispatch(SignIn(req))
-      //   .unwrap()
-      //   .then((response) => {
-          
-
-      //     if (response.status) {
-      //       if (response.data.Role !== "SUPERADMIN") {
-      //         setshowModal(true);
-      //         setUserData(response.data);
-      //       } else if (response.data.Role === "SUPERADMIN") {
-      //         toast.success(response.msg);
-      //         localStorage.setItem(
-      //           "user_details",
-      //           JSON.stringify(response.data)
-      //         );
-      //         localStorage.setItem(
-      //           "user_role",
-      //           JSON.stringify(response.data.Role)
-      //         );
-      //         setTimeout(() => {
-      //           navigate("/super/dashboard");
-      //         }, 1000);
-      //       }
-      //     } else {
-            
-      //       toast.error(response.msg);
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     console.log("Error", error);
-      //   });
+   
     },
   });
 

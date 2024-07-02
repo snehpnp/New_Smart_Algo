@@ -68,8 +68,6 @@ const TradingStatus = () => {
     }, [first])
 
 
-    console.log("ForGetCSV", ForGetCSV)
-
 
     const columns = [
         {
