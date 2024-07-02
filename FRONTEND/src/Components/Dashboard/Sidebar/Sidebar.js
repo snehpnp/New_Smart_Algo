@@ -5,7 +5,7 @@ import { Signal, Users, Wrench, Link2, Frame, CandlestickChart, Activity, Wallet
 import $ from "jquery";
 import Logo from '../Header/Logo';
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Get_Company_Logo } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import * as Config from "../../../Utils/Config";
 import { Get_Pmermission } from "../../../ReduxStore/Slice/Users/DashboardSlice";

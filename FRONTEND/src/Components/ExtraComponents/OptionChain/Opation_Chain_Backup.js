@@ -5,7 +5,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import Theme_Content from "../../Dashboard/Content/Content"
 import Loader from '../../../Utils/Loader'
 import FullDataTable from "../Datatable/FullDataTable"
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import BasicDataTable from "../Datatable/BasicDataTable";
 import Modal from "../Modal";
 import { Trash2 } from 'lucide-react';

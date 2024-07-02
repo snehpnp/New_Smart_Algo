@@ -53,8 +53,12 @@ const TradeHistory = () => {
   const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
 
 
+  const selector = useSelector((state) => state.DashboardSlice);
 
+  if(selector && selector.permission){
 
+    console.log("selector",selector.permission  && selector.permission.data && selector.permission.data[0] )
+  }
 
   useEffect(() => {
     GetAdminTradingStatus()
@@ -123,6 +127,7 @@ const TradeHistory = () => {
     setSelectService("null");
     setSelectServiceIndex('null')
     setToDate("");
+    SetlotMultypaly(1)
     setTradeHistoryData({
       loading: false,
       data: tradeHistoryData.data,

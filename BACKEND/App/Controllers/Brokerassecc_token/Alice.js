@@ -255,20 +255,33 @@ class AliceBlue {
 
     }
 
-    // GET LIVE PRICE TOKEN
-    async GetLivePrice(req, res) {
+    async  GetLivePrice(req, res) {
         try {
-            const Get_live_price = await live_price.find({ broker_name: "ALICE_BLUE" })
-            if (Get_live_price) {
-                return res.send({ status: true, data: Get_live_price, msg: "Get Data" })
+            const Get_live_price = await live_price.find({ broker_name: "ALICE_BLUE" });
+            
+            if (Get_live_price.length > 0) {
+                return res.send({ status: true, data: Get_live_price, msg: "Get Data" });
+            } else {
+                // Data not found, insert the default document
+                const defaultDocument = {
+                    broker_name: "ALICE_BLUE",
+                    Role: "ADMIN",
+                    access_token: "",
+                    trading_status: "off",
+                    updatedAt: new Date(), // current date and time
+                    user_id: "",
+                    broker_id: "2",
+                    Stock_chain: "NFO|45803#NFO|45832#NFO|35773#NFO|35772#NFO|46863#NFO|46864#NFO|35777#NFO|35776#NFO|47636#NFO|47637#NFO|35781#NFO|35780#NFO|47639#NFO|47640#NFO|35784#NFO|35782#NFO|49559#NFO|49560#NFO|35786#NFO|35785#NFO|49568#NFO|49569#NFO|35787#NFO|35788#NFO|49577#NFO|49576#NFO|35795#NFO|35796#NFO|49581#NFO|49580#NFO|35804#NFO|35803#NFO|49582#NFO|49591#NFO|35806#NFO|35805#NFO"
+                };
+    
+                const new_live_price = new live_price(defaultDocument);
+                await new_live_price.save();
+    
+                return res.send({ status: true, data: [new_live_price], msg: "Default Data Added and Returned" });
             }
-
-            return res.send({ status: false, data: [], msg: "Empty" })
-
         } catch (error) {
             console.log("Error In Get Token Live Price", error);
-            return res.send({ status: false, data: error, msg: "Error In get live price data" })
-
+            return res.send({ status: false, data: error, msg: "Error In get live price data" });
         }
     }
 

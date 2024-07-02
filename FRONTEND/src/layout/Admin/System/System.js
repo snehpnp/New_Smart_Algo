@@ -18,7 +18,7 @@ import UpdateCompanyInfo from './UpdateCompanyInfo';
 import UpdateImages from './UpdateImages';
 import UpdateSmptDetails from './UpdateSmptDetails';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const System = () => {
     const [dissArr, setDissArr] = useState([]);

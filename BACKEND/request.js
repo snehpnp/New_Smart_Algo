@@ -474,6 +474,11 @@ module.exports = function (app) {
     // =====================================================================================================================
 
 
+    app.get("/UpdateServicesToken", async (req, res) => { 
+        TokenSymbolUpdate()
+
+    })
+
 
 
 

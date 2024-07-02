@@ -5,7 +5,7 @@ import Loader from '../../../../Utils/Loader'
 
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_HELPS } from '../../../../ReduxStore/Slice/Admin/AdminHelpSlice'
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Modal from '../../../../Components/ExtraComponents/Modal';
 
 

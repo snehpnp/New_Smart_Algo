@@ -1236,7 +1236,6 @@ const TokenSymbolUpdate = () => {
                         }
 
                     } else if (element.instrumenttype == 'FUTCUR') {
-                        //console.log("INSTRUMENT LAST",element.name)
 
                         const filter_service = { name: element.name };
                         const updateOperation_service = { $set: { lotsize: element.lotsize } };

@@ -353,11 +353,7 @@ class Panel {
 
             var domain1 = "http://localhost:3000"
 
-            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "https://trade.pandpinfotech.com"
-            } else {
-                domain1 = domain
-            }
+            domain1 = domain
 
             const getAllpanel = await panel_model.find({ domain: domain1 })
 
@@ -402,13 +398,13 @@ class Panel {
 
             var domain1 = "http://localhost:3000"
 
-            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "https://trade.pandpinfotech.com"
-            } else {
+            // if (domain == "http://localhost:3000" ) {
+            //     domain1 = "https://trade.pandpinfotech.com"
+            // } else {
                 domain1 = domain
-            }
+            // }
 
-            const Panle_information = await panel_model.find({ domain: domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan , is_active')
+            const Panle_information = await panel_model.find({ domain: domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price')
 
 
 
@@ -432,11 +428,7 @@ class Panel {
 
             var domain1 = "http://localhost:3000"
 
-            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "https://trade.pandpinfotech.com"
-            } else {
-                domain1 = domain
-            }
+            domain1 = domain
 
 
 
@@ -485,11 +477,7 @@ class Panel {
         try {
             const { domain, data } = req.body
             var domain1 = "http://localhost:3000"
-            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "https://trade.pandpinfotech.com"
-            } else {
-                domain1 = domain
-            }
+            domain1 = domain
 
             const filter = { domain: domain1 };
             const update = {

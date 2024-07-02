@@ -4,7 +4,7 @@ import $ from "jquery";
 import Modal_Component from '../../../ExtraComponents/Modal';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import html2canvas from 'html2canvas';
 import { Add_Theme } from '../../../../ReduxStore/Slice/ThemeSlice';
 import toast from 'react-hot-toast';

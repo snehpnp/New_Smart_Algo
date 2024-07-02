@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import Logo from "./Logo";
 import DropDown from "./DropDown";
 import Notification from "../../ExtraComponents/Notification";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Holidays from "date-holidays"
 import $ from "jquery";
 import { useNavigate } from "react-router-dom";

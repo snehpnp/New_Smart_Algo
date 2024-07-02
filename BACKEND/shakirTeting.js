@@ -2976,7 +2976,6 @@ module.exports = function (app) {
       .then(function (response) {
 
         // res.send(response.data);
-        // console.log(response.data);
         // Using a loop to extract 'name' and 'instrumenttype'
 
 
@@ -2984,360 +2983,360 @@ module.exports = function (app) {
         let count = 0
         response.data.forEach((item) => {
 
-          //   function findRepeatedElements(array) {
-          //     const frequencyMap = {};
-          //     const repeatedElements = [];
+            // function findRepeatedElements(array) {
+            //   const frequencyMap = {};
+            //   const repeatedElements = [];
 
-          //     array.forEach(element => {
-          //       if (frequencyMap[element.instrumenttype]) {
-          //         frequencyMap[element.instrumenttype]++;
-          //         if (frequencyMap[element.instrumenttype] === 2) {
-          //           repeatedElements.push(element.instrumenttype);
-          //         }
-          //       } else {
-          //         frequencyMap[element.instrumenttype] = 1;
-          //       }
-          //     });
+            //   array.forEach(element => {
+            //     if (frequencyMap[element.instrumenttype]) {
+            //       frequencyMap[element.instrumenttype]++;
+            //       if (frequencyMap[element.instrumenttype] === 2) {
+            //         repeatedElements.push(element.instrumenttype);
+            //       }
+            //     } else {
+            //       frequencyMap[element.instrumenttype] = 1;
+            //     }
+            //   });
 
-          //     return repeatedElements;
-          //   }
+            //   return repeatedElements;
+            // }
 
-          //   const inputArray = response.data;
-          //   const repeatedElements = findRepeatedElements(inputArray);
+            // const inputArray = response.data;
+            // const repeatedElements = findRepeatedElements(inputArray);
 
-          //   console.log('Repeated elements:', repeatedElements);
-          //   res.send(repeatedElements)
-          // return
+        
 
-
-          //  if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
-
-
-          //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
-          //     count++
-          //     console.log('item - CO ' + count + ' ', item)
-          //     const matchingElements = categoryResult.filter(item => item.segment === "CO");
-          //     const category_id = matchingElements[0]._id
-
-
-          //     services.create({
-          //       name: item.name,
-          //       instrument_token: item.token,
-          //       zebu_token: item.symbol,
-          //       kotak_token: "",
-          //       instrumenttype: item.instrumenttype,
-          //       exch_seg: item.exch_seg,
-          //       lotsize: item.lotsize,
-          //       categorie_id: category_id,
-          //       unique_column: item.name + '_' + category_id
-          //     })
-          //       .then((createdServices) => {
-          //         console.log('User created and saved:', createdServices._id)
-          //       })
-          //       .catch((err) => {
-          //         try {
-          //           console.log('Error creating and saving user:', err);
-          //         } catch (e) {
-          //           console.log("duplicate key")
-          //         }
+           if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
+          
+
+
+
+           if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+              count++
+              // console.log('item - CO ' + count + ' ', item)
+              const matchingElements = categoryResult.filter(item => item.segment === "CO");
+              const category_id = matchingElements[0]._id
+
+
+              services.create({
+                name: item.name,
+                instrument_token: item.token,
+                zebu_token: item.symbol,
+                kotak_token: "",
+                instrumenttype: item.instrumenttype,
+                exch_seg: item.exch_seg,
+                lotsize: item.lotsize,
+                categorie_id: category_id,
+                unique_column: item.name + '_' + category_id
+              })
+                .then((createdServices) => {
+                  console.log('User created and saved:', createdServices._id)
+                })
+                .catch((err) => {
+                  try {
+                    console.log('Error creating and saving user:', err);
+                  } catch (e) {
+                    console.log("duplicate key")
+                  }
 
-          //       });
+                });
 
 
-          //   }
-
-
-
-          //   if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
-          //  unique_key.push(`${item.name}-${item.instrumenttype}`);
-
-
-          // if (item.symbol.slice(-3) == '-EQ') {
-          //   count++
-
-          //   const matchingElements = categoryResult.filter(item => item.segment === "C");
-          //   const category_id = matchingElements[0]._id
+            }
 
+
+
+            if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+           unique_key.push(`${item.name}-${item.instrumenttype}`);
+           console.log("55555",item.symbol)
+
+
+          if (item.symbol.slice(-3) == '-EQ') {
+            count++
+
+            const matchingElements = categoryResult.filter(item => item.segment === "C");
+            const category_id = matchingElements[0]._id
 
-          //   services.create({
-          //     name: item.name + '#',
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '#_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-          // }
-
 
+            services.create({
+              name: item.name + '#',
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '#_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+          }
+
 
 
-          // if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
-          //   count++
-          //   console.log('item - F ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "F");
-          //   const category_id = matchingElements[0]._id
 
+          if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
+            count++
+            console.log('item - F ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "F");
+            const category_id = matchingElements[0]._id
 
 
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-
-
-          // }
-
-
-
-          // if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
-          //   count++
-          //   console.log('item - O ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "O");
-          //   const category_id = matchingElements[0]._id
 
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-
-
-          // }
-
-
-          // if (item.instrumenttype == 'OPTFUT') {
-          //   count++
-          //   console.log('item - MO ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "MO");
-          //   const category_id = matchingElements[0]._id
-
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-
-
-          // }
-
-
-          // if (item.instrumenttype == 'FUTCOM') {
-          //   count++
-          //   console.log('item - MF ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "MF");
-          //   const category_id = matchingElements[0]._id
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+
+
+          }
+
+
+
+          if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
+            count++
+            console.log('item - O ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "O");
+            const category_id = matchingElements[0]._id
 
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-
-          // }
-
-          // if (item.instrumenttype == 'FUTCUR') {
-          //   count++
-          //   console.log('item - CF ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "CF");
-          //   const category_id = matchingElements[0]._id
-
-
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-          // }
-
-
-          //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
-          //   count++
-          //   console.log('item - CO ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "CO");
-          //   const category_id = matchingElements[0]._id
-
-
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-          // }
-
-
-
-
-
-
-
-
-
-
-          // if(item.instrumenttype == 'AMXIDX'|| item.instrumenttype == 'OPTIRC' || item.instrumenttype == 'UNDIRC' || item.instrumenttype == 'FUTIRC' || item.instrumenttype == 'UNDCUR' || item.instrumenttype == 'INDEX' || item.instrumenttype == 'COMDTY' || item.instrumenttype == 'AUCSO'){
-          //       count++
-          //       console.log('item - OTHER CONTENT '+count+' ',item)
-          //       // const matchingElements = categoryResult.filter(item => item.segment === "C");
-          //       // const category_id = matchingElements[0]._id
-          //       services.create({
-          //         name:item.name,
-          //         instrument_token:item.token,
-          //         zebu_token:item.symbol,
-          //         kotak_token:"",
-          //         instrumenttype:item.instrumenttype,
-          //         exch_seg:item.exch_seg,
-          //         lotsize:item.lotsize,
-          //         categorie_id : "",
-          //         unique_column : item.name +'_'+'c9dbdc14a9fefd971c979'
-          //       })
-          //       .then((createdServices) => {
-          //         console.log('User created and saved:', createdServices._id)
-          //       })
-          //       .catch((err) => {
-          //         try{
-          //         console.log('Error creating and saving user:', err);
-          //         }catch(e){
-          //          console.log("duplicate key")
-          //         }
-
-          //       });
-
-
-          //       }
-
-          // }
-          //   }
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+
+
+          }
+
+
+          if (item.instrumenttype == 'OPTFUT') {
+            count++
+            console.log('item - MO ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "MO");
+            const category_id = matchingElements[0]._id
+
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+
+
+          }
+
+
+          if (item.instrumenttype == 'FUTCOM') {
+            count++
+            console.log('item - MF ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "MF");
+            const category_id = matchingElements[0]._id
+
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+
+          }
+
+          if (item.instrumenttype == 'FUTCUR') {
+            count++
+            console.log('item - CF ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "CF");
+            const category_id = matchingElements[0]._id
+
+
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+          }
+
+
+           if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+            count++
+            console.log('item - CO ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "CO");
+            const category_id = matchingElements[0]._id
+
+
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+          }
+
+
+
+
+
+
+
+
+
+
+          if(item.instrumenttype == 'AMXIDX'|| item.instrumenttype == 'OPTIRC' || item.instrumenttype == 'UNDIRC' || item.instrumenttype == 'FUTIRC' || item.instrumenttype == 'UNDCUR' || item.instrumenttype == 'INDEX' || item.instrumenttype == 'COMDTY' || item.instrumenttype == 'AUCSO'){
+                count++
+                console.log('item - OTHER CONTENT '+count+' ',item)
+                // const matchingElements = categoryResult.filter(item => item.segment === "C");
+                // const category_id = matchingElements[0]._id
+                services.create({
+                  name:item.name,
+                  instrument_token:item.token,
+                  zebu_token:item.symbol,
+                  kotak_token:"",
+                  instrumenttype:item.instrumenttype,
+                  exch_seg:item.exch_seg,
+                  lotsize:item.lotsize,
+                  categorie_id : "",
+                  unique_column : item.name +'_'+'c9dbdc14a9fefd971c979'
+                })
+                .then((createdServices) => {
+                  console.log('User created and saved:', createdServices._id)
+                })
+                .catch((err) => {
+                  try{
+                  console.log('Error creating and saving user:', err);
+                  }catch(e){
+                   console.log("duplicate key")
+                  }
+
+                });
+
+
+                }
+
+          }
+            }
 
         });
 
@@ -3548,15 +3547,6 @@ module.exports = function (app) {
 
 
 
-  // app.use((req, res, next) => {
-  //   const clientIP = req.ip; // This gets the client's IP address
-  //   // Do something with the IP address, e.g., pass it to your API response
-  //   res.json({ clientIP });
-  // });
-
-
-
-
   app.get("/getip", (req, res) => {
     const os = require('os');
 
@@ -3580,8 +3570,6 @@ module.exports = function (app) {
 
     res.send("okk")
   })
-
-
 
   app.get("/tt", async (req, res) => {
 
@@ -3746,11 +3734,6 @@ module.exports = function (app) {
   })
 
 
-
-
-
-
-
   app.get("/stockPriceupdate", async (req, res) => {
 
     var axios = require('axios');
@@ -3792,8 +3775,6 @@ module.exports = function (app) {
     res.send("okk");
 
   })
-
-
 
 
   // app.get("/stockPriceupdate",async(req,res)=>{
@@ -3986,8 +3967,6 @@ module.exports = function (app) {
   //         }
 
   // }
-
-
 
 
   async function setupChangeStream() {
