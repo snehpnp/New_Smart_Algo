@@ -17,57 +17,31 @@ import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Su
 import { All_Api_Info_List } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import * as Config from "../../../Utils/Config";
 import Form from 'react-bootstrap/Form';
-
-
 import { Add_User } from '../../../ReduxStore/Slice/Subadmin/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
-
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-
 import "../../../App.css"
-
-
 
 
 const AddClient = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-
   const user_token = JSON.parse(localStorage.getItem("user_details")).token
   const Role = JSON.parse(localStorage.getItem("user_details")).Role
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
-
-
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [ShowAllStratagy, setShowAllStratagy] = useState(false)
   const [getPermissions, setGetPermissions] = useState([])
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
-
-
   const [first, setfirst] = useState([])
+  const [AllGroupServices, setAllGroupServices] = useState({ loading: true, data: []});
+  const [AllStrategy, setAllStrategy] = useState({loading: true,data: []});
+  const [GetServices, setGetServices] = useState({loading: true,data: [] });
 
-
-
-  const [AllGroupServices, setAllGroupServices] = useState({
-    loading: true,
-    data: []
-  });
-
-
-
-  const [AllStrategy, setAllStrategy] = useState({
-    loading: true,
-    data: []
-  });
-
-
-  const [GetServices, setGetServices] = useState({
-    loading: true,
-    data: []
-  });
-
-
+  const isValidEmail = (email) => { return Email_regex(email) }
+  const isValidContact = (mobile) => { return Mobile_regex(mobile) }
+  const isValidName = (mobile) => { return Name_regex(mobile)}
 
   //  SUBADMIN PERMISSION
   const data2 = async () => {
@@ -92,18 +66,6 @@ const AddClient = () => {
   useEffect(() => {
     data2()
   }, [])
-
-
-
-  const isValidEmail = (email) => {
-    return Email_regex(email)
-  }
-  const isValidContact = (mobile) => {
-    return Mobile_regex(mobile)
-  }
-  const isValidName = (mobile) => {
-    return Name_regex(mobile)
-  }
 
 
   const formik = useFormik({
@@ -167,9 +129,7 @@ const AddClient = () => {
         if (!values.broker) {
           errors.broker = valid_err.BROKER_ERROR;
         }
-        // if (!values.tomonth) {
-        //   errors.tomonth = valid_err.LICENCE_ERROR;
-        // }
+       
       }
       else if (values.licence === '1' || values.licence === 1) {
         if (!values.fromDate) {
@@ -196,6 +156,26 @@ const AddClient = () => {
       return errors;
     },
     onSubmit: async (values) => {
+      if (
+        !values.email ||
+        !values.fullName ||
+        !values.mobile 
+      ) {
+        toast.error("All Fields Are Mandatory");
+        return;
+      }
+
+
+      if (
+
+        !values.groupservice ||
+        selectedStrategies.length === 0
+      ) {
+        toast.error("All Fields Are Mandatory");
+        return;
+      }
+
+
       const req = {
         "FullName": values.fullName,
         "UserName": values.username,
@@ -242,20 +222,14 @@ const AddClient = () => {
   });
 
 
-
   const handleStrategyChange = (event) => {
     const strategyId = event.target.value;
 
-
     const strategyName = event.target.name;
     if (event.target.checked) {
-
       setSelectedStrategies([...selectedStrategies, { id: strategyId, name: strategyName }]);
-
       formik.setFieldValue('Strategy', selectedStrategies);
-
     } else {
-      // Remove the deselected strategy from the array
       setSelectedStrategies(selectedStrategies.filter((strategy) => strategy.id !== strategyId));
     }
   };
@@ -271,22 +245,7 @@ const AddClient = () => {
   }, [])
 
 
-  const brokerOptions = [
-    // { label: 'Market Hub', value: '1' },
-    { label: 'Alice Blue', value: '2' },
-    // { label: 'Master Trust', value: '3' },
-    // { label: 'Motilal Oswal', value: '4' },
-    // { label: 'Zebull', value: '5' },
-    // { label: 'IIFl', value: '6' },
-    // { label: 'Kotak', value: '7' },
-    // { label: 'Mandot', value: '8' },
-    // { label: 'Choice', value: '9' },
-    // { label: 'Anand Rathi', value: '10' },
-    // { label: 'B2C', value: '11' },
-    // { label: 'Angel', value: '12' },
-    // { label: 'Fyers', value: '13' },
-    // { label: 'Zerodha', value: '15' }
-  ];
+
 
   const fields = [
     { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },
@@ -419,12 +378,7 @@ const AddClient = () => {
 
   ]
 
-
   useEffect(() => {
-
-
-    ////////////////--------------START BROKER SET KEY----------------///////////
-
 
     if (formik.values.broker === '1' || formik.values.broker === 1) {
       formik.setFieldValue('api_key', 'null');
@@ -438,7 +392,6 @@ const AddClient = () => {
       formik.setFieldValue('app_key', 'null');
       formik.setFieldValue('client_code', 'null');
       formik.setFieldValue('api_type', 'null');
-      // formik.setFieldValue('demat_userid', 'null');
     }
 
     if (formik.values.broker === '3' || formik.values.broker === 3) {
@@ -571,8 +524,6 @@ const AddClient = () => {
 
   }, [formik.values.broker, formik.values.licence]);
 
-
-
   const getGroupeServics = async () => {
     if (formik.values.groupservice) {
       await dispatch(Get_Service_By_Group_Id({ _id: formik.values.groupservice })).unwrap()
@@ -591,7 +542,6 @@ const AddClient = () => {
   useEffect(() => {
     getGroupeServics();
   }, [formik.values.groupservice]);
-
 
 
   // GET ALL GROUP SERVICES NAME

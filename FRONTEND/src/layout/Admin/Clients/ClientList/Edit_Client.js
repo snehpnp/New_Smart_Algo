@@ -389,7 +389,6 @@ const EditClient = () => {
   useEffect(() => {
 
 
-    console.log("CPPPP")
 
     ////////////////--------------START BROKER SET KEY----------------///////////
     if (formik.values.broker === '1' || formik.values.broker === 1) {

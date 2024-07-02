@@ -7,7 +7,7 @@ import { user_getall_tradingstatus, USER_ACTIVICTY_LOGS } from "../../../Service
 export const Get_All_TRADINGSTATUS_USER = createAsyncThunk("getall/user/trading_status", async (data) => {
     try {
         const res = await user_getall_tradingstatus(data);
-        // console.log("res" ,res);
+     
         return await res;
     } catch (err) {
         return err;
@@ -17,7 +17,7 @@ export const Get_All_TRADINGSTATUS_USER = createAsyncThunk("getall/user/trading_
 export const user_activity_logs = createAsyncThunk("getall/user/actvictylogs", async (data) => {
     try {
         const res = await USER_ACTIVICTY_LOGS(data);
-        // console.log("res" ,res);
+       
         return await res;
     } catch (err) {
         return err;
@@ -40,9 +40,7 @@ const TradingStatusSlice = createSlice({
     recuders: {},
     extraReducers: {
 
-        [Get_All_TRADINGSTATUS_USER.pending]: (state, { payload }) => {
-            console.log("pending Get_All_TRADINGSTATUS_USER ");
-        },
+        [Get_All_TRADINGSTATUS_USER.pending]: (state, { payload }) => { },
         [Get_All_TRADINGSTATUS_USER.fulfilled]: (state, { payload }) => {
             return { ...state, alltradingstatus: payload, isLoading: false };
         },

@@ -62,7 +62,7 @@ const TradingStatus = () => {
                 }
             })
             .catch((err) => {
-                console.log("err", err);
+                
             })
     }
     useEffect(() => {

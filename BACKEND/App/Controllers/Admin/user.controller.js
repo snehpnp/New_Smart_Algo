@@ -7,6 +7,8 @@ const User_model = db.user;
 const user_SignUp = db.UserSignUp;
 const user_logs = db.user_logs;
 const Role_model = db.role;
+const BrokerResponse = db.BrokerResponse;
+
 const Company_info = db.company_information;
 const strategy_client = db.strategy_client;
 const groupService_User = db.groupService_User;
@@ -1276,11 +1278,6 @@ class Employee {
     }
   }
 
-
-
-
-
-
   // DELETE USER AND USER REGARD SERVICES
   async DeleteUser(req, res) {
     try {
@@ -1411,10 +1408,6 @@ class Employee {
     }
   }
 
-
-
-
-
   // UPDATE BROKER KEY
   async Update_Broker_Keys(req, res) {
     try {
@@ -1461,12 +1454,6 @@ class Employee {
 
     }
   }
-
-
-
-
-
-
 
   // Duplicate Data
   async GetDuplicateData(req, res) {
@@ -1527,6 +1514,44 @@ class Employee {
 
     }
   }
+
+
+  // Duplicate Data
+  async DawnloadStatusandResponse(req, res) {
+    try {
+      const { id, key } = req.body;
+
+      if (!id || !key) {
+        return res.status(400).json({ status: false, msg: "ID and key are required" });
+      }
+      let data
+      if (key == 1) {
+        data = await user_logs.find({ user_Id: id });
+      } else {
+        data = await BrokerResponse.find({ user_Id: id });
+
+      }
+
+
+      console.log("data", data);
+
+
+      if (!data.length) {
+        return res.status(404).json({ status: false, msg: "No data found for the provided ID" });
+      }
+
+      return res.status(200).json({
+        status: true,
+        msg: "Data retrieved successfully",
+        data: data
+      });
+
+    } catch (error) {
+      console.error("Error in DawnloadStatusandResponse:", error);
+      return res.status(500).json({ status: false, msg: "Internal Server Error", error });
+    }
+  }
+
 
 
 

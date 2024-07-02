@@ -57,7 +57,7 @@ const Broker_info = () => {
                 }
             })
             .catch((err) => {
-                console.log("err", err);
+                
             })
     }
 
@@ -78,7 +78,7 @@ const Broker_info = () => {
                 }
             })
             .catch((err) => {
-                console.log("err", err);
+                
             })
     }
     useEffect(() => {

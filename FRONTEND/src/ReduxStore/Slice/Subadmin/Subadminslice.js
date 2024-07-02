@@ -7,7 +7,7 @@ import { GETALL_SUB_ADMINS,GETALL_SUB_ADMINS_CLIENTS  , GET_SUB_ADMINS_PERMISSIO
 export const Get_All_SUBADMIN = createAsyncThunk("getall/subadmin", async (data) => {
     try {
         const res = await GETALL_SUB_ADMINS(data);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
         return err;
@@ -18,7 +18,7 @@ export const Get_All_SUBADMIN = createAsyncThunk("getall/subadmin", async (data)
 export const Get_All_SUBADMIN_CLIENT = createAsyncThunk("getall/subadmin", async (data) => {
     try {
         const res = await GETALL_SUB_ADMINS_CLIENTS(data);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
         return err;
@@ -27,7 +27,7 @@ export const Get_All_SUBADMIN_CLIENT = createAsyncThunk("getall/subadmin", async
 export const Get_Sub_Admin_Permissions = createAsyncThunk("subadmin/permissions", async (data) => {
     try {
         const res = await GET_SUB_ADMINS_PERMISSIONS(data);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
         return err;

@@ -648,7 +648,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
     if(e.target.value != ""){
       if(buy_sell == "buy"){
         const foundObject = coditionRequestArr.find((item,i) => i === index);
-      //console.log("foundObject --",foundObject)
+      
       if (foundObject) {
         if(element_first_second == "first"){
           foundObject.first_element.offset = e.target.value;
@@ -660,7 +660,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
       }
       }else if(buy_sell == "sell"){
         const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
+        
         if (foundObject) {
           if(element_first_second == "first"){
             foundObject.first_element.offset = e.target.value;
@@ -1106,7 +1106,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
       if(start_and == "start"){
 
         const foundObject = coditionRequestArr.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
+        
         if (foundObject) {
           // Update the source field of the found object
           foundObject.start_bracket.push("(");
@@ -1116,7 +1116,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
     
        }else if(start_and == "end"){
         const foundObject = coditionRequestArr.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
+        
         if (foundObject) {
           // Update the source field of the found object
           foundObject.end_bracket.push(")");
@@ -1129,7 +1129,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
       if(start_and == "start"){
 
         const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
+        
         if (foundObject) {
           // Update the source field of the found object
           foundObject.start_bracket.push("(");
@@ -1139,7 +1139,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
     
        }else if(start_and == "end"){
         const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-        //console.log("foundObject --",foundObject)
+        
         if (foundObject) {
           // Update the source field of the found object
           foundObject.end_bracket.push(")");
@@ -1160,7 +1160,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
         if(start_and == "start"){
     
           const foundObject = coditionRequestArr.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
+          
           if (foundObject) {
             // Update the source field of the found object
             foundObject.start_bracket.pop();
@@ -1172,7 +1172,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
         }else if(start_and == "end"){
     
           const foundObject = coditionRequestArr.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
+          
           if (foundObject) {
             // Update the source field of the found object
             foundObject.end_bracket.pop();
@@ -1190,7 +1190,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
         if(start_and == "start"){
     
           const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
+          
           if (foundObject) {
             // Update the source field of the found object
             foundObject.start_bracket.pop();
@@ -1202,7 +1202,7 @@ console.log("exitConditionBuyOrSell",exitConditionBuyOrSell)
         }else if(start_and == "end"){
     
           const foundObject = coditionRequestArrSell.find((item,i) => i === index);
-          //console.log("foundObject --",foundObject)
+          
           if (foundObject) {
             // Update the source field of the found object
             foundObject.end_bracket.pop();

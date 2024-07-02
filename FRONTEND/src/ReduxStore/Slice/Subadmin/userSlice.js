@@ -24,10 +24,10 @@ export const Find_One_User = createAsyncThunk("update/useractive/status", async 
     try {
         const { id } = data
         const res = await FIND_ONE_USER({ id: id });
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -37,10 +37,10 @@ export const Update_User = createAsyncThunk("update/useractive/status", async (d
     try {
         const { req, token } = data
         const res = await UPDATE_USER({ req: req }, token);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -51,10 +51,10 @@ export const Update_User = createAsyncThunk("update/useractive/status", async (d
 export const DELETE_USER_SERVICES = createAsyncThunk("delete/user", async (data) => {
     try {
         const res = await DELETE_USERAND_ALLSERVICES(data);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -63,7 +63,7 @@ export const DELETE_USER_SERVICES = createAsyncThunk("delete/user", async (data)
 export const Get_All_SUBADMIN_CLIENT = createAsyncThunk("getall/subadmin", async (data) => {
     try {
         const res = await GETALL_SUB_ADMINS_CLIENTS(data);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
         return err;

@@ -7,7 +7,7 @@ import { GET_DASHBOARD_COUNT, UPDATE_BROKER_INFORMATION, GET_BROKER_INFORMATION,
 export const Get_Dashboard_Count = createAsyncThunk("admin/dashboard/count", async (token) => {
     try {
         const res = await GET_DASHBOARD_COUNT(token);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
         return err;
@@ -19,7 +19,7 @@ export const Get_Dashboard_Count = createAsyncThunk("admin/dashboard/count", asy
 export const GET_BROKER_INFORMATIONS = createAsyncThunk("getall/broker_information", async (token) => {
     try {
         const res = await GET_BROKER_INFORMATION(token);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
         return err;
@@ -32,7 +32,7 @@ export const UPDATE_BROKER_INFORMATIONS = createAsyncThunk("update/broker_inform
 
     try {
         const res = await UPDATE_BROKER_INFORMATION(req, token);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
         return err;
@@ -44,7 +44,7 @@ export const UPDATE_BROKER_INFORMATIONS = createAsyncThunk("update/broker_inform
 export const FIND_BROKER_RESPONSES = createAsyncThunk("get/broker_information", async (data) => {
     try {
         const res = await FIND_BROKER_RESPONSE(data);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
         return err;

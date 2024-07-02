@@ -51,23 +51,12 @@ const TradeHistory = () => {
   const [ServiceData, setServiceData] = useState({ loading: true, data: [] });
   const [lotMultypaly, SetlotMultypaly] = useState(1);
   const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
-
-
   const selector = useSelector((state) => state.DashboardSlice);
 
-  
+  useEffect(() => { GetAdminTradingStatus()}, []);
 
-  useEffect(() => {
-    GetAdminTradingStatus()
-  }, []);
-
-  const handleFromDateChange = (e) => {
-    setFromDate(e.target.value);
-  };
-
-  const handleToDateChange = (e) => {
-    setToDate(e.target.value);
-  };
+  const handleFromDateChange = (e) => { setFromDate(e.target.value); };
+  const handleToDateChange = (e) => { setToDate(e.target.value); };
 
   const Get_TradHistory = async (e) => {
     let abc = new Date();
@@ -130,7 +119,6 @@ const TradeHistory = () => {
       data: tradeHistoryData.data,
     });
   };
-
 
 
   let columns = [
@@ -322,8 +310,6 @@ const TradeHistory = () => {
 
   }
 
-
-
   const StatusEntry = (row) => {
 
     const filteredData = row.result.find(obj => obj.type === "LE" || obj.type === 'SE');
@@ -335,8 +321,6 @@ const TradeHistory = () => {
     }
 
   }
-
-
 
   var CreatechannelList = "";
   let total = 0;
@@ -362,8 +346,6 @@ const TradeHistory = () => {
         }
       }
     });
-
-
 
   const ShowLivePrice = async () => {
 
@@ -623,7 +605,6 @@ const TradeHistory = () => {
 
   };
 
-
   const calcultateRPL = (row, livePrice, pre_row) => {
 
     let get_ids = '_id_' + row.token + '_' + row._id
@@ -660,12 +641,9 @@ const TradeHistory = () => {
     }
   };
 
-
   useEffect(() => {
     ShowLivePrice();
   }, [tradeHistoryData.data, SocketState, UserDetails]);
-
-
 
   const GetAllStrategyName = async (e) => {
     await dispatch(
@@ -690,8 +668,6 @@ const TradeHistory = () => {
   }, []);
 
 
-
-
   var a = 2
   const data = async () => {
     if (a < 2) {
@@ -705,7 +681,6 @@ const TradeHistory = () => {
   useEffect(() => {
     data();
   }, [a]);
-
 
 
   //  LOG IN FOR GET LIVE PRICE 
@@ -727,7 +702,6 @@ const TradeHistory = () => {
 
     }
   };
-
 
   const forCSVdata = () => {
     let csvArr = []
@@ -760,8 +734,6 @@ const TradeHistory = () => {
     forCSVdata()
   }, [tradeHistoryData.data])
 
-
-
   const getSymbols = async (e) => {
     await dispatch(Get_All_Service({})).unwrap()
       .then((response) => {
@@ -778,8 +750,6 @@ const TradeHistory = () => {
       });
   };
 
-
-
   const getservice = async () => {
     await dispatch(Get_All_Catagory()).unwrap()
       .then((response) => {
@@ -793,11 +763,7 @@ const TradeHistory = () => {
   }
   useEffect(() => {
     getservice()
-
-
-
   }, [])
-
 
   const GetAdminTradingStatus = async (e) => {
 
@@ -810,9 +776,6 @@ const TradeHistory = () => {
       });
   };
 
-
-
-
 // CONDITION  MANAGE TO LIVE PRICE SHOW
   if (selector && selector.permission) {
     if (selector.permission && selector.permission.data && selector.permission.data[0]) {
@@ -824,6 +787,16 @@ const TradeHistory = () => {
     }
   }
   
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    const isValidNumber = /^\d+$/.test(value);
+
+    if (isValidNumber) {
+      SetlotMultypaly(value === "" || value == 0 ? 1 : Number(value));
+    } else {
+      SetlotMultypaly(1);
+    }
+  };
 
   return (
     <>
@@ -968,7 +941,8 @@ const TradeHistory = () => {
               <input
                 type="Number"
                 className="default-select wide form-control"
-                onChange={(e) => SetlotMultypaly(e.target.value)}
+                defaultValue={1}
+                onChange={(e) => handleInputChange(e)}
               />
 
               <div />

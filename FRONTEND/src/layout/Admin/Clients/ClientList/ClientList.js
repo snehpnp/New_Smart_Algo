@@ -6,14 +6,16 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS, DELETE_USER_SERVICES } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
-
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import * as Config from "../../../../Utils/Config";
 import { useDispatch } from "react-redux";
 import { fa_time, fDateTime } from "../../../../Utils/Date_formet";
 import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
-
+import { DawnloadDataUser } from "../../../../ReduxStore/Slice/Admin/userSlice";
+import { Download } from 'lucide-react';
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 
 const AllClients = () => {
 
@@ -34,16 +36,8 @@ const AllClients = () => {
   const [selectBroker, setSelectBroker] = useState("null");
   const [BrokerDetails, setBrokerDetails] = useState([]);
   const [ForGetCSV, setForGetCSV] = useState([])
-
-  const [getAllClients, setAllClients] = useState({
-    loading: true,
-    data: [],
-  });
-
-  const [getAllStrategyName, setAllStrategyName] = useState({
-    loading: true,
-    data: [],
-  });
+  const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
+  const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [] });
 
 
   //  GET ALL SERVICE NAME
@@ -290,10 +284,6 @@ const AllClients = () => {
     }
   };
 
-
-
-
-
   const showLicenceName = (value1, licence_type) => {
     let value = parseInt(value1);
 
@@ -472,6 +462,38 @@ const AllClients = () => {
         </div>
       ),
     },
+
+    {
+      dataField: "Downloads",
+      text: "Downloads",
+      formatter: (cell, row) => (
+        <div style={{ width: "120px" }}>
+          <div>
+            <span data-toggle="tooltip" data-placement="top" title="Trading Status">
+              <Download
+                size={20}
+                color="#198754"
+                strokeWidth={2}
+                className="mx-1"
+                onClick={(e) => DownloadsData(row._id, 1)}
+              />
+            </span>
+
+            {row.license_type != "1" && (
+              <span data-toggle="tooltip" data-placement="top" title="Broker Response">
+                <Download
+                  size={20}
+                  color="#d83131"
+                  strokeWidth={2}
+                  className="mx-1"
+                  onClick={(e) => DownloadsData(row._id, 2)}
+                />
+              </span>
+            )}
+          </div>
+        </div>
+      ),
+    }
   ];
 
 
@@ -559,8 +581,37 @@ const AllClients = () => {
   }, [getAllClients.data])
 
 
+  const DownloadsData = async (id, key) => {
 
-  console.log("getAllClients.loading ", !getAllClients.loading)
+    console.log("----------", id)
+
+
+    await dispatch(
+      DawnloadDataUser({
+        req: { id: id, key: key },
+        token: token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+          if (response.data.length > 0) {
+
+            const fileType =
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+            const fileExtension = ".xlsx";
+
+            const ws = XLSX.utils.json_to_sheet(response.data);
+            const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+            const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+            const data = new Blob([excelBuffer], { type: fileType });
+            FileSaver.saveAs(data, "Broker Response" + fileExtension);
+
+
+          }
+        }
+      });
+  }
 
   return (
     <>
@@ -668,13 +719,13 @@ const AllClients = () => {
             </button>
           </div>
         </div>
-        
+
         {!getAllClients.loading ? (
           <FullDataTable
             TableColumns={columns}
             tableData={getAllClients.data}
           />
-          
+
         ) : (<Loader />)
 
         }

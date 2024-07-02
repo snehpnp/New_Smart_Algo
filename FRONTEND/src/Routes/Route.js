@@ -31,7 +31,7 @@ const Routing = () => {
       return
     }
     if (location.pathname.startsWith('/update')) {
-      console.log("fdoifuepo")
+
       navigate(location.pathname);
       return
     }

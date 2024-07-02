@@ -7,7 +7,7 @@ import { GET_TRADE_HISTORY } from "../../../Service/user.service";
 
 
 export const Get_Tradehisotry = createAsyncThunk("user/tradhistory", async (apireq) => {
-    console.log("apireq ",apireq)
+ 
     
     const { user_id, startDate, endDate, serviceIndex, selectStrategy , token } = apireq
     try {

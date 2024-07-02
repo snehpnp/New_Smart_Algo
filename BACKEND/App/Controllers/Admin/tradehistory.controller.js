@@ -180,11 +180,12 @@ class Tradehistory {
 
         filteredSignals.filter(function (item) {
 
+
           item.entry_qty_percent = Number(item.result1[0].lotsize) * (Math.ceil(Number(item.entry_qty_percent) / 100)),
             item.exit_qty_percent = Number(item.result1[0].lotsize) * (Math.ceil(Number(item.exit_qty_percent) / 100)),
 
             item.entry_qty = Number(item.result1[0].lotsize) * lotMultypaly,
-          item.exit_qty = Number(item.result1[0].lotsize) * lotMultypaly
+          item.exit_qty = item.exit_qty_percent == "" ? 0 :Number(item.result1[0].lotsize) * lotMultypaly
       });
 
     }

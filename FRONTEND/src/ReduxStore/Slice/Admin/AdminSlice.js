@@ -134,7 +134,7 @@ export const UPDATE_USER_ACTIVE_STATUS = createAsyncThunk("update/useractive/sta
     
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -148,7 +148,7 @@ export const Find_One_User = createAsyncThunk("update/useractive/status", async 
      
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -160,7 +160,7 @@ export const Find_One_Signup_Client = createAsyncThunk("update/useractive/status
      
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -173,7 +173,7 @@ export const Update_User = createAsyncThunk("update/useractive/status", async (d
         
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -187,7 +187,7 @@ export const DELETE_USER_SERVICES = createAsyncThunk("delete/user", async (data)
       
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -196,10 +196,10 @@ export const DELETE_USER_SERVICES = createAsyncThunk("delete/user", async (data)
 export const DELETE_ALL_SIGNUP = createAsyncThunk("deletesignupclients", async (data) => {
     try {
         const res = await DELETE_ALL_SIGNUP_CLIENT(data);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
