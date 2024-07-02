@@ -20,15 +20,11 @@ import { useLocation } from "react-router-dom";
 const BrokerResponse = () => {
   const dispatch = useDispatch();
   const location = useLocation()
-
-
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
   const Role = JSON.parse(localStorage.getItem("user_role"));
-
-
   const [showStartegyModal, setShowStartegyModal] = useState(false);
   const [modalsingleValue, setModalsingleValue] = useState({});
   const [Strategy, setStrategy] = useState({ loading: true, data: [] });
@@ -94,8 +90,14 @@ const BrokerResponse = () => {
 
 
     if (e.target.name != "active_status" && numericValue == 0) {
-      e.target.value = 1
+
       toast.error(`cant update  0 Quantity In ${symboll}`);
+      return
+    }
+
+    if (e.target.name != "active_status" && e.target.value < 0) {
+      e.target.value = 1
+      toast.error(`cant update  - Quantity In ${symboll}`);
       return
 
     }
@@ -108,7 +110,7 @@ const BrokerResponse = () => {
         setInputValue((prevPrices) => ({ ...prevPrices, [symboll]: e.target.value }))
         if ((data.servicegroup_services_ids.group_qty !== 0) && ((parseInt(e.target.value) * parseInt(data.service.lotsize)) > parseInt(data.servicegroup_services_ids.group_qty))) {
           toast.error(`cant update more then ${data.servicegroup_services_ids.group_qty} In ${symboll}`);
-          e.target.value = 1
+          // e.target.value = 1
           return
         }
       } else {
@@ -275,8 +277,7 @@ const BrokerResponse = () => {
                               id="lot_size"
                               placeholder="Enter Qty"
                               min={1}
-                              // max={setMax(data)}
-                              // defaultValue={data.service.lotsize}
+
 
                               onChange={
                                 (e) => {

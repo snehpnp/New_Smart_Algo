@@ -578,7 +578,6 @@ const Login = () => {
             <form onSubmit={verifyOTP}>
 
               <OtpInput
-
                 containerStyle="otp-div"
                 value={typeOtp}
                 onChange={setTypeOtp}
@@ -587,6 +586,7 @@ const Login = () => {
                 renderInput={(props, index) => (
                   <input
                     {...props}
+                    type="tel"
                     autoFocus={index === 0}
                     onKeyPress={(event) => {
                       if (event.key === 'Enter') {
