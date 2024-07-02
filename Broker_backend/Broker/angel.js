@@ -189,7 +189,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                                     }
                                 });
                             }
-                            if (response.data.data != null) {
+                            if (response.data.data != null && response.data.message == "SUCCESS" ) {
                                 const Exist_entry_order = response.data.data.find(item1 => item1.symboltoken === token[0].instrument_token);
 
                                 if (Exist_entry_order !== undefined) {

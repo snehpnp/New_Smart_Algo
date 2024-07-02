@@ -413,13 +413,6 @@ async function open_position_excute(req, res) {
 
 
 
-
-
-
-
-
-
-
 module.exports = { dropExistingView1, open_position_excute,createView,dropOpenPosition}
 
 

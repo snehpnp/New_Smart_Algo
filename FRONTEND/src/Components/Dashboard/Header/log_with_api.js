@@ -71,9 +71,6 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     }
     else if (broker_id === "7" || broker_id === 7) {
 
-
-        //alert("broker-7")
-        // console.log("RUN");
         axios({
             url: `${Config.base_url}kotakGetToken`,
             method: "post",
@@ -118,7 +115,27 @@ export const loginWithApi = async (broker_id, UserDetails) => {
 
     }
     if (broker_id === "8" || broker_id === 8) {
-        alert("broker-8")
+        axios({
+            url: `${Config.base_url}mandotsecurities`,
+            method: "post",
+            data: {
+                Email: UserDetails.Email,
+                _id: UserDetails._id,
+
+            },
+        }).then((res) => {
+            if (res.data.status == true) {
+                toast.success(res.data.msg)
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+
+            } else {
+                toast.error(res.data.msg)
+
+            }
+
+        });
     }
     else if (broker_id === "9" || broker_id === 9) {
         alert("broker-9")

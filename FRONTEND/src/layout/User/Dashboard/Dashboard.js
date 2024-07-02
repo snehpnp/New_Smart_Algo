@@ -7,22 +7,14 @@ import { MultiSelect } from 'primereact/multiselect';
 import BasicTable from "../../../Components/ExtraComponents/Tables/BasicTable";
 import { Pencil, Trash2 } from "lucide-react";
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
-import {
-  GetAliceTokenAndID,
-  CreateSocketSession,
-  ConnctSocket,
-  GetAccessToken
-} from "../../../Service/Alice_Socket";
+import { GetAliceTokenAndID, CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../Service/Alice_Socket";
 import { useDispatch, useSelector } from "react-redux";
 import $ from "jquery";
 import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { check_Device } from "../../../Utils/find_device";
 
-import {
-  User_Dashboard_Data,
-  Update_Dashboard_Data,
-} from "../../../ReduxStore/Slice/Users/DashboardSlice";
+import { User_Dashboard_Data, Update_Dashboard_Data } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 import { useLocation } from "react-router-dom";
 
 const BrokerResponse = () => {
@@ -49,6 +41,7 @@ const BrokerResponse = () => {
   const [updatedData, setUpdatedData] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const handleCloseStartegyModal = () => {
     setShowStartegyModal(false);
@@ -127,13 +120,10 @@ const BrokerResponse = () => {
     else if (e.target.name === "strategy_id") {
 
 
-      // Find the object with the matching _id
       const targetObject = GetServiceStrategy.find(item => item._id == data.service._id);
       if (targetObject.strategy_id.includes(e.target.value)) {
         const updatedStrategyId = targetObject.strategy_id.filter(id => id !== e.target.value);
-        // Create a new object with the updated strategy_id
         const updatedObject = { ...targetObject, strategy_id: updatedStrategyId };
-        // Update the state
         setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
 
       } else {
@@ -180,12 +170,17 @@ const BrokerResponse = () => {
   }
 
   const UpdateDashboard = async (e) => {
+
+    if (isUpdating) {
+      return;
+    }
+    setIsUpdating(true);
+
     if (statusStartegyUser == "1") {
       const isEmpty = Object.keys(updatedData).length === 0;
 
 
       if (isEmpty == false) {
-        // Filter objects with empty strategy_id
         const result = Object.keys(updatedData)
           .filter((key) => Array.isArray(updatedData[key].strategy_id) && updatedData[key].strategy_id.length === 0)
           .reduce((obj, key) => {
@@ -226,10 +221,10 @@ const BrokerResponse = () => {
       .unwrap()
       .then((response) => {
 
+        setIsUpdating(false);
         if (response.status) {
           toast.success(response.msg);
-          // setrefresh(!refresh)
-          window.location.reload();
+          // window.location.reload();
         } else {
           toast.error(response.msg);
         }
@@ -243,7 +238,7 @@ const BrokerResponse = () => {
 
   return (
     <Content Page_title="Dashboard" button_status={false}>
-      <div className="table-responsive " style={{ height: '80vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+      <div className="table-responsive " style={{ height: '55vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
         <table className="table dashboard-table ">
           <thead className="bg-primary">
             <tr>
@@ -514,8 +509,9 @@ const BrokerResponse = () => {
             type="button"
             className="btn btn-outline-primary btn-lg mt-4"
             onClick={(e) => UpdateDashboard(e)}
+            disabled={isUpdating}
           >
-            Update
+            {isUpdating ? 'Updating...' : 'Update'}
           </button>
         </>
       )}

@@ -37,13 +37,13 @@ const Notification = ({ status, NotificationData }) => {
                             fill="#737B8B"
                         />
                     </svg>
-                    <span className="badge light text-white bg-primary rounded-circle" />
+                   {NotificationData.data.length > 0 ? <span className="badge light text-white bg-primary rounded-circle" />:null}
                 </a>
                 <div className="dropdown-menu dropdown-menu-end">
                     <div
                         id="DZ_W_Notification1"
                         className="widget-media dz-scroll p-3"
-                    // style={{ height: auto }}
+            
                     >
                         <ul className="timeline">
                             {NotificationData.data && NotificationData.data.slice(0, 6).map((item) => {
