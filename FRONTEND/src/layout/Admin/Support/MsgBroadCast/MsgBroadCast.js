@@ -143,50 +143,50 @@ const MsgBroadCast = () => {
                 }
             })
         }
-        }
     }
 
 
-    const columns = [
-        {
-            dataField: "index",
-            text: "SR. No.",
-            formatter: (cell, row, rowIndex) => rowIndex + 1,
-        },
-        {
-            dataField: 'Message',
-            text: 'Message'
-        },
-        {
-            dataField: 'createdAt',
-            text: 'Message',
-            formatter: (cell, row, rowIndex) => fDateTimeSuffix(cell),
 
-        },
-        {
-            dataField: 'actions',
-            text: 'Actions',
-            formatter: (cell, row) => (
-                <div>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={() => Remove_Message(row._id)} />
-                    </span>
-                </div>
-            ),
-        },
+const columns = [
+    {
+        dataField: "index",
+        text: "SR. No.",
+        formatter: (cell, row, rowIndex) => rowIndex + 1,
+    },
+    {
+        dataField: 'Message',
+        text: 'Message'
+    },
+    {
+        dataField: 'createdAt',
+        text: 'Message',
+        formatter: (cell, row, rowIndex) => fDateTimeSuffix(cell),
 
-    ];
-
-    return <>
-        <Content Page_title="Message Broadcast" button_status={false}>
-            <Formikform1 fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Send" />
-            <div className="mt-5">
+    },
+    {
+        dataField: 'actions',
+        text: 'Actions',
+        formatter: (cell, row) => (
+            <div>
+                <span data-toggle="tooltip" data-placement="top" title="Delete">
+                    <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={() => Remove_Message(row._id)} />
+                </span>
             </div>
-            <FullDataTable TableColumns={columns} tableData={AllMessage.data} />
-            < ToastButton />
+        ),
+    },
 
-        </Content>
-    </>
+];
+
+return <>
+    <Content Page_title="Message Broadcast" button_status={false}>
+        <Formikform1 fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Send" />
+        <div className="mt-5">
+        </div>
+        <FullDataTable TableColumns={columns} tableData={AllMessage.data} />
+        < ToastButton />
+
+    </Content>
+</>
 }
 
 
