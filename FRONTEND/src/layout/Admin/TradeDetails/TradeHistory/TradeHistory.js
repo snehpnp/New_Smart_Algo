@@ -55,10 +55,7 @@ const TradeHistory = () => {
 
   const selector = useSelector((state) => state.DashboardSlice);
 
-  if(selector && selector.permission){
-
-    console.log("selector",selector.permission  && selector.permission.data && selector.permission.data[0] )
-  }
+  
 
   useEffect(() => {
     GetAdminTradingStatus()
@@ -136,7 +133,7 @@ const TradeHistory = () => {
 
 
 
-  const columns = [
+  let columns = [
     {
       dataField: "index",
       text: "S.No.",
@@ -816,8 +813,17 @@ const TradeHistory = () => {
 
 
 
-
-
+// CONDITION  MANAGE TO LIVE PRICE SHOW
+  if (selector && selector.permission) {
+    if (selector.permission && selector.permission.data && selector.permission.data[0]) {
+      console.log("selector", selector.permission.data[0].live_price);
+      
+      if (selector.permission.data[0].live_price == 0) {
+        columns = columns.filter((data) => data.dataField !== "live");
+      }
+    }
+  }
+  
 
   return (
     <>

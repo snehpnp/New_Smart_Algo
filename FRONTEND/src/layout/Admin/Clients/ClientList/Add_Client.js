@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import * as  valid_err from "../../../../Utils/Common_Messages"
 import { useNavigate, useLocation } from "react-router-dom";
 import { Email_regex, Mobile_regex, Name_regex } from "../../../../Utils/Common_regex"
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import Content from '../../../../Components/Dashboard/Content/Content';
 import { GET_ALL_GROUP_SERVICES } from '../../../../ReduxStore/Slice/Admin/AdminSlice';
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
@@ -34,6 +34,10 @@ const AddClient = () => {
   const isValidEmail = (email) => { return Email_regex(email) }
   const isValidContact = (mobile) => { return Mobile_regex(mobile) }
   const isValidName = (mobile) => { return Name_regex(mobile) }
+
+
+  const selector = useSelector((state) => state.DashboardSlice);
+
 
   const formik = useFormik({
     initialValues: {
@@ -204,7 +208,7 @@ const AddClient = () => {
 
 
 
-  const fields = [
+  let fields = [
     { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },
     { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },
     { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, disable: false },
@@ -543,6 +547,25 @@ const AddClient = () => {
     data()
   }, [])
 
+
+  if (selector && selector.permission) {
+    if (selector.permission && selector.permission.data && selector.permission.data[0]) {
+
+    
+      if (selector.permission.data[0].Two_day_client == 0) {
+        fields = fields.map((field) => {
+          if (field.name === 'licence') {
+            return {
+              ...field,
+              options: field.options.filter((option) => option.label !== '2 Days')
+            };
+          }
+          return field;
+        });
+      }
+    }
+  }
+  
 
   return (
     <>
