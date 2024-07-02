@@ -68,13 +68,13 @@ class Login {
                 }
             }
 
-            if ( EmailCheck.Role == "SUBADMIN" ) {
+            if (EmailCheck.Role == "SUBADMIN") {
 
-           // User active Status  
+                // User active Status  
                 if (EmailCheck.ActiveStatus == 0) {
-                return res.send({ status: false, msg: 'please contact admin you are inactive.', data: [] });
-          
-                }   
+                    return res.send({ status: false, msg: 'please contact admin you are inactive.', data: [] });
+
+                }
             }
 
 
@@ -418,6 +418,31 @@ class Login {
             })
             await user_login.save();
 
+
+            if (EmailCheck.TradingStatus == "on") {
+                const result1 = await User.updateOne(
+                    { Email: EmailCheck.Email },
+                    {
+                        $set:
+                        {
+                            TradingStatus: "off",
+                            access_token: ""
+
+                        }
+                    }
+                );
+
+                const user_login = new user_logs({
+                    user_Id: EmailCheck._id,
+                    login_status: "Trading off",
+                    role: EmailCheck.Role,
+                    system_ip: getIPAddress()
+                })
+                await user_login.save();
+
+            }
+
+
             // If Not Update User
             if (!result) {
                 return res.send({ status: false, msg: 'Server Side issue.', data: [] });
@@ -734,7 +759,7 @@ class Login {
 
     async DisclaimerMailSend(req, res) {
         try {
-        
+
             var disclaimerData = await disclaimer();
 
             var toEmail = "snehpnp@gmail.com";
