@@ -528,7 +528,7 @@ class Login {
     async ResetPassword(req, res) {
         try {
             const { userid, newpassword, oldpassword } = req.body;
-            // // IF Login Time Email CHECK
+
             const EmailCheck = await User.findById(userid);
 
             // return
@@ -556,9 +556,8 @@ class Login {
             }
 
 
-            res.send({ status: true, message: "Password Update Successfully" });
+           return res.send({ status: true, message: "Password Update Successfully" });
 
-            logger.info('Password Update Successfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
             // res.send({ status: true, message: "Password Update Successfully" });
         } catch (error) {
 
