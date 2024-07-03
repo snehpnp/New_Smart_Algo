@@ -14,11 +14,7 @@ var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
     
-    
-    
-
     try {
-   
         var dt = signals.DTime;
         var input_symbol = signals.Symbol;
         var type = signals.TType;
@@ -39,9 +35,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
 
         if (type == 'LE' || type == 'SE') {
-            // console.log("trade entry")
-
-
+       
             const requestPromises = AllClientData.map(async (item) => {
                 if (token != 0) {
 
@@ -62,23 +56,17 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                     item.postdata.body.Price = price
                                 }
 
-                                //  console.log("postData after ", item.postdata);
-
-
                                 EntryPlaceOrder(item, filePath, signals, signal_req)
 
-                        // console.log("OPTION")
                     } else {
-                        // console.log("CASH")
-                       
-                       
+                    
+                    
                         if (type == 'LE' || type == 'SX') {
                             item.postdata.body.OrderType = 'Buy';
                         } else if (type == 'SE' || type == 'LX') {
                             item.postdata.body.OrderType = 'Sell';
                         }
 
-                    
                         if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                             item.postdata.body.Price = price
                         }
@@ -105,9 +93,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                         reject_reason: "Token not received due to wrong trade",
 
                     })
-                        .then((BrokerResponseCreate) => {
-                            
-                        })
+                        .then((BrokerResponseCreate) => { })
                         .catch((err) => {
                             try {
                                 console.log('Error creating and saving user:', err);
@@ -120,20 +106,16 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                 }
 
             });
-            // Send all requests concurrently using Promise.all
+          
             Promise.all(requestPromises)
-                .then(responses => {
-                    // console.log("Response:", responses.data);
-
-                })
+                .then(responses => { })
                 .catch(errors => {
                     console.log("Error :", errors);
 
                 });
 
         } else if (type == 'SX' || type == 'LX') {
-            //console.log("trade exit")
-
+           
             const requestPromises = AllClientData.map(async (item) => {
 
                 if (token != 0) {

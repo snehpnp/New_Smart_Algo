@@ -13,10 +13,7 @@ const BrokerResponse = db.BrokerResponse;
 var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
-     
-  console.log("INSIDE UPSTOX")
-     
-  
+
 
     try {
 
@@ -38,138 +35,173 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         var client_key = signals.Key;
         var demo = signals.Demo;
 
-     
-     if(token != 0){
 
-        const csvFilePath = '../AllInstrumentToken/upstoxinstrument/complete.csv';
-        const filePath_token = path.join(__dirname, csvFilePath);
-        const pattern = token[0].instrument_token
-          
-       // console.log("filePath_token", filePath_token)
+        if (token != 0) {
 
-    
+            const csvFilePath = '../AllInstrumentToken/upstoxinstrument/complete.csv';
+            const filePath_token = path.join(__dirname, csvFilePath);
+            const pattern = token[0].instrument_token
 
-        const command = `grep '|${pattern}' ${filePath_token}`;
+            const command = `grep '|${pattern}' ${filePath_token}`;
 
-      // const command = `findstr ,${pattern}, ${filePath_token}`;
-      
-      // console.log("commad", command)
-
-       exec(command, (error, stdout, stderr) => {
-        if (error) {
-            console.log(`exec error: ${error}`);
-           // return;
-        }
-
-       
-      if(stdout){
-         
-      const parts = stdout.match(/"([^"]+)"/)[1]; // Extract the content inside double quotes
-     
-
-        if (type == 'LE' || type == 'SE') {
-    
-         const requestPromises = AllClientData.map(async (item) => {
-            //item.postdata.instrument_token = parts;
-            item.postdata.instrument_token = parts;
-           // console.log("parts",parts)
-
-            if (type == 'LE' || type == 'SX') {
-                item.postdata.transaction_type = 'BUY';
-            } else if (type == 'SE' || type == 'LX') {
-                item.postdata.transaction_type = 'SELL';
-            }
-
-            // console.log("price", price)
-            //console.log("item.client_services.order_type", item.client_services.order_type)
-
-            if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                item.postdata.price = price
-            }
-
-            //  console.log("postData after ", item.postdata);
-
-
-            EntryPlaceOrder(item, filePath, signals, signal_req)
-
-
-           });
-        // Send all requests concurrently using Promise.all
-          Promise.all(requestPromises)
-          .then(responses => {
-              // console.log("Response:", responses.data);
-          })
-          .catch(errors => {
-              console.log("errors:", errors);
-          });
-
-      }
-
-
-      else if (type == 'SX' || type == 'LX') {
-       // console.log("trade exit")
-      
-        const requestPromises = AllClientData.map(async (item) => {
-    
-                if (type == 'LE' || type == 'SX') {
-                    item.postdata.transaction_type = 'BUY';
-                } else if (type == 'SE' || type == 'LX') {
-                    item.postdata.transaction_type = 'SELL';
+            exec(command, (error, stdout, stderr) => {
+                if (error) {
+                    console.log(`exec error: ${error}`);
                 }
-    
-                // console.log("price", price)
-                // console.log("item.client_services.order_type", item.client_services.order_type)
-    
-                if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                    item.postdata.price = price
-                }
-    
-    
-    
-                var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
-    
-                
-                var config = {
-                    method: 'get',
-                    url: 'https://api-v2.upstox.com/portfolio/short-term-positions',
-                    headers: {
-                        'accept': ' application/json',
-                        'Api-Version': ' 2.0',
-                        'Authorization': 'Bearer ' + item.access_token,
-                        'Content-Type': 'application/json'
-                    },
-                };
-                axios(config)
-                    .then(async (response) => {
-                        console.log("response", response.data.data.length)
-                       
-                         
-                        
-    
-                        if (response.data.data != undefined) {
-    
-                            fs.appendFile(filePath, 'TIME ' + new Date() + ' UPSTOX POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.data.length) + '\n', function (err) {
-                                if (err) {
-                                  //  return console.log(err);
-                                }
+
+
+                if (stdout) {
+
+                    const parts = stdout.match(/"([^"]+)"/)[1]; // Extract the content inside double quotes
+
+
+                    if (type == 'LE' || type == 'SE') {
+
+                        const requestPromises = AllClientData.map(async (item) => {
+
+                            item.postdata.instrument_token = parts;
+
+                            if (type == 'LE' || type == 'SX') {
+                                item.postdata.transaction_type = 'BUY';
+                            } else if (type == 'SE' || type == 'LX') {
+                                item.postdata.transaction_type = 'SELL';
+                            }
+
+
+                            if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
+                                item.postdata.price = price
+                            }
+
+
+                            EntryPlaceOrder(item, filePath, signals, signal_req)
+
+
+                        });
+
+                        Promise.all(requestPromises)
+                            .then(responses => { })
+                            .catch(errors => {
+                                console.log("errors:", errors);
                             });
-    
-                            const Exist_entry_order = response.data.data.find(item1 => item1.instrument_token == parts);
+
+                    }
 
 
-                            console.log("Exist_entry_order",Exist_entry_order)
+                    else if (type == 'SX' || type == 'LX') {
 
-                            
-    
-                            if(Exist_entry_order != undefined){
-                               
-                                    item.postdata.instrument_token = parts
 
-                                  
-                                    const possition_qty = Exist_entry_order.day_buy_quantity - Exist_entry_order.day_sell_quantity
-    
-                                    if (possition_qty == 0) {
-                                        // console.log("possition_qty Not Available", possition_qty);
+                        const requestPromises = AllClientData.map(async (item) => {
+
+                            if (type == 'LE' || type == 'SX') {
+                                item.postdata.transaction_type = 'BUY';
+                            } else if (type == 'SE' || type == 'LX') {
+                                item.postdata.transaction_type = 'SELL';
+                            }
+
+
+
+                            if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
+                                item.postdata.price = price
+                            }
+
+
+
+                            var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
+
+
+                            var config = {
+                                method: 'get',
+                                url: 'https://api-v2.upstox.com/portfolio/short-term-positions',
+                                headers: {
+                                    'accept': ' application/json',
+                                    'Api-Version': ' 2.0',
+                                    'Authorization': 'Bearer ' + item.access_token,
+                                    'Content-Type': 'application/json'
+                                },
+                            };
+                            axios(config)
+                                .then(async (response) => {
+
+                                    if (response.data.data != undefined) {
+
+                                        fs.appendFile(filePath, 'TIME ' + new Date() + ' UPSTOX POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.data) + '\n', function (err) {
+                                            if (err) { }
+                                        });
+
+                                        const Exist_entry_order = response.data.data.find(item1 => item1.instrument_token == parts);
+
+                                        if (Exist_entry_order != undefined) {
+
+                                            item.postdata.instrument_token = parts
+                                            const possition_qty = Exist_entry_order.day_buy_quantity - Exist_entry_order.day_sell_quantity
+
+                                            if (possition_qty == 0) {
+                                                BrokerResponse.create({
+                                                    user_id: item._id,
+                                                    receive_signal: signal_req,
+                                                    strategy: strategy,
+                                                    type: type,
+                                                    symbol: input_symbol,
+                                                    order_status: "Entry Not Exist",
+                                                    reject_reason: "This Script position Empty ",
+                                                    broker_name: "UPSTOX",
+                                                    send_request: send_rr,
+                                                    open_possition_qty: possition_qty,
+
+                                                })
+                                                    .then((BrokerResponseCreate) => {
+
+                                                    })
+                                                    .catch((err) => {
+                                                        try {
+                                                            console.log('Error creating and saving user:', err);
+                                                        } catch (e) {
+                                                            console.log("duplicate key")
+                                                        }
+
+                                                    });
+
+
+                                            } else {
+
+                                                if (possition_qty > 0 && type == 'LX') {
+                                                    ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
+                                                } else if (possition_qty < 0 && type == 'SX') {
+                                                    ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
+                                                }
+
+                                            }
+
+
+                                        } else {
+
+                                            BrokerResponse.create({
+                                                user_id: item._id,
+                                                receive_signal: signal_req,
+                                                strategy: strategy,
+                                                type: type,
+                                                symbol: input_symbol,
+                                                order_status: "Entry Not Exist",
+                                                order_id: "",
+                                                trading_symbol: "",
+                                                broker_name: "UPSTOX",
+                                                send_request: send_rr,
+                                                reject_reason: "position Not Exist",
+
+                                            })
+                                                .then((BrokerResponseCreate) => { })
+                                                .catch((err) => {
+                                                    try {
+                                                        console.log('Error creating and saving user:', err);
+                                                    } catch (e) {
+                                                        console.log("duplicate key")
+                                                    }
+
+                                                });
+                                        }
+
+                                    } else {
+
                                         BrokerResponse.create({
                                             user_id: item._id,
                                             receive_signal: signal_req,
@@ -177,290 +209,166 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                             type: type,
                                             symbol: input_symbol,
                                             order_status: "Entry Not Exist",
-                                            reject_reason: "This Script position Empty ",
+                                            order_id: "",
+                                            trading_symbol: "",
                                             broker_name: "UPSTOX",
                                             send_request: send_rr,
-                                            open_possition_qty: possition_qty,
-    
+                                            reject_reason: "All position Empty",
+
                                         })
-                                            .then((BrokerResponseCreate) => {
-                                                
-                                            })
+                                            .then((BrokerResponseCreate) => { })
                                             .catch((err) => {
                                                 try {
                                                     console.log('Error creating and saving user:', err);
                                                 } catch (e) {
                                                     console.log("duplicate key")
                                                 }
-    
+
                                             });
-    
-    
-                                    } else {
-    
-                                        if (possition_qty > 0 && type == 'LX') {
-                                            ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                        } else if (possition_qty < 0 && type == 'SX') {
-                                            ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                        }
-    
-                                    }
-    
-                                
-                            }else{
 
-                                BrokerResponse.create({
-                                    user_id: item._id,
-                                    receive_signal: signal_req,
-                                    strategy: strategy,
-                                    type: type,
-                                    symbol: input_symbol,
-                                    order_status: "Entry Not Exist",
-                                    order_id: "",
-                                    trading_symbol: "",
-                                    broker_name: "UPSTOX",
-                                    send_request: send_rr,
-                                    reject_reason: "position Not Exist",
-        
+                                    }
+
+
+
+
                                 })
-                                    .then((BrokerResponseCreate) => {
-                                        
-                                    })
-                                    .catch((err) => {
-                                        try {
-                                            console.log('Error creating and saving user:', err);
-                                        } catch (e) {
-                                            console.log("duplicate key")
+                                .catch(async (error) => {
+
+                                    fs.appendFile(filePath, 'TIME ' + new Date() + ' UPSTOX POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
+                                        if (err) {
+                                            return console.log(err);
                                         }
-        
                                     });
-    
-                            }
-    
-                           
-                        } else {
-    
-                            BrokerResponse.create({
-                                user_id: item._id,
-                                receive_signal: signal_req,
-                                strategy: strategy,
-                                type: type,
-                                symbol: input_symbol,
-                                order_status: "Entry Not Exist",
-                                order_id: "",
-                                trading_symbol: "",
-                                broker_name: "UPSTOX",
-                                send_request: send_rr,
-                                reject_reason: "All position Empty",
-    
-                            })
-                                .then((BrokerResponseCreate) => {
-                                    
-                                })
-                                .catch((err) => {
-                                    try {
-                                        console.log('Error creating and saving user:', err);
-                                    } catch (e) {
-                                        console.log("duplicate key")
+
+                                    if (error) {
+
+                                        console.log("error", error)
+                                        const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+                                        BrokerResponse.create({
+                                            user_id: item._id,
+                                            receive_signal: signal_req,
+                                            strategy: strategy,
+                                            type: type,
+                                            symbol: input_symbol,
+                                            order_status: "position request error",
+                                            order_id: "",
+                                            trading_symbol: "",
+                                            broker_name: "UPSTOX",
+                                            send_request: send_rr,
+                                            reject_reason: message,
+
+                                        })
+                                            .then((BrokerResponseCreate) => { })
+                                            .catch((err) => {
+                                                try {
+                                                    console.log('Error creating and saving user:', err);
+                                                } catch (e) {
+                                                    console.log("duplicate key")
+                                                }
+
+                                            });
+                                    } else {
+                                        const message = (JSON.stringify(error)).replace(/["',]/g, '');
+
+                                        BrokerResponse.create({
+                                            user_id: item._id,
+                                            receive_signal: signal_req,
+                                            strategy: strategy,
+                                            type: type,
+                                            symbol: input_symbol,
+                                            order_status: "position request error",
+                                            order_id: "",
+                                            trading_symbol: "",
+                                            broker_name: "UPSTOX",
+                                            send_request: send_rr,
+                                            reject_reason: message,
+
+                                        })
+                                            .then((BrokerResponseCreate) => { })
+                                            .catch((err) => {
+                                                try {
+                                                    console.log('Error creating and saving user:', err);
+                                                } catch (e) {
+                                                    console.log("duplicate key")
+                                                }
+                                            });
                                     }
-    
                                 });
-    
-                        }
-    
-    
-    
-    
-                    })
-                    .catch(async (error) => {
-    
-                        fs.appendFile(filePath, 'TIME ' + new Date() + ' UPSTOX POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
-                            if (err) {
-                                return console.log(err);
-                            }
+
                         });
-    
-                        if (error) {
 
-                            console.log("error",error)
-                            const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
-                            BrokerResponse.create({
-                                user_id: item._id,
-                                receive_signal: signal_req,
-                                strategy: strategy,
-                                type: type,
-                                symbol: input_symbol,
-                                order_status: "position request error",
-                                order_id: "",
-                                trading_symbol: "",
-                                broker_name: "UPSTOX",
-                                send_request: send_rr,
-                                reject_reason: message,
-    
-                            })
-                                .then((BrokerResponseCreate) => {
-                                    
-                                })
-                                .catch((err) => {
-                                    try {
-                                        console.log('Error creating and saving user:', err);
-                                    } catch (e) {
-                                        console.log("duplicate key")
-                                    }
-    
-                                });
-                        } else {
-                            const message = (JSON.stringify(error)).replace(/["',]/g, '');
-    
-                            BrokerResponse.create({
-                                user_id: item._id,
-                                receive_signal: signal_req,
-                                strategy: strategy,
-                                type: type,
-                                symbol: input_symbol,
-                                order_status: "position request error",
-                                order_id: "",
-                                trading_symbol: "",
-                                broker_name: "UPSTOX",
-                                send_request: send_rr,
-                                reject_reason: message,
-    
-                            })
-                                .then((BrokerResponseCreate) => {
-                                    
-                                })
-                                .catch((err) => {
-                                    try {
-                                        console.log('Error creating and saving user:', err);
-                                    } catch (e) {
-                                        console.log("duplicate key")
-                                    }
-    
-                                });
-    
-    
-                        }
-                    });
-    
-    
-    
-    
-    
-    
-            
-    
-    
-    
-    
-        });
-        // Send all requests concurrently using Promise.all
-        Promise.all(requestPromises)
-            .then(responses => {
-                // console.log("Response:", responses.data);
-    
-            })
-            .catch(errors => {
-                console.log("errors:", errors);
-    
-         });
-    
-      }
-
-
-    }else{
-
-        const requestPromises = AllClientData.map(async (item) => {
-
-            BrokerResponse.create({
-                user_id: item._id,
-                receive_signal: signal_req,
-                strategy: strategy,
-                type: type,
-                symbol: input_symbol,
-                order_status: "",
-                order_id: "",
-                trading_symbol: "",
-                broker_name: "UPSTOX",
-                send_request: "",
-                reject_reason: "Token not Found",
-    
-            })
-                .then((BrokerResponseCreate) => {
-                    
-                })
-                .catch((err) => {
-                    try {
-                        console.log('Error creating and saving user:', err);
-                    } catch (e) {
-                        console.log("duplicate key")
+                        Promise.all(requestPromises)
+                            .then(responses => { })
+                            .catch(errors => { });
                     }
-    
-                });
-    
-              });
-            // Send all requests concurrently using Promise.all
-                Promise.all(requestPromises)
-                .then(responses => {
-                    // console.log("Response:", responses.data);
-    
+
+                } else {
+                    const requestPromises = AllClientData.map(async (item) => {
+                        BrokerResponse.create({
+                            user_id: item._id,
+                            receive_signal: signal_req,
+                            strategy: strategy,
+                            type: type,
+                            symbol: input_symbol,
+                            order_status: "",
+                            order_id: "",
+                            trading_symbol: "",
+                            broker_name: "UPSTOX",
+                            send_request: "",
+                            reject_reason: "Token not Found",
+                        })
+                            .then((BrokerResponseCreate) => { })
+                            .catch((err) => {
+                                try {
+                                    console.log('Error creating and saving user:', err);
+                                } catch (e) {
+                                    console.log("duplicate key")
+                                }
+                            });
+                    });
+                    Promise.all(requestPromises)
+                        .then(responses => { })
+                        .catch(errors => { });
+                }
+            });
+
+        } else {
+
+            const requestPromises = AllClientData.map(async (item) => {
+
+                BrokerResponse.create({
+                    user_id: item._id,
+                    receive_signal: signal_req,
+                    strategy: strategy,
+                    type: type,
+                    symbol: input_symbol,
+                    order_status: "",
+                    order_id: "",
+                    trading_symbol: "",
+                    broker_name: "UPSTOX",
+                    send_request: "",
+                    reject_reason: "Token not received due to wrong trade",
+
                 })
+                    .then((BrokerResponseCreate) => {  })
+                    .catch((err) => {
+                        try {
+                            console.log('Error creating and saving user:', err);
+                        } catch (e) {
+                            console.log("duplicate key")
+                        }
+
+                    });
+
+            });
+    
+            Promise.all(requestPromises)
+                .then(responses => { })
                 .catch(errors => {
                     console.log("errors:", errors);
-    
+
                 });
-
-
-   }
-
- });
-
-
-
-
-
-
-      }else{
-
-        const requestPromises = AllClientData.map(async (item) => {
-
-        BrokerResponse.create({
-            user_id: item._id,
-            receive_signal: signal_req,
-            strategy: strategy,
-            type: type,
-            symbol: input_symbol,
-            order_status: "",
-            order_id: "",
-            trading_symbol: "",
-            broker_name: "UPSTOX",
-            send_request: "",
-            reject_reason: "Token not received due to wrong trade",
-
-        })
-            .then((BrokerResponseCreate) => {
-                
-            })
-            .catch((err) => {
-                try {
-                    console.log('Error creating and saving user:', err);
-                } catch (e) {
-                    console.log("duplicate key")
-                }
-
-            });
-
-          });
-        // Send all requests concurrently using Promise.all
-            Promise.all(requestPromises)
-            .then(responses => {
-                // console.log("Response:", responses.data);
-
-            })
-            .catch(errors => {
-                console.log("errors:", errors);
-
-            });
-      }
+        }
 
     } catch (error) {
 
@@ -510,12 +418,12 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
             'Content-Type': 'application/json'
         },
         data: JSON.stringify(item.postdata)
-       
+
     };
     // console.log(config);
     axios(config)
         .then(async (response) => {
-           // console.log("respose ENTRY", response.data)
+            // console.log("respose ENTRY", response.data)
             fs.appendFile(filePath, 'TIME ' + new Date() + ' UPSTOX AFTER PLACE ORDER USER ENTRY - ' + item.UserName + ' RESPONSE -' + JSON.stringify(response.data) + '\n', function (err) {
                 if (err) {
                     return console.log(err);
@@ -539,7 +447,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
                 })
                     .then((BrokerResponseCreate) => {
-                        
+
                     })
                     .catch((err) => {
                         try {
@@ -569,7 +477,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
                 })
                     .then((BrokerResponseCreate) => {
-                        
+
                     })
                     .catch((err) => {
                         try {
@@ -612,7 +520,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                
+
                             })
                             .catch((err) => {
                                 try {
@@ -640,7 +548,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                
+
                             })
                             .catch((err) => {
                                 try {
@@ -703,7 +611,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
             'Content-Type': 'application/json'
         },
         data: JSON.stringify(item.postdata)
-       
+
     };
 
     axios(config)
@@ -734,7 +642,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
                 })
                     .then((BrokerResponseCreate) => {
-                        
+
                     })
                     .catch((err) => {
                         try {
@@ -746,7 +654,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                     });
 
 
-            }else {
+            } else {
 
                 const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
                 BrokerResponse.create({
@@ -764,7 +672,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
                 })
                     .then((BrokerResponseCreate) => {
-                        
+
                     })
                     .catch((err) => {
                         try {
@@ -806,7 +714,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                
+
                             })
                             .catch((err) => {
                                 try {
@@ -834,7 +742,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                
+
                             })
                             .catch((err) => {
                                 try {

@@ -61,7 +61,6 @@ const BrokerResponse = () => {
           }
         });
     };
-
     getservice();
   }, []);
 
@@ -203,7 +202,7 @@ const BrokerResponse = () => {
       if (updatedData.hasOwnProperty(key)) {
         const item = updatedData[key];
 
-        if (item.lot_size == 0) {
+        if (item.lot_size === 0 || item.lot_size === "0") {
           toast.error(`Can't update 0 Quantity`);
           setIsUpdating(false);
           return;

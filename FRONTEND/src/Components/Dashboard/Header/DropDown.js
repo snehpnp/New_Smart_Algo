@@ -11,14 +11,11 @@ import toast from 'react-hot-toast';
 const DropDown = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const user_id = JSON.parse(localStorage.getItem('user_details')).user_id
     const Role = JSON.parse(localStorage.getItem('user_details')).Role
-
     const [CheckUser, setCheckUser] = useState(check_Device());
-
     const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-
+ 
     const LogoutUser = async () => {
         const request = {
             "userId": user_id,
@@ -60,7 +57,6 @@ const DropDown = () => {
         }
 
     }
-
 
     return (
         <div className="mb-0 dropdown custom-dropdown">
