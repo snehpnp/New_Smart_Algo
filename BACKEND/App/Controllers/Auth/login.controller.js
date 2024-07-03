@@ -442,8 +442,6 @@ class Login {
 
             }
 
-
-            // If Not Update User
             if (!result) {
                 return res.send({ status: false, msg: 'Server Side issue.', data: [] });
             }
@@ -462,10 +460,8 @@ class Login {
     //  Forget Password
     async ForgetPassword(req, res) {
         try {
-
             const { Email, Device } = req.body;
 
-            // // IF Login Time Email CHECK
             var EmailCheck = await User.findOne({ Email: Email })
             var CompanyInformation = await company_information.findOne()
 
@@ -473,9 +469,7 @@ class Login {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
             }
 
-
             var userid = Buffer.from(JSON.stringify(EmailCheck._id)).toString('base64');
-            // var redirectUrl = 'http://trade.pandpinfotech.com/#/update/' + userid
             var redirectUrl = `https://${CompanyInformation.domain_url}/#/update/${userid}`
 
             var toEmail = Email;
@@ -485,10 +479,9 @@ class Login {
 
 
         } catch (error) {
-
+            console.log("Error in Login controller", error)
         }
 
-        logger.info('Mail send successfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
         res.send({ status: true, msg: "Mail send successfully", data: redirectUrl })
     }
 
@@ -496,8 +489,7 @@ class Login {
     // Update Password
     async UpdatePassword(req, res) {
         try {
-            const { userid, newpassword, confirmpassword } = req.body;
-            // // IF Login Time Email CHECK
+            const { userid, newpassword, confirmpassword } = req.body;       
             const EmailCheck = await User.findById(userid);
 
             if (!EmailCheck) {

@@ -8,9 +8,9 @@ import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDat
 import { useDispatch } from "react-redux";
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import Modal from "../../../Components/ExtraComponents/Modal";
-import { Trash2 ,X } from 'lucide-react';
+import { Trash2, X } from 'lucide-react';
 import Holidays from "date-holidays"
-import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token ,Option_Symbols_Update_status } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
+import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token, Option_Symbols_Update_status } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
 import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Service/Alice_Socket";
@@ -41,7 +41,7 @@ const HelpCenter = () => {
         data: []
     });
 
-    
+
 
     const [All_Symbols_Expiry, set_All_Symbols_Expiry] = useState({
         loading: false,
@@ -85,7 +85,7 @@ const HelpCenter = () => {
 
     const [disabled, setDisabled] = useState(false);
 
-    
+
 
     const handleClickDisabled = () => {
         setDisabled(true);
@@ -96,8 +96,8 @@ const HelpCenter = () => {
 
 
 
-      // For Show All The Filter's Services
-      const [state, setstate] = useState([]);
+    // For Show All The Filter's Services
+    const [state, setstate] = useState([]);
 
 
 
@@ -242,13 +242,13 @@ const HelpCenter = () => {
 
 
     const CreateRequest = (option_type, row_data, call_type, index) => {
- 
+
 
         if (strategyRef.current === "") {
             alert("Please Select Strategy First")
         } else {
 
- 
+
             OptionChainData.data && OptionChainData.data.filter((item) => {
                 if (item.call_token === row_data.call_token && call_type === "LE" && option_type === "CALL") {
                     const element = $('.button_call_buy_' + item.call_token);
@@ -423,7 +423,7 @@ const HelpCenter = () => {
         setshowModal(false)
 
     }
-   
+
 
     // ------------------------------------ REMOVE SELECTED------------------------------------
 
@@ -468,9 +468,9 @@ const HelpCenter = () => {
         ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
 
 
-            let price =  $('.Call_Price_' + item.token).html();
-            if(item.call_type.toUpperCase() == "PUT"){
-            price =  $('.Put_Price_' + item.token).html();
+            let price = $('.Call_Price_' + item.token).html();
+            if (item.call_type.toUpperCase() == "PUT") {
+                price = $('.Put_Price_' + item.token).html();
             }
 
 
@@ -522,10 +522,10 @@ const HelpCenter = () => {
                         toast.danger(response.data.msg);
 
                     }
-                    
+
                 })
                 .catch((error) => {
-                    console.log("Error in Option Chain Page",error);
+                    console.log("Error in Option Chain Page", error);
                 });
 
         })
@@ -551,11 +551,11 @@ const HelpCenter = () => {
                         data: response.data
                     });
 
-                   
+
                     const filteredSelectedData = response.data.filter((item) => item.token === "1").map((item) => item.symbol);
 
-                     setSelectedServices(filteredSelectedData)
-                     setTags(filteredSelectedData)
+                    setSelectedServices(filteredSelectedData)
+                    setTags(filteredSelectedData)
                 }
             })
     }
@@ -783,63 +783,63 @@ const HelpCenter = () => {
     }
 
 
- //  For Manage Filter Symboll 
-const filterFunction = async () => {
-   // alert("okk")
-    const filteredData = All_Symbols.data.filter((item) => {
-        return item.symbol.toLowerCase().includes(SerachService.toLowerCase())
-    });
+    //  For Manage Filter Symboll 
+    const filterFunction = async () => {
+        // alert("okk")
+        const filteredData = All_Symbols.data.filter((item) => {
+            return item.symbol.toLowerCase().includes(SerachService.toLowerCase())
+        });
 
 
-    if (SerachService === "") {
-        setstate([])
-    } else {
-        setstate(filteredData)
-    }
-};
-
-useEffect(() => {
-    filterFunction()
-}, [SerachService]);
-
-  
-
-   // State ForShow Selected Service After Filter And Show Into Table
-   const [selectedServices, setSelectedServices] = useState([]);
-
-   const [tags1, setTags] = useState([]);
-
-  //  For Select Services Checkbox
-  function handleServiceChange(event, symbol, item) {
-      const isChecked = event.target.checked;
-      
-      const symbolValue = symbol;
-      setSelectedServices((prevInfo) => {
-        if (isChecked) {
-            
-            if(selectedServices.length >= 5){
-           
-             
-             alert("You can only select up to 5 stocks.");
-             event.target.checked = false;
-             setTags(tags1.filter((symb) => symb !== symbolValue));
-             return prevInfo.filter((item) => item !== symbolValue);
-            
-            }else{
-                setTags((oldArray) => [...oldArray, symbolValue]);
-                return [...prevInfo, symbolValue];
-            }
+        if (SerachService === "") {
+            setstate([])
         } else {
-            setTags(tags1.filter((symb) => symb !== symbolValue));
-            return prevInfo.filter((item) => item !== symbolValue);
+            setstate(filteredData)
         }
-    });
+    };
 
-}
+    useEffect(() => {
+        filterFunction()
+    }, [SerachService]);
 
 
 
-    const SelectOptionStock = () =>{
+    // State ForShow Selected Service After Filter And Show Into Table
+    const [selectedServices, setSelectedServices] = useState([]);
+
+    const [tags1, setTags] = useState([]);
+
+    //  For Select Services Checkbox
+    function handleServiceChange(event, symbol, item) {
+        const isChecked = event.target.checked;
+
+        const symbolValue = symbol;
+        setSelectedServices((prevInfo) => {
+            if (isChecked) {
+
+                if (selectedServices.length >= 5) {
+
+
+                    alert("You can only select up to 5 stocks.");
+                    event.target.checked = false;
+                    setTags(tags1.filter((symb) => symb !== symbolValue));
+                    return prevInfo.filter((item) => item !== symbolValue);
+
+                } else {
+                    setTags((oldArray) => [...oldArray, symbolValue]);
+                    return [...prevInfo, symbolValue];
+                }
+            } else {
+                setTags(tags1.filter((symb) => symb !== symbolValue));
+                return prevInfo.filter((item) => item !== symbolValue);
+            }
+        });
+
+    }
+
+
+
+    const SelectOptionStock = () => {
         setshowModalSelectOptionStock(true)
     }
 
@@ -852,18 +852,18 @@ useEffect(() => {
             await dispatch(Option_Symbols_Update_status({ req: selectedServices, token: token })).unwrap()
                 .then((response) => {
 
-                    
-                    if (response.status) {
-                      toast.success(response.msg);
-                      setSerachService('')
-                      setRefresh(!refresh)
-                      setshowModalSelectOptionStock(false)  
 
-                    }else{
-                       toast.error(response.msg);
-                       setSerachService('')
-                       setRefresh(!refresh)
-                      // setshowModalSelectOptionStock(false) 
+                    if (response.status) {
+                        toast.success(response.msg);
+                        setSerachService('')
+                        setRefresh(!refresh)
+                        setshowModalSelectOptionStock(false)
+
+                    } else {
+                        toast.error(response.msg);
+                        setSerachService('')
+                        setRefresh(!refresh)
+                        // setshowModalSelectOptionStock(false) 
 
                     }
                 })
@@ -874,21 +874,21 @@ useEffect(() => {
 
         DoneSelectOptionTrade()
         return
-        setshowModalSelectOptionStock(false)  
+        setshowModalSelectOptionStock(false)
     }
 
-    const handleSymbolClickDelete = (e,symbol) => {
-        $('.delete_stoch_'+symbol).prop('checked', false);
+    const handleSymbolClickDelete = (e, symbol) => {
+        $('.delete_stoch_' + symbol).prop('checked', false);
         setRefresh(!refresh)
         setTags(tags1.filter((symb) => symb !== symbol));
         setSelectedServices(selectedServices.filter((symb) => symb !== symbol));
-        
+
     }
 
 
 
-    
-    
+
+
 
     return (
         <>
@@ -921,7 +921,7 @@ useEffect(() => {
                                     >
                                         <option value="" >Select Stock Name</option>
                                         {All_Symbols.data && All_Symbols.data.map((item) => {
-                                            return <option  value={item.symbol} name={item.price}>{item.symbol}</option>
+                                            return <option value={item.symbol} name={item.price}>{item.symbol}</option>
                                         })}
                                     </select>
                                 </div>
@@ -979,20 +979,20 @@ useEffect(() => {
                                     <input type="number" className="new-input-control form-control" />
                                 </div>
 
-                               
+
                                 <div className="col-md-2">
                                     <button
                                         className="btn btn-primary me-2"
                                         onClick={(e) => SelectOptionStock()}
                                     >
-                                     Select Option Stock
+                                        Select Option Stock
                                     </button>
                                 </div>
-                                
 
 
 
-                                 <div className="col-md-2 d-flex justify-content-end align-items-center text-secondary ">
+
+                                <div className="col-md-2 d-flex justify-content-end align-items-center text-secondary ">
                                     <button
                                         className="btn btn-primary me-2"
                                         onClick={(e) => ExcuteTradeButton()}
@@ -1005,7 +1005,7 @@ useEffect(() => {
                             </div>
 
 
-                            
+
 
 
                             <div className='option-chain mt-2'>
@@ -1119,7 +1119,7 @@ useEffect(() => {
 
 
 
-                       {showModalSelectOptionStock ? (
+                            {showModalSelectOptionStock ? (
                                 <>
                                     <Modal
                                         isOpen={showModalSelectOptionStock}
@@ -1133,97 +1133,99 @@ useEffect(() => {
                                         handleClose={() => setshowModalSelectOptionStock(false)}
                                     >
 
-                            
-                            
-              <div className="card-body d-flex ">
-                {
-                  tags1.length == 0 ? "" :
-                  <>
-                  {tags1.map((symbol, i) => (
-                    <React.Fragment key={i}>
-                      <div className='mx-3 d-flex justify-content-center'>
-                      <h6 >{symbol}</h6><span onClick={(e) => handleSymbolClickDelete(e,symbol)}><X /></span>
-                      </div>
-                    </React.Fragment>
-                  ))}
-                </>
 
-                }
- 
-                            
-                        </div>           
-                            <div className='col-md-11 px-2 ms-2 '>
-                                <input
-                                    type="test"
-                                    className="form-control"
-                                    placeholder="Search ..."
-                                    onChange={(e) => { setSerachService(e.target.value) }}
-                                    value={SerachService}
 
-                                />
-                               </div>
-                                  <div className="row ">
-                                        { 
-                                          state.length > 0 ?
-                                          state.map((service) => (
+                                        <div className="card-body d-flex ">
+                                            {
+                                                tags1.length == 0 ? "" :
+                                                    <>
+                                                        {tags1.map((symbol, i) => (
+                                                            <React.Fragment key={i}>
+                                                                <div className='mx-3 d-flex justify-content-center'>
+                                                                    <h6 >{symbol}</h6><span onClick={(e) => handleSymbolClickDelete(e, symbol)}><X /></span>
+                                                                </div>
+                                                            </React.Fragment>
+                                                        ))}
+                                                    </>
 
-                                            service.symbol == "BANKNIFTY" || service.symbol == "NIFTY" || service.symbol == "FINNIFTY" ? "":
-                                              <div key={service.symbol} className=" col-lg-3 mb-2">
-                                                <div className="col-lg-6">
-                                                        <div className="form-check">
-                                                            <input
-                                                                type="checkbox"
-                                                                className={`form-check-input delete_stoch_${service.symbol}`}          
-                                                                id={`service-${service.symbol}`}
-                                                                value={service.symbol}
-                                                                defaultChecked={selectedServices.includes(service.symbol)}
-                                                                onChange={(e) => handleServiceChange(e, service.symbol , service)}
-                                                            />
-                                                            <label className="form-check-label" htmlFor={`service-${service.symbol}`}>
-                                                                {service.symbol}
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                    
-                                                ))
-                                                
-                                                : 
-                                                
-                                                All_Symbols.data.map((service) => (
+                                            }
 
-                                                    service.symbol == "BANKNIFTY" || service.symbol == "NIFTY" || service.symbol == "FINNIFTY" ? "":
-                                                    <div key={service.symbol} className=" col-lg-3 mb-2">
 
-                                                      <div className="col-lg-6">
-                                                              <div className="form-check">
-                                                               
-                                                                <input
-                                                                      type="checkbox"
-                                                                      className={`form-check-input delete_stoch_${service.symbol}`} 
-                                                                      id={`service-${service.symbol}`}
-                                                                      value={service.symbol}
-                                                                      defaultChecked={selectedServices.includes(service.symbol)}
-                                                                     onChange={(e) => handleServiceChange(e, service.symbol , service)}
-                                                                  />
-                                                            
-                                                                  
+                                        </div>
+                                        <div className='col-md-11 px-2 ms-2 '>
+                                            <input
+                                                type="test"
+                                                className="form-control"
+                                                placeholder="Search ..."
+                                                onChange={(e) => { setSerachService(e.target.value) }}
+                                                value={SerachService}
 
-                                                                  <label className="form-check-label" htmlFor={`service-${service.symbol}`}>
-                                                                      {service.symbol}
-                                                                  </label>
-                                                              </div>
-                                                          </div>
-                                                          </div>
-                                                          
-                                                 ))
-                                                
-                                                
-                                                }
-                                                </div>
+                                            />
+                                        </div>
+                                        <div className="row ">
+                                            {
+                                                state.length > 0 ?
+                                                    state.map((service) => (
 
-                                       
-                                        
+                                                        service.symbol == "BANKNIFTY" || service.symbol == "NIFTY" || service.symbol == "FINNIFTY" ? "" :
+                                                            <div key={service.symbol} className=" col-lg-3 mb-2">
+                                                                <div className="col-lg-6">
+                                                                    <div className="form-check">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            className={`form-check-input delete_stoch_${service.symbol}`}
+                                                                            id={`service-${service.symbol}`}
+                                                                            value={service.symbol}
+                                                                            checked={selectedServices.includes(service.symbol)}
+                                                                            onChange={(e) => handleServiceChange(e, service.symbol, service)}
+                                                                        />
+
+                                                                        <label className="form-check-label" htmlFor={`service-${service.symbol}`}>
+                                                                            {service.symbol}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                    ))
+
+                                                    :
+
+                                                    All_Symbols.data.map((service) => (
+
+                                                        service.symbol == "BANKNIFTY" || service.symbol == "NIFTY" || service.symbol == "FINNIFTY" ? "" :
+                                                            <div key={service.symbol} className=" col-lg-3 mb-2">
+
+                                                                <div className="col-lg-6">
+                                                                    <div className="form-check">
+
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            className={`form-check-input delete_stoch_${service.symbol}`}
+                                                                            id={`service-${service.symbol}`}
+                                                                            value={service.symbol}
+                                                                            checked={selectedServices.includes(service.symbol)}
+                                                                            onChange={(e) => handleServiceChange(e, service.symbol, service)}
+                                                                        />
+
+
+
+
+                                                                        <label className="form-check-label" htmlFor={`service-${service.symbol}`}>
+                                                                            {service.symbol}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                    ))
+
+
+                                            }
+                                        </div>
+
+
+
                                     </Modal>
                                 </>
                             ) : (

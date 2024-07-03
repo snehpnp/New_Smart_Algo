@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config'
 import { Signal, Users, Wrench, Link2, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Boxes, Rocket, Paintbrush, Vote, Info } from 'lucide-react';
@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { Get_Company_Logo } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import * as Config from "../../../Utils/Config";
 import { Get_Pmermission } from "../../../ReduxStore/Slice/Users/DashboardSlice";
-
 
 
 const Sidebar = ({ ShowSidebar }) => {
@@ -102,7 +101,7 @@ const Sidebar = ({ ShowSidebar }) => {
                         {
                             gotodashboard != null ? user_role_goTo === "USER" ? Client && Client.map((item) => {
                                 return <>
-                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                    <li key={item.id} className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                         {item.Data.length > 0 ? <>
                                             <Link
                                                 className="has-arrow "
@@ -144,7 +143,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                     return (
                                         <>
                                             {(item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 0) ? null : (
-                                                <li className={`${location.pathname === item.route ? 'mm-active' : ""}`}>
+                                                <li key={item.id} className={`${location.pathname === item.route ? 'mm-active' : ""}`}>
                                                     {item.Data.length > 0 ? (
                                                         <>
                                                             <Link className="has-arrow" aria-expanded="false">
@@ -179,7 +178,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                     } else {
                                         return <>
 
-                                            <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
+                                            <li key={item.id} className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
                                                 {item.Data.length > 0 ? <>
                                                     <a
                                                         className="has-arrow"
@@ -249,7 +248,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                 }) :
                                     roles === 'SUPERADMIN' ? supper_admin_sidebar && supper_admin_sidebar.map((item) => {
                                         return <>
-                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                            <li key={item.id} className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                 {item.Data.length > 0 ? <>
 
                                                     <Link

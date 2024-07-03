@@ -1,23 +1,14 @@
-var sha256 = require('sha256');
-var axios = require('axios');
-var dateTime = require('node-datetime');
-
 "use strict";
+var axios = require('axios');
 const db = require('../../Models');
-const panel_model = db.panel_model;
 const User = db.user;
-const user_logs = db.user_activity_logs;
+const user_logs = db.user_logs;
 const BrokerResponse = db.BrokerResponse;
 const Broker_information = db.Broker_information;
-const live_price = db.live_price;
-
-
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-
 class mandotsecurities {
-
 
     async GetAccessTokenmandotsecurities(req, res) {
         try {
@@ -28,7 +19,7 @@ class mandotsecurities {
             }
 
             const userData = await User.findOne({ _id: new ObjectId(_id) }).select('TradingStatus api_secret api_key');
-            console.log("userData", userData);
+    
 
             if (!userData) {
                 return res.status(404).send({ status: false, data: [], msg: "User does not exist" });
@@ -71,14 +62,16 @@ class mandotsecurities {
                     { new: true }
                 );
 
-                const user_logs1 = new user_logs({
+                const user_logsData = new user_logs({
                     user_Id: userData._id,
                     trading_status: "Trading On",
                     role: "USER",
                     device: "WEB",
                     system_ip: system_ip ?system_ip :""
                 });
-                await user_logs1.save();
+
+                console.log("=>>",user_logsData)
+                await user_logsData.save();
 
                 return res.send({ status: true, data: [], msg: "Trading On Successfully" });
             } else {

@@ -197,39 +197,17 @@ const SubadminClient = () => {
             />
             <div className={`toggle-switch  ${SwitchButton ? 'bg-primary' : 'bg-secondary'}`}></div>
           </label>
-          {/* <label className="switch" >
-                        <input type="checkbox" className="bg-primary" defaultChecked={row.ActiveStatus == "1" ? true : false} onChange={(e) => activeUser(e, row)} />
-                        <span className="slider round"></span>
-                    </label> */}
+        
         </>
       ),
     },
-    // {
-    //   dataField: "ActiveStatus",
-    //   text: "Status",
-    //   formatter: (cell, row) => (
-    //     <>
-    //       <label className="switch">
-    //         <input
-    //           type="checkbox"
-    //           className="bg-primary"
-    //           defaultChecked={row.Is_Active === "1" ? true : false}
-    //         />
-    //         <span className="slider round"></span>
-    //       </label>
-    //     </>
-    //   ),
-    // },
+ 
     {
       dataField: "actions",
       text: "Actions",
       formatter: (cell, row) => (
         <div>
-          {/* <Link to="/admin/allsubadmins/edit">
-                    <span data-toggle="tooltip" data-placement="top" title="Edit">
-                        <Pencil size={20} color="#198754" strokeWidth={2} className="mx-1" />
-                    </span>
-                    </Link> */}
+       
           <Link>
             <span
               data-toggle="tooltip"

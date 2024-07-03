@@ -27,9 +27,7 @@ import { Get_Company_Logo } from '../../ReduxStore/Slice/Admin/AdminSlice'
 
 const Login = () => {
   const navigate = useNavigate();
-  const data = useRef();
   const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [showModal, setshowModal] = useState(false);
   const [showModal1, setshowModal1] = useState(false);
@@ -43,8 +41,6 @@ const Login = () => {
   const [typeOtp, setTypeOtp] = useState("");
   const [typeOtp1, setTypeOtp1] = useState("");
   const [UserData, setUserData] = useState("");
-  const [test, settest] = useState([]);
-
 
 
   let SetTheme = async () => {
@@ -305,7 +301,7 @@ const Login = () => {
             );
 
             if (roles.includes(role) && mobileNo === true) {
-              settest(userData);
+        
               localStorage.setItem("user_details", JSON.stringify(userData));
               localStorage.setItem("user_role", JSON.stringify(role));
               toast.success(res.payload.msg);

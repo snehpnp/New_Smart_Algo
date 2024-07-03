@@ -11,8 +11,8 @@ import { User_Dashboard_Data, Update_Dashboard_Data } from "../../../ReduxStore/
 
 const BrokerResponse = () => {
   const dispatch = useDispatch();
-  const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
-  const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
+
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
   const Role = JSON.parse(localStorage.getItem("user_role"));
@@ -39,8 +39,8 @@ const BrokerResponse = () => {
     const getservice = async () => {
       await dispatch(
         User_Dashboard_Data({
-          user_Id: gotodashboard ? GoToDahboard_id.user_id : user_Id,
-          AdminToken: AdminToken,
+          user_Id: gotodashboard ? GoToDahboard_id.user_id : user_details.user_id,
+          AdminToken: user_details.token,
         })
       )
         .unwrap()
@@ -50,21 +50,21 @@ const BrokerResponse = () => {
               loading: false,
               data: response.services,
             });
-  
+
             setStrategy({
               loading: false,
               data: response.strategy,
             });
-  
+
             setGetServiceStrategy(response.GetServiceStrategy);
             setStatusStartegy(response.status_startegy);
           }
         });
     };
-  
+
     getservice();
-  }, [dispatch, gotodashboard, GoToDahboard_id.user_id, user_Id, AdminToken]);
-  
+  }, [dispatch, gotodashboard, GoToDahboard_id, user_details]);
+
 
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
@@ -112,7 +112,7 @@ const BrokerResponse = () => {
 
       } else {
 
-        if (DashboardData.data[0].userInfo.multiple_strategy_select === 0 || DashboardData.data[0].userInfo.multiple_strategy_select === "0"  ) {
+        if (DashboardData.data[0].userInfo.multiple_strategy_select === 0 || DashboardData.data[0].userInfo.multiple_strategy_select === "0") {
           const updatedObject = { ...targetObject, strategy_id: [e.target.value] };
           setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
         } else {
@@ -160,7 +160,7 @@ const BrokerResponse = () => {
     }
     setIsUpdating(true);
 
-    if (statusStartegyUser === "1"|| statusStartegyUser === 1) {
+    if (statusStartegyUser === "1" || statusStartegyUser === 1) {
       const isEmpty = Object.keys(updatedData).length === 0;
 
 
@@ -174,7 +174,7 @@ const BrokerResponse = () => {
 
         const inputId = Object.keys(result)[0];
         const matchingObject = GetServiceStrategy.find(obj => obj._id === inputId);
-   
+
         const serviceName = matchingObject ? matchingObject.service_name : null;
         const isEmptyStartegyArray = Object.keys(result).length === 0;
         if (isEmptyStartegyArray === false) {
@@ -194,10 +194,10 @@ const BrokerResponse = () => {
           servicesData: updatedData,
           statusStartegyUser: statusStartegyUser,
           GetServiceStrategy: GetServiceStrategy,
-          user_id: user_Id,
+          user_id: user_details.user_id,
           data: { Editor_role: Role, device: check_Device() },
         },
-        AdminToken: AdminToken,
+        AdminToken: user_details.token,
       })
     )
       .unwrap()
@@ -267,7 +267,7 @@ const BrokerResponse = () => {
                                 }
                               }
                               defaultValue={data.lot_size}
-                   
+
                             />
                           </div>
 
@@ -393,16 +393,17 @@ const BrokerResponse = () => {
                             className="toggle-checkbox bg-primary"
                             type="checkbox"
                             name="active_status"
-                            defaultChecked={data.active_status === "1"}
+                            checked={data.active_status === "1"}
                             onChange={(e) =>
                               setgroup_qty_value_test(
-                                e,
+                                e.target.checked,
                                 data.service.name,
                                 data.service,
                                 data
                               )
                             }
                           />
+
                           <div
                             className={`toggle-switch ${data.active_status === "1"
                               ? "bg-primary"

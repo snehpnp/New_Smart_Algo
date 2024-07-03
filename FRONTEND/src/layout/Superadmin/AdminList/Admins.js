@@ -133,10 +133,10 @@ const AdminsList = () => {
             formatter: (cell, row) => (
                 <label className="toggle mt-3 ">
                     <input className="toggle-checkbox bg-primary" type="checkbox"
-                        defaultChecked={row.is_active === 0}
+                        defaultChecked={Number(row.is_active) === 0}
                         onChange={(e) => CloseCompany(row.domain, e.target.checked)}
                     />
-                    <div className={`toggle-switch ${row.is_active === 0 ? "bg-green" : "bg-danger"}`}></div>
+                    <div className={`toggle-switch ${Number(row.is_active) === 0 ? "bg-green" : "bg-danger"}`}></div>
                 </label>
             )
         },

@@ -6,7 +6,6 @@ import Logo from "./Logo";
 import DropDown from "./DropDown";
 import Notification from "../../ExtraComponents/Notification";
 import { useDispatch } from "react-redux";
-import Holidays from "date-holidays"
 import $ from "jquery";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../../Components/ExtraComponents/Modal";
@@ -18,36 +17,25 @@ import { GET_HELPS } from "../../../ReduxStore/Slice/Admin/AdminHelpSlice";
 import { Log_Out_User } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { TRADING_OFF_USER } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 import { Get_Company_Logo } from '../../../ReduxStore/Slice/Admin/AdminSlice';
-
 import jwt_decode from "jwt-decode";
 
 const Header = ({ ChatBox }) => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [showModal, setshowModal] = useState(false);
   const [refresh, setrefresh] = useState(false);
   const [UserDetails, setUserDetails] = useState([]);
   const [CheckUser, setCheckUser] = useState(check_Device());
-  const [getAllClients, setAllClients] = useState({loading: true, data: [] });
-  const [messageData, SetMessageData] = useState({loading: true, data: [] });
-
-
-
-
+  const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
+  const [messageData, SetMessageData] = useState({ loading: true, data: [] });
   const user_details = JSON.parse(localStorage.getItem("user_details"));
-
-  //  lOCAL STORAGE VALUE
   let theme_id = localStorage.getItem("theme");
   const page = localStorage.getItem("page")
   const routePath = localStorage.getItem("route");
-
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const user_role_goTo = JSON.parse(localStorage.getItem("user_role_goTo"));
   const user_role = JSON.parse(localStorage.getItem("user_role"));
   const UserNamego_localstg = JSON.parse(localStorage.getItem("user_details_goTo"))
-
 
 
   if (theme_id != null) {
@@ -137,8 +125,8 @@ const Header = ({ ChatBox }) => {
     });
   }
 
-  const redirectToAdmin = () => {
 
+  const redirectToAdmin = () => {
 
     if (page != null) {
       navigate("/admin/groupservices")
@@ -146,7 +134,6 @@ const Header = ({ ChatBox }) => {
     } else {
 
 
-      // return 
       navigate(routePath)
 
       window.location.reload();
@@ -187,14 +174,14 @@ const Header = ({ ChatBox }) => {
     try {
       const userId = gotodashboard ? UserNamego_localstg.user_id : user_details.user_id;
       const token = gotodashboard ? UserNamego_localstg.token : user_details.token;
-  
+
       const response = await dispatch(
         User_Profile({
           id: userId,
           token: token,
         })
       ).unwrap();
-  
+
       if (response.status) {
         setUserDetails(response.data);
       }
@@ -203,7 +190,7 @@ const Header = ({ ChatBox }) => {
       // Handle error accordingly, e.g., show an error message to the user
     }
   };
-  
+
 
 
   //  GET_USER_DETAILS
@@ -213,7 +200,7 @@ const Header = ({ ChatBox }) => {
         .unwrap()
         .then((response) => {
           if (response.status) {
-            SetMessageData({loading:false,data:response.data})
+            SetMessageData({ loading: false, data: response.data })
           }
         });
     }
@@ -294,9 +281,6 @@ const Header = ({ ChatBox }) => {
 
 
 
-
-
-
   const CompanyName = async () => {
     await dispatch(Get_Company_Logo()).unwrap()
       .then((response) => {
@@ -307,10 +291,6 @@ const Header = ({ ChatBox }) => {
         }
       })
   }
-
-
-
-
 
   useEffect(() => {
 

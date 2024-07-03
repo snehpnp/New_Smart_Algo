@@ -4,7 +4,6 @@
 // 13 =Fyers , 14 = 5-Paisa , 15 Zerodha ,
 import * as Config from "../../../Utils/Config";
 import axios from "axios";
-//import * as Config from "../Utils/Config";
 import { GET_BROKER_INFORMATION } from "../../../Service/admin.service";
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -118,6 +117,7 @@ export const loginWithApi = async (broker_id, UserDetails) => {
             data: {
                 Email: UserDetails.Email,
                 _id: UserDetails._id,
+                system_ip:""
 
             },
         }).then((res) => {

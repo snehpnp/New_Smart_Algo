@@ -3,22 +3,16 @@ import Content from "../../../Components/Dashboard/Content/Content";
 import Loader from "../../../Utils/Loader";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { Get_All_TRADINGSTATUS_USER, user_activity_logs } from "../../../ReduxStore/Slice/Users/TradingStatusSlice";
-
 import { useDispatch } from "react-redux";
-import {  fDateTimeSuffix } from "../../../Utils/Date_formet";
-
+import { fDateTimeSuffix } from "../../../Utils/Date_formet";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 
 const TradingStatus = () => {
   const dispatch = useDispatch();
-
-  const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
-
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-
-
   const [first, setfirst] = useState("all");
   const [first1, setfirst1] = useState("all");
   const [DateArray, setDateArray] = useState([]);
@@ -27,7 +21,7 @@ const TradingStatus = () => {
 
 
   let req = {
-    user_Id: isgotodashboard ? gotodashboard.user_id : user_Id,
+    user_Id: isgotodashboard ? gotodashboard.user_id : user_details.user_id,
   };
 
 
@@ -96,7 +90,7 @@ const TradingStatus = () => {
   useEffect(() => {
     data1();
     data3();
-  }, [first,first1]);
+  }, [first, first1]);
 
 
 
@@ -244,7 +238,7 @@ const TradingStatus = () => {
                           DateArray.map((item) => {
                             return (
                               <>
-                                <option value={item}>{item}</option>
+                                <option  key={item} value={item}>{item}</option>
                               </>
                             );
                           })}
@@ -277,13 +271,12 @@ const TradingStatus = () => {
                         onChange={(e) => setfirst1(e.target.value)}
                       >
                         {DateArray &&
-                          DateArray.map((item) => {
-                            return (
-                              <>
-                                <option value={item}>{item}</option>
-                              </>
-                            );
-                          })}
+                          DateArray.map((item) => (
+                            <option key={item} value={item}>
+                              {item}
+                            </option>
+                          ))}
+
                       </select>
                     </div>
                   </div>
