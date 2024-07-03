@@ -1509,8 +1509,7 @@ const updateStrategy = async (e) => {
           break; // Break out of the loop
         }
       }
-     // console.log("condition_string_sell_source",condition_string_sell_source)
-
+  
 
     // Send Request Buy ------
     if (buyCheck && buy_cond) {

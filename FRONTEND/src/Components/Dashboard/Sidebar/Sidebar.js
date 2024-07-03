@@ -139,8 +139,7 @@ const Sidebar = ({ ShowSidebar }) => {
                             }) :
                                 user_role_goTo === "SUBADMIN" ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
 
-                                    console.log("1", (item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 0))
-
+                                  
 
                                     return (
                                         <>

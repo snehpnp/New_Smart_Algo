@@ -148,7 +148,6 @@ const EditStrategyNormal = () => {
     await dispatch(Get_All_Catagory())
       .unwrap()
       .then((response) => {
-        // console.log("Get_All_Catagory", response);
         if (response.status) {
           setCatagoryData({
             loading: false,

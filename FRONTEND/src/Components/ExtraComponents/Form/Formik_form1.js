@@ -6,8 +6,8 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
 
   const location = useLocation()
   const [passwordVisible, setPasswordVisible] = useState({});
-
   const [previews, setPreviews] = useState([]);
+
 
   const handleFileChange = (event, index, name) => {
     if (event.target.files[0].size > 420000) {
@@ -17,18 +17,14 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
     }
     else {
       const file = event.target.files[0];
-      const newPreviews = [...previews]; // Create a copy of the previews array
+      const newPreviews = [...previews]; 
 
-      newPreviews[index] = URL.createObjectURL(file); // Set the preview for the specific index
-      console.log("newPreviews[index]", newPreviews[index]);
-      setPreviews(newPreviews); // Update the previews array
-
-
+      newPreviews[index] = URL.createObjectURL(file);
+      setPreviews(newPreviews); 
 
       const reader = new FileReader();
       reader.onload = () => {
-        //setPreviewImage(reader.result);
-        formik.setFieldValue(name, reader.result); // Set Formik field value for the specific index
+        formik.setFieldValue(name, reader.result); 
       };
 
 
@@ -50,7 +46,6 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, fromDate, isS
     if (day < 10) {
       day = `0${day}`;
     }
-
     return `${year}-${month}-${day}`;
   };
 

@@ -182,7 +182,7 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.log("Error", error);
+        console.log("Error in login page", error);
       });
   }
 
@@ -250,7 +250,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.log("Error", error);
+          console.log("Error in login page", error);
         });
     },
   });
@@ -352,7 +352,9 @@ const Login = () => {
         }
 
       })
-      .catch((error) => console.log("error on Otp Verify", error));
+      .catch((error) =>{
+
+      });
   };
 
   // CLOSE THE MODAL
@@ -427,7 +429,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.log("Error", error);
+          console.log("Error In Login page", error);
         });
     }, 1000);
   };
@@ -453,14 +455,11 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.log("Error", error);
+        console.log("Error in Login Page", error);
       });
   };
 
-  //  for set theme
 
-
-  // FOR DESCILMER
 
   const SubmitDesclimer = () => {
 

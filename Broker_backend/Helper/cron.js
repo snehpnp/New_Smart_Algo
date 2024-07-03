@@ -226,7 +226,7 @@ module.exports = function (app) {
             ];
     
            ulrs.forEach(async function(item) {
-                 //   console.log("urls",url);
+         
                 //  const url = 'https://justradeuat.swastika.co.in/NFO_symbols.txt.zip';
             
                  // Download the zip file
@@ -276,8 +276,6 @@ module.exports = function (app) {
         // Format the date
         const formattedDate = `${year}-${month}-${day}`;
 
-        // Log the formatted date
-        console.log(formattedDate);
 
         var TokenUrl = [
             {
@@ -303,7 +301,7 @@ module.exports = function (app) {
         TokenUrl.forEach((data) => {
             const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'KotakNeo', `${data.key}.csv`);
             
-            console.log(data.url);
+      
             const fileUrl = data.url
 
             axios({

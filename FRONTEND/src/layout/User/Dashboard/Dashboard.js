@@ -9,7 +9,6 @@ import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { check_Device } from "../../../Utils/find_device";
 import { User_Dashboard_Data, Update_Dashboard_Data } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 
-
 const BrokerResponse = () => {
   const dispatch = useDispatch();
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;

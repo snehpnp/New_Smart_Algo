@@ -525,7 +525,7 @@ const HelpCenter = () => {
                     
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log("Error in Option Chain Page",error);
                 });
 
         })

@@ -128,7 +128,7 @@ const SignUp = () => {
           }
         })
         .catch((error) => {
-          console.log("Error", error);
+          console.log("Error in signup page", error);
         });
 
     },

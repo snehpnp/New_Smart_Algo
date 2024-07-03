@@ -107,7 +107,7 @@ const UserProfile = () => {
           }
         })
         .catch((error) => {
-          console.log("Error", error);
+          console.log("Error In Profile page", error);
         });
     },
   });

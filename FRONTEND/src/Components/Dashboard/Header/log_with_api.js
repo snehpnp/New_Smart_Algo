@@ -23,7 +23,7 @@ export const loginWithApi = async (broker_id, UserDetails) => {
                 Email: UserDetails.Email,
             },
         }).then((res) => {
-            // console.log("res", res);
+         
             if (res.data.status == true) {
                 toast.success(res.data.msg)
                 setTimeout(() => {
@@ -78,12 +78,10 @@ export const loginWithApi = async (broker_id, UserDetails) => {
                 Email: UserDetails.Email,
             },
         }).then((res) => {
-            // console.log("res", res);
-            // return
+       
             if (res.data.status == true) {
                 let value = prompt("Enter Your OTP Here");
                 if (value === null) {
-                    // console.log("value", value);
                     return;
                 }
                 axios({
@@ -94,7 +92,6 @@ export const loginWithApi = async (broker_id, UserDetails) => {
                         otp: value,
                     },
                 }).then((res) => {
-                    // console.log("res", res.data);
                     if (res.data.status == true) {
                         toast.success(res.data.msg)
                         setTimeout(() => {
@@ -148,16 +145,16 @@ export const loginWithApi = async (broker_id, UserDetails) => {
     }
 
     else if (broker_id === "12" || broker_id === 12) {
-        // console.log("UserDetails",UserDetails.api_key)
-        // alert("broker-12")
+       
+  
         window.location.href = "https://smartapi.angelbroking.com/publisher-login?api_key=" + UserDetails.api_key;
-        // alert(UserDetails.api_key)
+       
     }
 
     else if (broker_id === "13" || broker_id === 13) {
 
         window.location.href = `https://api.fyers.in/api/v2/generate-authcode?client_id=${UserDetails.app_id}&redirect_uri=${Config.base_url}fyers&response_type=code&state=${UserDetails.client_key}`
-        // alert("broker-13")
+       
     }
 
     // FIVE PAISA
@@ -196,7 +193,7 @@ export const loginWithApi = async (broker_id, UserDetails) => {
                 Email: UserDetails.Email,
             },
         }).then((res) => {
-            // console.log("res", res);
+         
             if (res.data.status == true) {
 
                 toast.success(res.data.msg)
@@ -211,9 +208,9 @@ export const loginWithApi = async (broker_id, UserDetails) => {
 
     }
     else if (broker_id === "21" || broker_id === 21) {
-        //alert("broker-21")
+    
         var totp = prompt("Enter TOTP")
-        //  console.log("totp ",totp)
+    
 
         axios({
             url: `${Config.base_url}swastika`,
@@ -223,7 +220,7 @@ export const loginWithApi = async (broker_id, UserDetails) => {
                 totp: totp
             },
         }).then((res) => {
-            // console.log("res", res);
+      
             if (res.data.status == true) {
                 toast.success(res.data.msg)
                 setTimeout(() => {
@@ -243,9 +240,7 @@ export const loginWithApi = async (broker_id, UserDetails) => {
 
 
         const encodedApiKey = encodeURIComponent(UserDetails.api_key);
-        
-        console.log("encodedApiKey", encodedApiKey);
-        
+               
         window.location.href = `https://api.icicidirect.com/apiuser/login?api_key=${encodedApiKey}`;
         
         }

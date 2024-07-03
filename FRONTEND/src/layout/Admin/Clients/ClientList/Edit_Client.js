@@ -646,10 +646,6 @@ const EditClient = () => {
     const userData = UserData.data?.data?.[0];
 
     if (userData) {
-      console.log("app_key", userData.app_key);
-      console.log("api_secret", userData.api_secret);
-
-
       formik.setFieldValue('username', userData.UserName);
       formik.setFieldValue('fullName', userData.FullName);
       formik.setFieldValue('email', userData.Email);

@@ -161,7 +161,7 @@ const CreateTheme = ({ SelectTheme1 }) => {
         dispatch(Add_Theme(req)).then((res) => {
             setIsModalOpen(false)
         }).catch((err) => {
-            console.log("error", err);
+            console.log("Error In Theme Create Page", err);
         })
     }
 

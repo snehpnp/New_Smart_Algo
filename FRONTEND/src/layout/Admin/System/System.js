@@ -211,7 +211,7 @@ const System = () => {
                 }
             })
             .catch((err) => {
-                console.log("Internal server error");
+                console.log("Error nternal server error");
             });
     }
 
@@ -246,7 +246,7 @@ const System = () => {
                 }
             })
             .catch((err) => {
-                console.log("Internal server error");
+             
             });
     }
 
