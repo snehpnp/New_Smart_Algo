@@ -3,23 +3,15 @@ import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Content from "../../../Components/Dashboard/Content/Content";
-import { MultiSelect } from 'primereact/multiselect';
-import BasicTable from "../../../Components/ExtraComponents/Tables/BasicTable";
-import { Pencil, Trash2 } from "lucide-react";
-import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
-import { GetAliceTokenAndID, CreateSocketSession, ConnctSocket, GetAccessToken } from "../../../Service/Alice_Socket";
-import { useDispatch, useSelector } from "react-redux";
-import $ from "jquery";
-import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { check_Device } from "../../../Utils/find_device";
-
 import { User_Dashboard_Data, Update_Dashboard_Data } from "../../../ReduxStore/Slice/Users/DashboardSlice";
-import { useLocation } from "react-router-dom";
+
 
 const BrokerResponse = () => {
   const dispatch = useDispatch();
-  const location = useLocation()
   const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
   const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
@@ -30,13 +22,9 @@ const BrokerResponse = () => {
   const [Strategy, setStrategy] = useState({ loading: true, data: [] });
   const [GetServiceStrategy, setGetServiceStrategy] = useState([]);
   const [statusStartegyUser, setStatusStartegy] = useState("0");
-  const [enterqty, setEnterQty] = useState("");
   const [inputValue, setInputValue] = useState('1');
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
-  const [refresh, setrefresh] = useState(false);
   const [updatedData, setUpdatedData] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleCloseStartegyModal = () => {
@@ -48,54 +36,49 @@ const BrokerResponse = () => {
     setShowStartegyModal(true);
   }
 
-
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = DashboardData.data.slice(indexOfFirstItem, indexOfLastItem);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-
-
-  const getservice = async () => {
-    await dispatch(
-      User_Dashboard_Data({
-        user_Id: gotodashboard ? GoToDahboard_id.user_id : user_Id,
-        AdminToken: AdminToken,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-
-        if (response.status) {
-          setDashboardData({
-            loading: false,
-            data: response.services,
-          });
-
-          setStrategy({
-            loading: false,
-            data: response.strategy,
-          });
-
-          setGetServiceStrategy(response.GetServiceStrategy);
-          setStatusStartegy(response.status_startegy);
-        }
-      });
-  };
+  useEffect(() => {
+    const getservice = async () => {
+      await dispatch(
+        User_Dashboard_Data({
+          user_Id: gotodashboard ? GoToDahboard_id.user_id : user_Id,
+          AdminToken: AdminToken,
+        })
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
+            setDashboardData({
+              loading: false,
+              data: response.services,
+            });
+  
+            setStrategy({
+              loading: false,
+              data: response.strategy,
+            });
+  
+            setGetServiceStrategy(response.GetServiceStrategy);
+            setStatusStartegy(response.status_startegy);
+          }
+        });
+    };
+  
+    getservice();
+  }, [dispatch, gotodashboard, GoToDahboard_id.user_id, user_Id, AdminToken]);
+  
 
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
     const numericValue = e.target.value.replace(/[^0-9]/g, '');
 
 
-    if (e.target.name != "active_status" && numericValue == 0) {
+    if (e.target.name !== "active_status" && numericValue === 0) {
 
       toast.error(`cant update  0 Quantity In ${symboll}`);
       return
     }
 
-    if (e.target.name != "active_status" && e.target.value < 0) {
+    if (e.target.name !== "active_status" && e.target.value < 0) {
       e.target.value = 1
       toast.error(`cant update  - Quantity In ${symboll}`);
       return
@@ -122,7 +105,7 @@ const BrokerResponse = () => {
     else if (e.target.name === "strategy_id") {
 
 
-      const targetObject = GetServiceStrategy.find(item => item._id == data.service._id);
+      const targetObject = GetServiceStrategy.find(item => item._id === data.service._id);
       if (targetObject.strategy_id.includes(e.target.value)) {
         const updatedStrategyId = targetObject.strategy_id.filter(id => id !== e.target.value);
         const updatedObject = { ...targetObject, strategy_id: updatedStrategyId };
@@ -130,7 +113,7 @@ const BrokerResponse = () => {
 
       } else {
 
-        if (DashboardData.data[0].userInfo.multiple_strategy_select == 0) {
+        if (DashboardData.data[0].userInfo.multiple_strategy_select === 0 || DashboardData.data[0].userInfo.multiple_strategy_select === "0"  ) {
           const updatedObject = { ...targetObject, strategy_id: [e.target.value] };
           setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
         } else {
@@ -162,9 +145,9 @@ const BrokerResponse = () => {
   if (updatedData) {
     GetServiceStrategy.forEach((item) => {
 
-      if (updatedData[item._id] != undefined) {
+      if (updatedData[item._id] !== undefined) {
 
-        if (updatedData[item._id].strategy_id != undefined) {
+        if (updatedData[item._id].strategy_id !== undefined) {
           updatedData[item._id].strategy_id = item.strategy_id;
         }
       }
@@ -178,11 +161,11 @@ const BrokerResponse = () => {
     }
     setIsUpdating(true);
 
-    if (statusStartegyUser == "1") {
+    if (statusStartegyUser === "1"|| statusStartegyUser === 1) {
       const isEmpty = Object.keys(updatedData).length === 0;
 
 
-      if (isEmpty == false) {
+      if (isEmpty === false) {
         const result = Object.keys(updatedData)
           .filter((key) => Array.isArray(updatedData[key].strategy_id) && updatedData[key].strategy_id.length === 0)
           .reduce((obj, key) => {
@@ -190,14 +173,12 @@ const BrokerResponse = () => {
             return obj;
           }, {});
 
-        // Extracting the key (id) from the inputObject
         const inputId = Object.keys(result)[0];
-        // Finding the matching object in dataArray based on _id
         const matchingObject = GetServiceStrategy.find(obj => obj._id === inputId);
-        // Getting the service_name if a match is found
+   
         const serviceName = matchingObject ? matchingObject.service_name : null;
         const isEmptyStartegyArray = Object.keys(result).length === 0;
-        if (isEmptyStartegyArray == false) {
+        if (isEmptyStartegyArray === false) {
           alert("Please Select one Strategy a script " + serviceName)
           return
         }
@@ -226,7 +207,6 @@ const BrokerResponse = () => {
         setIsUpdating(false);
         if (response.status) {
           toast.success(response.msg);
-          // window.location.reload();
         } else {
           toast.error(response.msg);
         }
@@ -234,9 +214,7 @@ const BrokerResponse = () => {
   };
 
 
-  useEffect(() => {
-    getservice();
-  }, [refresh]);
+
 
   return (
     <Content Page_title="Dashboard" button_status={false}>
@@ -290,8 +268,7 @@ const BrokerResponse = () => {
                                 }
                               }
                               defaultValue={data.lot_size}
-                            // defaultValue={enterqty ? enterqty : data.quantity}
-                            // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
+                   
                             />
                           </div>
 
@@ -455,7 +432,7 @@ const BrokerResponse = () => {
 
           <div>
             {
-              modalsingleValue.strategy_id != undefined ?
+              modalsingleValue.strategy_id !== undefined ?
                 Strategy.data &&
                 Strategy.data.map((item) => (
                   <div key={item.result._id}>
