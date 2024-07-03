@@ -3,6 +3,7 @@ const db = require('../../Models');
 const MainSignals_modal = db.MainSignals
 const live_price = db.live_price
 const user_logs = db.user_logs
+const { logger, getIPAddress } = require('../../Helper/logger.helper')
 
 
 const { formattedDateTime } = require('../../Helper/time.helper')
@@ -351,7 +352,7 @@ class Tradehistory {
       user_Id: Admin_information[0].user_id,
       login_status: "Trading off",
       role: "ADMIN",
-      // system_ip: getIPAddress()
+      system_ip: getIPAddress(),
       device: device
     })
     await user_login.save();

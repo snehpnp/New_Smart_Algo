@@ -413,7 +413,10 @@ class Dashboard {
                     user_Id: User_information[0]._id,
                     login_status: "Trading off",
                     role: User_information[0].Role,
-                    device: device
+                    device: device,
+                    system_ip: getIPAddress()
+
+
                 })
                 await user_login.save();
 
@@ -433,7 +436,7 @@ class Dashboard {
                 user_Id: User_information[0]._id,
                 login_status: "Trading off",
                 role: User_information[0].Role,
-                // system_ip: getIPAddress()
+                system_ip: getIPAddress(),
                 device: device
             })
             await user_login.save();

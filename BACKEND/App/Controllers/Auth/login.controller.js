@@ -354,7 +354,6 @@ class Login {
                 login_status: "Panel On",
                 role: EmailCheck.Role,
                 device: Device,
-
                 system_ip: getIPAddress()
             })
             await user_login.save();
@@ -714,10 +713,7 @@ class Login {
             );
 
 
-            // let result11 = await User.findByIdAndUpdate(
-            //     EmailCheck._id,           
-            //     { new: true }
-            // )
+      
 
             const user_login = new user_logs({
                 user_Id: EmailCheck._id,

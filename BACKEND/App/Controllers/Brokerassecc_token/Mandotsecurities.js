@@ -8,6 +8,9 @@ const Broker_information = db.Broker_information;
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
+const { logger, getIPAddress } = require('../../Helper/logger.helper')
+
+
 class mandotsecurities {
 
     async GetAccessTokenmandotsecurities(req, res) {
@@ -67,7 +70,7 @@ class mandotsecurities {
                     trading_status: "Trading On",
                     role: "USER",
                     device: "WEB",
-                    system_ip: system_ip ?system_ip :""
+                    system_ip: getIPAddress()
                 });
 
                 console.log("=>>",user_logsData)
@@ -80,7 +83,7 @@ class mandotsecurities {
                     trading_status: response.data.message,
                     role: "USER",
                     device: "WEB",
-                    system_ip: system_ip?system_ip:""
+                    system_ip:getIPAddress()
                 });
                 await user_logs1.save();
 

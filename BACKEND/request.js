@@ -12,7 +12,6 @@ module.exports = function (app) {
     const User = db.user;
     const services = db.services;
     const categorie = db.categorie;
-    const user_logs = db.user_logs;
     const live_price = db.live_price;
     const UserMakeStrategy = db.UserMakeStrategy;
     const Get_Option_Chain_modal = db.option_chain_symbols;
