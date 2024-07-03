@@ -20016,7 +20016,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     padding: 0.625rem 1.25rem;
     margin-bottom: 0;
     display: inline-flex;
-    overflow-x: auto;
+    /* overflow-x: auto; */
     scrollbar-width: thin;
   }
 

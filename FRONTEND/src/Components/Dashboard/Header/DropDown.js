@@ -74,6 +74,9 @@ const DropDown = () => {
                 <i className="fa fa-angle-down ms-3" />
             </button>
             <div className="dropdown-menu dropdown-menu-end" style={{ margin: 0, padding: "11px" }}>
+                <Link to={"/admin/system"} className="btn btn-primary w-100  ">
+                    System
+                </Link>
                 <Link to={profile_Route()} className="btn btn-primary w-100 my-2 ">
                     Profile
                 </Link>

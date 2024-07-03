@@ -122,7 +122,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                         {item.Data.length > 0 ? <>
                                             <Link
                                                 className="has-arrow "
-                                                aria-expanded="false"
+                                                y aria-expanded="false"
                                             >
                                                 <IconComponent key={item.id} icon={item.Icon} />
                                                 <span className="nav-text mx-2">{item.name}</span>
@@ -452,6 +452,9 @@ const Sidebar = ({ ShowSidebar }) => {
                     </ul>
                 </div>
             </div>
+
+        
+            
         </div >
 
     )

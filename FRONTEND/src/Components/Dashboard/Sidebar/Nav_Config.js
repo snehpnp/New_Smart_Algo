@@ -8,13 +8,13 @@ export const admin_sidebar = [
         "route": "/admin/dashboard",
         "Data": []
     },
-    {
-        'id': 2,
-        "name": 'System',
-        "route": "/admin/system",
-        "Icon": "Building2",
-        "Data": []
-    },
+    // {
+    //     'id': 2,
+    //     "name": 'System',
+    //     "route": "/admin/system",
+    //     "Icon": "Building2",
+    //     "Data": []
+    // },
     {
         'id': 3,
         "name": 'Clients',
@@ -35,6 +35,13 @@ export const admin_sidebar = [
                 "name": 'Expired-Clients',
                 "route": "/admin/expiredclients",
             },
+            {
+                'id': 5,
+                "name": 'SignUp Clients',
+                // "Icon": "Users",
+                "route": "/admin/signupclient"
+            }
+
         ]
     },
 
@@ -89,41 +96,6 @@ export const admin_sidebar = [
 
         ]
     },
-    {
-        'id': 6,
-        "name": 'Option Chain',
-        "Icon": "Link2",
-        "Data": [
-            {
-                'id': 1,
-                "name": 'Option Chain',
-                "route": "/admin/optionchain",
-            },
-            {
-                'id': 2,
-                "name": 'Open Position',
-                "route": "/admin/openposition",
-
-            },
-        ]
-    },
-    {
-        'id': 7,
-        "name": 'License',
-        "Icon": "Copyright",
-        "Data": [
-            {
-                'id': 1,
-                "name": 'Transaction License',
-                "route": "/admin/allLicence",
-            },
-            {
-                'id': 2,
-                "name": 'Expired License',
-                "route": "/admin/expiredlicence",
-            },
-        ]
-    },
 
     {
         'id': 8,
@@ -148,7 +120,24 @@ export const admin_sidebar = [
             },
         ]
     },
+    {
+        'id': 6,
+        "name": 'Option Chain',
+        "Icon": "Link2",
+        "Data": [
+            {
+                'id': 1,
+                "name": 'Option Chain',
+                "route": "/admin/optionchain",
+            },
+            {
+                'id': 2,
+                "name": 'Open Position',
+                "route": "/admin/openposition",
 
+            },
+        ]
+    },
     {
         'id': 10,
         "name": 'Make Strategy',
@@ -170,15 +159,25 @@ export const admin_sidebar = [
         ]
     },
     {
-        'id': 11,
-        "name": 'Broker Information',
-        "Icon": "Info",
-        "route": "/admin/brokerinfo",
-        "Data": []
+        'id': 7,
+        "name": 'License',
+        "Icon": "Copyright",
+        "Data": [
+            {
+                'id': 1,
+                "name": 'Transaction License',
+                "route": "/admin/allLicence",
+            },
+            {
+                'id': 2,
+                "name": 'Expired License',
+                "route": "/admin/expiredlicence",
+            },
+        ]
     },
 
     {
-        'id': 12,
+        'id': 11,
         "name": 'Support',
         "Icon": "HelpingHand",
         "Data": [
@@ -201,18 +200,16 @@ export const admin_sidebar = [
                 "Icon": "WalletCards",
                 "Data": []
             },
+            {
+                'id': 4,
+                "name": 'Broker Information',
+                "Icon": "Info",
+                "route": "/admin/brokerinfo",
+                "Data": []
+            },
         ]
 
     },
-    {
-        'id': 13,
-        "name": 'SignUp Clients',
-        "Icon": "Users",
-        "route": "/admin/signupclient",
-        "Data": []
-    },
-
-
 
 ]
 
