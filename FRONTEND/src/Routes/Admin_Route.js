@@ -93,7 +93,6 @@ const Admin = () => {
 
 
 
-
     return (
         <>
             {location.pathname !== "/admin" && location.pathname !== "/admin/*" ? <Wraper /> : null}
@@ -114,12 +113,9 @@ const Admin = () => {
                 <Route exact path="/allsubadmins/edit" element={<EditSubadminClient />} />
                 <Route exact path="/strategies" element={<AllStrategy />} />
                 <Route exact path="/strategies/add" element={admin_permission.data && Number(admin_permission.data[0].Strategy_plan) === 1 ? <AddStrategy /> : <AddStraegyNormal />} />
-
                 <Route exact path="/strategies/edit/:id" element={admin_permission.data && Number(admin_permission.data[0].Strategy_plan) === 1 ? <EditStrategy /> : <EditStrategyNormal />} />
-
                 <Route exact path="/sevendaysentry" element={<SevenDaysEntry />} />
                 <Route exact path="/signupclient" element={<SignupClientDetails />} />
-
                 <Route exact path="/Edit7days" element={<Edit7days />} />
                 <Route exact path="/tradeexecution" element={<TradeExecutionReport />} />
                 <Route exact path="/tradingstatus" element={<TradingStatus />} />
@@ -145,11 +141,7 @@ const Admin = () => {
                 <Route exact path="/optionchain" element={<OpationChain />} />
                 <Route exact path="/openposition" element={<OpenPositions />} />
                 <Route exact path="/addstratgytoclients" element={<AddStrategyToClients />} />
-
                 <Route exact path="/chart" element={<ChartDetail />} />
-
-
-
 
 
             </Routes>
