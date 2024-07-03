@@ -1,380 +1,349 @@
-
-
 export const admin_sidebar = [
     {
-        'id': 1,
-        "name": 'Dashboard',
-        "Icon": "LayoutDashboard",
-        "route": "/admin/dashboard",
-        "Data": []
+        id: 1,
+        name: 'Dashboard',
+        Icon: 'LayoutDashboard',
+        route: '/admin/dashboard',
+        Data: []
     },
-    // {
-    //     'id': 2,
-    //     "name": 'System',
-    //     "route": "/admin/system",
-    //     "Icon": "Building2",
-    //     "Data": []
-    // },
     {
-        'id': 3,
-        "name": 'Clients',
-        "Icon": "Users",
-        "Data": [
+        id: 2,
+        name: 'Clients',
+        Icon: 'Users',
+        Data: [
             {
-                'id': 1,
-                "name": 'Add Client',
-                "route": "/admin/client/add",
+                id: 21,
+                name: 'Add Client',
+                route: '/admin/client/add',
             },
             {
-                'id': 2,
-                "name": 'Clients',
-                "route": "/admin/allclients",
+                id: 22,
+                name: 'Clients',
+                route: '/admin/allclients',
             },
             {
-                'id': 4,
-                "name": 'Expired-Clients',
-                "route": "/admin/expiredclients",
+                id: 23,
+                name: 'Expired-Clients',
+                route: '/admin/expiredclients',
             },
             {
-                'id': 5,
-                "name": 'SignUp Clients',
-                // "Icon": "Users",
-                "route": "/admin/signupclient"
+                id: 24,
+                name: 'SignUp Clients',
+                route: '/admin/signupclient',
             }
-
-        ]
-    },
-
-    {
-        'id': 4,
-        "name": 'Sub Admin',
-        "Icon": "Users",
-        "Data": [
-            {
-                'id': 1,
-                "name": 'All Sub Admins',
-                "route": "/admin/allsubadmins",
-            },
-            {
-                'id': 2,
-                "name": 'In-Active Clients',
-                "route": "/admin/subadminclients",
-            },
         ]
     },
     {
-        'id': 5,
-        "name": 'Trade Details',
-        "Icon": "FolderClock",
-        "Data": [
+        id: 3,
+        name: 'Sub Admin',
+        Icon: 'Users',
+        Data: [
             {
-                'id': 1,
-                "name": 'Signals',
-                "route": "/admin/signals",
+                id: 31,
+                name: 'All Sub Admins',
+                route: '/admin/allsubadmins',
             },
             {
-                'id': 2,
-                "name": 'Trade History',
-                "route": "/admin/tradehistory?type=admin",
-            },
-            {
-                'id': 3,
-                "name": 'Client Trade',
-                "route": "/admin/tradehistory?type=client",
-            },
-            {
-                'id': 4,
-                "name": 'Trading Status',
-                "route": "/admin/tradingstatus",
-            },
-
-            {
-                'id': 5,
-                "name": '7 Days Entry',
-                "route": "/admin/sevendaysentry",
-            },
-
-        ]
-    },
-
-    {
-        'id': 8,
-        "name": 'Script Mgmt',
-        "Icon": "Wrench",
-        "Data": [
-            {
-                'id': 1,
-                "name": 'All Services',
-                "route": "/admin/allservices",
-
-            },
-            {
-                'id': 2,
-                "name": 'Group Services',
-                "route": "/admin/groupservices",
-            },
-            {
-                'id': 3,
-                "name": "Strategies",
-                "route": "/admin/strategies",
-            },
+                id: 32,
+                name: 'In-Active Clients',
+                route: '/admin/subadminclients',
+            }
         ]
     },
     {
-        'id': 6,
-        "name": 'Option Chain',
-        "Icon": "Link2",
-        "Data": [
+        id: 4,
+        name: 'Trade Details',
+        Icon: 'FolderClock',
+        Data: [
             {
-                'id': 1,
-                "name": 'Option Chain',
-                "route": "/admin/optionchain",
+                id: 41,
+                name: 'Signals',
+                route: '/admin/signals',
             },
             {
-                'id': 2,
-                "name": 'Open Position',
-                "route": "/admin/openposition",
-
+                id: 42,
+                name: 'Trade History',
+                route: '/admin/tradehistory?type=admin',
             },
+            {
+                id: 43,
+                name: 'Client Trade',
+                route: '/admin/tradehistory?type=client',
+            },
+            {
+                id: 44,
+                name: 'Trading Status',
+                route: '/admin/tradingstatus',
+            },
+            {
+                id: 45,
+                name: '7 Days Entry',
+                route: '/admin/sevendaysentry',
+            }
         ]
     },
     {
-        'id': 10,
-        "name": 'Make Strategy',
-        "Icon": "Boxes",
-        "Data": [
-
+        id: 5,
+        name: 'Script Mgmt',
+        Icon: 'Wrench',
+        Data: [
             {
-                'id': 1,
-                "name": 'Create Strategy',
-                "route": "/admin/createstrategy",
-
+                id: 51,
+                name: 'All Services',
+                route: '/admin/allservices',
             },
             {
-                'id': 2,
-                "name": 'All Strategies',
-                "route": "/admin/AllMakeStrategy",
-
+                id: 52,
+                name: 'Group Services',
+                route: '/admin/groupservices',
             },
+            {
+                id: 53,
+                name: 'Strategies',
+                route: '/admin/strategies',
+            }
         ]
     },
     {
-        'id': 7,
-        "name": 'License',
-        "Icon": "Copyright",
-        "Data": [
+        id: 6,
+        name: 'Option Chain',
+        Icon: 'Link2',
+        Data: [
             {
-                'id': 1,
-                "name": 'Transaction License',
-                "route": "/admin/allLicence",
+                id: 61,
+                name: 'Option Chain',
+                route: '/admin/optionchain',
             },
             {
-                'id': 2,
-                "name": 'Expired License',
-                "route": "/admin/expiredlicence",
-            },
+                id: 62,
+                name: 'Open Position',
+                route: '/admin/openposition',
+            }
         ]
     },
-
     {
-        'id': 11,
-        "name": 'Support',
-        "Icon": "HelpingHand",
-        "Data": [
+        id: 7,
+        name: 'More',
+        Icon: 'MoreHorizontal',
+        Data: [
             {
-                'id': 1,
-                "name": 'Help Center',
-                "route": "/admin/helpcenter",
-
+                id: 71,
+                name: 'Support',
+                Icon: 'HelpingHand',
+                Data: [
+                    {
+                        id: 711,
+                        name: 'Help Center',
+                        route: '/admin/helpcenter',
+                    },
+                    {
+                        id: 712,
+                        name: 'Message Broadcast',
+                        route: '/admin/msgbroadcast',
+                    },
+                    {
+                        id: 713,
+                        name: 'Api Create Info',
+                        Icon: 'WalletCards',
+                        route: '/admin/apicreateinfo',
+                        Data: []
+                    },
+                    {
+                        id: 714,
+                        name: 'Broker Information',
+                        Icon: 'Info',
+                        route: '/admin/brokerinfo',
+                        Data: []
+                    }
+                ]
             },
             {
-                'id': 2,
-                "name": 'Message Broadcast',
-                "route": "/admin/msgbroadcast",
-
+                id: 72,
+                name: 'License',
+                Icon: 'Copyright',
+                Data: [
+                    {
+                        id: 721,
+                        name: 'Transaction License',
+                        route: '/admin/allLicence',
+                    },
+                    {
+                        id: 722,
+                        name: 'Expired License',
+                        route: '/admin/expiredlicence',
+                    }
+                ]
             },
             {
-                'id': 3,
-                "name": 'Api Create Info',
-                "route": "/admin/apicreateinfo",
-                "Icon": "WalletCards",
-                "Data": []
-            },
-            {
-                'id': 4,
-                "name": 'Broker Information',
-                "Icon": "Info",
-                "route": "/admin/brokerinfo",
-                "Data": []
-            },
+                id: 73,
+                name: 'Make Strategy',
+                Icon: 'Boxes',
+                Data: [
+                    {
+                        id: 731,
+                        name: 'Create Strategy',
+                        route: '/admin/createstrategy',
+                    },
+                    {
+                        id: 732,
+                        name: 'All Strategies',
+                        route: '/admin/AllMakeStrategy',
+                    }
+                ]
+            }
+            
         ]
-
-    },
-
-]
+    }
+    
+];
 
 
 export const supper_admin_sidebar = [
     {
-        'id': 1,
-        "name": 'Dashboard',
-        "Icon": "LayoutDashboard",
-        "route": "/super/dashboard",
-        "Data": []
+        id: 1,
+        name: 'Dashboard',
+        Icon: 'LayoutDashboard',
+        route: '/super/dashboard',
+        Data: []
     },
     {
-        'id': 2,
-        "name": 'All Admins',
-        "Icon": "Users",
-        "route": "/super/alladmins",
-        "Data": []
+        id: 2,
+        name: 'All Admins',
+        Icon: 'Users',
+        route: '/super/alladmins',
+        Data: []
     },
     {
-        'id': 3,
-        "name": 'All Permissions',
-        "Icon": "Vote",
-        "route": "/super/permitions",
-        "Data": []
+        id: 3,
+        name: 'All Permissions',
+        Icon: 'Vote',
+        route: '/super/permitions',
+        Data: []
     },
     {
-        'id': 4,
-        "name": 'History',
-        "Icon": "FolderClock",
-        "route": "/super/history",
-        "Data": []
+        id: 4,
+        name: 'History',
+        Icon: 'FolderClock',
+        route: '/super/history',
+        Data: []
     },
     {
-        'id': 5,
-        "name": 'Select Theme',
-        "Icon": "Paintbrush",
-        "route": "/super/selecttheme",
-        "Data": []
+        id: 5,
+        name: 'Select Theme',
+        Icon: 'Paintbrush',
+        route: '/super/selecttheme',
+        Data: []
     },
     {
-        'id': 6,
-        "name": 'Api Create Info',
-        "route": "/super/apicreateinfo",
-        "Icon": "WalletCards",
-        "Data": []
+        id: 6,
+        name: 'Api Create Info',
+        route: '/super/apicreateinfo',
+        Icon: 'WalletCards',
+        Data: []
     },
     {
-        'id': 7,
-        "name": 'Query-Update',
-        "Icon": "HelpingHand",
-        "route": "/super/query",
-        "Data": []
-    },
-    // {
-    //     'id': 8,
-    //     "name": 'Support',
-    //     "Icon": "HelpingHand",
-    //     "route": "/super/support",
-    //     "Data": []
-    // },
-]
-
+        id: 7,
+        name: 'Query-Update',
+        Icon: 'HelpingHand',
+        route: '/super/query',
+        Data: []
+    }
+];
 
 export const sub_admin_sidebar = [
     {
-        'id': 1,
-        "name": 'Signals',
-        "Icon": "Signal",
-        "route": "/subadmin/signals",
-        "Data": []
+        id: 1,
+        name: 'Signals',
+        Icon: 'Signal',
+        route: '/subadmin/signals',
+        Data: []
     },
     {
-        'id': 2,
-        "name": 'All Clients',
-        "Icon": "Users",
-        "route": "/subadmin/clients",
-        "Data": []
-    },
-
-    {
-        'id': 5,
-        "name": 'Trade History',
-        "Icon": "CandlestickChart",
-        "route": "/subadmin/tradehistory",
-        "Data": []
-
-    },
-
-    {
-        'id': 7,
-        "name": 'Api Create Info',
-        "Icon": "WalletCards",
-        "route": "/subadmin/apicreateinfo",
-        "Data": []
+        id: 2,
+        name: 'All Clients',
+        Icon: 'Users',
+        route: '/subadmin/clients',
+        Data: []
     },
     {
-        'id': 8,
-        "name": 'Help Center',
-        "Icon": "HelpingHand",
-        "route": "/subadmin/helpcenter",
-        "Data": []
+        id: 3,
+        name: 'Trade History',
+        Icon: 'CandlestickChart',
+        route: '/subadmin/tradehistory',
+        Data: []
     },
-
-]
-
-
+    {
+        id: 4,
+        name: 'Api Create Info',
+        Icon: 'WalletCards',
+        route: '/subadmin/apicreateinfo',
+        Data: []
+    },
+    {
+        id: 5,
+        name: 'Help Center',
+        Icon: 'HelpingHand',
+        route: '/subadmin/helpcenter',
+        Data: []
+    }
+];
 
 export const Client = [
     {
-        'id': 1,
-        "name": 'Dashboard',
-        "Icon": "LayoutDashboard",
-        "route": "/client/dashboard",
-        "Data": []
+        id: 1,
+        name: 'Dashboard',
+        Icon: 'LayoutDashboard',
+        route: '/client/dashboard',
+        Data: []
     },
     {
-        'id': 2,
-        "name": 'Signals',
-        "Icon": "Signal",
-        "route": "/client/signals",
-        "Data": []
+        id: 2,
+        name: 'Signals',
+        Icon: 'Signal',
+        route: '/client/signals',
+        Data: []
     },
     {
-        'id': 3,
-        "name": 'Trade History',
-        "Icon": "FolderClock",
-        "route": "/client/tradehistory",
-        "Data": []
+        id: 3,
+        name: 'Trade History',
+        Icon: 'FolderClock',
+        route: '/client/tradehistory',
+        Data: []
     },
     {
+        id: 4,
+        name: 'Trading Status',
+        Icon: 'Activity',
+        route: '/client/tradingstatus',
+        Data: []
+    },
+    {
+        id: 5,
+        name: 'Broker Response',
+        Icon: 'ArrowRightLeft',
+        route: '/client/brokerresponse',
+        Data: []
+    },
+    {
+        id: 6,
+        name: 'Api Create Info',
+        Icon: 'WalletCards',
+        route: '/client/apicreateinfo',
+        Data: []
+    },
+    {
+        id: 7,
+        name: 'Help Center',
+        Icon: 'HelpingHand',
+        route: '/client/helpcenter',
+        Data: []
+    },
+    {
+        id: 8,
+        name: 'Strategy Desc.',
+        Icon: 'ScatterChart',
+        route: '/client/strategydesc',
+        Data: []
+    }
+];
 
-        'id': 4,
-        "name": 'Trading Status',
-        "Icon": "Activity",
-        "route": "/client/tradingstatus",
-        "Data": []
-    },
-    {
-        'id': 5,
-        "name": 'Broker Response',
-        "Icon": "ArrowRightLeft",
-        "route": "/client/brokerresponse",
-        "Data": []
-    },
-    {
-        'id': 6,
-        "name": 'Api Create Info',
-        "Icon": "WalletCards",
-        "route": "/client/apicreateinfo",
-        "Data": []
-    },
-    {
-        'id': 7,
-        "name": 'Help Center',
-        "Icon": "HelpingHand",
-        "route": "/client/helpcenter",
-        "Data": []
-    },
-    {
-        'id': 8,
-        "name": 'Strategy Desc.',
-        "Icon": "ScatterChart",
-        "route": "/client/strategydesc",
-        "Data": []
-    },
-
-]

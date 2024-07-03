@@ -18625,7 +18625,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
   color: var(--primary) !important;
   font-weight: 600;
   box-shadow: none;
-  background-color: var(--rgba-primary-1);
+  /* background-color: var(--rgba-primary-1); */
 }
 
 .deznav .metismenu>li.mm-active>a i {
@@ -18642,7 +18642,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 }
 
 [data-sidebar-style="compact"] .deznav .metismenu>li.mm-active>a i {
-  background: var(--rgba-primary-1);
+  /* background: var(--rgba-primary-1); */
   color: var(--primary) !important;
 }
 
@@ -25772,7 +25772,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 [data-sibebarbg="color_13"][data-sidebar-style="icon-hover"][data-layout="horizontal"] .deznav .metismenu>li:hover>a,
 [data-sibebarbg="color_13"][data-sidebar-style="full"][data-layout="horizontal"] .deznav .metismenu>li.mm-active>a,
 [data-sibebarbg="color_13"][data-sidebar-style="full"][data-layout="horizontal"] .deznav .metismenu>li:hover>a {
-  background: rgba(255, 255, 255, 0.15) !important;
+  /* background: rgba(255, 255, 255, 0.15) !important; */
 }
 
 [data-sibebarbg="color_13"][data-theme-version="dark"][data-sidebar-style="full"][data-layout="vertical"] .deznav .metismenu>li.mm-active>a,
@@ -25836,7 +25836,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 
 [data-sibebarbg="color_13"][data-theme-version="dark"] .deznav .metismenu>li.mm-active>a,
 [data-sibebarbg="color_13"] .deznav .metismenu>li.mm-active>a {
-  background: rgba(255, 255, 255, 0.15) !important;
+  /* background: rgba(255, 255, 255, 0.15) !important; */
   color: #fff !important;
 }
 
