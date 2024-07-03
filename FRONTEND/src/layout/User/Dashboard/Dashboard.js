@@ -63,17 +63,21 @@ const BrokerResponse = () => {
     };
 
     getservice();
-  }, [dispatch, gotodashboard, GoToDahboard_id, user_details]);
+  }, []);
 
 
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
-    const numericValue = e.target.value.replace(/[^0-9]/g, '');
+
+    let numericValue
+    if (e.target.name !== "active_status") {
+      numericValue = e.target.value.replace(/[^0-9]/g, '');
+    }
 
 
     if (e.target.name !== "active_status" && numericValue === 0) {
-
       toast.error(`cant update  0 Quantity In ${symboll}`);
+      e.target.value = 1
       return
     }
 
@@ -83,6 +87,7 @@ const BrokerResponse = () => {
       return
 
     }
+
 
 
     if (e.target.name === "lot_size") {
@@ -96,7 +101,7 @@ const BrokerResponse = () => {
           return
         }
       } else {
-        e.target.value = 1
+        // e.target.value = 1
         return
       }
     }
@@ -186,6 +191,25 @@ const BrokerResponse = () => {
     }
 
 
+
+    if (Object.keys(updatedData).length === 0) {
+      toast.error(`Can't update empty quantity`);
+      setIsUpdating(false);
+      return;
+    }
+
+    // Iterate over updatedData
+    for (const key in updatedData) {
+      if (updatedData.hasOwnProperty(key)) {
+        const item = updatedData[key];
+
+        if (item.lot_size == 0) {
+          toast.error(`Can't update 0 Quantity`);
+          setIsUpdating(false);
+          return;
+        }
+      }
+    }
 
     handleCloseStartegyModal()
     await dispatch(
@@ -393,10 +417,10 @@ const BrokerResponse = () => {
                             className="toggle-checkbox bg-primary"
                             type="checkbox"
                             name="active_status"
-                            checked={data.active_status === "1"}
+                            defaultChecked={data.active_status === "1"}
                             onChange={(e) =>
                               setgroup_qty_value_test(
-                                e.target.checked,
+                                e,
                                 data.service.name,
                                 data.service,
                                 data
