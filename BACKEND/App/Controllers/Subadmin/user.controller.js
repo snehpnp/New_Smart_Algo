@@ -742,7 +742,7 @@ class Employee {
 
 
             if (req.multiple_strategy_select == 0) {
-              if (deleteStrategy.length > 0) {
+              if (delete_startegy.length > 0) {
 
                 var update_services = await client_services.updateMany(
                   { user_id: existingUsername._id, strategy_id: stgId },
