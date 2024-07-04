@@ -231,7 +231,7 @@ const AddClient = () => {
         "licence": values.licence1,
         "Editor_role": Role,
         "device": check_Device(),
-        "multiple_strategy_select": values.multiple_strategy_select === false ? '0' : '1'
+        "multiple_strategy_select": UserData.data.data[0].multiple_strategy_select
 
       }
 
@@ -463,9 +463,9 @@ const AddClient = () => {
         AllGroupServices.data && AllGroupServices.data.map((item) => ({ label: item.name, value: item._id }))
       , label_size: 12, col_size: 6, disable: false
     },
-    {
-      name: 'multiple_strategy_select', label: 'Mutiple Selection Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false, check_box_true: formik.values.multiple_strategy_select ? true : false,
-    },
+    // {
+    //   name: 'multiple_strategy_select', label: 'Mutiple Selection Strategy', type: 'checkbox', label_size: 12, col_size: 6, disable: false, check_box_true: formik.values.multiple_strategy_select ? true : false,
+    // },
   ];
 
 

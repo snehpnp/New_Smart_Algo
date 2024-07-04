@@ -519,13 +519,11 @@ class Employee {
 
       var TotalMonth = "0";
 
-      // var Panel_key = await Company_info.find();
 
 
       var Panel_key = await Company_info.find({}, { prefix: 1, licenses: 1, _id: 0 }).limit(1);
 
       const totalLicense = await User_model.aggregate([
-        // Match documents based on your criteria (e.g., specific conditions)
         {
           $match: {
             license_type: "2",
@@ -800,25 +798,42 @@ class Employee {
           });
 
 
+          if (req.multiple_strategy_select == 0) {
+            if (deleteStrategy.length > 0) {
 
+              var update_services = await client_services.updateMany(
+                { user_id: existingUsername._id, strategy_id: stgId },
+                { $set: { strategy_id: deleteStrategy[0].strategy_id } }
+              );
 
-          if (deleteStrategy.length > 0) {
+            } else {
+              var update_stg = new ObjectId(add_startegy[0]);
 
-            var update_services = await client_services.updateMany(
-              { user_id: existingUsername._id, strategy_id: stgId },
-              { $set: { strategy_id: deleteStrategy[0].strategy_id } }
-            );
-
+              var update_services = await client_services.updateMany(
+                { user_id: existingUsername._id, strategy_id: stgId },
+                { $set: { strategy_id: update_stg } }
+              );
+            }
           } else {
-            var update_stg = new ObjectId(add_startegy[0]);
 
-            var update_services = await client_services.updateMany(
-              { user_id: existingUsername._id, strategy_id: stgId },
-              { $set: { strategy_id: update_stg } }
-            );
+            if (delete_startegy.length > 0) {
+     
+              const deleteStrategyIds = delete_startegy.map(data => new ObjectId(data));
+            
+              const updatePromises = deleteStrategyIds.map(data =>
+                client_services.updateMany(
+                  { user_id: existingUsername._id },
+                  { $pull: { strategy_id: data } }
+                )
+              );
+            
+              // Wait for all update operations to complete
+              const results = await Promise.all(updatePromises);
+              console.log(results);
+            }
+
+
           }
-
-
 
         });
       }

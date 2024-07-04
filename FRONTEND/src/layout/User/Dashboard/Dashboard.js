@@ -25,6 +25,8 @@ const BrokerResponse = () => {
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
   const [updatedData, setUpdatedData] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
+  const [refresh, setrefresh] = useState(false);
+
 
   const handleCloseStartegyModal = () => {
     setShowStartegyModal(false);
@@ -46,6 +48,11 @@ const BrokerResponse = () => {
         .unwrap()
         .then((response) => {
           if (response.status) {
+
+            // response.services.map((data) => {
+              // console.log(data.service.name + "  - " + data.strategys.strategy_name)
+            // })
+
             setDashboardData({
               loading: false,
               data: response.services,
@@ -62,7 +69,7 @@ const BrokerResponse = () => {
         });
     };
     getservice();
-  }, []);
+  }, [refresh]);
 
 
 
@@ -229,14 +236,13 @@ const BrokerResponse = () => {
         setIsUpdating(false);
         if (response.status) {
           toast.success(response.msg);
+          setrefresh(!refresh)
+
         } else {
           toast.error(response.msg);
         }
       });
   };
-
-
-
 
   return (
     <Content Page_title="Dashboard" button_status={false}>

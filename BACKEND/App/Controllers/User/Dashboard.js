@@ -183,7 +183,7 @@ class Dashboard {
             }));
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Client Services ",
                 services: GetAllClientServices,

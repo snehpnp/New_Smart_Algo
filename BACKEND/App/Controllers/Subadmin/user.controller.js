@@ -643,6 +643,12 @@ class Employee {
         }
       }
 
+
+
+      const get_user = await Subadmin_Permission.find({ user_id: req.parent_id }).select('strategy')
+
+
+
       try {
         const Strategieclient = await strategy_client.find({
           user_id: existingUsername._id,
@@ -668,13 +674,16 @@ class Employee {
         var delete_startegy = [];
         db_exist_startegy.forEach(function (item, index) {
           if (!insert_startegy.includes(item)) {
-            delete_startegy.push(item);
+            if (get_user[0].strategy.includes(item)) {
+         
+              delete_startegy.push(item);
+            }
           }
         });
 
         if (add_startegy.length > 0) {
           add_startegy.forEach(async (data) => {
-          
+
             const User_strategy_client = new strategy_client({
               strategy_id: data,
               user_id: existingUsername._id,
@@ -696,6 +705,9 @@ class Employee {
             await user_activity.save();
           });
         }
+
+ 
+
 
         if (delete_startegy.length > 0) {
           delete_startegy.forEach(async (data) => {
@@ -729,20 +741,41 @@ class Employee {
             });
 
 
-            if (deleteStrategy.length > 0) {
+            if (req.multiple_strategy_select == 0) {
+              if (deleteStrategy.length > 0) {
 
-              var update_services = await client_services.updateMany(
-                { user_id: existingUsername._id, strategy_id: stgId },
-                { $set: { strategy_id: add_startegy[0] } }
-              );
+                var update_services = await client_services.updateMany(
+                  { user_id: existingUsername._id, strategy_id: stgId },
+                  { $set: { strategy_id: deleteStrategy[0].strategy_id } }
+                );
 
+              } else {
+                var update_stg = new ObjectId(add_startegy[0]);
+
+                var update_services = await client_services.updateMany(
+                  { user_id: existingUsername._id, strategy_id: stgId },
+                  { $set: { strategy_id: update_stg } }
+                );
+              }
             } else {
-              var update_stg = new ObjectId(add_startegy[0]);
 
-              var update_services = await client_services.updateMany(
-                { user_id: existingUsername._id, strategy_id: stgId },
-                { $set: { strategy_id: update_stg } }
-              );
+              if (delete_startegy.length > 0) {
+
+                const deleteStrategyIds = delete_startegy.map(data => new ObjectId(data));
+
+                const updatePromises = deleteStrategyIds.map(data =>
+                  client_services.updateMany(
+                    { user_id: existingUsername._id },
+                    { $pull: { strategy_id: data } }
+                  )
+                );
+
+                // Wait for all update operations to complete
+                const results = await Promise.all(updatePromises);
+            
+              }
+
+
             }
           });
         }
@@ -816,7 +849,7 @@ class Employee {
           var strategFind = await strategy_client.find({
             user_id: existingUsername._id,
           });
-          
+
           // var client_servicesDelete = await client_services.deleteMany({
           //   user_id: existingUsername._id,
           // });
@@ -970,7 +1003,7 @@ class Employee {
         var status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
 
 
-        res.send({
+        return res.send({
           status: true,
           msg: "Update Successfully",
           data: result,
@@ -1007,7 +1040,7 @@ class Employee {
         return res.send({ status: false, msg: "No Dat Found", data: [] });
       }
 
-      res.send({
+     return res.send({
         status: true,
         msg: "Get Users",
         data: get_user,
@@ -1039,7 +1072,7 @@ class Employee {
         return res.send({ status: false, msg: "Empty data", data: [] });
       }
 
-      res.send({
+      return res.send({
         status: true,
         msg: "Get Permission Successfully",
         data: get_user,
@@ -1099,7 +1132,7 @@ class Employee {
       }
 
       // DATA GET SUCCESSFULLY
-      res.send({
+      return res.send({
         status: true,
         msg: "Get All Clients",
         totalCount: totalCount,
@@ -1132,7 +1165,7 @@ class Employee {
       }
 
       // DATA GET SUCCESSFULLY
-      res.send({
+      return res.send({
         status: true,
         msg: "Get All Login Clients",
         totalCount: totalCount,
@@ -1166,7 +1199,7 @@ class Employee {
       }
 
       // DATA GET SUCCESSFULLY
-      res.send({
+      return res.send({
         status: true,
         msg: "Get All trading Clients",
         data: getAllTradingClients,
@@ -1230,7 +1263,7 @@ class Employee {
       }
 
       // DATA GET SUCCESSFULLY
-      res.send({
+      return res.send({
         status: true,
         msg: "Get All user_logs",
         data: GetAlluser_logs,
@@ -1277,7 +1310,7 @@ class Employee {
         user_id: get_user[0]._id,
       });
 
-      res.send({
+      return  res.send({
         status: true,
         msg: "Delete Successfully",
         data: DeleteUser,
@@ -1362,7 +1395,7 @@ class Employee {
 
       const userSTG = await strategy_client.find({ user_id: userId });
 
-      res.send({
+      return res.send({
         status: true,
         msg: "Get User Successfully",
         data: GetAllClientServices,
