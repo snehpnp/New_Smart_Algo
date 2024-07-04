@@ -49,10 +49,6 @@ const BrokerResponse = () => {
         .then((response) => {
           if (response.status) {
 
-            // response.services.map((data) => {
-              // console.log(data.service.name + "  - " + data.strategys.strategy_name)
-            // })
-
             setDashboardData({
               loading: false,
               data: response.services,
@@ -235,8 +231,8 @@ const BrokerResponse = () => {
 
         setIsUpdating(false);
         if (response.status) {
+          window.location.reload()
           toast.success(response.msg);
-          setrefresh(!refresh)
 
         } else {
           toast.error(response.msg);
@@ -347,16 +343,7 @@ const BrokerResponse = () => {
                             {Strategy.data &&
                               Strategy.data.map((item) => {
 
-                                if (data.strategy_id.includes(item.result._id)) {
-                                  // return (
-                                  //   <option
-                                  //     className="text-success h6"
-                                  //     value={item.result._id}
-                                  //   >
-                                  //     {item.result.strategy_name}
-                                  //   </option>
-                                  // );
-                                } else {
+                                if (data.strategy_id.includes(item.result._id)) { } else {
                                   return (
                                     <option
                                       className="text-danger h6"
