@@ -192,8 +192,6 @@ const BrokerResponse = () => {
       }
     }
 
-
-
     if (Object.keys(updatedData).length === 0) {
       toast.error(`Can't update empty quantity`);
       setIsUpdating(false);
@@ -240,6 +238,8 @@ const BrokerResponse = () => {
       });
   };
 
+
+  
   return (
     <Content Page_title="Dashboard" button_status={false}>
       <div className="table-responsive " style={{ height: '55vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
