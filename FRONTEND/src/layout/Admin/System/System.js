@@ -22,7 +22,11 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 import WebSocketService from '../../../Utils/LiveDataRedisSocket';
+import WebSocketServiceForexCrypto from '../../../Utils/LiveDataForexCryptoSocket';
 const WEBSOCKET_URI = 'ws://193.239.237.157:6789';
+
+const WEBSOCKET_URI_FOREX = 'wss://api.tiingo.com/fx';
+const API_KEY = 'bfb6173acfc17ce2afbc73a44015944789678341';
 
 const System = () => {
 
@@ -37,6 +41,7 @@ const System = () => {
     
     //     const handleOpen = () => {
     //       console.log('WebSocket connection opened');
+      
     //     };
     
     //     const handleClose = () => {
@@ -53,10 +58,6 @@ const System = () => {
     //       disconnect();
     //     };
     //   }, []);
-
-
-
-
 
 
 
