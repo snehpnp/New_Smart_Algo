@@ -1104,11 +1104,8 @@ class Employee {
       return res.send({
         status: true,
         msg: "Get All Clients",
-        // totalCount: totalCount,
         data: getAllClients,
-        // page: Number(page),
-        // limit: Number(limit),
-        // totalPages: Math.ceil(totalCount / Number(limit)),
+    
       });
     } catch (error) {
       console.log("Error loginClients Error-", error);

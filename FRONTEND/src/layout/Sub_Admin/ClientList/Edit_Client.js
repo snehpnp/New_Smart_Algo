@@ -6,18 +6,17 @@ import { useFormik } from 'formik';
 import * as  valid_err from "../../../Utils/Common_Messages"
 import { useNavigate, useLocation } from "react-router-dom";
 import { Email_regex, Mobile_regex, Name_regex } from "../../../Utils/Common_regex"
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Content from '../../../Components/Dashboard/Content/Content';
 import { GET_ALL_GROUP_SERVICES } from '../../../ReduxStore/Slice/Admin/AdminSlice';
 import { Find_One_User, Update_User } from '../../../ReduxStore/Slice/Subadmin/userSlice';
-import { Get_All_SUBADMIN } from '../../../ReduxStore/Slice/Subadmin/Subadminslice'
 import { Get_All_Service_for_Client } from '../../../ReduxStore/Slice/Common/commoSlice'
 import { Get_Service_By_Group_Id } from '../../../ReduxStore/Slice/Admin/GroupServiceSlice';
 import { check_Device } from "../../../Utils/find_device";
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
 import { All_Api_Info_List } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import * as Config from "../../../Utils/Config";
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import "../../../App.css"
 import { f_time } from '../../../Utils/Date_formet';
@@ -36,13 +35,13 @@ const AddClient = () => {
 
   const [UserData, setUserData] = useState({ loading: true, data: [] });
   const [selectedStrategies, setSelectedStrategies] = useState([]);
-  const [ShowAllStratagy, setShowAllStratagy] = useState(true)
+
   const [first, setfirst] = useState([])
   const [getPermissions, setGetPermissions] = useState([])
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
   const [AllGroupServices, setAllGroupServices] = useState({ loading: true, data: [] });
 
-  const [Addsubadmin, setAddsubadmin] = useState({ loading: true, data: [] });
+  // const [Addsubadmin, setAddsubadmin] = useState({ loading: true, data: [] });
   const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
   const [GetServices, setGetServices] = useState({ loading: true, data: [] });
 
@@ -292,27 +291,6 @@ const AddClient = () => {
   }, [])
 
 
-  const brokerOptions = [
-    // { label: 'Market Hub', value: '1' },
-    { label: 'Alice Blue', value: '2' },
-    // { label: 'Master Trust', value: '3' },
-    // { label: 'Motilal Oswal', value: '4' },
-    // { label: 'Zebull', value: '5' },
-    // { label: 'IIFl', value: '6' },
-    // { label: 'Kotak', value: '7' },
-    // { label: 'Mandot', value: '8' },
-    // { label: 'Choice', value: '9' },
-    // { label: 'Anand Rathi', value: '10' },
-    // { label: 'B2C', value: '11' },
-    { label: 'Angel', value: '12' },
-    // { label: 'Fyers', value: '13' },
-    { label: '5 Paisa', value: '14' },
-    { label: 'Zerodha', value: '15' }
-    // { label: 'Arihant', value: '16' }
-    // { label: 'Arihant', value: '17' }
-    // { label: 'Laxmi', value: '18' }
-  ];
-
   const fields = [
     { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },
     { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },
@@ -322,7 +300,7 @@ const AddClient = () => {
       name: 'licence',
       label: 'Licence',
       type: 'select',
-      options: getPermissions && getPermissions.license_permision == 1 ?
+      options: getPermissions && Number(getPermissions.license_permision) === 1 ?
 
         UserData.data.data !== undefined && UserData.data.data[0].license_type === "2" ? [
           { label: 'Live', value: '2' },
@@ -354,7 +332,7 @@ const AddClient = () => {
       label: 'To Month',
       type: 'select',
       options: first && first.map((item) => ({ label: item.endDate, value: item.month })),
-      showWhen: values => getPermissions && getPermissions.license_permision == 1 ? values.licence == '2' : null
+      showWhen: values => getPermissions && Number(getPermissions.license_permision) === 1 ? Number(values.licence) === 2 : null
       , label_size: 12, col_size: 6, disable: false, isSelected: true
     },
     {
@@ -423,13 +401,13 @@ const AddClient = () => {
         values.broker === '7' || values.broker === '9',
       label_size: 12, col_size: 6, disable: false
     },
-    {
-      name: 'parent_id',
-      label: 'Sub-Admin',
-      type: 'select',
-      options: Addsubadmin.data && Addsubadmin.data.map((item) => ({ label: item.FullName, value: item._id }))
-      , label_size: 12, col_size: 6, disable: false
-    },
+    // {
+    //   name: 'parent_id',
+    //   label: 'Sub-Admin',
+    //   type: 'select',
+    //   options: Addsubadmin.data && Addsubadmin.data.map((item) => ({ label: item.FullName, value: item._id }))
+    //   , label_size: 12, col_size: 6, disable: false
+    // },
     {
       name: 'service_given_month',
       label: 'Service Given To Month',
@@ -727,7 +705,7 @@ const AddClient = () => {
               ))}
               <label className="toggle mt-3">
                 <input className="toggle-checkbox bg-primary" type="checkbox" onChange={(e) => {
-                  setShowAllStratagy(e.target.checked)
+                  // setShowAllStratagy(e.target.checked)
                 }} />
 
               </label>

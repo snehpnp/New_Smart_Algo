@@ -36,7 +36,7 @@ verifyToken = async (req, res, next) => {
     if (!token) {
         return res.send({
             status: false,
-            message: "No token provided!",
+            msg: "No token provided!",
             data: [],
 
         });

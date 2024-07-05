@@ -170,28 +170,35 @@ const Header = ({ ChatBox }) => {
   };
 
   //  GET_USER_DETAILS
-  const data = async () => {
+  const fetchUserProfile = async () => {
     try {
       const userId = gotodashboard ? UserNamego_localstg.user_id : user_details.user_id;
       const token = gotodashboard ? UserNamego_localstg.token : user_details.token;
-
+  
       const response = await dispatch(
         User_Profile({
           id: userId,
           token: token,
         })
       ).unwrap();
-
+  
       if (response.status) {
         setUserDetails(response.data);
+      } else {
+        if ((response.msg === "Unauthorized!" || response.msg === "No token provided!!") && !gotodashboard) {
+      
+          localStorage.clear();
+          window.location.reload();
+        } else {
+          console.warn('Unexpected response:', response);
+        }
       }
     } catch (error) {
       console.error('Failed to fetch user profile:', error);
       // Handle error accordingly, e.g., show an error message to the user
     }
   };
-
-
+  
 
   //  GET_USER_DETAILS
   const message_brod = async () => {
@@ -208,7 +215,7 @@ const Header = ({ ChatBox }) => {
   };
 
   useEffect(() => {
-    data();
+    fetchUserProfile();
     message_brod()
   }, [refresh]);
 
