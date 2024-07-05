@@ -324,11 +324,11 @@ class Panel {
 
             // IF DATA NOT EXIST
             if (getAllpanel.length == 0) {
-                res.send({ status: false, msg: "Empty data", data: getAllpanel })
+                return res.send({ status: false, msg: "Empty data", data: getAllpanel })
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return  res.send({
                 status: true,
                 msg: "Get All Api Info",
                 data: getAllpanel,
@@ -413,7 +413,7 @@ class Panel {
             if (!Panle_information) {
                 return res.status(409).json({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            res.send({ status: true, msg: "Get Panel Permissions", data: Panle_information })
+            return res.send({ status: true, msg: "Get Panel Permissions", data: Panle_information })
 
         } catch (error) {
             // console.log("Theme error-", error);
@@ -466,7 +466,7 @@ class Panel {
             if (!update_token) {
                 return res.send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            res.send({ status: true, msg: "Close Panel SuccessFully", data: update_token })
+            return res.send({ status: true, msg: "Close Panel SuccessFully", data: update_token })
 
         } catch (error) {
             // console.log("Theme error-", error);
@@ -490,7 +490,7 @@ class Panel {
             if (!update_token) {
                 return res.send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            res.send({ status: true, msg: "Broker Update SuccessFully", data: update_token })
+            return res.send({ status: true, msg: "Broker Update SuccessFully", data: update_token })
 
         } catch (error) {
             // console.log("Theme error-", error);

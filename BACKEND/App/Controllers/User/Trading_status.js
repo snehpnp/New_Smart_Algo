@@ -31,7 +31,7 @@ class User_trading_status {
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return res.send({
                 status: true,
                 msg: "Get All trading Status",
                 data: getAllTrading_status,

@@ -128,14 +128,14 @@ class Login {
 
             try {
                 logger.info('Login Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
-                res.send({ status: true, msg: "Login Succesfully", data: msg })
+                return  res.send({ status: true, msg: "Login Succesfully", data: msg })
             } catch (error) {
                 console.log("Error Some Error in a login", error);
             }
         }
         catch (error) {
 
-            res.send({ status: false, msg: "Server Side error", data: error })
+            return   res.send({ status: false, msg: "Server Side error", data: error })
         }
 
     }
@@ -178,7 +178,7 @@ class Login {
             }
             var DeleteUser = await user_SignUp.deleteOne({ _id: get_user[0]._id });
 
-            res.send({
+            return  res.send({
                 status: true,
                 msg: "Delete Successfully",
                 data: DeleteUser,
@@ -359,7 +359,7 @@ class Login {
             await user_login.save();
 
             logger.info('Very Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Login Successfully", data: [], firstlogin: EmailCheck.Is_First_login })
+            return res.send({ status: true, msg: "Login Successfully", data: [], firstlogin: EmailCheck.Is_First_login })
 
 
         } catch (error) {
@@ -447,7 +447,7 @@ class Login {
 
 
             logger.info('Logout Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Logout Succesfully", data: [] })
+            return   res.send({ status: true, msg: "Logout Succesfully", data: [] })
 
 
         } catch (error) {
@@ -481,7 +481,7 @@ class Login {
             console.log("Error in Login controller", error)
         }
 
-        res.send({ status: true, msg: "Mail send successfully", data: redirectUrl })
+        return   res.send({ status: true, msg: "Mail send successfully", data: redirectUrl })
     }
 
 
@@ -516,7 +516,7 @@ class Login {
 
 
             logger.info('Password Update Successfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Password Update Successfully" });
+            return  res.send({ status: true, msg: "Password Update Successfully" });
         } catch (error) {
 
         }
@@ -591,13 +591,13 @@ class Login {
 
             try {
                 logger.info('Go To Dashboard Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
-                res.send({ status: true, msg: "Go To Dashboard Succesfully", data: msg })
+                return   res.send({ status: true, msg: "Go To Dashboard Succesfully", data: msg })
             } catch (error) {
                 console.log("Error Some Error in a login", error);
             }
         }
         catch (error) {
-            res.send({ status: false, msg: "Server Side error", data: error })
+            return  res.send({ status: false, msg: "Server Side error", data: error })
         }
 
     }
@@ -632,11 +632,11 @@ class Login {
 
             CommonEmail(toEmail, subjectEmail, htmlEmail, textEmail)
 
-            res.send({ status: true, msg: "Send mail Successfully", data: OTP })
+            return   res.send({ status: true, msg: "Send mail Successfully", data: OTP })
 
         }
         catch (error) {
-            res.send({ status: false, msg: "Server Side error", data: error })
+            return   res.send({ status: false, msg: "Server Side error", data: error })
         }
 
     }

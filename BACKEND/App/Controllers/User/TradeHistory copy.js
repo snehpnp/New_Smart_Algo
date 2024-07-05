@@ -137,14 +137,14 @@ class TradeHistory {
 
                 }
             } else {
-                res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
+                return  res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
             }
 
             if (abc.length > 0) {
               
-                res.send({ status: true, data: abc.flat(), msg: "Get Signals" })
+                return res.send({ status: true, data: abc.flat(), msg: "Get Signals" })
             } else {
-                res.send({ status: false, data: [], msg: "Data Empty" })
+                return  res.send({ status: false, data: [], msg: "Data Empty" })
 
             }
 

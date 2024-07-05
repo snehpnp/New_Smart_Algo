@@ -403,7 +403,7 @@ class Employee {
             role: data.Role,
             user_id: data._id,
           });
-          res.send({ status: true, msg: "successfully Add!", data: data });
+          return res.send({ status: true, msg: "successfully Add!", data: data });
         })
         .catch((err) => {
           if (err.keyValue) {
@@ -415,7 +415,7 @@ class Employee {
           }
         });
     } catch (error) {
-      res.send({ msg: "Error=>", error });
+      return  res.send({ msg: "Error=>", error });
     }
   }
 

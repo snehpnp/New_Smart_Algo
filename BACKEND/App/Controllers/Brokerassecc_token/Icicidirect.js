@@ -243,10 +243,10 @@ const GetAllBrokerResponse = async (user_info,res) => {
 
     
              })
-           res.send({status:true,msg:"broker response updated successfully"})
+             return  res.send({status:true,msg:"broker response updated successfully"})
     
         } else {
-            res.send({status:false,msg:"no user found"})
+            return res.send({status:false,msg:"no user found"})
          }
 
     } catch (error) {

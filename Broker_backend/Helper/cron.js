@@ -359,7 +359,7 @@ module.exports = function (app) {
 
     app.get('/sneh', async (req, res) => {
        downloadKotakNeotoken()
-         res.send("okkk")
+       return res.send("okkk")
       })
 
 

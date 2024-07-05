@@ -122,7 +122,7 @@ class SuperAdmin {
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return  res.send({
                 status: true,
                 msg: "Get All Subadmins",
                 data: getAllSubAdmins,
@@ -396,7 +396,7 @@ class SuperAdmin {
 
             await superadmin_History.save()
 
-            res.send({
+            return res.send({
                 status: true,
                 msg: "Data found and backed up successfully",
                 data: findData
@@ -580,7 +580,7 @@ class SuperAdmin {
         try {
             const { id , panel_name , superadmin_name } = req.body
             if (!id) {
-                res.send({ status: false, msg: "Id is Not Found", data: [] })
+                return res.send({ status: false, msg: "Id is Not Found", data: [] })
             }
 
             const deleteUser = await user.deleteMany({ _id: id })

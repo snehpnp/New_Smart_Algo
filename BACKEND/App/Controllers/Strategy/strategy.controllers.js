@@ -69,9 +69,9 @@ class Strategy {
             const get_user = await Alice_token.aggregate(pipeline);
 
             if (get_user.length > 0) {
-                res.send({ status: true, msg: "Get Permission Successfully", data: get_user });
+                return  res.send({ status: true, msg: "Get Permission Successfully", data: get_user });
             } else {
-                res.send({ status: false, msg: "Empty data", data: [] });
+                return res.send({ status: false, msg: "Empty data", data: [] });
             }
         } catch (error) {
             res.status(500).send({ status: false, msg: "Internal server error" });
@@ -86,9 +86,9 @@ class Strategy {
             const get_indicator = await collection.aggregate([]).toArray();
 
             if (get_indicator.length > 0) {
-                res.send({ status: true, msg: "Get Permission Successfully", data: get_indicator });
+                return  res.send({ status: true, msg: "Get Permission Successfully", data: get_indicator });
             } else {
-                res.send({ status: false, msg: "Empty data", data: [] });
+                return res.send({ status: false, msg: "Empty data", data: [] });
             }
         } catch (error) {
             res.status(500).send({ status: false, msg: "Internal server error" });

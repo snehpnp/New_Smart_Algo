@@ -89,7 +89,7 @@ class CancelOrder {
             //     CancelOrderAliceBlue(item);
             // }
             else {
-                res.send({ status: false, msg: "broker not found" });
+                return  res.send({ status: false, msg: "broker not found" });
             }
 
 

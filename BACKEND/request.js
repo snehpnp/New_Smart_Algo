@@ -67,7 +67,7 @@ module.exports = function (app) {
         createViewIcicidirect()
         DashboardView()
         createView()
-        res.send("DONEE")
+        return res.send("DONEE")
     })
 
 
@@ -118,7 +118,7 @@ module.exports = function (app) {
             console.log("SNEH")
 
 
-            res.send("DONE");
+            return res.send("DONE");
         } catch (error) {
             console.error("Error in /all/tabel route:", error);
             res.status(500).send("Internal Server Error");
@@ -526,7 +526,7 @@ module.exports = function (app) {
 
 
 
-        res.send({ status: true })
+        return  res.send({ status: true })
 
 
 
@@ -662,7 +662,7 @@ module.exports = function (app) {
         } else {
         }
 
-        res.send({ data: result, count: result.length })
+        return res.send({ data: result, count: result.length })
     });
 
 
@@ -1029,34 +1029,34 @@ module.exports = function (app) {
                 });
             });
 
-        res.send({ data: "okk" })
+            return  res.send({ data: "okk" })
     });
 
 
     app.get("/test", (req, res) => {
         MainSignalsRemainToken()
-        res.send("DONEE")
+        return  res.send("DONEE")
     })
 
     app.get('/dropOpenPosition', async (req, res) => {
         dropOpenPosition()
-        res.send({ msg: "Delete Done!!!" })
+        return res.send({ msg: "Delete Done!!!" })
     })
 
     app.get('/createView', async (req, res) => {
         createViewFyers();
-        res.send({ msg: "Create View Done!  !!" })
+        return  res.send({ msg: "Create View Done!  !!" })
     })
 
     app.get('/brokerView', async (req, res) => {
         //createViewUpstox()
         createViewDhan();
-        res.send({ msg: "Create View broker!  !!" })
+        return  res.send({ msg: "Create View broker!  !!" })
     })
 
     app.get('/dashboard-view', async (req, res) => {
         DashboardView()
-        res.send({ msg: "Dashboard view create Done!!!" })
+        return   res.send({ msg: "Dashboard view create Done!!!" })
     })
 
     app.get('/AccelpixTokenUpdate', async (req, res) => {
@@ -1116,7 +1116,7 @@ module.exports = function (app) {
 
 
 
-        res.send({ msg: "okk" })
+            return  res.send({ msg: "okk" })
     })
 
     app.get("/optionStockData", async (req, res) => {
@@ -1319,7 +1319,7 @@ module.exports = function (app) {
 
 
 
-            res.send("Donee")
+            return res.send("Donee")
             return
 
 
@@ -1344,7 +1344,7 @@ module.exports = function (app) {
 
 
 
-        res.send("Donee")
+        return   res.send("Donee")
 
 
 

@@ -438,7 +438,7 @@ class Employee {
             }
 
 
-            res.send({ status: true, msg: "successfully Add!", data: data[0] });
+            return  res.send({ status: true, msg: "successfully Add!", data: data[0] });
 
             var EmailData = await firstOptPass(email_data);
             CommonEmail(toEmail, subjectEmail, EmailData);
@@ -463,7 +463,7 @@ class Employee {
           }
         });
     } catch (error) {
-      res.send({ msg: error });
+      return res.send({ msg: error });
     }
   }
 
@@ -1057,7 +1057,7 @@ class Employee {
       }
 
       // DATA GET SUCCESSFULLY
-      res.send({
+      return  res.send({
         status: true,
         msg: "Get All Clients",
         totalCount: totalCount,
@@ -1164,7 +1164,7 @@ class Employee {
       }
 
       // DATA GET SUCCESSFULLY
-      res.send({
+      return  res.send({
         status: true,
         msg: "Get All trading Clients",
         data: getAllTradingClients,
@@ -1209,7 +1209,7 @@ class Employee {
       }
 
       // DATA GET SUCCESSFULLY
-      res.send({
+      return   res.send({
         status: true,
         msg: "Get All user_logs",
         data: GetAlluser_logs,
@@ -1275,7 +1275,7 @@ class Employee {
 
       if (result) {
         const status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
-        res.send({
+        return  res.send({
           status: true,
           msg: "Update Successfully",
           data: result,
@@ -1322,7 +1322,7 @@ class Employee {
         user_id: get_user[0]._id,
       });
 
-      res.send({
+      return res.send({
         status: true,
         msg: "Delete Successfully",
         data: DeleteUser,
@@ -1409,7 +1409,7 @@ class Employee {
 
       const userSTG = await strategy_client.find({ user_id: userId });
 
-      res.send({
+      return  res.send({
         status: true,
         msg: "Get User Successfully",
         data: GetAllClientServices,
@@ -1461,7 +1461,7 @@ class Employee {
       if (!Client_key) {
         return res.status(409).json({ status: false, msg: 'Client Not exists', data: [] });
       }
-      res.send({ status: true, msg: "Get Client key", data: Client_key })
+      return   res.send({ status: true, msg: "Get Client key", data: Client_key })
     } catch (error) {
 
     }
@@ -1521,7 +1521,7 @@ class Employee {
 
 
 
-      res.send({ status: true, msg: "Get Client key", data: Client_key })
+      return  res.send({ status: true, msg: "Get Client key", data: Client_key })
     } catch (error) {
 
     }
