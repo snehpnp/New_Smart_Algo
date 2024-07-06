@@ -50,7 +50,7 @@ const SubAdminList = () => {
         await dispatch(Get_All_Admin_Client(data)).unwrap()
             .then((response) => {
                 if (response.status) {
-                    console.log(response.data.data)
+               
 
                     const filterData = response.data && response.data.data.filter((item) => {
                         const matchSearch =
@@ -159,7 +159,6 @@ const SubAdminList = () => {
             .then((response) => {
                 if (response.status) {
 
-                    console.log("cpp", response.data)
                     setUserData({
                         loading: false,
                         data: response.data

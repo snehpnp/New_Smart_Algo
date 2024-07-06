@@ -12,10 +12,9 @@ export const Add_Subadmin = createAsyncThunk(
   "create/subadmin",
   async (data) => {
     const { req, token } = data;
-    console.log("req : slice", req);
+
     try {
       const res = await ADD_SUBADMIN(req, token);
-      console.log("res slice",res);
       return await res;
     } catch (err) {
       return err;
@@ -27,7 +26,7 @@ export const Edit_Subadmin = createAsyncThunk(
   "create/subadmin",
   async (data) => {
     const { req, token } = data;
-    console.log(data);
+    
     try {
       const res = await EDIT_SUBADMIN(req, token);
       return await res;
@@ -40,7 +39,7 @@ export const Find_One_Subadmin = createAsyncThunk(
   "find/one/subadmin",
   async (data) => {
     const { id, token } = data;
-    console.log(data);
+    
     try {
       const res = await FIND_ONE_SUBADMIN({ id: id }, token);
       return await res;
@@ -54,7 +53,7 @@ export const Get_Client_By_Subadmin_Id = createAsyncThunk(
   "find/allclients/subadmin/id",
   async (data) => {
     const { id, token } = data;
-    console.log(data);
+    
     try {
       const res = await GET_CLIENT_BY_SUBADMIN_ID({ id: id }, token);
       return await res;
@@ -66,7 +65,7 @@ export const Get_Client_By_Subadmin_Id = createAsyncThunk(
 export const Subadmin_Update_User_Status = createAsyncThunk("udapte/subadmin/client/status",
   async (data) => {
     const { id, status, token } = data;
-    console.log(data);
+    
     try {
       const res = await SUBADMIN_UPDATE_USER_STATUS({ id: id, user_active_status: status }, token);
       return await res;

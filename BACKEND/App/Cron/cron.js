@@ -707,13 +707,13 @@ const Get_Option_All_Token_Chain_stock = async () => {
 const LogoutAllUsers = async () => {
 
     // APP LOGOUT USERS  
-    const AppLoginUser = await User.find({ AppLoginStatus: '1', app_login_token: null });
+    const AppLoginUser = await User.find({ AppLoginStatus: '1' });
 
 
     if (AppLoginUser.length > 0) {
         AppLoginUser.map(async (user) => {
 
-            const updateValues = { AppLoginStatus: '0' };
+            const updateValues = { AppLoginStatus: '0',app_login_token:null};
             const updatedDocument = await User.findByIdAndUpdate(user._id, updateValues, {
                 new: true, // To return the updated document
             });
@@ -729,10 +729,10 @@ const LogoutAllUsers = async () => {
     }
 
     // WEB LOGOUT USERS  
-    const WebLoginUser = await User.find({ WebLoginStatus: '1', web_login_token: null });
+    const WebLoginUser = await User.find({ WebLoginStatus: '1' });
     if (WebLoginUser.length > 0) {
         WebLoginUser.map(async (user) => {
-            const updateValues = { WebLoginStatus: '0' };
+            const updateValues = { WebLoginStatus: '0',web_login_token:null };
             const updatedDocument = await User.findByIdAndUpdate(user._id, updateValues, {
                 new: true, // To return the updated document
             });
@@ -1235,7 +1235,6 @@ const TokenSymbolUpdate = () => {
                         }
 
                     } else if (element.instrumenttype == 'FUTCUR') {
-                        //console.log("INSTRUMENT LAST",element.name)
 
                         const filter_service = { name: element.name };
                         const updateOperation_service = { $set: { lotsize: element.lotsize } };

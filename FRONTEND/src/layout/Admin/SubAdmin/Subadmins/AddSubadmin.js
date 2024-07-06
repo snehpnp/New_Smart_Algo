@@ -16,31 +16,24 @@ import {
 import { useFormik } from "formik";
 import { Get_All_SUBADMIN } from "../../../../ReduxStore/Slice/Subadmin/Subadminslice";
 import { Add_Subadmin } from "../../../../ReduxStore/Slice/Admin/CreateSubadminSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import { GET_ALL_GROUP_SERVICES } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
-
 import toast, { Toaster } from "react-hot-toast";
-
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 
 const AllSubadmin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const user_token = JSON.parse(localStorage.getItem("user_details")).token;
   const Role = JSON.parse(localStorage.getItem("user_details")).Role;
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-
   const [first, setfirst] = useState("all");
   const [showModal, setshowModal] = useState(false);
-
   const [ShowAllStratagy, setShowAllStratagy] = useState(false);
-
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [SelectedGroupServices, setSelectedGroupServices] = useState([]);
 
-  console.log("SelectedGroupServices", SelectedGroupServices)
 
   const [Addsubadmin, setAddsubadmin] = useState({
     loading: false,
@@ -126,49 +119,6 @@ const AllSubadmin = () => {
       } else if (!isValidEmail(values.email)) {
         errors.email = valid_err.INVALID_EMAIL_ERROR;
       }
-
-      // console.log("values.addclient", values.addclient)
-      // console.log("values.editclient", values.editclient)
-
-      // if (values.addclient ) {
-      //   // If either "Add Client" or "Edit Client" is checked, enable "Group Service Permission"
-      //   values.groupservice = true;
-      // }
-
-      // else if (!values.addclient && !values.editclient && values.groupservice) {
-      //   // If "Group Service Permission" is checked without "Add Client" and "Edit Client", clear the checkbox
-      //   values.groupservice = false;
-      // }
-
-
-      // if (
-      //   (values.all || values.groupservice) &&
-      //   SelectedGroupServices.length === 0
-      // ) {
-      //   errors.groupservice = "Group Select";
-      // }
-
-      // if (
-      //   (values.all || values.groupservice) &&
-      //   SelectedGroupServices.length === 0
-      // ) {
-      //   errors.groupservice = "Group Select";
-      // }
-
-
-      // if (values.Strategy) {
-      //   if (!values.addclient && !values.editclient) {
-      //     errors.addclient = "select Add Client Also";
-      //     errors.editclient = "select Edit Client Also";
-      //   }
-      // }
-      // if (values.groupservice) {
-      //   if (!values.addclient && !values.editclient) {
-      //     errors.addclient = "select Add Client Also";
-      //     errors.editclient = "select Edit Client Also";
-      //   }
-      // }
-
       if ((values.addclient || values.editclient) && values.groupservice && state.length === 0) {
         errors.grouper_servcice = "You must select a Group Service from the list";
       }
@@ -179,9 +129,7 @@ const AllSubadmin = () => {
       return errors;
     },
     onSubmit: async (values) => {
-      // console.log("values", values);
-
-
+    
       const req = {
         FullName: values.FullName,
         Email: values.email,
@@ -205,8 +153,7 @@ const AllSubadmin = () => {
         },
       };
 
-      // console.log("test", req);
-      // return
+   
 
       await dispatch(Add_Subadmin({ req: req, token: user_token }))
         .unwrap()
@@ -216,8 +163,7 @@ const AllSubadmin = () => {
             toast.error(response.data.msg);
           } else if (response.status) {
             toast.success(response.msg);
-            console.log("response :", response)
-//  return 
+         
             setTimeout(() => {
               navigate("/admin/allsubadmins");
             }, 1000);

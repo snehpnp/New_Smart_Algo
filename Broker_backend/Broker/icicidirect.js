@@ -11,21 +11,16 @@ const MainSignals = db.MainSignals;
 const AliceViewModel = db.AliceViewModel;
 const BrokerResponse = db.BrokerResponse;
 var dateTime = require('node-datetime');
-
 var sha256 = require("crypto-js/sha256");
 
-
 const place_order = async (AllClientData, signals, token, filePath, signal_req, ExistExitSignal) => {
-
     try {
-
         var input_symbol = signals.Symbol;
         var type = signals.TType.toUpperCase();
         var segment = signals.Segment.toUpperCase();
         var option_type = signals.OType;
         var strategy = signals.Strategy;
         
-    
 
         if (token != 0) {
 
@@ -156,11 +151,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
                     }
 
                     else if (type == 'SX' || type == 'LX') {
-
-
+  
                         const requestPromises = AllClientData.map(async (item) => {
-
-
 
                             if (segment.toLowerCase() === 'c') {
                                 item.postdata.expiry_date = expiry_date ? convertToISO8601(expiry_date) : ""
@@ -478,7 +470,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req, 
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                        
                     })
                     .catch((err) => {
                         try {
@@ -666,7 +658,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {
@@ -831,7 +823,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {
@@ -859,7 +851,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {

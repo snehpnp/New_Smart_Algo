@@ -12,16 +12,9 @@ import { GET_ALL_GROUP_SERVICES, Find_One_User } from '../../../../ReduxStore/Sl
 import { Get_All_SUBADMIN } from '../../../../ReduxStore/Slice/Subadmin/Subadminslice'
 import { Get_All_Service_for_Client } from '../../../../ReduxStore/Slice/Common/commoSlice'
 import { Get_Service_By_Group_Id } from '../../../../ReduxStore/Slice/Admin/GroupServiceSlice';
-
-
 import { Add_User } from '../../../../ReduxStore/Slice/Admin/userSlice';
 import toast, { Toaster } from 'react-hot-toast';
-
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
-
-
-
-
 
 
 
@@ -30,43 +23,18 @@ const EditClient = () => {
   const location = useLocation()
   const dispatch = useDispatch()
 
-
-
-
   const user_token = JSON.parse(localStorage.getItem("user_details")).token
   const Role = JSON.parse(localStorage.getItem("user_details")).Role
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
 
-
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [ShowAllStratagy, setShowAllStratagy] = useState(false)
   const [UserData, setUserData] = useState([])
-
-  console.log("UserData", UserData.data && UserData.data[0]);
-
   const [first, setfirst] = useState([])
-
-  const [AllGroupServices, setAllGroupServices] = useState({
-    loading: true,
-    data: []
-  });
-
-  const [Addsubadmin, setAddsubadmin] = useState({
-    loading: true,
-    data: []
-  });
-
-
-  const [AllStrategy, setAllStrategy] = useState({
-    loading: true,
-    data: []
-  });
-
-
-  const [GetServices, setGetServices] = useState({
-    loading: true,
-    data: []
-  });
+  const [AllGroupServices, setAllGroupServices] = useState({ loading: true, data: [] });
+  const [Addsubadmin, setAddsubadmin] = useState({loading: true, data: [] });
+  const [AllStrategy, setAllStrategy] = useState({loading: true,data: []});
+  const [GetServices, setGetServices] = useState({loading: true,data: []});
 
 
   const isValidEmail = (email) => {
@@ -75,12 +43,6 @@ const EditClient = () => {
   const isValidContact = (mobile) => {
     return Mobile_regex(mobile)
   }
-
-
-
-
-
-
 
   // GET ALL GROUP SERVICES NAME
   const data_1 = async () => {

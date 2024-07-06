@@ -128,8 +128,7 @@ export const All_Brokers = createAsyncThunk("/get/all/brokers", async (req, toke
 
 
 export const Update_Comapny_Brokers = createAsyncThunk("/update/comapny/brokers", async (req, token) => {
-  // const { req, token } = data
-   console.log("req - Broker ",req)
+
   try {
     const res = await UPDATE_BROKERS(req);
     return await res;

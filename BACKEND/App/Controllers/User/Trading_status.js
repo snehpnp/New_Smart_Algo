@@ -31,7 +31,7 @@ class User_trading_status {
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return res.send({
                 status: true,
                 msg: "Get All trading Status",
                 data: getAllTrading_status,
@@ -56,11 +56,7 @@ class User_trading_status {
 
             const getAllTrading_status = await user_activity_logs.find({
                 user_id: user_Id,
-                // createdAt: {
-                //     $gte: today,
-                //     $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
-                // },
-
+            
             }).sort({createdAt:-1})
             const totalCount = getAllTrading_status.length;
 
@@ -70,7 +66,7 @@ class User_trading_status {
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+           return res.send({
                 status: true,
                 msg: "Get All activicty Status",
                 data: getAllTrading_status,

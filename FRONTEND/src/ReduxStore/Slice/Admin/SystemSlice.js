@@ -6,7 +6,7 @@ import { UPDATE_SMTP_DETAILS, UPDATE_COMPANY_DETAILS , DISCLAIMER_MESSAGE } from
 
 export const Update_smtp_details = createAsyncThunk("update/smtp", async (data) => {
     const { req, token } = data
-    console.log(data);
+    
     try {
         const res = await UPDATE_SMTP_DETAILS(req, token);
         return await res;
@@ -16,7 +16,7 @@ export const Update_smtp_details = createAsyncThunk("update/smtp", async (data) 
 });
 export const Update_Company_details = createAsyncThunk("update/company", async (data) => {
     const { req, token } = data
-    console.log(data);
+    
     try {
         const res = await UPDATE_COMPANY_DETAILS(req, token);
         return await res;

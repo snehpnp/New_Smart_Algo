@@ -58,14 +58,14 @@ class MakeStartegy {
       
     
         if (result.length > 0) {
-          res.send({ status: true, msg: "Get All time frame", data: transformedData })
+          return  res.send({ status: true, msg: "Get All time frame", data: transformedData })
         } else {
-          res.send({ status: false, msg: "Empty data", data: [] })
+          return  res.send({ status: false, msg: "Empty data", data: [] })
         }
 
         
       }else{
-        res.send({ status: false, msg: "Empty data", data: [] })
+        return({ status: false, msg: "Empty data", data: [] })
       }
 
      }catch(e){

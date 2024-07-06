@@ -4,15 +4,13 @@ import 'react-form-wizard-component/dist/style.css';
 const Main = () => {
 
     const handleComplete = () => {
-        console.log("Form completed!");
-        // Handle form completion logic here
+     
     };
     const tabChanged = ({
         prevIndex,
         nextIndex,
     }) => {
-        console.log("prevIndex", prevIndex);
-        console.log("nextIndex", nextIndex);
+     
     };
 
 

@@ -13,10 +13,6 @@ const BrokerResponse = db.BrokerResponse;
 var dateTime = require('node-datetime');
 
 const place_order = async (AllClientData, signals, token, filePath, signal_req) => {
-     
-  //console.log("Inside Fyers")
-      // curl -H "Authorization:app_id:access_token"  https://api.fyers.in/api/v2/orders?id=sample_order_id
-
 
     try {
 
@@ -38,389 +34,58 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         var client_key = signals.Key;
         var demo = signals.Demo;
 
-     
-     if(token != 0){
-      
-      if (type == 'LE' || type == 'SE') {
-         
-        const pattern = token[0].instrument_token
-        var filePath_token = ""
-        var symbol;
 
-        if (segment && segment.toUpperCase() === 'C') {
-            filePath_token = '/Fyers/FYERS_NSE.csv';
-        } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
-            filePath_token = '/Fyers/FYERS_NFO.csv';
-        } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
-            filePath_token = '/Fyers/FYERS_CDS.csv';
-        } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
-            filePath_token = '/Fyers/FYERS_MCX.csv';
-        } else {
+        if (token != 0) {
 
-            console.log('Invalid segment value');
-        }
+            if (type == 'LE' || type == 'SE') {
 
-        const filePath_fyers = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
+                const pattern = token[0].instrument_token
+                var filePath_token = ""
+                var symbol;
 
-       const command = `grep ,${pattern}, ${filePath_fyers}`;
-     // const command = `findstr ,${pattern}, ${filePath_fyers}`;
+                if (segment && segment.toUpperCase() === 'C') {
+                    filePath_token = '/Fyers/FYERS_NSE.csv';
+                } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
+                    filePath_token = '/Fyers/FYERS_NFO.csv';
+                } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
+                    filePath_token = '/Fyers/FYERS_CDS.csv';
+                } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
+                    filePath_token = '/Fyers/FYERS_MCX.csv';
+                } else {
 
-        console.log("command ", command)
-
-        exec(command, (error, stdout, stderr) => {
-
-            if (error) {
-                console.log(`exec error: ${error}`);
-               // return;
-            }
-
-             if(stdout){
-
-            const parts = stdout.split(','); // Extract the content inside double quotes
-            // console.log("Extracted Part:", parts[9]);
-            if (segment && segment.toUpperCase() === 'C') {
-                symbol =  parts[9]
-            } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
-                symbol =  parts[9]
-            } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
-               symbol =  parts[9]
-            } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
-               symbol =  parts[9]
-            } else {
-                console.log('Invalid segment value');
-                
-                const requestPromises = AllClientData.map(async (item) => {
-                    
-
-
-                    BrokerResponse.create({
-                        user_id: item._id,
-                        receive_signal: signal_req,
-                        strategy: strategy,
-                        type: type,
-                        symbol: input_symbol,
-                        order_status: 0,
-                        order_id: "",
-                        trading_symbol: "",
-                        broker_name: "FYERS",
-                        send_request: "",
-                        reject_reason: "Invalid segment value",
-            
-                    })
-                    .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                    })
-                    .catch((err) => {
-                        try {
-                            console.log('Error creating and saving user:', err);
-                        } catch (e) {
-                            console.log("duplicate key")
-                        }
-        
-                    }); 
-
-
-                });
-                // Send all requests concurrently using Promise.all
-                Promise.all(requestPromises)
-                .then(responses => {
-                    // console.log("Response:", responses.data);
-                })
-                .catch(errors => {
-                    console.log("errors:", errors);
-                  });
-                    
-                return;
-            }
-
-
-
-
-            
-            const requestPromises = AllClientData.map(async (item) => {
-
-            item.postdata.symbol = symbol;
-
-
-            if (type == 'LE' || type == 'SX') {
-                item.postdata.side = 1;
-            } else if (type == 'SE' || type == 'LX') {
-                item.postdata.side = -1;
-            }
-
-            // console.log("price", price)
-            //console.log("item.client_services.order_type", item.client_services.order_type)
-
-            if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                item.postdata.limitPrice = price
-            }
-
-            //  console.log("postData after ", item.postdata);
-
-
-            EntryPlaceOrder(item, filePath, signals, signal_req)
-
-
-           });
-        // Send all requests concurrently using Promise.all
-          Promise.all(requestPromises)
-          .then(responses => {
-              // console.log("Response:", responses.data);
-          })
-          .catch(errors => {
-              console.log("errors:", errors);
-          });
-
-         
-             }else{
-                
-                const requestPromises = AllClientData.map(async (item) => {
-
-                    BrokerResponse.create({
-                        user_id: item._id,
-                        receive_signal: signal_req,
-                        strategy: strategy,
-                        type: type,
-                        symbol: input_symbol,
-                        order_status: "",
-                        order_id: "",
-                        trading_symbol: "",
-                        broker_name: "FYERS",
-                        send_request: "",
-                        reject_reason: "Token not Found",
-            
-                    })
-                        .then((BrokerResponseCreate) => {
-                            // console.log('User created and saved:', BrokerResponseCreate._id)
-                        })
-                        .catch((err) => {
-                            try {
-                                console.log('Error creating and saving user:', err);
-                            } catch (e) {
-                                console.log("duplicate key")
-                            }
-            
-                        });
-            
-                      });
-                    // Send all requests concurrently using Promise.all
-                        Promise.all(requestPromises)
-                        .then(responses => {
-                            // console.log("Response:", responses.data);
-            
-                        })
-                        .catch(errors => {
-                            console.log("errors:", errors);
-            
-                        });
-
-             }
-
-
-
-        });
-
-       
-
-      }
-
-      else if (type == 'SX' || type == 'LX') {
-               console.log("trade exit")
-
-            
-const pattern = token[0].instrument_token
-var filePath_token = ""
-var symbol;
-
-if (segment && segment.toUpperCase() === 'C') {
-    filePath_token = '/Fyers/FYERS_NSE.csv';
-} else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
-    filePath_token = '/Fyers/FYERS_NFO.csv';
-} else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
-    filePath_token = '/Fyers/FYERS_CDS.csv';
-} else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
-    filePath_token = '/Fyers/FYERS_MCX.csv';
-} else {
-
-    console.log('Invalid segment value');
-}
-
-const filePath_fyers = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
-
-const command = `grep ,${pattern}, ${filePath_fyers}`;
-//   const command = `findstr ,${pattern}, ${filePath_fyers}`;
-
-console.log("command ", command)
-
-exec(command, (error, stdout, stderr) => {
-
-    if (error) {
-        console.log(`exec error: ${error}`);
-       // return;
-    }
-
-     if(stdout){
-
-    const parts = stdout.split(','); // Extract the content inside double quotes
-    // console.log("Extracted Part:", parts[9]);
-    if (segment && segment.toUpperCase() === 'C') {
-        symbol =  parts[9]
-    } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
-        symbol =  parts[9]
-    } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
-       symbol =  parts[9]
-    } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
-       symbol =  parts[9]
-    } else {
-        console.log('Invalid segment value');
-        
-        const requestPromises = AllClientData.map(async (item) => {
-            
-
-            
-            BrokerResponse.create({
-                user_id: item._id,
-                receive_signal: signal_req,
-                strategy: strategy,
-                type: type,
-                symbol: input_symbol,
-                order_status: 0,
-                order_id: "",
-                trading_symbol: "",
-                broker_name: "FYERS",
-                send_request: "",
-                reject_reason: "Invalid segment value",
-    
-            })
-            .then((BrokerResponseCreate) => {
-                // console.log('User created and saved:', BrokerResponseCreate._id)
-            })
-            .catch((err) => {
-                try {
-                    console.log('Error creating and saving user:', err);
-                } catch (e) {
-                    console.log("duplicate key")
+                    console.log('Invalid segment value');
                 }
 
-            }); 
+                const filePath_fyers = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
+
+                const command = `grep ,${pattern}, ${filePath_fyers}`;
 
 
-        });
-        // Send all requests concurrently using Promise.all
-        Promise.all(requestPromises)
-        .then(responses => {
-            // console.log("Response:", responses.data);
-        })
-        .catch(errors => {
-            console.log("errors:", errors);
-          });
-            
-       
-         }
+                exec(command, (error, stdout, stderr) => {
+
+                    if (error) {
+                        console.log(`exec error: ${error}`);
+                        // return;
+                    }
+
+                    if (stdout) {
+
+                        const parts = stdout.split(','); // Extract the content inside double quotes
+                        // console.log("Extracted Part:", parts[9]);
+                        if (segment && segment.toUpperCase() === 'C') {
+                            symbol = parts[9]
+                        } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
+                            symbol = parts[9]
+                        } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
+                            symbol = parts[9]
+                        } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
+                            symbol = parts[9]
+                        } else {
+                            console.log('Invalid segment value');
+
+                            const requestPromises = AllClientData.map(async (item) => {
 
 
-              
-      
-             const requestPromises = AllClientData.map(async (item) => {
-    
-                // console.log("user id ", item.demat_userid)
-                // console.log("postdata before", item.postdata)
-                item.postdata.symbol = symbol;
-    
-    
-                if (type == 'LE' || type == 'SX') {
-                    item.postdata.side = 1;
-                } else if (type == 'SE' || type == 'LX') {
-                    item.postdata.side = -1;
-                }
-    
-                // console.log("price", price)
-                // console.log("item.client_services.order_type", item.client_services.order_type)
-    
-                if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
-                    item.postdata.limitPrice = price
-                }
-    
-    
-    
-                var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
-    
-            
-                var config = {
-                    method: 'get',
-                    url: 'https://api.fyers.in/api/v2/positions',
-                    headers: {
-                        'Authorization': item.app_id + ':' + item.access_token,
-                    },
-                };
-                axios(config)
-                    .then(async (response) => {
-                        // console.log("response", response.data)
-                       
-                        if(response){
-    
-                        if (Array.isArray(response.data.netPositions)) {
-    
-                            fs.appendFile(filePath, 'TIME ' + new Date() + ' FYERS POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
-                                if (err) {
-                                  //  return console.log(err);
-                                }
-                            });
-
-
-                            
-
-
-
-
-    
-                            const Exist_entry_order = response.data.netPositions.find(item1 => item1.symbol == symbol);
-    
-                            if(Exist_entry_order != undefined){
-                               
-                                    const possition_qty = parseInt(Exist_entry_order.buyQty) - parseInt(Exist_entry_order.sellQty);
-                                    // console.log("possition_qty Cash", possition_qty);
-                                    if (possition_qty == 0) {
-                                        // console.log("possition_qty Not Available", possition_qty);
-                                        BrokerResponse.create({
-                                            user_id: item._id,
-                                            receive_signal: signal_req,
-                                            strategy: strategy,
-                                            type: type,
-                                            symbol: input_symbol,
-                                            order_status: "Entry Not Exist",
-                                            reject_reason: "This Script position Empty ",
-                                            broker_name: "FYERS",
-                                            send_request: send_rr,
-                                            open_possition_qty: possition_qty,
-    
-                                        })
-                                            .then((BrokerResponseCreate) => {
-                                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                                            })
-                                            .catch((err) => {
-                                                try {
-                                                    console.log('Error creating and saving user:', err);
-                                                } catch (e) {
-                                                    console.log("duplicate key")
-                                                }
-    
-                                            });
-    
-    
-                                    } else {
-    
-                                       
-                                        if (possition_qty > 0 && type == 'LX') {
-                                            ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                        } else if (possition_qty < 0 && type == 'SX') {
-                                            ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
-                                        }
-                                    }
-    
-    
-                                
-                            }else{
 
                                 BrokerResponse.create({
                                     user_id: item._id,
@@ -428,16 +93,16 @@ exec(command, (error, stdout, stderr) => {
                                     strategy: strategy,
                                     type: type,
                                     symbol: input_symbol,
-                                    order_status: "Entry Not Exist",
+                                    order_status: 0,
                                     order_id: "",
                                     trading_symbol: "",
                                     broker_name: "FYERS",
-                                    send_request: send_rr,
-                                    reject_reason: "position Not Exist",
-        
+                                    send_request: "",
+                                    reject_reason: "Invalid segment value",
+
                                 })
                                     .then((BrokerResponseCreate) => {
-                                        // console.log('User created and saved:', BrokerResponseCreate._id)
+
                                     })
                                     .catch((err) => {
                                         try {
@@ -445,265 +110,580 @@ exec(command, (error, stdout, stderr) => {
                                         } catch (e) {
                                             console.log("duplicate key")
                                         }
-        
+
                                     });
-    
-                            }
-    
 
- 
-
-
-
-
-                           
-                        } else {
-    
-                            BrokerResponse.create({
-                                user_id: item._id,
-                                receive_signal: signal_req,
-                                strategy: strategy,
-                                type: type,
-                                symbol: input_symbol,
-                                order_status: "Entry Not Exist",
-                                order_id: "",
-                                trading_symbol: "",
-                                broker_name: "FYERS",
-                                send_request: send_rr,
-                                reject_reason: "All position Empty",
-    
-                            })
-                            .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                            })
-                            .catch((err) => {
-                                try {
-                                    console.log('Error creating and saving user:', err);
-                                } catch (e) {
-                                    console.log("duplicate key")
-                                }
 
                             });
-    
-                        }
-    
-                    }else{
-                        BrokerResponse.create({
-                            user_id: item._id,
-                            receive_signal: signal_req,
-                            strategy: strategy,
-                            type: type,
-                            symbol: input_symbol,
-                            order_status: "Entry Not Exist",
-                            order_id: "",
-                            trading_symbol: "",
-                            broker_name: "FYERS",
-                            send_request: send_rr,
-                            reject_reason: "Possition Not Available",
-
-                        })
-                            .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                            })
-                            .catch((err) => {
-                                try {
-                                    console.log('Error creating and saving user:', err);
-                                } catch (e) {
-                                    console.log("duplicate key")
-                                }
-
-                            });
-                    }
-    
-    
-                    })
-                    .catch(async (error) => {
-    
-                        fs.appendFile(filePath, 'TIME ' + new Date() + ' FYERS POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
-                            if (err) {
-                                return console.log(err);
-                            }
-                        });
-    
-                        if (error) {
-                            const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
-                            BrokerResponse.create({
-                                user_id: item._id,
-                                receive_signal: signal_req,
-                                strategy: strategy,
-                                type: type,
-                                symbol: input_symbol,
-                                order_status: "position request error",
-                                order_id: "",
-                                trading_symbol: "",
-                                broker_name: "FYERS",
-                                send_request: send_rr,
-                                reject_reason: message,
-    
-                            })
-                                .then((BrokerResponseCreate) => {
-                                    // console.log('User created and saved:', BrokerResponseCreate._id)
+                            // Send all requests concurrently using Promise.all
+                            Promise.all(requestPromises)
+                                .then(responses => {
+                                    // console.log("Response:", responses.data);
                                 })
-                                .catch((err) => {
-                                    try {
-                                        console.log('Error creating and saving user:', err);
-                                    } catch (e) {
-                                        console.log("duplicate key")
-                                    }
-    
+                                .catch(errors => {
+                                    console.log("errors:", errors);
                                 });
-                        } else {
-                            const message = (JSON.stringify(error)).replace(/["',]/g, '');
-    
-                            BrokerResponse.create({
-                                user_id: item._id,
-                                receive_signal: signal_req,
-                                strategy: strategy,
-                                type: type,
-                                symbol: input_symbol,
-                                order_status: "position request error",
-                                order_id: "",
-                                trading_symbol: "",
-                                broker_name: "FYERS",
-                                send_request: send_rr,
-                                reject_reason: message,
-    
-                            })
-                                .then((BrokerResponseCreate) => {
-                                    // console.log('User created and saved:', BrokerResponseCreate._id)
-                                })
-                                .catch((err) => {
-                                    try {
-                                        console.log('Error creating and saving user:', err);
-                                    } catch (e) {
-                                        console.log("duplicate key")
-                                    }
-    
-                                });
-    
-    
+
+                            return;
                         }
-                    });
-    
-    
-    
-    
-    
-    
-            
-    
-    
-    
-    
-             });
-            // Send all requests concurrently using Promise.all
-             Promise.all(requestPromises)
-            .then(responses => {
-                // console.log("Response:", responses.data);
-              })
-              .catch(errors => {
-                console.log("errors:", errors);
-              });
 
 
 
-         
-            }else{
-                
-                const requestPromises = AllClientData.map(async (item) => {
 
-                    BrokerResponse.create({
-                        user_id: item._id,
-                        receive_signal: signal_req,
-                        strategy: strategy,
-                        type: type,
-                        symbol: input_symbol,
-                        order_status: "",
-                        order_id: "",
-                        trading_symbol: "",
-                        broker_name: "FYERS",
-                        send_request: "",
-                        reject_reason: "Token not Found",
-            
-                    })
-                        .then((BrokerResponseCreate) => {
-                            // console.log('User created and saved:', BrokerResponseCreate._id)
-                        })
-                        .catch((err) => {
-                            try {
-                                console.log('Error creating and saving user:', err);
-                            } catch (e) {
-                                console.log("duplicate key")
+
+                        const requestPromises = AllClientData.map(async (item) => {
+
+                            item.postdata.symbol = symbol;
+
+
+                            if (type == 'LE' || type == 'SX') {
+                                item.postdata.side = 1;
+                            } else if (type == 'SE' || type == 'LX') {
+                                item.postdata.side = -1;
                             }
-            
+
+                            // console.log("price", price)
+                            //console.log("item.client_services.order_type", item.client_services.order_type)
+
+                            if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
+                                item.postdata.limitPrice = price
+                            }
+
+                            //  console.log("postData after ", item.postdata);
+
+
+                            EntryPlaceOrder(item, filePath, signals, signal_req)
+
+
                         });
-            
-                      });
-                    // Send all requests concurrently using Promise.all
+                        // Send all requests concurrently using Promise.all
                         Promise.all(requestPromises)
-                        .then(responses => {
-                            // console.log("Response:", responses.data);
-            
-                        })
-                        .catch(errors => {
-                            console.log("errors:", errors);
-            
+                            .then(responses => {
+                                // console.log("Response:", responses.data);
+                            })
+                            .catch(errors => {
+                                console.log("errors:", errors);
+                            });
+
+
+                    } else {
+
+                        const requestPromises = AllClientData.map(async (item) => {
+
+                            BrokerResponse.create({
+                                user_id: item._id,
+                                receive_signal: signal_req,
+                                strategy: strategy,
+                                type: type,
+                                symbol: input_symbol,
+                                order_status: "",
+                                order_id: "",
+                                trading_symbol: "",
+                                broker_name: "FYERS",
+                                send_request: "",
+                                reject_reason: "Token not Found",
+
+                            })
+                                .then((BrokerResponseCreate) => {
+
+                                })
+                                .catch((err) => {
+                                    try {
+                                        console.log('Error creating and saving user:', err);
+                                    } catch (e) {
+                                        console.log("duplicate key")
+                                    }
+
+                                });
+
                         });
+                        // Send all requests concurrently using Promise.all
+                        Promise.all(requestPromises)
+                            .then(responses => {
+                                // console.log("Response:", responses.data);
 
-             }
+                            })
+                            .catch(errors => {
+                                console.log("errors:", errors);
+
+                            });
+
+                    }
 
 
 
-
-            });
-
-
-    
-      }
+                });
 
 
-      }else{
 
-        const requestPromises = AllClientData.map(async (item) => {
+            }
 
-        BrokerResponse.create({
-            user_id: item._id,
-            receive_signal: signal_req,
-            strategy: strategy,
-            type: type,
-            symbol: input_symbol,
-            order_status: "",
-            order_id: "",
-            trading_symbol: "",
-            broker_name: "FYERS",
-            send_request: "",
-            reject_reason: "Token not received due to wrong trade",
+            else if (type == 'SX' || type == 'LX') {
+              
 
-        })
-            .then((BrokerResponseCreate) => {
-                // console.log('User created and saved:', BrokerResponseCreate._id)
-            })
-            .catch((err) => {
-                try {
-                    console.log('Error creating and saving user:', err);
-                } catch (e) {
-                    console.log("duplicate key")
+
+                const pattern = token[0].instrument_token
+                var filePath_token = ""
+                var symbol;
+
+                if (segment && segment.toUpperCase() === 'C') {
+                    filePath_token = '/Fyers/FYERS_NSE.csv';
+                } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
+                    filePath_token = '/Fyers/FYERS_NFO.csv';
+                } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
+                    filePath_token = '/Fyers/FYERS_CDS.csv';
+                } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
+                    filePath_token = '/Fyers/FYERS_MCX.csv';
+                } else {
+
+                    console.log('Invalid segment value');
                 }
 
-            });
+                const filePath_fyers = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
 
-          });
-        // Send all requests concurrently using Promise.all
+                const command = `grep ,${pattern}, ${filePath_fyers}`;
+
+                exec(command, (error, stdout, stderr) => {
+
+                    if (error) {
+                        console.log(`exec error: ${error}`);
+                      
+                    }
+
+                    if (stdout) {
+
+                        const parts = stdout.split(','); 
+                        if (segment && segment.toUpperCase() === 'C') {
+                            symbol = parts[9]
+                        } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
+                            symbol = parts[9]
+                        } else if (segment && (segment.toUpperCase() === 'CF' || segment.toUpperCase() === 'CO')) {
+                            symbol = parts[9]
+                        } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
+                            symbol = parts[9]
+                        } else {
+                            console.log('Invalid segment value');
+
+                            const requestPromises = AllClientData.map(async (item) => {
+
+
+
+                                BrokerResponse.create({
+                                    user_id: item._id,
+                                    receive_signal: signal_req,
+                                    strategy: strategy,
+                                    type: type,
+                                    symbol: input_symbol,
+                                    order_status: 0,
+                                    order_id: "",
+                                    trading_symbol: "",
+                                    broker_name: "FYERS",
+                                    send_request: "",
+                                    reject_reason: "Invalid segment value",
+
+                                })
+                                    .then((BrokerResponseCreate) => {
+
+                                    })
+                                    .catch((err) => {
+                                        try {
+                                            console.log('Error creating and saving user:', err);
+                                        } catch (e) {
+                                            console.log("duplicate key")
+                                        }
+
+                                    });
+
+
+                            });
+                            // Send all requests concurrently using Promise.all
+                            Promise.all(requestPromises)
+                                .then(responses => {
+                                    // console.log("Response:", responses.data);
+                                })
+                                .catch(errors => {
+                                    console.log("errors:", errors);
+                                });
+
+
+                        }
+
+
+
+
+                        const requestPromises = AllClientData.map(async (item) => {
+
+                            // console.log("user id ", item.demat_userid)
+                            // console.log("postdata before", item.postdata)
+                            item.postdata.symbol = symbol;
+
+
+                            if (type == 'LE' || type == 'SX') {
+                                item.postdata.side = 1;
+                            } else if (type == 'SE' || type == 'LX') {
+                                item.postdata.side = -1;
+                            }
+
+                            // console.log("price", price)
+                            // console.log("item.client_services.order_type", item.client_services.order_type)
+
+                            if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
+                                item.postdata.limitPrice = price
+                            }
+
+
+
+                            var send_rr = Buffer.from(qs.stringify(item.postdata)).toString('base64');
+
+
+                            var config = {
+                                method: 'get',
+                                url: 'https://api.fyers.in/api/v2/positions',
+                                headers: {
+                                    'Authorization': item.app_id + ':' + item.access_token,
+                                },
+                            };
+                            axios(config)
+                                .then(async (response) => {
+                                 
+                                    if (response) {
+
+                                        if (Array.isArray(response.data.netPositions)) {
+
+                                            fs.appendFile(filePath, 'TIME ' + new Date() + ' FYERS POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data) + '\n', function (err) {
+                                                if (err) {
+                                                    //  return console.log(err);
+                                                }
+                                            });
+
+                                            const Exist_entry_order = response.data.netPositions.find(item1 => item1.symbol == symbol);
+
+                                            if (Exist_entry_order != undefined) {
+
+                                                const possition_qty = parseInt(Exist_entry_order.buyQty) - parseInt(Exist_entry_order.sellQty);
+                                               
+                                                if (possition_qty == 0) {
+                                                  
+                                                    BrokerResponse.create({
+                                                        user_id: item._id,
+                                                        receive_signal: signal_req,
+                                                        strategy: strategy,
+                                                        type: type,
+                                                        symbol: input_symbol,
+                                                        order_status: "Entry Not Exist",
+                                                        reject_reason: "This Script position Empty ",
+                                                        broker_name: "FYERS",
+                                                        send_request: send_rr,
+                                                        open_possition_qty: possition_qty,
+
+                                                    })
+                                                        .then((BrokerResponseCreate) => { })
+                                                        .catch((err) => {
+                                                            try {
+                                                                console.log('Error creating and saving user:', err);
+                                                            } catch (e) {
+                                                                console.log("duplicate key")
+                                                            }
+
+                                                        });
+
+
+                                                } else {
+
+
+                                                    if (possition_qty > 0 && type == 'LX') {
+                                                        ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
+                                                    } else if (possition_qty < 0 && type == 'SX') {
+                                                        ExitPlaceOrder(item, filePath, possition_qty, signals, signal_req)
+                                                    }
+                                                }
+
+
+
+                                            } else {
+
+                                                BrokerResponse.create({
+                                                    user_id: item._id,
+                                                    receive_signal: signal_req,
+                                                    strategy: strategy,
+                                                    type: type,
+                                                    symbol: input_symbol,
+                                                    order_status: "Entry Not Exist",
+                                                    order_id: "",
+                                                    trading_symbol: "",
+                                                    broker_name: "FYERS",
+                                                    send_request: send_rr,
+                                                    reject_reason: "position Not Exist",
+
+                                                })
+                                                    .then((BrokerResponseCreate) => {
+
+                                                    })
+                                                    .catch((err) => {
+                                                        try {
+                                                            console.log('Error creating and saving user:', err);
+                                                        } catch (e) {
+                                                            console.log("duplicate key")
+                                                        }
+
+                                                    });
+
+                                            }
+
+
+
+
+
+
+
+
+                                        } else {
+
+                                            BrokerResponse.create({
+                                                user_id: item._id,
+                                                receive_signal: signal_req,
+                                                strategy: strategy,
+                                                type: type,
+                                                symbol: input_symbol,
+                                                order_status: "Entry Not Exist",
+                                                order_id: "",
+                                                trading_symbol: "",
+                                                broker_name: "FYERS",
+                                                send_request: send_rr,
+                                                reject_reason: "All position Empty",
+
+                                            })
+                                                .then((BrokerResponseCreate) => {
+
+                                                })
+                                                .catch((err) => {
+                                                    try {
+                                                        console.log('Error creating and saving user:', err);
+                                                    } catch (e) {
+                                                        console.log("duplicate key")
+                                                    }
+
+                                                });
+
+                                        }
+
+                                    } else {
+                                        BrokerResponse.create({
+                                            user_id: item._id,
+                                            receive_signal: signal_req,
+                                            strategy: strategy,
+                                            type: type,
+                                            symbol: input_symbol,
+                                            order_status: "Entry Not Exist",
+                                            order_id: "",
+                                            trading_symbol: "",
+                                            broker_name: "FYERS",
+                                            send_request: send_rr,
+                                            reject_reason: "Possition Not Available",
+
+                                        })
+                                            .then((BrokerResponseCreate) => {
+
+                                            })
+                                            .catch((err) => {
+                                                try {
+                                                    console.log('Error creating and saving user:', err);
+                                                } catch (e) {
+                                                    console.log("duplicate key")
+                                                }
+
+                                            });
+                                    }
+
+
+                                })
+                                .catch(async (error) => {
+
+                                    fs.appendFile(filePath, 'TIME ' + new Date() + ' FYERS POSITION DATA ERROR CATCH - ' + item.UserName + ' ERROR - ' + JSON.stringify(error) + '\n', function (err) {
+                                        if (err) {
+                                            return console.log(err);
+                                        }
+                                    });
+
+                                    if (error) {
+                                        const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+                                        BrokerResponse.create({
+                                            user_id: item._id,
+                                            receive_signal: signal_req,
+                                            strategy: strategy,
+                                            type: type,
+                                            symbol: input_symbol,
+                                            order_status: "position request error",
+                                            order_id: "",
+                                            trading_symbol: "",
+                                            broker_name: "FYERS",
+                                            send_request: send_rr,
+                                            reject_reason: message,
+
+                                        })
+                                            .then((BrokerResponseCreate) => {
+
+                                            })
+                                            .catch((err) => {
+                                                try {
+                                                    console.log('Error creating and saving user:', err);
+                                                } catch (e) {
+                                                    console.log("duplicate key")
+                                                }
+
+                                            });
+                                    } else {
+                                        const message = (JSON.stringify(error)).replace(/["',]/g, '');
+
+                                        BrokerResponse.create({
+                                            user_id: item._id,
+                                            receive_signal: signal_req,
+                                            strategy: strategy,
+                                            type: type,
+                                            symbol: input_symbol,
+                                            order_status: "position request error",
+                                            order_id: "",
+                                            trading_symbol: "",
+                                            broker_name: "FYERS",
+                                            send_request: send_rr,
+                                            reject_reason: message,
+
+                                        })
+                                            .then((BrokerResponseCreate) => {
+
+                                            })
+                                            .catch((err) => {
+                                                try {
+                                                    console.log('Error creating and saving user:', err);
+                                                } catch (e) {
+                                                    console.log("duplicate key")
+                                                }
+
+                                            });
+
+
+                                    }
+                                });
+
+
+
+
+
+
+
+
+
+
+
+                        });
+                        // Send all requests concurrently using Promise.all
+                        Promise.all(requestPromises)
+                            .then(responses => {
+                                // console.log("Response:", responses.data);
+                            })
+                            .catch(errors => {
+                                console.log("errors:", errors);
+                            });
+
+
+
+
+                    } else {
+
+                        const requestPromises = AllClientData.map(async (item) => {
+
+                            BrokerResponse.create({
+                                user_id: item._id,
+                                receive_signal: signal_req,
+                                strategy: strategy,
+                                type: type,
+                                symbol: input_symbol,
+                                order_status: "",
+                                order_id: "",
+                                trading_symbol: "",
+                                broker_name: "FYERS",
+                                send_request: "",
+                                reject_reason: "Token not Found",
+
+                            })
+                                .then((BrokerResponseCreate) => {
+
+                                })
+                                .catch((err) => {
+                                    try {
+                                        console.log('Error creating and saving user:', err);
+                                    } catch (e) {
+                                        console.log("duplicate key")
+                                    }
+
+                                });
+
+                        });
+                        // Send all requests concurrently using Promise.all
+                        Promise.all(requestPromises)
+                            .then(responses => {
+                                // console.log("Response:", responses.data);
+
+                            })
+                            .catch(errors => {
+                                console.log("errors:", errors);
+
+                            });
+
+                    }
+
+
+
+
+                });
+
+
+
+            }
+
+
+        } else {
+
+            const requestPromises = AllClientData.map(async (item) => {
+
+                BrokerResponse.create({
+                    user_id: item._id,
+                    receive_signal: signal_req,
+                    strategy: strategy,
+                    type: type,
+                    symbol: input_symbol,
+                    order_status: "",
+                    order_id: "",
+                    trading_symbol: "",
+                    broker_name: "FYERS",
+                    send_request: "",
+                    reject_reason: "Token not received due to wrong trade",
+
+                })
+                    .then((BrokerResponseCreate) => {
+
+                    })
+                    .catch((err) => {
+                        try {
+                            console.log('Error creating and saving user:', err);
+                        } catch (e) {
+                            console.log("duplicate key")
+                        }
+
+                    });
+
+            });
+            // Send all requests concurrently using Promise.all
             Promise.all(requestPromises)
-            .then(responses => {
-                // console.log("Response:", responses.data);
+                .then(responses => {
+                    // console.log("Response:", responses.data);
 
-            })
-            .catch(errors => {
-                console.log("errors:", errors);
+                })
+                .catch(errors => {
+                    console.log("errors:", errors);
 
-            });
-      }
+                });
+        }
 
     } catch (error) {
 
@@ -778,7 +758,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+
                     })
                     .catch((err) => {
                         try {
@@ -808,7 +788,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+
                     })
                     .catch((err) => {
                         try {
@@ -851,7 +831,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+
                             })
                             .catch((err) => {
                                 try {
@@ -879,7 +859,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+
                             })
                             .catch((err) => {
                                 try {
@@ -972,7 +952,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+
                     })
                     .catch((err) => {
                         try {
@@ -1002,7 +982,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+
                     })
                     .catch((err) => {
                         try {
@@ -1044,7 +1024,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+
                             })
                             .catch((err) => {
                                 try {
@@ -1072,7 +1052,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+
                             })
                             .catch((err) => {
                                 try {

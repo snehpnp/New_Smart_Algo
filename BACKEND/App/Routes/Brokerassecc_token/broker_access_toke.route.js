@@ -12,8 +12,6 @@ const ObjectId = mongoose.Types.ObjectId;
 // ALICE BLUE CONTROLLER FILE
 const { CancelorderByAdmin } = require('../../Controllers/Brokerassecc_token/CancelOrder')
 
-//const { GetAccessToken ,GetOrderFullInformation,GetLivePrice,Cancel_order,GetOrderFullInformationAll} = require('../../Controllers/Brokerassecc_token/Alice')
-
 // ALICE BLUE CONTROLLER FILE
 const { GetAccessToken, GetLivePrice, Cancel_order, GetOrderFullInformationAll, backendRunSocket } = require('../../Controllers/Brokerassecc_token/Alice')
 
@@ -63,6 +61,8 @@ const { GetAccessTokenMotilaloswal, GetOrderFullInformationMotilaloswal } = requ
 const { GetAccessTokenIifl, GetOrderFullInformationIifl } = require('../../Controllers/Brokerassecc_token/Iifl')
 
 const { GetAccessTokenIcicidirect, GetOrderFullInformationIcicidirect } = require('../../Controllers/Brokerassecc_token/Icicidirect')
+
+const { GetAccessTokenmandotsecurities, GetOrderFullInformationmandotsecurities } = require('../../Controllers/Brokerassecc_token/Mandotsecurities')
 
 
 // BROKER REDIRECT
@@ -157,16 +157,20 @@ const GetOrderFullInformationAll_broker = async (req, res) => {
     else if (broker == 26) {
       GetOrderFullInformationIifl(req, res, result);
     }
+    // Mandot Securities   -  8
+    else if (broker == 8) {
+      GetOrderFullInformationmandotsecurities(req, res, result);
+    }
     
     else {
-      res.send({ status: false, msg: "broker not found" });
+      return res.send({ status: false, msg: "broker not found" });
     }
 
 
 
   } else {
     //console.log("User Not found")
-    res.send({ status: false, msg: "User Not found" });
+    return res.send({ status: false, msg: "User Not found" });
   }
 
 
@@ -241,8 +245,12 @@ router.post('/icicidirect', GetAccessTokenIcicidirect);
 // Motilal oswal
 router.get('/motilaloswal/access_token', GetAccessTokenMotilaloswal);
 
-
+// IIFL
 router.post('/iiflsecurities', GetAccessTokenIifl);
+
+
+router.post('/mandotsecurities', GetAccessTokenmandotsecurities);
+
 
 
 

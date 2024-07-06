@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { Modify_Details } from '../../../ReduxStore/Slice/Users/BrokerUpdateSlice';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import toast, { Toaster } from 'react-hot-toast';
 
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";

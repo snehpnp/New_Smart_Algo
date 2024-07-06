@@ -30,7 +30,7 @@ module.exports = function (app ,io) {
 
       await runSocket(io)
 
-      res.send("okkkkk")
+     return res.send("okkkkk")
       
     
     });

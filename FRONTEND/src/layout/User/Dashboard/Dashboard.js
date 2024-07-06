@@ -3,52 +3,30 @@ import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Content from "../../../Components/Dashboard/Content/Content";
-import { MultiSelect } from 'primereact/multiselect';
-import BasicTable from "../../../Components/ExtraComponents/Tables/BasicTable";
-import { Pencil, Trash2 } from "lucide-react";
-import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
-import {
-  GetAliceTokenAndID,
-  CreateSocketSession,
-  ConnctSocket,
-  GetAccessToken
-} from "../../../Service/Alice_Socket";
-import { useDispatch, useSelector } from "react-redux";
-import $ from "jquery";
-import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { check_Device } from "../../../Utils/find_device";
-
-import {
-  User_Dashboard_Data,
-  Update_Dashboard_Data,
-} from "../../../ReduxStore/Slice/Users/DashboardSlice";
-import { useLocation } from "react-router-dom";
+import { User_Dashboard_Data, Update_Dashboard_Data } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 
 const BrokerResponse = () => {
   const dispatch = useDispatch();
-  const location = useLocation()
 
-
-  const AdminToken = JSON.parse(localStorage.getItem("user_details")).token;
-  const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const GoToDahboard_id = JSON.parse(localStorage.getItem("user_details_goTo"));
   const Role = JSON.parse(localStorage.getItem("user_role"));
-
-
   const [showStartegyModal, setShowStartegyModal] = useState(false);
   const [modalsingleValue, setModalsingleValue] = useState({});
   const [Strategy, setStrategy] = useState({ loading: true, data: [] });
   const [GetServiceStrategy, setGetServiceStrategy] = useState([]);
   const [statusStartegyUser, setStatusStartegy] = useState("0");
-  const [enterqty, setEnterQty] = useState("");
   const [inputValue, setInputValue] = useState('1');
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
-  const [refresh, setrefresh] = useState(false);
   const [updatedData, setUpdatedData] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [refresh, setrefresh] = useState(false);
+
 
   const handleCloseStartegyModal = () => {
     setShowStartegyModal(false);
@@ -59,53 +37,59 @@ const BrokerResponse = () => {
     setShowStartegyModal(true);
   }
 
+  useEffect(() => {
+    const getservice = async () => {
+      await dispatch(
+        User_Dashboard_Data({
+          user_Id: gotodashboard ? GoToDahboard_id.user_id : user_details.user_id,
+          AdminToken: user_details.token,
+        })
+      )
+        .unwrap()
+        .then((response) => {
+          if (response.status) {
 
+            setDashboardData({
+              loading: false,
+              data: response.services,
+            });
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = DashboardData.data.slice(indexOfFirstItem, indexOfLastItem);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+            setStrategy({
+              loading: false,
+              data: response.strategy,
+            });
 
+            setGetServiceStrategy(response.GetServiceStrategy);
+            setStatusStartegy(response.status_startegy);
+          }
+        });
+    };
+    getservice();
+  }, [refresh]);
 
-
-  const getservice = async () => {
-    await dispatch(
-      User_Dashboard_Data({
-        user_Id: gotodashboard ? GoToDahboard_id.user_id : user_Id,
-        AdminToken: AdminToken,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-
-        if (response.status) {
-          setDashboardData({
-            loading: false,
-            data: response.services,
-          });
-
-          setStrategy({
-            loading: false,
-            data: response.strategy,
-          });
-
-          setGetServiceStrategy(response.GetServiceStrategy);
-          setStatusStartegy(response.status_startegy);
-        }
-      });
-  };
 
 
   const setgroup_qty_value_test = (e, symboll, rowdata, data) => {
-    const numericValue = e.target.value.replace(/[^0-9]/g, '');
+
+    let numericValue
+    if (e.target.name !== "active_status") {
+      numericValue = e.target.value.replace(/[^0-9]/g, '');
+    }
 
 
-    if (e.target.name != "active_status" && numericValue == 0) {
-      e.target.value = 1
+    if (e.target.name !== "active_status" && numericValue === 0) {
       toast.error(`cant update  0 Quantity In ${symboll}`);
+      e.target.value = 1
+      return
+    }
+
+    if (e.target.name !== "active_status" && e.target.value < 0) {
+      e.target.value = 1
+      toast.error(`cant update  - Quantity In ${symboll}`);
       return
 
     }
+
 
 
     if (e.target.name === "lot_size") {
@@ -115,11 +99,11 @@ const BrokerResponse = () => {
         setInputValue((prevPrices) => ({ ...prevPrices, [symboll]: e.target.value }))
         if ((data.servicegroup_services_ids.group_qty !== 0) && ((parseInt(e.target.value) * parseInt(data.service.lotsize)) > parseInt(data.servicegroup_services_ids.group_qty))) {
           toast.error(`cant update more then ${data.servicegroup_services_ids.group_qty} In ${symboll}`);
-          e.target.value = 1
+          // e.target.value = 1
           return
         }
       } else {
-        e.target.value = 1
+        // e.target.value = 1
         return
       }
     }
@@ -127,18 +111,15 @@ const BrokerResponse = () => {
     else if (e.target.name === "strategy_id") {
 
 
-      // Find the object with the matching _id
-      const targetObject = GetServiceStrategy.find(item => item._id == data.service._id);
+      const targetObject = GetServiceStrategy.find(item => item._id === data.service._id);
       if (targetObject.strategy_id.includes(e.target.value)) {
         const updatedStrategyId = targetObject.strategy_id.filter(id => id !== e.target.value);
-        // Create a new object with the updated strategy_id
         const updatedObject = { ...targetObject, strategy_id: updatedStrategyId };
-        // Update the state
         setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
 
       } else {
 
-        if (DashboardData.data[0].userInfo.multiple_strategy_select == 0) {
+        if (DashboardData.data[0].userInfo.multiple_strategy_select === 0 || DashboardData.data[0].userInfo.multiple_strategy_select === "0") {
           const updatedObject = { ...targetObject, strategy_id: [e.target.value] };
           setGetServiceStrategy((oldArray) => oldArray.map(item => (item._id === targetObject._id ? updatedObject : item)));
         } else {
@@ -170,9 +151,9 @@ const BrokerResponse = () => {
   if (updatedData) {
     GetServiceStrategy.forEach((item) => {
 
-      if (updatedData[item._id] != undefined) {
+      if (updatedData[item._id] !== undefined) {
 
-        if (updatedData[item._id].strategy_id != undefined) {
+        if (updatedData[item._id].strategy_id !== undefined) {
           updatedData[item._id].strategy_id = item.strategy_id;
         }
       }
@@ -180,12 +161,17 @@ const BrokerResponse = () => {
   }
 
   const UpdateDashboard = async (e) => {
-    if (statusStartegyUser == "1") {
+
+    if (isUpdating) {
+      return;
+    }
+    setIsUpdating(true);
+
+    if (statusStartegyUser === "1" || statusStartegyUser === 1) {
       const isEmpty = Object.keys(updatedData).length === 0;
 
 
-      if (isEmpty == false) {
-        // Filter objects with empty strategy_id
+      if (isEmpty === false) {
         const result = Object.keys(updatedData)
           .filter((key) => Array.isArray(updatedData[key].strategy_id) && updatedData[key].strategy_id.length === 0)
           .reduce((obj, key) => {
@@ -193,14 +179,12 @@ const BrokerResponse = () => {
             return obj;
           }, {});
 
-        // Extracting the key (id) from the inputObject
         const inputId = Object.keys(result)[0];
-        // Finding the matching object in dataArray based on _id
         const matchingObject = GetServiceStrategy.find(obj => obj._id === inputId);
-        // Getting the service_name if a match is found
+
         const serviceName = matchingObject ? matchingObject.service_name : null;
         const isEmptyStartegyArray = Object.keys(result).length === 0;
-        if (isEmptyStartegyArray == false) {
+        if (isEmptyStartegyArray === false) {
           alert("Please Select one Strategy a script " + serviceName)
           return
         }
@@ -208,7 +192,24 @@ const BrokerResponse = () => {
       }
     }
 
+    if (Object.keys(updatedData).length === 0) {
+      toast.error(`Can't update empty quantity`);
+      setIsUpdating(false);
+      return;
+    }
 
+    // Iterate over updatedData
+    for (const key in updatedData) {
+      if (updatedData.hasOwnProperty(key)) {
+        const item = updatedData[key];
+
+        if (item.lot_size === 0 || item.lot_size === "0") {
+          toast.error(`Can't update 0 Quantity`);
+          setIsUpdating(false);
+          return;
+        }
+      }
+    }
 
     handleCloseStartegyModal()
     await dispatch(
@@ -217,19 +218,20 @@ const BrokerResponse = () => {
           servicesData: updatedData,
           statusStartegyUser: statusStartegyUser,
           GetServiceStrategy: GetServiceStrategy,
-          user_id: user_Id,
+          user_id: user_details.user_id,
           data: { Editor_role: Role, device: check_Device() },
         },
-        AdminToken: AdminToken,
+        AdminToken: user_details.token,
       })
     )
       .unwrap()
       .then((response) => {
 
+        setIsUpdating(false);
         if (response.status) {
+          window.location.reload()
           toast.success(response.msg);
-          // setrefresh(!refresh)
-          window.location.reload();
+
         } else {
           toast.error(response.msg);
         }
@@ -237,13 +239,10 @@ const BrokerResponse = () => {
   };
 
 
-  useEffect(() => {
-    getservice();
-  }, [refresh]);
-
+  
   return (
     <Content Page_title="Dashboard" button_status={false}>
-      <div className="table-responsive " style={{ height: '80vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+      <div className="table-responsive " style={{ height: '55vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
         <table className="table dashboard-table ">
           <thead className="bg-primary">
             <tr>
@@ -280,8 +279,7 @@ const BrokerResponse = () => {
                               id="lot_size"
                               placeholder="Enter Qty"
                               min={1}
-                              // max={setMax(data)}
-                              // defaultValue={data.service.lotsize}
+
 
                               onChange={
                                 (e) => {
@@ -294,8 +292,7 @@ const BrokerResponse = () => {
                                 }
                               }
                               defaultValue={data.lot_size}
-                            // defaultValue={enterqty ? enterqty : data.quantity}
-                            // disabled={data.users.qty_type == "1" || data.users.qty_type == 1}
+
                             />
                           </div>
 
@@ -346,16 +343,7 @@ const BrokerResponse = () => {
                             {Strategy.data &&
                               Strategy.data.map((item) => {
 
-                                if (data.strategy_id.includes(item.result._id)) {
-                                  // return (
-                                  //   <option
-                                  //     className="text-success h6"
-                                  //     value={item.result._id}
-                                  //   >
-                                  //     {item.result.strategy_name}
-                                  //   </option>
-                                  // );
-                                } else {
+                                if (data.strategy_id.includes(item.result._id)) { } else {
                                   return (
                                     <option
                                       className="text-danger h6"
@@ -431,6 +419,7 @@ const BrokerResponse = () => {
                               )
                             }
                           />
+
                           <div
                             className={`toggle-switch ${data.active_status === "1"
                               ? "bg-primary"
@@ -459,7 +448,7 @@ const BrokerResponse = () => {
 
           <div>
             {
-              modalsingleValue.strategy_id != undefined ?
+              modalsingleValue.strategy_id !== undefined ?
                 Strategy.data &&
                 Strategy.data.map((item) => (
                   <div key={item.result._id}>
@@ -514,8 +503,9 @@ const BrokerResponse = () => {
             type="button"
             className="btn btn-outline-primary btn-lg mt-4"
             onClick={(e) => UpdateDashboard(e)}
+            disabled={isUpdating}
           >
-            Update
+            {isUpdating ? 'Updating...' : 'Update'}
           </button>
         </>
       )}

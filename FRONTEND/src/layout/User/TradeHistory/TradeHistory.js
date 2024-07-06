@@ -9,38 +9,28 @@ import { Get_Tradehisotry } from "../../../ReduxStore/Slice/Users/TradehistorySl
 import { useDispatch, useSelector } from "react-redux";
 import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
 import { Eye, CandlestickChart, Pencil } from "lucide-react";
-
-
 import DetailsView from "./DetailsView";
 import { GetAccessToken } from "../../../Service/Alice_Socket";
-
 import { FunctionForLivePriceCalculation } from "./tradehistoryCalculation";
 
 
 const TradeHistory = () => {
   const dispatch = useDispatch();
-
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
   const gotodashboard = JSON.parse(localStorage.getItem("gotodashboard"));
   const gotodashboard_Details = JSON.parse(localStorage.getItem('user_details_goTo'))
-
   const [showModal, setshowModal] = useState(false);
   const [SocketState, setSocketState] = useState("null");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [disableFromDate, setDisableFromDate] = useState(false);
-
   const [UserDetails, setUserDetails] = useState([]);
-
-
   const [rowData, setRowData] = useState("");
-
   const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
   const [selectStrategy, setSelectStrategy] = useState("null");
 
 
-  // console.log("rowdata :", rowData);
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -68,7 +58,6 @@ const TradeHistory = () => {
   });
 
 
-  //console.log("startegyFilterData ",startegyFilterData)
 
 
   //  GET BROKER DETAILS
@@ -143,7 +132,6 @@ const TradeHistory = () => {
       .then((response) => {
         if (response.status) {
 
-          // console.log("response.trade_strategy_filter ",response.trade_strategy_filter)
           setTradeHistoryData({
             loading: false,
             data: response.data,
@@ -341,26 +329,20 @@ const TradeHistory = () => {
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
 
-  //console.log("tradeHistoryData.data",tradeHistoryData.data)
 
   let total = 0;
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
-      console.log("item", item)
+    
 
 
-
-
-      // if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
-      // total += (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
-      // }
 
       if (parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price != '' && item.exit_price) {
 
 
         if (item.entry_type === "LE") {
-          // console.log("item iFF" ,item._id , " total ",total)
+        
           let total1 = (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
           if (!isNaN(total1)) {
             total += total1
@@ -368,7 +350,7 @@ const TradeHistory = () => {
 
         } else {
           let total1 = (parseFloat(item.entry_price) - parseFloat(item.exit_price)) * parseInt(item.exit_qty_percent);
-          // console.log("item ELSE" ,item._id , " total ",total)
+     
           if (!isNaN(total1)) {
             total += total1
           }

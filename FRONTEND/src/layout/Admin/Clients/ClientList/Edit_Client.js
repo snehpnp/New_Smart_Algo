@@ -23,49 +23,21 @@ const EditClient = () => {
   const location = useLocation()
   const dispatch = useDispatch()
 
+  const selector = useSelector((state) => state.DashboardSlice);
 
   const user_token = JSON.parse(localStorage.getItem("user_details")).token
   const Role = JSON.parse(localStorage.getItem("user_details")).Role
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id
 
-
-  const [UserData, setUserData] = useState({
-    loading: true,
-    data: []
-  });
-
-
+  const [UserData, setUserData] = useState({loading: true,data: [] });
   const [selectedStrategies, setSelectedStrategies] = useState([]);
   const [ShowAllStratagy, setShowAllStratagy] = useState(true)
   const [GetBrokerInfo, setGetBrokerInfo] = useState([]);
-
-
   const [first, setfirst] = useState([])
-
-
-
-
-  const [AllGroupServices, setAllGroupServices] = useState({
-    loading: true,
-    data: []
-  });
-
-  const [Addsubadmin, setAddsubadmin] = useState({
-    loading: true,
-    data: []
-  });
-
-
-  const [AllStrategy, setAllStrategy] = useState({
-    loading: true,
-    data: []
-  });
-
-
-  const [GetServices, setGetServices] = useState({
-    loading: true,
-    data: []
-  });
+  const [AllGroupServices, setAllGroupServices] = useState({loading: true,data: []});
+  const [Addsubadmin, setAddsubadmin] = useState({loading: true,data: []});
+  const [AllStrategy, setAllStrategy] = useState({loading: true,data: []});
+  const [GetServices, setGetServices] = useState({loading: true, data: [] });
 
 
   const isValidEmail = (email) => {
@@ -78,9 +50,6 @@ const EditClient = () => {
   const isValidName = (mobile) => {
     return Name_regex(mobile)
   }
-
-
-
 
 
   // GET USER DETAILS
@@ -268,7 +237,7 @@ const EditClient = () => {
   ];
 
 
-  const fields = [
+  let fields = [
     { name: 'username', label: 'Username', type: 'text', label_size: 12, col_size: 6, disable: false },
     { name: 'fullName', label: 'FullName', type: 'text', label_size: 12, col_size: 6, disable: false },
     { name: 'email', label: 'Email', type: 'text', label_size: 12, col_size: 6, disable: false },
@@ -420,7 +389,6 @@ const EditClient = () => {
   useEffect(() => {
 
 
-    console.log("CPPPP")
 
     ////////////////--------------START BROKER SET KEY----------------///////////
     if (formik.values.broker === '1' || formik.values.broker === 1) {
@@ -678,10 +646,6 @@ const EditClient = () => {
     const userData = UserData.data?.data?.[0];
 
     if (userData) {
-      console.log("app_key", userData.app_key);
-      console.log("api_secret", userData.api_secret);
-
-
       formik.setFieldValue('username', userData.UserName);
       formik.setFieldValue('fullName', userData.FullName);
       formik.setFieldValue('email', userData.Email);
@@ -720,6 +684,31 @@ const EditClient = () => {
       setSelectedStrategies(initialSelectedStrategies);
     }
   }, [UserData.data.strategy, AllStrategy.data]);
+
+
+
+
+
+
+
+
+  if (selector && selector.permission) {
+    if (selector.permission && selector.permission.data && selector.permission.data[0]) {
+
+    
+      if (selector.permission.data[0].Two_day_client == 0) {
+        fields = fields.map((field) => {
+          if (field.name === 'licence') {
+            return {
+              ...field,
+              options: field.options.filter((option) => option.label !== '2 Days')
+            };
+          }
+          return field;
+        });
+      }
+    }
+  }
 
   return (
     <>

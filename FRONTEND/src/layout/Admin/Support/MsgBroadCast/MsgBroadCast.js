@@ -11,48 +11,32 @@ import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 import toast from 'react-hot-toast';
 import { fDateTimeSuffix } from "../../../../Utils/Date_formet";
 import { Trash2 } from "lucide-react";
-
-
 import { Add_Message_Broadcast, Getl_All_Message_Broadcast, Remove_Message_Broadcast } from "../../../../ReduxStore/Slice/Admin/MessageBroadcastSlice";
-
-
 import { GET_PANEL_BROKERS } from "../../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
+import * as  Config from "../../../../Utils/Config"
+
+
 
 const MsgBroadCast = () => {
-
     const dispatch = useDispatch()
-
     const user_token = JSON.parse(localStorage.getItem("user_details")).token;
 
-
-    const [AllStrategy, setAllStrategy] = useState({
-        loading: true,
-        data: []
-    });
-
+    const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
+    const [AllMessage, setAllMessages] = useState({ loading: true, data: [] });
+    const [UserDetails, setUserDetails] = useState({ loading: true, data: [] });
     const [AllBrokers, setBrokers] = useState([]);
-    const [AllMessage, setAllMessages] = useState({
-        loading: true,
-        data: []
-    });
-
     const [refresh, setRefresh] = useState(false);
-
-
-    const [UserDetails, setUserDetails] = useState({
-        loading: true,
-        data: [],
-    });
 
 
 
     const broker_list = async () => {
-        // await dispatch(GET_PANEL_BROKERS({ domain: "sneh.com" })).unwrap().then((response) => {
-        //     if (response.status) {
-        //         setBrokers(response.data.broker_id)
-        //     }
-        // })
+        await dispatch(GET_PANEL_BROKERS({ domain: Config.react_domain })).unwrap().then((response) => {
+            if (response.status) {
+                setBrokers(response.data.broker_id)
+            }
+        })
     }
+
 
     const formik = useFormik({
         initialValues: {
@@ -69,7 +53,7 @@ const MsgBroadCast = () => {
             return errors;
         },
         onSubmit: async (values) => {
-            
+
             const req = {
                 "Broker": values.Broker,
                 "message": values.message,
@@ -81,7 +65,7 @@ const MsgBroadCast = () => {
                     toast.error(response.data.msg);
                 }
                 else if (response.status) {
-                     
+
                     setRefresh(!refresh)
                     formik.setFieldValue('message', "")
                     formik.setFieldValue('Strategy', "")
@@ -110,12 +94,11 @@ const MsgBroadCast = () => {
         { name: 'message', label: 'Entery Your Message', type: 'msgbox', label_size: 12, row_size: 3, col_size: 12, disable: true },
     ];
 
-     
+
 
 
 
     useEffect(() => {
-        // data()
         broker_list()
     }, [])
 
@@ -159,56 +142,51 @@ const MsgBroadCast = () => {
                     toast.error(response.msg);
                 }
             })
-        } else {
-            return console.log("Ss")
         }
     }
 
 
-    const columns = [
-        {
-            dataField: "index",
-            text: "SR. No.",
-            formatter: (cell, row, rowIndex) => rowIndex + 1,
-        },
-        // {
-        //     dataField: "_id",
-        //     text: "SR. No.",
-        // },
-        {
-            dataField: 'Message',
-            text: 'Message'
-        },
-        {
-            dataField: 'createdAt',
-            text: 'Message',
-            formatter: (cell, row, rowIndex) => fDateTimeSuffix(cell),
 
-        },
-        {
-            dataField: 'actions',
-            text: 'Actions',
-            formatter: (cell, row) => (
-                <div>
-                    <span data-toggle="tooltip" data-placement="top" title="Delete">
-                        <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={() => Remove_Message(row._id)} />
-                    </span>
-                </div>
-            ),
-        },
+const columns = [
+    {
+        dataField: "index",
+        text: "SR. No.",
+        formatter: (cell, row, rowIndex) => rowIndex + 1,
+    },
+    {
+        dataField: 'Message',
+        text: 'Message'
+    },
+    {
+        dataField: 'createdAt',
+        text: 'Message',
+        formatter: (cell, row, rowIndex) => fDateTimeSuffix(cell),
 
-    ];
-
-    return <>
-        <Content Page_title="Message Broadcast" button_status={false}>
-            <Formikform1 fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Send" />
-            <div className="mt-5">
+    },
+    {
+        dataField: 'actions',
+        text: 'Actions',
+        formatter: (cell, row) => (
+            <div>
+                <span data-toggle="tooltip" data-placement="top" title="Delete">
+                    <Trash2 size={20} color="#d83131" strokeWidth={2} className="mx-1" onClick={() => Remove_Message(row._id)} />
+                </span>
             </div>
-            <FullDataTable TableColumns={columns} tableData={AllMessage.data} />
-            < ToastButton />
+        ),
+    },
 
-        </Content>
-    </>
+];
+
+return <>
+    <Content Page_title="Message Broadcast" button_status={false}>
+        <Formikform1 fieldtype={fields.filter(field => !field.showWhen)} formik={formik} btn_name="Send" />
+        <div className="mt-5">
+        </div>
+        <FullDataTable TableColumns={columns} tableData={AllMessage.data} />
+        < ToastButton />
+
+    </Content>
+</>
 }
 
 

@@ -7,7 +7,8 @@ import { Pencil, Trash2, UserPlus, PlusSquare, LayoutList } from "lucide-react";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { useDispatch } from "react-redux";
 import Modal from "../../../../Components/ExtraComponents/Modal";
-import {  Get_All_Strategy, Remove_Strategy_BY_Id, Get_client_By_strategy_Id, Add_And_Remove_Strategy_To_Client, UpDate_strategy_Id} from "../../../../ReduxStore/Slice/Admin/StrategySlice";
+import { Get_All_Strategy, Remove_Strategy_BY_Id, Get_client_By_strategy_Id, Add_And_Remove_Strategy_To_Client, UpDate_strategy_Id } from "../../../../ReduxStore/Slice/Admin/StrategySlice";
+import { GO_TO_DASHBOARDS } from '../../../../ReduxStore/Slice/Admin/AdminSlice'
 
 import toast, { Toaster } from "react-hot-toast";
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
@@ -27,8 +28,8 @@ const ServicesList = () => {
   const [originalData, setOriginalData] = useState([]);
   const [oneStrategyClient, setOneStrategyClient] = useState([]);
   const [showStrategyName, setShowStrategyName] = useState('');
-  const [AllStrategy, setAllStrategy] = useState({  loading: true, data: []});
-  const [getServicesName, setServicesName] = useState({loading: true, data: []});
+  const [AllStrategy, setAllStrategy] = useState({ loading: true, data: [] });
+  const [getServicesName, setServicesName] = useState({ loading: true, data: [] });
 
 
   const data = async () => {
@@ -289,6 +290,27 @@ const ServicesList = () => {
       })
   }
 
+
+  const goToDashboard = async (email) => {
+    let req = {
+      Email: email.users.Email,
+
+    };
+    await dispatch(GO_TO_DASHBOARDS(req)).unwrap()
+      .then((response) => {
+        if (response.status) {
+          localStorage.setItem("gotodashboard", JSON.stringify(true));
+          localStorage.setItem("user_details_goTo", JSON.stringify(response.data));
+          localStorage.setItem("user_role_goTo", JSON.stringify(response.data.Role));
+          localStorage.setItem("page", "groupservices");
+
+          navigate("/client/dashboard")
+
+        }
+      })
+
+  }
+
   return (
     <>
       {AllStrategy.loading ? (
@@ -374,18 +396,18 @@ const ServicesList = () => {
                         dataField: 'users.TradingStatus',
                         text: 'Go To Dashboard',
                         formatter: (cell, row, rowIndex) =>
-                            <>
-               {             console.log("row",row)}
-                               
-                                <button
-                                    className={`btn  ${row.users.AppLoginStatus == '1' || row.users.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
+                          <>
 
-                                    // onClick={() => goToDashboard(row)}
-                                    disabled={row.users.AppLoginStatus === '0' && row.users.WebLoginStatus === '0'}
 
-                                > click</button>
-                            </>
-                    },
+                            <button
+                              className={`btn  ${row.users.AppLoginStatus == '1' || row.users.WebLoginStatus == '1' ? "btn-success" : "btn-danger"} btn-new-block`}
+
+                              onClick={() => goToDashboard(row)}
+                              disabled={row.users.AppLoginStatus === '0' && row.users.WebLoginStatus === '0'}
+
+                            > click</button>
+                          </>
+                      },
                     ]}
                     tableData={getServicesName && getServicesName.data}
                   />
@@ -408,7 +430,7 @@ const ServicesList = () => {
                       setshowModal2(false)
                     }
                   >
-               
+
                     <form onSubmit={(e) => handleSubmit(e)}>
                       <table className="mb-5">
                         <thead>
@@ -427,23 +449,24 @@ const ServicesList = () => {
                                   name={client._id}
                                   value="checkboxValue"
                                   defaultChecked={startegyClientIds.includes(client._id)}
-                                  disabled={oneStrategyClient.includes(client._id) ? true : false}
+                                  disabled={oneStrategyClient.includes(client._id)}
                                   onChange={(e) => handleStrategyChecked(e)}
                                 />
+
                                 <label className="mx-3" for={client._id}>{client.UserName}</label>
                                 {
-                                  oneStrategyClient.includes(client._id) ? 
-                                  <Link to={`/admin/client/edit/${client._id}`} state={client} >
-                                  <span data-toggle="tooltip" data-placement="top" title="Edit">
-                                    <Pencil
-                                      size={20}
-                                      color="#198754"
-                                      strokeWidth={2}
-                                      className="mx-1"
-                                    />
-                                  </span>
-                                </Link> : ""}
-                                
+                                  oneStrategyClient.includes(client._id) ?
+                                    <Link to={`/admin/client/edit/${client._id}`} state={client} >
+                                      <span data-toggle="tooltip" data-placement="top" title="Edit">
+                                        <Pencil
+                                          size={20}
+                                          color="#198754"
+                                          strokeWidth={2}
+                                          className="mx-1"
+                                        />
+                                      </span>
+                                    </Link> : ""}
+
                               </td>
                             </tr>
                           }

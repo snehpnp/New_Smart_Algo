@@ -27,7 +27,7 @@ const ChatBox = ({ toggleChat }) => {
                         <div className="tab-pane fade active show" id="chat" role="tabpanel">
                             <div className="card mb-sm-3 mb-md-0 contacts_card dz-chat-user-box">
                                 <div className="card-header chat-list-header text-center">
-                                    <a href="javascript:void(0);">
+                                    <a href="#">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -67,7 +67,7 @@ const ChatBox = ({ toggleChat }) => {
                                         <h6 className="mb-1">Chat List</h6>
                                         <p className="mb-0">Show All</p>
                                     </div>
-                                    <a href="javascript:void(0);">
+                                    <a href="#">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -345,7 +345,7 @@ const ChatBox = ({ toggleChat }) => {
                             </div>
                             <div className="card chat dz-chat-history-box d-none">
                                 <div className="card-header chat-list-header text-center">
-                                    <a href="javascript:void(0);" className="dz-chat-history-back">
+                                    <a href="#" className="dz-chat-history-back">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -386,7 +386,7 @@ const ChatBox = ({ toggleChat }) => {
                                     </div>
                                     <div className="dropdown">
                                         <a
-                                            href="javascript:void(0);"
+                                            href="#"
                                             data-bs-toggle="dropdown"
                                             aria-expanded="false"
                                         >
@@ -636,7 +636,7 @@ const ChatBox = ({ toggleChat }) => {
                         <div className="tab-pane fade" id="alerts" role="tabpanel">
                             <div className="card mb-sm-3 mb-md-0 contacts_card">
                                 <div className="card-header chat-list-header text-center">
-                                    <a href="javascript:void(0);">
+                                    <a href="#">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -662,7 +662,7 @@ const ChatBox = ({ toggleChat }) => {
                                         <h6 className="mb-1">Notications</h6>
                                         <p className="mb-0">Show All</p>
                                     </div>
-                                    <a href="javascript:void(0);">
+                                    <a href="#">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -745,7 +745,7 @@ const ChatBox = ({ toggleChat }) => {
                         <div className="tab-pane fade" id="notes">
                             <div className="card mb-sm-3 mb-md-0 note_card">
                                 <div className="card-header chat-list-header text-center">
-                                    <a href="javascript:void(0);">
+                                    <a href="#">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -785,7 +785,7 @@ const ChatBox = ({ toggleChat }) => {
                                         <h6 className="mb-1">Notes</h6>
                                         <p className="mb-0">Add New Nots</p>
                                     </div>
-                                    <a href="javascript:void(0);">
+                                    <a href="#">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             xmlnsXlink="http://www.w3.org/1999/xlink"
@@ -829,13 +829,13 @@ const ChatBox = ({ toggleChat }) => {
                                                 </div>
                                                 <div className="ms-auto">
                                                     <a
-                                                        href="javascript:void(0);"
+                                                        href="#"
                                                         className="btn btn-primary btn-xs sharp me-1"
                                                     >
                                                         <i className="fas fa-pencil-alt" />
                                                     </a>
                                                     <a
-                                                        href="javascript:void(0);"
+                                                        href="#"
                                                         className="btn btn-danger btn-xs sharp"
                                                     >
                                                         <i className="fa fa-trash" />
@@ -851,13 +851,13 @@ const ChatBox = ({ toggleChat }) => {
                                                 </div>
                                                 <div className="ms-auto">
                                                     <a
-                                                        href="javascript:void(0);"
+                                                        href="#"
                                                         className="btn btn-primary btn-xs sharp me-1"
                                                     >
                                                         <i className="fas fa-pencil-alt" />
                                                     </a>
                                                     <a
-                                                        href="javascript:void(0);"
+                                                        href="#"
                                                         className="btn btn-danger btn-xs sharp"
                                                     >
                                                         <i className="fa fa-trash" />
@@ -873,13 +873,13 @@ const ChatBox = ({ toggleChat }) => {
                                                 </div>
                                                 <div className="ms-auto">
                                                     <a
-                                                        href="javascript:void(0);"
+                                                        href="#"
                                                         className="btn btn-primary btn-xs sharp me-1"
                                                     >
                                                         <i className="fas fa-pencil-alt" />
                                                     </a>
                                                     <a
-                                                        href="javascript:void(0);"
+                                                        href="#"
                                                         className="btn btn-danger btn-xs sharp"
                                                     >
                                                         <i className="fa fa-trash" />
@@ -895,13 +895,13 @@ const ChatBox = ({ toggleChat }) => {
                                                 </div>
                                                 <div className="ms-auto">
                                                     <a
-                                                        href="javascript:void(0);"
+                                                        href="#"
                                                         className="btn btn-primary btn-xs sharp me-1"
                                                     >
                                                         <i className="fas fa-pencil-alt" />
                                                     </a>
                                                     <a
-                                                        href="javascript:void(0);"
+                                                        href="#"
                                                         className="btn btn-danger btn-xs sharp"
                                                     >
                                                         <i className="fa fa-trash" />

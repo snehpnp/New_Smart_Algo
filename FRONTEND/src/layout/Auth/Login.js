@@ -27,9 +27,7 @@ import { Get_Company_Logo } from '../../ReduxStore/Slice/Admin/AdminSlice'
 
 const Login = () => {
   const navigate = useNavigate();
-  const data = useRef();
   const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [showModal, setshowModal] = useState(false);
   const [showModal1, setshowModal1] = useState(false);
@@ -43,8 +41,6 @@ const Login = () => {
   const [typeOtp, setTypeOtp] = useState("");
   const [typeOtp1, setTypeOtp1] = useState("");
   const [UserData, setUserData] = useState("");
-  const [test, settest] = useState([]);
-
 
 
   let SetTheme = async () => {
@@ -182,7 +178,7 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.log("Error", error);
+        console.log("Error in login page", error);
       });
   }
 
@@ -250,7 +246,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.log("Error", error);
+          console.log("Error in login page", error);
         });
     },
   });
@@ -305,7 +301,7 @@ const Login = () => {
             );
 
             if (roles.includes(role) && mobileNo === true) {
-              settest(userData);
+        
               localStorage.setItem("user_details", JSON.stringify(userData));
               localStorage.setItem("user_role", JSON.stringify(role));
               toast.success(res.payload.msg);
@@ -352,7 +348,9 @@ const Login = () => {
         }
 
       })
-      .catch((error) => console.log("error on Otp Verify", error));
+      .catch((error) =>{
+
+      });
   };
 
   // CLOSE THE MODAL
@@ -427,7 +425,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.log("Error", error);
+          console.log("Error In Login page", error);
         });
     }, 1000);
   };
@@ -453,14 +451,11 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.log("Error", error);
+        console.log("Error in Login Page", error);
       });
   };
 
-  //  for set theme
 
-
-  // FOR DESCILMER
 
   const SubmitDesclimer = () => {
 
@@ -578,7 +573,6 @@ const Login = () => {
             <form onSubmit={verifyOTP}>
 
               <OtpInput
-
                 containerStyle="otp-div"
                 value={typeOtp}
                 onChange={setTypeOtp}
@@ -587,6 +581,7 @@ const Login = () => {
                 renderInput={(props, index) => (
                   <input
                     {...props}
+                    type="tel"
                     autoFocus={index === 0}
                     onKeyPress={(event) => {
                       if (event.key === 'Enter') {

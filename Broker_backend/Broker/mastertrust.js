@@ -162,7 +162,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
     
                                         })
                                             .then((BrokerResponseCreate) => {
-                                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                                
                                             })
                                             .catch((err) => {
                                                 try {
@@ -202,7 +202,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
         
                                 })
                                     .then((BrokerResponseCreate) => {
-                                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                                        
                                     })
                                     .catch((err) => {
                                         try {
@@ -240,7 +240,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {
@@ -279,7 +279,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
     
                             })
                                 .then((BrokerResponseCreate) => {
-                                    // console.log('User created and saved:', BrokerResponseCreate._id)
+                                    
                                 })
                                 .catch((err) => {
                                     try {
@@ -307,7 +307,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
     
                             })
                                 .then((BrokerResponseCreate) => {
-                                    // console.log('User created and saved:', BrokerResponseCreate._id)
+                                    
                                 })
                                 .catch((err) => {
                                     try {
@@ -367,7 +367,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
 
         })
             .then((BrokerResponseCreate) => {
-                // console.log('User created and saved:', BrokerResponseCreate._id)
+                
             })
             .catch((err) => {
                 try {
@@ -464,7 +464,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                        
                     })
                     .catch((err) => {
                         try {
@@ -494,7 +494,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                        
                     })
                     .catch((err) => {
                         try {
@@ -537,7 +537,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {
@@ -565,7 +565,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {
@@ -659,7 +659,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                        
                     })
                     .catch((err) => {
                         try {
@@ -689,7 +689,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                        
                     })
                     .catch((err) => {
                         try {
@@ -731,7 +731,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {
@@ -759,7 +759,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {

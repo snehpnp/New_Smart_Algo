@@ -134,13 +134,7 @@ const AllClients = () => {
                     <label className="switch" >
                         <input type="checkbox" className="bg-primary" defaultChecked={row.ActiveStatus == "1" ? true : false} onChange={(e) => activeUser(e, row)} />
                         <span className="slider round"></span>
-                        {/* <BootstrapSwitchButton
-                            checked={row.ActiveStatus === '1' ? true : false}
-                            size="xs"
-                            onstyle="outline-success"
-                            offstyle="outline-danger"
-                            onChange={(e) => activeUser(e, row)}
-                        /> */}
+                   
                     </label>
 
                 </>

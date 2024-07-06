@@ -3,9 +3,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { fDate, fDateTimeSuffix } from '../../Utils/Date_formet';
-const Notification = ({ data }) => {
-
-
+const Notification = ({ status, NotificationData }) => {
 
     const show_Name = (item) => {
         if (item) {
@@ -39,38 +37,51 @@ const Notification = ({ data }) => {
                             fill="#737B8B"
                         />
                     </svg>
-                    <span className="badge light text-white bg-primary rounded-circle" />
+                   {NotificationData.data.length > 0 ? <span className="badge light text-white bg-primary rounded-circle" />:null}
                 </a>
                 <div className="dropdown-menu dropdown-menu-end">
                     <div
                         id="DZ_W_Notification1"
                         className="widget-media dz-scroll p-3"
-                    // style={{ height: auto }}
+            
                     >
                         <ul className="timeline">
-                            {data.data && data.data.slice(0, 6).map((item) => {
-                                return <>
-                                    <li>
-                                        <div className="timeline-panel">
-                                            <div className="media me-2 media-info">{show_Name(item.fullname)}</div>
-                                            <div className="media-body">
-                                                <h6 className="mb-1">
-                                                    Recieved From {item.username}
-                                                </h6>
-                                                <small className="d-block">
-                                                    {fDateTimeSuffix(item.createdAt)}
-                                                </small>
+                            {NotificationData.data && NotificationData.data.slice(0, 6).map((item) => {
+                                return (
+                                    status == 2 ? (
+                                        <li key={item.id}>
+                                            <div className="timeline-panel">
+                                                <div className="media-body">
+                                                    <p>{item.Message}</p>
+                                                    <small className="d-block">
+                                                        {fDateTimeSuffix(item.createdAt)}
+                                                    </small>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </li></>
+                                        </li>
+                                    ) : (
+                                        <li key={item.id}>
+                                            <div className="timeline-panel">
+                                                <div className="media me-2 media-info">{show_Name(item.fullname)}</div>
+                                                <div className="media-body">
+                                                    <h6 className="mb-1">
+                                                        Received From {item.username}
+                                                    </h6>
+                                                    <small className="d-block">
+                                                        {fDateTimeSuffix(item.createdAt)}
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    )
+                                );
                             })}
-
-
                         </ul>
+
                     </div>
-                    <Link to='/admin/helpcenter' className="all-notification">
+                    {status == 2 ? null : <Link to='/admin/helpcenter' className="all-notification">
                         See all notifications <i className="ti-arrow-end" />
-                    </Link>
+                    </Link>}
                 </div>
             </li>
         </div>

@@ -23,9 +23,7 @@ const ThemeSelection = () => {
             let themedata = res.data.data[0]
 
             if (themedata) {
-                // console.log("themedata", themedata);
-                // let abc = $('body').attr('class')
-                // $('body').attr('data-dashboard', `${abc}-dashboard`);
+   
 
                 $('body').removeClass('theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9  theme-10');
                 $('body').addClass(themedata.dashboard)
@@ -101,7 +99,7 @@ const ThemeSelection = () => {
 
 
         }).catch((err) => {
-            console.log("error", err);
+            console.log("Error In Theme Selection Page", err);
         })
     }
 
@@ -112,7 +110,7 @@ const ThemeSelection = () => {
             axios.get(`${Config.smartAlogUrl}getall/theme`).then((res) => {
                 setThemeData(res.data.data)
             }).catch((err) => {
-                console.log("error", err);
+                console.log("Error In Theme Selection Page", err);
             })
         }
     }

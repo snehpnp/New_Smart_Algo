@@ -431,7 +431,7 @@ const MainSignals_modal = db.MainSignals
     // RunQueryUpdateAllDatabase()
     // RunQueryAddAllDatabase()
     // RunQueryManulTaskAllDatabase(res)
-    res.send("OKK DONE FF")
+    return res.send("OKK DONE FF")
   });
 
   async function deleteViewsAllDatabase() {
@@ -940,7 +940,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
 
-    res.send("doneeeee")
+      return   res.send("doneeeee")
 
 
     return
@@ -1019,7 +1019,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
 
-    res.send("okk");
+      return  res.send("okk");
   });
 
 
@@ -1049,7 +1049,6 @@ app.get("/remain_get_token",async (req,res)=>{
 
           function evaluateFunction(change) {
 
-            console.log('Evaluating changes:', change);
           }
 
 
@@ -1077,7 +1076,6 @@ app.get("/remain_get_token",async (req,res)=>{
           }
 
           const insertResult = await collection.insertOne(singleDocument);
-          //console.log('Inserted document:', insertResult.insertedId);
         }
 
       }
@@ -1122,10 +1120,9 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
       const collections = await db.listCollections().toArray();
-      // Check if the desired collection exists
+
       const collectionExists = collections.some(coll => coll.name === 'M_' + collectionName);
-      //console.log("collectionExists view 1 minute", collectionExists)
-      // console.log("pipeline",pipeline)
+   
 
       if (collectionExists) {
 
@@ -1213,8 +1210,7 @@ app.get("/remain_get_token",async (req,res)=>{
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M3_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1234,7 +1230,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1300,8 +1296,7 @@ app.get("/remain_get_token",async (req,res)=>{
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M5_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1321,7 +1316,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1387,8 +1382,7 @@ app.get("/remain_get_token",async (req,res)=>{
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M10_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1408,7 +1402,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1474,8 +1468,7 @@ app.get("/remain_get_token",async (req,res)=>{
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M15_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1495,7 +1488,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1561,8 +1554,7 @@ app.get("/remain_get_token",async (req,res)=>{
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M30_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1582,7 +1574,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1648,8 +1640,7 @@ app.get("/remain_get_token",async (req,res)=>{
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M60_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1669,7 +1660,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1731,8 +1722,7 @@ app.get("/remain_get_token",async (req,res)=>{
       const collections = await db.listCollections().toArray();
       // Check if the desired collection exists
       const collectionExists = collections.some(coll => coll.name === 'M1DAY_' + collectionName);
-      // console.log("collectionExists view",collectionExists)
-      // console.log("pipeline",pipeline)
+     
 
       if (collectionExists) {
 
@@ -1752,7 +1742,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -1771,13 +1761,12 @@ app.get("/remain_get_token",async (req,res)=>{
 
     // Listen for the "pankaj_sir" event from the server
     socket.on("testing_data", (response) => {
-      console.log("Received data ':", response);
-      // Do something with the received data here
+
+
       if (response.tk) {
-        // console.log("response",response)
+
         connectToDB(response.tk, response);
-        // console.log("token --",response.tk);
-        // getTokenStrategy(response.tk)
+       
       }
     });
 
@@ -1788,14 +1777,14 @@ app.get("/remain_get_token",async (req,res)=>{
 
     // Handle errors (optional)
     socket.on("error", (error) => {
-      console.log("Socket.IO Error:", error);
+
     });
 
-    res.send("okkkk ")
+    return res.send("okkkk ")
   })
 
   async function getTokenStrategy(token) {
-    console.log("inside token --", token);
+ 
 
     const pipeline1 = [
 
@@ -1844,7 +1833,7 @@ app.get("/remain_get_token",async (req,res)=>{
     const result = await UserMakeStrategy.aggregate(pipeline1);
 
     if (result.length > 0) {
-      // console.log("result ",result)
+  
 
       result.forEach(element => {
         callStartegy(element)
@@ -1875,19 +1864,12 @@ app.get("/remain_get_token",async (req,res)=>{
     let buffer_value = element.buffer_value;
     let UserName = element.userResult.UserName;
 
-    console.log("inside tokensymbol ", tokensymbol)
-    console.log("offset ", offset)
-    // console.log("inside UserName ",UserName)
-    // console.log("price_source ",price_source)
-
     const db = dbTradeTools;
     let collectionName = 'M' + timeframe + '_' + tokensymbol;
 
     const collections = await db.listCollections({ name: collectionName }).toArray();
 
     if (collections.length > 0) {
-
-      // console.log("exist collection",collectionName)
 
       const collection = db.collection(collectionName);
 
@@ -1933,8 +1915,6 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
 
-
-      console.log("get_view_data - ", get_view_data)
 
       const pipelineTimeFrameData = [
         { $sort: { _id: 1 } }
@@ -2269,7 +2249,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
     }
 
-    res.send(result);
+    return  res.send(result);
   });
 
 
@@ -2343,7 +2323,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
 
-    res.send("okkkk")
+    return res.send("okkkk")
   });
 
 
@@ -2351,7 +2331,7 @@ app.get("/remain_get_token",async (req,res)=>{
   app.get('/socket-api', async (req, res) => {
     const collection = "shakir2";
     dropAllCollections();
-    res.send("okkkk");
+    return res.send("okkkk");
     return
     //connectToDB(collection);
 
@@ -2440,7 +2420,7 @@ app.get("/remain_get_token",async (req,res)=>{
       }
 
     }
-    res.send("socket run")
+    return  res.send("socket run")
   });
 
 
@@ -2520,7 +2500,7 @@ app.get("/remain_get_token",async (req,res)=>{
     }
 
 
-    res.send({ status: true, data: get_final_data.length, averageData: averageData.length });
+    return res.send({ status: true, data: get_final_data.length, averageData: averageData.length });
 
 
   });
@@ -2731,7 +2711,7 @@ app.get("/remain_get_token",async (req,res)=>{
           abc(checkData, conditiostring1);
 
 
-          res.send("okk")
+          return  res.send("okk")
           return
           const condition = (checkData) => val.condition;
 
@@ -2741,7 +2721,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
         }
 
-        res.send("okk done")
+        return  res.send("okk done")
         return
         // Assuming you have some data to use for the condition evaluation
         const data = {
@@ -2765,7 +2745,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
       }
     }
-    res.send("okk")
+    return  res.send("okk")
 
   });
 
@@ -2874,7 +2854,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
       }
     }
-    res.send("okk")
+    return res.send("okk")
   })
 
   const abc = (data, conditionString) => {
@@ -2947,7 +2927,7 @@ app.get("/remain_get_token",async (req,res)=>{
       })
         .then(async (createUserMakeStrategy) => {
           console.log("3")
-          res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
+          return  res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
           return
           const last_insert_id = createUserMakeStrategy._id;
           const user_id = createUserMakeStrategy.user_id;
@@ -3010,7 +2990,7 @@ app.get("/remain_get_token",async (req,res)=>{
         }).catch((err) => {
           console.log("4")
           console.log('Error creating and saving user:', err);
-          res.send({ status: false, msg: err.message })
+          return res.send({ status: false, msg: err.message })
 
         });
 
@@ -3025,7 +3005,7 @@ app.get("/remain_get_token",async (req,res)=>{
     //  const collection = db.collection(collectionName);
 
 
-    res.send("okkk");
+    return   res.send("okkk");
     return;
 
     let incule_field = "";
@@ -3092,7 +3072,7 @@ app.get("/remain_get_token",async (req,res)=>{
     }
 
 
-    res.send(averageData);
+    return  res.send(averageData);
 
   });
 
@@ -3156,7 +3136,7 @@ app.get("/remain_get_token",async (req,res)=>{
     }
 
 
-    res.send("OK")
+    return   res.send("OK")
 
   });
 
@@ -3189,7 +3169,6 @@ app.get("/remain_get_token",async (req,res)=>{
       .then(function (response) {
 
         // res.send(response.data);
-        // console.log(response.data);
         // Using a loop to extract 'name' and 'instrumenttype'
 
 
@@ -3197,360 +3176,360 @@ app.get("/remain_get_token",async (req,res)=>{
         let count = 0
         response.data.forEach((item) => {
 
-          //   function findRepeatedElements(array) {
-          //     const frequencyMap = {};
-          //     const repeatedElements = [];
+            // function findRepeatedElements(array) {
+            //   const frequencyMap = {};
+            //   const repeatedElements = [];
 
-          //     array.forEach(element => {
-          //       if (frequencyMap[element.instrumenttype]) {
-          //         frequencyMap[element.instrumenttype]++;
-          //         if (frequencyMap[element.instrumenttype] === 2) {
-          //           repeatedElements.push(element.instrumenttype);
-          //         }
-          //       } else {
-          //         frequencyMap[element.instrumenttype] = 1;
-          //       }
-          //     });
+            //   array.forEach(element => {
+            //     if (frequencyMap[element.instrumenttype]) {
+            //       frequencyMap[element.instrumenttype]++;
+            //       if (frequencyMap[element.instrumenttype] === 2) {
+            //         repeatedElements.push(element.instrumenttype);
+            //       }
+            //     } else {
+            //       frequencyMap[element.instrumenttype] = 1;
+            //     }
+            //   });
 
-          //     return repeatedElements;
-          //   }
+            //   return repeatedElements;
+            // }
 
-          //   const inputArray = response.data;
-          //   const repeatedElements = findRepeatedElements(inputArray);
+            // const inputArray = response.data;
+            // const repeatedElements = findRepeatedElements(inputArray);
 
-          //   console.log('Repeated elements:', repeatedElements);
-          //   res.send(repeatedElements)
-          // return
+        
 
-
-          //  if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
-
-
-          //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
-          //     count++
-          //     console.log('item - CO ' + count + ' ', item)
-          //     const matchingElements = categoryResult.filter(item => item.segment === "CO");
-          //     const category_id = matchingElements[0]._id
-
-
-          //     services.create({
-          //       name: item.name,
-          //       instrument_token: item.token,
-          //       zebu_token: item.symbol,
-          //       kotak_token: "",
-          //       instrumenttype: item.instrumenttype,
-          //       exch_seg: item.exch_seg,
-          //       lotsize: item.lotsize,
-          //       categorie_id: category_id,
-          //       unique_column: item.name + '_' + category_id
-          //     })
-          //       .then((createdServices) => {
-          //         console.log('User created and saved:', createdServices._id)
-          //       })
-          //       .catch((err) => {
-          //         try {
-          //           console.log('Error creating and saving user:', err);
-          //         } catch (e) {
-          //           console.log("duplicate key")
-          //         }
+           if(item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX' || item.instrumenttype == 'FUTCUR'||item.instrumenttype == 'FUTCOM'||item.instrumenttype == 'OPTSTK'||item.instrumenttype == 'OPTIDX'||item.instrumenttype == 'OPTCUR'||item.instrumenttype == 'OPTFUT'){ 
+          
+
+
+
+           if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+              count++
+              // console.log('item - CO ' + count + ' ', item)
+              const matchingElements = categoryResult.filter(item => item.segment === "CO");
+              const category_id = matchingElements[0]._id
+
+
+              services.create({
+                name: item.name,
+                instrument_token: item.token,
+                zebu_token: item.symbol,
+                kotak_token: "",
+                instrumenttype: item.instrumenttype,
+                exch_seg: item.exch_seg,
+                lotsize: item.lotsize,
+                categorie_id: category_id,
+                unique_column: item.name + '_' + category_id
+              })
+                .then((createdServices) => {
+                  console.log('User created and saved:', createdServices._id)
+                })
+                .catch((err) => {
+                  try {
+                    console.log('Error creating and saving user:', err);
+                  } catch (e) {
+                    console.log("duplicate key")
+                  }
 
-          //       });
+                });
 
 
-          //   }
-
-
-
-          //   if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
-          //  unique_key.push(`${item.name}-${item.instrumenttype}`);
-
-
-          // if (item.symbol.slice(-3) == '-EQ') {
-          //   count++
-
-          //   const matchingElements = categoryResult.filter(item => item.segment === "C");
-          //   const category_id = matchingElements[0]._id
+            }
 
+
+
+            if (!unique_key.includes(`${item.name}-${item.instrumenttype}`)) {
+           unique_key.push(`${item.name}-${item.instrumenttype}`);
+           console.log("55555",item.symbol)
+
+
+          if (item.symbol.slice(-3) == '-EQ') {
+            count++
+
+            const matchingElements = categoryResult.filter(item => item.segment === "C");
+            const category_id = matchingElements[0]._id
 
-          //   services.create({
-          //     name: item.name + '#',
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '#_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-          // }
-
 
+            services.create({
+              name: item.name + '#',
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '#_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+          }
+
 
 
-          // if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
-          //   count++
-          //   console.log('item - F ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "F");
-          //   const category_id = matchingElements[0]._id
 
+          if (item.instrumenttype == 'FUTSTK' || item.instrumenttype == 'FUTIDX') {
+            count++
+            console.log('item - F ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "F");
+            const category_id = matchingElements[0]._id
 
 
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-
-
-          // }
-
-
-
-          // if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
-          //   count++
-          //   console.log('item - O ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "O");
-          //   const category_id = matchingElements[0]._id
 
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-
-
-          // }
-
-
-          // if (item.instrumenttype == 'OPTFUT') {
-          //   count++
-          //   console.log('item - MO ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "MO");
-          //   const category_id = matchingElements[0]._id
-
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-
-
-          // }
-
-
-          // if (item.instrumenttype == 'FUTCOM') {
-          //   count++
-          //   console.log('item - MF ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "MF");
-          //   const category_id = matchingElements[0]._id
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+
+
+          }
+
+
+
+          if (item.instrumenttype == 'OPTSTK' || item.instrumenttype == 'OPTIDX') {
+            count++
+            console.log('item - O ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "O");
+            const category_id = matchingElements[0]._id
 
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-
-          // }
-
-          // if (item.instrumenttype == 'FUTCUR') {
-          //   count++
-          //   console.log('item - CF ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "CF");
-          //   const category_id = matchingElements[0]._id
-
-
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-          // }
-
-
-          //  if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
-          //   count++
-          //   console.log('item - CO ' + count + ' ', item)
-          //   const matchingElements = categoryResult.filter(item => item.segment === "CO");
-          //   const category_id = matchingElements[0]._id
-
-
-          //   services.create({
-          //     name: item.name,
-          //     instrument_token: item.token,
-          //     zebu_token: item.symbol,
-          //     kotak_token: "",
-          //     instrumenttype: item.instrumenttype,
-          //     exch_seg: item.exch_seg,
-          //     lotsize: item.lotsize,
-          //     categorie_id: category_id,
-          //     unique_column: item.name + '_' + category_id
-          //   })
-          //     .then((createdServices) => {
-          //       console.log('User created and saved:', createdServices._id)
-          //     })
-          //     .catch((err) => {
-          //       try {
-          //         console.log('Error creating and saving user:', err);
-          //       } catch (e) {
-          //         console.log("duplicate key")
-          //       }
-
-          //     });
-
-
-          // }
-
-
-
-
-
-
-
-
-
-
-          // if(item.instrumenttype == 'AMXIDX'|| item.instrumenttype == 'OPTIRC' || item.instrumenttype == 'UNDIRC' || item.instrumenttype == 'FUTIRC' || item.instrumenttype == 'UNDCUR' || item.instrumenttype == 'INDEX' || item.instrumenttype == 'COMDTY' || item.instrumenttype == 'AUCSO'){
-          //       count++
-          //       console.log('item - OTHER CONTENT '+count+' ',item)
-          //       // const matchingElements = categoryResult.filter(item => item.segment === "C");
-          //       // const category_id = matchingElements[0]._id
-          //       services.create({
-          //         name:item.name,
-          //         instrument_token:item.token,
-          //         zebu_token:item.symbol,
-          //         kotak_token:"",
-          //         instrumenttype:item.instrumenttype,
-          //         exch_seg:item.exch_seg,
-          //         lotsize:item.lotsize,
-          //         categorie_id : "",
-          //         unique_column : item.name +'_'+'c9dbdc14a9fefd971c979'
-          //       })
-          //       .then((createdServices) => {
-          //         console.log('User created and saved:', createdServices._id)
-          //       })
-          //       .catch((err) => {
-          //         try{
-          //         console.log('Error creating and saving user:', err);
-          //         }catch(e){
-          //          console.log("duplicate key")
-          //         }
-
-          //       });
-
-
-          //       }
-
-          // }
-          //   }
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+
+
+          }
+
+
+          if (item.instrumenttype == 'OPTFUT') {
+            count++
+            console.log('item - MO ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "MO");
+            const category_id = matchingElements[0]._id
+
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+
+
+          }
+
+
+          if (item.instrumenttype == 'FUTCOM') {
+            count++
+            console.log('item - MF ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "MF");
+            const category_id = matchingElements[0]._id
+
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+
+          }
+
+          if (item.instrumenttype == 'FUTCUR') {
+            count++
+            console.log('item - CF ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "CF");
+            const category_id = matchingElements[0]._id
+
+
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+          }
+
+
+           if (item.instrumenttype == 'OPTCUR' && item.exch_seg=="CDS") {
+            count++
+            console.log('item - CO ' + count + ' ', item)
+            const matchingElements = categoryResult.filter(item => item.segment === "CO");
+            const category_id = matchingElements[0]._id
+
+
+            services.create({
+              name: item.name,
+              instrument_token: item.token,
+              zebu_token: item.symbol,
+              kotak_token: "",
+              instrumenttype: item.instrumenttype,
+              exch_seg: item.exch_seg,
+              lotsize: item.lotsize,
+              categorie_id: category_id,
+              unique_column: item.name + '_' + category_id
+            })
+              .then((createdServices) => {
+                console.log('User created and saved:', createdServices._id)
+              })
+              .catch((err) => {
+                try {
+                  console.log('Error creating and saving user:', err);
+                } catch (e) {
+                  console.log("duplicate key")
+                }
+
+              });
+
+
+          }
+
+
+
+
+
+
+
+
+
+
+          if(item.instrumenttype == 'AMXIDX'|| item.instrumenttype == 'OPTIRC' || item.instrumenttype == 'UNDIRC' || item.instrumenttype == 'FUTIRC' || item.instrumenttype == 'UNDCUR' || item.instrumenttype == 'INDEX' || item.instrumenttype == 'COMDTY' || item.instrumenttype == 'AUCSO'){
+                count++
+                console.log('item - OTHER CONTENT '+count+' ',item)
+                // const matchingElements = categoryResult.filter(item => item.segment === "C");
+                // const category_id = matchingElements[0]._id
+                services.create({
+                  name:item.name,
+                  instrument_token:item.token,
+                  zebu_token:item.symbol,
+                  kotak_token:"",
+                  instrumenttype:item.instrumenttype,
+                  exch_seg:item.exch_seg,
+                  lotsize:item.lotsize,
+                  categorie_id : "",
+                  unique_column : item.name +'_'+'c9dbdc14a9fefd971c979'
+                })
+                .then((createdServices) => {
+                  console.log('User created and saved:', createdServices._id)
+                })
+                .catch((err) => {
+                  try{
+                  console.log('Error creating and saving user:', err);
+                  }catch(e){
+                   console.log("duplicate key")
+                  }
+
+                });
+
+
+                }
+
+          }
+            }
 
         });
 
@@ -3677,7 +3656,7 @@ app.get("/remain_get_token",async (req,res)=>{
         console.log("All tasks completed");
       }
     });
-    res.send("okk");
+    return res.send("okk");
 
 
 
@@ -3754,19 +3733,10 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
 
-    res.send("okkk");
+    return  res.send("okkk");
 
 
   });
-
-
-
-  // app.use((req, res, next) => {
-  //   const clientIP = req.ip; // This gets the client's IP address
-  //   // Do something with the IP address, e.g., pass it to your API response
-  //   res.json({ clientIP });
-  // });
-
 
 
 
@@ -3791,10 +3761,8 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
 
-    res.send("okk")
+    return  res.send("okk")
   })
-
-
 
   app.get("/tt", async (req, res) => {
 
@@ -3951,17 +3919,12 @@ app.get("/remain_get_token",async (req,res)=>{
 
       });
       var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
-      res.send({ status: true, data: final_data, channellist: alltokenchannellist })
+      return  res.send({ status: true, data: final_data, channellist: alltokenchannellist })
     }
     else {
-      res.send({ status: false, data: [], channellist: "" })
+      return res.send({ status: false, data: [], channellist: "" })
     }
   })
-
-
-
-
-
 
 
   app.get("/stockPriceupdate", async (req, res) => {
@@ -4002,204 +3965,9 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
 
-    res.send("okk");
+    return res.send("okk");
 
   })
-
-
-
-
-  // app.get("/stockPriceupdate",async(req,res)=>{
-  //   const yahooFinance = require('yahoo-finance');
-  //   const pipeline = [
-  //     { $sort: { _id: -1 } },
-  //     { $project: { symbol: 1, price: 1 } },
-  //   ];
-
-  //   const result = await option_chain_symbols.aggregate(pipeline);
-
-  //   const date = new Date('2023-11-03');
-  //   const currentDay = date.toISOString().split('T')[0]; // 'yyyy-MM-dd' format
-
-  //   const date1 = new Date();
-  //   date1.setDate(date1.getDate() + 1);
-  //   const nextDay = date1.toISOString().split('T')[0];
-
-  //   const promises = result.map(async (element) => {
-  //     if (element.symbol === 'NIFTY' || element.symbol === 'BANKNIFTY' || element.symbol === 'FINNIFTY') {
-  //       console.log('symbol INDEX- ', element.symbol);
-  //       return null; // You can return a promise that resolves to null
-  //     } else {
-  //       console.log('symbol - ', element.symbol);
-  //       return new Promise((resolve, reject) => {
-  //         yahooFinance.historical(
-  //           {
-  //             symbol: element.symbol + '.NS',
-  //             from: currentDay,
-  //             to: nextDay,
-  //           },
-  //           (err, quotes) => {
-  //             if (err) {
-  //               console.log(err);
-  //               reject(err);
-  //             } else {
-  //              // console.log(quotes);
-
-  //                 resolve(quotes);
-
-  //             }
-  //           }
-  //         );
-  //       });
-  //     }
-  //   });
-
-  //   try {
-  //     const results = await Promise.all(promises);
-  //     console.log("results",results)
-  //     res.send(result);
-  //   } catch (error) {
-  //     // Handle errors here
-  //     res.status(500).send('Error fetching stock data');
-  //   }
-
-
-
-  // })
-
-  //   async Get_Option_All_Round_Token(req, res) {
-
-
-  //     const symbol = req.body.symbol;
-  //     const expiry = req.body.expiry;
-
-  //     // let price = "19300"
-  //     // let symbol = "NIFTY"
-  //     // let expiry = "26102023"
-
-  //     let limit_set = 20
-
-  //      let price = 3000
-
-  //     const get_symbol_price = await Get_Option_Chain_modal.findOne({symbol:symbol})
-
-  //     console.log("get_symbol_price",get_symbol_price)
-  //     if(get_symbol_price != undefined){
-  //         price = parseInt(get_symbol_price.price); 
-  //     }
-  //     console.log("price",price)
-
-  //         const pipeline2 = [
-  //             {
-  //                 $match: {
-  //                     symbol: symbol,
-  //                     segment: 'O',
-  //                     expiry: expiry
-  //                 }
-  //             }
-  //         ]
-
-  //         const pipeline3 = [
-  //             {
-  //                 $match: {
-  //                     symbol: symbol,
-  //                     segment: 'O',
-  //                     expiry: expiry
-  //                 }
-  //             },
-
-  //             {
-  //                 $addFields: {
-  //                     absoluteDifference: {
-  //                         $abs: {
-  //                             $subtract: [{ $toInt: "$strike" }, price]
-  //                         }
-  //                     }
-  //                 }
-  //             },
-
-  //             {
-  //                 $group: {
-  //                     _id: "$strike", // Group by unique values of A
-  //                     minDifference: { $min: "$absoluteDifference" }, // Find the minimum absolute difference for each group
-  //                     document: { $first: "$$ROOT" } // Keep the first document in each group
-  //                 }
-  //             },
-  //             {
-  //                 $sort: {
-  //                     minDifference: 1 // Sort by the minimum absolute difference in ascending order
-  //                 }
-  //             },
-  //             {
-  //                 $limit: limit_set
-  //             },
-  //             {
-  //                 $sort: {
-  //                     _id: 1 // Sort by the minimum absolute difference in ascending order
-  //                 }
-  //             }
-  //         ]
-
-  //         const result = await Alice_token.aggregate(pipeline2);
-  //         const resultStrike = await Alice_token.aggregate(pipeline3);
-
-
-
-
-  //         const final_data = [];
-  //         var channelstr = ""
-  //         if (result.length > 0) {
-  //             resultStrike.forEach(element => {
-
-  //                 let call_token = "";
-  //                 let put_token = "";
-  //                 let symbol = ""
-  //                 let segment = ""
-  //                 result.forEach(element1 => {
-  //                     if (element.document.strike == element1.strike) {
-  //                         console.log("strike price", element.document.strike)
-  //                         // console.log("segment", element1.strike)
-
-
-  //                         if (element1.option_type == "CE") {
-  //                             console.log("CALL", element1.option_type)
-  //                             console.log("STRIKE", element1.strike)
-  //                             symbol = element1.symbol
-  //                             segment = element1.segment
-  //                             call_token = element1.instrument_token;
-  //                         } else if (element1.option_type == "PE") {
-  //                             console.log("PUT", element1.option_type)
-  //                             console.log("STRIKE", element1.strike)
-  //                             symbol = element1.symbol
-  //                             segment = element1.segment
-  //                             put_token = element1.instrument_token;
-  //                         }
-  //                         channelstr += element1.exch_seg + "|" + element1.instrument_token + "#"
-  //                     }
-  //                 });
-
-  //                 const push_object = {
-  //                     symbol: symbol,
-  //                     segment: segment,
-  //                     strike_price: element.document.strike,
-  //                     call_token: call_token,
-  //                     put_token: put_token,
-  //                     expiry: element.document.expiry
-  //                 }
-  //                 final_data.push(push_object)
-  //             });
-
-
-  //             var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
-  //             //  console.log("alltokenchannellist",alltokenchannellist)
-  //             res.send({ status: true, data: final_data, channellist: alltokenchannellist })
-  //         }
-  //         else {
-  //             res.send({ status: false, data: [], channellist: "" })
-  //         }
-
-  // }
-
 
 
 

@@ -26,9 +26,6 @@ const ClientList = () => {
     const [refresh, setrefresh] = useState(false);
 
     let location = useLocation();
-    console.log("=>", location.state._id)
-
-
   
 
     const GetAllClients = async () => {
@@ -128,7 +125,6 @@ const ClientList = () => {
     }, [])
 
 
-    // console.log("ShowClients", ShowClients )
 
     return (
         <>

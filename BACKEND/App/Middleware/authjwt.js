@@ -22,11 +22,13 @@
 
 // module.exports = { verifyToken }
 
-
+const { logger, getIPAddress } = require('../Helper/logger.helper')
 
 const jwt = require("jsonwebtoken");
 const db = require("../Models");
 const User_model = db.user;
+const user_logs = db.user_logs;
+
 
 verifyToken = async (req, res, next) => {
     let token = req.headers["x-access-token"];
@@ -34,7 +36,7 @@ verifyToken = async (req, res, next) => {
     if (!token) {
         return res.send({
             status: false,
-            message: "No token provided!",
+            msg: "No token provided!",
             data: [],
 
         });
@@ -42,15 +44,27 @@ verifyToken = async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.SECRET);
-        const user = await User_model.findById(decoded.id).select("web_login_token app_login_token");
+        const user = await User_model.find({_id:decoded.id,Role:"USER"}).select("web_login_token app_login_token");
 
-        // if (!user || user.web_login_token !== token) {
-        //     return res.send({
-        //         status: false,
-        //         msg: "Unauthorized!",
-        //         data: [],
-        //     });
-        // }
+        if(user.length !== 0 ){
+
+            if (!user || user[0].web_login_token !== token) {
+
+                const user_login = new user_logs({
+                    user_Id: user[0]._id,
+                    login_status: "Panel off due to another login.",
+                    role: "USER",
+                    device: "",
+                    system_ip: getIPAddress()
+                })
+                await user_login.save();
+                return res.send({
+                    status: false,
+                    msg: "Unauthorized!",
+                    data: [],
+                });
+            }
+        }
 
         req.userId = decoded.id;
         next();

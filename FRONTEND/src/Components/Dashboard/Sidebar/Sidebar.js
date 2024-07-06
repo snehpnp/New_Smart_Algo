@@ -1,50 +1,42 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom';
 import { admin_sidebar, supper_admin_sidebar, sub_admin_sidebar, Client } from './Nav_Config'
 import { Signal, Users, Wrench, Link2, Frame, CandlestickChart, Activity, WalletCards, HelpingHand, FolderClock, LayoutDashboard, Building2, Copyright, Repeat2, ArrowRightLeft, ScatterChart, Boxes, Rocket, Paintbrush, Vote, Info } from 'lucide-react';
 import $ from "jquery";
 import Logo from '../Header/Logo';
 import { Get_Sub_Admin_Permissions } from '../../../ReduxStore/Slice/Subadmin/Subadminslice';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Get_Company_Logo } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import * as Config from "../../../Utils/Config";
 import { Get_Pmermission } from "../../../ReduxStore/Slice/Users/DashboardSlice";
 
 
-
 const Sidebar = ({ ShowSidebar }) => {
     const location = useLocation()
     const dispatch = useDispatch()
-
     const roles = JSON.parse(localStorage.getItem('user_role'))
     const gotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
     const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
     const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
     const token = JSON.parse(localStorage.getItem("user_details")).token
     const goTouser_ID = JSON.parse(localStorage.getItem("user_details_goTo"))
-
     const [getPermissions, setGetPermissions] = useState([])
     const [admin_permission, setAdmin_permission] = useState([]);
 
 
-
-    //  GET SUBADMIN PERMISSION
     const data2 = async () => {
         if (roles === 'SUBADMIN') {
             await dispatch(Get_Sub_Admin_Permissions({ id: user_ID && user_ID })).unwrap()
                 .then((response) => {
                     if (response.status) {
                         setGetPermissions(response.data[0])
-
                     }
                 })
         } else if (user_role_goTo === 'SUBADMIN') {
             await dispatch(Get_Sub_Admin_Permissions({ id: goTouser_ID && goTouser_ID.user_id })).unwrap()
                 .then((response) => {
                     if (response.status) {
-
                         setGetPermissions(response.data[0])
-
                     }
                 })
         }
@@ -76,11 +68,6 @@ const Sidebar = ({ ShowSidebar }) => {
         }
     }
 
-    useEffect(() => {
-        data2()
-    }, [])
-
-
     const CompanyName = async () => {
         await dispatch(Get_Company_Logo()).unwrap()
             .then((response) => {
@@ -99,25 +86,22 @@ const Sidebar = ({ ShowSidebar }) => {
     }
 
     useEffect(() => {
+        data2()
         CompanyName()
     }, [])
 
 
-
     return (
-        <div>
-
             <div className="deznav pt-3" >
                 <div className="deznav-scroll">
                     <ul className="metismenu" id="menu">
-
                         <div className='sidebar-logo'>
                             <Logo />
                         </div>
                         {
                             gotodashboard != null ? user_role_goTo === "USER" ? Client && Client.map((item) => {
                                 return <>
-                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                    <li key={item.id} className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                         {item.Data.length > 0 ? <>
                                             <Link
                                                 className="has-arrow "
@@ -154,13 +138,12 @@ const Sidebar = ({ ShowSidebar }) => {
                             }) :
                                 user_role_goTo === "SUBADMIN" ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
 
-                                    console.log("1", (item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 0))
-
+                                  
 
                                     return (
                                         <>
                                             {(item.route === "/subadmin/tradehistory" && getPermissions && getPermissions.trade_history_old == 0) ? null : (
-                                                <li className={`${location.pathname === item.route ? 'mm-active' : ""}`}>
+                                                <li key={item.id} className={`${location.pathname === item.route ? 'mm-active' : ""}`}>
                                                     {item.Data.length > 0 ? (
                                                         <>
                                                             <Link className="has-arrow" aria-expanded="false">
@@ -195,7 +178,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                     } else {
                                         return <>
 
-                                            <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
+                                            <li key={item.id} className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
                                                 {item.Data.length > 0 ? <>
                                                     <a
                                                         className="has-arrow"
@@ -206,37 +189,37 @@ const Sidebar = ({ ShowSidebar }) => {
                                                     </a>
                                                 </> : ""}
                                                 {item.Data.length !== 0 ?
-                                                 <>
-                                                    <ul aria-expanded='false'>
-                                                        {item.Data.length > 0 ?
-                                                            item.Data.map((nested_item) => {
+                                                    <>
+                                                        <ul aria-expanded='false'>
+                                                            {item.Data.length > 0 ?
+                                                                item.Data.map((nested_item) => {
 
-                                                                if (nested_item.route == "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 || nested_item.route == "/admin/AllMakeStrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0
-                                                                    || nested_item.route == "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0
-                                                                ) {
-
-
-                                                                } else {
-
-                                                                    return <>
-                                                                        <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
-
-                                                                            <Link to={nested_item.route}>{nested_item.name}</Link>
-
-                                                                        </li>
-                                                                    </>
-
-                                                                }
+                                                                    if (nested_item.route == "/admin/createstrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0 || nested_item.route == "/admin/AllMakeStrategy" && admin_permission.data && admin_permission.data[0].Create_Strategy === 0
+                                                                        || nested_item.route == "/admin/optionchain" && admin_permission.data && admin_permission.data[0].Option_chain === 0
+                                                                    ) {
 
 
+                                                                    } else {
 
-                                                            })
-                                                            : ""}
-                                                    </ul>
-                                                </> : null}
+                                                                        return <>
+                                                                            <li className={`${location.pathname.includes(item.route && item.route) ? 'mm-active' : ""}`}>
+
+                                                                                <Link to={nested_item.route}>{nested_item.name}</Link>
+
+                                                                            </li>
+                                                                        </>
+
+                                                                    }
+
+
+
+                                                                })
+                                                                : ""}
+                                                        </ul>
+                                                    </> : null}
                                             </li>
 
-                                            {/* : ""} */}
+
 
 
                                             {item.Data.length === 0 ? <>
@@ -265,7 +248,7 @@ const Sidebar = ({ ShowSidebar }) => {
                                 }) :
                                     roles === 'SUPERADMIN' ? supper_admin_sidebar && supper_admin_sidebar.map((item) => {
                                         return <>
-                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                            <li key={item.id} className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
                                                 {item.Data.length > 0 ? <>
 
                                                     <Link
@@ -451,8 +434,6 @@ const Sidebar = ({ ShowSidebar }) => {
                     </ul>
                 </div>
             </div>
-        </div >
-
     )
 }
 

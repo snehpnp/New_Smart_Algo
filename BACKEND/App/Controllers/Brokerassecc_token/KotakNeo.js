@@ -167,10 +167,7 @@ class KotakNeo {
                                                     // return
                                                     if (response.status == 201) {
     
-                                                        // connection1.query('UPDATE `client` SET `oneTimeToken`="' + access_token + '" , `kotakneo_sid`="' + stepOneSID + '", `kotakneo_auth`="' + stepOneToken + '", `kotakneo_userd`="' + decodeAccessToken.sub + '", `hserverid`="' + stepHsServerId + '" WHERE email="' + req.body.email + '"', (err, result1) => {
-    
-                                                        //     res.send({ status: true });
-                                                        // });
+                                                     
 
 
                                                         let result = await User.findByIdAndUpdate(
@@ -221,7 +218,7 @@ class KotakNeo {
                                         } else {
                                             
                                             const message = (JSON.stringify(response.data)).replace(/["',]/g, '');
-                                            res.send({ status: false, msg: message })
+                                            return   res.send({ status: false, msg: message })
                                         }
     
                                     })
@@ -231,11 +228,11 @@ class KotakNeo {
                                         
                                             const message = (JSON.stringify(error.response.data.error[0])).replace(/["',]/g, '');
 
-                                            res.send({ status: false, msg: message })
+                                            return  res.send({ status: false, msg: message })
                                         } else {
                                            
                                             const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
-                                            res.send({ status: false, msg: message })
+                                            return  res.send({ status: false, msg: message })
                                         }
     
     
@@ -545,10 +542,10 @@ const GetAllBrokerResponse = async (user_info,res) => {
 
     
             })
-           res.send({status:true,msg:"broker response updated successfully"})
+            return  res.send({status:true,msg:"broker response updated successfully"})
     
         } else {
-            res.send({status:false,msg:"no user found"})
+            return res.send({status:false,msg:"no user found"})
          }
 
     } catch (error) {

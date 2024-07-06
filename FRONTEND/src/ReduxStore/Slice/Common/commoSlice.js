@@ -37,10 +37,7 @@ export const GET_MESSAGE_BRODS = createAsyncThunk("get/messagebrodcast", async (
 
 export const CancelOrderReq = createAsyncThunk("cancelorderByAdmin", async (apireq) => {
     const { req, token } = apireq
-    console.log("req ",req)
-    console.log("token ",token)
-    
-    
+  
     try {
         const res = await CANCEL_ORDER_BY_ADMIN(req, token);
         return await res;

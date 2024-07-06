@@ -324,11 +324,11 @@ class Panel {
 
             // IF DATA NOT EXIST
             if (getAllpanel.length == 0) {
-                res.send({ status: false, msg: "Empty data", data: getAllpanel })
+                return res.send({ status: false, msg: "Empty data", data: getAllpanel })
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return  res.send({
                 status: true,
                 msg: "Get All Api Info",
                 data: getAllpanel,
@@ -353,11 +353,7 @@ class Panel {
 
             var domain1 = "http://localhost:3000"
 
-            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "https://trade.pandpinfotech.com"
-            } else {
-                domain1 = domain
-            }
+            domain1 = domain
 
             const getAllpanel = await panel_model.find({ domain: domain1 })
 
@@ -402,13 +398,13 @@ class Panel {
 
             var domain1 = "http://localhost:3000"
 
-            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "https://trade.pandpinfotech.com"
-            } else {
+            // if (domain == "http://localhost:3000" ) {
+            //     domain1 = "https://trade.pandpinfotech.com"
+            // } else {
                 domain1 = domain
-            }
+            // }
 
-            const Panle_information = await panel_model.find({ domain: domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan , is_active')
+            const Panle_information = await panel_model.find({ domain: domain1 }).select('broker_id Create_Strategy Option_chain Strategy_plan is_active Two_day_client live_price')
 
 
 
@@ -417,7 +413,7 @@ class Panel {
             if (!Panle_information) {
                 return res.status(409).json({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            res.send({ status: true, msg: "Get Panel Permissions", data: Panle_information })
+            return res.send({ status: true, msg: "Get Panel Permissions", data: Panle_information })
 
         } catch (error) {
             // console.log("Theme error-", error);
@@ -432,11 +428,7 @@ class Panel {
 
             var domain1 = "http://localhost:3000"
 
-            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "https://trade.pandpinfotech.com"
-            } else {
-                domain1 = domain
-            }
+            domain1 = domain
 
 
 
@@ -474,7 +466,7 @@ class Panel {
             if (!update_token) {
                 return res.send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            res.send({ status: true, msg: "Close Panel SuccessFully", data: update_token })
+            return res.send({ status: true, msg: "Close Panel SuccessFully", data: update_token })
 
         } catch (error) {
             // console.log("Theme error-", error);
@@ -485,11 +477,7 @@ class Panel {
         try {
             const { domain, data } = req.body
             var domain1 = "http://localhost:3000"
-            if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-                domain1 = "https://trade.pandpinfotech.com"
-            } else {
-                domain1 = domain
-            }
+            domain1 = domain
 
             const filter = { domain: domain1 };
             const update = {
@@ -502,7 +490,7 @@ class Panel {
             if (!update_token) {
                 return res.send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            res.send({ status: true, msg: "Broker Update SuccessFully", data: update_token })
+            return res.send({ status: true, msg: "Broker Update SuccessFully", data: update_token })
 
         } catch (error) {
             // console.log("Theme error-", error);

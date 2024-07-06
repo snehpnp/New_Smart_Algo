@@ -5,7 +5,7 @@ import { CREATE_HELP } from "../../../Service/user.service";
 
 export const Create_Help = createAsyncThunk("user/create/help", async (data) => {
     const { req, token } = data
-    console.log(data);
+
     try {
         const res = await CREATE_HELP({ req: req }, token);
         return await res;

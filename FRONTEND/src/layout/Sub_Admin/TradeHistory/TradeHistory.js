@@ -21,7 +21,6 @@ import { ShowColor, ShowColor1, ShowColor_Compare_two, } from "../../../Utils/Sh
 import { Get_All_Catagory, Service_By_Catagory } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import { Get_All_Service } from "../../../ReduxStore/Slice/Admin/AdminSlice";
 import { GET_ADMIN_TRADE_STATUS } from "../../../ReduxStore/Slice/Admin/TradehistorySlice";
-
 import { today } from "../../../Utils/Date_formet";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 // import * as Config from "../../Utils/Config";
@@ -33,13 +32,8 @@ const TradeHistory = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
-  // console.log("dashboard_filter", dashboard_filter);
-
   const token = JSON.parse(localStorage.getItem("user_details")).token;
   const user_id = JSON.parse(localStorage.getItem("user_details")).user_id;
-
-
-
   const [showModal, setshowModal] = useState(false);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -88,7 +82,6 @@ const TradeHistory = () => {
     GetAdminTradingStatus()
   }, []);
 
-  console.log("Shk", adminTradingStatus);
 
 
   const Get_TradHistory = async (e) => {
@@ -296,9 +289,6 @@ const TradeHistory = () => {
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
-      console.log("item" ,item)
-
-       
 
 
       if(parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price!= '' && item.exit_price){
@@ -314,7 +304,7 @@ const TradeHistory = () => {
   const SquareOff = (rowdata, rowIndex) => {
     // $('.BP1_Put_Price_' + item.token).html();
     // $('.SP1_Call_Price_' + item.token).html();
-    console.log("rowdata", rowdata)
+  
 
     var pre_tag = {
       option_type: rowdata.option_type,
@@ -325,7 +315,6 @@ const TradeHistory = () => {
       segment: rowdata.segment,
       strike: rowdata.strike_price,
     };
-    console.log("pre_tag", pre_tag)
 
     if (rowdata.entry_type === "") {
       setCreateSignalRequest(oldValues => {
@@ -343,7 +332,6 @@ const TradeHistory = () => {
 
   }
 
-  // console.log("CreateSignalRequest", CreateSignalRequest)
 
   // ----------------------------- SQUARE OFF ----------------------------
 
@@ -472,9 +460,7 @@ const TradeHistory = () => {
 
       tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
         
-        console.log(" row._id ",row._id)
-        console.log(" row token ",row.token)
-        console.log(" row ",row)
+
         let get_ids = '_id_' + row.token + '_' + row._id
         let get_id_token = $('.' + get_ids).html();
 
@@ -739,7 +725,6 @@ const TradeHistory = () => {
   };
 
 
-//  console.log("ServiceData.data:", ServiceData.data)
 
   return (
     <>

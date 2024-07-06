@@ -6,6 +6,10 @@ const LivePriceSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    broker_id: {
+        type: String,
+        default: null
+    },
     user_id: {
         type: String,
         default: null

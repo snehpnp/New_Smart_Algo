@@ -193,7 +193,7 @@ class TradeHistory {
 
                 }
             } else {
-                res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
+                return  res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
             }
             
             //console.log("abc.flat()1 ",abc1.flat())
@@ -220,9 +220,9 @@ class TradeHistory {
                
                 
                // console.log("trade_strategy_filter ",trade_strategy_filter)
-                res.send({ status: true, data: abc.flat(), msg: "Get Signals" ,trade_strategy_filter:trade_strategy_filter})
+               return res.send({ status: true, data: abc.flat(), msg: "Get Signals" ,trade_strategy_filter:trade_strategy_filter})
             } else {
-                res.send({ status: false, data: [], msg: "Data Empty" })
+                return res.send({ status: false, data: [], msg: "Data Empty" })
 
             }
 

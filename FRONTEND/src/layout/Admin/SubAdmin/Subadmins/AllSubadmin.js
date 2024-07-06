@@ -64,7 +64,7 @@ const AllSubadmin = () => {
         .unwrap()
         .then((response) => {
           if (response.status) {
-            // console.log("response", response)
+        
             toast.success(response.msg);
             window.location.reload()
 
@@ -112,7 +112,7 @@ const AllSubadmin = () => {
       await dispatch(DELETE_USER_SERVICES(req1))
         .unwrap()
         .then((response) => {
-          // console.log("response", response);
+          
           if (response.status) {
             setrefresh(!refresh);
           }
@@ -127,7 +127,7 @@ const AllSubadmin = () => {
     await dispatch(Get_Client_By_Subadmin_Id({ id: id, token: token }))
       .unwrap()
       .then((response) => {
-        // console.log("response", response);
+
         if (response.status) {
           setSubAdminClients({
             loading: false,
@@ -266,7 +266,7 @@ const AllSubadmin = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-          // console.log(response);
+   
           localStorage.setItem("route", "/admin/allsubadmins");
           localStorage.setItem("gotodashboard", "true");
           localStorage.setItem(

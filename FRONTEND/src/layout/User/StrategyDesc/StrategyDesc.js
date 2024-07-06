@@ -120,7 +120,6 @@ const StrategyDesc = () => {
 
 
 
-  console.log("Strategy_By_Price[index] || Strategy_By_Price", Strategy_By_Price)
   return (
     <Content Page_title="Strategy Description" button_status={false}>
 

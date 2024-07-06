@@ -280,7 +280,7 @@ class OptionChain {
 
             var alltokenchannellist = channelstr.substring(0, channelstr.length - 1);
 
-            res.send({ status: true, data: final_data, channellist: alltokenchannellist })
+            return  res.send({ status: true, data: final_data, channellist: alltokenchannellist })
         }
         else {
            return res.send({ status: false, data: [], channellist: "" })
@@ -554,7 +554,7 @@ class OptionChain {
             const updateOperation = { $set: { Stock_chain: concatenatedArray1 } };
             const Update_Stock_chain = await live_price.updateOne(filter, updateOperation);
 
-            res.send({ status: true, msg: "Done" })
+            return   res.send({ status: true, msg: "Done" })
 
         } catch (error) {
             console.log("Error Get_Option_All_Token_Chain", error);

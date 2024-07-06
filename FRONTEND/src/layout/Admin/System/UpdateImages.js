@@ -57,11 +57,6 @@ const UpdateImages = ({ showModal, setshowModal, data }) => {
                     "loginimage": values.loginimg,
                 }
             }
-
-
-           // console.log("req",req)
-             
-
             await dispatch(Update_smtp_details({ req: req, token: user_token })).unwrap().then((response) => {
 
                 if (response.status === 409) {

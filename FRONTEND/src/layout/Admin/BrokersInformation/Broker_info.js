@@ -11,7 +11,7 @@ import Formikform from "../../../Components/ExtraComponents/Form/Formik_form"
 import { useFormik } from 'formik';
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GET_BROKER_INFORMATIONS, UPDATE_BROKER_INFORMATIONS, FIND_BROKER_RESPONSES } from '../../../ReduxStore/Slice/Admin/DashboardSlice'
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fDate } from "../../../Utils/Date_formet";
 import Modal from '../../../Components/ExtraComponents/Modal';
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
@@ -57,7 +57,7 @@ const Broker_info = () => {
                 }
             })
             .catch((err) => {
-                console.log("err", err);
+                
             })
     }
 
@@ -78,7 +78,7 @@ const Broker_info = () => {
                 }
             })
             .catch((err) => {
-                console.log("err", err);
+                
             })
     }
     useEffect(() => {

@@ -68,13 +68,13 @@ class Login {
                 }
             }
 
-            if ( EmailCheck.Role == "SUBADMIN" ) {
+            if (EmailCheck.Role == "SUBADMIN") {
 
-           // User active Status  
+                // User active Status  
                 if (EmailCheck.ActiveStatus == 0) {
-                return res.send({ status: false, msg: 'please contact admin you are inactive.', data: [] });
-          
-                }   
+                    return res.send({ status: false, msg: 'please contact admin you are inactive.', data: [] });
+
+                }
             }
 
 
@@ -128,14 +128,14 @@ class Login {
 
             try {
                 logger.info('Login Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
-                res.send({ status: true, msg: "Login Succesfully", data: msg })
+                return  res.send({ status: true, msg: "Login Succesfully", data: msg })
             } catch (error) {
                 console.log("Error Some Error in a login", error);
             }
         }
         catch (error) {
 
-            res.send({ status: false, msg: "Server Side error", data: error })
+            return   res.send({ status: false, msg: "Server Side error", data: error })
         }
 
     }
@@ -178,7 +178,7 @@ class Login {
             }
             var DeleteUser = await user_SignUp.deleteOne({ _id: get_user[0]._id });
 
-            res.send({
+            return  res.send({
                 status: true,
                 msg: "Delete Successfully",
                 data: DeleteUser,
@@ -354,13 +354,12 @@ class Login {
                 login_status: "Panel On",
                 role: EmailCheck.Role,
                 device: Device,
-
                 system_ip: getIPAddress()
             })
             await user_login.save();
 
             logger.info('Very Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Login Successfully", data: [], firstlogin: EmailCheck.Is_First_login })
+            return res.send({ status: true, msg: "Login Successfully", data: [], firstlogin: EmailCheck.Is_First_login })
 
 
         } catch (error) {
@@ -418,14 +417,37 @@ class Login {
             })
             await user_login.save();
 
-            // If Not Update User
+
+            if (EmailCheck.TradingStatus == "on") {
+                const result1 = await User.updateOne(
+                    { Email: EmailCheck.Email },
+                    {
+                        $set:
+                        {
+                            TradingStatus: "off",
+                            access_token: ""
+
+                        }
+                    }
+                );
+
+                const user_login = new user_logs({
+                    user_Id: EmailCheck._id,
+                    login_status: "Trading off",
+                    role: EmailCheck.Role,
+                    system_ip: getIPAddress()
+                })
+                await user_login.save();
+
+            }
+
             if (!result) {
                 return res.send({ status: false, msg: 'Server Side issue.', data: [] });
             }
 
 
             logger.info('Logout Succesfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Logout Succesfully", data: [] })
+            return   res.send({ status: true, msg: "Logout Succesfully", data: [] })
 
 
         } catch (error) {
@@ -437,10 +459,8 @@ class Login {
     //  Forget Password
     async ForgetPassword(req, res) {
         try {
-
             const { Email, Device } = req.body;
 
-            // // IF Login Time Email CHECK
             var EmailCheck = await User.findOne({ Email: Email })
             var CompanyInformation = await company_information.findOne()
 
@@ -448,9 +468,7 @@ class Login {
                 return res.send({ status: false, msg: 'User Not exists', data: [] });
             }
 
-
             var userid = Buffer.from(JSON.stringify(EmailCheck._id)).toString('base64');
-            // var redirectUrl = 'http://trade.pandpinfotech.com/#/update/' + userid
             var redirectUrl = `https://${CompanyInformation.domain_url}/#/update/${userid}`
 
             var toEmail = Email;
@@ -460,19 +478,17 @@ class Login {
 
 
         } catch (error) {
-
+            console.log("Error in Login controller", error)
         }
 
-        logger.info('Mail send successfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-        res.send({ status: true, msg: "Mail send successfully", data: redirectUrl })
+        return   res.send({ status: true, msg: "Mail send successfully", data: redirectUrl })
     }
 
 
     // Update Password
     async UpdatePassword(req, res) {
         try {
-            const { userid, newpassword, confirmpassword } = req.body;
-            // // IF Login Time Email CHECK
+            const { userid, newpassword, confirmpassword } = req.body;       
             const EmailCheck = await User.findById(userid);
 
             if (!EmailCheck) {
@@ -500,7 +516,7 @@ class Login {
 
 
             logger.info('Password Update Successfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
-            res.send({ status: true, msg: "Password Update Successfully" });
+            return  res.send({ status: true, msg: "Password Update Successfully" });
         } catch (error) {
 
         }
@@ -511,7 +527,7 @@ class Login {
     async ResetPassword(req, res) {
         try {
             const { userid, newpassword, oldpassword } = req.body;
-            // // IF Login Time Email CHECK
+
             const EmailCheck = await User.findById(userid);
 
             // return
@@ -539,9 +555,8 @@ class Login {
             }
 
 
-            res.send({ status: true, message: "Password Update Successfully" });
+           return res.send({ status: true, message: "Password Update Successfully" });
 
-            logger.info('Password Update Successfully', { role: EmailCheck.Role, user_id: EmailCheck._id });
             // res.send({ status: true, message: "Password Update Successfully" });
         } catch (error) {
 
@@ -576,13 +591,13 @@ class Login {
 
             try {
                 logger.info('Go To Dashboard Succesfully', { Email: EmailCheck.Email, role: EmailCheck.Role, user_id: EmailCheck._id });
-                res.send({ status: true, msg: "Go To Dashboard Succesfully", data: msg })
+                return   res.send({ status: true, msg: "Go To Dashboard Succesfully", data: msg })
             } catch (error) {
                 console.log("Error Some Error in a login", error);
             }
         }
         catch (error) {
-            res.send({ status: false, msg: "Server Side error", data: error })
+            return  res.send({ status: false, msg: "Server Side error", data: error })
         }
 
     }
@@ -617,11 +632,11 @@ class Login {
 
             CommonEmail(toEmail, subjectEmail, htmlEmail, textEmail)
 
-            res.send({ status: true, msg: "Send mail Successfully", data: OTP })
+            return   res.send({ status: true, msg: "Send mail Successfully", data: OTP })
 
         }
         catch (error) {
-            res.send({ status: false, msg: "Server Side error", data: error })
+            return   res.send({ status: false, msg: "Server Side error", data: error })
         }
 
     }
@@ -698,10 +713,7 @@ class Login {
             );
 
 
-            // let result11 = await User.findByIdAndUpdate(
-            //     EmailCheck._id,           
-            //     { new: true }
-            // )
+      
 
             const user_login = new user_logs({
                 user_Id: EmailCheck._id,
@@ -734,7 +746,7 @@ class Login {
 
     async DisclaimerMailSend(req, res) {
         try {
-        
+
             var disclaimerData = await disclaimer();
 
             var toEmail = "snehpnp@gmail.com";

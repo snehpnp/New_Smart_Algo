@@ -56,9 +56,6 @@ const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
 
         mergedArray.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
-      //  console.log("mergedArray -- ",mergedArray);
-
-
 
     }
 
@@ -168,7 +165,7 @@ const DetailsView = ({ showModal, setshowModal, tradeHistoryData }) => {
     var dateString = day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":" + seconds + " (IST)";
 
     // Output the result
-        // console.log(dateString);
+  
         return dateString
         //return row.ft_time
         }else{
