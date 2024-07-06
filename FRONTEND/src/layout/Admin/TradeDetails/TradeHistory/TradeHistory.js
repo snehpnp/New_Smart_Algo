@@ -673,7 +673,6 @@ const TradeHistory = () => {
         const webSocketService = new WebSocketService(WEBSOCKET_URI);
         const handleMessage = (response) => {
       //  console.log("response trade history",response)
-
     $('.BP1_Put_Price_' + response.token).html();
     $('.SP1_Call_Price_' + response.token).html();
     $(".LivePrice_" + response.token).html(response.price);
