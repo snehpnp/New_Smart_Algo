@@ -18,6 +18,9 @@ export const base_url = "http://localhost:7700/";
 // export const base_url = "https://software.growupalgo.com/backend/";
 // export const base_url = "https://software.fincodify.com/backend/";
 // export const base_url = "https://software.uniquetechnology.in/backend/";
+// export const base_url = "https://software.unitythesmartalgo.com/backend/";
+
+
 
 
 

@@ -1518,362 +1518,522 @@ const CreateStrategy = () => {
 
                 <strong>Buy Entry Condition</strong>
 
+                <div className="table-responsive w-100">
+                  <table className="table">
+                    <thead className="bg-transparent">
+                      <tr>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>First</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Comparators</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Second</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
+                        <th className="text-dark text-center" style={{ fontSize: '15px' }}>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+
+                        <td >
+                          {/* <i className="fa-solid fa-circle-plus"></i> */}
+                          <button className="btn btn-success" style={{ fontSize: '15px', padding: '2px 5px' }} ><i className="fa-solid fa-circle-plus"></i></button>
+
+                          <button className="btn btn-danger mx-1" style={{ fontSize: '10px', padding: '2px 3px' }} ><i className="fa-solid fa-circle-minus"></i></button>
+
+                        </td>
+                        <td>
+                          <div className="d-flex">
+                            <select className="form-select" name="expiry_date">
+                              <option value="">---</option>
+                              <option value="close">Close</option>
+                              <option value="open">Open</option>
+                              <option value="high">High</option>
+                              <option value="low">Low</option>
+                              <option value="number">Number</option>
+                            </select>
+                            <input
+                              type="number"
+                              min={0}
+                              className="form-control w-50 ms-2"
+                              defaultValue={0}
+                            />
+                          </div>
+                        </td>
+                        <td>
+
+
+                          <select className="form-select" name="expiry_date">
+                            <option value="">---</option>
+                            <option value="close">Close</option>
+                            <option value="open">Open</option>
+                            <option value="high">High</option>
+                            <option value="low">Low</option>
+                            <option value="number">Number</option>
+                          </select>
+
+                        </td>
+                        <td>
+                          <div className="d-flex">
+                            <select className="form-select" name="expiry_date">
+                              <option value="">---</option>
+                              <option value="close">Close</option>
+                              <option value="open">Open</option>
+                              <option value="high">High</option>
+                              <option value="low">Low</option>
+                              <option value="number">Number</option>
+                            </select>
+                            <input
+                              type="number"
+                              min={0}
+                              className="form-control w-50 ms-2"
+                              defaultValue={0}
+                            />
+                          </div>
+                        </td>
+
+                        <td>
+                          <button className="btn btn-danger" style={{ fontSize: '10px', padding: '2px 3px' }} ><i className="fa-solid fa-circle-minus"></i></button>
+                          <button className="btn btn-success mx-1" style={{ fontSize: '15px', padding: '2px 4px' }} ><i className="fa-solid fa-circle-plus"></i></button>
+
+
+                          
+                        </td>
+                        <td>
+                          <button className="btn btn-danger" style={{ fontSize: '10px', padding: '5px 10px' }} >Remove</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div>
+                  <button className="btn btn-primary float-lg-start">
+                    <i className="fa-solid  fa-plus "></i> Add Row
+                  </button>
+                </div>
+
+
+
+
                 {buyCheck == true ? (
-                  <>
-                    <h4>{condition_string}</h4>
-                    <div className="table-responsive w-100">
-                      <table className="table">
-                        <thead className="bg-transparent">
-                          <tr>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>First</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Comparators</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Second</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}></th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Remove</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                  <Tabs
+                    id="uncontrolled-tab-example"
+                    className="mb-3"
+                  >
+                    <Tab eventKey="home" title="Price">
+                      <h4>{condition_string}</h4>
 
-                          {coditionRequestArr && coditionRequestArr.map((condition_item, index) => {
-                            return (
-                              <>
-                                <tr key={index}>
-                                  <td >
-                                    <button
-                                      className="btn btn-success" style={{ fontSize: '15px', padding: '2px 5px' }}
-                                      onClick={() =>
-                                        AddBracket(index, "start", "buy")
+                      {coditionRequestArr.length > 0 ? (
+                        <>
+                          <Row>
+                            <Col md={2}></Col>
+                            <Col md={4}>
+                              <label style={{ marginRight: "82px" }}>
+                                <b>First</b>
+                              </label>
+
+                              <label style={{ marginRight: "32px" }}>
+                                <b>Comparators</b>
+                              </label>
+
+                              <label>
+                                <b>Second</b>
+                              </label>
+                            </Col>
+                            <Col md={2}></Col>
+                            {coditionRequestArr.length == 2 ? (
+                              <Col md={2}>
+                                <label>
+                                  <b>AND / OR</b>
+                                </label>
+                              </Col>
+                            ) : (
+                              ""
+                            )}
+                          </Row>
+                        </>
+                      ) : (
+                        ""
+                      )}
+
+                      {coditionRequestArr &&
+                        coditionRequestArr.map((condition_item, index) => (
+                          <>
+                            <Row className="mb-2">
+                              <Col
+                                md={2}
+                                className="d-flex px-0 justify-content-center"
+                                style={{ height: "25px" }}
+                              >
+                                <button
+                                  className="btn "
+                                  onClick={() =>
+                                    AddBracket(index, "start", "buy")
+                                  }
+                                  style={{
+                                    border: "1px dashed orange",
+                                    fontSize: "10px",
+                                    color: "#000",
+                                    padding: "5px 10px",
+                                    marginRight: "10px",
+                                  }}
+                                >
+                                  + Bracket
+                                </button>
+
+                                {condition_item.start_bracket.length > 0 ? (
+                                  <button
+                                    className="border-0 px-2"
+                                    onClick={() =>
+                                      RemoveBracket(
+                                        index,
+                                        "start",
+                                        condition_item.start_bracket.length - 1,
+                                        "buy"
+                                      )
+                                    }
+                                  >
+                                    <i className="fa-solid fa-xmark"></i>
+                                  </button>
+                                ) : (
+                                  ""
+                                )}
+
+                                <p
+                                  style={{
+                                    marginRight: "10px",
+                                    fontSize: "larger",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {condition_item.start_bracket.join("")}
+                                </p>
+                              </Col>
+
+                              <Col
+                                md={4}
+                                className="d-flex px-0"
+                                style={{ height: "25px" }}
+                              >
+                                {/* <label>First Element</label> */}
+                                <select
+                                  className="form-select"
+                                  name="expiry_date"
+                                  onChange={(e) => {
+                                    selectSource(
+                                      e,
+                                      condition_item,
+                                      "first",
+                                      index,
+                                      "buy"
+                                    );
+                                  }}
+                                >
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  <option value="">---</option>
+                                  {getSources.data.map((sm, i) => (
+                                    <option
+                                      selected={
+                                        condition_item.first_element.source ==
+                                        sm.value
                                       }
+                                      value={sm.value}
                                     >
-                                      {/* + Bracket */}
-                                      <i className="fa-solid fa-circle-plus"></i>
-                                    </button>
+                                      {sm.name}
+                                    </option>
+                                  ))}
+                                </select>
 
+                                <input
+                                  style={{ height: "25px", margin: "0 20px" }}
+                                  type="number"
+                                  defaultValue={
+                                    condition_item.first_element.offset
+                                  }
+                                  onChange={(e) => {
+                                    ChangeOffsetval(
+                                      e,
+                                      condition_item,
+                                      "first",
+                                      index,
+                                      "buy"
+                                    );
+                                  }}
+                                  min="0"
+                                  className="form-control new-field"
+                                />
 
-                                    {condition_item.start_bracket.length > 0 ? (
-                                      <button
-                                        className="btn btn-danger mx-1" style={{ fontSize: '10px', padding: '2px 3px' }}
-                                        onClick={() =>
-                                          RemoveBracket(
-                                            index,
-                                            "start",
-                                            condition_item.start_bracket.length - 1,
-                                            "buy"
-                                          )
-                                        }
-                                      >
-                                        <i className="fa-solid fa-xmark"></i>
-                                      </button>
-                                    ) : (
-                                      ""
-                                    )}
-
-                                    <p
-                                      style={{
-                                        marginRight: "10px",
-                                        fontSize: "larger",
-                                        fontWeight: "bold",
-                                      }}
+                                {/* <label>Comparators</label> */}
+                                <select
+                                  className="form-select"
+                                  name="expiry_date"
+                                  onChange={(e) => {
+                                    selectComparators(
+                                      e,
+                                      condition_item,
+                                      index,
+                                      "buy"
+                                    );
+                                  }}
+                                >
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  {/* <option value="" >---</option> */}
+                                  {getComparators.data.map((sm, i) => (
+                                    <option
+                                      selected={
+                                        condition_item.comparators == sm.value
+                                      }
+                                      value={sm.value}
                                     >
-                                      {condition_item.start_bracket.join("")}
-                                    </p>
-                                  </td>
+                                      {sm.name}
+                                    </option>
+                                  ))}
+                                </select>
 
+                                {/* <label>Second Element</label> */}
+                                <select
+                                  style={{ margin: "0 20px" }}
+                                  className="form-select"
+                                  name="expiry_date"
+                                  onChange={(e) => {
+                                    selectSource(
+                                      e,
+                                      condition_item,
+                                      "second",
+                                      index,
+                                      "buy"
+                                    );
+                                  }}
+                                >
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  <option value="">---</option>
+                                  {getSources.data.map((sm, i) => (
+                                    <option
+                                      selected={
+                                        condition_item.second_element.source ==
+                                        sm.value
+                                      }
+                                      value={sm.value}
+                                    >
+                                      {sm.name}
+                                    </option>
+                                  ))}
+                                </select>
+                                <input
+                                  style={{ height: "25px" }}
+                                  type="number"
+                                  defaultValue={
+                                    condition_item.second_element.offset
+                                  }
+                                  onChange={(e) => {
+                                    ChangeOffsetval(
+                                      e,
+                                      condition_item,
+                                      "second",
+                                      index,
+                                      "buy"
+                                    );
+                                  }}
+                                  min="0"
+                                  className="form-control new-field"
+                                />
+                              </Col>
+                              {/* <Col md={2}>
+                        <label>Offset</label>
+                        <Form.Control type="number" id="text3" />
+                      </Col> */}
 
-                                  <td>
-                                    <div className="d-flex">
-                                      <select className="form-select" name="first_source"
-                                        onChange={(e) => {
-                                          selectSource(e, condition_item, "first", index, "buy");
-                                        }}
-                                      >
-                                        <option value="">---</option>
-                                        {getSources.data.map((sm, i) => (
-                                          <option
-                                            selected={
-                                              condition_item.first_element.source ==
-                                              sm.value
-                                            }
-                                            value={sm.value}
-                                          >
-                                            {sm.name}
-                                          </option>
-                                        ))}
-                                      </select>
+                              <Col
+                                md={2}
+                                className="d-flex px-0 justify-content-center"
+                                style={{ height: "25px" }}
+                              >
+                                <p
+                                  style={{
+                                    marginRight: "10px",
+                                    fontSize: "larger",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {condition_item.end_bracket.join("")}
+                                </p>
 
-                                      <input
-                                        type="number"
-                                        defaultValue={
-                                          condition_item.first_element.offset
-                                        }
-                                        onChange={(e) => {
-                                          ChangeOffsetval(e, condition_item, "first", index, "buy");
-                                        }}
-                                        min="0"
-                                        className="form-control w-50 ms-2"
-                                      />
-                                    </div>
-                                  </td>
+                                {condition_item.end_bracket.length > 0 ? (
+                                  <button
+                                    className="border-0 px-2"
+                                    onClick={() =>
+                                      RemoveBracket(
+                                        index,
+                                        "end",
+                                        condition_item.end_bracket.length - 1,
+                                        "buy"
+                                      )
+                                    }
+                                  >
+                                    <i className="fa-solid fa-xmark"></i>
+                                  </button>
+                                ) : (
+                                  ""
+                                )}
 
-                                  <td>
-
+                                <button
+                                  className=" btn "
+                                  onClick={() =>
+                                    AddBracket(index, "end", "buy")
+                                  }
+                                  style={{
+                                    border: "1px dashed orange",
+                                    fontSize: "10px",
+                                    color: "#000",
+                                    padding: "5px 10px",
+                                    marginRight: "10px",
+                                  }}
+                                >
+                                  + Bracket
+                                </button>
+                              </Col>
+                              <Col md={2}>
+                                {coditionRequestArr.length >= 2 ? (
+                                  condition_item.and_or_operator == "" ? (
+                                    ""
+                                  ) : (
                                     <select
-                                      className="form-select" name="comparators"
+                                      className="form-select"
+                                      name="and_or"
                                       onChange={(e) => {
-                                        selectComparators(e, condition_item, index, "buy");
+                                        selectAndOrOperaterChange(
+                                          e,
+                                          condition_item,
+                                          index,
+                                          "buy"
+                                        );
                                       }}
                                     >
-                                      {/* <option value="">---</option> */}
-                                      {getComparators.data.map((sm, i) => (
-                                        <option
-                                          selected={
-                                            condition_item.comparators == sm.value
-                                          }
-                                          value={sm.value}
-                                        >
-                                          {sm.name}
-                                        </option>
-                                      ))}
+                                      {/* <option value="">Select Expiry Date</option> */}
+                                      <option
+                                        selected={
+                                          condition_item.and_or_operator ==
+                                          "and"
+                                        }
+                                        value="and"
+                                      >
+                                        AND
+                                      </option>
+                                      <option
+                                        selected={
+                                          condition_item.and_or_operator == "or"
+                                        }
+                                        value="or"
+                                      >
+                                        OR
+                                      </option>
                                     </select>
-                                  </td>
-
-
-
-                                  <td>
-                                    <div className="d-flex">
-
-                                      <select className="form-select" name="second_source"
-                                        onChange={(e) => {
-                                          selectSource(e, condition_item, "second", index,
-                                            "buy");
-                                        }}
-                                      >
-
-                                        <option value="">---</option>
-                                        {getSources.data.map((sm, i) => (
-                                          <option
-                                            selected={
-                                              condition_item.second_element.source ==
-                                              sm.value
-                                            }
-                                            value={sm.value}
-                                          >
-                                            {sm.name}
-                                          </option>
-                                        ))}
-                                      </select>
-                                      <input
-                                        type="number"
-                                        defaultValue={
-                                          condition_item.second_element.offset
-                                        }
-                                        onChange={(e) => {
-                                          ChangeOffsetval(e, condition_item, "second", index,
-                                            "buy");
-                                        }}
-                                        min="0"
-                                        className="form-control w-50 ms-2"
-                                      />
-                                    </div>
-                                  </td>
-
-                                  <td>
-
-                                    {condition_item.end_bracket.length > 0 ? (
-                                      <button
-                                        className="btn btn-danger" style={{ fontSize: '10px', padding: '2px 3px' }}
-                                        onClick={() =>
-                                          RemoveBracket(
-                                            index,
-                                            "end",
-                                            condition_item.end_bracket.length - 1,
-                                            "buy"
-                                          )
-                                        }
-                                      >
-                                        <i className="fa-solid fa-xmark"></i>
-                                      </button>
-                                    ) : (
-                                      ""
-                                    )}
-
+                                  )
+                                ) : (
+                                  ""
+                                )}
+                              </Col>
+                              <Col md={2} style={{ height: "25px" }}>
+                                {index == 0 ? (
+                                  coditionRequestArr.length == 1 ? (
                                     <button
-                                      className="btn btn-success mx-1" style={{ fontSize: '15px', padding: '2px 4px' }}
+                                      className="btn btn-danger "
                                       onClick={() =>
-                                        AddBracket(index, "end", "buy")
+                                        conditionRemove(index, "buy")
                                       }
-                                    >
-                                      {/* + Bracket */}
-                                      <i className="fa-solid fa-circle-plus"></i>
-                                    </button>
-
-                                    <p
                                       style={{
-                                        marginRight: "10px",
-                                        fontSize: "larger",
-                                        fontWeight: "bold",
+                                        fontSize: "10px",
+                                        padding: "5px 10px",
                                       }}
                                     >
-                                      {condition_item.end_bracket.join("")}
-                                    </p>
+                                      Remove
+                                    </button>
+                                  ) : (
+                                    ""
+                                  )
+                                ) : (
+                                  <button
+                                    className="btn btn-danger  "
+                                    style={{
+                                      fontSize: "10px",
+                                      padding: "5px 10px",
+                                    }}
+                                    onClick={() =>
+                                      conditionRemove(index, "buy")
+                                    }
+                                  >
+                                    Remove
+                                  </button>
+                                )}
+                              </Col>
+                            </Row>
+                          </>
+                        ))}
 
+                      <button
+                        style={{ border: "1px dashed orange" }}
+                        className="btn p-2"
+                        onClick={() => conditionAdd(coditionRequestArr, "buy")}
+                      >
+                        + Add
+                      </button>
 
-                                  </td>
-
-                                  <td>
-                                    {coditionRequestArr.length >= 2 ? (
-                                      condition_item.and_or_operator == "" ? (
-                                        ""
-                                      ) : (
-                                        <select
-                                          className="form-select"
-                                          name="and_or"
-                                          onChange={(e) => {
-                                            selectAndOrOperaterChange(
-                                              e,
-                                              condition_item,
-                                              index,
-                                              "buy"
-                                            );
-                                          }}
-                                        >
-                                          {/* <option value="">Select Expiry Date</option> */}
-                                          <option
-                                            selected={
-                                              condition_item.and_or_operator ==
-                                              "and"
-                                            }
-                                            value="and"
-                                          >
-                                            AND
-                                          </option>
-                                          <option
-                                            selected={
-                                              condition_item.and_or_operator == "or"
-                                            }
-                                            value="or"
-                                          >
-                                            OR
-                                          </option>
-                                        </select>
-                                      )
-                                    ) : (
-                                      ""
-                                    )}
-
-                                  </td>
-
-                                  <td>
-
-                                    {index == 0 ? (
-                                      coditionRequestArr.length == 1 ? (
-                                        <button
-                                          className="btn btn-danger "
-                                          onClick={() =>
-                                            conditionRemove(index, "buy")
-                                          }
-                                          style={{
-                                            fontSize: "10px",
-                                            padding: "5px 10px",
-                                          }}
-                                        >
-                                          Remove
-                                        </button>
-                                      ) : (
-                                        ""
-                                      )
-                                    ) : (
-                                      <button
-                                        className="btn btn-danger  "
-                                        style={{
-                                          fontSize: "10px",
-                                          padding: "5px 10px",
-                                        }}
-                                        onClick={() =>
-                                          conditionRemove(index, "buy")
-                                        }
-                                      >
-                                        Remove
-                                      </button>
-                                    )}
-                                  </td>
-
-
-                                </tr>
-                              </>
-                            )
-                          })
-                          }
-
-                        </tbody>
-                      </table>
-                    </div>
-                    <button
-                      style={{ border: "1px dashed orange" }}
-                      className="btn p-2"
-                      onClick={() => conditionAdd(coditionRequestArr, "buy")}
-                    >
-                      + Add
-                    </button>
-                  </>
-
+                      {condition_string != "" ? (
+                        <li className="StepProgress-item">
+                          <strong>Buy Exit Condition</strong>
+                          <div className="row mt-3">
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label className="text-danger">
+                                  Stop loss (point)
+                                </label>
+                                <input
+                                  type="number"
+                                  onChange={(e) => {
+                                    StoplossChange(e, "buy");
+                                  }}
+                                  className="form-control"
+                                ></input>
+                              </div>
+                            </div>
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label className="text-success">
+                                  Target Profit (point)
+                                </label>
+                                <input
+                                  type="number"
+                                  onChange={(e) => {
+                                    TargetChange(e, "buy");
+                                  }}
+                                  className="form-control"
+                                ></input>
+                              </div>
+                            </div>
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label className="">
+                                  Trailing SL (point) (optional)
+                                </label>
+                                <input
+                                  type="number"
+                                  onChange={(e) => {
+                                    TSLChange(e, "buy");
+                                  }}
+                                  className="form-control"
+                                ></input>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      ) : (
+                        ""
+                      )}
+                    </Tab>
+                  </Tabs>
                 ) : (
                   ""
                 )}
 
-                {condition_string != "" ? (
-                  <li className="StepProgress-item">
-                    <strong>Buy Exit Condition</strong>
-                    <div className="row mt-3">
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-danger">
-                            Stop loss (point)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              StoplossChange(e, "buy");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-success">
-                            Target Profit (point)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              TargetChange(e, "buy");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="">
-                            Trailing SL (point) (optional)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              TSLChange(e, "buy");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ) : (
-                  ""
-                )}
 
               </li>
 
@@ -1896,364 +2056,432 @@ const CreateStrategy = () => {
                 <strong>Sell Entry Condition</strong>
 
                 {sellCheck == true ? (
-                  <>
-                    <h4>{condition_string_sell}</h4>
-                    <div className="table-responsive w-100">
-                      <table className="table">
-                        <thead className="bg-transparent">
-                          <tr>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>First</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Comparators</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Second</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Bracket</th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}></th>
-                            <th className="text-dark text-center" style={{ fontSize: '15px' }}>Remove</th>
-                          </tr>
-                        </thead>
-                        <tbody>
+                  <Tabs
+                    // defaultActiveKey="profile"
+                    id="uncontrolled-tab-example"
+                    className="mb-3"
+                  >
+                    <Tab eventKey="home" title="Price">
+                      <h4>{condition_string_sell}</h4>
 
-                          {coditionRequestArrSell && coditionRequestArrSell.map((condition_item, index) => {
-                            return (
-                              <>
-                                <tr key={index}>
-                                  <td >
-                                    <button
-                                      className="btn btn-success" style={{ fontSize: '15px', padding: '2px 5px' }}
-                                      onClick={() =>
-                                        AddBracket(index, "start", "sell")
+                      {coditionRequestArrSell.length > 0 ? (
+                        <>
+                          <Row>
+                            <Col md={2}></Col>
+                            <Col md={4}>
+                              <label style={{ marginRight: "82px" }}>
+                                <b>First</b>
+                              </label>
+
+                              <label style={{ marginRight: "32px" }}>
+                                <b>Comparators</b>
+                              </label>
+
+                              <label>
+                                <b>Second</b>
+                              </label>
+                            </Col>
+                            <Col md={2}></Col>
+                            {coditionRequestArrSell.length == 2 ? (
+                              <Col md={2}>
+                                <label>
+                                  <b>AND / OR</b>
+                                </label>
+                              </Col>
+                            ) : (
+                              ""
+                            )}
+                          </Row>
+                        </>
+                      ) : (
+                        ""
+                      )}
+
+                      {coditionRequestArrSell &&
+                        coditionRequestArrSell.map((condition_item, index) => (
+                          <>
+                            <Row className="mb-2">
+                              <Col
+                                md={2}
+                                className="d-flex px-0 justify-content-center"
+                                style={{ height: "25px" }}
+                              >
+                                <button
+                                  className="btn "
+                                  onClick={() =>
+                                    AddBracket(index, "start", "sell")
+                                  }
+                                  style={{
+                                    border: "1px dashed orange",
+                                    fontSize: "10px",
+                                    color: "#000",
+                                    padding: "5px 10px",
+                                    marginRight: "10px",
+                                  }}
+                                >
+                                  + Bracket
+                                </button>
+
+                                {condition_item.start_bracket.length > 0 ? (
+                                  <button
+                                    className="border-0 px-2"
+                                    onClick={() =>
+                                      RemoveBracket(
+                                        index,
+                                        "start",
+                                        condition_item.start_bracket.length - 1,
+                                        "sell"
+                                      )
+                                    }
+                                  >
+                                    <i className="fa-solid fa-xmark"></i>
+                                  </button>
+                                ) : (
+                                  ""
+                                )}
+
+                                <p
+                                  style={{
+                                    marginRight: "10px",
+                                    fontSize: "larger",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {condition_item.start_bracket.join("")}
+                                </p>
+                              </Col>
+
+                              <Col
+                                md={4}
+                                className="d-flex px-0"
+                                style={{ height: "25px" }}
+                              >
+                                {/* <label>First Element</label> */}
+                                <select
+                                  className="form-select"
+                                  name="expiry_date"
+                                  onChange={(e) => {
+                                    selectSource(
+                                      e,
+                                      condition_item,
+                                      "first",
+                                      index,
+                                      "sell"
+                                    );
+                                  }}
+                                >
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  <option value="">---</option>
+                                  {getSources.data.map((sm, i) => (
+                                    <option
+                                      selected={
+                                        condition_item.first_element.source ==
+                                        sm.value
                                       }
+                                      value={sm.value}
                                     >
-                                      {/* + Bracket */}
-                                      <i className="fa-solid fa-circle-plus"></i>
-                                    </button>
+                                      {sm.name}
+                                    </option>
+                                  ))}
+                                </select>
 
+                                <input
+                                  style={{ height: "25px", margin: "0 20px" }}
+                                  type="number"
+                                  defaultValue={
+                                    condition_item.first_element.offset
+                                  }
+                                  onChange={(e) => {
+                                    ChangeOffsetval(
+                                      e,
+                                      condition_item,
+                                      "first",
+                                      index,
+                                      "sell"
+                                    );
+                                  }}
+                                  min="0"
+                                  className="form-control new-field"
+                                />
 
-                                    {condition_item.start_bracket.length > 0 ? (
-                                      <button
-                                        className="btn btn-danger mx-1" style={{ fontSize: '10px', padding: '2px 3px' }}
-                                        onClick={() =>
-                                          RemoveBracket(
-                                            index,
-                                            "start",
-                                            condition_item.start_bracket.length - 1,
-                                            "sell"
-                                          )
-                                        }
-                                      >
-                                        <i className="fa-solid fa-xmark"></i>
-                                      </button>
-                                    ) : (
-                                      ""
-                                    )}
+                                {/* <Col md={2}>
+        <label>Offset</label>
+        <Form.Control type="number" id="text2" />
+      </Col> */}
 
-                                    <p
-                                      style={{
-                                        marginRight: "10px",
-                                        fontSize: "larger",
-                                        fontWeight: "bold",
-                                      }}
+                                {/* <label>Comparators</label> */}
+                                <select
+                                  className="form-select"
+                                  name="expiry_date"
+                                  onChange={(e) => {
+                                    selectComparators(
+                                      e,
+                                      condition_item,
+                                      index,
+                                      "sell"
+                                    );
+                                  }}
+                                >
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  {/* <option value="" >---</option> */}
+                                  {getComparators.data.map((sm, i) => (
+                                    <option
+                                      selected={
+                                        condition_item.comparators == sm.value
+                                      }
+                                      value={sm.value}
                                     >
-                                      {condition_item.start_bracket.join("")}
-                                    </p>
-                                  </td>
+                                      {sm.name}
+                                    </option>
+                                  ))}
+                                </select>
 
+                                {/* <label>Second Element</label> */}
+                                <select
+                                  style={{ margin: "0 20px" }}
+                                  className="form-select"
+                                  name="expiry_date"
+                                  onChange={(e) => {
+                                    selectSource(
+                                      e,
+                                      condition_item,
+                                      "second",
+                                      index,
+                                      "sell"
+                                    );
+                                  }}
+                                >
+                                  {/* <option value="">Select Expiry Date</option> */}
+                                  <option value="">---</option>
+                                  {getSources.data.map((sm, i) => (
+                                    <option
+                                      selected={
+                                        condition_item.second_element.source ==
+                                        sm.value
+                                      }
+                                      value={sm.value}
+                                    >
+                                      {sm.name}
+                                    </option>
+                                  ))}
+                                </select>
+                                <input
+                                  style={{ height: "25px" }}
+                                  type="number"
+                                  defaultValue={
+                                    condition_item.second_element.offset
+                                  }
+                                  onChange={(e) => {
+                                    ChangeOffsetval(
+                                      e,
+                                      condition_item,
+                                      "second",
+                                      index,
+                                      "sell"
+                                    );
+                                  }}
+                                  min="0"
+                                  className="form-control new-field"
+                                />
+                              </Col>
+                              {/* <Col md={2}>
+        <label>Offset</label>
+        <Form.Control type="number" id="text3" />
+      </Col> */}
 
-                                  <td>
-                                    <div className="d-flex">
-                                      <select className="form-select" name="first_source"
-                                        onChange={(e) => {
-                                          selectSource(e, condition_item, "first", index, "sell");
-                                        }}
-                                      >
-                                        <option value="">---</option>
-                                        {getSources.data.map((sm, i) => (
-                                          <option
-                                            selected={
-                                              condition_item.first_element.source ==
-                                              sm.value
-                                            }
-                                            value={sm.value}
-                                          >
-                                            {sm.name}
-                                          </option>
-                                        ))}
-                                      </select>
+                              <Col
+                                md={2}
+                                className="d-flex px-0 justify-content-center"
+                                style={{ height: "25px" }}
+                              >
+                                <p
+                                  style={{
+                                    marginRight: "10px",
+                                    fontSize: "larger",
+                                    fontWeight: "bold",
+                                  }}
+                                >
+                                  {condition_item.end_bracket.join("")}
+                                </p>
 
-                                      <input
-                                        type="number"
-                                        defaultValue={
-                                          condition_item.first_element.offset
-                                        }
-                                        onChange={(e) => {
-                                          ChangeOffsetval(e, condition_item, "first", index, "sell");
-                                        }}
-                                        min="0"
-                                        className="form-control w-50 ms-2"
-                                      />
-                                    </div>
-                                  </td>
+                                {condition_item.end_bracket.length > 0 ? (
+                                  <button
+                                    className="border-0 px-2"
+                                    onClick={() =>
+                                      RemoveBracket(
+                                        index,
+                                        "end",
+                                        condition_item.end_bracket.length - 1,
+                                        "sell"
+                                      )
+                                    }
+                                  >
+                                    <i className="fa-solid fa-xmark"></i>
+                                  </button>
+                                ) : (
+                                  ""
+                                )}
 
-                                  <td>
-
+                                <button
+                                  className=" btn "
+                                  onClick={() =>
+                                    AddBracket(index, "end", "sell")
+                                  }
+                                  style={{
+                                    border: "1px dashed orange",
+                                    fontSize: "10px",
+                                    color: "#000",
+                                    padding: "5px 10px",
+                                    marginRight: "10px",
+                                  }}
+                                >
+                                  + Bracket
+                                </button>
+                              </Col>
+                              <Col md={2}>
+                                {coditionRequestArrSell.length >= 2 ? (
+                                  condition_item.and_or_operator == "" ? (
+                                    ""
+                                  ) : (
                                     <select
-                                      className="form-select" name="comparators"
+                                      className="form-select"
+                                      name="and_or"
                                       onChange={(e) => {
-                                        selectComparators(e, condition_item, index, "sell");
+                                        selectAndOrOperaterChange(
+                                          e,
+                                          condition_item,
+                                          index,
+                                          "sell"
+                                        );
                                       }}
                                     >
-                                      {/* <option value="">---</option> */}
-                                      {getComparators.data.map((sm, i) => (
-                                        <option
-                                          selected={
-                                            condition_item.comparators == sm.value
-                                          }
-                                          value={sm.value}
-                                        >
-                                          {sm.name}
-                                        </option>
-                                      ))}
+                                      {/* <option value="">Select Expiry Date</option> */}
+                                      <option
+                                        selected={
+                                          condition_item.and_or_operator ==
+                                          "and"
+                                        }
+                                        value="and"
+                                      >
+                                        AND
+                                      </option>
+                                      <option
+                                        selected={
+                                          condition_item.and_or_operator == "or"
+                                        }
+                                        value="or"
+                                      >
+                                        OR
+                                      </option>
                                     </select>
-                                  </td>
-
-
-
-                                  <td>
-                                    <div className="d-flex">
-
-                                      <select className="form-select" name="second_source"
-                                        onChange={(e) => {
-                                          selectSource(e, condition_item, "second", index,
-                                            "sell");
-                                        }}
-                                      >
-
-                                        <option value="">---</option>
-                                        {getSources.data.map((sm, i) => (
-                                          <option
-                                            selected={
-                                              condition_item.second_element.source ==
-                                              sm.value
-                                            }
-                                            value={sm.value}
-                                          >
-                                            {sm.name}
-                                          </option>
-                                        ))}
-                                      </select>
-                                      <input
-                                        type="number"
-                                        defaultValue={
-                                          condition_item.second_element.offset
-                                        }
-                                        onChange={(e) => {
-                                          ChangeOffsetval(e, condition_item, "second", index,
-                                            "sell");
-                                        }}
-                                        min="0"
-                                        className="form-control w-50 ms-2"
-                                      />
-                                    </div>
-                                  </td>
-
-                                  <td>
-
-                                    {condition_item.end_bracket.length > 0 ? (
-                                      <button
-                                        className="btn btn-danger" style={{ fontSize: '10px', padding: '2px 3px' }}
-                                        onClick={() =>
-                                          RemoveBracket(
-                                            index,
-                                            "end",
-                                            condition_item.end_bracket.length - 1,
-                                            "sell"
-                                          )
-                                        }
-                                      >
-                                        <i className="fa-solid fa-xmark"></i>
-                                      </button>
-                                    ) : (
-                                      ""
-                                    )}
-
+                                  )
+                                ) : (
+                                  ""
+                                )}
+                              </Col>
+                              <Col md={2} style={{ height: "25px" }}>
+                                {index == 0 ? (
+                                  coditionRequestArrSell.length == 1 ? (
                                     <button
-                                      className="btn btn-success mx-1" style={{ fontSize: '15px', padding: '2px 4px' }}
+                                      className="btn btn-danger "
                                       onClick={() =>
-                                        AddBracket(index, "end", "sell")
+                                        conditionRemove(index, "sell")
                                       }
-                                    >
-                                      {/* + Bracket */}
-                                      <i className="fa-solid fa-circle-plus"></i>
-                                    </button>
-
-                                    <p
                                       style={{
-                                        marginRight: "10px",
-                                        fontSize: "larger",
-                                        fontWeight: "bold",
+                                        fontSize: "10px",
+                                        padding: "5px 10px",
                                       }}
                                     >
-                                      {condition_item.end_bracket.join("")}
-                                    </p>
+                                      Remove
+                                    </button>
+                                  ) : (
+                                    ""
+                                  )
+                                ) : (
+                                  <button
+                                    className="btn btn-danger  "
+                                    style={{
+                                      fontSize: "10px",
+                                      padding: "5px 10px",
+                                    }}
+                                    onClick={() =>
+                                      conditionRemove(index, "sell")
+                                    }
+                                  >
+                                    Remove
+                                  </button>
+                                )}
+                              </Col>
+                            </Row>
+                          </>
+                        ))}
 
+                      <button
+                        style={{ border: "1px dashed orange" }}
+                        className="btn p-2"
+                        onClick={() =>
+                          conditionAdd(coditionRequestArrSell, "sell")
+                        }
+                      >
+                        + Add
+                      </button>
 
-                                  </td>
-
-                                  <td>
-                                    {coditionRequestArrSell.length >= 2 ? (
-                                      condition_item.and_or_operator == "" ? (
-                                        ""
-                                      ) : (
-                                        <div className="d-flex">
-                                          <select
-                                            className="form-select"
-                                            name="and_or"
-                                            onChange={(e) => {
-                                              selectAndOrOperaterChange(
-                                                e,
-                                                condition_item,
-                                                index,
-                                                "sell"
-                                              );
-                                            }}
-                                          >
-
-                                            <option
-                                              selected={
-                                                condition_item.and_or_operator ==
-                                                "and"
-                                              }
-                                              value="and"
-                                            >
-                                              AND
-                                            </option>
-                                            <option
-                                              selected={
-                                                condition_item.and_or_operator == "or"
-                                              }
-                                              value="or"
-                                            >
-                                              OR
-                                            </option>
-                                          </select>
-                                        </div>
-                                      )
-                                    ) : (
-                                      ""
-                                    )}
-
-                                  </td>
-
-                                  <td>
-
-                                    {index == 0 ? (
-                                      coditionRequestArrSell.length == 1 ? (
-                                        <button
-                                          className="btn btn-danger "
-                                          onClick={() =>
-                                            conditionRemove(index, "sell")
-                                          }
-                                          style={{
-                                            fontSize: "10px",
-                                            padding: "5px 10px",
-                                          }}
-                                        >
-                                          Remove
-                                        </button>
-                                      ) : (
-                                        ""
-                                      )
-                                    ) : (
-                                      <button
-                                        className="btn btn-danger  "
-                                        style={{
-                                          fontSize: "10px",
-                                          padding: "5px 10px",
-                                        }}
-                                        onClick={() =>
-                                          conditionRemove(index, "sell")
-                                        }
-                                      >
-                                        Remove
-                                      </button>
-                                    )}
-                                  </td>
-
-
-                                </tr>
-                              </>
-                            )
-                          })
-                          }
-
-                        </tbody>
-                      </table>
-                    </div>
-                    <button
-                      style={{ border: "1px dashed orange" }}
-                      className="btn p-2"
-                      onClick={() => conditionAdd(coditionRequestArrSell, "sell")}
-                    >
-                      + Add
-                    </button>
-                  </>
+                      {condition_string_sell != "" ? (
+                        <li className="StepProgress-item">
+                          <strong>Sell Exit Condition</strong>
+                          <div className="row mt-3">
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label className="text-danger">
+                                  Stop loss (point)
+                                </label>
+                                <input
+                                  type="number"
+                                  onChange={(e) => {
+                                    StoplossChange(e, "sell");
+                                  }}
+                                  className="form-control"
+                                ></input>
+                              </div>
+                            </div>
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label className="text-success">
+                                  Target Profit (point)
+                                </label>
+                                <input
+                                  type="number"
+                                  onChange={(e) => {
+                                    TargetChange(e, "sell");
+                                  }}
+                                  className="form-control"
+                                ></input>
+                              </div>
+                            </div>
+                            <div className="col-md-4">
+                              <div className="form-group">
+                                <label className="">
+                                  Trailing SL (point) (optional)
+                                </label>
+                                <input
+                                  type="number"
+                                  onChange={(e) => {
+                                    TSLChange(e, "sell");
+                                  }}
+                                  className="form-control"
+                                ></input>
+                              </div>
+                            </div>
+                          </div>
+                        </li>
+                      ) : (
+                        ""
+                      )}
+                    </Tab>
+                  </Tabs>
                 ) : (
                   ""
                 )}
-
-
-                {condition_string_sell != "" ? (
-                  <li className="StepProgress-item">
-                    <strong>Sell Exit Condition</strong>
-                    <div className="row mt-3">
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-danger">
-                            Stop loss (point)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              StoplossChange(e, "sell");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="text-success">
-                            Target Profit (point)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              TargetChange(e, "sell");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label className="">
-                            Trailing SL (point) (optional)
-                          </label>
-                          <input
-                            type="number"
-                            onChange={(e) => {
-                              TSLChange(e, "sell");
-                            }}
-                            className="form-control"
-                          ></input>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ) : (
-                  ""
-                )}
-
               </li>
             </ul>
 

@@ -299,7 +299,7 @@ class MakeStartegy {
 
   /// Make Startegy
   async AddMakeStartegy(req, res) {
- 
+
     var _id = new ObjectId(req.body.user_id);
 
     let user_panel_key = await user.findOne({_id:_id}).select('client_key').lean();
@@ -351,11 +351,6 @@ class MakeStartegy {
         let maxProfit = req.body.maxProfit;
         let maxLoss = req.body.maxLoss;
         
-
-
-
-        
-
         // Add Token token chain
       var get_token_chain = await token_chain.findOne({_id:tokensymbol})
      

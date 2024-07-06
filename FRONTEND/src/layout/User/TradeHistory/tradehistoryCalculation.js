@@ -15,8 +15,7 @@ import {
 import $ from "jquery";
 
 
-
-
+//  SHOW lIVE PRICE
 
 export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDetails, setSocketState, tradeHistoryData) => {
 
@@ -183,8 +182,7 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
             }
         }
     }
-
-    else{
+     else{
     
         tradeHistoryData && tradeHistoryData.forEach((row, i) => {
          
@@ -289,15 +287,10 @@ export const FunctionForLivePriceCalculation = async (CreatechannelList, UserDet
         });
   
   
-      }
-
-
-
+     }
 
 
 };
-
-
 
 
 

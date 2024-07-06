@@ -20,7 +20,48 @@ import UpdateSmptDetails from './UpdateSmptDetails';
 
 import { useDispatch } from "react-redux";
 
+
+import WebSocketService from '../../../Utils/LiveDataRedisSocket';
+import WebSocketServiceForexCrypto from '../../../Utils/LiveDataForexCryptoSocket';
+const WEBSOCKET_URI = 'ws://193.239.237.157:6789';
+
+const WEBSOCKET_URI_FOREX = 'wss://api.tiingo.com/fx';
+const API_KEY = 'bfb6173acfc17ce2afbc73a44015944789678341';
+
 const System = () => {
+
+
+    const [messages, setMessages] = useState([]);
+    // useEffect(() => {
+    //     const webSocketService = new WebSocketService(WEBSOCKET_URI);
+    //     const handleMessage = (message) => {
+    //      setMessages((prevMessages) => [...prevMessages, message]);
+    //     console.log("message ",message)
+    //     };
+    
+    //     const handleOpen = () => {
+    //       console.log('WebSocket connection opened');
+      
+    //     };
+    
+    //     const handleClose = () => {
+    //       console.log('WebSocket connection closed');
+    //     };
+    
+    //     const handleError = (error) => {
+    //       console.error('WebSocket error:', error);
+    //     };
+    
+    //     const disconnect = webSocketService.connect(handleMessage, handleOpen, handleClose, handleError);
+    
+    //     return () => {
+    //       disconnect();
+    //     };
+    //   }, []);
+
+
+
+
     const [dissArr, setDissArr] = useState([]);
     const [inputs, setInputs] = useState([]);
 
@@ -82,10 +123,10 @@ const System = () => {
             dataField: 'panel_name',
             text: 'Company Name'
         },
-        {
-            dataField: 'panel_short_name',
-            text: 'Panel Key'
-        },
+        // {
+        //     dataField: 'panel_key',
+        //     text: 'Panel Key'
+        // },
         {
             dataField: 'panel_short_name',
             text: 'Company Short Name'
@@ -253,6 +294,9 @@ const System = () => {
 
     return (
         <Content Page_title="System" button_status={false}>
+           
+           {/* <button onClick={()=>connect()}>OKKK</button> */}
+
             <h2>Company Information</h2>
             <BasicDataTable tableData={getCompanyName.data} TableColumns={Company_columns} dropdown={false} />
             <br />
