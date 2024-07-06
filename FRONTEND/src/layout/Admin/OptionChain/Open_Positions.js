@@ -405,10 +405,8 @@ const TradeHistory = () => {
     const UpdateStopLoss = async () => {
 
         const filteredArray2 = tradeHistoryAllData.data.filter(item => selected1.some(obj => obj._id === item._id));
-   
         
         let MarketOpenToday = GetMarketOpenDays();
-
         if (MarketOpenToday) {
             if (UserDetails && UserDetails.trading_status == "off") {
                 alert("Please Trading On First")
@@ -418,8 +416,6 @@ const TradeHistory = () => {
                     alert("Please Select Atleast One Symbol")
                 }
                 else {
-
-
                     await dispatch(
                         Update_Signals({
                             data: filteredArray2,

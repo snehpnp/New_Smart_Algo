@@ -10,7 +10,7 @@ import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicD
 import Modal from "../../../Components/ExtraComponents/Modal";
 import { Trash2, X } from 'lucide-react';
 import Holidays from "date-holidays"
-import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token, Option_Symbols_Update_status } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
+import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token, Option_Symbols_Update_status ,Update_Subscribe_token} from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
 import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Service/Alice_Socket";
@@ -318,46 +318,7 @@ const HelpCenter = () => {
 
     const ExcuteTradeButton = () => {
     
-        let Arr = []
-
-        const expiry_i = convert_string_to_month(expiry && expiry)
-
-        CreateSignalRequest && CreateSignalRequest.map((item) => {
-            // const expiry_i = get_thre_digit_month()
-            const buy = $('.BP1_Put_Price_' + item.token).html();
-            const sell = $('.SP1_Call_Price_' + item.token).html();
-
-            const Symbol = `${symbol && symbol}${expiry_i}${item.strike}${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`
-
-            Arr.push({
-                "entry_qty": item.entry_qty,
-                "price": buy ? buy : sell,
-                "Symbol": Symbol,
-                'option_type': `${item.option_type === "CALL" ? "CE" : item.option_type === "PUT" ? "PE" : ""}`,
-                "type": item.type === "SE" ? "SELL" : item.type === "LE" ? "BUY" : "",
-                "token": item.token,
-                "strategy": strategy && strategy,
-                "call_type": item.option_type,
-                "trading_type": item.type,
-                "segment": item.segment,
-                "strike": item.strike,
-            })
-        })
-
-        setExecuteTradeData({
-            loading: false,
-            data: Arr
-        })
-        setshowModal(true)
-
-        return
-
-
-
-
-
-
-
+        
         ///////////////////////////////////////////////////////////////////
 
         const currentDate = new Date();
@@ -503,9 +464,10 @@ const HelpCenter = () => {
     // ------------------------------------ REMOVE SELECTED------------------------------------
 
 
-    const Done_For_Trade = (id) => {
+    const Done_For_Trade = async (id) => {
         handleClickDisabled();
 
+        
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
         ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
@@ -573,8 +535,16 @@ const HelpCenter = () => {
 
         })
 
+        await dispatch(
+            Update_Subscribe_token({
+                data: ExecuteTradeData.data,
+                token: token,
+            })
 
-
+        ).unwrap()
+        .then((response) => { 
+          //  console.log("response subscribe token",response) 
+        });
 
     }
 

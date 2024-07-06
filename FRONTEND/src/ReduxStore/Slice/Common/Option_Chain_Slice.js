@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { DispatchLogin } from "../../../Layout/Auth/Login";
-import { GET_OPTION_SYMBOLS_EXPIRY, GET_OPTION_ALL_ROUND_TOKEN, UPDATE_SIGNALS, GET_OPEN_POSITION, GET_PANEL_KEY, GET_OPTION_SYMBOLS ,OPTION_SYMBOLS_UPDATE_STATUS } from "../../../Service/common.service";
+import { GET_OPTION_SYMBOLS_EXPIRY, GET_OPTION_ALL_ROUND_TOKEN, UPDATE_SIGNALS, GET_OPEN_POSITION, GET_PANEL_KEY, GET_OPTION_SYMBOLS ,OPTION_SYMBOLS_UPDATE_STATUS ,UPDATE_SUBSCRIBE_TOKEN} from "../../../Service/common.service";
 
 
 export const Get_Option_Symbols = createAsyncThunk("get/option_symbols", async (data) => {
@@ -69,6 +69,17 @@ export const Update_Signals = createAsyncThunk("/update/signals", async (apireq)
     const { data, token } = apireq
     try {
         const res = await UPDATE_SIGNALS({ data: data }, token);
+        return await res;
+    } catch (err) {
+        return err;
+    }
+});
+
+
+export const Update_Subscribe_token = createAsyncThunk("/update/subscribe/token", async (apireq) => {
+    const { data, token } = apireq
+    try {
+        const res = await UPDATE_SUBSCRIBE_TOKEN({ data: data }, token);
         return await res;
     } catch (err) {
         return err;

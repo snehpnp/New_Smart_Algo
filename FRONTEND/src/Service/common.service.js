@@ -158,6 +158,21 @@ export async function UPDATE_SIGNALS(data, token) {
 }
 
 
+// UPDATE SUBSCRIBE_TOKEN
+export async function UPDATE_SUBSCRIBE_TOKEN(data, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}update/subscribe/token`, data, {
+            headers: header(token),
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        
+    }
+
+}
+
+
 
 // FIND BROKER RESPONSE BY ID
 export async function GET_MESSAGE_BROD(id) {
