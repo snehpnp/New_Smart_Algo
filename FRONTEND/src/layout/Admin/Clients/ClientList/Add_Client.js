@@ -128,7 +128,7 @@ const AddClient = () => {
       if (
         !values.email ||
         !values.fullName ||
-        !values.mobile 
+        !values.mobile
       ) {
         toast.error("All Fields Are Mandatory");
         return;
@@ -170,7 +170,7 @@ const AddClient = () => {
       }
 
 
-    
+
 
       await dispatch(Add_User({ req: req, token: user_details.token })).unwrap().then((response) => {
         if (response.status === 409) {
