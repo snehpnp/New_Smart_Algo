@@ -21,14 +21,15 @@ CREATE TABLE permissions (
 
 
 /*--TABLE:- ROLE PERMISSIONS  */
-CREATE TABLE role_permissions (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+
+CREATE TABLE `role_permissions` (
     role_id INT NOT NULL,
     permission_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (role_id) REFERENCES roles(id),
-    FOREIGN KEY (permission_id) REFERENCES permissions(id)
+    FOREIGN KEY (permission_id) REFERENCES permissions(id),
+    UNIQUE (role_id,permission_id)
 );
 
 
