@@ -87,15 +87,6 @@ const TradingStatus = () => {
   }
 
 
-  useEffect(() => {
-    data1();
-    data3();
-  }, [first, first1]);
-
-
-
-
-
   const columns = [
     {
       dataField: "index",
@@ -211,6 +202,11 @@ const TradingStatus = () => {
   useEffect(() => {
     dateArr();
   }, []);
+
+  useEffect(() => {
+    data1();
+    data3();
+  }, [first, first1]);
 
 
   return (

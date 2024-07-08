@@ -1,17 +1,5 @@
-
-
-import DetailsView from "./DetailsView";
-import {
-    GetAliceTokenAndID,
-    CreateSocketSession,
-    ConnctSocket,
-
-} from "../../../Service/Alice_Socket";
-import {
-    ShowColor,
-    ShowColor1,
-    ShowColor_Compare_two,
-} from "../../../Utils/ShowTradeColor";
+import {CreateSocketSession,ConnctSocket} from "../../../Service/Alice_Socket";
+import { ShowColor1} from "../../../Utils/ShowTradeColor";
 import $ from "jquery";
 
 
