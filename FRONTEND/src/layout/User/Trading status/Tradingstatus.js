@@ -179,6 +179,7 @@ const TradingStatus = () => {
 
   var dateArray = [];
   const dateArr = () => {
+    console.log("dateArr -> dateArr");
     for (let i = 0; i < 3; i++) {
       const currentDate = new Date();
       currentDate.setDate(currentDate.getDate() - i);
@@ -199,94 +200,97 @@ const TradingStatus = () => {
     setfirst1(dateArray[0]);
 
   };
+
   useEffect(() => {
     dateArr();
   }, []);
 
   useEffect(() => {
     data1();
-    data3();
-  }, [first, first1]);
 
+  }, [first]);
+
+  useEffect(() => {
+
+    data3();
+  }, [first1]);
 
   return (
     <>
-      {getAllUserTrading_status.loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Content Page_title="Trading Status" button_status={false}>
-            <Tabs
-              defaultActiveKey="home"
-              id="uncontrolled-tab-example"
-              className="mb-3"
-            >
-              <Tab eventKey="home" title="Panel Trading Status">
-                <div className="col-lg-6">
-                  <div className="mb-3 row">
-                    <div className="col-lg-7">
-                      <select
-                        className="default-select wide form-control"
-                        id="validationCustom05"
-                        onChange={(e) => setfirst(e.target.value)}
-                      >
-                        {DateArray &&
-                          DateArray.map((item) => {
-                            return (
-                              <>
-                                <option  key={item} value={item}>{item}</option>
-                              </>
-                            );
-                          })}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                {getAllUserTrading_status.data &&
-                  getAllUserTrading_status.data.length === 0 ? (
-                  <FullDataTable
-                    TableColumns={columns}
-                    tableData={getAllUserTrading_status.data}
-                  />
-                ) : (
-                  <>
-                    <FullDataTable
-                      TableColumns={columns}
-                      tableData={getAllUserTrading_status.data}
-                    />
-                  </>
-                )}
-              </Tab>
-              <Tab eventKey="profile" title="Update Status">
-                <div className="col-lg-6">
-                  <div className="mb-3 row">
-                    <div className="col-lg-7">
-                      <select
-                        className="default-select wide form-control"
-                        id="validationCustom05"
-                        onChange={(e) => setfirst1(e.target.value)}
-                      >
-                        {DateArray &&
-                          DateArray.map((item) => (
-                            <option key={item} value={item}>
-                              {item}
-                            </option>
-                          ))}
 
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <FullDataTable
-                  TableColumns={columns1}
-                  tableData={userLogs.data}
-                />
+      <Content Page_title="Trading Status" button_status={false}>
+        <Tabs
+          defaultActiveKey="home"
+          id="uncontrolled-tab-example"
+          className="mb-3"
+        >
 
-              </Tab>
-            </Tabs>
-          </Content>
-        </>
-      )}
+
+          <Tab eventKey="home" title="Panel Trading Status">
+            <div className="col-lg-6">
+              <div className="mb-3 row">
+                <div className="col-lg-7">
+                  <select
+                    className="default-select wide form-control"
+                    id="validationCustom05"
+                    onChange={(e) => setfirst(e.target.value)}
+                  >
+                    {DateArray &&
+                      DateArray.map((item) => {
+                        return (
+                          <>
+                            <option key={item} value={item}>{item}</option>
+                          </>
+                        );
+                      })}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {getAllUserTrading_status.loading ? <Loader />
+              : <FullDataTable
+                TableColumns={columns}
+                tableData={getAllUserTrading_status.data}
+              />}
+
+          </Tab>
+
+
+
+          <Tab eventKey="profile" title="Update Status">
+            <div className="col-lg-6">
+              <div className="mb-3 row">
+                <div className="col-lg-7">
+                  <select
+                    className="default-select wide form-control"
+                    id="validationCustom05"
+                    onChange={(e) => setfirst1(e.target.value)}
+                  >
+                    {DateArray &&
+                      DateArray.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+
+                  </select>
+                </div>
+              </div>
+            </div>
+
+
+            {userLogs.loading ? <Loader />
+              : (<FullDataTable
+                TableColumns={columns1}
+                tableData={userLogs.data}
+              />)}
+
+          </Tab>
+        </Tabs>
+      </Content>
+
+
     </>
   );
 };

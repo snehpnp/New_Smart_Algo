@@ -12,8 +12,6 @@ import $ from "jquery"
 import { DisclaimerMessage } from '../../../ReduxStore/Slice/Admin/SystemSlice'
 import { SquarePlus, CirclePlus } from 'lucide-react';
 import { Button, Container, Row, Col, Form } from 'react-bootstrap';
-
-
 import UpdateCompanyInfo from './UpdateCompanyInfo';
 import UpdateImages from './UpdateImages';
 import UpdateSmptDetails from './UpdateSmptDetails';
@@ -31,7 +29,6 @@ const API_KEY = 'bfb6173acfc17ce2afbc73a44015944789678341';
 const System = () => {
 
 
-    const [messages, setMessages] = useState([]);
     // useEffect(() => {
     //     const webSocketService = new WebSocketService(WEBSOCKET_URI);
     //     const handleMessage = (message) => {
@@ -61,27 +58,17 @@ const System = () => {
 
 
 
+    const dispatch = useDispatch();
 
+    const [messages, setMessages] = useState([]);
     const [dissArr, setDissArr] = useState([]);
     const [inputs, setInputs] = useState([]);
-
-    const dispatch = useDispatch();
-    const [getCompanyName, setCompanyName] = useState({
-        loading: true,
-        data: []
-    });
-
+    const [getCompanyName, setCompanyName] = useState({loading: true,data: [] });
     const [refresh, setRefresh] = useState(false);
-
-    //  for Panel Details
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false);
     const [diss, setDiss] = useState('');
     const [getDissStatus, setDissStatus] = useState('');
-
-
-    //  for Show Clients
     const [ShowEmailModal, setShowEmailModal] = useState(false);
-    //  for Subadmins
     const [showImgModal, setshowImgModal] = useState(false);
 
     const CompanyName = async () => {
@@ -123,10 +110,6 @@ const System = () => {
             dataField: 'panel_name',
             text: 'Company Name'
         },
-        // {
-        //     dataField: 'panel_key',
-        //     text: 'Panel Key'
-        // },
         {
             dataField: 'panel_short_name',
             text: 'Company Short Name'
@@ -295,8 +278,6 @@ const System = () => {
     return (
         <Content Page_title="System" button_status={false}>
            
-           {/* <button onClick={()=>connect()}>OKKK</button> */}
-
             <h2>Company Information</h2>
             <BasicDataTable tableData={getCompanyName.data} TableColumns={Company_columns} dropdown={false} />
             <br />

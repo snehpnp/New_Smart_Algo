@@ -8,6 +8,8 @@ import toast from "react-hot-toast";
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 import { check_Device } from "../../../Utils/find_device";
 import { User_Dashboard_Data, Update_Dashboard_Data } from "../../../ReduxStore/Slice/Users/DashboardSlice";
+import Loader from "../../../Utils/Loader";
+
 
 const BrokerResponse = () => {
   const dispatch = useDispatch();
@@ -229,8 +231,8 @@ const BrokerResponse = () => {
 
         setIsUpdating(false);
         if (response.status) {
-          window.location.reload()
           toast.success(response.msg);
+          window.location.reload()
 
         } else {
           toast.error(response.msg);
@@ -239,7 +241,7 @@ const BrokerResponse = () => {
   };
 
 
-  
+
   return (
     <Content Page_title="Dashboard" button_status={false}>
       <div className="table-responsive " style={{ height: '55vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
@@ -258,7 +260,9 @@ const BrokerResponse = () => {
               <th>Trading </th>
             </tr>
           </thead>
-          <tbody >
+        
+          {DashboardData.loading ? <Loader /> :
+           <tbody >
             {DashboardData.data &&
               DashboardData.data.map((data, index) => {
                 return (
@@ -292,7 +296,6 @@ const BrokerResponse = () => {
                                 }
                               }
                               defaultValue={data.lot_size}
-
                             />
                           </div>
 
@@ -435,7 +438,8 @@ const BrokerResponse = () => {
 
             <ToastButton />
 
-          </tbody>
+          </tbody>}
+
         </table>
       </div>
 

@@ -7,8 +7,8 @@ import Content from "../../../Components/Dashboard/Content/Content";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import { Get_Tradehisotry } from "../../../ReduxStore/Slice/Users/TradehistorySlice";
 import { useDispatch, useSelector } from "react-redux";
-import { fa_time, fDateTimeSuffix } from "../../../Utils/Date_formet";
-import { Eye, CandlestickChart, Pencil } from "lucide-react";
+import { fDateTimeSuffix } from "../../../Utils/Date_formet";
+import { Eye, } from "lucide-react";
 import DetailsView from "./DetailsView";
 import { GetAccessToken } from "../../../Service/Alice_Socket";
 import { FunctionForLivePriceCalculation } from "./tradehistoryCalculation";
@@ -29,8 +29,9 @@ const TradeHistory = () => {
   const [rowData, setRowData] = useState("");
   const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
   const [selectStrategy, setSelectStrategy] = useState("null");
-
-
+  const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
+  const [tradeHistoryData1, setTradeHistoryData1] = useState({ loading: true, data: [] });
+  const [startegyFilterData, setStartegyFilterData] = useState({ loading: true, data: [] });
 
   const handleFromDateChange = (e) => {
     setFromDate(e.target.value);
@@ -42,24 +43,6 @@ const TradeHistory = () => {
     setDisableFromDate(true);
   };
 
-  const [tradeHistoryData, setTradeHistoryData] = useState({
-    loading: true,
-    data: [],
-  });
-
-  const [tradeHistoryData1, setTradeHistoryData1] = useState({
-    loading: true,
-    data: [],
-  });
-
-  const [startegyFilterData, setStartegyFilterData] = useState({
-    loading: true,
-    data: [],
-  });
-
-
-
-
   //  GET BROKER DETAILS
   const data = async () => {
     const response = await GetAccessToken({ broker_name: "aliceblue" });
@@ -67,49 +50,6 @@ const TradeHistory = () => {
       setUserDetails(response.data[0]);
     }
 
-  };
-  useEffect(() => {
-    data();
-  }, []);
-
-
-
-
-  const getsignals = async (e) => {
-    let startDate = getActualDateFormate(fromDate);
-    let endDate = getActualDateFormate(toDate);
-    e.preventDefault();
-
-    await dispatch(
-      Get_Tradehisotry({
-        user_id: gotodashboard ? gotodashboard_Details.user_id : user_id,
-        startDate: startDate,
-        endDate: endDate,
-        serviceIndex: SelectServiceIndex,
-        selectStrategy: selectStrategy,
-        token: token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setTradeHistoryData({
-            loading: false,
-            data: response.data,
-          });
-
-          setStartegyFilterData({
-            loading: false,
-            data: response.trade_strategy_filter,
-          });
-        } else {
-          setTradeHistoryData({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
-    // }
   };
 
   const getsignals11 = async (e) => {
@@ -152,37 +92,6 @@ const TradeHistory = () => {
         });
       });
   };
-
-  useEffect(() => {
-    getsignals11();
-  }, [SelectServiceIndex, selectStrategy]);
-
-  const getActualDateFormate = (date) => {
-    const dateParts = date.split("-");
-    const formattedDate = `${dateParts[0]}/${parseInt(
-      dateParts[1],
-      10
-    )}/${parseInt(dateParts[2], 10)}`;
-    return formattedDate;
-  };
-
-  const ResetDate = (e) => {
-    e.preventDefault();
-    setFromDate("");
-    setToDate("");
-    setSelectServiceIndex("null")
-    setSelectStrategy("null")
-    setTradeHistoryData({
-      loading: false,
-      data: tradeHistoryData1.data,
-    });
-
-
-  };
-
-
-
-
 
 
   const columns = [
@@ -306,7 +215,6 @@ const TradeHistory = () => {
 
 
 
-
   var CreatechannelList = "";
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
@@ -322,42 +230,40 @@ const TradeHistory = () => {
 
   };
 
+  useEffect(() => {
+    data();
+  }, []);
 
+  useEffect(() => {
+    getsignals11();
+  }, [SelectServiceIndex, selectStrategy]);
 
   useEffect(() => {
     ShowLivePrice();
   }, [tradeHistoryData.data, SocketState, UserDetails]);
 
 
-
   let total = 0;
   tradeHistoryData.data &&
     tradeHistoryData.data?.map((item) => {
       CreatechannelList += `${item.exchange}|${item.token}#`;
-    
-
-
 
       if (parseInt(item.exit_qty) == parseInt(item.entry_qty) && item.entry_price != '' && item.exit_price) {
 
-
         if (item.entry_type === "LE") {
-        
           let total1 = (parseFloat(item.exit_price) - parseFloat(item.entry_price)) * parseInt(item.exit_qty_percent);
           if (!isNaN(total1)) {
             total += total1
           }
-
         } else {
           let total1 = (parseFloat(item.entry_price) - parseFloat(item.exit_price)) * parseInt(item.exit_qty_percent);
-     
           if (!isNaN(total1)) {
             total += total1
           }
-
         }
       }
     });
+
 
   return (
     <>
@@ -377,8 +283,7 @@ const TradeHistory = () => {
                     id="fromdate"
                     value={fromDate}
                     onChange={handleFromDateChange}
-                  // min={new Date().toISOString().split('T')[0]} // Disable past dates
-                  // disabled={disableFromDate}
+
                   />
                 </div>
               </div>
@@ -394,83 +299,13 @@ const TradeHistory = () => {
                     id="endDate"
                     value={toDate}
                     onChange={handleToDateChange}
-                    min={
-                      // new Date().toISOString().split('T')[0] &&
-                      fromDate
-                    } // Disable past dates
+                    min={fromDate}
                   />
                 </div>
               </div>
 
-
-
-              {/* <div className="col-lg-3 px-1">
-            <div className="mb-3">
-              <label for="select" className="form-label">
-                Index Symbol
-              </label>
-              <select
-                className="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setSelectServiceIndex(e.target.value)}
-                value={SelectServiceIndex}
-              >
-                <option value="null" selected>All</option>
-                <option value="BANKNIFTY" selected>BANKNIFTY</option>
-                <option value="NIFTY" selected>NIFTY</option>
-                <option value="FINNIFTY" selected>FINNIFTY</option>
-              </select>
-            </div>
-           </div>
-
-           <div className="col-lg-3 px-1">
-            <div className="mb-3">
-              <label for="select" className="form-label">
-                Strategy
-              </label>
-              <select
-                className="default-select wide form-control"
-                aria-label="Default select example"
-                id="select"
-                onChange={(e) => setSelectStrategy(e.target.value)}
-                value={selectStrategy}
-              >
-                <option value="null" selected>All</option>
-                {startegyFilterData.data &&
-                  startegyFilterData.data.map((item) => {
-                    // return (
-                    //   <option className="mt-1" value={item.fullname}>
-                    //     {item.fullname}
-                    //   </option>
-                    // );
-
-                    return (
-                      <option className="mt-1" value={item}>
-                        {item}
-                      </option>
-                    );
-
-                  })}
-              </select>
-            </div>
-          </div> */}
-
-
-
               <div className="col-lg-3 d-flex">
-                {/* <button
-                  className="btn btn-primary mx-2"
-                  onClick={(e) => getsignals(e)}
-                >
-                  Search
-                </button> */}
-                {/* <button
-                  className="btn btn-primary"
-                  onClick={(e) => ResetDate(e)}
-                >
-                  Reset
-                </button> */}
+
               </div>
             </div>
           </>
@@ -485,22 +320,13 @@ const TradeHistory = () => {
           />
         ) : (
           <>
-
             <div className="table-responsive">
-
-
               {tradeHistoryData.data.length > 0 ?
-
                 total >= 0 ?
                   <h4 >Total Realised P/L : <span style={{ color: "green" }}> {total.toFixed(2)}</span> </h4> :
                   <h4 >Total Realised P/L : <span style={{ color: "red" }}> {total.toFixed(2)}</span> </h4> : ""
-
               }
-
-
             </div>
-
-
             <FullDataTable
               TableColumns={columns}
               tableData={tradeHistoryData.data}
@@ -516,7 +342,6 @@ const TradeHistory = () => {
         />
         <br />
         <br />
-
         <h6><b>THIS RESULTS IS VALID FOR TODAY ONLY, WE DO NOT DIRECTLY OR INDIRECTLY MAKE ANY REFERENCE TO THE PAST OR EXPECTED FUTURE RETURN/PERFORMANCE OF THE ALGORITHM.</b></h6>
         <br />
         <h6><b>सभी प्रतिभूतियां एल्गो ट्रेडिंग सिस्टम बाजार जोखिमों के अधीन हैं और इस बात का कोई आश्वासन नहीं दिया जा सकता है कि उपयोगकर्ता के उद्देश्यों को आज के प्रदर्शन के आधार पर प्राप्त किया जाएगा। यह परिणाम केवल आज के लिए मान्य है।</b></h6>
