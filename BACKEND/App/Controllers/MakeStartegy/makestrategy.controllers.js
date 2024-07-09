@@ -633,9 +633,11 @@ async function run() {
 
                     console.log("val.condition", val.condition)
                     console.log("data", data)
-
-
+                    
+                    
                     const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
+                    console.log("condition", condition)
+                    
                     if (condition) {
                       let entry_type = 'LE';
                       if (val.type === 'BUY') {
