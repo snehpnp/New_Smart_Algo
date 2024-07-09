@@ -46635,3 +46635,16 @@ body {
 .logo-abbr1 {
   max-width: 4.8125rem;
 }
+
+.income-data {
+  height: 100% !important;
+  margin-bottom: 5px;
+}
+
+.otp-div {
+
+  display: flex;
+  align-items: center;
+  justify-content: center !important;
+
+}
