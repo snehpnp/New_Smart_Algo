@@ -475,22 +475,7 @@ const holidays = new Holidays();
 const currentDate = new Date();
 let rr = 1
 
-function calculateEMA(prices, period) {
-  const k = 2 / (period + 1);
-  let emaArray = [prices[0]]; // Initialize with the first price
 
-  for (let i = 1; i < prices.length; i++) {
-    emaArray.push(prices[i] * k + emaArray[i - 1] * (1 - k));
-  }
-
-  return emaArray;
-}
-
-
-const getHistoricalPrices = async (collection, period) => {
-  const prices = await collection.find({}).sort({ _id: -1 }).limit(period).toArray();
-  return prices.map(price => price.close); // Adjust based on your price structure
-};
 
 async function run() {
 
@@ -507,13 +492,15 @@ async function run() {
           {
             $match: {
               //tokensymbol:"67308",
-              status: "1"
+              // status: "1"
+             name:"SHK64c76f1d32067577d02310dfBUY111435"
+             // name: "SHK_D64c76f1d32067577d02310dfBUY11705"
             }
           }
         ];
         const allStrategyResult = await UserMakeStrategy.aggregate(pipeline);
 
-       // console.log("allStrategyResult ", allStrategyResult)
+        //console.log("allStrategyResult ", allStrategyResult)
         if (allStrategyResult.length > 0) {
           for (let index = 0; index < allStrategyResult.length; index++) {
             const val = allStrategyResult[index];
@@ -536,16 +523,21 @@ async function run() {
             const entryTime = val.entryTime.toLocaleTimeString('en-US', options1);
             const exitTime = val.exitTime.toLocaleTimeString('en-US', options1);
             const notradeTime = val.notradeTime.toLocaleTimeString('en-US', options1);
-            if (
-              (val.segment.toUpperCase() === 'O' || val.segment.toUpperCase() === 'F' || val.segment.toUpperCase() === 'C') &&
-              (isMarketOpen && isMarketClosedEquity)
-            ) {
+            // if (
+            //   (val.segment.toUpperCase() === 'O' || val.segment.toUpperCase() === 'F' || val.segment.toUpperCase() === 'C') &&
+            //   (isMarketOpen && isMarketClosedEquity)
+            // ) {
+
+            if (rr==false) {
+
+              console.log("IFFF ")
              
               return;
             } else if (
               (val.segment.toUpperCase() === 'CO' || val.segment.toUpperCase() === 'CO') &&
               (isMarketOpen && isMarketClosedCurrency)
             ) {
+              console.log("ELSE  1 ")
             
 
               return;
@@ -553,6 +545,8 @@ async function run() {
               (val.segment.toUpperCase() === 'MO' || val.segment.toUpperCase() === 'MF') &&
               (isMarketOpen && isMarketClosedMCX)
             ) {
+              console.log("ELSE  2 ")
+
              
               return;
             } else {
@@ -567,27 +561,43 @@ async function run() {
                 const milliseconds = currentDate.getTime();
                 let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
                 const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
+                //console.log("ExistView ", ExistView)
                 if (ExistView.length > 0) {
                   const collection = dbTradeTools.collection(collectionName);
-
-                  const prices = await getHistoricalPrices(collection, 20); // Adjust the period as needed
-
-                  if (prices.length < 10) {
-                    console.log('Not enough data to calculate EMA');
-                    continue;
-                  }
-                  const ema = calculateEMA(prices, 10); // Adjust the period as needed
-
                   const get_view_data = await collection.aggregate([{ $sort: { _id: -1 } }]).toArray();
                   let data = {};
+
+                  // if(val.condition_source_indicator != null && val.condition_source_indicator != undefined && val.condition_source_indicator != ""){
+                  //   let condition_source_indicator = val.condition_source_indicator.split(',');
+                  //   if (condition_source_indicator.length > 0) {
+                  //     for (const source of condition_source_indicator) {
+                         
+                  //       let indicatorCollectionName = source+'_M' + val.timeframe + '_' + val.tokensymbol;
+                  //       const indicatorView = await dbTradeTools.collection(indicatorCollectionName);
+                  //       const get_view_data = await indicatorView.aggregate([{ $sort: { _id: -1 } }]).toArray();
+
+                  //      // console.log("source ", source)
+                  //      // console.log("get_view_data ", get_view_data)
+
+                  //       if(get_view_data.length > 0){
+                  //         let sourceVal = get_view_data.map(item => item.ema);
+                  //         data[source] = sourceVal;
+                  //         console.log("source IFFFFF", source)
+                  //       } 
+                  //     }
+                  //   }
+                  // }
+
+
                   if (val.condition_source != null) {
                     let condition_source = val.condition_source.split(',');
                     if (condition_source.length > 0) {
                       for (const source of condition_source) {
+                        console.log("source ", source)
                         const matches = source.match(/(\w+)\((\d+)\)/);
-                        if (matches) {
-                          const OFFSET_KEY = matches[2];
-                          const viewSourceValue = get_view_data[get_view_data.length - (parseInt(OFFSET_KEY) + 1)];
+                        if (matches) { 
+                          console.log("source IFFFF", source)
+
                           let sourceVal;
                           if (matches[1] === 'close') {
                             sourceVal = get_view_data.map(item => item.close);
@@ -598,12 +608,23 @@ async function run() {
                           } else if (matches[1] === 'high') {
                             sourceVal = get_view_data.map(item => item.high);
                           }
-                          else if (matches[1] === 'ema') {
-                            sourceVal = ema;
-                          }
                           data[matches[1]] = sourceVal;
-                        } else {
-                          console.log('No match found');
+                        } 
+                        
+                        else {
+                          console.log('No match found' ,source);
+                        let indicatorCollectionName = source+'_M' + val.timeframe + '_' + val.tokensymbol;
+                        const indicatorView = await dbTradeTools.collection(indicatorCollectionName);
+                        const get_view_data_indicator = await indicatorView.aggregate([{ $sort: { _id: -1 } }]).toArray();
+
+                       // console.log("source ", source)
+                       // console.log("get_view_data ", get_view_data)
+
+                        if(get_view_data.length > 0){
+                          let sourceVal = get_view_data_indicator.map(item => item.ema);
+                          data[source] = sourceVal;
+                          console.log("source IFFFFF", source)
+                        } 
                         }
                       }
                     }
@@ -905,7 +926,7 @@ async function run() {
     while (true) {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
-    //  await executeFunction();
+       await executeFunction();
       await exitOpentrade()
     }
   } finally {

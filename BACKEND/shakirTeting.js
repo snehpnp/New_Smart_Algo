@@ -4041,3 +4041,65 @@ app.get("/remain_get_token",async (req,res)=>{
 
 }
 
+
+
+
+// db.createView(
+//   "emahigh5_M_111435",               // View ka naam
+//   "M_111435",                // Source collection
+//   [
+//     { $sort: { _id: -1 } }, // Sorting to get the latest prices first
+//     // { $limit: 2 },         // Limiting to the period (adjust this based on your period)
+//     { $setWindowFields: {   // Window function to calculate EMA
+//         sortBy: { _id: 1 },
+//         output: {
+//           ema: {
+//             $expMovingAvg: { input: "$high", N: 2 }  // Adjust N based on your period
+//           }
+//         }
+//       }
+//     },
+//     { $project: { ema: 1, _id: 0 } } // Projecting only the ema field, excluding _id
+//   ]
+// )
+
+
+
+
+
+
+
+
+
+
+
+
+// const prices = await getHistoricalPrices(collection, 3); // Adjust the period as needed
+
+// if (prices.length < 3) {
+//   console.log('Not enough data to calculate EMA');
+//   continue;
+// }
+// const ema = calculateEMA(prices, 3); // Adjust the period as needed
+
+
+
+// function calculateEMA(prices, period) {
+//   const k = 2 / (period + 1);
+//   let emaArray = [prices[0]]; // Initialize with the first price
+
+//   for (let i = 1; i < prices.length; i++) {
+//     emaArray.push(prices[i] * k + emaArray[i - 1] * (1 - k));
+//   }
+
+//   return emaArray;
+// }
+
+
+// const getHistoricalPrices = async (collection, period) => {
+//   const prices = await collection.find({}).sort({ _id: -1 }).limit(period).toArray();
+//   return prices.map(price => price.close); // Adjust based on your price structure
+// };
+
+
+
