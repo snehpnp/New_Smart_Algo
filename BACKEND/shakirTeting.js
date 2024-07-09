@@ -2749,35 +2749,61 @@ app.get("/remain_get_token",async (req,res)=>{
 
   });
 
+  const getHistoricalPrices = async (collection, period) => {
+    const prices = await collection.find({}).sort({ _id: -1 }).limit(period).toArray();
+    console.log("prices", prices)
+    return prices.map(price => price.close); // Adjust based on your price structure
+  };
+
+  function calculateEMA(prices, period) {
+    const k = 2 / (period + 1);
+    let emaArray = [prices[0]]; // Initialize with the first price
+  
+    for (let i = 1; i < prices.length; i++) {
+      emaArray.push(prices[i] * k + emaArray[i - 1] * (1 - k));
+    }
+  
+    return emaArray;
+  }
+
 
   app.get("/work_startegy", async (req, res) => {
     const pipeline = [
       {
         $match: {
-          //tokensymbol:"67308",
-          status: "0"
+         // tokensymbol:"111435",
+          // status: "1"
+          name: "SHK64c76f1d32067577d02310dfBUY111435"
         }
       }
     ];
 
 
     const allStrategyResult = await UserMakeStrategy.aggregate(pipeline)
+  //  console.log("allStrategyResult", allStrategyResult)
     if (allStrategyResult.length > 0) {
       for (const val of allStrategyResult) {
         //console.log("startegy",val.condition)
-        //console.log("timeframe",val.timeframe)
-        // console.log("tokensymbol",val.tokensymbol)
-
-        //console.log("condition_source",val.condition_source.split(','))
+        console.log("timeframe",val.timeframe)
+        console.log("tokensymbol",val.tokensymbol)
 
         let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
+        console.log("collectionName",collectionName)
         const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
         if (ExistView.length > 0) {
 
           // console.log("exist collection if ",collectionName)
           const collection = dbTradeTools.collection(collectionName);
           const get_view_data = await collection.aggregate([{ $sort: { _id: 1 } }]).toArray();
+         
+          const prices = await getHistoricalPrices(collection, 3); // Adjust the period as needed
 
+          if (prices.length < 3) {
+            console.log('Not enough data to calculate EMA');
+            continue;
+          }
+    
+          const ema = calculateEMA(prices, 20); // Adjust the period as needed
 
           // console.log("get_view_data",get_view_data)
 
@@ -2790,7 +2816,7 @@ app.get("/remain_get_token",async (req,res)=>{
             if (condition_source.length > 0) {
               for (const source of condition_source) {
 
-                // console.log("condition_source",source)
+                 console.log("condition_source",source)
 
                 const matches = source.match(/(\w+)\((\d+)\)/);
 
@@ -2819,7 +2845,10 @@ app.get("/remain_get_token",async (req,res)=>{
                     sourceVal = get_view_data.map(item => item.low);
                   } else if (matches[1] == "high") {
                     sourceVal = get_view_data.map(item => item.high);
+                  }else if (matches[1] == "ema") {
+                    sourceVal = ema;
                   }
+                  
 
 
 
@@ -2849,7 +2878,7 @@ app.get("/remain_get_token",async (req,res)=>{
 
           //  console.log("symbol_name",val.symbol_name)
           abc(checkData, val.condition);
-        }
+         }else{  console.log("Collection does not exist.");}
 
 
       }
