@@ -27,49 +27,18 @@ const WEBSOCKET_URI_FOREX = 'wss://api.tiingo.com/fx';
 const API_KEY = 'bfb6173acfc17ce2afbc73a44015944789678341';
 
 const System = () => {
-
-
-    // useEffect(() => {
-    //     const webSocketService = new WebSocketService(WEBSOCKET_URI);
-    //     const handleMessage = (message) => {
-    //      setMessages((prevMessages) => [...prevMessages, message]);
-    //     console.log("message ",message)
-    //     };
-    
-    //     const handleOpen = () => {
-    //       console.log('WebSocket connection opened');
-      
-    //     };
-    
-    //     const handleClose = () => {
-    //       console.log('WebSocket connection closed');
-    //     };
-    
-    //     const handleError = (error) => {
-    //       console.error('WebSocket error:', error);
-    //     };
-    
-    //     const disconnect = webSocketService.connect(handleMessage, handleOpen, handleClose, handleError);
-    
-    //     return () => {
-    //       disconnect();
-    //     };
-    //   }, []);
-
-
-
     const dispatch = useDispatch();
 
+    const [diss, setDiss] = useState('');
     const [messages, setMessages] = useState([]);
     const [dissArr, setDissArr] = useState([]);
     const [inputs, setInputs] = useState([]);
-    const [getCompanyName, setCompanyName] = useState({loading: true,data: [] });
     const [refresh, setRefresh] = useState(false);
-    const [PanelDetailsModal, setPanelDetailsModal] = useState(false);
-    const [diss, setDiss] = useState('');
     const [getDissStatus, setDissStatus] = useState('');
-    const [ShowEmailModal, setShowEmailModal] = useState(false);
     const [showImgModal, setshowImgModal] = useState(false);
+    const [ShowEmailModal, setShowEmailModal] = useState(false);
+    const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
+    const [PanelDetailsModal, setPanelDetailsModal] = useState(false);
 
     const CompanyName = async () => {
         await dispatch(GET_COMPANY_INFOS()).unwrap()
@@ -78,7 +47,7 @@ const System = () => {
                     setDiss(response.data[0].disclaimer);
                     setDissArr(response.data[0].dissArr);
                     setDissStatus(response.data[0].disclaimer_status);
-
+                    console.log("response.data[0].dissArr", response.data[0].disclaimer_status)
                     setInputs(response.data[0].dissArr);
 
                     setCompanyName({
@@ -95,10 +64,6 @@ const System = () => {
                 }
             });
     }
-
-    useEffect(() => {
-        CompanyName();
-    }, []);
 
     const Company_columns = [
         {
@@ -264,20 +229,23 @@ const System = () => {
             .then((response) => {
                 if (response.status) {
                     toast.success("Disclaimer added successfully...");
-                    setRefresh(!refresh);
+                    window.location.reload();
                 } else {
                     toast.error("Disclaimer add error");
                 }
             })
             .catch((err) => {
-             
+
             });
     }
 
+    useEffect(() => {
+        CompanyName();
+    }, []);
 
     return (
         <Content Page_title="System" button_status={false}>
-           
+
             <h2>Company Information</h2>
             <BasicDataTable tableData={getCompanyName.data} TableColumns={Company_columns} dropdown={false} />
             <br />
@@ -291,15 +259,15 @@ const System = () => {
 
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <h2 style={{ marginRight: "10px" }}>Disclaimer Message</h2>
+
                 <div className='toogle-new'>
                     <input type="checkbox"
                         id="switch"
-                        defaultChecked={getDissStatus && getDissStatus == 1}
+                        checked={Number(getDissStatus) === 1}
                         onChange={(e) => updateDiscStatus(e)}
-                    /><label for="switch">Toggle</label>
+                    />
+                    <label htmlFor="switch">Toggle</label>
                 </div>
-
-
             </div>
 
 
