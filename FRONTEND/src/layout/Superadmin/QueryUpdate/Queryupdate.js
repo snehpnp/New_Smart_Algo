@@ -118,10 +118,10 @@ const QueryUpdate = () => {
                 await dispatch(UPDATE_QUERY_PANEL(data)).unwrap()
                     .then((response) => {
                         if(response.status){
-                            console.log("response",response)
+                            
                             setrefresh(!refresh)
                         }else{
-                            console.log("response",response)
+                            
                         }
                     })
             
@@ -136,7 +136,7 @@ const QueryUpdate = () => {
     };
 
     const createView = () => {
-        console.log(collectionName2, getPipeline, getViewName)
+    
         alert("Create View =>")
     }
 

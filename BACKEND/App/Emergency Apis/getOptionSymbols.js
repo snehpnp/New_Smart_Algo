@@ -8,7 +8,7 @@ module.exports = function (app) {
     const fs = require('fs');
     app.get('/token_symbolls', async (req, res) => {
         return
-        res.send("done")
+        return  res.send("done")
         try {
             axios.get("https://margincalculator.angelbroking.com/OpenAPI_File/files/OpenAPIScripMaster.json", {
                 maxBodyLength: Infinity,
@@ -40,7 +40,7 @@ module.exports = function (app) {
                         }
                     });
                 }
-                res.send("done")
+                return  res.send("done")
             }).catch((error) => {
                
             });
@@ -94,7 +94,7 @@ module.exports = function (app) {
 
         });
 
-        res.send("ok");
+        return res.send("ok");
     });
 
 

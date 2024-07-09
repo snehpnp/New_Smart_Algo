@@ -69,12 +69,11 @@ const AllLicence = () => {
             const filteredData =
               response.data &&
               response.data.filter((item) => {
-                console.log("item" ,item)
+           
                 let getMonthAndYear = get_year_and_month_only(item.createdAt)
                 return getMonthAndYear === CountLicence
               });
 
-              console.log("filteredData" ,filteredData)
 
             setAllClients({
               loading: false,
@@ -87,14 +86,6 @@ const AllLicence = () => {
           }
           setOriginalData(response.data);
 
-          // setAllClients({
-          //   loading: false,
-          //   data: response,
-          // });
-          // setAllClients1({
-          //   loading: false,
-          //   data: response,
-          // });
         } else {
           setAllClients({
             loading: false,

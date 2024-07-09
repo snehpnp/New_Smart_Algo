@@ -151,12 +151,12 @@ class strategy {
 
             // IF DATA NOT EXIST
             if (getAllstrategy.length == 0) {
-                res.send({ status: false, msg: "Empty data", data: getAllstrategy })
+                return  res.send({ status: false, msg: "Empty data", data: getAllstrategy })
                 return
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return   res.send({
                 status: true,
                 msg: "Get All Startegy",
                 data: getAllstrategy,
@@ -186,11 +186,11 @@ class strategy {
 
             // IF DATA NOT EXIST
             if (getAllstrategy.length == 0) {
-                res.send({ status: false, msg: "Empty data", data: getAllstrategy })
+               return res.send({ status: false, msg: "Empty data", data: getAllstrategy })
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+           return res.send({
                 status: true,
                 msg: "Get All Startegy",
                 data: getAllstrategy,

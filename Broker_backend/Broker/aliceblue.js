@@ -61,10 +61,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
         const filePath_aliceblue = path.join(__dirname, '..', 'AllInstrumentToken', filePath_token);
 
        const command = `grep ,${pattern}, ${filePath_aliceblue}`;
-     //   const command = `findstr ,${pattern}, ${filePath_aliceblue}`;
-
-        console.log("command ", command)
-
+    
         exec(command, (error, stdout, stderr) => {
 
             if (error) {
@@ -74,8 +71,8 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
 
              if(stdout){
 
-            const parts = stdout.split(','); // Extract the content inside double quotes
-            // console.log("Extracted Part:", parts[9]);
+            const parts = stdout.split(','); 
+        
             if (segment && segment.toUpperCase() === 'C') {
                 trading_symbol = token[0].instrument_token
             } else if (segment && (segment.toUpperCase() === 'F' || segment.toUpperCase() === 'O')) {
@@ -85,7 +82,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
             } else if (segment && (segment.toUpperCase() === 'MF' || segment.toUpperCase() === 'MO')) {
                 trading_symbol = parts[8];
             } else {
-                console.log('Invalid segment value');
+               
                 
                 const requestPromises = AllClientData.map(async (item) => {
 
@@ -103,9 +100,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                         reject_reason: "Invalid segment value",
             
                     })
-                    .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
-                    })
+                    .then((BrokerResponseCreate) => { })
                     .catch((err) => {
                         try {
                             console.log('Error creating and saving user:', err);
@@ -114,14 +109,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                         }
         
                     }); 
-
-
                 });
-                // Send all requests concurrently using Promise.all
+            
                 Promise.all(requestPromises)
-                .then(responses => {
-                    // console.log("Response:", responses.data);
-                })
+                .then(responses => {  })
                 .catch(errors => {
                     console.log("errors:", errors);
                   });
@@ -129,10 +120,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                 return;
             }
 
-
-
-
-            
+        
             const requestPromises = AllClientData.map(async (item) => {
 
             item.postdata.symbol_id = token[0].instrument_token;
@@ -146,30 +134,21 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                 item.postdata.transtype = 'SELL';
             }
 
-            // console.log("price", price)
-            //console.log("item.client_services.order_type", item.client_services.order_type)
 
             if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                 item.postdata.price = price
             }
 
-            //  console.log("postData after ", item.postdata);
-
-
             EntryPlaceOrder(item, filePath, signals, signal_req)
 
 
            });
-        // Send all requests concurrently using Promise.all
+       
           Promise.all(requestPromises)
-          .then(responses => {
-              // console.log("Response:", responses.data);
-          })
+          .then(responses => {})
           .catch(errors => {
               console.log("errors:", errors);
           });
-
-         
              }else{
                 
                 const requestPromises = AllClientData.map(async (item) => {
@@ -188,9 +167,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                         reject_reason: "Token not Found",
             
                     })
-                        .then((BrokerResponseCreate) => {
-                            // console.log('User created and saved:', BrokerResponseCreate._id)
-                        })
+                        .then((BrokerResponseCreate) => {  })
                         .catch((err) => {
                             try {
                                 console.log('Error creating and saving user:', err);
@@ -201,7 +178,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                         });
             
                       });
-                    // Send all requests concurrently using Promise.all
+                 
                         Promise.all(requestPromises)
                         .then(responses => {
                             // console.log("Response:", responses.data);
@@ -258,12 +235,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
       }
 
       else if (type == 'SX' || type == 'LX') {
-        // console.log("trade exit")
+      
       
         const requestPromises = AllClientData.map(async (item) => {
     
-                // console.log("user id ", item.demat_userid)
-                // console.log("postdata before", item.postdata)
                 if (segment.toUpperCase() != "C") {
                     item.postdata.symbol_id = token[0].instrument_token;
                 }
@@ -275,8 +250,6 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                     item.postdata.transtype = 'SELL';
                 }
     
-                // console.log("price", price)
-                // console.log("item.client_services.order_type", item.client_services.order_type)
     
                 if (item.client_services.order_type == "2" || item.client_services.order_type == "3") {
                     item.postdata.price = price
@@ -300,15 +273,15 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                 };
                 axios(config)
                     .then(async (response) => {
-                        // console.log("response", response.data)
+             
                        
     
     
                         if (Array.isArray(response.data)) {
     
-                            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data.length) + '\n', function (err) {
+                            fs.appendFile(filePath, 'TIME ' + new Date() + ' ALICE BLUE POSITION DATA - ' + item.UserName + ' LENGTH = ' + JSON.stringify(response.data) + '\n', function (err) {
                                 if (err) {
-                                  //  return console.log(err);
+                                 
                                 }
                             });
     
@@ -318,11 +291,9 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                 if (segment.toUpperCase() == 'C') {
     
                                     const possition_qty = parseInt(Exist_entry_order.Bqty) - parseInt(Exist_entry_order.Sqty);
-                                    // console.log("possition_qty Cash", possition_qty);
+                                 
                                     if (possition_qty == 0) {
-                                        // console.log("possition_qty Not Available", possition_qty);
-                                       
-
+                                    
                                         BrokerResponse.create({
                                             user_id: item._id,
                                             receive_signal: signal_req,
@@ -336,9 +307,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                             open_possition_qty: possition_qty,
     
                                         })
-                                            .then((BrokerResponseCreate) => {
-                                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                                            })
+                                            .then((BrokerResponseCreate) => {})
                                             .catch((err) => {
                                                 try {
                                                     console.log('Error creating and saving user:', err);
@@ -363,19 +332,10 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
     
     
                                 } else {
-
-
                                     item.postdata.trading_symbol = Exist_entry_order.Tsym;
-
-                                    const possition_qty = Exist_entry_order.Netqty;
-                                    // console.log("possition_qty", possition_qty);
-    
+                                    const possition_qty = Exist_entry_order.Netqty;                         
                                     if (possition_qty == 0) {
                                          
-
-
-
-                                        // console.log("possition_qty Not Available", possition_qty);
                                         BrokerResponse.create({
                                             user_id: item._id,
                                             receive_signal: signal_req,
@@ -389,9 +349,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
                                             open_possition_qty: possition_qty,
     
                                         })
-                                            .then((BrokerResponseCreate) => {
-                                                // console.log('User created and saved:', BrokerResponseCreate._id)
-                                            })
+                                            .then((BrokerResponseCreate) => {  })
                                             .catch((err) => {
                                                 try {
                                                     console.log('Error creating and saving user:', err);
@@ -434,7 +392,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
         
                                 })
                                     .then((BrokerResponseCreate) => {
-                                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                                        
                                     })
                                     .catch((err) => {
                                         try {
@@ -469,7 +427,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
     
                             })
                                 .then((BrokerResponseCreate) => {
-                                    // console.log('User created and saved:', BrokerResponseCreate._id)
+                                    
                                 })
                                 .catch((err) => {
                                     try {
@@ -513,7 +471,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
     
                             })
                                 .then((BrokerResponseCreate) => {
-                                    // console.log('User created and saved:', BrokerResponseCreate._id)
+                                    
                                 })
                                 .catch((err) => {
                                     try {
@@ -546,7 +504,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
     
                             })
                                 .then((BrokerResponseCreate) => {
-                                    // console.log('User created and saved:', BrokerResponseCreate._id)
+                                    
                                 })
                                 .catch((err) => {
                                     try {
@@ -604,7 +562,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req ,
 
         })
             .then((BrokerResponseCreate) => {
-                // console.log('User created and saved:', BrokerResponseCreate._id)
+                
             })
             .catch((err) => {
                 try {
@@ -704,7 +662,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                        
                     })
                     .catch((err) => {
                         try {
@@ -734,7 +692,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                        
                     })
                     .catch((err) => {
                         try {
@@ -777,7 +735,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {
@@ -805,7 +763,7 @@ const EntryPlaceOrder = async (item, filePath, signals, signal_req) => {
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {
@@ -898,7 +856,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                        
                     })
                     .catch((err) => {
                         try {
@@ -928,7 +886,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
 
                 })
                     .then((BrokerResponseCreate) => {
-                        // console.log('User created and saved:', BrokerResponseCreate._id)
+                        
                     })
                     .catch((err) => {
                         try {
@@ -970,7 +928,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {
@@ -998,7 +956,7 @@ const ExitPlaceOrder = async (item, filePath, possition_qty, signals, signal_req
                             reject_reason: message,
                         })
                             .then((BrokerResponseCreate) => {
-                                // console.log('User created and saved:', BrokerResponseCreate._id)
+                                
                             })
                             .catch((err) => {
                                 try {

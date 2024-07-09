@@ -3,22 +3,16 @@ import Content from "../../../Components/Dashboard/Content/Content";
 import Loader from "../../../Utils/Loader";
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { Get_All_TRADINGSTATUS_USER, user_activity_logs } from "../../../ReduxStore/Slice/Users/TradingStatusSlice";
-
 import { useDispatch } from "react-redux";
-import {  fDateTimeSuffix } from "../../../Utils/Date_formet";
-
+import { fDateTimeSuffix } from "../../../Utils/Date_formet";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 
 const TradingStatus = () => {
   const dispatch = useDispatch();
-
-  const user_Id = JSON.parse(localStorage.getItem("user_details")).user_id;
-
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-
-
   const [first, setfirst] = useState("all");
   const [first1, setfirst1] = useState("all");
   const [DateArray, setDateArray] = useState([]);
@@ -27,7 +21,7 @@ const TradingStatus = () => {
 
 
   let req = {
-    user_Id: isgotodashboard ? gotodashboard.user_id : user_Id,
+    user_Id: isgotodashboard ? gotodashboard.user_id : user_details.user_id,
   };
 
 
@@ -91,15 +85,6 @@ const TradingStatus = () => {
 
       });
   }
-
-
-  useEffect(() => {
-    data1();
-    data3();
-  }, [first,first1]);
-
-
-
 
 
   const columns = [
@@ -194,6 +179,7 @@ const TradingStatus = () => {
 
   var dateArray = [];
   const dateArr = () => {
+    console.log("dateArr -> dateArr");
     for (let i = 0; i < 3; i++) {
       const currentDate = new Date();
       currentDate.setDate(currentDate.getDate() - i);
@@ -214,90 +200,97 @@ const TradingStatus = () => {
     setfirst1(dateArray[0]);
 
   };
+
   useEffect(() => {
     dateArr();
   }, []);
 
+  useEffect(() => {
+    data1();
+
+  }, [first]);
+
+  useEffect(() => {
+
+    data3();
+  }, [first1]);
 
   return (
     <>
-      {getAllUserTrading_status.loading ? (
-        <Loader />
-      ) : (
-        <>
-          <Content Page_title="Trading Status" button_status={false}>
-            <Tabs
-              defaultActiveKey="home"
-              id="uncontrolled-tab-example"
-              className="mb-3"
-            >
-              <Tab eventKey="home" title="Panel Trading Status">
-                <div className="col-lg-6">
-                  <div className="mb-3 row">
-                    <div className="col-lg-7">
-                      <select
-                        className="default-select wide form-control"
-                        id="validationCustom05"
-                        onChange={(e) => setfirst(e.target.value)}
-                      >
-                        {DateArray &&
-                          DateArray.map((item) => {
-                            return (
-                              <>
-                                <option value={item}>{item}</option>
-                              </>
-                            );
-                          })}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                {getAllUserTrading_status.data &&
-                  getAllUserTrading_status.data.length === 0 ? (
-                  <FullDataTable
-                    TableColumns={columns}
-                    tableData={getAllUserTrading_status.data}
-                  />
-                ) : (
-                  <>
-                    <FullDataTable
-                      TableColumns={columns}
-                      tableData={getAllUserTrading_status.data}
-                    />
-                  </>
-                )}
-              </Tab>
-              <Tab eventKey="profile" title="Update Status">
-                <div className="col-lg-6">
-                  <div className="mb-3 row">
-                    <div className="col-lg-7">
-                      <select
-                        className="default-select wide form-control"
-                        id="validationCustom05"
-                        onChange={(e) => setfirst1(e.target.value)}
-                      >
-                        {DateArray &&
-                          DateArray.map((item) => {
-                            return (
-                              <>
-                                <option value={item}>{item}</option>
-                              </>
-                            );
-                          })}
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <FullDataTable
-                  TableColumns={columns1}
-                  tableData={userLogs.data}
-                />
 
-              </Tab>
-            </Tabs>
-          </Content>
-        </>
-      )}
+      <Content Page_title="Trading Status" button_status={false}>
+        <Tabs
+          defaultActiveKey="home"
+          id="uncontrolled-tab-example"
+          className="mb-3"
+        >
+
+
+          <Tab eventKey="home" title="Panel Trading Status">
+            <div className="col-lg-6">
+              <div className="mb-3 row">
+                <div className="col-lg-7">
+                  <select
+                    className="default-select wide form-control"
+                    id="validationCustom05"
+                    onChange={(e) => setfirst(e.target.value)}
+                  >
+                    {DateArray &&
+                      DateArray.map((item) => {
+                        return (
+                          <>
+                            <option key={item} value={item}>{item}</option>
+                          </>
+                        );
+                      })}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {getAllUserTrading_status.loading ? <Loader />
+              : <FullDataTable
+                TableColumns={columns}
+                tableData={getAllUserTrading_status.data}
+              />}
+
+          </Tab>
+
+
+
+          <Tab eventKey="profile" title="Update Status">
+            <div className="col-lg-6">
+              <div className="mb-3 row">
+                <div className="col-lg-7">
+                  <select
+                    className="default-select wide form-control"
+                    id="validationCustom05"
+                    onChange={(e) => setfirst1(e.target.value)}
+                  >
+                    {DateArray &&
+                      DateArray.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+
+                  </select>
+                </div>
+              </div>
+            </div>
+
+
+            {userLogs.loading ? <Loader />
+              : (<FullDataTable
+                TableColumns={columns1}
+                tableData={userLogs.data}
+              />)}
+
+          </Tab>
+        </Tabs>
+      </Content>
+
+
     </>
   );
 };

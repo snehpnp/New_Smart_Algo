@@ -14,7 +14,7 @@ export const Add_Theme = createAsyncThunk("theme/add", async (data) => {
 export const Get_All_Theme = createAsyncThunk("theme/getall", async (data) => {
     try {
         const res = await GET_ALL_THEME(data);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
         return err;
@@ -23,7 +23,7 @@ export const Get_All_Theme = createAsyncThunk("theme/getall", async (data) => {
 export const Get_All_Theme_Name = createAsyncThunk("getall/theme/name", async (data) => {
     try {
         const res = await GET_ALL_THEME_NAME(data);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
         return err;

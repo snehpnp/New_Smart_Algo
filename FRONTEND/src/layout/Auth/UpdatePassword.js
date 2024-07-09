@@ -21,11 +21,9 @@ const UpdatePassword = () => {
 
     const GetAllThemes = () => {
         axios.get("https://api.smartalgo.in:3001/smartalgo/get/theme").then((res) => {
-            // console.log("accept res`122`12`", res.data.data);
-            // $('body').attr('data-theme-version', themedata.theme_version);
-            // setThemeData(res.data.data)
+     
         }).catch((err) => {
-            console.log("error", err);
+            console.log("Error in update password", err);
         })
     }
 
@@ -79,7 +77,7 @@ const UpdatePassword = () => {
                     }
                 })
                 .catch((error) => {
-                    console.log("Error", error);
+                    console.log("Error in update password", error);
                 });
         }
     })

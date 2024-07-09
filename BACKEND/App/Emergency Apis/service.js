@@ -1,5 +1,5 @@
 module.exports = function (app) {
-    const { service_token_update } = require('../Cron/cron')
+
 
     const axios = require('axios');
     const excel = require('exceljs');

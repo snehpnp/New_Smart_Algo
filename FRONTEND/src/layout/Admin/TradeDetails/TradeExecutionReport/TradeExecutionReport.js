@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Content from "../../../../Components/Dashboard/Content/Content"
-import BasicDataTable from '../../../../Components/ExtraComponents/Datatable/BasicDataTable'
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable"
 import Loader from '../../../../Utils/Loader'
-import { fa_time, fDateTimeSuffix } from '../../../../Utils/Date_formet'
-import { Pencil, Trash2 } from 'lucide-react';
+import { fDateTimeSuffix } from '../../../../Utils/Date_formet'
 import { Get_All_Signals } from '../../../../ReduxStore/Slice/Admin/SignalsSlice'
-import { useDispatch, useSelector } from "react-redux";
-
+import { useDispatch } from "react-redux";
 
 
 const TradeExecutionReport = () => {

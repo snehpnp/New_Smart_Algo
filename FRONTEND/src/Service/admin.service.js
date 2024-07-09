@@ -21,8 +21,7 @@ export async function ALL_CLIENTS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -42,8 +41,7 @@ export async function ALL_SIGNUP_CLIENTS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -66,8 +64,7 @@ export async function ALL_EXPIRED_CLIENTS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -83,8 +80,7 @@ export async function FIND_ONE_USER(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -100,8 +96,7 @@ export async function FIND_ONE_CLIENT(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -118,8 +113,7 @@ export async function UPDATE_USER(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -133,8 +127,7 @@ export async function FIND_ONE_SIGNUP_CLIENT(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -150,8 +143,7 @@ export async function ALL_SERVICES(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -167,8 +159,7 @@ export async function GET_COMPANY_LOGO(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -184,8 +175,7 @@ export async function ALL_CATAGORY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -201,8 +191,7 @@ export async function SERVICE_BY_CATAGORY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -218,8 +207,7 @@ export async function ALL_GROUP_SERVICES(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -235,8 +223,7 @@ export async function GET_COMPANY_INFO(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -252,8 +239,7 @@ export async function ADD_GROUP_SERVICES(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -268,8 +254,7 @@ export async function GET_ALL_STRATEGY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -285,8 +270,7 @@ export async function GET_STRATEGY_BY_ID(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -301,8 +285,7 @@ export async function EDIT_STRATEGY_BY_ID(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -318,8 +301,7 @@ export async function REMOVE_STRATEGY_BY_ID(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -335,8 +317,7 @@ export async function ADD_STRATEGY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -352,8 +333,7 @@ export async function GET_ALL_TRADINGSTATUS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -368,8 +348,7 @@ export async function GO_TO_DASHBOARD(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -384,8 +363,7 @@ export async function GET_ALL_SERVICES_NAME(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -400,8 +378,7 @@ export async function GET_ALL_SERVICES_USER_NAME(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -419,8 +396,7 @@ export async function GET_SERVICES_BY_GROUP_ID(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -435,8 +411,7 @@ export async function GET_SERVICES_BY_GROUP_ID_For_Edit_update(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -453,8 +428,7 @@ export async function UPDATE_SERVICES_BY_GROUP_ID(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -468,8 +442,7 @@ export async function GET_CLIENTS_BY_STRATEG_ID(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -485,8 +458,7 @@ export async function DELETE_GROUP_SERVICES(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -503,8 +475,7 @@ export async function UPDATE_USERACTIVE_STATUS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error =", err);
-        // custom error
+        
     }
 
 }
@@ -522,7 +493,7 @@ export async function ADD_CLIENT(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error =", err);
+        
         return err
         // custom error
     }
@@ -532,18 +503,18 @@ export async function ADD_CLIENT(data, token) {
 
 // GET ALL SERVICE
 export async function GET_ALL_SERVICE(data, token) {
-    console.log( " 11111111   data",data);
+    
     try {
         const res = await axios.post(`${Config.base_url}get/allsignals`, data, {
             headers: header(token),
             data: { data },
         })
 
-        console.log( " 222222   data",res);
+       
         return await res?.data;
     }
     catch (err) {
-        console.log("error =", err);
+        
         return err
         // custom error
     }
@@ -560,7 +531,7 @@ export async function GET_TRADEHISTORY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error =", err);
+        
         return err
         // custom error
     }
@@ -579,7 +550,7 @@ export async function GET_SEVAN_TRADEHISTORY(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error =", err);
+        
         return err
         // custom error
     }
@@ -598,7 +569,7 @@ export async function DELETE_USERAND_ALLSERVICES(data, token) {
 
     }
     catch (err) {
-        console.log("error =", err);
+        
         return err
         // custom error
     }
@@ -618,7 +589,7 @@ export async function DELETE_ALL_SIGNUP_CLIENT(data, token) {
 
     }
     catch (err) {
-        console.log("error =", err);
+        
         return err
         // custom error
     }
@@ -640,7 +611,7 @@ export async function GET_DASHBOARD_COUNT(token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error =", err);
+        
 
         return err
         // custom error
@@ -660,7 +631,7 @@ export async function GET_HELP_REQUEST(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error =", err);
+        
         return err
         // custom error
     }
@@ -681,7 +652,7 @@ export async function EXPIRED_SOON_USER(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error =", err);
+        
         return err
         // custom error
     }
@@ -701,7 +672,7 @@ export async function TRANSACTION_LICENCE(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error =", err);
+        
         return err
         // custom error
     }
@@ -717,8 +688,7 @@ export async function ADD_SUBADMIN(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -733,8 +703,7 @@ export async function EDIT_SUBADMIN(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -748,8 +717,7 @@ export async function FIND_ONE_SUBADMIN(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -767,8 +735,7 @@ export async function UPDATE_SMTP_DETAILS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -783,8 +750,7 @@ export async function UPDATE_COMPANY_DETAILS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -802,8 +768,7 @@ export async function GET_CLIENT_BY_SUBADMIN_ID(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -821,8 +786,7 @@ export async function SUBADMIN_UPDATE_USER_STATUS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -837,8 +801,7 @@ export async function GET_BROKER_INFORMATION(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -851,8 +814,7 @@ export async function UPDATE_BROKER_INFORMATION(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -869,8 +831,7 @@ export async function ADD_MESSAGE_BROADCAST(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -884,8 +845,7 @@ export async function GET_ALL_MESSAGE_BROADCAST(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -899,8 +859,7 @@ export async function REMOVE_MESSAGE_BROADCAST(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -916,8 +875,7 @@ export async function FIND_BROKER_RESPONSE(data) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -933,8 +891,7 @@ export async function GET_ADMIN_TRADING_STATUS(data) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -951,8 +908,7 @@ export async function AddAndRemoveStrategyToClient(data) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -969,8 +925,7 @@ export async function UpdateStrategyToClient(data) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+        
     }
 
 }
@@ -984,6 +939,19 @@ export async function DISCLAIMER_MESSAGE(data) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err); 
+     
+    }
+}
+
+export async function DawnloadData(user_id, token) {
+    try {
+        const res = await axios.post(`${Config.base_url}dawnload/data`, user_id, {
+            headers: header(token),
+            data: {},
+        })
+        return await res?.data;
+    }
+    catch (err) {
+        return await err
     }
 }

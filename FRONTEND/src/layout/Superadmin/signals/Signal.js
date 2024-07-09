@@ -1,19 +1,12 @@
-
 import React, { useEffect, useState } from 'react'
 import Content from "../../../Components/Dashboard/Content/Content"
 import Loader from '../../../Utils/Loader'
-
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
 import { GetAllSignal, Update_Price, DeleteSignal } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
-import { useDispatch, useSelector } from "react-redux";
-import Modal from '../../../Components/ExtraComponents/Modal';
-import { fa_time, fDateTimeSuffix, today } from "../../../Utils/Date_formet";
+import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Trash2, Pencil } from 'lucide-react';
-import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
+import { Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
-
-
 
 
 const AdminHelps = () => {
@@ -21,7 +14,6 @@ const AdminHelps = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     let location = useLocation();
-    let admin_details = location.state
     const UserName = JSON.parse(localStorage.getItem("user_details")).UserName
     const token = JSON.parse(localStorage.getItem("user_details")).token
     const backend_rul = localStorage.getItem("backend_rul");
@@ -34,22 +26,13 @@ const AdminHelps = () => {
     const [entryPriceId, setEntryPriceId] = useState('')
     const [exitPriceId, setExitPriceId] = useState('')
     const [inputSearch, setInputSearch] = useState('')
-
-
-    
     const [signalId, setSignalId] = useState('')
     const [refresh, setRefresh] = useState(false)
+    const [getAllSignals, setAllSignals] = useState({loading: true, data: [] });
 
-
-    const [getAllSignals, setAllSignals] = useState({
-        loading: true,
-        data: []
-    });
-
- 
 
     const updatePrice = async () => {
-        const data = { id: entryPriceId, price: entryPrice, signalId: signalId, entryPriceID: 1,backend_rul:backend_rul , superadmin_name: UserName ,  panel_name : panel_name }
+        const data = { id: entryPriceId, price: entryPrice, signalId: signalId, entryPriceID: 1, backend_rul: backend_rul, superadmin_name: UserName, panel_name: panel_name }
         await dispatch(Update_Price(data)).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -60,13 +43,12 @@ const AdminHelps = () => {
                 }
             })
             .catch((err) => {
-                console.log("error in updation the entry price", err)
+                return err
             })
     }
 
-
     const updateExitPrice = async () => {
-        const data = { id: exitPriceId, price: exitPrice, signalId: signalId, entryPriceID: 2 ,backend_rul:backend_rul, superadmin_name: UserName ,  panel_name : panel_name }
+        const data = { id: exitPriceId, price: exitPrice, signalId: signalId, entryPriceID: 2, backend_rul: backend_rul, superadmin_name: UserName, panel_name: panel_name }
         await dispatch(Update_Price(data)).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -81,25 +63,23 @@ const AdminHelps = () => {
             })
     }
 
-
-
     const data = async () => {
-        await dispatch(GetAllSignal({backend_rul:backend_rul })).unwrap()
+        await dispatch(GetAllSignal({ backend_rul: backend_rul })).unwrap()
             .then((response) => {
                 if (response.status) {
 
-                    const filterData = response.data.filter((item)=>{
-                        const inputSearchMetch = 
-                               inputSearch== '' || 
-                               item.symbol.toLowerCase().includes(inputSearch.toLowerCase()) || 
-                               item.entry_type.toLowerCase().includes(inputSearch.toLowerCase()) || 
-                               item.exit_type.toLowerCase().includes(inputSearch.toLowerCase()) || 
-                               item.strategy.toLowerCase().includes(inputSearch.toLowerCase()) || 
-                               item.entry_price.toLowerCase().includes(inputSearch.toLowerCase()) || 
-                               item.exit_price.toLowerCase().includes(inputSearch.toLowerCase()) 
+                    const filterData = response.data.filter((item) => {
+                        const inputSearchMetch =
+                            inputSearch == '' ||
+                            item.symbol.toLowerCase().includes(inputSearch.toLowerCase()) ||
+                            item.entry_type.toLowerCase().includes(inputSearch.toLowerCase()) ||
+                            item.exit_type.toLowerCase().includes(inputSearch.toLowerCase()) ||
+                            item.strategy.toLowerCase().includes(inputSearch.toLowerCase()) ||
+                            item.entry_price.toLowerCase().includes(inputSearch.toLowerCase()) ||
+                            item.exit_price.toLowerCase().includes(inputSearch.toLowerCase())
 
-                               return inputSearchMetch
-                            
+                        return inputSearchMetch
+
                     })
 
                     setAllSignals({
@@ -116,10 +96,11 @@ const AdminHelps = () => {
     }
     useEffect(() => {
         data()
-    }, [refresh , inputSearch])
+    }, [refresh, inputSearch])
+
 
     const handleDelete = async (id) => {
-        const data = { id: id , backend_rul:backend_rul , superadmin_name: UserName , panel_name : panel_name }
+        const data = { id: id, backend_rul: backend_rul, superadmin_name: UserName, panel_name: panel_name }
         await dispatch(DeleteSignal(data)).unwrap()
             .then((response) => {
                 if (response.status) {
@@ -134,9 +115,6 @@ const AdminHelps = () => {
                 console.log("Error is found in deleting the signal", err)
             })
     }
-
-
-
 
 
     const columns = [
@@ -199,7 +177,7 @@ const AdminHelps = () => {
 
     ];
 
-    const handleBackupBtn =()=>{
+    const handleBackupBtn = () => {
         navigate('/super/backupsignal')
 
     }
@@ -211,12 +189,12 @@ const AdminHelps = () => {
                     <>
                         <Content Page_title="Signal" button_status={true} button_title='Back' route='/super/permitions'>
                             <div>
-                                <input type="text"  
-                                placeholder='search here...' 
-                                className=' p-2 rounded border-none'
-                                onChange={(e)=>{setInputSearch(e.target.value)}}
-                                value={inputSearch}
-                                 />
+                                <input type="text"
+                                    placeholder='search here...'
+                                    className=' p-2 rounded border-none'
+                                    onChange={(e) => { setInputSearch(e.target.value) }}
+                                    value={inputSearch}
+                                />
                                 <button className='btn btn-primary mb-3 mt-3 mx-3' onClick={handleBackupBtn}>backup Signal</button>
 
                             </div>

@@ -11,7 +11,7 @@ class MakeStrategy {
     // GET ADMIN SIGNALS
     async GetAllSymbols(req, res) {
         try {
-         res.send("ok shk")
+            return  res.send("ok shk")
 
         } catch (error) {
             console.log("Error  error-", error);

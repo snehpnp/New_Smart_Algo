@@ -14,21 +14,18 @@ module.exports = function (app) {
     
     cron.schedule('10 7 * * *', () => {
         console.log('Run First Time');
-        downloadAndSwastika();
-     
-        
+        downloadAndSwastika(); 
     });
     
+
     cron.schedule('15 7 * * *', () => {
         console.log('Run First Time');
-      
         downloadKotakNeotoken();
-        
     });
+
 
     cron.schedule('20 7 * * *', () => {
         console.log('Run First Time');
-      
         downloadZerodhatoken();
         downloadAndExtractUpstox();
         downloadAndExtractICICIDirect();
@@ -229,7 +226,7 @@ module.exports = function (app) {
             ];
     
            ulrs.forEach(async function(item) {
-                 //   console.log("urls",url);
+         
                 //  const url = 'https://justradeuat.swastika.co.in/NFO_symbols.txt.zip';
             
                  // Download the zip file
@@ -279,8 +276,6 @@ module.exports = function (app) {
         // Format the date
         const formattedDate = `${year}-${month}-${day}`;
 
-        // Log the formatted date
-        console.log(formattedDate);
 
         var TokenUrl = [
             {
@@ -306,7 +301,7 @@ module.exports = function (app) {
         TokenUrl.forEach((data) => {
             const filePath = path.join(__dirname, '..', 'AllInstrumentToken', 'KotakNeo', `${data.key}.csv`);
             
-            console.log(data.url);
+      
             const fileUrl = data.url
 
             axios({
@@ -364,7 +359,7 @@ module.exports = function (app) {
 
     app.get('/sneh', async (req, res) => {
        downloadKotakNeotoken()
-         res.send("okkk")
+       return res.send("okkk")
       })
 
 

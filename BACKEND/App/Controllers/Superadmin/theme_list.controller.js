@@ -111,11 +111,11 @@ class Theme {
 
             // IF DATA NOT EXIST
             if (getAllTheme.length == 0) {
-                res.send({ status: false, msg: "Empty data", data: getAllTheme })
+                return({ status: false, msg: "Empty data", data: getAllTheme })
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Theme name",
                 data: getAllTheme,
@@ -144,7 +144,7 @@ class Theme {
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return  res.send({
                 status: true,
                 msg: "Get Your Theme",
                 data: getAllTradingClients,

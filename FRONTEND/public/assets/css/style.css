@@ -12648,6 +12648,8 @@ h6,
   white-space: nowrap;
 }
 
+
+
 .content-body .container {
   margin-top: 2.5rem;
 }
@@ -46251,7 +46253,7 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 /*  ------------------------   Loader Only   */
 
 
-@keyframes flip {
+/* @keyframes flip {
   0% {
     transform: rotateY(0);
   }
@@ -46262,7 +46264,6 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
 }
 
 body {
-  /* display: flex; */
   justify-content: center;
   align-items: center;
   width: 100vw;
@@ -46271,7 +46272,6 @@ body {
 }
 
 .loader {
-  /* width: 65px; */
   margin: auto;
 }
 

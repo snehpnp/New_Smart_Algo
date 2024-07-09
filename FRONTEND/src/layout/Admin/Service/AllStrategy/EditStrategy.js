@@ -235,7 +235,6 @@ const EditStrategy = () => {
     await dispatch(Get_All_Catagory())
       .unwrap()
       .then((response) => {
-        // console.log("Get_All_Catagory", response);
         if (response.status) {
           setCatagoryData({
             loading: false,
@@ -257,7 +256,6 @@ const EditStrategy = () => {
     )
       .unwrap()
       .then((response) => {
-        // console.log("response :",response)
 
         if (response.status) {
           setone_strategy(response.data);

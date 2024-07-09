@@ -6,7 +6,6 @@ var dateTime = require('node-datetime');
 const db = require('../../Models');
 const panel_model = db.panel_model;
 const User = db.user;
-const user_logs = db.user_logs;
 const BrokerResponse = db.BrokerResponse;
 const Broker_information = db.Broker_information;
 const live_price = db.live_price;
@@ -16,7 +15,6 @@ const aliceblueView = db.aliceblueView;
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
 
-const { logger, getIPAddress } = require('../../Helper/logger.helper')
 
 
 class CancelOrder {
@@ -91,7 +89,7 @@ class CancelOrder {
             //     CancelOrderAliceBlue(item);
             // }
             else {
-                res.send({ status: false, msg: "broker not found" });
+                return  res.send({ status: false, msg: "broker not found" });
             }
 
 

@@ -17,8 +17,7 @@ export async function GETALL_SUB_ADMINS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+       
     }
 
 }
@@ -32,8 +31,7 @@ export async function GETALL_SUB_ADMINS_CLIENTS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+       
     }
 
 }
@@ -48,8 +46,7 @@ export async function GET_SUB_ADMINS_PERMISSIONS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+       
     }
 
 }
@@ -63,7 +60,6 @@ export async function GET_SUB_ADMINS_PERMISSIONS(data, token) {
 
 // ADD USER
 export async function ADD_CLIENT(data, token) {
-    console.log(data);
     try {
         const res = await axios.post(`${Config.base_url}sub/add/employee`, data, {
             headers: header(token),
@@ -72,9 +68,9 @@ export async function ADD_CLIENT(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error =", err);
+        
         return err
-        // custom error
+   
     }
 
 }
@@ -83,7 +79,7 @@ export async function ADD_CLIENT(data, token) {
 
 // DELTE USER
 export async function DELETE_USERAND_ALLSERVICES(data, token) {
-    console.log(data);
+
     try {
         const res = await axios.post(`${Config.base_url}delete/user`, data, {
             //  headers: header(token),
@@ -93,7 +89,7 @@ export async function DELETE_USERAND_ALLSERVICES(data, token) {
 
     }
     catch (err) {
-        console.log("error =", err);
+        
         return err
         // custom error
     }
@@ -117,8 +113,7 @@ export async function ALL_CLIENTS(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+       
     }
 
 }
@@ -134,8 +129,7 @@ export async function FIND_ONE_USER(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+       
     }
 
 }
@@ -151,8 +145,7 @@ export async function UPDATE_USER(data, token) {
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
-        // custom error
+       
     }
 
 }

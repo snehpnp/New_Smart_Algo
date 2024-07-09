@@ -5,7 +5,7 @@ import { GET_USER_BROKER_INFO } from "../../../Service/user.service";
 
 export const User_Api_Create_Info = createAsyncThunk("user/create/api_create", async (data) => {
     const { user_id, token } = data
-    console.log(data);
+    
     try {
         const res = await GET_USER_BROKER_INFO({ user_id: user_id }, token);
         return await res;

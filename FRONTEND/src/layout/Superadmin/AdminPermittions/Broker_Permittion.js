@@ -33,8 +33,7 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => 
         },
         onSubmit: async (values) => {
            
-          //  console.log('List',List.domain)
-          //  console.log('SelectedBrokers',SelectedBrokers)
+     
            
             const req = {
                 "data": SelectedBrokers,
@@ -43,7 +42,7 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => 
             }
 
             await dispatch(Update_Comapny_Brokers(req)).unwrap().then((response) => {
-                console.log("response", response)
+         
                 if (response.status) {
                     toast.success(response.msg);
                     setshowModal(false)
@@ -64,7 +63,7 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => 
         if (showModal) {
             await dispatch(All_Brokers()).unwrap()
                 .then((response) => {
-                    console.log("setPanelData", response)
+                  
                     setGetAllBrokerName(
                         response.data
                     );
@@ -79,7 +78,7 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => 
 
     useEffect(() => {
         let abc = []
-        // console.log("List && List" ,List && List)
+
         List && List.broker_id.map((item) => {
             abc.push({
                 id: item.id,
@@ -111,7 +110,7 @@ const Broker_Permittion = ({ showModal, setshowModal, showPanelName, List }) => 
     ]
 
     const handleStrategyChange = (event, strategy_id) => {
-       // console.log("strategy_id", strategy_id)
+
         const strategyId = event.target.value;
         const strategyName = event.target.name;
         if (event.target.checked) {

@@ -123,7 +123,7 @@ class Subadmin {
 
         }
         catch (error) {
-            res.send({ msg: "Error=>", error })
+            return  res.send({ msg: "Error=>", error })
         }
 
     }
@@ -190,7 +190,7 @@ class Subadmin {
 
         }
         catch (error) {
-            res.send({ msg: "Error=>", error })
+            return res.send({ msg: "Error=>", error })
         }
 
     }
@@ -210,7 +210,7 @@ class Subadmin {
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Subadmins",
                 data: getAllSubAdmins,
@@ -268,7 +268,7 @@ class Subadmin {
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return res.send({
                 status: true,
                 msg: "Get  Subadmins",
                 data: getAllSubAdmins,
@@ -287,7 +287,7 @@ class Subadmin {
             const getAllSubAdmins = await User_model.find({
                 parent_role: "SUBADMIN",
                 license_type: "2",
-                Is_Active: '0'
+                Is_Active: "0"
 
             });
             const totalCount = getAllSubAdmins.length;
@@ -298,7 +298,7 @@ class Subadmin {
             }
 
             // DATA GET SUCCESSFULLY
-            res.send({
+            return res.send({
                 status: true,
                 msg: "Get All Subadmins",
                 data: getAllSubAdmins,

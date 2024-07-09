@@ -7,6 +7,8 @@ const User_model = db.user;
 const user_SignUp = db.UserSignUp;
 const user_logs = db.user_logs;
 const Role_model = db.role;
+const BrokerResponse = db.BrokerResponse;
+
 const Company_info = db.company_information;
 const strategy_client = db.strategy_client;
 const groupService_User = db.groupService_User;
@@ -72,8 +74,6 @@ class Employee {
 
         }
       }
-
-
 
       const existingUser = await User_model.findOne({
         $or: [
@@ -436,8 +436,6 @@ class Employee {
             }
 
 
-            res.send({ status: true, msg: "successfully Add!", data: data[0] });
-
             var EmailData = await firstOptPass(email_data);
             CommonEmail(toEmail, subjectEmail, EmailData);
 
@@ -446,6 +444,8 @@ class Employee {
               role: data[0].Role,
               user_id: data[0]._id,
             });
+             res.send({ status: true, msg: "successfully Add!", data: data[0] });
+
 
 
           }
@@ -461,7 +461,7 @@ class Employee {
           }
         });
     } catch (error) {
-      res.send({ msg: error });
+      return res.send({ msg: error });
     }
   }
 
@@ -517,13 +517,9 @@ class Employee {
 
       var TotalMonth = "0";
 
-      // var Panel_key = await Company_info.find();
-
-
       var Panel_key = await Company_info.find({}, { prefix: 1, licenses: 1, _id: 0 }).limit(1);
 
       const totalLicense = await User_model.aggregate([
-        // Match documents based on your criteria (e.g., specific conditions)
         {
           $match: {
             license_type: "2",
@@ -558,10 +554,7 @@ class Employee {
         new_licence = req.licence1;
       }
 
-
-
       if (Number(new_licence) > 0) {
-
 
         if ((parseInt(TotalLicense) + parseInt(new_licence)) > Number(Panel_key[0].licenses)) {
 
@@ -571,7 +564,6 @@ class Employee {
             data: [],
           })
         }
-
       }
 
 
@@ -722,7 +714,6 @@ class Employee {
         insert_startegy.push(item.id);
       });
 
-
       // ADD STRATEGY ARRAY
       var add_startegy = [];
       insert_startegy.forEach(function (item, index) {
@@ -738,7 +729,6 @@ class Employee {
           delete_startegy.push(item);
         }
       });
-
 
       // ADD STRATEGY IN STRATEGY CLIENT
       if (add_startegy.length > 0) {
@@ -798,29 +788,45 @@ class Employee {
           });
 
 
+          if (req.multiple_strategy_select == 0) {
+            if (deleteStrategy.length > 0) {
 
+              var update_services = await client_services.updateMany(
+                { user_id: existingUsername._id, strategy_id: stgId },
+                { $set: { strategy_id: deleteStrategy[0].strategy_id } }
+              );
 
-          if (deleteStrategy.length > 0) {
+            } else {
+              var update_stg = new ObjectId(add_startegy[0]);
 
-            var update_services = await client_services.updateMany(
-              { user_id: existingUsername._id, strategy_id: stgId },
-              { $set: { strategy_id: deleteStrategy[0].strategy_id } }
-            );
-
+              var update_services = await client_services.updateMany(
+                { user_id: existingUsername._id, strategy_id: stgId },
+                { $set: { strategy_id: update_stg } }
+              );
+            }
           } else {
-            var update_stg = new ObjectId(add_startegy[0]);
 
-            var update_services = await client_services.updateMany(
-              { user_id: existingUsername._id, strategy_id: stgId },
-              { $set: { strategy_id: update_stg } }
-            );
+            if (delete_startegy.length > 0) {
+
+              const deleteStrategyIds = delete_startegy.map(data => new ObjectId(data));
+
+              const updatePromises = deleteStrategyIds.map(data =>
+                client_services.updateMany(
+                  { user_id: existingUsername._id },
+                  { $pull: { strategy_id: data } }
+                )
+              );
+
+              // Wait for all update operations to complete
+              const results = await Promise.all(updatePromises);
+              console.log(results);
+            }
+
+
           }
-
-
 
         });
       }
-
 
       try {
         // GROUP SERVICES ADD EDIT
@@ -854,9 +860,6 @@ class Employee {
           await user_activity.save();
 
           // IF GROUP SERVICES NOT EXIST
-          // var GroupServices = await serviceGroup_services_id.find({
-          //   Servicegroup_id: GroupServiceId,
-          // });
           const GroupServices = await serviceGroup_services_id.aggregate([
             {
               $match: {
@@ -895,6 +898,7 @@ class Employee {
           var strategFind = await strategy_client.find({
             user_id: existingUsername._id,
           });
+
           var client_servicesDelete = await client_services.deleteMany({
             user_id: existingUsername._id,
           });
@@ -912,10 +916,6 @@ class Employee {
             });
             User_client_services.save();
           });
-
-
-
-        } else {
 
         }
       } catch (error) {
@@ -951,7 +951,6 @@ class Employee {
       );
 
 
-
       if (req.license_type == "2" || req.license_type == 2) {
 
         if (Number(new_licence) > 0) {
@@ -963,7 +962,7 @@ class Employee {
         }
       }
 
-      if (req.multiple_strategy_select == 0) {
+      if (req.multiple_strategy_select == 0 && existingUsername.multiple_strategy_select == 1) {
         var multy_stgfind = await client_services.find({
           user_id: existingUsername._id,
         }).select('strategy_id')
@@ -983,7 +982,61 @@ class Employee {
           })
         }
 
+      }
 
+
+
+      if (req.multiple_strategy_select == 1 && existingUsername.multiple_strategy_select == 0) {
+
+        var strategFind = await strategy_client.find({
+          user_id: existingUsername._id,
+        });
+
+        var multy_stgfind = await client_services.find({
+          user_id: existingUsername._id,
+        }).select('strategy_id')
+
+
+        if (multy_stgfind.length > 0) {
+          multy_stgfind.forEach(async (data) => {
+            console.log("data", data)
+            console.log("strategFind", strategFind[0].strategy_id)
+
+            if (data.strategy_id.length == 0) {
+              const filter = { _id: data._id };
+              const updateOperation = { $set: { strategy_id: [strategFind[0].strategy_id] } }
+              const result = await client_services.updateOne(filter, updateOperation);
+            }
+
+          })
+        }
+
+      }
+
+      if (req.multiple_strategy_select == 1 && existingUsername.multiple_strategy_select == 1) {
+
+        var strategFind = await strategy_client.find({
+          user_id: existingUsername._id,
+        });
+
+        var multy_stgfind = await client_services.find({
+          user_id: existingUsername._id,
+        }).select('strategy_id')
+
+
+        if (multy_stgfind.length > 0) {
+          multy_stgfind.forEach(async (data) => {
+            console.log("data", data)
+            console.log("strategFind", strategFind[0].strategy_id)
+
+            if (data.strategy_id.length == 0) {
+              const filter = { _id: data._id };
+              const updateOperation = { $set: { strategy_id: [strategFind[0].strategy_id] } }
+              const result = await client_services.updateOne(filter, updateOperation);
+            }
+
+          })
+        }
 
       }
 
@@ -1040,7 +1093,7 @@ class Employee {
       }
 
       // DATA GET SUCCESSFULLY
-      res.send({
+      return res.send({
         status: true,
         msg: "Get All Clients",
         totalCount: totalCount,
@@ -1087,11 +1140,8 @@ class Employee {
       return res.send({
         status: true,
         msg: "Get All Clients",
-        // totalCount: totalCount,
         data: getAllClients,
-        // page: Number(page),
-        // limit: Number(limit),
-        // totalPages: Math.ceil(totalCount / Number(limit)),
+
       });
     } catch (error) {
       console.log("Error loginClients Error-", error);
@@ -1150,7 +1200,7 @@ class Employee {
       }
 
       // DATA GET SUCCESSFULLY
-      res.send({
+      return res.send({
         status: true,
         msg: "Get All trading Clients",
         data: getAllTradingClients,
@@ -1195,7 +1245,7 @@ class Employee {
       }
 
       // DATA GET SUCCESSFULLY
-      res.send({
+      return res.send({
         status: true,
         msg: "Get All user_logs",
         data: GetAlluser_logs,
@@ -1261,7 +1311,7 @@ class Employee {
 
       if (result) {
         const status_msg = user_active_status == "0" ? "DeActivate" : "Activate";
-        res.send({
+        return res.send({
           status: true,
           msg: "Update Successfully",
           data: result,
@@ -1275,11 +1325,6 @@ class Employee {
       });
     }
   }
-
-
-
-
-
 
   // DELETE USER AND USER REGARD SERVICES
   async DeleteUser(req, res) {
@@ -1313,7 +1358,7 @@ class Employee {
         user_id: get_user[0]._id,
       });
 
-      res.send({
+      return res.send({
         status: true,
         msg: "Delete Successfully",
         data: DeleteUser,
@@ -1400,7 +1445,7 @@ class Employee {
 
       const userSTG = await strategy_client.find({ user_id: userId });
 
-      res.send({
+      return res.send({
         status: true,
         msg: "Get User Successfully",
         data: GetAllClientServices,
@@ -1410,10 +1455,6 @@ class Employee {
       console.log("Error trading status Error-", error);
     }
   }
-
-
-
-
 
   // UPDATE BROKER KEY
   async Update_Broker_Keys(req, res) {
@@ -1456,17 +1497,11 @@ class Employee {
       if (!Client_key) {
         return res.status(409).json({ status: false, msg: 'Client Not exists', data: [] });
       }
-      res.send({ status: true, msg: "Get Client key", data: Client_key })
+      return res.send({ status: true, msg: "Get Client key", data: Client_key })
     } catch (error) {
 
     }
   }
-
-
-
-
-
-
 
   // Duplicate Data
   async GetDuplicateData(req, res) {
@@ -1522,11 +1557,49 @@ class Employee {
 
 
 
-      res.send({ status: true, msg: "Get Client key", data: Client_key })
+      return res.send({ status: true, msg: "Get Client key", data: Client_key })
     } catch (error) {
 
     }
   }
+
+
+  // Duplicate Data
+  async DawnloadStatusandResponse(req, res) {
+    try {
+      const { id, key } = req.body;
+
+      if (!id || !key) {
+        return res.status(400).json({ status: false, msg: "ID and key are required" });
+      }
+      let data
+      if (key == 1) {
+        data = await user_logs.find({ user_Id: id });
+      } else {
+        data = await BrokerResponse.find({ user_Id: id });
+
+      }
+
+
+      console.log("data", data);
+
+
+      if (!data.length) {
+        return res.status(404).json({ status: false, msg: "No data found for the provided ID" });
+      }
+
+      return res.status(200).json({
+        status: true,
+        msg: "Data retrieved successfully",
+        data: data
+      });
+
+    } catch (error) {
+      console.error("Error in DawnloadStatusandResponse:", error);
+      return res.status(500).json({ status: false, msg: "Internal Server Error", error });
+    }
+  }
+
 
 
 

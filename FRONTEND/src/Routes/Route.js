@@ -7,12 +7,10 @@ import Client from "./User_Route"
 import Login from "../layout/Auth/Login"
 import ForgetPassword from '../layout/Auth/ForgetPassword';
 import UpdatePassword from '../layout/Auth/UpdatePassword.js';
-import Testing from "../test"
 import Deactivate_Company from '../layout/Auth/Deactivate_Company';
 import NotFound from '../layout/Auth/Not_Found';
 import SignUp from '../layout/Sign_Up_Users/Main';
 import NewSignUp from '../layout/Sign_Up_Users/signUp'
-
 
 
 const Routing = () => {
@@ -31,7 +29,7 @@ const Routing = () => {
       return
     }
     if (location.pathname.startsWith('/update')) {
-      console.log("fdoifuepo")
+
       navigate(location.pathname);
       return
     }
@@ -93,7 +91,6 @@ const Routing = () => {
       <Route path="/forget" element={<ForgetPassword />} />
       <Route path="/profile" element={<ForgetPassword />} />
       <Route path="/update/:id" element={<UpdatePassword />} />
-      <Route path="/Testing" element={<Testing />} />
       <Route path="/notfound" element={<Deactivate_Company />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/*" element={<NotFound />} />

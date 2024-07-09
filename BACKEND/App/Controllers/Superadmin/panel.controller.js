@@ -558,7 +558,7 @@ class Panel {
             if (!Panel_information) {
                 return res.status(409).send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            res.send({ status: true, msg: "Get Panel Broker", data: Panel_information })
+            return  res.send({ status: true, msg: "Get Panel Broker", data: Panel_information })
 
         } catch (error) {
             // console.log("Theme error-", error);
@@ -652,7 +652,7 @@ class Panel {
             if (!Panel_information) {
                 return res.status(409).send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            res.send({ status: true, msg: "Get Panel Broker", data: Panel_information, Error: ErrorArray })
+            return  res.send({ status: true, msg: "Get Panel Broker", data: Panel_information, Error: ErrorArray })
 
         } catch (error) {
             // console.log("Theme error-", error);
@@ -711,7 +711,7 @@ class Panel {
                 }
             }));
 
-            res.send({
+            return res.send({
                 status: true,
                 msg: 'View creation completed',
                 successResults: successResults,

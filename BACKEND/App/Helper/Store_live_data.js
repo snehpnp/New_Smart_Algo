@@ -346,7 +346,7 @@ socket.on('connect', () => {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -432,7 +432,7 @@ socket.on('connect', () => {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -518,7 +518,7 @@ socket.on('connect', () => {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -604,7 +604,7 @@ socket.on('connect', () => {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -690,7 +690,7 @@ socket.on('connect', () => {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -775,7 +775,7 @@ socket.on('connect', () => {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 
@@ -857,7 +857,7 @@ socket.on('connect', () => {
 
 
     } catch (err) {
-      // console.log('Error View Create 5 minute:', err);
+     
     }
 
 

@@ -59,7 +59,6 @@ export const Edit_Strategy = createAsyncThunk("admin/strategy/edit", async (apir
 
     const { req, token } = apireq
 
-console.log("tesdt" , apireq);
 
     try {
         const res = await EDIT_STRATEGY_BY_ID(req, token);

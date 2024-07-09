@@ -114,43 +114,10 @@ const AddStrategy = () => {
 
 
     //  For Set Group-Qty
-
     const InputGroupQty = (event, id, servicename, segment, lotsize) => {
-
-
-
-        // const numericValue = event.target.value.replace(/[^0-9]/g, '');
-        // // const aa = No_Negetive_Input_regex(updatedQty) 
-
-
-        // if (event.target.value === "") {
-        //     toast.error("Can Not Set Less Then Its Lot Size ")
-        //     event.target.value = 0
-
-        //     return
-        // } else {
-        //     if (numericValue) {
-
-        //         if (numericValue >= parseInt(lotsize)) {
-        //             // console.log("segement", (numericValue % parseInt(lotsize)))
-
-        //             if ((numericValue % parseInt(lotsize)) !== 0) {
-        //                 toast.error(`Set Qty According Which Is Multiple to Its LotSize In  ${servicename}`);
-        //                 event.target.value = lotsize
-        //                 return
-        //             }
-        //         } else {
-        //             toast.error("Can Not Set Less Then Its Lot Size ")
-        //             // event.target.value = lotsize
-        //             return
-        //         }
 
         const updatedQty = event.target.value === "" ? 0 : parseInt(event.target.value);
 
-
- 
-
-        // Update the quantity for the selected service
         setSelectedServices((prevInfo) =>
             prevInfo.map((info) =>
                 info.service_id === id

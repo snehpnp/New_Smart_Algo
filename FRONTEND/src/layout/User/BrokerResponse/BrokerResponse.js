@@ -20,7 +20,7 @@ const BrokerResponse = () => {
   const [showModal, setshowModal] = useState(false)
   const [BrokerResponseId, setBrokerResponseId] = useState([])
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
- console.log("BrokerResponseId",BrokerResponseId)
+
 
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))

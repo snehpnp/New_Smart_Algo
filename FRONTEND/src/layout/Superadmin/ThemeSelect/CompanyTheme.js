@@ -24,6 +24,7 @@ const CompanyTheme = () => {
     const [getThemeId, setThemeId] = useState(null);
 
     useEffect(() => {
+  
         dispatch(Get_All_Theme());
     }, [dispatch]);
 
@@ -109,11 +110,11 @@ const CompanyTheme = () => {
 
             axios.request(config)
                 .then((response) => {
-                    console.log(response.data);
+                 
                     window.location.reload();
                 })
                 .catch((error) => {
-                    console.log(error);
+                  
                 });
 
             handleCloseModal();

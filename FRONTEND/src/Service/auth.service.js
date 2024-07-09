@@ -68,11 +68,11 @@ export async function LOG_OUT_USER(data, token) {
             // headers: header(token),
             data: {},
         })
-        // console.log("res", res);
+        
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
+        
         return err
 
         // custom error
@@ -88,7 +88,7 @@ export async function FORGET_PASSWORD(data, token) {
             // headers: header(token),
             data: {},
         })
-        // console.log("res", res);
+        
         return await res?.data;
     }
     catch (err) {
@@ -105,14 +105,12 @@ export async function UPDATE_PASSWORD(data, token) {
             // headers: header(token),
             data: {},
         })
-        // console.log("res", res);
+        
         return await res?.data;
     }
     catch (err) {
         return err
 
-        // console.log("error", err);/
-        // custom error
     }
 
 }
@@ -125,11 +123,11 @@ export async function RESET_PASSWORD(data, token) {
             // headers: header(token),
             data: {},
         })
-        // console.log("res", res);
+        
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
+        
         return err
 
         // custom error
@@ -145,11 +143,11 @@ export async function SET_THEME_DETAILS(data, token) {
             // headers: header(token),
             data: {},
         })
-        // console.log("res", res);
+        
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
+        
         return err
 
         // custom error
@@ -167,11 +165,11 @@ export async function GET_PANEL_INFORMATION(data, token) {
             // headers: header(token),
             data: {},
         })
-        // console.log("res", res);
+        
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
+        
         return err
 
         // custom error
@@ -187,11 +185,11 @@ export async function OTP_SEND_USEHERE(data, token) {
             // headers: header(token),
             data: {data},
         })
-        // console.log("res", res);
+        
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
+        
         return err
 
         // custom error
@@ -210,11 +208,11 @@ export async function LOGOUT_FROM_OTHER_DEVICE(data, token) {
             // headers: header(token),
             data: {data},
         })
-        // console.log("res", res);
+        
         return await res?.data;
     }
     catch (err) {
-        console.log("error", err);
+        
         return err
 
         // custom error

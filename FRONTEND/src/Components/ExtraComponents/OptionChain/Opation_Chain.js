@@ -5,13 +5,12 @@ import React, { useEffect, useState, useRef } from 'react'
 import Theme_Content from "../../../Components/Dashboard/Content/Content"
 import Loader from '../../../Utils/Loader'
 import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import BasicDataTable from "../../../Components/ExtraComponents/Datatable/BasicDataTable";
 import Modal from "../../../Components/ExtraComponents/Modal";
-import { Trash2 ,X } from 'lucide-react';
-import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
+import { Trash2, X } from 'lucide-react';
 import Holidays from "date-holidays"
-import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token ,Option_Symbols_Update_status } from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
+import { Get_Option_Symbols_Expiry, Get_Option_Symbols, Get_Panel_key, Get_Option_All_Round_token, Option_Symbols_Update_status ,Update_Subscribe_token} from '../../../ReduxStore/Slice/Common/Option_Chain_Slice';
 import { get_thre_digit_month, convert_string_to_month } from "../../../Utils/Date_formet";
 import { Get_All_Service_for_Client } from "../../../ReduxStore/Slice/Common/commoSlice";
 import { CreateSocketSession, ConnctSocket, GetAccessToken, } from "../../../Service/Alice_Socket";
@@ -20,12 +19,12 @@ import axios from "axios"
 import toast, { Toaster } from 'react-hot-toast';
 
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
-// import { Get_Panel_Informtion  } from "../../../ReduxStore/Slice/Auth/AuthSlice";
 import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
 import { useNavigate } from 'react-router-dom';
 
 
-
+import WebSocketService from '../../../Utils/LiveDataRedisSocket';
+const WEBSOCKET_URI = 'ws://193.239.237.157:6789';
 const HelpCenter = () => {
 
     const dispatch = useDispatch()
@@ -43,7 +42,7 @@ const HelpCenter = () => {
         data: []
     });
 
-    
+
 
     const [All_Symbols_Expiry, set_All_Symbols_Expiry] = useState({
         loading: false,
@@ -87,7 +86,7 @@ const HelpCenter = () => {
 
     const [disabled, setDisabled] = useState(false);
 
-    
+
 
     const handleClickDisabled = () => {
         setDisabled(true);
@@ -98,8 +97,8 @@ const HelpCenter = () => {
 
 
 
-      // For Show All The Filter's Services
-      const [state, setstate] = useState([]);
+    // For Show All The Filter's Services
+    const [state, setstate] = useState([]);
 
 
 
@@ -244,13 +243,13 @@ const HelpCenter = () => {
 
 
     const CreateRequest = (option_type, row_data, call_type, index) => {
- 
+
 
         if (strategyRef.current === "") {
             alert("Please Select Strategy First")
         } else {
 
- 
+
             OptionChainData.data && OptionChainData.data.filter((item) => {
                 if (item.call_token === row_data.call_token && call_type === "LE" && option_type === "CALL") {
                     const element = $('.button_call_buy_' + item.call_token);
@@ -318,6 +317,9 @@ const HelpCenter = () => {
 
 
     const ExcuteTradeButton = () => {
+    
+        
+        ///////////////////////////////////////////////////////////////////
 
         const currentDate = new Date();
         const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -425,7 +427,7 @@ const HelpCenter = () => {
         setshowModal(false)
 
     }
-   
+
 
     // ------------------------------------ REMOVE SELECTED------------------------------------
 
@@ -462,17 +464,18 @@ const HelpCenter = () => {
     // ------------------------------------ REMOVE SELECTED------------------------------------
 
 
-    const Done_For_Trade = (id) => {
+    const Done_For_Trade = async (id) => {
         handleClickDisabled();
 
+        
         const currentTimestamp = Math.floor(Date.now() / 1000);
 
         ExecuteTradeData.data && ExecuteTradeData.data.map((item) => {
 
 
-            let price =  $('.Call_Price_' + item.token).html();
-            if(item.call_type.toUpperCase() == "PUT"){
-            price =  $('.Put_Price_' + item.token).html();
+            let price = $('.Call_Price_' + item.token).html();
+            if (item.call_type.toUpperCase() == "PUT") {
+                price = $('.Put_Price_' + item.token).html();
             }
 
 
@@ -524,16 +527,24 @@ const HelpCenter = () => {
                         toast.danger(response.data.msg);
 
                     }
-                    
+
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.log("Error in Option Chain Page", error);
                 });
 
         })
 
+        await dispatch(
+            Update_Subscribe_token({
+                data: ExecuteTradeData.data,
+                token: token,
+            })
 
-
+        ).unwrap()
+        .then((response) => { 
+          //  console.log("response subscribe token",response) 
+        });
 
     }
 
@@ -553,11 +564,11 @@ const HelpCenter = () => {
                         data: response.data
                     });
 
-                   
+
                     const filteredSelectedData = response.data.filter((item) => item.token === "1").map((item) => item.symbol);
 
-                     setSelectedServices(filteredSelectedData)
-                     setTags(filteredSelectedData)
+                    setSelectedServices(filteredSelectedData)
+                    setTags(filteredSelectedData)
                 }
             })
     }
@@ -697,68 +708,160 @@ const HelpCenter = () => {
 
 
     //  SHOW lIVE PRICE
-    const ShowLivePrice = async () => {
-        let type = { loginType: "API" };
-        let channelList = TokenSymbolChain && TokenSymbolChain;
+    // const ShowLivePrice = async () => {
+    //     let type = { loginType: "API" };
+    //     let channelList = TokenSymbolChain && TokenSymbolChain;
 
-        if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
+    //     if (UserDetails.user_id !== undefined && UserDetails.access_token !== undefined && UserDetails.trading_status == "on") {
 
 
-            const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
+    //         const res = await CreateSocketSession(type, UserDetails.user_id, UserDetails.access_token);
 
-            if (res.data.stat) {
-                const handleResponse = async (response) => {
+    //         if (res.data.stat) {
+    //             const handleResponse = async (response) => {
 
-                    const old_val_call = $('.Call_Price_' + response.tk).html();
-                    const old_val_put = $('.Put_Price_' + response.tk).html();
+    //                 const old_val_call = $('.Call_Price_' + response.tk).html();
+    //                 const old_val_put = $('.Put_Price_' + response.tk).html();
 
-                    $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
-                    $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
+    //                 $('.SP1_Call_Price_' + response.tk).html(response.sp1 ? response.sp1 : response.lp);
+    //                 $('.BP1_Put_Price_' + response.tk).html(response.bp1 ? response.bp1 : response.lp);
 
-                    if (response.tk) {
-                        if (response.lp !== undefined) {
+    //                 if (response.tk) {
+    //                     if (response.lp !== undefined) {
 
-                            $(".Call_Price_" + response.tk).html(response.lp);
-                            $(".Put_Price_" + response.tk).html(response.lp);
+    //                         $(".Call_Price_" + response.tk).html(response.lp);
+    //                         $(".Put_Price_" + response.tk).html(response.lp);
 
-                            const new_val_call = $('.Call_Price_' + response.tk).html();
-                            const new_val_put = $('.Put_Price_' + response.tk).html();
+    //                         const new_val_call = $('.Call_Price_' + response.tk).html();
+    //                         const new_val_put = $('.Put_Price_' + response.tk).html();
 
-                            if (new_val_call > old_val_call || new_val_put > old_val_put) {
-                                $('.Call_Price_' + response.tk).css({ "color": "green" });
-                                $('.Put_Price_' + response.tk).css({ "color": "green" });
-                                $('.Call_Price_' + response.tk).append('&#8593;')
-                                $('.Put_Price_' + response.tk).append('&#8593;')
-                                $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
-                                $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
-                            } else if (new_val_call < old_val_call || new_val_put < old_val_put) {
-                                $('.Call_Price_' + response.tk).css({ "color": "red" });
-                                $('.Put_Price_' + response.tk).css({ "color": "red" });
-                                $('.Call_Price_' + response.tk).append('&#8595;')
-                                $('.Put_Price_' + response.tk).append('&#8595;')
-                                $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
-                                $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
-                            } else if (new_val_call === old_val_call || new_val_put === old_val_put) {
-                                $('.Call_Price_' + response.tk).css({ "color": "black" });
-                                $('.Put_Price_' + response.tk).css({ "color": "black" });
+    //                         if (new_val_call > old_val_call || new_val_put > old_val_put) {
+    //                             $('.Call_Price_' + response.tk).css({ "color": "green" });
+    //                             $('.Put_Price_' + response.tk).css({ "color": "green" });
+    //                             $('.Call_Price_' + response.tk).append('&#8593;')
+    //                             $('.Put_Price_' + response.tk).append('&#8593;')
+    //                             $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
+    //                             $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
+    //                         } else if (new_val_call < old_val_call || new_val_put < old_val_put) {
+    //                             $('.Call_Price_' + response.tk).css({ "color": "red" });
+    //                             $('.Put_Price_' + response.tk).css({ "color": "red" });
+    //                             $('.Call_Price_' + response.tk).append('&#8595;')
+    //                             $('.Put_Price_' + response.tk).append('&#8595;')
+    //                             $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
+    //                             $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
+    //                         } else if (new_val_call === old_val_call || new_val_put === old_val_put) {
+    //                             $('.Call_Price_' + response.tk).css({ "color": "black" });
+    //                             $('.Put_Price_' + response.tk).css({ "color": "black" });
 
-                            }
-                        };
-                    };
+    //                         }
+    //                     };
+    //                 };
+    //             }
+    //             await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
+    //         }
+
+    //     }
+
+
+    // };
+
+    // useEffect(() => {
+    //     ShowLivePrice();
+    // }, [UserDetails, TokenSymbolChain, showModal]);
+
+    // --------------- FOR GET OPTIONS SYMBOLS ENDS-----------------------
+
+ 
+
+      // --------------- FOR LIVE DATA REDIS FOR SYMBOLS  -----------------------
+
+      
+      useEffect(() => {
+        // alert("okk")
+        const webSocketService = new WebSocketService(WEBSOCKET_URI);
+        const handleMessage = (response) => {
+       // console.log("response option chain",response)
+        
+       
+
+        $('.SP1_Call_Price_' + response.token).html(response.price);
+        $('.BP1_Put_Price_' + response.token).html(response.price);
+
+        if (response.token) {
+
+            const old_val_call = $('.Call_Price_' + response.token).html();
+            const old_val_put = $('.Put_Price_' + response.token).html();
+
+            if (response.price !== undefined) {
+
+                $(".Call_Price_" + response.token).html(response.price);
+                $(".Put_Price_" + response.token).html(response.price);
+
+                const new_val_call = $('.Call_Price_' + response.token).html();
+                const new_val_put = $('.Put_Price_' + response.token).html();
+
+                if (new_val_call > old_val_call || new_val_put > old_val_put) {
+                    $('.Call_Price_' + response.token).css({ "color": "green" });
+                    $('.Put_Price_' + response.token).css({ "color": "green" });
+                    $('.Call_Price_' + response.token).append('&#8593;')
+                    $('.Put_Price_' + response.token).append('&#8593;')
+                    $('.Put_Price_' + response.token).css({ "font-weight": "900" });
+                    $('.Call_Price_' + response.token).css({ "font-weight": "900" });
+                } else if (new_val_call < old_val_call || new_val_put < old_val_put) {
+                    $('.Call_Price_' + response.token).css({ "color": "red" });
+                    $('.Put_Price_' + response.token).css({ "color": "red" });
+                    $('.Call_Price_' + response.token).append('&#8595;')
+                    $('.Put_Price_' + response.token).append('&#8595;')
+                    $('.Put_Price_' + response.token).css({ "font-weight": "900" });
+                    $('.Call_Price_' + response.token).css({ "font-weight": "900" });
+                } else if (new_val_call === old_val_call || new_val_put === old_val_put) {
+                    $('.Call_Price_' + response.token).css({ "color": "black" });
+                    $('.Put_Price_' + response.token).css({ "color": "black" });
+
                 }
-                await ConnctSocket(handleResponse, channelList, UserDetails.user_id, UserDetails.access_token).then((res) => { });
-            }
-
-        }
+            };
+        };
 
 
-    };
+        };
+    
+        const handleOpen = () => {
+          console.log('WebSocket connection opened');
+        };
+    
+        const handleClose = () => {
+          console.log('WebSocket connection closed');
+        };
+    
+        const handleError = (error) => {
+          console.error('WebSocket error:', error);
+        };
+    
+        const disconnect = webSocketService.connect(handleMessage, handleOpen, handleClose, handleError);
+    
+        return () => {
+          disconnect();
+        };
+      }, [TokenSymbolChain]);
+
+ 
+
+    // --------------- FOR LIVE DATA REDIS FOR SYMBOLS  ENDS-----------------------
+    
 
 
 
-    useEffect(() => {
-        ShowLivePrice();
-    }, [UserDetails, TokenSymbolChain, showModal]);
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -785,63 +888,63 @@ const HelpCenter = () => {
     }
 
 
- //  For Manage Filter Symboll 
-const filterFunction = async () => {
-   // alert("okk")
-    const filteredData = All_Symbols.data.filter((item) => {
-        return item.symbol.toLowerCase().includes(SerachService.toLowerCase())
-    });
+    //  For Manage Filter Symboll 
+    const filterFunction = async () => {
+        // alert("okk")
+        const filteredData = All_Symbols.data.filter((item) => {
+            return item.symbol.toLowerCase().includes(SerachService.toLowerCase())
+        });
 
 
-    if (SerachService === "") {
-        setstate([])
-    } else {
-        setstate(filteredData)
-    }
-};
-
-useEffect(() => {
-    filterFunction()
-}, [SerachService]);
-
-  
-
-   // State ForShow Selected Service After Filter And Show Into Table
-   const [selectedServices, setSelectedServices] = useState([]);
-
-   const [tags1, setTags] = useState([]);
-
-  //  For Select Services Checkbox
-  function handleServiceChange(event, symbol, item) {
-      const isChecked = event.target.checked;
-      
-      const symbolValue = symbol;
-      setSelectedServices((prevInfo) => {
-        if (isChecked) {
-            
-            if(selectedServices.length >= 5){
-           
-             
-             alert("You can only select up to 5 stocks.");
-             event.target.checked = false;
-             setTags(tags1.filter((symb) => symb !== symbolValue));
-             return prevInfo.filter((item) => item !== symbolValue);
-            
-            }else{
-                setTags((oldArray) => [...oldArray, symbolValue]);
-                return [...prevInfo, symbolValue];
-            }
+        if (SerachService === "") {
+            setstate([])
         } else {
-            setTags(tags1.filter((symb) => symb !== symbolValue));
-            return prevInfo.filter((item) => item !== symbolValue);
+            setstate(filteredData)
         }
-    });
+    };
 
-}
+    useEffect(() => {
+        filterFunction()
+    }, [SerachService]);
 
 
 
-    const SelectOptionStock = () =>{
+    // State ForShow Selected Service After Filter And Show Into Table
+    const [selectedServices, setSelectedServices] = useState([]);
+
+    const [tags1, setTags] = useState([]);
+
+    //  For Select Services Checkbox
+    function handleServiceChange(event, symbol, item) {
+        const isChecked = event.target.checked;
+
+        const symbolValue = symbol;
+        setSelectedServices((prevInfo) => {
+            if (isChecked) {
+
+                if (selectedServices.length >= 5) {
+
+
+                    alert("You can only select up to 5 stocks.");
+                    event.target.checked = false;
+                    setTags(tags1.filter((symb) => symb !== symbolValue));
+                    return prevInfo.filter((item) => item !== symbolValue);
+
+                } else {
+                    setTags((oldArray) => [...oldArray, symbolValue]);
+                    return [...prevInfo, symbolValue];
+                }
+            } else {
+                setTags(tags1.filter((symb) => symb !== symbolValue));
+                return prevInfo.filter((item) => item !== symbolValue);
+            }
+        });
+
+    }
+
+
+
+    const SelectOptionStock = () => {
         setshowModalSelectOptionStock(true)
     }
 
@@ -854,18 +957,18 @@ useEffect(() => {
             await dispatch(Option_Symbols_Update_status({ req: selectedServices, token: token })).unwrap()
                 .then((response) => {
 
-                    
-                    if (response.status) {
-                      toast.success(response.msg);
-                      setSerachService('')
-                      setRefresh(!refresh)
-                      setshowModalSelectOptionStock(false)  
 
-                    }else{
-                       toast.error(response.msg);
-                       setSerachService('')
-                       setRefresh(!refresh)
-                      // setshowModalSelectOptionStock(false) 
+                    if (response.status) {
+                        toast.success(response.msg);
+                        setSerachService('')
+                        setRefresh(!refresh)
+                        setshowModalSelectOptionStock(false)
+
+                    } else {
+                        toast.error(response.msg);
+                        setSerachService('')
+                        setRefresh(!refresh)
+                        // setshowModalSelectOptionStock(false) 
 
                     }
                 })
@@ -876,21 +979,21 @@ useEffect(() => {
 
         DoneSelectOptionTrade()
         return
-        setshowModalSelectOptionStock(false)  
+        setshowModalSelectOptionStock(false)
     }
 
-    const handleSymbolClickDelete = (e,symbol) => {
-        $('.delete_stoch_'+symbol).prop('checked', false);
+    const handleSymbolClickDelete = (e, symbol) => {
+        $('.delete_stoch_' + symbol).prop('checked', false);
         setRefresh(!refresh)
         setTags(tags1.filter((symb) => symb !== symbol));
         setSelectedServices(selectedServices.filter((symb) => symb !== symbol));
-        
+
     }
 
 
 
-    
-    
+
+
 
     return (
         <>
@@ -923,7 +1026,7 @@ useEffect(() => {
                                     >
                                         <option value="" >Select Stock Name</option>
                                         {All_Symbols.data && All_Symbols.data.map((item) => {
-                                            return <option  value={item.symbol} name={item.price}>{item.symbol}</option>
+                                            return <option value={item.symbol} name={item.price}>{item.symbol}</option>
                                         })}
                                     </select>
                                 </div>
@@ -981,20 +1084,20 @@ useEffect(() => {
                                     <input type="number" className="new-input-control form-control" />
                                 </div>
 
-                               
+
                                 <div className="col-md-2">
                                     <button
                                         className="btn btn-primary me-2"
                                         onClick={(e) => SelectOptionStock()}
                                     >
-                                     Select Option Stock
+                                        Select Option Stock
                                     </button>
                                 </div>
-                                
 
 
 
-                                 <div className="col-md-2 d-flex justify-content-end align-items-center text-secondary ">
+
+                                <div className="col-md-2 d-flex justify-content-end align-items-center text-secondary ">
                                     <button
                                         className="btn btn-primary me-2"
                                         onClick={(e) => ExcuteTradeButton()}
@@ -1007,7 +1110,7 @@ useEffect(() => {
                             </div>
 
 
-                            
+
 
 
                             <div className='option-chain mt-2'>
@@ -1121,7 +1224,7 @@ useEffect(() => {
 
 
 
-                       {showModalSelectOptionStock ? (
+                            {showModalSelectOptionStock ? (
                                 <>
                                     <Modal
                                         isOpen={showModalSelectOptionStock}
@@ -1135,97 +1238,99 @@ useEffect(() => {
                                         handleClose={() => setshowModalSelectOptionStock(false)}
                                     >
 
-                            
-                            
-              <div className="card-body d-flex ">
-                {
-                  tags1.length == 0 ? "" :
-                  <>
-                  {tags1.map((symbol, i) => (
-                    <React.Fragment key={i}>
-                      <div className='mx-3 d-flex justify-content-center'>
-                      <h6 >{symbol}</h6><span onClick={(e) => handleSymbolClickDelete(e,symbol)}><X /></span>
-                      </div>
-                    </React.Fragment>
-                  ))}
-                </>
 
-                }
- 
-                            
-                        </div>           
-                            <div className='col-md-11 px-2 ms-2 '>
-                                <input
-                                    type="test"
-                                    className="form-control"
-                                    placeholder="Search ..."
-                                    onChange={(e) => { setSerachService(e.target.value) }}
-                                    value={SerachService}
 
-                                />
-                               </div>
-                                  <div className="row ">
-                                        { 
-                                          state.length > 0 ?
-                                          state.map((service) => (
+                                        <div className="card-body d-flex ">
+                                            {
+                                                tags1.length == 0 ? "" :
+                                                    <>
+                                                        {tags1.map((symbol, i) => (
+                                                            <React.Fragment key={i}>
+                                                                <div className='mx-3 d-flex justify-content-center'>
+                                                                    <h6 >{symbol}</h6><span onClick={(e) => handleSymbolClickDelete(e, symbol)}><X /></span>
+                                                                </div>
+                                                            </React.Fragment>
+                                                        ))}
+                                                    </>
 
-                                            service.symbol == "BANKNIFTY" || service.symbol == "NIFTY" || service.symbol == "FINNIFTY" ? "":
-                                              <div key={service.symbol} className=" col-lg-3 mb-2">
-                                                <div className="col-lg-6">
-                                                        <div className="form-check">
-                                                            <input
-                                                                type="checkbox"
-                                                                className={`form-check-input delete_stoch_${service.symbol}`}          
-                                                                id={`service-${service.symbol}`}
-                                                                value={service.symbol}
-                                                                defaultChecked={selectedServices.includes(service.symbol)}
-                                                                onChange={(e) => handleServiceChange(e, service.symbol , service)}
-                                                            />
-                                                            <label className="form-check-label" htmlFor={`service-${service.symbol}`}>
-                                                                {service.symbol}
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                    
-                                                ))
-                                                
-                                                : 
-                                                
-                                                All_Symbols.data.map((service) => (
+                                            }
 
-                                                    service.symbol == "BANKNIFTY" || service.symbol == "NIFTY" || service.symbol == "FINNIFTY" ? "":
-                                                    <div key={service.symbol} className=" col-lg-3 mb-2">
 
-                                                      <div className="col-lg-6">
-                                                              <div className="form-check">
-                                                               
-                                                                <input
-                                                                      type="checkbox"
-                                                                      className={`form-check-input delete_stoch_${service.symbol}`} 
-                                                                      id={`service-${service.symbol}`}
-                                                                      value={service.symbol}
-                                                                      defaultChecked={selectedServices.includes(service.symbol)}
-                                                                     onChange={(e) => handleServiceChange(e, service.symbol , service)}
-                                                                  />
-                                                            
-                                                                  
+                                        </div>
+                                        <div className='col-md-11 px-2 ms-2 '>
+                                            <input
+                                                type="test"
+                                                className="form-control"
+                                                placeholder="Search ..."
+                                                onChange={(e) => { setSerachService(e.target.value) }}
+                                                value={SerachService}
 
-                                                                  <label className="form-check-label" htmlFor={`service-${service.symbol}`}>
-                                                                      {service.symbol}
-                                                                  </label>
-                                                              </div>
-                                                          </div>
-                                                          </div>
-                                                          
-                                                 ))
-                                                
-                                                
-                                                }
-                                                </div>
+                                            />
+                                        </div>
+                                        <div className="row ">
+                                            {
+                                                state.length > 0 ?
+                                                    state.map((service) => (
 
-                                       
-                                        
+                                                        service.symbol == "BANKNIFTY" || service.symbol == "NIFTY" || service.symbol == "FINNIFTY" ? "" :
+                                                            <div key={service.symbol} className=" col-lg-3 mb-2">
+                                                                <div className="col-lg-6">
+                                                                    <div className="form-check">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            className={`form-check-input delete_stoch_${service.symbol}`}
+                                                                            id={`service-${service.symbol}`}
+                                                                            value={service.symbol}
+                                                                            checked={selectedServices.includes(service.symbol)}
+                                                                            onChange={(e) => handleServiceChange(e, service.symbol, service)}
+                                                                        />
+
+                                                                        <label className="form-check-label" htmlFor={`service-${service.symbol}`}>
+                                                                            {service.symbol}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                    ))
+
+                                                    :
+
+                                                    All_Symbols.data.map((service) => (
+
+                                                        service.symbol == "BANKNIFTY" || service.symbol == "NIFTY" || service.symbol == "FINNIFTY" ? "" :
+                                                            <div key={service.symbol} className=" col-lg-3 mb-2">
+
+                                                                <div className="col-lg-6">
+                                                                    <div className="form-check">
+
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            className={`form-check-input delete_stoch_${service.symbol}`}
+                                                                            id={`service-${service.symbol}`}
+                                                                            value={service.symbol}
+                                                                            checked={selectedServices.includes(service.symbol)}
+                                                                            onChange={(e) => handleServiceChange(e, service.symbol, service)}
+                                                                        />
+
+
+
+
+                                                                        <label className="form-check-label" htmlFor={`service-${service.symbol}`}>
+                                                                            {service.symbol}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                    ))
+
+
+                                            }
+                                        </div>
+
+
+
                                     </Modal>
                                 </>
                             ) : (

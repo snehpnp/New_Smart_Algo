@@ -269,8 +269,7 @@ const AddStrategy = () => {
                                 <tr>
                                     <th>#</th>
                                     <th>Segment</th>
-                                    <th>Service Name</th>
-                                    {/* <th>Qty</th> */}
+                                    <th>Service Name</th>             
                                     <th>Remove</th>
                                 </tr>
                             </thead>
@@ -281,17 +280,7 @@ const AddStrategy = () => {
                                             <td>{index + 1}</td>
                                             <td>{item.segment}</td>
                                             <td>{item.name}</td>
-                                            {/* <td>
-                                                <input
-                                                type="number"
-                                                className="form-control col-md-1"
-                                                placeholder="Enter Qty"
-                                                onChange={(e) => InputGroupQty(e, item.id, item.name, item.segment)}
-                                                min={0}
-                                                defaultValue="0"
-
-                                            />
-                                            </td> */}
+                                         
                                             <td onClick={() => {
                                                 remoeveService(item.service_id);
                                                 removeServiceFromSelected(item.service_id);
@@ -340,10 +329,7 @@ const AddStrategy = () => {
                                                                 type="checkbox"
                                                                 className="form-check-input "
                                                                 id='selectall'
-                                                            // id={`service-${service._id}`}
-                                                            // value={service._id}
-                                                            // checked={selectedServices.includes(service._id)}
-                                                            // onChange={handleServiceChange}
+                                                          
                                                             />
                                                             <label className="form-check-label" htmlFor='selectall'>
                                                                 Select All
@@ -367,17 +353,7 @@ const AddStrategy = () => {
                                                             </div>
 
 
-                                                            {/* <input
-                                                                type="number"
-                                                                className="form-control col-md-1 my-2"
-                                                                placeholder="Enter Qty"
-                                                                onChange={(e) => InputGroupQty(e, service._id, service.category.name, service.name)}
-                                                                min={0}
-
-                                                                defaultValue="0"
-                                                                style={{ background: !enabledInputs[service._id] ? '#eeeeee' : "" }}
-                                                                readOnly={!enabledInputs[service._id]}
-                                                            /> */}
+                                                    
                                                         </div>
 
 
@@ -390,45 +366,7 @@ const AddStrategy = () => {
                                 )}
                             </div>
 
-                            {/* <table className="table table-responsive-sm ">
-                                <thead className="bg-primary">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Segment</th>
-                                        <th>Service Name</th>
-                                        <th>Qty</th>
-                                        <th>Remove</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {selectedServices && selectedServices.map((item, index) => {
-                                        return <>
-                                            <tr key={index + 1}>
-                                                <td>{index + 1}</td>
-                                                <td>{item.segment}</td>
-                                                <td>{item.name}</td>
-                                                <td><input
-                                                    type="number"
-                                                    className="form-control col-md-1"
-                                                    placeholder="Enter Qty"
-                                                    // onChange={(e) => InputGroupQty(e, service._id, service.category.name, service.name)}
-                                                    min={0}
-                                                    defaultValue="0"
-                                                // style={{ background: !enabledInputs[service._id] ? '#eeeeee' : "" }}
-                                                // readOnly={!enabledInputs[service._id]}
-                                                />
-                                                </td>
-                                                <td onClick={() => remoeveService(item.id)}><Trash2 /></td>
-
-                                            </tr>
-                                        </>
-                                    })
-
-
-                                    }
-
-                                </tbody >
-                            </table> */}
+                        
 
 
                         </>

@@ -60,15 +60,13 @@ const TradingStatus = () => {
                 }
             })
             .catch((err) => {
-                console.log("err", err);
+                
             })
     }
     useEffect(() => {
         data()
     }, [first])
 
-
-    console.log("ForGetCSV", ForGetCSV)
 
 
     const columns = [

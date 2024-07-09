@@ -99,8 +99,7 @@ const History = () => {
             filtered = filtered.filter(obj => dateFormate(obj.createdAt).split(" ")[0].substring(0, 10) === getfiltervalue);
         }
 
-         filtered.filter(obj => console.log("=>",dateFormate(obj.createdAt).split(" ")[0].substring(0, 10)))
-        setFilteredData(filtered);
+        
     };
 
 

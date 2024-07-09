@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// import { DispatchLogin } from "../../../Layout/Auth/Login";
 import { ALL_SERVICES, ALL_CATAGORY, ALL_SIGNUP_CLIENTS, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_EXPIRED_CLIENTS, ALL_CLIENTS, GET_COMPANY_LOGO, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_ALL_SIGNUP_CLIENT, DELETE_USERAND_ALLSERVICES , FIND_ONE_USER, UPDATE_USER, FIND_ONE_SIGNUP_CLIENT } from "../../../Service/admin.service";
 
 
@@ -134,7 +133,7 @@ export const UPDATE_USER_ACTIVE_STATUS = createAsyncThunk("update/useractive/sta
     
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -148,7 +147,7 @@ export const Find_One_User = createAsyncThunk("update/useractive/status", async 
      
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -160,7 +159,7 @@ export const Find_One_Signup_Client = createAsyncThunk("update/useractive/status
      
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -173,7 +172,7 @@ export const Update_User = createAsyncThunk("update/useractive/status", async (d
         
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -187,7 +186,7 @@ export const DELETE_USER_SERVICES = createAsyncThunk("delete/user", async (data)
       
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });
@@ -196,10 +195,10 @@ export const DELETE_USER_SERVICES = createAsyncThunk("delete/user", async (data)
 export const DELETE_ALL_SIGNUP = createAsyncThunk("deletesignupclients", async (data) => {
     try {
         const res = await DELETE_ALL_SIGNUP_CLIENT(data);
-        // console.log("res" ,res);
+        
         return await res;
     } catch (err) {
-        console.log("err", err);
+        
         return err;
     }
 });

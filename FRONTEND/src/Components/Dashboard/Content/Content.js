@@ -8,7 +8,7 @@ const Content = ({ Page_title, button_title, Page_title_showClient, button_statu
 
 
   return (
-    <div>
+
       <div className="content-body">
         <div className="container-fluid">
           <div className="row page-titles">
@@ -67,7 +67,6 @@ const Content = ({ Page_title, button_title, Page_title_showClient, button_statu
         </div>
       </div>
 
-    </div>
   )
 }
 

@@ -17,24 +17,11 @@ const ApiCreateInfo = () => {
   const dispatch = useDispatch()
 
   const token = JSON.parse(localStorage.getItem("user_details")).token;
-
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-
-
-
   const [showModal, setshowModal] = useState(false)
   const [modalData, setModalData] = useState([])
-
-
-
-  const [UserDetails, setUserDetails] = useState({
-    loading: true,
-    data: [],
-  });
-
-  // console.log("UserDetails", UserDetails)
-
+  const [UserDetails, setUserDetails] = useState({loading: true,data: []});
 
 
   const data = async () => {
@@ -111,7 +98,6 @@ const ApiCreateInfo = () => {
             : <>
 
 
-              {/* {console.log("modalData", modalData.broker_id)} */}
               <h4>API Process of {modalData.title}: -</h4>
               {modalData.description ? (
                 <ul>

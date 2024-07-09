@@ -67,7 +67,7 @@ class GroupService {
         });
     }
     catch (error) {
-      res.send({ msg: "Error=>", error })
+      return res.send({ msg: "Error=>", error })
     }
 
   }
@@ -251,7 +251,7 @@ class GroupService {
 
     }
     catch (error) {
-      res.send({ msg: "Error=>", error })
+      return  res.send({ msg: "Error=>", error })
     }
   }
 
@@ -320,10 +320,10 @@ class GroupService {
     const result = await categorie.aggregate(pipeline);
 
     if (result.length > 0) {
-      res.send({ status: true, data: result });
+      return  res.send({ status: true, data: result });
 
     } else {
-      res.send({ status: false, data: [] });
+      return  res.send({ status: false, data: [] });
 
     }
 
@@ -346,10 +346,10 @@ class GroupService {
     const result = await categorie.aggregate(pipeline);
 
     if (result.length > 0) {
-      res.send({ status: true, data: result });
+      return  res.send({ status: true, data: result });
 
     } else {
-      res.send({ status: false, data: [] });
+      return res.send({ status: false, data: [] });
 
     }
 
@@ -431,10 +431,10 @@ class GroupService {
     const result = await services.aggregate(pipeline);
 
     if (result.length > 0) {
-      res.send({ status: true, data: result });
+      return res.send({ status: true, data: result });
 
     } else {
-      res.send({ status: false, data: [] });
+      return  res.send({ status: false, data: [] });
 
     }
 
@@ -464,9 +464,9 @@ class GroupService {
       const result = await serviceGroupName.aggregate(pipeline);
 
       if (result.length > 0) {
-        res.send({ status: true, data: result, msg: 'Get All successfully' });
+        return  res.send({ status: true, data: result, msg: 'Get All successfully' });
       } else {
-        res.send({ status: false, data: [], msg: 'false' });
+        return  res.send({ status: false, data: [], msg: 'false' });
       }
 
     } catch (error) {

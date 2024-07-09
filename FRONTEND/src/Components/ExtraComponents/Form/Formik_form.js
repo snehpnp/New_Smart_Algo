@@ -3,45 +3,33 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 
 
-const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_signUp, btn_name_login, fromDate, fieldtype, formik, btn_name, forlogin, title, additional_field }) => {
-
+const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_signUp, btn_name_login, fromDate, fieldtype, formik, btn_name, forlogin, title, additional_field, btnStatusloading }) => {
 
 
   const location = useLocation()
   const navigate = useNavigate()
-
-
   const [passwordVisible, setPasswordVisible] = useState({});
-
-
   const [previews, setPreviews] = useState([]);
-
 
   const handleFileChange = (event, index, name) => {
     const file = event.target.files[0];
     const reader = new FileReader();
-
     reader.onload = () => {
-      const base64Preview = reader.result; // Get the base64 data URL
-      const newPreviews = [...previews]; // Create a copy of the previews array
+      const base64Preview = reader.result; 
+      const newPreviews = [...previews]; 
+      newPreviews[index] = base64Preview; 
 
-      newPreviews[index] = base64Preview; // Set the base64 preview for the specific index
-
-      // Update the previews array
       setPreviews(newPreviews);
     };
-
     reader.readAsDataURL(file);
   }
 
-  const sneh = (index, name) => {
-  
-
-  }
+  const sneh = (index, name) => {}
 
   const fun = () => {
     navigate('/newsignup')
   }
+  
   const fun1 = () => {
     navigate('/login')
   }
@@ -85,7 +73,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                 </div>
               </> :
                 field.type === "checkbox" ? <>
-                 
+
                   {field.options && field.options.length > 0 ? <>
                     {field.options && field.options.map((option, index) => (
                       <>
@@ -143,7 +131,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
 
                   field.type === "radio" ? <>
                     {field.index === '1' ? <>
-                      
+
                     </>
                       : ""}
 
@@ -298,108 +286,108 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
                             </> :
 
 
-field.type === "number" ? (
-  <div className="col-lg-3">
-    <div className="row d-flex">
-      <div className="col-lg-12 ">
-        <div className="form-group mb-3">
-          <label htmlFor={field.name}>{field.name}</label>
-          <input
-            type="number"
-            name={field.name}
-            className="form-control"
-            id={field.name}
-            {...formik.getFieldProps(field.name)}
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-) : 
-
-
-
-
-                              field.type === "file" ? <>
-                                <div className="col-lg-6">
+                              field.type === "number" ? (
+                                <div className="col-lg-3">
                                   <div className="row d-flex">
-                                    <div className={`col-lg-${title === "addgroup" ? 6 : 12}`}>
-                                      <div className="mb-3">
-                                        <label className={`col-form-label`} htmlFor={field.name}>
+                                    <div className="col-lg-12 ">
+                                      <div className="form-group mb-3">
+                                        <label htmlFor={field.name}>{field.name}</label>
+                                        <input
+                                          type="number"
+                                          name={field.name}
+                                          className="form-control"
+                                          id={field.name}
+                                          {...formik.getFieldProps(field.name)}
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ) :
+
+
+
+
+                                field.type === "file" ? <>
+                                  <div className="col-lg-6">
+                                    <div className="row d-flex">
+                                      <div className={`col-lg-${title === "addgroup" ? 6 : 12}`}>
+                                        <div className="mb-3">
+                                          <label className={`col-form-label`} htmlFor={field.name}>
+                                            {field.label}
+                                            <span className="text-danger">*</span>
+                                          </label>
+                                          <input
+                                            type="file"
+                                            id={field.name}
+                                            onChange={(e) => handleFileChange(e, index, field.name)} // Pass the index to the handler
+                                            className={`form-control`}
+                                          />
+                                        </div>
+                                      </div>
+                                      <img src={previews[index] ? previews[index] : sneh(index, field.name)} name={field.name} alt={`Preview_${index}`} className="mb-3" />
+                                    </div>
+                                  </div>
+                                </> :
+                                  title === "forlogin1" ?
+
+                                    <div className={`col-lg-${title === "forlogin1" || title === "brokerkey" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
+                                      <div className="mb-3 d-flex justify-content-center row">
+                                        <label
+                                          className={`col-lg-${title === "forlogin1" ? 12 : title === "brokerkey" ? 6 : 4} col-form-label `}
+                                          htmlFor={field.name}
+                                        >
                                           {field.label}
                                           <span className="text-danger">*</span>
                                         </label>
-                                        <input
-                                          type="file"
-                                          id={field.name}
-                                          onChange={(e) => handleFileChange(e, index, field.name)} // Pass the index to the handler
-                                          className={`form-control`}
-                                        />
-                                      </div>
-                                    </div>
-                                    <img src={previews[index] ? previews[index] : sneh(index, field.name)} name={field.name} alt={`Preview_${index}`} className="mb-3" />
-                                  </div>
-                                </div>
-                              </> :
-                                title === "forlogin1" ?
+                                        <div className={`col-lg-${title === "forlogin1" ? 12 : title === "forResetPassword" || "forUpdatePassword" ? 12 : 7} `}>
+                                          <input
+                                            type="text"
+                                            className="form-control"
+                                            id={field.name}
+                                            placeholder={`Enter ${field.label}`}
+                                            {...formik.getFieldProps(field.name)}
+                                            required=""
+                                          />
+                                          <div className="invalid-feedback">
+                                            Please enter {field.label}
+                                          </div>
+                                          {formik.errors[field.name] &&
+                                            <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
 
-                                  <div className={`col-lg-${title === "forlogin1" || title === "brokerkey" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
-                                    <div className="mb-3 d-flex justify-content-center row">
-                                      <label
-                                        className={`col-lg-${title === "forlogin1" ? 12 : title === "brokerkey" ? 6 : 4} col-form-label `}
-                                        htmlFor={field.name}
-                                      >
-                                        {field.label}
-                                        <span className="text-danger">*</span>
-                                      </label>
-                                      <div className={`col-lg-${title === "forlogin1" ? 12 : title === "forResetPassword" || "forUpdatePassword" ? 12 : 7} `}>
-                                        <input
-                                          type="text"
-                                          className="form-control"
-                                          id={field.name}
-                                          placeholder={`Enter ${field.label}`}
-                                          {...formik.getFieldProps(field.name)}
-                                          required=""
-                                        />
-                                        <div className="invalid-feedback">
-                                          Please enter {field.label}
                                         </div>
-                                        {formik.errors[field.name] &&
-                                          <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
-
                                       </div>
-                                    </div>
 
-                                  </div>
-                                  :
-                                  <div className={`col-lg-${title === "forlogin" || title === "brokerkey" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
-                                    <div className="mb-3 row">
-                                      <label
-                                        className={`col-lg-${title === "forlogin" ? 3 : title === "brokerkey" ? 6 : 4} col-form-label `}
-                                        htmlFor={field.name}
-                                      >
-                                        {field.label}
-                                        <span className="text-danger">*</span>
-                                      </label>
-                                      <div className={`col-lg-${title === "forlogin" ? 8 : title === "forResetPassword" || "forUpdatePassword" ? 12 : 7} `}>
-                                        <input
-                                          type="text"
-                                          className="form-control"
-                                          id={field.name}
-                                          placeholder={`Enter ${field.label}`}
-                                          {...formik.getFieldProps(field.name)}
-                                          required=""
-                                        />
-                                        <div className="invalid-feedback">
-                                          Please enter {field.label}
+                                    </div>
+                                    :
+                                    <div className={`col-lg-${title === "forlogin" || title === "brokerkey" ? 12 : title === "forResetPassword" ? 12 : title === "forUpdatePassword" ? 12 : 6} `}>
+                                      <div className="mb-3 row">
+                                        <label
+                                          className={`col-lg-${title === "forlogin" ? 3 : title === "brokerkey" ? 6 : 4} col-form-label `}
+                                          htmlFor={field.name}
+                                        >
+                                          {field.label}
+                                          <span className="text-danger">*</span>
+                                        </label>
+                                        <div className={`col-lg-${title === "forlogin" ? 8 : title === "forResetPassword" || "forUpdatePassword" ? 12 : 7} `}>
+                                          <input
+                                            type="text"
+                                            className="form-control"
+                                            id={field.name}
+                                            placeholder={`Enter ${field.label}`}
+                                            {...formik.getFieldProps(field.name)}
+                                            required=""
+                                          />
+                                          <div className="invalid-feedback">
+                                            Please enter {field.label}
+                                          </div>
+                                          {formik.errors[field.name] &&
+                                            <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
+
                                         </div>
-                                        {formik.errors[field.name] &&
-                                          <div style={{ color: 'red' }}>{formik.errors[field.name]}</div>}
-
                                       </div>
-                                    </div>
 
-                                  </div>
+                                    </div>
 
               }
 
@@ -411,8 +399,9 @@ field.type === "number" ? (
           <div className="form-group mb-0">
             {btn_name == 'sneh' ? "" : btn_name == 'Sign In' ?
               < >
-                <button className={`btn btn-primary col-lg-12 btn-rounded ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">
-                  {btn_name}
+             { console.log("btnStatusloading", btnStatusloading)}
+                <button className={`btn btn-primary col-lg-12 btn-rounded ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit" disabled={btnStatusloading} >
+                  {btn_name} 
                 </button>
               </ > : <>
                 <button className={`btn btn-primary col-lg-12 btn-rounded ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit">

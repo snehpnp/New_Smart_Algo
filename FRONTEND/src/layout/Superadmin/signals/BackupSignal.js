@@ -27,10 +27,6 @@ const AdminHelps = () => {
     const token = JSON.parse(localStorage.getItem("user_details")).token
     const UserName = JSON.parse(localStorage.getItem("user_details")).UserName
     const panel_name = localStorage.getItem("panel_name");
-
- 
-     
-    console.log("backend_rul :", backend_rul)
     const [refresh, setRefresh] = useState(false)
 
 

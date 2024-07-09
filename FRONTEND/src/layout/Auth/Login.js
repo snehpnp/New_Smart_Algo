@@ -27,9 +27,7 @@ import { Get_Company_Logo } from '../../ReduxStore/Slice/Admin/AdminSlice'
 
 const Login = () => {
   const navigate = useNavigate();
-  const data = useRef();
   const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
   const [CheckUser, setCheckUser] = useState(check_Device());
   const [showModal, setshowModal] = useState(false);
   const [showModal1, setshowModal1] = useState(false);
@@ -43,8 +41,8 @@ const Login = () => {
   const [typeOtp, setTypeOtp] = useState("");
   const [typeOtp1, setTypeOtp1] = useState("");
   const [UserData, setUserData] = useState("");
-  const [test, settest] = useState([]);
 
+  const [signInBtn, setSignInBtn] = useState(false);
 
 
   let SetTheme = async () => {
@@ -52,16 +50,11 @@ const Login = () => {
     const req = {
       domain: Config.react_domain
     };
-
     await dispatch(Get_Panel_Informtion(req))
       .unwrap()
       .then((response) => {
         let themedata = response.data[0].theme_data[0];
         localStorage.setItem("theme", JSON.stringify(themedata));
-
-       
-
-     
 
         if (themedata != undefined) {
 
@@ -157,7 +150,6 @@ const Login = () => {
   }
 
 
-
   //  FOR SET COMPANY LOGO
   const CompanyName = async () => {
     await dispatch(Get_Company_Logo()).unwrap()
@@ -182,7 +174,7 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.log("Error", error);
+        console.log("Error in login page", error);
       });
   }
 
@@ -213,6 +205,8 @@ const Login = () => {
     },
 
     onSubmit: async (values) => {
+      setSignInBtn(true);
+
       let req = {
         Email: values.email,
         Password: values.password,
@@ -226,7 +220,7 @@ const Login = () => {
 
           if (response.status) {
             await SetTheme()
-
+            setSignInBtn(false);
             if (response.data.Role !== "SUPERADMIN") {
               setshowModal(true);
               setUserData(response.data);
@@ -250,7 +244,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.log("Error", error);
+          console.log("Error in login page", error);
         });
     },
   });
@@ -272,12 +266,18 @@ const Login = () => {
 
 
   const verifyOTP = async () => {
+    setSignInBtn(true);
+
     if (typeOtp === "") {
       alert("enter otp");
+      setSignInBtn(false);
+
       return;
     }
     if (typeOtp.length < 4) {
-      alert("please enter valid otp");
+      alert("please enter valid otp")
+      setSignInBtn(false);
+      ;
       return;
     }
 
@@ -287,14 +287,17 @@ const Login = () => {
       Otp: typeOtp,
     };
 
-    await dispatch(Verify_User_Device(req))
+    await dispatch(Verify_User_Device(req)).unwrap()
       .then((res) => {
+        console.log("res", res);
 
-        if (res.payload.firstlogin === "0") {
+        if (res.firstlogin === "0") {
           setDesclaimerModal(true)
+          setSignInBtn(false);
+
         }
         else {
-          if (res.payload.status) {
+          if (res.status) {
             const roles = ["ADMIN", "USER", "SUBADMIN", "SUPERADMIN"];
             const userData = UserData;
 
@@ -305,10 +308,11 @@ const Login = () => {
             );
 
             if (roles.includes(role) && mobileNo === true) {
-              settest(userData);
+              setSignInBtn(false);
+
               localStorage.setItem("user_details", JSON.stringify(userData));
               localStorage.setItem("user_role", JSON.stringify(role));
-              toast.success(res.payload.msg);
+              toast.success(res.msg);
               let redirectPath = `/${role === "USER"
                 ? "client/dashboard"
                 : role === "SUBADMIN"
@@ -321,38 +325,46 @@ const Login = () => {
                 }
            `;
 
-              setTimeout(() => {
-                setshowModal(false);
-                navigate(redirectPath);
-                window.location.reload();
-              }, 1000);
+           setshowModal(false);
+           navigate(redirectPath);
+           window.location.reload();
+              // setTimeout(() => {
+              // }, 1000);
             } else {
               toast.error(mobileNo);
+              setSignInBtn(false);
+
             }
           } else {
-            if (res.payload.msg === "You are already logged in on the Web.") {
-              toast.error(res.payload.msg);
+            if (res.msg === "You are already logged in on the Web.") {
+              toast.error(res.msg);
               setshowModal(false);
               setshowModal1(true);
+              setSignInBtn(false);
+
             }
-            else if (res.payload.msg === "You are already logged in on the phone.") {
-              toast.error(res.payload.msg);
+            else if (res.msg === "You are already logged in on the phone.") {
+              toast.error(res.msg);
               setshowModal(false);
               setshowModal1(true);
+              setSignInBtn(false);
+
             }
 
 
             else {
-              toast.error(res.payload.msg);
+              toast.error(res.msg);
               setTimeout(() => {
-                // setshowModal(false);
+                setSignInBtn(false);
               }, 1000);
             }
           }
         }
 
       })
-      .catch((error) => console.log("error on Otp Verify", error));
+      .catch((error) => {
+
+      });
   };
 
   // CLOSE THE MODAL
@@ -366,18 +378,15 @@ const Login = () => {
     setshowModal1(false);
     setshowModal2(false);
     setshowModal(false);
-
     setgetOtpStatus(false);
   };
+
+
   // CLOSE THE MODAL
   const verifyOTP_login = async () => {
 
     if (getOtp && getOtp == typeOtp1) {
-      // const socket = socketIOClient(`${Config.base_url}`);
-      // socket.emit("logout_user_from_other_device_req", {
-      //   CheckUser: CheckUser,
-      //   usedata: UserData,
-      // });
+    
     }
 
     setTimeout(async () => {
@@ -392,19 +401,14 @@ const Login = () => {
         .then((res) => {
           if (res.status) {
             const roles = ["ADMIN", "USER", "SUBADMIN"];
-
             const userData = UserData;
-
             const role = userData && userData.Role;
 
             if (roles.includes(role)) {
               localStorage.setItem("user_details", JSON.stringify(userData));
               localStorage.setItem("user_role", JSON.stringify(role));
               toast.success(res.msg);
-              // let redirectPath = `/${
-              //   role === "USER" ? "client" : role.toLowerCase()
-              // }/dashboard`;
-
+             
               let redirectPath = `/${role === "USER"
                 ? "client/dashboard"
                 : role === "SUBADMIN"
@@ -427,7 +431,7 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.log("Error", error);
+          console.log("Error In Login page", error);
         });
     }, 1000);
   };
@@ -453,14 +457,11 @@ const Login = () => {
         }
       })
       .catch((error) => {
-        console.log("Error", error);
+        console.log("Error in Login Page", error);
       });
   };
 
-  //  for set theme
 
-
-  // FOR DESCILMER
 
   const SubmitDesclimer = () => {
 
@@ -496,7 +497,6 @@ const Login = () => {
 
         setTimeout(() => {
           navigate(redirectPath);
-          // window.location.reload();
         }, 1000);
       }
     }
@@ -506,7 +506,6 @@ const Login = () => {
 
 
   useEffect(() => {
-    // getPanelDetails();
     CompanyName()
   }, []);
 
@@ -515,8 +514,8 @@ const Login = () => {
 
 
   return (
-    <div className="vh-100" style={{ 
-      backgroundImage: `url(${backgroundImage})` ,backgroundSize:'cover'
+    <div className="vh-100" style={{
+      backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover'
     }}>
 
       <div className="authincation h-100">
@@ -541,8 +540,8 @@ const Login = () => {
                         )}
                         formik={formik}
                         btn_name="Sign In"
-                        //  btn_name_signUp="Sign Up"
                         title="forlogin1"
+                        btnStatusloading={signInBtn}
                       />
                       <div className="form-row mt-4 mb-2">
                         <div className="mb-3 mt-1  d-flex justify-content-between ">
@@ -573,12 +572,12 @@ const Login = () => {
             btn_name="Verify"
             btn_name1="Verify1"
             Submit_Function={verifyOTP}
+            disabled_submit= {signInBtn}
           >
-             
+
             <form onSubmit={verifyOTP}>
 
               <OtpInput
-
                 containerStyle="otp-div"
                 value={typeOtp}
                 onChange={setTypeOtp}
@@ -587,11 +586,12 @@ const Login = () => {
                 renderInput={(props, index) => (
                   <input
                     {...props}
+                    type="tel"
                     autoFocus={index === 0}
                     onKeyPress={(event) => {
                       if (event.key === 'Enter') {
-                        event.preventDefault();  
-                        verifyOTP();  
+                        event.preventDefault();
+                        verifyOTP();
                       }
                     }}
                   />
@@ -637,7 +637,6 @@ const Login = () => {
         <>
           <Modal
             isOpen={showModal2}
-            // handleClose={!showModal2}
             handleClose={() => setshowModal2(false)}
             backdrop="static"
             size="sm"
@@ -677,7 +676,7 @@ const Login = () => {
 
 
 
-      {/*  for Desclaimer    */}
+
       {desclaimerModal ? (
         <>
           <Modal
