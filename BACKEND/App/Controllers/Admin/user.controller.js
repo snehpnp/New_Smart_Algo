@@ -436,8 +436,6 @@ class Employee {
             }
 
 
-            return res.send({ status: true, msg: "successfully Add!", data: data[0] });
-
             var EmailData = await firstOptPass(email_data);
             CommonEmail(toEmail, subjectEmail, EmailData);
 
@@ -446,6 +444,8 @@ class Employee {
               role: data[0].Role,
               user_id: data[0]._id,
             });
+             res.send({ status: true, msg: "successfully Add!", data: data[0] });
+
 
 
           }
