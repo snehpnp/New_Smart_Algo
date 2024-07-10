@@ -12,33 +12,36 @@ import $ from "jquery"
 import { DisclaimerMessage } from '../../../ReduxStore/Slice/Admin/SystemSlice'
 import { SquarePlus, CirclePlus } from 'lucide-react';
 import { Button, Container, Row, Col, Form } from 'react-bootstrap';
+
+
 import UpdateCompanyInfo from './UpdateCompanyInfo';
 import UpdateImages from './UpdateImages';
 import UpdateSmptDetails from './UpdateSmptDetails';
 
 import { useDispatch } from "react-redux";
 
-
-import WebSocketService from '../../../Utils/LiveDataRedisSocket';
-import WebSocketServiceForexCrypto from '../../../Utils/LiveDataForexCryptoSocket';
-const WEBSOCKET_URI = 'ws://193.239.237.157:6789';
-
-const WEBSOCKET_URI_FOREX = 'wss://api.tiingo.com/fx';
-const API_KEY = 'bfb6173acfc17ce2afbc73a44015944789678341';
-
 const System = () => {
-    const dispatch = useDispatch();
-
-    const [diss, setDiss] = useState('');
-    const [messages, setMessages] = useState([]);
     const [dissArr, setDissArr] = useState([]);
     const [inputs, setInputs] = useState([]);
+
+    const dispatch = useDispatch();
+    const [getCompanyName, setCompanyName] = useState({
+        loading: true,
+        data: []
+    });
+
     const [refresh, setRefresh] = useState(false);
-    const [getDissStatus, setDissStatus] = useState('');
-    const [showImgModal, setshowImgModal] = useState(false);
-    const [ShowEmailModal, setShowEmailModal] = useState(false);
-    const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
+
+    //  for Panel Details
     const [PanelDetailsModal, setPanelDetailsModal] = useState(false);
+    const [diss, setDiss] = useState('');
+    const [getDissStatus, setDissStatus] = useState('');
+
+
+    //  for Show Clients
+    const [ShowEmailModal, setShowEmailModal] = useState(false);
+    //  for Subadmins
+    const [showImgModal, setshowImgModal] = useState(false);
 
     const CompanyName = async () => {
         await dispatch(GET_COMPANY_INFOS()).unwrap()
@@ -47,7 +50,7 @@ const System = () => {
                     setDiss(response.data[0].disclaimer);
                     setDissArr(response.data[0].dissArr);
                     setDissStatus(response.data[0].disclaimer_status);
-                    console.log("response.data[0].dissArr", response.data[0].disclaimer_status)
+
                     setInputs(response.data[0].dissArr);
 
                     setCompanyName({
@@ -65,6 +68,10 @@ const System = () => {
             });
     }
 
+    useEffect(() => {
+        CompanyName();
+    }, []);
+
     const Company_columns = [
         {
             dataField: 'index',
@@ -74,6 +81,10 @@ const System = () => {
         {
             dataField: 'panel_name',
             text: 'Company Name'
+        },
+        {
+            dataField: 'panel_short_name',
+            text: 'Panel Key'
         },
         {
             dataField: 'panel_short_name',
@@ -229,23 +240,19 @@ const System = () => {
             .then((response) => {
                 if (response.status) {
                     toast.success("Disclaimer added successfully...");
-                    window.location.reload();
+                    setRefresh(!refresh);
                 } else {
                     toast.error("Disclaimer add error");
                 }
             })
             .catch((err) => {
-
+             
             });
     }
 
-    useEffect(() => {
-        CompanyName();
-    }, []);
 
     return (
         <Content Page_title="System" button_status={false}>
-
             <h2>Company Information</h2>
             <BasicDataTable tableData={getCompanyName.data} TableColumns={Company_columns} dropdown={false} />
             <br />
@@ -259,15 +266,15 @@ const System = () => {
 
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <h2 style={{ marginRight: "10px" }}>Disclaimer Message</h2>
-
                 <div className='toogle-new'>
                     <input type="checkbox"
                         id="switch"
-                        checked={Number(getDissStatus) === 1}
+                        defaultChecked={getDissStatus && getDissStatus == 1}
                         onChange={(e) => updateDiscStatus(e)}
-                    />
-                    <label htmlFor="switch">Toggle</label>
+                    /><label for="switch">Toggle</label>
                 </div>
+
+
             </div>
 
 
