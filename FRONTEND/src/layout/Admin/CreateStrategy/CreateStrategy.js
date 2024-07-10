@@ -85,7 +85,16 @@ const CreateStrategy = () => {
   const [selectAndOrOperater, setSelectAndOrOperater] = useState("or");
   const [showModalOffset, setShowModalOffset] = useState(false);
   const [showModalAndOrOperator, setShowModalAndOrOperator] = useState(false);
+
   const [showModalindicators, setShowModalindicators] = useState(false);
+  const [modalPropsindicators, setModalPropsindicators] = useState({
+    e: null,
+    condition_item: null,
+    element_first_second: null,
+    index: null,
+    buy_sell: null,
+  });
+
   const [checkBuySellAndOr, setCheckBuySellAndOr] = useState("");
   const [exitConditionBuyOrSell, setExitConditionBuyOrSell] = useState([
     {
@@ -96,6 +105,8 @@ const CreateStrategy = () => {
   const [timeTradeConddition, setTimeTradeConddition] = useState([
     { entry: { time: "" }, exit: { time: "" }, notrade: { time: "" } },
   ]);
+
+
 
   const selectTimeFrame = (item) => {
     setTimeFrameVal(item.value);
@@ -137,7 +148,14 @@ const CreateStrategy = () => {
   const closeModalindicators = () => {
     setShowModalindicators(false);
   };
-  const openModalindicators = () => {
+  const openModalindicators = (e, condition_item, element_first_second, index, buy_sell) => {
+    setModalPropsindicators({
+      e,
+      condition_item,
+      element_first_second,
+      index,
+      buy_sell
+    });
     setShowModalindicators(true);
   };
 
@@ -371,6 +389,74 @@ const CreateStrategy = () => {
     }
   };
 
+  const selectSourceIndicators = (e, propsindicators, field) => {
+      // console.log("fieldfield",field)
+      // console.log("value", e.target.value, "Propsindicators", propsindicators)
+      // console.log(" e ", propsindicators.e.target.value)
+      // console.log(" e.target.value ", e.target.value)
+      // console.log(" buy_sell ", propsindicators.buy_sell)
+      // console.log(" index ", propsindicators.index)
+
+      if (propsindicators.buy_sell == "buy") {
+        const foundObject = coditionRequestArr.find((item, i) => i === propsindicators.index);
+        if (foundObject) {
+          // Update the source field of the found object
+          if (propsindicators.element_first_second == "first") {
+            if(field == "source"){
+              foundObject.first_element.indicator_field = e.target.value;
+              foundObject.first_element.source = propsindicators.e.target.value+e.target.value+foundObject.first_element.period;
+            }else if(field == "period"){
+              foundObject.first_element.period = e.target.value;
+              foundObject.first_element.source = propsindicators.e.target.value+foundObject.first_element.indicator_field+e.target.value;
+            }
+           
+          } else if (propsindicators.element_first_second == "second") {
+            if(field == "source"){
+              foundObject.second_element.indicator_field = e.target.value;
+              foundObject.second_element.source = propsindicators.e.target.value+e.target.value+foundObject.second_element.period;
+            }else if(field == "period"){
+              foundObject.second_element.period = e.target.value;
+              foundObject.second_element.source = propsindicators.e.target.value+foundObject.second_element.indicator_field+e.target.value;
+            }
+          }
+          // Create a new array to trigger a state update
+          setCoditionRequestArr([...coditionRequestArr]);
+        }
+      } else if (propsindicators.buy_sell == "sell") {
+        const foundObject = coditionRequestArrSell.find(
+          (item, i) => i === propsindicators.index
+        );
+        if (foundObject) {
+         // Update the source field of the found object
+         if (propsindicators.element_first_second == "first") {
+          if(field == "source"){
+            foundObject.first_element.indicator_field = e.target.value;
+            foundObject.first_element.source = propsindicators.e.target.value+e.target.value+foundObject.first_element.period;
+          }else if(field == "period"){
+            foundObject.first_element.period = e.target.value;
+            foundObject.first_element.source = propsindicators.e.target.value+foundObject.first_element.indicator_field+e.target.value;
+          }
+         
+        } else if (propsindicators.element_first_second == "second") {
+          if(field == "source"){
+            foundObject.second_element.indicator_field = e.target.value;
+            foundObject.second_element.source = propsindicators.e.target.value+e.target.value+foundObject.second_element.period;
+          }else if(field == "period"){
+            foundObject.second_element.period = e.target.value;
+            foundObject.second_element.source = propsindicators.e.target.value+foundObject.second_element.indicator_field+e.target.value;
+          }
+        }
+          // Create a new array to trigger a state update
+          setCoditionRequestArrSell([...coditionRequestArrSell]);
+        }
+      }
+
+
+
+
+    
+  }
+
   const selectSource = (e, condition_item, element_first_second, index, buy_sell) => {
 
     console.log("e.target.value", e.target.value)
@@ -378,21 +464,25 @@ const CreateStrategy = () => {
     console.log("element_first_second", element_first_second)
     console.log("index", index)
     console.log("buy_sell", buy_sell)
-
-    if (e.target.value == 'ema') {
-      openModalindicators()
+    let value = e.target.value;
+    if (value == 'ema') {
+      openModalindicators(e, condition_item, element_first_second, index, buy_sell)
     }
 
 
-    //if (e.target.value != "") {
+    //if (value != "") {
     if (buy_sell == "buy") {
       const foundObject = coditionRequestArr.find((item, i) => i === index);
       if (foundObject) {
         // Update the source field of the found object
         if (element_first_second == "first") {
-          foundObject.first_element.source = e.target.value;
+          foundObject.first_element.source = value=="ema"?
+          value+foundObject.first_element.indicator_field+foundObject.first_element.period
+          :value;
         } else if (element_first_second == "second") {
-          foundObject.second_element.source = e.target.value;
+          foundObject.second_element.source = value=="ema"?
+          value+foundObject.second_element.indicator_field+foundObject.second_element.period
+          :value;
         }
         // Create a new array to trigger a state update
         setCoditionRequestArr([...coditionRequestArr]);
@@ -404,9 +494,13 @@ const CreateStrategy = () => {
       if (foundObject) {
         // Update the source field of the found object
         if (element_first_second == "first") {
-          foundObject.first_element.source = e.target.value;
+          foundObject.first_element.source = value=="ema"?
+          value+foundObject.first_element.indicator_field+foundObject.first_element.period
+          :value;
         } else if (element_first_second == "second") {
-          foundObject.second_element.source = e.target.value;
+          foundObject.second_element.source = value=="ema"?
+          value+foundObject.second_element.indicator_field+foundObject.second_element.period
+          :value;
         }
         // Create a new array to trigger a state update
         setCoditionRequestArrSell([...coditionRequestArrSell]);
@@ -489,6 +583,8 @@ const CreateStrategy = () => {
           first_element: {
             source: "",
             offset: "0",
+            indicator_field: "close",
+            period: "0",
           },
 
           comparators: "==",
@@ -496,6 +592,8 @@ const CreateStrategy = () => {
           second_element: {
             source: "",
             offset: "0",
+            indicator_field: "close",
+            period: "0",
           },
           and_or_operator: "",
           end_bracket: [],
@@ -532,6 +630,8 @@ const CreateStrategy = () => {
           first_element: {
             source: "",
             offset: "0",
+            indicator_field: "close",
+            period: "0",
           },
 
           comparators: "==",
@@ -539,6 +639,8 @@ const CreateStrategy = () => {
           second_element: {
             source: "",
             offset: "0",
+            indicator_field: "close",
+            period: "0",
           },
           and_or_operator: "",
           end_bracket: [],
@@ -589,6 +691,8 @@ const CreateStrategy = () => {
         first_element: {
           source: "",
           offset: "0",
+          indicator_field: "close",
+          period: "0",
         },
 
         comparators: "==",
@@ -596,6 +700,8 @@ const CreateStrategy = () => {
         second_element: {
           source: "",
           offset: "0",
+          indicator_field: "close",
+          period: "0",
         },
         and_or_operator: "",
         end_bracket: [],
@@ -620,6 +726,8 @@ const CreateStrategy = () => {
         first_element: {
           source: "",
           offset: "0",
+          indicator_field: "close",
+          period: "0",
         },
 
         comparators: "==",
@@ -627,6 +735,8 @@ const CreateStrategy = () => {
         second_element: {
           source: "",
           offset: "0",
+          indicator_field: "close",
+          period: "0",
         },
         and_or_operator: "",
         end_bracket: [],
@@ -1016,7 +1126,44 @@ const CreateStrategy = () => {
   }
 
   const saveStrategy = async (e) => {
-    // alert(condition_string)
+    alert(condition_string)
+    let condition_string_source11 = [];
+    
+    for (let index = 0; index < coditionRequestArr.length; index++) {
+      const val = coditionRequestArr[index];
+
+      if (val.first_element.source !== "" && val.second_element.source !== "") {
+        if (val.first_element.source != "number") {
+          if (
+            !condition_string_source11.includes(
+              `${val.first_element.source}`
+            )
+          ) {
+            condition_string_source11.push(
+              `${val.first_element.source}`
+            );
+          }
+        }
+
+        if (val.second_element.source != "number") {
+          if (
+            !condition_string_source11.includes(
+              `${val.second_element.source}`
+            )
+          ) {
+            condition_string_source11.push(
+              `${val.second_element.source}`
+            );
+          }
+        }
+      } else {
+        break; // Break out of the loop
+      }
+    }
+   
+    console.log("condition_string_source11",condition_string_source11)
+  
+    return;
 
     if (strategyName == "") {
       alert("Please select a strategy name");
@@ -2479,43 +2626,87 @@ const CreateStrategy = () => {
             <Modal.Title>EMA Indicator</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div className="row">
-              <div className="col-md-6">
-                <label>Field</label>
-                {/* <select className="form-control formcontol-1" aria-label="Default select example">
-                  <option selected>Open this select menu</option>
-                  <option value="1">One</option>
-                  <option value="2">Two</option>
-                  <option value="3">Three</option>
-                </select> */}
+            {
+              //console.log("modalPropsindicators inside -- ", modalPropsindicators)
+              // console.log("modalPropsindicators inside -- ", modalPropsindicators.e != null ? modalPropsindicators.e.target.value +"  "+modalPropsindicators.index 
+              //   : "")
+              //  console.log("modalPropsindicators index -- ", modalPropsindicators.element_first_second)
+              // console.log("modalPropsindicators inside -- ", coditionRequestArr[modalPropsindicators.index])
 
-                <select  className="form-control formcontol-1" aria-label="Default select example" >
-                  {/* <option value="">---</option> */}
-                  {getSources.data.map((sm, i) => (
-                    ['close', 'open', 'high', 'low'].includes(sm.value)? 
-                     <>
-                      <option
-                      // selected={
-                      //   condition_item.first_element.source ==
-                      //   sm.value
-                      // }
-                      value={sm.value}
+            }
+
+            {
+              modalPropsindicators.index != null ?
+                <div className="row">
+                  <div className="col-md-6">
+                    <label>Field</label>
+                    <select className="form-control formcontol-1" aria-label="Default select example"
+                      onChange={(e) => {
+                        selectSourceIndicators(e, modalPropsindicators, "source");
+                      }}
                     >
-                      {sm.name}
-                    </option>
-                     </>
-                    :""
-                  ))}
-                </select>
+                      {/* <option value="">---</option> */}
+                      {getSources.data.map((sm, i) => (
+                        ['close', 'open', 'high', 'low'].includes(sm.value) ?
+                          <>
+                            <option
+                              selected={
 
+                                modalPropsindicators.buy_sell == "buy" ?
+                                  modalPropsindicators.element_first_second == "first" ?
+                                    coditionRequestArr[modalPropsindicators.index].first_element.indicator_field == sm.value
+                                    :
+                                    coditionRequestArr[modalPropsindicators.index].second_element.indicator_field ==
+                                    sm.value
+                                  :
 
+                                  modalPropsindicators.element_first_second == "first" ?
+                                    coditionRequestArrSell[modalPropsindicators.index].first_element.indicator_field == sm.value
+                                    :
+                                    coditionRequestArrSell[modalPropsindicators.index].second_element.indicator_field ==
+                                    sm.value
 
-              </div>
-              <div className="col-md-6">
-                <label>Period</label>
-                <input type="number" className="form-control formcontol-1" min="0"/>
-              </div>
-            </div>
+                              }
+                              value={sm.value}
+                            >
+                              {sm.name}
+                            </option>
+                          </>
+                          : ""
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-md-6">
+                    <label>Period</label>
+                  
+                    <input
+                    type="number"
+                      className="form-control formcontol-1"
+                      min="0"
+                      defaultValue={
+
+                        modalPropsindicators.buy_sell == "buy" ?
+                          modalPropsindicators.element_first_second == "first" ?
+                            coditionRequestArr[modalPropsindicators.index].first_element.period
+                            :
+                            coditionRequestArr[modalPropsindicators.index].second_element.period
+                          :
+
+                          modalPropsindicators.element_first_second == "first" ?
+                            coditionRequestArrSell[modalPropsindicators.index].first_element.period
+                            :
+                            coditionRequestArrSell[modalPropsindicators.index].second_element.period
+
+                      }
+                    onChange={(e) => selectSourceIndicators(e, modalPropsindicators, "period")}
+                   
+                    />
+                  </div>
+                </div>
+
+                : ""
+            }
+
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={closeModalindicators}>
@@ -2523,7 +2714,8 @@ const CreateStrategy = () => {
             </Button>
             <Button
               variant="primary"
-            //   onClick={() => ModalConfirmindicators(checkBuySellAndOr)}
+               //onClick={() => ModalConfirmindicators(checkBuySellAndOr)}
+               onClick={closeModalindicators}
             >
               Done
             </Button>

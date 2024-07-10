@@ -637,7 +637,7 @@ async function run() {
                     
                     const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
                     console.log("condition", condition)
-                    
+                    return;
                     if (condition) {
                       let entry_type = 'LE';
                       if (val.type === 'BUY') {
@@ -928,7 +928,7 @@ async function run() {
     while (true) {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
-       await executeFunction();
+     // await executeFunction();
       await exitOpentrade()
     }
   } finally {

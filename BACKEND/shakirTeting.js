@@ -4044,24 +4044,24 @@ app.get("/remain_get_token",async (req,res)=>{
 
 
 
-db.createView(
-  "emahigh5_M_111435",               // View ka naam
-  "M_111435",                // Source collection
-  [
-    { $sort: { _id: -1 } }, // Sorting to get the latest prices first
-    // { $limit: 2 },         // Limiting to the period (adjust this based on your period)
-    { $setWindowFields: {   // Window function to calculate EMA
-        sortBy: { _id: 1 },
-        output: {
-          ema: {
-            $expMovingAvg: { input: "$high", N: 2 }  // Adjust N based on your period
-          }
-        }
-      }
-    },
-    { $project: { ema: 1, _id: 1 } } // Projecting only the ema field, excluding _id
-  ]
-)
+// db.createView(
+//   "emaclose2_M_111435",               // View ka naam
+//   "M_111435",                // Source collection
+//   [
+//     { $sort: { _id: -1 } }, // Sorting to get the latest prices first
+//     // { $limit: 2 },         // Limiting to the period (adjust this based on your period)
+//     { $setWindowFields: {   // Window function to calculate EMA
+//         sortBy: { _id: 1 },
+//         output: {
+//           ema: {
+//             $expMovingAvg: { input: "$close", N: 2 }  // Adjust N based on your period
+//           }
+//         }
+//       }
+//     },
+//     { $project: { ema: 1, _id: 1 } } // Projecting only the ema field, excluding _id
+//   ]
+// )
 
 
 
