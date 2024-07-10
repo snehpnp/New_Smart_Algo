@@ -72,6 +72,19 @@ CREATE TABLE services (
 );
 
 
+
+/*--TABLE:- STAFF COMPETANCY */
+CREATE TABLE staff_competencies (
+    staff_id INT NOT NULL,
+    service_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (staff_id) REFERENCES staffs(id),
+    FOREIGN KEY (service_id) REFERENCES services(id),
+    UNIQUE (staff_id,service_id)
+);
+
+
 /*--TABLE:- JOB TYPE */
 CREATE TABLE job_types (
     id INT AUTO_INCREMENT PRIMARY KEY,
