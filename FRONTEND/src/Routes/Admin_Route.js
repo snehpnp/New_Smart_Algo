@@ -52,6 +52,9 @@ import AddStrategyToClients from '../layout/Admin/Service/AllStrategy/AddStrateg
 import BrokerInfor from '../layout/Admin/BrokersInformation/Broker_info';
 import ChartDetail from '../layout/Admin/ChartInformation/Chart_info';
 import { Get_Pmermission } from "../ReduxStore/Slice/Users/DashboardSlice";
+
+import Starclients from '../layout/Admin/Clients/Starclients/Starclients'
+
 import { useDispatch } from "react-redux";
 
 const Admin = () => {
@@ -142,6 +145,7 @@ const Admin = () => {
                 <Route exact path="/openposition" element={<OpenPositions />} />
                 <Route exact path="/addstratgytoclients" element={<AddStrategyToClients />} />
                 <Route exact path="/chart" element={<ChartDetail />} />
+                <Route exact path="/allstarclients" element={<Starclients />} />
 
 
             </Routes>

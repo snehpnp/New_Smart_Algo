@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
 import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
-import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS, DELETE_USER_SERVICES, UpdateStarClientStatus } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
+import { GetAllStarClient, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS, DELETE_USER_SERVICES ,UpdateStarClientStatus} from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
 import * as Config from "../../../../Utils/Config";
 import { useDispatch } from "react-redux";
 import { fa_time, fDateTime } from "../../../../Utils/Date_formet";
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import ToastButton from "../../../../Components/ExtraComponents/Alert_Toast";
 import { DawnloadDataUser } from "../../../../ReduxStore/Slice/Admin/userSlice";
 import { Download } from 'lucide-react';
@@ -96,13 +96,13 @@ const AllClients = () => {
     }
   };
 
-  var headerName = "All Clients"
+  var headerName = "All Star Clients"
   const data = async () => {
     var req1 = {
       Find_Role: Role,
       user_ID: user_ID,
     };
-    await dispatch(GET_ALL_CLIENTS(req1))
+    await dispatch(GetAllStarClient(req1))
       .unwrap()
       .then((response) => {
         if (response.status) {
@@ -306,7 +306,6 @@ const AllClients = () => {
         .then((response) => {
 
           if (response.status) {
-            setIsStarred(newStarStatus ? "1" : "0");
             setrefresh(!refresh)
             toast.success(response.msg);
           } else {
@@ -326,8 +325,7 @@ const AllClients = () => {
     );
   };
 
-
-
+  
   const columns = [
     {
       dataField: "index",
@@ -637,7 +635,7 @@ const AllClients = () => {
       });
   }
 
-
+  
   return (
     <>
       <Content

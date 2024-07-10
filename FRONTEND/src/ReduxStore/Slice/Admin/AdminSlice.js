@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { ALL_SERVICES, ALL_CATAGORY, ALL_SIGNUP_CLIENTS, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_EXPIRED_CLIENTS, ALL_CLIENTS, GET_COMPANY_LOGO, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_ALL_SIGNUP_CLIENT, DELETE_USERAND_ALLSERVICES , FIND_ONE_USER, UPDATE_USER, FIND_ONE_SIGNUP_CLIENT } from "../../../Service/admin.service";
+import { ALL_SERVICES, ALL_CATAGORY, ALL_SIGNUP_CLIENTS, SERVICE_BY_CATAGORY, ALL_GROUP_SERVICES, ALL_EXPIRED_CLIENTS, ALL_CLIENTS, GET_COMPANY_LOGO, GET_COMPANY_INFO, GET_ALL_TRADINGSTATUS, GO_TO_DASHBOARD, UPDATE_USERACTIVE_STATUS, DELETE_ALL_SIGNUP_CLIENT, DELETE_USERAND_ALLSERVICES , FIND_ONE_USER, UPDATE_USER, FIND_ONE_SIGNUP_CLIENT ,GetAllStarClients,UpdateStarStatus} from "../../../Service/admin.service";
 
 
 
@@ -203,6 +203,32 @@ export const DELETE_ALL_SIGNUP = createAsyncThunk("deletesignupclients", async (
     }
 });
 
+export const GetAllStarClient = createAsyncThunk("getall/star/clients", async (data) => {
+    try {
+        const res = await GetAllStarClients(data);
+        
+        return await res;
+    } catch (err) {
+        
+        return err;
+    }
+});
+
+
+
+export const UpdateStarClientStatus = createAsyncThunk("update/star/status", async (data) => {
+    try {
+        const res = await UpdateStarStatus(data);
+        
+        return await res;
+    } catch (err) {
+        
+        return err;
+    }
+});
+
+
+
 const AdminSlice = createSlice({
     name: "AdminSlice",
     initialState: {
@@ -222,7 +248,10 @@ const AdminSlice = createSlice({
         deleteuser: [],
         updateuser: [],
         oneuser: [],
-        logos: []
+        logos: [],
+        startClients:[],
+        startClientStatus:[]
+
     },
 
     recuders: {},
@@ -289,11 +318,18 @@ const AdminSlice = createSlice({
             // state.isLoading = false;
             return { ...state, deleteuser: payload, isLoading: false };
         },
+        [GetAllStarClient.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, startClients: payload, isLoading: false };
+        },
+        [UpdateStarClientStatus.fulfilled]: (state, { payload }) => {
+            // state.isLoading = false;
+            return { ...state, startClientStatus: payload, isLoading: false };
+        },
     },
 });
 
 
-// export const getthemedata = (state) => state && state.ThemeSlice
 
 
 export default AdminSlice;
