@@ -11,69 +11,46 @@ import Tabs from "react-bootstrap/Tabs";
 const TradingStatus = () => {
   const dispatch = useDispatch();
   const user_details = JSON.parse(localStorage.getItem("user_details"));
-  const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
-  const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
-  const [first, setfirst] = useState("all");
-  const [first1, setfirst1] = useState("all");
-  const [DateArray, setDateArray] = useState([]);
-  const [getAllUserTrading_status, setAllUserTrading_status] = useState({ loading: true, data: [] });
+  const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'));
+  const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'));
+  const [first, setFirst] = useState("all");
+  const [first1, setFirst1] = useState("all");
+  const [dateArray, setDateArray] = useState([]);
+  const [getAllUserTradingStatus, setAllUserTradingStatus] = useState({ loading: true, data: [] });
   const [userLogs, setUserLogs] = useState({ loading: true, data: [] });
-
 
   let req = {
     user_Id: isgotodashboard ? gotodashboard.user_id : user_details.user_id,
   };
 
-
-  const data1 = async () => {
+  const fetchData1 = async () => {
     await dispatch(Get_All_TRADINGSTATUS_USER(req))
       .unwrap()
       .then((response) => {
         if (response.status) {
-          if (first === "all") {
-            setAllUserTrading_status({
-              loading: false,
-              data: response.data,
-            });
-          }
-
-          let abc = response.data.filter((item) => {
-            return item.createdAt.split("T")[0] === first;
-          });
-          setAllUserTrading_status({
+          const data = first === "all" ? response.data : response.data.filter(item => item.createdAt.split("T")[0] === first);
+          setAllUserTradingStatus({
             loading: false,
-            data: abc,
+            data: data,
           });
         } else {
-          setAllUserTrading_status({
+          setAllUserTradingStatus({
             loading: false,
             data: [],
           });
         }
       });
-
   };
 
-  const data3 = async () => {
-
+  const fetchData3 = async () => {
     await dispatch(user_activity_logs(req))
       .unwrap()
       .then((response) => {
-
         if (response.status) {
-          if (first1 === "all") {
-            setUserLogs({
-              loading: false,
-              data: response.data,
-            });
-          }
-
-          let abc = response.data.filter((item) => {
-            return item.createdAt.split("T")[0] === first1;
-          });
+          const data = first1 === "all" ? response.data : response.data.filter(item => item.createdAt.split("T")[0] === first1);
           setUserLogs({
             loading: false,
-            data: abc,
+            data: data,
           });
         } else {
           setUserLogs({
@@ -81,11 +58,36 @@ const TradingStatus = () => {
             data: [],
           });
         }
-
-
       });
-  }
+  };
 
+  useEffect(() => {
+    const generateDateArray = () => {
+      let dates = [];
+      for (let i = 0; i < 3; i++) {
+        const currentDate = new Date();
+        currentDate.setDate(currentDate.getDate() - i);
+        const day = currentDate.getDate() < 10 ? `0${currentDate.getDate()}` : currentDate.getDate();
+        const month = currentDate.getMonth() + 1 < 10 ? `0${currentDate.getMonth() + 1}` : currentDate.getMonth() + 1;
+        const year = currentDate.getFullYear();
+        const formattedDate = `${year}-${month}-${day}`;
+        dates.push(formattedDate);
+      }
+      setDateArray(dates);
+      setFirst(dates[0]);
+      setFirst1(dates[0]);
+    };
+
+    generateDateArray();
+  }, []);
+
+  useEffect(() => {
+    fetchData1();
+  }, [first, dispatch]);
+
+  useEffect(() => {
+    fetchData3();
+  }, [first1, dispatch]);
 
   const columns = [
     {
@@ -102,16 +104,13 @@ const TradingStatus = () => {
       dataField: "login_status",
       text: "login status",
       formatter: (cell, row) => (
-        <>
-          <div>
-            <span data-toggle="tooltip" data-placement="top" title="Delete">
-              {row.login_status == null ? row.trading_status : row.login_status}
-            </span>
-          </div>
-        </>
+        <div>
+          <span data-toggle="tooltip" data-placement="top" title="Delete">
+            {row.login_status == null ? row.trading_status : row.login_status}
+          </span>
+        </div>
       ),
     },
-
     {
       dataField: "role",
       text: "role",
@@ -136,31 +135,18 @@ const TradingStatus = () => {
     {
       dataField: "Strategy",
       text: "Strategy",
-      formatter: (cell, row) => (
-        <>
-          <div>{cell ? cell : "-"}</div>
-        </>
-      ),
+      formatter: (cell, row) => <div>{cell ? cell : "-"}</div>,
     },
     {
       dataField: "message",
       text: "Update",
-      formatter: (cell, row) => (
-        <>
-          <div>{cell ? cell : "-"}</div>
-        </>
-      ),
+      formatter: (cell, row) => <div>{cell ? cell : "-"}</div>,
     },
     {
       dataField: "quantity",
       text: "Qty",
-      formatter: (cell, row) => (
-        <>
-          <div>{cell ? cell : "-"}</div>
-        </>
-      ),
+      formatter: (cell, row) => <div>{cell ? cell : "-"}</div>,
     },
-
     {
       dataField: "system_ip",
       text: "IP",
@@ -175,123 +161,57 @@ const TradingStatus = () => {
     },
   ];
 
-
-
-  var dateArray = [];
-  const dateArr = () => {
-    console.log("dateArr -> dateArr");
-    for (let i = 0; i < 3; i++) {
-      const currentDate = new Date();
-      currentDate.setDate(currentDate.getDate() - i);
-      const day =
-        currentDate.getDate() + 1 < 10
-          ? `0${currentDate.getDate()}`
-          : currentDate.getDate();
-      const month =
-        currentDate.getMonth() + 1 < 10
-          ? `0${currentDate.getMonth() + 1}`
-          : currentDate.getMonth() + 1; // Months are zero-based, so add 1
-      const year = currentDate.getFullYear();
-      const formattedDate = `${year}-${month}-${day}`;
-      dateArray.push(formattedDate);
-    }
-    setDateArray(dateArray);
-    setfirst(dateArray[0]);
-    setfirst1(dateArray[0]);
-
-  };
-
-  useEffect(() => {
-    dateArr();
-  }, []);
-
-  useEffect(() => {
-    data1();
-
-  }, [first]);
-
-  useEffect(() => {
-
-    data3();
-  }, [first1]);
-
   return (
-    <>
-
-      <Content Page_title="Trading Status" button_status={false}>
-        <Tabs
-          defaultActiveKey="home"
-          id="uncontrolled-tab-example"
-          className="mb-3"
-        >
-
-
-          <Tab eventKey="home" title="Panel Trading Status">
-            <div className="col-lg-6">
-              <div className="mb-3 row">
-                <div className="col-lg-7">
-                  <select
-                    className="default-select wide form-control"
-                    id="validationCustom05"
-                    onChange={(e) => setfirst(e.target.value)}
-                  >
-                    {DateArray &&
-                      DateArray.map((item) => {
-                        return (
-                          <>
-                            <option key={item} value={item}>{item}</option>
-                          </>
-                        );
-                      })}
-                  </select>
-                </div>
+    <Content Page_title="Trading Status" button_status={false}>
+      <Tabs defaultActiveKey="home" id="uncontrolled-tab-example" className="mb-3">
+        <Tab eventKey="home" title="Panel Trading Status">
+          <div className="col-lg-6">
+            <div className="mb-3 row">
+              <div className="col-lg-7">
+                <select
+                  className="default-select wide form-control"
+                  id="validationCustom05"
+                  onChange={(e) => setFirst(e.target.value)}
+                >
+                  {dateArray.map((item) => (
+                    <option key={item} value={item}>{item}</option>
+                  ))}
+                </select>
               </div>
             </div>
-
-            {getAllUserTrading_status.loading ? <Loader />
-              : <FullDataTable
-                TableColumns={columns}
-                tableData={getAllUserTrading_status.data}
-              />}
-
-          </Tab>
-
-
-
-          <Tab eventKey="profile" title="Update Status">
-            <div className="col-lg-6">
-              <div className="mb-3 row">
-                <div className="col-lg-7">
-                  <select
-                    className="default-select wide form-control"
-                    id="validationCustom05"
-                    onChange={(e) => setfirst1(e.target.value)}
-                  >
-                    {DateArray &&
-                      DateArray.map((item) => (
-                        <option key={item} value={item}>
-                          {item}
-                        </option>
-                      ))}
-
-                  </select>
-                </div>
+          </div>
+          {getAllUserTradingStatus.loading ? (
+            <Loader />
+          ) : (
+            <FullDataTable TableColumns={columns} tableData={getAllUserTradingStatus.data} />
+          )}
+        </Tab>
+        <Tab eventKey="profile" title="Update Status">
+          <div className="col-lg-6">
+            <div className="mb-3 row">
+              <div className="col-lg-7">
+                <select
+                  className="default-select wide form-control"
+                  id="validationCustom05"
+                  onChange={(e) => setFirst1(e.target.value)}
+                >
+                  {dateArray.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
-
-
-            {userLogs.loading ? <Loader />
-              : (<FullDataTable
-                TableColumns={columns1}
-                tableData={userLogs.data}
-              />)}
-
-          </Tab>
-        </Tabs>
-      </Content>
-
-
-    </>
+          </div>
+          {userLogs.loading ? (
+            <Loader />
+          ) : (
+            <FullDataTable TableColumns={columns1} tableData={userLogs.data} />
+          )}
+        </Tab>
+      </Tabs>
+    </Content>
   );
 };
 
