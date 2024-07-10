@@ -241,10 +241,12 @@ const Login = () => {
           } else {
 
             toast.error(response.msg);
+            setSignInBtn(false);
           }
         })
         .catch((error) => {
           console.log("Error in login page", error);
+          setSignInBtn(false);
         });
     },
   });
