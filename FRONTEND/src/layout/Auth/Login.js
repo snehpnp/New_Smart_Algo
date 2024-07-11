@@ -210,7 +210,7 @@ const Login = () => {
 
 
           if (response.status) {
-            await SetTheme()
+            // await SetTheme()
             setSignInBtn(false);
             if (response.data.Role !== "SUPERADMIN") {
               setshowModal(true);
@@ -492,9 +492,9 @@ const Login = () => {
 
 
   useEffect(() => {
+    SetTheme()
     CompanyName()
     setCheckUser(check_Device())
-
   }, []);
 
 

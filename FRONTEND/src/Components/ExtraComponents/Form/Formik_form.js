@@ -399,7 +399,7 @@ const ReusableForm = ({ initialValues, validationSchema, onSubmit, btn_name_sign
           <div className="form-group mb-0">
             {btn_name == 'sneh' ? "" : btn_name == 'Sign In' ?
               < >
-             { console.log("btnStatusloading", btnStatusloading)}
+          
                 <button className={`btn btn-primary col-lg-12 btn-rounded ${location.pathname === "resetpassword" ? "col-md-11" : ""}`} type="submit" disabled={btnStatusloading} >
                   {btn_name} 
                 </button>

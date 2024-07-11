@@ -1,56 +1,38 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from 'react'
-import Content from "../../../Components/Dashboard/Content/Content"
-import FullDataTable from '../../../Components/ExtraComponents/Datatable/FullDataTable'
+import Content from "../../../Components/Dashboard/Content/Content";
 import BasicDataTable from '../../../Components/ExtraComponents/Datatable/BasicDataTable'
-import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
-import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content"
-import { Pencil, Trash2 } from 'lucide-react';
+import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice';
+import { Pencil } from 'lucide-react';
 import ToastButton from '../../../Components/ExtraComponents/Alert_Toast'
 import toast from 'react-hot-toast'
 import $ from "jquery"
-import { DisclaimerMessage } from '../../../ReduxStore/Slice/Admin/SystemSlice'
-import { SquarePlus, CirclePlus } from 'lucide-react';
-import { Button, Container, Row, Col, Form } from 'react-bootstrap';
-
-
+import { DisclaimerMessage } from '../../../ReduxStore/Slice/Admin/SystemSlice';
+import { Button, Row, Col, Form } from 'react-bootstrap';
 import UpdateCompanyInfo from './UpdateCompanyInfo';
 import UpdateImages from './UpdateImages';
 import UpdateSmptDetails from './UpdateSmptDetails';
-
 import { useDispatch } from "react-redux";
 
+
 const System = () => {
-    const [dissArr, setDissArr] = useState([]);
-    const [inputs, setInputs] = useState([]);
-
     const dispatch = useDispatch();
-    const [getCompanyName, setCompanyName] = useState({
-        loading: true,
-        data: []
-    });
-
-    const [refresh, setRefresh] = useState(false);
-
-    //  for Panel Details
-    const [PanelDetailsModal, setPanelDetailsModal] = useState(false);
     const [diss, setDiss] = useState('');
+    const [inputs, setInputs] = useState([]);
+    const [refresh, setRefresh] = useState(false);
     const [getDissStatus, setDissStatus] = useState('');
-
-
-    //  for Show Clients
-    const [ShowEmailModal, setShowEmailModal] = useState(false);
-    //  for Subadmins
     const [showImgModal, setshowImgModal] = useState(false);
+    const [ShowEmailModal, setShowEmailModal] = useState(false);
+    const [getCompanyName, setCompanyName] = useState({ loading: true, data: [] });
+    const [PanelDetailsModal, setPanelDetailsModal] = useState(false);
 
     const CompanyName = async () => {
         await dispatch(GET_COMPANY_INFOS()).unwrap()
             .then((response) => {
                 if (response.status) {
                     setDiss(response.data[0].disclaimer);
-                    setDissArr(response.data[0].dissArr);
                     setDissStatus(response.data[0].disclaimer_status);
-
+                    console.log("response.data[0].dissArr", response.data[0].disclaimer_status)
                     setInputs(response.data[0].dissArr);
 
                     setCompanyName({
@@ -68,10 +50,6 @@ const System = () => {
             });
     }
 
-    useEffect(() => {
-        CompanyName();
-    }, []);
-
     const Company_columns = [
         {
             dataField: 'index',
@@ -81,10 +59,6 @@ const System = () => {
         {
             dataField: 'panel_name',
             text: 'Company Name'
-        },
-        {
-            dataField: 'panel_short_name',
-            text: 'Panel Key'
         },
         {
             dataField: 'panel_short_name',
@@ -240,19 +214,23 @@ const System = () => {
             .then((response) => {
                 if (response.status) {
                     toast.success("Disclaimer added successfully...");
-                    setRefresh(!refresh);
+                    window.location.reload();
                 } else {
                     toast.error("Disclaimer add error");
                 }
             })
             .catch((err) => {
-             
+
             });
     }
 
+    useEffect(() => {
+        CompanyName();
+    }, []);
 
     return (
         <Content Page_title="System" button_status={false}>
+
             <h2>Company Information</h2>
             <BasicDataTable tableData={getCompanyName.data} TableColumns={Company_columns} dropdown={false} />
             <br />
@@ -266,15 +244,15 @@ const System = () => {
 
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                 <h2 style={{ marginRight: "10px" }}>Disclaimer Message</h2>
+
                 <div className='toogle-new'>
                     <input type="checkbox"
                         id="switch"
-                        defaultChecked={getDissStatus && getDissStatus == 1}
+                        checked={Number(getDissStatus) === 1}
                         onChange={(e) => updateDiscStatus(e)}
-                    /><label for="switch">Toggle</label>
+                    />
+                    <label htmlFor="switch">Toggle</label>
                 </div>
-
-
             </div>
 
 
