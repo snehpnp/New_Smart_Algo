@@ -1,27 +1,21 @@
 /* eslint-disable react/jsx-pascal-case */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  SignIn,
-  Verify_User_Device,
-  Get_Panel_Informtion,
-  OTP_SEND_USEHERES,
-  Logout_From_Other_Device,
-} from "../../ReduxStore/Slice/Auth/AuthSlice";
+import { useDispatch } from "react-redux";
+import { SignIn, Verify_User_Device,Get_Panel_Informtion, OTP_SEND_USEHERES, Logout_From_Other_Device} from "../../ReduxStore/Slice/Auth/AuthSlice";
 import Modal from "../../Components/ExtraComponents/Modal";
 import OtpInput from "react-otp-input";
 import { check_Device } from "../../Utils/find_device";
 import { getLastFourDigits } from "../../Utils/common_Functions";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import $ from "jquery";
 import ToastButton from "../../Components/ExtraComponents/Alert_Toast";
 import * as Config from "../../Utils/Config";
 import Formikform from "../../Components/ExtraComponents/Form/Formik_form";
 import { useFormik } from "formik";
 import * as valid_err from "../../Utils/Common_Messages";
-import { Email_regex, Mobile_regex } from "../../Utils/Common_regex";
+import { Email_regex } from "../../Utils/Common_regex";
 import { Get_Company_Logo } from '../../ReduxStore/Slice/Admin/AdminSlice'
 
 
@@ -41,12 +35,11 @@ const Login = () => {
   const [typeOtp, setTypeOtp] = useState("");
   const [typeOtp1, setTypeOtp1] = useState("");
   const [UserData, setUserData] = useState("");
-
   const [signInBtn, setSignInBtn] = useState(false);
 
 
+
   let SetTheme = async () => {
-    let domain = window.location.host
     const req = {
       domain: Config.react_domain
     };
@@ -56,7 +49,7 @@ const Login = () => {
         let themedata = response.data[0].theme_data[0];
         localStorage.setItem("theme", JSON.stringify(themedata));
 
-        if (themedata != undefined) {
+        if (themedata !== undefined) {
 
           $("body").removeClass(
             "theme-1 theme-2 theme-3 theme-4 theme-5 theme-6 theme-7 theme-8 theme-9 theme-10"
@@ -149,7 +142,6 @@ const Login = () => {
       });
   }
 
-
   //  FOR SET COMPANY LOGO
   const CompanyName = async () => {
     await dispatch(Get_Company_Logo()).unwrap()
@@ -177,7 +169,6 @@ const Login = () => {
         console.log("Error in login page", error);
       });
   }
-
 
 
   const isValidEmail = (email) => {
@@ -258,14 +249,7 @@ const Login = () => {
   ];
 
 
-
-
-
-
-
   // ------------------ For Otp Varify --------------------------
-
-
 
   const verifyOTP = async () => {
     setSignInBtn(true);
@@ -387,7 +371,7 @@ const Login = () => {
   // CLOSE THE MODAL
   const verifyOTP_login = async () => {
 
-    if (getOtp && getOtp == typeOtp1) {
+    if (getOtp && getOtp === typeOtp1) {
     
     }
 
@@ -509,6 +493,8 @@ const Login = () => {
 
   useEffect(() => {
     CompanyName()
+    setCheckUser(check_Device())
+
   }, []);
 
 
