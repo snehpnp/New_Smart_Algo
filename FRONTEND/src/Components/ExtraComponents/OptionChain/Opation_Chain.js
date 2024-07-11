@@ -479,7 +479,6 @@ const HelpCenter = () => {
             let config = {
                 method: 'post',
                 maxBodyLength: Infinity,
-                // url: 'http://localhost:8000/broker-signals',
                 url: `${getBrokerUrl && getBrokerUrl}`,
                 headers: {
                     'Content-Type': 'text/plain'
@@ -725,15 +724,15 @@ const HelpCenter = () => {
                             if (new_val_call > old_val_call || new_val_put > old_val_put) {
                                 $('.Call_Price_' + response.tk).css({ "color": "green" });
                                 $('.Put_Price_' + response.tk).css({ "color": "green" });
-                                $('.Call_Price_' + response.tk).append('&#8593;')
-                                $('.Put_Price_' + response.tk).append('&#8593;')
+                                // $('.Call_Price_' + response.tk).append('&#8593;')
+                                // $('.Put_Price_' + response.tk).append('&#8593;')
                                 $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
                                 $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
                             } else if (new_val_call < old_val_call || new_val_put < old_val_put) {
                                 $('.Call_Price_' + response.tk).css({ "color": "red" });
                                 $('.Put_Price_' + response.tk).css({ "color": "red" });
-                                $('.Call_Price_' + response.tk).append('&#8595;')
-                                $('.Put_Price_' + response.tk).append('&#8595;')
+                                // $('.Call_Price_' + response.tk).append('&#8595;')
+                                // $('.Put_Price_' + response.tk).append('&#8595;')
                                 $('.Put_Price_' + response.tk).css({ "font-weight": "900" });
                                 $('.Call_Price_' + response.tk).css({ "font-weight": "900" });
                             } else if (new_val_call === old_val_call || new_val_put === old_val_put) {
