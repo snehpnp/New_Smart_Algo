@@ -84,14 +84,7 @@ module.exports = function (app) {
     async function connectToDB(message) {
       try {
           const collections = await dbTradeTools.listCollections().toArray();
-          // lp: message.price.toString(),
-          //       ft: message.time.toString(),
-          //       v: message.volume.toString(),
-  
           let collectionName = message.token
-          let price = message.price
-          let volume = message.volume
-          let time = message.time
           // Check if the desired collection exists
           const collectionExists = collections.some(coll => coll.name === collectionName);
   
