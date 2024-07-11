@@ -1,293 +1,213 @@
-
-import React, { useEffect, useState } from 'react'
-import Content from "../../../Components/Dashboard/Content/Content"
-import Loader from '../../../Utils/Loader'
+import React, { useEffect, useState } from 'react';
+import Content from "../../../Components/Dashboard/Content/Content";
+import Loader from '../../../Utils/Loader';
 import { Pencil, Trash2, Eye } from "lucide-react";
 import { Link, useParams } from 'react-router-dom';
-
-import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable"
-import { Get_Admin_Helps } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
+import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from '../../../Components/ExtraComponents/Modal';
 import { fa_time, fDateTimeSuffix, today } from "../../../Utils/Date_formet";
 import { useLocation } from 'react-router-dom';
-import { Get_All_Admin_Client } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice'
-
 import toast, { Toaster } from 'react-hot-toast';
-import { DELETE_USER_SERVICES, Find_User } from "../../../ReduxStore/Slice/Superadmin/SuperAdminSlice";
 
-
-
-
+import { 
+    Get_Admin_Helps, 
+    Get_All_Admin_Client, 
+    DELETE_USER_SERVICES, 
+    Find_User 
+} from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 
 const SubAdminList = () => {
+    const dispatch = useDispatch();
+    const location = useLocation();
+    
+    const [allClients, setAllClients] = useState([]);
+    const [filteredClients, setFilteredClients] = useState([]);
+    const [refresh, setRefresh] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [userData, setUserData] = useState({ loading: true, data: [] });
+    const [searchInput, setSearchInput] = useState('');
 
-    const dispatch = useDispatch()
-    const [ShowClients, setshowClients] = useState([])
-    const [refresh, setrefresh] = useState(false);
-    let location = useLocation();
-    const [showModal, setShowModal] = useState(false)
-    const [getRowId, setRowId] = useState('')
-    const [searchInput, setSearchInput] = useState('')
+    const rowId = localStorage.getItem('RowData');
+    const backendUrl = localStorage.getItem("backend_rul");
+    const userName = JSON.parse(localStorage.getItem("user_details")).UserName;
+    const panelName = localStorage.getItem("panel_name");
 
-    const RowId = localStorage.getItem('RowData')
-    const backend_rul = localStorage.getItem("backend_rul");
-    const UserName = JSON.parse(localStorage.getItem("user_details")).UserName
-    const panel_name = localStorage.getItem("panel_name");
+    useEffect(() => {
+        GetAllClients();
+    }, [refresh]);
 
-    const [UserData, setUserData] = useState({
-        loading: true,
-        data: []
-    });
-
-
-
+    useEffect(() => {
+        filterClients();
+    }, [searchInput, allClients]);
 
     const GetAllClients = async () => {
-        const data = { id: RowId }
+        try {
+            const data = { id: rowId };
+            const response = await dispatch(Get_All_Admin_Client(data)).unwrap();
 
+            if (response.status) {
+                setAllClients(response.data.data);
+                setFilteredClients(response.data.data);
+            }
+        } catch (error) {
+            toast.error("Failed to fetch clients.");
+        }
+    };
 
-        await dispatch(Get_All_Admin_Client(data)).unwrap()
-            .then((response) => {
-                if (response.status) {
-               
+    const filterClients = () => {
+        const filterData = allClients.filter((item) =>
+            searchInput === '' || item.UserName.toLowerCase().includes(searchInput.toLowerCase())
+        );
+        setFilteredClients(filterData);
+    };
 
-                    const filterData = response.data && response.data.data.filter((item) => {
-                        const matchSearch =
-                            searchInput == '' ||
-                            item.UserName.toLowerCase().includes(searchInput.toLowerCase())
-
-                        return matchSearch
-                    })
-
-                    setshowClients(
-                        searchInput ? filterData : response.data.data
-                    );
-                }
-            })
-    }
-
-
-    const Delete_user = async (id) => {
-        var req = {
-            id: id,
-            backend_rul: backend_rul,
-            superadmin_name: UserName,
-            panel_name: panel_name
-
-        };
+    const DeleteUser = async (id) => {
         if (window.confirm("Do you want to delete this User ?")) {
-            await dispatch(DELETE_USER_SERVICES(req))
-                .unwrap()
-                .then((response) => {
-                    if (response.status) {
-                        toast.success(response.msg);
+            try {
+                const req = { id, backend_rul: backendUrl, superadmin_name: userName, panel_name: panelName };
+                const response = await dispatch(DELETE_USER_SERVICES(req)).unwrap();
 
-                        setrefresh(!refresh);
-                    } else {
-                        toast.error(response.msg);
+                if (response.status) {
+                    toast.success(response.msg);
+                    setRefresh(!refresh);
+                } else {
+                    toast.error(response.msg);
+                }
+            } catch (error) {
+                toast.error("Failed to delete user.");
+            }
+        }
+    };
 
-                    }
-                });
-        } else {
-            return
+    const handleViewFunction = async (id) => {
+        try {
+            const data = { id, backend_rul: backendUrl };
+            const response = await dispatch(Find_User(data)).unwrap();
+
+            if (response.status) {
+                setUserData({ loading: false, data: response.data });
+            }
+        } catch (error) {
+            toast.error("Failed to fetch user details.");
         }
     };
 
     const showBrokerName = (value1, licence_type) => {
         let value = parseInt(value1);
 
-        if (licence_type === "0") {
-            return "2 Days Only";
-        } else if (licence_type === "1") {
-            return "Demo";
-        } else {
-            if (value === 1) {
-                return "markethub";
-            }
-            if (value === 1) {
-                return "markethub";
-            } else if (value === 2) {
-                return "alice blue";
-            } else if (value === 3) {
-                return "master trust";
-            } else if (value === 4) {
-                return "Motilal Oswal";
-            } else if (value === 5) {
-                return "Zebull";
-            } else if (value === 6) {
-                return "IIFl";
-            } else if (value === 7) {
-                return "Kotak";
-            } else if (value === 8) {
-                return "Mandot";
-            } else if (value === 9) {
-                return "Choice";
-            } else if (value === 10) {
-                return "Anand Rathi";
-            } else if (value === 11) {
-                return "B2C";
-            } else if (value === 12) {
-                return "Angel";
-            } else if (value === 13) {
-                return "Fyers";
-            } else if (value === 14) {
-                return "5-Paisa";
-            } else if (value === 15) {
-                return "Zerodha";
-            }
+        if (licence_type === "0") return "2 Days Only";
+        if (licence_type === "1") return "Demo";
+
+        switch (value) {
+            case 1: return "markethub";
+            case 2: return "alice blue";
+            case 3: return "master trust";
+            case 4: return "Motilal Oswal";
+            case 5: return "Zebull";
+            case 6: return "IIFl";
+            case 7: return "Kotak";
+            case 8: return "Mandot";
+            case 9: return "Choice";
+            case 10: return "Anand Rathi";
+            case 11: return "B2C";
+            case 12: return "Angel";
+            case 13: return "Fyers";
+            case 14: return "5-Paisa";
+            case 15: return "Zerodha";
+            default: return "Unknown";
         }
     };
-
 
     const showLicenceName = (value1, licence_type) => {
         let value = parseInt(value1);
-
-        if (licence_type === "0") {
-            return "2 Days Only";
-        } else if (licence_type === "1") {
-            return "Demo";
-        } else {
-            return "Live";
-        }
+        if (licence_type === "0") return "2 Days Only";
+        if (licence_type === "1") return "Demo";
+        return "Live";
     };
-
-    // GET USER DETAILS
-    const handleViewFunction = async (row) => {
-        const data = { id: row, backend_rul: backend_rul }
-        await dispatch(Find_User(data)).unwrap()
-            .then((response) => {
-                if (response.status) {
-
-                    setUserData({
-                        loading: false,
-                        data: response.data
-                    });
-                }
-            })
-    }
-
 
     const columns = [
         {
             dataField: "index",
             text: "SR. No.",
             formatter: (cell, row, rowIndex) => rowIndex + 1,
-
         },
-        {
-            dataField: 'UserName',
-            text: 'User Name'
-        }, {
-            dataField: 'Email',
-            text: 'Email'
-        },
-        {
-            dataField: 'PhoneNo',
-            text: 'Phone Number'
-        },
+        { dataField: 'UserName', text: 'User Name' },
+        { dataField: 'Email', text: 'Email' },
+        { dataField: 'PhoneNo', text: 'Phone Number' },
         {
             dataField: 'broker',
-            text: 'Broker'
-            ,
-            formatter: (cell, row) => (
-                <span >
-                    {showBrokerName(cell, row.license_type)}
-                </span>
-            )
+            text: 'Broker',
+            formatter: (cell, row) => showBrokerName(cell, row.license_type)
         },
         {
             dataField: 'license_type',
             text: 'Licence Type',
             formatter: (cell, row) => showLicenceName(cell, row.license_type)
-
         },
-
-
         {
             dataField: "actions",
             text: "Actions",
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
-                    <div>
-                        <Link>
-                            <span data-toggle="tooltip" data-placement="top" title="Delete">
-                                <Eye
-                                    size={20}
-                                    strokeWidth={2}
-                                    className="mx-1"
-                                    onClick={(e) => { setShowModal(true); handleViewFunction(row._id) }}
-                                />
-                            </span>
-
-                        </Link>
-                        <Link to={`/super/client/edit/${row._id}`} state={row}>
-                            <span data-toggle="tooltip" data-placement="top" title="Edit">
-                                <Pencil
-                                    size={20}
-                                    color="#198754"
-                                    strokeWidth={2}
-                                    className="mx-1"
-                                />
-                            </span>
-                        </Link>
-
-
-                        <Link>
-                            <span data-toggle="tooltip" data-placement="top" title="Delete">
-                                <Trash2
-                                    size={20}
-                                    color="#d83131"
-                                    strokeWidth={2}
-                                    className="mx-1"
-                                    onClick={(e) => Delete_user(row._id)}
-                                />
-                            </span>
-                        </Link>
-
-
-                    </div>
+                    <Link>
+                        <span data-toggle="tooltip" data-placement="top" title="View">
+                            <Eye
+                                size={20}
+                                strokeWidth={2}
+                                className="mx-1"
+                                onClick={() => { setShowModal(true); handleViewFunction(row._id) }}
+                            />
+                        </span>
+                    </Link>
+                    <Link to={`/super/client/edit/${row._id}`} state={row}>
+                        <span data-toggle="tooltip" data-placement="top" title="Edit">
+                            <Pencil
+                                size={20}
+                                color="#198754"
+                                strokeWidth={2}
+                                className="mx-1"
+                            />
+                        </span>
+                    </Link>
+                    <Link>
+                        <span data-toggle="tooltip" data-placement="top" title="Delete">
+                            <Trash2
+                                size={20}
+                                color="#d83131"
+                                strokeWidth={2}
+                                className="mx-1"
+                                onClick={() => DeleteUser(row._id)}
+                            />
+                        </span>
+                    </Link>
                 </div>
             ),
         },
-
     ];
-
-    useEffect(() => {
-        GetAllClients()
-    }, [searchInput])
-
-
-
 
     return (
         <>
-            {!ShowClients && ShowClients ? (
+            {!allClients.length ? (
                 <Loader />
             ) : (
                 <Content Page_title="Client List" button_status={true} button_title='Back' route='/super/permitions'>
-                    {ShowClients ?
-
-
-                        <>
-                            <div className='mb-4'>
-                                <h6>Search here something</h6>
-                                <input type="text"
-                                    style={{ height: '2rem' }}
-                                    placeholder='search...'
-                                    className='p-2 rounded'
-                                    onChange={(e) => { setSearchInput(e.target.value) }}
-                                    value={searchInput} />
-                            </div>
-                            <FullDataTable TableColumns={columns} tableData={ShowClients} />
-                        </>
-                        :
-                        <FullDataTable TableColumns={columns} tableData={[]} />
-                    }
+                    <div className='mb-4'>
+                        <h6>Search here something</h6>
+                        <input 
+                            type="text"
+                            style={{ height: '2rem' }}
+                            placeholder='search...'
+                            className='p-2 rounded'
+                            onChange={(e) => setSearchInput(e.target.value)}
+                            value={searchInput} 
+                        />
+                    </div>
+                    <FullDataTable TableColumns={columns} tableData={filteredClients} />
                 </Content>
             )}
-            {
-                showModal && <Modal
+            {showModal && (
+                <Modal
                     isOpen={showModal}
                     size="md"
                     title="Licence View"
@@ -298,28 +218,23 @@ const SubAdminList = () => {
                         <tbody>
                             <tr>
                                 <td>Create Date</td>
-                                <td>{UserData.data.length > 0 && UserData.data[0] && UserData.data[0].CreateDate}</td>
-
+                                <td>{userData.data.length > 0 && userData.data[0]?.CreateDate}</td>
                             </tr>
-
                             <tr>
                                 <td>Start Date</td>
-                                <td>{UserData.data.length > 0 && UserData.data[0] && UserData.data[0].StartDate}</td>
+                                <td>{userData.data.length > 0 && userData.data[0]?.StartDate}</td>
                             </tr>
-
                             <tr>
                                 <td>End Date</td>
-                                <td>{UserData.data.length > 0 && UserData.data[0] && UserData.data[0].EndDate}</td>
+                                <td>{userData.data.length > 0 && userData.data[0]?.EndDate}</td>
                             </tr>
                             <tr>
                                 <td>To Month</td>
-                                <td>
-                                    {UserData.data.length > 0 && UserData.data[0] && UserData.data[0].totalLicence}
-                                </td>
+                                <td>{userData.data.length > 0 && userData.data[0]?.totalLicence}</td>
                             </tr>
                             <tr>
                                 <td>Total Licence</td>
-                                <td>{UserData.data.length > 0 && UserData.data[0] && UserData.data[0].licence}</td>
+                                <td>{userData.data.length > 0 && userData.data[0]?.licence}</td>
                             </tr>
                             <tr>
                                 <td>Remaining Licence</td>
@@ -329,21 +244,12 @@ const SubAdminList = () => {
                                 <td>Minus Licence</td>
                                 <td>0</td>
                             </tr>
-
-
                         </tbody>
                     </table>
-
-
-
-                </Modal >
-
-            }
-
-
+                </Modal>
+            )}
         </>
-    )
-}
+    );
+};
 
-
-export default SubAdminList
+export default SubAdminList;

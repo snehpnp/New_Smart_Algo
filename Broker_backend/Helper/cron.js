@@ -18,11 +18,16 @@ module.exports = function (app) {
     });
     
 
-    cron.schedule('15 7 * * *', () => {
+    cron.schedule('15 6 * * *', () => {
         console.log('Run First Time');
         downloadKotakNeotoken();
     });
 
+
+    cron.schedule('15 18 * * *', () => {
+        console.log('Run First Time');
+        downloadKotakNeotoken();
+    });
 
     cron.schedule('20 7 * * *', () => {
         console.log('Run First Time');
