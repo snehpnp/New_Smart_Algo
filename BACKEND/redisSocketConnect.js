@@ -81,7 +81,7 @@ module.exports = function (app) {
         }
 
    // Initialize the first connection
-   //  connect();
+    connect();
 
    app.get("/getRedisData",async(req,res)=>{
    res.send("okkkkkk")

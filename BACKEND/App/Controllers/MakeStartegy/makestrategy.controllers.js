@@ -205,15 +205,14 @@ class MakeStartegy {
 
   //Update Strategy..
   async UpdateMakeStartegy(req, res) {
-
-    console.log("user_panel_key", req.body.show_strategy)
-
+     
     let channelList = "";
     try {
 
       let strategy_name = req.body.strategy_name;
 
       let timeframe = req.body.timeframe;
+      let tokensymbol = req.body.tokensymbol;
       let indicator = req.body.indicator;
       let price_source = req.body.price_source;
       let period = req.body.period;
@@ -235,8 +234,6 @@ class MakeStartegy {
       let maxProfit = req.body.maxProfit;
       let maxLoss = req.body.maxLoss;
 
-
-
       // Update Number Of Trade
       const filter_number_of_trade = { show_strategy: req.body.show_strategy };
       const update_make_strategy_number_of_trade = {
@@ -247,13 +244,8 @@ class MakeStartegy {
         }
       };
       const result_number_of_trade = await UserMakeStrategy.updateMany(filter_number_of_trade, update_make_strategy_number_of_trade);
-
-
-
-
       const objectId_update = new ObjectId(req.body.update_id);
       const filter = { _id: objectId_update };
-
 
       const update_make_strategy = {
         $set: {
@@ -285,6 +277,62 @@ class MakeStartegy {
       };
       // UPDATE STRATEGY INFORMATION
       const result = await UserMakeStrategy.updateOne(filter, update_make_strategy);
+    
+      
+
+      condition_array.forEach(async (condition) => {
+        ['first_element', 'second_element'].forEach(async (element) => {
+          if (condition[element].source !== 'close' && condition[element].source !== 'open' && condition[element].source !== 'high' && condition[element].source !== 'low' && condition[element].source !== 'number') {
+            
+            // console.log(`Working on timeframe: ${timeframe}`);
+            // console.log(`Working on tokensymbol: ${tokensymbol}`);
+            // console.log(`Working on source: ${condition[element].source}`);
+            // console.log(`Working on offset: ${condition[element].offset}`);
+            // console.log(`Working on indicator_field: ${condition[element].indicator_field}`);
+            // console.log(`Working on period: ${condition[element].period}`);
+      
+            let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
+            let collectionViewName = 'M' + timeframe + '_' + tokensymbol;
+            let expMovingAvg = { input: "$" + condition[element].indicator_field, N: parseInt(condition[element].period) }; // Convert period to integer
+
+            const pipelineIndicatorView = [
+              { $sort: { _id: -1 } }, // Sorting to get the latest prices first
+              // { $limit: 2 },         // Limiting to the period (adjust this based on your period)
+              {
+                $setWindowFields: {   // Window function to calculate EMA
+                  sortBy: { _id: 1 },
+                  output: {
+                    ema: {
+                      $expMovingAvg: { input: expMovingAvg.input, N: expMovingAvg.N }  // Adjust N based on your period
+                    }
+                  }
+                }
+              },
+              { $project: { ema: 1, _id: 1 } } // Projecting only the ema field, excluding _id
+            ];
+      
+            try {
+              const collections = await dbTradeTools.listCollections().toArray();
+              const collectionExists = collections.some(coll => coll.name === viewName);
+      
+              if (!collectionExists) {
+                await dbTradeTools.createCollection(viewName, {
+                  viewOn: collectionViewName,
+                  pipeline: pipelineIndicatorView
+                });
+                console.log(`View ${viewName} created successfully`);
+              }else{
+                console.log(`View ${viewName} already exists`);
+              }
+            } catch (error) {
+              console.error(`Error creating view ${viewName}:`, error);
+            }
+
+
+            
+          }
+        });
+      });
 
       // }
 
@@ -364,7 +412,7 @@ class MakeStartegy {
         }
 
 
-        await UserMakeStrategy.create({
+          await UserMakeStrategy.create({
           name: req.body.name + req.body.user_id + req.body.type + tokensymbol,
 
           user_id: user_id,
@@ -400,8 +448,65 @@ class MakeStartegy {
           numberOfTrade: numberOfTrade,
           maxProfit: maxProfit,
           maxLoss: maxLoss
-        })
+          })
           .then(async (createUserMakeStrategy) => {
+
+            //console.log('condition_array:', condition_array);
+
+            condition_array.forEach(async (condition) => {
+              ['first_element', 'second_element'].forEach(async (element) => {
+                if (condition[element].source !== 'close' && condition[element].source !== 'open' && condition[element].source !== 'high' && condition[element].source !== 'low' && condition[element].source !== 'number') {
+                  
+                  // console.log(`Working on timeframe: ${timeframe}`);
+                  // console.log(`Working on tokensymbol: ${tokensymbol}`);
+                  // console.log(`Working on source: ${condition[element].source}`);
+                  // console.log(`Working on offset: ${condition[element].offset}`);
+                  // console.log(`Working on indicator_field: ${condition[element].indicator_field}`);
+                  // console.log(`Working on period: ${condition[element].period}`);
+            
+                  let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
+                  let collectionViewName = 'M' + timeframe + '_' + tokensymbol;
+                  let expMovingAvg = { input: "$" + condition[element].indicator_field, N: parseInt(condition[element].period) }; // Convert period to integer
+      
+                  const pipelineIndicatorView = [
+                    { $sort: { _id: -1 } }, // Sorting to get the latest prices first
+                    // { $limit: 2 },         // Limiting to the period (adjust this based on your period)
+                    {
+                      $setWindowFields: {   // Window function to calculate EMA
+                        sortBy: { _id: 1 },
+                        output: {
+                          ema: {
+                            $expMovingAvg: { input: expMovingAvg.input, N: expMovingAvg.N }  // Adjust N based on your period
+                          }
+                        }
+                      }
+                    },
+                    { $project: { ema: 1, _id: 1 } } // Projecting only the ema field, excluding _id
+                  ];
+            
+                  try {
+                    const collections = await dbTradeTools.listCollections().toArray();
+                    const collectionExists = collections.some(coll => coll.name === viewName);
+            
+                    if (!collectionExists) {
+                      await dbTradeTools.createCollection(viewName, {
+                        viewOn: collectionViewName,
+                        pipeline: pipelineIndicatorView
+                      });
+                      console.log(`View ${viewName} created successfully`);
+                    }else{
+                      console.log(`View ${viewName} already exists`);
+                    }
+                  } catch (error) {
+                    console.error(`Error creating view ${viewName}:`, error);
+                  }
+
+
+                  
+                }
+              });
+            });
+            
 
             //res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
 
@@ -493,7 +598,7 @@ async function run() {
             $match: {
               //tokensymbol:"67308",
               // status: "1"
-             name:"SHK64c76f1d32067577d02310dfBUY111435"
+             name:"SHK64c76f1d32067577d02310dfBUY111438"
              // name: "SHK_D64c76f1d32067577d02310dfBUY11705"
             }
           }
@@ -561,58 +666,34 @@ async function run() {
                 const milliseconds = currentDate.getTime();
                 let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
                 const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-                //console.log("ExistView ", ExistView)
+               // console.log("ExistView ", ExistView)
                 if (ExistView.length > 0) {
                   const collection = dbTradeTools.collection(collectionName);
                   const get_view_data = await collection.aggregate([{ $sort: { _id: -1 } }]).toArray();
                   let data = {};
-
-                  // if(val.condition_source_indicator != null && val.condition_source_indicator != undefined && val.condition_source_indicator != ""){
-                  //   let condition_source_indicator = val.condition_source_indicator.split(',');
-                  //   if (condition_source_indicator.length > 0) {
-                  //     for (const source of condition_source_indicator) {
-                         
-                  //       let indicatorCollectionName = source+'_M' + val.timeframe + '_' + val.tokensymbol;
-                  //       const indicatorView = await dbTradeTools.collection(indicatorCollectionName);
-                  //       const get_view_data = await indicatorView.aggregate([{ $sort: { _id: -1 } }]).toArray();
-
-                  //      // console.log("source ", source)
-                  //      // console.log("get_view_data ", get_view_data)
-
-                  //       if(get_view_data.length > 0){
-                  //         let sourceVal = get_view_data.map(item => item.ema);
-                  //         data[source] = sourceVal;
-                  //         console.log("source IFFFFF", source)
-                  //       } 
-                  //     }
-                  //   }
-                  // }
-
 
                   if (val.condition_source != null) {
                     let condition_source = val.condition_source.split(',');
                     if (condition_source.length > 0) {
                       for (const source of condition_source) {
                         console.log("source ", source)
-                        const matches = source.match(/(\w+)\((\d+)\)/);
-                        if (matches) { 
-                          console.log("source IFFFF", source)
-
+                        if (['close', 'open', 'low', 'high'].includes(source)) { 
+                          console.log("source IFFFFFF", source)
                           let sourceVal;
-                          if (matches[1] === 'close') {
+                          if (source === 'close') {
                             sourceVal = get_view_data.map(item => item.close);
-                          } else if (matches[1] === 'open') {
+                          } else if (source === 'open') {
                             sourceVal = get_view_data.map(item => item.open);
-                          } else if (matches[1] === 'low') {
+                          } else if (source === 'low') {
                             sourceVal = get_view_data.map(item => item.low);
-                          } else if (matches[1] === 'high') {
+                          } else if (source === 'high') {
                             sourceVal = get_view_data.map(item => item.high);
                           }
-                          data[matches[1]] = sourceVal;
+                          data[source] = sourceVal;
                         } 
                         
                         else {
-                          console.log('No match found' ,source);
+                        console.log('source ELSEEEE' ,source);
                         let indicatorCollectionName = source+'_M' + val.timeframe + '_' + val.tokensymbol;
                         const indicatorView = await dbTradeTools.collection(indicatorCollectionName);
                         const get_view_data_indicator = await indicatorView.aggregate([{ $sort: { _id: -1 } }]).toArray();
@@ -620,10 +701,10 @@ async function run() {
                        // console.log("source ", source)
                        // console.log("get_view_data ", get_view_data)
 
-                        if(get_view_data.length > 0){
+                        if(get_view_data_indicator.length > 0){
                           let sourceVal = get_view_data_indicator.map(item => item.ema);
                           data[source] = sourceVal;
-                          console.log("source IFFFFF", source)
+                          console.log("source ELSE INSIDE DATA", source)
                         } 
                         }
                       }
@@ -633,8 +714,6 @@ async function run() {
 
                     console.log("val.condition", val.condition)
                     console.log("data", data)
-                    
-                    
                     const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
                     console.log("condition", condition)
                     return;

@@ -1126,67 +1126,34 @@ const CreateStrategy = () => {
   }
 
   const saveStrategy = async (e) => {
-    alert(condition_string)
-    let condition_string_source11 = [];
-    
-    for (let index = 0; index < coditionRequestArr.length; index++) {
-      const val = coditionRequestArr[index];
-
-      if (val.first_element.source !== "" && val.second_element.source !== "") {
-        if (val.first_element.source != "number") {
-          if (
-            !condition_string_source11.includes(
-              `${val.first_element.source}`
-            )
-          ) {
-            condition_string_source11.push(
-              `${val.first_element.source}`
-            );
-          }
-        }
-
-        if (val.second_element.source != "number") {
-          if (
-            !condition_string_source11.includes(
-              `${val.second_element.source}`
-            )
-          ) {
-            condition_string_source11.push(
-              `${val.second_element.source}`
-            );
-          }
-        }
-      } else {
-        break; // Break out of the loop
-      }
-    }
-   
-    console.log("condition_string_source11",condition_string_source11)
-  
-    return;
 
     if (strategyName == "") {
-      alert("Please select a strategy name");
+      //alert("Please select a strategy name");
+      toast.error('Please select a strategy name');
       return;
     }
 
     if (selectStrategy == "") {
-      alert("Please select a strategy tag");
+      //alert("Please select a strategy tag");
+      toast.error('Please select a strategy tag');
       return;
     }
 
     if (selectedItems.length == 0) {
-      alert("Please select a Instruments");
+     // alert("Please select a Instruments");
+      toast.error('Please select a Instruments');
       return;
     }
 
     if (!buyCheck && !sellCheck) {
-      alert("Please select a Buy or Sell");
+      //alert("Please select a Buy or Sell");
+      toast.error('Please select a Buy or Sell');
       return;
     }
 
     if (condition_string == "" && condition_string_sell == "") {
-      alert("Please select a add condition");
+     // alert("Please select a add condition");
+     toast.error('Please select a add condition');
       return;
     }
 
@@ -1194,7 +1161,8 @@ const CreateStrategy = () => {
     if (condition_string != "") {
       buy_cond = areParenthesesBalanced(condition_string);
       if (!buy_cond) {
-        alert("Please correct Buy condition");
+        // alert("Please correct Buy condition");
+        toast.error('Please correct Buy condition');
         return;
       }
     }
@@ -1203,21 +1171,24 @@ const CreateStrategy = () => {
     if (condition_string_sell != "") {
       sell_cond = areParenthesesBalanced(condition_string_sell);
       if (!sell_cond) {
-        alert("Please correct Sell condition");
+        // alert("Please correct Sell condition");
+        toast.error('Please correct Sell condition');
         return;
       }
     }
 
     if (sellCheck) {
       if (!sell_cond) {
-        alert("Please add Sell condition");
+       // alert("Please add Sell condition");
+        toast.error('Please add Sell condition');
         return;
       }
     }
 
     if (buyCheck) {
       if (!buy_cond) {
-        alert("Please add Buy condition");
+        //alert("Please add Buy condition");
+        toast.error('Please add Buy condition');
         return;
       }
     }
@@ -1232,11 +1203,11 @@ const CreateStrategy = () => {
         if (val.first_element.source != "number") {
           if (
             !condition_string_source.includes(
-              `${val.first_element.source}(${val.first_element.offset})`
+              `${val.first_element.source}`
             )
           ) {
             condition_string_source.push(
-              `${val.first_element.source}(${val.first_element.offset})`
+              `${val.first_element.source}`
             );
           }
         }
@@ -1244,11 +1215,11 @@ const CreateStrategy = () => {
         if (val.second_element.source != "number") {
           if (
             !condition_string_source.includes(
-              `${val.second_element.source}(${val.second_element.offset})`
+              `${val.second_element.source}`
             )
           ) {
             condition_string_source.push(
-              `${val.second_element.source}(${val.second_element.offset})`
+              `${val.second_element.source}`
             );
           }
         }
@@ -1264,11 +1235,11 @@ const CreateStrategy = () => {
         if (val.first_element.source != "number") {
           if (
             !condition_string_sell_source.includes(
-              `${val.first_element.source}(${val.first_element.offset})`
+              `${val.first_element.source}`
             )
           ) {
             condition_string_sell_source.push(
-              `${val.first_element.source}(${val.first_element.offset})`
+              `${val.first_element.source}`
             );
           }
         }
@@ -1276,11 +1247,11 @@ const CreateStrategy = () => {
         if (val.second_element.source != "number") {
           if (
             !condition_string_sell_source.includes(
-              `${val.second_element.source}(${val.second_element.offset})`
+              `${val.second_element.source}`
             )
           ) {
             condition_string_sell_source.push(
-              `${val.second_element.source}(${val.second_element.offset})`
+              `${val.second_element.source}`
             );
           }
         }

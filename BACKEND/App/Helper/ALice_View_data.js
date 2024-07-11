@@ -31,7 +31,6 @@ async function connectToDB(collectionName, response, dbTradeTools) {
             const collectionExistsViews = collections.some(coll => coll.name === 'M3_' + collectionName);
             if (!collectionExistsViews) {
                 await createView(collectionName, dbTradeTools);
-                await createView1(collectionName, dbTradeTools);
                 await createViewM3(collectionName, dbTradeTools);
                 await createViewM5(collectionName, dbTradeTools);
                 await createViewM10(collectionName, dbTradeTools);
@@ -96,52 +95,6 @@ async function createView(collectionName, dbTradeTools) {
 
         if (!collectionExists) {
             const viewName = 'M_' + collectionName;
-            await dbTradeTools.createCollection(viewName, {
-                viewOn: collectionName,
-                pipeline: pipeline,
-            });
-        }
-    } catch (err) {
-        console.error(err);
-    }
-}
-
-async function createView1(collectionName, dbTradeTools) {
-    try {
-        const pipeline = [
-            {
-                $project: {
-                    _id: {
-                        $toDate: '$_id',
-                    },
-                    lp: 1,
-                    v: 1,
-                },
-            },
-            { $sort: { _id: 1 } },
-            {
-                $group: {
-                    _id: {
-                        $dateToString: {
-                            format: '%Y-%m-%d %H:%M',
-                            date: '$_id',
-                        },
-                    },
-                    open: { $first: '$lp' },
-                    high: { $max: '$lp' },
-                    low: { $min: '$lp' },
-                    close: { $last: '$lp' },
-                    MaxVol: { $max: '$v' },
-                    MinVol: { $min: '$v' },
-                },
-            },
-        ];
-
-        const collections = await dbTradeTools.listCollections().toArray();
-        const collectionExists = collections.some(coll => coll.name === 'M1_' + collectionName);
-
-        if (!collectionExists) {
-            const viewName = 'M1_' + collectionName;
             await dbTradeTools.createCollection(viewName, {
                 viewOn: collectionName,
                 pipeline: pipeline,
@@ -543,9 +496,6 @@ async function createViewM1DAY(collectionName, dbTradeTools) {
         console.error(err);
     }
 }
-
-
-
 
 // Create other view functions (createView1, createViewM3, etc.) in a similar way
 
