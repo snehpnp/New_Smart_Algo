@@ -597,18 +597,22 @@ async function run() {
           {
             $match: {
               //tokensymbol:"67308",
-              // status: "1"
-             name:"SHK64c76f1d32067577d02310dfBUY111438"
-             // name: "SHK_D64c76f1d32067577d02310dfBUY11705"
+               status: "1"
+            // name:"SHK64c76f1d32067577d02310dfBUY111438"
+             
             }
           }
         ];
         const allStrategyResult = await UserMakeStrategy.aggregate(pipeline);
 
-        //console.log("allStrategyResult ", allStrategyResult)
+      //  console.log("allStrategyResult ", allStrategyResult.length)
         if (allStrategyResult.length > 0) {
-          for (let index = 0; index < allStrategyResult.length; index++) {
-            const val = allStrategyResult[index];
+          await Promise.all(
+         allStrategyResult.map(async (val, index) => {
+          //for (let index = 0; index < allStrategyResult.length; index++) {
+           // const val = allStrategyResult[index];
+            //console.log("val.condition", val.condition)
+           // console.log("val.condition", val.type)
             const currentDate = new Date();
             const options = {
               hour: '2-digit',
@@ -666,9 +670,9 @@ async function run() {
                 const milliseconds = currentDate.getTime();
                 let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
                 const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-               // console.log("ExistView ", ExistView)
+             //   console.log("ExistView ",collectionName)
                 if (ExistView.length > 0) {
-                  const collection = dbTradeTools.collection(collectionName);
+                  const collection = await dbTradeTools.collection(collectionName);
                   const get_view_data = await collection.aggregate([{ $sort: { _id: -1 } }]).toArray();
                   let data = {};
 
@@ -676,9 +680,9 @@ async function run() {
                     let condition_source = val.condition_source.split(',');
                     if (condition_source.length > 0) {
                       for (const source of condition_source) {
-                        console.log("source ", source)
+                       // console.log("source ", source)
                         if (['close', 'open', 'low', 'high'].includes(source)) { 
-                          console.log("source IFFFFFF", source)
+                          //console.log("source IFFFFFF", source)
                           let sourceVal;
                           if (source === 'close') {
                             sourceVal = get_view_data.map(item => item.close);
@@ -693,7 +697,7 @@ async function run() {
                         } 
                         
                         else {
-                        console.log('source ELSEEEE' ,source);
+                        //console.log('source ELSEEEE' ,source);
                         let indicatorCollectionName = source+'_M' + val.timeframe + '_' + val.tokensymbol;
                         const indicatorView = await dbTradeTools.collection(indicatorCollectionName);
                         const get_view_data_indicator = await indicatorView.aggregate([{ $sort: { _id: -1 } }]).toArray();
@@ -704,7 +708,7 @@ async function run() {
                         if(get_view_data_indicator.length > 0){
                           let sourceVal = get_view_data_indicator.map(item => item.ema);
                           data[source] = sourceVal;
-                          console.log("source ELSE INSIDE DATA", source)
+                          //console.log("source ELSE INSIDE DATA", source)
                         } 
                         }
                       }
@@ -712,11 +716,12 @@ async function run() {
                   }
                   try {
 
-                    console.log("val.condition", val.condition)
-                    console.log("data", data)
+                    // console.log("val.condition", val.condition)
+                    // console.log("val.condition", val.type)
+                    // console.log("data", data)
                     const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
                     console.log("condition", condition)
-                    return;
+                    
                     if (condition) {
                       let entry_type = 'LE';
                       if (val.type === 'BUY') {
@@ -905,7 +910,10 @@ async function run() {
                  console.log('else:', entryTime);
               }
             }
-          }
+         // }
+         })
+        );
+        
         }
       } else {
         console.log('The stock market is Closed!');
@@ -1007,13 +1015,17 @@ async function run() {
     while (true) {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
-     // await executeFunction();
+      await executeFunction();
       await exitOpentrade()
     }
-  } finally {
-    // Close the client when you're done
 
-  }
+    // setInterval(async () => {
+    //   await executeFunction();
+    // }, 1000);
+
+    } finally {
+    // Close the client when you're done
+    }
 
 }
 
