@@ -184,14 +184,6 @@ class Employee {
       }
 
 
-
-
-
-
-
-
-
-
       // USER 2 DAYS LICENSE USE
       if (license_type == "0") {
         var currentDate = new Date();

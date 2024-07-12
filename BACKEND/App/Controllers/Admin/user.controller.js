@@ -943,6 +943,7 @@ class Employee {
         demat_userid: req.demat_userid,
         service_given_month: req.service_given_month,
         multiple_strategy_select: req.multiple_strategy_select,
+        Is_Active: "1"
       };
 
       const User_Update = await User_model.updateOne(

@@ -217,6 +217,13 @@ export const admin_sidebar = [
         "Data": []
     },
 
+    {
+        'id': 14,
+        "name": 'Faq',
+        "Icon": "Users",
+        "route": "/admin/faq",
+        "Data": []
+    },
 
 
 ]
