@@ -134,7 +134,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                     }
 
                     var config = {
-                        method: 'get',
+                        method: 'post',
                         url: 'https://openapi.motilaloswal.com/rest/book/v1/getposition',
                         headers: {
                             'Accept': ' application/json',
@@ -169,7 +169,7 @@ const place_order = async (AllClientData, signals, token, filePath, signal_req) 
                                 });
                                 if (response.data.data.length > 0) {
 
-                                    const Exist_entry_order = response.data.data.find(item1 => item1.symboltoken === token[0].instrument_token);
+                                    const Exist_entry_order = response.data.data.find(item1 => item1.symboltoken == token[0].instrument_token);
 
                                     if (Exist_entry_order != undefined) {
 
