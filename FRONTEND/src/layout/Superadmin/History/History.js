@@ -1,6 +1,5 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
 import Theme_Content from "../../../Components/Dashboard/Content/Theme_Content";
 import { fDateTimeSuffix, dateFormate } from "../../../Utils/Date_formet";
 import { Get_Panel_History } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
@@ -13,11 +12,10 @@ const History = () => {
     const monthRef = useRef("");
     const dayRef = useRef("");
 
-    const [getfiltervalue, setfiltervalue] = useState("");
-
+    const [getFilterValue, setFilterValue] = useState("");
     const [searchInput, setSearchInput] = useState('');
     const [monthFilter, setMonthFilter] = useState('');
-    const [AllData, setAllData] = useState({ loading: true, data: [] });
+    const [allData, setAllData] = useState({ loading: true, data: [] });
     const [filteredData, setFilteredData] = useState([]);
     const [licAdd, setLicAdd] = useState(false);
 
@@ -38,7 +36,7 @@ const History = () => {
         {
             dataField: 'client_id',
             text: 'Client Id',
-            formatter: (cell, row, rowIndex) => <div>{cell == null ? "-" : cell}</div>
+            formatter: (cell) => <div>{cell == null ? "-" : cell}</div>
         },
         {
             dataField: 'msg',
@@ -47,12 +45,11 @@ const History = () => {
         {
             dataField: "createdAt",
             text: "Date & Time",
-            formatter: (cell, row, rowIndex) => <div>{fDateTimeSuffix(cell)}</div>,
+            formatter: (cell) => <div>{fDateTimeSuffix(cell)}</div>,
             sort: true,
         }
     ];
 
-    
     const fetchData = async () => {
         const response = await dispatch(Get_Panel_History()).unwrap();
         if (response.status) {
@@ -70,87 +67,84 @@ const History = () => {
 
     useEffect(() => {
         filterData();
-    }, [searchInput, monthFilter, licAdd,getfiltervalue]);
+    }, [searchInput, monthFilter, licAdd, getFilterValue]);
 
     const filterData = () => {
-
-        let filtered = AllData.data;
+        let filtered = allData.data;
 
         if (licAdd) {
             filtered = filtered.filter(obj => obj.msg.includes("License Add"));
         }
 
         if (searchInput) {
-            filtered = filtered.filter(item => {
-                const matchSearch = searchInput === '' ||
-                    item.panal_name.toLowerCase().includes(searchInput.toLowerCase()) ||
-                    item.superadmin_name.toLowerCase().includes(searchInput.toLowerCase()) ||
-                    item.msg.toLowerCase().includes(searchInput.toLowerCase());
-
-                return matchSearch;
-            });
+            const lowerCaseSearchInput = searchInput.toLowerCase();
+            filtered = filtered.filter(item => 
+                item.panal_name?.toLowerCase().includes(lowerCaseSearchInput) ||
+                item.superadmin_name?.toLowerCase().includes(lowerCaseSearchInput) ||
+                item.msg?.toLowerCase().includes(lowerCaseSearchInput)
+            );
         }
 
         if (monthFilter) {
-            filtered = filtered.filter(obj => dateFormate(obj.createdAt).split(" ")[0].substring(0, 7) === monthFilter);
+            filtered = filtered.filter(obj => 
+                dateFormate(obj.createdAt).split(" ")[0].substring(0, 7) === monthFilter
+            );
         }
 
-        if (getfiltervalue) {
-            filtered = filtered.filter(obj => dateFormate(obj.createdAt).split(" ")[0].substring(0, 10) === getfiltervalue);
+        if (getFilterValue) {
+            filtered = filtered.filter(obj => 
+                dateFormate(obj.createdAt).split(" ")[0].substring(0, 10) === getFilterValue
+            );
         }
 
-        
+        setFilteredData(filtered);
     };
-
-
 
     return (
         <Theme_Content Page_title="History" button_status={false}>
-            <div className='mb-4' style={{ display: 'flex', alignItems: 'center' }}>
-                <div style={{ marginRight: '10px' }}>
-                    <h6>Search here something</h6>
+            <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '1rem', gap: '10px', alignItems: 'center' }}>
+                <div style={{ flex: '1 1 300px', display: 'flex', flexDirection: 'column' }}>
+                   
                     <input
                         type="text"
-                        style={{ height: '2rem' }}
-                        placeholder='search...'
-                        className='p-2 rounded'
+                        placeholder="Search..."
+                        style={{ height: '2rem', padding: '0.5rem', borderRadius: '4px', width: '100%' }}
                         onChange={(e) => setSearchInput(e.target.value)}
                         value={searchInput}
                     />
                 </div>
-                <div>
+                
+                <div style={{ flex: '1 1 300px', display: 'flex', gap: '10px' }}>
                     <input
-                        style={{ position: "absolute", top: "15px", right: "300px" }}
                         ref={dayRef}
                         type="date"
-
-                        onChange={(data) => {
-                            setfiltervalue(data.target.value)
-                            setMonthFilter("")
-                            monthRef.current.value = ""
-                        }
-                        }
+                        style={{ height: '2rem', padding: '0.5rem', borderRadius: '4px', width: '100%' }}
+                        onChange={(e) => {
+                            setFilterValue(e.target.value);
+                            setMonthFilter("");
+                            monthRef.current.value = "";
+                        }}
                     />
                     <input
                         ref={monthRef}
                         type="month"
-                        style={{ position: "absolute", top: "15px", right: "150px" }}
+                        style={{ height: '2rem', padding: '0.5rem', borderRadius: '4px', width: '100%' }}
                         onChange={(e) => {
                             setMonthFilter(e.target.value);
-                            setfiltervalue("");
-                            dayRef.current.value = ""
-
+                            setFilterValue("");
+                            dayRef.current.value = "";
                         }}
                     />
                 </div>
+                
                 <Form.Check
                     type="switch"
                     onClick={() => setLicAdd(!licAdd)}
-                    style={{ position: "absolute", right: "100px", top: "15px" }}
+                    style={{ marginLeft: 'auto',width: '100px' }}
                 />
             </div>
 
-            {AllData.loading ? <Loader /> : <FullDataTable TableColumns={columns} tableData={filteredData} />}
+            {allData.loading ? <Loader /> : <FullDataTable TableColumns={columns} tableData={filteredData} />}
         </Theme_Content>
     );
 };
