@@ -47,20 +47,6 @@ module.exports = function (app) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // ========================================================================================================
 
     app.get("/all/brokerview", (req, res) => {
@@ -82,6 +68,8 @@ module.exports = function (app) {
         createViewIcicidirect()
         DashboardView()
         createView()
+
+        open_position_excute()
         return res.send("DONEE")
     })
 

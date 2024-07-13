@@ -252,7 +252,6 @@ const Header = ({ ChatBox }) => {
 
     if (decoded.exp * 1000 < new Date().getTime()) {
 
-
       const request = {
         userId: user_details.user_id,
         Device: CheckUser,
@@ -293,14 +292,12 @@ const Header = ({ ChatBox }) => {
       .then((response) => {
         if (response.status) {
           $(".Company_logo").html(response.data && response.data[0].panel_name);
-
           $(".set_Favicon")
         }
       })
   }
 
   useEffect(() => {
-
     CompanyName()
   }, []);
 
@@ -315,7 +312,8 @@ const Header = ({ ChatBox }) => {
 
               </div>
               <ul className="navbar-nav header-right">
-                <li className="nav-item dropdown header-profile ms-2 ">
+            
+                <li className="nav-item dropdown header-profile">
                   {user_role === "USER" && UserDetails.license_type != 1 ? (
                     <>
                       <div className="headaer-title">
@@ -359,7 +357,7 @@ const Header = ({ ChatBox }) => {
                     </>
                   ) : ("")}
                 </li>
-                {/* GO TO DASHBOARD */}
+           
 
                 <>
                   {user_role === "ADMIN" || user_role === "USER" || (gotodashboard && user_role_goTo == "USER") ?
@@ -407,6 +405,7 @@ const Header = ({ ChatBox }) => {
                 <li className="nav-item dropdown header-profile ">
                   <DropDown />
                 </li>
+
               </ul>
             </div>
           </nav>
