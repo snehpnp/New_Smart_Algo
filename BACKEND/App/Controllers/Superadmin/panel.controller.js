@@ -710,8 +710,8 @@ class Panel {
                 answer,
                 answer1,
                 type,
-                img1:image1,
-                img2:image2
+                img1: image1,
+                img2: image2
             });
 
             const savedData = await AddPanel.save();
@@ -739,38 +739,40 @@ class Panel {
 
     async DeleteFaq(req, res) {
         const { faqId } = req.body; // Assuming you get the FAQ ID from request parameters
-    
+
         try {
             const deletedFaq = await Faq_Data.findByIdAndDelete(faqId);
-    
+
             if (!deletedFaq) {
                 return res.status(404).json({ status: false, msg: 'FAQ not found' });
             }
-    
+
             res.status(200).json({ status: true, msg: 'FAQ deleted successfully', data: deletedFaq });
         } catch (error) {
             console.error('Error deleting FAQ:', error);
             res.status(500).json({ status: false, msg: 'Server error', error });
         }
     }
-    
+
     async UpdateFaq(req, res) {
-        const { faqId, question, answer, answer1, type, image1, image2 } = req.body;
-    
+        const { id, question, answer, answer1, type, image1, image2 } = req.body;
+
         try {
-            const updatedFaq = await Faq_Data.findByIdAndUpdate(faqId, {
-                question,
-                answer,
-                answer1,
-                type,
-                img1:image1,
-                img2:image2
-            }, { new: true });
-    
-            if (!updatedFaq) {
+            const existingFaq = await Faq_Data.findById(new ObjectId(id));
+
+            if (!existingFaq) {
                 return res.status(404).json({ status: false, msg: 'FAQ not found' });
             }
-    
+
+            if (question) existingFaq.question = question;
+            if (answer) existingFaq.answer = answer;
+            if (answer1) existingFaq.answer1 = answer1;
+            if (type) existingFaq.type = type;
+            if (image1) existingFaq.img1 = image1;
+            if (image2) existingFaq.img2 = image2;
+
+            const updatedFaq = await existingFaq.save();
+
             res.status(200).json({ status: true, msg: 'FAQ updated successfully', data: updatedFaq });
         } catch (error) {
             console.error('Error updating FAQ:', error);

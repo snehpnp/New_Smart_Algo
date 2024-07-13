@@ -17,11 +17,8 @@ const FaqAccordion = () => {
     const [filterOption, setFilterOption] = useState('all'); // Default filter option
     const [brokerOption, setBrokerOption] = useState('');
     const [addModalOpen, setAddModalOpen] = useState(false);
-
-
     const [faqData, setFaqData] = useState([]);
     const [EditModalOpen, setEditModalOpen] = useState(null);
-
     const [editModalData, seTeditModalData] = useState([]);
 
 
@@ -38,7 +35,6 @@ const FaqAccordion = () => {
     };
 
 
-
     const deleteFaq = async (faqId) => {
 
         try {
@@ -50,7 +46,6 @@ const FaqAccordion = () => {
             console.error("Error deleting FAQ:", error);
         }
     };
-
 
 
     useEffect(() => {
@@ -67,21 +62,20 @@ const FaqAccordion = () => {
         setSearchTerm(event.target.value);
     };
 
-    const handleFilterChange = (event) => {
-        const value = event.target.value;
-        setFilterOption(value);
-        setBrokerOption(''); // Reset broker option
-    };
-
-    const handleBrokerChange = (event) => {
-        setBrokerOption(event.target.value);
-    };
-
-
     const openEditModal = (faq, editMode) => {
         setEditModalOpen(true);
         seTeditModalData(faq)
     };
+
+
+
+    const filteredFaqs = faqData.filter((faq) => {
+        const matchesSearch = faq.question.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesFilter = filterOption === 'all' || filterOption === faq.type;
+
+        return matchesSearch && matchesFilter;
+    });
+
 
 
     return (
@@ -117,7 +111,7 @@ const FaqAccordion = () => {
                         labelId="filter-label"
                         id="filter-select"
                         value={filterOption}
-                        onChange={handleFilterChange}
+                        onChange={(e) => setFilterOption(e.target.value)}
                         label="Filter By"
                     >
                         <MenuItem value="all">All FAQs</MenuItem>
@@ -127,25 +121,7 @@ const FaqAccordion = () => {
                         <MenuItem value="trade">Trade Issue FAQs</MenuItem>
                     </Select>
                 </FormControl>
-                {filterOption === 'trade' && (
-                    <FormControl
-                        variant="outlined"
-                        style={{ minWidth: 200 }}
-                    >
-                        <InputLabel id="broker-label">Select Broker</InputLabel>
-                        <Select
-                            labelId="broker-label"
-                            id="broker-select"
-                            value={brokerOption}
-                            onChange={handleBrokerChange}
-                            label="Select Broker"
-                        >
-                            <MenuItem value="broker1">Broker 1</MenuItem>
-                            <MenuItem value="broker2">Broker 2</MenuItem>
-                            <MenuItem value="broker3">Broker 3</MenuItem>
-                        </Select>
-                    </FormControl>
-                )}
+
                 <Button
                     variant="contained"
                     color="primary"
@@ -170,12 +146,12 @@ const FaqAccordion = () => {
                     marginTop: '0rem',
                 }}
             >
-                {faqData.length === 0 ? (
+                {filteredFaqs.length === 0 ? (
                     <Typography variant="body1">
                         No FAQs found.
                     </Typography>
                 ) : (
-                    faqData.map((faq, index) => (
+                    filteredFaqs.map((faq, index) => (
                         <div
                             key={index}
                             className="accordion"

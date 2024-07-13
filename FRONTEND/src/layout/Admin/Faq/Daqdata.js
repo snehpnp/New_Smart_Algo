@@ -1,6 +1,6 @@
 export const faqData = [
     {
-        question: "What are the trading hours of the Indian stock market?",
+        question: "What are the trading hours of the Indian stock market ?",
         answer: "The trading hours of the Indian stock market (NSE and BSE) are from 9:15 AM to 3:30 PM, Monday to Friday, excluding public holidays."
     },
     {

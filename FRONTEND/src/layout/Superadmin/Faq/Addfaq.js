@@ -9,10 +9,9 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { useDispatch } from "react-redux";
-import { ADD_FAQ } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice'; // Assuming you have an update action
-import { useEffect, UPDATE_FAQ } from 'react';
-
+import { useDispatch } from 'react-redux';
+import { ADD_FAQ, UPDATE_FAQ } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice'; // Assuming you have an update action
+import { useEffect } from 'react';
 
 const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
     const dispatch = useDispatch();
@@ -41,7 +40,6 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                 const image2 = values.image2 ? await fileToBase64(values.image2) : null;
 
                 if (mode === 'add') {
-                    // Add new FAQ
                     const addData = await dispatch(ADD_FAQ({
                         question: values.question,
                         answer: values.answer,
@@ -50,11 +48,12 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                         image1: image1,
                         image2: image2
                     })).unwrap();
-                    console.log("Add Data", addData);
+                    console.log('Add Data', addData);
+                    window.location.reload();
+
                 } else if (mode === 'edit' && initialValues) {
-                    // Update existing FAQ
                     const updateData = await dispatch(UPDATE_FAQ({
-                        id: initialValues.id,
+                        id: initialValues._id,
                         question: values.question,
                         answer: values.answer,
                         answer1: values.answer1,
@@ -62,7 +61,9 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                         image1: image1,
                         image2: image2
                     })).unwrap();
-                    console.log("Update Data", updateData);
+                    console.log('Update Data', updateData);
+                    window.location.reload();
+
                 }
 
                 onClose();
@@ -79,11 +80,7 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = () => resolve(reader.result);
-            reader.onerror = (error) => {
-                if (reject) {
-                    reject(error);
-                }
-            };
+            reader.onerror = (error) => reject(error);
         });
     };
 
@@ -93,14 +90,13 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                 question: initialValues.question,
                 answer: initialValues.answer,
                 answer1: initialValues.answer1,
-                category: initialValues.type, // Set category from initialValues.type
-                image1: initialValues.img1,
-                image2: initialValues.img2,
+                category: initialValues.type,
+                image1: null,
+                image2: null,
             });
         }
     }, [initialValues]);
     
-
 
     return (
         <Modal
@@ -172,22 +168,24 @@ const AddFaqModal = ({ open, onClose, mode, initialValues }) => {
                             <MenuItem value="trade">Trade Issue</MenuItem>
                         </Select>
                     </FormControl>
-                    {/* Image Upload Inputs */}
-                    <input
-                        id="image1"
-                        name="image1"
-                        type="file"
-                        onChange={(e) => formik.setFieldValue('image1', e.target.files[0])}
-                        style={{ marginBottom: '1rem' }}
-                    />
-                    <input
-                        id="image2"
-                        name="image2"
-                        type="file"
-                        onChange={(e) => formik.setFieldValue('image2', e.target.files[0])}
-                        style={{ marginBottom: '1rem' }}
-                    />
-                    {/* Buttons */}
+              
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <input
+                            id="image1"
+                            name="image1"
+                            type="file"
+                            onChange={(e) => formik.setFieldValue('image1', e.target.files[0])}
+                            style={{ marginBottom: '1rem' }}
+                        />
+                        <input
+                            id="image2"
+                            name="image2"
+                            type="file"
+                            onChange={(e) => formik.setFieldValue('image2', e.target.files[0])}
+                            style={{ marginBottom: '1rem' }}
+                        />
+                    </div>
+               
                     <Button type="submit" variant="contained" color="primary" style={{ marginRight: '1rem' }}>
                         {mode === 'add' ? 'Add FAQ' : 'Update FAQ'}
                     </Button>

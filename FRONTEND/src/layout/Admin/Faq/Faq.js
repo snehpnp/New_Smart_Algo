@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { CSSTransition } from 'react-transition-group';
 import Content from '../../../Components/Dashboard/Content/Content';
@@ -28,6 +28,9 @@ const FaqAccordion = () => {
 
 
     }
+    useEffect(() => {
+        GetFaqData()
+    }, []);
 
     const toggleAccordion = (index) => {
         setExpandedIndex((prevIndex) =>
@@ -39,42 +42,18 @@ const FaqAccordion = () => {
         setSearchTerm(event.target.value);
     };
 
-    const handleFilterChange = (event) => {
-        const value = event.target.value;
-        setFilterOption(value);
-        // Reset brokerOption when filter changes
-        setBrokerOption('');
-    };
 
-    const handleBrokerChange = (event) => {
-        setBrokerOption(event.target.value);
-    };
+
 
     const filteredFaqs = faqData.filter((faq) => {
-        // Filter by search term
-        const matchesSearch = faq.question
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase());
+        const matchesSearch = faq.question.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesFilter = filterOption === 'all' || filterOption === faq.type;
 
-        // Filter by selected option
-        if (filterOption === 'all') {
-            return matchesSearch;
-        } else if (filterOption === 'trade') {
-            return (
-                matchesSearch &&
-                faq.answer
-                    .toLowerCase()
-                    .includes('trade') // Example condition for 'Trade Issue FAQs'
-            );
-        } else {
-            return false;
-        }
+        return matchesSearch && matchesFilter;
     });
 
 
-    useEffect(() => {
-        GetFaqData()
-    }, []);
+
 
     return (
         <Content
@@ -109,7 +88,7 @@ const FaqAccordion = () => {
                         labelId="filter-label"
                         id="filter-select"
                         value={filterOption}
-                        onChange={handleFilterChange}
+                        onChange={(e) => setFilterOption(e.target.value)}
                         label="Filter By"
                     >
                         <MenuItem value="all">All FAQs</MenuItem>
@@ -119,25 +98,7 @@ const FaqAccordion = () => {
                         <MenuItem value="trade">Trade Issue FAQs</MenuItem>
                     </Select>
                 </FormControl>
-                {filterOption === 'trade' && (
-                    <FormControl
-                        variant="outlined"
-                        style={{ minWidth: 200 }}
-                    >
-                        <InputLabel id="broker-label">Select Broker</InputLabel>
-                        <Select
-                            labelId="broker-label"
-                            id="broker-select"
-                            value={brokerOption}
-                            onChange={handleBrokerChange}
-                            label="Select Broker"
-                        >
-                            <MenuItem value="broker1">Broker 1</MenuItem>
-                            <MenuItem value="broker2">Broker 2</MenuItem>
-                            <MenuItem value="broker3">Broker 3</MenuItem>
-                        </Select>
-                    </FormControl>
-                )}
+
             </div>
 
             <div
@@ -203,11 +164,10 @@ const FaqAccordion = () => {
                                     }}
                                 >
                                     <i
-                                        className={`ri ${
-                                            expandedIndex === index
-                                                ? 'ri-subtract-line'
-                                                : 'ri-add-line'
-                                        }`}
+                                        className={`ri ${expandedIndex === index
+                                            ? 'ri-subtract-line'
+                                            : 'ri-add-line'
+                                            }`}
                                     >
                                         +
                                     </i>
@@ -238,18 +198,46 @@ const FaqAccordion = () => {
                                     >
                                         {faq.answer}
                                     </Typography>
-                                    {faq.image && (
-                                        <div style={{ marginTop: '1rem' }}>
-                                            <img
-                                                src={faq.image}
-                                                alt="FAQ Image"
-                                                style={{
-                                                    maxWidth: '100%',
-                                                    height: 'auto',
-                                                }}
-                                            />
-                                        </div>
-                                    )}
+
+
+                                    {faq.answer1 && (<Typography
+                                        style={{
+                                            padding: '2rem 0',
+                                        }}
+                                    >
+                                        {faq.answer1}
+                                    </Typography>)}
+
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                        {faq.img1 && (
+                                            <div style={{ marginTop: '1rem' }}>
+                                                <img
+                                                    src={faq.img1}
+                                                    alt="FAQ Image"
+                                                    style={{
+                                                        maxWidth: '100%',
+                                                        height: 'auto',
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+
+
+                                        {faq.img2 && (
+                                            <div style={{ marginTop: '1rem' }}>
+                                                <img
+                                                    src={faq.img2}
+                                                    alt="FAQ Image"
+                                                    style={{
+                                                        maxWidth: '100%',
+                                                        height: 'auto',
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+
+
                                 </div>
                             </CSSTransition>
                         </div>
