@@ -136,7 +136,7 @@ db.createView("makeStrategyData", "usermakestrategies",
         },
         {
             $lookup: {
-              from: "M_48123",
+              from: 'M_48123',
               pipeline: [], // Empty pipeline to get all data
               as: 'timeFrameData'
             }
