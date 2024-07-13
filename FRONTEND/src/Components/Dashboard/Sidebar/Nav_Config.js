@@ -289,6 +289,14 @@ export const supper_admin_sidebar = [
     //     "route": "/super/support",
     //     "Data": []
     // },
+     {
+        'id': 7,
+        "name": 'Faq',
+        "Icon": "HelpingHand",
+        "route": "/super/update/faq",
+        "Data": []
+    },
+    
 ]
 
 

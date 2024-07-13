@@ -4,6 +4,8 @@ const panel_model = db.panel_model;
 const User = db.user;
 const ApiCreateInfo = db.api_create_info;
 const Superadmin_History = db.Superadmin_History;
+const Faq_Data = db.Faq_Data;
+
 
 const mongoose = require('mongoose');
 const ObjectId = mongoose.Types.ObjectId;
@@ -346,9 +348,6 @@ class Panel {
         }
     }
 
-
-
-
     // Create APi Infor
     async CreateAPiInfo(req, res) {
         try {
@@ -391,8 +390,6 @@ class Panel {
             return res.send({ status: false, msg: 'Internal server error', error: error.keyValue });
         }
     }
-
-
 
     // Get All APi Infor
     async GetAllAPiInfo(req, res) {
@@ -469,7 +466,6 @@ class Panel {
         }
     }
 
-
     // Get All APi Infor
     async GetAllAPiInfo_Super(req, res) {
         try {
@@ -503,7 +499,6 @@ class Panel {
         }
     }
 
-
     // Update APi Info
     async UpdateAPiInfo(req, res) {
         try {
@@ -536,20 +531,10 @@ class Panel {
     }
 
 
-
     // GET ONE PANEL AND HIS 
     async GetPanlebroker(req, res) {
         try {
             const { domain } = req.body
-
-            // FIND PANEL NAME DUPLICATE
-            // var domain1 = "http://localhost:3000"
-
-            // if (domain == "http://localhost:3000" || domain == "https://trade.pandpinfotech.com") {
-            //     domain1 = "https://trade.pandpinfotech.com"
-            // } else {
-            //     domain1 = domain
-            // }
 
             const Panel_information = await panel_model.findOne({ domain: domain }, 'broker_id');
 
@@ -563,7 +548,6 @@ class Panel {
             // console.log("Theme error-", error);
         }
     }
-
 
     // GET SUPER ADMIN HISTORY     
     async GetHistoryData(req, res) {
@@ -604,8 +588,6 @@ class Panel {
             console.log("Error Get all Panels error-", error);
         }
     }
-
-
 
     // UPDAYE QUERY IN ALL PANEL 
     async updateQuery(req, res) {
@@ -657,10 +639,6 @@ class Panel {
             // console.log("Theme error-", error);
         }
     }
-
-
-
-
 
     async createView(req, res) {
         try {
@@ -723,10 +701,82 @@ class Panel {
         }
     }
 
+    async AddFaq(req, res) {
+        try {
+            const { question, answer, answer1, type, image1, image2 } = req.body;
 
+            const AddPanel = new Faq_Data({
+                question,
+                answer,
+                answer1,
+                type,
+                img1:image1,
+                img2:image2
+            });
 
+            const savedData = await AddPanel.save();
+            res.status(201).json({ status: true, msg: "FAQ successfully added!", data: savedData });
+        } catch (error) {
+            if (error.code === 11000) {
+                res.status(409).json({ status: false, msg: 'Duplicate key error', error });
+            } else {
+                console.error('Error adding FAQ:', error);
+                res.status(500).json({ status: false, msg: 'Server error', error });
+            }
+        }
+    }
 
+    async GetAllFaq(req, res) {
+        try {
+            const faqData = await Faq_Data.find();
 
+            res.status(200).json({ status: true, msg: "FAQs retrieved successfully", data: faqData });
+        } catch (error) {
+            console.error('Error retrieving FAQs:', error);
+            res.status(500).json({ status: false, msg: 'Server error', error });
+        }
+    }
+
+    async DeleteFaq(req, res) {
+        const { faqId } = req.body; // Assuming you get the FAQ ID from request parameters
+    
+        try {
+            const deletedFaq = await Faq_Data.findByIdAndDelete(faqId);
+    
+            if (!deletedFaq) {
+                return res.status(404).json({ status: false, msg: 'FAQ not found' });
+            }
+    
+            res.status(200).json({ status: true, msg: 'FAQ deleted successfully', data: deletedFaq });
+        } catch (error) {
+            console.error('Error deleting FAQ:', error);
+            res.status(500).json({ status: false, msg: 'Server error', error });
+        }
+    }
+    
+    async UpdateFaq(req, res) {
+        const { faqId, question, answer, answer1, type, image1, image2 } = req.body;
+    
+        try {
+            const updatedFaq = await Faq_Data.findByIdAndUpdate(faqId, {
+                question,
+                answer,
+                answer1,
+                type,
+                img1:image1,
+                img2:image2
+            }, { new: true });
+    
+            if (!updatedFaq) {
+                return res.status(404).json({ status: false, msg: 'FAQ not found' });
+            }
+    
+            res.status(200).json({ status: true, msg: 'FAQ updated successfully', data: updatedFaq });
+        } catch (error) {
+            console.error('Error updating FAQ:', error);
+            res.status(500).json({ status: false, msg: 'Server error', error });
+        }
+    }
 
 }
 

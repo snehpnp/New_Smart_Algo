@@ -1,33 +1,61 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { CSSTransition } from 'react-transition-group';
 import Content from '../../../Components/Dashboard/Content/Content';
-import { GET_ALL_FAQ_DATA } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+import { GET_ALL_FAQ_DATA, Delete_faq, ADD_FAQ } from '../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
+
+import AddFaqModal from './Addfaq';
+
 
 import { useDispatch } from "react-redux";
+
 const FaqAccordion = () => {
+
     const dispatch = useDispatch()
     const [expandedIndex, setExpandedIndex] = useState(-1);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterOption, setFilterOption] = useState('all'); // Default filter option
     const [brokerOption, setBrokerOption] = useState('');
-    const [faqData, SetfaqData] = useState([]);
+    const [addModalOpen, setAddModalOpen] = useState(false);
 
 
-    const GetFaqData = async (id) => {
-        await dispatch(GET_ALL_FAQ_DATA({})).unwrap()
-            .then((response) => {
-                if (response.status) {
-                    SetfaqData(response.data)
-                }
-                else {
-                }
-            }).catch((err) => {
-                console.log("Error is found in Backup the signal", err)
-            })
+    const [faqData, setFaqData] = useState([]);
+    const [EditModalOpen, setEditModalOpen] = useState(null);
+
+    const [editModalData, seTeditModalData] = useState([]);
 
 
-    }
+    // Function to fetch FAQs
+    const fetchFaqData = async () => {
+        try {
+            const response = await dispatch(GET_ALL_FAQ_DATA({})).unwrap();
+            if (response.status) {
+                setFaqData(response.data);
+            }
+        } catch (error) {
+            console.error("Error fetching FAQs:", error);
+        }
+    };
+
+
+
+    const deleteFaq = async (faqId) => {
+
+        try {
+            const response = await dispatch(Delete_faq({ faqId: faqId })).unwrap();
+            if (response.status) {
+                fetchFaqData(); // Refresh FAQ list
+            }
+        } catch (error) {
+            console.error("Error deleting FAQ:", error);
+        }
+    };
+
+
+
+    useEffect(() => {
+        fetchFaqData();
+    }, []);
 
     const toggleAccordion = (index) => {
         setExpandedIndex((prevIndex) =>
@@ -42,39 +70,19 @@ const FaqAccordion = () => {
     const handleFilterChange = (event) => {
         const value = event.target.value;
         setFilterOption(value);
-        // Reset brokerOption when filter changes
-        setBrokerOption('');
+        setBrokerOption(''); // Reset broker option
     };
 
     const handleBrokerChange = (event) => {
         setBrokerOption(event.target.value);
     };
 
-    const filteredFaqs = faqData.filter((faq) => {
-        // Filter by search term
-        const matchesSearch = faq.question
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase());
 
-        // Filter by selected option
-        if (filterOption === 'all') {
-            return matchesSearch;
-        } else if (filterOption === 'trade') {
-            return (
-                matchesSearch &&
-                faq.answer
-                    .toLowerCase()
-                    .includes('trade') // Example condition for 'Trade Issue FAQs'
-            );
-        } else {
-            return false;
-        }
-    });
+    const openEditModal = (faq, editMode) => {
+        setEditModalOpen(true);
+        seTeditModalData(faq)
+    };
 
-
-    useEffect(() => {
-        GetFaqData()
-    }, []);
 
     return (
         <Content
@@ -138,6 +146,15 @@ const FaqAccordion = () => {
                         </Select>
                     </FormControl>
                 )}
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                        setAddModalOpen(true);
+                    }}
+                >
+                    Add FAQ
+                </Button>
             </div>
 
             <div
@@ -153,12 +170,12 @@ const FaqAccordion = () => {
                     marginTop: '0rem',
                 }}
             >
-                {filteredFaqs.length === 0 ? (
+                {faqData.length === 0 ? (
                     <Typography variant="body1">
                         No FAQs found.
                     </Typography>
                 ) : (
-                    filteredFaqs.map((faq, index) => (
+                    faqData.map((faq, index) => (
                         <div
                             key={index}
                             className="accordion"
@@ -188,30 +205,33 @@ const FaqAccordion = () => {
                                 >
                                     {faq.question}
                                 </Typography>
-                                <span
-                                    className="accordion__icon"
-                                    style={{
-                                        backgroundColor: '#FF4B4B',
-                                        width: '2.2rem',
-                                        height: '2.2rem',
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        borderRadius: '50%',
-                                        color: '#fff',
-                                        flexShrink: 0,
-                                    }}
-                                >
-                                    <i
-                                        className={`ri ${
-                                            expandedIndex === index
-                                                ? 'ri-subtract-line'
-                                                : 'ri-add-line'
-                                        }`}
+                                <div>
+                                    {/* Edit Button */}
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={() => {
+
+                                            openEditModal(faq, true);
+
+                                        }}
+                                        style={{ marginRight: '1rem' }}
                                     >
-                                        +
-                                    </i>
-                                </span>
+                                        Edit
+                                    </Button>
+                                    {/* Delete Button */}
+                                    <Button
+                                        variant="outlined"
+                                        color="secondary"
+                                        onClick={() => {
+                                            if (window.confirm('Are you sure you want to delete this FAQ?')) {
+                                                deleteFaq(faq._id);
+                                            }
+                                        }}
+                                    >
+                                        Delete
+                                    </Button>
+                                </div>
                             </div>
                             <CSSTransition
                                 in={expandedIndex === index}
@@ -238,10 +258,32 @@ const FaqAccordion = () => {
                                     >
                                         {faq.answer}
                                     </Typography>
-                                    {faq.image && (
+
+
+                                    {faq.answer1 && <Typography
+                                        style={{
+                                            padding: '2rem 0',
+                                        }}
+                                    >
+                                        {faq.answer1}
+                                    </Typography>}
+
+                                    {faq.img1 && (
                                         <div style={{ marginTop: '1rem' }}>
                                             <img
-                                                src={faq.image}
+                                                src={faq.img1}
+                                                alt="FAQ Image"
+                                                style={{
+                                                    maxWidth: '100%',
+                                                    height: 'auto',
+                                                }}
+                                            />
+                                        </div>
+                                    )}
+                                    {faq.img2 && (
+                                        <div style={{ marginTop: '1rem' }}>
+                                            <img
+                                                src={faq.img2}
                                                 alt="FAQ Image"
                                                 style={{
                                                     maxWidth: '100%',
@@ -256,6 +298,22 @@ const FaqAccordion = () => {
                     ))
                 )}
             </div>
+
+            <AddFaqModal
+                open={addModalOpen}
+                onClose={() => setAddModalOpen(false)}
+                mode="add"
+
+            />
+
+
+
+            <AddFaqModal
+                open={EditModalOpen}
+                onClose={() => setEditModalOpen(false)}
+                mode="edit"
+                initialValues={editModalData}
+            />
         </Content>
     );
 };
