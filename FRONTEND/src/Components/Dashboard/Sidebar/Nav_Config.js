@@ -40,6 +40,13 @@ export const admin_sidebar = [
                 "name": 'Star-Clients',
                 "route": "/admin/allstarclients",
             },
+            {
+                'id': 6,
+                "name": 'SignUp Clients',
+                "Icon": "Users",
+                "route": "/admin/signupclient",
+             
+            },
         ]
     },
 
@@ -110,6 +117,13 @@ export const admin_sidebar = [
                 "route": "/admin/openposition",
 
             },
+            {
+                'id': 3,
+                "name": 'Broker Information',
+                "Icon": "Info",
+                "route": "/admin/brokerinfo",
+           
+            },
         ]
     },
     {
@@ -174,13 +188,7 @@ export const admin_sidebar = [
             },
         ]
     },
-    {
-        'id': 11,
-        "name": 'Broker Information',
-        "Icon": "Info",
-        "route": "/admin/brokerinfo",
-        "Data": []
-    },
+   
 
     {
         'id': 12,
@@ -204,26 +212,21 @@ export const admin_sidebar = [
                 "name": 'Api Create Info',
                 "route": "/admin/apicreateinfo",
                 "Icon": "WalletCards",
-                "Data": []
+            
+            },
+            {
+                'id': 4,
+                "name": 'Faq',
+                "Icon": "Users",
+                "route": "/admin/faq",
+       
             },
         ]
 
     },
-    {
-        'id': 13,
-        "name": 'SignUp Clients',
-        "Icon": "Users",
-        "route": "/admin/signupclient",
-        "Data": []
-    },
+ 
 
-    {
-        'id': 14,
-        "name": 'Faq',
-        "Icon": "Users",
-        "route": "/admin/faq",
-        "Data": []
-    },
+    
 
 
 ]

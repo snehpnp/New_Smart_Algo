@@ -16,7 +16,7 @@ class Panel {
     // ADD PANEL IN A COLLECTION
     async AddPanel(req, res) {
         try {
-            const { panel_name, domain, port, key, ip_address, theme_id, backend_rul, parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id, UserName ,db_url} = req.body.req
+            const { panel_name, domain, port, key, ip_address, theme_id, backend_rul, parent_id, Create_Strategy, Option_chain, Strategy_plan, broker_id, UserName, db_url } = req.body.req
 
             // FIND PANEL NAME DUPLICATE
             const panel_data = await panel_model.findOne({ panel_name: panel_name });
@@ -38,11 +38,10 @@ class Panel {
                 broker_id: broker_id,
                 backend_rul: backend_rul,
                 is_active: 0,
-                db_url:db_url
+                db_url: db_url
             });
             AddPanel.save()
                 .then(async (data) => {
-                    // logger.info('Panel Add successfully', { role: "SUPERADMIN", user_id: parent_id });
 
                     const filter = { panal_name: "111" };
                     const update = {
@@ -80,7 +79,7 @@ class Panel {
                                 "client_key": key,
                                 backend_rul: backend_rul,
                                 domain: domain,
-                                db_url:db_url
+                                db_url: db_url
                             });
 
                             let config = {
@@ -317,7 +316,7 @@ class Panel {
                         Strategy_plan: 1,
                         Option_chain: 1,
                         Create_Strategy: 1,
-                        db_url:1
+                        db_url: 1
                     }
                 },
                 {
@@ -558,7 +557,7 @@ class Panel {
             if (!Panel_information) {
                 return res.status(409).send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            return  res.send({ status: true, msg: "Get Panel Broker", data: Panel_information })
+            return res.send({ status: true, msg: "Get Panel Broker", data: Panel_information })
 
         } catch (error) {
             // console.log("Theme error-", error);
@@ -652,7 +651,7 @@ class Panel {
             if (!Panel_information) {
                 return res.status(409).send({ status: false, msg: 'Panle Not exist Not exists', data: [] });
             }
-            return  res.send({ status: true, msg: "Get Panel Broker", data: Panel_information, Error: ErrorArray })
+            return res.send({ status: true, msg: "Get Panel Broker", data: Panel_information, Error: ErrorArray })
 
         } catch (error) {
             // console.log("Theme error-", error);
