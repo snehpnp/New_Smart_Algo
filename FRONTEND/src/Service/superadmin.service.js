@@ -490,7 +490,7 @@ export async function GET_FAQ_DATA() {
 
     try {
         // const res = await axios.post(`${Config.smartAlogUrl}getll/faq`, data, {
-        const res = await axios.get(`${Config.base_url}getll/faq`, {
+        const res = await axios.get(`${Config.smartAlogUrl}getll/faq`, {
 
             // headers: header(token),
             data: {},
@@ -508,7 +508,7 @@ export async function DELETE_FAQ_DATA(data) {
 
     try {
         // const res = await axios.post(`${Config.smartAlogUrl}getll/faq`, data, {
-        const res = await axios.post(`${Config.base_url}delete/faq`, data,{
+        const res = await axios.post(`${Config.smartAlogUrl}delete/faq`, data,{
 
             // headers: header(token),
             data: {},
@@ -525,7 +525,7 @@ export async function ADD_FAQ_DATA(data) {
 
     try {
         // const res = await axios.post(`${Config.smartAlogUrl}getll/faq`, data, {
-        const res = await axios.post(`${Config.base_url}add/faq`, data,{
+        const res = await axios.post(`${Config.smartAlogUrl}add/faq`, data,{
 
             // headers: header(token),
             data: {},
@@ -542,7 +542,7 @@ export async function UPDATE_FAQ_DATA(data) {
     
         try {
             // const res = await axios.post(`${Config.smartAlogUrl}getll/faq`, data, {
-            const res = await axios.post(`${Config.base_url}update/faq`, data,{
+            const res = await axios.post(`${Config.smartAlogUrl}update/faq`, data,{
     
                 // headers: header(token),
                 data: {},
@@ -554,4 +554,3 @@ export async function UPDATE_FAQ_DATA(data) {
         }
     
     }
-    
