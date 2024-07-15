@@ -136,7 +136,8 @@ db.createView("makeStrategyData", "usermakestrategies",
         },
         {
             $lookup: {
-              from: 'M_48123',
+
+              from: { $concat: ["M_", "$timeframe", "_", "$tokensymbol"] },
               pipeline: [], // Empty pipeline to get all data
               as: 'timeFrameData'
             }
