@@ -71,7 +71,6 @@ class TradeHistory {
 
             const GetAllClientServices = await client_services.aggregate(pipeline)
 
-
             var abc = [];
             var abc1 = [];
             let serIndex;
@@ -214,12 +213,7 @@ class TradeHistory {
                 return res.send({ status: true, data: abc.flat(), msg: "Get Signals", trade_strategy_filter: trade_strategy_filter })
             } else {
                 return res.send({ status: false, data: [], msg: "Data Empty" })
-
             }
-
-
-
-
 
         } catch (error) {
             console.log("Error get user trading Status error -", error);

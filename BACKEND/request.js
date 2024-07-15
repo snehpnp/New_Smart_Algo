@@ -5,10 +5,8 @@ module.exports = function (app) {
     var dateTime = require('node-datetime');
     var moment = require('moment');
     const { MongoClient } = require('mongodb');
-
     const mongoose = require("mongoose");
     const ObjectId = mongoose.Types.ObjectId;
-
     const User = db.user;
     const services = db.services;
     const categorie = db.categorie;
@@ -20,11 +18,9 @@ module.exports = function (app) {
 
 
     const Broker_information = db.Broker_information;
-
     const { DashboardView } = require('./View/DashboardData')
     const { createView, dropOpenPosition, open_position_excute } = require('./View/Open_position')
     const { MainSignalsRemainToken, service_token_update, TokenSymbolUpdate } = require('./App/Cron/cron')
-
     const { createViewAlice } = require('./View/Alice_blue')
     const { createViewAngel } = require('./View/Angel')
     const { createViewDhan } = require('./View/dhan')
@@ -43,14 +39,7 @@ module.exports = function (app) {
 
 
 
-
-
-
-
-    // ========================================================================================================
-
-    app.get("/all/brokerview", (req, res) => {
-
+     const createAllView = () => {
         createViewAlice()
         createViewAngel()
         createViewDhan()
@@ -66,65 +55,8 @@ module.exports = function (app) {
         createViewZebul()
         createViewZerodha()
         createViewIcicidirect()
-        DashboardView()
-        createView()
-
-        open_position_excute()
-        return res.send("DONEE")
-    })
-
-    app.post("/all/tabel", async (req, res) => {
-        try {
-
-            const roles = await Roledata.find();
-            if (roles.length !== 4) {
-                RoleCreate();
-            }
-
-
-            const companies = await company.find();
-            if (companies.length == 0) {
-                CompanyCreate(req.body);
-            }
-
-
-            const categories = await categorie.find();
-            if (categories.length == 0) {
-                categorys();
-            }
-
-
-            const brokers = await Broker_information.find();
-            if (brokers.length == 0) {
-                CreateBrokerinfo();
-            }
-
-            const servicesData = await services.find();
-            if (servicesData.length == 0) {
-                service_token_update();
-            }
-
-
-            const Alice_tokenData = await Alice_token.find();
-            if (Alice_tokenData.length == 0) {
-                TokenSymbolUpdate();
-            }
-
-            const live_price_data = await live_price.find();
-            if (live_price_data.length == 0) {
-                live_price_data_create();
-            }
-
-            CreateDataBase(req.body)
-            console.log("SNEH")
-
-
-            return res.send("DONE");
-        } catch (error) {
-            console.error("Error in /all/tabel route:", error);
-            res.status(500).send("Internal Server Error");
-        }
-    });
+        res.send("All View Created")
+    }
 
     var CreateDataBase = async (data) => {
         const uri = data;
@@ -150,7 +82,6 @@ module.exports = function (app) {
             }
         }
     }
-
 
     const DawnloadOptionChainSymbol = async () => {
 
@@ -190,7 +121,7 @@ module.exports = function (app) {
 
 
     }
-    // Role Create
+
     const RoleCreate = () => {
         var arr = [
             {
@@ -248,7 +179,6 @@ module.exports = function (app) {
         }
     };
 
-
     const CreateBrokerinfo = async () => {
         try {
             const Broker_informationData = new Broker_information({
@@ -272,7 +202,6 @@ module.exports = function (app) {
         }
     };
 
-    // Create categorys 
     const categorys = async () => {
         const categoriesData = [
             {
@@ -366,10 +295,85 @@ module.exports = function (app) {
     };
 
 
+    // =====================================================================================================================
 
 
+    app.get("/all/brokerview", (req, res) => {
+
+        createViewAlice()
+        createViewAngel()
+        createViewDhan()
+        createViewFivepaisa()
+        createViewFyers()
+        createViewIifl()
+        createViewKotakNeo()
+        createViewMarketHub()
+        createViewMastertrust()
+        createViewMotilalOswal()
+        createViewSwastika()
+        createViewUpstox()
+        createViewZebul()
+        createViewZerodha()
+        createViewIcicidirect()
+        DashboardView()
+        createView()
+        open_position_excute()
+
+        return res.send("DONEE")
+    })
+
+    app.post("/all/tabel", async (req, res) => {
+        try {
+
+            const roles = await Roledata.find();
+            if (roles.length !== 4) {
+                RoleCreate();
+            }
 
 
+            const companies = await company.find();
+            if (companies.length == 0) {
+                CompanyCreate(req.body);
+            }
+
+
+            const categories = await categorie.find();
+            if (categories.length == 0) {
+                categorys();
+            }
+
+
+            const brokers = await Broker_information.find();
+            if (brokers.length == 0) {
+                CreateBrokerinfo();
+            }
+
+            const servicesData = await services.find();
+            if (servicesData.length == 0) {
+                service_token_update();
+            }
+
+
+            const Alice_tokenData = await Alice_token.find();
+            if (Alice_tokenData.length == 0) {
+                TokenSymbolUpdate();
+            }
+
+            const live_price_data = await live_price.find();
+            if (live_price_data.length == 0) {
+                live_price_data_create();
+            }
+
+            CreateDataBase(req.body)
+            console.log("SNEH")
+
+
+            return res.send("DONE");
+        } catch (error) {
+            console.error("Error in /all/tabel route:", error);
+            res.status(500).send("Internal Server Error");
+        }
+    });
 
     app.post("/add/admin", async (req, res) => {
         const { panelname, client_key } = req.body;
@@ -436,27 +440,9 @@ module.exports = function (app) {
         }
     });
 
-
-
-    // =====================================================================================================================
-
-
     app.get("/UpdateServicesToken", async (req, res) => {
         TokenSymbolUpdate()
-
     })
-
-
-
-
-
-
-
-
-
-
-
-
 
     app.get("/UpdateQty", async (req, res) => {
 
@@ -513,7 +499,6 @@ module.exports = function (app) {
 
 
     })
-
 
     app.get('/addstockExtra', async function (req, res) {
 
@@ -592,7 +577,6 @@ module.exports = function (app) {
 
     })
 
-
     app.get("/DT", async (req, res) => {
 
         const pipeline = [
@@ -643,7 +627,6 @@ module.exports = function (app) {
 
         return res.send({ data: result, count: result.length })
     });
-
 
     app.get("/T-U", async (req, res) => {
 
@@ -1011,7 +994,6 @@ module.exports = function (app) {
         return res.send({ data: "okk" })
     });
 
-
     app.get("/test", (req, res) => {
         MainSignalsRemainToken()
         return res.send("DONEE")
@@ -1022,16 +1004,6 @@ module.exports = function (app) {
         return res.send({ msg: "Delete Done!!!" })
     })
 
-    app.get('/createView', async (req, res) => {
-        createViewFyers();
-        return res.send({ msg: "Create View Done!  !!" })
-    })
-
-    app.get('/brokerView', async (req, res) => {
-        //createViewUpstox()
-        createViewDhan();
-        return res.send({ msg: "Create View broker!  !!" })
-    })
 
     app.get('/dashboard-view', async (req, res) => {
         DashboardView()
@@ -1332,5 +1304,3 @@ module.exports = function (app) {
     })
 
 }
-
-

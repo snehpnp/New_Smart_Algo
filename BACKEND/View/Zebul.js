@@ -12,13 +12,15 @@ const db = client.db(process.env.DB_NAME); // Replace with your actual database 
 
 
 async function createViewZebul() {
-
-  // All Client Trading on view
   try {
+    const views = await db.listCollections({ name: 'ZebulView' }).toArray();
 
-    const currentDate = new Date(); // Get the current date and time
+    if (views.length > 0) {
+      console.log('View already exists.');
+      return; 
+    }
 
-    // Define the pipeline to create the view
+    const currentDate = new Date(); 
     const pipeline = [
       {
         $match: {

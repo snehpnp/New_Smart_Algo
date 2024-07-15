@@ -13,13 +13,15 @@ const db = client.db(process.env.DB_NAME); // Replace with your actual database 
 
 async function createViewDhan() {
 
-console.log("111")
-  // All Client Trading on view
   try {
+    const views = await db.listCollections({ name: 'dhanView' }).toArray();
 
-    const currentDate = new Date(); // Get the current date and time
+    if (views.length > 0) {
+      console.log('View already exists.');
+      return; 
+    }
+    const currentDate = new Date(); 
 
-    // Define the pipeline to create the view
     const pipeline = [
       {
         $match: {
@@ -333,8 +335,6 @@ console.log("111")
       }
     ];
    
-    console.log("pipeline",pipeline)
-    // Create the view
     await db.createCollection('dhanView', { viewOn: 'users', pipeline });
 
     console.log('View dhanView created successfully.');

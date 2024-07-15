@@ -8,35 +8,37 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 client.connect();
 
-const db = client.db(process.env.DB_NAME); // Replace with your actual database name
+const db = client.db(process.env.DB_NAME); 
 
 
 async function createViewFyers() {
-
-
-
-  // All Client Trading on view
   try {
+    const views = await db.listCollections({ name: 'fyersView' }).toArray();
 
-    const currentDate = new Date(); // Get the current date and time
+    if (views.length > 0) {
+      console.log('View already exists.');
+      return; 
+    }
 
-    // Define the pipeline to create the view
+    const currentDate = new Date(); 
+
+
     const pipeline = [
       {
         $match: {
           broker: "13",
-          TradingStatus: 'on',// Condition from the user collection
+          TradingStatus: 'on',
           $or: [
-            { EndDate: { $gte: currentDate } }, // EndDate is today or in the future
-            { EndDate: null } // EndDate is not set
+            { EndDate: { $gte: currentDate } }, 
+            { EndDate: null } 
           ]
         }
       },
       {
         $lookup: {
           from: 'client_services',
-          localField: '_id', // Field from the user collection to match
-          foreignField: 'user_id', // Field from the client_services collection to match
+          localField: '_id',
+          foreignField: 'user_id', 
           as: 'client_services'
         }
       },
@@ -261,7 +263,6 @@ async function createViewFyers() {
       }
     ];
 
-    // Create the view
     await db.createCollection('fyersView', { viewOn: 'users', pipeline });
 
     console.log('View created successfully.');

@@ -8,33 +8,38 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 client.connect();
 
-const db = client.db(process.env.DB_NAME); // Replace with your actual database name
+const db = client.db(process.env.DB_NAME);
 
 
 async function createViewIifl() {
 
-  // All Client Trading on view
+
   try {
+    const views = await db.listCollections({ name: 'iiflView' }).toArray();
 
-    const currentDate = new Date(); // Get the current date and time
+    if (views.length > 0) {
+      console.log('View already exists.');
+      return; 
+    }
+    const currentDate = new Date();
 
-    // Define the pipeline to create the view
+
     const pipeline = [
       {
         $match: {
           broker: "26",
-          TradingStatus: 'on',// Condition from the user collection
+          TradingStatus: 'on',
           $or: [
-            { EndDate: { $gte: currentDate } }, // EndDate is today or in the future
-            { EndDate: null } // EndDate is not set
+            { EndDate: { $gte: currentDate } }, 
+            { EndDate: null } 
           ]
         }
       },
       {
         $lookup: {
           from: 'client_services',
-          localField: '_id', // Field from the user collection to match
-          foreignField: 'user_id', // Field from the client_services collection to match
+          localField: '_id', 
+          foreignField: 'user_id',
           as: 'client_services'
         }
       },
