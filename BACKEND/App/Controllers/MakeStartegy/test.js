@@ -124,25 +124,24 @@ db.createView("makeStrategyData", "usermakestrategies",
     [
         {
           $match: {
-            status: "1",
+            status: "1"
           }
         },
         {
-          $addFields: {
-            timeFrameView: {
-              $concat: ["M", "$timeframe", "_", "$tokensymbol"]
-            }
+          $lookup: {
+            let: { collectionName: "$indicator" },
+            from: "$$collectionName",
+            pipeline: [
+              {
+                $match: {
+                  _id: "$$indicatorId"
+                }
+              }
+            ],
+            as: "indicatorData"
           }
-        },
-        {
-            $lookup: {
-
-              from: { $concat: ["M_", "$timeframe", "_", "$tokensymbol"] },
-              pipeline: [], // Empty pipeline to get all data
-              as: 'timeFrameData'
-            }
-          },
-       
+        }
+          
       ]
   )
 
