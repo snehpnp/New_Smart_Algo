@@ -4,13 +4,15 @@ import FullDataTable from "../../../Components/ExtraComponents/Datatable/FullDat
 import Loader from '../../../Utils/Loader'
 import { fDateTimeSuffix } from '../../../Utils/Date_formet'
 import { Get_Signals } from "../../../ReduxStore/Slice/Users/SignalsSlice"
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 
 
 const Signals = () => {
-
+  const strategy = useSelector((state) => state.DashboardSlice.update_dashboard?.strategy);
   const dispatch = useDispatch()
-
+  const [SelectServiceIndex, setSelectServiceIndex] = useState("Strategy");
+  const [selectStrategy, setSelectStrategy] = useState("null");
   const [SignalsData, setSignalsData] = useState({ loading: true, data: [] });
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
@@ -18,7 +20,7 @@ const Signals = () => {
   const AdminToken = JSON.parse(localStorage.getItem('user_details'));
 
   const getClientsignals = async (e) => {
-    await dispatch(Get_Signals({ _id: isgotodashboard ? gotodashboard.user_id : user_details.user_id, token: AdminToken.token })).unwrap()
+    await dispatch(Get_Signals({ _id: isgotodashboard ? gotodashboard.user_id : user_details.user_id,type:SelectServiceIndex, token: AdminToken.token })).unwrap()
       .then((response) => {
 
         if (response.status) {
@@ -73,13 +75,65 @@ const Signals = () => {
 
   useEffect(() => {
     getClientsignals()
-  }, [])
+  }, [SelectServiceIndex])
 
   return (
     <>
       {
         SignalsData.loading ? <Loader /> :
           <Content Page_title="Signals" button_status={false}>
+
+            <div className="row d-flex  align-items-center justify-content-start">
+
+              <div className="col-lg-2 px-1">
+                <div className="mb-3">
+                  <label for="select" className="form-label">
+                    Type
+                  </label>
+                  <select
+                    className="default-select wide form-control"
+                    aria-label="Default select example"
+                    id="select"
+                    onChange={(e) => setSelectServiceIndex(e.target.value)}
+                    value={SelectServiceIndex}
+                  >
+                    <option value="Strategy" selected>Starategy</option>
+                    <option value="Trade" selected>Trade</option>
+
+                  </select>
+                </div>
+              </div>
+
+              {strategy && <div className="col-lg-2  px-1">
+                <div className="mb-3">
+                  <label for="select" className="form-label">
+                    Strategy
+                  </label>
+                  <select
+                    className="default-select wide form-control"
+                    aria-label="Default select example"
+                    id="select"
+                    onChange={(e) => setSelectStrategy(e.target.value)}
+                    value={selectStrategy}
+                  >
+                    <option value="null" selected >All</option>
+                    {strategy &&
+                      strategy.map((item) => {
+                        return (
+                          <option value={item.result.strategy_name}>
+                            {item.result.strategy_name}
+                          </option>
+                        );
+                      })}
+                  </select>
+                </div>
+              </div>}
+
+
+
+            </div>
+
+
             <FullDataTable TableColumns={columns} tableData={SignalsData.data} />
           </Content>
       }

@@ -1277,7 +1277,7 @@ app.post('/broker-signals', async (req, res) => {
 
 
 
-            
+
             //Process Tading View Client icicidirect
             try {
               const IciciDirectlCollection = db1.collection('icicidirectview');
@@ -1340,6 +1340,24 @@ app.post('/broker-signals', async (req, res) => {
           // STRICK
           var strike;
           if (strike == undefined || strike == '') { strike = "0" } else { strike = strike }
+          const Filter_user = db1.collection('Cilents_service_stg');
+          const pipeline = [
+            {
+              $match: {
+                strategy_name: strategy,
+                service_name: input_symbol
+              }
+            },
+            {
+              $group: {
+                _id: "$user_id"
+              }
+            }
+          ];
+
+          const Filter_users = await Filter_user.aggregate(pipeline).toArray();
+
+          const uniqueUserIds = Filter_users.map(user => user._id);
 
 
 
@@ -1369,7 +1387,8 @@ app.post('/broker-signals', async (req, res) => {
               lot_size: find_lot_size,
               MakeStartegyName: MakeStartegyName,
               exit_status: ExitStatus,
-              ft_time: ft_time
+              ft_time: ft_time,
+              users_id: uniqueUserIds ? uniqueUserIds : []
             }
 
             let Signal_req1 = new Signals(Signal_req)

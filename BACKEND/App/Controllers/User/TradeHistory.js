@@ -13,8 +13,7 @@ class TradeHistory {
     async GetUserTradeHistory(req, res) {
         try {
 
-           // console.log("req.body ",req.body)
-            const { user_id, startDate, endDate , serviceIndex ,selectStrategy} = req.body;
+            const { user_id, startDate, endDate, serviceIndex, selectStrategy ,getType} = req.body;
 
             const objectId = new ObjectId(user_id);
 
@@ -87,28 +86,27 @@ class TradeHistory {
                     }
 
                     try {
-                        // console.log("client_persnal_key1", item.quantity);
 
 
-                           if (serviceIndex === "null") {
+                        if (serviceIndex === "null") {
                             serIndex = item.service.name
-                            } else {
+                        } else {
                             serIndex = serviceIndex
-                            }
+                        }
 
-                            if (selectStrategy === "null") {
+                        if (selectStrategy === "null") {
                             strategyset = item.strategys.strategy_name
-                            } else {
+                        } else {
                             strategyset = selectStrategy
-                            }
+                        }
 
-                          var data = await MainSignals.aggregate([
+                        var data = await MainSignals.aggregate([
                             {
                                 $match: {
-                                   // symbol: item.service.name,
+                                    // symbol: item.service.name,
                                     symbol: serIndex,
                                     strategy: strategyset,
-                                   // strategy: item.strategys.strategy_name,
+                                    // strategy: item.strategys.strategy_name,
                                     dt_date: {
                                         $gte: startDate,
                                         $lte: endDate,
@@ -129,12 +127,12 @@ class TradeHistory {
                                     _id: -1 // Sort in ascending order. Use -1 for descending.
                                 }
                             }
-                          ]);
+                        ]);
 
-                          var data1 = await MainSignals.aggregate([
+                        var data1 = await MainSignals.aggregate([
                             {
                                 $match: {
-                                     symbol: item.service.name,
+                                    symbol: item.service.name,
                                     strategy: item.strategys.strategy_name,
                                     dt_date: {
                                         $gte: startDate,
@@ -156,35 +154,35 @@ class TradeHistory {
                                     _id: -1 // Sort in ascending order. Use -1 for descending.
                                 }
                             }
-                          ]);
+                        ]);
 
-                          if (data.length > 0) {
-                          //  console.log("data ",data.length)
+                        if (data.length > 0) {
+                            //  console.log("data ",data.length)
                             data.forEach(function (item) {
-                          
+
                                 var findstg = GetAllClientServices.find((data) => data.service.name == item.symbol && data.strategys.strategy_name == item.strategy)
-                               // console.log("findstg ",findstg)
-                               //  console.log("item.result ",item.result)
-                              if(findstg != undefined){
-                                item.result.forEach(function (signal) {
+                                // console.log("findstg ",findstg)
+                                //  console.log("item.result ",item.result)
+                                if (findstg != undefined) {
+                                    item.result.forEach(function (signal) {
 
-                                    signal.qty_percent = findstg.quantity * (Math.ceil(Number(signal.qty_percent) / 100) * 100) * 0.01
+                                        signal.qty_percent = findstg.quantity * (Math.ceil(Number(signal.qty_percent) / 100) * 100) * 0.01
 
-                                });
+                                    });
 
-                                item.entry_qty_percent = findstg.quantity * (Math.ceil(Number(item.entry_qty_percent) / 100) * 100) * 0.01,
-                                    item.exit_qty_percent = findstg.quantity * (Math.ceil(Number(item.exit_qty_percent) / 100) * 100) * 0.01
-                              }
+                                    item.entry_qty_percent = findstg.quantity * (Math.ceil(Number(item.entry_qty_percent) / 100) * 100) * 0.01,
+                                        item.exit_qty_percent = findstg.quantity * (Math.ceil(Number(item.exit_qty_percent) / 100) * 100) * 0.01
+                                }
 
                             });
 
                             abc.push(data)
-                          }
+                        }
 
-                          if(data1.length > 0){
-                        //    console.log("data1 ",data1.length)
+                        if (data1.length > 0) {
+                            //    console.log("data1 ",data1.length)
                             abc1.push(data1)
-                          }
+                        }
 
                     } catch (error) {
                         console.log("Error fetching data:", error);
@@ -193,34 +191,27 @@ class TradeHistory {
 
                 }
             } else {
-                return  res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
+                return res.send({ status: false, data: GetAllClientServices, msg: "Data Empty" })
             }
-            
-            //console.log("abc.flat()1 ",abc1.flat())
-             var trade_strategy_filter
-             if(abc1.length >0){
 
-              //  console.log("abc1 ",abc1.flat())
+            var trade_strategy_filter
+            if (abc1.length > 0) {
+
 
                 const groupedDataStrategy = abc1.flat().reduce((acc, curr) => {
                     if (!acc[curr.strategy]) {
-                      acc[curr.strategy] = 1;
+                        acc[curr.strategy] = 1;
                     } else {
-                      acc[curr.strategy]++;
+                        acc[curr.strategy]++;
                     }
                     return acc;
-                  }, {});
-                  
-             trade_strategy_filter = Object.keys(groupedDataStrategy);
-             //console.log("trade_strategy_filter ",trade_strategy_filter)
-    
-             }
+                }, {});
+
+                trade_strategy_filter = Object.keys(groupedDataStrategy);
+            }
 
             if (abc.length > 0) {
-               
-                
-               // console.log("trade_strategy_filter ",trade_strategy_filter)
-               return res.send({ status: true, data: abc.flat(), msg: "Get Signals" ,trade_strategy_filter:trade_strategy_filter})
+                return res.send({ status: true, data: abc.flat(), msg: "Get Signals", trade_strategy_filter: trade_strategy_filter })
             } else {
                 return res.send({ status: false, data: [], msg: "Data Empty" })
 

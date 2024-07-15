@@ -86,7 +86,12 @@ const SignalsSchema = Schema({
         type: String,
         default: null
     },
-
+    users_id: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'users'
+        }
+    ],
     createdAt: {
         type: Date,
         default: Date.now
