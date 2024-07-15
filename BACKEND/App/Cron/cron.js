@@ -33,8 +33,6 @@ const token_chain_collection = db_main.collection('token_chain');
 const { DashboardView, deleteDashboard } = require('../../View/DashboardData')
 const { createView } = require('../../View/Open_position')
 
-
-
 const { createViewAlice } = require('../../View/Alice_blue')
 const { createViewAngel } = require('../../View/Angel')
 const { createViewDhan } = require('../../View/dhan')
@@ -50,7 +48,6 @@ const { createViewUpstox } = require('../../View/Upstox')
 const { createViewZebul } = require('../../View/Zebul')
 const { createViewZerodha } = require('../../View/zerodha')
 const { createViewIcicidirect } = require('../../View/Icicidirectview')
-
 
 
  const createAllView = () => {

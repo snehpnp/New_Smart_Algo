@@ -23,7 +23,7 @@ import { Get_All_Service } from "../../../ReduxStore/Slice/Admin/AdminSlice";
 import { GET_ADMIN_TRADE_STATUS } from "../../../ReduxStore/Slice/Admin/TradehistorySlice";
 import { today } from "../../../Utils/Date_formet";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-// import * as Config from "../../Utils/Config";
+
 
 
 import $ from "jquery";
