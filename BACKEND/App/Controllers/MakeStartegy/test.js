@@ -120,28 +120,49 @@ run().catch(console.dir);
 //////////---------------------///////////
 
 
-db.createView("makeStrategyData", "usermakestrategies",
+db.createView("M_48123_makeStrategyData", "usermakestrategies",
     [
         {
           $match: {
-            status: "1"
+            status: "1",
+            timeframe: "",
+            tokensymbol: "48123",
           }
         },
         {
           $lookup: {
-            let: { collectionName: "$indicator" },
-            from: "$$collectionName",
+            from: "M_48123",
             pipeline: [
-              {
-                $match: {
-                  _id: "$$indicatorId"
-                }
-              }
             ],
-            as: "indicatorData"
+            as: "timeFrameData"
           }
-        }
+        },
+        {
+            $lookup: {
+              from: "emaclose3_M_48123",
+              pipeline: [
+              ],
+              as: "emaclose3Data"
+            }
+          }
           
       ]
-  )
+)    
 
+
+
+  
+
+// Yahan pe hum $arrayElemAt operator ka use kar rahe hain taaki specific indexes ko access kiya ja sake arrays se.
+
+// {
+//     "$match": {
+//       "$expr": {
+//         "$and": [
+//           { "$gt": [ { "$arrayElemAt": ["$timeFrameViewData.close", 1] }, { "$arrayElemAt": ["$timeFrameViewData.emaclose3", 1] } ] },
+//           { "$lt": [ { "$arrayElemAt": ["$timeFrameViewData.close", 2] }, { "$arrayElemAt": ["$timeFrameViewData.emaclose3", 2] } ] }
+//         ]
+//       }
+//     }
+//   }
+  

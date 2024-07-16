@@ -1015,8 +1015,8 @@ async function run() {
     while (true) {
       // Delay for 1000 milliseconds (1 second)
       await new Promise(resolve => setTimeout(resolve, 1000));
-      await executeFunction();
-      await exitOpentrade()
+     // await executeFunction();
+      //await exitOpentrade()
     }
 
     // setInterval(async () => {

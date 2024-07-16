@@ -17,6 +17,8 @@ module.exports = function (app) {
     const Get_Option_Chain_modal = db.option_chain_symbols;
     const company = db.company_information;
     const Roledata = db.role;
+    const dbTest = db.dbTest;
+
 
 
     const Broker_information = db.Broker_information;
@@ -42,23 +44,264 @@ module.exports = function (app) {
     const { createViewIcicidirect } = require('./View/Icicidirectview')
 
 
+    app.get("/logicStrategyView", async (req, res) => {
 
 
+         let conditionString = "(data.close[1]>data.emaclose3[1])&&(data.close[6]<data.emaclose3[2])"
 
 
+         const conditions = conditionString.split(/\)\s*\(/); // Split by ') (' to handle multiple conditions
 
-
-
-
-
-
-
-
-
-
-
+         // Build $match stages array
+         const matchStages = conditions.map(condition => {
+           // Extract field names, indexes, and operators
+           const parts = condition.match(/data\.(\w+)\[(\d+)\]([><])/);
+           if (!parts) throw new Error('Invalid condition string format');
+     
+           const fieldName = parts[1]; // e.g., 'close', 'emaclose3'
+           const arrayIndex = parseInt(parts[2]); // e.g., 1, 6
+           const operator = parts[3]; // e.g., '>' or '<'
+          
+           console.log("fieldName",fieldName)
+           console.log("arrayIndex",arrayIndex)
+           console.log("operator",operator)
+           // Determine MongoDB comparison operator
+           const mongoOperator = operator === '>' ? '$gt' : '$lt';
+     
+           // Construct $match stage for this condition
+           return {
+             $expr: {
+               [mongoOperator]: [
+                 { $arrayElemAt: [`$timeFrameViewData.${fieldName}`, arrayIndex] },
+                 { $arrayElemAt: [`$timeFrameViewData.${fieldName}`, arrayIndex] }
+               ]
+             }
+           };
+         });
     
+     
+        console.log("matchStage ",matchStages)
 
+      res.send({status:true,condition:matchStages})
+
+
+
+
+
+
+
+
+
+
+
+
+
+    return
+
+
+
+        const pipeline = [
+
+            {
+                $match: {
+                    status: "1",
+                }
+            }
+
+        ]
+        const result = await UserMakeStrategy.aggregate(pipeline)
+        console.log("result - length ", result.length)
+
+
+        result.forEach(async (ele) => {
+            let collectionViewName = "usermakestrategies"
+            let arraySource = []
+            await ele.condition_array.forEach(async (condition) => {
+                ['first_element', 'second_element'].forEach(async (element) => {
+                    if (condition[element].source !== 'close' && condition[element].source !== 'open' && condition[element].source !== 'high' && condition[element].source !== 'low' && condition[element].source !== 'number') {
+
+                        if (!arraySource.includes(condition[element].source)) {
+                            arraySource.push(condition[element].source)
+                        }
+
+
+                        // await dbTest.collection(viewName).drop();
+                        // console.log(`View ${viewName} dropped successfully`);
+
+                        console.log("ele - id 2", ele._id, "condition[element].source ", condition[element].source)
+
+
+                        // console.log(`Working on timeframe: ${timeframe}`);
+                        // console.log(`Working on tokensymbol: ${tokensymbol}`);
+                        // console.log(`Working on source: ${condition[element].source}`);
+                        // console.log(`Working on offset: ${condition[element].offset}`);
+                        // console.log(`Working on indicator_field: ${condition[element].indicator_field}`);
+                        // console.log(`Working on period: ${condition[element].period}`);
+
+                        // let viewName = condition[element].source + '_M' + timeframe + '_' + tokensymbol;
+                        // let collectionViewName = 'M' + timeframe + '_' + tokensymbol;
+                        // let expMovingAvg = { input: "$" + condition[element].indicator_field, N: parseInt(condition[element].period) }; // Convert period to integer
+
+                        // const pipelineIndicatorView = [
+                        //   { $sort: { _id: -1 } }, // Sorting to get the latest prices first
+                        //   // { $limit: 2 },         // Limiting to the period (adjust this based on your period)
+                        //   {
+                        //     $setWindowFields: {   // Window function to calculate EMA
+                        //       sortBy: { _id: 1 },
+                        //       output: {
+                        //         ema: {
+                        //           $expMovingAvg: { input: expMovingAvg.input, N: expMovingAvg.N }  // Adjust N based on your period
+                        //         }
+                        //       }
+                        //     }
+                        //   },
+                        //   { $project: { ema: 1, _id: 1 } } // Projecting only the ema field, excluding _id
+                        // ];
+
+                        // try {
+                        //   const collections = await dbTradeTools.listCollections().toArray();
+                        //   const collectionExists = collections.some(coll => coll.name === viewName);
+
+                        //   if (!collectionExists) {
+                        //     await dbTradeTools.createCollection(viewName, {
+                        //       viewOn: collectionViewName,
+                        //       pipeline: pipelineIndicatorView
+                        //     });
+                        //     console.log(`View ${viewName} created successfully`);
+                        //   }else{
+                        //     console.log(`View ${viewName} already exists`);
+                        //   }
+                        // } catch (error) {
+                        //   console.error(`Error creating view ${viewName}:`, error);
+                        // }
+
+
+
+                    }
+                });
+            });
+
+
+            if (arraySource.length > 0) {
+                console.log("ele - id", ele._id)
+                console.log("ele timeframe- ", ele.timeframe)
+                console.log("ele token symbol- ", ele.tokensymbol)
+                console.log("IFF timeframedataView plus incator view ", arraySource)
+                let timeFrameView = 'M'+ele.timeframe+'_'+ele.tokensymbol
+                let pipeline = [];
+
+                pipeline.push({
+                    $match: {
+                        status: ele.status,
+                        timeframe: ele.timeframe,
+                        tokensymbol: ele.tokensymbol,
+                        name: ele.name,
+                    }
+                });
+
+                pipeline.push({
+                    $lookup: {
+                        from: timeFrameView,
+                        pipeline: [
+                        ],
+                        as: "timeFrameViewData"
+                    }
+                });
+
+                arraySource.forEach(async (source) => {
+                    pipeline.push({
+                        $lookup: {
+                            from: source + '_M' + ele.timeframe + '_' + ele.tokensymbol,
+                            pipeline: [
+                            ],
+                            as: source + 'Data'
+                        }
+                    });
+                });
+
+            console.log("timeframedataView plus incator view IFF", pipeline)
+               
+             let viewName = 'M' + ele.timeframe + '_' + ele.tokensymbol + '_make_'+ele.name;
+
+               try {
+                  const collections = await dbTest.listCollections().toArray();
+                  const collectionExists = collections.some(coll => coll.name === viewName);
+
+                  if (!collectionExists) {
+                    await dbTest.createCollection(viewName, {
+                      viewOn: collectionViewName,
+                      pipeline: pipeline
+                    });
+                    console.log(`View ${viewName} created successfully`);
+                  }else{
+                    console.log(`View ${viewName} already exists`);
+                  }
+                } catch (error) {
+                  console.error(`Error creating view ${viewName}:`, error);
+                }
+
+            } else {
+                console.log("ele - id", ele._id)
+                console.log("ele timeframe- ", ele.timeframe)
+                console.log("ele token symbol- ", ele.tokensymbol)
+                console.log("ELSE timeframedataView", arraySource)
+
+                let timeFrameView = 'M'+ele.timeframe+'_'+ele.tokensymbol
+                let pipeline = [];
+
+                pipeline.push({
+                    $match: {
+                        status: ele.status,
+                        timeframe: ele.timeframe,
+                        tokensymbol: ele.tokensymbol,
+                        name: ele.name,
+                    }
+                });
+
+                pipeline.push({
+                    $lookup: {
+                        from: timeFrameView,
+                        pipeline: [
+                        ],
+                        as: "timeFrameViewData"
+                    }
+                });
+                console.log("timeframedataView plus incator view ELSE", pipeline)
+
+                let viewName = 'M' + ele.timeframe + '_' + ele.tokensymbol + '_make_'+ele.name;
+
+                try {
+                   const collections = await dbTest.listCollections().toArray();
+                   const collectionExists = collections.some(coll => coll.name === viewName);
+ 
+                   if (!collectionExists) {
+                     await dbTest.createCollection(viewName, {
+                       viewOn: collectionViewName,
+                       pipeline: pipeline
+                     });
+                     console.log(`View ${viewName} created successfully`);
+                   }else{
+                     console.log(`View ${viewName} already exists`);
+                   }
+                 } catch (error) {
+                   console.error(`Error creating view ${viewName}:`, error);
+                 }
+            }
+
+
+
+
+
+
+
+
+
+
+
+        });
+
+        res.send({ STAT: "OKKK" })
+    });
 
 
     // ========================================================================================================
@@ -141,24 +384,24 @@ module.exports = function (app) {
     var CreateDataBase = async (data) => {
         const uri = data;
         const databaseName = "TradeTools"
-        if(uri){
+        if (uri) {
 
             if (!databaseName) {
                 console.log('Database name is required');
             }
-    
+
             try {
                 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
                 await client.connect();
-    
+
                 const db = client.db(databaseName);
                 await db.createCollection('dummy'); // Create a dummy collection to initialize the database
-    
+
                 await client.close();
                 console.log(`Database ${databaseName} created successfully`);
             } catch (error) {
                 console.error(error);
-    
+
             }
         }
     }
@@ -242,7 +485,7 @@ module.exports = function (app) {
             prefix: data.client_key.substring(0, 3),
             domain_url: data.domain,
             domain_url_https: data.backend_rul + '/#/login',
-            broker_url: data.backend_rul+'/signal/broker-signals',
+            broker_url: data.backend_rul + '/signal/broker-signals',
             theme_id: "64d0c04a0e38c94d0e20ee28",
             theme_name: "theme_name",
             disclaimer: "Disclaimer: The risk of loss in trading in any financial markets or exchange can be substantial. These are leveraged products that carry a substantial risk of loss up to your invested capital and may not be suitable for everyone. You should therefore carefully consider whether such trading is suitable for you considering your financial condition. Please ensure that you fully understand the risks involved and do not invest money you cannot afford to lose. Past performance does not guarantee future performance. Historical returns, expected returns, and probability projections are provided for informational and illustrative purposes, and may not reflect actual future performance. SKW Investment Adviser does not guarantee returns in any of its products or services.",
@@ -475,7 +718,7 @@ module.exports = function (app) {
     // =====================================================================================================================
 
 
-    app.get("/UpdateServicesToken", async (req, res) => { 
+    app.get("/UpdateServicesToken", async (req, res) => {
         TokenSymbolUpdate()
 
     })
@@ -539,7 +782,7 @@ module.exports = function (app) {
 
 
 
-        return  res.send({ status: true })
+        return res.send({ status: true })
 
 
 
@@ -1042,13 +1285,13 @@ module.exports = function (app) {
                 });
             });
 
-            return  res.send({ data: "okk" })
+        return res.send({ data: "okk" })
     });
 
 
     app.get("/test", (req, res) => {
         MainSignalsRemainToken()
-        return  res.send("DONEE")
+        return res.send("DONEE")
     })
 
     app.get('/dropOpenPosition', async (req, res) => {
@@ -1058,18 +1301,18 @@ module.exports = function (app) {
 
     app.get('/createView', async (req, res) => {
         createViewFyers();
-        return  res.send({ msg: "Create View Done!  !!" })
+        return res.send({ msg: "Create View Done!  !!" })
     })
 
     app.get('/brokerView', async (req, res) => {
         //createViewUpstox()
         createViewDhan();
-        return  res.send({ msg: "Create View broker!  !!" })
+        return res.send({ msg: "Create View broker!  !!" })
     })
 
     app.get('/dashboard-view', async (req, res) => {
         DashboardView()
-        return   res.send({ msg: "Dashboard view create Done!!!" })
+        return res.send({ msg: "Dashboard view create Done!!!" })
     })
 
     app.get('/AccelpixTokenUpdate', async (req, res) => {
@@ -1129,7 +1372,7 @@ module.exports = function (app) {
 
 
 
-            return  res.send({ msg: "okk" })
+        return res.send({ msg: "okk" })
     })
 
     app.get("/optionStockData", async (req, res) => {
@@ -1357,7 +1600,7 @@ module.exports = function (app) {
 
 
 
-        return   res.send("Donee")
+        return res.send("Donee")
 
 
 

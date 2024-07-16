@@ -4,6 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 const uri = process.env.MONGO_URI
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const dbTradeTools = client.db(process.env.DB_TRADETOOLS);
+const dbTest = client.db(process.env.DB_NAME);
 const db_GET_VIEW = client.db(process.env.DB_NAME);
 const get_open_position_view = db_GET_VIEW.collection('open_position');
 const aliceblueView = db_GET_VIEW.collection('aliceblueView');
@@ -59,6 +60,7 @@ module.exports = {
     open_position:open_position,
     open_position_excute:open_position_excute,
     dbTradeTools:dbTradeTools,
+    dbTest:dbTest,
     Store_all_redis_key : require('./Store_all_redis_key.model'),
 
 
