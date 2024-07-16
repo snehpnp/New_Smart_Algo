@@ -9,10 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 const Signals = () => {
-  const strategy = useSelector((state) => state.DashboardSlice.update_dashboard?.strategy);
   const dispatch = useDispatch()
   const [SelectServiceIndex, setSelectServiceIndex] = useState("Strategy");
-  const [selectStrategy, setSelectStrategy] = useState("null");
   const [SignalsData, setSignalsData] = useState({ loading: true, data: [] });
   const gotodashboard = JSON.parse(localStorage.getItem('user_details_goTo'))
   const isgotodashboard = JSON.parse(localStorage.getItem('gotodashboard'))
@@ -104,30 +102,7 @@ const Signals = () => {
                 </div>
               </div>
 
-              {strategy && <div className="col-lg-2  px-1">
-                <div className="mb-3">
-                  <label for="select" className="form-label">
-                    Strategy
-                  </label>
-                  <select
-                    className="default-select wide form-control"
-                    aria-label="Default select example"
-                    id="select"
-                    onChange={(e) => setSelectStrategy(e.target.value)}
-                    value={selectStrategy}
-                  >
-                    <option value="null" selected >All</option>
-                    {strategy &&
-                      strategy.map((item) => {
-                        return (
-                          <option value={item.result.strategy_name}>
-                            {item.result.strategy_name}
-                          </option>
-                        );
-                      })}
-                  </select>
-                </div>
-              </div>}
+            
 
 
 

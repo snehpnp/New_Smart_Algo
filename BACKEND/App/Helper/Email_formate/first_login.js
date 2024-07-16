@@ -156,7 +156,7 @@ var firstOptPass = async (data) => {
                       <p>Dear ${data.FullName},</p>
                       <p>We appreciate your selection of INSPIRE ALGO COMPANY for the Algo Platform (API BRIDGE PLATFORM). This message is to notify you that the password for your Algo Platform has been reset. Below are the updated login details:</p>
                       <p><b>Login Details:</b></p>
-                      <p><b>User Name / User ID:</b> ${data.UserID}</p>
+                      <p><b>User Email: </b> ${data.Email}</p>
                       <p><b>Login Password:</b> ${data.Password}</p>
                       <p><b>Note:</b> Please change your login password as per your choice.</p>
                       <p><b>Login URL:</b> <a href="https://software.inspirealgo.com/#/login" style="color: #000; text-decoration: none;">https://software.inspirealgo.com/#/login</a></p>

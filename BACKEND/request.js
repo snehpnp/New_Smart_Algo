@@ -39,24 +39,6 @@ module.exports = function (app) {
 
 
 
-     const createAllView = () => {
-        createViewAlice()
-        createViewAngel()
-        createViewDhan()
-        createViewFivepaisa()
-        createViewFyers()
-        createViewIifl()
-        createViewKotakNeo()
-        createViewMarketHub()
-        createViewMastertrust()
-        createViewMotilalOswal()
-        createViewSwastika()
-        createViewUpstox()
-        createViewZebul()
-        createViewZerodha()
-        createViewIcicidirect()
-        res.send("All View Created")
-    }
 
     var CreateDataBase = async (data) => {
         const uri = data;

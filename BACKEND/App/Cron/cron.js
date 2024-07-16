@@ -50,24 +50,7 @@ const { createViewZerodha } = require('../../View/zerodha')
 const { createViewIcicidirect } = require('../../View/Icicidirectview')
 
 
- const createAllView = () => {
-    createViewAlice()
-    createViewAngel()
-    createViewDhan()
-    createViewFivepaisa()
-    createViewFyers()
-    createViewIifl()
-    createViewKotakNeo()
-    createViewMarketHub()
-    createViewMastertrust()
-    createViewMotilalOswal()
-    createViewSwastika()
-    createViewUpstox()
-    createViewZebul()
-    createViewZerodha()
-    createViewIcicidirect()
-    res.send("All View Created")
-}
+
 
 // shedule delete symbol
 cron.schedule('10 23 * * *', () => {
@@ -128,7 +111,22 @@ cron.schedule('*/5 * * * *', async () => {
 
 
 cron.schedule('* 9 * * *', async () => {
-    createAllView()
+    Console.log("Run Every 09:00 ", new Date())
+    createViewAlice()
+    createViewAngel()
+    createViewDhan()
+    createViewFivepaisa()
+    createViewFyers()
+    createViewIifl()
+    createViewKotakNeo()
+    createViewMarketHub()
+    createViewMastertrust()
+    createViewMotilalOswal()
+    createViewSwastika()
+    createViewUpstox()
+    createViewZebul()
+    createViewZerodha()
+    createViewIcicidirect()
 });
 
 

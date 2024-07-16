@@ -242,7 +242,6 @@ app.get('/r', (req, res) => {
 
 // BROKER REQUIRES
 const aliceblue = require('./Broker/aliceblue')
-
 const angel = require('./Broker/angel')
 const fivepaisa = require('./Broker/fivepaisa')
 const zerodha = require('./Broker/zerodha')
@@ -253,7 +252,6 @@ const markethub = require('./Broker/markethub')
 const swastika = require('./Broker/swastika')
 const mastertrust = require('./Broker/mastertrust')
 const kotakneo = require('./Broker/kotakneo')
-
 const iiflView = require('./Broker/Iifl')
 const Motilaloswal = require('./Broker/Motilaloswal')
 const Zebull = require('./Broker/Zebull')
@@ -1300,17 +1298,6 @@ app.post('/broker-signals', async (req, res) => {
             //End Process Tading View Client icicidirect 
 
 
-
-
-
-
-
-
-
-
-
-
-
           }
 
           option_type = option_type.toUpperCase();
@@ -1441,7 +1428,8 @@ app.post('/broker-signals', async (req, res) => {
               exit_time1: 0,
               complete_trade: 0,
               sl_status: sl_status,
-              MakeStartegyName: MakeStartegyName
+              MakeStartegyName: MakeStartegyName,
+              Entry_users_id: uniqueUserIds ? uniqueUserIds : []
 
             }
             const Entry_MainSignals = new MainSignals(Entry_MainSignals_req)
@@ -1513,7 +1501,8 @@ app.post('/broker-signals', async (req, res) => {
                   exit_qty_percent: exit_qty_percent1,
                   exit_qty: result,
                   exit_dt_date: current_date,
-                  exit_status: ExitStatus
+                  exit_status: ExitStatus,
+                  Exit_users_id: uniqueUserIds ? uniqueUserIds : []
                 }
                 updatedData.$addToSet = { signals_id: SignalSave._id };
 
@@ -1535,7 +1524,8 @@ app.post('/broker-signals', async (req, res) => {
                     exit_qty_percent: (parseFloat(qty_percent) + (isNaN(ExitMainSignals[0].exit_qty_percent) || ExitMainSignals[0].exit_qty_percent === "" ? 0 : parseFloat(ExitMainSignals[0].exit_qty_percent))),
                     exit_qty: result,
                     exit_dt_date: current_date,
-                    exit_status: ExitStatus
+                    exit_status: ExitStatus,
+                    Exit_users_id: uniqueUserIds ? uniqueUserIds : []
                   }
                   updatedData.$addToSet = { signals_id: SignalSave._id };
 

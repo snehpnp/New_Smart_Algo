@@ -13,6 +13,8 @@ import DetailsView from "./DetailsView";
 import { GetAccessToken } from "../../../Service/Alice_Socket";
 import { FunctionForLivePriceCalculation } from "./tradehistoryCalculation";
 import DatePicker from "react-datepicker";
+import Loader from "../../../Utils/Loader";
+
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -31,11 +33,9 @@ const TradeHistory = () => {
   const [SelectServiceIndex, setSelectServiceIndex] = useState("null");
   const [selectStrategy, setSelectStrategy] = useState("null");
   const [tradeHistoryData, setTradeHistoryData] = useState({ loading: true, data: [] });
-  const [getType, setType] = useState("null");
+  const [getType, setType] = useState("Strategy");
 
 
-
-  const strategy = useSelector((state) => state.DashboardSlice.update_dashboard?.strategy);
   const USerStartDate = useSelector((state) => state.CommonSlice?.profiledata?.data?.CreateDate);
   const formattedStartDate = USerStartDate ? new Date(USerStartDate).toISOString().split('T')[0] : "";
 
@@ -58,17 +58,26 @@ const TradeHistory = () => {
 
   };
 
+
+
   const getsignals11 = async (e) => {
     let abc = new Date();
-    let month = abc.getMonth() + 1;
-    let date = abc.getDate();
-    let year = abc.getFullYear();
-    let full = `${year}/${month}/${date}`;
+
+    let startDate1 = new Date(abc);
+    startDate1.setHours(0, 1, 0, 0);
+
+    // End of the day
+    let endDate1 = new Date(abc);
+    endDate1.setHours(23, 59, 59, 999);
+
+    const formattedFromDate = fromDate ? fromDate : startDate1;
+    const formattedToDate = toDate ? toDate.setHours(23, 59, 59, 999) : endDate1;
+
     await dispatch(
       Get_Tradehisotry({
         user_id: gotodashboard ? gotodashboard_Details.user_id : user_id,
-        startDate: "2024/6/15",
-        endDate: "2024/7/15",
+        startDate: formattedFromDate,
+        endDate: formattedToDate,
         serviceIndex: SelectServiceIndex,
         selectStrategy: selectStrategy,
         token: token,
@@ -229,7 +238,11 @@ const TradeHistory = () => {
   };
 
 
-  const ResetAllData = (e) => { };
+  const ResetAllData = (e) => {
+    setFromDate("");
+    setToDate("");
+    setType("Strategy");
+  };
 
 
   useEffect(() => {
@@ -238,7 +251,7 @@ const TradeHistory = () => {
 
   useEffect(() => {
     getsignals11();
-  }, [SelectServiceIndex, selectStrategy]);
+  }, [fromDate, toDate, getType]);
 
   useEffect(() => {
     ShowLivePrice();
@@ -282,6 +295,8 @@ const TradeHistory = () => {
               selected={fromDate}
               onChange={(date) => handleFromDateChange(date)}
               minDate={formattedStartDate}
+              maxDate={new Date()}
+
               placeholderText="Select a date"
               dateFormat="yyyy-MM-dd"
               className="form-control"
@@ -301,6 +316,7 @@ const TradeHistory = () => {
               selected={toDate}
               onChange={(date) => handleToDateChange(date)}
               minDate={fromDate ? fromDate : formattedStartDate}
+              maxDate={new Date()}
               placeholderText="Select a date"
               dateFormat="yyyy-MM-dd"
               className="form-control"
@@ -329,30 +345,6 @@ const TradeHistory = () => {
           </div>
         </div>
 
-        {/* {strategy && <div className="col-lg-2  px-1">
-          <div className="mb-3">
-            <label for="select" className="form-label">
-              Strategy
-            </label>
-            <select
-              className="default-select wide form-control"
-              aria-label="Default select example"
-              id="select"
-              onChange={(e) => setSelectStrategy(e.target.value)}
-              value={selectStrategy}
-            >
-              <option value="null" selected >All</option>
-              {strategy &&
-                strategy.map((item) => {
-                  return (
-                    <option value={item.result.strategy_name}>
-                      {item.result.strategy_name}
-                    </option>
-                  );
-                })}
-            </select>
-          </div>
-        </div>} */}
 
         <div className="col-lg-2  px-1">
           <div className="mb-3">
@@ -361,29 +353,24 @@ const TradeHistory = () => {
             </button>
           </div>
         </div>
-
       </div>
 
-      {tradeHistoryData.data && tradeHistoryData.data.length === 0 ? (
+
+      <div className="table-responsive">
+        {tradeHistoryData.data && tradeHistoryData.data.length > 0 ?
+          total >= 0 ?
+            <h4 >Total Realised P/L : <span style={{ color: "green" }}> {total.toFixed(2)}</span> </h4> :
+            <h4 >Total Realised P/L : <span style={{ color: "red" }}> {total.toFixed(2)}</span> </h4> : ""
+        }
+      </div>
+
+
+      {tradeHistoryData && tradeHistoryData.loading ? <Loader /> :
         <FullDataTable
           TableColumns={columns}
           tableData={tradeHistoryData.data}
-        />
-      ) : (
-        <>
-          <div className="table-responsive">
-            {tradeHistoryData.data.length > 0 ?
-              total >= 0 ?
-                <h4 >Total Realised P/L : <span style={{ color: "green" }}> {total.toFixed(2)}</span> </h4> :
-                <h4 >Total Realised P/L : <span style={{ color: "red" }}> {total.toFixed(2)}</span> </h4> : ""
-            }
-          </div>
-          <FullDataTable
-            TableColumns={columns}
-            tableData={tradeHistoryData.data}
-          />
-        </>
-      )}
+        />}
+
 
 
       <DetailsView

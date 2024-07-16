@@ -14,7 +14,6 @@ class Signals {
         try {
             const { user_id, type } = req.body;
 
-            console.log("type", type);
 
             const objectId = new ObjectId(user_id);
 

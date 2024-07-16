@@ -27,47 +27,50 @@ const BrokerResponse = () => {
   const [DashboardData, setDashboardData] = useState({ loading: true, data: [] });
   const [updatedData, setUpdatedData] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
-  const [refresh, setrefresh] = useState(false);
+
 
 
   const handleCloseStartegyModal = () => {
     setShowStartegyModal(false);
     setModalsingleValue({})
   }
+
   const handleShowStartegyModal = (data) => {
     setModalsingleValue(data)
     setShowStartegyModal(true);
   }
 
+  const getservice = async () => {
+    await dispatch(
+      User_Dashboard_Data({
+        user_Id: gotodashboard ? GoToDahboard_id.user_id : user_details.user_id,
+        AdminToken: user_details.token,
+      })
+    )
+      .unwrap()
+      .then((response) => {
+        if (response.status) {
+
+          setDashboardData({
+            loading: false,
+            data: response.services,
+          });
+
+          setStrategy({
+            loading: false,
+            data: response.strategy,
+          });
+
+          setGetServiceStrategy(response.GetServiceStrategy);
+          setStatusStartegy(response.status_startegy);
+        }
+      });
+  };
+  
   useEffect(() => {
-    const getservice = async () => {
-      await dispatch(
-        User_Dashboard_Data({
-          user_Id: gotodashboard ? GoToDahboard_id.user_id : user_details.user_id,
-          AdminToken: user_details.token,
-        })
-      )
-        .unwrap()
-        .then((response) => {
-          if (response.status) {
-
-            setDashboardData({
-              loading: false,
-              data: response.services,
-            });
-
-            setStrategy({
-              loading: false,
-              data: response.strategy,
-            });
-
-            setGetServiceStrategy(response.GetServiceStrategy);
-            setStatusStartegy(response.status_startegy);
-          }
-        });
-    };
+ 
     getservice();
-  }, [refresh]);
+  }, []);
 
 
 
@@ -232,7 +235,7 @@ const BrokerResponse = () => {
         setIsUpdating(false);
         if (response.status) {
           toast.success(response.msg);
-          window.location.reload()
+          getservice()
 
         } else {
           toast.error(response.msg);
@@ -260,67 +263,113 @@ const BrokerResponse = () => {
               <th>Trading </th>
             </tr>
           </thead>
-        
+
           {DashboardData.loading ? <Loader /> :
-           <tbody >
-            {DashboardData.data &&
-              DashboardData.data.map((data, index) => {
-                return (
-                  <>
-                    <tr>
-                      <th>{index + 1}</th>
-                      <td>{`${data.service.name}[${data.categories.segment}]`}</td>
-                      <td>{data.service.lotsize}</td>
-                      <td>{data.servicegroup_services_ids.group_qty}</td>
-                      <td>
-                        <div className="row d-flex">
-                          <div className="col-lg-12">
-                            <input
-                              key={index}
-                              type="number"
-                              name="lot_size"
-                              className="form-control"
-                              id="lot_size"
-                              placeholder="Enter Qty"
-                              min={1}
+            <tbody >
+              {DashboardData.data &&
+                DashboardData.data.map((data, index) => {
+                  return (
+                    <>
+                      <tr>
+                        <th>{index + 1}</th>
+                        <td>{`${data.service.name}[${data.categories.segment}]`}</td>
+                        <td>{data.service.lotsize}</td>
+                        <td>{data.servicegroup_services_ids.group_qty}</td>
+                        <td>
+                          <div className="row d-flex">
+                            <div className="col-lg-12">
+                              <input
+                                key={index}
+                                type="number"
+                                name="lot_size"
+                                className="form-control"
+                                id="lot_size"
+                                placeholder="Enter Qty"
+                                min={1}
 
 
-                              onChange={
-                                (e) => {
-                                  setgroup_qty_value_test(
-                                    e,
-                                    data.service.name,
-                                    data.service,
-                                    data
-                                  )
+                                onChange={
+                                  (e) => {
+                                    setgroup_qty_value_test(
+                                      e,
+                                      data.service.name,
+                                      data.service,
+                                      data
+                                    )
+                                  }
                                 }
-                              }
-                              defaultValue={data.lot_size}
-                            />
+                                defaultValue={data.lot_size}
+                              />
+                            </div>
+
                           </div>
+                        </td>
 
-                        </div>
-                      </td>
+                        <td>{inputValue[data.service.name] ? parseInt(inputValue[data.service.name]) * parseInt(data.service.lotsize) :
+                          parseInt(data.lot_size) * parseInt(data.service.lotsize)}</td>
 
-                      <td>{inputValue[data.service.name] ? parseInt(inputValue[data.service.name]) * parseInt(data.service.lotsize) :
-                        parseInt(data.lot_size) * parseInt(data.service.lotsize)}</td>
-
-                      <td className="color-primary col-md-2">
-                        {data.userInfo.multiple_strategy_select === "1" ?
-                          // "Multiple Startegy Select"
+                        <td className="color-primary col-md-2">
+                          {data.userInfo.multiple_strategy_select === "1" ?
+                            // "Multiple Startegy Select"
 
 
 
-                          <Button variant="primary" onClick={() => handleShowStartegyModal(data)}>
-                            Selected Strategy
-                          </Button>
+                            <Button variant="primary" onClick={() => handleShowStartegyModal(data)}>
+                              Selected Strategy
+                            </Button>
 
-                          :
+                            :
 
-                          //  "Single Strategy Select"
+                            //  "Single Strategy Select"
+                            <select
+                              name="strategy_id"
+
+                              className="form-select form-select-lg "
+                              aria-label=".form-select-lg example"
+                              onChange={(e) =>
+                                setgroup_qty_value_test(
+                                  e,
+                                  data.service.name,
+                                  data.service,
+                                  data
+                                )
+                              }
+
+                            >
+                              <option
+                                value={Strategy.data && Strategy.data.map((item) => { if (data.strategy_id.includes(item.result._id)) { return item.result._id } })}
+
+
+                                className="text-success h6"
+                                selected
+                                disabled
+                              >
+                                {Strategy.data && Strategy.data.map((item) => { if (data.strategy_id.includes(item.result._id)) { return item.result.strategy_name } })}
+                              </option>
+                              {Strategy.data &&
+                                Strategy.data.map((item) => {
+
+                                  if (data.strategy_id.includes(item.result._id)) { } else {
+                                    return (
+                                      <option
+                                        className="text-danger h6"
+                                        value={item.result._id}
+                                      >
+                                        {item.result.strategy_name}
+                                      </option>
+                                    );
+                                  }
+
+                                })
+                              }
+                            </select>
+                          }
+
+                        </td>
+
+                        <td className="color-primary">
                           <select
-                            name="strategy_id"
-
+                            name="order_type"
                             className="form-select form-select-lg "
                             aria-label=".form-select-lg example"
                             onChange={(e) =>
@@ -331,88 +380,19 @@ const BrokerResponse = () => {
                                 data
                               )
                             }
-
+                            defaultValue={data.order_type}
                           >
-                            <option
-                              value={Strategy.data && Strategy.data.map((item) => { if (data.strategy_id.includes(item.result._id)) { return item.result._id } })}
-
-
-                              className="text-success h6"
-                              selected
-                              disabled
-                            >
-                              {Strategy.data && Strategy.data.map((item) => { if (data.strategy_id.includes(item.result._id)) { return item.result.strategy_name } })}
-                            </option>
-                            {Strategy.data &&
-                              Strategy.data.map((item) => {
-
-                                if (data.strategy_id.includes(item.result._id)) { } else {
-                                  return (
-                                    <option
-                                      className="text-danger h6"
-                                      value={item.result._id}
-                                    >
-                                      {item.result.strategy_name}
-                                    </option>
-                                  );
-                                }
-
-                              })
-                            }
+                            <option value="1">MARKET</option>
+                            <option value="2">LIMIT</option>
+                            <option value="3">STOPLOSS LIMIT</option>
+                            <option value="4">STOPLOSS MARKET</option>
                           </select>
-                        }
-
-                      </td>
-
-                      <td className="color-primary">
-                        <select
-                          name="order_type"
-                          className="form-select form-select-lg "
-                          aria-label=".form-select-lg example"
-                          onChange={(e) =>
-                            setgroup_qty_value_test(
-                              e,
-                              data.service.name,
-                              data.service,
-                              data
-                            )
-                          }
-                          defaultValue={data.order_type}
-                        >
-                          <option value="1">MARKET</option>
-                          <option value="2">LIMIT</option>
-                          <option value="3">STOPLOSS LIMIT</option>
-                          <option value="4">STOPLOSS MARKET</option>
-                        </select>
-                      </td>
-                      <td className="color-primary">
-                        <select
-                          name="product_type"
-                          className="form-select form-select-lg "
-                          aria-label=".form-select-lg example"
-                          onChange={(e) =>
-                            setgroup_qty_value_test(
-                              e,
-                              data.service.name,
-                              data.service,
-                              data
-                            )
-                          }
-                          defaultValue={data.product_type}
-                        >
-                          <option value="2">MIS</option>
-                          <option value="1">CNC</option>
-                          <option value="3">BO</option>
-                          <option value="4">CO</option>
-                        </select>
-                      </td>
-                      <td className="color-primary">
-                        <label className="toggle">
-                          <input
-                            className="toggle-checkbox bg-primary"
-                            type="checkbox"
-                            name="active_status"
-                            defaultChecked={data.active_status === "1"}
+                        </td>
+                        <td className="color-primary">
+                          <select
+                            name="product_type"
+                            className="form-select form-select-lg "
+                            aria-label=".form-select-lg example"
                             onChange={(e) =>
                               setgroup_qty_value_test(
                                 e,
@@ -421,24 +401,47 @@ const BrokerResponse = () => {
                                 data
                               )
                             }
-                          />
+                            defaultValue={data.product_type}
+                          >
+                            <option value="2">MIS</option>
+                            <option value="1">CNC</option>
+                            <option value="3">BO</option>
+                            <option value="4">CO</option>
+                          </select>
+                        </td>
+                        <td className="color-primary">
+                          <label className="toggle">
+                            <input
+                              className="toggle-checkbox bg-primary"
+                              type="checkbox"
+                              name="active_status"
+                              defaultChecked={data.active_status === "1"}
+                              onChange={(e) =>
+                                setgroup_qty_value_test(
+                                  e,
+                                  data.service.name,
+                                  data.service,
+                                  data
+                                )
+                              }
+                            />
 
-                          <div
-                            className={`toggle-switch ${data.active_status === "1"
-                              ? "bg-primary"
-                              : "bg-secondary"
-                              }`}
-                          ></div>
-                        </label>
-                      </td>
-                    </tr>
-                  </>
-                );
-              })}
+                            <div
+                              className={`toggle-switch ${data.active_status === "1"
+                                ? "bg-primary"
+                                : "bg-secondary"
+                                }`}
+                            ></div>
+                          </label>
+                        </td>
+                      </tr>
+                    </>
+                  );
+                })}
 
-            <ToastButton />
+              <ToastButton />
 
-          </tbody>}
+            </tbody>}
 
         </table>
       </div>

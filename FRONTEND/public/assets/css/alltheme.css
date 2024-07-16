@@ -1778,3 +1778,33 @@ button.button_sell.active {
     background: #FF0000;
     color: white;
 }
+
+/* .table-container {
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  
+  .table-responsive {
+    overflow-y: auto;
+  }
+  
+  .fiXed-header th {
+    position: sticky;
+    top: 0;
+    background-color: #007bff;
+    color: #fff;
+    z-index: 1;
+  }
+   */
+
+    .react-bootstrap-table {
+    height: 400px !important;
+    overflow-y: auto !important;
+  } 
+
+  .header-class
+  {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }

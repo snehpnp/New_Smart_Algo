@@ -128,6 +128,18 @@ const MainSignalsSchema = Schema({
             ref: 'signals'
         }
     ],
+   Entry_users_id: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'users'
+        }
+    ],
+    Exit_users_id: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'users'
+        }
+    ],
     createdAt: {
         type: Date,
         default: Date.now
