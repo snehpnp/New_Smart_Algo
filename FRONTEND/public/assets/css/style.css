@@ -46527,21 +46527,21 @@ body {
   margin-top: 200px;
 }
 
-.loader {
+/* .loader {
   font-weight: bold;
   font-family: monospace;
   font-size: 30px;
   clip-path: inset(0 3ch 0 0);
   animation: l4 1s steps(4) infinite;
-}
+} */
 
-@keyframes l4 {
+/* @keyframes l4 {
   0%, 100% { clip-path: inset(0 3ch 0 0); }
   25% { clip-path: inset(0 2ch 0 0); }
   50% { clip-path: inset(0 1ch 0 0); }
   75% { clip-path: inset(0 0ch 0 0); }
 }
-
+ */
 
 
 .image-container {
@@ -46584,7 +46584,6 @@ body {
 }
 
 
-/*.loader  */
 
 .loader {
   font-weight: bold;
@@ -46597,4 +46596,3 @@ body {
 }
 @keyframes l1 {to{opacity: 0}}
 
-/*.loader  */

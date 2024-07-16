@@ -66,9 +66,9 @@ const BrokerResponse = () => {
         }
       });
   };
-  
+
   useEffect(() => {
- 
+
     getservice();
   }, []);
 
@@ -247,24 +247,26 @@ const BrokerResponse = () => {
 
   return (
     <Content Page_title="Dashboard" button_status={false}>
-      <div className="table-responsive " style={{ height: '55vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
-        <table className="table dashboard-table ">
-          <thead className="bg-primary">
-            <tr>
-              <th>#</th>
-              <th>Symbol</th>
-              <th>lot size</th>
-              <th>max Qty</th>
-              <th>No.Of Lot</th>
-              <th>Quantity</th>
-              <th>Strategy</th>
-              <th>Order Type</th>
-              <th>Product Type</th>
-              <th>Trading </th>
-            </tr>
-          </thead>
+      <div className="table-responsive " style={{ height: '50vh', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
 
-          {DashboardData.loading ? <Loader /> :
+
+        {DashboardData.loading ?
+          <Loader /> :
+          <table className="table dashboard-table ">
+            <thead className="bg-primary">  
+              <tr>
+                <th>#</th>
+                <th>Symbol</th>
+                <th>lot size</th>
+                <th>max Qty</th>
+                <th>No.Of Lot</th>
+                <th>Quantity</th>
+                <th>Strategy</th>
+                <th>Order Type</th>
+                <th>Product Type</th>
+                <th>Trading </th>
+              </tr>
+            </thead>
             <tbody >
               {DashboardData.data &&
                 DashboardData.data.map((data, index) => {
@@ -441,9 +443,11 @@ const BrokerResponse = () => {
 
               <ToastButton />
 
-            </tbody>}
+            </tbody>
+          </table>
 
-        </table>
+        }
+
       </div>
 
 
