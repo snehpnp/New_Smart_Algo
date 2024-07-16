@@ -309,30 +309,7 @@ const Header = ({ ChatBox }) => {
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">
               <div className="header-left">
-              <div className="headaer-title">
-                        <h3 className="font-w400 mb-0 pe-1">Api Login </h3>
-                      </div>
 
-                      <div className="Api Login">
-                        <label className="switch mb-0">
-                          <input
-                            type="checkbox"
-                            className="bg-primary"
-                            checked={
-                              UserDetails.TradingStatus === "on" ? true : false
-                            }
-                            onClick={(e) =>
-                              LogIn_WIth_Api(
-                                e.target.checked,
-                                UserDetails.broker,
-                                UserDetails.TradingStatus,
-                                UserDetails
-                              )
-                            }
-                          />
-                          <span className="slider round"></span>
-                        </label>
-                      </div>
               </div>
               <ul className="navbar-nav header-right">
             
