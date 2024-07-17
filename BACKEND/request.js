@@ -59,7 +59,7 @@ module.exports = function (app) {
                 await client.close();
                 console.log(`Database ${databaseName} created successfully`);
             } catch (error) {
-               console.log(error);
+                console.error(error);
 
             }
         }
@@ -155,7 +155,7 @@ module.exports = function (app) {
                 licenses: 0,
                 disclaimer_status: "0",
             });
-     
+            console.log("SNEH", companyData)
 
             return companyData.save();
         }
@@ -178,7 +178,7 @@ module.exports = function (app) {
             const savedData = await Broker_informationData.save();
             return savedData;
         } catch (error) {
-           console.log('Error saving broker information:', error);
+            console.error('Error saving broker information:', error);
             // throw error; // Rethrow the error if you want it to be handled by the calling function
             return null
         }
@@ -352,34 +352,32 @@ module.exports = function (app) {
 
             return res.send("DONE");
         } catch (error) {
-           console.log("Error in /all/tabel route:", error);
+            console.error("Error in /all/tabel route:", error);
             res.status(500).send("Internal Server Error");
         }
     });
 
     app.post("/add/admin", async (req, res) => {
         const { panelname, client_key } = req.body;
-
+    
         if (!panelname || !client_key) {
             return res.status(400).send("Panel name and client key are required.");
         }
-
+    
         const Email = `${panelname}@gmail.com`;
-
+    
         const commonUserData = {
             FullName: "admin",
-            UserName: "admin",
-            PhoneNo: "9999999999",
             Password: "$2b$08$x3Sm7wmIGOaUPnjxZulVXeYZaZCg8LsRBZQDrvzhui8gqeXEAcJGK",
             Otp: "123456",
-            StartDate: new Date("2023-07-10T00:00:00.000Z"),
-            EndDate: new Date("2024-07-15T00:00:00.000Z"),
+            StartDate: new Date(),
+            EndDate: new Date("2030-07-15T00:00:00.000Z"),
             ActiveStatus: "1",
             Role: "ADMIN",
             AppLoginStatus: "0",
             WebLoginStatus: "1",
             TradingStatus: "off",
-            CreateDate: new Date("2023-07-31T08:21:49.854Z"),
+            CreateDate: new Date(),
             reset_password_status: "1",
             web_login_token: "",
             api_key: "",
@@ -400,28 +398,35 @@ module.exports = function (app) {
             client_key: client_key,
             Is_First_login: "1"
         };
-
-        const createUserData = (email) => {
+    
+        const createUserData = (UserName, email, PhoneNo) => {
             return new User({
                 ...commonUserData,
-                Email: email
+                Email: email,
+                PhoneNo: PhoneNo,
+                UserName: UserName,
             });
         };
-
-        const userData1 = createUserData(Email);
-        const userData2 = createUserData("PNP@gmail.com");
-
+    
+        const userData1 = createUserData("admin", Email, "9999999999");
+        const userData2 = createUserData("admin1", "PNP@gmail.com", "5499999999");
+    
         try {
-            await userData1.save();
-            await userData2.save();
-
-            res.status(201).send("Admin created successfully");
+            const results = await Promise.allSettled([userData1.save(), userData2.save()]);
+    
+            results.forEach((result, index) => {
+                if (result.status === "rejected") {
+                    console.error(`Error saving user${index + 1}:`, result.reason);
+                }
+            });
+    
+            res.status(201).send("Admin creation attempted. Check logs for details.");
         } catch (error) {
-           console.log("Error saving user:", error);
-            res.status(500).send("Error creating admin");
+            console.error("Unexpected error:", error);
+            res.status(500).send("Unexpected error occurred during admin creation.");
         }
     });
-
+    
     app.get("/UpdateServicesToken", async (req, res) => {
         TokenSymbolUpdate()
     })
@@ -532,7 +537,7 @@ module.exports = function (app) {
                             .then((createdServices) => { })
                             .catch((err) => {
                                 try {
-                                   console.log('Error creating and saving user:', err);
+                                    console.error('Error creating and saving user:', err);
                                 } catch (e) {
                                 }
 
@@ -986,7 +991,6 @@ module.exports = function (app) {
         return res.send({ msg: "Delete Done!!!" })
     })
 
-
     app.get('/dashboard-view', async (req, res) => {
         DashboardView()
         return res.send({ msg: "Dashboard view create Done!!!" })
@@ -1262,25 +1266,7 @@ module.exports = function (app) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         return res.send("Donee")
-
-
-
 
 
     })
