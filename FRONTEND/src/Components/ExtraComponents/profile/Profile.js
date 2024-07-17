@@ -34,8 +34,10 @@ const UserProfile = () => {
     const userId = isgotodashboard ? gotodashboard.user_id : user_details.user_id;
     const token = isgotodashboard ? gotodashboard.token : user_details.token;
 
-    await dispatch(User_Profile({   id: userId,
-      token: token,}))
+    await dispatch(User_Profile({
+      id: userId,
+      token: token,
+    }))
       .unwrap()
       .then((response) => {
         if (response.status) {
@@ -251,15 +253,16 @@ const UserProfile = () => {
                             </div>
                             <div className="col-sm-9 col-7">
                               <span>
-                                {UserDetails && UserDetails.data.PhoneNo}
+                                {UserDetails.data && UserDetails.data?.PhoneNo && `${'*'.repeat(UserDetails.data.PhoneNo.length - 4)}${UserDetails.data.PhoneNo.slice(-4)}`}
                               </span>
+
                             </div>
                           </div>
 
                           <div className="row mb-2">
                             <div className="col-sm-3 col-5">
                               <h5 className="f-w-500">
-                              PANEL_CLIENT_KEY <span className="pull-end">:</span>
+                                PANEL_CLIENT_KEY <span className="pull-end">:</span>
                               </h5>
                             </div>
                             <div className="col-sm-9 col-7">

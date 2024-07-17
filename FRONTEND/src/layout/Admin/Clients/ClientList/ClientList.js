@@ -24,7 +24,6 @@ const AllClients = () => {
   const dispatch = useDispatch();
   const user_details = JSON.parse(localStorage.getItem("user_details"));
 
-
   const [refresh, setrefresh] = useState(false);
   const [originalData, setOriginalData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
@@ -35,7 +34,6 @@ const AllClients = () => {
   const [ForGetCSV, setForGetCSV] = useState([])
   const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
 
-
   const Brokerdata = async () => {
 
     await dispatch(All_Api_Info_List({ token: user_details && user_details.token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
@@ -45,8 +43,6 @@ const AllClients = () => {
         }
       })
   }
-
-
 
   const Delete_user = async (id) => {
     var req1 = {
@@ -179,7 +175,6 @@ const AllClients = () => {
   };
 
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -282,9 +277,9 @@ const AllClients = () => {
           if (response.status) {
             setIsStarred(newStarStatus ? "1" : "0");
             setrefresh(!refresh)
-            toast.success(response.msg);
+            // toast.success(response.msg);
           } else {
-            toast.error(response.msg);
+            // toast.error(response.msg);
           }
         });
     };
@@ -299,7 +294,6 @@ const AllClients = () => {
       </div>
     );
   };
-
 
 
   const columns = [
