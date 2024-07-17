@@ -23,9 +23,8 @@ const AllClients = () => {
   const location = useLocation();
   var dashboard_filter = location.search.split("=")[1];
   const dispatch = useDispatch();
-  const Role = JSON.parse(localStorage.getItem("user_details")).Role;
-  const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id;
-  const token = JSON.parse(localStorage.getItem("user_details")).token;
+  const user_details = JSON.parse(localStorage.getItem("user_details"));
+
 
   const [refresh, setrefresh] = useState(false);
   const [originalData, setOriginalData] = useState([]);
@@ -44,7 +43,7 @@ const AllClients = () => {
     await dispatch(
       Get_All_Service_for_Client({
         req: {},
-        token: token,
+        token: user_details && user_details.token,
       })
     )
       .unwrap()
@@ -61,7 +60,7 @@ const AllClients = () => {
 
   const Brokerdata = async () => {
 
-    await dispatch(All_Api_Info_List({ token: token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
+    await dispatch(All_Api_Info_List({ token: user_details && user_details.token, url: Config.react_domain, brokerId: -1, key: 1 })).unwrap()
       .then((response) => {
         if (response.status) {
           setBrokerDetails(response.data);
@@ -99,8 +98,8 @@ const AllClients = () => {
   var headerName = "All Clients"
   const data = async () => {
     var req1 = {
-      Find_Role: Role,
-      user_ID: user_ID,
+      Find_Role: user_details && user_details.Role,
+      user_ID: user_details && user_details.user_id,
     };
     await dispatch(GET_ALL_CLIENTS(req1))
       .unwrap()
@@ -613,7 +612,7 @@ const AllClients = () => {
     await dispatch(
       DawnloadDataUser({
         req: { id: id, key: key },
-        token: token,
+        token: user_details && user_details.token,
       })
     )
       .unwrap()

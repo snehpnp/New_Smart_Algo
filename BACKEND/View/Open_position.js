@@ -357,7 +357,7 @@ async function dropOpenPosition() {
        
     } catch (error) {
         // Handle any errors if the view doesn't exist
-        console.error('Error:', error);
+       console.log('Error:', error);
     }
 }
 
@@ -371,7 +371,7 @@ async function dropExistingView1() {
        
     } catch (error) {
         // Handle any errors if the view doesn't exist
-        console.error('Error:', error);
+       console.log('Error:', error);
     }
 }
 
@@ -402,7 +402,7 @@ async function open_position_excute(req, res) {
     
         console.log('Destination view created successfully');
     } catch (error) {
-        console.error('Error:', error);
+       console.log('Error:', error);
     } finally {
         // Ensure the client is closed even if an error occurs
         await client.close();

@@ -1593,7 +1593,7 @@ class Employee {
       });
 
     } catch (error) {
-      console.error("Error in DawnloadStatusandResponse:", error);
+     console.log("Error in DawnloadStatusandResponse:", error);
       return res.status(500).json({ status: false, msg: "Internal Server Error", error });
     }
   }

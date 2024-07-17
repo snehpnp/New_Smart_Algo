@@ -111,7 +111,7 @@ const AllClients = () => {
                 await data();
             } catch (error) {
                 // Handle errors appropriately
-                console.error('Error fetching data:', error);
+               console.log('Error fetching data:', error);
             }
         };
 

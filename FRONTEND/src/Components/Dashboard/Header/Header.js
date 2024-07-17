@@ -194,7 +194,7 @@ const Header = ({ ChatBox }) => {
         }
       }
     } catch (error) {
-      console.error('Failed to fetch user profile:', error);
+     console.log('Failed to fetch user profile:', error);
       // Handle error accordingly, e.g., show an error message to the user
     }
   };

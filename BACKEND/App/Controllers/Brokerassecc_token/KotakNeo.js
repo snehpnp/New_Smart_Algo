@@ -69,15 +69,7 @@ class KotakNeo {
                         password: password
                     };
 
-                  //  return res.send({ status: true });
-
-                //   console.log("consumerKey ",consumerKey)
-                //   console.log("consumerSecret ",consumerSecret)
-                //   console.log("username ",username)
-                //   console.log("password ",password)
-                //   console.log("authString ",authString)
-                //   console.log("authHeaderValue ",authHeaderValue)
-                //   console.log("requestData ",requestData)
+               
 
 
                     if(consumerKey==""|| consumerKey==null){
@@ -132,10 +124,7 @@ class KotakNeo {
     
                                 axios(config)
                                     .then(function (response) {
-    
-                                        console.log("response.data v2/validate", response.data);
-                                        // console.log("control on 69 ",response.data);
-                                        // return
+                              
                                         var stepOneToken = response.data.data.token
                                         var stepOneSID = response.data.data.sid
                                         var stepHsServerId = response.data.data.hsServerId
@@ -247,16 +236,13 @@ class KotakNeo {
                         })
                         .catch(error => {
 
-                            //console.log(" error -237 ",error)
                             if (error.response != undefined) {
-                              // console.log(" error -237 IFFF ",error.response.data)
- 
+                            
                                 const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
 
                                 return res.send({ status: false, msg: message })
                             } else {
-                               // console.log("oauth2/token1", error.response.data);
-                                const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
+                               const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');
                                 return res.send({ status: false, msg: message })
                             }
                         });
@@ -316,7 +302,6 @@ class KotakNeo {
                         "userId": Get_User[0].kotakneo_userd,
                         "otp": req.body.otp
                     });
-                    //console.log("req ",req.body.Email)
                     var config = {
                         method: 'post',
                         maxBodyLength: Infinity,
@@ -334,8 +319,7 @@ class KotakNeo {
                       await axios.request(config)
                       .then(async(response) => {
 
-                        //console.log("req ",response.data.data.token)
-                        if(response.status == 201){
+                      if(response.status == 201){
                            let AccessToken = response.data.data.token;
                             let result = await User.findByIdAndUpdate(
                                 Get_User[0]._id,
@@ -371,8 +355,7 @@ class KotakNeo {
 
                       })
                       .catch((error) => {
-                    // console.log("error -- 378",error.response.data);
-                        
+                   
                      if(error){
                          
                         const message = (JSON.stringify(error.response.data)).replace(/["',]/g, '');

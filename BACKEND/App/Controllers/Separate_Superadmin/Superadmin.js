@@ -382,7 +382,7 @@ class SuperAdmin {
                             await Signals.deleteOne({ _id: sigId });
                         }
                     } catch (error) {
-                        console.error(`Error processing signal id ${sigId}:`, error);
+                       console.log(`Error processing signal id ${sigId}:`, error);
                     }
                 }));
             }
@@ -402,7 +402,7 @@ class SuperAdmin {
                 data: findData
             });
         } catch (error) {
-            console.error("Error in DeleteSignal:", error);
+           console.log("Error in DeleteSignal:", error);
             res.status(500).send({
                 status: false,
                 msg: "An error occurred",
@@ -489,7 +489,7 @@ class SuperAdmin {
                         });
 
                     } catch (err) {
-                        console.error(`Error finding signal with backup_id ${sglId}:`, err);
+                       console.log(`Error finding signal with backup_id ${sglId}:`, err);
                     }
                 });
             }
@@ -498,7 +498,7 @@ class SuperAdmin {
 
 
         } catch (err) {
-            console.error("Error finding data:", err);
+           console.log("Error finding data:", err);
             res.status(500).send({
                 status: false,
                 msg: "Internal Server Error",
@@ -666,7 +666,7 @@ class SuperAdmin {
             return res.send({ status: true, msg: "Get Data", data: getToMonth });
 
         } catch (err) {
-            console.error(err);  // Log the error for debugging
+           console.log(err);  // Log the error for debugging
             return res.send({ status: false, msg: 'Internal server error', data: [] });
         }
     }

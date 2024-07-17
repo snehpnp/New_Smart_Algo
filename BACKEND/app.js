@@ -87,7 +87,7 @@ setIO(io).then(() => {
    });
  
  }).catch((error) => {
-   console.error("Error setting io:", error);
+
  });
 
 

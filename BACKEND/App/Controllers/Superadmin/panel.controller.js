@@ -65,7 +65,7 @@ class Panel {
                             const response = await axios.get(backend_rul + 'all/brokerview');
                             return response.data;
                         } catch (error) {
-                            console.error('Error fetching broker view data:', error.message);
+                           console.log('Error fetching broker view data:', error.message);
                             throw error;
                         }
                     };
@@ -101,7 +101,7 @@ class Panel {
                                     console.log(error);
                                 });
                         } catch (error) {
-                            console.error('Error fetching broker view data:', error.message);
+                           console.log('Error fetching broker view data:', error.message);
                             throw error;
                         }
                     };
@@ -131,7 +131,7 @@ class Panel {
                                     console.log(error);
                                 });
                         } catch (error) {
-                            console.error('Error fetching broker view data:', error.message);
+                           console.log('Error fetching broker view data:', error.message);
                             throw error;
                         }
                     };
@@ -677,11 +677,11 @@ class Panel {
                     if (result.ok === 1) {
                         successResults.push({ db_url: url.db_url, status: 'success' });
                     } else {
-                        console.error('Error creating view:', result);
+                       console.log('Error creating view:', result);
                         errorArray.push({ db_url: url.db_url, status: 'failed', error: result });
                     }
                 } catch (error) {
-                    console.error('Error creating view:', error);
+                   console.log('Error creating view:', error);
                     errorArray.push({ db_url: url.db_url, status: 'failed', error: error.message });
                 } finally {
                     await client.close();
@@ -696,7 +696,7 @@ class Panel {
             });
 
         } catch (error) {
-            console.error('View creation error:', error);
+           console.log('View creation error:', error);
             res.status(500).send({ status: false, msg: 'Internal Server Error' });
         }
     }
@@ -720,7 +720,7 @@ class Panel {
             if (error.code === 11000) {
                 res.status(409).json({ status: false, msg: 'Duplicate key error', error });
             } else {
-                console.error('Error adding FAQ:', error);
+               console.log('Error adding FAQ:', error);
                 res.status(500).json({ status: false, msg: 'Server error', error });
             }
         }
@@ -732,7 +732,7 @@ class Panel {
 
             res.status(200).json({ status: true, msg: "FAQs retrieved successfully", data: faqData });
         } catch (error) {
-            console.error('Error retrieving FAQs:', error);
+           console.log('Error retrieving FAQs:', error);
             res.status(500).json({ status: false, msg: 'Server error', error });
         }
     }
@@ -749,7 +749,7 @@ class Panel {
 
             res.status(200).json({ status: true, msg: 'FAQ deleted successfully', data: deletedFaq });
         } catch (error) {
-            console.error('Error deleting FAQ:', error);
+           console.log('Error deleting FAQ:', error);
             res.status(500).json({ status: false, msg: 'Server error', error });
         }
     }
@@ -775,7 +775,7 @@ class Panel {
 
             res.status(200).json({ status: true, msg: 'FAQ updated successfully', data: updatedFaq });
         } catch (error) {
-            console.error('Error updating FAQ:', error);
+           console.log('Error updating FAQ:', error);
             res.status(500).json({ status: false, msg: 'Server error', error });
         }
     }

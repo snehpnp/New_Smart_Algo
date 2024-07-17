@@ -30,7 +30,7 @@ const FaqAccordion = () => {
                 setFaqData(response.data);
             }
         } catch (error) {
-            console.error("Error fetching FAQs:", error);
+           console.log("Error fetching FAQs:", error);
         }
     };
 
@@ -43,7 +43,7 @@ const FaqAccordion = () => {
                 fetchFaqData(); // Refresh FAQ list
             }
         } catch (error) {
-            console.error("Error deleting FAQ:", error);
+           console.log("Error deleting FAQ:", error);
         }
     };
 

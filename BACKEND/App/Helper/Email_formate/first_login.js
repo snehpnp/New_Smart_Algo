@@ -297,7 +297,7 @@ const disclaimer = async () => {
 
     return emailTemplate;
   } catch (error) {
-    console.error("Error fetching company information:", error);
+   console.log("Error fetching company information:", error);
     throw error;
   }
 };

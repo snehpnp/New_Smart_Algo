@@ -59,7 +59,7 @@ module.exports = function (app) {
                 await client.close();
                 console.log(`Database ${databaseName} created successfully`);
             } catch (error) {
-                console.error(error);
+               console.log(error);
 
             }
         }
@@ -155,7 +155,7 @@ module.exports = function (app) {
                 licenses: 0,
                 disclaimer_status: "0",
             });
-            console.log("SNEH", companyData)
+     
 
             return companyData.save();
         }
@@ -178,7 +178,7 @@ module.exports = function (app) {
             const savedData = await Broker_informationData.save();
             return savedData;
         } catch (error) {
-            console.error('Error saving broker information:', error);
+           console.log('Error saving broker information:', error);
             // throw error; // Rethrow the error if you want it to be handled by the calling function
             return null
         }
@@ -352,7 +352,7 @@ module.exports = function (app) {
 
             return res.send("DONE");
         } catch (error) {
-            console.error("Error in /all/tabel route:", error);
+           console.log("Error in /all/tabel route:", error);
             res.status(500).send("Internal Server Error");
         }
     });
@@ -417,7 +417,7 @@ module.exports = function (app) {
 
             res.status(201).send("Admin created successfully");
         } catch (error) {
-            console.error("Error saving user:", error);
+           console.log("Error saving user:", error);
             res.status(500).send("Error creating admin");
         }
     });
@@ -532,7 +532,7 @@ module.exports = function (app) {
                             .then((createdServices) => { })
                             .catch((err) => {
                                 try {
-                                    console.error('Error creating and saving user:', err);
+                                   console.log('Error creating and saving user:', err);
                                 } catch (e) {
                                 }
 

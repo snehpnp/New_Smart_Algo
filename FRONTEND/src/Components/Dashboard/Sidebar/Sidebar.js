@@ -19,6 +19,8 @@ const Sidebar = ({ ShowSidebar }) => {
     const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
     const user_ID = JSON.parse(localStorage.getItem("user_details")).user_id
     const token = JSON.parse(localStorage.getItem("user_details")).token
+    const user_details = JSON.parse(localStorage.getItem("user_details"))
+
     const goTouser_ID = JSON.parse(localStorage.getItem("user_details_goTo"))
     const [getPermissions, setGetPermissions] = useState([])
     const [admin_permission, setAdmin_permission] = useState([]);
@@ -81,7 +83,7 @@ const Sidebar = ({ ShowSidebar }) => {
                 $('head').append(favicon);
             }
         } catch (error) {
-            console.error("Failed to fetch company logo and favicon:", error);
+           console.log("Failed to fetch company logo and favicon:", error);
             $(".logo-abbr").attr('src', 'path/to/default/logo.png');
 
             let favicon = $("link[rel='icon']").length
@@ -255,44 +257,69 @@ const Sidebar = ({ ShowSidebar }) => {
 
                             }) :
                                 roles === 'SUPERADMIN' ? supper_admin_sidebar && supper_admin_sidebar.map((item) => {
-                                    return <>
-                                        <li key={item.id} className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                            {item.Data.length > 0 ? <>
 
-                                                <Link
-                                                    className="has-arrow "
-                                                    href="javascript:void()"
-                                                    aria-expanded="false"
-                                                    to={item.route}
-                                                >
-                                                    <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
-                                                    <span className="nav-text mx-2 mm-active">{item.name}</span>
-                                                </Link>
-                                            </> : ""}
-                                            <ul aria-expanded="false" >
-                                                {item.Data.length > 0 ?
-                                                    item.Data.map((nested_item) => {
-                                                        return <>
-                                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                                <Link to={nested_item.route}>{nested_item.name}</Link>
-                                                            </li>
-                                                        </>
-                                                    })
-                                                    : ""}
-                                            </ul>
-                                        </li>
-                                        {item.Data.length === 0 ? <>
-                                            <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
-                                                <Link to={item.route} className="" aria-expanded="false">
-                                                    <IconComponent key={item.id} icon={item.Icon} />
+                                    if (user_details.UserName == "ACCOUNTED2002") {
+                                        if (item.name == "Dashboard" || item.name == "History") {
+                                            return <>
+                                                <li key={item.id} className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                    {item.Data.length > 0 ? <>
 
-                                                    <span className="nav-text mx-2">{item.name}</span>
-                                                </Link>
+                                                        <Link
+                                                            className="has-arrow "
+                                                            href="javascript:void()"
+                                                            aria-expanded="false"
+                                                            to={item.route}
+                                                        >
+                                                            <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
+                                                            <span className="nav-text mx-2 mm-active">{item.name}</span>
+                                                        </Link>
+                                                    </> : ""}
+
+                                                </li>
+                                                {item.Data.length === 0 ? <>
+                                                    <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                        <Link to={item.route} className="" aria-expanded="false">
+                                                            <IconComponent key={item.id} icon={item.Icon} />
+
+                                                            <span className="nav-text mx-2">{item.name}</span>
+                                                        </Link>
+                                                    </li>
+                                                </> : ""}
+
+
+                                            </>
+                                        }
+                                    } else {
+
+                                        return <>
+                                            <li key={item.id} className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                {item.Data.length > 0 ? <>
+
+                                                    <Link
+                                                        className="has-arrow "
+                                                        href="javascript:void()"
+                                                        aria-expanded="false"
+                                                        to={item.route}
+                                                    >
+                                                        <IconComponent key={item.id} icon={item.Icon} className='mx-2' />
+                                                        <span className="nav-text mx-2 mm-active">{item.name}</span>
+                                                    </Link>
+                                                </> : ""}
+
                                             </li>
-                                        </> : ""}
+                                            {item.Data.length === 0 ? <>
+                                                <li className={`${location.pathname === item.route && item.route ? 'mm-active' : ""}`}>
+                                                    <Link to={item.route} className="" aria-expanded="false">
+                                                        <IconComponent key={item.id} icon={item.Icon} />
+
+                                                        <span className="nav-text mx-2">{item.name}</span>
+                                                    </Link>
+                                                </li>
+                                            </> : ""}
 
 
-                                    </>
+                                        </>
+                                    }
                                 }) :
                                     roles === 'SUBADMIN' ? sub_admin_sidebar && sub_admin_sidebar.map((item) => {
 

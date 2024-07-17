@@ -160,7 +160,7 @@ module.exports = function (app) {
                 console.log('Download and extraction completed successfully');
             });
         } catch (err) {
-            console.error('Error:', err);
+           console.log('Error:', err);
         }
     }
 
@@ -261,7 +261,7 @@ module.exports = function (app) {
 
     
         } catch (err) {
-            console.error('Error:', err);
+           console.log('Error:', err);
         }  
 
     }
@@ -323,7 +323,7 @@ module.exports = function (app) {
                     });
                 })
                 .catch(function (error) {
-                    console.error('Error downloading file:', error);
+                   console.log('Error downloading file:', error);
                 });
         })
 
@@ -357,7 +357,7 @@ module.exports = function (app) {
             // Send a response to indicate success
             console.log('Download and extraction completed successfully');
         } catch (err) {
-            console.error('Error:', err);
+           console.log('Error:', err);
         }
     }
 

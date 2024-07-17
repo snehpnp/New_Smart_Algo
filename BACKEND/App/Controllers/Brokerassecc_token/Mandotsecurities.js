@@ -91,7 +91,7 @@ class mandotsecurities {
             }
 
         } catch (error) {
-            console.error("Error Catch -", error.response ? error.response.data : error.message);
+           console.log("Error Catch -", error.response ? error.response.data : error.message);
             return res.send({ status: false, data: error.response ? error.response.data : error.message, msg: "Error occurred while retrieving access token" });
         }
     }
