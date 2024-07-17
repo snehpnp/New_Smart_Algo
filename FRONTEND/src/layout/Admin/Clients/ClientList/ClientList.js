@@ -3,7 +3,6 @@ import Content from "../../../../Components/Dashboard/Content/Content";
 import Loader from "../../../../Utils/Loader";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Pencil, Trash2 } from "lucide-react";
-import { Get_All_Service_for_Client } from "../../../../ReduxStore/Slice/Common/commoSlice";
 import FullDataTable from "../../../../Components/ExtraComponents/Datatable/FullDataTable";
 import { GET_ALL_CLIENTS, GO_TO_DASHBOARDS, UPDATE_USER_ACTIVE_STATUS, DELETE_USER_SERVICES, UpdateStarClientStatus } from "../../../../ReduxStore/Slice/Admin/AdminSlice";
 import { All_Api_Info_List } from '../../../../ReduxStore/Slice/Superadmin/ApiCreateInfoSlice';
@@ -31,31 +30,10 @@ const AllClients = () => {
   const [searchInput, setSearchInput] = useState("");
   const [PanelStatus, setPanelStatus] = useState("2");
   const [ClientStatus, setClientStatus] = useState("null");
-  const [SwitchButton, setSwitchButton] = useState(true);
   const [selectBroker, setSelectBroker] = useState("null");
   const [BrokerDetails, setBrokerDetails] = useState([]);
   const [ForGetCSV, setForGetCSV] = useState([])
   const [getAllClients, setAllClients] = useState({ loading: true, data: [] });
-  const [getAllStrategyName, setAllStrategyName] = useState({ loading: true, data: [] });
-
-
-  const GetAllStrategyName = async (e) => {
-    await dispatch(
-      Get_All_Service_for_Client({
-        req: {},
-        token: user_details && user_details.token,
-      })
-    )
-      .unwrap()
-      .then((response) => {
-        if (response.status) {
-          setAllStrategyName({
-            loading: false,
-            data: response.data,
-          });
-        }
-      });
-  };
 
 
   const Brokerdata = async () => {
@@ -68,9 +46,6 @@ const AllClients = () => {
       })
   }
 
-  useEffect(() => {
-    GetAllStrategyName();
-  }, []);
 
 
   const Delete_user = async (id) => {
@@ -378,7 +353,6 @@ const AllClients = () => {
                 checked={row.ActiveStatus === "1" ? true : false}
                 onChange={(e) => {
                   activeUser(e, row);
-                  setSwitchButton(e.target.checked)
                 }}
               />
               <div className={`toggle-switch  ${row.ActiveStatus === "1" ? 'bg-success' : 'bg-danger'}`}></div>
