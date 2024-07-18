@@ -189,10 +189,7 @@ module.exports = function (app) {
                 });
         
 
-               
                 
-                res.send(pipeline)
-                return
                 console.log("timeframedataView plus incator view IFF", pipeline)
 
                 let viewName = 'M' + ele.timeframe + '_' + ele.tokensymbol + '_make_' + ele.name;
@@ -295,7 +292,7 @@ module.exports = function (app) {
 
         });
 
-   //res.send({ STAT: "OKKK" })
+   res.send({ STAT: "OKKK" })
     });
 
 
@@ -318,11 +315,39 @@ module.exports = function (app) {
 
     })
 
+    // function parseConditionString(conditionString) {
+    //     const conditionRegex = /data\.(\w+)\[(\d+)\]([><])data\.(\w+)\[(\d+)\]/g;
+    //     const conditions = [];
+    //     let andFlag = false;
+
+    //     // Handle the && and || parts
+    //     const andParts = conditionString.split('&&');
+    //     andParts.forEach(part => {
+    //         const orParts = part.split('||');
+    //         orParts.forEach((subPart, index) => {
+    //             let match;
+    //             while ((match = conditionRegex.exec(subPart)) !== null) {
+    //                 const [_, field1, index1, operator, field2, index2] = match;
+    //                 conditions.push({
+    //                     operator,
+    //                     field1,
+    //                     index1: parseInt(index1),
+    //                     field2,
+    //                     index2: parseInt(index2),
+    //                     type: index === 0 && andFlag ? 'and' : 'or'
+    //                 });
+    //             }
+    //         });
+    //         andFlag = true;
+    //     });
+
+    //     return conditions;
+    // }
     function parseConditionString(conditionString) {
-        const conditionRegex = /data\.(\w+)\[(\d+)\]([><])data\.(\w+)\[(\d+)\]/g;
+        const conditionRegex = /data\.(\w+)\[(\d+)\]([><=]{1,2})data\.(\w+)\[(\d+)\]/g;
         const conditions = [];
         let andFlag = false;
-
+    
         // Handle the && and || parts
         const andParts = conditionString.split('&&');
         andParts.forEach(part => {
@@ -332,7 +357,7 @@ module.exports = function (app) {
                 while ((match = conditionRegex.exec(subPart)) !== null) {
                     const [_, field1, index1, operator, field2, index2] = match;
                     conditions.push({
-                        operator,
+                        operator: operator.length === 2 ? operator : operator + '=', // Normalize operator
                         field1,
                         index1: parseInt(index1),
                         field2,
@@ -343,9 +368,12 @@ module.exports = function (app) {
             });
             andFlag = true;
         });
-
+    
         return conditions;
     }
+    
+
+    
 
     const generateMongoCondition = (conditions ,ele) => {
         const andArray = [];
@@ -356,8 +384,31 @@ module.exports = function (app) {
       
         conditions.forEach(condition => {
             const { operator, field1, index1, field2, index2, type } = condition;
-            const mongoOperator = operator === '>' ? '$gt' : '$lt';
-            
+            // const mongoOperator = operator === '>' ? '$gt' : '$lt';
+
+            let mongoOperator;
+            switch (operator) {
+                case '>':
+                    mongoOperator = '$gt';
+                    break;
+                case '<':
+                    mongoOperator = '$lt';
+                    break;
+                case '>=':
+                    mongoOperator = '$gte';
+                    break;
+                case '<=':
+                    mongoOperator = '$lte';
+                    break;
+                case '==': // Handle equality operator
+                case '===': // Handle strict equality operator
+                    mongoOperator = '$eq';
+                    break;
+                default:
+                    mongoOperator = '$lt'; // Default to less than
+                    break;
+            }
+
             console.log("operator ",operator)
             console.log("field1 ",field1)
             console.log("index1 ",index1)
