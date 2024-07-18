@@ -47,53 +47,284 @@ module.exports = function (app) {
     app.get("/logicStrategyView", async (req, res) => {
 
 
-         let conditionString = "(data.close[1]>data.emaclose3[1])&&(data.close[6]<data.emaclose3[2])"
-
-
-         const conditions = conditionString.split(/\)\s*\(/); // Split by ') (' to handle multiple conditions
-
-         // Build $match stages array
-         const matchStages = conditions.map(condition => {
-           // Extract field names, indexes, and operators
-           const parts = condition.match(/data\.(\w+)\[(\d+)\]([><])/);
-           if (!parts) throw new Error('Invalid condition string format');
+        //  let conditionString = "(data.close[1]>data.emaclose3[1])&&(data.close[6]<data.emaclose3[2])"
+        //  const conditions = conditionString.split(/\)\s*\(/); // Split by ') (' to handle multiple 
+        //  const matchStages = conditions.map(condition => {
+        //    // Extract field names, indexes, and operators
+        //    const parts = condition.match(/data\.(\w+)\[(\d+)\]([><])/);
+        //    if (!parts) throw new Error('Invalid condition string format');
      
-           const fieldName = parts[1]; // e.g., 'close', 'emaclose3'
-           const arrayIndex = parseInt(parts[2]); // e.g., 1, 6
-           const operator = parts[3]; // e.g., '>' or '<'
+        //    const fieldName = parts[1]; // e.g., 'close', 'emaclose3'
+        //    const arrayIndex = parseInt(parts[2]); // e.g., 1, 6
+        //    const operator = parts[3]; // e.g., '>' or '<'
           
-           console.log("fieldName",fieldName)
-           console.log("arrayIndex",arrayIndex)
-           console.log("operator",operator)
-           // Determine MongoDB comparison operator
-           const mongoOperator = operator === '>' ? '$gt' : '$lt';
+        //    console.log("fieldName",fieldName)
+        //    console.log("arrayIndex",arrayIndex)
+        //    console.log("operator",operator)
+        //    // Determine MongoDB comparison operator
+        //    const mongoOperator = operator === '>' ? '$gt' : '$lt';
      
-           // Construct $match stage for this condition
-           return {
-             $expr: {
-               [mongoOperator]: [
-                 { $arrayElemAt: [`$timeFrameViewData.${fieldName}`, arrayIndex] },
-                 { $arrayElemAt: [`$timeFrameViewData.${fieldName}`, arrayIndex] }
-               ]
-             }
-           };
-         });
-    
-     
-        console.log("matchStage ",matchStages)
+        //    // Construct $match stage for this condition
+        //    return {
+        //      $expr: {
+        //        [mongoOperator]: [
+        //          { $arrayElemAt: [`$timeFrameViewData.${fieldName}`, arrayIndex] },
+        //          { $arrayElemAt: [`$timeFrameViewData.${fieldName}`, arrayIndex] }
+        //        ]
+        //      }
+        //    };
+        //  });
+        
+           
+
+        ////////------------------/////////////
+        //   const conditions = [
+        //     "(data.close[1]>data.emaclose3[1])&&(data.close[6]<data.emaclose3[2])"
+        //   ];    
+        //   const matchStages = conditions.map(condition => {
+        //     // Split the condition into individual parts
+        //     const parts = condition.match(/\(([^)]+)\)/g);
+          
+        //     const matchStage = {
+        //       $expr: {
+        //         $and: []
+        //       }
+        //     };
+          
+        //     parts.forEach(part => {
+        //       // Extract field names, indexes, and operators
+        //       const subParts = part.match(/data\.(\w+)\[(\d+)\]([><])data\.(\w+)\[(\d+)\]/);
+        //       if (!subParts) throw new Error('Invalid condition string format');
+          
+        //       const fieldName1 = subParts[1]; // e.g., 'close'
+        //       const arrayIndex1 = parseInt(subParts[2]); // e.g., 1
+        //       const operator = subParts[3]; // e.g., '>' or '<'
+        //       const fieldName2 = subParts[4]; // e.g., 'emaclose3'
+        //       const arrayIndex2 = parseInt(subParts[5]); // e.g., 1
+          
+        //       console.log("fieldName1", fieldName1)
+        //       console.log("arrayIndex1", arrayIndex1)
+        //       console.log("operator", operator)
+        //       console.log("fieldName2", fieldName2)
+        //       console.log("arrayIndex2", arrayIndex2)
+          
+        //       // Determine MongoDB comparison operator
+        //       const mongoOperator = operator === '>'? '$gt' : '$lt';
+          
+        //       // Construct $match stage for this condition
+        //       matchStage.$expr.$and.push({
+        //         [mongoOperator]: [
+        //           { $arrayElemAt: [`$timeFrameViewData.${fieldName1}`, arrayIndex1] },
+        //           { $arrayElemAt: [`$timeFrameViewData.${fieldName2}`, arrayIndex2] }
+        //         ]
+        //       });
+        //     });
+          
+        //     return matchStage;
+        //   });
+          //////////------------------///////////
+
+
+        //   const conditions = [
+        //     "(data.close[1]>data.emaclose3[1])||((data.close[6]<data.emaclose3[2])&&(data.close[9]<data.emaclose2[3]))"
+        //   ];
+        //   const matchStages = conditions.map(condition => {
+        //     // Split the condition into individual parts
+        //     const parts = condition.match(/\(([^)]+)\)/g);
+          
+        //     const matchStage = {
+        //       $expr: {}
+        //     };
+          
+        //     if (condition.includes('&&')) {
+        //       matchStage.$expr.$and = [];
+        //       parts.forEach(part => {
+        //         // Extract field names, indexes, and operators
+        //         const subParts = part.match(/data\.(\w+)\[(\d+)\]([><])data\.(\w+)\[(\d+)\]/);
+        //         if (!subParts) throw new Error('Invalid condition string format');
+          
+        //         const fieldName1 = subParts[1]; // e.g., 'close'
+        //         const arrayIndex1 = parseInt(subParts[2]); // e.g., 1
+        //         const operator = subParts[3]; // e.g., '>' or '<'
+        //         const fieldName2 = subParts[4]; // e.g., 'emaclose3'
+        //         const arrayIndex2 = parseInt(subParts[5]); // e.g., 1
+          
+        //         console.log("fieldName1", fieldName1)
+        //         console.log("arrayIndex1", arrayIndex1)
+        //         console.log("operator", operator)
+        //         console.log("fieldName2", fieldName2)
+        //         console.log("arrayIndex2", arrayIndex2)
+          
+        //         // Determine MongoDB comparison operator
+        //         const mongoOperator = operator === '>' ? '$gt' : '$lt';
+          
+        //         // Construct $match stage for this condition
+        //         matchStage.$expr.$and.push({
+        //           [mongoOperator]: [
+        //             { $arrayElemAt: [`$timeFrameViewData.${fieldName1}`, arrayIndex1] },
+        //             { $arrayElemAt: [`$timeFrameViewData.${fieldName2}`, arrayIndex2] }
+        //           ]
+        //         });
+        //       });
+        //     } else if (condition.includes('||')) {
+        //       matchStage.$expr.$or = [];
+        //       parts.forEach(part => {
+        //         // Extract field names, indexes, and operators
+        //         const subParts = part.match(/data\.(\w+)\[(\d+)\]([><])data\.(\w+)\[(\d+)\]/);
+        //         if (!subParts) throw new Error('Invalid condition string format');
+          
+        //         const fieldName1 = subParts[1]; // e.g., 'close'
+        //         const arrayIndex1 = parseInt(subParts[2]); // e.g., 1
+        //         const operator = subParts[3]; // e.g., '>' or '<'
+        //         const fieldName2 = subParts[4]; // e.g., 'emaclose3'
+        //         const arrayIndex2 = parseInt(subParts[5]); // e.g., 1
+          
+        //         console.log("fieldName1", fieldName1)
+        //         console.log("arrayIndex1", arrayIndex1)
+        //         console.log("operator", operator)
+        //         console.log("fieldName2", fieldName2)
+        //         console.log("arrayIndex2", arrayIndex2)
+          
+        //         // Determine MongoDB comparison operator
+        //         const mongoOperator = operator === '>' ? '$gt' : '$lt';
+          
+        //         // Construct $match stage for this condition
+        //         matchStage.$expr.$or.push({
+        //           [mongoOperator]: [
+        //             { $arrayElemAt: [`$timeFrameViewData.${fieldName1}`, arrayIndex1] },
+        //             { $arrayElemAt: [`$timeFrameViewData.${fieldName2}`, arrayIndex2] }
+        //           ]
+        //         });
+        //       });
+        //     }
+          
+        //     return matchStage;
+        //   });
+
+
+
+        const conditions = [
+            "(data.close[1]>data.emaclose3[1])&&((data.close[6]<data.emaclose3[2])||(data.close[9]<data.emaclose2[3]))"
+          ];
+          
+          const matchStages = conditions.map(condition => {
+            // Split the condition into individual parts
+            const parts = condition.match(/\([^()]+?\)/g);
+          
+            const matchStage = {
+              $expr: {}
+            };
+          
+            if (condition.includes('&&')) {
+              if (condition.includes('||')) {
+                const orParts = condition.split('||');
+                matchStage.$expr.$or = orParts.map(orPart => {
+                  const andParts = orPart.split('&&');
+                  const andStage = {
+                    $expr: {
+                      $and: []
+                    }
+                  };
+                  andParts.forEach(andPart => {
+                    const subParts = andPart.match(/data\.(\w+)\[(\d+)\]([><])data\.(\w+)\[(\d+)\]/);
+                    if (!subParts) throw new Error('Invalid condition string format');
+          
+                    const fieldName1 = subParts[1]; // e.g., 'close'
+                    const arrayIndex1 = parseInt(subParts[2]); // e.g., 1
+                    const operator = subParts[3]; // e.g., '>' or '<'
+                    const fieldName2 = subParts[4]; // e.g., 'emaclose3'
+                    const arrayIndex2 = parseInt(subParts[5]); // e.g., 1
+          
+                    console.log("fieldName1", fieldName1)
+                    console.log("arrayIndex1", arrayIndex1)
+                    console.log("operator", operator)
+                    console.log("fieldName2", fieldName2)
+                    console.log("arrayIndex2", arrayIndex2)
+          
+                    // Determine MongoDB comparison operator
+                    const mongoOperator = operator === '>'? '$gt' : '$lt';
+          
+                    // Construct $match stage for this condition
+                    andStage.$expr.$and.push({
+                      [mongoOperator]: [
+                        { $arrayElemAt: [`$timeFrameViewData.${fieldName1}`, arrayIndex1] },
+                        { $arrayElemAt: [`$timeFrameViewData.${fieldName2}`, arrayIndex2] }
+                      ]
+                    });
+                  });
+                  return andStage;
+                });
+              } else {
+                matchStage.$expr.$and = [];
+                parts.forEach(part => {
+                  const subParts = part.match(/data\.(\w+)\[(\d+)\]([><])data\.(\w+)\[(\d+)\]/);
+                  if (!subParts) throw new Error('Invalid condition string format');
+          
+                  const fieldName1 = subParts[1]; // e.g., 'close'
+                  const arrayIndex1 = parseInt(subParts[2]); // e.g., 1
+                  const operator = subParts[3]; // e.g., '>' or '<'
+                  const fieldName2 = subParts[4]; // e.g., 'emaclose3'
+                  const arrayIndex2 = parseInt(subParts[5]); // e.g., 1
+          
+                  console.log("fieldName1", fieldName1)
+                  console.log("arrayIndex1", arrayIndex1)
+                  console.log("operator", operator)
+                  console.log("fieldName2", fieldName2)
+                  console.log("arrayIndex2", arrayIndex2)
+          
+                  // Determine MongoDB comparison operator
+                  const mongoOperator = operator === '>'? '$gt' : '$lt';
+          
+                  // Construct $match stage for this condition
+                  matchStage.$expr.$and.push({
+                    [mongoOperator]: [
+                      { $arrayElemAt: [`$timeFrameViewData.${fieldName1}`, arrayIndex1] },
+                      { $arrayElemAt: [`$timeFrameViewData.${fieldName2}`, arrayIndex2] }
+                    ]
+                  });
+                });
+              }
+            } 
+           
+                else if (condition.includes('||')) {
+                          matchStage.$expr.$or = [];
+                          parts.forEach(part => {
+                            // Extract field names, indexes, and operators
+                            const subParts = part.match(/data\.(\w+)\[(\d+)\]([><])data\.(\w+)\[(\d+)\]/);
+                            if (!subParts) throw new Error('Invalid condition string format');
+                      
+                            const fieldName1 = subParts[1]; // e.g., 'close'
+                            const arrayIndex1 = parseInt(subParts[2]); // e.g., 1
+                            const operator = subParts[3]; // e.g., '>' or '<'
+                            const fieldName2 = subParts[4]; // e.g., 'emaclose3'
+                            const arrayIndex2 = parseInt(subParts[5]); // e.g., 1
+                      
+                            console.log("fieldName1", fieldName1)
+                            console.log("arrayIndex1", arrayIndex1)
+                            console.log("operator", operator)
+                            console.log("fieldName2", fieldName2)
+                            console.log("arrayIndex2", arrayIndex2)
+                      
+                            // Determine MongoDB comparison operator
+                            const mongoOperator = operator === '>' ? '$gt' : '$lt';
+                      
+                            // Construct $match stage for this condition
+                            matchStage.$expr.$or.push({
+                              [mongoOperator]: [
+                                { $arrayElemAt: [`$timeFrameViewData.${fieldName1}`, arrayIndex1] },
+                                { $arrayElemAt: [`$timeFrameViewData.${fieldName2}`, arrayIndex2] }
+                              ]
+                            });
+                          });
+                        }
+                      
+                        return matchStage;
+          });
+
+
+
 
       res.send({status:true,condition:matchStages})
-
-
-
-
-
-
-
-
-
-
-
 
 
     return
@@ -302,6 +533,93 @@ module.exports = function (app) {
 
         res.send({ STAT: "OKKK" })
     });
+
+
+    app.get("/logicStrategyView1", async (req, res) => {
+        // const conditions = [
+        //     "(data.close[1]>data.emaclose3[1])&&((data.close[6]<data.emaclose3[2])||(data.close[9]<data.emaclose2[3]))"
+        //   ];
+
+
+          const conditions = parseConditionString("(data.close[1]>data.emaclose3[1])||((data.close[6]<data.emaclose3[2])||(data.close[9]<data.emaclose2[3]))");
+          console.log(JSON.stringify(conditions, null, 2));
+
+        const matchStage = generateMongoCondition(conditions);
+        console.log(JSON.stringify(matchStage, null, 2));
+
+        console.log(matchStage);
+ 
+          res.send({status: true, condition: matchStage});
+          
+    })
+
+    function parseConditionString(conditionString) {
+        const conditionRegex = /data\.(\w+)\[(\d+)\]([><])data\.(\w+)\[(\d+)\]/g;
+        const conditions = [];
+        let andFlag = false;
+      
+        // Handle the && and || parts
+        const andParts = conditionString.split('&&');
+        andParts.forEach(part => {
+          const orParts = part.split('||');
+          orParts.forEach((subPart, index) => {
+            let match;
+            while ((match = conditionRegex.exec(subPart)) !== null) {
+              const [_, field1, index1, operator, field2, index2] = match;
+              conditions.push({
+                operator,
+                field1,
+                index1: parseInt(index1),
+                field2,
+                index2: parseInt(index2),
+                type: index === 0 && andFlag ? 'and' : 'or'
+              });
+            }
+          });
+          andFlag = true;
+        });
+      
+        return conditions;
+      }
+
+      const generateMongoCondition = (conditions) => {
+        const andArray = [];
+        const orArray = [];
+      
+        conditions.forEach(condition => {
+          const { operator, field1, index1, field2, index2, type } = condition;
+          const mongoOperator = operator === '>' ? '$gt' : '$lt';
+      
+          const conditionObj = {
+            [mongoOperator]: [
+              { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] },
+              { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
+            ]
+          };
+      
+          if (type === 'and') {
+            andArray.push(conditionObj);
+          } else if (type === 'or') {
+            orArray.push(conditionObj);
+          }
+        });
+      
+        const finalExpr = {};
+        if (andArray.length > 0) {
+          finalExpr.$and = andArray;
+        }
+        if (orArray.length > 0) {
+          finalExpr.$or = orArray;
+        }
+      
+        return { $expr: finalExpr };
+      };
+      
+      
+      
+      
+      
+      
 
 
     // ========================================================================================================
