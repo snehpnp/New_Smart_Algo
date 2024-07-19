@@ -1797,3 +1797,38 @@ module.exports = function (app) {
 }
 
 
+
+
+// const MongoClient = require('mongodb').MongoClient;
+
+// async function watchChanges() {
+//   const client = new MongoClient('your_mongodb_uri', { useNewUrlParser: true, useUnifiedTopology: true });
+
+//   try {
+//     await client.connect();
+//     const db = client.db('your_database_name');
+//     const collection = db.collection('your_collection_name');
+
+//     const changeStream = collection.watch();
+
+//     changeStream.on('change', (change) => {
+//       console.log('Change detected:', change);
+        //  const documents = await db.collection(viewName).find({ isCondition: true }).toArray();
+        //  if (documents.length > 0) {
+        //     const insertResult = await db.collection(targetCollectionName).insertMany(documents);
+        //     console.log(`${insertResult.insertedCount} documents inserted into the target collection`);
+        //   } else {
+        //     console.log('No documents met the condition to be inserted');
+        //   }
+//       // Here, add logic to handle the change, e.g., query the view and insert documents into another collection
+//     });
+
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+
+// watchChanges();
+
+
+

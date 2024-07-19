@@ -1054,335 +1054,185 @@ async function run() {
     const executeFunction = async () => {
 
       console.log("DONEEE executeFunction")
-      let rr = 1
-        if (rr) {
-     // if (holidays.isHoliday(currentDate) && weekday != 'Sunday' && weekday != 'Saturday') {
-        const pipeline = [
-          {
-            $match: {
-              //tokensymbol:"67308",
-               status: "1"
-            // name:"SHK64c76f1d32067577d02310dfBUY111438"
-             
-            }
-          }
-        ];
-        const allStrategyResult = await UserMakeStrategy.aggregate(pipeline);
+      // if (condition) {
+      //   let entry_type = 'LE';
+      //   if (val.type === 'BUY') {
+      //     entry_type = 'SE';
+      //   }
+      //   let condition_check_previous_trade = {
+      //     strategy: val.strategy_name,
+      //     symbol: val.symbol_name,
+      //     entry_type: entry_type,
+      //     segment: val.segment,
+      //     client_persnal_key: val.panelKey,
+      //     MakeStartegyName: val.show_strategy,
+      //     TradeType: 'MAKE_STRATEGY',
+      //   };
+      //   if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
+      //     let option_type = 'CALL';
+      //     if (val.option_type === 'PE') {
+      //       option_type = 'PUT';
+      //     }
+      //     condition_check_previous_trade = {
+      //       strategy: val.strategy_name,
+      //       symbol: val.symbol_name,
+      //       entry_type: entry_type,
+      //       segment: val.segment,
+      //       strike: val.strike_price,
+      //       option_type: option_type,
+      //       expiry: val.expiry,
+      //       client_persnal_key: val.panelKey,
+      //       MakeStartegyName: val.show_strategy,
+      //       TradeType: 'MAKE_STRATEGY',
+      //     };
+      //   }
+      //   else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
+      //     condition_check_previous_trade = {
+      //       strategy: val.strategy_name,
+      //       symbol: val.symbol_name,
+      //       entry_type: entry_type,
+      //       segment: val.segment,
+      //       expiry: val.expiry,
+      //       client_persnal_key: val.panelKey,
+      //       MakeStartegyName: val.show_strategy,
+      //       TradeType: 'MAKE_STRATEGY',
+      //     };
+      //   }
+      //   var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
+      //   const collection_last_price = dbTradeTools.collection(val.tokensymbol);
+      //   const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
+      //   let price_lp = last_price[0].lp;
+      //   if (checkPreviousTrade != null) {
+      //     const currentTimestamp = Math.floor(Date.now() / 1000);
+      //     let type = 'LX';
+      //     let price = checkPreviousTrade.stockInfo_bp1;
+      //     if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
+      //       type = 'SX';
+      //       price = checkPreviousTrade.stockInfo_sp1;
+      //     }
+      //     let strike = checkPreviousTrade.strike;
+      //     if (checkPreviousTrade.strike_price === 'NaN') {
+      //       strike = '100';
+      //     }
+      //     let option_type = 'CALL';
+      //     if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
+      //       option_type = 'PUT';
+      //     }
+      //     let Quntity = checkPreviousTrade.entry_qty_percent;
+      //     let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+      //     let config = {
+      //       method: 'post',
+      //       maxBodyLength: Infinity,
+      //       // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+      //       url: `${process.env.BROKER_URL}`,
+      //       headers: {
+      //         'Content-Type': 'text/plain'
+      //       },
+      //       data: req
+      //     };
+      //     await axios.request(config)
+      //       .then((response) => {
+      //         // console.log("response Trade Excuted - ",response)
+      //       })
+      //       .catch((error) => {
+      //         console.log('Error ', error);
+      //       });
+      //   }
+      //   const update = {
+      //     $set: {
+      //       status: '2',
+      //     },
+      //     $inc: {
+      //       numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
+      //     },
+      //   };
+      //   const filter = { _id: val._id };
+      //   let Res = await UserMakeStrategy.updateOne(filter, update);
+      //   let Check_same_trade_type = 'BUY';
+      //   if (val.type === 'BUY') {
+      //     Check_same_trade_type = 'SELL';
+      //   }
+      //   const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
+      //   if (Check_same_trade_data) {
+      //     let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
+      //       $set: {
+      //         status: '1',
+      //       },
+      //     });
+      //   }
+      //   const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
+      //     {
+      //       $match: {
+      //         show_strategy: val.show_strategy,
+      //         numberOfTrade: { $ne: '' }
+      //       }
+      //     },
+      //     {
+      //       $group: {
+      //         _id: null,
+      //         totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
+      //       }
+      //     },
+      //     {
+      //       $project: {
+      //         _id: 0,
+      //         totalNumberOfTrade_count_trade: 1,
+      //         anotherField: '$numberOfTrade',
+      //         isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
+      //       }
+      //     }
+      //   ]);
+      //   if (numberOfTrade_count_trade_count.length > 0) {
+      //     if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
+      //       const update_trade_off = {
+      //         $set: {
+      //           status: '2',
+      //         },
+      //       };
+      //       const filter_trade_off = { show_strategy: val.show_strategy };
+      //       let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
+      //     }
+      //   }
+      //   const currentTimestamp = Math.floor(Date.now() / 1000);
+      //   let type = 'LE';
+      //   if (val.type.toUpperCase() === 'SELL') {
+      //     type = 'SE';
+      //   }
+      //   let price = 0;
+      //   let strike = val.strike_price;
+      //   if (val.strike_price === 'NaN') {
+      //     strike = '100';
+      //   }
+      //   let option_type = 'CALL';
+      //   if (val.option_type.toUpperCase() === 'PE') {
+      //     option_type = 'PUT';
+      //   }
+      //   let Quntity = '100';
+      //   const dateObject = new Date(val.exitTime);
+      //   const hours = ('0' + dateObject.getUTCHours()).slice(-2);
+      //   const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
+      //   const ExitTime = `${hours}-${minutes}`;
+      //   let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
+      //   let config = {
+      //     method: 'post',
+      //     maxBodyLength: Infinity,
+      //     // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
+      //     url: `${process.env.BROKER_URL}`,
+      //     headers: {
+      //       'Content-Type': 'text/plain'
+      //     },
+      //     data: req
+      //   };
+      //   await axios.request(config)
+      //     .then((response) => {
+      //       // console.log("response Trade Excuted - ", response)
+      //     })
+      //     .catch((error) => {
+      //       console.log('Error ', error);
+      //     });
+      // } else {
 
-      //  console.log("allStrategyResult ", allStrategyResult.length)
-        if (allStrategyResult.length > 0) {
-          await Promise.all(
-         allStrategyResult.map(async (val, index) => {
-          //for (let index = 0; index < allStrategyResult.length; index++) {
-           // const val = allStrategyResult[index];
-            //console.log("val.condition", val.condition)
-           // console.log("val.condition", val.type)
-            const currentDate = new Date();
-            const options = {
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              hour12: false, // Set to true for 12-hour format
-              timeZone: 'Asia/Kolkata', // Adjust the time zone as needed
-            };
-            const currentTime = currentDate.toLocaleString('en-IN', options);
-            const options1 = {
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              hour12: false, // Set to true for 12-hour format
-              timeZone: 'UTC', // Adjust the time zone as needed
-            };
-            const entryTime = val.entryTime.toLocaleTimeString('en-US', options1);
-            const exitTime = val.exitTime.toLocaleTimeString('en-US', options1);
-            const notradeTime = val.notradeTime.toLocaleTimeString('en-US', options1);
-            // if (
-            //   (val.segment.toUpperCase() === 'O' || val.segment.toUpperCase() === 'F' || val.segment.toUpperCase() === 'C') &&
-            //   (isMarketOpen && isMarketClosedEquity)
-            // ) {
-
-            if (rr==false) {
-
-              console.log("IFFF ")
-             
-              return;
-            } else if (
-              (val.segment.toUpperCase() === 'CO' || val.segment.toUpperCase() === 'CO') &&
-              (isMarketOpen && isMarketClosedCurrency)
-            ) {
-              console.log("ELSE  1 ")
-            
-
-              return;
-            } else if (
-              (val.segment.toUpperCase() === 'MO' || val.segment.toUpperCase() === 'MF') &&
-              (isMarketOpen && isMarketClosedMCX)
-            ) {
-              console.log("ELSE  2 ")
-
-             
-              return;
-            } else {
-
-              // console.log("currentTime ", currentTime)
-              // console.log("entryTime ", entryTime)
-              // console.log("exitTime ", exitTime)
-              // console.log("notradeTime ", notradeTime)
-              // if (currentTime > entryTime && entryTime < exitTime && entryTime < notradeTime) {
-              if (rr) {
-                const currentDate = new Date();
-                const milliseconds = currentDate.getTime();
-                let collectionName = 'M' + val.timeframe + '_' + val.tokensymbol;
-                const ExistView = await dbTradeTools.listCollections({ name: collectionName }).toArray();
-             //   console.log("ExistView ",collectionName)
-                if (ExistView.length > 0) {
-                  const collection = await dbTradeTools.collection(collectionName);
-                  const get_view_data = await collection.aggregate([{ $sort: { _id: -1 } }]).toArray();
-                  let data = {};
-
-                  if (val.condition_source != null) {
-                    let condition_source = val.condition_source.split(',');
-                    if (condition_source.length > 0) {
-                      for (const source of condition_source) {
-                       // console.log("source ", source)
-                        if (['close', 'open', 'low', 'high'].includes(source)) { 
-                          //console.log("source IFFFFFF", source)
-                          let sourceVal;
-                          if (source === 'close') {
-                            sourceVal = get_view_data.map(item => item.close);
-                          } else if (source === 'open') {
-                            sourceVal = get_view_data.map(item => item.open);
-                          } else if (source === 'low') {
-                            sourceVal = get_view_data.map(item => item.low);
-                          } else if (source === 'high') {
-                            sourceVal = get_view_data.map(item => item.high);
-                          }
-                          data[source] = sourceVal;
-                        } 
-                        
-                        else {
-                        //console.log('source ELSEEEE' ,source);
-                        let indicatorCollectionName = source+'_M' + val.timeframe + '_' + val.tokensymbol;
-                        const indicatorView = await dbTradeTools.collection(indicatorCollectionName);
-                        const get_view_data_indicator = await indicatorView.aggregate([{ $sort: { _id: -1 } }]).toArray();
-
-                       // console.log("source ", source)
-                       // console.log("get_view_data ", get_view_data)
-
-                        if(get_view_data_indicator.length > 0){
-                          let sourceVal = get_view_data_indicator.map(item => item.ema);
-                          data[source] = sourceVal;
-                          //console.log("source ELSE INSIDE DATA", source)
-                        } 
-                        }
-                      }
-                    }
-                  }
-                  try {
-
-                    // console.log("val.condition", val.condition)
-                    // console.log("val.condition", val.type)
-                    // console.log("data", data)
-                    const condition = eval(val.condition.replace(/(\|\||&&)$/, ''));
-                    console.log("condition", condition)
-                    
-                    if (condition) {
-                      let entry_type = 'LE';
-                      if (val.type === 'BUY') {
-                        entry_type = 'SE';
-                      }
-                      let condition_check_previous_trade = {
-                        strategy: val.strategy_name,
-                        symbol: val.symbol_name,
-                        entry_type: entry_type,
-                        segment: val.segment,
-                        client_persnal_key: val.panelKey,
-                        MakeStartegyName: val.show_strategy,
-                        TradeType: 'MAKE_STRATEGY',
-                      };
-                      if (['O', 'FO', 'MO', 'CO'].includes(val.segment.toUpperCase())) {
-                        let option_type = 'CALL';
-                        if (val.option_type === 'PE') {
-                          option_type = 'PUT';
-                        }
-                        condition_check_previous_trade = {
-                          strategy: val.strategy_name,
-                          symbol: val.symbol_name,
-                          entry_type: entry_type,
-                          segment: val.segment,
-                          strike: val.strike_price,
-                          option_type: option_type,
-                          expiry: val.expiry,
-                          client_persnal_key: val.panelKey,
-                          MakeStartegyName: val.show_strategy,
-                          TradeType: 'MAKE_STRATEGY',
-                        };
-                      }
-                      else if (['F', 'MF', 'CF'].includes(val.segment.toUpperCase())) {
-                        condition_check_previous_trade = {
-                          strategy: val.strategy_name,
-                          symbol: val.symbol_name,
-                          entry_type: entry_type,
-                          segment: val.segment,
-                          expiry: val.expiry,
-                          client_persnal_key: val.panelKey,
-                          MakeStartegyName: val.show_strategy,
-                          TradeType: 'MAKE_STRATEGY',
-                        };
-                      }
-                      var checkPreviousTrade = await get_open_position_view.findOne(condition_check_previous_trade);
-                      const collection_last_price = dbTradeTools.collection(val.tokensymbol);
-                      const last_price = await collection_last_price.aggregate([{ $sort: { _id: -1 } }, { $limit: 1 }]).toArray();
-                      let price_lp = last_price[0].lp;
-                      if (checkPreviousTrade != null) {
-                        const currentTimestamp = Math.floor(Date.now() / 1000);
-                        let type = 'LX';
-                        let price = checkPreviousTrade.stockInfo_bp1;
-                        if (checkPreviousTrade.entry_type.toUpperCase() === 'SE') {
-                          type = 'SX';
-                          price = checkPreviousTrade.stockInfo_sp1;
-                        }
-                        let strike = checkPreviousTrade.strike;
-                        if (checkPreviousTrade.strike_price === 'NaN') {
-                          strike = '100';
-                        }
-                        let option_type = 'CALL';
-                        if (checkPreviousTrade.option_type.toUpperCase() === 'PUT') {
-                          option_type = 'PUT';
-                        }
-                        let Quntity = checkPreviousTrade.entry_qty_percent;
-                        let req = `DTime:${currentTimestamp}|Symbol:${checkPreviousTrade.symbol}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${checkPreviousTrade.segment}|Strike:${strike}|OType:${option_type}|Expiry:${checkPreviousTrade.expiry}|Strategy:${checkPreviousTrade.strategy}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:${checkPreviousTrade.TradeType}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
-                        let config = {
-                          method: 'post',
-                          maxBodyLength: Infinity,
-                          // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                          url: `${process.env.BROKER_URL}`,
-                          headers: {
-                            'Content-Type': 'text/plain'
-                          },
-                          data: req
-                        };
-                        await axios.request(config)
-                          .then((response) => {
-                            // console.log("response Trade Excuted - ",response)
-                          })
-                          .catch((error) => {
-                            console.log('Error ', error);
-                          });
-                      }
-                      const update = {
-                        $set: {
-                          status: '2',
-                        },
-                        $inc: {
-                          numberOfTrade_count_trade: 1, // Increment by 1, you can change this value based on your requirement
-                        },
-                      };
-                      const filter = { _id: val._id };
-                      let Res = await UserMakeStrategy.updateOne(filter, update);
-                      let Check_same_trade_type = 'BUY';
-                      if (val.type === 'BUY') {
-                        Check_same_trade_type = 'SELL';
-                      }
-                      const Check_same_trade_data = await UserMakeStrategy.findOne({ show_strategy: val.show_strategy, type: Check_same_trade_type });
-                      if (Check_same_trade_data) {
-                        let Res = await UserMakeStrategy.updateOne({ name: Check_same_trade_data.name }, {
-                          $set: {
-                            status: '1',
-                          },
-                        });
-                      }
-                      const numberOfTrade_count_trade_count = await UserMakeStrategy.aggregate([
-                        {
-                          $match: {
-                            show_strategy: val.show_strategy,
-                            numberOfTrade: { $ne: '' }
-                          }
-                        },
-                        {
-                          $group: {
-                            _id: null,
-                            totalNumberOfTrade_count_trade: { $sum: '$numberOfTrade_count_trade' },
-                          }
-                        },
-                        {
-                          $project: {
-                            _id: 0,
-                            totalNumberOfTrade_count_trade: 1,
-                            anotherField: '$numberOfTrade',
-                            isTotalSmall: { $lt: ['$totalNumberOfTrade_count_trade', parseInt(val.numberOfTrade)] }
-                          }
-                        }
-                      ]);
-                      if (numberOfTrade_count_trade_count.length > 0) {
-                        if (numberOfTrade_count_trade_count[0].isTotalSmall === false) {
-                          const update_trade_off = {
-                            $set: {
-                              status: '2',
-                            },
-                          };
-                          const filter_trade_off = { show_strategy: val.show_strategy };
-                          let Res = await UserMakeStrategy.updateMany(filter_trade_off, update_trade_off);
-                        }
-                      }
-                      const currentTimestamp = Math.floor(Date.now() / 1000);
-                      let type = 'LE';
-                      if (val.type.toUpperCase() === 'SELL') {
-                        type = 'SE';
-                      }
-                      let price = 0;
-                      let strike = val.strike_price;
-                      if (val.strike_price === 'NaN') {
-                        strike = '100';
-                      }
-                      let option_type = 'CALL';
-                      if (val.option_type.toUpperCase() === 'PE') {
-                        option_type = 'PUT';
-                      }
-                      let Quntity = '100';
-                      const dateObject = new Date(val.exitTime);
-                      const hours = ('0' + dateObject.getUTCHours()).slice(-2);
-                      const minutes = ('0' + dateObject.getUTCMinutes()).slice(-2);
-                      const ExitTime = `${hours}-${minutes}`;
-                      let req = `DTime:${currentTimestamp}|Symbol:${val.symbol_name}|TType:${type}|Tr_Price:131|Price:${price_lp}|Sq_Value:0.00|Sl_Value:0.00|TSL:0.00|Segment:${val.segment}|Strike:${strike}|OType:${option_type}|Expiry:${val.expiry}|Strategy:${val.strategy_name}|Quntity:${Quntity}|Key:${val.panelKey}|TradeType:MAKE_STRATEGY|Target:${val.target}|StopLoss:${val.stoploss}|ExitTime:${ExitTime}|MakeStartegyName:${val.show_strategy}|Demo:demo`;
-                      let config = {
-                        method: 'post',
-                        maxBodyLength: Infinity,
-                        // url: 'https://trade.pandpinfotech.com/signal/broker-signals',
-                        url: `${process.env.BROKER_URL}`,
-                        headers: {
-                          'Content-Type': 'text/plain'
-                        },
-                        data: req
-                      };
-                      await axios.request(config)
-                        .then((response) => {
-                          // console.log("response Trade Excuted - ", response)
-                        })
-                        .catch((error) => {
-                          console.log('Error ', error);
-                        });
-                    } else {
-                      // Your code for when the condition is false
-                      //  console.log("Condition is false ", val._id);
-                    }
-                  } catch (error) {
-                    console.log('Error in evaluating the condition:', error);
-                  }
-                }
-              } else {
-                 console.log('else:', entryTime);
-              }
-            }
-         // }
-         })
-        );
-        
-        }
-      } else {
-        console.log('The stock market is Closed!');
-      }
-
+      // }
 
     };
 
