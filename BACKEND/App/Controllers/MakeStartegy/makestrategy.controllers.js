@@ -280,12 +280,16 @@ class MakeStartegy {
       // UPDATE STRATEGY INFORMATION
       const result = await UserMakeStrategy.updateOne(filter, update_make_strategy);
     
-      
+      let arraySource = []
 
       condition_array.forEach(async (condition) => {
         ['first_element', 'second_element'].forEach(async (element) => {
           if (condition[element].source !== 'close' && condition[element].source !== 'open' && condition[element].source !== 'high' && condition[element].source !== 'low' && condition[element].source !== 'number') {
             
+
+            if (!arraySource.includes(condition[element].source)) {
+              arraySource.push(condition[element].source)
+            }
             // console.log(`Working on timeframe: ${timeframe}`);
             // console.log(`Working on tokensymbol: ${tokensymbol}`);
             // console.log(`Working on source: ${condition[element].source}`);
@@ -335,6 +339,146 @@ class MakeStartegy {
           }
         });
       });
+
+      let collectionViewName = "usermakestrategies"
+      if (arraySource.length > 0) {
+               
+        let timeFrameView = 'M' + req.body.timeframe + '_' + req.body.tokensymbol
+        let pipeline = [];
+
+        const conditions = await parseConditionString(req.body.condition);
+
+        const matchStage = await generateMongoCondition(conditions);
+        console.log("req.body.status ",req.body.status);
+        console.log("req.body.timeframe ",req.body.timeframe);
+        console.log("req.body.tokensymbol ",req.body.tokensymbol);
+        console.log("req.body.name ",req.body.name);
+        console.log("req.body.condition ",req.body.condition);
+       
+
+        pipeline.push({
+            $match: {
+                status: '1',
+                timeframe: req.body.timeframe,
+                tokensymbol: req.body.tokensymbol,
+                name: req.body.name,
+            }
+        });
+
+        pipeline.push({
+            $lookup: {
+                from: timeFrameView,
+                pipeline: [
+                    {
+                        $sort: { _id: -1 }
+                    }
+                ],
+                as: "timeFrameViewData"
+            }
+        });
+
+        arraySource.forEach(async (source) => {
+            pipeline.push({
+                $lookup: {
+                    from: source + '_M' + req.body.timeframe + '_' + req.body.tokensymbol,
+                    pipeline: [
+                        {
+                            $sort: { _id: -1 }
+                        }
+                    ],
+                    as: source+'Data'
+                }
+            });
+        });
+
+
+         pipeline.push({
+            $addFields: {
+                isCondition: matchStage
+            }
+        });
+
+
+        let viewName = 'M' + req.body.timeframe + '_' + req.body.tokensymbol + '_make_' + req.body.name;
+
+           try {
+              await dbTest.collection(viewName).drop();
+              const collections = await dbTest.listCollections().toArray();
+              const collectionExists = collections.some(coll => coll.name === viewName);
+
+              if (!collectionExists) {
+                await dbTest.createCollection(viewName, {
+                  viewOn: collectionViewName,
+                  pipeline: pipeline
+                });
+                console.log(`View ${viewName} created successfully`);
+              }else{
+                console.log(`View ${viewName} already exists`);
+              }
+            } catch (error) {
+              console.error(`Error creating view ${viewName}:`, error);
+            }
+
+    } else {
+      console.log("else req.body.status ",req.body.status);
+      console.log("else req.body.timeframe ",req.body.timeframe);
+      console.log("else req.body.tokensymbol ",req.body.tokensymbol);
+      console.log("else req.body.name ",req.body.name);
+      console.log("else req.body.condition ",req.body.condition);
+        const conditions =await parseConditionString(req.body.condition);
+
+        const matchStage =await generateMongoCondition(conditions);
+
+        let timeFrameView = 'M' + req.body.timeframe + '_' + req.body.tokensymbol
+        let pipeline = [];
+
+        pipeline.push({
+            $match: {
+                status: '1',
+                timeframe: req.body.timeframe,
+                tokensymbol: req.body.tokensymbol,
+                name: req.body.name,
+            }
+        });
+
+        pipeline.push({
+            $lookup: {
+                from: timeFrameView,
+                pipeline: [
+                    {
+                        $sort: { _id: -1 }
+                    }
+                ],
+                as: "timeFrameViewData"
+            }
+        });
+
+        pipeline.push({
+            $addFields: {
+                isCondition: matchStage
+            }
+        });
+
+        let viewName = 'M' + req.body.timeframe + '_' + req.body.tokensymbol + '_make_' + req.body.name;
+
+        try {
+           await dbTest.collection(viewName).drop();
+           const collections = await dbTest.listCollections().toArray();
+           const collectionExists = collections.some(coll => coll.name === viewName);
+
+           if (!collectionExists) {
+             await dbTest.createCollection(viewName, {
+               viewOn: collectionViewName,
+               pipeline: pipeline
+             });
+             console.log(`View ${viewName} created successfully`);
+           }else{
+             console.log(`View ${viewName} already exists`);
+           }
+         } catch (error) {
+           console.error(`Error creating view ${viewName}:`, error);
+         }
+    }
 
       // }
 

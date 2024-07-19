@@ -58,7 +58,6 @@ module.exports = function (app) {
         const result = await UserMakeStrategy.aggregate(pipeline)
         console.log("result - length ", result.length)
 
-
         result.forEach(async (ele) => {
             let collectionViewName = "usermakestrategies"
             let arraySource = []
