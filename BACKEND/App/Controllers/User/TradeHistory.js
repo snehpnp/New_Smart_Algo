@@ -72,6 +72,8 @@ class TradeHistory {
 
             const GetAllClientServices = await client_services.aggregate(pipeline)
 
+            console.log("GetAllClientServices", GetAllClientServices)
+
             var abc = [];
             var abc1 = [];
             let serIndex;
@@ -98,11 +100,12 @@ class TradeHistory {
                         } else {
                             strategyset = selectStrategy
                         }
+                        console.log("strategyset", strategyset)
 
 
                         var MatchPipeline = {
                             symbol: serIndex,
-                            strategy: strategyset,
+                            // strategy: strategyset,
                             createdAt: {
                                 $gte: new Date(startDate),
                                 $lte: new Date(endDate)
@@ -110,10 +113,13 @@ class TradeHistory {
                             client_persnal_key: client_persnal_key1,
                         };
 
+                        if(getType != "Trade"){
+                        MatchPipeline.strategy = strategyset
+                        }
+
                         if (getType == "Trade") {
                             MatchPipeline.$or = [
                                 { Entry_users_id: objectId },
-                                // { Exit_users_id: objectId }
                             ];
                         }
 
@@ -136,33 +142,37 @@ class TradeHistory {
                             }
                         ]);
 
+console.log("data",data)
+
 
                         var data1 = data
 
                         if (data.length > 0) {
 
                             data.forEach(function (item) {
-                                
 
                                 var findstg = GetAllClientServices.find((data) => data.service.name == item.symbol && data.strategys.strategy_name == item.strategy)
                                 if (findstg != undefined) {
                                     item.result.forEach(function (signal) {
-
                                         signal.qty_percent = findstg.quantity * (Math.ceil(Number(signal.qty_percent) / 100) * 100) * 0.01
-
                                     });
 
                                     item.entry_qty_percent = findstg.quantity * (Math.ceil(Number(item.entry_qty_percent) / 100) * 100) * 0.01,
                                         item.exit_qty_percent = findstg.quantity * (Math.ceil(Number(item.exit_qty_percent) / 100) * 100) * 0.01
                                 }
 
-                                if(item.Exit_users_id.length == 0){
+                                if (item.Exit_users_id.length != 0 && getType == "Trade") {
 
-                                    item.exit_type = "";
-                                    item.exit_price = "";
-                                    item.exit_qty_percent = "";
-                                    item.exit_qty = "";
-                                    item.exit_dt_date = "";
+                                    var matchData = item.Exit_users_id.toString().includes(objectId.toString())
+
+                                    if (matchData) {
+                                        item.exit_type = "";
+                                        item.exit_price = "";
+                                        item.exit_qty_percent = "";
+                                        item.exit_qty = "";
+                                        item.exit_dt_date = "";
+                                    }
+
                                 }
 
                             });
