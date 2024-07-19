@@ -23,10 +23,13 @@ class Tradehistory {
           client_persnal_key1 = { $ne: "" }
         }
       }
+      
       var lotMultypaly1 = 1
 
       if (lotMultypaly == undefined || lotMultypaly == 'undefined') {
         lotMultypaly1 = 1
+      }else{
+        lotMultypaly1 = Number(lotMultypaly)
       }
 
 
