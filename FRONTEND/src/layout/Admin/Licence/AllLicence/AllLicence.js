@@ -282,13 +282,36 @@ const AllLicence = () => {
 
               {dashboard_filter !== undefined ? "" : <>
 
-                <div className="col-2 mx-auto border border-dark text-center rounded-3">
-                  <h6>Remaining Licence</h6>
-                  <h6>
-                    {Number.isFinite(ForShowTotalLicence) && Number.isFinite(ForShowUsedLicence) ? ForShowTotalLicence - ForShowUsedLicence : 0}
-                  </h6>
-                </div>
+                <div className="row mb-5">
+                  <div className="col-2 mx-auto border border-dark text-center rounded-3">
+                    <h6 >Start Date</h6>
+                    <span >{ForPanelStartDate && ForPanelStartDate}</span>
+                  </div>
+                  <div className="col-2 mx-auto border border-dark text-center rounded-3">
+                    <h6 >Total Licence</h6>
+                    <h6 >
+                      {ForShowTotalLicence && ForShowTotalLicence}
+                    </h6>
+                  </div>
+                  <div className="col-2 mx-auto border border-dark text-center rounded-3">
+                    <h6 >Total Used Licence</h6>
+                    <h6 >{ForShowUsedLicence && ForShowUsedLicence}</h6>
+                  </div>
+                  <div className="col-2 mx-auto  border border-dark text-center rounded-3">
+                    <h6 >Remaining Licence</h6>
+                    <h6>
+                      {Number.isFinite(ForShowTotalLicence) && Number.isFinite(ForShowUsedLicence) ? ForShowTotalLicence - ForShowUsedLicence : 0}
+                    </h6>
 
+
+                  </div>
+                  <div className="col-2 mx-auto border border-dark text-center rounded-3">
+                    <h6 >Current Month Licence</h6>
+                    <span >
+                      {usedLicence ? usedLicence : "Please Select Month"}
+                    </span>
+                  </div>
+                </div>
               </>}
 
             </div>
