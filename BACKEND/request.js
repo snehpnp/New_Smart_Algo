@@ -129,22 +129,13 @@ module.exports = function (app) {
 
 
             if (arraySource.length > 0) {
-                console.log("ele - id", ele._id)
-                console.log("ele value condition- ", ele.condition)
-                // console.log("ele timeframe- ", ele.timeframe)
-                // console.log("ele token symbol- ", ele.tokensymbol)
-                // console.log("IFF timeframedataView plus incator view ", arraySource)
+               
                 let timeFrameView = 'M' + ele.timeframe + '_' + ele.tokensymbol
                 let pipeline = [];
 
                 const conditions = parseConditionString(ele.condition);
 
-                console.log(JSON.stringify(conditions, null, 2));
-
                 const matchStage = generateMongoCondition(conditions ,ele);
-                console.log(JSON.stringify(matchStage, null, 2));
-
-                console.log("IFFF", matchStage);
 
                 pipeline.push({
                     $match: {
@@ -212,20 +203,10 @@ module.exports = function (app) {
                     }
 
             } else {
-                console.log("ele - id", ele._id)
-                console.log("ele value condition- ", ele.condition)
-                // console.log("ele timeframe- ", ele.timeframe)
-                // console.log("ele token symbol- ", ele.tokensymbol)
-                // console.log("ELSE timeframedataView", arraySource)
-
+                
                 const conditions = parseConditionString(ele.condition);
 
-                console.log(JSON.stringify(conditions, null, 2));
-
                 const matchStage = generateMongoCondition(conditions ,ele);
-                console.log(JSON.stringify(matchStage, null, 2));
-
-                //console.log("ELSE", matchStage);
 
                 let timeFrameView = 'M' + ele.timeframe + '_' + ele.tokensymbol
                 let pipeline = [];
@@ -256,9 +237,6 @@ module.exports = function (app) {
                         isCondition: matchStage
                     }
                 });
-
-                // return res.send(pipeline)
-                console.log("timeframedataView plus incator view ELSE", pipeline)
 
                 let viewName = 'M' + ele.timeframe + '_' + ele.tokensymbol + '_make_' + ele.name;
 
@@ -371,8 +349,6 @@ module.exports = function (app) {
     
         return conditions;
     }
-    
-
     
 
     const generateMongoCondition = (conditions ,ele) => {
@@ -943,16 +919,6 @@ module.exports = function (app) {
         TokenSymbolUpdate()
 
     })
-
-
-
-
-
-
-
-
-
-
 
 
 

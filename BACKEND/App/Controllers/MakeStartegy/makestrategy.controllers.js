@@ -14,7 +14,9 @@ const user = db.user;
 const token_chain = db.token_chain;
 const get_open_position_view = db.open_position;
 const open_position_excute = db.open_position_excute;
-const dbTradeTools = db.dbTradeTools;
+const dbTradeTools = db.dbTest;
+const dbTest = db.dbTest;
+
 
 
 
@@ -348,6 +350,7 @@ class MakeStartegy {
   /// Make Startegy
   async AddMakeStartegy(req, res) {
 
+
     var _id = new ObjectId(req.body.user_id);
 
     let user_panel_key = await user.findOne({ _id: _id }).select('client_key').lean();
@@ -450,12 +453,18 @@ class MakeStartegy {
           maxLoss: maxLoss
           })
           .then(async (createUserMakeStrategy) => {
-
+             console.log("createUserMakeStrategy ",createUserMakeStrategy)
+             
             //console.log('condition_array:', condition_array);
-
-            condition_array.forEach(async (condition) => {
+            
+            let arraySource = []
+           await condition_array.forEach(async (condition) => {
               ['first_element', 'second_element'].forEach(async (element) => {
                 if (condition[element].source !== 'close' && condition[element].source !== 'open' && condition[element].source !== 'high' && condition[element].source !== 'low' && condition[element].source !== 'number') {
+
+                  if (!arraySource.includes(condition[element].source)) {
+                    arraySource.push(condition[element].source)
+                  }
                   
                   // console.log(`Working on timeframe: ${timeframe}`);
                   // console.log(`Working on tokensymbol: ${tokensymbol}`);
@@ -506,6 +515,138 @@ class MakeStartegy {
                 }
               });
             });
+
+
+            let collectionViewName = "usermakestrategies"
+
+            if (arraySource.length > 0) {
+               
+              let timeFrameView = 'M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol
+              let pipeline = [];
+
+              const conditions = await parseConditionString(createUserMakeStrategy.condition);
+
+              const matchStage = await generateMongoCondition(conditions);
+
+              pipeline.push({
+                  $match: {
+                      status: createUserMakeStrategy.status,
+                      timeframe: createUserMakeStrategy.timeframe,
+                      tokensymbol: createUserMakeStrategy.tokensymbol,
+                      name: createUserMakeStrategy.name,
+                  }
+              });
+
+              pipeline.push({
+                  $lookup: {
+                      from: timeFrameView,
+                      pipeline: [
+                          {
+                              $sort: { _id: -1 }
+                          }
+                      ],
+                      as: "timeFrameViewData"
+                  }
+              });
+
+              arraySource.forEach(async (source) => {
+                  pipeline.push({
+                      $lookup: {
+                          from: source + '_M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol,
+                          pipeline: [
+                              {
+                                  $sort: { _id: -1 }
+                              }
+                          ],
+                          as: source+'Data'
+                      }
+                  });
+              });
+
+
+               pipeline.push({
+                  $addFields: {
+                      isCondition: matchStage
+                  }
+              });
+      
+
+              let viewName = 'M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol + '_make_' + createUserMakeStrategy.name;
+
+                 try {
+                    const collections = await dbTest.listCollections().toArray();
+                    const collectionExists = collections.some(coll => coll.name === viewName);
+
+                    if (!collectionExists) {
+                      await dbTest.createCollection(viewName, {
+                        viewOn: collectionViewName,
+                        pipeline: pipeline
+                      });
+                      console.log(`View ${viewName} created successfully`);
+                    }else{
+                      console.log(`View ${viewName} already exists`);
+                    }
+                  } catch (error) {
+                    console.error(`Error creating view ${viewName}:`, error);
+                  }
+
+          } else {
+              
+              const conditions =await parseConditionString(createUserMakeStrategy.condition);
+
+              const matchStage =await generateMongoCondition(conditions);
+
+              let timeFrameView = 'M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol
+              let pipeline = [];
+
+              pipeline.push({
+                  $match: {
+                      status: createUserMakeStrategy.status,
+                      timeframe: createUserMakeStrategy.timeframe,
+                      tokensymbol: createUserMakeStrategy.tokensymbol,
+                      name: createUserMakeStrategy.name,
+                  }
+              });
+
+              pipeline.push({
+                  $lookup: {
+                      from: timeFrameView,
+                      pipeline: [
+                          {
+                              $sort: { _id: -1 }
+                          }
+                      ],
+                      as: "timeFrameViewData"
+                  }
+              });
+
+              pipeline.push({
+                  $addFields: {
+                      isCondition: matchStage
+                  }
+              });
+
+              let viewName = 'M' + createUserMakeStrategy.timeframe + '_' + createUserMakeStrategy.tokensymbol + '_make_' + createUserMakeStrategy.name;
+
+              try {
+                 const collections = await dbTest.listCollections().toArray();
+                 const collectionExists = collections.some(coll => coll.name === viewName);
+
+                 if (!collectionExists) {
+                   await dbTest.createCollection(viewName, {
+                     viewOn: collectionViewName,
+                     pipeline: pipeline
+                   });
+                   console.log(`View ${viewName} created successfully`);
+                 }else{
+                   console.log(`View ${viewName} already exists`);
+                 }
+               } catch (error) {
+                 console.error(`Error creating view ${viewName}:`, error);
+               }
+          }
+
+
             
 
             //res.send({ status: true, msg: "successfully Add!", data: createUserMakeStrategy });
@@ -527,7 +668,186 @@ class MakeStartegy {
     }
   }
 
+
 }
+
+
+
+
+
+
+async function parseConditionString(conditionString) {
+
+  const conditionRegex = /data\.(\w+)\[(\d+)\]([><=]{1,2})data\.(\w+)\[(\d+)\]/g;
+  const conditions = [];
+  let andFlag = false;
+
+  // Handle the && and || parts
+  const andParts = conditionString.split('&&');
+  andParts.forEach(part => {
+      const orParts = part.split('||');
+      orParts.forEach((subPart, index) => {
+          let match;
+          while ((match = conditionRegex.exec(subPart)) !== null) {
+              const [_, field1, index1, operator, field2, index2] = match;
+              conditions.push({
+                  operator: operator.length === 2 ? operator : operator + '=', // Normalize operator
+                  field1,
+                  index1: parseInt(index1),
+                  field2,
+                  index2: parseInt(index2),
+                  type: index === 0 && andFlag ? 'and' : 'or'
+              });
+          }
+      });
+      andFlag = true;
+  });
+
+  return conditions;
+}
+
+const generateMongoCondition = async (conditions) => {
+  const andArray = [];
+  let orArray = [];
+
+  conditions.forEach(condition => {
+      const { operator, field1, index1, field2, index2, type } = condition;
+      // const mongoOperator = operator === '>' ? '$gt' : '$lt';
+
+      let mongoOperator;
+      switch (operator) {
+          case '>':
+              mongoOperator = '$gt';
+              break;
+          case '<':
+              mongoOperator = '$lt';
+              break;
+          case '>=':
+              mongoOperator = '$gte';
+              break;
+          case '<=':
+              mongoOperator = '$lte';
+              break;
+          case '==': // Handle equality operator
+          case '===': // Handle strict equality operator
+              mongoOperator = '$eq';
+              break;
+          default:
+              mongoOperator = '$lt'; // Default to less than
+              break;
+      }
+
+      console.log("operator ",operator)
+      console.log("field1 ",field1)
+      console.log("index1 ",index1)
+      console.log("field2 ",field2)
+      console.log("index2 ",index2)
+      console.log("type ",type)
+      console.log("mongoOperator ",mongoOperator)
+
+
+      // let condition_one
+      // ['close','open','high','low','number'].includes(field1) ?
+      // condition_one = { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] }
+      // :condition_one = { $arrayElemAt: [`$${field1}Data.${field1}`, index1] }
+
+    
+      // let condition_two
+      // ['close','open','high','low','number'].includes(field2) ?
+      // condition_two =  { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
+      // :condition_two =  { $arrayElemAt: [`$${field2}Data.${field2}`, index2] }
+
+
+      let condition_one
+      ['close','open','high','low','number'].includes(field1) ?
+      condition_one = { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] }
+      :condition_one = { $arrayElemAt: [`$${field1}Data.ema`, index1] }
+
+    
+      let condition_two
+      ['close','open','high','low','number'].includes(field2) ?
+      condition_two =  { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
+      :condition_two =  { $arrayElemAt: [`$${field2}Data.ema`, index2] }
+
+
+      // const conditionObj = {
+      //     [mongoOperator]: [
+      //         { $arrayElemAt: [`$timeFrameViewData.${field1}`, index1] },
+      //         { $arrayElemAt: [`$timeFrameViewData.${field2}`, index2] }
+      //     ]
+      // };
+
+      const conditionObj = {
+          [mongoOperator]: [
+              condition_one,
+              condition_two
+          ]
+      };
+
+      console.log("conditionObj ",conditionObj)
+
+      // if (type === 'and') {
+      //     andArray.push(conditionObj);
+      // } else if (type === 'or') {
+      //     orArray.push(conditionObj);
+      // }
+
+       if (type === 'and') {
+      if (orArray.length > 0) {
+          andArray.push({ $or: orArray });
+          orArray = []; // Reset orArray after adding it to andArray
+      }
+      andArray.push(conditionObj);
+  } else if (type === 'or') {
+      orArray.push(conditionObj);
+  }
+
+  });
+
+//     const finalExpr = {};
+//     if (andArray.length > 0) {
+//         finalExpr.$and = andArray;
+//     }
+//     if (orArray.length > 0) {
+//         finalExpr.$or = orArray;
+//     }
+
+//   //  return { $cond: finalExpr };
+//     return {
+//         $cond: {
+//             if: finalExpr,
+//             then: true,
+//             else: false
+//         }
+//     };
+
+
+
+console.log("andArray ",andArray)
+console.log("orArray ",orArray)
+const finalExpr = {};
+if (andArray.length > 0 && orArray.length > 0) {
+finalExpr.$and = andArray;
+finalExpr.$or = orArray;
+} else if (andArray.length > 0) {
+finalExpr.$and = andArray;
+} else if (orArray.length > 0) {
+finalExpr.$or = orArray;
+}
+
+return {
+$cond: {
+if: finalExpr,
+then: true,
+else: false
+}
+};
+
+
+};
+
+
+
 
 //-------------------Strategy Run Code ---------------------------------------------//
 
