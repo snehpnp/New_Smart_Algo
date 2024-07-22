@@ -10,17 +10,17 @@ import { fa_time, fDateTimeSuffix, today } from "../../../Utils/Date_formet";
 import { useLocation } from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 
-import { 
-    Get_Admin_Helps, 
-    Get_All_Admin_Client, 
-    DELETE_USER_SERVICES, 
-    Find_User 
+import {
+    Get_Admin_Helps,
+    Get_All_Admin_Client,
+    DELETE_USER_SERVICES,
+    Find_User
 } from '../../../ReduxStore/Slice/Superadmin/SuperAdminSlice';
 
 const SubAdminList = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    
+
     const [allClients, setAllClients] = useState([]);
     const [filteredClients, setFilteredClients] = useState([]);
     const [refresh, setRefresh] = useState(false);
@@ -150,7 +150,7 @@ const SubAdminList = () => {
             text: "Actions",
             formatter: (cell, row) => (
                 <div style={{ width: "120px" }}>
-                    <Link>
+                    {row.license_type == 2 ? <Link>
                         <span data-toggle="tooltip" data-placement="top" title="View">
                             <Eye
                                 size={20}
@@ -159,7 +159,8 @@ const SubAdminList = () => {
                                 onClick={() => { setShowModal(true); handleViewFunction(row._id) }}
                             />
                         </span>
-                    </Link>
+                    </Link> : null}
+
                     <Link to={`/super/client/edit/${row._id}`} state={row}>
                         <span data-toggle="tooltip" data-placement="top" title="Edit">
                             <Pencil
@@ -186,6 +187,27 @@ const SubAdminList = () => {
         },
     ];
 
+    function getMonthsRemaining(endDate) {
+        const currentDate = new Date();
+        const end = new Date(endDate);
+
+        if (end < currentDate) {
+            return 0
+        }
+
+        const yearDiff = end.getFullYear() - currentDate.getFullYear();
+        const monthDiff = end.getMonth() - currentDate.getMonth();
+
+        let monthsRemaining = yearDiff * 12 + monthDiff;
+
+        if (end.getDate() < currentDate.getDate()) {
+            monthsRemaining -= 1;
+        }
+
+        return monthsRemaining;
+    }
+
+
     return (
         <>
             {!allClients.length ? (
@@ -194,13 +216,13 @@ const SubAdminList = () => {
                 <Content Page_title="Client List" button_status={true} button_title='Back' route='/super/permitions'>
                     <div className='mb-4'>
                         <h6>Search here something</h6>
-                        <input 
+                        <input
                             type="text"
                             style={{ height: '2rem' }}
                             placeholder='search...'
                             className='p-2 rounded'
                             onChange={(e) => setSearchInput(e.target.value)}
-                            value={searchInput} 
+                            value={searchInput}
                         />
                     </div>
                     <FullDataTable TableColumns={columns} tableData={filteredClients} />
@@ -215,18 +237,19 @@ const SubAdminList = () => {
                     handleClose={() => setShowModal(false)}
                 >
                     <table className="table table-responsive-sm table-bordered ">
-                        <tbody>
+
+                        {userData.data && <tbody>
                             <tr>
                                 <td>Create Date</td>
-                                <td>{userData.data.length > 0 && userData.data[0]?.CreateDate}</td>
+                                <td>{userData.data.length > 0 && fDateTimeSuffix(userData.data[0]?.CreateDate)}</td>
                             </tr>
                             <tr>
                                 <td>Start Date</td>
-                                <td>{userData.data.length > 0 && userData.data[0]?.StartDate}</td>
+                                <td>{userData.data.length > 0 && fDateTimeSuffix(userData.data[0]?.StartDate)}</td>
                             </tr>
                             <tr>
                                 <td>End Date</td>
-                                <td>{userData.data.length > 0 && userData.data[0]?.EndDate}</td>
+                                <td>{userData.data.length > 0 && fDateTimeSuffix(userData.data[0]?.EndDate)}</td>
                             </tr>
                             <tr>
                                 <td>To Month</td>
@@ -238,13 +261,15 @@ const SubAdminList = () => {
                             </tr>
                             <tr>
                                 <td>Remaining Licence</td>
-                                <td>0</td>
+                                <td>{userData.data.length > 0 && getMonthsRemaining(userData.data[0]?.EndDate)}</td>
+
                             </tr>
                             <tr>
                                 <td>Minus Licence</td>
                                 <td>0</td>
                             </tr>
-                        </tbody>
+                        </tbody>}
+
                     </table>
                 </Modal>
             )}

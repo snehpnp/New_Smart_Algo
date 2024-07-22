@@ -53,7 +53,7 @@ const TradeHistory = () => {
   const [CatagoryData, setCatagoryData] = useState({ loading: true, data: [] });
   const selector = useSelector((state) => state.DashboardSlice);
 
-  useEffect(() => { GetAdminTradingStatus()}, []);
+  useEffect(() => { GetAdminTradingStatus() }, []);
 
   const handleFromDateChange = (e) => { setFromDate(e.target.value); };
   const handleToDateChange = (e) => { setToDate(e.target.value); };
@@ -296,9 +296,9 @@ const TradeHistory = () => {
       .unwrap()
       .then((response) => {
         if (response.status) {
-       
+
         } else {
-     
+
         }
       });
 
@@ -776,7 +776,7 @@ const TradeHistory = () => {
       });
   };
 
-// CONDITION  MANAGE TO LIVE PRICE SHOW
+  // CONDITION  MANAGE TO LIVE PRICE SHOW
   if (selector && selector.permission) {
     if (selector.permission && selector.permission.data && selector.permission.data[0]) {
       if (selector.permission.data[0].live_price == 0) {
@@ -784,7 +784,7 @@ const TradeHistory = () => {
       }
     }
   }
-  
+
   const handleInputChange = (e) => {
     const value = e.target.value;
     const isValidNumber = /^\d+$/.test(value);
@@ -933,25 +933,21 @@ const TradeHistory = () => {
           </div>
           <div className="col-lg-2  px-1">
             <div className="form-check custom-checkbox mb-3 ps-0">
-              <label className="col-lg-12" htmlFor="fromdate">
-               Lots
+              <label className="col-lg-12" >
+                Lots
               </label>
               <input
-                type="Number"
+                type="number"
                 className="default-select wide form-control"
-                defaultValue={1}
+                value={lotMultypaly}
                 onChange={(e) => handleInputChange(e)}
               />
-
-              <div />
-              <div />
-
             </div>
 
 
 
-          </div>
 
+          </div>
           <div className="col-lg-2  px-1">
             <div className="mb-3">
               <button className="btn btn-primary" onClick={(e) => ResetAllData(e)}>
