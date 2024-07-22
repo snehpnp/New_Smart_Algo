@@ -22,7 +22,7 @@ const Routing = () => {
   const user_role_goTo = JSON.parse(localStorage.getItem('user_role_goTo'))
 
 
-
+console.log("location.pathname",location.pathname)
   useEffect(() => {
     if (location.pathname === "/forget") {
       navigate("/forget");
@@ -36,8 +36,8 @@ const Routing = () => {
     if (location.pathname === "/") {
       navigate("/login");
     }
-    if (location.pathname === "/newsignup") {
-      navigate("/newsignup");
+    if (location.pathname.startsWith('/newsignup')) {
+      navigate(location.pathname);
       return
     }
 
@@ -87,7 +87,10 @@ const Routing = () => {
       <Route path="/subadmin/*" element={(roles === "SUBADMIN") ? <SubAdmin /> : <Login />} />
       <Route path="/client/*" element={gotodashboard != null ? <Client /> : (roles === "USER") ? <Client /> : <Login />} />
       <Route path="/login" element={<Login />} />
+      
+      <Route path="/newsignup/:id" element={<NewSignUp />} />
       <Route path="/newsignup" element={<NewSignUp />} />
+
       <Route path="/forget" element={<ForgetPassword />} />
       <Route path="/profile" element={<ForgetPassword />} />
       <Route path="/update/:id" element={<UpdatePassword />} />

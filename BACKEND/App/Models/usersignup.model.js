@@ -35,6 +35,11 @@ const userSignUp = Schema({
         unique: true,
         default: null
     },
+    refer_code: {
+        type: String,
+        trim: true,
+        default: null
+    },
     ActiveStatus: {
         type: String,
         enum: ['0', '1'],

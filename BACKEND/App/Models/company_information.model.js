@@ -110,6 +110,9 @@ const CompanySchema = new mongoose.Schema({
     licenses: {
         type: Number
     },
+    refer_points: {
+        type: Number
+    },
     createdAt: {
         type: Date,
         default: Date.now

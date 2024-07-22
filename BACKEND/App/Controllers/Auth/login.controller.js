@@ -194,7 +194,7 @@ class Login {
     // User SignUp
     async signup(req, res) {
         try {
-            const { UserName, FullName, Email, PhoneNo } = req.body;
+            const { UserName, FullName, Email, PhoneNo ,refer_code} = req.body;
 
             const searchQuery = {
                 $or: [
@@ -255,7 +255,8 @@ class Login {
                 UserName: req.body.UserName,
                 FullName: req.body.FullName,
                 Email: req.body.Email,
-                PhoneNo: req.body.PhoneNo
+                PhoneNo: req.body.PhoneNo,
+                refer_code:req.refer_code
             });
 
 

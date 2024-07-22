@@ -101,7 +101,7 @@ const Sidebar = ({ ShowSidebar }) => {
 
 
     return (
-        <div className="deznav pt-3" >
+        <div className="deznav " >
             <div className="deznav-scroll">
                 <ul className="metismenu" id="menu">
                     {

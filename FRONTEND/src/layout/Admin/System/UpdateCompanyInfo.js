@@ -28,7 +28,10 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
         formik.setFieldValue('domain_url', data.length > 0 && data[0].domain_url);
         formik.setFieldValue('domain_url_https', data.length > 0 && data[0].domain_url_https);
 
+
+
     }, [data && data]);
+
 
 
 
@@ -39,8 +42,8 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
             shortname: "",
             broker: '',
             version: '',
-            domain_url: "",
-            domain_url_https: ""
+            domain_url:"",
+            domain_url_https:""
         },
         touched: {
             companyname: false,
@@ -48,8 +51,8 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
             shortname: false,
             broker: false,
             version: false,
-            domain_url: false,
-            domain_url_https: false,
+            domain_url:false,
+            domain_url_https:false,
         },
         validate: (values) => {
 
@@ -81,12 +84,12 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
                     "broker_url": values.broker,
                     "version": values.version,
                     "prefix": values.shortname,
-                    "domain_url": values.domain_url,
-                    "domain_url_https": values.domain_url_https
+                    "domain_url":values.domain_url,
+                    "domain_url_https":values.domain_url_https
 
                 }
             }
-
+       
 
             await dispatch(Update_smtp_details({ req: req, token: user_token })).unwrap().then((response) => {
 
@@ -123,15 +126,14 @@ const UpdateCompanyInfo = ({ showModal, setshowModal, data }) => {
     ];
 
     return (
-        <div>
-            <Modal isOpen={showModal} size="lg" title="Company Information" hideBtn={true}
-                handleClose={() => setshowModal(false)}
-            >
-                <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
-                />
-                <ToastButton />
-            </Modal >
-        </div>
+        <div>   <Modal isOpen={showModal} size="lg" title="Company Information" hideBtn={true}
+            handleClose={() => setshowModal(false)}
+        >
+            <Formikform1 fieldtype={fields.filter(field => !field.showWhen || field.showWhen(formik.values))} formik={formik} btn_name="Update"
+            />
+            <ToastButton />
+
+        </Modal ></div>
     )
 }
 
