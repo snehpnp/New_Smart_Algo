@@ -160,11 +160,7 @@ export const admin_sidebar = [
         name: 'More',
         Icon: 'MoreHorizontal',
         Data: [
-            // {
-            //     id: 71,
-            //     name: 'Support',
-            //     Icon: 'HelpingHand',
-            //     Data: [
+        
             {
                 id: 711,
                 name: 'Help Center',
@@ -189,8 +185,7 @@ export const admin_sidebar = [
                 route: '/admin/brokerinfo',
                 Data: []
             },
-            //     ]
-            // },
+        
 
 
 
