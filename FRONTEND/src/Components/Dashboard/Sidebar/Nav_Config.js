@@ -139,6 +139,23 @@ export const admin_sidebar = [
         ]
     },
     {
+        id: 73,
+        name: 'Make Strategy',
+        Icon: 'Boxes',
+        Data: [
+            {
+                id: 731,
+                name: 'Create Strategy',
+                route: '/admin/createstrategy',
+            },
+            {
+                id: 732,
+                name: 'All Strategies',
+                route: '/admin/AllMakeStrategy',
+            }
+        ]
+    },
+    {
         id: 7,
         name: 'More',
         Icon: 'MoreHorizontal',
@@ -175,23 +192,7 @@ export const admin_sidebar = [
             //     ]
             // },
 
-            // {
-            // id: 73,
-            // name: 'Make Strategy',
-            // Icon: 'Boxes',
-            // Data: [
-            {
-                id: 731,
-                name: 'Create Strategy',
-                route: '/admin/createstrategy',
-            },
-            {
-                id: 732,
-                name: 'All Strategies',
-                route: '/admin/AllMakeStrategy',
-            }
-            // ]
-            // }
+
 
         ]
     }
@@ -243,14 +244,14 @@ export const supper_admin_sidebar = [
         Data: []
     },
 
-     {
+    {
         'id': 7,
         "name": 'Faq',
         "Icon": "HelpingHand",
         "route": "/super/update/faq",
         "Data": []
     },
-    
+
 ]
 
 

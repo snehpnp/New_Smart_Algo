@@ -16,21 +16,16 @@ import Modal from "../../../Components/ExtraComponents/Modal";
 import { convert_string_to_month, GetMarketOpenDays } from "../../../Utils/Date_formet";
 import { No_Negetive_Input_regex } from "../../../Utils/Common_regex";
 import toast from 'react-hot-toast';
-import Holidays from "date-holidays"
 import ToastButton from "../../../Components/ExtraComponents/Alert_Toast";
 
 import { GET_COMPANY_INFOS } from '../../../ReduxStore/Slice/Admin/AdminSlice'
-import { useLocation } from "react-router-dom";
 
 
 
-import socketIOClient from 'socket.io-client';
-import io from 'socket.io-client';
 
 
 const TradeHistory = () => {
     const dispatch = useDispatch();
-    const location = useLocation();
 
 
 
@@ -777,115 +772,9 @@ const TradeHistory = () => {
     };
 
 
-    // useEffect(() => {
-    //     ShowLivePrice();
-    // }, [tradeHistoryData.data, SocketState, UserDetails]);
-
-
-
-
-
-
     useEffect(() => {
-        const webSocketService = new WebSocketService(WEBSOCKET_URI);
-        const handleMessage = (response) => {
-            // console.log("response position ",response )
-
-
-            $('.SP1_Call_Price_' + response.token).html(response.price);
-            $('.BP1_Put_Price_' + response.token).html(response.price);
-
-            // UPL_
-            $(".LivePrice_" + response.token).html(response.price);
-
-
-            var live_price = response.price === undefined ? "" : response.price;
-
-            tradeHistoryData.data && tradeHistoryData.data.forEach((row, i) => {
-
-
-                let get_ids = '_id_' + response.token + '_' + row._id
-                let get_id_token = $('.' + get_ids).html();
-
-                const get_entry_qty = $(".entry_qty_" + response.token + '_' + row._id).html();
-                const get_exit_qty = $(".exit_qty_" + response.token + '_' + row._id).html();
-                const get_exit_price = $(".exit_price_" + response.token + '_' + row._id).html();
-                const get_entry_price = $(".entry_price_" + response.token + '_' + row._id).html();
-                const get_entry_type = $(".entry_type_" + response.token + '_' + row._id).html();
-                const get_exit_type = $(".exit_type_" + response.token + '_' + row._id).html();
-                const get_Strategy = $(".strategy_" + response.token + '_' + row._id).html();
-
-                if ((get_entry_type === "LE" && get_exit_type === "LX") || (get_entry_type === "SE" && get_exit_type === "SX")) {
-                    if (get_entry_qty !== "" && get_exit_qty !== "") {
-
-                        if (parseInt(get_entry_qty) >= parseInt(get_exit_qty)) {
-                            let rpl = (parseFloat(get_exit_price) - parseFloat(get_entry_price)) * parseInt(get_exit_qty);
-                            let upl = parseInt(get_exit_qty) - parseInt(get_entry_qty);
-                            let finalyupl = (parseFloat(get_entry_price) - parseFloat(live_price)) * upl;
-
-                            if ((isNaN(finalyupl) || isNaN(rpl))) {
-                                return "-";
-                            } else {
-                                $(".show_rpl_" + response.token + "_" + get_id_token).html(rpl.toFixed(2));
-                                $(".UPL_" + response.token + "_" + get_id_token).html(finalyupl.toFixed(2));
-                                $(".TPL_" + response.token + "_" + get_id_token).html((finalyupl + rpl).toFixed(2));
-
-                                ShowColor1(".show_rpl_" + response.token + "_" + get_id_token, rpl.toFixed(2), response.token, get_id_token);
-                                ShowColor1(".UPL_" + response.token + "_" + get_id_token, finalyupl.toFixed(2), response.token, get_id_token);
-                                ShowColor1(".TPL_" + response.token + "_" + get_id_token, (finalyupl + rpl).toFixed(2), response.token, get_id_token);
-                            }
-                        }
-                    }
-                }
-                //  if Only entry qty Exist
-                else if ((get_entry_type === "LE" && get_exit_type === "") || (get_entry_type === "SE" && get_exit_type === "")) {
-                    let abc = ((parseFloat(live_price) - parseFloat(get_entry_price)) * parseInt(get_entry_qty)).toFixed();
-                    if (isNaN(abc)) {
-                        return "-";
-                    } else {
-                        $(".show_rpl_" + response.token + "_" + get_id_token).html(abc);
-                        $(".UPL_" + response.token + "_" + get_id_token).html("-");
-                        $(".TPL_" + response.token + "_" + get_id_token).html(abc);
-                        ShowColor1(".show_rpl_" + response.token + "_" + get_id_token, abc, response.token, get_id_token);
-                        ShowColor1(".UPL_" + response.token + "_" + get_id_token, "-", response.token, get_id_token);
-                        ShowColor1(".TPL_" + response.token + "_" + get_id_token, abc, response.token, get_id_token);
-                    }
-
-                }
-
-                //  if Only Exist qty Exist
-                else if (
-                    (get_entry_type === "" && get_exit_type === "LX") ||
-                    (get_entry_type === "" && get_exit_type === "SX")
-                ) {
-                } else {
-                }
-            });
-
-
-        };
-
-        const handleOpen = () => {
-            console.log('WebSocket connection opened');
-        };
-
-        const handleClose = () => {
-            console.log('WebSocket connection closed');
-        };
-
-        const handleError = (error) => {
-            console.error('WebSocket error:', error);
-        };
-
-        const disconnect = webSocketService.connect(handleMessage, handleOpen, handleClose, handleError);
-
-        return () => {
-            disconnect();
-        };
-    }, []);
-
-
-
+        ShowLivePrice();
+    }, [tradeHistoryData.data, SocketState, UserDetails]);
 
 
 
